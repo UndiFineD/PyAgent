@@ -1,30 +1,10 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Engine.py module.
-"""
-
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Dict, List, Optional, Any, Tuple, Union
+from .config import RoPEConfig, RoPEVariant, RoPEScalingType
 from .base import RotaryEmbeddingBase
-from .config import RoPEConfig, RoPEScalingType, RoPEVariant
-from .dynamic import XDRotaryEmbedding
+from .neox import NeoxRotaryEmbedding
 from .gptj import GptJRotaryEmbedding
 from .multimodal import MRotaryEmbedding
-from .neox import NeoxRotaryEmbedding
-
+from .dynamic import XDRotaryEmbedding
 
 class RotaryEmbeddingEngine:
     """Unified engine for rotary position embeddings.
@@ -40,7 +20,7 @@ class RotaryEmbeddingEngine:
         RoPEVariant.XDROPE: XDRotaryEmbedding,
     }
 
-    def __init__(self, config: Optional[RoPEConfig] = None) -> None:
+    def __init__(self, config: Optional[RoPEConfig] = None):
         """Initialize the RoPE engine."""
         self.config = config or RoPEConfig()
         self._embeddings: Dict[RoPEVariant, RotaryEmbeddingBase] = {}
@@ -118,7 +98,6 @@ class RotaryEmbeddingEngine:
     def list_variants(cls) -> List[str]:
         """List all supported RoPE variants."""
         return [v.name for v in RoPEVariant]
-
 
 def create_rope_embedding(
     head_dim: int = 64,

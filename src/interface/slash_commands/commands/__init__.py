@@ -11,7 +11,7 @@ To add a new command:
 
 Example (mycommand.py):
     from src.interface.slash_commands import register, CommandContext, CommandResult
-    
+
     @register("mycommand", description="My custom command", category="custom")
     def cmd_mycommand(ctx: CommandContext) -> CommandResult:
         return CommandResult.ok("[My command output!]")

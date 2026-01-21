@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -19,7 +5,6 @@ Speculative tree structures for EAGLE.
 """
 
 from __future__ import annotations
-
 import math
 from dataclasses import dataclass, field
 from typing import cast
@@ -28,7 +13,6 @@ from typing import cast
 @dataclass(slots=True)
 class TreeNode:
     """Node in speculative decoding tree."""
-
     token_id: int
     depth: int
     parent: TreeNode | None = None
@@ -47,7 +31,7 @@ class TreeNode:
             parent=self,
             logprob=logprob,
             cumulative_logprob=self.cumulative_logprob + logprob,
-            confidence=confidence,
+            confidence=confidence
         )
         self.children.append(child)
         return child
@@ -74,7 +58,6 @@ class TreeNode:
 @dataclass(slots=True)
 class SpeculativeTree:
     """Tree structure for tree-based speculative decoding."""
-
     root: TreeNode
     max_depth: int
     num_nodes: int = 1
@@ -91,7 +74,7 @@ class SpeculativeTree:
         self,
         node: TreeNode,
         candidates: list[tuple[int, float] | tuple[int, float, float]],  # (token_id, logprob, [confidence])
-        max_width: int = 4,
+        max_width: int = 4
     ) -> list[TreeNode]:
         """Expand node with candidate tokens based on confidence.
 
@@ -129,14 +112,12 @@ class SpeculativeTree:
 
     def prune(self, accepted_depth: int) -> None:
         """Prune tree to accepted depth."""
-
         def _prune(node: TreeNode) -> None:
             if node.depth >= accepted_depth:
                 node.children = []
             else:
                 for child in node.children:
                     _prune(child)
-
         _prune(self.root)
 
 
@@ -144,8 +125,12 @@ class TalonTreeBuilder:
     """Implements Budget-Driven Adaptive Tree Expansion (arXiv:2601.07353)."""
 
     def __init__(
-        self, budget: int = 64, max_depth: int = 10, confidence_threshold: float = 0.1, branching_factor: int = 4
-    ) -> None:
+        self,
+        budget: int = 64,
+        max_depth: int = 10,
+        confidence_threshold: float = 0.1,
+        branching_factor: int = 4
+    ):
         self.budget = budget
         self.max_depth = max_depth
         self.confidence_threshold = confidence_threshold
@@ -154,23 +139,25 @@ class TalonTreeBuilder:
     def build_tree(
         self,
         root_token_id: int,
-        get_candidates_fn: callable,  # fn(node) -> list[(token_id, logprob, confidence)]
+        get_candidates_fn: callable # fn(node) -> list[(token_id, logprob, confidence)]
     ) -> SpeculativeTree:
         """Constructs an adaptive tree until budget is exhausted."""
         tree = SpeculativeTree.create(
-            root_token_id, max_depth=self.max_depth, confidence_threshold=self.confidence_threshold
+            root_token_id,
+            max_depth=self.max_depth,
+            confidence_threshold=self.confidence_threshold
         )
 
         # Priority queue for expansion nodes (Expansion Score, Node)
         # Expansion Score = cumulative_logprob * node_confidence (simplified)
-        from heapq import heappop, heappush
+        from heapq import heappush, heappop
 
         frontier = []
         # Use negative logprob for max-heap behavior
         heappush(frontier, (-0.0, tree.root))
 
         while tree.num_nodes < self.budget and frontier:
-            _, current_node = heappop(frontier)
+            neg_score, current_node = heappop(frontier)
 
             if current_node.depth >= self.max_depth:
                 continue
@@ -184,7 +171,11 @@ class TalonTreeBuilder:
                 continue
 
             # Expand current node
-            new_nodes = tree.expand(current_node, viable, max_width=self.branching_factor)
+            new_nodes = tree.expand(
+                current_node,
+                viable,
+                max_width=self.branching_factor
+            )
 
             # Add new nodes to frontier
             for child in new_nodes:

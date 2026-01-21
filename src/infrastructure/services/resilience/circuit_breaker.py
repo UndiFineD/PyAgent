@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 CircuitBreaker - Resilience pattern for failing gracefully.
 
@@ -25,37 +11,32 @@ States:
 
 Phase 18: Beyond vLLM - Resilience Patterns
 """
-
 from __future__ import annotations
-
-import contextlib
-import functools
+import asyncio
 import inspect
+import functools
 import threading
 import time
-from dataclasses import dataclass
+import contextlib
+from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, ParamSpec, TypeVar
+from typing import Callable, TypeVar, ParamSpec, Any, Generic
 
-from src.core.base.logic.connectivity_manager import ConnectivityManager
-
-P = ParamSpec("P")
-R = TypeVar("R")
-T = TypeVar("T")
+P = ParamSpec('P')
+R = TypeVar('R')
+T = TypeVar('T')
 
 
 class CircuitState(Enum):
     """Circuit breaker states."""
-
-    CLOSED = auto()  # Normal operation
-    OPEN = auto()  # Rejecting requests
-    HALF_OPEN = auto()  # Testing recovery
+    CLOSED = auto()      # Normal operation
+    OPEN = auto()        # Rejecting requests
+    HALF_OPEN = auto()   # Testing recovery
 
 
 @dataclass
 class CircuitStats:
     """Statistics for circuit breaker monitoring."""
-
     total_calls: int = 0
     successful_calls: int = 0
     failed_calls: int = 0
@@ -83,29 +64,45 @@ class CircuitStats:
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
-            "total_calls": self.total_calls,
-            "successful_calls": self.successful_calls,
-            "failed_calls": self.failed_calls,
-            "rejected_calls": self.rejected_calls,
-            "failure_rate": round(self.failure_rate, 4),
-            "success_rate": round(self.success_rate, 4),
-            "consecutive_failures": self.consecutive_failures,
-            "consecutive_successes": self.consecutive_successes,
-            "state_changes": self.state_changes,
+            'total_calls': self.total_calls,
+            'successful_calls': self.successful_calls,
+            'failed_calls': self.failed_calls,
+            'rejected_calls': self.rejected_calls,
+            'failure_rate': round(self.failure_rate, 4),
+            'success_rate': round(self.success_rate, 4),
+            'consecutive_failures': self.consecutive_failures,
+            'consecutive_successes': self.consecutive_successes,
+            'state_changes': self.state_changes,
         }
 
 
 class CircuitBreakerError(Exception):
     """Raised when circuit is open."""
-
     def __init__(self, message: str, retry_after: float | None = None):
         super().__init__(message)
         self.retry_after = retry_after
 
 
 class CircuitBreaker:
-    """Thread-safe circuit breaker for protecting against cascading failures in services."""
+    """
+    Thread-safe circuit breaker for protecting against cascading failures.
 
+    Example:
+        >>> breaker = CircuitBreaker(
+        ...     failure_threshold=5,
+        ...     recovery_timeout=30.0,
+        ...     half_open_max_calls=3,
+        ... )
+        >>>
+        >>> @breaker
+        ... def call_external_service():
+        ...     return requests.get("http://api.example.com")
+        >>>
+        >>> try:
+        ...     result = call_external_service()
+        ... except CircuitBreakerError as e:
+        ...     print(f"Circuit open, retry after {e.retry_after}s")
+    """
 
     def __init__(
         self,
@@ -175,9 +172,7 @@ class CircuitBreaker:
         """Check if state should transition based on timeout."""
         if self._state == CircuitState.OPEN and self._opened_at:
             elapsed = time.monotonic() - self._opened_at
-            # print(f"[DEBUG] _check_state_transition: state=OPEN, elapsed={elapsed:.2f}, recovery_timeout={self._recovery_timeout}")
             if elapsed >= self._recovery_timeout:
-                # print("[DEBUG] Transitioning to HALF_OPEN from OPEN due to timeout.")
                 self._transition_to(CircuitState.HALF_OPEN)
 
     def _transition_to(self, new_state: CircuitState) -> None:
@@ -185,7 +180,7 @@ class CircuitBreaker:
         if self._state == new_state:
             return
 
-        # print(f"[DEBUG] Transitioning state: {self._state.name} -> {new_state.name}")
+        old_state = self._state
         self._state = new_state
         self._stats.state_changes += 1
 
@@ -212,46 +207,21 @@ class CircuitBreaker:
                     callback()
 
     def _should_allow_request(self) -> bool:
-        """Check if request should be allowed, and trigger state transitions if needed."""
-        # Phase 336: Global Connectivity Check (15m TTL)
-        if not ConnectivityManager().is_endpoint_available(self._name):
-            # print(f"[DEBUG] ConnectivityManager: endpoint '{self._name}' unavailable.")
-            return False
-
+        """Check if request should be allowed."""
         with self._lock:
-            # Always check for state transition on every call
-            if self._state == CircuitState.OPEN and self._opened_at:
-                elapsed = time.monotonic() - self._opened_at
-                # print(f"[DEBUG] _should_allow_request: state=OPEN, elapsed={elapsed:.2f}, recovery_timeout={self._recovery_timeout}")
-                if elapsed >= self._recovery_timeout:
-                    # print("[DEBUG] _should_allow_request: Transitioning to HALF_OPEN from OPEN due to timeout.")
-                    self._transition_to(CircuitState.HALF_OPEN)
-
-            # print(f"[DEBUG] _should_allow_request: state={self._state.name}, half_open_calls={self._half_open_calls}")
+            self._check_state_transition()
 
             if self._state == CircuitState.CLOSED:
-                # print("[DEBUG] _should_allow_request: Allowing request (CLOSED)")
                 return True
 
             if self._state == CircuitState.OPEN:
-                # print("[DEBUG] _should_allow_request: Rejecting request (OPEN)")
-                # If just transitioned to HALF_OPEN, allow the first call
-                if self._opened_at and (time.monotonic() - self._opened_at) >= self._recovery_timeout:
-                    # print("[DEBUG] _should_allow_request: Forcing transition to HALF_OPEN and allowing first call.")
-                    self._transition_to(CircuitState.HALF_OPEN)
-                    if self._half_open_calls == 0:
-                        self._half_open_calls += 1
-                        # print("[DEBUG] _should_allow_request: Allowing first call in HALF_OPEN")
-                        return True
                 return False
 
             # HALF_OPEN: Allow limited requests
             if self._half_open_calls < self._half_open_max_calls:
                 self._half_open_calls += 1
-                # print(f"[DEBUG] _should_allow_request: Allowing request in HALF_OPEN (call {self._half_open_calls}/{self._half_open_max_calls})")
                 return True
 
-            # print("[DEBUG] _should_allow_request: Rejecting request (HALF_OPEN, max calls reached)")
             return False
 
     def _record_success(self) -> None:
@@ -261,10 +231,6 @@ class CircuitBreaker:
             self._stats.successful_calls += 1
             self._stats.last_success_time = time.monotonic()
             self._stats.consecutive_successes += 1
-
-            # Phase 336: Update global connectivity status
-            ConnectivityManager().update_status(self._name, True)
-
             self._stats.consecutive_failures = 0
 
             if self._state == CircuitState.HALF_OPEN:
@@ -281,9 +247,6 @@ class CircuitBreaker:
             self._stats.consecutive_failures += 1
             self._stats.consecutive_successes = 0
 
-            # Phase 336: Update global connectivity status
-            ConnectivityManager().update_status(self._name, False)
-
             if self._state == CircuitState.HALF_OPEN:
                 # Any failure in half-open reopens circuit
                 self._transition_to(CircuitState.OPEN)
@@ -295,11 +258,9 @@ class CircuitBreaker:
                 if self._stats.consecutive_failures >= self._failure_threshold:
                     should_open = True
 
-                if (
-                    self._failure_rate_threshold
-                    and self._stats.total_calls >= 10
-                    and self._stats.failure_rate >= self._failure_rate_threshold
-                ):
+                if (self._failure_rate_threshold and
+                    self._stats.total_calls >= 10 and
+                    self._stats.failure_rate >= self._failure_rate_threshold):
                     should_open = True
 
                 if should_open:
@@ -315,10 +276,20 @@ class CircuitBreaker:
         return max(0.0, remaining)
 
     def call(self, func: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
-        """Execute a function through the circuit breaker."""
-        # Always check for state transition before allowing request
-        with self._lock:
-            self._check_state_transition()
+        """
+        Execute a function through the circuit breaker.
+
+        Args:
+            func: Function to call
+            *args: Positional arguments
+            **kwargs: Keyword arguments
+
+        Returns:
+            Function result
+
+        Raises:
+            CircuitBreakerError: If circuit is open
+        """
         if not self._should_allow_request():
             self._stats.rejected_calls += 1
             raise CircuitBreakerError(
@@ -334,7 +305,7 @@ class CircuitBreaker:
             # Don't count excluded exceptions as failures
             self._record_success()
             raise
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:
             self._record_failure()
             raise
 
@@ -344,10 +315,9 @@ class CircuitBreaker:
         *args: P.args,
         **kwargs: P.kwargs,
     ) -> Any:
-        """Execute an async function through the circuit breaker."""
-        # Always check for state transition before allowing request
-        with self._lock:
-            self._check_state_transition()
+        """
+        Execute an async function through the circuit breaker.
+        """
         if not self._should_allow_request():
             self._stats.rejected_calls += 1
             raise CircuitBreakerError(
@@ -359,25 +329,24 @@ class CircuitBreaker:
             result = await func(*args, **kwargs)
             self._record_success()
             return result
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except self._excluded_exceptions:
+            self._record_success()
+            raise
+        except Exception:
             self._record_failure()
             raise
 
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
         """Decorator for wrapping functions with circuit breaker."""
         if inspect.iscoroutinefunction(func):
-
             @functools.wraps(func)
             async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 return await self.call_async(func, *args, **kwargs)
-
             return async_wrapper  # type: ignore
         else:
-
             @functools.wraps(func)
             def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 return self.call(func, *args, **kwargs)
-
             return sync_wrapper
 
     def on_open(self, callback: Callable[[], None]) -> None:
@@ -446,7 +415,10 @@ class CircuitBreakerRegistry:
 
     def get_all_stats(self) -> dict[str, dict]:
         """Get stats for all circuit breakers."""
-        return {name: cb.stats.to_dict() for name, cb in self._breakers.items()}
+        return {
+            name: cb.stats.to_dict()
+            for name, cb in self._breakers.items()
+        }
 
     def reset_all(self) -> None:
         """Reset all circuit breakers."""
@@ -484,12 +456,12 @@ def get_all_circuit_stats() -> dict[str, dict]:
 
 
 __all__ = [
-    "CircuitState",
-    "CircuitStats",
-    "CircuitBreakerError",
-    "CircuitBreaker",
-    "CircuitBreakerRegistry",
-    "circuit_breaker",
-    "get_circuit_stats",
-    "get_all_circuit_stats",
+    'CircuitState',
+    'CircuitStats',
+    'CircuitBreakerError',
+    'CircuitBreaker',
+    'CircuitBreakerRegistry',
+    'circuit_breaker',
+    'get_circuit_stats',
+    'get_all_circuit_stats',
 ]

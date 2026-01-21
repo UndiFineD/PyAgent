@@ -25,7 +25,7 @@ __version__ = VERSION
 
 class ReflectionAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Reflection Agent: Critique and refinement engine 
+    Tier 2 (Cognitive Logic) - Reflection Agent: Critique and refinement engine
     specializing in self-improvement and logic verification.
     """
 

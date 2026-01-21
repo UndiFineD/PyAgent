@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 40: Input Processing Package
 
@@ -25,16 +11,37 @@ This package provides:
 - Input size estimation for scheduling
 """
 
-from .input_preprocessor import (  # Enums; Data classes; Core classes; Utilities  # noqa: F401
-    ChatMessage, ChatPrompt, ConversationLinearizer, EmbedsPrompt,
-    EncoderDecoderPrompt, InputFormat, InputMetadata, InputPreprocessor,
-    ProcessedInput, PromptTemplate, PromptType, PromptValidator, TextPrompt,
-    TokensPrompt, estimate_tokens, parse_prompt)
+from .input_preprocessor import (
+    # Enums
+    PromptType,
+    InputFormat,
+
+    # Data classes
+    TextPrompt,
+    TokensPrompt,
+    EmbedsPrompt,
+    EncoderDecoderPrompt,
+    ChatMessage,
+    ChatPrompt,
+    ProcessedInput,
+    InputMetadata,
+
+    # Core classes
+    PromptTemplate,
+    InputPreprocessor,
+    PromptValidator,
+    ConversationLinearizer,
+
+    # Utilities
+    parse_prompt,
+    estimate_tokens,
+)
 
 __all__ = [
     # Enums
     "PromptType",
     "InputFormat",
+
     # Data classes
     "TextPrompt",
     "TokensPrompt",
@@ -44,11 +51,13 @@ __all__ = [
     "ChatPrompt",
     "ProcessedInput",
     "InputMetadata",
+
     # Core classes
     "PromptTemplate",
     "InputPreprocessor",
     "PromptValidator",
     "ConversationLinearizer",
+
     # Utilities
     "parse_prompt",
     "estimate_tokens",

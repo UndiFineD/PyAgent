@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -21,15 +7,15 @@ Base class for tokenizers.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence
 
-from .models import TokenizerConfig, TokenizeResult, TokenizerInfo
+from .models import TokenizerConfig, TokenizerInfo, TokenizeResult
 
 
 class BaseTokenizer(ABC):
     """Abstract base class for tokenizers."""
 
-    def __init__(self, config: TokenizerConfig) -> None:
+    def __init__(self, config: TokenizerConfig):
         self.config = config
         self._info: Optional[TokenizerInfo] = None
 
@@ -37,25 +23,25 @@ class BaseTokenizer(ABC):
     @abstractmethod
     def vocab_size(self) -> int:
         """Size of the vocabulary."""
-        raise NotImplementedError("Subclasses must implement vocab_size")
+        pass
 
     @property
     @abstractmethod
     def bos_token_id(self) -> Optional[int]:
         """Beginning of sequence token ID."""
-        raise NotImplementedError("Subclasses must implement bos_token_id")
+        pass
 
     @property
     @abstractmethod
     def eos_token_id(self) -> Optional[int]:
         """End of sequence token ID."""
-        raise NotImplementedError("Subclasses must implement eos_token_id")
+        pass
 
     @property
     @abstractmethod
     def pad_token_id(self) -> Optional[int]:
         """Padding token ID."""
-        raise NotImplementedError("Subclasses must implement pad_token_id")
+        pass
 
     @abstractmethod
     def encode(
@@ -64,7 +50,7 @@ class BaseTokenizer(ABC):
         add_special_tokens: bool = True,
     ) -> List[int]:
         """Encode text to token IDs."""
-        raise NotImplementedError("Subclasses must implement encode()")
+        pass
 
     @abstractmethod
     def decode(
@@ -73,7 +59,7 @@ class BaseTokenizer(ABC):
         skip_special_tokens: bool = True,
     ) -> str:
         """Decode token IDs to text."""
-        raise NotImplementedError("Subclasses must implement decode()")
+        pass
 
     def batch_encode(
         self,
@@ -98,7 +84,6 @@ class BaseTokenizer(ABC):
         return_offsets: bool = False,
     ) -> TokenizeResult:
         """Full tokenization with metadata."""
-        _ = return_offsets  # Not supported by base implementation
         input_ids = self.encode(text, add_special_tokens)
         return TokenizeResult(
             input_ids=input_ids,

@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -20,29 +6,30 @@ Engine core processor for data parallel coordination.
 
 from __future__ import annotations
 
-from _thread import RLock
 import logging
 import threading
 import time
 from collections import deque
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
+from src.infrastructure.swarm.parallel.dp.types import (
+    DPConfig,
+    WorkerState,
+    WorkerHealth,
+    StepState,
+    WaveState,
+)
 from src.infrastructure.swarm.parallel.dp.balancer import P2CLoadBalancer
-from src.infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
-                                                        WaveState,
-                                                        WorkerHealth,
-                                                        WorkerState)
 
-logger: logging.Logger = logging.getLogger(__name__)
-
+logger = logging.getLogger(__name__)
 
 class DPEngineCoreProc:
     """
     Data Parallel engine core processor.
     """
 
-    def __init__(self, config: DPConfig) -> None:
-        self.config: DPConfig = config
+    def __init__(self, config: DPConfig):
+        self.config = config
 
         # Step tracking
         self._step_counter = 0
@@ -60,7 +47,9 @@ class DPEngineCoreProc:
 
         # Load balancer
         self._load_balancer = P2CLoadBalancer(
-            list(self._workers.values()), self.config.p2c_sample_size, self.config.enable_locality
+            list(self._workers.values()),
+            self.config.p2c_sample_size,
+            self.config.enable_locality
         )
 
         # Barriers for synchronization
@@ -71,7 +60,7 @@ class DPEngineCoreProc:
             self._step_barrier = threading.Barrier(self.config.dp_size)
             self._wave_barrier = threading.Barrier(self.config.dp_size)
 
-        self._lock: RLock = threading.RLock()
+        self._lock = threading.RLock()
 
         logger.info(f"DPEngineCoreProc initialized: rank={config.dp_rank}, size={config.dp_size}")
 
@@ -81,18 +70,26 @@ class DPEngineCoreProc:
             locality_group = 0
             for group_idx, group in enumerate(self.config.locality_groups):
                 if i in group:
-                    locality_group: int = group_idx
+                    locality_group = group_idx
                     break
 
-            self._workers[i] = WorkerState(worker_id=i, dp_rank=i % self.config.dp_size, locality_group=locality_group)
+            self._workers[i] = WorkerState(
+                worker_id=i,
+                dp_rank=i % self.config.dp_size,
+                locality_group=locality_group
+            )
 
     def begin_step(self, num_requests: int = 0) -> StepState:
         """Begin a new step."""
         with self._lock:
             self._step_counter += 1
-            self._step_request_count: int = num_requests
+            self._step_request_count = num_requests
 
-            step = StepState(step_id=self._step_counter, wave_id=self._wave_id, request_count=num_requests)
+            step = StepState(
+                step_id=self._step_counter,
+                wave_id=self._wave_id,
+                request_count=num_requests
+            )
             self._current_step = step
             return step
 
@@ -102,7 +99,7 @@ class DPEngineCoreProc:
             if self._current_step is None:
                 return None
 
-            step: StepState = self._current_step
+            step = self._current_step
             step.end_time = time.time()
             if self._current_wave:
                 self._current_wave.completed_steps += 1
@@ -135,7 +132,7 @@ class DPEngineCoreProc:
             if self._current_wave is None:
                 return None
 
-            wave: WaveState = self._current_wave
+            wave = self._current_wave
             wave.end_time = time.time()
             self._wave_history.append(wave)
             self._current_wave = None
@@ -150,19 +147,24 @@ class DPEngineCoreProc:
         """Select worker for request assignment."""
         return self._load_balancer.select_worker(locality_group)
 
-    def assign_request(self, _request_id: str) -> int:
+    def assign_request(self, request_id: str) -> int:
         """Assign request to a worker. Returns worker ID."""
-        worker: WorkerState = self.select_worker()
+        worker = self.select_worker()
         worker.pending_requests += 1
         return worker.worker_id
 
-    def complete_request(self, worker_id: int, latency_ms: float, success: bool = True) -> None:
+    def complete_request(
+        self,
+        worker_id: int,
+        latency_ms: float,
+        success: bool = True
+    ) -> None:
         """Mark request as complete on worker."""
         with self._lock:
             if worker_id not in self._workers:
                 return
 
-            worker: WorkerState = self._workers[worker_id]
+            worker = self._workers[worker_id]
             worker.pending_requests = max(0, worker.pending_requests - 1)
             worker.total_processed += 1
             worker.update_latency(latency_ms)
@@ -202,14 +204,17 @@ class DPEngineCoreProc:
     def get_healthy_workers(self) -> list[WorkerState]:
         """Get only healthy workers."""
         with self._lock:
-            return [w for w in self._workers.values() if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)]
+            return [
+                w for w in self._workers.values()
+                if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)
+            ]
 
     def get_metrics(self) -> dict[str, Any]:
         """Get coordinator metrics."""
         with self._lock:
-            total_pending: int = sum(w.pending_requests for w in self._workers.values())
-            total_processed: int = sum(w.total_processed for w in self._workers.values())
-            healthy_count: int = len(self.get_healthy_workers())
+            total_pending = sum(w.pending_requests for w in self._workers.values())
+            total_processed = sum(w.total_processed for w in self._workers.values())
+            healthy_count = len(self.get_healthy_workers())
 
             return {
                 "dp_rank": self.config.dp_rank,

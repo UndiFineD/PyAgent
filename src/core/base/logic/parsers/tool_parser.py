@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 ToolParser - Extensible tool call parsing framework.
 
@@ -38,7 +24,6 @@ T = TypeVar("T", bound="ToolParser")
 @dataclass
 class ToolCall:
     """Represents a single tool/function call."""
-
     name: str
     arguments: dict[str, Any]
     id: str | None = None
@@ -57,7 +42,6 @@ class ToolCall:
 @dataclass
 class ExtractedToolCalls:
     """Result of tool call extraction."""
-
     tool_calls: list[ToolCall] = field(default_factory=list)
     content: str | None = None
     is_complete: bool = True
@@ -72,7 +56,6 @@ class ExtractedToolCalls:
 @dataclass
 class StreamingToolCallDelta:
     """Delta update for streaming tool call extraction."""
-
     tool_call_index: int
     name_delta: str | None = None
     arguments_delta: str | None = None
@@ -115,8 +98,15 @@ class ToolParser(ABC):
     ) -> ExtractedToolCalls:
         """
         Extract tool calls from a complete model output.
+
+        Args:
+            model_output: The complete model-generated string
+            tools: Optional list of available tool definitions
+
+        Returns:
+            ExtractedToolCalls with parsed tool calls
         """
-        ...
+        pass
 
     @abstractmethod
     def extract_tool_calls_streaming(
@@ -130,8 +120,19 @@ class ToolParser(ABC):
     ) -> StreamingToolCallDelta | None:
         """
         Extract tool calls from streaming output.
+
+        Args:
+            previous_text: Text from previous iteration
+            current_text: Current accumulated text
+            delta_text: New text since last iteration
+            previous_token_ids: Token IDs from previous iteration
+            current_token_ids: Current token IDs
+            delta_token_ids: New token IDs
+
+        Returns:
+            StreamingToolCallDelta or None if no update
         """
-        ...
+        pass
 
     def reset(self) -> None:
         """Reset parser state for new request."""
@@ -199,13 +200,11 @@ class JSONToolParser(ToolParser):
             tool_calls = []
             for i, item in enumerate(parsed):
                 if isinstance(item, dict) and "name" in item:
-                    tool_calls.append(
-                        ToolCall(
-                            name=item["name"],
-                            arguments=item.get("arguments", item.get("parameters", {})),
-                            id=item.get("id", f"call_{i}"),
-                        )
-                    )
+                    tool_calls.append(ToolCall(
+                        name=item["name"],
+                        arguments=item.get("arguments", item.get("parameters", {})),
+                        id=item.get("id", f"call_{i}"),
+                    ))
 
             content = model_output[:start_idx].strip() or None
 
@@ -243,7 +242,6 @@ class JSONToolParser(ToolParser):
             # Use partial JSON parsing if available
             try:
                 import partial_json_parser
-
                 parsed = partial_json_parser.loads(json_partial)
             except ImportError:
                 # Fallback: try adding closing brackets
@@ -273,7 +271,7 @@ class JSONToolParser(ToolParser):
                         arguments_delta=json.dumps(current_call.get("arguments", {})),
                         is_complete=self.tool_call_end in current_text,
                     )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:
             pass
 
         return None
@@ -308,7 +306,7 @@ class XMLToolParser(ToolParser):
         for i, match in enumerate(self.TOOL_CALL_PATTERN.finditer(model_output)):
             # Capture content before this tool call
             if match.start() > last_end:
-                content_parts.append(model_output[last_end : match.start()])
+                content_parts.append(model_output[last_end:match.start()])
 
             name = match.group(1).strip()
             args_str = match.group(2).strip()
@@ -318,13 +316,11 @@ class XMLToolParser(ToolParser):
             except json.JSONDecodeError:
                 arguments = {"raw": args_str}
 
-            tool_calls.append(
-                ToolCall(
-                    name=name,
-                    arguments=arguments,
-                    id=f"call_{i}",
-                )
-            )
+            tool_calls.append(ToolCall(
+                name=name,
+                arguments=arguments,
+                id=f"call_{i}",
+            ))
 
             last_end = match.end()
 
@@ -398,7 +394,6 @@ class ToolParserManager:
 
             ToolParserManager.register("my_parser", MyParser)
         """
-
         def decorator(parser: type[ToolParser]) -> type[ToolParser]:
             if not issubclass(parser, ToolParser):
                 raise TypeError(f"Must be subclass of ToolParser, got {type(parser)}")
@@ -449,7 +444,7 @@ class ToolParserManager:
                     raise TypeError(f"{class_name} is not a ToolParser subclass")
                 cls._parsers[name] = parser_cls  # Cache it
                 return parser_cls
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 raise ImportError(f"Failed to load parser '{name}': {e}") from e
 
         raise KeyError(f"Tool parser '{name}' not found")
@@ -488,11 +483,9 @@ def tool_parser(name: str) -> Callable[[type[T]], type[T]]:
         @tool_parser("my_parser")
         class MyParser(ToolParser): ...
     """
-
     def decorator(cls: type[T]) -> type[T]:
         ToolParserManager.register(name, cls)  # type: ignore
         return cls
-
     return decorator
 
 

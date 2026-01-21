@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -20,9 +6,17 @@ JSON schema constraint logic for structured output decoding.
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Set,
+)
 
 import numpy as np
 
@@ -46,7 +40,7 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
     _token_history: List[int] = field(default_factory=list, init=False)
     _terminated: bool = field(default=False, init=False)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         """Compile JSON schema to regex pattern."""
         self._pattern = self._schema_to_regex(self.schema)
         self._regex = re.compile(self._pattern)
@@ -94,7 +88,7 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
             for name, prop_schema in properties.items():
                 prop_pattern = self._schema_to_regex(prop_schema)
                 key_pattern = f'"{re.escape(name)}"'
-                full_pattern = f"{key_pattern}\\s*:\\s*{prop_pattern}"
+                full_pattern = f'{key_pattern}\\s*:\\s*{prop_pattern}'
                 if name not in required:
                     full_pattern = f"({full_pattern})?"
                 prop_patterns.append(full_pattern)
@@ -133,8 +127,7 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
                 return True
             # Also accept if we're building valid JSON
             return self._is_valid_json_prefix(text)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:
             return False
 
     def _is_valid_json_prefix(self, text: str) -> bool:
@@ -148,7 +141,7 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
         open_brackets = text.count("[") - text.count("]")
         in_string = False
         for i, c in enumerate(text):
-            if c == '"' and (i == 0 or text[i - 1] != "\\"):
+            if c == '"' and (i == 0 or text[i-1] != '\\'):
                 in_string = not in_string
 
         return open_braces >= 0 and open_brackets >= 0
@@ -175,6 +168,7 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
         if num_tokens <= 0:
             return
 
+        tokens_to_remove = self._token_history[-num_tokens:]
         self._token_history = self._token_history[:-num_tokens]
 
         # Rebuild buffer

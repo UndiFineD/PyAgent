@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 RetryStrategy - Exponential backoff with jitter for resilient retries.
 
@@ -23,35 +9,31 @@ Goes beyond vLLM with production-grade retry patterns including:
 
 Phase 18: Beyond vLLM - Resilience Patterns
 """
-
 from __future__ import annotations
-
 import asyncio
-import functools
 import inspect
+import functools
 import random
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, ParamSpec, TypeVar
+from typing import Callable, TypeVar, ParamSpec, Any, Sequence
 
-P = ParamSpec("P")
-R = TypeVar("R")
+P = ParamSpec('P')
+R = TypeVar('R')
 
 
 class JitterType(Enum):
     """Types of jitter for backoff."""
-
-    NONE = auto()  # No jitter (not recommended)
-    FULL = auto()  # Random between 0 and backoff
-    EQUAL = auto()  # Half backoff + random half
-    DECORRELATED = auto()  # AWS-style decorrelated jitter
+    NONE = auto()         # No jitter (not recommended)
+    FULL = auto()         # Random between 0 and backoff
+    EQUAL = auto()        # Half backoff + random half
+    DECORRELATED = auto() # AWS-style decorrelated jitter
 
 
 @dataclass
 class RetryStats:
     """Statistics for retry operations."""
-
     total_attempts: int = 0
     successful_attempts: int = 0
     failed_attempts: int = 0
@@ -62,19 +44,18 @@ class RetryStats:
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
-            "total_attempts": self.total_attempts,
-            "successful_attempts": self.successful_attempts,
-            "failed_attempts": self.failed_attempts,
-            "total_retries": self.total_retries,
-            "avg_retries": round(self.total_retries / max(1, self.total_attempts), 2),
-            "total_wait_time_ms": round(self.total_wait_time * 1000, 2),
-            "last_error": self.last_error,
+            'total_attempts': self.total_attempts,
+            'successful_attempts': self.successful_attempts,
+            'failed_attempts': self.failed_attempts,
+            'total_retries': self.total_retries,
+            'avg_retries': round(self.total_retries / max(1, self.total_attempts), 2),
+            'total_wait_time_ms': round(self.total_wait_time * 1000, 2),
+            'last_error': self.last_error,
         }
 
 
 class RetryExhaustedError(Exception):
     """Raised when all retries are exhausted."""
-
     def __init__(
         self,
         message: str,
@@ -158,7 +139,7 @@ class RetryStrategy:
             return delay
 
         # Exponential backoff
-        exp_delay = self._base_delay * (self._exponential_base**attempt)
+        exp_delay = self._base_delay * (self._exponential_base ** attempt)
         delay = min(exp_delay, self._max_delay)
 
         if self._jitter == JitterType.NONE:
@@ -211,7 +192,7 @@ class RetryStrategy:
                 self._stats.successful_attempts += 1
                 return result
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 last_exception = e
                 self._stats.last_error = str(e)
 
@@ -265,7 +246,7 @@ class RetryStrategy:
                 self._stats.successful_attempts += 1
                 return result
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 last_exception = e
                 self._stats.last_error = str(e)
 
@@ -300,18 +281,14 @@ class RetryStrategy:
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
         """Decorator for wrapping functions with retry logic."""
         if inspect.iscoroutinefunction(func):
-
             @functools.wraps(func)
             async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 return await self.execute_async(func, *args, **kwargs)
-
             return async_wrapper  # type: ignore
         else:
-
             @functools.wraps(func)
             def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 return self.execute(func, *args, **kwargs)
-
             return sync_wrapper
 
 
@@ -424,18 +401,20 @@ class RetryBudget:
     def get_stats(self) -> dict:
         """Get budget statistics."""
         return {
-            "available_tokens": round(self._tokens, 2),
-            "requests": self._requests_count,
-            "retries": self._retry_count,
-            "retry_ratio": round(self._retry_count / max(1, self._requests_count), 4),
+            'available_tokens': round(self._tokens, 2),
+            'requests': self._requests_count,
+            'retries': self._retry_count,
+            'retry_ratio': round(
+                self._retry_count / max(1, self._requests_count), 4
+            ),
         }
 
 
 __all__ = [
-    "JitterType",
-    "RetryStats",
-    "RetryExhaustedError",
-    "RetryStrategy",
-    "retry",
-    "RetryBudget",
+    'JitterType',
+    'RetryStats',
+    'RetryExhaustedError',
+    'RetryStrategy',
+    'retry',
+    'RetryBudget',
 ]

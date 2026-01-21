@@ -1,19 +1,3 @@
-#!/usr/bin/env python3
-from __future__ import annotations
-
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 LRUOffloadManager: LRU-based KV Cache Offloading
 
@@ -30,22 +14,31 @@ Key Features Beyond vLLM:
 Based on vLLM v1 patterns with PyAgent innovations.
 """
 
+from __future__ import annotations
 
-import threading
-import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Iterator
+import time
+import threading
+import heapq
 
 # Import shared types from ARCOffloadManager
 from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
-    Backend, BlockHash, BlockState, BlockStatus, LoadStoreSpec,
-    OffloadingEvent, OffloadingManager, OffloadMedium, PrepareStoreOutput,
-    SimpleBackend)
+    BlockHash,
+    BlockState,
+    BlockStatus,
+    LoadStoreSpec,
+    OffloadingEvent,
+    OffloadMedium,
+    PrepareStoreOutput,
+    Backend,
+    OffloadingManager,
+    SimpleBackend,
+)
 
 try:
-    import rust_core  # noqa: F401
-
+    import rust_core
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -75,8 +68,11 @@ class LRUOffloadManager(OffloadingManager):
     Evicts least recently used blocks when space is needed.
     """
 
-    def __init__(self, backend: Backend, enable_events: bool = False):
-        """Initialize LRU manager with given backend."""
+    def __init__(
+        self,
+        backend: Backend,
+        enable_events: bool = False
+    ):
         self.backend = backend
         # block_hash -> BlockStatus (ordered by access time)
         self.blocks: OrderedDict[BlockHash, BlockStatus] = OrderedDict()
@@ -133,7 +129,10 @@ class LRUOffloadManager(OffloadingManager):
                 assert block.ref_cnt > 0
                 block.ref_cnt -= 1
 
-    def prepare_store(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
+    def prepare_store(
+        self,
+        block_hashes: list[BlockHash]
+    ) -> PrepareStoreOutput | None:
         """Prepare to store blocks with LRU eviction."""
         with self._lock:
             # Filter already stored
@@ -143,7 +142,7 @@ class LRUOffloadManager(OffloadingManager):
                 return PrepareStoreOutput(
                     block_hashes_to_store=[],
                     store_spec=self.backend.get_load_store_spec([], []),
-                    block_hashes_evicted=[],
+                    block_hashes_evicted=[]
                 )
 
             num_to_evict = len(to_store) - self.backend.get_num_free_blocks()
@@ -165,14 +164,12 @@ class LRUOffloadManager(OffloadingManager):
 
             # Record event
             if self.events is not None and evicted:
-                self.events.append(
-                    OffloadingEvent(
-                        block_hashes=evicted,
-                        block_size=self.backend.block_size,
-                        medium=self.backend.medium,
-                        removed=True,
-                    )
-                )
+                self.events.append(OffloadingEvent(
+                    block_hashes=evicted,
+                    block_size=self.backend.block_size,
+                    medium=self.backend.medium,
+                    removed=True
+                ))
 
             # Allocate new blocks
             new_blocks = self.backend.allocate_blocks(to_store)
@@ -184,7 +181,7 @@ class LRUOffloadManager(OffloadingManager):
             return PrepareStoreOutput(
                 block_hashes_to_store=to_store,
                 store_spec=self.backend.get_load_store_spec(to_store, new_blocks),
-                block_hashes_evicted=evicted,
+                block_hashes_evicted=evicted
             )
 
     def complete_store(self, block_hashes: list[BlockHash]) -> None:
@@ -222,8 +219,12 @@ class WeightedLRUManager(LRUOffloadManager):
     Combines recency with access frequency for smarter eviction.
     """
 
-    def __init__(self, backend: Backend, enable_events: bool = False, frequency_weight: float = 0.3):
-        """Initialize weighted LRU manager."""
+    def __init__(
+        self,
+        backend: Backend,
+        enable_events: bool = False,
+        frequency_weight: float = 0.3
+    ):
         super().__init__(backend, enable_events)
         self.frequency_weight = frequency_weight
         # Track access counts
@@ -235,9 +236,13 @@ class WeightedLRUManager(LRUOffloadManager):
             for block_hash in reversed(list(block_hashes)):
                 if block_hash in self.blocks:
                     self.blocks.move_to_end(block_hash)
-                    self._access_counts[block_hash] = self._access_counts.get(block_hash, 0) + 1
+                    self._access_counts[block_hash] = \
+                        self._access_counts.get(block_hash, 0) + 1
 
-    def prepare_store(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
+    def prepare_store(
+        self,
+        block_hashes: list[BlockHash]
+    ) -> PrepareStoreOutput | None:
         """Store with weighted eviction."""
         with self._lock:
             to_store = [h for h in block_hashes if h not in self.blocks]
@@ -246,7 +251,7 @@ class WeightedLRUManager(LRUOffloadManager):
                 return PrepareStoreOutput(
                     block_hashes_to_store=[],
                     store_spec=self.backend.get_load_store_spec([], []),
-                    block_hashes_evicted=[],
+                    block_hashes_evicted=[]
                 )
 
             num_to_evict = len(to_store) - self.backend.get_num_free_blocks()
@@ -281,14 +286,12 @@ class WeightedLRUManager(LRUOffloadManager):
                     return None
 
             if self.events is not None and evicted:
-                self.events.append(
-                    OffloadingEvent(
-                        block_hashes=evicted,
-                        block_size=self.backend.block_size,
-                        medium=self.backend.medium,
-                        removed=True,
-                    )
-                )
+                self.events.append(OffloadingEvent(
+                    block_hashes=evicted,
+                    block_size=self.backend.block_size,
+                    medium=self.backend.medium,
+                    removed=True
+                ))
 
             new_blocks = self.backend.allocate_blocks(to_store)
             for block_hash, block in zip(to_store, new_blocks):
@@ -298,7 +301,7 @@ class WeightedLRUManager(LRUOffloadManager):
             return PrepareStoreOutput(
                 block_hashes_to_store=to_store,
                 store_spec=self.backend.get_load_store_spec(to_store, new_blocks),
-                block_hashes_evicted=evicted,
+                block_hashes_evicted=evicted
             )
 
 
@@ -315,9 +318,8 @@ class TieredLRUManager:
         warm_backend: Backend,
         cold_backend: Backend | None = None,
         hot_ratio: float = 0.2,
-        warm_ratio: float = 0.3,
+        warm_ratio: float = 0.3
     ):
-        """Initialize tiered LRU manager with separate backends for each tier."""
         self.hot_manager = LRUOffloadManager(hot_backend, enable_events=True)
         self.warm_manager = LRUOffloadManager(warm_backend, enable_events=True)
         self.cold_manager = LRUOffloadManager(cold_backend) if cold_backend else None
@@ -354,7 +356,8 @@ class TieredLRUManager:
         """Touch and potentially promote blocks."""
         with self._lock:
             for block_hash in block_hashes:
-                self._access_counts[block_hash] = self._access_counts.get(block_hash, 0) + 1
+                self._access_counts[block_hash] = \
+                    self._access_counts.get(block_hash, 0) + 1
 
                 count = self._access_counts[block_hash]
 
@@ -375,13 +378,21 @@ class TieredLRUManager:
                     if self.cold_manager:
                         self.cold_manager.touch([block_hash])
 
-    def _promote(self, block_hash: BlockHash, from_manager: LRUOffloadManager, to_manager: LRUOffloadManager) -> None:
+    def _promote(
+        self,
+        block_hash: BlockHash,
+        from_manager: LRUOffloadManager,
+        to_manager: LRUOffloadManager
+    ) -> None:
         """Promote block between tiers."""
         # This is a simplified promotion - actual implementation
         # would handle data transfer between backends
         pass
 
-    def prepare_store(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
+    def prepare_store(
+        self,
+        block_hashes: list[BlockHash]
+    ) -> PrepareStoreOutput | None:
         """Store in appropriate tier."""
         # New blocks go to warm tier first
         result = self.warm_manager.prepare_store(block_hashes)
@@ -410,8 +421,12 @@ class PrefetchingLRUManager(LRUOffloadManager):
     Maintains prefetch hints to proactively load blocks.
     """
 
-    def __init__(self, backend: Backend, enable_events: bool = False, prefetch_lookahead: int = 4):
-        """Initialize prefetching LRU manager."""
+    def __init__(
+        self,
+        backend: Backend,
+        enable_events: bool = False,
+        prefetch_lookahead: int = 4
+    ):
         super().__init__(backend, enable_events)
         self.prefetch_lookahead = prefetch_lookahead
 
@@ -422,8 +437,9 @@ class PrefetchingLRUManager(LRUOffloadManager):
     def hint_prefetch(self, block_hashes: list[BlockHash]) -> None:
         """Hint blocks that may be needed soon."""
         with self._lock:
-            for block_hash in block_hashes[: self.prefetch_lookahead]:
-                if block_hash not in self.blocks and block_hash not in self._prefetch_in_progress:
+            for block_hash in block_hashes[:self.prefetch_lookahead]:
+                if block_hash not in self.blocks and \
+                   block_hash not in self._prefetch_in_progress:
                     self._prefetch_queue.append(block_hash)
 
     def process_prefetch(self) -> list[BlockHash]:
@@ -432,7 +448,8 @@ class PrefetchingLRUManager(LRUOffloadManager):
             to_prefetch = []
             while self._prefetch_queue and len(to_prefetch) < self.prefetch_lookahead:
                 block_hash = self._prefetch_queue.pop(0)
-                if block_hash not in self.blocks and block_hash not in self._prefetch_in_progress:
+                if block_hash not in self.blocks and \
+                   block_hash not in self._prefetch_in_progress:
                     to_prefetch.append(block_hash)
                     self._prefetch_in_progress.add(block_hash)
 
@@ -449,34 +466,32 @@ class AsyncLRUManager:
     """Async wrapper for LRU offloading manager."""
 
     def __init__(self, manager: LRUOffloadManager):
-        """Initialize async wrapper with given LRU manager."""
         self.manager = manager
 
     async def lookup_async(self, block_hashes: list[BlockHash]) -> int:
         """Async lookup."""
         import asyncio
-
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.lookup, block_hashes)
 
     async def prepare_load_async(self, block_hashes: list[BlockHash]) -> LoadStoreSpec:
         """Async prepare load."""
         import asyncio
-
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.prepare_load, block_hashes)
 
-    async def prepare_store_async(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
+    async def prepare_store_async(
+        self,
+        block_hashes: list[BlockHash]
+    ) -> PrepareStoreOutput | None:
         """Async prepare store."""
         import asyncio
-
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.prepare_store, block_hashes)
 
     async def touch_async(self, block_hashes: list[BlockHash]) -> None:
         """Async touch."""
         import asyncio
-
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(None, self.manager.touch, block_hashes)
 
@@ -485,14 +500,19 @@ class LRUManagerFactory:
     """Factory for creating LRU managers."""
 
     @staticmethod
-    def create_simple(num_blocks: int = 1000, block_size: int = 16) -> LRUOffloadManager:
+    def create_simple(
+        num_blocks: int = 1000,
+        block_size: int = 16
+    ) -> LRUOffloadManager:
         """Create simple LRU manager."""
         backend = SimpleBackend(num_blocks=num_blocks, block_size=block_size)
         return LRUOffloadManager(backend)
 
     @staticmethod
     def create_weighted(
-        num_blocks: int = 1000, block_size: int = 16, frequency_weight: float = 0.3
+        num_blocks: int = 1000,
+        block_size: int = 16,
+        frequency_weight: float = 0.3
     ) -> WeightedLRUManager:
         """Create weighted LRU manager."""
         backend = SimpleBackend(num_blocks=num_blocks, block_size=block_size)
@@ -500,7 +520,10 @@ class LRUManagerFactory:
 
     @staticmethod
     def create_tiered(
-        hot_blocks: int = 200, warm_blocks: int = 500, cold_blocks: int = 1000, block_size: int = 16
+        hot_blocks: int = 200,
+        warm_blocks: int = 500,
+        cold_blocks: int = 1000,
+        block_size: int = 16
     ) -> TieredLRUManager:
         """Create tiered LRU manager."""
         hot = SimpleBackend(hot_blocks, block_size, OffloadMedium.GPU)
@@ -510,8 +533,13 @@ class LRUManagerFactory:
 
     @staticmethod
     def create_prefetching(
-        num_blocks: int = 1000, block_size: int = 16, prefetch_lookahead: int = 4
+        num_blocks: int = 1000,
+        block_size: int = 16,
+        prefetch_lookahead: int = 4
     ) -> PrefetchingLRUManager:
         """Create prefetching LRU manager."""
         backend = SimpleBackend(num_blocks=num_blocks, block_size=block_size)
-        return PrefetchingLRUManager(backend, prefetch_lookahead=prefetch_lookahead)
+        return PrefetchingLRUManager(
+            backend,
+            prefetch_lookahead=prefetch_lookahead
+        )

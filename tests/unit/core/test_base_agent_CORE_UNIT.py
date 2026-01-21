@@ -80,7 +80,7 @@ class TestLogicComponents:
 
     def test_event_manager_basic(self, base_agent_module: Any) -> None:
         """Test basic event management."""
-        from src.core.base.managers.SystemManagers import EventManager, AgentEvent
+        from src.core.base.logic.managers.system_managers import EventManager, AgentEvent
 
         manager = EventManager()
         calls: list[str] = []
@@ -92,7 +92,7 @@ class TestLogicComponents:
 
     def test_event_multiple_handlers(self, base_agent_module: Any) -> None:
         """Test multiple handlers for same event."""
-        from src.core.base.managers.SystemManagers import EventManager, AgentEvent
+        from src.core.base.logic.managers.system_managers import EventManager, AgentEvent
 
         manager = EventManager()
         results: list[int] = []
@@ -105,7 +105,7 @@ class TestLogicComponents:
 
     def test_event_with_data(self, base_agent_module: Any) -> None:
         """Test events with data payload."""
-        from src.core.base.managers.SystemManagers import EventManager, AgentEvent
+        from src.core.base.logic.managers.system_managers import EventManager, AgentEvent
 
         manager = EventManager()
         received: list[dict[str, Any]] = []
@@ -145,9 +145,9 @@ class TestRequestBatcher:
 
     def test_batcher_add(self, base_agent_module: Any) -> None:
         """Test adding items to batcher."""
-        from src.core.base.managers.BatchManagers import RequestBatcher
-        from src.core.base.BaseAgent import BatchRequest
-        
+        from src.core.base.logic.managers.batch_managers import RequestBatcher
+        from src.core.base.lifecycle.base_agent import BatchRequest
+
         batcher = RequestBatcher(batch_size=2)
 
         batcher.add_request(BatchRequest(file_path=Path("req1")))
@@ -163,8 +163,8 @@ class TestSerializationManager:
 
     def test_serialization_basic(self, base_agent_module: Any) -> None:
         """Test basic serialization."""
-        from src.core.base.managers.ProcessorManagers import SerializationManager
-        
+        from src.core.base.logic.managers.processor_managers import SerializationManager
+
         manager = SerializationManager()
 
         data = {"a": 1, "b": [2, 3]}
@@ -179,13 +179,13 @@ class TestFilePriorityManager:
 
     def test_priority_calculation(self, base_agent_module: Any) -> None:
         """Test calculating file priority."""
-        from src.core.base.managers.SystemManagers import FilePriorityManager
-        
+        from src.core.base.logic.managers.system_managers import FilePriorityManager
+
         manager = FilePriorityManager()
 
         # High priority for important files
         p1 = manager.get_priority(Path("README.md"))
-        p2 = manager.get_priority(Path("src/core/base/AgentCore.py"))
+        p2 = manager.get_priority(Path("src\core\base\agent_core.py"))
         p3 = manager.get_priority(Path("temp/debug.log"))
 
         assert p1.value >= p3.value
@@ -252,8 +252,8 @@ class TestPromptVersioningAndABTesting:
 
     def test_ab_test_variant_selection(self, base_agent_module: Any) -> None:
         """Test A/B test variant selection."""
-        from src.core.base.managers.OrchestrationManagers import ABTest
-        
+        from src.core.base.logic.managers.orchestration_managers import ABTest
+
         test = ABTest(
             name="prompt_test", variants=["control", "treatment"], weights=[0.5, 0.5]
         )
@@ -321,8 +321,8 @@ class TestAgentConfigurationProfiles:
 
     def test_health_metrics_collection(self, base_agent_module: Any) -> None:
         """Test health metrics calculation logic."""
-        from src.core.base.managers.SystemManagers import HealthChecker
-        
+        from src.core.base.logic.managers.system_managers import HealthChecker
+
         checker = HealthChecker()
 
         for _ in range(5):
@@ -335,9 +335,9 @@ class TestAgentConfigurationProfiles:
 
     def test_config_profile_inheritance(self, base_agent_module: Any) -> None:
         """Test profile inheritance logic."""
-        from src.core.base.managers.SystemManagers import ProfileManager
-        from src.core.base.BaseAgent import ConfigProfile
-        
+        from src.core.base.logic.managers.system_managers import ProfileManager
+        from src.core.base.lifecycle.base_agent import ConfigProfile
+
         manager = ProfileManager()
         base = ConfigProfile("base", {"timeout": 30, "retries": 3})
         custom = ConfigProfile("custom", {"timeout": 60}, parent="base")

@@ -1,28 +1,11 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 """
 Mamba Operations - Causal Convolution and Selective Scan.
 """
 
-# pylint: disable=invalid-name, too-many-function-args
-
 from __future__ import annotations
 
 import math
-
 import numpy as np
 
 
@@ -41,7 +24,9 @@ class CausalConv1d:
         self.kernel_size = kernel_size
 
         # Initialize weights [in_channels, kernel_size]
-        self.weight = np.random.randn(in_channels, kernel_size).astype(np.float32) * (1.0 / math.sqrt(kernel_size))
+        self.weight = np.random.randn(
+            in_channels, kernel_size
+        ).astype(np.float32) * (1.0 / math.sqrt(kernel_size))
 
         self.bias = np.zeros(in_channels, dtype=np.float32) if bias else None
 
@@ -66,18 +51,18 @@ class CausalConv1d:
             x_padded = np.pad(
                 x_t,
                 ((0, 0), (0, 0), (self.kernel_size - 1, 0)),
-                mode="constant",
+                mode='constant',
             )
 
         output = np.zeros((batch_size, self.in_channels, seq_len), dtype=x.dtype)
         for i in range(seq_len):
-            window = x_padded[:, :, i : i + self.kernel_size]
+            window = x_padded[:, :, i:i + self.kernel_size]
             output[:, :, i] = (window * self.weight).sum(axis=-1)
 
         if self.bias is not None:
             output = output + self.bias.reshape(1, -1, 1)
 
-        new_state = x_padded[:, :, -(self.kernel_size - 1) :] if seq_len >= 1 else conv_state
+        new_state = x_padded[:, :, -(self.kernel_size - 1):] if seq_len >= 1 else conv_state
         if new_state is not None and new_state.shape[-1] < self.kernel_size:
             pad_width = self.kernel_size - new_state.shape[-1]
             new_state = np.pad(new_state, ((0, 0), (0, 0), (pad_width, 0)))
@@ -114,7 +99,9 @@ class SelectiveScan:
         self.d_inner = d_inner
         self.ssm_state_size = ssm_state_size
 
-        self.A = -np.exp(np.random.randn(d_inner, ssm_state_size).astype(np.float32) * 0.5)
+        self.A = -np.exp(
+            np.random.randn(d_inner, ssm_state_size).astype(np.float32) * 0.5
+        )
         self.D = np.ones(d_inner, dtype=np.float32)
 
     def forward(

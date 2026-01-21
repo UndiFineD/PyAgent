@@ -1013,39 +1013,39 @@ pub fn compute_cache_keys_rust(
 }
 
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(quantize_symmetric_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(quantize_asymmetric_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(dequantize_int4_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(pack_int4_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(compute_scales_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(lora_merge_rust, m)?)?;
     m.add_function(wrap_pyfunction!(attention_softmax_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(gqa_expand_kv_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(slot_mapping_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_dequantize_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_descriptor_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(beam_score_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(check_stop_strings_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(check_stop_tokens_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_cache_keys_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_dp_splits_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_penalties_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_prefix_match_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_scales_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(copy_with_indices_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(dequantize_int4_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(detokenize_batch_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(gqa_expand_kv_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(gumbel_sample_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(hash_block_tokens_rust, m)?)?;
     m.add_function(wrap_pyfunction!(lora_forward_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(lora_merge_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(merge_batch_metadata_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(merge_request_states_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(pack_int4_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(pack_outputs_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(pad_sequences_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(pin_memory_copy_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(quantize_asymmetric_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(quantize_symmetric_rust, m)?)?;
     m.add_function(wrap_pyfunction!(request_status_transition_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(slot_mapping_rust, m)?)?;
     m.add_function(wrap_pyfunction!(top_k_mask_rust, m)?)?;
     m.add_function(wrap_pyfunction!(top_p_mask_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(gumbel_sample_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(beam_score_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(check_stop_tokens_rust, m)?)?;
     m.add_function(wrap_pyfunction!(update_prefix_offset_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(compute_penalties_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(batch_descriptor_hash_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(copy_with_indices_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(pad_sequences_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(compute_dp_splits_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(pin_memory_copy_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(merge_batch_metadata_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_batch_shapes_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(hash_block_tokens_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(check_stop_strings_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(detokenize_batch_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(merge_request_states_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(compute_prefix_match_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_utf8_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(pack_outputs_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(compute_cache_keys_rust, m)?)?;
     Ok(())
 }

@@ -1,38 +1,24 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Registry.py module.
-"""
-
 import logging
-from typing import Any, Dict, List, Optional
-
-from .audio import AudioProcessor
-from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,
-                   MultiModalData, MultiModalInputs, PlaceholderInfo)
-from .embed import TextEmbedProcessor
+from typing import Dict, Optional, Any, List
+from .base import (
+    ModalityType,
+    MultiModalConfig,
+    MultiModalData,
+    MultiModalInputs,
+    BaseMultiModalProcessor,
+    PlaceholderInfo,
+)
 from .image import ImageProcessor
 from .video import VideoProcessor
+from .audio import AudioProcessor
+from .embed import TextEmbedProcessor
 
 logger = logging.getLogger(__name__)
-
 
 class MultiModalRegistry:
     """Central registry for multimodal processors."""
 
-    def __init__(self) -> None:
+    def __init__(self):
         self._processors: Dict[ModalityType, BaseMultiModalProcessor] = {}
         self._default_config = MultiModalConfig()
 
@@ -41,12 +27,10 @@ class MultiModalRegistry:
         modality: ModalityType,
         processor: BaseMultiModalProcessor,
     ) -> None:
-        """Register a processor for a specific modality."""
         self._processors[modality] = processor
         logger.debug("Registered processor for %s", modality.name)
 
     def get_processor(self, modality: ModalityType) -> Optional[BaseMultiModalProcessor]:
-        """Get the registered processor for a modality, if any."""
         return self._processors.get(modality)
 
     def create_processor(
@@ -54,18 +38,18 @@ class MultiModalRegistry:
         modality: ModalityType,
         config: Optional[MultiModalConfig] = None,
     ) -> BaseMultiModalProcessor:
-        """Create a new processor instance for the given modality."""
         config = config or self._default_config
 
         if modality == ModalityType.IMAGE:
             return ImageProcessor(config=config)
-        if modality == ModalityType.VIDEO:
+        elif modality == ModalityType.VIDEO:
             return VideoProcessor(config=config)
-        if modality == ModalityType.AUDIO:
+        elif modality == ModalityType.AUDIO:
             return AudioProcessor(config=config)
-        if modality == ModalityType.EMBEDS:
+        elif modality == ModalityType.EMBEDS:
             return TextEmbedProcessor(config=config)
-        raise ValueError(f"Unsupported modality: {modality}")
+        else:
+            raise ValueError(f"Unsupported modality: {modality}")
 
     def process_inputs(
         self,
@@ -73,7 +57,6 @@ class MultiModalRegistry:
         config: Optional[MultiModalConfig] = None,
         **kwargs: Any,
     ) -> MultiModalInputs:
-        """Process multiple modalities into unified inputs for the model."""
         config = config or self._default_config
         result = MultiModalInputs()
 
@@ -93,14 +76,12 @@ class MultiModalRegistry:
                 num_tokens = processor.get_placeholder_count(image, **kwargs)
 
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
-                        modality=ModalityType.IMAGE,
-                        item_idx=idx,
-                        start_idx=offset,
-                        length=num_tokens,
-                    )
-                )
+                placeholders.append(PlaceholderInfo(
+                    modality=ModalityType.IMAGE,
+                    item_idx=idx,
+                    start_idx=offset,
+                    length=num_tokens,
+                ))
                 offset += num_tokens
 
             result.mm_embeddings["image"] = embeddings
@@ -122,14 +103,12 @@ class MultiModalRegistry:
                 num_tokens = meta.get("total_tokens", processor.get_placeholder_count(video, **kwargs))
 
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
-                        modality=ModalityType.VIDEO,
-                        item_idx=idx,
-                        start_idx=offset,
-                        length=num_tokens,
-                    )
-                )
+                placeholders.append(PlaceholderInfo(
+                    modality=ModalityType.VIDEO,
+                    item_idx=idx,
+                    start_idx=offset,
+                    length=num_tokens,
+                ))
                 offset += num_tokens
 
             result.mm_embeddings["video"] = embeddings
@@ -151,14 +130,12 @@ class MultiModalRegistry:
                 num_tokens = meta.get("num_frames", processor.get_placeholder_count(audio, **kwargs))
 
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
-                        modality=ModalityType.AUDIO,
-                        item_idx=idx,
-                        start_idx=offset,
-                        length=num_tokens,
-                    )
-                )
+                placeholders.append(PlaceholderInfo(
+                    modality=ModalityType.AUDIO,
+                    item_idx=idx,
+                    start_idx=offset,
+                    length=num_tokens,
+                ))
                 offset += num_tokens
 
             result.mm_embeddings["audio"] = embeddings
@@ -176,14 +153,12 @@ class MultiModalRegistry:
                 num_tokens = meta.get("num_tokens", 1)
 
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
-                        modality=ModalityType.EMBEDS,
-                        item_idx=idx,
-                        start_idx=offset,
-                        length=num_tokens,
-                    )
-                )
+                placeholders.append(PlaceholderInfo(
+                    modality=ModalityType.EMBEDS,
+                    item_idx=idx,
+                    start_idx=offset,
+                    length=num_tokens,
+                ))
                 offset += num_tokens
 
             result.mm_embeddings["embeds"] = embeddings
@@ -191,26 +166,21 @@ class MultiModalRegistry:
 
         return result
 
-
 # Global registry instance
 MULTIMODAL_REGISTRY = MultiModalRegistry()
-
 
 def process_multimodal_inputs(
     mm_data: MultiModalData,
     config: Optional[MultiModalConfig] = None,
     **kwargs: Any,
 ) -> MultiModalInputs:
-    """Entry point for processing multimodal data using the global registry."""
     return MULTIMODAL_REGISTRY.process_inputs(mm_data, config, **kwargs)
-
 
 def get_placeholder_tokens(
     mm_inputs: MultiModalInputs,
     modality: str,
     token_id: int,
 ) -> List[int]:
-    """Generate the total sequence of placeholder tokens for a modality."""
     placeholders = mm_inputs.mm_placeholders.get(modality, [])
     total_tokens = sum(p.length for p in placeholders)
     return [token_id] * total_tokens

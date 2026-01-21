@@ -1,42 +1,32 @@
-#!/usr/bin/env python3
-
-"""
-Stream agent.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 
 from __future__ import annotations
-
-import asyncio
 import contextlib
+from src.core.base.lifecycle.version import VERSION
+import logging
 import json
 import re
 import time
+import asyncio
+from typing import Any, Dict, List, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
-
-from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
-
 class WebhookStatus(Enum):
-    """Possible statuses for a webhook delivery."""
     SUCCESS = "success"
     FAILED = "failed"
     TIMEOUT = "timeout"
     RETRY = "retry"
     RATE_LIMITED = "rate_limited"
 
-
 @dataclass
 class WebhookConfig:
     """Configuration for a webhook endpoint."""
-
     url: str
     name: str
     method: str = "POST"
@@ -46,19 +36,15 @@ class WebhookConfig:
     retry_delay: float = 1.0
     schema: Optional[Dict[str, Any]] = None
 
-
 @dataclass
 class StreamEvent:
     """Represents an event in the data stream."""
-
     event_type: str
     payload: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
     source: str = "unknown"
     correlation_id: Optional[str] = None
 
-
-# pylint: disable=too-many-ancestors
 class StreamAgent(BaseAgent):
     """
     Agent specializing in streaming data injection and extraction.
@@ -78,8 +64,7 @@ class StreamAgent(BaseAgent):
         )
 
     @as_tool
-    # pylint: disable=too-many-positional-arguments
-    async def register_external_webhook(
+    async def register_webhook(
         self,
         name: str,
         url: str,
@@ -87,9 +72,9 @@ class StreamAgent(BaseAgent):
         headers: Optional[Dict[str, str]] = None,
         timeout: float = 10.0,
         max_retries: int = 3,
-        schema: Optional[Dict[str, Any]] = None,
+        schema: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        """Registers an external automation webhook (n8n, etc.)."""
+        """Registers a webhook endpoint for later use."""
         config = WebhookConfig(
             url=url,
             name=name,
@@ -97,26 +82,33 @@ class StreamAgent(BaseAgent):
             headers=headers or {"Content-Type": "application/json"},
             timeout=timeout,
             max_retries=max_retries,
-            schema=schema,
+            schema=schema
         )
         self._webhooks[name] = config
 
-        return {"success": True, "webhook_name": name, "url": url, "registered_webhooks": list(self._webhooks.keys())}
+        return {
+            "success": True,
+            "webhook_name": name,
+            "url": url,
+            "registered_webhooks": list(self._webhooks.keys())
+        }
 
     @as_tool
     async def push_to_n8n(
-        self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
+        self,
+        webhook_url: str,
+        data: Dict,
+        webhook_name: Optional[str] = None,
+        validate_schema: bool = True
     ) -> Dict[str, Any]:
         """Sends data to an n8n webhook with retry logic and validation."""
-        from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+        import requests
 
         # Get config if named webhook
         config = self._webhooks.get(webhook_name) if webhook_name else None
         if config:
             webhook_url = config.url
-        
-        firewall = ReverseProxyFirewall()
-        
+
         # Schema validation
         if validate_schema and config and config.schema:
             validation = self._validate_schema(data, config.schema)
@@ -131,63 +123,84 @@ class StreamAgent(BaseAgent):
         last_error = None
         for attempt in range(max_retries):
             try:
-                response = firewall.post(webhook_url, json=data, headers=headers, timeout=timeout)
+                response = requests.post(
+                    webhook_url,
+                    json=data,
+                    headers=headers,
+                    timeout=timeout
+                )
 
                 status = WebhookStatus.SUCCESS if response.status_code in (200, 201, 202) else WebhookStatus.FAILED
-                
+
                 result = {
                     "success": status == WebhookStatus.SUCCESS,
                     "status_code": response.status_code,
                     "attempt": attempt + 1,
                     "webhook_url": webhook_url[:50] + "...",
-                    "response_preview": response.text[:200] if response.text else None,
+                    "response_preview": response.text[:200] if response.text else None
                 }
 
-                self._delivery_log.append({**result, "timestamp": time.time(), "payload_size": len(json.dumps(data))})
+                self._delivery_log.append({
+                    **result,
+                    "timestamp": time.time(),
+                    "payload_size": len(json.dumps(data))
+                })
 
                 if status == WebhookStatus.SUCCESS:
                     return result
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except requests.Timeout:
+                last_error = "timeout"
+            except requests.ConnectionError:
+                last_error = "connection_error"
+            except Exception as e:
                 last_error = str(e)
 
             if attempt < max_retries - 1:
                 await asyncio.sleep(config.retry_delay if config else 1.0)
 
-        return {"success": False, "status": WebhookStatus.FAILED.value, "error": last_error, "attempts": max_retries}
+        return {
+            "success": False,
+            "status": WebhookStatus.FAILED.value,
+            "error": last_error,
+            "attempts": max_retries
+        }
 
     @as_tool
     async def extract_from_stream(self, raw_stream: str, extract_type: str = "auto") -> Dict[str, Any]:
         """Parses complex stream data into a structured schema."""
         if extract_type == "json":
             return self._extract_json(raw_stream)
-        if extract_type == "csv":
+        elif extract_type == "csv":
             return self._extract_csv(raw_stream)
-        if extract_type == "xml":
+        elif extract_type == "xml":
             return self._extract_xml(raw_stream)
+        else:
+            # Auto-detect and use LLM for complex extraction
+            prompt = (
+                f"Extract key entities and variables from this stream data:\n\n"
+                f"{raw_stream[:2000]}\n\n"
+                "Output structured JSON with:\n"
+                "- 'entities': list of named entities found\n"
+                "- 'variables': key-value pairs of variables\n"
+                "- 'format': detected data format\n"
+                "- 'schema': inferred schema"
+            )
+            res = await self.improve_content(prompt)
 
-        # Auto-detect and use LLM for complex extraction
-        prompt = (
-            f"Extract key entities and variables from this stream data:\n\n"
-            f"{raw_stream[:2000]}\n\n"
-            "Output structured JSON with:\n"
-            "- 'entities': list of named entities found\n"
-            "- 'variables': key-value pairs of variables\n"
-            "- 'format': detected data format\n"
-            "- 'schema': inferred schema"
-        )
-        res = await self.improve_content(prompt)
+            with contextlib.suppress(Exception):
+                match = re.search(r"(\{[\s\S]*\})", res)
+                if match:
+                    return json.loads(match.group(1))
 
-        with contextlib.suppress(ValueError, TypeError, AttributeError, json.JSONDecodeError, KeyError):
-            match = re.search(r"(\{[\s\S]*\})", res)
-            if match:
-                return json.loads(match.group(1))
-
-        return {"raw": res, "format": "unknown"}
+            return {"raw": res, "format": "unknown"}
 
     @as_tool
     async def transform_data(
-        self, data: Dict[str, Any], mapping: Dict[str, str], filters: Optional[List[str]] = None
+        self,
+        data: Dict[str, Any],
+        mapping: Dict[str, str],
+        filters: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """Transforms data using a field mapping and optional filters."""
         result = {}
@@ -200,37 +213,44 @@ class StreamAgent(BaseAgent):
         # Apply filters
         if filters:
             for filter_expr in filters:
-                self._apply_filter(result, filter_expr)
+                # Simple filter expressions like "age > 18"
+                try:
+                    # Parse filter (simplified)
+                    parts = filter_expr.split()
+                    if len(parts) == 3:
+                        field, op, val = parts
+                        field_val = result.get(field)
+                        if field_val is not None:
+                            if op == ">" and not (float(field_val) > float(val)):
+                                result["_filtered_out"] = True
+                            elif op == "<" and not (float(field_val) < float(val)):
+                                result["_filtered_out"] = True
+                            elif op == "==" and str(field_val) != val:
+                                result["_filtered_out"] = True
+                except Exception:
+                    pass
 
-        return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}
-
-    def _apply_filter(self, result: Dict[str, Any], filter_expr: str) -> None:
-        """Helper to apply a single filter to result - reduces nesting."""
-        try:
-            parts = filter_expr.split()
-            if len(parts) != 3:
-                return
-            fld, op, val = parts
-            field_val = result.get(fld)
-            if field_val is None:
-                return
-
-            if op == ">" and float(field_val) <= float(val):
-                result["_filtered_out"] = True
-            elif op == "<" and float(field_val) >= float(val):
-                result["_filtered_out"] = True
-            elif op == "==" and str(field_val) != val:
-                result["_filtered_out"] = True
-        except (ValueError, TypeError, AttributeError):
-            pass
+        return {
+            "transformed": result,
+            "original_keys": list(data.keys()),
+            "mapped_keys": list(result.keys())
+        }
 
     @as_tool
     async def buffer_event(self, event_type: str, payload: Dict[str, Any], source: str = "manual") -> Dict[str, Any]:
         """Buffers an event for batch processing."""
-        event = StreamEvent(event_type=event_type, payload=payload, source=source)
+        event = StreamEvent(
+            event_type=event_type,
+            payload=payload,
+            source=source
+        )
         self._event_buffer.append(event)
 
-        return {"buffered": True, "buffer_size": len(self._event_buffer), "event_type": event_type}
+        return {
+            "buffered": True,
+            "buffer_size": len(self._event_buffer),
+            "event_type": event_type
+        }
 
     @as_tool
     async def flush_buffer(self, webhook_name: str) -> Dict[str, Any]:
@@ -250,7 +270,7 @@ class StreamAgent(BaseAgent):
                 for e in events
             ],
             "batch_size": len(events),
-            "flush_timestamp": time.time(),
+            "flush_timestamp": time.time()
         }
 
         result = await self.push_to_n8n("", payload, webhook_name=webhook_name)
@@ -273,20 +293,20 @@ class StreamAgent(BaseAgent):
             "success_rate": f"{successes / total:.1%}",
             "registered_webhooks": list(self._webhooks.keys()),
             "buffer_size": len(self._event_buffer),
-            "recent_deliveries": self._delivery_log[-5:],
+            "recent_deliveries": self._delivery_log[-5:]
         }
 
     def _validate_schema(self, data: Dict, schema: Dict) -> Dict[str, Any]:
         """Simple schema validation."""
         errors = []
-        for fld, rules in schema.items():
-            if rules.get("required") and fld not in data:
-                errors.append(f"Missing required field: {fld}")
-            if fld in data and "type" in rules:
+        for field, rules in schema.items():
+            if rules.get("required") and field not in data:
+                errors.append(f"Missing required field: {field}")
+            if field in data and "type" in rules:
                 expected_type = rules["type"]
-                actual_type = type(data[fld]).__name__
+                actual_type = type(data[field]).__name__
                 if expected_type != actual_type:
-                    errors.append(f"Type mismatch for {fld}: expected {expected_type}, got {actual_type}")
+                    errors.append(f"Type mismatch for {field}: expected {expected_type}, got {actual_type}")
         return {"valid": not errors, "errors": errors}
 
     def _get_nested_value(self, data: Dict, path: str) -> Any:

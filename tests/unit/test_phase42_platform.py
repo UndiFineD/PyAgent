@@ -339,14 +339,14 @@ class TestMockCudaPlatform:
         mock.cuda.device_count.return_value = 2
         mock.cuda.get_device_capability.return_value = (8, 0)
         mock.cuda.get_device_name.return_value = "NVIDIA A100"
-        
+
         props = MagicMock()
         props.total_memory = 80 * (1024**3)
         mock.cuda.get_device_properties.return_value = props
         mock.cuda.memory_reserved.return_value = 10 * (1024**3)
         mock.cuda.memory_allocated.return_value = 5 * (1024**3)
         mock.version.cuda = "12.1"
-        
+
         return mock
 
     def test_cuda_platform_with_mock(self, mock_torch):
@@ -356,7 +356,7 @@ class TestMockCudaPlatform:
         with patch.dict("sys.modules", {"torch": mock_torch}):
             platform = CudaPlatform()
             platform._torch = mock_torch
-            
+
             assert platform.get_device_count() == 2
             cap = platform.get_device_capability()
             assert cap.major == 8

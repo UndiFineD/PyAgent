@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Intelligent routing for multi-cloud AI providers.
 
@@ -24,13 +10,13 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Never, NoReturn, Optional
+from typing import Dict, List, Optional, Any
+from datetime import datetime, timedelta
 
-from .base import CloudProviderBase, InferenceRequest
+from .base import CloudProviderBase, InferenceRequest, InferenceResponse
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class RoutingStrategy(Enum):
@@ -93,7 +79,7 @@ class IntelligentRouter:
         default_strategy: RoutingStrategy = RoutingStrategy.COST_OPTIMIZED,
         health_check_interval: float = 60.0,
         failover_cooldown: float = 30.0,
-    ) -> None:
+    ):
         """
         Initialize the router.
 
@@ -102,9 +88,9 @@ class IntelligentRouter:
             health_check_interval: Seconds between health checks.
             failover_cooldown: Seconds to wait before retrying failed provider.
         """
-        self.default_strategy: RoutingStrategy = default_strategy
-        self.health_check_interval: float = health_check_interval
-        self.failover_cooldown: float = failover_cooldown
+        self.default_strategy = default_strategy
+        self.health_check_interval = health_check_interval
+        self.failover_cooldown = failover_cooldown
 
         self._providers: Dict[str, CloudProviderBase] = {}
         self._priorities: Dict[str, int] = {}
@@ -128,7 +114,7 @@ class IntelligentRouter:
             priority: Lower number = higher priority (1 is highest).
             cost_per_1k_tokens: Average cost for pricing decisions.
         """
-        name: str = provider.name
+        name = provider.name
         self._providers[name] = provider
         self._priorities[name] = priority
         self._metrics[name] = ProviderMetrics(cost_per_1k_tokens=cost_per_1k_tokens)
@@ -154,7 +140,7 @@ class IntelligentRouter:
         if name not in self._providers:
             return False
 
-        self._providers.pop(name)
+        provider = self._providers.pop(name)
         self._priorities.pop(name, None)
         self._metrics.pop(name, None)
 
@@ -189,32 +175,35 @@ class IntelligentRouter:
         constraints = constraints or RoutingConstraints()
 
         # Get candidates that support the requested model
-        candidates: List[str] = self._get_candidates(request.model, constraints)
+        candidates = self._get_candidates(request.model, constraints)
 
         if not candidates:
             logger.warning(f"No providers available for model: {request.model}")
             return None
 
         # Filter by health
-        healthy_candidates: List[str] = [name for name in candidates if self._is_provider_healthy(name)]
+        healthy_candidates = [
+            name for name in candidates
+            if self._is_provider_healthy(name)
+        ]
 
         if not healthy_candidates:
             logger.warning("No healthy providers available, trying all candidates")
-            healthy_candidates: List[str] = candidates
+            healthy_candidates = candidates
 
         # Apply routing strategy
         if strategy == RoutingStrategy.COST_OPTIMIZED:
-            selected: str | None = self._route_by_cost(healthy_candidates, request)
+            selected = self._route_by_cost(healthy_candidates, request)
         elif strategy == RoutingStrategy.LATENCY_OPTIMIZED:
-            selected: str | None = self._route_by_latency(healthy_candidates)
+            selected = self._route_by_latency(healthy_candidates)
         elif strategy == RoutingStrategy.QUALITY_OPTIMIZED:
-            selected: str | None = self._route_by_priority(healthy_candidates)
+            selected = self._route_by_priority(healthy_candidates)
         elif strategy == RoutingStrategy.ROUND_ROBIN:
-            selected: str | None = self._route_round_robin(healthy_candidates)
+            selected = self._route_round_robin(healthy_candidates)
         elif strategy == RoutingStrategy.FAILOVER:
-            selected: str | None = self._route_failover(healthy_candidates)
+            selected = self._route_failover(healthy_candidates)
         else:
-            selected: Never = healthy_candidates[0] if healthy_candidates else None
+            selected = healthy_candidates[0] if healthy_candidates else None
 
         if selected:
             logger.debug(f"Routed request to provider: {selected}")
@@ -230,31 +219,40 @@ class IntelligentRouter:
         """Get candidate providers for a model with constraints applied."""
         # Start with providers that support the model
         if model in self._model_mapping:
-            candidates: List[str] = self._model_mapping[model].copy()
+            candidates = self._model_mapping[model].copy()
         else:
             # Try all providers if model not in mapping
-            candidates: List[str] = [name for name, provider in self._providers.items() if provider.supports_model(model)]
+            candidates = [
+                name for name, provider in self._providers.items()
+                if provider.supports_model(model)
+            ]
 
         # Apply exclusions
-        candidates: List[str] = [name for name in candidates if name not in constraints.excluded_providers]
+        candidates = [
+            name for name in candidates
+            if name not in constraints.excluded_providers
+        ]
 
         # Apply preferences (move preferred to front)
         if constraints.preferred_providers:
-            preferred: List[str] = [name for name in constraints.preferred_providers if name in candidates]
-            others: List[str] = [name for name in candidates if name not in preferred]
-            candidates: List[str] = preferred + others
+            preferred = [
+                name for name in constraints.preferred_providers
+                if name in candidates
+            ]
+            others = [name for name in candidates if name not in preferred]
+            candidates = preferred + others
 
         return candidates
 
     def _is_provider_healthy(self, name: str) -> bool:
         """Check if a provider is healthy and not in cooldown."""
-        provider: CloudProviderBase | None = self._providers.get(name)
+        provider = self._providers.get(name)
         if not provider or not provider.is_healthy:
             return False
 
-        metrics: ProviderMetrics | None = self._metrics.get(name)
+        metrics = self._metrics.get(name)
         if metrics and metrics.last_failure:
-            cooldown_end: datetime = metrics.last_failure + timedelta(seconds=self.failover_cooldown)
+            cooldown_end = metrics.last_failure + timedelta(seconds=self.failover_cooldown)
             if datetime.now() < cooldown_end:
                 return False
 
@@ -270,7 +268,7 @@ class IntelligentRouter:
             return None
 
         def get_cost(name: str) -> float:
-            provider: CloudProviderBase = self._providers[name]
+            provider = self._providers[name]
             return provider.estimate_cost(request)
 
         return min(candidates, key=get_cost)
@@ -300,7 +298,7 @@ class IntelligentRouter:
         if not candidates:
             return None
 
-        selected: str = candidates[self._round_robin_index % len(candidates)]
+        selected = candidates[self._round_robin_index % len(candidates)]
         self._round_robin_index += 1
         return selected
 
@@ -325,7 +323,7 @@ class IntelligentRouter:
         if provider_name not in self._metrics:
             return
 
-        metrics: ProviderMetrics = self._metrics[provider_name]
+        metrics = self._metrics[provider_name]
         metrics.total_requests += 1
 
         if success:
@@ -336,7 +334,9 @@ class IntelligentRouter:
             else:
                 # Exponential moving average
                 alpha = 0.1
-                metrics.avg_latency_ms = alpha * latency_ms + (1 - alpha) * metrics.avg_latency_ms
+                metrics.avg_latency_ms = (
+                    alpha * latency_ms + (1 - alpha) * metrics.avg_latency_ms
+                )
         else:
             metrics.failed_requests += 1
             metrics.last_failure = datetime.now()
@@ -349,7 +349,7 @@ class IntelligentRouter:
         if self._health_check_task is not None:
             return
 
-        async def _health_loop() -> NoReturn:
+        async def _health_loop():
             while True:
                 await asyncio.sleep(self.health_check_interval)
                 await self._run_health_checks()
@@ -368,16 +368,16 @@ class IntelligentRouter:
         """Run health checks on all providers."""
         for name, provider in self._providers.items():
             try:
-                is_healthy: bool = await provider.health_check()
+                is_healthy = await provider.health_check()
                 logger.debug(f"Health check {name}: {is_healthy}")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logger.warning(f"Health check failed for {name}: {e}")
 
     def get_provider_stats(self) -> Dict[str, Dict[str, Any]]:
         """Get statistics for all registered providers."""
         stats = {}
         for name, provider in self._providers.items():
-            metrics: ProviderMetrics = self._metrics.get(name, ProviderMetrics())
+            metrics = self._metrics.get(name, ProviderMetrics())
             stats[name] = {
                 "healthy": provider.is_healthy,
                 "priority": self._priorities.get(name, 999),

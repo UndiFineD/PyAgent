@@ -1,28 +1,9 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Registry.py module.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 import importlib
 import logging
-from typing import Any, Callable, ClassVar
-
+from typing import Any, ClassVar, Callable, Type
 from .base import ReasoningParser
 
 logger = logging.getLogger(__name__)
@@ -69,7 +50,10 @@ class ReasoningParserManager:
             return cls._load_lazy_parser(name)
 
         available = cls.list_registered()
-        raise KeyError(f"Reasoning parser '{name}' not found. Available parsers: {', '.join(available)}")
+        raise KeyError(
+            f"Reasoning parser '{name}' not found. "
+            f"Available parsers: {', '.join(available)}"
+        )
 
     @classmethod
     def _load_lazy_parser(cls, name: str) -> type[ReasoningParser]:
@@ -88,7 +72,9 @@ class ReasoningParserManager:
     @classmethod
     def list_registered(cls) -> list[str]:
         """Get names of all registered parsers."""
-        return sorted(set(cls.reasoning_parsers.keys()) | set(cls.lazy_parsers.keys()))
+        return sorted(
+            set(cls.reasoning_parsers.keys()) | set(cls.lazy_parsers.keys())
+        )
 
     @classmethod
     def create_parser(
@@ -108,9 +94,7 @@ def reasoning_parser(name: str) -> Callable[[type[ReasoningParser]], type[Reason
     """
     Decorator to register a reasoning parser.
     """
-
     def decorator(cls: type[ReasoningParser]) -> type[ReasoningParser]:
         ReasoningParserManager.register_module(name, cls)
         return cls
-
     return decorator

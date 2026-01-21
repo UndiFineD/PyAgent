@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -22,16 +8,17 @@ from __future__ import annotations
 
 import logging
 from functools import lru_cache
+from typing import Any
 
 from .base import AttentionBackend
-from .flash import FlashAttentionBackend
-from .flashinfer import FlashInferBackend
 from .models import AttentionBackendEnum, AttentionCapabilities, AttentionType
 from .naive import NaiveAttentionBackend
+from .sdpa import TorchSDPABackend, HAS_TORCH, torch
+from .flash import FlashAttentionBackend
+from .flashinfer import FlashInferBackend
 from .packkv import PackKVAttentionBackend
-from .sdpa import HAS_TORCH, TorchSDPABackend, torch
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class AttentionBackendRegistry:
@@ -51,18 +38,15 @@ class AttentionBackendRegistry:
         """Singleton pattern."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            cls._instance._init_registry()
         return cls._instance
 
-    def __init__(self) -> None:
+    def _init_registry(self) -> None:
         """Initialize the registry with default backends."""
-        if hasattr(self, "_initialized"):
-            return
-
         self._backends: dict[str, type[AttentionBackend]] = {}
         self._active_backend: AttentionBackend | None = None
         self._fallback_chain: list[str] = []
         self._hot_swap_enabled: bool = True
-        self._initialized: bool = True
 
         # Register default backends
         self.register(NaiveAttentionBackend)
@@ -92,7 +76,7 @@ class AttentionBackendRegistry:
             backend_cls: Backend class to register
             override: Whether to override existing registration
         """
-        name: str = backend_cls.get_name()
+        name = backend_cls.get_name()
 
         if name in self._backends and not override:
             logger.warning(f"Backend '{name}' already registered, skipping")
@@ -167,13 +151,13 @@ class AttentionBackendRegistry:
                 return backend
 
         # Try fallback chain
-        for name: str in self._fallback_chain:
+        for name in self._fallback_chain:
             backend = self.get_backend(name)
             if backend and self._check_backend(backend, capabilities, attn_type):
                 return backend
 
         # Try any backend
-        for name: str in self._backends:
+        for name in self._backends:
             backend = self.get_backend(name)
             if backend and self._check_backend(backend, capabilities, attn_type):
                 return backend
@@ -191,7 +175,7 @@ class AttentionBackendRegistry:
             return False
 
         if capabilities is not None:
-            caps: AttentionCapabilities = backend.get_capabilities()
+            caps = backend.get_capabilities()
             # Check key capabilities
             if capabilities.supports_sliding_window and not caps.supports_sliding_window:
                 return False
@@ -251,7 +235,8 @@ class AttentionBackendRegistry:
         if self.set_active(new_backend):
             if old_backend:
                 logger.info(
-                    f"Hot-swapped from {old_backend.get_name()} to {self._active_backend.get_name()}"  # type: ignore
+                    f"Hot-swapped from {old_backend.get_name()} to "
+                    f"{self._active_backend.get_name()}"  # type: ignore
                 )
             return True
 
@@ -281,7 +266,7 @@ class AttentionBackendRegistry:
         if backend is None:
             return False
 
-        caps: AttentionCapabilities = backend.get_capabilities()
+        caps = backend.get_capabilities()
 
         # Check CUDA requirement
         if caps.requires_cuda and (not HAS_TORCH or not torch.cuda.is_available()):
@@ -290,7 +275,7 @@ class AttentionBackendRegistry:
         # Check SM version
         if HAS_TORCH and torch.cuda.is_available():
             major, minor = torch.cuda.get_device_capability()
-            sm_version: int = major * 10 + minor
+            sm_version = major * 10 + minor
             if sm_version < caps.min_sm_version:
                 return False
 
@@ -298,7 +283,7 @@ class AttentionBackendRegistry:
 
     def get_available_backends(self) -> list[str]:
         """Get list of actually usable backends."""
-        return [name for name: str in self._backends if self._check_availability(name)]
+        return [name for name in self._backends if self._check_availability(name)]
 
 
 # Convenience function

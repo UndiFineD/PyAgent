@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Content-aware hasher for multimodal data."""
@@ -19,24 +5,20 @@
 import hashlib
 import io
 import struct
-from typing import Any, Tuple, Union
-
+from typing import Any, Optional, Tuple, Union
 import numpy as np
-
+from .enums import MediaType, HashAlgorithm
 from .data import MediaHash
-from .enums import HashAlgorithm, MediaType
 
 # Optional imports
 try:
     import blake3
-
     HAS_BLAKE3 = True
 except ImportError:
     HAS_BLAKE3 = False
 
 try:
     from PIL import Image
-
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
@@ -56,7 +38,7 @@ class MultiModalHasher:
         self,
         algorithm: HashAlgorithm = HashAlgorithm.BLAKE3,
         perceptual_size: Tuple[int, int] = (8, 8),
-    ) -> None:
+    ):
         self.algorithm = algorithm
         self.perceptual_size = perceptual_size
 
@@ -67,17 +49,17 @@ class MultiModalHasher:
     def hash_bytes(self, data: bytes) -> str:
         """Hash raw bytes."""
         if self.algorithm == HashAlgorithm.BLAKE3 and HAS_BLAKE3:
-            # pylint: disable=not-callable
             return blake3.blake3(data).hexdigest()
-        if self.algorithm == HashAlgorithm.SHA256:
+        elif self.algorithm == HashAlgorithm.SHA256:
             return hashlib.sha256(data).hexdigest()
-        if self.algorithm == HashAlgorithm.XXHASH:
+        elif self.algorithm == HashAlgorithm.XXHASH:
             # Simple xxHash-like implementation
             h = 0
-            for byte in data:
+            for i, byte in enumerate(data):
                 h = (h * 31 + byte) & 0xFFFFFFFFFFFFFFFF
-            return format(h, "016x")
-        return hashlib.sha256(data).hexdigest()
+            return format(h, '016x')
+        else:
+            return hashlib.sha256(data).hexdigest()
 
     def hash_image(self, image_data: Union[bytes, Any]) -> MediaHash:
         """Hash image content."""
@@ -87,7 +69,7 @@ class MultiModalHasher:
         elif HAS_PIL and isinstance(image_data, Image.Image):
             # Convert PIL image to bytes
             buffer = io.BytesIO()
-            image_data.save(buffer, format="PNG")
+            image_data.save(buffer, format='PNG')
             img_bytes = buffer.getvalue()
             content_hash = self.hash_bytes(img_bytes)
             size = len(img_bytes)
@@ -96,24 +78,35 @@ class MultiModalHasher:
             content_hash = self.hash_bytes(str(image_data).encode())
             size = 0
 
-        return MediaHash(value=content_hash, algorithm=self.algorithm, media_type=MediaType.IMAGE, size_bytes=size)
+        return MediaHash(
+            value=content_hash,
+            algorithm=self.algorithm,
+            media_type=MediaType.IMAGE,
+            size_bytes=size
+        )
 
     def hash_audio(self, audio_data: bytes, sample_rate: int = 16000) -> MediaHash:
         """Hash audio content."""
-        combined = audio_data + struct.pack("I", sample_rate)
+        combined = audio_data + struct.pack('I', sample_rate)
         content_hash = self.hash_bytes(combined)
 
         return MediaHash(
-            value=content_hash, algorithm=self.algorithm, media_type=MediaType.AUDIO, size_bytes=len(audio_data)
+            value=content_hash,
+            algorithm=self.algorithm,
+            media_type=MediaType.AUDIO,
+            size_bytes=len(audio_data)
         )
 
     def hash_video(self, video_data: bytes, frame_count: int = 0) -> MediaHash:
         """Hash video content."""
-        combined = video_data + struct.pack("I", frame_count)
+        combined = video_data + struct.pack('I', frame_count)
         content_hash = self.hash_bytes(combined)
 
         return MediaHash(
-            value=content_hash, algorithm=self.algorithm, media_type=MediaType.VIDEO, size_bytes=len(video_data)
+            value=content_hash,
+            algorithm=self.algorithm,
+            media_type=MediaType.VIDEO,
+            size_bytes=len(video_data)
         )
 
     def hash_embedding(self, embedding: np.ndarray) -> MediaHash:
@@ -121,7 +114,10 @@ class MultiModalHasher:
         content_hash = self.hash_bytes(embedding.tobytes())
 
         return MediaHash(
-            value=content_hash, algorithm=self.algorithm, media_type=MediaType.EMBEDDING, size_bytes=embedding.nbytes
+            value=content_hash,
+            algorithm=self.algorithm,
+            media_type=MediaType.EMBEDDING,
+            size_bytes=embedding.nbytes
         )
 
     def perceptual_hash(self, image_data: Union[bytes, Any]) -> str:
@@ -133,15 +129,15 @@ class MultiModalHasher:
 
         # Load image
         if isinstance(image_data, bytes):
-            img = Image.open(io.BytesIO(image_data, encoding='utf-8'))
+            img = Image.open(io.BytesIO(image_data))
         elif isinstance(image_data, Image.Image):
             img = image_data
         else:
             return self.hash_bytes(str(image_data).encode())[:16]
 
-        img = img.convert("L").resize(self.perceptual_size, Image.Resampling.LANCZOS)
+        img = img.convert('L').resize(self.perceptual_size, Image.Resampling.LANCZOS)
         pixels = np.array(img)
         avg = pixels.mean()
         bits = (pixels > avg).flatten()
-        hash_value = "".join("1" if b else "0" for b in bits)
-        return format(int(hash_value, 2), f"0{len(bits) // 4}x")
+        hash_value = ''.join('1' if b else '0' for b in bits)
+        return format(int(hash_value, 2), f'0{len(bits)//4}x')

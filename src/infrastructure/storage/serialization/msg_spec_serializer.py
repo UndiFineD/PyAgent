@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 MsgSpec Serializers
 ====================
@@ -32,18 +18,27 @@ Dependencies:
 
 from __future__ import annotations
 
+import logging
 import time
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Callable, Generic, Iterator, Sequence, Type, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    Iterator,
+    Sequence,
+    Type,
+    TypeVar,
+    Union,
+    get_origin,
+    get_args,
+)
 
 try:
     import msgspec
-    from msgspec import Struct
-    from msgspec import json as msgspec_json
-    from msgspec import msgpack as msgspec_msgpack
-
+    from msgspec import Struct, json as msgspec_json, msgpack as msgspec_msgpack
     MSGSPEC_AVAILABLE = True
 except ImportError:
     MSGSPEC_AVAILABLE = False
@@ -71,7 +66,10 @@ def is_msgspec_available() -> bool:
 def require_msgspec() -> None:
     """Raise ImportError if msgspec is not available."""
     if not MSGSPEC_AVAILABLE:
-        raise ImportError("msgspec is required for high-performance serialization. Install with: pip install msgspec")
+        raise ImportError(
+            "msgspec is required for high-performance serialization. "
+            "Install with: pip install msgspec"
+        )
 
 
 # =============================================================================
@@ -82,7 +80,6 @@ if MSGSPEC_AVAILABLE:
 
     class Role(str, Enum):
         """Chat message roles."""
-
         SYSTEM = "system"
         USER = "user"
         ASSISTANT = "assistant"
@@ -90,7 +87,6 @@ if MSGSPEC_AVAILABLE:
 
     class ChatMessage(Struct, frozen=True, gc=False):
         """Chat message structure for LLM APIs."""
-
         role: Role
         content: str
         name: str | None = None
@@ -98,20 +94,17 @@ if MSGSPEC_AVAILABLE:
 
     class ToolCall(Struct, frozen=True):
         """Tool/function call from assistant."""
-
         id: str
         type: str  # "function"
         function: "FunctionCall"
 
     class FunctionCall(Struct, frozen=True):
         """Function call details."""
-
         name: str
         arguments: str  # JSON string
 
     class ChatCompletionRequest(Struct):
         """OpenAI-compatible chat completion request."""
-
         model: str
         messages: list[ChatMessage]
         temperature: float = 0.7
@@ -123,34 +116,29 @@ if MSGSPEC_AVAILABLE:
 
     class ToolDefinition(Struct):
         """Tool definition for function calling."""
-
         type: str  # "function"
         function: "FunctionDefinition"
 
     class FunctionDefinition(Struct):
         """Function definition."""
-
         name: str
         description: str = ""
         parameters: dict[str, Any] | None = None
 
     class ChatChoice(Struct):
         """Single completion choice."""
-
         index: int
         message: ChatMessage
         finish_reason: str | None = None
 
     class Usage(Struct):
         """Token usage statistics."""
-
         prompt_tokens: int
         completion_tokens: int
         total_tokens: int
 
     class ChatCompletionResponse(Struct):
         """OpenAI-compatible chat completion response."""
-
         id: str
         object: str  # "chat.completion"
         created: int
@@ -160,20 +148,17 @@ if MSGSPEC_AVAILABLE:
 
     class StreamDelta(Struct):
         """Streaming delta content."""
-
         role: Role | None = None
         content: str | None = None
 
     class StreamChoice(Struct):
         """Streaming choice."""
-
         index: int
         delta: StreamDelta
         finish_reason: str | None = None
 
     class ChatCompletionChunk(Struct):
         """Streaming chat completion chunk."""
-
         id: str
         object: str  # "chat.completion.chunk"
         created: int
@@ -183,20 +168,17 @@ if MSGSPEC_AVAILABLE:
     # Embedding structures
     class EmbeddingData(Struct):
         """Single embedding result."""
-
         object: str  # "embedding"
         embedding: list[float]
         index: int
 
     class EmbeddingRequest(Struct):
         """Embedding request."""
-
         model: str
         input: str | list[str]
 
     class EmbeddingResponse(Struct):
         """Embedding response."""
-
         object: str  # "list"
         data: list[EmbeddingData]
         model: str
@@ -246,7 +228,6 @@ class JSONEncoder:
             return obj.isoformat()
         if isinstance(obj, bytes):
             import base64
-
             return base64.b64encode(obj).decode("ascii")
         if hasattr(obj, "__dict__"):
             return obj.__dict__
@@ -515,7 +496,6 @@ def decode_stream_chunk(data: bytes | str) -> ChatCompletionChunk:
 @dataclass
 class BenchmarkResult:
     """Serialization benchmark result."""
-
     format: str
     encode_time: float
     decode_time: float
@@ -609,14 +589,17 @@ __all__ = [
     "is_msgspec_available",
     "require_msgspec",
     "MSGSPEC_AVAILABLE",
+
     # Encoders
     "JSONEncoder",
     "MsgPackEncoder",
     "TypedSerializer",
+
     # Chat helpers
     "encode_chat_request",
     "decode_chat_response",
     "decode_stream_chunk",
+
     # Benchmarking
     "BenchmarkResult",
     "benchmark_serialization",
@@ -624,18 +607,16 @@ __all__ = [
 
 # Conditionally export Struct types
 if MSGSPEC_AVAILABLE:
-    __all__.extend(
-        [
-            "Role",
-            "ChatMessage",
-            "ToolCall",
-            "FunctionCall",
-            "ChatCompletionRequest",
-            "ChatCompletionResponse",
-            "ChatCompletionChunk",
-            "EmbeddingRequest",
-            "EmbeddingResponse",
-            "ToolDefinition",
-            "FunctionDefinition",
-        ]
-    )
+    __all__.extend([
+        "Role",
+        "ChatMessage",
+        "ToolCall",
+        "FunctionCall",
+        "ChatCompletionRequest",
+        "ChatCompletionResponse",
+        "ChatCompletionChunk",
+        "EmbeddingRequest",
+        "EmbeddingResponse",
+        "ToolDefinition",
+        "FunctionDefinition",
+    ])

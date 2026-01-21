@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Built-in system commands for slash commands.
 """
@@ -65,7 +51,7 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
         now = datetime.now(timezone.utc)
         return CommandResult.ok(
             output=f"[{now.strftime('%Y-%m-%d')}]",
-            data={"date": now.strftime("%Y-%m-%d"), "iso": now.date().isoformat()},
+            data={"date": now.strftime('%Y-%m-%d'), "iso": now.date().isoformat()},
         )
 
     @registry.command(
@@ -77,7 +63,7 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
         now = datetime.now(timezone.utc)
         return CommandResult.ok(
             output=f"[{now.strftime('%H:%M:%S')} UTC]",
-            data={"time": now.strftime("%H:%M:%S"), "timezone": "UTC"},
+            data={"time": now.strftime('%H:%M:%S'), "timezone": "UTC"},
         )
 
     @registry.command(
@@ -91,7 +77,7 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
 
         cpu_percent = psutil.cpu_percent(interval=0.1)
         memory = psutil.virtual_memory()
-        disk = psutil.disk_usage("/")
+        disk = psutil.disk_usage('/')
 
         output = (
             f"[CPU: {cpu_percent:.1f}% | "
@@ -278,7 +264,6 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
     def cmd_gpu(ctx: CommandContext) -> CommandResult:
         try:
             import torch
-
             if torch.cuda.is_available():
                 gpu_count = torch.cuda.device_count()
                 current_device = torch.cuda.current_device()
@@ -310,11 +295,10 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
         aliases=["py"],
     )
     def cmd_python(ctx: CommandContext) -> CommandResult:
-        v = sys.version_info
         return CommandResult.ok(
-            output=f"[Python {v.major}.{v.minor}.{v.micro} at {sys.executable}]",
+            output=f"[Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro} at {sys.executable}]",
             data={
-                "version": f"{v.major}.{v.minor}.{v.micro}",
+                "version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
                 "executable": sys.executable,
                 "prefix": sys.prefix,
                 "platform": sys.platform,
@@ -342,7 +326,6 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
     )
     def cmd_uuid(ctx: CommandContext) -> CommandResult:
         import uuid
-
         new_uuid = str(uuid.uuid4())
         return CommandResult.ok(
             output=f"[{new_uuid}]",

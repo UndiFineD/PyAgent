@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 OutputProcessor - Request output management and state tracking.
 
@@ -22,20 +8,20 @@ detokenization, and output batching.
 from __future__ import annotations
 
 import asyncio
-import contextlib
-import logging
 import time
-from collections import defaultdict
+import contextlib
+from abc import ABC
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple
+from collections import defaultdict
+import logging
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class EventType(Enum):
     """Types of request events."""
-
     QUEUED = auto()
     STARTED = auto()
     PREEMPTED = auto()
@@ -47,7 +33,6 @@ class EventType(Enum):
 @dataclass
 class RequestEvent:
     """An event in request lifecycle."""
-
     event_type: EventType
     timestamp: float = field(default_factory=time.time)
     details: Optional[Dict[str, Any]] = None
@@ -56,7 +41,6 @@ class RequestEvent:
 @dataclass
 class LoRARequest:
     """LoRA adapter request information."""
-
     lora_id: int
     lora_name: str
     lora_path: Optional[str] = None
@@ -65,7 +49,6 @@ class LoRARequest:
 @dataclass
 class ParentRequest:
     """Parent request for multi-turn conversations."""
-
     request_id: str
     child_request_ids: List[str] = field(default_factory=list)
 
@@ -73,7 +56,6 @@ class ParentRequest:
 @dataclass
 class SamplingParams:
     """Parameters for token sampling."""
-
     max_tokens: int = 256
     temperature: float = 1.0
     top_p: float = 1.0
@@ -87,7 +69,6 @@ class SamplingParams:
 @dataclass
 class EngineCoreRequest:
     """Request to be processed by engine core."""
-
     request_id: str
     external_req_id: Optional[str] = None
     prompt_token_ids: Optional[List[int]] = None
@@ -105,7 +86,6 @@ class EngineCoreRequest:
 @dataclass
 class EngineCoreOutput:
     """Output from engine core for a single request."""
-
     request_id: str
     new_token_ids: List[int] = field(default_factory=list)
     finish_reason: Optional[str] = None
@@ -119,7 +99,6 @@ class EngineCoreOutput:
 @dataclass
 class EngineCoreOutputs:
     """Batch of outputs from engine core."""
-
     outputs: List[EngineCoreOutput] = field(default_factory=list)
     scheduler_stats: Optional[Any] = None
     timestamp: float = field(default_factory=time.time)
@@ -128,7 +107,6 @@ class EngineCoreOutputs:
 @dataclass
 class RequestOutput:
     """Final output for a request (to be returned to client)."""
-
     request_id: str
     prompt: Optional[str] = None
     prompt_token_ids: Optional[List[int]] = None
@@ -140,7 +118,6 @@ class RequestOutput:
 @dataclass
 class OutputProcessorOutput:
     """Output from OutputProcessor.process_outputs()."""
-
     request_outputs: List[RequestOutput] = field(default_factory=list)
     finished_request_ids: Set[str] = field(default_factory=set)
 
@@ -148,7 +125,7 @@ class OutputProcessorOutput:
 class RequestOutputCollector:
     """Queue for collecting request outputs."""
 
-    def __init__(self) -> None:
+    def __init__(self):
         self._queue: asyncio.Queue = asyncio.Queue()
 
     def put(self, output: RequestOutput) -> None:
@@ -184,15 +161,15 @@ class RequestState:
         queue: Optional[RequestOutputCollector] = None,
         log_stats: bool = False,
         stream_interval: int = 1,
-    ) -> None:
-        self.request_id: str = request_id
-        self.prompt: str | None = prompt
-        self.prompt_token_ids: List[int] = prompt_token_ids or []
-        self.sampling_params: SamplingParams | None = sampling_params
-        self.arrival_time: float = arrival_time
-        self.queue: RequestOutputCollector | None = queue
-        self.log_stats: bool = log_stats
-        self.stream_interval: int = stream_interval
+    ):
+        self.request_id = request_id
+        self.prompt = prompt
+        self.prompt_token_ids = prompt_token_ids or []
+        self.sampling_params = sampling_params
+        self.arrival_time = arrival_time
+        self.queue = queue
+        self.log_stats = log_stats
+        self.stream_interval = stream_interval
 
         # Output state
         self.output_token_ids: List[int] = []
@@ -215,11 +192,11 @@ class RequestState:
     @classmethod
     def from_new_request(
         cls,
-        _tokenizer: Any,
+        tokenizer: Any,
         request: EngineCoreRequest,
         prompt: Optional[str],
-        _parent_req: Optional["ParentRequest"] = None,
-        _request_index: int = 0,
+        parent_req: Optional[ParentRequest] = None,
+        request_index: int = 0,
         queue: Optional[RequestOutputCollector] = None,
         log_stats: bool = False,
         stream_interval: int = 1,
@@ -247,7 +224,7 @@ class RequestState:
         finish_reason: Optional[str] = None,
     ) -> None:
         """Update state with new output."""
-        now: float = time.time()
+        now = time.time()
 
         if new_token_ids:
             if self.first_token_time is None:
@@ -275,22 +252,20 @@ class RequestState:
         """Get current output."""
         if delta:
             # Return only new tokens since last output
-            token_ids: List[int] = self.output_token_ids[self._last_output_index :]
+            token_ids = self.output_token_ids[self._last_output_index:]
             self._last_output_index = len(self.output_token_ids)
         else:
-            token_ids: List[int] = self.output_token_ids.copy()
+            token_ids = self.output_token_ids.copy()
 
         return RequestOutput(
             request_id=self.request_id,
             prompt=self.prompt,
             prompt_token_ids=self.prompt_token_ids,
-            outputs=[
-                {
-                    "token_ids": token_ids,
-                    "text": self.output_text,
-                    "finish_reason": self.finish_reason,
-                }
-            ],
+            outputs=[{
+                "token_ids": token_ids,
+                "text": self.output_text,
+                "finish_reason": self.finish_reason,
+            }],
             finished=self.finished,
             metrics=self._get_metrics() if self.log_stats else None,
         )
@@ -312,8 +287,8 @@ class RequestState:
 class LoRARequestStates:
     """Track LoRA request states."""
 
-    def __init__(self, log_stats: bool = False) -> None:
-        self.log_stats: bool = log_stats
+    def __init__(self, log_stats: bool = False):
+        self.log_stats = log_stats
         self.active_loras: Dict[int, Set[str]] = defaultdict(set)
         self.lora_stats: Dict[int, Dict[str, Any]] = {}
 
@@ -346,10 +321,10 @@ class OutputProcessor:
         tokenizer: Any = None,
         log_stats: bool = False,
         stream_interval: int = 1,
-    ) -> None:
+    ):
         self.tokenizer = tokenizer
-        self.log_stats: bool = log_stats
-        self.stream_interval: int = stream_interval
+        self.log_stats = log_stats
+        self.stream_interval = stream_interval
 
         # Request states
         self.request_states: Dict[str, RequestState] = {}
@@ -379,7 +354,7 @@ class OutputProcessor:
 
     def propagate_error(self, e: Exception) -> None:
         """Propagate error to all request queues."""
-        for _, state in self.request_states.items():
+        for request_id, state in self.request_states.items():
             if state.queue is not None:
                 state.queue.put(e)  # type: ignore
 
@@ -392,17 +367,17 @@ class OutputProcessor:
         queue: Optional[RequestOutputCollector] = None,
     ) -> None:
         """Add a new request to track."""
-        request_id: str = request.request_id
+        request_id = request.request_id
 
         if request_id in self.request_states:
             raise ValueError(f"Request id {request_id} already running.")
 
-        state: RequestState = RequestState.from_new_request(
-            _tokenizer=self.tokenizer,
+        state = RequestState.from_new_request(
+            tokenizer=self.tokenizer,
             request=request,
             prompt=prompt,
-            _parent_req=parent_req,
-            _request_index=request_index,
+            parent_req=parent_req,
+            request_index=request_index,
             queue=queue,
             log_stats=self.log_stats,
             stream_interval=self.stream_interval,
@@ -430,14 +405,14 @@ class OutputProcessor:
     def abort_requests(
         self,
         request_ids: List[str],
-        _internal: bool = False,
+        internal: bool = False,
     ) -> List[str]:
         """Abort requests and return list of aborted IDs."""
         aborted = []
 
         for request_id in request_ids:
             if request_id in self.request_states:
-                state: RequestState = self.request_states[request_id]
+                state = self.request_states[request_id]
                 state.add_event(EventType.ABORTED)
                 state.finished = True
                 state.finish_reason = "abort"
@@ -458,8 +433,8 @@ class OutputProcessor:
     def process_outputs(
         self,
         engine_core_outputs: List[EngineCoreOutput],
-        _engine_core_timestamp: Optional[float] = None,
-        _iteration_stats: Optional[Any] = None,
+        engine_core_timestamp: Optional[float] = None,
+        iteration_stats: Optional[Any] = None,
     ) -> OutputProcessorOutput:
         """
         Process EngineCoreOutputs into RequestOutputs.
@@ -469,20 +444,20 @@ class OutputProcessor:
         2) Detokenizes if needed
         3) Creates and emits RequestOutput objects
         """
-
         result = OutputProcessorOutput()
+
         for output in engine_core_outputs:
-            request_id: str = output.request_id
+            request_id = output.request_id
 
             if request_id not in self.request_states:
                 logger.warning(f"Unknown request {request_id} in output")
                 continue
 
-            state: RequestState = self.request_states[request_id]
+            state = self.request_states[request_id]
 
             # Update state with new tokens
             # Note: In real impl, we'd detokenize here
-            new_text: str = ""
+            new_text = ""
             if self.tokenizer and output.new_token_ids:
                 with contextlib.suppress(Exception):
                     new_text = self.tokenizer.decode(
@@ -498,7 +473,7 @@ class OutputProcessor:
 
             # Emit output if needed
             if state.should_emit_output() or state.finished:
-                request_output: RequestOutput = state.get_output(delta=True)
+                request_output = state.get_output(delta=True)
                 result.request_outputs.append(request_output)
 
                 # Send to queue if present
@@ -524,7 +499,7 @@ class OutputProcessor:
 class IterationStats:
     """Statistics for a single iteration."""
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.num_prompt_tokens: int = 0
         self.num_generation_tokens: int = 0
         self.num_requests: int = 0
@@ -544,7 +519,7 @@ class IterationStats:
         }
 
 
-__all__: List[str] = [
+__all__ = [
     "EventType",
     "RequestEvent",
     "LoRARequest",

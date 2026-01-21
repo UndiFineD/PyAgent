@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 BloomFilter - Probabilistic data structure for fast membership testing.
 
@@ -23,15 +9,17 @@ Goes beyond vLLM with space-efficient set operations:
 
 Phase 18: Beyond vLLM - Advanced Data Structures
 """
-
 from __future__ import annotations
-
 import hashlib
 import math
-from typing import Any
+from typing import Any, Iterator
 
 # Try Rust acceleration
-RUST_AVAILABLE = False
+try:
+    import rust_core as rc
+    RUST_AVAILABLE = True
+except ImportError:
+    RUST_AVAILABLE = False
 
 
 class BloomFilter:
@@ -73,7 +61,9 @@ class BloomFilter:
         if bit_array is not None:
             self._bits = bit_array
             self._size = len(bit_array) * 8
-            self._num_hashes = num_hashes or self._optimal_num_hashes(self._size, expected_items)
+            self._num_hashes = num_hashes or self._optimal_num_hashes(
+                self._size, expected_items
+            )
         else:
             self._size = self._optimal_size(expected_items, fp_rate)
             self._bits = bytearray((self._size + 7) // 8)
@@ -107,9 +97,9 @@ class BloomFilter:
         if isinstance(item, bytes):
             data = item
         elif isinstance(item, str):
-            data = item.encode("utf-8")
+            data = item.encode('utf-8')
         else:
-            data = str(item).encode("utf-8")
+            data = str(item).encode('utf-8')
 
         # Double hashing: h(i) = h1 + i*h2
         h1 = int(hashlib.md5(data, usedforsecurity=False).hexdigest(), 16)
@@ -126,7 +116,7 @@ class BloomFilter:
         """Set a bit at position."""
         byte_idx = pos // 8
         bit_idx = pos % 8
-        self._bits[byte_idx] |= 1 << bit_idx
+        self._bits[byte_idx] |= (1 << bit_idx)
 
     def _get_bit(self, pos: int) -> bool:
         """Get a bit at position."""
@@ -171,29 +161,30 @@ class BloomFilter:
     @property
     def fill_ratio(self) -> float:
         """Get ratio of set bits."""
-        set_bits = sum(bin(byte).count("1") for byte in self._bits)
+        set_bits = sum(bin(byte).count('1') for byte in self._bits)
         return set_bits / self._size
 
     def get_stats(self) -> dict:
         """Get filter statistics."""
         return {
-            "size_bits": self._size,
-            "size_bytes": self.size_bytes,
-            "num_hashes": self._num_hashes,
-            "items_added": self._count,
-            "expected_items": self._expected_items,
-            "target_fp_rate": self._fp_rate,
-            "estimated_fp_rate": round(self.estimated_fp_rate, 6),
-            "fill_ratio": round(self.fill_ratio, 4),
+            'size_bits': self._size,
+            'size_bytes': self.size_bytes,
+            'num_hashes': self._num_hashes,
+            'items_added': self._count,
+            'expected_items': self._expected_items,
+            'target_fp_rate': self._fp_rate,
+            'estimated_fp_rate': round(self.estimated_fp_rate, 6),
+            'fill_ratio': round(self.fill_ratio, 4),
         }
 
-    def union(self, other: "BloomFilter") -> "BloomFilter":
+    def union(self, other: 'BloomFilter') -> 'BloomFilter':
         """Create union of two filters (must be same size)."""
-        # pylint: disable=protected-access
         if self._size != other._size or self._num_hashes != other._num_hashes:
             raise ValueError("Filters must have same size and hash count")
 
-        new_bits = bytearray(a | b for a, b in zip(self._bits, other._bits))
+        new_bits = bytearray(
+            a | b for a, b in zip(self._bits, other._bits)
+        )
 
         bf = BloomFilter(
             expected_items=self._expected_items,
@@ -203,16 +194,15 @@ class BloomFilter:
         bf._count = self._count + other._count
         return bf
 
-    def __or__(self, other: "BloomFilter") -> "BloomFilter":
+    def __or__(self, other: 'BloomFilter') -> 'BloomFilter':
         """Union operator."""
         return self.union(other)
 
     def serialize(self) -> bytes:
         """Serialize filter to bytes."""
         import struct
-
         header = struct.pack(
-            "<IIII",
+            '<IIII',
             self._size,
             self._num_hashes,
             self._count,
@@ -221,11 +211,10 @@ class BloomFilter:
         return header + bytes(self._bits)
 
     @classmethod
-    def deserialize(cls, data: bytes) -> "BloomFilter":
+    def deserialize(cls, data: bytes) -> 'BloomFilter':
         """Deserialize filter from bytes."""
         import struct
-
-        size, num_hashes, count, expected = struct.unpack("<IIII", data[:16])
+        size, num_hashes, count, expected = struct.unpack('<IIII', data[:16])
         bits = bytearray(data[16:])
 
         bf = cls(
@@ -282,9 +271,9 @@ class CountingBloomFilter:
         if isinstance(item, bytes):
             data = item
         elif isinstance(item, str):
-            data = item.encode("utf-8")
+            data = item.encode('utf-8')
         else:
-            data = str(item).encode("utf-8")
+            data = str(item).encode('utf-8')
 
         h1 = int(hashlib.md5(data, usedforsecurity=False).hexdigest(), 16)
         h2 = int(hashlib.sha1(data).hexdigest(), 16)
@@ -326,7 +315,10 @@ class CountingBloomFilter:
 
     def __contains__(self, item: Any) -> bool:
         """Check if item might be in the filter."""
-        return all(self._counters[pos] > 0 for pos in self._get_hash_positions(item))
+        return all(
+            self._counters[pos] > 0
+            for pos in self._get_hash_positions(item)
+        )
 
     @property
     def count(self) -> int:
@@ -337,12 +329,12 @@ class CountingBloomFilter:
         """Get filter statistics."""
         non_zero = sum(1 for c in self._counters if c > 0)
         return {
-            "size": self._size,
-            "num_hashes": self._num_hashes,
-            "counter_bits": self._counter_bits,
-            "items_added": self._count,
-            "non_zero_counters": non_zero,
-            "fill_ratio": round(non_zero / self._size, 4),
+            'size': self._size,
+            'num_hashes': self._num_hashes,
+            'counter_bits': self._counter_bits,
+            'items_added': self._count,
+            'non_zero_counters': non_zero,
+            'fill_ratio': round(non_zero / self._size, 4),
         }
 
 
@@ -383,7 +375,9 @@ class ScalableBloomFilter:
         self._fp_tightening_ratio = fp_tightening_ratio
 
         # Start with one filter
-        self._filters: list[BloomFilter] = [BloomFilter(expected_items=initial_capacity, fp_rate=fp_rate)]
+        self._filters: list[BloomFilter] = [
+            BloomFilter(expected_items=initial_capacity, fp_rate=fp_rate)
+        ]
 
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
@@ -392,11 +386,12 @@ class ScalableBloomFilter:
 
         if current.fill_ratio > 0.5:
             # Create new filter with tighter FP rate
-            # pylint: disable=protected-access
             new_capacity = current._expected_items * self._growth_factor
             new_fp = self._fp_rate * (self._fp_tightening_ratio ** len(self._filters))
 
-            self._filters.append(BloomFilter(expected_items=new_capacity, fp_rate=new_fp))
+            self._filters.append(
+                BloomFilter(expected_items=new_capacity, fp_rate=new_fp)
+            )
 
         self._filters[-1].add(item)
 
@@ -412,15 +407,15 @@ class ScalableBloomFilter:
     def get_stats(self) -> dict:
         """Get filter statistics."""
         return {
-            "num_filters": len(self._filters),
-            "total_items": self.count,
-            "total_size_bytes": sum(bf.size_bytes for bf in self._filters),
-            "filters": [bf.get_stats() for bf in self._filters],
+            'num_filters': len(self._filters),
+            'total_items': self.count,
+            'total_size_bytes': sum(bf.size_bytes for bf in self._filters),
+            'filters': [bf.get_stats() for bf in self._filters],
         }
 
 
 __all__ = [
-    "BloomFilter",
-    "CountingBloomFilter",
-    "ScalableBloomFilter",
+    'BloomFilter',
+    'CountingBloomFilter',
+    'ScalableBloomFilter',
 ]

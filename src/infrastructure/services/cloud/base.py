@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Base classes for cloud provider integration.
 
@@ -23,7 +9,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, AsyncIterator, Dict, List, Optional
+from typing import AsyncIterator, List, Optional, Dict, Any
 
 
 @dataclass
@@ -106,7 +92,7 @@ class CloudProviderBase(ABC):
                 ...
     """
 
-    def __init__(self, api_key: Optional[str] = None, **config) -> None:
+    def __init__(self, api_key: Optional[str] = None, **config):
         """
         Initialize the cloud provider.
 
@@ -114,7 +100,7 @@ class CloudProviderBase(ABC):
             api_key: API key for authentication (can also use env vars).
             **config: Additional provider-specific configuration.
         """
-        self._api_key: str | None = api_key
+        self._api_key = api_key
         self._config = config
         self._is_healthy = True
         self._last_error: Optional[str] = None
@@ -199,11 +185,11 @@ class CloudProviderBase(ABC):
         """Check if this provider supports the given model."""
         return model in self.available_models
 
-    async def __aenter__(self) -> Self:
+    async def __aenter__(self):
         """Async context manager entry."""
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Async context manager exit - cleanup resources."""
         pass
 
@@ -211,22 +197,22 @@ class CloudProviderBase(ABC):
 class CloudProviderError(Exception):
     """Base exception for cloud provider errors."""
 
-    def __init__(self, message: str, provider: str, retriable: bool = False) -> None:
+    def __init__(self, message: str, provider: str, retriable: bool = False):
         super().__init__(message)
-        self.provider: str = provider
-        self.retriable: bool = retriable
+        self.provider = provider
+        self.retriable = retriable
 
 
 class RateLimitError(CloudProviderError):
     """Raised when rate limits are exceeded."""
 
-    def __init__(self, message: str, provider: str, retry_after: Optional[float] = None) -> None:
+    def __init__(self, message: str, provider: str, retry_after: Optional[float] = None):
         super().__init__(message, provider, retriable=True)
-        self.retry_after: float | None = retry_after
+        self.retry_after = retry_after
 
 
 class AuthenticationError(CloudProviderError):
     """Raised when authentication fails."""
 
-    def __init__(self, message: str, provider: str) -> None:
+    def __init__(self, message: str, provider: str):
         super().__init__(message, provider, retriable=False)

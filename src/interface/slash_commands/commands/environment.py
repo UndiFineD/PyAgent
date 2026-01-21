@@ -20,7 +20,7 @@ from src.interface.slash_commands.core import CommandContext, CommandResult
 def cmd_version(ctx: CommandContext) -> CommandResult:
     """Get Python and OS version."""
     python_version = sys.version.split()[0]
-    
+
     return CommandResult.ok(
         output=f"[Python {python_version} | {platform.system()} {platform.release()}]",
         data={
@@ -56,11 +56,11 @@ def cmd_env(ctx: CommandContext) -> CommandResult:
             output=f"[{ctx.first_arg.upper()}: not set]",
             data={"key": ctx.first_arg.upper(), "value": None},
         )
-    
+
     # List common env vars
     common_vars = ["PATH", "HOME", "USER", "SHELL", "VIRTUAL_ENV", "PYTHONPATH"]
     found = {k: os.environ.get(k, "not set")[:30] for k in common_vars if k in os.environ}
-    
+
     return CommandResult.ok(
         output=f"[Env vars: {len(os.environ)} total]",
         data={"count": len(os.environ), "sample": found},
@@ -114,12 +114,12 @@ def cmd_hostname(ctx: CommandContext) -> CommandResult:
     """Get system hostname."""
     import socket
     hostname = socket.gethostname()
-    
+
     try:
         ip = socket.gethostbyname(hostname)
     except socket.gaierror:
         ip = "unknown"
-    
+
     return CommandResult.ok(
         output=f"[{hostname} ({ip})]",
         data={"hostname": hostname, "ip": ip},
@@ -136,10 +136,10 @@ def cmd_hostname(ctx: CommandContext) -> CommandResult:
 def cmd_user(ctx: CommandContext) -> CommandResult:
     """Get current user name."""
     import getpass
-    
+
     username = getpass.getuser()
     home = os.path.expanduser("~")
-    
+
     return CommandResult.ok(
         output=f"[User: {username}]",
         data={"username": username, "home": home},
@@ -156,14 +156,14 @@ def cmd_user(ctx: CommandContext) -> CommandResult:
 def cmd_venv(ctx: CommandContext) -> CommandResult:
     """Get virtual environment information."""
     venv = os.environ.get("VIRTUAL_ENV")
-    
+
     if venv:
         venv_name = os.path.basename(venv)
         return CommandResult.ok(
             output=f"[venv: {venv_name}]",
             data={"active": True, "path": venv, "name": venv_name},
         )
-    
+
     return CommandResult.ok(
         output="[venv: Not active]",
         data={"active": False},

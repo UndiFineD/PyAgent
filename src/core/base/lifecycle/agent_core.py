@@ -72,7 +72,7 @@ class LogicCore:
 
     def analyze_structure(self, text: str) -> dict[str, Any]:
         """Returns line count, word count, and estimated token count.
-        
+
         Uses Rust-accelerated analysis when available for 3x speedup.
         """
         if not text:

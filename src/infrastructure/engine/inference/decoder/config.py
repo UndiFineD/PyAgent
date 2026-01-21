@@ -1,31 +1,12 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Config.py module.
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, Sequence
 
 
 class SpecMethod(str, Enum):
     """Speculative decoding method."""
-
     NGRAM = "ngram"
     SUFFIX = "suffix"
     DRAFT_MODEL = "draft_model"
@@ -76,11 +57,9 @@ class DraftProposal:
 
     @property
     def num_tokens(self) -> int:
-        """Return number of tokens in draft."""
         return len(self.token_ids)
 
     def is_empty(self) -> bool:
-        """Check if draft is empty."""
         return not self.token_ids
 
 
@@ -97,14 +76,12 @@ class VerificationResult:
 
     @property
     def acceptance_rate(self) -> float:
-        """Calculate verification acceptance rate."""
         if self.num_draft_tokens == 0:
             return 0.0
         return self.num_accepted_tokens / self.num_draft_tokens
 
     @property
     def all_accepted(self) -> bool:
-        """Check if all draft tokens were accepted."""
         return self.num_accepted_tokens == self.num_draft_tokens
 
 
@@ -122,7 +99,7 @@ class SpecDecodingMetrics:
     proposal_time_ms: float = 0.0
     verification_time_ms: float = 0.0
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         if not self.accepted_per_position:
             self.accepted_per_position = []
 
@@ -150,14 +127,12 @@ class SpecDecodingMetrics:
 
     @property
     def acceptance_rate(self) -> float:
-        """Calculate overall acceptance rate."""
         if self.num_draft_tokens == 0:
             return 0.0
         return self.num_accepted_tokens / self.num_draft_tokens
 
     @property
     def avg_accepted_per_draft(self) -> float:
-        """Calculate average accepted tokens per draft."""
         if self.num_drafts == 0:
             return 0.0
         return self.num_accepted_tokens / self.num_drafts
@@ -180,7 +155,6 @@ class SpecDecodingMetrics:
         self.verification_time_ms = 0.0
 
     def as_dict(self) -> dict[str, Any]:
-        """Convert metrics to dictionary."""
         return {
             "num_drafts": self.num_drafts,
             "num_draft_tokens": self.num_draft_tokens,

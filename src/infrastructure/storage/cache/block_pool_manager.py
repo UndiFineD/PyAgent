@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 BlockPoolManager: Advanced KV block pool management with LRU/ARC eviction.
 
@@ -27,32 +13,29 @@ Beyond vLLM:
 """
 
 from __future__ import annotations
-
-import hashlib
 import logging
 import threading
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from enum import IntEnum
-from typing import Any, Optional
+from enum import IntEnum, auto
+from typing import Any, Callable, Optional, Hashable
+import hashlib
 
 logger = logging.getLogger(__name__)
 
 
 class BlockState(IntEnum):
     """Block allocation state with priority ordering."""
-
-    FREE = 0  # Available for allocation
-    ALLOCATED = 1  # In use by active request
-    CACHED = 2  # Cached for potential reuse
-    PINNED = 3  # Protected from eviction
+    FREE = 0        # Available for allocation
+    ALLOCATED = 1   # In use by active request
+    CACHED = 2      # Cached for potential reuse
+    PINNED = 3      # Protected from eviction
 
 
 @dataclass
 class Block:
     """A single KV cache block."""
-
     block_id: int
     state: BlockState = BlockState.FREE
     block_hash: Optional[int] = None
@@ -71,15 +54,19 @@ class Block:
 
 @dataclass
 class BlockPoolConfig:
+    """Configuration for block pool."""
+    num_blocks: int = 1024
     block_size_bytes: int = 2 * 1024 * 1024  # 2MB default
     enable_prefix_caching: bool = True
+    eviction_policy: str = "arc"  # "lru" or "arc"
+    arc_p_initial: float = 0.5  # ARC balance parameter
+    min_free_blocks: int = 32
     max_cached_ratio: float = 0.5  # Max fraction of blocks in cached state
 
 
 @dataclass
 class EvictionEvent:
     """Record of a block eviction."""
-
     block_id: int
     block_hash: Optional[int]
     eviction_time: float
@@ -91,7 +78,6 @@ class EvictionEvent:
 @dataclass
 class CacheMetrics:
     """KV cache metrics."""
-
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -128,7 +114,7 @@ class KVCacheMetricsCollector:
         with self._lock:
             self._eviction_events.append(event)
             if len(self._eviction_events) > self._max_events:
-                self._eviction_events = self._eviction_events[-self._max_events :]
+                self._eviction_events = self._eviction_events[-self._max_events:]
 
     def get_metrics(self) -> CacheMetrics:
         """Get current cache metrics."""
@@ -285,7 +271,11 @@ class BlockPool:
         # Initialize blocks
         self._blocks: dict[int, Block] = {}
         for i in range(self.config.num_blocks):
-            self._blocks[i] = Block(block_id=i, state=BlockState.FREE, size_bytes=self.config.block_size_bytes)
+            self._blocks[i] = Block(
+                block_id=i,
+                state=BlockState.FREE,
+                size_bytes=self.config.block_size_bytes
+            )
 
         # Free block queue (LIFO for cache locality)
         self._free_queue: list[int] = list(range(self.config.num_blocks))
@@ -295,9 +285,9 @@ class BlockPool:
 
         # Eviction policy
         if self.config.eviction_policy == "arc":
-            capacity = int(self.config.num_blocks * self.config.max_cached_ratio)
             self._arc = ARCPolicy(
-                capacity=capacity, p_initial=self.config.arc_p_initial
+                capacity=int(self.config.num_blocks * self.config.max_cached_ratio),
+                p_initial=self.config.arc_p_initial
             )
         else:
             self._arc = None
@@ -324,7 +314,9 @@ class BlockPool:
                 self._evict_cached_blocks(needed)
 
             if len(self._free_queue) < num_blocks:
-                raise RuntimeError(f"Not enough free blocks: need {num_blocks}, have {len(self._free_queue)}")
+                raise RuntimeError(
+                    f"Not enough free blocks: need {num_blocks}, have {len(self._free_queue)}"
+                )
 
             allocated: list[int] = []
             for _ in range(num_blocks):
@@ -495,7 +487,7 @@ class BlockPool:
             eviction_time=time.time(),
             reason=reason,
             age_seconds=time.time() - block.last_access,
-            access_count=block.access_count,
+            access_count=block.access_count
         )
         self._metrics_collector.record_eviction(event)
 

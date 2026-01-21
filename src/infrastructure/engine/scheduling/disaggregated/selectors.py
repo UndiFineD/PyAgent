@@ -1,28 +1,9 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Selectors.py module.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 import random
 from abc import ABC, abstractmethod
 from typing import List, Optional
-
 from .config import InstanceInfo, ScheduledRequest
 
 
@@ -36,13 +17,13 @@ class InstanceSelector(ABC):
         request: ScheduledRequest,
     ) -> Optional[InstanceInfo]:
         """Select an instance for the request."""
-        raise NotImplementedError
+        ...
 
 
 class RoundRobinSelector(InstanceSelector):
     """Round-robin instance selection."""
 
-    def __init__(self) -> None:
+    def __init__(self):
         self._counter = 0
 
     def select(

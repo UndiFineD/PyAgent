@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -22,14 +8,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Dict, FrozenSet, List, Optional, Set, Tuple
-
-import numpy as np  # noqa: F401
+import numpy as np
 
 
 @dataclass(frozen=True)
 class FSMState:
     """Immutable representation of FSM state."""
-
     state_id: int
     is_accepting: bool = False
     is_initial: bool = False
@@ -50,7 +34,6 @@ class FSMState:
 @dataclass
 class FSMTransitionTable:
     """Transition table for efficient FSM execution."""
-
     num_states: int
     initial_state: int
     accepting_states: FrozenSet[int]
@@ -61,10 +44,12 @@ class FSMTransitionTable:
     # Allowed characters per state (for bitmask generation)
     allowed_chars: Dict[int, Set[str]] = field(default_factory=dict)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         if self.transition_table is None:
             # Default: 256 ASCII characters
-            self.transition_table = np.full((self.num_states, 256), -1, dtype=np.int32)
+            self.transition_table = np.full(
+                (self.num_states, 256), -1, dtype=np.int32
+            )
 
     def add_transition(self, from_state: int, char: str, to_state: int) -> None:
         """Add a transition."""
@@ -95,11 +80,10 @@ class FSMTransitionTable:
 @dataclass
 class TokenMask:
     """Token-level constraint mask."""
-
     vocab_size: int
     mask: np.ndarray = field(default=None)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         if self.mask is None:
             self.mask = np.ones(self.vocab_size, dtype=np.bool_)
 

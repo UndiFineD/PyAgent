@@ -1,24 +1,5 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Dynamic.py module.
-"""
-
-from typing import Any, Optional, Tuple
-
-from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
+from typing import Tuple, Any, Optional
+from .base import HAS_TORCH, HAS_NUMPY, RotaryEmbeddingBase
 from .config import RoPEConfig
 
 if HAS_TORCH:
@@ -26,14 +7,13 @@ if HAS_TORCH:
 if HAS_NUMPY:
     import numpy as np
 
-
 class XDRotaryEmbedding(RotaryEmbeddingBase):
     """Extended Dynamic Rotary Position Embedding.
 
     Implements dynamic NTK-aware scaling for extended context lengths.
     """
 
-    def __init__(self, config: RoPEConfig) -> None:
+    def __init__(self, config: RoPEConfig):
         super().__init__(config)
         self.scaling_factor = config.scaling_factor
         self.original_max_position = config.original_max_position
@@ -47,9 +27,19 @@ class XDRotaryEmbedding(RotaryEmbeddingBase):
         """Compute inverse frequencies with optional custom base."""
         base = base or self.base
         if HAS_TORCH:
-            return 1.0 / (base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
-        if HAS_NUMPY:
-            return 1.0 / (base ** (np.arange(0, self.rotary_dim, 2, dtype=np.float32) / self.rotary_dim))
+            return 1.0 / (
+                base ** (
+                    torch.arange(0, self.rotary_dim, 2, dtype=torch.float32)
+                    / self.rotary_dim
+                )
+            )
+        elif HAS_NUMPY:
+            return 1.0 / (
+                base ** (
+                    np.arange(0, self.rotary_dim, 2, dtype=np.float32)
+                    / self.rotary_dim
+                )
+            )
         raise RuntimeError("No numerical backend available")
 
     def _compute_dynamic_base(self, seq_len: int) -> float:
@@ -58,7 +48,9 @@ class XDRotaryEmbedding(RotaryEmbeddingBase):
             return self.base
 
         # NTK-aware scaling
-        alpha = (seq_len / self.original_max_position) ** (self.rotary_dim / (self.rotary_dim - 2))
+        alpha = (seq_len / self.original_max_position) ** (
+            self.rotary_dim / (self.rotary_dim - 2)
+        )
         return self.base * alpha
 
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
@@ -73,7 +65,7 @@ class XDRotaryEmbedding(RotaryEmbeddingBase):
             t = torch.arange(max_len, dtype=torch.float32)
             freqs = torch.outer(t, self.inv_freq)
             return torch.cos(freqs), torch.sin(freqs)
-        if HAS_NUMPY:
+        elif HAS_NUMPY:
             t = np.arange(max_len, dtype=np.float32)
             freqs = np.outer(t, self.inv_freq)
             return np.cos(freqs), np.sin(freqs)

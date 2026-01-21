@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -20,26 +6,15 @@ Guided decoding engine for structured output generation.
 
 from __future__ import annotations
 
-import gc
 import json
 import logging
-import os
 import re
 from typing import Any, Dict, List, Optional, Union
 
-# Check torch availability
-try:
-    import torch
-
-    HAS_TORCH = True
-except ImportError:
-    HAS_TORCH = False
-    torch = None
-
 # Check vLLM availability
 try:
-    from vllm import LLM, SamplingParams
-
+    from vllm import SamplingParams
+    from vllm import LLM
     HAS_VLLM = True
 except ImportError:
     HAS_VLLM = False
@@ -48,8 +23,7 @@ except ImportError:
 
 # Check outlines availability
 try:
-    import outlines  # noqa: F401 # pylint: disable=unused-import
-
+    import outlines
     HAS_OUTLINES = True
 except ImportError:
     HAS_OUTLINES = False
@@ -89,7 +63,6 @@ class GuidedDecoder:
         }
 
     @classmethod
-    @classmethod
     def get_instance(cls, **kwargs) -> "GuidedDecoder":
         """Get singleton instance."""
         if cls._instance is None:
@@ -111,17 +84,20 @@ class GuidedDecoder:
             return True
 
         try:
+            import os
+            import torch
+
             if "VLLM_TARGET_DEVICE" not in os.environ:
-                if HAS_TORCH and torch.cuda.is_available():
+                if torch.cuda.is_available():
                     os.environ["VLLM_TARGET_DEVICE"] = "cuda"
                 else:
                     os.environ["VLLM_TARGET_DEVICE"] = "cpu"
 
-            logger.info("Initializing GuidedDecoder with model: %s", self.model)
+            logger.info(f"Initializing GuidedDecoder with model: {self.model}")
 
             kwargs = {
                 "model": self.model,
-                "trust_remote_code": False,
+                "trust_remote_code": True,
                 **self._llm_kwargs,
             }
 
@@ -136,8 +112,8 @@ class GuidedDecoder:
             logger.info("GuidedDecoder initialized successfully")
             return True
 
-        except (RuntimeError, ValueError) as e:
-            logger.error("Failed to initialize GuidedDecoder: %s", e)
+        except Exception as e:
+            logger.error(f"Failed to initialize GuidedDecoder: {e}")
             return False
 
     def generate(
@@ -147,7 +123,7 @@ class GuidedDecoder:
         temperature: float = 0.7,
         max_tokens: int = 1024,
         system_prompt: Optional[str] = None,
-        **kwargs: Any,
+        **kwargs,
     ) -> str:
         """Generate with guided decoding configuration."""
         if not self._ensure_initialized():
@@ -178,28 +154,9 @@ class GuidedDecoder:
 
             return ""
 
-        except (RuntimeError, ValueError) as e:
-            logger.error("Guided generation failed: %s", e)
+        except Exception as e:
+            logger.error(f"Guided generation failed: {e}")
             return ""
-
-    def _prepare_json_system_prompt(self, system_prompt: Optional[str]) -> str:
-        """Prepare system prompt for JSON generation."""
-        json_instruction = "You must respond with valid JSON only. No explanations."
-        if system_prompt:
-            return f"{system_prompt}\n\n{json_instruction}"
-        return json_instruction
-
-    def _parse_json_result(self, result: str) -> Union[Dict[str, Any], str]:
-        """Parse JSON result if possible."""
-        if not result:
-            return result
-
-        try:
-            return json.loads(result)
-        except json.JSONDecodeError as e:
-            self._stats["validation_failures"] += 1
-            logger.warning("Failed to parse JSON output: %s", e)
-            return result
 
     def generate_json(
         self,
@@ -221,7 +178,9 @@ class GuidedDecoder:
         )
 
         # Add JSON instruction to system prompt
-        json_system = self._prepare_json_system_prompt(system_prompt)
+        json_system = "You must respond with valid JSON only. No explanations."
+        if system_prompt:
+            json_system = f"{system_prompt}\n\n{json_system}"
 
         result = self.generate(
             prompt,
@@ -234,8 +193,13 @@ class GuidedDecoder:
 
         self._stats["json_generations"] += 1
 
-        if parse:
-            return self._parse_json_result(result)
+        if parse and result:
+            try:
+                return json.loads(result)
+            except json.JSONDecodeError as e:
+                self._stats["validation_failures"] += 1
+                logger.warning(f"Failed to parse JSON output: {e}")
+                return result
 
         return result
 
@@ -274,7 +238,7 @@ class GuidedDecoder:
         if validate and result:
             if not re.match(pattern_str, result):
                 self._stats["validation_failures"] += 1
-                logger.warning("Output doesn't match pattern: %s", pattern_str)
+                logger.warning(f"Output doesn't match pattern: {pattern_str}")
 
         return result
 
@@ -352,12 +316,17 @@ class GuidedDecoder:
     def shutdown(self) -> None:
         """Shutdown and free resources."""
         if self._llm:
+            import gc
             del self._llm
             self._llm = None
             gc.collect()
 
-            if HAS_TORCH and torch.cuda.is_available():
-                torch.cuda.empty_cache()
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except ImportError:
+                pass
 
             self._initialized = False
             logger.info("GuidedDecoder shut down")

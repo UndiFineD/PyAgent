@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Budget management for cloud AI spending.
 
@@ -20,15 +6,14 @@ Provides thread-safe cost tracking with daily/monthly limits and alerts.
 
 from __future__ import annotations
 
-from _thread import RLock
-import logging
 import threading
-from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import date, datetime
-from typing import Callable, Dict, List, Optional
+from datetime import datetime, date
+from typing import Dict, List, Optional, Callable
+from collections import defaultdict
+import logging
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -81,7 +66,7 @@ class BudgetManager:
         monthly_limit: float = 1000.0,
         alert_threshold: float = 0.8,
         alert_callback: Optional[Callable[[BudgetAlert], None]] = None,
-    ) -> None:
+    ):
         """
         Initialize the budget manager.
 
@@ -91,13 +76,13 @@ class BudgetManager:
             alert_threshold: Fraction (0.0-1.0) at which to trigger warnings.
             alert_callback: Optional callback for budget alerts.
         """
-        self.daily_limit: float = daily_limit
-        self.monthly_limit: float = monthly_limit
-        self.alert_threshold: float = alert_threshold
-        self._alert_callback: Callable[[BudgetAlert], None] | None = alert_callback
+        self.daily_limit = daily_limit
+        self.monthly_limit = monthly_limit
+        self.alert_threshold = alert_threshold
+        self._alert_callback = alert_callback
 
         # Thread safety
-        self._lock: RLock = threading.RLock()
+        self._lock = threading.RLock()
 
         # Cost tracking
         self._daily_costs: Dict[date, float] = defaultdict(float)
@@ -118,7 +103,7 @@ class BudgetManager:
     def month_spend(self) -> float:
         """Get current month's total spend."""
         with self._lock:
-            month_key: str = datetime.now().strftime("%Y-%m")
+            month_key = datetime.now().strftime("%Y-%m")
             return self._monthly_costs[month_key]
 
     def can_make_request(self, estimated_cost: float = 0.0) -> bool:
@@ -141,11 +126,9 @@ class BudgetManager:
 
             # Check monthly limit
             if self.month_spend + estimated_cost > self.monthly_limit:
-                msg: str = (
-                    f"Monthly budget exceeded: {self.month_spend:.4f} + "
-                    f"{estimated_cost:.4f} > {self.monthly_limit:.2f}"
+                logger.warning(
+                    f"Monthly budget exceeded: {self.month_spend:.4f} + {estimated_cost:.4f} > {self.monthly_limit:.2f}"
                 )
-                logger.warning(msg)
                 return False
 
             return True
@@ -169,9 +152,9 @@ class BudgetManager:
             request_id: Optional request identifier for tracking.
         """
         with self._lock:
-            now: datetime = datetime.now()
-            today: date = now.date()
-            month_key: str = now.strftime("%Y-%m")
+            now = datetime.now()
+            today = now.date()
+            month_key = now.strftime("%Y-%m")
 
             # Record the cost
             self._daily_costs[today] += cost
@@ -228,13 +211,13 @@ class BudgetManager:
             List of CostRecord objects.
         """
         with self._lock:
-            records: List[CostRecord] = self._cost_history.copy()
+            records = self._cost_history.copy()
 
         if since:
-            records: List[CostRecord] = [r for r in records if r.timestamp >= since]
+            records = [r for r in records if r.timestamp >= since]
 
         if provider:
-            records: List[CostRecord] = [r for r in records if r.provider == provider]
+            records = [r for r in records if r.provider == provider]
 
         return records[-limit:]
 
@@ -247,29 +230,25 @@ class BudgetManager:
     def _check_alerts(self) -> None:
         """Check and trigger budget alerts."""
         # Daily threshold alert
-        daily_ratio: float | int = self.today_spend / self.daily_limit if self.daily_limit > 0 else 0
+        daily_ratio = self.today_spend / self.daily_limit if self.daily_limit > 0 else 0
         if daily_ratio >= self.alert_threshold and "daily_threshold" not in self._alerts_sent:
-            self._send_alert(
-                BudgetAlert(
-                    alert_type="threshold",
-                    message=f"Daily spend at {daily_ratio * 100:.1f}% of limit",
-                    current_spend=self.today_spend,
-                    limit=self.daily_limit,
-                )
-            )
+            self._send_alert(BudgetAlert(
+                alert_type="threshold",
+                message=f"Daily spend at {daily_ratio*100:.1f}% of limit",
+                current_spend=self.today_spend,
+                limit=self.daily_limit,
+            ))
             self._alerts_sent.add("daily_threshold")
 
         # Monthly threshold alert
-        monthly_ratio: float | int = self.month_spend / self.monthly_limit if self.monthly_limit > 0 else 0
+        monthly_ratio = self.month_spend / self.monthly_limit if self.monthly_limit > 0 else 0
         if monthly_ratio >= self.alert_threshold and "monthly_threshold" not in self._alerts_sent:
-            self._send_alert(
-                BudgetAlert(
-                    alert_type="threshold",
-                    message=f"Monthly spend at {monthly_ratio * 100:.1f}% of limit",
-                    current_spend=self.month_spend,
-                    limit=self.monthly_limit,
-                )
-            )
+            self._send_alert(BudgetAlert(
+                alert_type="threshold",
+                message=f"Monthly spend at {monthly_ratio*100:.1f}% of limit",
+                current_spend=self.month_spend,
+                limit=self.monthly_limit,
+            ))
             self._alerts_sent.add("monthly_threshold")
 
     def _send_alert(self, alert: BudgetAlert) -> None:
@@ -278,5 +257,5 @@ class BudgetManager:
         if self._alert_callback:
             try:
                 self._alert_callback(alert)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logger.error(f"Alert callback failed: {e}")

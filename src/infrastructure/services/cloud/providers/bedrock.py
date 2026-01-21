@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 AWS Bedrock cloud provider connector.
 
@@ -21,19 +7,25 @@ supporting Claude, Titan, and other Bedrock-hosted models.
 
 from __future__ import annotations
 
-import json
-import logging
 import os
 import time
-from typing import Any, AsyncIterator, Dict, List, Optional
+import json
+import logging
+from typing import AsyncIterator, List, Optional, Dict, Any
 
 import aioboto3
 from botocore.exceptions import ClientError
 
-from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
-                    InferenceRequest, InferenceResponse, RateLimitError)
+from ..base import (
+    CloudProviderBase,
+    InferenceRequest,
+    InferenceResponse,
+    CloudProviderError,
+    RateLimitError,
+    AuthenticationError,
+)
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class AWSBedrockConnector(CloudProviderBase):
@@ -58,7 +50,7 @@ class AWSBedrockConnector(CloudProviderBase):
     """
 
     # Pricing per 1M tokens (input/output) - approximate
-    PRICING: Dict[str, Dict[str, float]] = {
+    PRICING = {
         "anthropic.claude-3-opus-20240229-v1:0": {"input": 15.00, "output": 75.00},
         "anthropic.claude-3-sonnet-20240229-v1:0": {"input": 3.00, "output": 15.00},
         "anthropic.claude-3-haiku-20240307-v1:0": {"input": 0.25, "output": 1.25},
@@ -75,7 +67,7 @@ class AWSBedrockConnector(CloudProviderBase):
         aws_access_key_id: Optional[str] = None,
         aws_secret_access_key: Optional[str] = None,
         **config,
-    ) -> None:
+    ):
         """
         Initialize the AWS Bedrock connector.
 
@@ -87,10 +79,10 @@ class AWSBedrockConnector(CloudProviderBase):
             **config: Additional configuration options.
         """
         super().__init__(**config)
-        self._region: str = region_name or os.getenv("AWS_DEFAULT_REGION", "us-east-1")
-        self._profile: str | None = profile_name
-        self._access_key: str | None = aws_access_key_id
-        self._secret_key: str | None = aws_secret_access_key
+        self._region = region_name or os.getenv("AWS_DEFAULT_REGION", "us-east-1")
+        self._profile = profile_name
+        self._access_key = aws_access_key_id
+        self._secret_key = aws_secret_access_key
 
         self._session = aioboto3.Session(
             region_name=self._region,
@@ -136,10 +128,10 @@ class AWSBedrockConnector(CloudProviderBase):
         Returns:
             InferenceResponse with the generated content.
         """
-        start_time: float = time.perf_counter()
+        start_time = time.perf_counter()
 
         try:
-            body: Dict[str, Any] = self._format_request_body(request)
+            body = self._format_request_body(request)
 
             async with self._session.client("bedrock-runtime") as client:
                 response = await client.invoke_model(
@@ -150,15 +142,15 @@ class AWSBedrockConnector(CloudProviderBase):
                 )
 
                 response_body = json.loads(await response["body"].read())
-                content: str = self._parse_response(response_body, request.model)
+                content = self._parse_response(response_body, request.model)
 
                 # Token counting (approximate if not provided)
-                prompt_tokens: int = self._estimate_tokens(request.messages)
-                completion_tokens: int = self._estimate_tokens([{"content": content}])
-                tokens_used: int = prompt_tokens + completion_tokens
+                prompt_tokens = self._estimate_tokens(request.messages)
+                completion_tokens = self._estimate_tokens([{"content": content}])
+                tokens_used = prompt_tokens + completion_tokens
 
-                latency_ms: float = (time.perf_counter() - start_time) * 1000
-                cost: float = self.estimate_cost(request)  # Refine this if needed
+                latency_ms = (time.perf_counter() - start_time) * 1000
+                cost = self.estimate_cost(request) # Refine this if needed
 
                 return InferenceResponse(
                     content=content,
@@ -178,7 +170,7 @@ class AWSBedrockConnector(CloudProviderBase):
             elif error_code == "AccessDeniedException":
                 raise AuthenticationError(str(e), provider=self.name)
             raise CloudProviderError(f"Bedrock error: {str(e)}", provider=self.name)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             raise CloudProviderError(f"Unexpected error: {str(e)}", provider=self.name)
 
     async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
@@ -192,7 +184,7 @@ class AWSBedrockConnector(CloudProviderBase):
             String chunks of the response.
         """
         try:
-            body: Dict[str, Any] = self._format_request_body(request)
+            body = self._format_request_body(request)
 
             async with self._session.client("bedrock-runtime") as client:
                 response = await client.invoke_model_with_response_stream(
@@ -204,10 +196,10 @@ class AWSBedrockConnector(CloudProviderBase):
 
                 async for event in response["body"]:
                     chunk = json.loads(event["chunk"]["bytes"])
-                    text: str = self._extract_text_from_chunk(chunk, request.model)
+                    text = self._extract_text_from_chunk(chunk, request.model)
                     if text:
                         yield text
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"Bedrock streaming error: {str(e)}")
             raise CloudProviderError(f"Streaming failed: {str(e)}", provider=self.name)
 
@@ -243,7 +235,7 @@ class AWSBedrockConnector(CloudProviderBase):
 
     def _estimate_tokens(self, messages: List[Dict[str, str]]) -> int:
         """Rough token estimation (4 chars/token)."""
-        total_chars: int = sum(len(m.get("content", "")) for m in messages)
+        total_chars = sum(len(m.get("content", "")) for m in messages)
         return max(1, total_chars // 4)
 
     async def health_check(self) -> bool:
@@ -259,7 +251,7 @@ class AWSBedrockConnector(CloudProviderBase):
                 await client.list_foundation_models(byOutputModality="TEXT")
                 self._is_healthy = True
                 return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"Bedrock health check failed: {str(e)}")
             self._is_healthy = False
             self._last_error = str(e)
@@ -275,15 +267,15 @@ class AWSBedrockConnector(CloudProviderBase):
         Returns:
             Estimated cost in USD.
         """
-        model: str = request.model
-        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
+        model = request.model
+        pricing = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
 
         # Rough estimate: assume 4 chars per token
-        input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4
-        output_tokens: int = request.max_tokens
+        input_tokens = sum(len(m.get("content", "")) for m in request.messages) // 4
+        output_tokens = request.max_tokens
 
-        input_cost: float = (input_tokens / 1_000_000) * pricing["input"]
-        output_cost: float = (output_tokens / 1_000_000) * pricing["output"]
+        input_cost = (input_tokens / 1_000_000) * pricing["input"]
+        output_cost = (output_tokens / 1_000_000) * pricing["output"]
 
         return input_cost + output_cost
 
@@ -293,15 +285,15 @@ class AWSBedrockConnector(CloudProviderBase):
 
         Different model families on Bedrock have different request formats.
         """
-        model: str = request.model
+        model = request.model
 
         if model.startswith("anthropic.claude-3"):
             # Claude 3 format (Messages API)
-            system_prompt: str = ""
+            system_prompt = ""
             filtered_messages = []
             for m in request.messages:
                 if m["role"] == "system":
-                    system_prompt: str = m["content"]
+                    system_prompt = m["content"]
                 else:
                     filtered_messages.append(m)
 
@@ -317,7 +309,7 @@ class AWSBedrockConnector(CloudProviderBase):
 
         elif model.startswith("anthropic."):
             # Older Claude (Text Completions API)
-            prompt: str = self._messages_to_claude_prompt(request.messages)
+            prompt = self._messages_to_claude_prompt(request.messages)
             return {
                 "prompt": prompt,
                 "max_tokens_to_sample": request.max_tokens,
@@ -326,7 +318,7 @@ class AWSBedrockConnector(CloudProviderBase):
 
         elif model.startswith("amazon.titan"):
             # Titan format
-            prompt: str = self._messages_to_prompt(request.messages)
+            prompt = self._messages_to_prompt(request.messages)
             return {
                 "inputText": prompt,
                 "textGenerationConfig": {
@@ -337,7 +329,7 @@ class AWSBedrockConnector(CloudProviderBase):
 
         elif model.startswith("meta.llama3"):
             # Llama 3 format
-            prompt: str = self._messages_to_llama3_prompt(request.messages)
+            prompt = self._messages_to_llama3_prompt(request.messages)
             return {
                 "prompt": prompt,
                 "max_gen_len": request.max_tokens,
@@ -346,7 +338,7 @@ class AWSBedrockConnector(CloudProviderBase):
 
         elif model.startswith("meta.llama"):
             # Llama 2 format
-            prompt: str = self._messages_to_llama_prompt(request.messages)
+            prompt = self._messages_to_llama_prompt(request.messages)
             return {
                 "prompt": prompt,
                 "max_gen_len": request.max_tokens,
@@ -355,7 +347,7 @@ class AWSBedrockConnector(CloudProviderBase):
 
         elif model.startswith("mistral."):
             # Mistral format
-            prompt: str = self._messages_to_prompt(request.messages)
+            prompt = self._messages_to_prompt(request.messages)
             return {
                 "prompt": prompt,
                 "max_tokens": request.max_tokens,
@@ -364,7 +356,7 @@ class AWSBedrockConnector(CloudProviderBase):
 
         else:
             # Generic format
-            prompt: str = self._messages_to_prompt(request.messages)
+            prompt = self._messages_to_prompt(request.messages)
             return {
                 "prompt": prompt,
                 "max_tokens": request.max_tokens,
@@ -373,24 +365,24 @@ class AWSBedrockConnector(CloudProviderBase):
 
     def _messages_to_claude_prompt(self, messages: List[Dict[str, str]]) -> str:
         """Convert messages to legacy Claude \n\nHuman:/\n\nAssistant: format."""
-        prompt: str = ""
+        prompt = ""
         for msg in messages:
-            role: str = msg.get("role", "user")
-            content: str = msg.get("content", "")
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
             if role == "user":
                 prompt += f"\n\nHuman: {content}"
             elif role == "assistant":
                 prompt += f"\n\nAssistant: {content}"
             elif role == "system":
-                prompt: str = f"{content}{prompt}"
+                prompt = f"{content}{prompt}"
         return f"{prompt}\n\nAssistant:"
 
     def _messages_to_llama3_prompt(self, messages: List[Dict[str, str]]) -> str:
         """Convert messages to Llama 3 chat format."""
         prompt = "<|begin_of_text|>"
         for msg in messages:
-            role: str = msg.get("role", "user")
-            content: str = msg.get("content", "")
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
             prompt += f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>"
         prompt += "<|start_header_id|>assistant<|end_header_id|>\n\n"
         return prompt
@@ -399,8 +391,8 @@ class AWSBedrockConnector(CloudProviderBase):
         """Convert messages to a simple prompt string."""
         parts = []
         for msg in messages:
-            role: str = msg.get("role", "user")
-            content: str = msg.get("content", "")
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
             parts.append(f"{role.capitalize()}: {content}")
         return "\n\n".join(parts) + "\n\nAssistant:"
 
@@ -408,8 +400,8 @@ class AWSBedrockConnector(CloudProviderBase):
         """Convert messages to Llama 2 chat format."""
         parts = []
         for msg in messages:
-            role: str = msg.get("role", "user")
-            content: str = msg.get("content", "")
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
             if role == "system":
                 parts.append(f"<<SYS>>\n{content}\n<</SYS>>")
             elif role == "user":

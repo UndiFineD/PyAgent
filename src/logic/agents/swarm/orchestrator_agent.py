@@ -1,31 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-from __future__ import annotations
-
-"""
-Orchestrator agent.py module.
-"""
-"""
-Module: orchestrator_agent
-Implements orchestration logic for PyAgent system agents.
-"""
 # Standardized OrchestratorAgent for Swarm Intelligence
 
+from __future__ import annotations
 import logging
 import time
 from pathlib import Path
 from typing import Any
-
-from src.core.base.execution.agent_command_handler import AgentCommandHandler
-BaseAgent = None  # Will be imported locally to avoid circular import
 from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.execution.agent_command_handler import AgentCommandHandler
 from .orchestrator_features import OrchestratorFeatures
 
 __version__ = VERSION
 
-
-class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
+class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
     """
     Primary orchestrator for swarm agentic workflows.
     Combines core BaseAgent capabilities with specialized orchestrator features.
@@ -35,22 +24,15 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
     """
 
     def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
-        global BaseAgent
-        if BaseAgent is None:
-            from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
-            BaseAgent = _BaseAgent
         # Handle cases where repo_root is passed instead of file_path
         repo_root = kwargs.get("repo_root")
         if repo_root and (file_path == "." or not file_path):
             file_path = repo_root
-        self._base = BaseAgent(str(file_path), **kwargs)
-        super().__init__()
+
+        super().__init__(str(file_path), **kwargs)
 
         # Initialize legacy components expected by some integration tests
         self.command_handler = AgentCommandHandler(str(self._workspace_root))
-
-        # Initialize plugins container
-        self.plugins: dict[str, Any] = {}
 
         # Legacy attribute support
         self.enable_async = kwargs.get("enable_async", False)
@@ -82,7 +64,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         """Sets agent metrics."""
         self._metrics = value
 
-    def register_plugin(self, name_or_plugin: Any, plugin: Any | None = None) -> None:  # pylint: disable=arguments-renamed
+    def register_plugin(self, plugin: Any) -> None:
         """
         Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.
@@ -92,13 +74,8 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
             self.plugins = {}
 
         # Use the mixin implementation
-        from src.logic.agents.swarm.orchestrator_plugin_mixin import \
-            OrchestratorPluginMixin
-
-        if plugin:
-            OrchestratorPluginMixin.register_plugin(self, plugin)
-        else:
-            OrchestratorPluginMixin.register_plugin(self, name_or_plugin)
+        from src.logic.agents.swarm.orchestrator_plugin_mixin import OrchestratorPluginMixin
+        OrchestratorPluginMixin.register_plugin(self, plugin)
 
     @property
     def repo_root(self) -> str:
@@ -117,12 +94,11 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         Legacy support for config-driven initialization.
         """
         import json
-
         config_path = Path(config_path)
         if not config_path.exists():
             raise FileNotFoundError(f"Config file not found: {config_path}")
 
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, "r") as f:
             config = json.load(f)
 
         repo_root = config.get("repo_root", ".")
@@ -138,7 +114,11 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         rate = (modified / processed * 100.0) if processed > 0 else 0.0
 
         return {
-            "summary": {"files_processed": processed, "files_modified": modified, "modification_rate": rate},
+            "summary": {
+                "files_processed": processed,
+                "files_modified": modified,
+                "modification_rate": rate
+            },
             "agents": self._metrics.get("agents_applied", {}),
             "mode": {
                 "dry_run": getattr(self, "dry_run", False),
@@ -151,9 +131,13 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         Legacy support for Phase 5 benchmarking.
         """
         total_files = len(files)
-        elapsed = time.time() - float(self._metrics.get("start_time", time.time()))
+        elapsed = time.time() - self._metrics.get("start_time", time.time())
         avg = (elapsed / total_files) if total_files > 0 else 0.0
-        return {"average_per_file": avg, "total_time": elapsed, "file_count": total_files}
+        return {
+            "average_per_file": avg,
+            "total_time": elapsed,
+            "file_count": total_files
+        }
 
     def cost_analysis(self, cost_per_request: float = 0.0) -> dict[str, Any]:
         """
@@ -165,7 +149,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
             "total_estimated_cost": agent_runs * cost_per_request,
             "total_agent_runs": agent_runs,
             "cost_per_request": cost_per_request,
-            "currency": "USD",
+            "currency": "USD"
         }
 
     def update_code(self, target: Path) -> str:
@@ -192,18 +176,16 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
         Synchronous wrapper for agent execution.
         If no prompt is provided, runs the main processing loop.
         """
-        _ = kwargs
         if prompt is None:
             # Legacy loop-based mode (Phase 5/6)
             logging.info("Orchestrator: Starting processing loop (legacy mode)")
             if hasattr(self, "run_with_parallel_execution"):
-                getattr(self, "run_with_parallel_execution")()
+                self.run_with_parallel_execution()
                 return "Success"
             return "Orchestrator: No loop implementation found."
 
         # Call modern async run via runner
         import asyncio
-
         try:
             # Check if there is an existing event loop
             try:
@@ -215,9 +197,10 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
                 # We are in an async context already (unlikely for these tests)
                 # This is a bit tricky, but for tests we'll just return a placeholder
                 return "Async execution required"
-
-            # Use the new run_async method in BaseAgent
-            return asyncio.run(self.run_async(prompt))
-        except (RuntimeError, ValueError) as e:
+            else:
+                # Use the new run_async method in BaseAgent
+                return asyncio.run(self.run_async(prompt))
+        except Exception as e:
             logging.error(f"Error in OrchestratorAgent.run: {e}")
             return f"Error: {e}"
+

@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -24,7 +10,12 @@ import threading
 from typing import Dict, Iterable, List
 
 from .base import OffloadingBackend
-from .models import BlockHash, BlockStatus, LoadStoreSpec, OffloadMedium
+from .models import (
+    BlockHash,
+    BlockStatus,
+    LoadStoreSpec,
+    OffloadMedium,
+)
 
 
 class MemoryBackend(OffloadingBackend):
@@ -39,7 +30,7 @@ class MemoryBackend(OffloadingBackend):
         capacity_blocks: int,
         block_size: int = 4096,
         medium: str = "cpu",
-    ) -> None:
+    ):
         self._capacity = capacity_blocks
         self._block_size = block_size
         self._medium = medium
@@ -70,14 +61,12 @@ class MemoryBackend(OffloadingBackend):
                 self._next_address += self._block_size
                 self._allocated[address] = bytes(self._block_size)
 
-                blocks.append(
-                    BlockStatus(
-                        address=address,
-                        size=self._block_size,
-                        ref_cnt=1,  # Initially pinned for store
-                        is_ready=False,
-                    )
-                )
+                blocks.append(BlockStatus(
+                    address=address,
+                    size=self._block_size,
+                    ref_cnt=1,  # Initially pinned for store
+                    is_ready=False,
+                ))
         return blocks
 
     def free(self, block: BlockStatus) -> None:

@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 BlockTableV2: Enhanced Block Table Management
 
@@ -30,21 +16,20 @@ Based on vLLM v1 patterns with PyAgent innovations.
 
 from __future__ import annotations
 
-import contextlib
-import threading
 from dataclasses import dataclass
 from enum import Enum, auto
+import threading
+import contextlib
 from typing import Any
 
 with contextlib.suppress(ImportError):
     import rust_core
 
-HAS_RUST = "rust_core" in globals()
+HAS_RUST = 'rust_core' in globals()
 
 
 class BlockAllocationStrategy(Enum):
     """Strategy for block allocation."""
-
     CONTIGUOUS = auto()  # Allocate contiguous blocks
     SCATTERED = auto()  # Allocate wherever available
     NUMA_AWARE = auto()  # NUMA-aware allocation
@@ -54,7 +39,6 @@ class BlockAllocationStrategy(Enum):
 @dataclass(frozen=True, slots=True)
 class BlockTableConfig:
     """Configuration for block table."""
-
     block_size: int = 16
     kernel_block_size: int = 16
     max_num_reqs: int = 256
@@ -68,7 +52,6 @@ class BlockTableConfig:
 @dataclass(slots=True)
 class BlockInfo:
     """Information about a block."""
-
     block_id: int
     ref_count: int = 0
     is_allocated: bool = False
@@ -162,7 +145,8 @@ class BlockTable:
         else:
             if config.block_size % config.kernel_block_size != 0:
                 raise ValueError(
-                    f"kernel_block_size {config.kernel_block_size} must divide block_size {config.block_size} evenly"
+                    f"kernel_block_size {config.kernel_block_size} must divide "
+                    f"block_size {config.block_size} evenly"
                 )
             self.block_size = config.kernel_block_size
             self.blocks_per_kv_block = config.block_size // config.kernel_block_size
@@ -171,13 +155,19 @@ class BlockTable:
         self.max_num_blocks_per_req = config.max_num_blocks_per_req * self.blocks_per_kv_block
 
         # Block table buffer
-        self.block_table = CpuGpuBuffer((self.max_num_reqs, self.max_num_blocks_per_req), dtype="int32")
+        self.block_table = CpuGpuBuffer(
+            (self.max_num_reqs, self.max_num_blocks_per_req),
+            dtype="int32"
+        )
 
         # Number of blocks per row
         self._num_blocks_per_row = [0] * config.max_num_reqs
 
         # Slot mapping buffer
-        self.slot_mapping = CpuGpuBuffer((config.max_num_batched_tokens,), dtype="int64")
+        self.slot_mapping = CpuGpuBuffer(
+            (config.max_num_batched_tokens,),
+            dtype="int64"
+        )
 
         # Kernel block arange for hybrid blocks
         if self.use_hybrid_blocks:
@@ -194,7 +184,12 @@ class BlockTable:
 
         self._lock = threading.Lock()
 
-    def append_row(self, row_idx: int, block_ids: list[int], _num_tokens: int = 0) -> None:
+    def append_row(
+        self,
+        row_idx: int,
+        block_ids: list[int],
+        _num_tokens: int = 0
+    ) -> None:
         """
         Append blocks to a row in the block table.
 
@@ -224,7 +219,10 @@ class BlockTable:
         """Get all block IDs for a row."""
         with self._lock:
             num_blocks = self._num_blocks_per_row[row_idx]
-            return [self.block_table.get(row_idx, i) for i in range(num_blocks)]
+            return [
+                self.block_table.get(row_idx, i)
+                for i in range(num_blocks)
+            ]
 
     def clear_row(self, row_idx: int) -> None:
         """Clear a row."""
@@ -234,15 +232,20 @@ class BlockTable:
                 self.block_table.set(row_idx, i, 0)
             self._num_blocks_per_row[row_idx] = 0
 
-    def compute_slot_mapping(self, row_idx: int, num_tokens: int, start_position: int = 0) -> list[int]:
+    def compute_slot_mapping(
+        self,
+        row_idx: int,
+        num_tokens: int,
+        start_position: int = 0
+    ) -> list[int]:
         """
         Compute slot mapping for tokens.
 
         Maps each token position to a slot in the KV cache.
         """
-        if HAS_RUST and hasattr(rust_core, "block_table_slot_mapping_rust"):
+        if HAS_RUST and hasattr(rust_core, 'block_table_slot_mapping_rust'):
             blocks = self.get_row(row_idx)
-            return getattr(rust_core, "block_table_slot_mapping_rust")(
+            return getattr(rust_core, 'block_table_slot_mapping_rust')(
                 blocks, num_tokens, start_position, self.block_size
             )
 
@@ -263,7 +266,10 @@ class BlockTable:
 
         return slots
 
-    def update_slot_mapping(self, token_positions: list[tuple[int, int, int]]) -> None:
+    def update_slot_mapping(
+        self,
+        token_positions: list[tuple[int, int, int]]
+    ) -> None:
         """
         Update slot mapping for multiple tokens.
 
@@ -364,7 +370,12 @@ class PredictiveBlockAllocator:
     Predicts future block needs based on sequence patterns.
     """
 
-    def __init__(self, total_blocks: int, block_size: int = 16, prediction_horizon: int = 4):
+    def __init__(
+        self,
+        total_blocks: int,
+        block_size: int = 16,
+        prediction_horizon: int = 4
+    ):
         self.total_blocks = total_blocks
         self.block_size = block_size
         self.prediction_horizon = prediction_horizon
@@ -379,7 +390,12 @@ class PredictiveBlockAllocator:
 
         self._lock = threading.Lock()
 
-    def allocate(self, request_id: str, num_blocks: int, predict_future: bool = True) -> list[int]:
+    def allocate(
+        self,
+        request_id: str,
+        num_blocks: int,
+        predict_future: bool = True
+    ) -> list[int]:
         """Allocate blocks with optional prediction."""
         with self._lock:
             # Determine total to allocate
@@ -395,7 +411,11 @@ class PredictiveBlockAllocator:
             self._free_blocks = self._free_blocks[total_needed:]
 
             for block_id in allocated:
-                self._allocated[block_id] = BlockInfo(block_id=block_id, ref_count=1, is_allocated=True)
+                self._allocated[block_id] = BlockInfo(
+                    block_id=block_id,
+                    ref_count=1,
+                    is_allocated=True
+                )
 
             # Track for prediction
             if request_id not in self._last_allocations:
@@ -439,7 +459,12 @@ class DistributedBlockTable:
     Coordinates block allocation across multiple GPUs/workers.
     """
 
-    def __init__(self, config: BlockTableConfig, num_workers: int = 1, worker_id: int = 0):
+    def __init__(
+        self,
+        config: BlockTableConfig,
+        num_workers: int = 1,
+        worker_id: int = 0
+    ):
         self.config = config
         self.num_workers = num_workers
         self.worker_id = worker_id
@@ -451,7 +476,12 @@ class DistributedBlockTable:
         self._block_locations: dict[int, int] = {}  # block_id -> worker_id
         self._lock = threading.Lock()
 
-    def allocate_blocks(self, _row_idx: int, num_blocks: int, _prefer_local: bool = True) -> list[int]:
+    def allocate_blocks(
+        self,
+        _row_idx: int,
+        num_blocks: int,
+        _prefer_local: bool = True
+    ) -> list[int]:
         """Allocate blocks with locality preference."""
         # This is a simplified implementation
         # Real version would coordinate with other workers
@@ -474,27 +504,33 @@ class BlockTableV2:
     Combines standard, sparse, predictive, and distributed features.
     """
 
-    def __init__(self, config: BlockTableConfig, use_sparse: bool = False, use_prediction: bool = False):
+    def __init__(
+        self,
+        config: BlockTableConfig,
+        use_sparse: bool = False,
+        use_prediction: bool = False
+    ):
         self.config = config
 
         # Choose implementation based on config
         self._impl = SparseBlockTable(config) if use_sparse else BlockTable(config)
 
         # Predictive allocator
-        self.allocator = (
-            PredictiveBlockAllocator(
-                total_blocks=1000,  # Default
-                block_size=config.block_size,
-            )
-            if use_prediction
-            else None
-        )
+        self.allocator = PredictiveBlockAllocator(
+            total_blocks=1000,  # Default
+            block_size=config.block_size
+        ) if use_prediction else None
 
         # Statistics
         self._allocations = 0
         self._frees = 0
 
-    def append_row(self, row_idx: int, block_ids: list[int], num_tokens: int = 0) -> None:
+    def append_row(
+        self,
+        row_idx: int,
+        block_ids: list[int],
+        num_tokens: int = 0
+    ) -> None:
         """Append blocks to row."""
         if isinstance(self._impl, BlockTable):
             self._impl.append_row(row_idx, block_ids, num_tokens)
@@ -519,7 +555,12 @@ class BlockTableV2:
             self._frees += len(blocks)
         self._impl.clear_row(row_idx)
 
-    def compute_slot_mapping(self, row_idx: int, num_tokens: int, start_position: int = 0) -> list[int]:
+    def compute_slot_mapping(
+        self,
+        row_idx: int,
+        num_tokens: int,
+        start_position: int = 0
+    ) -> list[int]:
         """Compute slot mapping."""
         if isinstance(self._impl, BlockTable):
             return self._impl.compute_slot_mapping(row_idx, num_tokens, start_position)
@@ -532,7 +573,12 @@ class BlockTableV2:
             return slots
         return []
 
-    def allocate_for_request(self, request_id: str, row_idx: int, num_blocks: int) -> list[int]:
+    def allocate_for_request(
+        self,
+        request_id: str,
+        row_idx: int,
+        num_blocks: int
+    ) -> list[int]:
         """Allocate blocks for request using predictor."""
         if self.allocator:
             block_ids = self.allocator.allocate(request_id, num_blocks)
@@ -555,21 +601,33 @@ class BlockTableFactory:
     """Factory for creating block tables."""
 
     @staticmethod
-    def create_standard(block_size: int = 16, max_num_reqs: int = 256, max_blocks_per_req: int = 128) -> BlockTable:
+    def create_standard(
+        block_size: int = 16,
+        max_num_reqs: int = 256,
+        max_blocks_per_req: int = 128
+    ) -> BlockTable:
         """Create standard block table."""
         config = BlockTableConfig(
-            block_size=block_size, max_num_reqs=max_num_reqs, max_num_blocks_per_req=max_blocks_per_req
+            block_size=block_size,
+            max_num_reqs=max_num_reqs,
+            max_num_blocks_per_req=max_blocks_per_req
         )
         return BlockTable(config)
 
     @staticmethod
-    def create_sparse(block_size: int = 16) -> SparseBlockTable:
+    def create_sparse(
+        block_size: int = 16
+    ) -> SparseBlockTable:
         """Create sparse block table."""
         config = BlockTableConfig(block_size=block_size)
         return SparseBlockTable(config)
 
     @staticmethod
-    def create_v2(block_size: int = 16, use_sparse: bool = False, use_prediction: bool = True) -> BlockTableV2:
+    def create_v2(
+        block_size: int = 16,
+        use_sparse: bool = False,
+        use_prediction: bool = True
+    ) -> BlockTableV2:
         """Create enhanced block table."""
         config = BlockTableConfig(block_size=block_size)
         return BlockTableV2(config, use_sparse=use_sparse, use_prediction=use_prediction)

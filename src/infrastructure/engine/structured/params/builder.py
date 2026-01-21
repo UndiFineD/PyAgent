@@ -1,36 +1,15 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Builder.py module.
-"""
-
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 from typing import Any, Dict, List, Optional
-
-from .config import StructuredOutputConfig
+from .enums import StructuredOutputType, GuidedDecodingBackend, WhitespacePattern
 from .constraints import OutputConstraint
-from .enums import (GuidedDecodingBackend, StructuredOutputType,
-                    WhitespacePattern)
-
+from .config import StructuredOutputConfig
 
 class ConstraintBuilder:
     """
     Fluent builder for structured output constraints.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         self._config = StructuredOutputConfig()
         self._constraints: List[OutputConstraint] = []
 
@@ -50,7 +29,7 @@ class ConstraintBuilder:
         self._config.json_object = True
         return self
 
-    def regex(self, pattern: str, _flags: int = 0) -> "ConstraintBuilder":
+    def regex(self, pattern: str, flags: int = 0) -> "ConstraintBuilder":
         """Add regex constraint."""
         self._config.regex = pattern
         self._config.output_type = StructuredOutputType.REGEX
@@ -59,7 +38,7 @@ class ConstraintBuilder:
     def choices(
         self,
         options: List[str],
-        _case_sensitive: bool = True,
+        case_sensitive: bool = True,
     ) -> "ConstraintBuilder":
         """Add choice constraint."""
         self._config.choices = options

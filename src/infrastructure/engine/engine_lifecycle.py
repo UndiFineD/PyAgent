@@ -1,24 +1,26 @@
-
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Engine lifecycle management module for coordinating engine states and request processing.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
+Engine lifecycle management for inference engines.
+
+This module implements engine state management and lifecycle control,
+inspired by vLLM's v1/engine/core.py architecture.
+
+Key Components:
+    - EngineState: Enum for engine states (INITIALIZING, READY, RUNNING, etc.)
+    - EngineConfig: Configuration for engine lifecycle
+    - EngineLifecycleManager: Manages engine state transitions
+
+Example:
+    >>> from src.infrastructure.engine import EngineLifecycleManager, EngineConfig
+    >>>
+    >>> config = EngineConfig(max_requests=100)
+    >>> manager = EngineLifecycleManager(config)
+    >>>
+    >>> manager.start()  # INITIALIZING -> READY
+    >>> manager.step()   # READY -> RUNNING -> READY
+    >>> manager.shutdown()  # -> SHUTTING_DOWN -> DEAD
+"""
 
 from __future__ import annotations
 
@@ -28,11 +30,16 @@ import logging
 import signal
 import threading
 import time
-from dataclasses import dataclass
-from typing import Any, Callable, Optional, Set
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, List, Optional, Set
 
-from .request_lifecycle import (FinishReason, Request, RequestQueue,
-                                RequestTracker)
+from .request_lifecycle import (
+    FinishReason,
+    Request,
+    RequestQueue,
+    RequestStatus,
+    RequestTracker,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,16 +48,21 @@ logger = logging.getLogger(__name__)
 # Engine State Enum
 # ==============================================================================
 
-
 class EngineState(enum.Enum):
-    """Enumeration of possible engine lifecycle states."""
+    """
+    State of the inference engine.
 
-    INITIALIZING = "initializing"  # Engine is starting up
-    READY = "ready"  # Ready to accept requests
-    RUNNING = "running"  # Processing requests
-    SLEEPING = "sleeping"  # Power-saving mode
-    SHUTTING_DOWN = "shutting_down"  # Graceful shutdown in progress
-    DEAD = "dead"  # Engine is terminated
+    State machine:
+        INITIALIZING -> READY -> RUNNING <-> SLEEPING
+                                    |
+                              SHUTTING_DOWN -> DEAD
+    """
+    INITIALIZING = "initializing"   # Engine is starting up
+    READY = "ready"                 # Ready to accept requests
+    RUNNING = "running"             # Processing requests
+    SLEEPING = "sleeping"           # Power-saving mode
+    SHUTTING_DOWN = "shutting_down" # Graceful shutdown in progress
+    DEAD = "dead"                   # Engine is terminated
 
     def __str__(self) -> str:
         return self.value
@@ -69,7 +81,7 @@ class EngineState(enum.Enum):
 
 
 # Valid state transitions
-_ENGINE_TRANSITIONS: dict[EngineState, Set[EngineState]] = {
+_ENGINE_TRANSITIONS: Dict[EngineState, Set[EngineState]] = {
     EngineState.INITIALIZING: {EngineState.READY, EngineState.DEAD},
     EngineState.READY: {
         EngineState.RUNNING,
@@ -95,7 +107,6 @@ _ENGINE_TRANSITIONS: dict[EngineState, Set[EngineState]] = {
 # Engine Configuration
 # ==============================================================================
 
-
 @dataclass
 class EngineConfig:
     """
@@ -111,7 +122,6 @@ class EngineConfig:
         sleep_level: Default sleep level (1-3)
         health_check_interval: Interval for health checks
     """
-
     max_requests: int = 256
     max_tokens_per_step: int = 8192
     step_timeout: float = 30.0
@@ -131,8 +141,7 @@ class EngineConfig:
 # Engine Lifecycle Manager
 # ==============================================================================
 
-
-class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
+class EngineLifecycleManager:
     """
     Manages the lifecycle of an inference engine.
 
@@ -150,7 +159,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         self,
         config: Optional[EngineConfig] = None,
         request_queue: Optional[RequestQueue] = None,
-    ) -> None:
+    ):
         """
         Initialize the engine lifecycle manager.
 
@@ -169,7 +178,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
 
         # Sleep mode state
         self._sleep_level = 0
-        self._wake_tags: Optional[list[str]] = None
+        self._wake_tags: Optional[List[str]] = None
 
         # Step counting
         self._step_count = 0
@@ -242,7 +251,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
             if self.config.on_state_change:
                 try:
                     self.config.on_state_change(old_state, new_state)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:
                     logger.exception("Error in state change callback: %s", e)
 
             return True
@@ -276,34 +285,31 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         """
         timeout = timeout or self.config.shutdown_timeout
 
-        self._signal_shutdown()
-        self._transition_to_shutting_down()
+        # Signal shutdown
+        self._shutdown_event.set()
 
+        # Transition to shutting down
+        if not self._transition_to(EngineState.SHUTTING_DOWN):
+            # Force transition if we're in a terminal state
+            if not self._state.is_terminal():
+                self._state = EngineState.SHUTTING_DOWN
+
+        # Drain requests if configured
         if self.config.drain_requests_on_shutdown:
-            self._drain_pending_requests(timeout)
-
-        return self._transition_to_dead()
-
-    def _abort_all_pending_requests(self) -> None:
-        """Abort all waiting and running requests in the queue."""
-        for request in self.request_queue.get_waiting_requests():
-            self.request_queue.abort_request(request.request_id)
-        for request in self.request_queue.get_running_requests():
-            self.request_queue.abort_request(request.request_id)
-
-    def _sleep_briefly(self) -> None:
-        # Helper to sleep briefly, compatible with sync context
-        try:
-            if asyncio.get_event_loop().is_running():
-                # If in async context, schedule async sleep
-                asyncio.create_task(self._async_sleep())
-            else:
+            start_time = time.time()
+            while self.request_queue.has_unfinished_requests():
+                if time.time() - start_time > timeout:
+                    logger.warning(
+                        "Shutdown timeout: %d requests still pending",
+                        self.request_queue.get_num_unfinished(),
+                    )
+                    # Abort remaining requests
+                    for request in self.request_queue.get_waiting_requests():
+                        self.request_queue.abort_request(request.request_id)
+                    for request in self.request_queue.get_running_requests():
+                        self.request_queue.abort_request(request.request_id)
+                    break
                 time.sleep(0.1)
-        except (RuntimeError, AttributeError):
-            time.sleep(0.1)
-
-    async def _async_sleep(self) -> bool:
-        await asyncio.sleep(0.1)
 
         self._drain_complete.set()
         return self._transition_to(EngineState.DEAD)
@@ -330,7 +336,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         logger.info("Engine sleeping at level %d", self._sleep_level)
         return self._transition_to(EngineState.SLEEPING)
 
-    def wake_up(self, tags: Optional[list[str]] = None) -> bool:
+    def wake_up(self, tags: Optional[List[str]] = None) -> bool:
         """
         Wake up the engine from sleep.
 
@@ -377,7 +383,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         self.request_queue.add_request(request)
         return True
 
-    def abort_requests(self, request_ids: list[str]) -> list[Request]:
+    def abort_requests(self, request_ids: List[str]) -> List[Request]:
         """
         Abort one or more requests.
 
@@ -404,7 +410,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
     # Step Execution
     # -------------------------------------------------------------------------
 
-    def step(self) -> list[Request]:
+    def step(self) -> List[Request]:
         """
         Execute a single engine step.
 
@@ -417,7 +423,9 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         if self._shutdown_event.is_set():
             return []
 
-        self._transition_to_running_if_needed()
+        # Transition to running if we have work
+        if self._state == EngineState.READY and self.request_queue.has_unfinished_requests():
+            self._transition_to(EngineState.RUNNING)
 
         if self._state != EngineState.RUNNING:
             return []
@@ -425,78 +433,54 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         finished = []
 
         try:
-            self._schedule_waiting_requests()
-            self._record_step_timing()
-            finished = self._process_running_requests()
-            self._transition_to_ready_if_idle()
+            # Schedule waiting requests
+            available_slots = (
+                self.config.max_requests - self.request_queue.get_num_running()
+            )
+            if available_slots > 0:
+                self.request_queue.schedule_next(available_slots)
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self._handle_step_error(e)
+            # Record step timing
+            self._step_count += 1
+            self._last_step_time = time.time()
+
+            # Process running requests (placeholder - actual processing
+            # would happen in a subclass or via callbacks)
+            for request in self.request_queue.get_running_requests():
+                # Check if request should stop (e.g., hit max_tokens)
+                if request.should_stop():
+                    reason = FinishReason.LENGTH
+                    if request.output_token_ids and request.eos_token_id:
+                        if request.output_token_ids[-1] == request.eos_token_id:
+                            reason = FinishReason.STOP
+
+                    self.request_queue.finish_request(
+                        request.request_id,
+                        reason,
+                    )
+                    self.tracker.record_request(request)
+                    finished.append(request)
+
+                    if self.config.on_request_complete:
+                        try:
+                            self.config.on_request_complete(request)
+                        except Exception as e:
+                            logger.exception("Error in completion callback: %s", e)
+
+            # Transition back to ready if no work remains
+            if not self.request_queue.has_unfinished_requests():
+                self._transition_to(EngineState.READY)
+
+        except Exception as e:
+            self._last_error = e
+            self._error_count += 1
+            logger.exception("Error during step: %s", e)
+            if self.config.on_error:
+                self.config.on_error(e)
 
         return finished
 
-    def _transition_to_running_if_needed(self) -> None:
-        """Transition to running state if there are unfinished requests."""
-        if self._state == EngineState.READY and self.request_queue.has_unfinished_requests():
-            self._transition_to(EngineState.RUNNING)
-
-    def _schedule_waiting_requests(self) -> None:
-        """Schedule waiting requests into available slots."""
-        available_slots = self.config.max_requests - self.request_queue.get_num_running()
-        if available_slots > 0:
-            self.request_queue.schedule_next(available_slots)
-
-    def _record_step_timing(self) -> None:
-        """Record timing information for this step."""
-        self._step_count += 1
-        self._last_step_time = time.time()
-
-    def _process_running_requests(self) -> list[Request]:
-        """Process all currently running requests and return finished ones."""
-        finished = []
-        for request in self.request_queue.get_running_requests():
-            if request.should_stop():
-                finished_request = self._finish_request(request)
-                finished.append(finished_request)
-        return finished
-
-    def _finish_request(self, request: Request) -> Request:
-        """Finish a request and handle completion callbacks."""
-        reason = self._determine_finish_reason(request)
-
-        self.request_queue.finish_request(request.request_id, reason)
-        self.tracker.record_request(request)
-
-        if self.config.on_request_complete:
-            try:
-                self.config.on_request_complete(request)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.exception("Error in completion callback: %s", e)
-
-        return request
-
-    def _determine_finish_reason(self, request: Request) -> FinishReason:
-        """Determine why a request finished."""
-        reason = FinishReason.LENGTH
-        if request.output_token_ids and request.eos_token_id:
-            if request.output_token_ids[-1] == request.eos_token_id:
-                reason = FinishReason.STOP
-        return reason
-
-    def _transition_to_ready_if_idle(self) -> None:
-        """Transition back to ready state if no work remains."""
-        if not self.request_queue.has_unfinished_requests():
-            self._transition_to(EngineState.READY)
-
-    def _handle_step_error(self, error: Exception) -> None:
-        """Handle errors that occur during step execution."""
-        self._last_error = error
-        self._error_count += 1
-        logger.exception("Error during step: %s", error)
-        if self.config.on_error:
-            self.config.on_error(error)
-
-    async def step_async(self) -> list[Request]:
+    async def step_async(self) -> List[Request]:
         """Async version of step()."""
         return await asyncio.get_event_loop().run_in_executor(None, self.step)
 
@@ -504,7 +488,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
     # Health & Monitoring
     # -------------------------------------------------------------------------
 
-    def health_check(self) -> dict[str, Any]:
+    def health_check(self) -> Dict[str, Any]:
         """
         Perform a health check.
 
@@ -526,7 +510,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         """Check if the engine is healthy."""
         return not self._state.is_terminal() and self._error_count == 0
 
-    def get_stats(self) -> dict[str, Any]:
+    def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""
         return {
             "state": str(self._state),
@@ -542,8 +526,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
 
     def setup_signal_handlers(self) -> None:
         """Set up signal handlers for graceful shutdown."""
-
-        def signal_handler(signum: int, _frame: Any) -> None:
+        def signal_handler(signum, frame):
             logger.info("Received signal %s, initiating shutdown", signum)
             self.shutdown()
 

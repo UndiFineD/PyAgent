@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 AsyncEngineClient: Multi-process async engine client with DP load balancing.
 
@@ -19,20 +5,19 @@ Refactored to modular package structure for Phase 317.
 Decomposed into types, base, and specific client implementation modules.
 """
 
-from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
+from src.infrastructure.engine.engine_client.types import (
+    ClientMode, WorkerState, EngineClientConfig,
+    SchedulerOutput, EngineOutput, WorkerInfo
+)
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
+from src.infrastructure.engine.engine_client.inproc import InprocClient
+from src.infrastructure.engine.engine_client.sync_mp import SyncMPClient
+from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
+from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
 from src.infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
 from src.infrastructure.engine.engine_client.factory import (
-    auto_select_client_mode, create_engine_client)
-from src.infrastructure.engine.engine_client.inproc import InprocClient
-from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
-from src.infrastructure.engine.engine_client.sync_mp import SyncMPClient
-from src.infrastructure.engine.engine_client.types import (ClientMode,
-                                                           EngineClientConfig,
-                                                           EngineOutput,
-                                                           SchedulerOutput,
-                                                           WorkerInfo,
-                                                           WorkerState)
+    auto_select_client_mode, create_engine_client
+)
 
 __all__ = [
     "ClientMode",

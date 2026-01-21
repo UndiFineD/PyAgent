@@ -1,32 +1,26 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""Image loader implementation."""
-
-# pylint: disable=too-many-function-args
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
+Image loader implementation.
+"""
 
 from __future__ import annotations
 
 import io
 from pathlib import Path
-from typing import BinaryIO, Tuple, Union
+from typing import BinaryIO, Optional, Tuple, Union
 
 import numpy as np
 
 from .base import MediaLoader
-from .models import (ImageData, ImageFormat, MediaLoadConfig, MediaMetadata,
-                     MediaType, ResizeMode)
+from .models import (
+    ImageData,
+    ImageFormat,
+    MediaLoadConfig,
+    MediaMetadata,
+    MediaType,
+    ResizeMode,
+)
 
 
 class ImageLoader(MediaLoader):
@@ -35,12 +29,14 @@ class ImageLoader(MediaLoader):
     def __init__(self):
         self._pil_available = False
         self._cv2_available = False
+
         try:
             from PIL import Image
             self._pil_available = True
-            self._image_lib = Image
+            self._Image = Image
         except ImportError:
             pass
+
         try:
             import cv2
             self._cv2_available = True
@@ -79,13 +75,17 @@ class ImageLoader(MediaLoader):
 
         return ImageData(data=img, metadata=metadata, source=source_str)
 
-    async def _read_source(self, source: Union[str, bytes, BinaryIO]) -> Tuple[bytes, str]:
+    async def _read_source(
+        self,
+        source: Union[str, bytes, BinaryIO]
+    ) -> Tuple[bytes, str]:
         """Read bytes from source."""
         if isinstance(source, bytes):
             return source, "<bytes>"
+
         if isinstance(source, (str, Path)):
             source_str = str(source)
-            if source_str.startswith(("http://", "https://")):
+            if source_str.startswith(('http://', 'https://')):
                 data = await self._fetch_url(source_str)
             else:
                 with open(source_str, 'rb') as f:
@@ -109,23 +109,27 @@ class ImageLoader(MediaLoader):
 
     def _detect_format(self, data: bytes) -> ImageFormat:
         """Detect image format from magic bytes."""
-        if data[:2] == b"\xff\xd8":
+        if data[:2] == b'\xff\xd8':
             return ImageFormat.JPEG
-        if data[:8] == b"\x89PNG\r\n\x1a\n":
+        elif data[:8] == b'\x89PNG\r\n\x1a\n':
             return ImageFormat.PNG
-        if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        elif data[:4] == b'RIFF' and data[8:12] == b'WEBP':
             return ImageFormat.WEBP
-        if data[:6] in (b"GIF87a", b"GIF89a"):
+        elif data[:6] in (b'GIF87a', b'GIF89a'):
             return ImageFormat.GIF
-        if data[:2] == b"BM":
+        elif data[:2] == b'BM':
             return ImageFormat.BMP
         return ImageFormat.JPEG
 
-    async def _load_pil(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
+    async def _load_pil(
+        self,
+        data: bytes,
+        config: MediaLoadConfig
+    ) -> np.ndarray:
         """Load using PIL."""
-        img = self._image_lib.open(io.BytesIO(data))
-        if img.mode != "RGB":
-            img = img.convert("RGB")
+        img = self._Image.open(io.BytesIO(data))
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
 
         if config.target_size:
             img = self._resize_pil(img, config.target_size, config.resize_mode)
@@ -138,42 +142,47 @@ class ImageLoader(MediaLoader):
             arr = (arr - mean) / std
         return arr
 
-    def _resize_pil(self, img, target: Tuple[int, int], mode: ResizeMode):
+    def _resize_pil(
+        self,
+        img,
+        target: Tuple[int, int],
+        mode: ResizeMode
+    ):
         """Resize image using PIL."""
         w, h = img.size
         tw, th = target
-
         if mode == ResizeMode.STRETCH:
-            return img.resize((tw, th), self._image_lib.Resampling.BICUBIC)
-
-        if mode == ResizeMode.CROP:
+            return img.resize((tw, th), self._Image.Resampling.BICUBIC)
+        elif mode == ResizeMode.CROP:
             scale = max(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
-            img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
+            img = img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
             left = (new_w - tw) // 2
             top = (new_h - th) // 2
             return img.crop((left, top, left + tw, top + th))
-
-        if mode == ResizeMode.PAD:
+        elif mode == ResizeMode.PAD:
             scale = min(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
-            img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
-            result = self._image_lib.new("RGB", (tw, th), (0, 0, 0))
+            img = img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
+            result = self._Image.new('RGB', (tw, th), (0, 0, 0))
             left = (tw - new_w) // 2
             top = (th - new_h) // 2
             result.paste(img, (left, top))
             return result
-
-        if mode == ResizeMode.SHORTEST:
+        elif mode == ResizeMode.SHORTEST:
             scale = min(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
-            return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
+            return img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
+        else:
+            scale = max(tw / w, th / h)
+            new_w, new_h = int(w * scale), int(h * scale)
+            return img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
 
-        scale = max(tw / w, th / h)
-        new_w, new_h = int(w * scale), int(h * scale)
-        return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
-
-    async def _load_cv2(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
+    async def _load_cv2(
+        self,
+        data: bytes,
+        config: MediaLoadConfig
+    ) -> np.ndarray:
         """Load using OpenCV."""
         arr = np.frombuffer(data, dtype=np.uint8)
         img = self._cv2.imdecode(arr, self._cv2.IMREAD_COLOR)
@@ -190,17 +199,19 @@ class ImageLoader(MediaLoader):
             img = (img - mean) / std
         return img
 
-    def _resize_cv2(self, img: np.ndarray, target: Tuple[int, int], mode: ResizeMode) -> np.ndarray:
+    def _resize_cv2(
+        self,
+        img: np.ndarray,
+        target: Tuple[int, int],
+        mode: ResizeMode
+    ) -> np.ndarray:
         """Resize image using OpenCV."""
         h, w = img.shape[:2]
         tw, th = target
-
         if mode == ResizeMode.STRETCH:
             return self._cv2.resize(img, (tw, th), interpolation=self._cv2.INTER_LINEAR)
-
-        if mode == ResizeMode.SHORTEST:
+        elif mode == ResizeMode.SHORTEST:
             scale = min(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
             return self._cv2.resize(img, (new_w, new_h), interpolation=self._cv2.INTER_LINEAR)
-
         return self._cv2.resize(img, (tw, th), interpolation=self._cv2.INTER_LINEAR)

@@ -30,14 +30,14 @@ def measure_token_speed(agent, prompt: str, label: str = "Test") -> dict:
     print(f"🧪 {label}")
     print(f"{'='*60}")
     print(f"📝 Prompt: {prompt[:100]}{'...' if len(prompt) > 100 else ''}")
-    
+
     # Estimate input tokens
     input_tokens = estimate_token_count(prompt)
     print(f"📊 Input tokens: {input_tokens}")
-    
+
     # Measure generation
     start = time.perf_counter()
-    
+
     try:
         # Attempt different agent methods
         if hasattr(agent, 'improve_content'):
@@ -59,18 +59,18 @@ def measure_token_speed(agent, prompt: str, label: str = "Test") -> dict:
             "error": str(e),
             "duration": duration,
         }
-    
+
     duration = time.perf_counter() - start
-    
+
     # Estimate output tokens
     output_tokens = estimate_token_count(str(output))
     total_tokens = input_tokens + output_tokens
-    
+
     # Calculate metrics
     tokens_per_sec = total_tokens / duration if duration > 0 else 0
     output_tps = output_tokens / duration if duration > 0 else 0
     latency_ms = (duration / total_tokens * 1000) if total_tokens > 0 else 0
-    
+
     # Display results
     print(f"\n📈 RESULTS:")
     print(f"   ⏱️  Duration: {duration:.3f}s")
@@ -79,12 +79,12 @@ def measure_token_speed(agent, prompt: str, label: str = "Test") -> dict:
     print(f"   🚀 Tokens/sec (total): {tokens_per_sec:.2f}")
     print(f"   🚀 Tokens/sec (output only): {output_tps:.2f}")
     print(f"   ⏳ Latency per token: {latency_ms:.2f}ms")
-    
+
     if len(str(output)) < 500:
         print(f"\n💬 Output preview:\n{output}\n")
     else:
         print(f"\n💬 Output preview:\n{str(output)[:500]}...\n")
-    
+
     return {
         "success": True,
         "duration": duration,
@@ -102,7 +102,7 @@ def main():
     """Run token generation speed tests."""
     print("🚀 PyAgent Token Generation Speed Test")
     print("=" * 60)
-    
+
     # Initialize agent
     print("\n🔧 Initializing BenchmarkAgent...")
     try:
@@ -113,7 +113,7 @@ def main():
     except Exception as e:
         print(f"❌ Failed to initialize agent: {e}")
         return
-    
+
     # Test prompts
     tests = [
         ("Short prompt", "What is Python?"),
@@ -128,30 +128,30 @@ def main():
             "Include docstrings, type hints, and handle edge cases."
         )),
     ]
-    
+
     # Run tests
     results = []
     for label, prompt in tests:
         result = measure_token_speed(agent, prompt, label)
         results.append(result)
-        
+
         # Small delay between tests
         time.sleep(0.5)
-    
+
     # Summary
     print("\n" + "=" * 60)
     print("📊 SUMMARY")
     print("=" * 60)
-    
+
     successful = [r for r in results if r.get("success", False)]
-    
+
     if successful:
         avg_tps = sum(r["tokens_per_sec"] for r in successful) / len(successful)
         avg_output_tps = sum(r["output_tps"] for r in successful) / len(successful)
         avg_latency = sum(r["latency_ms"] for r in successful) / len(successful)
         total_tokens = sum(r["total_tokens"] for r in successful)
         total_time = sum(r["duration"] for r in successful)
-        
+
         print(f"\n✅ Successful tests: {len(successful)}/{len(results)}")
         print(f"\n📊 Average Performance:")
         print(f"   Tokens/sec (total): {avg_tps:.2f}")
@@ -161,20 +161,20 @@ def main():
         print(f"   Total tokens processed: {total_tokens}")
         print(f"   Total time: {total_time:.2f}s")
         print(f"   Overall throughput: {total_tokens/total_time:.2f} tokens/sec")
-        
+
         # Best performance
         best = max(successful, key=lambda r: r["tokens_per_sec"])
         print(f"\n🏆 Best Performance:")
         print(f"   {best['tokens_per_sec']:.2f} tokens/sec")
     else:
         print("❌ No successful tests")
-    
+
     failed = [r for r in results if not r.get("success", False)]
     if failed:
         print(f"\n⚠️  Failed tests: {len(failed)}")
         for r in failed:
             print(f"   - {r.get('error', 'Unknown error')}")
-    
+
     print("\n✨ Test complete!")
 
 

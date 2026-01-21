@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -22,16 +8,16 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Callable, List, Optional, Set
+from typing import (
+    Callable,
+    List,
+    Optional,
+    Set,
+)
 
 import numpy as np
 
 from .base import StructuredOutputGrammar
-
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None
 
 
 @dataclass
@@ -40,8 +26,6 @@ class RegexGrammar(StructuredOutputGrammar):
 
     Uses DFA-based matching for efficient token validation.
     Inspired by vLLM's outlines backend.
-
-    Phase 39: Rust-accelerated bitmasking for full-vocab validation.
     """
 
     pattern: str
@@ -52,37 +36,9 @@ class RegexGrammar(StructuredOutputGrammar):
     _token_history: List[int] = field(default_factory=list, init=False)
     _terminated: bool = field(default=False, init=False)
 
-    # Rust FSM state
-    _has_fsm: bool = field(default=False, init=False)
-    _fsm_state: int = field(default=0, init=False)
-    _transitions: List[List[int]] = field(default_factory=list, init=False)
-    _accepting: Set[int] = field(default_factory=set, init=False)
-    _token_to_chars: List[List[int]] = field(default_factory=list, init=False)
-
-    def __post_init__(self) -> None:
-        """Compile regex pattern and build transition table."""
+    def __post_init__(self):
+        """Compile regex pattern."""
         self._regex = re.compile(self.pattern)
-
-        # Initialize Rust FSM if available
-        if rc and hasattr(rc, "regex_to_fsm_rust"):
-            try:
-                # pylint: disable=no-member
-                trans, acc, init = rc.regex_to_fsm_rust(self.pattern, self.vocab_size)
-                self._transitions = trans
-                self._accepting = set(acc)
-                self._fsm_state = init
-
-                # Pre-calculate token bytes for fast bitmasking
-                # This only happens once per grammar life
-                self._token_to_chars = []
-                for i in range(self.vocab_size):
-                    s = self.token_to_string(i)
-                    self._token_to_chars.append(list(s.encode("utf-8")))
-
-                self._has_fsm = True
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                self._has_fsm = False
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
         """Accept tokens that match regex prefix."""
@@ -92,19 +48,6 @@ class RegexGrammar(StructuredOutputGrammar):
 
             # Check if valid prefix using partial match
             if self._is_valid_prefix(new_buffer):
-                # Update FSM state if using Rust
-                if self._has_fsm:
-                    token_bytes = token_str.encode("utf-8")
-                    temp_state = self._fsm_state
-                    for b in token_bytes:
-                        if 0 <= temp_state < len(self._transitions):
-                            temp_state = self._transitions[temp_state][b]
-                        else:
-                            temp_state = -1
-                            break
-                    if temp_state >= 0:
-                        self._fsm_state = temp_state
-
                 self._buffer = new_buffer
                 self._token_history.append(token)
             else:
@@ -134,8 +77,7 @@ class RegexGrammar(StructuredOutputGrammar):
                 if self._regex.match(text[:i]):
                     return True
             return not text
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:
             return False
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
@@ -162,20 +104,8 @@ class RegexGrammar(StructuredOutputGrammar):
 
         self._token_history = self._token_history[:-num_tokens]
         self._buffer = ""
-        self._fsm_state = 0  # Assuming 0 is initial state
-
         for token in self._token_history:
-            token_str = self.token_to_string(token)
-            self._buffer += token_str
-            if self._has_fsm:
-                token_bytes = token_str.encode("utf-8")
-                for b in token_bytes:
-                    if self._fsm_state >= 0 and self._fsm_state < len(self._transitions):
-                        self._fsm_state = self._transitions[self._fsm_state][b]
-                    else:
-                        self._fsm_state = -1
-                        break
-
+            self._buffer += self.token_to_string(token)
         self._terminated = False
 
     def fill_bitmask(self, bitmask: np.ndarray, idx: int) -> None:
@@ -186,24 +116,10 @@ class RegexGrammar(StructuredOutputGrammar):
                 bitmask[idx, token_id] = True
 
     def get_valid_tokens(self) -> Set[int]:
-        """Get tokens that produce valid prefixes.
-
-        Uses Rust-accelerated bitmasking for full-vocab coverage if available.
-        """
-        if self._has_fsm:
-            try:
-                # Use Rust to calculate bitmask for current state across entire vocab
-                # pylint: disable=no-member
-                mask = rc.fill_token_bitmask_rust(self._fsm_state, self._transitions, self._token_to_chars)
-                return {i for i, allowed in enumerate(mask) if allowed}
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
-
+        """Get tokens that produce valid prefixes."""
         valid: Set[int] = set()
 
-        # Fallback to slow way (limited to 1000 tokens)
-        for token_id in range(min(self.vocab_size, 1000)):
+        for token_id in range(min(self.vocab_size, 1000)):  # Limit for performance
             token_str = self.token_to_string(token_id)
             test_buffer = self._buffer + token_str
 
@@ -221,7 +137,6 @@ class RegexGrammar(StructuredOutputGrammar):
         self._buffer = ""
         self._token_history = []
         self._terminated = False
-        self._fsm_state = 0
 
     @property
     def num_processed_tokens(self) -> int:
@@ -243,7 +158,7 @@ class ChoiceGrammar(StructuredOutputGrammar):
     _active_choices: Set[int] = field(default_factory=set, init=False)
     _matched_choice: Optional[int] = field(default=None, init=False)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         """Initialize active choice set."""
         self._active_choices = set(range(len(self.choices)))
 

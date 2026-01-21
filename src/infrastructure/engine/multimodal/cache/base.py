@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Base class for multimodal caching."""
@@ -19,9 +5,8 @@
 import threading
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, Optional
-
-from .data import CacheEntry, CacheStats, MediaHash
 from .hasher import MultiModalHasher
+from .data import MediaHash, CacheEntry, CacheStats
 
 
 class MultiModalCache(ABC):
@@ -39,7 +24,7 @@ class MultiModalCache(ABC):
         max_size_bytes: int = 1024 * 1024 * 1024,  # 1GB
         max_entries: int = 10000,
         hasher: Optional[MultiModalHasher] = None,
-    ) -> None:
+    ):
         self.max_size_bytes = max_size_bytes
         self.max_entries = max_entries
         self.hasher = hasher or MultiModalHasher()
@@ -49,30 +34,33 @@ class MultiModalCache(ABC):
     @abstractmethod
     def get(self, key: MediaHash) -> Optional[CacheEntry]:
         """Get entry from cache."""
-        raise NotImplementedError("Subclasses must implement get()")
+        pass
 
     @abstractmethod
     def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
         """Put entry into cache."""
-        raise NotImplementedError("Subclasses must implement put()")
+        pass
 
     @abstractmethod
     def evict(self, count: int = 1) -> int:
         """Evict entries, return number evicted."""
-        raise NotImplementedError("Subclasses must implement evict()")
+        pass
 
     @abstractmethod
     def clear(self) -> None:
         """Clear all entries."""
-        raise NotImplementedError("Subclasses must implement clear()")
+        pass
 
     @abstractmethod
     def contains(self, key: MediaHash) -> bool:
         """Check if key exists in cache."""
-        raise NotImplementedError("Subclasses must implement contains()")
+        pass
 
     def get_or_compute(
-        self, key: MediaHash, compute_fn: Callable[[], Any], metadata: Optional[Dict] = None
+        self,
+        key: MediaHash,
+        compute_fn: Callable[[], Any],
+        metadata: Optional[Dict] = None
     ) -> CacheEntry:
         """Get from cache or compute and cache."""
         entry = self.get(key)

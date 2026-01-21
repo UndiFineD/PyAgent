@@ -1,57 +1,28 @@
-
-"""
-Transport layer.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (ZMQ Transport Layer)
 
-import asyncio
-import os
-from typing import Any, Awaitable, Callable, Dict, Optional
-
 import zmq
 import zmq.asyncio
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-
+import asyncio
+from typing import Any, Dict, Optional, Callable, Awaitable
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
-
 
 class VoyagerTransport:
     """
     VoyagerTransport: High-performance P2P message bus using ZeroMQ.
     Uses DEALER/ROUTER pattern for asynchronous bi-directional communication.
     """
-
-    def __init__(self, host: str = "0.0.0.0", port: int = 5555, encryption_key: Optional[bytes] = None) -> None:
-        self.host: str = host
-        self.port: int = port
+    def __init__(self, host: str = "0.0.0.0", port: int = 5555):
+        self.host = host
+        self.port = port
         self.ctx = zmq.asyncio.Context()
         self.router: Optional[zmq.asyncio.Socket] = None
         self.running = False
         self._handler: Optional[Callable[[Dict[str, Any]], Awaitable[Dict[str, Any]]]] = None
-        self.aesgcm: AESGCM | None = AESGCM(encryption_key) if encryption_key else None
-        if not self.aesgcm:
-            logger.warning("Voyager: Encryption disabled (no key provided).")
 
-    def _encrypt(self, data: bytes) -> bytes:
-        if self.aesgcm:
-            nonce: bytes = os.urandom(12)
-            # AESGCM.encrypt returns ciphertext + tag appended, effectively.
-            # But wait, AESGCM.encrypt returns ciphertext (which includes authentication tag).
-            # We need to prepend nonce to send it.
-            return nonce + self.aesgcm.encrypt(nonce, data, None)
-        return data
-
-    def _decrypt(self, data: bytes) -> bytes:
-        if self.aesgcm:
-            nonce: bytes = data[:12]
-            ciphertext: bytes = data[12:]
-            return self.aesgcm.decrypt(nonce, ciphertext, None)
-        return data
-
-    async def start_server(self, handler: Callable[[Dict[str, Any]], Awaitable[Dict[str, Any]]]) -> None:
+    async def start_server(self, handler: Callable[[Dict[str, Any]], Awaitable[Dict[str, Any]]]):
         """Starts the ROUTER socket to listen for incoming peer requests."""
         self.router = self.ctx.socket(zmq.ROUTER)
         self.router.setsockopt(zmq.LINGER, 0)
@@ -65,68 +36,60 @@ class VoyagerTransport:
             while self.running:
                 try:
                     # ROUTER socket receives [identity, empty, message]
-                    result: list[bytes] = await self.router.recv_multipart()
+                    result = await self.router.recv_multipart()
                     if not result:
                         break
 
-                    identity, _, msg_raw = result
+                    identity, _, msg_bytes = result
                     import msgpack
-
-                    msg_bytes: bytes = self._decrypt(msg_raw)
                     message = msgpack.unpackb(msg_bytes, raw=False)
 
                     logger.debug(f"Voyager: Received message from {identity.hex()}")
 
                     # Dispatch to handler
                     if self._handler:
-                        response_data: Dict[str, Any] = await self._handler(message)
+                        response_data = await self._handler(message)
                         response_bytes = msgpack.packb(response_data, use_bin_type=True)
-                        encrypted_response: bytes = self._encrypt(response_bytes)
-                        await self.router.send_multipart([identity, b"", encrypted_response])
+                        await self.router.send_multipart([identity, b"", response_bytes])
 
                 except (zmq.ContextTerminated, zmq.ZMQError, asyncio.CancelledError):
                     self.running = False
                     break
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:
                     if self.running:
                         logger.error(f"Voyager: Transport server error: {e}")
                     await asyncio.sleep(1)
         finally:
             self.stop()
 
-    async def send_to_peer(
-        self, peer_address: str, peer_port: int, message: Dict[str, Any], timeout: int = 5000
-    ) -> Optional[Dict[str, Any]]:
+    async def send_to_peer(self, peer_address: str, peer_port: int, message: Dict[str, Any], timeout: int = 5000) -> Optional[Dict[str, Any]]:
         """Sends a message to a specific peer using a DEALER socket."""
         import msgpack
-
-        dealer: zmq.asyncio.Socket = self.ctx.socket(zmq.DEALER)
+        dealer = self.ctx.socket(zmq.DEALER)
         dealer.setsockopt(zmq.LINGER, 0)
-        target: str = f"tcp://{peer_address}:{peer_port}"
+        target = f"tcp://{peer_address}:{peer_port}"
 
         try:
             dealer.connect(target)
             msg_bytes = msgpack.packb(message, use_bin_type=True)
-            encrypted_msg: bytes = self._encrypt(msg_bytes)
 
             # Send [empty, message]
-            await dealer.send_multipart([b"", encrypted_msg])
+            await dealer.send_multipart([b"", msg_bytes])
 
             # Wait for response with timeout
             if await dealer.poll(timeout):
-                _, resp_raw = await dealer.recv_multipart()
-                resp_bytes: bytes = self._decrypt(resp_raw)
+                _, resp_bytes = await dealer.recv_multipart()
                 return msgpack.unpackb(resp_bytes, raw=False)
-
-            logger.warning(f"Voyager: Timeout waiting for response from {target}")
-            return None
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            else:
+                logger.warning(f"Voyager: Timeout waiting for response from {target}")
+                return None
+        except Exception as e:
             logger.error(f"Voyager: Failed to send to {target}: {e}")
             return None
         finally:
             dealer.close()
 
-    def stop(self) -> None:
+    def stop(self):
         """Stops the transport layer."""
         self.running = False
         if self.router and not self.router.closed:

@@ -42,7 +42,7 @@ except ImportError:
 
 class TestCacheGroupType:
     """Test CacheGroupType enum."""
-    
+
     def test_enum_values(self):
         """Test all enum values exist."""
         assert CacheGroupType.FULL_ATTENTION is not None
@@ -50,7 +50,7 @@ class TestCacheGroupType:
         assert CacheGroupType.CROSS_ATTENTION is not None
         assert CacheGroupType.MLA_COMPRESSED is not None
         assert CacheGroupType.CHUNKED_LOCAL is not None
-        
+
     def test_enum_iteration(self):
         """Test enum is iterable."""
         types = list(CacheGroupType)
@@ -59,7 +59,7 @@ class TestCacheGroupType:
 
 class TestAllocationStrategy:
     """Test AllocationStrategy enum."""
-    
+
     def test_strategies(self):
         """Test allocation strategies."""
         assert AllocationStrategy.GREEDY is not None
@@ -67,7 +67,7 @@ class TestAllocationStrategy:
 
 class TestEvictionPolicy:
     """Test EvictionPolicy enum."""
-    
+
     def test_policies(self):
         """Test eviction policies."""
         assert EvictionPolicy.LRU is not None
@@ -79,18 +79,18 @@ class TestEvictionPolicy:
 
 class TestBlockHash:
     """Test BlockHash dataclass."""
-    
+
     def test_block_hash_creation(self):
         """Test creating a block hash."""
         bh = BlockHash(hash_bytes=b'\x01\x02\x03\x04')
         assert bh.hash_bytes == b'\x01\x02\x03\x04'
-        
+
     def test_block_hash_equality(self):
         """Test block hash equality."""
         bh1 = BlockHash(hash_bytes=b'\x01\x02\x03\x04')
         bh2 = BlockHash(hash_bytes=b'\x01\x02\x03\x04')
         assert bh1 == bh2
-        
+
     def test_block_hash_immutable(self):
         """Test block hash is frozen/hashable."""
         bh = BlockHash(hash_bytes=b'\x01\x02')
@@ -99,7 +99,7 @@ class TestBlockHash:
 
 class TestBlockHashWithGroupId:
     """Test BlockHashWithGroupId dataclass."""
-    
+
     def test_with_group_id(self):
         """Test block hash with group ID."""
         bh = BlockHash(hash_bytes=b'\x01\x02')
@@ -110,7 +110,7 @@ class TestBlockHashWithGroupId:
 
 class TestKVCacheBlock:
     """Test KVCacheBlock dataclass."""
-    
+
     def test_block_creation(self):
         """Test creating a cache block."""
         block = KVCacheBlock(block_id=42)
@@ -118,7 +118,7 @@ class TestKVCacheBlock:
         assert block.ref_cnt == 0
         assert block.block_hash is None
         assert block.is_null is False
-        
+
     def test_block_touch(self):
         """Test touching a block updates access time."""
         block = KVCacheBlock(block_id=1)
@@ -127,7 +127,7 @@ class TestKVCacheBlock:
         block.touch()
         assert block.last_access_time > initial_time
         assert block.access_count > 0
-        
+
     def test_block_reset(self):
         """Test resetting a block."""
         block = KVCacheBlock(block_id=1)
@@ -140,7 +140,7 @@ class TestKVCacheBlock:
 
 class TestKVCacheBlocks:
     """Test KVCacheBlocks tuple wrapper."""
-    
+
     def test_blocks_creation(self):
         """Test creating blocks tuple."""
         block = KVCacheBlock(block_id=0)
@@ -154,38 +154,38 @@ class TestKVCacheBlocks:
 
 class TestFreeBlockQueue:
     """Test FreeBlockQueue O(1) operations."""
-    
+
     def test_init_with_blocks(self):
         """Test initialization with blocks."""
         blocks = [KVCacheBlock(block_id=i) for i in range(5)]
         queue = FreeBlockQueue(blocks)
         assert queue.num_free_blocks == 5
-        
+
     def test_pop_front(self):
         """Test popping from front."""
         blocks = [KVCacheBlock(block_id=i) for i in range(3)]
         queue = FreeBlockQueue(blocks)
-        
+
         block = queue.pop_front()
         assert block is not None
         assert block.block_id == 0
         assert queue.num_free_blocks == 2
-        
+
     def test_append(self):
         """Test appending blocks."""
         queue = FreeBlockQueue([])
         block = KVCacheBlock(block_id=99)
         queue.append(block)
         assert queue.num_free_blocks == 1
-        
+
     def test_remove(self):
         """Test removing specific block."""
         blocks = [KVCacheBlock(block_id=i) for i in range(3)]
         queue = FreeBlockQueue(blocks)
-        
+
         queue.remove(blocks[1])
         assert queue.num_free_blocks == 2
-        
+
     def test_empty_pop(self):
         """Test popping from empty queue."""
         queue = FreeBlockQueue([])
@@ -199,33 +199,33 @@ class TestFreeBlockQueue:
 
 class TestBlockHashCache:
     """Test BlockHashCache for prefix caching."""
-    
+
     def test_insert_and_get(self):
         """Test inserting and getting block hashes."""
         cache = BlockHashCache()
         bh = BlockHash(hash_bytes=b'\x01\x02\x03\x04')
         bhg = BlockHashWithGroupId(block_hash=bh, group_id=0)
         block = KVCacheBlock(block_id=42)
-        
+
         cache.insert(bhg, block)
         result = cache.get(bhg)
         assert result is not None
         assert result.block_id == 42
-        
+
     def test_missing_key(self):
         """Test missing key returns None."""
         cache = BlockHashCache()
         bh = BlockHash(hash_bytes=b'\xff\xff')
         bhg = BlockHashWithGroupId(block_hash=bh, group_id=0)
         assert cache.get(bhg) is None
-        
+
     def test_remove(self):
         """Test removing from cache."""
         cache = BlockHashCache()
         bh = BlockHash(hash_bytes=b'\x01\x02')
         bhg = BlockHashWithGroupId(block_hash=bh, group_id=0)
         block = KVCacheBlock(block_id=1)
-        
+
         cache.insert(bhg, block)
         cache.remove(bhg, block.block_id)
         # After removal, the block should not be cached
@@ -238,18 +238,18 @@ class TestBlockHashCache:
 
 class TestBlockPool:
     """Test BlockPool allocation."""
-    
+
     def test_creation(self):
         """Test creating a block pool."""
         pool = BlockPool(num_blocks=100)
         assert pool is not None
-        
+
     def test_allocate_blocks(self):
         """Test allocating blocks."""
         pool = BlockPool(num_blocks=10)
         blocks = pool.allocate(3)
         assert len(blocks) == 3
-        
+
     def test_free_blocks(self):
         """Test freeing blocks."""
         pool = BlockPool(num_blocks=10)
@@ -264,7 +264,7 @@ class TestBlockPool:
 
 class TestCacheGroupSpec:
     """Test CacheGroupSpec configuration."""
-    
+
     def test_full_attention_spec(self):
         """Test full attention group spec."""
         spec = CacheGroupSpec(
@@ -277,7 +277,7 @@ class TestCacheGroupSpec:
         assert spec.group_id == 0
         assert spec.group_type == CacheGroupType.FULL_ATTENTION
         assert spec.block_size == 16
-        
+
     def test_sliding_window_spec(self):
         """Test sliding window group spec."""
         spec = CacheGroupSpec(
@@ -293,7 +293,7 @@ class TestCacheGroupSpec:
 
 class TestCacheConfig:
     """Test CacheConfig."""
-    
+
     def test_basic_config(self):
         """Test basic cache configuration."""
         spec = CacheGroupSpec(
@@ -320,7 +320,7 @@ class TestCacheConfig:
 
 class TestKVCacheCoordinator:
     """Test KVCacheCoordinator main class."""
-    
+
     @pytest.fixture
     def basic_config(self):
         """Create a basic cache config."""
@@ -336,7 +336,7 @@ class TestKVCacheCoordinator:
             block_size=16,
             groups=[spec],
         )
-    
+
     def test_initialization(self, basic_config):
         """Test coordinator initialization."""
         coord = KVCacheCoordinator(
@@ -344,7 +344,7 @@ class TestKVCacheCoordinator:
             max_model_len=2048,
         )
         assert coord is not None
-        
+
     def test_allocate(self, basic_config):
         """Test allocation."""
         coord = KVCacheCoordinator(
@@ -354,7 +354,7 @@ class TestKVCacheCoordinator:
         # allocate takes request_id, num_tokens, num_encoder_tokens
         blocks = coord.allocate(request_id="req_001", num_tokens=80)
         assert blocks is not None
-        
+
     def test_free(self, basic_config):
         """Test freeing allocated blocks."""
         coord = KVCacheCoordinator(
@@ -363,7 +363,7 @@ class TestKVCacheCoordinator:
         )
         blocks = coord.allocate(request_id="req_001", num_tokens=80)
         coord.free(request_id="req_001")
-        
+
     def test_get_stats(self, basic_config):
         """Test getting cache statistics."""
         coord = KVCacheCoordinator(
@@ -380,7 +380,7 @@ class TestKVCacheCoordinator:
 
 class TestHierarchicalKVCacheCoordinator:
     """Test HierarchicalKVCacheCoordinator."""
-    
+
     @pytest.fixture
     def config(self):
         """Create config."""
@@ -396,7 +396,7 @@ class TestHierarchicalKVCacheCoordinator:
             block_size=16,
             groups=[spec],
         )
-    
+
     def test_init(self, config):
         """Test hierarchical coordinator initialization."""
         coord = HierarchicalKVCacheCoordinator(
@@ -409,7 +409,7 @@ class TestHierarchicalKVCacheCoordinator:
 
 class TestPredictiveKVCacheCoordinator:
     """Test PredictiveKVCacheCoordinator."""
-    
+
     @pytest.fixture
     def config(self):
         """Create config."""
@@ -425,7 +425,7 @@ class TestPredictiveKVCacheCoordinator:
             block_size=16,
             groups=[spec],
         )
-    
+
     def test_init(self, config):
         """Test predictive coordinator initialization."""
         coord = PredictiveKVCacheCoordinator(
@@ -438,7 +438,7 @@ class TestPredictiveKVCacheCoordinator:
 
 class TestAsyncPrefetchCoordinator:
     """Test AsyncPrefetchCoordinator."""
-    
+
     @pytest.fixture
     def config(self):
         """Create config."""
@@ -454,7 +454,7 @@ class TestAsyncPrefetchCoordinator:
             block_size=16,
             groups=[spec],
         )
-    
+
     def test_init(self, config):
         """Test async prefetch coordinator initialization."""
         coord = AsyncPrefetchCoordinator(
@@ -472,24 +472,24 @@ class TestAsyncPrefetchCoordinator:
 @pytest.mark.skipif(not RUST_AVAILABLE, reason="Rust module not available")
 class TestRustIntegration:
     """Test Rust acceleration integration."""
-    
+
     def test_block_hashes_batched(self):
         """Test compute_block_hashes_batched_rust."""
         tokens = list(range(64))
         hashes = rust_core.compute_block_hashes_batched_rust(tokens, 16, 42)
         assert len(hashes) == 4  # 64 tokens / 16 block size
-        
+
     def test_calculate_blocks_needed(self):
         """Test calculate_blocks_needed_rust."""
         num_blocks = rust_core.calculate_blocks_needed_rust(100, 16, 0)
         assert num_blocks == 7  # ceil(100/16)
-        
+
     def test_find_prefix_match(self):
         """Test find_prefix_match_rust."""
         # This tests the Rust prefix matching function
         cached_hashes = [1, 2, 3, 4, 5]
         query_hashes = [1, 2, 3]
-        
+
         match_len = rust_core.find_prefix_match_rust(cached_hashes, query_hashes)
         assert match_len == 3
 

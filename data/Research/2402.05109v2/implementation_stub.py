@@ -13,7 +13,7 @@ class HydraHead(nn.Module):
         self.head_index = head_index
         # Input: h_t + embeddings of previous (i-1) draft tokens
         input_dim = hidden_dim + (head_index * embed_dim)
-        
+
         self.mlp = nn.Sequential(
             nn.Linear(input_dim, hidden_dim),
             nn.ReLU(),
@@ -32,9 +32,9 @@ class HydraModel(nn.Module):
         super().__init__()
         self.base_model = base_model # Frozen teacher model
         self.heads = nn.ModuleList([
-            HydraHead(base_model.config.hidden_size, 
+            HydraHead(base_model.config.hidden_size,
                       base_model.config.hidden_size, # Simplified: hidden == embed
-                      base_model.config.vocab_size, 
+                      base_model.config.vocab_size,
                       i)
             for i in range(num_heads)
         ])
@@ -46,18 +46,18 @@ class HydraModel(nn.Module):
         """
         speculated_ids = []
         prev_embeds = []
-        
+
         for i in range(len(self.heads)):
             # Combine current h_t with history of this speculation step
             input_embeds = torch.stack(prev_embeds, dim=1) if prev_embeds else torch.zeros(h_t.size(0), 0, h_t.size(1))
-            
+
             logits = self.heads[i](h_t, input_embeds)
             next_id = torch.argmax(logits, dim=-1)
-            
+
             speculated_ids.append(next_id)
             # Fetch embedding for the next head to see
             prev_embeds.append(self.base_model.get_input_embeddings()(next_id))
-            
+
         return torch.stack(speculated_ids, dim=1)
 
 # Training logic (Simplified):

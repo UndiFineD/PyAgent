@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -25,20 +11,23 @@ from typing import Any, List, Optional
 
 import numpy as np
 
-from .buffers import InputBuffers
-from .models import (BatchUpdateBuilder, CachedRequestState, InputBatch,
-                     SamplingMetadata)
-
 logger = logging.getLogger(__name__)
 
 # Try to import torch, but provide fallback for testing
 try:
     import torch
-
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
+
+from .models import (
+    BatchUpdateBuilder,
+    CachedRequestState,
+    InputBatch,
+    SamplingMetadata,
+)
+from .buffers import InputBuffers
 
 
 class InputBatchOrchestrator:
@@ -126,7 +115,9 @@ class InputBatchOrchestrator:
             )
             self.token_ids_cpu = self.token_ids_cpu_tensor.numpy()
         else:
-            self.token_ids_cpu = np.zeros((self.max_num_reqs, self.max_model_len), dtype=np.int32)
+            self.token_ids_cpu = np.zeros(
+                (self.max_num_reqs, self.max_model_len), dtype=np.int32
+            )
 
         self.num_tokens_no_spec = np.zeros(self.max_num_reqs, dtype=np.int32)
         self.num_prompt_tokens = np.zeros(self.max_num_reqs, dtype=np.int32)
@@ -137,35 +128,41 @@ class InputBatchOrchestrator:
         if HAS_TORCH:
             # Temperature
             self.temperature_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu",
+                pin_memory=self.pin_memory
             )
             self.temperature_cpu = self.temperature_cpu_tensor.numpy()
 
             # Top-p
             self.top_p_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu",
+                pin_memory=self.pin_memory
             )
             self.top_p_cpu = self.top_p_cpu_tensor.numpy()
 
             # Top-k
             self.top_k_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.int32, device="cpu", pin_memory=self.pin_memory
+                (self.max_num_reqs,), dtype=torch.int32, device="cpu",
+                pin_memory=self.pin_memory
             )
             self.top_k_cpu = self.top_k_cpu_tensor.numpy()
 
             # Penalties
             self.frequency_penalties_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu",
+                pin_memory=self.pin_memory
             )
             self.frequency_penalties_cpu = self.frequency_penalties_cpu_tensor.numpy()
 
             self.presence_penalties_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu",
+                pin_memory=self.pin_memory
             )
             self.presence_penalties_cpu = self.presence_penalties_cpu_tensor.numpy()
 
             self.repetition_penalties_cpu_tensor = torch.empty(
-                (self.max_num_reqs,), dtype=torch.float32, device="cpu", pin_memory=self.pin_memory
+                (self.max_num_reqs,), dtype=torch.float32, device="cpu",
+                pin_memory=self.pin_memory
             )
             self.repetition_penalties_cpu = self.repetition_penalties_cpu_tensor.numpy()
         else:
@@ -185,7 +182,7 @@ class InputBatchOrchestrator:
     @property
     def req_ids(self) -> List[str]:
         """List of active request IDs in order."""
-        return [rid for rid in self._req_ids[: self.num_reqs] if rid is not None]
+        return [rid for rid in self._req_ids[:self.num_reqs] if rid is not None]
 
     def add_request(
         self,
@@ -381,7 +378,10 @@ class InputBatchOrchestrator:
         total_tokens = sum(num_scheduled_tokens)
 
         # Build idx_mapping
-        idx_mapping_np = np.array([self.req_id_to_index[rid] for rid in scheduled_req_ids], dtype=np.int32)
+        idx_mapping_np = np.array(
+            [self.req_id_to_index[rid] for rid in scheduled_req_ids],
+            dtype=np.int32
+        )
         num_scheduled_tokens_np = np.array(num_scheduled_tokens, dtype=np.int32)
 
         # Build query_start_loc
@@ -448,22 +448,20 @@ class InputBatchOrchestrator:
             sampling_metadata=sampling_metadata,
         )
 
-    def _make_sampling_metadata(self, idx_mapping: np.ndarray, num_reqs: int) -> SamplingMetadata:
+    def _make_sampling_metadata(
+        self,
+        idx_mapping: np.ndarray,
+        num_reqs: int
+    ) -> SamplingMetadata:
         """Construct GPU sampling metadata from CPU arrays."""
         if not HAS_TORCH:
             return SamplingMetadata(
                 temperature=self.temperature_cpu[idx_mapping[:num_reqs]].copy(),
                 top_p=self.top_p_cpu[idx_mapping[:num_reqs]].copy() if not self.no_top_p else None,
                 top_k=self.top_k_cpu[idx_mapping[:num_reqs]].copy() if not self.no_top_k else None,
-                frequency_penalties=self.frequency_penalties_cpu[idx_mapping[:num_reqs]].copy()
-                if not self.no_penalties
-                else None,
-                presence_penalties=self.presence_penalties_cpu[idx_mapping[:num_reqs]].copy()
-                if not self.no_penalties
-                else None,
-                repetition_penalties=self.repetition_penalties_cpu[idx_mapping[:num_reqs]].copy()
-                if not self.no_penalties
-                else None,
+                frequency_penalties=self.frequency_penalties_cpu[idx_mapping[:num_reqs]].copy() if not self.no_penalties else None,
+                presence_penalties=self.presence_penalties_cpu[idx_mapping[:num_reqs]].copy() if not self.no_penalties else None,
+                repetition_penalties=self.repetition_penalties_cpu[idx_mapping[:num_reqs]].copy() if not self.no_penalties else None,
                 min_p=None,
                 all_greedy=self.all_greedy,
                 no_top_p=self.no_top_p,
@@ -472,28 +470,28 @@ class InputBatchOrchestrator:
             )
 
         # Copy CPU tensors to GPU
-        temperature = (
-            torch.from_numpy(self.temperature_cpu[idx_mapping[:num_reqs]].copy()).to(self.device)
-            if not self.all_greedy
-            else None
-        )
+        temperature = torch.from_numpy(
+            self.temperature_cpu[idx_mapping[:num_reqs]].copy()
+        ).to(self.device) if not self.all_greedy else None
 
-        top_p = (
-            torch.from_numpy(self.top_p_cpu[idx_mapping[:num_reqs]].copy()).to(self.device)
-            if not self.no_top_p
-            else None
-        )
+        top_p = torch.from_numpy(
+            self.top_p_cpu[idx_mapping[:num_reqs]].copy()
+        ).to(self.device) if not self.no_top_p else None
 
-        top_k = (
-            torch.from_numpy(self.top_k_cpu[idx_mapping[:num_reqs]].copy()).to(self.device)
-            if not self.no_top_k
-            else None
-        )
+        top_k = torch.from_numpy(
+            self.top_k_cpu[idx_mapping[:num_reqs]].copy()
+        ).to(self.device) if not self.no_top_k else None
 
         if not self.no_penalties:
-            freq_pen = torch.from_numpy(self.frequency_penalties_cpu[idx_mapping[:num_reqs]].copy()).to(self.device)
-            pres_pen = torch.from_numpy(self.presence_penalties_cpu[idx_mapping[:num_reqs]].copy()).to(self.device)
-            rep_pen = torch.from_numpy(self.repetition_penalties_cpu[idx_mapping[:num_reqs]].copy()).to(self.device)
+            freq_pen = torch.from_numpy(
+                self.frequency_penalties_cpu[idx_mapping[:num_reqs]].copy()
+            ).to(self.device)
+            pres_pen = torch.from_numpy(
+                self.presence_penalties_cpu[idx_mapping[:num_reqs]].copy()
+            ).to(self.device)
+            rep_pen = torch.from_numpy(
+                self.repetition_penalties_cpu[idx_mapping[:num_reqs]].copy()
+            ).to(self.device)
         else:
             freq_pen = pres_pen = rep_pen = None
 

@@ -1,58 +1,29 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Constraints.py module.
-"""
-
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 import json
 import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Pattern, Type
-
 from .enums import ConstraintType, SchemaFormat
-
 
 @dataclass
 class OutputConstraint:
     """Base output constraint."""
-
     constraint_type: ConstraintType = ConstraintType.INCLUDE
     priority: int = 0
 
-    def validate(self, _text: str) -> bool:
+    def validate(self, text: str) -> bool:
         """Validate text against constraint."""
         return True
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert to dictionary.
-
-        Returns:
-            Dictionary with constraint type and priority.
-        """
         return {
             "constraint_type": self.constraint_type.name,
             "priority": self.priority,
         }
 
-
 @dataclass
 class JsonSchemaConstraint(OutputConstraint):
     """JSON Schema constraint."""
-
     schema: Dict[str, Any] = field(default_factory=dict)
     schema_format: SchemaFormat = SchemaFormat.DRAFT_07
     strict: bool = True
@@ -92,7 +63,7 @@ class JsonSchemaConstraint(OutputConstraint):
 
             return True
 
-        if schema_type == "array":
+        elif schema_type == "array":
             if not isinstance(data, list):
                 return False
 
@@ -104,19 +75,19 @@ class JsonSchemaConstraint(OutputConstraint):
 
             return True
 
-        if schema_type == "string":
+        elif schema_type == "string":
             return isinstance(data, str)
 
-        if schema_type == "number":
+        elif schema_type == "number":
             return isinstance(data, (int, float))
 
-        if schema_type == "integer":
+        elif schema_type == "integer":
             return isinstance(data, int)
 
-        if schema_type == "boolean":
+        elif schema_type == "boolean":
             return isinstance(data, bool)
 
-        if schema_type == "null":
+        elif schema_type == "null":
             return data is None
 
         return True
@@ -179,28 +150,25 @@ class JsonSchemaConstraint(OutputConstraint):
             "strict": self.strict,
         }
 
-
 @dataclass
 class RegexConstraint(OutputConstraint):
     """Regex pattern constraint."""
-
     pattern: str = ""
     flags: int = 0
     _compiled: Optional[Pattern] = field(default=None, repr=False)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         if self.pattern and self._compiled is None:
             self._compiled = re.compile(self.pattern, self.flags)
 
     def validate(self, text: str) -> bool:
-        """Validate text against regex."""
         if self._compiled is None:
             return True
 
         if self.constraint_type == ConstraintType.INCLUDE:
             return bool(self._compiled.match(text))
-
-        return not bool(self._compiled.match(text))
+        else:
+            return not bool(self._compiled.match(text))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -209,11 +177,9 @@ class RegexConstraint(OutputConstraint):
             "flags": self.flags,
         }
 
-
 @dataclass
 class ChoiceConstraint(OutputConstraint):
     """Fixed choice constraint."""
-
     choices: List[str] = field(default_factory=list)
     case_sensitive: bool = True
 
@@ -229,11 +195,9 @@ class ChoiceConstraint(OutputConstraint):
             "case_sensitive": self.case_sensitive,
         }
 
-
 @dataclass
 class GrammarConstraint(OutputConstraint):
     """Grammar constraint (EBNF/Lark)."""
-
     grammar: str = ""
     grammar_type: str = "ebnf"  # "ebnf", "lark", "gbnf"
     start_symbol: str = "start"
@@ -246,12 +210,10 @@ class GrammarConstraint(OutputConstraint):
             "start_symbol": self.start_symbol,
         }
 
-
 @dataclass
 class TypeConstraint(OutputConstraint):
     """Type annotation constraint."""
-
-    type_annotation: str = ""  # Python type annotation string
+    type_annotation: str = ""       # Python type annotation string
     python_type: Optional[Type] = None
 
     def validate(self, text: str) -> bool:
@@ -265,15 +227,15 @@ class TypeConstraint(OutputConstraint):
             # Parse type annotation
             if self.type_annotation == "str":
                 return isinstance(value, str)
-            if self.type_annotation == "int":
+            elif self.type_annotation == "int":
                 return isinstance(value, int)
-            if self.type_annotation == "float":
+            elif self.type_annotation == "float":
                 return isinstance(value, (int, float))
-            if self.type_annotation == "bool":
+            elif self.type_annotation == "bool":
                 return isinstance(value, bool)
-            if self.type_annotation.startswith("List["):
+            elif self.type_annotation.startswith("List["):
                 return isinstance(value, list)
-            if self.type_annotation.startswith("Dict["):
+            elif self.type_annotation.startswith("Dict["):
                 return isinstance(value, dict)
 
             return True

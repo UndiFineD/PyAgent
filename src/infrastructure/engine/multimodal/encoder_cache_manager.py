@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # PyAgent Phase 44: Encoder Cache Manager for Multimodal Models
 # Implements vLLM's EncoderCacheManager for vision/multimodal caching
@@ -35,76 +21,72 @@ from __future__ import annotations
 
 import hashlib
 import time
+import weakref
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Generic, TypeVar
 
 import numpy as np
 
 if TYPE_CHECKING:
-    pass
+    from numpy.typing import NDArray
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
-
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
-T = TypeVar("T")
+T = TypeVar('T')
 
 
 class CacheTier(Enum):
     """Cache storage tier."""
-
-    MEMORY = auto()  # In-memory (fastest)
-    DISK = auto()  # Disk-based (persistent)
-    REMOTE = auto()  # Remote storage (shared)
+    MEMORY = auto()      # In-memory (fastest)
+    DISK = auto()        # Disk-based (persistent)
+    REMOTE = auto()      # Remote storage (shared)
 
 
 class EvictionPolicy(Enum):
     """Cache eviction policy."""
-
-    LRU = auto()  # Least recently used
-    LFU = auto()  # Least frequently used
-    FIFO = auto()  # First in first out
-    PRIORITY = auto()  # Priority-based
+    LRU = auto()         # Least recently used
+    LFU = auto()         # Least frequently used
+    FIFO = auto()        # First in first out
+    PRIORITY = auto()    # Priority-based
 
 
 @dataclass
 class CacheConfig:
     """Configuration for encoder cache."""
-
-    cache_size: int = 1000  # Max number of entries
-    memory_budget_mb: float = 512.0  # Memory budget in MB
+    cache_size: int = 1000              # Max number of entries
+    memory_budget_mb: float = 512.0     # Memory budget in MB
     eviction_policy: EvictionPolicy = EvictionPolicy.LRU
-    enable_dedup: bool = True  # Content-based deduplication
-    enable_prefetch: bool = False  # Predictive prefetching
-    prefetch_window: int = 3  # Number of items to prefetch
-    ttl_seconds: float = 0.0  # Time-to-live (0 = no expiry)
-    use_weak_refs: bool = True  # Use weak references for outputs
-    hash_algorithm: str = "sha256"  # Hash algorithm for dedup
+    enable_dedup: bool = True           # Content-based deduplication
+    enable_prefetch: bool = False       # Predictive prefetching
+    prefetch_window: int = 3            # Number of items to prefetch
+    ttl_seconds: float = 0.0            # Time-to-live (0 = no expiry)
+    use_weak_refs: bool = True          # Use weak references for outputs
+    hash_algorithm: str = "sha256"      # Hash algorithm for dedup
 
     def __post_init__(self) -> None:
         if self.cache_size < 1:
             raise ValueError(f"cache_size must be >= 1, got {self.cache_size}")
         if self.memory_budget_mb <= 0:
-            raise ValueError("memory_budget_mb must be > 0")
+            raise ValueError(f"memory_budget_mb must be > 0")
 
 
 @dataclass
 class CacheEntry:
     """A single cache entry."""
-
-    key: str  # Unique identifier (hash)
-    data: Any  # Cached data (encoder output)
-    size_bytes: int  # Size in bytes
-    access_count: int = 0  # Access count for LFU
+    key: str                            # Unique identifier (hash)
+    data: Any                           # Cached data (encoder output)
+    size_bytes: int                     # Size in bytes
+    access_count: int = 0               # Access count for LFU
     last_access: float = field(default_factory=time.time)
     created_at: float = field(default_factory=time.time)
-    priority: int = 0  # Higher = more important
+    priority: int = 0                   # Higher = more important
     request_refs: set[str] = field(default_factory=set)  # Request IDs using this
 
     def touch(self) -> None:
@@ -131,7 +113,6 @@ class CacheEntry:
 @dataclass
 class CacheStats:
     """Cache statistics."""
-
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -143,7 +124,7 @@ class CacheStats:
     @property
     def hit_rate(self) -> float:
         """Cache hit rate."""
-        total: int = self.hits + self.misses
+        total = self.hits + self.misses
         return self.hits / total if total > 0 else 0.0
 
     @property
@@ -173,8 +154,8 @@ class EncoderCacheManager:
     - Prefetching support
     """
 
-    def __init__(self, config: CacheConfig | None = None) -> None:
-        self.config: CacheConfig = config or CacheConfig()
+    def __init__(self, config: CacheConfig | None = None):
+        self.config = config or CacheConfig()
         self.stats = CacheStats()
 
         # Main cache storage
@@ -207,7 +188,7 @@ class EncoderCacheManager:
         Returns:
             Cached data or None if not found
         """
-        entry: CacheEntry | None = self._cache.get(key)
+        entry = self._cache.get(key)
 
         if entry is None:
             self.stats.misses += 1
@@ -260,7 +241,7 @@ class EncoderCacheManager:
         """
         # Check for existing entry
         if key in self._cache:
-            entry: CacheEntry = self._cache[key]
+            entry = self._cache[key]
             entry.touch()
             if request_id:
                 entry.request_refs.add(request_id)
@@ -270,17 +251,17 @@ class EncoderCacheManager:
         if self.config.enable_dedup and content_hash:
             if content_hash in self._content_hashes:
                 # Return existing entry
-                existing_key: str = self._content_hashes[content_hash]
+                existing_key = self._content_hashes[content_hash]
                 if existing_key in self._cache:
                     self.stats.dedup_saves += 1
-                    entry: CacheEntry = self._cache[existing_key]
+                    entry = self._cache[existing_key]
                     entry.touch()
                     if request_id:
                         entry.request_refs.add(request_id)
                     return True
 
         # Calculate size
-        size_bytes: int = self._estimate_size(data)
+        size_bytes = self._estimate_size(data)
 
         # Evict if needed
         while self._should_evict(size_bytes):
@@ -334,11 +315,11 @@ class EncoderCacheManager:
         if request_id not in self._request_keys:
             return freed_keys
 
-        keys: set[str] = self._request_keys.pop(request_id)
+        keys = self._request_keys.pop(request_id)
 
         for key in keys:
             if key in self._cache:
-                entry: CacheEntry = self._cache[key]
+                entry = self._cache[key]
                 entry.request_refs.discard(request_id)
 
                 if not entry.is_referenced:
@@ -348,23 +329,24 @@ class EncoderCacheManager:
 
     def compute_hash(self, data: Any) -> str:
         """Compute content hash for deduplication."""
-        if HAS_RUST and hasattr(rust_core, "blake3_hash_rust"):
+        if HAS_RUST and hasattr(rust_core, 'blake3_hash_rust'):
             if isinstance(data, np.ndarray):
                 return rust_core.blake3_hash_rust(data.tobytes())
 
         # Python fallback
         if isinstance(data, np.ndarray):
-            content: bytes = data.tobytes()
+            content = data.tobytes()
         elif isinstance(data, (bytes, bytearray)):
             content = bytes(data)
         else:
-            content: bytes = str(data).encode()
+            content = str(data).encode()
 
         if self.config.hash_algorithm == "sha256":
             return hashlib.sha256(content).hexdigest()
-        if self.config.hash_algorithm == "md5":
+        elif self.config.hash_algorithm == "md5":
             return hashlib.md5(content).hexdigest()
-        return hashlib.blake2b(content).hexdigest()
+        else:
+            return hashlib.blake2b(content).hexdigest()
 
     def prefetch(
         self,
@@ -381,22 +363,24 @@ class EncoderCacheManager:
         if not self.config.enable_prefetch:
             return
 
-        for key in keys[: self.config.prefetch_window]:
+        for key in keys[:self.config.prefetch_window]:
             if key not in self._cache:
                 try:
                     data = loader(key)
                     if data is not None:
-                        content_hash: str | None = self.compute_hash(data) if self.config.enable_dedup else None
+                        content_hash = self.compute_hash(data) if self.config.enable_dedup else None
                         self.put(key, data, content_hash=content_hash)
                         self.stats.prefetch_hits += 1
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    # Prefetch failures are non-critical
-                    pass
+                except Exception:
+                    pass  # Prefetch failures are non-critical
 
     def evict_unreferenced(self) -> int:
         """Evict all unreferenced entries."""
         evicted = 0
-        keys_to_evict: list[str] = [key for key, entry in self._cache.items() if not entry.is_referenced]
+        keys_to_evict = [
+            key for key, entry in self._cache.items()
+            if not entry.is_referenced
+        ]
 
         for key in keys_to_evict:
             self._evict_entry(key)
@@ -438,7 +422,7 @@ class EncoderCacheManager:
             return False
 
         # Find eviction candidate
-        candidate_key: str | None = self._select_eviction_candidate()
+        candidate_key = self._select_eviction_candidate()
 
         if candidate_key is None:
             return False
@@ -449,12 +433,15 @@ class EncoderCacheManager:
     def _select_eviction_candidate(self) -> str | None:
         """Select entry to evict based on policy."""
         # Prefer unreferenced entries first
-        unreferenced: list[tuple[str, CacheEntry]] = [(key, entry) for key, entry in self._cache.items() if not entry.is_referenced]
+        unreferenced = [
+            (key, entry) for key, entry in self._cache.items()
+            if not entry.is_referenced
+        ]
 
         if unreferenced:
-            candidates: list[tuple[str, CacheEntry]] = unreferenced
+            candidates = unreferenced
         else:
-            candidates: list[tuple[str, CacheEntry]] = list(self._cache.items())
+            candidates = list(self._cache.items())
 
         if not candidates:
             return None
@@ -463,15 +450,15 @@ class EncoderCacheManager:
             # Least recently used
             return min(candidates, key=lambda x: x[1].last_access)[0]
 
-        if self.config.eviction_policy == EvictionPolicy.LFU:
+        elif self.config.eviction_policy == EvictionPolicy.LFU:
             # Least frequently used
             return min(candidates, key=lambda x: x[1].access_count)[0]
 
-        if self.config.eviction_policy == EvictionPolicy.FIFO:
+        elif self.config.eviction_policy == EvictionPolicy.FIFO:
             # First in first out
             return min(candidates, key=lambda x: x[1].created_at)[0]
 
-        if self.config.eviction_policy == EvictionPolicy.PRIORITY:
+        elif self.config.eviction_policy == EvictionPolicy.PRIORITY:
             # Lowest priority first, then LRU
             return min(candidates, key=lambda x: (x[1].priority, x[1].last_access))[0]
 
@@ -483,7 +470,7 @@ class EncoderCacheManager:
         if key not in self._cache:
             return
 
-        entry: CacheEntry = self._cache.pop(key)
+        entry = self._cache.pop(key)
         self._bytes_used -= entry.size_bytes
         self.stats.evictions += 1
 
@@ -501,14 +488,18 @@ class EncoderCacheManager:
         """Estimate size of data in bytes."""
         if isinstance(data, np.ndarray):
             return data.nbytes
-        if isinstance(data, (bytes, bytearray)):
+        elif isinstance(data, (bytes, bytearray)):
             return len(data)
-        if isinstance(data, (list, tuple)):
+        elif isinstance(data, (list, tuple)):
             return sum(self._estimate_size(item) for item in data)
-        if isinstance(data, dict):
-            return sum(self._estimate_size(k) + self._estimate_size(v) for k, v in data.items())
-        # Rough estimate for other objects
-        return 64  # Minimum object size
+        elif isinstance(data, dict):
+            return sum(
+                self._estimate_size(k) + self._estimate_size(v)
+                for k, v in data.items()
+            )
+        else:
+            # Rough estimate for other objects
+            return 64  # Minimum object size
 
     @property
     def num_free_slots(self) -> int:
@@ -534,22 +525,22 @@ class MultiTierEncoderCache:
         memory_config: CacheConfig | None = None,
         disk_path: str | None = None,
         remote_url: str | None = None,
-    ) -> None:
+    ):
         self.memory_cache = EncoderCacheManager(memory_config)
-        self.disk_path: str | None = disk_path
-        self.remote_url: str | None = remote_url
+        self.disk_path = disk_path
+        self.remote_url = remote_url
         self._disk_index: dict[str, str] = {}  # key -> filename
 
     def get(self, key: str, request_id: str | None = None) -> Any | None:
         """Get from fastest available tier."""
         # Try memory first
-        data: Any | None = self.memory_cache.get(key, request_id)
+        data = self.memory_cache.get(key, request_id)
         if data is not None:
             return data
 
         # Try disk
         if self.disk_path and key in self._disk_index:
-            data: Any | None = self._load_from_disk(key)
+            data = self._load_from_disk(key)
             if data is not None:
                 # Promote to memory
                 self.memory_cache.put(key, data, request_id)
@@ -568,7 +559,7 @@ class MultiTierEncoderCache:
         """Put data into specified tier."""
         if tier == CacheTier.MEMORY:
             return self.memory_cache.put(key, data, request_id)
-        if tier == CacheTier.DISK and self.disk_path:
+        elif tier == CacheTier.DISK and self.disk_path:
             return self._save_to_disk(key, data)
         return False
 
@@ -578,14 +569,12 @@ class MultiTierEncoderCache:
             return None
 
         import os
-
-        filepath: str = os.path.join(self.disk_path, self._disk_index[key])
+        filepath = os.path.join(self.disk_path, self._disk_index[key])
 
         if os.path.exists(filepath):
             try:
                 return np.load(filepath, allow_pickle=True)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:
                 return None
         return None
 
@@ -595,18 +584,16 @@ class MultiTierEncoderCache:
             return False
 
         import os
-
         os.makedirs(self.disk_path, exist_ok=True)
 
-        filename: str = f"{hashlib.md5(key.encode()).hexdigest()}.npy"
-        filepath: str = os.path.join(self.disk_path, filename)
+        filename = f"{hashlib.md5(key.encode()).hexdigest()}.npy"
+        filepath = os.path.join(self.disk_path, filename)
 
         try:
             np.save(filepath, data, allow_pickle=True)
             self._disk_index[key] = filename
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:
             return False
 
 
@@ -628,7 +615,7 @@ def create_encoder_cache(
         enable_dedup: Enable content deduplication
         **kwargs: Additional config options
     """
-    eviction_map: dict[str, EvictionPolicy] = {
+    eviction_map = {
         "lru": EvictionPolicy.LRU,
         "lfu": EvictionPolicy.LFU,
         "fifo": EvictionPolicy.FIFO,
@@ -646,7 +633,7 @@ def create_encoder_cache(
     return EncoderCacheManager(config)
 
 
-__all__: list[str] = [
+__all__ = [
     "CacheTier",
     "EvictionPolicy",
     "CacheConfig",

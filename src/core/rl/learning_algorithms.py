@@ -1,33 +1,26 @@
-
-"""
-Learning algorithms.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Reinforcement Learning Algorithms Implementation - Phase 319 Enhanced
 
 from __future__ import annotations
-
-import logging
-import random
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple
-
 import numpy as np
+from typing import Any, List, Dict, Tuple, Optional, Callable
+from dataclasses import dataclass, field
+from collections import defaultdict
+import random
+import logging
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class PolicyGradientBuffer:
     """Stores trajectory data for policy gradient methods."""
-
     states: List[Any] = field(default_factory=list)
     actions: List[Any] = field(default_factory=list)
     rewards: List[float] = field(default_factory=list)
     log_probs: List[float] = field(default_factory=list)
     values: List[float] = field(default_factory=list)
 
-    def clear(self) -> None:
+    def clear(self):
         self.states.clear()
         self.actions.clear()
         self.rewards.clear()
@@ -54,7 +47,6 @@ class PolicyGradientBuffer:
             advantages.insert(0, gae)
         return advantages
 
-
 class LearningAlgorithms:
     """Standard RL algorithms for agent policy improvement."""
 
@@ -67,7 +59,7 @@ class LearningAlgorithms:
         next_state: str,
         actions: List[str],
         alpha: float = 0.1,
-        gamma: float = 0.99,
+        gamma: float = 0.99
     ) -> float:
         """Standard Q-Learning update: Q(s,a) <- Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]"""
         old_val = q_table.get((state, action), 0.0)
@@ -85,7 +77,7 @@ class LearningAlgorithms:
         next_state: str,
         next_action: str,
         alpha: float = 0.1,
-        gamma: float = 0.99,
+        gamma: float = 0.99
     ) -> float:
         """SARSA update: Q(s,a) <- Q(s,a) + α[r + γ Q(s',a') - Q(s,a)]"""
         old_val = q_table.get((state, action), 0.0)
@@ -104,7 +96,7 @@ class LearningAlgorithms:
         next_state: str,
         actions: List[str],
         alpha: float = 0.1,
-        gamma: float = 0.99,
+        gamma: float = 0.99
     ) -> Tuple[float, float]:
         """Double Q-Learning to reduce overestimation bias."""
         if random.random() < 0.5:
@@ -122,7 +114,12 @@ class LearningAlgorithms:
         return q1.get((state, action), 0.0), q2.get((state, action), 0.0)
 
     @staticmethod
-    def epsilon_greedy(q_table: Dict[Tuple[str, str], float], state: str, actions: List[str], epsilon: float) -> str:
+    def epsilon_greedy(
+        q_table: Dict[Tuple[str, str], float],
+        state: str,
+        actions: List[str],
+        epsilon: float
+    ) -> str:
         """ε-greedy exploration strategy."""
         if random.random() < epsilon:
             return random.choice(actions)
@@ -130,7 +127,10 @@ class LearningAlgorithms:
 
     @staticmethod
     def softmax_policy(
-        q_table: Dict[Tuple[str, str], float], state: str, actions: List[str], temperature: float = 1.0
+        q_table: Dict[Tuple[str, str], float],
+        state: str,
+        actions: List[str],
+        temperature: float = 1.0
     ) -> str:
         """Boltzmann/Softmax exploration."""
         q_values = np.array([q_table.get((state, a), 0.0) for a in actions])
@@ -145,7 +145,7 @@ class LearningAlgorithms:
         state: str,
         actions: List[str],
         total_visits: int,
-        c: float = 2.0,
+        c: float = 2.0
     ) -> str:
         """Upper Confidence Bound action selection."""
         ucb_values = []
@@ -168,7 +168,7 @@ class LearningAlgorithms:
         actions: List[str],
         alpha: float = 0.1,
         gamma: float = 0.99,
-        lam: float = 0.9,
+        lam: float = 0.9
     ) -> None:
         """TD(λ) with eligibility traces."""
         # Compute TD error
@@ -183,7 +183,6 @@ class LearningAlgorithms:
             eligibility_traces[(s, a)] = gamma * lam * e
             if eligibility_traces[(s, a)] < 1e-6:
                 del eligibility_traces[(s, a)]
-
 
 class PolicyOptimizer:
     """High-level policy optimization utilities."""

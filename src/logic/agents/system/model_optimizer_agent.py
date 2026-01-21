@@ -25,7 +25,7 @@ from typing import Any
 
 class ModelOptimizerAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Model Optimizer Agent: Optimizes LLM deployment, 
+    Tier 2 (Cognitive Logic) - Model Optimizer Agent: Optimizes LLM deployment,
     quantization strategies, and inference performance for the fleet.
     """
 

@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 KV Cache Manager.
 
@@ -29,14 +15,13 @@ import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Callable
+from typing import Any, Callable, Generic, Protocol, TypeVar
 
 import numpy as np
 
 
 class DeviceType(str, Enum):
     """Device type for KV cache."""
-
     CPU = "cpu"
     CUDA = "cuda"
     MPS = "mps"
@@ -44,7 +29,6 @@ class DeviceType(str, Enum):
 
 class DType(str, Enum):
     """Data type for KV cache."""
-
     FLOAT16 = "float16"
     FLOAT32 = "float32"
     BFLOAT16 = "bfloat16"
@@ -380,7 +364,9 @@ class PagedKVCache:
 
         # Check if current blocks can handle additional tokens
         existing = self._block_tables[request_id].get(0, [])
-        total_tokens_in_blocks = sum(self._get_block_tokens(request_id, 0, bid) for bid in existing)
+        total_tokens_in_blocks = sum(
+            self._get_block_tokens(request_id, 0, bid) for bid in existing
+        )
 
         if total_tokens_in_blocks + additional_tokens <= current_capacity:
             return KVCacheBlocks()  # No new blocks needed
@@ -529,7 +515,6 @@ class KVCacheManager:
 # =============================================================================
 # Convenience Functions
 # =============================================================================
-
 
 def create_kv_cache_manager(
     num_layers: int,

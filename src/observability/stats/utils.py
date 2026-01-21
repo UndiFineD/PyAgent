@@ -18,69 +18,68 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import argparse
 import json
 import logging
 import sys
-from .StatsAgent import StatsAgent
-
-try:
-    import matplotlib
-    # Use non-interactive backend
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    has_matplotlib = True
-except (ImportError, RuntimeError, Exception):
-    plt = None
-    has_matplotlib = False
+import contextlib
+from .stats_agent import StatsAgent
 
 __version__ = VERSION
+
 
 def main() -> None:
     """CLI entry point for the Stats Agent."""
     parser = argparse.ArgumentParser(
-        description='Stats Agent: Reports file update statistics',
-        epilog='Example: python src/agent_stats.py --files src/*.py'
+        description="Stats Agent: Reports file update statistics",
+        epilog="Example: python src/agent_stats.py --files src/*.py",
     )
-    parser.add_argument('--files', nargs='+', required=True, help='List of files to analyze')
     parser.add_argument(
-        '--format',
-        choices=[
-            'text',
-            'json',
-            'csv'],
-        default='text',
-        help='Output format')
-    parser.add_argument('--coverage', help='Path to code coverage report')
-    parser.add_argument('--export', nargs='+', help='Export formats (json, csv, html, sqlite)')
-    parser.add_argument('--baseline', help='Path to baseline stats for comparison')
-    parser.add_argument('--verbose', default='normal', help='Verbosity level')
-    parser.add_argument('--no-cascade', action='store_true', help='Unused, for compatibility')
+        "--files", nargs="+", required=True, help="List of files to analyze"
+    )
+    parser.add_argument(
+        "--format",
+        choices=["text", "json", "csv"],
+        default="text",
+        help="Output format",
+    )
+    parser.add_argument("--coverage", help="Path to code coverage report")
+    parser.add_argument(
+        "--export", nargs="+", help="Export formats (json, csv, html, sqlite)"
+    )
+    parser.add_argument("--baseline", help="Path to baseline stats for comparison")
+    parser.add_argument("--verbose", default="normal", help="Verbosity level")
+    parser.add_argument(
+        "--no-cascade", action="store_true", help="Unused, for compatibility"
+    )
     args = parser.parse_args()
 
     # Setup logging
     levels = {
-        'quiet': logging.ERROR,
-        'minimal': logging.WARNING,
-        'normal': logging.INFO,
-        'elaborate': logging.DEBUG,
+        "quiet": logging.ERROR,
+        "minimal": logging.WARNING,
+        "normal": logging.INFO,
+        "elaborate": logging.DEBUG,
     }
     level = levels.get(args.verbose.lower(), logging.INFO)
-    logging.basicConfig(level=level, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=level, format="%(asctime)s - %(levelname)s - %(message)s")
 
     try:
         agent = StatsAgent(args.files)
         if args.coverage:
             agent.track_code_coverage(args.coverage)
         if args.export:
-            agent.export_stats('stats_output', args.export)
+            agent.export_stats("stats_output", args.export)
         if args.baseline:
             with open(args.baseline) as baseline_file:
                 baseline_stats = json.load(baseline_file)
             agent.generate_comparison_report(baseline_stats)
         agent.report_stats(output_format=args.format)
-        if has_matplotlib:
+
+        # Visualize only if requested and available
+        with contextlib.suppress(ImportError):
+            import matplotlib
             agent.visualize_stats()
     except ValueError as e:
         logging.error(str(e))

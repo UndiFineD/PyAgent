@@ -1,34 +1,22 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Reader for tensorizer file format."""
 
-from __future__ import annotations
-
-from _thread import LockType
-from concurrent.futures import ThreadPoolExecutor  # noqa: F401
 import hashlib
 import mmap
 import struct
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple, Union)
-
+from typing import BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple, Union
 import numpy as np
-
-from .compression import decompress_data
-from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION, CompressionType, TensorizerConfig)
+from .config import (
+    TensorizerConfig, CompressionType, DTYPE_MAP,
+    TENSORIZER_MAGIC, TENSORIZER_VERSION
+)
 from .metadata import TensorMetadata
+from .compression import decompress_data
 
 
 @dataclass
@@ -42,14 +30,12 @@ class LoadProgress:
 
     @property
     def tensor_progress(self) -> float:
-        """Returns the fraction of total tensors loaded (0.0 to 1.0)."""
         if self.total_tensors == 0:
             return 0.0
         return self.loaded_tensors / self.total_tensors
 
     @property
     def byte_progress(self) -> float:
-        """Returns the fraction of total bytes loaded (0.0 to 1.0)."""
         if self.total_bytes == 0:
             return 0.0
         return self.loaded_bytes / self.total_bytes
@@ -66,29 +52,27 @@ class TensorizerReader:
         self,
         path: Union[str, Path],
         config: Optional[TensorizerConfig] = None,
-    ) -> None:
+    ):
         self.path = Path(path)
-        self.config: TensorizerConfig = config or TensorizerConfig()
+        self.config = config or TensorizerConfig()
 
         self._file: Optional[BinaryIO] = None
         self._mmap: Optional[mmap.mmap] = None
         self._metadata: Dict[str, TensorMetadata] = {}
         self._compression: CompressionType = CompressionType.NONE
-        self._lock: LockType = threading.Lock()
+        self._lock = threading.Lock()
         self._metadata_offset = 0
 
     def __enter__(self) -> "TensorizerReader":
-        """Context manager entry: open the file."""
         self.open()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Context manager exit: close the file."""
         self.close()
 
     def open(self) -> None:
         """Open file for reading."""
-        self._file = open(self.path, 'rb')
+        self._file = open(self.path, "rb")
 
         if self.config.use_mmap:
             self._mmap = mmap.mmap(
@@ -116,7 +100,7 @@ class TensorizerReader:
             return
 
         # Magic
-        magic: bytes = self._file.read(4)
+        magic = self._file.read(4)
         if magic != TENSORIZER_MAGIC:
             raise ValueError(f"Invalid tensorizer file: bad magic {magic}")
 
@@ -130,7 +114,7 @@ class TensorizerReader:
 
         # Compression
         comp_len = struct.unpack("<I", self._file.read(4))[0]
-        comp_str: str = self._file.read(comp_len).decode("utf-8")
+        comp_str = self._file.read(comp_len).decode("utf-8")
         self._compression = CompressionType(comp_str)
 
     def _read_metadata(self) -> None:
@@ -146,7 +130,7 @@ class TensorizerReader:
         # Read each metadata
         for _ in range(num_tensors):
             meta_len = struct.unpack("<I", self._file.read(4))[0]
-            meta_bytes: bytes = self._file.read(meta_len)
+            meta_bytes = self._file.read(meta_len)
             meta, _ = TensorMetadata.from_bytes(meta_bytes)
             self._metadata[meta.name] = meta
 
@@ -166,7 +150,7 @@ class TensorizerReader:
 
     def read_tensor(self, name: str) -> Optional[np.ndarray]:
         """Read a single tensor by name."""
-        meta: TensorMetadata | None = self._metadata.get(name)
+        meta = self._metadata.get(name)
         if meta is None:
             return None
 
@@ -176,26 +160,29 @@ class TensorizerReader:
         """Load tensor data."""
         with self._lock:
             if self._mmap:
-                data: bytes = self._mmap[meta.offset : meta.offset + meta.compressed_size]
+                data = self._mmap[meta.offset:meta.offset + meta.compressed_size]
             else:
                 if self._file is None:
                     raise RuntimeError("Reader not opened")
                 self._file.seek(meta.offset)
-                data: bytes = self._file.read(meta.compressed_size)
+                data = self._file.read(meta.compressed_size)
 
         # Decompress if needed
         if meta.compression != CompressionType.NONE:
-            data: bytes = decompress_data(data, meta.compression)
+            data = decompress_data(data, meta.compression)
 
         # Verify checksum
         if self.config.verify_checksums:
-            actual_checksum: str = hashlib.sha256(data).hexdigest()[:16]
+            actual_checksum = hashlib.sha256(data).hexdigest()[:16]
             if actual_checksum != meta.checksum:
-                raise ValueError(f"Checksum mismatch for {meta.name}: expected {meta.checksum}, got {actual_checksum}")
+                raise ValueError(
+                    f"Checksum mismatch for {meta.name}: "
+                    f"expected {meta.checksum}, got {actual_checksum}"
+                )
 
         # Convert to numpy
         np_dtype, _ = DTYPE_MAP.get(meta.dtype, (np.float32, 4))
-        tensor: np.ndarray[Tuple[int], np.dtype[np.float64]] = np.frombuffer(data, dtype=np_dtype).reshape(meta.shape)
+        tensor = np.frombuffer(data, dtype=np_dtype).reshape(meta.shape)
 
         return tensor
 
@@ -230,18 +217,22 @@ class TensorizerReader:
         progress_callback: Optional[Callable[[LoadProgress], None]] = None,
     ) -> Dict[str, np.ndarray]:
         """Read tensors in parallel."""
-        names: List[str] = tensor_names or list(self._metadata.keys())
+        names = tensor_names or list(self._metadata.keys())
 
         progress = LoadProgress(
             total_tensors=len(names),
-            total_bytes=sum(self._metadata[n].size_bytes for n in names if n in self._metadata),
+            total_bytes=sum(
+                self._metadata[n].size_bytes
+                for n in names
+                if n in self._metadata
+            ),
         )
 
         result: Dict[str, np.ndarray] = {}
-        result_lock: LockType = threading.Lock()
+        result_lock = threading.Lock()
 
         def load_one(name: str) -> None:
-            meta: TensorMetadata | None = self._metadata.get(name)
+            meta = self._metadata.get(name)
             if meta is None:
                 return
 
@@ -264,6 +255,4 @@ class TensorizerReader:
     def iter_tensors(self) -> Iterator[Tuple[str, np.ndarray]]:
         """Iterate over tensors one at a time."""
         for name in self._metadata:
-            tensor = self.read_tensor(name)
-            if tensor is not None:
-                yield name, tensor
+            yield name, self.read_tensor(name)

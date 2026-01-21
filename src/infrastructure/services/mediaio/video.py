@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -24,15 +10,14 @@ from typing import BinaryIO, Tuple, Union
 
 import numpy as np
 
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None
-
-
 from .base import MediaLoader
-from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
-                     VideoFormat)
+from .models import (
+    MediaLoadConfig,
+    MediaMetadata,
+    MediaType,
+    VideoData,
+    VideoFormat,
+)
 
 
 class VideoLoader(MediaLoader):
@@ -42,7 +27,6 @@ class VideoLoader(MediaLoader):
         self._cv2_available = False
         try:
             import cv2
-
             self._cv2_available = True
             self._cv2 = cv2
         except ImportError:
@@ -62,8 +46,7 @@ class VideoLoader(MediaLoader):
 
         if isinstance(source, bytes):
             import tempfile
-
-            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:
+            with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as f:
                 f.write(source)
                 path = f.name
             source_str = "<bytes>"
@@ -79,14 +62,12 @@ class VideoLoader(MediaLoader):
             timestamps=timestamps,
         )
 
-    async def _load_frames(self, path: str, config: MediaLoadConfig) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
+    async def _load_frames(
+        self,
+        path: str,
+        config: MediaLoadConfig
+    ) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
         """Load frames from video file."""
-        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):
-            # TensorRT path for 120fps optimization
-            # This is a stub for real TensorRT/CUDA acceleration
-            rc.initialize_tensorrt_rust()
-            # ... process with TensorRT ...
-
         cap = self._cv2.VideoCapture(path)
         try:
             fps = cap.get(self._cv2.CAP_PROP_FPS)
@@ -95,22 +76,15 @@ class VideoLoader(MediaLoader):
             height = int(cap.get(self._cv2.CAP_PROP_FRAME_HEIGHT))
             duration = total_frames / fps if fps > 0 else 0
 
-            # Use Rust for frame sampling if available
-            if rc and hasattr(rc, "extract_video_frames_rust"):
-                target_count = config.max_frames
-                if config.frame_rate:
-                    target_count = min(target_count, int(duration * config.frame_rate))
-                indices = rc.extract_video_frames_rust(total_frames, target_count, "uniform")
+            if config.frame_rate and config.frame_rate < fps:
+                step = fps / config.frame_rate
+                indices = [int(i * step) for i in range(int(total_frames / step))]
             else:
-                if config.frame_rate and config.frame_rate < fps:
-                    step = fps / config.frame_rate
-                    indices = [int(i * step) for i in range(int(total_frames / step))]
-                else:
-                    indices = list(range(total_frames))
+                indices = list(range(total_frames))
 
-                if len(indices) > config.max_frames:
-                    step = len(indices) / config.max_frames
-                    indices = [indices[int(i * step)] for i in range(config.max_frames)]
+            if len(indices) > config.max_frames:
+                step = len(indices) / config.max_frames
+                indices = [indices[int(i * step)] for i in range(config.max_frames)]
 
             frames = []
             timestamps = []
@@ -120,33 +94,21 @@ class VideoLoader(MediaLoader):
                 if ret:
                     frame = self._cv2.cvtColor(frame, self._cv2.COLOR_BGR2RGB)
                     if config.target_size:
-                        # Use Rust for resize if available
-                        if rc and hasattr(rc, "image_resize_rust"):
-                            h, w, c = frame.shape
-                            th, tw = config.target_size
-                            pixels = frame.flatten().astype(np.float32).tolist()
-                            resized = rc.image_resize_rust(pixels, h, w, c, th, tw)
-                            frame = np.array(resized, dtype=np.float32).reshape((th, tw, c))
-                        else:
-                            frame = self._cv2.resize(frame, config.target_size, interpolation=self._cv2.INTER_LINEAR)
+                        frame = self._cv2.resize(
+                            frame,
+                            config.target_size,
+                            interpolation=self._cv2.INTER_LINEAR
+                        )
                     frames.append(frame)
                     timestamps.append(idx / fps if fps > 0 else 0)
 
             frames_arr = np.stack(frames, axis=0).astype(np.float32)
             timestamps_arr = np.array(timestamps, dtype=np.float32)
-
             if config.normalize:
-                if rc and hasattr(rc, "normalize_pixels_rust"):
-                    n, h, w, c = frames_arr.shape
-                    # Flatten and normalize via Rust
-                    flat = frames_arr.flatten().tolist()
-                    normed = rc.normalize_pixels_rust(flat, c, list(config.mean), list(config.std))
-                    frames_arr = np.array(normed, dtype=np.float32).reshape((n, h, w, c))
-                else:
-                    frames_arr = frames_arr / 255.0
-                    mean = np.array(config.mean, dtype=np.float32).reshape((1, 1, 1, 3))
-                    std = np.array(config.std, dtype=np.float32).reshape((1, 1, 1, 3))
-                    frames_arr = (frames_arr - mean) / std
+                frames_arr = frames_arr / 255.0
+                mean = np.array(config.mean, dtype=np.float32).reshape(1, 1, 1, 3)
+                std = np.array(config.std, dtype=np.float32).reshape(1, 1, 1, 3)
+                frames_arr = (frames_arr - mean) / std
 
             metadata = MediaMetadata(
                 media_type=MediaType.VIDEO,

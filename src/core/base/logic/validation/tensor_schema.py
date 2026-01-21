@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 TensorSchema - Tensor shape validation with symbolic dimensions.
 
@@ -24,11 +10,10 @@ Phase 23: Advanced Serialization & Validation
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, get_type_hints, get_origin, get_args, Union, Annotated
 
 try:
     import torch
-
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
@@ -36,7 +21,6 @@ except ImportError:
 
 try:
     import numpy as np
-
     NUMPY_AVAILABLE = True
 except ImportError:
     NUMPY_AVAILABLE = False
@@ -220,21 +204,6 @@ class TensorSchema:
         results = {}
         collected_bindings = dict(self.resolve_bindings)
 
-        # First pass: collect dimension bindings
-        self._collect_bindings(tensors, results, collected_bindings)
-
-        # Second pass: validate shapes
-        self._validate_shapes(tensors, results, collected_bindings)
-
-        return results
-
-    def _collect_bindings(
-        self,
-        tensors: dict[str, Any],
-        results: dict[str, tuple[int, ...]],
-        collected_bindings: dict[str, int]
-    ) -> None:
-        """Collect dimension bindings from tensors."""
         for name, tensor in tensors.items():
             if name not in self.fields:
                 continue
@@ -242,41 +211,31 @@ class TensorSchema:
             shape = self._get_shape(tensor)
             expected = self.fields[name]
 
+            # Collect dimension bindings
             if len(shape) == len(expected.dims):
-                self._extract_bindings(shape, expected, collected_bindings)
+                for i, (actual, exp) in enumerate(zip(shape, expected.dims)):
+                    if isinstance(exp, str) and exp not in collected_bindings:
+                        collected_bindings[exp] = actual
+                    elif isinstance(exp, DynamicDim) and exp.name not in collected_bindings:
+                        collected_bindings[exp.name] = actual
 
             results[name] = shape
 
-    def _extract_bindings(
-        self,
-        shape: tuple[int, ...],
-        expected: TensorShape,
-        collected_bindings: dict[str, int]
-    ) -> None:
-        """Extract dimension bindings from shape comparison."""
-        for actual, exp in zip(shape, expected.dims):
-            if isinstance(exp, str) and exp not in collected_bindings:
-                collected_bindings[exp] = actual
-            elif isinstance(exp, DynamicDim) and exp.name not in collected_bindings:
-                collected_bindings[exp.name] = actual
-
-    def _validate_shapes(
-        self,
-        tensors: dict[str, Any],
-        results: dict[str, tuple[int, ...]],
-        collected_bindings: dict[str, int]
-    ) -> None:
-        """Validate all tensor shapes against schema."""
+        # Validate shapes
         for name, tensor in tensors.items():
             if name not in self.fields:
                 continue
 
-            shape = results[name]
+            shape = self._get_shape(tensor)
             expected = self.fields[name]
 
             if not expected.matches(shape, **collected_bindings):
                 resolved = expected.resolve(**collected_bindings)
-                raise ValueError(f"Shape mismatch for '{name}': expected {resolved}, got {shape}")
+                raise ValueError(
+                    f"Shape mismatch for '{name}': expected {resolved}, got {shape}"
+                )
+
+        return results
 
     def _get_shape(self, tensor: Any) -> tuple[int, ...]:
         """Get shape from tensor or nested structure."""

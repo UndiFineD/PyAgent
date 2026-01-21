@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 AdaptiveRateLimiter - Token bucket with burst handling and adaptive limits.
 
@@ -23,27 +9,23 @@ Goes beyond vLLM with production-grade rate limiting including:
 
 Phase 18: Beyond vLLM - Resilience Patterns
 """
-
 from __future__ import annotations
-
 import asyncio
-import functools
 import inspect
+import functools
 import threading
 import time
-from dataclasses import dataclass
-from typing import Callable, Generic, ParamSpec, TypeVar
+from collections import defaultdict
+from dataclasses import dataclass, field
+from typing import Callable, TypeVar, ParamSpec, Any, Generic
 
-from src.core.base.logic.connectivity_manager import ConnectivityManager
-
-P = ParamSpec("P")
-R = TypeVar("R")
-K = TypeVar("K")
+P = ParamSpec('P')
+R = TypeVar('R')
+K = TypeVar('K')
 
 
 class RateLimitExceededError(Exception):
     """Raised when rate limit is exceeded."""
-
     def __init__(self, message: str, retry_after: float | None = None):
         super().__init__(message)
         self.retry_after = retry_after
@@ -52,7 +34,6 @@ class RateLimitExceededError(Exception):
 @dataclass
 class RateLimiterStats:
     """Statistics for rate limiter."""
-
     total_requests: int = 0
     allowed_requests: int = 0
     rejected_requests: int = 0
@@ -68,11 +49,11 @@ class RateLimiterStats:
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
-            "total_requests": self.total_requests,
-            "allowed_requests": self.allowed_requests,
-            "rejected_requests": self.rejected_requests,
-            "rejection_rate": round(self.rejection_rate, 4),
-            "total_wait_time_ms": round(self.total_wait_time * 1000, 2),
+            'total_requests': self.total_requests,
+            'allowed_requests': self.allowed_requests,
+            'rejected_requests': self.rejected_requests,
+            'rejection_rate': round(self.rejection_rate, 4),
+            'total_wait_time_ms': round(self.total_wait_time * 1000, 2),
         }
 
 
@@ -332,7 +313,6 @@ class AdaptiveRateLimiter:
         recovery_rate: float = 1.1,
         reduction_rate: float = 0.5,
         window_seconds: float = 10.0,
-        name: str = "default_limiter",
     ) -> None:
         """
         Initialize adaptive rate limiter.
@@ -345,9 +325,7 @@ class AdaptiveRateLimiter:
             recovery_rate: Multiplier for rate recovery (>1.0)
             reduction_rate: Multiplier for rate reduction (<1.0)
             window_seconds: Window for measuring error rate
-            name: Identifier for connectivity checks
         """
-        self._name = name
         self._base_rate = base_rate
         self._min_rate = min_rate
         self._max_rate = max_rate if max_rate is not None else base_rate * 2
@@ -403,11 +381,6 @@ class AdaptiveRateLimiter:
 
     def acquire(self, block: bool = False) -> bool:
         """Acquire permission to proceed."""
-        # Phase 336: Connectivity Check
-        # Check if endpoint is known to be down
-        if not ConnectivityManager().is_endpoint_available(self._name):
-            return False
-
         with self._lock:
             self._update_rate()
             self._window_requests += 1
@@ -434,7 +407,6 @@ class AdaptiveRateLimiter:
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
         """Decorator for rate limiting functions."""
         if inspect.iscoroutinefunction(func):
-
             @functools.wraps(func)
             async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 acquired = await self.acquire_async(block=True)
@@ -444,13 +416,11 @@ class AdaptiveRateLimiter:
                     result = await func(*args, **kwargs)
                     self.record_success()
                     return result
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:
                     self.record_error()
                     raise
-
             return async_wrapper  # type: ignore
         else:
-
             @functools.wraps(func)
             def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 acquired = self.acquire(block=True)
@@ -460,22 +430,21 @@ class AdaptiveRateLimiter:
                     result = func(*args, **kwargs)
                     self.record_success()
                     return result
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:
                     self.record_error()
                     raise
-
             return sync_wrapper
 
     def get_stats(self) -> dict:
         """Get limiter statistics."""
         return {
-            "current_rate": round(self._current_rate, 2),
-            "base_rate": self._base_rate,
-            "min_rate": self._min_rate,
-            "max_rate": self._max_rate,
-            "window_requests": self._window_requests,
-            "window_errors": self._window_errors,
-            "bucket_stats": self._bucket.stats.to_dict(),
+            'current_rate': round(self._current_rate, 2),
+            'base_rate': self._base_rate,
+            'min_rate': self._min_rate,
+            'max_rate': self._max_rate,
+            'window_requests': self._window_requests,
+            'window_errors': self._window_errors,
+            'bucket_stats': self._bucket.stats.to_dict(),
         }
 
 
@@ -521,7 +490,10 @@ class PerKeyRateLimiter(Generic[K]):
         if now - self._last_cleanup < self._cleanup_interval:
             return
 
-        expired_keys = [key for key, last in self._last_access.items() if now - last > self._cleanup_interval]
+        expired_keys = [
+            key for key, last in self._last_access.items()
+            if now - last > self._cleanup_interval
+        ]
 
         for key in expired_keys:
             del self._buckets[key]
@@ -567,7 +539,10 @@ class PerKeyRateLimiter(Generic[K]):
 
     def get_all_stats(self) -> dict[K, dict]:
         """Get stats for all keys."""
-        return {key: bucket.stats.to_dict() for key, bucket in self._buckets.items()}
+        return {
+            key: bucket.stats.to_dict()
+            for key, bucket in self._buckets.items()
+        }
 
 
 def rate_limit(
@@ -587,7 +562,6 @@ def rate_limit(
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
         if inspect.iscoroutinefunction(func):
-
             @functools.wraps(func)
             async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 acquired = await bucket.acquire_async(block=block)
@@ -597,10 +571,8 @@ def rate_limit(
                         retry_after=bucket.time_to_available(),
                     )
                 return await func(*args, **kwargs)
-
             return async_wrapper  # type: ignore
         else:
-
             @functools.wraps(func)
             def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 acquired = bucket.acquire(block=block)
@@ -610,18 +582,17 @@ def rate_limit(
                         retry_after=bucket.time_to_available(),
                     )
                 return func(*args, **kwargs)
-
             return sync_wrapper
 
     return decorator
 
 
 __all__ = [
-    "RateLimitExceededError",
-    "RateLimiterStats",
-    "TokenBucket",
-    "SlidingWindowCounter",
-    "AdaptiveRateLimiter",
-    "PerKeyRateLimiter",
-    "rate_limit",
+    'RateLimitExceededError',
+    'RateLimiterStats',
+    'TokenBucket',
+    'SlidingWindowCounter',
+    'AdaptiveRateLimiter',
+    'PerKeyRateLimiter',
+    'rate_limit',
 ]

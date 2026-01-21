@@ -1,34 +1,22 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""Base scheduler implementation for priority-based task execution."""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from _thread import LockType
 import heapq
 import threading
 import time
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    TypeVar,
+)
 from concurrent.futures import Future, ThreadPoolExecutor
-from typing import Any, Callable, Dict, List, Optional, TypeVar
-
 from .enums import TaskPriority, TaskState
-from .models import ScheduledTask, TaskStats
+from .models import TaskStats, ScheduledTask
 
-R = TypeVar("R")
-
+R = TypeVar('R')
 
 class PriorityScheduler:
     """
@@ -47,7 +35,7 @@ class PriorityScheduler:
         workers: int = 4,
         max_queue_size: int = 10000,
         enable_work_stealing: bool = True,
-    ) -> None:
+    ):
         """
         Initialize scheduler.
 
@@ -56,14 +44,16 @@ class PriorityScheduler:
             max_queue_size: Maximum pending tasks
             enable_work_stealing: Allow low-priority workers to steal high-priority tasks
         """
-        self._workers: int = workers
-        self._max_queue_size: int = max_queue_size
-        self._enable_work_stealing: bool = enable_work_stealing
+        self._workers = workers
+        self._max_queue_size = max_queue_size
+        self._enable_work_stealing = enable_work_stealing
 
         # Priority queues (one per priority level)
-        self._queues: Dict[TaskPriority, List[ScheduledTask]] = {p: [] for p in TaskPriority}
+        self._queues: Dict[TaskPriority, List[ScheduledTask]] = {
+            p: [] for p in TaskPriority
+        }
 
-        self._lock: LockType = threading.Lock()
+        self._lock = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
         self._sequence = 0
         self._pending_count = 0
@@ -80,7 +70,7 @@ class PriorityScheduler:
         # Start worker threads
         self._worker_futures: List[Future] = []
         for i in range(workers):
-            f: Future[None] = self._executor.submit(self._worker_loop, i)
+            f = self._executor.submit(self._worker_loop, i)
             self._worker_futures.append(f)
 
     def submit(
@@ -94,15 +84,15 @@ class PriorityScheduler:
         """
         Submit a task for execution.
         """
-        now: float = time.monotonic()
+        now = time.monotonic()
 
-        deadline = float("inf")
+        deadline = float('inf')
         if deadline_ms is not None:
-            deadline: float = now + deadline_ms / 1000.0
+            deadline = now + deadline_ms / 1000.0
 
         timeout = None
         if timeout_ms is not None:
-            timeout: float = timeout_ms / 1000.0
+            timeout = timeout_ms / 1000.0
 
         future: Future[R] = Future()
 
@@ -113,7 +103,7 @@ class PriorityScheduler:
 
             self._sequence += 1
 
-            task: ScheduledTask[R] = ScheduledTask(
+            task = ScheduledTask(
                 priority_value=priority.value,
                 deadline=deadline,
                 sequence=self._sequence,
@@ -133,7 +123,7 @@ class PriorityScheduler:
 
         return future
 
-    def _worker_loop(self, _worker_id: int) -> None:
+    def _worker_loop(self, worker_id: int) -> None:
         """Worker thread main loop."""
         while self._running:
             task = self._get_next_task()
@@ -170,8 +160,8 @@ class PriorityScheduler:
 
     def _execute_task(self, task: ScheduledTask) -> None:
         """Execute a single task."""
-        start_time: float = time.monotonic()
-        wait_time: float = (start_time - task.created_at) * 1000  # ms
+        start_time = time.monotonic()
+        wait_time = (start_time - task.created_at) * 1000  # ms
 
         task.state = TaskState.RUNNING
 
@@ -189,7 +179,7 @@ class PriorityScheduler:
                 task.future.set_result(result)
 
             # Update stats
-            exec_time: float = (time.monotonic() - start_time) * 1000
+            exec_time = (time.monotonic() - start_time) * 1000
             with self._lock:
                 self._stats.completed += 1
                 self._stats.total_wait_time_ms += wait_time
@@ -198,7 +188,7 @@ class PriorityScheduler:
         except TimeoutError:
             self._handle_timeout(task)
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             task.state = TaskState.FAILED
             task.error = e
 
@@ -218,10 +208,10 @@ class PriorityScheduler:
         error_container: List[Exception] = []
         completed = threading.Event()
 
-        def wrapper() -> None:
+        def wrapper():
             try:
                 result_container.append(func())
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 error_container.append(e)
             finally:
                 completed.set()
@@ -254,7 +244,7 @@ class PriorityScheduler:
         with self._lock:
             for priority in TaskPriority:
                 queue = self._queues[priority]
-                for _i, task in enumerate(queue):
+                for i, task in enumerate(queue):
                     if task.id == task_id and task.state == TaskState.PENDING:
                         task.state = TaskState.CANCELLED
                         if task.future:
@@ -263,7 +253,7 @@ class PriorityScheduler:
                         return True
         return False
 
-    def shutdown(self, wait: bool = True, _timeout: Optional[float] = None) -> None:
+    def shutdown(self, wait: bool = True, timeout: Optional[float] = None) -> None:
         """Shutdown the scheduler."""
         self._running = False
         with self._not_empty:

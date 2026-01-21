@@ -1,33 +1,46 @@
-
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
-collection_utils.py
+Collection Utilities Module - Phase 20: Production Infrastructure
+==================================================================
 
-Collection utilities for advanced data structure operations and transformations.
+Helper functions and classes for working with collections.
+Inspired by vLLM's collection_utils.py pattern.
 
-This module provides helper functions for manipulating and analyzing collections, supporting advanced workflows in the PyAgent system.
+Features:
+- LazyDict: Evaluates values only when accessed
+- chunk_list: Yield successive chunks from a list
+- flatten_2d_lists: Flatten nested lists
+- full_groupby: Group items without requiring sorted input
+- is_list_of: Type guard for homogeneous lists
+- as_list/as_iter: Convert iterables to lists/iterators
+- swap_dict_values: Swap values between two dictionary keys
+- deep_merge_dicts: Recursively merge dictionaries
+- invert_dict: Invert a dictionary (swap keys and values)
+- filter_none: Filter None values from collections
+
+Author: PyAgent Phase 20
 """
 
 from __future__ import annotations
 
 import itertools
 from collections import defaultdict
-from collections.abc import (Callable, Generator, Hashable, Iterable, Iterator,
-                             Mapping)
-from typing import Any, Generic, Literal, TypeVar
+from collections.abc import (
+    Callable,
+    Generator,
+    Hashable,
+    Iterable,
+    Iterator,
+    Mapping,
+    MutableMapping,
+    Sequence,
+)
+from typing import (
+    Any,
+    Generic,
+    Literal,
+    TypeVar,
+    overload,
+)
 
 from typing_extensions import TypeIs
 
@@ -172,24 +185,18 @@ def is_list_of(
         >>> is_list_of(["a", "b"], int)
         False
     """
-    def _is_empty(val: object) -> bool:
-        return isinstance(val, list) and not val
-
-    def _check_first(val: list, typ: type[T] | tuple[type[T], ...]) -> bool:
-        return isinstance(val[0], typ)
-
-    def _check_all(val: list, typ: type[T] | tuple[type[T], ...]) -> bool:
-        return all(isinstance(v, typ) for v in val)
-
     if not isinstance(value, list):
         return False
-    if _is_empty(value):
+
+    if not value:  # Empty list
         return True
+
     if check == "first":
-        return _check_first(value, typ)
-    if check == "all":
-        return _check_all(value, typ)
-    raise ValueError(f"Invalid check mode: {check}")
+        return isinstance(value[0], typ)
+    elif check == "all":
+        return all(isinstance(v, typ) for v in value)
+    else:
+        raise ValueError(f"Invalid check mode: {check}")
 
 
 def chunk_list(lst: list[T], chunk_size: int) -> Generator[list[T], None, None]:
@@ -203,7 +210,7 @@ def chunk_list(lst: list[T], chunk_size: int) -> Generator[list[T], None, None]:
     if chunk_size <= 0:
         raise ValueError("chunk_size must be positive")
     for i in range(0, len(lst), chunk_size):
-        yield lst[i : i + chunk_size]
+        yield lst[i:i + chunk_size]
 
 
 def chunk_iter(iterable: Iterable[T], chunk_size: int) -> Generator[list[T], None, None]:
@@ -265,7 +272,11 @@ def flatten_deep(nested: Any, max_depth: int = -1) -> list[Any]:
 # ============================================================================
 
 
-def full_groupby(values: Iterable[V], *, key: Callable[[V], K]) -> Iterable[tuple[K, list[V]]]:
+def full_groupby(
+    values: Iterable[V],
+    *,
+    key: Callable[[V], K]
+) -> Iterable[tuple[K, list[V]]]:
     """
     Group items by key, without requiring sorted input.
 
@@ -283,7 +294,10 @@ def full_groupby(values: Iterable[V], *, key: Callable[[V], K]) -> Iterable[tupl
     return groups.items()
 
 
-def partition(values: Iterable[T], predicate: Callable[[T], bool]) -> tuple[list[T], list[T]]:
+def partition(
+    values: Iterable[T],
+    predicate: Callable[[T], bool]
+) -> tuple[list[T], list[T]]:
     """
     Partition items into two lists based on a predicate.
 
@@ -355,7 +369,12 @@ def swap_dict_values(obj: dict[K, V], key1: K, key2: K) -> None:
         obj.pop(key1, None)
 
 
-def deep_merge_dicts(base: dict[str, Any], override: dict[str, Any], *, inplace: bool = False) -> dict[str, Any]:
+def deep_merge_dicts(
+    base: dict[str, Any],
+    override: dict[str, Any],
+    *,
+    inplace: bool = False
+) -> dict[str, Any]:
     """
     Recursively merge two dictionaries.
 
@@ -370,7 +389,11 @@ def deep_merge_dicts(base: dict[str, Any], override: dict[str, Any], *, inplace:
     result = base if inplace else dict(base)
 
     for key, value in override.items():
-        if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+        if (
+            key in result
+            and isinstance(result[key], dict)
+            and isinstance(value, dict)
+        ):
             result[key] = deep_merge_dicts(result[key], value)
         else:
             result[key] = value
@@ -467,7 +490,10 @@ def unique_by(iterable: Iterable[T], key: Callable[[T], Hashable]) -> list[T]:
 # ============================================================================
 
 
-def sliding_window(iterable: Iterable[T], size: int) -> Generator[tuple[T, ...], None, None]:
+def sliding_window(
+    iterable: Iterable[T],
+    size: int
+) -> Generator[tuple[T, ...], None, None]:
     """
     Yield sliding windows of a specified size.
 

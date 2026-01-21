@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -28,7 +14,7 @@ def lmstudio_chat(
     prompt: str,
     model: str = "",
     system_prompt: str = "You are a helpful assistant.",
-    **_kwargs,
+    **kwargs,
 ) -> str:
     """Convenience function for quick LM Studio chat."""
     try:
@@ -41,7 +27,7 @@ def lmstudio_chat(
         result = llm.respond(chat)
         return str(result)
 
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception as e:
         logger.error(f"lmstudio_chat error: {e}")
         return ""
 
@@ -62,7 +48,7 @@ def lmstudio_stream(
         for fragment in llm.respond_stream(chat):
             yield str(fragment)
 
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception as e:
         logger.error(f"lmstudio_stream error: {e}")
 
 
@@ -85,6 +71,6 @@ async def lmstudio_chat_async(
             result = await llm.respond(chat)
             return str(result)
 
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception as e:
         logger.error(f"lmstudio_chat_async error: {e}")
         return ""

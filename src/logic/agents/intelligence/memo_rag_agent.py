@@ -19,13 +19,11 @@ Ref: https://github.com/qhjqhj00/MemoRAG
 """
 
 from __future__ import annotations
-
+from src.core.base.lifecycle.version import VERSION
 import logging
 from pathlib import Path
-
-from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.base_utilities import as_tool
 
 try:
     import rust_core
@@ -37,12 +35,12 @@ except ImportError:
 __version__ = VERSION
 
 
-class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class MemoRagAgent(BaseAgent):
     """Memory-Augmented RAG agent for deep context discovery with sharding."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.shard_dir = Path(self._workspace_root) / "data/memory/agent_store/memory_shards"
+        self.shard_dir = Path("data/memory/agent_store/memory_shards")
         self.shard_dir.mkdir(parents=True, exist_ok=True)
         self.active_shard: str = "global"
         self._system_prompt = (
@@ -60,7 +58,9 @@ class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.info(f"MemoRAG: Shard '{shard_name}' updated.")
 
     @as_tool
-    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> list[str]:
+    def recall_clues_from_shard(
+        self, query: str, shard_name: str = "global"
+    ) -> list[str]:
         """Generates clues by scanning a specific memory shard. Uses Rust similarity if available."""
         shard_file = self.shard_dir / f"{shard_name}.txt"
         if not shard_file.exists():
@@ -72,9 +72,7 @@ class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     lines = [line.strip() for line in f if line.strip().startswith("[MEM]")]
 
                 if lines:
-                    from src.logic.agents.intelligence.core.synthesis_core import \
-                        SynthesisCore
-
+                    from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
                     sc = SynthesisCore()
                     q_embedding = sc.vectorize_insight(query)
 
@@ -83,11 +81,9 @@ class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
                     # Fast Rust retrieval
                     matches = rust_core.top_k_cosine_similarity(q_embedding, line_embeddings, 2)
-                    return [
-                        f"Semantic Clue [{score:.2f}] (shard: {shard_name}): {lines[idx]}" for idx, score in matches
-                    ]
+                    return [f"Semantic Clue [{score:.2f}] (shard: {shard_name}): {lines[idx]}" for idx, score in matches]
 
-            except (IOError, ValueError, RuntimeError, ImportError) as e:
+            except Exception as e:
                 logging.warning(f"MemoRAG semantic search failed: {e}")
 
         # Simulated intelligent retrieval fallback
@@ -101,8 +97,9 @@ class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Lists all existing memory shards."""
         return [f.stem for f in self.shard_dir.glob("*.txt")]
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        _ = target_file
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         self.list_shards()
         clues = self.recall_clues_from_shard(prompt, self.active_shard)
-        return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join([f"- {c}" for c in clues])
+        return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join(
+            [f"- {c}" for c in clues]
+        )

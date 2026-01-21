@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Scheduler Statistics.
 
@@ -34,7 +20,6 @@ from typing import Any
 
 class MetricExportFormat(str, Enum):
     """Format for metric export."""
-
     DICT = "dict"
     PROMETHEUS = "prometheus"
     JSON = "json"
@@ -64,7 +49,7 @@ class PrefixCacheStats:
 
     @property
     def hit_rate(self) -> float:
-        total: int = self.num_hits + self.num_misses
+        total = self.num_hits + self.num_misses
         if total == 0:
             return 0.0
         return self.num_hits / total
@@ -103,7 +88,7 @@ class SpecDecodingStats:
     num_accepted_tokens: int = 0
     num_accepted_tokens_per_pos: list[int] = field(default_factory=list)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         if not self.num_accepted_tokens_per_pos:
             self.num_accepted_tokens_per_pos = [0] * self.num_spec_tokens
 
@@ -255,11 +240,11 @@ class PerfStats:
     @property
     def total_time_ms(self) -> float:
         return (
-            self.schedule_time_ms
-            + self.model_forward_time_ms
-            + self.sample_time_ms
-            + self.all_reduce_time_ms
-            + self.cache_swap_time_ms
+            self.schedule_time_ms +
+            self.model_forward_time_ms +
+            self.sample_time_ms +
+            self.all_reduce_time_ms +
+            self.cache_swap_time_ms
         )
 
     @property
@@ -375,21 +360,12 @@ class SchedulerStats:
 
     def reset(self) -> None:
         """Reset all stats."""
-        self._reset_queue_state()
-        self._reset_caches()
-        self._reset_stats_components()
-
-    def _reset_queue_state(self) -> None:
         self.num_running_reqs = 0
         self.num_waiting_reqs = 0
         self.step_counter = 0
         self.kv_cache_usage = 0.0
-
-    def _reset_caches(self) -> None:
         self.prefix_cache_stats.reset()
         self.kv_cache_eviction_events.clear()
-
-    def _reset_stats_components(self) -> None:
         if self.spec_decoding_stats:
             self.spec_decoding_stats.reset()
         if self.perf_stats:
@@ -403,17 +379,11 @@ class SchedulerStats:
             step_counter=self.step_counter,
             current_wave=self.current_wave,
             kv_cache_usage=self.kv_cache_usage,
-            prefix_cache_stats=self._clone_prefix_cache_stats(),
-            spec_decoding_stats=self._clone_spec_decoding_stats(),
+            prefix_cache_stats=self.prefix_cache_stats.clone(),
+            spec_decoding_stats=self.spec_decoding_stats.clone() if self.spec_decoding_stats else None,
             cudagraph_stats=self.cudagraph_stats,
             perf_stats=self.perf_stats,
         )
-
-    def _clone_prefix_cache_stats(self) -> PrefixCacheStats:
-        return self.prefix_cache_stats.clone() if self.prefix_cache_stats else PrefixCacheStats()
-
-    def _clone_spec_decoding_stats(self) -> SpecDecodingStats | None:
-        return self.spec_decoding_stats.clone() if self.spec_decoding_stats else None
 
     def as_dict(self) -> dict[str, Any]:
         result = {
@@ -439,32 +409,30 @@ class SchedulerStats:
 
     def to_prometheus(self) -> str:
         """Export as Prometheus format."""
-        lines: list[str] = [
-            f"scheduler_running_requests {{}} {self.num_running_reqs}",
-            f"scheduler_waiting_requests {{}} {self.num_waiting_reqs}",
-            f"scheduler_step_counter {{}} {self.step_counter}",
-            f"kv_cache_usage {{}} {self.kv_cache_usage}",
-            f"prefix_cache_hit_rate {{}} {self.prefix_cache_stats.hit_rate}",
-            f"prefix_cache_hits_total {{}} {self.prefix_cache_stats.num_hits}",
-            f"prefix_cache_misses_total {{}} {self.prefix_cache_stats.num_misses}",
+        lines = [
+            f'scheduler_running_requests {{}} {self.num_running_reqs}',
+            f'scheduler_waiting_requests {{}} {self.num_waiting_reqs}',
+            f'scheduler_step_counter {{}} {self.step_counter}',
+            f'kv_cache_usage {{}} {self.kv_cache_usage}',
+            f'prefix_cache_hit_rate {{}} {self.prefix_cache_stats.hit_rate}',
+            f'prefix_cache_hits_total {{}} {self.prefix_cache_stats.num_hits}',
+            f'prefix_cache_misses_total {{}} {self.prefix_cache_stats.num_misses}',
         ]
 
         if self.spec_decoding_stats:
-            lines.extend(
-                [
-                    f"spec_decode_drafts_total {{}} {self.spec_decoding_stats.num_drafts}",
-                    f"spec_decode_acceptance_rate {{}} {self.spec_decoding_stats.acceptance_rate}",
-                ]
-            )
+            lines.extend([
+                f'spec_decode_drafts_total {{}} {self.spec_decoding_stats.num_drafts}',
+                f'spec_decode_acceptance_rate {{}} {self.spec_decoding_stats.acceptance_rate}',
+            ])
 
-        return "\n".join(lines)
+        return '\n'.join(lines)
 
 
 class SchedulerStatsCollector:
     """Collects and aggregates scheduler statistics over time."""
 
-    def __init__(self, window_size: int = 100) -> None:
-        self.window_size: int = window_size
+    def __init__(self, window_size: int = 100):
+        self.window_size = window_size
         self._history: list[SchedulerStats] = []
         self._current = SchedulerStats()
 
@@ -483,12 +451,12 @@ class SchedulerStatsCollector:
 
     def commit(self) -> SchedulerStats:
         """Commit current stats to history and reset."""
-        snapshot: SchedulerStats = self._current.clone()
+        snapshot = self._current.clone()
         self._history.append(snapshot)
 
         # Trim history
         if len(self._history) > self.window_size:
-            self._history = self._history[-self.window_size :]
+            self._history = self._history[-self.window_size:]
 
         self._current.reset()
         return snapshot
@@ -499,21 +467,16 @@ class SchedulerStatsCollector:
             return {}
 
         n = len(self._history)
-        avg_running_reqs = sum(s.num_running_reqs for s in self._history) / n
-        avg_waiting_reqs = sum(s.num_waiting_reqs for s in self._history) / n
-        avg_kv_usage = sum(s.kv_cache_usage for s in self._history) / n
-        avg_prefix_hit_rate = sum(s.prefix_cache_stats.hit_rate for s in self._history) / n
-        result = {
-            "avg_running_reqs": avg_running_reqs,
-            "avg_waiting_reqs": avg_waiting_reqs,
-            "avg_kv_usage": avg_kv_usage,
-            "avg_prefix_hit_rate": avg_prefix_hit_rate,
+        return {
+            "avg_running_reqs": sum(s.num_running_reqs for s in self._history) / n,
+            "avg_waiting_reqs": sum(s.num_waiting_reqs for s in self._history) / n,
+            "avg_kv_usage": sum(s.kv_cache_usage for s in self._history) / n,
+            "avg_prefix_hit_rate": sum(s.prefix_cache_stats.hit_rate for s in self._history) / n,
         }
-        return result
 
     def drain_events(self) -> list[KVCacheEvictionEvent]:
         """Get and clear eviction events."""
-        events: list[KVCacheEvictionEvent] = list(self._current.kv_cache_eviction_events)
+        events = list(self._current.kv_cache_eviction_events)
         self._current.kv_cache_eviction_events.clear()
         return events
 
@@ -521,7 +484,6 @@ class SchedulerStatsCollector:
 # =============================================================================
 # Convenience Functions
 # =============================================================================
-
 
 def create_scheduler_stats(
     enable_spec_decoding: bool = False,

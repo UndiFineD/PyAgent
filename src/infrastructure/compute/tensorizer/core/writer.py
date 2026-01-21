@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Writer for tensorizer file format."""
@@ -20,12 +6,13 @@ import hashlib
 import struct
 from pathlib import Path
 from typing import BinaryIO, Callable, Dict, List, Optional, Union
-
 import numpy as np
-
-from .compression import compress_data
-from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION, TensorDtype, TensorizerConfig)
+from .config import (
+    TensorizerConfig, TensorDtype, DTYPE_MAP,
+    TENSORIZER_MAGIC, TENSORIZER_VERSION
+)
 from .metadata import TensorMetadata
+from .compression import compress_data
 
 
 class TensorizerWriter:
@@ -39,9 +26,9 @@ class TensorizerWriter:
         self,
         path: Union[str, Path],
         config: Optional[TensorizerConfig] = None,
-    ) -> None:
+    ):
         self.path = Path(path)
-        self.config: TensorizerConfig = config or TensorizerConfig()
+        self.config = config or TensorizerConfig()
 
         self._file: Optional[BinaryIO] = None
         self._metadata: List[TensorMetadata] = []
@@ -57,7 +44,7 @@ class TensorizerWriter:
 
     def open(self) -> None:
         """Open file for writing."""
-        self._file = open(self.path, 'wb')
+        self._file = open(self.path, "wb")
         self._write_header()
 
     def close(self) -> None:
@@ -80,10 +67,10 @@ class TensorizerWriter:
         self._file.write(struct.pack("<Q", 0))
 
         # Config info
-        comp_bytes: bytes = self.config.compression.value.encode("utf-8")
+        comp_bytes = self.config.compression.value.encode("utf-8")
         self._file.write(struct.pack("<I", len(comp_bytes)) + comp_bytes)
 
-        self._data_offset: int = self._file.tell()
+        self._data_offset = self._file.tell()
         self._header_written = True
 
     def _finalize(self) -> None:
@@ -92,14 +79,14 @@ class TensorizerWriter:
             return
 
         # Write metadata
-        metadata_offset: int = self._file.tell()
+        metadata_offset = self._file.tell()
 
         # Number of tensors
         self._file.write(struct.pack("<I", len(self._metadata)))
 
         # Each tensor's metadata
         for meta in self._metadata:
-            meta_bytes: bytes = meta.to_bytes()
+            meta_bytes = meta.to_bytes()
             self._file.write(struct.pack("<I", len(meta_bytes)))
             self._file.write(meta_bytes)
 
@@ -117,27 +104,27 @@ class TensorizerWriter:
             raise RuntimeError("Writer not opened")
 
         # Determine dtype
-        dtype: TensorDtype = TensorDtype.FLOAT32
+        dtype = TensorDtype.FLOAT32
         for td, (np_dtype, _) in DTYPE_MAP.items():
             if tensor.dtype == np_dtype:
                 dtype = td
                 break
 
         # Serialize tensor data
-        tensor_bytes: bytes = tensor.tobytes()
+        tensor_bytes = tensor.tobytes()
 
         # Compute checksum
-        checksum: str = hashlib.sha256(tensor_bytes).hexdigest()[:16]
+        checksum = hashlib.sha256(tensor_bytes).hexdigest()[:16]
 
         # Compress if configured
-        compressed_bytes: bytes = compress_data(
+        compressed_bytes = compress_data(
             tensor_bytes,
             self.config.compression,
             self.config.compression_level,
         )
 
         # Record position
-        offset: int = self._file.tell()
+        offset = self._file.tell()
 
         # Write data
         self._file.write(compressed_bytes)
@@ -164,13 +151,13 @@ class TensorizerWriter:
     ) -> List[TensorMetadata]:
         """Write multiple tensors (a model) to the file."""
         results = []
-        total: int = len(tensors)
+        total = len(tensors)
 
         for i, (name, tensor) in enumerate(tensors.items()):
             if progress_callback:
                 progress_callback(name, i, total)
 
-            meta: TensorMetadata = self.write_tensor(name, tensor)
+            meta = self.write_tensor(name, tensor)
             results.append(meta)
 
         return results

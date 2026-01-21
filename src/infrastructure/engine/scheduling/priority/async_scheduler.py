@@ -1,47 +1,33 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Async scheduler.py module.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 import asyncio
 import time
-from typing import Any, Coroutine, Dict, Optional, TypeVar
-
+from typing import (
+    Any,
+    Coroutine,
+    Dict,
+    Optional,
+    TypeVar,
+)
 from .enums import TaskPriority
 from .models import TaskStats
 
-R = TypeVar("R")
-
+R = TypeVar('R')
 
 class AsyncPriorityScheduler:
     """
     Async priority scheduler for coroutine-based workloads.
     """
 
-    def __init__(self, max_concurrent: int = 100) -> None:
+    def __init__(self, max_concurrent: int = 100):
         """
         Initialize async scheduler.
 
         Args:
             max_concurrent: Maximum concurrent tasks
         """
-        self._max_concurrent: int = max_concurrent
+        self._max_concurrent = max_concurrent
         self._semaphore = asyncio.Semaphore(max_concurrent)
 
         self._queues: Dict[TaskPriority, asyncio.PriorityQueue] = {}
@@ -52,7 +38,7 @@ class AsyncPriorityScheduler:
     async def submit(
         self,
         coro: Coroutine[Any, Any, R],
-        _priority: TaskPriority = TaskPriority.NORMAL,
+        priority: TaskPriority = TaskPriority.NORMAL,
         deadline_ms: Optional[float] = None,
     ) -> R:
         """
@@ -67,19 +53,19 @@ class AsyncPriorityScheduler:
             Coroutine result
         """
         async with self._semaphore:
-            start: float = time.monotonic()
+            start = time.monotonic()
 
             timeout = None
             if deadline_ms:
-                timeout: float = deadline_ms / 1000.0
+                timeout = deadline_ms / 1000.0
 
             try:
                 if timeout:
-                    result: R = await asyncio.wait_for(coro, timeout=timeout)
+                    result = await asyncio.wait_for(coro, timeout=timeout)
                 else:
-                    result: R = await coro
+                    result = await coro
 
-                exec_time: float = (time.monotonic() - start) * 1000
+                exec_time = (time.monotonic() - start) * 1000
                 async with self._lock:
                     self._stats.completed += 1
                     self._stats.total_exec_time_ms += exec_time
@@ -91,7 +77,7 @@ class AsyncPriorityScheduler:
                     self._stats.timeouts += 1
                 raise
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 async with self._lock:
                     self._stats.failed += 1
                 raise

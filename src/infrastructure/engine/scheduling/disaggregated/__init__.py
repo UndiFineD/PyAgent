@@ -1,31 +1,23 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Disaggregated package.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from .config import DCPConfig, InstanceInfo, KVTransferParams, ScheduledRequest  # noqa: F401
-from .enums import InstanceRole, SchedulingPolicy  # noqa: F401
-from .factory import SchedulerFactory, create_dcp_scheduler  # noqa: F401
-from .orchestrator import ProxyOrchestrator  # noqa: F401
-from .scheduler import DisaggregatedScheduler  # noqa: F401
-from .selectors import (HashSelector, InstanceSelector, LeastLoadedSelector,  # noqa: F401
-                        RandomSelector, RoundRobinSelector)
+from .enums import InstanceRole, SchedulingPolicy
+from .config import (
+    InstanceInfo,
+    DCPConfig,
+    KVTransferParams,
+    ScheduledRequest
+)
+from .selectors import (
+    InstanceSelector,
+    RoundRobinSelector,
+    LeastLoadedSelector,
+    RandomSelector,
+    HashSelector
+)
+from .scheduler import DisaggregatedScheduler
+from .orchestrator import ProxyOrchestrator
+from .factory import SchedulerFactory, create_dcp_scheduler
 
 __all__ = [
     "InstanceRole",
@@ -40,7 +32,5 @@ __all__ = [
     "RandomSelector",
     "HashSelector",
     "DisaggregatedScheduler",
-    "ProxyOrchestrator",
     "SchedulerFactory",
-    "create_dcp_scheduler",
 ]

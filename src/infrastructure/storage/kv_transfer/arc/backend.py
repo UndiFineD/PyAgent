@@ -1,32 +1,12 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Phase 45: ARC Offload Backends
 Backends for block storage in the ARC offloading system.
 """
 
 from __future__ import annotations
-
 import threading
 from abc import ABC, abstractmethod
-
-from src.infrastructure.storage.kv_transfer.arc.types import (BlockHash,
-                                                              BlockState,
-                                                              BlockStatus,
-                                                              LoadStoreSpec,
-                                                              OffloadMedium)
+from src.infrastructure.storage.kv_transfer.arc.types import BlockStatus, BlockState, OffloadMedium, LoadStoreSpec, BlockHash
 
 
 class Backend(ABC):
@@ -48,7 +28,11 @@ class Backend(ABC):
         pass
 
     @abstractmethod
-    def get_load_store_spec(self, block_hashes: list[BlockHash], blocks: list[BlockStatus]) -> LoadStoreSpec:
+    def get_load_store_spec(
+        self,
+        block_hashes: list[BlockHash],
+        blocks: list[BlockStatus]
+    ) -> LoadStoreSpec:
         """Get load/store specification."""
         pass
 
@@ -68,7 +52,12 @@ class Backend(ABC):
 class SimpleBackend(Backend):
     """Simple in-memory backend for testing."""
 
-    def __init__(self, num_blocks: int = 1000, block_size: int = 16, medium: OffloadMedium = OffloadMedium.CPU):
+    def __init__(
+        self,
+        num_blocks: int = 1000,
+        block_size: int = 16,
+        medium: OffloadMedium = OffloadMedium.CPU
+    ):
         self._num_blocks = num_blocks
         self._block_size = block_size
         self._medium = medium
@@ -85,7 +74,11 @@ class SimpleBackend(Backend):
         with self._lock:
             for h in block_hashes:
                 if h not in self._allocated:
-                    block = BlockStatus(block_id=self._next_id, medium=self._medium, state=BlockState.PENDING)
+                    block = BlockStatus(
+                        block_id=self._next_id,
+                        medium=self._medium,
+                        state=BlockState.PENDING
+                    )
                     self._allocated[h] = block
                     self._next_id += 1
                 blocks.append(self._allocated[h])
@@ -102,12 +95,16 @@ class SimpleBackend(Backend):
             if to_remove:
                 del self._allocated[to_remove]
 
-    def get_load_store_spec(self, block_hashes: list[BlockHash], blocks: list[BlockStatus]) -> LoadStoreSpec:
+    def get_load_store_spec(
+        self,
+        block_hashes: list[BlockHash],
+        blocks: list[BlockStatus]
+    ) -> LoadStoreSpec:
         return LoadStoreSpec(
             block_hashes=list(block_hashes),
             blocks=list(blocks),
             source_medium=self._medium,
-            target_medium=OffloadMedium.GPU,
+            target_medium=OffloadMedium.GPU
         )
 
     @property

@@ -1,30 +1,21 @@
-#!/usr/bin/env python3
-
-"""
-Architectural design agent.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
 
 from __future__ import annotations
-
+from src.core.base.lifecycle.version import VERSION
+import logging
+import json
 import asyncio
 import contextlib
-import json
-import logging
+from typing import Any, Dict, List, Optional
 from enum import Enum
-from typing import Any, Dict, Optional
-
-from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
-
 class DesignPhase(Enum):
-    """Phases of the architectural design process."""
     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"
     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"
     CONCEPT_GENERATION = "Concept Generation"
@@ -33,14 +24,10 @@ class DesignPhase(Enum):
     DESIGN_PRODUCTION = "Design Production"
     POST_PRODUCTION = "Post-production/Presentation"
 
-
 class DesignExpertise(Enum):
-    """Levels of expertise for the architectural agent."""
     NOVICE = "novice"
     EXPERT = "expert"
 
-
-# pylint: disable=too-many-ancestors
 class ArchitecturalDesignAgent(BaseAgent):
     """
     Agent specializing in hierarchical architectural design workflows.
@@ -59,13 +46,13 @@ class ArchitecturalDesignAgent(BaseAgent):
             "layouts": [],
             "visualizations": [],
             "feedback_history": [],
-            "critique_passed": False,
+            "critique_passed": False
         }
         self.metrics = {
             "jct_start": asyncio.get_event_loop().time(),
             "cognitive_load_index": 0.0,
             "aesthetic_delta": 0.14,
-            "constructability_score": 0.0,
+            "constructability_score": 0.0
         }
         self._system_prompt = (
             "You are the Architectural Design Agent, specializing in the multi-stage "
@@ -87,7 +74,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         requirements = await self.run_subagent("extracting requirements", prompt)
         self.design_state["requirements"] = requirements
         self.current_phase = DesignPhase.PRE_DESIGN_ANALYSIS
-        self.metrics["cognitive_load_index"] += 0.1  # Simulated tracking
+        self.metrics["cognitive_load_index"] += 0.1 # Simulated tracking
         return {"phase": self.current_phase.value, "requirements": requirements}
 
     @as_tool
@@ -104,24 +91,6 @@ class ArchitecturalDesignAgent(BaseAgent):
         self.design_state["environmental_analysis"] = analysis
         self.current_phase = DesignPhase.ENVIRONMENTAL_SIMULATION
         return {"phase": self.current_phase.value, "analysis": analysis}
-
-    @as_tool
-    async def map_research_to_logic(self, research_data: str) -> str:
-        """
-        Maps research findings (summaries, papers) to specific Agent logic or infrastructure changes.
-        Used in Phase 51 Research Synthesis loop to bridge Hardware and Intelligence.
-        """
-        logging.info("ArchitecturalDesignAgent: Mapping research to system logic.")
-        prompt = (
-            "Analyze the following research findings and propose technical implementation mappings for PyAgent:\n"
-            "1. AI Model Scaling (IA³, LoRA, Adapters).\n"
-            "2. Hardware Acceleration (TensorRT, CUDA, FP8).\n"
-            "3. Communication Protocols (MUX/DEMUX, 120fps sync).\n"
-            "Output the proposal as a set of actionable 'Improvement' items for the improvements.md file."
-        )
-
-        mapping = await super().think(f"{prompt}\n\nRESEARCH:\n{research_data}")
-        return mapping
 
     @as_tool
     async def generate_spatial_concept(self, refinement: Optional[str] = None) -> Dict[str, Any]:
@@ -149,21 +118,19 @@ class ArchitecturalDesignAgent(BaseAgent):
         )
         critique = await self.run_subagent("critic: evaluating concept", critic_prompt)
 
-        # Final Concept Generation based on Critique
-        final_prompt = (
-            f"Requirements: {self.design_state['requirements']}\n"
-            f"Original Concept: {concept}\n"
-            f"Expert Critique: {critique}\n"
-            "Produce the final refined spatial concept mapping."
+        refinement_prompt = (
+            f"Refine the following concept: '{concept}' based on this critique: '{critique}'. "
+            "Produce the final optimized GAAD concept."
         )
-        final_concept = await self.run_subagent("generator: final refinement", final_prompt)
+        final_concept = await self.run_subagent("generator: refining concept", refinement_prompt)
+
         self.design_state["concepts"].append(final_concept)
-        self.design_state["spatial_concept"] = final_concept
         self.current_phase = DesignPhase.CONCEPT_GENERATION
         return {
             "phase": self.current_phase.value,
-            "final_optimized_concept": final_concept,
-            "internal_critique": critique
+            "initial_concept": concept,
+            "internal_critique": critique,
+            "final_optimized_concept": final_concept
         }
 
     @as_tool
@@ -183,7 +150,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         )
         refined_concept = await self.run_subagent("visual refinement", prompt)
         self.design_state["concepts"].append(refined_concept)
-        self.metrics["cognitive_load_index"] -= 0.05  # Reductions per arXiv:2601.10696
+        self.metrics["cognitive_load_index"] -= 0.05 # Reductions per arXiv:2601.10696
         self.current_phase = DesignPhase.VISUAL_REFINEMENT
         return {"phase": self.current_phase.value, "refined_concept": refined_concept}
 
@@ -208,7 +175,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         Translates qualitative concepts into quantitative parameters.
         """
         if not self.design_state["critique_passed"]:
-            return {"error": "Must pass critical engagement buffer first."}
+             return {"error": "Must pass critical engagement buffer first."}
 
         concept = self.design_state["concepts"][concept_index]
         verification_prompt = (
@@ -227,7 +194,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         Calculates the DPO Constructability Score.
         """
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
-            logging.warning("Advancing to Production phase without full development.")
+             logging.warning("Advancing to Production phase without full development.")
 
         prompt = f"Generate production specs/ urban context match for: {json.dumps(self.design_state)}"
         specs = await self.run_subagent("finalizing production specs", prompt)
@@ -239,7 +206,6 @@ class ArchitecturalDesignAgent(BaseAgent):
         self.metrics["constructability_score"] = 0.85
         with contextlib.suppress(Exception):
             import re
-
             match = re.search(r"(\d\.\d+)", score_str)
             if match:
                 self.metrics["constructability_score"] = float(match.group(1))
@@ -248,7 +214,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         return {
             "phase": self.current_phase.value,
             "specs": specs,
-            "constructability_score": self.metrics["constructability_score"],
+            "constructability_score": self.metrics["constructability_score"]
         }
 
     @as_tool
@@ -260,24 +226,6 @@ class ArchitecturalDesignAgent(BaseAgent):
         presentation = await self.run_subagent("synthesizing presentation", prompt)
         self.current_phase = DesignPhase.POST_PRODUCTION
         return {"phase": self.current_phase.value, "presentation_link": presentation}
-
-    @as_tool
-    async def process_research_brief(self, research_content: str) -> Dict[str, Any]:
-        """
-        Specialized tool for Phase 51 Research Synthesis.
-        Parses Arxiv paper content and extracts architectural requirements for system evolution.
-        """
-        logging.info("ArchitecturalDesignAgent: Processing research brief for system evolution.")
-        prompt = (
-            "You are acting as the Chief Architect. "
-            "Examine this research content and identify:\n"
-            "1. Core Alogrithmic Changes (e.g. IA3 vs LoRA).\n"
-            "2. Infrastructure Requirements (e.g. TensorRT engine params).\n"
-            "3. Multi-Agent Coordination updates.\n"
-            "Return a structured architectural directive."
-        )
-        directive = await super().think(f"{prompt}\n\nCONTENT:\n{research_content}")
-        return {"type": "architectural_directive", "directive": directive}
 
     def get_dpo_metrics(self) -> Dict[str, float]:
         """Returns the Design Performance Optimization metrics."""
@@ -294,5 +242,5 @@ class ArchitecturalDesignAgent(BaseAgent):
             "kv_cache_efficiency": "94.2%",  # High reuse due to hierarchical design tokens
             "hierarchical_depth": 4,
             "streaming_status": "enabled",
-            "coordination_overhead": "low",
+            "coordination_overhead": "low"
         }

@@ -1,46 +1,36 @@
-#!/usr/bin/env python3
-
-"""
-Regression agent.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
-
-import math
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List
-
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+import logging
+import json
+import re
+import math
+from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass, field
+from enum import Enum
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
-
 class RegressionType(Enum):
-    """Supported regression model types."""
     LINEAR = "linear"
     POLYNOMIAL = "polynomial"
     EXPONENTIAL = "exponential"
     LOGARITHMIC = "logarithmic"
     MOVING_AVERAGE = "moving_average"
 
-
 @dataclass
 class RegressionResult:
     """Stores regression analysis results."""
-
     regression_type: RegressionType
     coefficients: List[float]
     r_squared: float
     predictions: List[float]
     residuals: List[float]
 
-
-# pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
     """
     Agent specializing in predicting continuous values and analyzing relationships
@@ -59,15 +49,16 @@ class RegressionAgent(BaseAgent):
 
     @as_tool
     async def predict_future_state(
-        self, history: List[float], steps: int = 1, method: str = "linear"
+        self,
+        history: List[float],
+        steps: int = 1,
+        method: str = "linear"
     ) -> Dict[str, Any]:
         """Predicts the next values in a sequence using the specified method."""
         if len(history) < 2:
             return {"predictions": history, "error": "Need at least 2 data points"}
 
-        regression_type = (
-            RegressionType(method) if method in [m.value for m in RegressionType] else RegressionType.LINEAR
-        )
+        regression_type = RegressionType(method) if method in [m.value for m in RegressionType] else RegressionType.LINEAR
 
         if regression_type == RegressionType.LINEAR:
             result = self._linear_regression(history, steps)
@@ -81,19 +72,21 @@ class RegressionAgent(BaseAgent):
             result = self._linear_regression(history, steps)
 
         # Record prediction
-        self._prediction_history.append(
-            {
-                "history_length": len(history),
-                "steps": steps,
-                "method": regression_type.value,
-                "predictions": result["predictions"],
-            }
-        )
+        self._prediction_history.append({
+            "history_length": len(history),
+            "steps": steps,
+            "method": regression_type.value,
+            "predictions": result["predictions"]
+        })
 
         return result
 
     @as_tool
-    async def analyze_correlation(self, var_a: List[float], var_b: List[float]) -> Dict[str, Any]:
+    async def analyze_correlation(
+        self,
+        var_a: List[float],
+        var_b: List[float]
+    ) -> Dict[str, Any]:
         """Calculates correlation and relationship metrics between two variables."""
         if len(var_a) != len(var_b):
             return {"error": "Variables must have same length"}
@@ -129,12 +122,20 @@ class RegressionAgent(BaseAgent):
             "pearson_correlation": round(correlation, 4),
             "spearman_correlation": round(spearman, 4),
             "covariance": round(covar / n, 4),
-            "interpretation": {"strength": strength, "direction": direction},
-            "sample_size": n,
+            "interpretation": {
+                "strength": strength,
+                "direction": direction
+            },
+            "sample_size": n
         }
 
     @as_tool
-    async def fit_model(self, x: List[float], y: List[float], model_type: str = "linear") -> Dict[str, Any]:
+    async def fit_model(
+        self,
+        x: List[float],
+        y: List[float],
+        model_type: str = "linear"
+    ) -> Dict[str, Any]:
         """Fits a regression model to the data."""
         if len(x) != len(y):
             return {"error": "x and y must have same length"}
@@ -143,9 +144,7 @@ class RegressionAgent(BaseAgent):
         if n < 2:
             return {"error": "Need at least 2 data points"}
 
-        regression_type = (
-            RegressionType(model_type) if model_type in [m.value for m in RegressionType] else RegressionType.LINEAR
-        )
+        regression_type = RegressionType(model_type) if model_type in [m.value for m in RegressionType] else RegressionType.LINEAR
 
         if regression_type == RegressionType.LINEAR:
             # Fit linear: y = a + b*x
@@ -163,7 +162,7 @@ class RegressionAgent(BaseAgent):
             residuals = [yi - pi for yi, pi in zip(y, predictions)]
 
             # R-squared
-            ss_res = sum(r**2 for r in residuals)
+            ss_res = sum(r ** 2 for r in residuals)
             ss_tot = sum((yi - mean_y) ** 2 for yi in y)
             r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
 
@@ -172,7 +171,7 @@ class RegressionAgent(BaseAgent):
                 coefficients=[a, b],
                 r_squared=r_squared,
                 predictions=predictions,
-                residuals=residuals,
+                residuals=residuals
             )
 
             cache_key = f"linear_{n}"
@@ -185,7 +184,7 @@ class RegressionAgent(BaseAgent):
                 "slope": round(b, 4),
                 "r_squared": round(r_squared, 4),
                 "std_error": round(math.sqrt(ss_res / (n - 2)) if n > 2 else 0, 4),
-                "sample_size": n,
+                "sample_size": n
             }
 
         return {"error": f"Model type {model_type} not fully implemented"}
@@ -231,12 +230,15 @@ class RegressionAgent(BaseAgent):
             "r_squared": fit.get("r_squared", 0),
             "first_value": data[0],
             "last_value": data[-1],
-            "change_pct": round((data[-1] - data[0]) / abs(data[0]) * 100, 2) if data[0] != 0 else None,
+            "change_pct": round((data[-1] - data[0]) / abs(data[0]) * 100, 2) if data[0] != 0 else None
         }
 
     @as_tool
     async def forecast_with_confidence(
-        self, history: List[float], steps: int = 3, confidence: float = 0.95
+        self,
+        history: List[float],
+        steps: int = 3,
+        confidence: float = 0.95
     ) -> Dict[str, Any]:
         """Provides forecasts with confidence intervals."""
         n = len(history)
@@ -259,7 +261,7 @@ class RegressionAgent(BaseAgent):
         # Calculate standard error
         predictions = [intercept + slope * i for i in range(n)]
         residuals = [y - p for y, p in zip(history, predictions)]
-        std_error = math.sqrt(sum(r**2 for r in residuals) / (n - 2)) if n > 2 else 0
+        std_error = math.sqrt(sum(r ** 2 for r in residuals) / (n - 2)) if n > 2 else 0
 
         # Z-score for confidence level (simplified)
         z_scores = {0.90: 1.645, 0.95: 1.96, 0.99: 2.576}
@@ -269,21 +271,19 @@ class RegressionAgent(BaseAgent):
         forecast_details = []
         for step, point in enumerate(forecasts, 1):
             # Prediction interval widens with distance
-            interval_width = z * std_error * math.sqrt(1 + 1 / n + (step**2) / sum((i - n / 2) ** 2 for i in range(n)))
-            forecast_details.append(
-                {
-                    "step": step,
-                    "point_forecast": round(point, 4),
-                    "lower_bound": round(point - interval_width, 4),
-                    "upper_bound": round(point + interval_width, 4),
-                }
-            )
+            interval_width = z * std_error * math.sqrt(1 + 1/n + (step ** 2) / sum((i - n/2) ** 2 for i in range(n)))
+            forecast_details.append({
+                "step": step,
+                "point_forecast": round(point, 4),
+                "lower_bound": round(point - interval_width, 4),
+                "upper_bound": round(point + interval_width, 4)
+            })
 
         return {
             "forecasts": forecast_details,
             "confidence_level": confidence,
             "model_r_squared": fit.get("r_squared", 0),
-            "std_error": round(std_error, 4),
+            "std_error": round(std_error, 4)
         }
 
     def _linear_regression(self, history: List[float], steps: int) -> Dict[str, Any]:
@@ -306,7 +306,7 @@ class RegressionAgent(BaseAgent):
             "predictions": [round(p, 4) for p in predictions],
             "slope": round(slope, 4),
             "intercept": round(intercept, 4),
-            "method": "linear",
+            "method": "linear"
         }
 
     def _polynomial_regression(self, history: List[float], steps: int, degree: int = 2) -> Dict[str, Any]:
@@ -316,7 +316,7 @@ class RegressionAgent(BaseAgent):
         # Fit quadratic: use simple finite differences
         if n >= 3:
             # Estimate second derivative
-            accel = history[-1] - 2 * history[-2] + history[-3]
+            accel = (history[-1] - 2 * history[-2] + history[-3])
             slope = history[-1] - history[-2]
 
             predictions = []
@@ -327,7 +327,11 @@ class RegressionAgent(BaseAgent):
         else:
             return self._linear_regression(history, steps)
 
-        return {"predictions": [round(p, 4) for p in predictions], "method": "polynomial", "degree": degree}
+        return {
+            "predictions": [round(p, 4) for p in predictions],
+            "method": "polynomial",
+            "degree": degree
+        }
 
     def _exponential_regression(self, history: List[float], steps: int) -> Dict[str, Any]:
         """Exponential growth/decay prediction."""
@@ -345,17 +349,22 @@ class RegressionAgent(BaseAgent):
         return {
             "predictions": [round(p, 4) for p in predictions],
             "growth_rate": round(math.exp(linear_result["slope"]) - 1, 4),
-            "method": "exponential",
+            "method": "exponential"
         }
 
     def _moving_average(self, history: List[float], steps: int, window: int = 3) -> Dict[str, Any]:
         """Moving average prediction."""
-        window = min(window, len(history))
+        if len(history) < window:
+            window = len(history)
 
         last_avg = sum(history[-window:]) / window
         predictions = [last_avg] * steps
 
-        return {"predictions": [round(p, 4) for p in predictions], "window": window, "method": "moving_average"}
+        return {
+            "predictions": [round(p, 4) for p in predictions],
+            "window": window,
+            "method": "moving_average"
+        }
 
     def _rank(self, data: List[float]) -> List[int]:
         """Compute ranks for Spearman correlation."""

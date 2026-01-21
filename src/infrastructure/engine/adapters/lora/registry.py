@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """LRU registry for managing multiple LoRA models."""
@@ -20,7 +6,6 @@ import time
 from collections import OrderedDict
 from dataclasses import dataclass
 from typing import Any
-
 from .config import LoRAModelState
 from .model import LoRAModel
 
@@ -28,14 +13,13 @@ from .model import LoRAModel
 @dataclass
 class LoRAModelEntry:
     """Entry in the LoRA registry."""
-
     model: LoRAModel
     state: LoRAModelState
     load_time: float
     last_access: float
     access_count: int = 0
 
-    def touch(self) -> None:
+    def touch(self):
         """Update access time and count."""
         self.last_access = time.time()
         self.access_count += 1
@@ -48,7 +32,7 @@ class LoRARegistry:
         self,
         max_memory_bytes: int = 1024 * 1024 * 1024,  # 1GB
         max_models: int = 16,
-    ) -> None:
+    ):
         """Initialize registry."""
         self.max_memory_bytes = max_memory_bytes
         self.max_models = max_models
@@ -61,7 +45,8 @@ class LoRARegistry:
 
         # Evict if needed
         while (
-            self._current_memory + model_memory > self.max_memory_bytes or len(self._models) >= self.max_models
+            self._current_memory + model_memory > self.max_memory_bytes
+            or len(self._models) >= self.max_models
         ) and self._models:
             self._evict_lru()
 
@@ -100,7 +85,7 @@ class LoRARegistry:
         self._current_memory -= entry.model.get_memory_bytes()
         return True
 
-    def _evict_lru(self) -> None:
+    def _evict_lru(self):
         """Evict least recently used model."""
         if not self._models:
             return

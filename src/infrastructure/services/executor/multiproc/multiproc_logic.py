@@ -1,37 +1,17 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Multiproc logic.py module.
-"""
-
 from __future__ import annotations
-
-import contextlib
 import multiprocessing as mp
 import queue
 import signal
 import threading
 import time
+import contextlib
 import traceback
 from typing import Any, Callable, Dict, List, Optional
-
 from src.infrastructure.services.executor.multiproc.base import Executor
-from src.infrastructure.services.executor.multiproc.future import FutureWrapper
 from src.infrastructure.services.executor.multiproc.types import (
-    ResultMessage, TaskMessage, WorkerInfo, WorkerState)
-
+    WorkerState, WorkerInfo, TaskMessage, ResultMessage
+)
+from src.infrastructure.services.executor.multiproc.future import FutureWrapper
 
 class MultiprocExecutor(Executor):
     """
@@ -156,13 +136,11 @@ class MultiprocExecutor(Executor):
                     task: TaskMessage = task_queue.get(timeout=1.0)
                 except queue.Empty:
                     # Send heartbeat
-                    result_queue.put(
-                        ResultMessage(
-                            task_id="__heartbeat__",
-                            worker_id=worker_id,
-                            success=True,
-                        )
-                    )
+                    result_queue.put(ResultMessage(
+                        task_id="__heartbeat__",
+                        worker_id=worker_id,
+                        success=True,
+                    ))
                     continue
 
                 # Execute task
@@ -173,29 +151,25 @@ class MultiprocExecutor(Executor):
                     result = functions[task.func_name](*task.args, **task.kwargs)
                     end_time = time.time_ns()
 
-                    result_queue.put(
-                        ResultMessage(
-                            task_id=task.task_id,
-                            worker_id=worker_id,
-                            success=True,
-                            result=result,
-                            execution_time_ns=end_time - start_time,
-                        )
-                    )
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    result_queue.put(ResultMessage(
+                        task_id=task.task_id,
+                        worker_id=worker_id,
+                        success=True,
+                        result=result,
+                        execution_time_ns=end_time - start_time,
+                    ))
+                except Exception as e:
                     end_time = time.time_ns()
-                    result_queue.put(
-                        ResultMessage(
-                            task_id=task.task_id,
-                            worker_id=worker_id,
-                            success=False,
-                            error=str(e),
-                            traceback=traceback.format_exc(),
-                            execution_time_ns=end_time - start_time,
-                        )
-                    )
+                    result_queue.put(ResultMessage(
+                        task_id=task.task_id,
+                        worker_id=worker_id,
+                        success=False,
+                        error=str(e),
+                        traceback=traceback.format_exc(),
+                        execution_time_ns=end_time - start_time,
+                    ))
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 with contextlib.suppress(Exception):
                     # Worker loop error - try to continue
                     pass
@@ -229,7 +203,7 @@ class MultiprocExecutor(Executor):
 
             except queue.Empty:
                 continue
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
     def _monitor_workers(self) -> None:
@@ -318,20 +292,17 @@ class MultiprocExecutor(Executor):
     def get_worker_stats(self) -> Dict[int, WorkerInfo]:
         """Get worker statistics."""
         with self._lock:
-            return {
-                wid: WorkerInfo(
-                    worker_id=info.worker_id,
-                    pid=info.pid,
-                    state=info.state,
-                    gpu_id=info.gpu_id,
-                    start_time=info.start_time,
-                    last_heartbeat=info.last_heartbeat,
-                    tasks_completed=info.tasks_completed,
-                    error_count=info.error_count,
-                    current_task_id=info.current_task_id,
-                )
-                for wid, info in self._worker_info.items()
-            }
+            return {wid: WorkerInfo(
+                worker_id=info.worker_id,
+                pid=info.pid,
+                state=info.state,
+                gpu_id=info.gpu_id,
+                start_time=info.start_time,
+                last_heartbeat=info.last_heartbeat,
+                tasks_completed=info.tasks_completed,
+                error_count=info.error_count,
+                current_task_id=info.current_task_id,
+            ) for wid, info in self._worker_info.items()}
 
     def is_healthy(self) -> bool:
         """Check executor health."""
@@ -340,6 +311,7 @@ class MultiprocExecutor(Executor):
 
         with self._lock:
             healthy_workers = sum(
-                1 for info in self._worker_info.values() if info.state in (WorkerState.READY, WorkerState.BUSY)
+                1 for info in self._worker_info.values()
+                if info.state in (WorkerState.READY, WorkerState.BUSY)
             )
             return healthy_workers >= self._num_workers // 2

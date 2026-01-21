@@ -1,34 +1,12 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Linear.py module.
-"""
-
 from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 import numpy as np
-
-from .base import Quantizer
+from typing import TYPE_CHECKING
 from .config import QuantStrategy
+from .base import Quantizer
 from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
-
 
 class LinearQuantizer(Quantizer):
     """Linear (uniform) quantization."""
@@ -37,20 +15,18 @@ class LinearQuantizer(Quantizer):
         self,
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
-        """Quantizes a float matrix into the configured bit-depth."""
         from .utils import pack_int4
-
         original_shape = weight.shape
 
         if self.config.strategy == QuantStrategy.TENSOR:
-            scale, zp = self.compute_tensor_params(weight)
-            qweight = self.quantize_linear(weight, scale, zp)
+            scale, zp = self._compute_tensor_params(weight)
+            qweight = self._quantize_linear(weight, scale, zp)
         elif self.config.strategy == QuantStrategy.CHANNEL:
-            scale, zp = self.compute_channel_params(weight)
-            qweight = self.quantize_per_channel(weight, scale, zp)
+            scale, zp = self._compute_channel_params(weight)
+            qweight = self._quantize_per_channel(weight, scale, zp)
         else:
-            scale, zp = self.compute_group_params(weight)
-            qweight = self.quantize_per_group(weight, scale, zp)
+            scale, zp = self._compute_group_params(weight)
+            qweight = self._quantize_per_group(weight, scale, zp)
 
         if self.config.bits == 4:
             qweight = pack_int4(qweight)
@@ -67,32 +43,29 @@ class LinearQuantizer(Quantizer):
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-        """Restores a float matrix from the quantized representation."""
         return qtensor.dequantize()
 
-    def compute_tensor_params(
+    def _compute_tensor_params(
         self,
         weight: NDArray[np.float32],
     ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
-        """Computes quantization parameters for the entire tensor."""
         if self.config.symmetric:
             max_val = np.max(np.abs(weight))
             scale = max_val / self.config.qmax if max_val > 0 else 1.0
             return np.array([scale], dtype=np.float32), None
+        else:
+            min_val = np.min(weight)
+            max_val = np.max(weight)
+            scale = (max_val - min_val) / (self.config.qmax - self.config.qmin)
+            scale = max(scale, 1e-8)
+            zp = int(round(-min_val / scale)) + self.config.qmin
+            zp = np.clip(zp, self.config.qmin, self.config.qmax)
+            return np.array([scale], dtype=np.float32), np.array([zp], dtype=np.int32)
 
-        min_val = np.min(weight)
-        max_val = np.max(weight)
-        scale = (max_val - min_val) / (self.config.qmax - self.config.qmin)
-        scale = max(scale, 1e-8)
-        zp = int(round(-min_val / scale)) + self.config.qmin
-        zp = np.clip(zp, self.config.qmin, self.config.qmax)
-        return np.array([scale], dtype=np.float32), np.array([zp], dtype=np.int32)
-
-    def compute_channel_params(
+    def _compute_channel_params(
         self,
         weight: NDArray[np.float32],
     ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
-        """Computes quantization parameters per output channel."""
         num_channels = weight.shape[0]
         weight_flat = weight.reshape(num_channels, -1)
 
@@ -100,20 +73,19 @@ class LinearQuantizer(Quantizer):
             max_vals = np.max(np.abs(weight_flat), axis=1)
             scales = np.where(max_vals > 0, max_vals / self.config.qmax, 1.0)
             return scales.astype(np.float32), None
+        else:
+            min_vals = np.min(weight_flat, axis=1)
+            max_vals = np.max(weight_flat, axis=1)
+            scales = (max_vals - min_vals) / (self.config.qmax - self.config.qmin)
+            scales = np.maximum(scales, 1e-8)
+            zps = np.round(-min_vals / scales).astype(np.int32) + self.config.qmin
+            zps = np.clip(zps, self.config.qmin, self.config.qmax)
+            return scales.astype(np.float32), zps.astype(np.int32)
 
-        min_vals = np.min(weight_flat, axis=1)
-        max_vals = np.max(weight_flat, axis=1)
-        scales = (max_vals - min_vals) / (self.config.qmax - self.config.qmin)
-        scales = np.maximum(scales, 1e-8)
-        zps = np.round(-min_vals / scales).astype(np.int32) + self.config.qmin
-        zps = np.clip(zps, self.config.qmin, self.config.qmax)
-        return scales.astype(np.float32), zps.astype(np.int32)
-
-    def compute_group_params(
+    def _compute_group_params(
         self,
         weight: NDArray[np.float32],
     ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
-        """Computes quantization parameters per group of weights."""
         out_features, in_features = weight.shape[:2] if weight.ndim >= 2 else (weight.shape[0], 1)
         flat = weight.reshape(out_features, -1)
         in_features = flat.shape[1]
@@ -146,26 +118,24 @@ class LinearQuantizer(Quantizer):
         zps = np.stack(zps, axis=1).astype(np.int32) if zps else None
         return scales, zps
 
-    def quantize_linear(
+    def _quantize_linear(
         self,
         weight: NDArray[np.float32],
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
     ) -> NDArray[np.int8]:
-        """Quantizes the entire tensor using a single scale/zero-point."""
         scaled = weight / scale[0]
         if zp is not None:
             scaled = scaled + zp[0]
         clipped = np.clip(scaled, self.config.qmin, self.config.qmax)
         return np.round(clipped).astype(np.int8)
 
-    def quantize_per_channel(
+    def _quantize_per_channel(
         self,
         weight: NDArray[np.float32],
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
     ) -> NDArray[np.int8]:
-        """Quantizes the tensor per output channel."""
         num_channels = weight.shape[0]
         weight_flat = weight.reshape(num_channels, -1)
 
@@ -175,13 +145,12 @@ class LinearQuantizer(Quantizer):
         clipped = np.clip(scaled, self.config.qmin, self.config.qmax)
         return np.round(clipped).reshape(weight.shape).astype(np.int8)
 
-    def quantize_per_group(
+    def _quantize_per_group(
         self,
         weight: NDArray[np.float32],
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
     ) -> NDArray[np.int8]:
-        """Quantizes the tensor in grouped blocks."""
         original_shape = weight.shape
         out_features = weight.shape[0]
         flat = weight.reshape(out_features, -1)
@@ -194,9 +163,11 @@ class LinearQuantizer(Quantizer):
             end = min(start + self.config.group_size, in_features)
             group = flat[:, start:end]
 
-            scaled = group / scale[:, g : g + 1]
+            scaled = group / scale[:, g:g+1]
             if zp is not None:
-                scaled = scaled + zp[:, g : g + 1]
-            qweight[:, start:end] = np.clip(np.round(scaled), self.config.qmin, self.config.qmax).astype(np.int8)
+                scaled = scaled + zp[:, g:g+1]
+            qweight[:, start:end] = np.clip(
+                np.round(scaled), self.config.qmin, self.config.qmax
+            ).astype(np.int8)
 
         return qweight.reshape(original_shape).astype(np.int8)

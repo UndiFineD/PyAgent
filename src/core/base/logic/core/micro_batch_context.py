@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """MicroBatchContext - Micro-batch orchestration with CUDA stream synchronization.
 
 This module implements thread-synchronized micro-batching for efficient
@@ -35,15 +21,15 @@ from __future__ import annotations
 
 import threading
 import time
-from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Generic, Iterator, Optional, TypeVar
+from typing import Any, Callable, Iterator, Optional, Generic, TypeVar
+from contextlib import contextmanager
+import queue
 
 # Try to import torch for GPU operations
 try:
     import torch
-
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -52,30 +38,26 @@ except ImportError:
 # Try to import Rust accelerations
 try:
     from src.core.rust_bridge import get_bridge
-
-    _BRIDGE = get_bridge()
-    HAS_RUST = hasattr(_BRIDGE, "stream_sync_rust")
-except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+    _bridge = get_bridge()
+    HAS_RUST = hasattr(_bridge, 'stream_sync_rust')
+except Exception:
     HAS_RUST = False
-    _BRIDGE = None
+    _bridge = None
 
 
-T = TypeVar("T")
+T = TypeVar('T')
 
 
 class StreamType(Enum):
     """Type of CUDA stream."""
-
-    COMPUTE = auto()  # For compute operations
+    COMPUTE = auto()      # For compute operations
     COMMUNICATION = auto()  # For data transfers
-    DEFAULT = auto()  # Default stream
+    DEFAULT = auto()       # Default stream
     HIGH_PRIORITY = auto()  # High priority stream
 
 
 class MicroBatchState(Enum):
     """State of a micro-batch."""
-
     PENDING = auto()
     RUNNING = auto()
     COMPLETED = auto()
@@ -85,7 +67,6 @@ class MicroBatchState(Enum):
 @dataclass
 class StreamHandle:
     """Handle to a CUDA stream with metadata."""
-
     stream_id: int
     stream_type: StreamType
     stream: Any = None
@@ -117,7 +98,6 @@ class StreamHandle:
 @dataclass
 class MicroBatchInfo:
     """Information about a single micro-batch."""
-
     batch_idx: int
     start_idx: int
     end_idx: int
@@ -148,7 +128,7 @@ class StreamManager:
         num_compute_streams: int = 2,
         num_comm_streams: int = 2,
         use_high_priority: bool = False,
-    ) -> None:
+    ):
         """Initialize stream manager.
 
         Args:
@@ -177,26 +157,22 @@ class StreamManager:
         for i in range(self.num_compute_streams):
             priority = -1 if self.use_high_priority else 0
             stream = torch.cuda.Stream(priority=priority)
-            self._compute_streams.append(
-                StreamHandle(
-                    stream_id=i,
-                    stream_type=StreamType.COMPUTE,
-                    stream=stream,
-                    priority=priority,
-                )
-            )
+            self._compute_streams.append(StreamHandle(
+                stream_id=i,
+                stream_type=StreamType.COMPUTE,
+                stream=stream,
+                priority=priority,
+            ))
 
         # Create communication streams
         for i in range(self.num_comm_streams):
             stream = torch.cuda.Stream()
-            self._comm_streams.append(
-                StreamHandle(
-                    stream_id=i,
-                    stream_type=StreamType.COMMUNICATION,
-                    stream=stream,
-                    priority=0,
-                )
-            )
+            self._comm_streams.append(StreamHandle(
+                stream_id=i,
+                stream_type=StreamType.COMMUNICATION,
+                stream=stream,
+                priority=0,
+            ))
 
     def get_compute_stream(self) -> Optional[StreamHandle]:
         """Get next compute stream (round-robin)."""
@@ -258,7 +234,6 @@ class MicroBatchContext(Generic[T]):
         num_micro_batches: Number of micro-batches
     """
 
-    # pylint: disable=too-many-positional-arguments
     def __init__(
         self,
         batch_size: int,
@@ -268,7 +243,7 @@ class MicroBatchContext(Generic[T]):
         adaptive: bool = True,
         min_micro_batch: int = 1,
         max_micro_batch: int = 64,
-    ) -> None:
+    ):
         """Initialize micro-batch context.
 
         Args:
@@ -325,16 +300,14 @@ class MicroBatchContext(Generic[T]):
             start = i * self.micro_batch_size
             end = min(start + self.micro_batch_size, self.batch_size)
 
-            self._micro_batches.append(
-                MicroBatchInfo(
-                    batch_idx=i,
-                    start_idx=start,
-                    end_idx=end,
-                    size=end - start,
-                    compute_stream=self._stream_manager.get_compute_stream(),
-                    comm_stream=self._stream_manager.get_comm_stream(),
-                )
-            )
+            self._micro_batches.append(MicroBatchInfo(
+                batch_idx=i,
+                start_idx=start,
+                end_idx=end,
+                size=end - start,
+                compute_stream=self._stream_manager.get_compute_stream(),
+                comm_stream=self._stream_manager.get_comm_stream(),
+            ))
             self._outputs.append(None)
 
     def __enter__(self) -> "MicroBatchContext[T]":
@@ -381,7 +354,7 @@ class MicroBatchContext(Generic[T]):
             Tuple of (MicroBatchInfo, data_slice)
         """
         for mb in self.iterate():
-            data_slice = data[mb.start_idx : mb.end_idx]
+            data_slice = data[mb.start_idx:mb.end_idx]
             yield mb, data_slice
 
     def record_output(self, output: T, mb_idx: Optional[int] = None) -> None:

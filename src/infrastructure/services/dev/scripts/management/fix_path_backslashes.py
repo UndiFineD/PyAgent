@@ -17,10 +17,9 @@ Utility to fix backslash escaping issues in paths (e.g., c:\" -> c:\\").
 Ported from temp/fix_backslashes.py.
 """
 
-import argparse
 import os
+import argparse
 from pathlib import Path
-
 
 def fix_path_backslashes(target_dirs: list[str]):
     """Recursively fixes malformed path strings in Python files."""
@@ -35,20 +34,19 @@ def fix_path_backslashes(target_dirs: list[str]):
         print(f"Checking {folder_rel} for path backslash errors...")
         for root, _, files in os.walk(folder):
             for file in files:
-                if file.endswith(".py"):
+                if file.endswith('.py'):
                     path = Path(root) / file
                     try:
-                        content = path.read_text(encoding="utf-8")
+                        content = path.read_text(encoding='utf-8')
 
                         # Fix backslash escaping quote issue: c:\" -> c:\\"
                         new_content = content.replace('c:\\"', 'c:\\\\"').replace('C:\\"', 'C:\\\\"')
 
                         if new_content != content:
-                            path.write_text(new_content, encoding="utf-8")
+                            path.write_text(new_content, encoding='utf-8')
                             print(f"Fixed backslashes: {path.relative_to(workspace_root)}")
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except Exception as e:
                         print(f"Failed to process {file}: {e}")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fix malformed path backslashes.")

@@ -1,36 +1,6 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
-"""
-InterpretableCore: Core logic for interpretable Sparse Autoencoder (SAE) bridges in PyAgent.
-Enables explainable AI, feature attribution, and transparent model reasoning for cognitive agents.
-
-This module simulates the decomposition of LLM activations into human-interpretable
-features, leveraging Rust for high-throughput vectorized operations.
-"""
-
 from __future__ import annotations
-import logging
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +10,6 @@ try:
 except ImportError:
     rc = None
     RUST_AVAILABLE = False
-
-__version__ = VERSION
 
 
 class InterpretableCore:
@@ -55,11 +23,6 @@ class InterpretableCore:
     """
 
     def __init__(self, feature_count: int = 4096) -> None:
-        """Initialize the interpretable core.
-
-        Args:
-            feature_count: The total number of features in the SAE.
-        """
         self.feature_count = feature_count
 
     def decompose_activations(self, mock_activations: list[float]) -> dict[str, Any]:
@@ -67,22 +30,16 @@ class InterpretableCore:
         Simulates SAE decomposition.
         Identifies 'Active Neurons' and maps them to semantic labels.
 
-        Uses Rust-accelerated top-K selection when available.
-
-        Args:
-            mock_activations: List of raw activation floats.
-
-        Returns:
-            Dictionary containing active features and semantic mapping.
+        Uses Rust-accelerated top-K selection when available for O(n) instead of O(n log n).
         """
         # Simulated 'Top-K' sparsification
         k = 10
 
         # Rust-accelerated top-K selection using partial sort
-        if RUST_AVAILABLE and rc is not None and hasattr(rc, "top_k_indices_rust"):
+        if RUST_AVAILABLE and hasattr(rc, 'top_k_indices_rust'):
             try:
                 top_k = rc.top_k_indices_rust(mock_activations, k)
-            except (ValueError, RuntimeError, TypeError) as e:
+            except Exception as e:
                 logger.debug(f"Rust top_k_indices failed: {e}, using Python fallback")
                 sorted_indices = sorted(
                     range(len(mock_activations)),

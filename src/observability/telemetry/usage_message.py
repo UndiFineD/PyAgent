@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 UsageMessage - Structured telemetry for platform detection and async reporting.
 
@@ -26,6 +12,8 @@ from __future__ import annotations
 import contextlib
 import os
 import platform
+import sys
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
@@ -34,19 +22,17 @@ from threading import Thread
 from typing import Any
 from uuid import uuid4
 
-from psutil import virtual_memory
-
 # ============================================================================
 # Constants and configuration
 # ============================================================================
 
-_CONFIG_HOME: str = os.environ.get("PYAGENT_CONFIG_ROOT", str(Path.home() / ".config" / "pyagent"))
-_USAGE_STATS_JSON_PATH: str = os.path.join(_CONFIG_HOME, "usage_stats.json")
-_DO_NOT_TRACK_PATH: str = os.path.join(_CONFIG_HOME, "do_not_track")
+_CONFIG_HOME = os.environ.get("PYAGENT_CONFIG_ROOT", str(Path.home() / ".config" / "pyagent"))
+_USAGE_STATS_JSON_PATH = os.path.join(_CONFIG_HOME, "usage_stats.json")
+_DO_NOT_TRACK_PATH = os.path.join(_CONFIG_HOME, "do_not_track")
 _USAGE_STATS_ENABLED: bool | None = None
 
 # Environment variables to collect
-_ENV_VARS_TO_COLLECT: list[str] = [
+_ENV_VARS_TO_COLLECT = [
     "PYAGENT_MODEL_BACKEND",
     "PYAGENT_LOG_LEVEL",
     "PYAGENT_FLEET_SIZE",
@@ -59,7 +45,6 @@ _GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
 
 class UsageContext(str, Enum):
     """Context in which PyAgent is being used."""
-
     UNKNOWN = "UNKNOWN"
     CLI = "CLI"
     API_SERVER = "API_SERVER"
@@ -71,7 +56,6 @@ class UsageContext(str, Enum):
 # ============================================================================
 # Global runtime data management
 # ============================================================================
-
 
 def set_runtime_usage_data(key: str, value: str | int | bool) -> None:
     """
@@ -98,7 +82,6 @@ def clear_runtime_usage_data() -> None:
 # Opt-out checking
 # ============================================================================
 
-
 def is_usage_stats_enabled() -> bool:
     """
     Check if usage statistics collection is enabled.
@@ -115,19 +98,17 @@ def is_usage_stats_enabled() -> bool:
     global _USAGE_STATS_ENABLED
 
     if _USAGE_STATS_ENABLED is None:
-        do_not_track: bool = os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1"
-        generic_do_not_track: bool = os.environ.get("DO_NOT_TRACK", "0") == "1"
-        no_usage_stats: bool = os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1"
-        do_not_track_file: bool = os.path.exists(_DO_NOT_TRACK_PATH)
+        do_not_track = os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1"
+        generic_do_not_track = os.environ.get("DO_NOT_TRACK", "0") == "1"
+        no_usage_stats = os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1"
+        do_not_track_file = os.path.exists(_DO_NOT_TRACK_PATH)
 
-        _USAGE_STATS_ENABLED = not any(
-            [
-                do_not_track,
-                generic_do_not_track,
-                no_usage_stats,
-                do_not_track_file,
-            ]
-        )
+        _USAGE_STATS_ENABLED = not any([
+            do_not_track,
+            generic_do_not_track,
+            no_usage_stats,
+            do_not_track_file,
+        ])
 
     return _USAGE_STATS_ENABLED
 
@@ -148,7 +129,6 @@ def enable_usage_stats() -> None:
 # Platform detection
 # ============================================================================
 
-
 def detect_cloud_provider() -> str:
     """
     Detect the cloud provider where the code is running.
@@ -157,7 +137,7 @@ def detect_cloud_provider() -> str:
         Cloud provider name or "UNKNOWN"
     """
     # Check vendor files (Linux)
-    vendor_files: list[str] = [
+    vendor_files = [
         "/sys/class/dmi/id/product_version",
         "/sys/class/dmi/id/bios_vendor",
         "/sys/class/dmi/id/product_name",
@@ -165,7 +145,7 @@ def detect_cloud_provider() -> str:
         "/sys/class/dmi/id/sys_vendor",
     ]
 
-    cloud_identifiers: dict[str, str] = {
+    cloud_identifiers = {
         "amazon": "AWS",
         "microsoft corporation": "AZURE",
         "google": "GCP",
@@ -178,8 +158,8 @@ def detect_cloud_provider() -> str:
     for vendor_file in vendor_files:
         try:
             if os.path.isfile(vendor_file):
-                with open(vendor_file, 'r', encoding='utf-8') as f:
-                    content: str = f.read().lower()
+                with open(vendor_file, "r") as f:
+                    content = f.read().lower()
                     for identifier, provider in cloud_identifiers.items():
                         if identifier in content:
                             return provider
@@ -187,7 +167,7 @@ def detect_cloud_provider() -> str:
             continue
 
     # Check environment variables
-    env_to_provider: dict[str, str] = {
+    env_to_provider = {
         "AWS_REGION": "AWS",
         "AWS_EXECUTION_ENV": "AWS",
         "AZURE_HTTP_USER_AGENT": "AZURE",
@@ -212,7 +192,6 @@ def get_cpu_info() -> dict[str, Any]:
     """
     try:
         import cpuinfo
-
         info = cpuinfo.get_cpu_info()
         return {
             "brand": info.get("brand_raw", "Unknown"),
@@ -238,7 +217,6 @@ def get_gpu_info() -> dict[str, Any]:
     """
     try:
         import torch
-
         if torch.cuda.is_available():
             return {
                 "count": torch.cuda.device_count(),
@@ -261,7 +239,6 @@ def get_memory_info() -> dict[str, int]:
     """
     try:
         import psutil
-
         mem = psutil.virtual_memory()
         return {
             "total": mem.total,
@@ -275,7 +252,6 @@ def get_memory_info() -> dict[str, int]:
 # ============================================================================
 # Usage message dataclass
 # ============================================================================
-
 
 @dataclass
 class UsageMessage:
@@ -323,16 +299,16 @@ class UsageMessage:
         self.python_version = platform.python_version()
 
         # CPU
-        cpu_info: dict[str, Any] = get_cpu_info()
+        cpu_info = get_cpu_info()
         self.num_cpu = cpu_info.get("count")
         self.cpu_type = cpu_info.get("brand")
 
         # Memory
-        mem_info: dict[str, int] = get_memory_info()
+        mem_info = get_memory_info()
         self.total_memory = mem_info.get("total")
 
         # GPU
-        gpu_info: dict[str, Any] = get_gpu_info()
+        gpu_info = get_gpu_info()
         if gpu_info:
             self.gpu_count = gpu_info.get("count")
             self.gpu_type = gpu_info.get("name")
@@ -341,8 +317,11 @@ class UsageMessage:
 
         # Environment variables
         import json
-
-        env_data: dict[str, str | None] = {var: os.environ.get(var) for var in _ENV_VARS_TO_COLLECT if os.environ.get(var)}
+        env_data = {
+            var: os.environ.get(var)
+            for var in _ENV_VARS_TO_COLLECT
+            if os.environ.get(var)
+        }
         if env_data:
             self.env_var_json = json.dumps(env_data)
 
@@ -392,13 +371,13 @@ class UsageMessage:
         """Save usage stats to local file."""
         import json
 
-        data: dict[str, Any] = self.to_dict()
+        data = self.to_dict()
         data.update(extra_kvs)
         data.update(_GLOBAL_RUNTIME_DATA)
 
         try:
             os.makedirs(os.path.dirname(_USAGE_STATS_JSON_PATH), exist_ok=True)
-            with open(_USAGE_STATS_JSON_PATH, 'w', encoding='utf-8') as f:
+            with open(_USAGE_STATS_JSON_PATH, "w") as f:
                 json.dump(data, f, indent=2)
         except (IOError, PermissionError):
             pass
@@ -406,8 +385,7 @@ class UsageMessage:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary, excluding None values."""
         return {
-            k: v
-            for k, v in {
+            k: v for k, v in {
                 "uuid": self.uuid,
                 "provider": self.provider,
                 "num_cpu": self.num_cpu,
@@ -425,15 +403,13 @@ class UsageMessage:
                 "log_time": self.log_time,
                 "source": self.source,
                 "env_var_json": self.env_var_json,
-            }.items()
-            if v is not None
+            }.items() if v is not None
         }
 
 
 # ============================================================================
 # Convenience functions
 # ============================================================================
-
 
 def report_usage(
     context: UsageContext = UsageContext.UNKNOWN,

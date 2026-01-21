@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 CacheInfo - LRU Cache with hit/miss statistics and pinned items.
 
@@ -19,25 +5,20 @@ Inspired by vLLM's cache.py patterns for production cache monitoring.
 
 Phase 17: vLLM Pattern Integration
 """
-
 from __future__ import annotations
-
-from _thread import RLock
 import threading
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from typing import Generic, Optional, TypeVar
-from collections.abc import Hashable
+from typing import TypeVar, Generic, Optional, Hashable, Iterator
 
-K = TypeVar("K", bound=Hashable)
-V = TypeVar("V")
+K = TypeVar('K', bound=Hashable)
+V = TypeVar('V')
 
 
 @dataclass
 class CacheStats:
     """Statistics for cache performance monitoring."""
-
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -60,7 +41,7 @@ class CacheStats:
         """Cache miss ratio (0.0 to 1.0)."""
         return 1.0 - self.hit_ratio
 
-    def reset(self) -> "CacheStats":
+    def reset(self) -> 'CacheStats':
         """Reset stats and return a copy of the old stats."""
         old = CacheStats(
             hits=self.hits,
@@ -76,19 +57,18 @@ class CacheStats:
 
     def to_dict(self) -> dict:
         return {
-            "hits": self.hits,
-            "misses": self.misses,
-            "total": self.total,
-            "hit_ratio": round(self.hit_ratio, 4),
-            "evictions": self.evictions,
-            "pins": self.pins,
+            'hits': self.hits,
+            'misses': self.misses,
+            'total': self.total,
+            'hit_ratio': round(self.hit_ratio, 4),
+            'evictions': self.evictions,
+            'pins': self.pins,
         }
 
 
 @dataclass
 class CacheEntry(Generic[V]):
     """A cache entry with value, timestamp, and pin status."""
-
     value: V
     created_at: float = field(default_factory=time.time)
     last_access: float = field(default_factory=time.time)
@@ -134,15 +114,15 @@ class LRUCache(Generic[K, V]):
             ttl_seconds: Optional TTL for entries (None = no expiration)
             name: Name for logging/debugging
         """
-        self._max_size: int = max_size
-        self._ttl_seconds: float | None = ttl_seconds
-        self._name: str = name
+        self._max_size = max_size
+        self._ttl_seconds = ttl_seconds
+        self._name = name
 
         self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
         self._pinned: dict[K, CacheEntry[V]] = {}
         self._stats = CacheStats()
         self._delta_stats = CacheStats()
-        self._lock: RLock = threading.RLock()
+        self._lock = threading.RLock()
 
     @property
     def stats(self) -> CacheStats:
@@ -181,37 +161,32 @@ class LRUCache(Generic[K, V]):
             Cached value or default
         """
         with self._lock:
-            value = self._get_from_pinned(key)
-            if value is not None:
-                return value
-            value = self._get_from_cache(key)
-            if value is not None:
-                return value
+            # Check pinned first
+            if key in self._pinned:
+                entry = self._pinned[key]
+                if not self._is_expired(entry):
+                    entry.touch()
+                    self._record_hit()
+                    return entry.value
+                else:
+                    # Remove expired pinned item
+                    del self._pinned[key]
+
+            # Check regular cache
+            if key in self._cache:
+                entry = self._cache[key]
+                if not self._is_expired(entry):
+                    entry.touch()
+                    # Move to end (most recently used)
+                    self._cache.move_to_end(key)
+                    self._record_hit()
+                    return entry.value
+                else:
+                    # Remove expired item
+                    del self._cache[key]
+
             self._record_miss()
             return default
-
-    def _get_from_pinned(self, key: K) -> Optional[V]:
-        if key in self._pinned:
-            entry: CacheEntry[V] = self._pinned[key]
-            if not self._is_expired(entry):
-                entry.touch()
-                self._record_hit()
-                return entry.value
-            else:
-                del self._pinned[key]
-        return None
-
-    def _get_from_cache(self, key: K) -> Optional[V]:
-        if key in self._cache:
-            entry: CacheEntry[V] = self._cache[key]
-            if not self._is_expired(entry):
-                entry.touch()
-                self._cache.move_to_end(key)
-                self._record_hit()
-                return entry.value
-            else:
-                del self._cache[key]
-        return None
 
     def put(self, key: K, value: V, pinned: bool = False) -> None:
         """
@@ -223,27 +198,21 @@ class LRUCache(Generic[K, V]):
             pinned: If True, item won't be evicted
         """
         with self._lock:
-            entry: CacheEntry[V] = CacheEntry(value=value, pinned=pinned)
-            self._remove_from_other_dicts(key)
+            entry = CacheEntry(value=value, pinned=pinned)
+
+            # Remove from other dict if exists
+            if key in self._cache:
+                del self._cache[key]
+            if key in self._pinned:
+                del self._pinned[key]
+
             if pinned:
-                self._add_to_pinned(key, entry)
+                self._pinned[key] = entry
+                self._stats.pins += 1
             else:
-                self._add_to_cache(key, entry)
-
-    def _remove_from_other_dicts(self, key: K) -> None:
-        if key in self._cache:
-            del self._cache[key]
-        if key in self._pinned:
-            del self._pinned[key]
-
-    def _add_to_pinned(self, key: K, entry: "CacheEntry[V]") -> None:
-        self._pinned[key] = entry
-        self._stats.pins += 1
-
-    def _add_to_cache(self, key: K, entry: "CacheEntry[V]") -> None:
-        self._cache[key] = entry
-        self._cache.move_to_end(key)
-        self._evict_if_needed()
+                self._cache[key] = entry
+                self._cache.move_to_end(key)
+                self._evict_if_needed()
 
     def touch(self, key: K) -> bool:
         """
@@ -280,7 +249,7 @@ class LRUCache(Generic[K, V]):
                 return True  # Already pinned
 
             if key in self._cache:
-                entry: CacheEntry[V] = self._cache.pop(key)
+                entry = self._cache.pop(key)
                 entry.pinned = True
                 self._pinned[key] = entry
                 self._stats.pins += 1
@@ -302,7 +271,7 @@ class LRUCache(Generic[K, V]):
             if key not in self._pinned:
                 return False
 
-            entry: CacheEntry[V] = self._pinned.pop(key)
+            entry = self._pinned.pop(key)
             entry.pinned = False
             self._cache[key] = entry
             self._cache.move_to_end(key)
@@ -344,7 +313,7 @@ class LRUCache(Generic[K, V]):
             Number of items cleared
         """
         with self._lock:
-            count: int = len(self._cache)
+            count = len(self._cache)
             self._cache.clear()
 
             if include_pinned:
@@ -384,13 +353,13 @@ class LRUCache(Generic[K, V]):
         """Get comprehensive cache information."""
         with self._lock:
             return {
-                "name": self._name,
-                "size": self.size,
-                "capacity": self._max_size,
-                "usage": round(self.usage, 4),
-                "pinned_count": len(self._pinned),
-                "ttl_seconds": self._ttl_seconds,
-                "stats": self._stats.to_dict(),
+                'name': self._name,
+                'size': self.size,
+                'capacity': self._max_size,
+                'usage': round(self.usage, 4),
+                'pinned_count': len(self._pinned),
+                'ttl_seconds': self._ttl_seconds,
+                'stats': self._stats.to_dict(),
             }
 
     def _record_hit(self) -> None:
@@ -440,9 +409,9 @@ class TTLLRUCache(LRUCache[K, V]):
         super().__init__(max_size=max_size, ttl_seconds=ttl_seconds, name=name)
 
 
-__all__: list[str] = [
-    "LRUCache",
-    "TTLLRUCache",
-    "CacheStats",
-    "CacheEntry",
+__all__ = [
+    'LRUCache',
+    'TTLLRUCache',
+    'CacheStats',
+    'CacheEntry',
 ]

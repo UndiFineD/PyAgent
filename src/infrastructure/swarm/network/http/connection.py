@@ -1,35 +1,14 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Connection.py module.
-"""
-
 from __future__ import annotations
-
 import logging
-from typing import Any, MutableMapping
+from typing import Any, Mapping, MutableMapping
 from urllib.parse import urlparse
-
-from src.infrastructure.swarm.network.http.async_methods import AsyncHTTPMixin
 from src.infrastructure.swarm.network.http.sync_methods import SyncHTTPMixin
+from src.infrastructure.swarm.network.http.async_methods import AsyncHTTPMixin
 
 logger = logging.getLogger(__name__)
 
 # Version for User-Agent
 __version__ = "0.1.0"
-
 
 class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
     """
@@ -55,10 +34,12 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
         if self._sync_client is None or not self.reuse_client:
             try:
                 import requests
-
                 self._sync_client = requests.Session()
             except ImportError:
-                raise ImportError("requests is required for sync HTTP. Install with: pip install requests")
+                raise ImportError(
+                    "requests is required for sync HTTP. "
+                    "Install with: pip install requests"
+                )
         return self._sync_client
 
     async def get_async_client(self) -> Any:
@@ -66,13 +47,15 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
         if self._async_client is None or not self.reuse_client:
             try:
                 import aiohttp
-
                 self._async_client = aiohttp.ClientSession(
                     trust_env=True,
                     timeout=aiohttp.ClientTimeout(total=self.default_timeout),
                 )
             except ImportError:
-                raise ImportError("aiohttp is required for async HTTP. Install with: pip install aiohttp")
+                raise ImportError(
+                    "aiohttp is required for async HTTP. "
+                    "Install with: pip install aiohttp"
+                )
         return self._async_client
 
     def close(self) -> None:
@@ -103,7 +86,9 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
         """Validate that URL uses http or https scheme."""
         parsed = urlparse(url)
         if parsed.scheme not in ("http", "https"):
-            raise ValueError(f"Invalid HTTP URL: expected 'http' or 'https' scheme, got '{parsed.scheme}'")
+            raise ValueError(
+                f"Invalid HTTP URL: expected 'http' or 'https' scheme, got '{parsed.scheme}'"
+            )
 
     def _headers(self, **extras: str) -> MutableMapping[str, str]:
         """Build request headers with User-Agent."""

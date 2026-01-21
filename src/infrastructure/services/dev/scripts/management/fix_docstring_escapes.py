@@ -17,10 +17,9 @@ Utility to fix incorrectly escaped quotes in docstrings (common after bulk refac
 Ported from temp/fix_escaped_quotes.py.
 """
 
-import argparse
 import os
+import argparse
 from pathlib import Path
-
 
 def fix_escapes(target_dirs: list[str]):
     """Recursively fixes \"\"\" and \" in Python files."""
@@ -35,20 +34,19 @@ def fix_escapes(target_dirs: list[str]):
         print(f"Checking {folder_rel} for escaped quotes...")
         for root, _, files in os.walk(folder):
             for file in files:
-                if file.endswith(".py"):
+                if file.endswith('.py'):
                     path = Path(root) / file
                     try:
-                        content = path.read_text(encoding="utf-8")
+                        content = path.read_text(encoding='utf-8')
 
                         # Fix escaped quotes
-                        new_content = content.replace(r"\"\"\"", '"""').replace(r"\"", '"')
+                        new_content = content.replace(r'\"\"\"', '"""').replace(r'\"', '"')
 
                         if new_content != content:
-                            path.write_text(new_content, encoding="utf-8")
+                            path.write_text(new_content, encoding='utf-8')
                             print(f"Fixed: {path.relative_to(workspace_root)}")
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except Exception as e:
                         print(f"Failed to process {file}: {e}")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fix escaped quotes in docstrings.")

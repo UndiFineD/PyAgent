@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """CudaStreamPool - CUDA stream and event management with pooling.
 
 This module provides efficient stream and event pooling for GPU operations,
@@ -34,16 +20,16 @@ from __future__ import annotations
 
 import threading
 import time
-from collections import deque
-from contextlib import contextmanager
+import weakref
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Iterator, Optional
+from typing import Any, Callable, Optional, Iterator
+from contextlib import contextmanager
+from collections import deque
 
 # Try to import torch for GPU operations
 try:
     import torch
-
     HAS_TORCH = True
     HAS_CUDA = torch.cuda.is_available()
 except ImportError:
@@ -54,35 +40,30 @@ except ImportError:
 # Try to import Rust accelerations
 try:
     from src.core.rust_bridge import get_bridge
-
-    _BRIDGE = get_bridge()
-    HAS_RUST = hasattr(_BRIDGE, "event_query_rust")
-except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+    _bridge = get_bridge()
+    HAS_RUST = hasattr(_bridge, 'event_query_rust')
+except Exception:
     HAS_RUST = False
-    _BRIDGE = None
+    _bridge = None
 
 
 class StreamPriority(Enum):
     """Priority level for CUDA streams."""
-
-    LOW = auto()  # Background operations
-    NORMAL = auto()  # Default priority
-    HIGH = auto()  # Latency-critical operations
+    LOW = auto()       # Background operations
+    NORMAL = auto()    # Default priority
+    HIGH = auto()      # Latency-critical operations
 
 
 class StreamState(Enum):
     """State of a pooled stream."""
-
-    FREE = auto()  # Available for use
-    ACQUIRED = auto()  # In use
-    BUSY = auto()  # Has pending operations
+    FREE = auto()       # Available for use
+    ACQUIRED = auto()   # In use
+    BUSY = auto()       # Has pending operations
 
 
 @dataclass
 class StreamStats:
     """Statistics for a stream."""
-
     acquisitions: int = 0
     total_active_time_ns: int = 0
     events_recorded: int = 0
@@ -107,7 +88,6 @@ class PooledStream:
         state: Current state
         stream: Underlying CUDA stream
     """
-
     stream_id: int
     priority: StreamPriority = StreamPriority.NORMAL
     state: StreamState = StreamState.FREE
@@ -115,7 +95,7 @@ class PooledStream:
     stats: StreamStats = field(default_factory=StreamStats)
     affinity_key: Optional[str] = None
 
-    acquired_at: float = field(default=0.0, repr=False)
+    _acquired_at: float = field(default=0.0, repr=False)
 
     def __post_init__(self) -> None:
         """Initialize stream if not provided."""
@@ -127,9 +107,9 @@ class PooledStream:
         """Convert priority enum to CUDA priority."""
         if self.priority == StreamPriority.HIGH:
             return -1  # High priority in CUDA
-        if self.priority == StreamPriority.LOW:
-            return 1  # Low priority
-        return 0  # Normal
+        elif self.priority == StreamPriority.LOW:
+            return 1   # Low priority
+        return 0       # Normal
 
     def synchronize(self) -> None:
         """Wait for all operations to complete."""
@@ -153,7 +133,7 @@ class PooledStream:
             self.stream.wait_event(event)
 
     @contextmanager
-    def context(self) -> Iterator["PooledStream"]:
+    def context(self):
         """Context manager for stream operations."""
         if self.stream is not None:
             with torch.cuda.stream(self.stream):
@@ -170,7 +150,6 @@ class PooledEvent:
         event_id: Unique identifier
         event: Underlying CUDA event
     """
-
     event_id: int
     event: Any = None
     in_use: bool = False
@@ -210,7 +189,7 @@ class EventPool:
     Events are expensive to create, so pooling them improves performance.
     """
 
-    def __init__(self, initial_size: int = 16, max_size: int = 256) -> None:
+    def __init__(self, initial_size: int = 16, max_size: int = 256):
         """Initialize event pool.
 
         Args:
@@ -264,7 +243,7 @@ class EventPool:
             self._free.append(event)
 
     @contextmanager
-    def event_context(self) -> Iterator[Optional[PooledEvent]]:
+    def event_context(self):
         """Context manager for event acquisition."""
         event = self.acquire()
         try:
@@ -292,7 +271,6 @@ class CudaStreamPool:
         comm_streams: Number of communication streams
     """
 
-    # pylint: disable=too-many-positional-arguments
     def __init__(
         self,
         compute_streams: int = 4,
@@ -300,7 +278,7 @@ class CudaStreamPool:
         high_priority_streams: int = 1,
         event_pool_size: int = 32,
         enable_affinity: bool = True,
-    ) -> None:
+    ):
         """Initialize stream pool.
 
         Args:
@@ -445,8 +423,7 @@ class CudaStreamPool:
             if timeout and (time.time() - start) >= timeout:
                 return None
 
-            # Avoid blocking event loop; use threading.Event().wait for better async compatibility
-            threading.Event().wait(0.001)
+            time.sleep(0.001)
 
     def _mark_acquired(
         self,
@@ -456,7 +433,7 @@ class CudaStreamPool:
     ) -> PooledStream:
         """Mark stream as acquired."""
         stream.state = StreamState.ACQUIRED
-        stream.acquired_at = time.perf_counter_ns()
+        stream._acquired_at = time.perf_counter_ns()
         stream.stats.acquisitions += 1
         stream.stats.last_used = time.time()
 
@@ -480,7 +457,7 @@ class CudaStreamPool:
         """
         with self._lock:
             # Record timing
-            elapsed = time.perf_counter_ns() - stream.acquired_at
+            elapsed = time.perf_counter_ns() - stream._acquired_at
             stream.stats.total_active_time_ns += elapsed
             stream.state = StreamState.FREE
 
@@ -493,7 +470,7 @@ class CudaStreamPool:
                 self._free_high.append(stream)
 
     @contextmanager
-    def compute_context(self, affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
+    def compute_context(self, affinity_key: Optional[str] = None):
         """Context manager for compute stream."""
         stream = self.acquire_compute(affinity_key)
         if stream is None:
@@ -507,7 +484,7 @@ class CudaStreamPool:
             self.release(stream)
 
     @contextmanager
-    def comm_context(self, affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
+    def comm_context(self, affinity_key: Optional[str] = None):
         """Context manager for communication stream."""
         stream = self.acquire_comm(affinity_key)
         if stream is None:
@@ -521,7 +498,7 @@ class CudaStreamPool:
             self.release(stream)
 
     @contextmanager
-    def high_priority_context(self) -> Iterator[Optional[PooledStream]]:
+    def high_priority_context(self):
         """Context manager for high-priority stream."""
         stream = self.acquire_high_priority()
         if stream is None:
@@ -543,14 +520,18 @@ class CudaStreamPool:
         self._event_pool.release(event)
 
     @contextmanager
-    def event_context(self) -> Iterator[Optional[PooledEvent]]:
+    def event_context(self):
         """Context manager for event acquisition."""
         with self._event_pool.event_context() as event:
             yield event
 
     def sync_all(self) -> None:
         """Synchronize all streams."""
-        all_streams = self._compute_streams + self._comm_streams + self._high_priority_streams
+        all_streams = (
+            self._compute_streams +
+            self._comm_streams +
+            self._high_priority_streams
+        )
         for stream in all_streams:
             stream.synchronize()
 
@@ -575,7 +556,6 @@ class CudaStreamPool:
     def stats(self) -> dict[str, Any]:
         """Get pool statistics."""
         with self._lock:
-
             def pool_stats(streams: list[PooledStream]) -> dict[str, Any]:
                 total_acq = sum(s.stats.acquisitions for s in streams)
                 total_time = sum(s.stats.total_active_time_ns for s in streams)
@@ -598,7 +578,7 @@ class CudaStreamPool:
 
 
 # Global pool instance
-_GLOBAL_POOL: Optional[CudaStreamPool] = None
+_global_pool: Optional[CudaStreamPool] = None
 _global_lock = threading.Lock()
 
 
@@ -615,30 +595,30 @@ def get_global_stream_pool(
     Returns:
         Global CudaStreamPool instance
     """
-    global _GLOBAL_POOL  # pylint: disable=global-statement
+    global _global_pool
 
     with _global_lock:
-        if _GLOBAL_POOL is None:
-            _GLOBAL_POOL = CudaStreamPool(
+        if _global_pool is None:
+            _global_pool = CudaStreamPool(
                 compute_streams=compute_streams,
                 comm_streams=comm_streams,
             )
-        return _GLOBAL_POOL
+        return _global_pool
 
 
 def reset_global_pool() -> None:
     """Reset the global stream pool."""
-    global _GLOBAL_POOL  # pylint: disable=global-statement
+    global _global_pool
 
     with _global_lock:
-        if _GLOBAL_POOL is not None:
-            _GLOBAL_POOL.sync_all()
-        _GLOBAL_POOL = None
+        if _global_pool is not None:
+            _global_pool.sync_all()
+        _global_pool = None
 
 
 # Convenience functions
 @contextmanager
-def compute_stream(affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
+def compute_stream(affinity_key: Optional[str] = None):
     """Get a compute stream from the global pool."""
     pool = get_global_stream_pool()
     with pool.compute_context(affinity_key) as stream:
@@ -646,7 +626,7 @@ def compute_stream(affinity_key: Optional[str] = None) -> Iterator[Optional[Pool
 
 
 @contextmanager
-def comm_stream(affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
+def comm_stream(affinity_key: Optional[str] = None):
     """Get a communication stream from the global pool."""
     pool = get_global_stream_pool()
     with pool.comm_context(affinity_key) as stream:
@@ -654,7 +634,7 @@ def comm_stream(affinity_key: Optional[str] = None) -> Iterator[Optional[PooledS
 
 
 @contextmanager
-def high_priority_stream() -> Iterator[Optional[PooledStream]]:
+def high_priority_stream():
     """Get a high-priority stream from the global pool."""
     pool = get_global_stream_pool()
     with pool.high_priority_context() as stream:

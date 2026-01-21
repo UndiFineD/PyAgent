@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -23,8 +9,8 @@ from __future__ import annotations
 import re
 from typing import Dict, Optional
 
-from .base import GrammarEngine
 from .models import FSMTransitionTable
+from .base import GrammarEngine
 from .regex import RegexGrammar
 
 
@@ -38,7 +24,7 @@ class EBNFGrammar(GrammarEngine):
         vocab_size: int,
         token_strings: Optional[Dict[int, str]] = None,
         eos_token_id: Optional[int] = None,
-    ) -> None:
+    ):
         super().__init__(vocab_size, token_strings, eos_token_id)
         self._rule_cache: Dict[str, FSMTransitionTable] = {}
 
@@ -56,7 +42,7 @@ class EBNFGrammar(GrammarEngine):
                 fsm = self._rule_to_fsm(first_rule, rules)
             self._rule_cache[spec] = fsm
             return fsm
-        except (ValueError, KeyError, TypeError, RuntimeError):
+        except Exception:
             return self._build_literal_fsm(spec)
 
     def _parse_ebnf(self, spec: str) -> Dict[str, str]:
@@ -64,18 +50,17 @@ class EBNFGrammar(GrammarEngine):
         rules = {}
         for line in spec.strip().split("\n"):
             line = line.strip()
-            if not line or line.startswith("#"):
-                continue
+            if not line or line.startswith("#"): continue
             if ":" in line:
                 name, expr = line.split(":", 1)
                 rules[name.strip()] = expr.strip()
         return rules
 
-    def _rule_to_fsm(self, rule: str, _all_rules: Dict[str, str]) -> FSMTransitionTable:
+    def _rule_to_fsm(self, rule: str, all_rules: Dict[str, str]) -> FSMTransitionTable:
         """Convert a single rule to FSM."""
         regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
         pattern = rule.replace(" ", "")
-        pattern = re.sub(r"\[([^\]]+)\]", r"[\1]", pattern)
+        pattern = re.sub(r'\[([^\]]+)\]', r'[\1]', pattern)
         return regex_engine.build_fsm(pattern)
 
     def _build_literal_fsm(self, spec: str) -> FSMTransitionTable:

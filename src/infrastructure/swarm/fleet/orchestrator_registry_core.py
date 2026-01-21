@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import os
 from typing import Any
 
@@ -48,10 +48,16 @@ class OrchestratorRegistryCore:
         for rel_path in file_paths:
             file = os.path.basename(rel_path)
             if file.endswith(".py") and not file.startswith("__"):
-                class_name: str = file[:-3]
+                filename_base: str = file[:-3]
 
+                # Convert filename to likely class name (snake_case -> PascalCase)
+                # e.g., "signal_bus_orchestrator" -> "SignalBusOrchestrator"
+                class_name = "".join(x.capitalize() for x in filename_base.split("_"))
+
+                # Check for orchestrator-like components (case-insensitive for snake_case filenames)
+                search_name = filename_base.lower()
                 if any(
-                    x in class_name
+                    x.lower() in search_name
                     for x in [
                         "Orchestrator",
                         "Manager",
@@ -65,15 +71,19 @@ class OrchestratorRegistryCore:
                     module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
 
                     # Convert ClassName -> snake_case key
+                    # Robust handling for both PascalCase and snake_case (Phase 135)
                     # "SelfHealingOrchestrator" -> "self_healing"
-                    short_key: str = self._to_snake_case(
-                        class_name.replace("Orchestrator", "")
-                    )
+                    # "signal_bus_orchestrator" -> "signal_bus"
+                    raw_short = class_name
+                    for suffix in ["Orchestrator", "orchestrator", "_orchestrator"]:
+                        raw_short = raw_short.replace(suffix, "")
+
+                    short_key: str = self._to_snake_case(raw_short)
                     full_key: str = self._to_snake_case(class_name)
 
                     # Default heuristic for 'needs_fleet'
                     needs_fleet: bool = any(
-                        x in class_name
+                        x.lower() in search_name
                         for x in [
                             "Orchestrator",
                             "Spawner",

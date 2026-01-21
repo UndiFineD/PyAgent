@@ -19,22 +19,17 @@ Used for critical infrastructure or security logic changes.
 """
 
 from __future__ import annotations
-
-import asyncio
-import asyncio
-import hashlib
-import logging
-from typing import Any, Dict
-
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+import logging
+from typing import Any
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 from src.logic.agents.security.core.byzantine_core import ByzantineCore
 
 __version__ = VERSION
 
 
-class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class ByzantineConsensusAgent(BaseAgent):
     """Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents."""
 
     def __init__(self, file_path: str) -> None:
@@ -45,7 +40,6 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def select_committee(self, task: str, available_agents: list[str]) -> list[str]:
         """Selects a subset of agents best suited for a task based on reliability."""
-        _ = task
         # Ensure registry is populated
         for agent in available_agents:
             if agent not in self.reliability_scores:
@@ -55,67 +49,18 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def run_committee_vote(
-        self, task: str, proposals: dict[str, str], change_type: str = "default", timeout: float = 30.0
+        self, task: str, proposals: dict[str, str], change_type: str = "default"
     ) -> dict[str, Any]:
-        """
-        Evaluates a set of proposals and determines the winner via BFT Consensus.
-        Implements 'Wait-for-Majority' logic with timeout.
-        """
-        logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
+        """Evaluates a set of proposals and determines the winner via AI-powered scoring."""
+        logging.info(
+            f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}..."
+        )
 
-        required_quorum = self.core.get_required_quorum(change_type)
-        
-        # 1. Proposal Hashing & Grouping
-        vote_payloads = []
-        proposal_map: Dict[str, str] = {} # hash -> content
+        self.core.get_required_quorum(change_type)
 
-        for agent, content in proposals.items():
-            # Calculate SHA-256 hash of the content to find exact matches
-            content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
-            
-            # Update reliability score if missing
-            if agent not in self.reliability_scores:
-                self.reliability_scores[agent] = 0.9
-            
-            weight = self.reliability_scores.get(agent, 0.5)
-            
-            vote_payloads.append({
-                "agent": agent,
-                "weight": weight,
-                "hash": content_hash
-            })
-            if content_hash not in proposal_map:
-                proposal_map[content_hash] = content
-        
-        # 2. Check for Consensus (Agreement on Content)
-        agreement_score = self.core.calculate_agreement_score(vote_payloads)
-        
-        logging.info(f"ByzantineConsensus: Current Agreement Score: {agreement_score:.2f} (Required: {required_quorum})")
-
-        if agreement_score >= required_quorum:
-            # Find the winning hash
-            from collections import defaultdict
-            hash_weights = defaultdict(float)
-            for v in vote_payloads:
-                hash_weights[v["hash"]] += v["weight"]
-            
-            winning_hash = max(hash_weights, key=hash_weights.get)
-            confidence = hash_weights[winning_hash] / sum(hash_weights.values())
-            
-            return {
-                "decision": "ACCEPTED",
-                "reason": "Byzantine Quorum Reached",
-                "agreement_score": agreement_score,
-                "confidence": confidence,
-                "content": proposal_map[winning_hash],
-                "winning_hash": winning_hash
-            }
-
-        logging.warning("ByzantineConsensus: No consensus reached on content. Falling back to AI Quality Eval.")
-        
+        # 1. AI-Powered Scoring
         scores: dict[str, float] = {}
-
-        async def _evaluate_proposal(agent_name: str, content: str) -> tuple[str, float]:
+        for agent_name, content in proposals.items():
             evaluation_prompt = (
                 f"Identify the technical quality and correctness of the following proposal for the task: '{task}'\n\n"
                 f"Agent Proposal ({agent_name}):\n{content}\n\n"
@@ -124,9 +69,10 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             )
             try:
                 # Use subagent logic to get a score
+                # Note: We use a simplified regex-based score extraction from the AI response
+                # Fix: Use self.think() instead of self.run_subagent() to handle sync/async bridging
                 score_response = (await self.think(evaluation_prompt)).strip()
-                
-                # Phase 108: Record the evaluation context
+                # Phase 108: Record the evaluation context (Safety record)
                 if hasattr(self, "recorder") and self.recorder:
                     try:
                         self.recorder.record(
@@ -135,17 +81,25 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                             provider="ByzantineConsensus",
                             meta={"agent": agent_name},
                         )
-                    except (IOError, AttributeError):
+                    except Exception:
                         pass
 
                 import re
+
                 match = re.search(r"(\d+\.\d+)", score_response)
-                score = float(match.group(1)) if match else 0.7
-            except (ValueError, TypeError, RuntimeError) as e:
+                score = (
+                    float(match.group(1)) if match else 0.7
+                )  # Fallback to reasonable default
+            except Exception as e:
                 logging.error(f"ByzantineConsensus: Error scoring {agent_name}: {e}")
                 score = 0.5
 
-            # Hard constraints and penalties
+            # Penalize the 'TODO' or length-based issues (hard constraints)
+            # Refined Algorithm (Phase 135):
+            # - FIXME is treated as a critical defect (50% penalty)
+            # - TODO is context-dependent:
+            #   - If content is short/stubby, massive penalty (60%)
+            #   - If content is substantial, minor penalty (10%) for technical debt
             if "FIXME" in content:
                 score *= 0.5
             elif "TODO" in content:
@@ -156,25 +110,8 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             if len(content) < 10:
                 score *= 0.2
-            
-            return agent_name, score
 
-        # Parallelize evaluation with timeout
-        tasks = [_evaluate_proposal(name, content) for name, content in proposals.items()]
-        
-        try:
-            results = await asyncio.wait_for(asyncio.gather(*tasks), timeout=timeout)
-            for name, score in results:
-                scores[name] = score
-        except asyncio.TimeoutError:
-            logging.warning(f"ByzantineConsensus: Voting timed out after {timeout}s! Using partial results.")
-            # In a real implementation, we would collect completed tasks here. 
-            # For now, we fail fast to ensure liveness, or we could handle partials.
-            return {
-                "decision": "TIMEOUT",
-                "reason": "Committee vote timed out waiting for AI evaluation.",
-                "scores": {},
-            }
+            scores[agent_name] = score
 
         # 2. Majority Check (Requirement: > 2/3 agreement or highest score above threshold)
         best_agent = max(scores, key=scores.get)
@@ -188,10 +125,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             }
 
         logging.warning(
-            "ByzantineConsensus: Decision reached. "
-            "Primary output selected from '%s' (Score: %.2f).",
-            best_agent,
-            confidence,
+            f"ByzantineConsensus: Decision reached. Primary output selected from '{best_agent}' (Score: {confidence:.2f})."
         )
 
         return {
@@ -205,14 +139,15 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             },
         }
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    def improve_content(self, input_text: str) -> str:
         """Acts as a high-level evaluator for a single piece of content."""
-        _ = (prompt, target_file)
         return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log")
+    main = create_main_function(
+        ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log"
+    )
     main()

@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Advanced request scheduler coordinator."""
@@ -19,23 +5,23 @@
 import threading
 import time
 import uuid
-from typing import Any, Dict, List, Optional
-
-from .config import (PreemptionReason, RequestPriority, RequestState,
-                     SchedulerConfig)
+from typing import Any, List, Optional, Dict
+from .config import RequestPriority, RequestState, PreemptionReason, SchedulerConfig
+from .request import ScheduledRequest, RequestMetrics
 from .queue import PriorityRequestQueue
-from .request import ScheduledRequest
 
 
 class AdvancedRequestScheduler:
     """Advanced request scheduler with priority and preemption."""
 
-    def __init__(self, config: Optional[SchedulerConfig] = None) -> None:
+    def __init__(self, config: Optional[SchedulerConfig] = None):
         """Initialize scheduler."""
         self.config = config or SchedulerConfig()
 
         # Request queues
-        self.waiting = PriorityRequestQueue(enable_starvation_prevention=self.config.starvation_prevention)
+        self.waiting = PriorityRequestQueue(
+            enable_starvation_prevention=self.config.starvation_prevention
+        )
         self.running: Dict[str, ScheduledRequest] = {}
         self.preempted: Dict[str, ScheduledRequest] = {}
         self.completed: Dict[str, ScheduledRequest] = {}
@@ -78,7 +64,7 @@ class AdvancedRequestScheduler:
 
         with self._lock:
             self._sequence += 1
-            request.sequence = self._sequence
+            request._sequence = self._sequence
 
         self.waiting.push(request)
         return request
@@ -147,7 +133,8 @@ class AdvancedRequestScheduler:
             return False
 
         preemptible = [
-            r for r in self.running.values() if r.is_preemptible and r.priority.value > incoming.priority.value
+            r for r in self.running.values()
+            if r.is_preemptible and r.priority.value > incoming.priority.value
         ]
 
         if not preemptible:
@@ -168,13 +155,16 @@ class AdvancedRequestScheduler:
     def _preempt_for_request(self, incoming: ScheduledRequest) -> int:
         """Preempt running requests to make room."""
         preemptible = [
-            r for r in self.running.values() if r.is_preemptible and r.priority.value > incoming.priority.value
+            r for r in self.running.values()
+            if r.is_preemptible and r.priority.value > incoming.priority.value
         ]
 
         preemptible.sort(key=lambda r: -r.priority.value)
 
         freed = 0
-        needed = incoming.total_tokens - (self.config.max_tokens_per_batch - self._running_tokens)
+        needed = incoming.total_tokens - (
+            self.config.max_tokens_per_batch - self._running_tokens
+        )
 
         for request in preemptible:
             if freed >= needed:
@@ -305,7 +295,10 @@ class AdvancedRequestScheduler:
                 return count
 
             cutoff = time.time() - older_than
-            to_remove = [rid for rid, req in self.completed.items() if req.metrics.completed_at < cutoff]
+            to_remove = [
+                rid for rid, req in self.completed.items()
+                if req.metrics.completed_at < cutoff
+            ]
 
             for rid in to_remove:
                 del self.completed[rid]

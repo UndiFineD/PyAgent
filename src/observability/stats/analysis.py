@@ -10,14 +10,15 @@ import math
 import operator
 import re
 import time
+import contextlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from .ObservabilityCore import (
+from .observability_core import (
     DerivedMetric,
     MetricCorrelation,
 )
-from .ABEngine import (
+from .ab_engine import (
     ABComparisonResult,
     ABSignificanceResult,
 )
@@ -31,21 +32,11 @@ except ImportError:
 
 try:
     import psutil
-
     HAS_PSUTIL = True
 except ImportError:
     HAS_PSUTIL = False
 
 logger = logging.getLogger(__name__)
-
-# Mock for matplotlib if not present
-has_matplotlib = False
-try:
-    import matplotlib.pyplot as plt
-
-    has_matplotlib = True
-except ImportError:
-    plt = None  # type: ignore[assignment]
 
 # Model costs for TokenCostEngine
 MODEL_COSTS = {
@@ -109,7 +100,7 @@ class FleetMetrics:
 
 class StabilityCore:
     """Pure logic for calculating fleet stability and reasoning coherence.
-    
+
     Phase 14 Rust Optimizations:
     - calculate_variance_rust: Fast variance calculation for stasis detection
     """
@@ -128,20 +119,18 @@ class StabilityCore:
 
     def is_in_stasis(self, score_history: list[float]) -> bool:
         """Detect if the fleet is in stasis (low variance).
-        
+
         Uses Rust-accelerated variance calculation when available.
         """
         if len(score_history) < 10:
             return False
-        
+
         # Rust-accelerated variance calculation
         if RUST_AVAILABLE and hasattr(rc, 'calculate_variance_rust'):
-            try:
+            with contextlib.suppress(Exception):
                 variance = rc.calculate_variance_rust(score_history)
                 return variance < 0.0001
-            except Exception:
-                pass  # Fall back to Python
-        
+
         avg = sum(score_history) / len(score_history)
         variance = sum((x - avg) ** 2 for x in score_history) / len(score_history)
         return variance < 0.0001
@@ -364,7 +353,7 @@ class FormulaEngineCore:
 
     def calculate_logic(self, formula: str, variables: dict[str, Any]) -> float:
         if rc and "AVG(" not in formula:
-            try:
+            with contextlib.suppress(Exception):
                 # Convert variables to dict[str, float] for Rust (excludes list/complex types)
                 float_vars = {
                     k: float(v)
@@ -373,8 +362,6 @@ class FormulaEngineCore:
                 }
 
                 return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
-            except Exception:
-                pass
 
         if "AVG(" in formula:
             match = re.search(r"AVG\(\{(\w+)\}\)", formula)
@@ -485,10 +472,8 @@ class StatsRollupCalculator:
         bucket = mult * amt
 
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_stats_rollup(pts, bucket)  # type: ignore[attr-defined]
-            except Exception:
-                pass
 
         bkts: dict[int, list[float]] = {}
         for t, v in pts:

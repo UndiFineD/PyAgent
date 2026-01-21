@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 CompilationCounter - Statistics and counters for compilation metrics.
 
@@ -29,32 +15,29 @@ Beyond vLLM:
 
 from __future__ import annotations
 
-from _thread import LockType
 import logging
 import threading
 import time
-from collections import Counter
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class CompileEventType(Enum):
     """Types of compilation events."""
-
-    COMPILE = auto()  # Initial compilation
-    RECOMPILE = auto()  # Recompilation due to shape change
-    CACHE_HIT = auto()  # Compilation cache hit
-    FALLBACK = auto()  # Fallback to eager
-    ERROR = auto()  # Compilation error
+    COMPILE = auto()          # Initial compilation
+    RECOMPILE = auto()        # Recompilation due to shape change
+    CACHE_HIT = auto()        # Compilation cache hit
+    FALLBACK = auto()         # Fallback to eager
+    ERROR = auto()            # Compilation error
 
 
 @dataclass
 class CompileEvent:
     """A compilation event."""
-
     event_type: CompileEventType
     timestamp: float
     function_id: int
@@ -72,14 +55,13 @@ class CompileEvent:
             "shape": self.shape,
             "duration": self.duration,
             "backend": self.backend,
-            "error": self.error,
+            "error": self.error
         }
 
 
 @dataclass
 class FunctionStats:
     """Statistics for a single function."""
-
     function_id: int
     compile_count: int = 0
     recompile_count: int = 0
@@ -98,7 +80,7 @@ class FunctionStats:
     @property
     def avg_compile_time(self) -> float:
         """Average compilation time."""
-        total: int = self.compile_count + self.recompile_count
+        total = self.compile_count + self.recompile_count
         if total == 0:
             return 0.0
         return self.total_compile_time / total
@@ -118,7 +100,12 @@ class CompilationCounter:
     Based on vLLM's compilation counter pattern.
     """
 
-    def __init__(self, name: str = "default", max_events: int = 10000, emit_interval: float = 60.0) -> None:
+    def __init__(
+        self,
+        name: str = "default",
+        max_events: int = 10000,
+        emit_interval: float = 60.0
+    ):
         """
         Initialize counter.
 
@@ -127,13 +114,13 @@ class CompilationCounter:
             max_events: Maximum events to keep
             emit_interval: Interval for metric emission (seconds)
         """
-        self.name: str = name
-        self.max_events: int = max_events
-        self.emit_interval: float = emit_interval
+        self.name = name
+        self.max_events = max_events
+        self.emit_interval = emit_interval
 
         self._events: List[CompileEvent] = []
         self._function_stats: Dict[int, FunctionStats] = {}
-        self._lock: LockType = threading.Lock()
+        self._lock = threading.Lock()
 
         # Aggregate counters
         self._total_compiles = 0
@@ -143,10 +130,14 @@ class CompilationCounter:
         self._total_errors = 0
 
         # Timing
-        self._last_emit: float = time.time()
+        self._last_emit = time.time()
 
     def record_compile(
-        self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str = "inductor"
+        self,
+        function_id: int,
+        shape: Tuple[int, ...],
+        duration: float,
+        backend: str = "inductor"
     ) -> None:
         """
         Record a compilation event.
@@ -157,103 +148,116 @@ class CompilationCounter:
             duration: Compilation time
             backend: Compilation backend
         """
-        event = self._create_compile_event(function_id, shape, duration, backend)
-        with self._lock:
-            self._add_event(event)
-            self._total_compiles += 1
-            self._update_compile_stats(function_id, duration, shape)
-
-    def _create_compile_event(self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str) -> CompileEvent:
-        return CompileEvent(
+        event = CompileEvent(
             event_type=CompileEventType.COMPILE,
             timestamp=time.time(),
             function_id=function_id,
             shape=shape,
             duration=duration,
-            backend=backend,
+            backend=backend
         )
 
-    def _update_compile_stats(self, function_id: int, duration: float, shape: Tuple[int, ...]) -> None:
-        stats: FunctionStats = self._get_or_create_stats(function_id)
-        stats.compile_count += 1
-        stats.total_compile_time += duration
-        stats.shapes_seen.add(shape)
-        stats.last_compiled = time.time()
-
-    def record_recompile(
-        self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str = "inductor"
-    ) -> None:
-        """Record a recompilation event."""
-        event = self._create_recompile_event(function_id, shape, duration, backend)
         with self._lock:
             self._add_event(event)
-            self._total_recompiles += 1
-            self._update_recompile_stats(function_id, duration, shape)
+            self._total_compiles += 1
 
-    def _create_recompile_event(self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str) -> CompileEvent:
-        return CompileEvent(
+            stats = self._get_or_create_stats(function_id)
+            stats.compile_count += 1
+            stats.total_compile_time += duration
+            stats.shapes_seen.add(shape)
+            stats.last_compiled = time.time()
+
+    def record_recompile(
+        self,
+        function_id: int,
+        shape: Tuple[int, ...],
+        duration: float,
+        backend: str = "inductor"
+    ) -> None:
+        """Record a recompilation event."""
+        event = CompileEvent(
             event_type=CompileEventType.RECOMPILE,
             timestamp=time.time(),
             function_id=function_id,
             shape=shape,
             duration=duration,
-            backend=backend,
+            backend=backend
         )
 
-    def _update_recompile_stats(self, function_id: int, duration: float, shape: Tuple[int, ...]) -> None:
-        stats: FunctionStats = self._get_or_create_stats(function_id)
-        stats.recompile_count += 1
-        stats.total_compile_time += duration
-        stats.shapes_seen.add(shape)
+        with self._lock:
+            self._add_event(event)
+            self._total_recompiles += 1
+
+            stats = self._get_or_create_stats(function_id)
+            stats.recompile_count += 1
+            stats.total_compile_time += duration
+            stats.shapes_seen.add(shape)
 
     def record_cache_hit(self, function_id: int, shape: Tuple[int, ...]) -> None:
         """Record a cache hit."""
         event = CompileEvent(
-            event_type=CompileEventType.CACHE_HIT, timestamp=time.time(), function_id=function_id, shape=shape
+            event_type=CompileEventType.CACHE_HIT,
+            timestamp=time.time(),
+            function_id=function_id,
+            shape=shape
         )
 
         with self._lock:
             self._add_event(event)
             self._total_cache_hits += 1
 
-            stats: FunctionStats = self._get_or_create_stats(function_id)
+            stats = self._get_or_create_stats(function_id)
             stats.cache_hits += 1
 
-    def record_fallback(self, function_id: int, shape: Tuple[int, ...], reason: str = "") -> None:
+    def record_fallback(
+        self,
+        function_id: int,
+        shape: Tuple[int, ...],
+        reason: str = ""
+    ) -> None:
         """Record a fallback to eager execution."""
         event = CompileEvent(
             event_type=CompileEventType.FALLBACK,
             timestamp=time.time(),
             function_id=function_id,
             shape=shape,
-            error=reason,
+            error=reason
         )
 
         with self._lock:
             self._add_event(event)
             self._total_fallbacks += 1
 
-            stats: FunctionStats = self._get_or_create_stats(function_id)
+            stats = self._get_or_create_stats(function_id)
             stats.fallbacks += 1
 
-    def record_error(self, function_id: int, shape: Tuple[int, ...], error: str) -> None:
+    def record_error(
+        self,
+        function_id: int,
+        shape: Tuple[int, ...],
+        error: str
+    ) -> None:
         """Record a compilation error."""
         event = CompileEvent(
-            event_type=CompileEventType.ERROR, timestamp=time.time(), function_id=function_id, shape=shape, error=error
+            event_type=CompileEventType.ERROR,
+            timestamp=time.time(),
+            function_id=function_id,
+            shape=shape,
+            error=error
         )
 
         with self._lock:
             self._add_event(event)
             self._total_errors += 1
 
-            stats: FunctionStats = self._get_or_create_stats(function_id)
+            stats = self._get_or_create_stats(function_id)
             stats.errors += 1
 
     def _add_event(self, event: CompileEvent) -> None:
         """Add event with size limit."""
         self._events.append(event)
         if len(self._events) > self.max_events:
-            self._events = self._events[-self.max_events :]
+            self._events = self._events[-self.max_events:]
 
     def _get_or_create_stats(self, function_id: int) -> FunctionStats:
         """Get or create function stats."""
@@ -264,7 +268,11 @@ class CompilationCounter:
     def get_summary(self) -> Dict[str, Any]:
         """Get summary statistics."""
         with self._lock:
-            total: int = self._total_compiles + self._total_recompiles + self._total_cache_hits
+            total = (
+                self._total_compiles +
+                self._total_recompiles +
+                self._total_cache_hits
+            )
 
             return {
                 "name": self.name,
@@ -275,7 +283,7 @@ class CompilationCounter:
                 "total_errors": self._total_errors,
                 "cache_hit_rate": self._total_cache_hits / total if total > 0 else 0,
                 "functions_tracked": len(self._function_stats),
-                "events_recorded": len(self._events),
+                "events_recorded": len(self._events)
             }
 
     def get_function_stats(self, function_id: int) -> Optional[FunctionStats]:
@@ -293,7 +301,10 @@ class CompilationCounter:
         with self._lock:
             counter: Counter[Tuple[int, ...]] = Counter()
             for event in self._events:
-                if event.event_type in (CompileEventType.COMPILE, CompileEventType.RECOMPILE):
+                if event.event_type in (
+                    CompileEventType.COMPILE,
+                    CompileEventType.RECOMPILE
+                ):
                     counter[event.shape] += 1
             return dict(counter)
 
@@ -304,7 +315,7 @@ class CompilationCounter:
     def emit_metrics(self) -> Dict[str, Any]:
         """Emit metrics and reset timer."""
         with self._lock:
-            self._last_emit: float = time.time()
+            self._last_emit = time.time()
             return self.get_summary()
 
     def reset(self) -> None:
@@ -328,32 +339,57 @@ class RecompileTracker(CompilationCounter):
     - Suggests optimization strategies
     """
 
-    def __init__(self, max_recompiles: int = 10, alert_threshold: float = 0.5, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        max_recompiles: int = 10,
+        alert_threshold: float = 0.5,
+        **kwargs: Any
+    ):
         super().__init__(**kwargs)
-        self.max_recompiles: int = max_recompiles
-        self.alert_threshold: float = alert_threshold
+        self.max_recompiles = max_recompiles
+        self.alert_threshold = alert_threshold
         self._alerts: List[Dict[str, Any]] = []
 
     def record_recompile(
-        self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str = "inductor"
+        self,
+        function_id: int,
+        shape: Tuple[int, ...],
+        duration: float,
+        backend: str = "inductor"
     ) -> None:
         """Record recompile and check for alerts."""
         super().record_recompile(function_id, shape, duration, backend)
 
         # Check for excessive recompilation
-        stats: FunctionStats | None = self.get_function_stats(function_id)
+        stats = self.get_function_stats(function_id)
         if stats and stats.recompile_count >= self.max_recompiles:
             self._add_alert(
-                function_id, "excessive_recompiles", f"Function {function_id} has {stats.recompile_count} recompiles"
+                function_id,
+                "excessive_recompiles",
+                f"Function {function_id} has {stats.recompile_count} recompiles"
             )
 
         # Check ratio
         if stats and stats.recompile_ratio >= self.alert_threshold:
-            self._add_alert(function_id, "high_recompile_ratio", f"Recompile ratio {stats.recompile_ratio:.2%}")
+            self._add_alert(
+                function_id,
+                "high_recompile_ratio",
+                f"Recompile ratio {stats.recompile_ratio:.2%}"
+            )
 
-    def _add_alert(self, function_id: int, alert_type: str, message: str) -> None:
+    def _add_alert(
+        self,
+        function_id: int,
+        alert_type: str,
+        message: str
+    ) -> None:
         """Add an alert."""
-        alert = {"timestamp": time.time(), "function_id": function_id, "type": alert_type, "message": message}
+        alert = {
+            "timestamp": time.time(),
+            "function_id": function_id,
+            "type": alert_type,
+            "message": message
+        }
         self._alerts.append(alert)
         logger.warning(f"Compilation alert: {message}")
 
@@ -393,8 +429,8 @@ class TrendAnalyzer:
     - Predicts future issues
     """
 
-    def __init__(self, window_size: int = 100) -> None:
-        self.window_size: int = window_size
+    def __init__(self, window_size: int = 100):
+        self.window_size = window_size
         self._compile_times: List[float] = []
         self._timestamps: List[float] = []
 
@@ -405,19 +441,19 @@ class TrendAnalyzer:
 
         # Keep window size
         if len(self._compile_times) > self.window_size:
-            self._compile_times = self._compile_times[-self.window_size :]
-            self._timestamps = self._timestamps[-self.window_size :]
+            self._compile_times = self._compile_times[-self.window_size:]
+            self._timestamps = self._timestamps[-self.window_size:]
 
     def get_trend(self) -> str:
         """Get trend direction."""
         if len(self._compile_times) < 10:
             return "insufficient_data"
 
-        first_half: List[float] = self._compile_times[: len(self._compile_times) // 2]
-        second_half: List[float] = self._compile_times[len(self._compile_times) // 2 :]
+        first_half = self._compile_times[:len(self._compile_times)//2]
+        second_half = self._compile_times[len(self._compile_times)//2:]
 
-        avg_first: float = sum(first_half) / len(first_half)
-        avg_second: float = sum(second_half) / len(second_half)
+        avg_first = sum(first_half) / len(first_half)
+        avg_second = sum(second_half) / len(second_half)
 
         if avg_second > avg_first * 1.1:
             return "increasing"
@@ -434,9 +470,14 @@ class TrendAnalyzer:
         n = len(self._compile_times)
         avg = sum(self._compile_times) / n
         variance = sum((x - avg) ** 2 for x in self._compile_times) / n
-        std = variance**0.5
+        std = variance ** 0.5
 
-        return {"min": min(self._compile_times), "max": max(self._compile_times), "avg": avg, "std": std}
+        return {
+            "min": min(self._compile_times),
+            "max": max(self._compile_times),
+            "avg": avg,
+            "std": std
+        }
 
 
 # Global counter instance
@@ -445,7 +486,7 @@ _global_counter: Optional[CompilationCounter] = None
 
 def get_global_counter() -> CompilationCounter:
     """Get or create global compilation counter."""
-    global _global_counter  # pylint: disable=global-statement
+    global _global_counter
     if _global_counter is None:
         _global_counter = CompilationCounter(name="global")
     return _global_counter
@@ -453,5 +494,6 @@ def get_global_counter() -> CompilationCounter:
 
 def reset_global_counter() -> None:
     """Reset global counter."""
+    global _global_counter
     if _global_counter:
         _global_counter.reset()

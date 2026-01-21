@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 """
 N-gram Proposers - Implementation of speculative decoding token proposers.
@@ -19,17 +5,17 @@ N-gram Proposers - Implementation of speculative decoding token proposers.
 
 from __future__ import annotations
 
-import contextlib
 import logging
 from typing import TYPE_CHECKING
+import contextlib
 
 import numpy as np
 
-from src.infrastructure.engine.sampling.ngram.accelerators import HAS_RUST
+from src.infrastructure.engine.sampling.ngram.types import (
+    MatchingStrategy, NgramConfig, ProposalStats
+)
 from src.infrastructure.engine.sampling.ngram.index import SuffixIndex
-from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
-                                                            NgramConfig,
-                                                            ProposalStats)
+from src.infrastructure.engine.sampling.ngram.accelerators import HAS_RUST
 
 # Try to import rust_core if available via accelerators module context
 with contextlib.suppress(ImportError):
@@ -49,7 +35,7 @@ class NgramProposer:
     likely continuations without running a draft model.
     """
 
-    def __init__(self, config: NgramConfig | None = None) -> None:
+    def __init__(self, config: NgramConfig | None = None):
         self.config = config or NgramConfig()
         self.stats = ProposalStats()
         self._suffix_index = SuffixIndex(self.config.max_n) if self.config.use_suffix_tree else None
@@ -73,7 +59,7 @@ class NgramProposer:
             return []
 
         # Use Rust if available
-        if HAS_RUST and hasattr(rust_core, "advanced_ngram_propose_rust"):
+        if HAS_RUST and hasattr(rust_core, 'advanced_ngram_propose_rust'):
             result = rust_core.advanced_ngram_propose_rust(
                 tokens_list,
                 self.config.min_n,
@@ -115,12 +101,16 @@ class NgramProposer:
 
             # Score and select best match
             for match_pos in matches:
-                proposal = self._get_continuation(tokens_list, match_pos + n - 1, num_proposals)
+                proposal = self._get_continuation(
+                    tokens_list, match_pos + n - 1, num_proposals
+                )
 
                 if not proposal:
                     continue
 
-                score = self._score_match(proposal, match_pos, n_tokens, n)
+                score = self._score_match(
+                    proposal, match_pos, n_tokens, n
+                )
 
                 if score > best_score:
                     best_score = score
@@ -144,7 +134,11 @@ class NgramProposer:
     ) -> list[int]:
         """Linear search for n-gram matches."""
         n = len(ngram)
-        return [i for i in range(len(tokens) - n + 1) if tuple(tokens[i : i + n]) == ngram]
+        return [
+            i
+            for i in range(len(tokens) - n + 1)
+            if tuple(tokens[i : i + n]) == ngram
+        ]
 
     def _get_continuation(
         self,
@@ -173,14 +167,14 @@ class NgramProposer:
         if self.config.strategy == MatchingStrategy.FIRST:
             return base_score
 
-        if self.config.strategy == MatchingStrategy.LONGEST:
+        elif self.config.strategy == MatchingStrategy.LONGEST:
             return base_score * 10  # Prioritize length
 
-        if self.config.strategy == MatchingStrategy.RECENT:
+        elif self.config.strategy == MatchingStrategy.RECENT:
             recency = position / max(1, total_length)
             return base_score * (1 + recency * self.config.recency_weight)
 
-        if self.config.strategy == MatchingStrategy.WEIGHTED:
+        elif self.config.strategy == MatchingStrategy.WEIGHTED:
             recency = position / max(1, total_length)
             ngram_bonus = ngram_size / self.config.max_n
             return base_score * (1 + recency * self.config.recency_weight + ngram_bonus)
@@ -196,10 +190,9 @@ class NgramProposer:
         if num_proposals is None:
             num_proposals = self.config.num_speculative_tokens
 
-        if HAS_RUST and hasattr(rust_core, "batch_ngram_propose_rust"):
+        if HAS_RUST and hasattr(rust_core, 'batch_ngram_propose_rust'):
             return [
-                list(p)
-                for p in getattr(rust_core, "batch_ngram_propose_rust")(
+                list(p) for p in getattr(rust_core, 'batch_ngram_propose_rust')(
                     batch_tokens,
                     self.config.min_n,
                     self.config.max_n,
@@ -229,7 +222,7 @@ class AdaptiveNgramProposer(NgramProposer):
     Adaptive n-gram proposer that adjusts parameters based on performance.
     """
 
-    def __init__(self, config: NgramConfig | None = None) -> None:
+    def __init__(self, config: NgramConfig | None = None):
         super().__init__(config)
         self._acceptance_history: list[float] = []
         self._adaptive_n: int = self.config.max_n

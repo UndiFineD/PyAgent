@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -28,7 +14,13 @@ from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 from .audio import AudioLoader
 from .base import MediaLoader
 from .image import ImageLoader
-from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
+from .models import (
+    AudioData,
+    ImageData,
+    MediaLoadConfig,
+    MediaType,
+    VideoData,
+)
 from .video import VideoLoader
 
 
@@ -83,19 +75,26 @@ class MediaIOEngine:
         tasks = [self.load(source, media_type, config) for source in sources]
         return await asyncio.gather(*tasks)
 
-    def _detect_media_type(self, source: Union[str, bytes, BinaryIO]) -> MediaType:
+    def _detect_media_type(
+        self,
+        source: Union[str, bytes, BinaryIO]
+    ) -> MediaType:
         """Detect media type from source."""
         if isinstance(source, (str, Path)):
             ext = Path(str(source)).suffix.lower()
-            if ext in (".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".tiff", ".heic"):
+            if ext in ('.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp', '.tiff', '.heic'):
                 return MediaType.IMAGE
-            elif ext in (".mp4", ".webm", ".avi", ".mov", ".mkv"):
+            elif ext in ('.mp4', '.webm', '.avi', '.mov', '.mkv'):
                 return MediaType.VIDEO
-            elif ext in (".wav", ".mp3", ".flac", ".ogg", ".m4a"):
+            elif ext in ('.wav', '.mp3', '.flac', '.ogg', '.m4a'):
                 return MediaType.AUDIO
         return MediaType.IMAGE
 
-    def _compute_cache_key(self, source: Union[str, bytes, BinaryIO], media_type: MediaType) -> str:
+    def _compute_cache_key(
+        self,
+        source: Union[str, bytes, BinaryIO],
+        media_type: MediaType
+    ) -> str:
         """Compute cache key for media."""
         if isinstance(source, str):
             return f"{media_type.name}:{source}"

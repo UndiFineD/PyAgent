@@ -1,29 +1,7 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Meta.py module.
-"""
-
 from __future__ import annotations
-
 from typing import Callable
-
-from src.core.base.common.utils.jsontree.iteration import (
-    json_iter_leaves, json_iter_leaves_with_path)
-from src.core.base.common.utils.jsontree.types import _T, JSONTree
-
+from src.core.base.common.utils.jsontree.types import JSONTree, _T
+from src.core.base.common.utils.jsontree.iteration import json_iter_leaves, json_iter_leaves_with_path
 
 def json_count_leaves(value: JSONTree[_T]) -> int:
     """Count the number of leaves in a nested JSON structure."""
@@ -36,12 +14,12 @@ def json_depth(value: JSONTree[_T]) -> int:
         if not value:
             return 1
         return 1 + max(json_depth(v) for v in value.values())
-    if isinstance(value, (list, tuple)):
+    elif isinstance(value, (list, tuple)):
         if not value:
             return 1
         return 1 + max(json_depth(v) for v in value)
-
-    return 0
+    else:
+        return 0
 
 
 def json_filter_leaves(
@@ -59,7 +37,7 @@ def json_filter_leaves(
                 continue
             result[k] = filtered
         return result
-    if isinstance(value, list):
+    elif isinstance(value, list):
         result_list = []
         for v in value:
             filtered = json_filter_leaves(predicate, v)
@@ -69,7 +47,7 @@ def json_filter_leaves(
                 continue
             result_list.append(filtered)
         return result_list
-    if isinstance(value, tuple):
+    elif isinstance(value, tuple):
         result_tuple = []
         for v in value:
             filtered = json_filter_leaves(predicate, v)
@@ -79,8 +57,8 @@ def json_filter_leaves(
                 continue
             result_tuple.append(filtered)
         return tuple(result_tuple)
-
-    return value if predicate(value) else {}  # type: ignore
+    else:
+        return value if predicate(value) else {}  # type: ignore
 
 
 def json_validate_leaves(
@@ -96,4 +74,8 @@ def json_find_leaves(
     value: JSONTree[_T],
 ) -> list[tuple[str, _T]]:
     """Find all leaves matching a predicate, with their paths."""
-    return [(path, leaf) for path, leaf in json_iter_leaves_with_path(value) if predicate(leaf)]
+    return [
+        (path, leaf)
+        for path, leaf in json_iter_leaves_with_path(value)
+        if predicate(leaf)
+    ]

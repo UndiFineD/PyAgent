@@ -1,31 +1,17 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 OpenTelemetry Tracing Module - Phase 20: Production Infrastructure
 ===================================================================
 
-Distributed tracing with OpenTelemetry integration for PyAgent.
-This module provides:
-- Standardized span attribute names for LLM operations
-- Trace context extraction and propagation utilities
+Distributed tracing with OpenTelemetry integration.
+Inspired by vLLM's tracing.py pattern.
+
+Features:
+- SpanAttributes: Standard attribute names for LLM operations
+- Trace context extraction and propagation
 - OTLP exporter support (gRPC and HTTP)
 - Graceful fallback when OpenTelemetry is not installed
 - Span context managers and decorators
 - Custom span processors
-
-This module is required for Phase 315 documentation parity.
 
 Author: PyAgent Phase 20
 """
@@ -39,42 +25,59 @@ import time
 from collections.abc import Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, Callable, Generator, ParamSpec, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Generator,
+    ParamSpec,
+    TypeVar,
+)
 
-from opentelemetry.trace.span import Span
-from opentelemetry.sdk.trace.export import SpanExporter
-
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 # Standard trace headers
-TRACE_HEADERS: list[str] = ["traceparent", "tracestate"]
+TRACE_HEADERS = ["traceparent", "tracestate"]
 
 # Track if OpenTelemetry is available
 _is_otel_imported = False
 otel_import_error_traceback: str | None = None
 
+# Type stubs for when otel is not available
 Context = Any
 Tracer = Any
+Span = Any
 SpanKind = Any
 
 try:
-    from opentelemetry import trace  # pylint: disable=unused-import
+    from opentelemetry import trace
     from opentelemetry.context.context import Context
-    from opentelemetry.sdk.environment_variables import \
-        OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+    from opentelemetry.sdk.environment_variables import (
+        OTEL_EXPORTER_OTLP_TRACES_PROTOCOL,
+    )
     from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import (BatchSpanProcessor,
-                                                SimpleSpanProcessor)
-    from opentelemetry.trace import (Span, SpanKind, Status, StatusCode,
-                                     Tracer, get_current_span,
-                                     get_tracer_provider, set_tracer_provider)
-    from opentelemetry.trace.propagation.tracecontext import \
-        TraceContextTextMapPropagator
+    from opentelemetry.sdk.trace.export import (
+        BatchSpanProcessor,
+        SimpleSpanProcessor,
+        SpanExporter,
+    )
+    from opentelemetry.trace import (
+        SpanKind,
+        Tracer,
+        Span,
+        Status,
+        StatusCode,
+        set_tracer_provider,
+        get_tracer_provider,
+        get_current_span,
+    )
+    from opentelemetry.trace.propagation.tracecontext import (
+        TraceContextTextMapPropagator,
+    )
 
     _is_otel_imported = True
 except ImportError:
     import traceback
-
     otel_import_error_traceback = traceback.format_exc()
 
 
@@ -177,7 +180,7 @@ def init_tracer(
     trace_provider = TracerProvider()
 
     if otlp_traces_endpoint:
-        span_exporter: SpanExporter = get_span_exporter(otlp_traces_endpoint)
+        span_exporter = get_span_exporter(otlp_traces_endpoint)
         if use_batch_processor:
             trace_provider.add_span_processor(BatchSpanProcessor(span_exporter))
         else:
@@ -196,14 +199,16 @@ def get_span_exporter(endpoint: str) -> SpanExporter:
     if not is_otel_available():
         raise RuntimeError("OpenTelemetry is not available")
 
-    protocol: str = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_PROTOCOL, "grpc")
+    protocol = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_PROTOCOL, "grpc")
 
     if protocol == "grpc":
-        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
-            OTLPSpanExporter
+        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+            OTLPSpanExporter,
+        )
     elif protocol == "http/protobuf":
-        from opentelemetry.exporter.otlp.proto.http.trace_exporter import \
-            OTLPSpanExporter
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+            OTLPSpanExporter,
+        )
     else:
         raise ValueError(f"Unsupported OTLP protocol '{protocol}' is configured")
 
@@ -277,35 +282,6 @@ def contains_trace_headers(headers: Mapping[str, str]) -> bool:
 # ============================================================================
 
 
-
-def _select_tracer(tracer: Tracer | None) -> Tracer | None:
-    """Select the tracer to use, falling back to global if not provided."""
-    if tracer is not None:
-        return tracer
-    return get_tracer()
-
-def _start_span_context(
-    tracer: Tracer,
-    name: str,
-    kind: SpanKind | None,
-    attributes: dict[str, Any] | None,
-    context: Context | None,
-    record_exception: bool,
-    set_status_on_exception: bool,
-) -> Any:
-    """Start a span context with the given parameters."""
-    # Default to INTERNAL kind
-    if kind is None:
-        kind = SpanKind.INTERNAL
-    return tracer.start_as_current_span(
-        name,
-        kind=kind,
-        attributes=attributes,
-        context=context,
-        record_exception=record_exception,
-        set_status_on_exception=set_status_on_exception,
-    )
-
 @contextmanager
 def create_span(
     name: str,
@@ -342,19 +318,24 @@ def create_span(
         yield None
         return
 
-    tracer_obj = _select_tracer(tracer)
-    if tracer_obj is None:
+    if tracer is None:
+        tracer = get_tracer()
+
+    if tracer is None:
         yield None
         return
 
-    with _start_span_context(
-        tracer_obj,
+    # Default to INTERNAL kind
+    if kind is None:
+        kind = SpanKind.INTERNAL
+
+    with tracer.start_as_current_span(
         name,
-        kind,
-        attributes,
-        context,
-        record_exception,
-        set_status_on_exception,
+        kind=kind,
+        attributes=attributes,
+        context=context,
+        record_exception=record_exception,
+        set_status_on_exception=set_status_on_exception,
     ) as span:
         yield span
 
@@ -382,9 +363,8 @@ def traced(
         ... def process_data(data: str) -> str:
         ...     return data.upper()
     """
-
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
-        span_name: str = name or func.__name__
+        span_name = name or func.__name__
 
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
@@ -394,7 +374,7 @@ def traced(
                 kind=kind,
                 attributes=attributes,
                 record_exception=record_exception,
-            ):
+            ) as span:
                 return func(*args, **kwargs)
 
         return wrapper
@@ -423,7 +403,7 @@ def add_span_attributes(attributes: dict[str, Any]) -> None:
     if not is_otel_available():
         return
 
-    span: Span = get_current_span()
+    span = get_current_span()
     if span and span.is_recording():
         for key, value in attributes.items():
             span.set_attribute(key, value)
@@ -441,7 +421,7 @@ def add_span_event(
     if not is_otel_available():
         return
 
-    span: Span = get_current_span()
+    span = get_current_span()
     if span and span.is_recording():
         span.add_event(name, attributes=attributes or {})
 
@@ -455,7 +435,7 @@ def record_exception(exception: Exception, escaped: bool = True) -> None:
     if not is_otel_available():
         return
 
-    span: Span = get_current_span()
+    span = get_current_span()
     if span and span.is_recording():
         span.record_exception(exception, escaped=escaped)
         span.set_status(Status(StatusCode.ERROR, str(exception)))
@@ -471,7 +451,7 @@ _log_tracing_disabled_once = False
 
 def log_tracing_disabled_warning() -> None:
     """Log a warning that tracing is disabled (only once)."""
-    # global _log_tracing_disabled_once  # noqa: PLW0603
+    global _log_tracing_disabled_once
     if not _log_tracing_disabled_once:
         logger.warning("Received a request with trace context but tracing is disabled")
         _log_tracing_disabled_once = True
@@ -491,7 +471,7 @@ class SpanTiming:
 
     def checkpoint(self, name: str) -> float:
         """Record a timing checkpoint."""
-        elapsed: float = time.perf_counter() - self.start_time
+        elapsed = time.perf_counter() - self.start_time
         self.checkpoints[name] = elapsed
         return elapsed
 
@@ -501,7 +481,7 @@ class SpanTiming:
 
     def to_attributes(self, prefix: str = "") -> dict[str, float]:
         """Convert checkpoints to span attributes."""
-        result: dict[str, float] = {f"{prefix}total": self.elapsed()}
+        result = {f"{prefix}total": self.elapsed()}
         for name, elapsed in self.checkpoints.items():
             result[f"{prefix}{name}"] = elapsed
         return result
@@ -516,7 +496,9 @@ class SpanTiming:
 
 @contextmanager
 def timed_span(
-    name: str, tracer: Tracer | None = None, **kwargs: Any
+    name: str,
+    tracer: Tracer | None = None,
+    **kwargs: Any
 ) -> Generator[tuple[Span | None, SpanTiming], None, None]:
     """
     Context manager for a span with timing.
@@ -567,10 +549,14 @@ class NullTracer:
     """A no-op tracer for testing or when tracing is disabled."""
 
     @contextmanager
-    def start_as_current_span(self, name: str, **kwargs: Any) -> Generator[NullSpan, None, None]:  # noqa: ARG002
+    def start_as_current_span(
+        self,
+        name: str,
+        **kwargs: Any
+    ) -> Generator[NullSpan, None, None]:
         yield NullSpan()
 
-    def start_span(self, name: str, **kwargs: Any) -> NullSpan:  # noqa: ARG002
+    def start_span(self, name: str, **kwargs: Any) -> NullSpan:
         return NullSpan()
 
 
@@ -583,7 +569,7 @@ def get_null_tracer() -> NullTracer:
 # Exports
 # ============================================================================
 
-__all__: list[str] = [
+__all__ = [
     # Constants
     "TRACE_HEADERS",
     "SpanAttributes",

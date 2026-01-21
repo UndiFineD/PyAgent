@@ -1,33 +1,13 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Orchestrator.py module.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import logging
 import uuid
+import logging
 from typing import Any, Dict, Optional
-
 from .config import ScheduledRequest
 from .scheduler import DisaggregatedScheduler
 
 logger = logging.getLogger(__name__)
-
 
 class ProxyOrchestrator:
     """Orchestrator that wraps DisaggregatedScheduler for easier request management.
@@ -35,16 +15,20 @@ class ProxyOrchestrator:
     Acts as a high-level API for disaggregated prefill-decode serving.
     """
 
-    def __init__(self, scheduler: DisaggregatedScheduler) -> None:
+    def __init__(self, scheduler: DisaggregatedScheduler):
         self.scheduler = scheduler
 
-    def create_request(self, prompt: str, max_tokens: int = 128, request_id: Optional[str] = None) -> ScheduledRequest:
+    def create_request(
+        self,
+        prompt: str,
+        max_tokens: int = 128,
+        request_id: Optional[str] = None
+    ) -> ScheduledRequest:
         """Create a new request for scheduling."""
         if request_id is None:
             request_id = f"req-{uuid.uuid4().hex[:8]}"
 
         from .config import KVTransferParams
-
         request = ScheduledRequest(
             request_id=request_id,
             prompt=prompt,
@@ -72,8 +56,8 @@ class ProxyOrchestrator:
                 "status": "success",
                 "kv_transfer_params": {
                     "remote_engine_id": f"engine-{prefill_instance.instance_id}",
-                    "remote_block_ids": [1, 2, 3],
-                },
+                    "remote_block_ids": [1, 2, 3]
+                }
             }
 
             # 2. Schedule Decode
@@ -91,7 +75,7 @@ class ProxyOrchestrator:
                 "request_id": request.request_id,
                 "prefill_instance": prefill_instance.instance_id,
                 "decode_instance": decode_instance.instance_id,
-                "id": request.request_id,  # For test compatibility
+                "id": request.request_id # For test compatibility
             }
         except (RuntimeError, ValueError, AttributeError) as e:
             logger.error("Error in ProxyOrchestrator: %s", e)

@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 BadWordsProcessorV2 - Enhanced bad words filtering processor.
 
@@ -29,31 +15,43 @@ Beyond vLLM innovations:
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+)
+import threading
 
 try:
-    import numpy as np  # noqa: F401
-
+    import numpy as np
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # pylint: disable=unused-import
-
+    import rust_core
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
-from .logits_processor_v2 import (BatchUpdate, LogitsProcessor,
-                                  MoveDirectionality)
+from .logits_processor_v2 import (
+    BatchUpdate,
+    LogitsProcessor,
+    MoveDirectionality,
+    SamplingParams,
+)
+
 
 _SMALLEST_LOGIT = float("-inf")
 
 
 class BadWordsPenaltyMode(Enum):
     """Penalty mode for bad words."""
-
     HARD = auto()  # Set to -inf
     SOFT = auto()  # Apply large penalty
     DECAY = auto()  # Exponentially decay penalty
@@ -62,7 +60,6 @@ class BadWordsPenaltyMode(Enum):
 @dataclass
 class TrieNode:
     """Trie node for efficient prefix matching."""
-
     children: Dict[int, "TrieNode"] = field(default_factory=dict)
     is_end: bool = False
     token_id: int = -1
@@ -124,7 +121,7 @@ class BadWordsProcessorV2(LogitsProcessor):
         device: str = "cpu",
         penalty_mode: BadWordsPenaltyMode = BadWordsPenaltyMode.HARD,
         soft_penalty: float = -100.0,
-    ) -> None:
+    ):
         self.max_num_reqs = max_num_reqs
         self.device = device
         self.penalty_mode = penalty_mode
@@ -150,7 +147,7 @@ class BadWordsProcessorV2(LogitsProcessor):
             return
 
         # Process added requests
-        for index, params, _, output_tokens in batch_update.added:
+        for index, params, prompt_tokens, output_tokens in batch_update.added:
             if params.bad_words:
                 self._bad_words[index] = list(params.bad_words)
                 self._tries[index] = self._build_trie(params.bad_words)
@@ -207,11 +204,10 @@ class BadWordsProcessorV2(LogitsProcessor):
 
         if HAS_RUST:
             return self._apply_rust(logits)
-
-        if HAS_NUMPY and isinstance(logits, np.ndarray):
+        elif HAS_NUMPY and isinstance(logits, np.ndarray):
             return self._apply_numpy(logits)
-
-        return self._apply_generic(logits)
+        else:
+            return self._apply_generic(logits)
 
     def _apply_rust(self, logits: Any) -> Any:
         """Apply using Rust acceleration."""
@@ -352,7 +348,7 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
         device: str = "cpu",
         penalty_mode: BadWordsPenaltyMode = BadWordsPenaltyMode.HARD,
         max_wildcards: int = 3,
-    ) -> None:
+    ):
         super().__init__(max_num_reqs, device, penalty_mode)
         self.max_wildcards = max_wildcards
         self._wildcard_patterns: Dict[int, List[Tuple[List[int], int]]] = {}
@@ -368,12 +364,10 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
             self._wildcard_patterns[req_index] = []
 
         # Store as (prefix + suffix, wildcard_position)
-        self._wildcard_patterns[req_index].append(
-            (
-                prefix + suffix,
-                len(prefix),
-            )
-        )
+        self._wildcard_patterns[req_index].append((
+            prefix + suffix,
+            len(prefix),
+        ))
 
     def _check_wildcard_match(
         self,
@@ -401,17 +395,17 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
                 # Check if suffix prefix matches
                 actual_suffix = past_tokens[suffix_start:]
                 if len(actual_suffix) >= len(suffix_pattern) - 1:
-                    if actual_suffix[: len(suffix_pattern) - 1] == suffix_pattern[:-1]:
+                    if actual_suffix[:len(suffix_pattern)-1] == suffix_pattern[:-1]:
                         blocked.add(suffix_pattern[-1])
 
         return blocked
 
 
 __all__ = [
-    "BadWordsPenaltyMode",
-    "TrieNode",
-    "BadWordsProcessorV2",
-    "BadPhrasesProcessor",
-    "apply_bad_words",
-    "apply_bad_words_with_drafts",
+    'BadWordsPenaltyMode',
+    'TrieNode',
+    'BadWordsProcessorV2',
+    'BadPhrasesProcessor',
+    'apply_bad_words',
+    'apply_bad_words_with_drafts',
 ]

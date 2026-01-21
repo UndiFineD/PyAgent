@@ -1,41 +1,34 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Lock-Free Queue for high-performance concurrent operations.
 
 Phase 19: Beyond vLLM - Performance Patterns
 Wait-free and lock-free data structures.
 """
-
 from __future__ import annotations
 
-import heapq
 import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
+from typing import (
+    Any,
+    Generic,
+    TypeVar,
+    Optional,
+    Dict,
+    List,
+    Iterator,
+    Callable,
+)
 from queue import Empty, Full
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+import heapq
 
-T = TypeVar("T")
+T = TypeVar('T')
 
 
 @dataclass
 class QueueStats:
     """Statistics for queue operations."""
-
     enqueued: int = 0
     dequeued: int = 0
     failed_enqueue: int = 0
@@ -50,12 +43,12 @@ class QueueStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            "enqueued": self.enqueued,
-            "dequeued": self.dequeued,
-            "failed_enqueue": self.failed_enqueue,
-            "failed_dequeue": self.failed_dequeue,
-            "peak_size": self.peak_size,
-            "current_size": self.current_size,
+            'enqueued': self.enqueued,
+            'dequeued': self.dequeued,
+            'failed_enqueue': self.failed_enqueue,
+            'failed_dequeue': self.failed_dequeue,
+            'peak_size': self.peak_size,
+            'current_size': self.current_size,
         }
 
 
@@ -82,7 +75,7 @@ class MPMCQueue(Generic[T]):
         value = queue.get()
     """
 
-    def __init__(self, capacity: int = 1000) -> None:
+    def __init__(self, capacity: int = 1000):
         """
         Initialize queue.
 
@@ -276,7 +269,7 @@ class SPSCQueue(Generic[T]):
     WARNING: Only safe with exactly one producer and one consumer thread!
     """
 
-    def __init__(self, capacity: int = 1024) -> None:
+    def __init__(self, capacity: int = 1024):
         """
         Initialize SPSC queue.
 
@@ -359,7 +352,6 @@ class SPSCQueue(Generic[T]):
 @dataclass(order=True)
 class PriorityItem(Generic[T]):
     """Item with priority for priority queue."""
-
     priority: float
     sequence: int = field(compare=True)
     item: T = field(compare=False)
@@ -373,7 +365,7 @@ class PriorityQueue(Generic[T]):
     Maintains FIFO order for items with equal priority.
     """
 
-    def __init__(self, capacity: int = 10000) -> None:
+    def __init__(self, capacity: int = 10000):
         """
         Initialize priority queue.
 
@@ -391,7 +383,7 @@ class PriorityQueue(Generic[T]):
         self,
         item: T,
         priority: float = 0.0,
-        _timeout: Optional[float] = None,
+        timeout: Optional[float] = None,
     ) -> bool:
         """
         Put an item with priority.
@@ -490,7 +482,7 @@ class WorkStealingDeque(Generic[T]):
     Thieves steal from head (FIFO to get older tasks).
     """
 
-    def __init__(self, capacity: int = 1024) -> None:
+    def __init__(self, capacity: int = 1024):
         """Initialize work-stealing deque."""
         self._capacity = capacity
         self._buffer: deque[T] = deque()
@@ -577,7 +569,7 @@ class BatchingQueue(Generic[T]):
         batch_size: int = 32,
         batch_timeout: float = 0.01,
         max_pending: int = 10000,
-    ) -> None:
+    ):
         """
         Initialize batching queue.
 
@@ -638,8 +630,8 @@ class BatchingQueue(Generic[T]):
                 return []
 
             # Take up to batch_size items
-            batch = self._pending[: self._batch_size]
-            self._pending = self._pending[self._batch_size :]
+            batch = self._pending[:self._batch_size]
+            self._pending = self._pending[self._batch_size:]
 
             self._stats.dequeued += len(batch)
             self._last_batch_time = time.monotonic()

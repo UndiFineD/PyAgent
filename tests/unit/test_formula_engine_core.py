@@ -9,7 +9,7 @@ except ImportError:
     FormulaEngineCore = None  # type: ignore
 
 pytestmark = pytest.mark.skipif(
-    FormulaEngineCore is None, 
+    FormulaEngineCore is None,
     reason="FormulaEngineCore not available in MetricsEngine"
 )
 

@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 MemorySnapshot - Device memory profiling with GC tracking.
 
@@ -20,19 +6,16 @@ memory monitoring and garbage collection optimization.
 
 Phase 17: vLLM Pattern Integration
 """
-
 from __future__ import annotations
-
-from _thread import LockType
 import gc
 import os
-import threading
+import sys
 import time
-import tracemalloc
+import threading
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Iterator, Optional
-
+from typing import Optional, Iterator, Any
+import tracemalloc
 
 
 @dataclass
@@ -42,7 +25,6 @@ class MemorySnapshot:
 
     Tracks Python, system, and optionally GPU memory.
     """
-
     timestamp: float = field(default_factory=time.time)
 
     # Python memory (via tracemalloc)
@@ -64,30 +46,30 @@ class MemorySnapshot:
     gc_generation_2: int = 0
     gc_objects: int = 0
 
-    def delta(self, other: "MemorySnapshot") -> dict[str, float]:
+    def delta(self, other: 'MemorySnapshot') -> dict:
         """Calculate memory change from another snapshot."""
         return {
-            "python_current_delta_mb": self.python_current_mb - other.python_current_mb,
-            "rss_delta_mb": self.rss_mb - other.rss_mb,
-            "gpu_allocated_delta_mb": self.gpu_allocated_mb - other.gpu_allocated_mb,
-            "gc_objects_delta": self.gc_objects - other.gc_objects,
-            "elapsed_seconds": self.timestamp - other.timestamp,
+            'python_current_delta_mb': self.python_current_mb - other.python_current_mb,
+            'rss_delta_mb': self.rss_mb - other.rss_mb,
+            'gpu_allocated_delta_mb': self.gpu_allocated_mb - other.gpu_allocated_mb,
+            'gc_objects_delta': self.gc_objects - other.gc_objects,
+            'elapsed_seconds': self.timestamp - other.timestamp,
         }
 
-    def to_dict(self) -> dict[str, float | int]:
+    def to_dict(self) -> dict:
         return {
-            "timestamp": self.timestamp,
-            "python_current_mb": round(self.python_current_mb, 2),
-            "python_peak_mb": round(self.python_peak_mb, 2),
-            "rss_mb": round(self.rss_mb, 2),
-            "vms_mb": round(self.vms_mb, 2),
-            "gpu_allocated_mb": round(self.gpu_allocated_mb, 2),
-            "gpu_reserved_mb": round(self.gpu_reserved_mb, 2),
-            "gpu_peak_mb": round(self.gpu_peak_mb, 2),
-            "gc_generation_0": self.gc_generation_0,
-            "gc_generation_1": self.gc_generation_1,
-            "gc_generation_2": self.gc_generation_2,
-            "gc_objects": self.gc_objects,
+            'timestamp': self.timestamp,
+            'python_current_mb': round(self.python_current_mb, 2),
+            'python_peak_mb': round(self.python_peak_mb, 2),
+            'rss_mb': round(self.rss_mb, 2),
+            'vms_mb': round(self.vms_mb, 2),
+            'gpu_allocated_mb': round(self.gpu_allocated_mb, 2),
+            'gpu_reserved_mb': round(self.gpu_reserved_mb, 2),
+            'gpu_peak_mb': round(self.gpu_peak_mb, 2),
+            'gc_generation_0': self.gc_generation_0,
+            'gc_generation_1': self.gc_generation_1,
+            'gc_generation_2': self.gc_generation_2,
+            'gc_objects': self.gc_objects,
         }
 
 
@@ -102,50 +84,43 @@ def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
         MemorySnapshot with current memory state
     """
     snapshot = MemorySnapshot()
-    _capture_python_memory(snapshot)
-    _capture_system_memory(snapshot)
-    if include_gpu:
-        _capture_gpu_memory(snapshot)
-    _capture_gc_stats(snapshot)
-    return snapshot
 
-
-def _capture_python_memory(snapshot: MemorySnapshot) -> None:
+    # Python memory via tracemalloc
     if tracemalloc.is_tracing():
         current, peak = tracemalloc.get_traced_memory()
         snapshot.python_current_mb = current / (1024 * 1024)
         snapshot.python_peak_mb = peak / (1024 * 1024)
 
-
-def _capture_system_memory(snapshot: MemorySnapshot) -> None:
+    # System memory via psutil (if available)
     try:
         import psutil
         process = psutil.Process(os.getpid())
-        mem_info = process.memory_info()  # type: ignore
+        mem_info = process.memory_info()
         snapshot.rss_mb = mem_info.rss / (1024 * 1024)
         snapshot.vms_mb = mem_info.vms / (1024 * 1024)
     except ImportError:
         pass
 
+    # GPU memory via torch (if available)
+    if include_gpu:
+        try:
+            import torch
+            if torch.cuda.is_available():
+                snapshot.gpu_allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)
+                snapshot.gpu_reserved_mb = torch.cuda.memory_reserved() / (1024 * 1024)
+                snapshot.gpu_peak_mb = torch.cuda.max_memory_allocated() / (1024 * 1024)
+        except ImportError:
+            pass
 
-def _capture_gpu_memory(snapshot: MemorySnapshot) -> None:
-    try:
-        import torch
-        if torch.cuda.is_available():
-            snapshot.gpu_allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)
-            snapshot.gpu_reserved_mb = torch.cuda.memory_reserved() / (1024 * 1024)
-            snapshot.gpu_peak_mb = torch.cuda.max_memory_allocated() / (1024 * 1024)
-    except ImportError:
-        pass
-
-
-def _capture_gc_stats(snapshot: MemorySnapshot) -> None:
-    gc_counts: tuple[int, int, int] = gc.get_count()
+    # GC stats
+    gc_counts = gc.get_count()
     if len(gc_counts) >= 3:
         snapshot.gc_generation_0 = gc_counts[0]
         snapshot.gc_generation_1 = gc_counts[1]
         snapshot.gc_generation_2 = gc_counts[2]
     snapshot.gc_objects = len(gc.get_objects())
+
+    return snapshot
 
 
 class MemoryProfiler:
@@ -159,13 +134,13 @@ class MemoryProfiler:
     """
 
     def __init__(self, name: str = "profile", include_gpu: bool = True) -> None:
-        self.name: str = name
-        self.include_gpu: bool = include_gpu
+        self.name = name
+        self.include_gpu = include_gpu
         self.start_snapshot: Optional[MemorySnapshot] = None
         self.end_snapshot: Optional[MemorySnapshot] = None
         self._start_trace = False
 
-    def __enter__(self) -> "MemoryProfiler":
+    def __enter__(self) -> 'MemoryProfiler':
         # Start tracemalloc if not running
         if not tracemalloc.is_tracing():
             tracemalloc.start()
@@ -190,10 +165,10 @@ class MemoryProfiler:
         """Generate a complete profiling report."""
         delta = self.delta() or {}
         return {
-            "name": self.name,
-            "start": self.start_snapshot.to_dict() if self.start_snapshot else None,
-            "end": self.end_snapshot.to_dict() if self.end_snapshot else None,
-            "delta": delta,
+            'name': self.name,
+            'start': self.start_snapshot.to_dict() if self.start_snapshot else None,
+            'end': self.end_snapshot.to_dict() if self.end_snapshot else None,
+            'delta': delta,
         }
 
 
@@ -227,13 +202,11 @@ class GCDebugger:
     """
 
     def __init__(self, log_collections: bool = False) -> None:
-        self.log_collections: bool = log_collections
+        self.log_collections = log_collections
         self.collections: list[dict] = []
         self._original_callbacks: list = []
         self._running = False
-
-        self._lock: LockType = threading.Lock()
-        self._gc_start_time = 0.0
+        self._lock = threading.Lock()
 
         # Stats
         self.total_collections = 0
@@ -262,43 +235,43 @@ class GCDebugger:
     def _gc_callback(self, phase: str, info: dict) -> None:
         """Callback invoked by GC."""
         with self._lock:
-            if phase == "start":
+            if phase == 'start':
                 self._gc_start_time = time.time()
-            elif phase == "stop":
-                elapsed_ms: gc.Any | float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000
+            elif phase == 'stop':
+                elapsed_ms = (time.time() - getattr(self, '_gc_start_time', time.time())) * 1000
 
                 self.total_collections += 1
-                self.total_collected += info.get("collected", 0)
-                self.total_uncollectable += info.get("uncollectable", 0)
+                self.total_collected += info.get('collected', 0)
+                self.total_uncollectable += info.get('uncollectable', 0)
                 self.total_time_ms += elapsed_ms
 
                 if self.log_collections:
                     collection_info = {
-                        "generation": info.get("generation", -1),
-                        "collected": info.get("collected", 0),
-                        "uncollectable": info.get("uncollectable", 0),
-                        "elapsed_ms": round(elapsed_ms, 3),
-                        "timestamp": time.time(),
+                        'generation': info.get('generation', -1),
+                        'collected': info.get('collected', 0),
+                        'uncollectable': info.get('uncollectable', 0),
+                        'elapsed_ms': round(elapsed_ms, 3),
+                        'timestamp': time.time(),
                     }
                     self.collections.append(collection_info)
 
     def force_collection(self, generation: int = 2) -> dict:
         """Force a garbage collection and return stats."""
-        start: float = time.time()
-        collected: int = gc.collect(generation)
-        elapsed_ms: float = (time.time() - start) * 1000
+        start = time.time()
+        collected = gc.collect(generation)
+        elapsed_ms = (time.time() - start) * 1000
 
         return {
-            "generation": generation,
-            "collected": collected,
-            "elapsed_ms": round(elapsed_ms, 3),
+            'generation': generation,
+            'collected': collected,
+            'elapsed_ms': round(elapsed_ms, 3),
         }
 
     def get_top_objects(self, n: int = 10) -> list[tuple[str, int]]:
         """Get the top N most common object types by count."""
         type_counts: dict[str, int] = {}
         for obj in gc.get_objects():
-            type_name: str = type(obj).__name__
+            type_name = type(obj).__name__
             type_counts[type_name] = type_counts.get(type_name, 0) + 1
 
         return sorted(type_counts.items(), key=lambda x: x[1], reverse=True)[:n]
@@ -306,17 +279,19 @@ class GCDebugger:
     def report(self) -> dict:
         """Generate a GC debugging report."""
         return {
-            "total_collections": self.total_collections,
-            "total_collected": self.total_collected,
-            "total_uncollectable": self.total_uncollectable,
-            "total_time_ms": round(self.total_time_ms, 2),
-            "avg_collection_time_ms": round(self.total_time_ms / max(1, self.total_collections), 2),
-            "current_gc_counts": gc.get_count(),
-            "total_objects": len(gc.get_objects()),
-            "collection_log": self.collections[-10:] if self.collections else [],
+            'total_collections': self.total_collections,
+            'total_collected': self.total_collected,
+            'total_uncollectable': self.total_uncollectable,
+            'total_time_ms': round(self.total_time_ms, 2),
+            'avg_collection_time_ms': round(
+                self.total_time_ms / max(1, self.total_collections), 2
+            ),
+            'current_gc_counts': gc.get_count(),
+            'total_objects': len(gc.get_objects()),
+            'collection_log': self.collections[-10:] if self.collections else [],
         }
 
-    def __enter__(self) -> "GCDebugger":
+    def __enter__(self) -> 'GCDebugger':
         self.start()
         return self
 
@@ -336,7 +311,7 @@ def freeze_gc_heap() -> int:
     """
     gc.collect()  # Full collection first
     gc.freeze()
-    return len(gc.get_freeze_count()) if hasattr(gc, "get_freeze_count") else -1
+    return len(gc.get_freeze_count()) if hasattr(gc, 'get_freeze_count') else -1
 
 
 def unfreeze_gc_heap() -> None:
@@ -344,34 +319,34 @@ def unfreeze_gc_heap() -> None:
     gc.unfreeze()
 
 
-def gc_stats() -> dict[str, object]:
+def gc_stats() -> dict:
     """Get current GC statistics."""
-    counts: tuple[int, int, int] = gc.get_count()
-    thresholds: tuple[int, int, int] = gc.get_threshold()
+    counts = gc.get_count()
+    thresholds = gc.get_threshold()
 
     return {
-        "counts": {
-            "generation_0": counts[0],
-            "generation_1": counts[1],
-            "generation_2": counts[2],
+        'counts': {
+            'generation_0': counts[0],
+            'generation_1': counts[1],
+            'generation_2': counts[2],
         },
-        "thresholds": {
-            "generation_0": thresholds[0],
-            "generation_1": thresholds[1],
-            "generation_2": thresholds[2],
+        'thresholds': {
+            'generation_0': thresholds[0],
+            'generation_1': thresholds[1],
+            'generation_2': thresholds[2],
         },
-        "total_objects": len(gc.get_objects()),
-        "gc_enabled": gc.isenabled(),
+        'total_objects': len(gc.get_objects()),
+        'gc_enabled': gc.isenabled(),
     }
 
 
-__all__: list[str] = [
-    "MemorySnapshot",
-    "MemoryProfiler",
-    "GCDebugger",
-    "capture_memory_snapshot",
-    "memory_profile",
-    "freeze_gc_heap",
-    "unfreeze_gc_heap",
-    "gc_stats",
+__all__ = [
+    'MemorySnapshot',
+    'MemoryProfiler',
+    'GCDebugger',
+    'capture_memory_snapshot',
+    'memory_profile',
+    'freeze_gc_heap',
+    'unfreeze_gc_heap',
+    'gc_stats',
 ]

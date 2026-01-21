@@ -28,7 +28,7 @@ __version__ = VERSION
 
 class ProactiveAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers, 
+    Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers,
     scheduled maintenance, and predictive task execution for the fleet.
     """
 

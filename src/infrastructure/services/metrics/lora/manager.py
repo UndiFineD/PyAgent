@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 """
 LoRA Stats Manager - Collection of aggregate stats for LoRA adapters.
@@ -24,11 +10,9 @@ import threading
 import time
 from typing import Dict, List, Optional, Tuple
 
-from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
-                                                            LoRALoadState,
-                                                            LoRARequestState,
-                                                            LoRAStats)
+from src.infrastructure.services.metrics.lora.types import (
+    LoRALoadState, LoRAAdapterInfo, LoRARequestState, LoRAStats
+)
 
 logger = logging.getLogger(__name__)
 
@@ -82,14 +66,6 @@ class LoRAStatsManager:
 
     def start_loading(self, adapter_id: str) -> None:
         """Mark adapter as loading."""
-        # Phase 336: Connectivity Check
-        if not ConnectivityManager().is_endpoint_available(adapter_id):
-            logger.warning(f"LoRAStatsManager: Skipping load for {adapter_id} - endpoint unavailable")
-            with self._lock:
-                if adapter_id in self._adapters:
-                    self._adapters[adapter_id].load_state = LoRALoadState.FAILED
-            return
-
         with self._lock:
             if adapter_id in self._adapters:
                 adapter = self._adapters[adapter_id]
@@ -153,7 +129,9 @@ class LoRAStatsManager:
             self._stats.active_requests += 1
 
             # Update adapter counts
-            self._stats.adapter_request_counts[adapter_id] = self._stats.adapter_request_counts.get(adapter_id, 0) + 1
+            self._stats.adapter_request_counts[adapter_id] = (
+                self._stats.adapter_request_counts.get(adapter_id, 0) + 1
+            )
 
             return state
 
@@ -202,7 +180,9 @@ class LoRAStatsManager:
                 adapter_id = req.adapter_id
                 if adapter_id in self._adapters:
                     self._adapters[adapter_id].mark_used()
-                    self._stats.adapter_use_counts[adapter_id] = self._stats.adapter_use_counts.get(adapter_id, 0) + 1
+                    self._stats.adapter_use_counts[adapter_id] = (
+                        self._stats.adapter_use_counts.get(adapter_id, 0) + 1
+                    )
 
     def preempt_request(self, request_id: str) -> None:
         """Mark request as preempted."""
@@ -242,8 +222,12 @@ class LoRAStatsManager:
 
             # Calculate averages
             if self._stats.completed_requests > 0:
-                stats.avg_load_latency = self._stats.total_load_time / self._stats.completed_requests
-                stats.avg_execution_latency = self._stats.total_execution_time / self._stats.completed_requests
+                stats.avg_load_latency = (
+                    self._stats.total_load_time / self._stats.completed_requests
+                )
+                stats.avg_execution_latency = (
+                    self._stats.total_execution_time / self._stats.completed_requests
+                )
 
             return stats
 
@@ -268,13 +252,17 @@ class LoRAStatsManager:
     def get_loaded_adapters(self) -> List[str]:
         """Get list of loaded adapter IDs."""
         with self._lock:
-            return [aid for aid, info in self._adapters.items() if info.load_state == LoRALoadState.LOADED]
+            return [
+                aid for aid, info in self._adapters.items()
+                if info.load_state == LoRALoadState.LOADED
+            ]
 
     def get_lru_adapter(self) -> Optional[str]:
         """Get least recently used loaded adapter."""
         with self._lock:
             loaded = [
-                (info.last_used, aid) for aid, info in self._adapters.items()
+                (info.last_used, aid)
+                for aid, info in self._adapters.items()
                 if info.load_state == LoRALoadState.LOADED
             ]
             if not loaded:

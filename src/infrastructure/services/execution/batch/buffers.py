@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -30,7 +16,6 @@ logger = logging.getLogger(__name__)
 # Try to import torch, but provide fallback for testing
 try:
     import torch
-
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -80,11 +65,15 @@ class InputBuffers:
 
         # Optional embeddings
         if inputs_embeds_size > 0:
-            self.inputs_embeds = torch.zeros((max_num_tokens, inputs_embeds_size), dtype=dtype, device=device)
+            self.inputs_embeds = torch.zeros(
+                (max_num_tokens, inputs_embeds_size), dtype=dtype, device=device
+            )
         else:
             self.inputs_embeds = None
 
-        logger.debug(f"InputBuffers initialized: max_reqs={max_num_reqs}, max_tokens={max_num_tokens}")
+        logger.debug(
+            f"InputBuffers initialized: max_reqs={max_num_reqs}, max_tokens={max_num_tokens}"
+        )
 
     def _init_numpy_buffers(self, max_num_reqs: int, max_num_tokens: int) -> None:
         """Initialize numpy buffers for testing without torch."""

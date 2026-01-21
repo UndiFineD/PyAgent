@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -77,7 +63,13 @@ class FlashAttentionBackend(AttentionBackend[None]):
             from flash_attn import flash_attn_func
         except ImportError:
             logger.warning("flash_attn not available, falling back to SDPA")
-            return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
+            return TorchSDPABackend().forward(
+                query, key, value, kv_cache, metadata, scale
+            )
+
+        # FlashAttention expects [batch, seqlen, heads, head_dim]
+        # Reshape accordingly
+        batch_seq, num_heads, head_dim = query.shape
 
         q = query.unsqueeze(0)  # Add batch dim
         k = key.unsqueeze(0)
@@ -85,12 +77,11 @@ class FlashAttentionBackend(AttentionBackend[None]):
 
         # Compute
         output = flash_attn_func(
-            q,
-            k,
-            v,
+            q, k, v,
             softmax_scale=scale,
             causal=(metadata.attn_type != AttentionType.ENCODER),
-            window_size=(metadata.sliding_window, metadata.sliding_window) if metadata.sliding_window else (-1, -1),
+            window_size=(metadata.sliding_window, metadata.sliding_window)
+            if metadata.sliding_window else (-1, -1),
         )
 
         return output.squeeze(0)

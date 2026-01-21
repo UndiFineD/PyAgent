@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 AtomicCounter - Thread-safe counter with Rust acceleration.
 
@@ -19,15 +5,13 @@ Inspired by vLLM's counter.py patterns for high-frequency atomic operations.
 
 Phase 17: vLLM Pattern Integration
 """
-
 from __future__ import annotations
-
 import threading
+from typing import Optional
 
 # Rust acceleration imports
 try:
     from rust_core import rust_core as rc
-
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
@@ -40,7 +24,7 @@ class Counter:
     Use AtomicCounter for multi-threaded scenarios.
     """
 
-    __slots__ = ("_value",)
+    __slots__ = ('_value',)
 
     def __init__(self, start: int = 0) -> None:
         self._value = start
@@ -87,7 +71,7 @@ class AtomicCounter:
         6
     """
 
-    __slots__ = ("_value", "_lock", "_use_rust")
+    __slots__ = ('_value', '_lock', '_use_rust')
 
     def __init__(self, start: int = 0, use_rust: bool = True) -> None:
         """
@@ -117,10 +101,9 @@ class AtomicCounter:
         Returns:
             New counter value
         """
-        if self._use_rust and hasattr(rc, "atomic_counter_add_rust"):
+        if self._use_rust and hasattr(rc, 'atomic_counter_add_rust'):
             # Rust atomic operation
             with self._lock:
-                # pylint: disable=c-extension-no-member
                 self._value = rc.atomic_counter_add_rust(self._value, delta)
                 return self._value
 
@@ -199,7 +182,7 @@ class AtomicCounter:
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, (int, AtomicCounter, Counter)):
-            return self.value == (other.value if hasattr(other, "value") else other)
+            return self.value == (other.value if hasattr(other, 'value') else other)
         return NotImplemented
 
 
@@ -210,7 +193,7 @@ class AtomicFlag:
     Useful for signaling between threads.
     """
 
-    __slots__ = ("_flag", "_lock")
+    __slots__ = ('_flag', '_lock')
 
     def __init__(self, initial: bool = False) -> None:
         self._flag = initial
@@ -264,7 +247,7 @@ class AtomicGauge:
     Useful for monitoring metrics that can go up and down.
     """
 
-    __slots__ = ("_value", "_min", "_max", "_lock")
+    __slots__ = ('_value', '_min', '_max', '_lock')
 
     def __init__(self, initial: float = 0.0) -> None:
         self._value = initial
@@ -294,39 +277,43 @@ class AtomicGauge:
         """Set the gauge value and update min/max."""
         with self._lock:
             self._value = value
-            self._min = min(self._min, value)
-            self._max = max(self._max, value)
+            if value < self._min:
+                self._min = value
+            if value > self._max:
+                self._max = value
 
     def inc(self, delta: float = 1.0) -> float:
         """Increment and return new value."""
         with self._lock:
             self._value += delta
-            self._max = max(self._max, self._value)
+            if self._value > self._max:
+                self._max = self._value
             return self._value
 
     def dec(self, delta: float = 1.0) -> float:
         """Decrement and return new value."""
         with self._lock:
             self._value -= delta
-            self._min = min(self._min, self._value)
+            if self._value < self._min:
+                self._min = self._value
             return self._value
 
     def snapshot(self) -> dict:
         """Get a snapshot of current, min, max values."""
         with self._lock:
             return {
-                "value": self._value,
-                "min": self._min,
-                "max": self._max,
+                'value': self._value,
+                'min': self._min,
+                'max': self._max,
             }
 
     def reset(self, value: float = 0.0) -> dict:
         """Reset and return previous snapshot."""
         with self._lock:
             snapshot = {
-                "value": self._value,
-                "min": self._min,
-                "max": self._max,
+                'value': self._value,
+                'min': self._min,
+                'max': self._max,
             }
             self._value = value
             self._min = value
@@ -339,9 +326,9 @@ class AtomicGauge:
 
 
 __all__ = [
-    "Counter",
-    "AtomicCounter",
-    "AtomicFlag",
-    "AtomicGauge",
-    "RUST_AVAILABLE",
+    'Counter',
+    'AtomicCounter',
+    'AtomicFlag',
+    'AtomicGauge',
+    'RUST_AVAILABLE',
 ]

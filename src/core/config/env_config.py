@@ -1,20 +1,3 @@
-#!/usr/bin/env python3
-from __future__ import annotations
-
-
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Environment Configuration Module - Phase 20: Production Infrastructure
 ========================================================================
@@ -23,19 +6,34 @@ Type-safe environment variable access with defaults and validation.
 Inspired by vLLM's envs.py pattern.
 
 Features:
+- Type-safe environment variable access
+- Default values with proper typing
+- Validation and transformation
+- Lazy evaluation support
+- Configuration namespacing
+- Environment variable documentation
 
 Author: PyAgent Phase 20
-
-Module: env_config
-Handles environment configuration and variable management for PyAgent core.
 """
 
+from __future__ import annotations
 
-import json
+import functools
 import logging
 import os
-from dataclasses import dataclass
-from typing import Any, Callable, Generic, TypeVar
+import json
+from dataclasses import dataclass, field
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Generic,
+    Literal,
+    TypeVar,
+    overload,
+    get_args,
+    get_origin,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -63,15 +61,8 @@ class EnvVar(Generic[T]):
     """
 
     __slots__ = (
-        "name",
-        "default",
-        "type_",
-        "validator",
-        "transformer",
-        "description",
-        "deprecated",
-        "_cached_value",
-        "_is_cached",
+        "name", "default", "type_", "validator", "transformer",
+        "description", "deprecated", "_cached_value", "_is_cached"
     )
 
     def __init__(
@@ -114,7 +105,6 @@ class EnvVar(Generic[T]):
 
         if self.deprecated:
             import warnings
-
             warnings.warn(
                 f"Environment variable {self.name} is deprecated: {self.deprecated}",
                 DeprecationWarning,
@@ -136,7 +126,10 @@ class EnvVar(Generic[T]):
 
         # Validate the value
         if self.validator and not self.validator(value):
-            raise ValueError(f"Invalid value for {self.name}: {raw_value} (validation failed)")
+            raise ValueError(
+                f"Invalid value for {self.name}: {raw_value} "
+                f"(validation failed)"
+            )
 
         self._cached_value = value
         self._is_cached = True
@@ -146,27 +139,24 @@ class EnvVar(Generic[T]):
         """Automatically convert string to target type."""
         type_ = self.type_
 
-        converter = self._get_type_converter(type_)
-        if converter:
-            return converter(raw_value)
-
-        # Try JSON parsing for complex types
-        try:
-            return json.loads(raw_value)  # type: ignore
-        except json.JSONDecodeError:
+        if type_ is bool:
+            return raw_value.lower() in ("1", "true", "yes", "on")  # type: ignore
+        elif type_ is int:
+            return int(raw_value)  # type: ignore
+        elif type_ is float:
+            return float(raw_value)  # type: ignore
+        elif type_ is str:
             return raw_value  # type: ignore
-
-    def _get_type_converter(self, type_: type) -> Callable[[str], T] | None:
-        """Get the appropriate converter function for a type."""
-        converters = {
-            bool: lambda x: x.lower() in ("1", "true", "yes", "on"),
-            int: int,
-            float: float,
-            str: lambda x: x,
-            list: json.loads,
-            dict: json.loads,
-        }
-        return converters.get(type_)
+        elif type_ is list:
+            return json.loads(raw_value)  # type: ignore
+        elif type_ is dict:
+            return json.loads(raw_value)  # type: ignore
+        else:
+            # Try JSON parsing for complex types
+            try:
+                return json.loads(raw_value)  # type: ignore
+            except json.JSONDecodeError:
+                return raw_value  # type: ignore
 
     def reset_cache(self) -> None:
         """Reset the cached value."""
@@ -174,19 +164,14 @@ class EnvVar(Generic[T]):
         self._is_cached = False
 
     def __get__(self, obj: Any, objtype: type | None = None) -> T:
-        """Get the environment variable value when accessed as a class attribute.
-        """
         return self.get()
 
     def __set__(self, obj: Any, value: T) -> None:
-        """Set the environment variable value when assigned to as a class attribute."""
         # Allow setting via env var for testing
         os.environ[self.name] = str(value)
         self.reset_cache()
 
     def __repr__(self) -> str:
-        """Return a string representation of the EnvVar descriptor.
-        """
         return f"EnvVar({self.name!r}, default={self.default!r})"
 
 
@@ -218,33 +203,24 @@ def get_env(
         return default
 
     actual_type = type_ or type(default)
-    return _convert_env_value(raw_value, actual_type, default)
 
-
-def _convert_env_value(raw_value: str, target_type: type[T], default: T) -> T:
-    """Convert a raw environment variable value to the target type."""
-    converters = {
-        bool: lambda x: x.lower() in ("1", "true", "yes", "on"),
-        int: int,
-        float: float,
-        str: lambda x: x,
-        list: json.loads,
-        dict: json.loads,
-    }
-
-    converter = converters.get(target_type)
-    if converter:
-        try:
-            return converter(raw_value)  # type: ignore
-        except (ValueError, json.JSONDecodeError):
-            logger.warning(f"Invalid {target_type.__name__} for env var: {raw_value}, using default")
-            return default
-
-    # Try JSON parsing for complex types
-    try:
-        return json.loads(raw_value)  # type: ignore
-    except json.JSONDecodeError:
+    if actual_type is bool:
+        return raw_value.lower() in ("1", "true", "yes", "on")  # type: ignore
+    elif actual_type is int:
+        return int(raw_value)  # type: ignore
+    elif actual_type is float:
+        return float(raw_value)  # type: ignore
+    elif actual_type is str:
         return raw_value  # type: ignore
+    elif actual_type is list:
+        return json.loads(raw_value)  # type: ignore
+    elif actual_type is dict:
+        return json.loads(raw_value)  # type: ignore
+    else:
+        try:
+            return json.loads(raw_value)  # type: ignore
+        except json.JSONDecodeError:
+            return raw_value  # type: ignore
 
 
 def get_env_bool(name: str, default: bool = False) -> bool:
@@ -318,7 +294,6 @@ def get_env_json(name: str, default: T) -> T:
 @dataclass
 class EnvConfigMeta:
     """Metadata for an environment configuration."""
-
     name: str
     description: str
     default: Any
@@ -362,15 +337,13 @@ class EnvConfig:
         for name in dir(cls):
             attr = getattr(cls, name, None)
             if isinstance(attr, EnvVar):
-                metadata.append(
-                    EnvConfigMeta(
-                        name=attr.name,
-                        description=attr.description,
-                        default=attr.default,
-                        type_name=attr.type_.__name__ if attr.type_ else "unknown",
-                        deprecated=attr.deprecated is not None,
-                    )
-                )
+                metadata.append(EnvConfigMeta(
+                    name=attr.name,
+                    description=attr.description,
+                    default=attr.default,
+                    type_name=attr.type_.__name__ if attr.type_ else "unknown",
+                    deprecated=attr.deprecated is not None,
+                ))
         return metadata
 
     @classmethod
@@ -382,7 +355,7 @@ class EnvConfig:
             if isinstance(attr, EnvVar):
                 try:
                     result[attr.name] = attr.get()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:
                     result[attr.name] = f"<error: {e}>"
         return result
 
@@ -395,43 +368,22 @@ class EnvConfig:
         print("-" * 50)
 
         for meta in cls.get_metadata():
-            value = cls._get_config_value(meta)
-            masked_value = cls._mask_secret_value(value, meta, secret_patterns, mask_secrets)
+            try:
+                value = getattr(cls, [n for n in dir(cls)
+                                     if isinstance(getattr(cls, n, None), EnvVar)
+                                     and getattr(cls, n).name == meta.name][0])
+            except Exception:
+                value = "<error>"
+
+            # Mask secrets
+            if mask_secrets and any(p in meta.name.lower() for p in secret_patterns):
+                if value and value != meta.default:
+                    value = "****"
+
             status = "[DEPRECATED]" if meta.deprecated else ""
-            print(f"  {meta.name}: {masked_value} {status}")
+            print(f"  {meta.name}: {value} {status}")
 
         print("-" * 50)
-
-    @classmethod
-    def _get_config_value(cls, meta: EnvConfigMeta) -> Any:
-        """Get the configuration value for a metadata entry."""
-        try:
-            attr_name = cls._find_env_var_attr_name(meta.name)
-            if attr_name:
-                return getattr(cls, attr_name)
-            return "<not found>"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return "<error>"
-
-    @classmethod
-    def _find_env_var_attr_name(cls, env_name: str) -> str | None:
-        """Find the attribute name for an environment variable name."""
-        for attr_name in dir(cls):
-            attr = getattr(cls, attr_name, None)
-            if isinstance(attr, EnvVar) and attr.name == env_name:
-                return attr_name
-        return None
-
-    @classmethod
-    def _mask_secret_value(cls, value: Any, meta: EnvConfigMeta, secret_patterns: set[str], mask_secrets: bool) -> Any:
-        """Mask secret values if masking is enabled."""
-        if not mask_secrets:
-            return value
-
-        if any(pattern in meta.name.lower() for pattern in secret_patterns):
-            if value and value != meta.default:
-                return "****"
-        return value
 
 
 # ============================================================================
@@ -504,7 +456,10 @@ class NamespacedConfig:
     def to_dict(self) -> dict[str, str]:
         """Get all environment variables with this namespace."""
         prefix = f"{self.namespace}{self.sep}"
-        return {k: v for k, v in os.environ.items() if k.startswith(prefix)}
+        return {
+            k: v for k, v in os.environ.items()
+            if k.startswith(prefix)
+        }
 
 
 # ============================================================================
@@ -526,7 +481,6 @@ class LazyEnvVar(Generic[T]):
         *,
         type_: type[T] | None = None,
     ) -> None:
-        """Initialize a lazy environment variable descriptor."""
         self.name = name
         self.default_factory = default_factory
         self.type_ = type_
@@ -534,7 +488,6 @@ class LazyEnvVar(Generic[T]):
         self._computed = False
 
     def get(self) -> T:
-        """Get the environment variable value, computing it on first access."""
         if self._computed:
             return self._value  # type: ignore
 
@@ -542,22 +495,17 @@ class LazyEnvVar(Generic[T]):
 
         if raw_value is None:
             self._value = self.default_factory()
+        elif self.type_ is bool:
+            self._value = raw_value.lower() in ("1", "true", "yes", "on")  # type: ignore
+        elif self.type_ is int:
+            self._value = int(raw_value)  # type: ignore
+        elif self.type_ is float:
+            self._value = float(raw_value)  # type: ignore
         else:
-            self._value = self._convert_lazy_value(raw_value)
+            self._value = raw_value  # type: ignore
 
         self._computed = True
         return self._value  # type: ignore
-
-    def _convert_lazy_value(self, raw_value: str) -> T:
-        """Convert raw value for lazy environment variable."""
-        if self.type_ is bool:
-            return raw_value.lower() in ("1", "true", "yes", "on")  # type: ignore
-        elif self.type_ is int:
-            return int(raw_value)  # type: ignore
-        elif self.type_ is float:
-            return float(raw_value)  # type: ignore
-        else:
-            return raw_value  # type: ignore
 
     def reset(self) -> None:
         """Reset to recompute on next access."""
@@ -591,7 +539,6 @@ class temp_env:
         self.original: dict[str, str | None] = {}
 
     def __enter__(self) -> "temp_env":
-        """Set the environment variables temporarily, saving original values for restoration."""
         # Save original values
         for key in self.env_vars:
             self.original[key] = os.environ.get(key)
@@ -606,8 +553,6 @@ class temp_env:
         return self
 
     def __exit__(self, *args: Any) -> None:
-        """Restore original environment variable values after the block exits.
-        """
         # Restore original values
         for key, value in self.original.items():
             if value is None:

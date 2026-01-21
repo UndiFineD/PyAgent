@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 39: Logit Processor for Constrained Generation
 # Inspired by vLLM's structured output framework
@@ -29,15 +15,14 @@ Provides:
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Callable, Dict, List, Optional, Set
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+import numpy as np
 
-import numpy as np  # noqa: F401
 
 # =============================================================================
 # Data Classes
 # =============================================================================
-
 
 @dataclass
 class LogitBias:
@@ -49,12 +34,11 @@ class LogitBias:
     - Multiplicative scaling
     - Hard constraints (force/ban)
     """
-
     token_id: int
     bias: float = 0.0
     scale: float = 1.0
     force: bool = False  # If True, only this token is allowed
-    ban: bool = False  # If True, token is disallowed
+    ban: bool = False    # If True, token is disallowed
 
     def apply(self, logit: float) -> float:
         """Apply bias to a logit value."""
@@ -68,7 +52,6 @@ class LogitBias:
 @dataclass
 class ProcessorStats:
     """Statistics for logit processors."""
-
     tokens_processed: int = 0
     tokens_masked: int = 0
     tokens_biased: int = 0
@@ -76,7 +59,6 @@ class ProcessorStats:
 
     @property
     def mask_ratio(self) -> float:
-        """Get the ratio of tokens masked to tokens processed."""
         if self.tokens_processed == 0:
             return 0.0
         return self.tokens_masked / self.tokens_processed
@@ -86,7 +68,6 @@ class ProcessorStats:
 # Abstract Logit Processor
 # =============================================================================
 
-
 class LogitProcessor(ABC):
     """
     Abstract base class for logit processors.
@@ -95,7 +76,7 @@ class LogitProcessor(ABC):
     enabling constrained generation, bias injection, and token filtering.
     """
 
-    def __init__(self, vocab_size: int) -> None:
+    def __init__(self, vocab_size: int):
         self.vocab_size = vocab_size
         self.stats = ProcessorStats()
         self._enabled = True
@@ -116,6 +97,7 @@ class LogitProcessor(ABC):
         Returns:
             Modified logits [batch_size, vocab_size].
         """
+        pass
 
     def enable(self) -> None:
         """Enable the processor."""
@@ -147,7 +129,6 @@ class LogitProcessor(ABC):
 # Constrained Logit Processor
 # =============================================================================
 
-
 class ConstrainedLogitProcessor(LogitProcessor):
     """
     Logit processor for constrained generation.
@@ -161,7 +142,7 @@ class ConstrainedLogitProcessor(LogitProcessor):
         vocab_size: int,
         allowed_tokens_fn: Callable[[np.ndarray], Set[int]],
         mask_value: float = float("-inf"),
-    ) -> None:
+    ):
         """
         Initialize constrained processor.
 
@@ -184,7 +165,6 @@ class ConstrainedLogitProcessor(LogitProcessor):
             return logits
 
         import time
-
         start = time.perf_counter()
 
         batch_size = logits.shape[0]
@@ -216,7 +196,6 @@ class ConstrainedLogitProcessor(LogitProcessor):
 # Bitmask Logit Processor
 # =============================================================================
 
-
 class BitmaskLogitProcessor(LogitProcessor):
     """
     High-performance logit processor using pre-computed bitmasks.
@@ -229,7 +208,7 @@ class BitmaskLogitProcessor(LogitProcessor):
         vocab_size: int,
         bitmask_fn: Callable[[np.ndarray, np.ndarray], None],
         mask_value: float = float("-inf"),
-    ) -> None:
+    ):
         """
         Initialize bitmask processor.
 
@@ -250,7 +229,9 @@ class BitmaskLogitProcessor(LogitProcessor):
     def _ensure_buffer(self, batch_size: int) -> np.ndarray:
         """Ensure buffer is allocated for batch size."""
         if self._bitmask_buffer is None or self._buffer_size < batch_size:
-            self._bitmask_buffer = np.ones((batch_size, self.vocab_size), dtype=np.bool_)
+            self._bitmask_buffer = np.ones(
+                (batch_size, self.vocab_size), dtype=np.bool_
+            )
             self._buffer_size = batch_size
         return self._bitmask_buffer[:batch_size]
 
@@ -264,7 +245,6 @@ class BitmaskLogitProcessor(LogitProcessor):
             return logits
 
         import time
-
         start = time.perf_counter()
 
         batch_size = logits.shape[0]
@@ -306,7 +286,6 @@ class BitmaskLogitProcessor(LogitProcessor):
 # Bias Logit Processor
 # =============================================================================
 
-
 class BiasLogitProcessor(LogitProcessor):
     """
     Logit processor for applying token biases.
@@ -318,7 +297,7 @@ class BiasLogitProcessor(LogitProcessor):
         self,
         vocab_size: int,
         biases: Optional[List[LogitBias]] = None,
-    ) -> None:
+    ):
         super().__init__(vocab_size)
         self._biases: Dict[int, LogitBias] = {}
 
@@ -363,7 +342,6 @@ class BiasLogitProcessor(LogitProcessor):
             return logits
 
         import time
-
         start = time.perf_counter()
 
         result = logits.copy()
@@ -398,7 +376,6 @@ class BiasLogitProcessor(LogitProcessor):
 # Composite Logit Processor
 # =============================================================================
 
-
 class CompositeLogitProcessor(LogitProcessor):
     """
     Combines multiple logit processors.
@@ -410,7 +387,7 @@ class CompositeLogitProcessor(LogitProcessor):
         self,
         vocab_size: int,
         processors: Optional[List[LogitProcessor]] = None,
-    ) -> None:
+    ):
         super().__init__(vocab_size)
         self._processors: List[LogitProcessor] = processors or []
 
@@ -470,11 +447,10 @@ class CompositeLogitProcessor(LogitProcessor):
 # Specialized Processors
 # =============================================================================
 
-
 class TemperatureProcessor(LogitProcessor):
     """Apply temperature scaling to logits."""
 
-    def __init__(self, vocab_size: int, temperature: float = 1.0) -> None:
+    def __init__(self, vocab_size: int, temperature: float = 1.0):
         super().__init__(vocab_size)
         self.temperature = temperature
 
@@ -495,7 +471,7 @@ class TemperatureProcessor(LogitProcessor):
 class TopKProcessor(LogitProcessor):
     """Apply top-k filtering to logits."""
 
-    def __init__(self, vocab_size: int, k: int = 50) -> None:
+    def __init__(self, vocab_size: int, k: int = 50):
         super().__init__(vocab_size)
         self.k = k
 
@@ -515,7 +491,7 @@ class TopKProcessor(LogitProcessor):
 
         for b in range(result.shape[0]):
             # Get top-k indices
-            top_k_indices = np.argpartition(result[b], -self.k)[-self.k :]
+            top_k_indices = np.argpartition(result[b], -self.k)[-self.k:]
 
             # Mask everything else
             mask = np.ones(self.vocab_size, dtype=bool)
@@ -528,7 +504,7 @@ class TopKProcessor(LogitProcessor):
 class TopPProcessor(LogitProcessor):
     """Apply top-p (nucleus) filtering to logits."""
 
-    def __init__(self, vocab_size: int, p: float = 0.9) -> None:
+    def __init__(self, vocab_size: int, p: float = 0.9):
         super().__init__(vocab_size)
         self.p = p
 
@@ -561,7 +537,7 @@ class TopPProcessor(LogitProcessor):
 
             # Mask tokens beyond cutoff
             if cutoff_idx < len(sorted_indices) - 1:
-                mask_indices = sorted_indices[cutoff_idx + 1 :]
+                mask_indices = sorted_indices[cutoff_idx + 1:]
                 result[b][mask_indices] = float("-inf")
 
         return result
@@ -575,7 +551,7 @@ class RepetitionPenaltyProcessor(LogitProcessor):
         vocab_size: int,
         penalty: float = 1.2,
         window_size: int = 64,
-    ) -> None:
+    ):
         super().__init__(vocab_size)
         self.penalty = penalty
         self.window_size = window_size
@@ -593,7 +569,7 @@ class RepetitionPenaltyProcessor(LogitProcessor):
         for b in range(result.shape[0]):
             # Get recent tokens
             seq = input_ids[b] if input_ids.ndim > 1 else input_ids
-            recent = seq[-self.window_size :] if len(seq) > self.window_size else seq
+            recent = seq[-self.window_size:] if len(seq) > self.window_size else seq
 
             # Get unique tokens
             unique_tokens = set(int(t) for t in recent if 0 <= t < self.vocab_size)
@@ -611,7 +587,6 @@ class RepetitionPenaltyProcessor(LogitProcessor):
 # =============================================================================
 # Utility Functions
 # =============================================================================
-
 
 def create_standard_processor_chain(
     vocab_size: int,

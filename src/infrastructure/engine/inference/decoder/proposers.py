@@ -1,21 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Proposers.py module.
-"""
-
 from __future__ import annotations
 
 from typing import Protocol, Sequence
@@ -57,7 +39,7 @@ class NgramProposer:
         self,
         prompt_lookup_min: int = 3,
         prompt_lookup_max: int = 5,
-    ) -> None:
+    ):
         self.prompt_lookup_min = prompt_lookup_min
         self.prompt_lookup_max = prompt_lookup_max
 
@@ -121,7 +103,7 @@ class NgramProposer:
 
         # Search from end to find most recent match
         for i in range(len(tokens) - n - 1, -1, -1):
-            if tokens[i : i + n] == pattern:
+            if tokens[i:i + n] == pattern:
                 # Found match, return continuation
                 continuation_start = i + n
                 continuation_end = min(continuation_start + max_tokens, len(tokens))
@@ -143,9 +125,9 @@ class NgramProposer:
 class SuffixNode:
     """Node in a suffix tree."""
 
-    __slots__ = ("children", "count", "continuations")
+    __slots__ = ('children', 'count', 'continuations')
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.children: dict[int, SuffixNode] = {}
         self.count: int = 0
         self.continuations: dict[int, int] = {}  # token -> frequency
@@ -165,7 +147,7 @@ class SuffixProposer:
         max_cached_requests: int = 10000,
         max_spec_factor: float = 1.0,
         min_token_prob: float = 0.1,
-    ) -> None:
+    ):
         self.max_tree_depth = max_tree_depth
         self.max_cached_requests = max_cached_requests
         self.max_spec_factor = max_spec_factor
@@ -292,7 +274,8 @@ class SuffixProposer:
 
             # Find most frequent continuation
             total = sum(current_node.continuations.values())
-            best_token = max(current_node.continuations.keys(), key=lambda t: current_node.continuations[t])
+            best_token = max(current_node.continuations.keys(),
+                           key=lambda t: current_node.continuations[t])
             freq = current_node.continuations[best_token]
             prob = freq / total
 
@@ -339,7 +322,7 @@ def ngram_match(
         return None
 
     for i in range(len(tokens) - n, -1, -1):
-        if tokens[i : i + n] == pattern:
+        if tokens[i:i + n] == pattern:
             start = i + n
             end = min(start + max_continuation, len(tokens))
             if start < len(tokens):

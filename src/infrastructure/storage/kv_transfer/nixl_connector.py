@@ -1,19 +1,3 @@
-#!/usr/bin/env python3
-from __future__ import annotations
-
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -27,52 +11,60 @@ It utilizes RDMA techniques and peer-to-peer memory copies to minimize CPU overh
 Inspired by vLLM's NixlConnector and advanced distributed communication patterns.
 """
 
+from __future__ import annotations
 
 import logging
 import threading
 import time
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import IntEnum
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Dict,
+    List,
+    Optional,
+    Set,
+    Tuple,
+    Union,
+)
 
 try:
     import numpy as np
 except ImportError:
     np = None
 
-from src.core.lazy_loader import LazyLoader
 from src.core.rust_bridge import RustBridge
+from src.core.lazy_loader import LazyLoader
 from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
-    KVConnectorBase, KVTransferConfig)
+    KVConnectorBase,
+    KVConnectorRole,
+    KVTransferConfig,
+    KVConnectorMetadata,
+)
 
 if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
-        ForwardContext
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import ForwardContext
 
 logger = logging.getLogger(__name__)
 
-
 class NixlMemoryRegionStatus(IntEnum):
     """Status of an RDMA memory region."""
-
     UNREGISTERED = 0
     REGISTERING = 1
     REGISTERED = 2
     ERROR = 3
 
-
 @dataclass
 class NixlMemoryRegion:
     """Represents a registered memory region for RDMA operations."""
-
     address: int
     length: int
     lkey: int
     rkey: int
     status: NixlMemoryRegionStatus = NixlMemoryRegionStatus.UNREGISTERED
     device_id: int = 0
-
 
 class NixlConnector(KVConnectorBase):
     """
@@ -102,19 +94,16 @@ class NixlConnector(KVConnectorBase):
     def _init_rdma(self):
         """Initialize Rust RDMA context."""
         try:
-            self.rust_bridge.call(
-                "init_nixl_rdma",
-                {
-                    "rank": self.rank,
-                    "world_size": self.world_size,
-                    "device_name": self.config.extra_config.get("rdma_device", "ib0"),
-                },
-            )
+            self.rust_bridge.execute("init_nixl_rdma", {
+                "rank": self.rank,
+                "world_size": self.world_size,
+                "device_name": self.config.extra_config.get("rdma_device", "ib0")
+            })
 
             # Start completion thread
             self._completion_thread = threading.Thread(target=self._poll_loop, daemon=True)
             self._completion_thread.start()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"Failed to initialize Nixl RDMA: {e}")
 
     def _poll_loop(self):
@@ -133,55 +122,60 @@ class NixlConnector(KVConnectorBase):
             addr = 0
             length = 0
             if np is not None and isinstance(tensor, np.ndarray):
-                addr = tensor.__array_interface__["data"][0]
+                addr = tensor.__array_interface__['data'][0]
                 length = tensor.nbytes
             elif hasattr(tensor, "data_ptr"):
                 addr = tensor.data_ptr()
                 length = tensor.numel() * tensor.element_size()
 
-            result = self.rust_bridge.call("nixl_register_mr", {"address": addr, "length": length})
+            result = self.rust_bridge.execute("nixl_register_mr", {
+                "address": addr,
+                "length": length
+            })
 
             region = NixlMemoryRegion(
                 address=addr,
                 length=length,
                 lkey=result.get("lkey", 0),
                 rkey=result.get("rkey", 0),
-                status=NixlMemoryRegionStatus.REGISTERED,
+                status=NixlMemoryRegionStatus.REGISTERED
             )
             self.memory_regions[tensor_id] = region
             return region
 
     def transfer_blocks(
-        self, target_rank: int, block_ids: List[int], local_tensor: Any, remote_buffer_ptr: int, rkey: int
+        self,
+        target_rank: int,
+        block_ids: List[int],
+        local_tensor: Any,
+        remote_buffer_ptr: int,
+        rkey: int
     ) -> bool:
         """Asynchronously transfer KV blocks to a remote rank."""
         try:
             region = self.register_memory(local_tensor)
             transfer_id = f"tx_{int(time.time() * 1000)}_{uuid.uuid4().hex[:8]}"
 
-            self.rust_bridge.call(
-                "nixl_rdma_write",
-                {
-                    "transfer_id": transfer_id,
-                    "target_rank": target_rank,
-                    "block_ids": block_ids,
-                    "local_ptr": region.address,
-                    "remote_ptr": remote_buffer_ptr,
-                    "remote_rkey": rkey,
-                },
-            )
+            self.rust_bridge.execute("nixl_rdma_write", {
+                "transfer_id": transfer_id,
+                "target_rank": target_rank,
+                "block_ids": block_ids,
+                "local_ptr": region.address,
+                "remote_ptr": remote_buffer_ptr,
+                "remote_rkey": rkey
+            })
 
             with self._lock:
                 self.active_transfers.add(transfer_id)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"Nixl transfer failed: {e}")
             return False
 
     def poll_completions(self) -> List[str]:
         """Poll for completed transfers."""
         try:
-            completed = self.rust_bridge.call("nixl_poll_cq", {})
+            completed = self.rust_bridge.execute("nixl_poll_cq", {})
             finished_ids = []
             with self._lock:
                 for tx_id in completed:
@@ -189,7 +183,7 @@ class NixlConnector(KVConnectorBase):
                         self.active_transfers.remove(tx_id)
                         finished_ids.append(tx_id)
             return finished_ids
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:
             return []
 
     # ==============================
@@ -218,7 +212,11 @@ class NixlConnector(KVConnectorBase):
 
         for t_rank in target_ranks:
             self.transfer_blocks(
-                target_rank=t_rank, block_ids=block_ids, local_tensor=kv_layer, remote_buffer_ptr=0, rkey=0
+                target_rank=t_rank,
+                block_ids=block_ids,
+                local_tensor=kv_layer,
+                remote_buffer_ptr=0,
+                rkey=0
             )
 
     def close(self) -> None:
@@ -227,7 +225,6 @@ class NixlConnector(KVConnectorBase):
         if self._completion_thread:
             self._completion_thread.join(timeout=1.0)
         logger.info("NixlConnector closed.")
-
 
 # Lazy loading registration
 _connector = LazyLoader("src.infrastructure.storage.kv_transfer.nixl_connector", "NixlConnector")

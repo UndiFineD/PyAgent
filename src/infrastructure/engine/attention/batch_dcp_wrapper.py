@@ -1,19 +1,6 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
-Module: batch_dcp_wrapper
 Batch DCP Wrapper - Batch processing for disaggregated prefill-decode.
 
 Implements batch-level wrappers for coordinating DCP (Disaggregated
@@ -32,29 +19,45 @@ Beyond vLLM:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Protocol,
+    Sequence,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 logger = logging.getLogger(__name__)
 
 # Try importing optional dependencies
 try:
-    import torch  # noqa: F401
-    import torch.distributed as dist_module  # noqa: F401
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
 
+try:
+    import torch
+    import torch.distributed as dist
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
-    dist_module = None  # type: ignore
 
 
 class BatchPhase(Enum):
     """Phase of batch processing."""
-
     PREFILL = auto()
     DECODE = auto()
     MIXED = auto()
@@ -62,11 +65,10 @@ class BatchPhase(Enum):
 
 class AllReduceStrategy(Enum):
     """Strategy for distributed reduction."""
-
-    RING = auto()  # Ring all-reduce
-    TREE = auto()  # Tree-based reduction
-    RECURSIVE = auto()  # Recursive halving
-    NCCL = auto()  # Use NCCL primitives
+    RING = auto()        # Ring all-reduce
+    TREE = auto()        # Tree-based reduction
+    RECURSIVE = auto()   # Recursive halving
+    NCCL = auto()        # Use NCCL primitives
 
 
 @dataclass
@@ -75,7 +77,6 @@ class BatchRequest:
 
     Tracks per-request state within a batch.
     """
-
     request_id: str
     tokens: List[int]
     seq_len: int
@@ -100,7 +101,6 @@ class BatchMetadata:
 
     Inspired by vLLM's batch metadata structures.
     """
-
     batch_id: str
     phase: BatchPhase
 
@@ -126,20 +126,19 @@ class BatchMetadata:
 
     @property
     def is_prefill(self) -> bool:
-        """Check if phase is prefill."""
         return self.phase == BatchPhase.PREFILL
 
     @property
     def is_decode(self) -> bool:
-        """Check if phase is decode."""
         return self.phase == BatchPhase.DECODE
+
 
 @dataclass
 class DCPPlanConfig:
-    """Controls how batches are planned and executed.
-    Batch DCP wrapper for attention mechanisms in PyAgent engine.
-    """
+    """Configuration for DCP planning.
 
+    Controls how batches are planned and executed.
+    """
     # Batch sizing
     max_batch_size: int = 256
     max_tokens_per_batch: int = 8192
@@ -170,7 +169,6 @@ class ExecutionPlan:
 
     Produced by plan() method, consumed by run() method.
     """
-
     batch_id: str
     phase: BatchPhase
 
@@ -206,7 +204,7 @@ class BatchExecutor(ABC):
 
         Returns execution plan without running.
         """
-        raise NotImplementedError
+        ...
 
     @abstractmethod
     def run(
@@ -223,7 +221,7 @@ class BatchExecutor(ABC):
         Returns:
             Output tensors and metadata
         """
-        raise NotImplementedError
+        ...
 
 
 class BatchDCPPrefillWrapper(BatchExecutor):
@@ -239,7 +237,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         self,
         config: DCPPlanConfig,
         attention_fn: Optional[Callable] = None,
-    ) -> None:
+    ):
         """Initialize prefill wrapper.
 
         Args:
@@ -295,13 +293,11 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         remote_transfers = []
         for req in sorted_requests:
             if req.remote_engine_id:
-                remote_transfers.append(
-                    {
-                        "request_id": req.request_id,
-                        "remote_engine_id": req.remote_engine_id,
-                        "block_ids": block_allocation[req.request_id],
-                    }
-                )
+                remote_transfers.append({
+                    "request_id": req.request_id,
+                    "remote_engine_id": req.remote_engine_id,
+                    "block_ids": block_allocation[req.request_id],
+                })
 
         plan = ExecutionPlan(
             batch_id=batch_id,
@@ -328,7 +324,9 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         position_ids = input_tensors.get("position_ids")
 
         # Build attention mask
-        total_tokens = sum(end - start for start, end in plan.token_positions.values())
+        total_tokens = sum(
+            end - start for start, end in plan.token_positions.values()
+        )
 
         # Run attention (mock if no function provided)
         if self._attention_fn:
@@ -383,7 +381,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         self,
         config: DCPPlanConfig,
         attention_fn: Optional[Callable] = None,
-    ) -> None:
+    ):
         """Initialize decode wrapper.
 
         Args:
@@ -414,7 +412,9 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         request_order = [r.request_id for r in requests]
 
         # Single token per request for decode
-        token_positions = {r.request_id: (i, i + 1) for i, r in enumerate(requests)}
+        token_positions = {
+            r.request_id: (i, i + 1) for i, r in enumerate(requests)
+        }
 
         # Use remote blocks if available, else local
         block_allocation = {}
@@ -481,9 +481,8 @@ class BatchDCPDecodeWrapper(BatchExecutor):
             output = {"hidden_states": hidden_states}
 
         # LSE all-gather if distributed
-        if plan.lse_gather_plan and HAS_TORCH:
-            if dist_module is not None and dist_module.is_initialized():
-                output = self._do_lse_gather(output, plan.lse_gather_plan)
+        if plan.lse_gather_plan and HAS_TORCH and dist.is_initialized():
+            output = self._do_lse_gather(output, plan.lse_gather_plan)
 
         # Update statistics
         self._total_decodes += len(plan.request_order)
@@ -503,10 +502,8 @@ class BatchDCPDecodeWrapper(BatchExecutor):
 
         Aggregates attention statistics across distributed ranks.
         """
-        if not HAS_TORCH or dist_module is None:
+        if not HAS_TORCH:
             return output
-
-        import torch  # Now that HAS_TORCH is True, import is guaranteed to work
 
         # Get local LSE values
         local_lse = output.get("lse")
@@ -516,7 +513,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         # All-gather across ranks
         world_size = gather_plan["world_size"]
         gathered_lse = [torch.empty_like(local_lse) for _ in range(world_size)]
-        dist_module.all_gather(gathered_lse, local_lse)
+        dist.all_gather(gathered_lse, local_lse)
 
         # Combine with log-sum-exp
         stacked = torch.stack(gathered_lse)
@@ -543,7 +540,7 @@ class UnifiedBatchWrapper:
     Beyond vLLM: Single interface for heterogeneous batches.
     """
 
-    def __init__(self, config: DCPPlanConfig) -> None:
+    def __init__(self, config: DCPPlanConfig):
         """Initialize unified wrapper.
 
         Args:

@@ -27,7 +27,7 @@ __version__ = VERSION
 
 class MetacognitiveMonitor(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Metacognitive Monitor: Evaluates the internal 
+    Tier 2 (Cognitive Logic) - Metacognitive Monitor: Evaluates the internal
     consistency and certainty of agent reasoning.
     """
 

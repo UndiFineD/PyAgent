@@ -1,31 +1,9 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Multimodal.py module.
-"""
-
-from typing import Any, Tuple
-
+from typing import Tuple, Any
 from .base import HAS_TORCH, RotaryEmbeddingBase
 from .config import RoPEConfig
 
 if HAS_TORCH:
     import torch
-else:
-    torch = None  # pylint: disable=invalid-name
-
 
 class MRotaryEmbedding(RotaryEmbeddingBase):
     """Multimodal Rotary Position Embedding.
@@ -36,7 +14,7 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
     - Width (spatial x)
     """
 
-    def __init__(self, config: RoPEConfig) -> None:
+    def __init__(self, config: RoPEConfig):
         super().__init__(config)
         self.mrope_sections = config.mrope_sections or [8, 8, 8]
         assert len(self.mrope_sections) == 3, "Need 3 sections: temporal, height, width"
@@ -52,7 +30,10 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         inv_freqs = []
         for section_size in self.mrope_sections:
             inv_freq = 1.0 / (
-                self.base ** (torch.arange(0, section_size * 2, 2, dtype=torch.float32) / (section_size * 2))
+                self.base ** (
+                    torch.arange(0, section_size * 2, 2, dtype=torch.float32)
+                    / (section_size * 2)
+                )
             )
             inv_freqs.append(inv_freq)
         return inv_freqs
@@ -90,7 +71,9 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
 
         seq_len = int(positions.max().item()) + 1
         if self._cache_seq_len < seq_len:
-            self._cos_cache, self._sin_cache = self._compute_cos_sin_cache(max(seq_len, 2048))
+            self._cos_cache, self._sin_cache = self._compute_cos_sin_cache(
+                max(seq_len, 2048)
+            )
             self._cache_seq_len = max(seq_len, 2048)
 
         # Apply rotation for each section
@@ -105,8 +88,8 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
             cos = self._cos_cache[i][pos_i]  # [seq_len, section_size]
             sin = self._sin_cache[i][pos_i]
 
-            q_section = query[..., dim_offset : dim_offset + section_dim]
-            k_section = key[..., dim_offset : dim_offset + section_dim]
+            q_section = query[..., dim_offset:dim_offset + section_dim]
+            k_section = key[..., dim_offset:dim_offset + section_dim]
 
             # Apply rotation
             q_rot, k_rot = self._apply_rotation(q_section, k_section, cos, sin)
@@ -130,7 +113,6 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         sin: "torch.Tensor",
     ) -> Tuple["torch.Tensor", "torch.Tensor"]:
         """Apply rotation to a section."""
-
         def rotate_half(x: "torch.Tensor") -> "torch.Tensor":
             x1 = x[..., : x.shape[-1] // 2]
             x2 = x[..., x.shape[-1] // 2 :]

@@ -1,36 +1,27 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Scheduler.py module.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 import asyncio
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Any, Tuple
 
-from .config import DCPConfig, InstanceInfo, KVTransferParams, ScheduledRequest
 from .enums import InstanceRole, SchedulingPolicy
-from .selectors import (HashSelector, InstanceSelector, LeastLoadedSelector,
-                        RandomSelector, RoundRobinSelector)
+from .config import (
+    InstanceInfo,
+    DCPConfig,
+    KVTransferParams,
+    ScheduledRequest
+)
+from .selectors import (
+    InstanceSelector,
+    RoundRobinSelector,
+    LeastLoadedSelector,
+    RandomSelector,
+    HashSelector
+)
 
 logger = logging.getLogger(__name__)
-
 
 class DisaggregatedScheduler:
     """Scheduler for disaggregated prefill-decode inference.
@@ -47,7 +38,7 @@ class DisaggregatedScheduler:
         SchedulingPolicy.HASH_BASED: HashSelector,
     }
 
-    def __init__(self, config: DCPConfig) -> None:
+    def __init__(self, config: DCPConfig):
         """Initialize the scheduler.
 
         Args:
@@ -141,13 +132,17 @@ class DisaggregatedScheduler:
         request: ScheduledRequest,
     ) -> Tuple[Optional[InstanceInfo], KVTransferParams]:
         """Schedule a request for prefill phase."""
-        prefill_instance = self._prefill_selector.select(self._prefill_instances, request)
+        prefill_instance = self._prefill_selector.select(
+            self._prefill_instances, request
+        )
 
         if prefill_instance is None:
             logger.warning("No healthy prefill instance available")
             return None, KVTransferParams()
 
-        decode_instance = self._decode_selector.select(self._decode_instances, request)
+        decode_instance = self._decode_selector.select(
+            self._decode_instances, request
+        )
 
         params = KVTransferParams(
             do_remote_decode=True,
@@ -180,7 +175,9 @@ class DisaggregatedScheduler:
         """Schedule a request for decode phase."""
         decode_instance = request.decode_instance
         if decode_instance is None or not decode_instance.is_healthy:
-            decode_instance = self._decode_selector.select(self._decode_instances, request)
+            decode_instance = self._decode_selector.select(
+                self._decode_instances, request
+            )
 
         if decode_instance is None:
             logger.warning("No healthy decode instance available")

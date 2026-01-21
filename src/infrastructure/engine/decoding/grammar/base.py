@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -24,7 +10,14 @@ import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import (
+    Any,
+    Dict,
+    List,
+    Optional,
+    Set,
+    Union,
+)
 
 import numpy as np
 
@@ -35,12 +28,12 @@ class StructuredOutputOptions(Enum):
     Inspired by vLLM's StructuredOutputOptions.
     """
 
-    JSON = auto()  # JSON schema constraint
-    JSON_OBJECT = auto()  # Any valid JSON object
-    REGEX = auto()  # Regular expression pattern
-    CHOICE = auto()  # Multi-choice selection
-    GRAMMAR = auto()  # EBNF context-free grammar
-    STRUCTURAL_TAG = auto()  # Tagged sections with schemas
+    JSON = auto()           # JSON schema constraint
+    JSON_OBJECT = auto()    # Any valid JSON object
+    REGEX = auto()          # Regular expression pattern
+    CHOICE = auto()         # Multi-choice selection
+    GRAMMAR = auto()        # EBNF context-free grammar
+    STRUCTURAL_TAG = auto() # Tagged sections with schemas
 
 
 @dataclass
@@ -80,7 +73,7 @@ class StructuredOutputsParams:
     _backend: Optional[str] = field(default=None, repr=False)
     _backend_was_auto: bool = field(default=False, repr=False)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         """Validate that only one constraint is set."""
         constraints = [
             self.json is not None,
@@ -150,6 +143,7 @@ class StructuredOutputGrammar(ABC):
         Returns:
             True if all tokens were accepted, False otherwise.
         """
+        ...
 
     @abstractmethod
     def validate_tokens(self, tokens: List[int]) -> List[int]:
@@ -161,6 +155,7 @@ class StructuredOutputGrammar(ABC):
         Returns:
             Prefix of tokens that are valid.
         """
+        ...
 
     @abstractmethod
     def rollback(self, num_tokens: int) -> None:
@@ -171,6 +166,7 @@ class StructuredOutputGrammar(ABC):
         Args:
             num_tokens: Number of tokens to roll back.
         """
+        ...
 
     @abstractmethod
     def fill_bitmask(self, bitmask: np.ndarray, idx: int) -> None:
@@ -180,6 +176,7 @@ class StructuredOutputGrammar(ABC):
             bitmask: 2D boolean array [batch_size, vocab_size].
             idx: Batch index to fill.
         """
+        ...
 
     @abstractmethod
     def get_valid_tokens(self) -> Set[int]:
@@ -188,6 +185,7 @@ class StructuredOutputGrammar(ABC):
         Returns:
             Set of token IDs that are valid next tokens.
         """
+        ...
 
     @abstractmethod
     def is_terminated(self) -> bool:
@@ -196,10 +194,12 @@ class StructuredOutputGrammar(ABC):
         Returns:
             True if generation should stop.
         """
+        ...
 
     @abstractmethod
     def reset(self) -> None:
         """Reset grammar to initial state."""
+        ...
 
     @property
     def num_processed_tokens(self) -> int:

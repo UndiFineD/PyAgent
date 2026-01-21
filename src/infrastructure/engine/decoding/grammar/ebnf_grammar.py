@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -21,7 +7,12 @@ EBNF grammar constraint logic for structured output decoding.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Set
+from typing import (
+    Callable,
+    Dict,
+    List,
+    Set,
+)
 
 import numpy as np
 
@@ -31,7 +22,6 @@ from .base import StructuredOutputGrammar
 @dataclass
 class GrammarRule:
     """A single EBNF grammar rule."""
-
     name: str
     alternatives: List[List[str]]  # Each alternative is a sequence of symbols
 
@@ -53,7 +43,7 @@ class EBNFGrammar(StructuredOutputGrammar):
     _token_history: List[int] = field(default_factory=list, init=False)
     _terminated: bool = field(default=False, init=False)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         """Parse EBNF grammar rules."""
         self._parse_grammar()
 
@@ -83,14 +73,14 @@ class EBNFGrammar(StructuredOutputGrammar):
                 in_string = False
 
                 for char in alt.strip():
-                    if char == '"' and (not current or current[-1] != "\\"):
+                    if char == '"' and (not current or current[-1] != '\\'):
                         if in_string:
                             symbols.append(("LITERAL", current))
                             current = ""
                         in_string = not in_string
                     elif in_string:
                         current += char
-                    elif char.isalnum() or char == "_":
+                    elif char.isalnum() or char == '_':
                         current += char
                     elif char.isspace():
                         if current:

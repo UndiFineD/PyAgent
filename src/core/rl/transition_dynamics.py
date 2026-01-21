@@ -1,22 +1,16 @@
-
-"""
-Transition dynamics.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Transition Dynamics for Markov Decision Processes - Phase 319 Enhanced
 
 from __future__ import annotations
-
-import math
-import random
+from typing import Any, Dict, List, Tuple, Optional, Set
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
-
+import random
+import math
+import logging
 
 @dataclass
 class TransitionRecord:
     """Records a single state transition with metadata."""
-
     state: Any
     action: Any
     next_state: Any
@@ -24,11 +18,9 @@ class TransitionRecord:
     done: bool = False
     timestamp: int = 0
 
-
 @dataclass
 class StateActionStats:
     """Statistics for a state-action pair."""
-
     visit_count: int = 0
     total_reward: float = 0.0
     next_state_counts: Dict[Any, int] = field(default_factory=dict)
@@ -37,14 +29,13 @@ class StateActionStats:
     def avg_reward(self) -> float:
         return self.total_reward / self.visit_count if self.visit_count > 0 else 0.0
 
-
 class TransitionDynamics:
     """
     Models the probability of moving from state S to S' given action A.
     Supports empirical estimation, model learning, and uncertainty quantification.
     """
 
-    def __init__(self, smoothing: float = 0.1) -> None:
+    def __init__(self, smoothing: float = 0.1):
         # (state, action) -> StateActionStats
         self._stats: Dict[Tuple[Any, Any], StateActionStats] = {}
         # All observed states and actions
@@ -68,7 +59,12 @@ class TransitionDynamics:
         return len(self._history)
 
     def record_transition(
-        self, state: Any, action: Any, next_state: Any, reward: float = 0.0, done: bool = False
+        self,
+        state: Any,
+        action: Any,
+        next_state: Any,
+        reward: float = 0.0,
+        done: bool = False
     ) -> None:
         """Records a transition and updates statistics."""
         key = (state, action)
@@ -89,16 +85,14 @@ class TransitionDynamics:
 
         # Record to history
         self._step_counter += 1
-        self._history.append(
-            TransitionRecord(
-                state=state,
-                action=action,
-                next_state=next_state,
-                reward=reward,
-                done=done,
-                timestamp=self._step_counter,
-            )
-        )
+        self._history.append(TransitionRecord(
+            state=state,
+            action=action,
+            next_state=next_state,
+            reward=reward,
+            done=done,
+            timestamp=self._step_counter
+        ))
 
     def get_transition_probability(self, state: Any, action: Any, next_state: Any) -> float:
         """Returns P(s'|s, a) with Laplace smoothing."""
@@ -128,7 +122,10 @@ class TransitionDynamics:
         stats = self._stats[key]
         total = stats.visit_count
 
-        return {next_state: count / total for next_state, count in stats.next_state_counts.items()}
+        return {
+            next_state: count / total
+            for next_state, count in stats.next_state_counts.items()
+        }
 
     def predict_next_state(self, state: Any, action: Any) -> Optional[Any]:
         """Stochastic prediction of the next state based on history."""
@@ -229,7 +226,10 @@ class TransitionDynamics:
         if key not in self._stats or not self._stats[key].next_state_counts:
             return None
 
-        return max(self._stats[key].next_state_counts.items(), key=lambda x: x[1])[0]
+        return max(
+            self._stats[key].next_state_counts.items(),
+            key=lambda x: x[1]
+        )[0]
 
     def get_transition_matrix(self, states: List[Any], action: Any) -> List[List[float]]:
         """Builds a transition probability matrix for a given action."""
@@ -252,7 +252,8 @@ class TransitionDynamics:
         state = start_state
 
         for step in range(steps):
-            action = self._select_random_action()
+            # Choose random action
+            action = random.choice(list(self._actions)) if self._actions else None
             if action is None:
                 break
 
@@ -261,24 +262,19 @@ class TransitionDynamics:
                 break
 
             reward = self.predict_expected_reward(state, action)
-            record = self._create_transition_record(state, action, next_state, reward, step)
-            trajectory.append(record)
+
+            trajectory.append(TransitionRecord(
+                state=state,
+                action=action,
+                next_state=next_state,
+                reward=reward,
+                done=False,
+                timestamp=step
+            ))
 
             state = next_state
 
         return trajectory
-
-    def _select_random_action(self) -> Optional[Any]:
-        """Select a random action from available actions."""
-        return random.choice(list(self._actions)) if self._actions else None
-
-    def _create_transition_record(
-        self, state: Any, action: Any, next_state: Any, reward: float, step: int
-    ) -> TransitionRecord:
-        """Create a transition record for the trajectory."""
-        return TransitionRecord(
-            state=state, action=action, next_state=next_state, reward=reward, done=False, timestamp=step
-        )
 
     def get_stats_summary(self) -> Dict[str, Any]:
         """Returns a summary of the transition dynamics."""
@@ -287,7 +283,9 @@ class TransitionDynamics:
             "action_space_size": self.action_space_size,
             "total_transitions": self.transition_count,
             "unique_state_action_pairs": len(self._stats),
-            "avg_transitions_per_pair": (self.transition_count / len(self._stats) if self._stats else 0),
+            "avg_transitions_per_pair": (
+                self.transition_count / len(self._stats) if self._stats else 0
+            )
         }
 
     def clear(self) -> None:

@@ -1,36 +1,21 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Deadline.py module.
-"""
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from _thread import LockType
 import heapq
 import threading
 import time
+from typing import (
+    List,
+    Optional,
+    TypeVar,
+    Callable,
+    Tuple,
+)
 from concurrent.futures import Future, ThreadPoolExecutor
-from typing import Callable, List, Optional, Tuple, TypeVar
-
 from .enums import TaskPriority, TaskState
-from .models import ScheduledTask, TaskStats
+from .models import TaskStats, ScheduledTask
 
-R = TypeVar("R")
-
+R = TypeVar('R')
 
 class DeadlineScheduler:
     """
@@ -39,11 +24,11 @@ class DeadlineScheduler:
     Always executes the task with the nearest deadline first.
     """
 
-    def __init__(self, workers: int = 4) -> None:
+    def __init__(self, workers: int = 4):
         """Initialize EDF scheduler."""
-        self._workers: int = workers
+        self._workers = workers
         self._queue: List[Tuple[float, int, ScheduledTask]] = []
-        self._lock: LockType = threading.Lock()
+        self._lock = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
         self._sequence = 0
         self._running = True
@@ -74,15 +59,15 @@ class DeadlineScheduler:
         Returns:
             Future for result
         """
-        now: float = time.monotonic()
-        deadline: float = now + deadline_ms / 1000.0
+        now = time.monotonic()
+        deadline = now + deadline_ms / 1000.0
 
         future: Future[R] = Future()
 
         with self._not_empty:
             self._sequence += 1
 
-            task: ScheduledTask[R] = ScheduledTask(
+            task = ScheduledTask(
                 priority_value=0,
                 deadline=deadline,
                 sequence=self._sequence,
@@ -121,7 +106,7 @@ class DeadlineScheduler:
                 with self._lock:
                     self._stats.completed += 1
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 task.state = TaskState.FAILED
                 if task.future:
                     task.future.set_exception(e)

@@ -45,7 +45,7 @@ class ModelOutput:
     timestamp: float = field(default_factory=time.time)
 
 
-@dataclass 
+@dataclass
 class SchedulerOutput:
     """Output from scheduler for model runner."""
     request_ids: list[str] = field(default_factory=list)

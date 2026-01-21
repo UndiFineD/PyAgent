@@ -16,17 +16,14 @@
 """Agent specializing in Project Management and Multi-Agent Orchestration."""
 
 from __future__ import annotations
-
-import json
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import create_main_function
+from src.infrastructure.swarm.orchestration.state.status_manager import StatusManager
 import logging
+import json
 import re
 from pathlib import Path
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.orchestration.state.status_manager import \
-    StatusManager
 
 __version__ = VERSION
 
@@ -48,17 +45,10 @@ class DirectorAgent(BaseAgent):
             "Your goal is to manage complex multi-file projects. "
             "You have the authority to delegate tasks to other specialized agents:\n"
             "- CoderAgent: For implementation/refactoring.\n"
-            "- WebIntelligenceAgent: For deep web research, Arxiv synthesis, and navigation.\n"
-            "- TestsAgent: For unit testing and verification.\n"
-            "- SecurityAgent: For auditing and safety scanning.\n"
-            "- ArchitectAgent: For system design and IA³ configuration.\n\n"
-            "RESEARCH WORKFLOW:\n"
-            "If a task requires modern research (Phase 51+), follow this workflow:\n"
-            "1. Search: Use WebIntelligenceAgent's search_arxiv tools.\n"
-            "2. Data: Download papers/summaries to data/research/.\n"
-            "3. Map: Use ArchitectAgent to map findings to Agent Logic (e.g., IA³ layers).\n"
-            "4. Implement: Use CoderAgent to apply changes.\n"
-            "5. Track: Update docs/improvements.md and .improvements.md files.\n\n"
+            "- SearchAgent: For web research.\n"
+            "- TestsAgent: For unit testing.\n"
+            "- SecurityAgent: For auditing.\n"
+            "- ArchitectAgent: For system design.\n\n"
             "When given a task, break it down into steps. For each step, specify:\n"
             "1. The target file.\n"
             "2. The agent type to use.\n"
@@ -77,11 +67,9 @@ class DirectorAgent(BaseAgent):
         src_path = Path(ws_root) / "src"
 
         # Scan src/data/agents, src/logic/agents, and orchestration folders
-        for p in src_path.rglob("*_agent.py"):
-            if p.name not in ["base_agent.py", "director_agent.py"]:
-                # Convert snake_case to PascalCase for easier LLM identification
-                name = "".join(part.capitalize() for part in p.stem.split("_"))
-                agents.append(name)
+        for p in src_path.rglob("*Agent.py"):
+            if p.name not in ["BaseAgent.py", "DirectorAgent.py"]:
+                agents.append(p.stem)
 
         # Ensure we unique and sort
         return sorted(list(set(agents)))
@@ -119,7 +107,9 @@ class DirectorAgent(BaseAgent):
     async def execute_project_plan(self, high_level_goal: str) -> str:
         """Decomposes a goal and executes delegations."""
         available = self._get_available_agents()
-        logging.info(f"Director planning for: {high_level_goal}. Available specialists: {available}")
+        logging.info(
+            f"Director planning for: {high_level_goal}. Available specialists: {available}"
+        )
 
         improvement_title = None
         if "Improvement Task:" in high_level_goal:
@@ -142,8 +132,7 @@ class DirectorAgent(BaseAgent):
             # Try to extract JSON from the LLM response
             json_match = re.search(r"\[.*\]", raw_plan, re.DOTALL)
             if not json_match:
-                error_prefix = "Plan generation failed. LLM did not provide a valid JSON list."
-                error_msg = f"{error_prefix} Response: {raw_plan[:200]}"
+                error_msg = f"Plan generation failed. LLM did not provide a valid JSON list. Response: {raw_plan[:200]}"
                 self.status.finish_project(success=False)
                 return error_msg
 
@@ -152,7 +141,9 @@ class DirectorAgent(BaseAgent):
 
             # Record all steps first
             for step in plan:
-                self.status.add_step(step.get("agent"), step.get("file"), step.get("prompt"))
+                self.status.add_step(
+                    step.get("agent"), step.get("file"), step.get("prompt")
+                )
 
             for i, step in enumerate(plan):
                 agent_type = step.get("agent")
@@ -165,12 +156,16 @@ class DirectorAgent(BaseAgent):
                 try:
                     res = await self.delegate_to(agent_type, sub_prompt, target_file)
 
-                    results.append(f"### Step {i + 1}: {agent_type} on {target_file}\n{res}\n")
+                    results.append(
+                        f"### Step {i + 1}: {agent_type} on {target_file}\n{res}\n"
+                    )
                     self.status.update_step_status(i, "Completed", res[:100] + "...")
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as step_error:
                     logging.error(f"Step {i + 1} failed: {step_error}")
 
-                    results.append(f"### Step {i + 1}: {agent_type} FAILED\n{str(step_error)}\n")
+                    results.append(
+                        f"### Step {i + 1}: {agent_type} FAILED\n{str(step_error)}\n"
+                    )
                     self.status.update_step_status(i, "Failed", str(step_error))
 
             self.status.finish_project(success=True)
@@ -180,10 +175,12 @@ class DirectorAgent(BaseAgent):
 
             return "# Plan Execution Results\n\n" + "\n".join(results)
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"Execution failed: {e}")
             self.status.finish_project(success=False)
-            return f"Error executing plan: {str(e)}\n\nOriginal Plan Output:\n{raw_plan}"
+            return (
+                f"Error executing plan: {str(e)}\n\nOriginal Plan Output:\n{raw_plan}"
+            )
 
     def _update_improvement_status(self, title: str, status: str) -> None:
         """Updates the status of an improvement in the tracking file."""
@@ -194,7 +191,10 @@ class DirectorAgent(BaseAgent):
             content = self.file_path.read_text(encoding="utf-8")
             # Look for the title and the status line following it
             # Format: **Title**\n   - Status: OLD_STATUS
-            pattern = re.compile(rf"\*\*{re.escape(title)}\*\*\n\s+-\s+Status:\s+([A-Z/ ()\w]+)", re.MULTILINE)
+            pattern = re.compile(
+                rf"\*\*{re.escape(title)}\*\*\n\s+-\s+Status:\s+([A-Z/ ()\w]+)",
+                re.MULTILINE
+            )
 
             match = pattern.search(content)
             if match:
@@ -205,7 +205,7 @@ class DirectorAgent(BaseAgent):
                 logging.info(f"Updated status for '{title}' to {status} in {self.file_path.name}")
             else:
                 logging.warning(f"Could not find improvement '{title}' in {self.file_path.name}")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"Failed to update improvement status: {e}")
 
     async def improve_content(self, prompt: str) -> str:
@@ -214,5 +214,7 @@ class DirectorAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(DirectorAgent, "Director Agent", "Goal/Project to orchestrate")
+    main = create_main_function(
+        DirectorAgent, "Director Agent", "Goal/Project to orchestrate"
+    )
     main()

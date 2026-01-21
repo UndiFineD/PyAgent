@@ -27,7 +27,7 @@ __version__ = VERSION
 
 class ReasoningAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems 
+    Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems
     and provides a logical blueprint before action using Chain-of-Thought reasoning.
     """
 

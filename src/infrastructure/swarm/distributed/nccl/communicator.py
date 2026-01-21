@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -20,8 +6,8 @@ NCCL communicator and custom operations.
 
 import logging
 import time
-from contextlib import contextmanager
 from typing import Any, Callable
+from contextlib import contextmanager
 
 from .models import NCCLConfig, NCCLStats, ReduceOp
 
@@ -31,7 +17,6 @@ logger = logging.getLogger(__name__)
 try:
     import torch
     import torch.distributed as dist
-
     HAS_TORCH = True
     HAS_DIST = dist.is_available()
 except ImportError:
@@ -92,7 +77,9 @@ class NCCLCommunicator:
             self._world_size = 1
             self._rank = 0
 
-        logger.debug(f"NCCLCommunicator initialized: rank={self._rank}/{self._world_size}")
+        logger.debug(
+            f"NCCLCommunicator initialized: rank={self._rank}/{self._world_size}"
+        )
 
     @property
     def world_size(self) -> int:
@@ -129,13 +116,16 @@ class NCCLCommunicator:
         for attempt in range(self.config.max_retries + 1):
             try:
                 return fn()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 last_error = e
                 self._stats.errors += 1
 
                 if attempt < self.config.max_retries:
                     self._stats.retry_count += 1
-                    logger.warning(f"NCCL {op_name} failed (attempt {attempt + 1}), retrying in {delay:.1f}s: {e}")
+                    logger.warning(
+                        f"NCCL {op_name} failed (attempt {attempt + 1}), "
+                        f"retrying in {delay:.1f}s: {e}"
+                    )
                     time.sleep(delay)
                     delay *= self.config.retry_backoff_factor
                 else:
@@ -175,7 +165,7 @@ class NCCLCommunicator:
             return None
 
         reduce_op = self._map_reduce_op(op)
-        is_avg = op in (ReduceOp.AVG, "avg")
+        is_avg = (op == ReduceOp.AVG or op == "avg")
 
         def do_reduce():
             with self._timed_op("all_reduce", tensor):
@@ -284,7 +274,7 @@ class NCCLCommunicator:
             return tensor
 
         if not HAS_DIST or not dist.is_initialized():
-            start = sum(output_sizes[: self._rank])
+            start = sum(output_sizes[:self._rank])
             return tensor.narrow(dim, start, output_sizes[self._rank])
 
         reduce_op = self._map_reduce_op(op)
@@ -294,7 +284,7 @@ class NCCLCommunicator:
                 input_chunks = list(tensor.split(output_sizes, dim=dim))
                 output = torch.empty_like(input_chunks[self._rank])
 
-                dist.reduce_scatter(
+                handle = dist.reduce_scatter(
                     output,
                     input_chunks,
                     op=reduce_op,
@@ -463,7 +453,7 @@ class CustomAllReduce:
             try:
                 self._custom_all_reduce(tensor, op)
                 return
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logger.warning(f"Custom all-reduce failed, falling back to NCCL: {e}")
                 self._fallback_count += 1
 

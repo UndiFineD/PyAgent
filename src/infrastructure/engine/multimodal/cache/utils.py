@@ -1,31 +1,15 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Utility functions for multimodal caching."""
 
-from typing import Any, Union
-
+from typing import Any, Optional, Union
 import numpy as np
-
-from .base import MultiModalCache
+from .enums import MediaType, HashAlgorithm, CacheBackend
 from .data import MediaHash
-from .enums import CacheBackend, HashAlgorithm, MediaType
-from .hasher import HAS_PIL, MultiModalHasher
-from .ipc import IPCMultiModalCache
+from .hasher import MultiModalHasher, HAS_PIL
+from .base import MultiModalCache
 from .memory import MemoryMultiModalCache
+from .ipc import IPCMultiModalCache
 
 
 def compute_media_hash(
@@ -38,38 +22,41 @@ def compute_media_hash(
 
     if media_type == MediaType.IMAGE or (media_type == MediaType.UNKNOWN and HAS_PIL):
         return hasher.hash_image(data)
-    if media_type == MediaType.AUDIO:
+    elif media_type == MediaType.AUDIO:
         return hasher.hash_audio(data if isinstance(data, bytes) else data.tobytes())
-    if media_type == MediaType.VIDEO:
+    elif media_type == MediaType.VIDEO:
         return hasher.hash_video(data if isinstance(data, bytes) else data.tobytes())
-    if media_type == MediaType.EMBEDDING or isinstance(data, np.ndarray):
+    elif media_type == MediaType.EMBEDDING or isinstance(data, np.ndarray):
         return hasher.hash_embedding(data if isinstance(data, np.ndarray) else np.frombuffer(data, dtype=np.float32))
-
-    # Generic bytes hash
-    if isinstance(data, bytes):
-        hash_value = hasher.hash_bytes(data)
     else:
-        hash_value = hasher.hash_bytes(str(data).encode())
+        # Generic bytes hash
+        if isinstance(data, bytes):
+            hash_value = hasher.hash_bytes(data)
+        else:
+            hash_value = hasher.hash_bytes(str(data).encode())
 
-    return MediaHash(
-        value=hash_value,
-        algorithm=algorithm,
-        media_type=media_type,
-        size_bytes=len(data) if isinstance(data, bytes) else 0,
-    )
+        return MediaHash(
+            value=hash_value,
+            algorithm=algorithm,
+            media_type=media_type,
+            size_bytes=len(data) if isinstance(data, bytes) else 0
+        )
 
 
 def create_cache(
     backend: CacheBackend = CacheBackend.MEMORY,
     max_size_bytes: int = 1024 * 1024 * 1024,
     max_entries: int = 10000,
-    **kwargs,
+    **kwargs
 ) -> MultiModalCache:
     """Factory function to create cache instance."""
     if backend == CacheBackend.MEMORY:
         return MemoryMultiModalCache(max_size_bytes, max_entries)
-    if backend == CacheBackend.SHARED:
+    elif backend == CacheBackend.SHARED:
         return IPCMultiModalCache(
-            name=kwargs.get("name", "pyagent_mm_cache"), max_size_bytes=max_size_bytes, max_entries=max_entries
+            name=kwargs.get("name", "pyagent_mm_cache"),
+            max_size_bytes=max_size_bytes,
+            max_entries=max_entries
         )
-    return MemoryMultiModalCache(max_size_bytes, max_entries)
+    else:
+        return MemoryMultiModalCache(max_size_bytes, max_entries)

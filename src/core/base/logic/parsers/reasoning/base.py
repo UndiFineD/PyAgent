@@ -1,29 +1,11 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""Base reasoning parser interface."""
-
 from __future__ import annotations
-
 from abc import ABC, abstractmethod
-from functools import cached_property
 from typing import Any, ClassVar, Sequence
-
-from .models import ReasoningResult, StreamingReasoningState
+from functools import cached_property
+from src.core.base.common.models import ReasoningResult, StreamingReasoningState
 
 
 class ReasoningParser(ABC):
@@ -43,13 +25,13 @@ class ReasoningParser(ABC):
     # Class-level name for registration
     name: ClassVar[str] = "base"
 
-    def __init__(self, tokenizer: Any = None, **_kwargs: Any) -> None:
+    def __init__(self, tokenizer: Any = None, **kwargs: Any) -> None:
         """
         Initialize the reasoning parser.
 
         Args:
             tokenizer: Tokenizer for token-level operations (optional).
-            **_kwargs: Additional configuration options.
+            **kwargs: Additional configuration options.
         """
         self.model_tokenizer = tokenizer
 
@@ -78,14 +60,14 @@ class ReasoningParser(ABC):
     def is_reasoning_end_streaming(
         self,
         input_ids: list[int],
-        _delta_ids: list[int],
+        delta_ids: list[int],
     ) -> bool:
         """
         Check if reasoning ends during streaming (decode step).
 
         Args:
             input_ids: The entire model output token IDs.
-            _delta_ids: The latest tokens from current decode step.
+            delta_ids: The latest tokens from current decode step.
 
         Returns:
             True if reasoning section ends in delta_ids.

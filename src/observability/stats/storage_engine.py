@@ -4,6 +4,7 @@
 # Phase 16: Rust acceleration for JSON serialization and compression
 
 from __future__ import annotations
+import contextlib
 import json
 import logging
 import zlib
@@ -11,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 from dataclasses import dataclass
-from .ObservabilityCore import StatsSnapshot
+from .observability_core import StatsSnapshot
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +87,7 @@ class StatsBackupManager:
             for f in self.backup_dir.glob("*.json"):
                 name = f.stem
                 if name not in self.backups:
-                    try:
+                    with contextlib.suppress(Exception):
                         payload = json.loads(f.read_text(encoding="utf-8"))
                         backups.append(
                             StatsBackup(
@@ -95,8 +96,6 @@ class StatsBackupManager:
                                 timestamp=payload.get("timestamp", ""),
                             )
                         )
-                    except Exception:
-                        pass
         return backups
 
     def restore(self, name: str) -> dict[str, Any] | None:
@@ -109,15 +108,13 @@ class StatsBackupManager:
             else None
         )
         if path and path.exists():
-            try:
+            with contextlib.suppress(Exception):
                 payload = json.loads(path.read_text(encoding="utf-8"))
                 self.backups[name] = {
                     "data": payload["data"],
                     "timestamp": payload["timestamp"],
                 }
                 return payload["data"]
-            except Exception:
-                pass
         return None
 
 
@@ -156,7 +153,7 @@ class StatsSnapshotManager:
             for f in self.snapshot_dir.glob("*.json"):
                 name = f.stem
                 if name not in self.snapshots:
-                    try:
+                    with contextlib.suppress(Exception):
                         payload = json.loads(f.read_text(encoding="utf-8"))
                         # Assuming payload has data, timestamp, name
                         snapshots.append(
@@ -166,8 +163,6 @@ class StatsSnapshotManager:
                                 timestamp=payload.get("timestamp", ""),
                             )
                         )
-                    except Exception:
-                        pass
         return snapshots
 
     def restore_snapshot(self, name: str) -> dict[str, Any] | None:
@@ -179,7 +174,7 @@ class StatsSnapshotManager:
             path = self.snapshot_dir / f"{name}.json"
 
             if path.exists():
-                try:
+                with contextlib.suppress(Exception):
                     payload = json.loads(path.read_text(encoding="utf-8"))
                     data = payload.get("data", {})
                     snap = StatsSnapshot(
@@ -189,8 +184,6 @@ class StatsSnapshotManager:
                     )
                     self.snapshots[name] = snap
                     return data
-                except Exception:
-                    pass
         return None
 
 
@@ -200,14 +193,12 @@ class StatsCompressor:
     def compress(self, data: Any) -> bytes:
         # Phase 16: Try Rust-accelerated JSON serialization + compression
         if _RUST_AVAILABLE and hasattr(rust_core, "compress_json_rust"):
-            try:
+            with contextlib.suppress(Exception):
                 if not isinstance(data, (bytes, bytearray)):
                     result = rust_core.compress_json_rust(data)
                     if result:
                         return result
-            except Exception:
-                pass  # Fall through to Python implementation
-        
+
         payload = (
             (b"b" + bytes(data))
             if isinstance(data, (bytes, bytearray))
@@ -218,13 +209,11 @@ class StatsCompressor:
     def decompress(self, data: bytes) -> Any:
         # Phase 16: Try Rust-accelerated decompression + JSON parsing
         if _RUST_AVAILABLE and hasattr(rust_core, "decompress_json_rust"):
-            try:
+            with contextlib.suppress(Exception):
                 result = rust_core.decompress_json_rust(data)
                 if result is not None:
                     return result
-            except Exception:
-                pass  # Fall through to Python implementation
-        
+
         payload = zlib.decompress(data)
         tag, body = payload[:1], payload[1:]
         if tag == b"b":

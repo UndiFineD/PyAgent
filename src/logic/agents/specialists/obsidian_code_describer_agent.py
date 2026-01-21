@@ -1,31 +1,24 @@
-#!/usr/bin/env python3
-
-"""
-Obsidian code describer agent.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
-
 import contextlib
+from src.core.base.lifecycle.version import VERSION
 import logging
+import os
 import re
+import json
 import time
-from dataclasses import dataclass, field
-from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
-
-from src.core.base.common.base_utilities import as_tool
+from dataclasses import dataclass, field
+from enum import Enum
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
-
 class NoteType(Enum):
-    """Types of notes in the Obsidian vault."""
     FILE = "file"
     CLASS = "class"
     FUNCTION = "function"
@@ -33,11 +26,9 @@ class NoteType(Enum):
     CONCEPT = "concept"
     INDEX = "index"
 
-
 @dataclass
 class CodeEntity:
     """Represents a code entity to document."""
-
     name: str
     entity_type: str  # class, function, variable, etc.
     file_path: str
@@ -45,19 +36,15 @@ class CodeEntity:
     docstring: Optional[str] = None
     dependencies: List[str] = field(default_factory=list)
 
-
 @dataclass
 class VaultNote:
     """Represents an Obsidian note."""
-
     title: str
     note_type: NoteType
     content: str
     frontmatter: Dict[str, Any] = field(default_factory=dict)
     wikilinks: Set[str] = field(default_factory=set)
 
-
-# pylint: disable=too-many-ancestors
 class ObsidianCodeDescriberAgent(BaseAgent):
     """
     Agent specializing in describing code and generating markdown files
@@ -77,14 +64,13 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         )
 
     @as_tool
-    # pylint: disable=too-many-positional-arguments
     async def describe_file_to_vault(
         self,
         target_file: str,
         vault_path: str,
         include_classes: bool = True,
         include_functions: bool = True,
-        generate_moc: bool = False,
+        generate_moc: bool = False
     ) -> Dict[str, Any]:
         """Analyzes a file and creates corresponding Obsidian notes."""
         target = Path(target_file)
@@ -125,12 +111,16 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             "success": True,
             "notes_created": notes_created,
             "entities_documented": len(entities),
-            "vault_path": str(self._vault_path),
+            "vault_path": str(self._vault_path)
         }
 
     @as_tool
     async def describe_directory_to_vault(
-        self, source_dir: str, vault_path: str, file_pattern: str = "*.py", recursive: bool = True
+        self,
+        source_dir: str,
+        vault_path: str,
+        file_pattern: str = "*.py",
+        recursive: bool = True
     ) -> Dict[str, Any]:
         """Documents an entire directory to an Obsidian vault."""
         source = Path(source_dir)
@@ -153,10 +143,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                     str(file_path),
                     vault_path,
                     include_classes=True,
-                    include_functions=False,  # Only top-level for bulk
+                    include_functions=False  # Only top-level for bulk
                 )
                 results.append({"file": str(file_path), "success": result.get("success")})
-            except (AttributeError, RuntimeError, TypeError, IOError) as e:
+            except Exception as e:
                 results.append({"file": str(file_path), "success": False, "error": str(e)})
 
         # Generate index note
@@ -171,7 +161,12 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         }
 
     @as_tool
-    async def generate_concept_note(self, concept: str, related_files: List[str], vault_path: str) -> Dict[str, Any]:
+    async def generate_concept_note(
+        self,
+        concept: str,
+        related_files: List[str],
+        vault_path: str
+    ) -> Dict[str, Any]:
         """Generates a concept note linking multiple code files."""
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
@@ -206,16 +201,25 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             frontmatter={
                 "type": "concept",
                 "created": time.strftime("%Y-%m-%d"),
-                "tags": ["concept", concept.lower().replace(" ", "-")],
-            },
+                "tags": ["concept", concept.lower().replace(" ", "-")]
+            }
         )
 
         saved_path = self._save_note(note)
 
-        return {"success": True, "note_path": saved_path, "concept": concept, "related_files": len(related_files)}
+        return {
+            "success": True,
+            "note_path": saved_path,
+            "concept": concept,
+            "related_files": len(related_files)
+        }
 
     @as_tool
-    async def update_frontmatter(self, note_path: str, frontmatter_updates: Dict[str, Any]) -> Dict[str, Any]:
+    async def update_frontmatter(
+        self,
+        note_path: str,
+        frontmatter_updates: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Updates the YAML frontmatter of an existing note."""
         path = Path(note_path)
         if not path.exists():
@@ -229,12 +233,11 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             # Update frontmatter
             try:
                 import yaml
-
                 existing_fm = yaml.safe_load(fm_match.group(1))
                 existing_fm.update(frontmatter_updates)
                 new_fm = yaml.dump(existing_fm, default_flow_style=False)
-                new_content = f"---\n{new_fm}---\n" + content[fm_match.end() :]
-            except (yaml.YAMLError, AttributeError, TypeError, KeyError):
+                new_content = f"---\n{new_fm}---\n" + content[fm_match.end():]
+            except Exception:
                 return {"success": False, "error": "Failed to parse YAML"}
         else:
             # Add new frontmatter
@@ -257,7 +260,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 name=match.group(1),
                 entity_type="class",
                 file_path=file_path,
-                line_number=code[: match.start()].count("\n") + 1,
+                line_number=code[:match.start()].count("\n") + 1
             )
             entities.append(entity)
             self._entity_registry[entity.name] = entity
@@ -267,7 +270,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 name=match.group(1),
                 entity_type="function",
                 file_path=file_path,
-                line_number=code[: match.start()].count("\n") + 1,
+                line_number=code[:match.start()].count("\n") + 1
             )
             entities.append(entity)
             self._entity_registry[entity.name] = entity
@@ -304,9 +307,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 "path": str(target),
                 "language": "python",
                 "created": time.strftime("%Y-%m-%d"),
-                "tags": ["code", "python", target.stem.lower()],
+                "tags": ["code", "python", target.stem.lower()]
             },
-            wikilinks=wikilinks,
+            wikilinks=wikilinks
         )
 
     async def _generate_entity_note(self, entity: CodeEntity, code: str) -> VaultNote:
@@ -339,9 +342,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 "file": entity.file_path,
                 "line": entity.line_number,
                 "created": time.strftime("%Y-%m-%d"),
-                "tags": ["code", entity.entity_type, entity.name.lower()],
+                "tags": ["code", entity.entity_type, entity.name.lower()]
             },
-            wikilinks=wikilinks,
+            wikilinks=wikilinks
         )
 
     def _generate_moc(self, name: str, notes: List[str]) -> VaultNote:
@@ -353,19 +356,18 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             title=f"{name} MOC",
             note_type=NoteType.INDEX,
             content=content,
-            frontmatter={"type": "moc", "created": time.strftime("%Y-%m-%d"), "tags": ["moc", "index"]},
+            frontmatter={
+                "type": "moc",
+                "created": time.strftime("%Y-%m-%d"),
+                "tags": ["moc", "index"]
+            }
         )
 
     def _generate_index_note(self, name: str, results: List[Dict]) -> VaultNote:
         """Generates an index note for a directory."""
         successful = [r for r in results if r.get("success")]
         links = "\n".join([f"- [[{Path(r['file']).stem}]]" for r in successful])
-        content = (
-            f"# {name} - Code Documentation Index\n\n"
-            f"## Files\n\n{links}\n\n"
-            f"## Statistics\n\n- Total files: {len(results)}\n"
-            f"- Documented: {len(successful)}\n"
-        )
+        content = f"# {name} - Code Documentation Index\n\n## Files\n\n{links}\n\n## Statistics\n\n- Total files: {len(results)}\n- Documented: {len(successful)}\n"
 
         return VaultNote(
             title=f"{name} Index",
@@ -374,8 +376,8 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             frontmatter={
                 "type": "index",
                 "created": time.strftime("%Y-%m-%d"),
-                "tags": ["index", "documentation"],
-            },
+                "tags": ["index", "documentation"]
+            }
         )
 
     def _save_note(self, note: VaultNote) -> str:

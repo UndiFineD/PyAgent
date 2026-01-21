@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 EngineCoreClient - Client interfaces for engine communication.
 
@@ -22,24 +8,37 @@ implementations for communicating with EngineCore.
 from __future__ import annotations
 
 import asyncio
-import logging
 import queue
 import threading
+import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, List, Optional
-
-from .engine_core import (EngineCore, EngineCoreOutputs, EngineCoreProc,
-                          MockExecutor, Request, SimpleScheduler)
-from .output_processor import EngineCoreRequest
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
+import logging
 
 logger = logging.getLogger(__name__)
+
+# Import from sibling modules
+from .engine_core import (
+    EngineCore,
+    EngineCoreProc,
+    Request,
+    SchedulerOutput,
+    ModelRunnerOutput,
+    EngineCoreOutputs,
+    SimpleScheduler,
+    MockExecutor,
+)
+from .output_processor import (
+    EngineCoreRequest,
+    EngineCoreOutput,
+    SamplingParams,
+)
 
 
 class RequestType(Enum):
     """Types of requests to engine core."""
-
     ADD_REQUEST = auto()
     ABORT_REQUESTS = auto()
     GET_OUTPUT = auto()
@@ -53,7 +52,6 @@ class RequestType(Enum):
 @dataclass
 class ClientConfig:
     """Configuration for engine core clients."""
-
     max_batch_size: int = 32
     max_tokens: int = 4096
     log_stats: bool = True
@@ -88,20 +86,23 @@ class EngineCoreClient(ABC):
 
     def profile(self, is_start: bool = True) -> None:
         """Start or stop profiling."""
+        pass
 
     def reset_prefix_cache(
         self,
-        _reset_running_requests: bool = False,
-        _reset_connector: bool = False,
+        reset_running_requests: bool = False,
+        reset_connector: bool = False,
     ) -> bool:
         """Reset the prefix cache."""
         return False
 
     def sleep(self, level: int = 1) -> None:
         """Put engine to sleep."""
+        pass
 
     def wake_up(self, tags: Optional[List[str]] = None) -> None:
         """Wake up engine from sleep."""
+        pass
 
     def is_sleeping(self) -> bool:
         """Check if engine is sleeping."""
@@ -109,6 +110,7 @@ class EngineCoreClient(ABC):
 
     def execute_dummy_batch(self) -> None:
         """Execute a dummy batch for warmup."""
+        pass
 
     # Async variants
     async def get_output_async(self) -> EngineCoreOutputs:
@@ -125,9 +127,11 @@ class EngineCoreClient(ABC):
 
     async def profile_async(self, is_start: bool = True) -> None:
         """Start or stop profiling (async)."""
+        pass
 
     async def execute_dummy_batch_async(self) -> None:
         """Execute a dummy batch for warmup (async)."""
+        pass
 
 
 class InprocClient(EngineCoreClient):
@@ -142,7 +146,7 @@ class InprocClient(EngineCoreClient):
         self,
         config: Optional[ClientConfig] = None,
         engine_core: Optional[EngineCore] = None,
-    ) -> None:
+    ):
         self.config = config or ClientConfig()
 
         if engine_core is not None:
@@ -211,7 +215,7 @@ class SyncMPClient(EngineCoreClient):
     def __init__(
         self,
         config: Optional[ClientConfig] = None,
-    ) -> None:
+    ):
         self.config = config or ClientConfig()
 
         # Create engine in this process
@@ -235,60 +239,39 @@ class SyncMPClient(EngineCoreClient):
         self._worker_thread = threading.Thread(target=self._run_engine_loop, daemon=True)
         self._worker_thread.start()
 
-    @property
-    def is_shutdown(self) -> bool:
-        """Check if engine is shutdown."""
-        return self._shutdown_flag.is_set()
-
     def _run_engine_loop(self) -> None:
         """Background thread running the engine."""
         while not self._shutdown_flag.is_set():
-            self._process_input_requests()
-            self._step_engine_if_needed()
+            # Process input requests
+            try:
+                request_type, data = self.input_queue.get(timeout=0.1)
+                self._handle_request(request_type, data)
+            except queue.Empty:
+                pass
 
-    def _process_input_requests(self) -> None:
-        """Process any pending input requests."""
-        try:
-            request_type, data = self.input_queue.get(timeout=0.1)
-            self._handle_request(request_type, data)
-        except queue.Empty:
-            pass
-
-    def _step_engine_if_needed(self) -> None:
-        """Step the engine if there are requests to process."""
-        if self.engine_core.scheduler.has_requests():
-            outputs, model_executed = self.engine_core.step()
-            if outputs:
-                for client_idx, engine_outputs in outputs.items():
-                    self.output_queue.put((client_idx, engine_outputs))
-            self.engine_core.post_step(model_executed)
+            # Step if we have work
+            if self.engine_core.scheduler.has_requests():
+                outputs, model_executed = self.engine_core.step()
+                if outputs:
+                    for client_idx, engine_outputs in outputs.items():
+                        self.output_queue.put((client_idx, engine_outputs))
+                self.engine_core.post_step(model_executed)
 
     def _handle_request(self, request_type: RequestType, data: Any) -> None:
         """Handle incoming request."""
         if request_type == RequestType.ADD_REQUEST:
-            self._handle_add_request(data)
+            request = data
+            engine_request = Request(
+                request_id=request.request_id,
+                prompt_token_ids=request.prompt_token_ids or [],
+                sampling_params=request.sampling_params.__dict__ if request.sampling_params else None,
+                arrival_time=request.arrival_time,
+            )
+            self.engine_core.add_request(engine_request)
         elif request_type == RequestType.ABORT_REQUESTS:
-            self._handle_abort_requests(data)
+            self.engine_core.abort_requests(data)
         elif request_type == RequestType.SHUTDOWN:
-            self._handle_shutdown()
-
-    def _handle_add_request(self, request: EngineCoreRequest) -> None:
-        """Handle add request."""
-        engine_request = Request(
-            request_id=request.request_id,
-            prompt_token_ids=request.prompt_token_ids or [],
-            sampling_params=request.sampling_params.__dict__ if request.sampling_params else None,
-            arrival_time=request.arrival_time,
-        )
-        self.engine_core.add_request(engine_request)
-
-    def _handle_abort_requests(self, request_ids: List[str]) -> None:
-        """Handle abort requests."""
-        self.engine_core.abort_requests(request_ids)
-
-    def _handle_shutdown(self) -> None:
-        """Handle shutdown request."""
-        self._shutdown_flag.set()
+            self._shutdown_flag.set()
 
     def get_output(self) -> EngineCoreOutputs:
         """Get output from engine."""
@@ -325,7 +308,7 @@ class AsyncMPClient(EngineCoreClient):
     def __init__(
         self,
         config: Optional[ClientConfig] = None,
-    ) -> None:
+    ):
         self.config = config or ClientConfig()
         self.config.async_mode = True
 
@@ -343,23 +326,19 @@ class AsyncMPClient(EngineCoreClient):
 
     async def _process_outputs(self) -> None:
         """Background task to process outputs."""
-        while not self._sync_client.is_shutdown:
+        loop = asyncio.get_event_loop()
+        while not self._sync_client._shutdown_flag.is_set():
             try:
-                outputs = await self._get_next_output()
+                # Non-blocking check
+                outputs = await loop.run_in_executor(
+                    None,
+                    lambda: self._sync_client.output_queue.get(timeout=0.1),
+                )
                 await self._output_queue.put(outputs)
             except queue.Empty:
                 await asyncio.sleep(0.01)
-            except Exception as e:
-                logger.error("Unexpected error in output processing task: %s", e)
+            except Exception:
                 break
-
-    async def _get_next_output(self) -> tuple:
-        """Get next output from sync client."""
-        loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(
-            None,
-            lambda: self._sync_client.output_queue.get(timeout=0.1),
-        )
 
     async def get_output_async(self) -> EngineCoreOutputs:
         """Get output from engine (async)."""
@@ -418,11 +397,12 @@ def create_client(
 
     if client_type == "inproc":
         return InprocClient(config=config)
-    if client_type == "sync_mp":
+    elif client_type == "sync_mp":
         return SyncMPClient(config=config)
-    if client_type == "async_mp":
+    elif client_type == "async_mp":
         return AsyncMPClient(config=config)
-    raise ValueError(f"Unknown client type: {client_type}")
+    else:
+        raise ValueError(f"Unknown client type: {client_type}")
 
 
 __all__ = [

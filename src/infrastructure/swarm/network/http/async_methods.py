@@ -1,29 +1,8 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Async methods.py module.
-"""
-
 from __future__ import annotations
-
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Mapping
-
+from typing import Any, Callable, Mapping, TYPE_CHECKING
 if TYPE_CHECKING:
     from src.infrastructure.swarm.network.http.connection import HTTPConnection
-
 
 class AsyncHTTPMixin:
     """Mixin providing asynchronous HTTP methods."""
@@ -57,7 +36,9 @@ class AsyncHTTPMixin:
         allow_redirects: bool = True,
     ) -> bytes:
         """Async GET request returning response body as bytes."""
-        async with await self.async_get_response(url, timeout=timeout, allow_redirects=allow_redirects) as r:
+        async with await self.async_get_response(
+            url, timeout=timeout, allow_redirects=allow_redirects
+        ) as r:
             r.raise_for_status()
             return await r.read()
 
@@ -126,7 +107,7 @@ class AsyncHTTPMixin:
             total_size = int(r.headers.get("content-length", 0)) or None
             downloaded = 0
 
-            with save_path.open("wb", encoding='utf-8') as f:
+            with save_path.open("wb") as f:
                 async for chunk in r.content.iter_chunked(chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)

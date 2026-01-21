@@ -27,15 +27,22 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, AsyncIterator, Dict, List, Optional
-
-logger = logging.getLogger(__name__)
+from typing import (
+    Any,
+    AsyncIterator,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    Union,
+)
 
 # Check vLLM availability
 try:
     from vllm import SamplingParams
-    from vllm.engine.arg_utils import AsyncEngineArgs
     from vllm.engine.async_llm_engine import AsyncLLMEngine
+    from vllm.engine.arg_utils import AsyncEngineArgs
 
     HAS_ASYNC_VLLM = True
 except ImportError:
@@ -47,7 +54,6 @@ except ImportError:
 
 class RequestState(Enum):
     """State of an async request."""
-
     PENDING = auto()
     RUNNING = auto()
     STREAMING = auto()
@@ -66,7 +72,7 @@ class AsyncEngineConfig:
     max_model_len: Optional[int] = None
     dtype: str = "auto"
     quantization: Optional[str] = None
-    trust_remote_code: bool = False
+    trust_remote_code: bool = True
 
     # Scheduling
     max_num_seqs: int = 256
@@ -125,7 +131,6 @@ class AsyncRequestHandle:
 
     @property
     def is_finished(self) -> bool:
-        """Check if request has completed or failed."""
         return self.state in (
             RequestState.COMPLETED,
             RequestState.FAILED,
@@ -134,33 +139,52 @@ class AsyncRequestHandle:
 
     @property
     def latency_ms(self) -> Optional[float]:
-        """Get end-to-end latency in milliseconds."""
         if self.started_at and self.completed_at:
             return (self.completed_at - self.started_at) * 1000
         return None
 
     @property
     def tokens_per_second(self) -> Optional[float]:
-        """Get generated tokens per second."""
         latency = self.latency_ms
         if latency and self.generated_tokens > 0:
             return self.generated_tokens / (latency / 1000)
         return None
 
+
 class AsyncVllmEngine:
     """
-    AsyncVllmEngine provides high-throughput async inference for PyAgent using vLLM.
+    High-throughput async vLLM engine for PyAgent.
+
+    Provides:
+    - Concurrent request handling
+    - Request tracking and cancellation
+    - Automatic batching via vLLM scheduler
+    - Streaming support via async iterators
+
+    Example:
+        engine = AsyncVllmEngine(AsyncEngineConfig(model="meta-llama/Llama-3-8B"))
+        await engine.start()
+
+        # Single request
+        result = await engine.generate("What is AI?")
+
+        # Concurrent requests
+        handles = await engine.generate_batch(["Q1", "Q2", "Q3"])
+
+        # Streaming
+        async for token in engine.generate_stream("Tell me a story"):
+            print(token, end="", flush=True)
     """
+
     _instance: Optional["AsyncVllmEngine"] = None
 
-    def __init__(self, config: AsyncEngineConfig) -> None:
-        """Initialize the async vLLM engine."""
-        self.config = config
+    def __init__(self, config: Optional[AsyncEngineConfig] = None):
+        self.config = config or AsyncEngineConfig()
         self._engine: Optional[AsyncLLMEngine] = None
-        self._running: bool = False
-        self._req_tracker: Dict[str, AsyncRequestHandle] = {}
+        self._running = False
+        self._requests: Dict[str, AsyncRequestHandle] = {}
         self._lock = asyncio.Lock()
-        self._stats: Dict[str, Any] = {
+        self._stats = {
             "total_requests": 0,
             "completed_requests": 0,
             "failed_requests": 0,
@@ -168,15 +192,16 @@ class AsyncVllmEngine:
         }
 
     @classmethod
-    def get_instance(cls: type["AsyncVllmEngine"], config: AsyncEngineConfig) -> "AsyncVllmEngine":
-        """Get the singleton instance of the async engine."""
+    def get_instance(cls, config: Optional[AsyncEngineConfig] = None) -> "AsyncVllmEngine":
+        """Get singleton instance."""
         if cls._instance is None:
             cls._instance = AsyncVllmEngine(config)
         return cls._instance
+
     @property
-    def _requests(self):
-        """Alias for test compatibility (legacy)."""
-        return self._req_tracker
+    def is_available(self) -> bool:
+        """Check if vLLM async engine is available."""
+        return HAS_ASYNC_VLLM
 
     @property
     def is_running(self) -> bool:
@@ -186,24 +211,24 @@ class AsyncVllmEngine:
     async def start(self) -> bool:
         """Start the async engine."""
         if not HAS_ASYNC_VLLM:
-            logger.warning("vLLM async engine not available")
+            logging.warning("vLLM async engine not available")
             return False
 
         if self._running:
             return True
 
         try:
-            logger.info("Starting AsyncVllmEngine with model: %s", self.config.model)
+            logging.info(f"Starting AsyncVllmEngine with model: {self.config.model}")
 
             engine_args = self.config.to_engine_args()
             self._engine = AsyncLLMEngine.from_engine_args(engine_args)
             self._running = True
 
-            logger.info("AsyncVllmEngine started successfully")
+            logging.info("AsyncVllmEngine started successfully")
             return True
 
-        except (RuntimeError, ValueError) as e:
-            logger.error("Failed to start AsyncVllmEngine: %s", e)
+        except Exception as e:
+            logging.error(f"Failed to start AsyncVllmEngine: {e}")
             self._running = False
             return False
 
@@ -211,70 +236,16 @@ class AsyncVllmEngine:
         """Stop the async engine."""
         if self._engine:
             # Abort all pending requests
-            for request_id in list(self._req_tracker.keys()):
+            for request_id in list(self._requests.keys()):
                 await self.abort_request(request_id)
 
             self._engine = None
             self._running = False
-            logger.info("AsyncVllmEngine stopped")
+            logging.info("AsyncVllmEngine stopped")
 
     def _generate_request_id(self) -> str:
         """Generate unique request ID."""
         return f"req-{uuid.uuid4().hex[:12]}"
-
-    def _format_prompt_with_system(self, prompt: str, system_prompt: Optional[str]) -> str:
-        """Format prompt with system prompt if provided."""
-        if system_prompt:
-            return f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:"
-        return prompt
-
-    def _create_request_handle(self, request_id: str, full_prompt: str) -> AsyncRequestHandle:
-        """Create and register a new request handle."""
-        handle = AsyncRequestHandle(
-            request_id=request_id,
-            prompt=full_prompt,
-        )
-        return handle
-
-    def _register_request(self, handle: AsyncRequestHandle) -> None:
-        """Register request in tracker and update stats."""
-        self._req_tracker[handle.request_id] = handle
-        self._stats["total_requests"] += 1
-
-    def _update_request_output(self, handle: AsyncRequestHandle, final_output: Any) -> None:
-        """Update request handle with generation output."""
-        if final_output and final_output.outputs:
-            output = final_output.outputs[0]
-            handle.output_text = output.text
-            handle.output_tokens = list(output.token_ids) if hasattr(output, "token_ids") else []
-            handle.finish_reason = output.finish_reason
-            handle.generated_tokens = len(handle.output_tokens)
-            handle.prompt_tokens = (
-                len(final_output.prompt_token_ids) if hasattr(final_output, "prompt_token_ids") else 0
-            )
-
-    def _finalize_request_success(self, handle: AsyncRequestHandle) -> None:
-        """Finalize successful request."""
-        handle.state = RequestState.COMPLETED
-        handle.completed_at = time.time()
-        self._stats["completed_requests"] += 1
-        self._stats["total_tokens"] += handle.generated_tokens
-
-    def _finalize_request_failure(self, handle: AsyncRequestHandle, error: str) -> None:
-        """Finalize failed request."""
-        handle.state = RequestState.FAILED
-        handle.error = error
-        handle.completed_at = time.time()
-        self._stats["failed_requests"] += 1
-
-    def _cleanup_old_requests(self) -> None:
-        """Clean up old completed requests if tracker is too large."""
-        if len(self._req_tracker) > 1000:
-            # Remove oldest completed requests
-            completed = [(k, v) for k, v in self._req_tracker.items() if v.is_finished]
-            completed.sort(key=lambda x: x[1].completed_at or 0)
-            for k, _ in completed[:500]:
-                del self._req_tracker[k]
 
     async def generate(
         self,
@@ -304,12 +275,20 @@ class AsyncVllmEngine:
             if not await self.start():
                 return ""
 
-        full_prompt = self._format_prompt_with_system(prompt, system_prompt)
+        # Format prompt with system prompt if provided
+        full_prompt = prompt
+        if system_prompt:
+            full_prompt = f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:"
+
         request_id = self._generate_request_id()
-        handle = self._create_request_handle(request_id, full_prompt)
+        handle = AsyncRequestHandle(
+            request_id=request_id,
+            prompt=full_prompt,
+        )
 
         async with self._lock:
-            self._register_request(handle)
+            self._requests[request_id] = handle
+            self._stats["total_requests"] += 1
 
         try:
             sampling_params = SamplingParams(
@@ -334,22 +313,46 @@ class AsyncVllmEngine:
             async for request_output in results_generator:
                 final_output = request_output
 
-            self._update_request_output(handle, final_output)
+            if final_output and final_output.outputs:
+                output = final_output.outputs[0]
+                handle.output_text = output.text
+                handle.output_tokens = list(output.token_ids) if hasattr(output, 'token_ids') else []
+                handle.finish_reason = output.finish_reason
+                handle.generated_tokens = len(handle.output_tokens)
+                handle.prompt_tokens = len(final_output.prompt_token_ids) if hasattr(final_output, 'prompt_token_ids') else 0
+
+            handle.state = RequestState.COMPLETED
+            handle.completed_at = time.time()
+
             async with self._lock:
-                self._finalize_request_success(handle)
+                self._stats["completed_requests"] += 1
+                self._stats["total_tokens"] += handle.generated_tokens
 
             return handle.output_text
 
-        except (RuntimeError, ValueError) as e:
+        except Exception as e:
+            handle.state = RequestState.FAILED
+            handle.error = str(e)
+            handle.completed_at = time.time()
+
             async with self._lock:
-                self._finalize_request_failure(handle, str(e))
-            logger.error("Generation failed for %s: %s", request_id, e)
+                self._stats["failed_requests"] += 1
+
+            logging.error(f"Generation failed for {request_id}: {e}")
             return ""
 
         finally:
             # Clean up old requests
             async with self._lock:
-                self._cleanup_old_requests()
+                if len(self._requests) > 1000:
+                    # Remove oldest completed requests
+                    completed = [
+                        (k, v) for k, v in self._requests.items()
+                        if v.is_finished
+                    ]
+                    completed.sort(key=lambda x: x[1].completed_at or 0)
+                    for k, _ in completed[:500]:
+                        del self._requests[k]
 
     async def generate_batch(
         self,
@@ -406,7 +409,7 @@ class AsyncVllmEngine:
         )
 
         async with self._lock:
-            self._req_tracker[request_id] = handle
+            self._requests[request_id] = handle
             self._stats["total_requests"] += 1
 
         try:
@@ -441,18 +444,18 @@ class AsyncVllmEngine:
             async with self._lock:
                 self._stats["completed_requests"] += 1
 
-        except (RuntimeError, ValueError) as e:
+        except Exception as e:
             handle.state = RequestState.FAILED
             handle.error = str(e)
-            logger.error("Streaming failed for %s: %s", request_id, e)
+            logging.error(f"Streaming failed for {request_id}: {e}")
 
     async def abort_request(self, request_id: str) -> bool:
         """Abort a running request."""
         async with self._lock:
-            if request_id not in self._req_tracker:
+            if request_id not in self._requests:
                 return False
 
-            handle = self._req_tracker[request_id]
+            handle = self._requests[request_id]
             if handle.is_finished:
                 return False
 
@@ -464,19 +467,22 @@ class AsyncVllmEngine:
             handle.completed_at = time.time()
             return True
 
-        except (RuntimeError, ValueError) as e:
-            logger.error("Failed to abort request %s: %s", request_id, e)
+        except Exception as e:
+            logging.error(f"Failed to abort request {request_id}: {e}")
             return False
 
     def get_request(self, request_id: str) -> Optional[AsyncRequestHandle]:
         """Get request handle by ID."""
-        return self._req_tracker.get(request_id)
+        return self._requests.get(request_id)
 
     def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""
         return {
             **self._stats,
-            "active_requests": len([r for r in self._req_tracker.values() if not r.is_finished]),
+            "active_requests": len([
+                r for r in self._requests.values()
+                if not r.is_finished
+            ]),
             "is_running": self.is_running,
         }
 
@@ -485,7 +491,7 @@ class AsyncVllmEngine:
 async def async_generate(
     prompt: str,
     model: str = "meta-llama/Llama-3-8B-Instruct",
-    **kwargs: Any,
+    **kwargs,
 ) -> str:
     """
     Convenience function for quick async generation.

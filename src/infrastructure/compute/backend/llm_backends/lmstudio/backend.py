@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -20,11 +6,18 @@ LM Studio LLM backend implementation.
 
 import logging
 import time
-from typing import TYPE_CHECKING, Any, Callable, Iterator, Optional, Sequence
+from typing import (
+    Any,
+    Callable,
+    Iterator,
+    Optional,
+    Sequence,
+    TYPE_CHECKING,
+)
 
 from ..llm_backend import LLMBackend
-from .cache import ModelCache
 from .models import LMStudioConfig
+from .cache import ModelCache
 
 if TYPE_CHECKING:
     import lmstudio
@@ -62,7 +55,6 @@ class LMStudioBackend(LLMBackend):
 
         try:
             import lmstudio
-
             self._sdk_available = True
             logger.debug(f"LM Studio SDK version: {lmstudio.__version__}")
             return True
@@ -85,7 +77,7 @@ class LMStudioBackend(LLMBackend):
             self._client = lmstudio.Client(self.config.api_host)
             logger.info(f"Connected to LM Studio at {self.config.api_host}")
             return self._client
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"Failed to connect to LM Studio: {e}")
             self._update_status(self.PROVIDER_ID, False)
             raise
@@ -104,7 +96,7 @@ class LMStudioBackend(LLMBackend):
             self._async_client = lmstudio.AsyncClient(self.config.api_host)
             logger.info(f"Async connected to LM Studio at {self.config.api_host}")
             return self._async_client
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"Failed to create async LM Studio client: {e}")
             raise
 
@@ -113,7 +105,7 @@ class LMStudioBackend(LLMBackend):
         if self._client is not None:
             try:
                 self._client.close()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
             self._client = None
 
@@ -126,10 +118,9 @@ class LMStudioBackend(LLMBackend):
         """List currently loaded models in LM Studio."""
         try:
             import lmstudio
-
             models = lmstudio.list_loaded_models()
             return [m.path for m in models]
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.debug(f"Failed to list loaded models: {e}")
             return []
 
@@ -137,10 +128,9 @@ class LMStudioBackend(LLMBackend):
         """List downloaded models available in LM Studio."""
         try:
             import lmstudio
-
             models = lmstudio.list_downloaded_models()
             return [m.path for m in models]
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.debug(f"Failed to list downloaded models: {e}")
             return []
 
@@ -167,65 +157,9 @@ class LMStudioBackend(LLMBackend):
         except lmstudio.LMStudioModelNotFoundError:
             logger.warning(f"Model '{model}' not found in LM Studio")
             raise
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"Failed to get model '{model}': {e}")
             raise
-
-    def _handle_chat_response(self, result: Any, start_time: float, model: str, prompt: str, system_prompt: str) -> str:
-        """Handle successful chat response and record metrics."""
-        elapsed = time.time() - start_time
-        response_text = str(result)
-
-        logger.debug(f"LM Studio response in {elapsed:.2f}s: {len(response_text)} chars")
-
-        self._record(
-            self.PROVIDER_ID,
-            model or "default",
-            prompt,
-            response_text,
-            system_prompt=system_prompt,
-        )
-        self._update_status(self.PROVIDER_ID, True)
-
-        return response_text
-
-    def _handle_model_not_found_error(self, e: "lmstudio.LMStudioModelNotFoundError", model: str, prompt: str, system_prompt: str) -> str:
-        """Handle model not found error."""
-        logger.warning(f"LM Studio model not found: {e}")
-        self._update_status(self.PROVIDER_ID, False)
-        self._record(
-            self.PROVIDER_ID,
-            model or "default",
-            prompt,
-            f"ERROR: Model not found - {e}",
-            system_prompt=system_prompt,
-        )
-        return ""
-
-    def _handle_timeout_error(self, e: "lmstudio.LMStudioTimeoutError") -> str:
-        """Handle timeout error."""
-        logger.warning(f"LM Studio timeout: {e}")
-        self._update_status(self.PROVIDER_ID, False)
-        return ""
-
-    def _handle_lmstudio_error(self, e: "lmstudio.LMStudioError", model: str, prompt: str, system_prompt: str) -> str:
-        """Handle general LM Studio error."""
-        logger.error(f"LM Studio error: {e}")
-        self._update_status(self.PROVIDER_ID, False)
-        self._record(
-            self.PROVIDER_ID,
-            model or "default",
-            prompt,
-            f"ERROR: {e}",
-            system_prompt=system_prompt,
-        )
-        return ""
-
-    def _handle_generic_error(self, e: Exception) -> str:
-        """Handle generic exceptions."""
-        logger.debug(f"LM Studio call failed: {e}")
-        self._update_status(self.PROVIDER_ID, False)
-        return ""
 
     def chat(
         self,
@@ -252,16 +186,53 @@ class LMStudioBackend(LLMBackend):
 
             start_time = time.time()
             result = llm.respond(chat, config=config)
-            return self._handle_chat_response(result, start_time, model, prompt, system_prompt)
+            elapsed = time.time() - start_time
+
+            response_text = str(result)
+
+            logger.debug(f"LM Studio response in {elapsed:.2f}s: {len(response_text)} chars")
+
+            self._record(
+                self.PROVIDER_ID,
+                model or "default",
+                prompt,
+                response_text,
+                system_prompt=system_prompt,
+            )
+            self._update_status(self.PROVIDER_ID, True)
+
+            return response_text
 
         except lmstudio.LMStudioModelNotFoundError as e:
-            return self._handle_model_not_found_error(e, model, prompt, system_prompt)
+            logger.warning(f"LM Studio model not found: {e}")
+            self._update_status(self.PROVIDER_ID, False)
+            self._record(
+                self.PROVIDER_ID,
+                model or "default",
+                prompt,
+                f"ERROR: Model not found - {e}",
+                system_prompt=system_prompt,
+            )
+            return ""
         except lmstudio.LMStudioTimeoutError as e:
-            return self._handle_timeout_error(e)
+            logger.warning(f"LM Studio timeout: {e}")
+            self._update_status(self.PROVIDER_ID, False)
+            return ""
         except lmstudio.LMStudioError as e:
-            return self._handle_lmstudio_error(e, model, prompt, system_prompt)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return self._handle_generic_error(e)
+            logger.error(f"LM Studio error: {e}")
+            self._update_status(self.PROVIDER_ID, False)
+            self._record(
+                self.PROVIDER_ID,
+                model or "default",
+                prompt,
+                f"ERROR: {e}",
+                system_prompt=system_prompt,
+            )
+            return ""
+        except Exception as e:
+            logger.debug(f"LM Studio call failed: {e}")
+            self._update_status(self.PROVIDER_ID, False)
+            return ""
 
     def chat_stream(
         self,
@@ -303,7 +274,7 @@ class LMStudioBackend(LLMBackend):
             )
             self._update_status(self.PROVIDER_ID, True)
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"LM Studio streaming error: {e}")
             self._update_status(self.PROVIDER_ID, False)
 
@@ -342,7 +313,7 @@ class LMStudioBackend(LLMBackend):
 
                 return response_text
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"LM Studio async error: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return ""
@@ -373,7 +344,7 @@ class LMStudioBackend(LLMBackend):
                 embeddings.append(list(vec))
 
             return embeddings
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"LM Studio embedding error: {e}")
             return []
 
@@ -412,18 +383,16 @@ class LMStudioBackend(LLMBackend):
             tool_calls = []
             if hasattr(result, "tool_calls") and result.tool_calls:
                 for tc in result.tool_calls:
-                    tool_calls.append(
-                        {
-                            "name": tc.name,
-                            "arguments": tc.arguments,
-                        }
-                    )
+                    tool_calls.append({
+                        "name": tc.name,
+                        "arguments": tc.arguments,
+                    })
 
             return {
                 "content": str(result),
                 "tool_calls": tool_calls,
             }
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logger.error(f"LM Studio tool calling error: {e}")
             return {"content": "", "tool_calls": []}
 
@@ -445,7 +414,7 @@ class LMStudioBackend(LLMBackend):
             is_healthy = bool(models)
             self._update_status(self.PROVIDER_ID, is_healthy)
             return is_healthy
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:
             self._update_status(self.PROVIDER_ID, False)
             return False
 

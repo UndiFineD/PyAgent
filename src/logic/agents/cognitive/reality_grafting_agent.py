@@ -23,7 +23,7 @@ __version__ = VERSION
 
 class RealityGraftingAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Reality Grafting Agent: Integrates successful 
+    Tier 2 (Cognitive Logic) - Reality Grafting Agent: Integrates successful
     logic paths from simulations and experimental shards into production codebases.
     """
     

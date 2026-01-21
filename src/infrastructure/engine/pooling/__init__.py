@@ -1,16 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
@@ -18,18 +5,38 @@
 Unified pooling infrastructure (AI and Connections).
 """
 
-# Connection Pooling
-from .connection_pool import (AsyncConnectionPool, ConnectionPool,  # noqa: F401
-                              ConnectionState, MultiHostPool, PooledConnection,
-                              PooledConnectionManager, PoolStats)
-from .engine import PoolingEngine, create_pooling_engine  # noqa: F401
 # AI Pooling
-from .models import (EmbeddingOutput, PoolingConfig, PoolingResult,  # noqa: F401
-                     PoolingStrategy, PoolingTask)
-from .strategies import (AttentionPooler, BasePooler, CLSPooler,  # noqa: F401
-                         LastTokenPooler, MatryoshkaPooler, MaxPooler,
-                         MeanPooler, MultiVectorPooler, StepPooler,
-                         WeightedMeanPooler)
+from .models import (
+    PoolingTask,
+    PoolingStrategy,
+    PoolingConfig,
+    PoolingResult,
+    EmbeddingOutput
+)
+from .strategies import (
+    BasePooler,
+    MeanPooler,
+    CLSPooler,
+    LastTokenPooler,
+    MaxPooler,
+    AttentionPooler,
+    WeightedMeanPooler,
+    MatryoshkaPooler,
+    MultiVectorPooler,
+    StepPooler
+)
+from .engine import PoolingEngine, create_pooling_engine
+
+# Connection Pooling
+from .connection_pool import (
+    ConnectionState,
+    PoolStats,
+    PooledConnection,
+    ConnectionPool,
+    AsyncConnectionPool,
+    PooledConnectionManager,
+    MultiHostPool,
+)
 
 __all__ = [
     # AI
@@ -50,6 +57,7 @@ __all__ = [
     "StepPooler",
     "PoolingEngine",
     "create_pooling_engine",
+
     # Connection
     "ConnectionState",
     "PoolStats",
@@ -59,3 +67,4 @@ __all__ = [
     "PooledConnectionManager",
     "MultiHostPool",
 ]
+

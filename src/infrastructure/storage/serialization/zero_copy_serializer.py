@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 ZeroCopySerializer - Zero-copy msgpack serialization for tensors and arrays.
 
@@ -26,15 +12,14 @@ from __future__ import annotations
 
 import dataclasses
 import pickle
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from enum import Enum
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import Any, TypeVar, Generic, TYPE_CHECKING
 
 try:
     import msgspec
     from msgspec import msgpack
-
     MSGSPEC_AVAILABLE = True
 except ImportError:
     MSGSPEC_AVAILABLE = False
@@ -43,7 +28,6 @@ except ImportError:
 
 try:
     import numpy as np
-
     NUMPY_AVAILABLE = True
 except ImportError:
     NUMPY_AVAILABLE = False
@@ -162,6 +146,7 @@ class ZeroCopyEncoder:
 
     def _encode_tensor(self, tensor: "torch.Tensor") -> tuple[str, tuple[int, ...], int | memoryview]:
         """Encode a torch tensor."""
+        import torch
 
         assert self._aux_buffers is not None
 
@@ -354,7 +339,6 @@ def decode_with_buffers(
 
 
 # Helper functions
-
 
 @lru_cache(maxsize=32)
 def _str_to_torch_dtype(dtype_str: str) -> "torch.dtype":

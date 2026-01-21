@@ -1,17 +1,11 @@
-
-"""
-Reward functions.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Reward Functions for Agent Reinforcement - Phase 319 Enhanced
 
 from __future__ import annotations
-
 import math
+from typing import Any, Callable, Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, List
-
 
 class RewardType(Enum):
     SPARSE = "sparse"
@@ -19,16 +13,13 @@ class RewardType(Enum):
     SHAPED = "shaped"
     INTRINSIC = "intrinsic"
 
-
 @dataclass
 class RewardSignal:
     """Structured reward with metadata."""
-
     value: float
     reward_type: RewardType
     source: str
     explanation: str = ""
-
 
 class RewardFunctions:
     """Library of standard reward functions for agentic behavior."""
@@ -97,20 +88,17 @@ class RewardFunctions:
         efficiency = 1.0 - (resources_used / budget)
         return RewardSignal(efficiency * scale, RewardType.SHAPED, "resources", f"Efficiency: {efficiency:.2%}")
 
-
 class CompositeRewardFunction:
     """Combines multiple reward functions with weights."""
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.components: List[tuple[str, Callable, float]] = []
 
     def add(self, name: str, fn: Callable, weight: float = 1.0) -> "CompositeRewardFunction":
-        """Adds a reward component with weight."""
         self.components.append((name, fn, weight))
         return self
 
     def compute(self, **kwargs) -> RewardSignal:
-        """Computes combined reward from all components."""
         total = 0.0
         explanations = []
         for name, fn, weight in self.components:
@@ -123,15 +111,14 @@ class CompositeRewardFunction:
                 explanations.append(f"{name}: {result:.3f}")
         return RewardSignal(total, RewardType.SHAPED, "composite", " | ".join(explanations))
 
-
 class RewardShaper:
     """Applies potential-based reward shaping to avoid changing optimal policy."""
 
-    def __init__(self, potential_fn: Callable[[Any], float], gamma: float = 0.99) -> None:
+    def __init__(self, potential_fn: Callable[[Any], float], gamma: float = 0.99):
         self.potential_fn = potential_fn
         self.gamma = gamma
 
     def shape(self, reward: float, state: Any, next_state: Any) -> float:
-        """Applies potential-based reward shaping."""
+        """F(s,s') = γΦ(s') - Φ(s)"""
         shaping = self.gamma * self.potential_fn(next_state) - self.potential_fn(state)
         return reward + shaping

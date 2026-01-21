@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 TypedPrompts - Type-safe prompt schemas with type guards.
 
@@ -23,14 +9,14 @@ Phase 24: Advanced Observability & Parsing
 
 from __future__ import annotations
 
-from typing import Any, Generic, TypeAlias, TypeVar
+from typing import Any, Generic, Literal, TypeAlias, TypeVar
 
 from typing_extensions import NotRequired, TypedDict, TypeIs
+
 
 # ============================================================================
 # Prompt TypedDicts
 # ============================================================================
-
 
 class TextPrompt(TypedDict):
     """
@@ -38,7 +24,6 @@ class TextPrompt(TypedDict):
 
     The text will be tokenized before passing to the model.
     """
-
     prompt: str
     """The input text to be tokenized."""
 
@@ -58,7 +43,6 @@ class TokensPrompt(TypedDict):
 
     Token IDs are passed directly to the model.
     """
-
     prompt_token_ids: list[int]
     """List of token IDs to pass to the model."""
 
@@ -84,7 +68,6 @@ class EmbedsPrompt(TypedDict):
 
     Pre-computed embeddings are passed directly to the model.
     """
-
     prompt_embeds: Any  # torch.Tensor or numpy array
     """The embeddings of the prompt."""
 
@@ -98,7 +81,6 @@ class DataPrompt(TypedDict):
 
     Used for custom IO processor plugins.
     """
-
     data: Any
     """The input data."""
 
@@ -120,21 +102,20 @@ Set of possible schemas for a single prompt:
 """
 
 # TypeVar without default for Python 3.12 compatibility
-T1 = TypeVar("T1", bound=SingletonPrompt)  # pylint: disable=invalid-name
-T2 = TypeVar("T2", bound=SingletonPrompt)  # pylint: disable=invalid-name
+_T1 = TypeVar("_T1", bound=SingletonPrompt)
+_T2 = TypeVar("_T2", bound=SingletonPrompt)
 
 
-class ExplicitEncoderDecoderPrompt(TypedDict, Generic[T1, T2]):
+class ExplicitEncoderDecoderPrompt(TypedDict, Generic[_T1, _T2]):
     """
     Schema for encoder/decoder model prompts.
 
     Allows specifying separate encoder and decoder prompts.
     """
-
-    encoder_prompt: T1
+    encoder_prompt: _T1
     """The encoder prompt."""
 
-    decoder_prompt: T2 | None
+    decoder_prompt: _T2 | None
     """The decoder prompt (optional)."""
 
     mm_processor_kwargs: NotRequired[dict[str, Any]]
@@ -148,7 +129,6 @@ PromptType: TypeAlias = SingletonPrompt | ExplicitEncoderDecoderPrompt
 # ============================================================================
 # Type guards
 # ============================================================================
-
 
 def is_text_prompt(prompt: SingletonPrompt) -> TypeIs[TextPrompt]:
     """
@@ -178,7 +158,11 @@ def is_tokens_prompt(prompt: SingletonPrompt) -> TypeIs[TokensPrompt]:
     Returns:
         True if prompt is a TokensPrompt dict
     """
-    return isinstance(prompt, dict) and "prompt_token_ids" in prompt and "prompt_embeds" not in prompt
+    return (
+        isinstance(prompt, dict)
+        and "prompt_token_ids" in prompt
+        and "prompt_embeds" not in prompt
+    )
 
 
 def is_embeds_prompt(prompt: SingletonPrompt) -> TypeIs[EmbedsPrompt]:
@@ -191,7 +175,11 @@ def is_embeds_prompt(prompt: SingletonPrompt) -> TypeIs[EmbedsPrompt]:
     Returns:
         True if prompt is an EmbedsPrompt dict
     """
-    return isinstance(prompt, dict) and "prompt_embeds" in prompt and "prompt_token_ids" not in prompt
+    return (
+        isinstance(prompt, dict)
+        and "prompt_embeds" in prompt
+        and "prompt_token_ids" not in prompt
+    )
 
 
 def is_data_prompt(prompt: Any) -> TypeIs[DataPrompt]:
@@ -204,7 +192,11 @@ def is_data_prompt(prompt: Any) -> TypeIs[DataPrompt]:
     Returns:
         True if prompt is a DataPrompt dict
     """
-    return isinstance(prompt, dict) and "data" in prompt and "data_format" in prompt
+    return (
+        isinstance(prompt, dict)
+        and "data" in prompt
+        and "data_format" in prompt
+    )
 
 
 def is_string_prompt(prompt: SingletonPrompt) -> TypeIs[str]:
@@ -232,13 +224,16 @@ def is_explicit_encoder_decoder_prompt(
     Returns:
         True if prompt has encoder_prompt and decoder_prompt keys
     """
-    return isinstance(prompt, dict) and "encoder_prompt" in prompt and "decoder_prompt" in prompt
+    return (
+        isinstance(prompt, dict)
+        and "encoder_prompt" in prompt
+        and "decoder_prompt" in prompt
+    )
 
 
 # ============================================================================
 # Prompt parsing utilities
 # ============================================================================
-
 
 def parse_prompt(prompt: SingletonPrompt) -> dict[str, Any]:
     """
@@ -255,22 +250,23 @@ def parse_prompt(prompt: SingletonPrompt) -> dict[str, Any]:
             "type": "text",
             "prompt": prompt,
         }
-    if is_text_prompt(prompt):
+    elif is_text_prompt(prompt):
         return {
             "type": "text",
             **prompt,
         }
-    if is_tokens_prompt(prompt):
+    elif is_tokens_prompt(prompt):
         return {
             "type": "tokens",
             **prompt,
         }
-    if is_embeds_prompt(prompt):
+    elif is_embeds_prompt(prompt):
         return {
             "type": "embeds",
             **prompt,
         }
-    raise ValueError(f"Unknown prompt type: {type(prompt)}")
+    else:
+        raise ValueError(f"Unknown prompt type: {type(prompt)}")
 
 
 def get_prompt_text(prompt: SingletonPrompt) -> str | None:
@@ -285,9 +281,9 @@ def get_prompt_text(prompt: SingletonPrompt) -> str | None:
     """
     if is_string_prompt(prompt):
         return prompt
-    if is_text_prompt(prompt):
+    elif is_text_prompt(prompt):
         return prompt["prompt"]
-    if is_tokens_prompt(prompt):
+    elif is_tokens_prompt(prompt):
         return prompt.get("prompt")
     return None
 
@@ -326,7 +322,6 @@ def has_multi_modal_data(prompt: SingletonPrompt) -> bool:
 # ============================================================================
 # Prompt builders
 # ============================================================================
-
 
 def make_text_prompt(
     text: str,
@@ -432,7 +427,6 @@ def make_encoder_decoder_prompt(
 # ============================================================================
 # Prompt validation
 # ============================================================================
-
 
 def validate_prompt(prompt: PromptType) -> list[str]:
     """

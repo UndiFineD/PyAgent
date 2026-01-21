@@ -1,20 +1,13 @@
-
-"""
-Remote neural synapse.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Remote Neural Synapse)
 
 import asyncio
 from typing import Any, Dict, List, Optional
-
-from src.infrastructure.swarm.voyager.teleportation_engine import \
-    TeleportationEngine
+from src.infrastructure.swarm.voyager.teleportation_engine import TeleportationEngine
 from src.infrastructure.swarm.voyager.transport_layer import VoyagerTransport
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
-
 
 class RemoteNeuralSynapse:
     """
@@ -22,7 +15,7 @@ class RemoteNeuralSynapse:
     Implements the transport layer for Voyager Phase 1.1 using ZMQ.
     """
 
-    def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None) -> None:
+    def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None):
         self.fleet_manager = fleet_manager
         self.engine = TeleportationEngine()
         self.transport = VoyagerTransport(port=transport_port)
@@ -30,13 +23,13 @@ class RemoteNeuralSynapse:
         self.active_transfers: List[str] = []
         self._server_task: Optional[asyncio.Task] = None
 
-    async def start(self) -> None:
+    async def start(self):
         """Starts the transport server to receive remote synaptic fires."""
         if self._server_task:
             return
         self._server_task = asyncio.create_task(self.transport.start_server(self._handle_incoming_synapse))
 
-    async def stop(self) -> None:
+    async def stop(self):
         """Stops the transport server."""
         self.transport.stop()
         if self._server_task:
@@ -55,10 +48,10 @@ class RemoteNeuralSynapse:
         logger.info(f"Synapse: Incoming {msg_type} from {message.get('sender_id', 'unknown')}")
 
         if msg_type == "teleport":
-            encoded_blob: Any | None = message.get("agent_blob")
+            encoded_blob = message.get("agent_blob")
             if encoded_blob:
-                blob: bytes = self.engine.decode_from_transport(encoded_blob)
-                state: Dict[str, Any] = self.engine.restore_agent_state(blob)
+                blob = self.engine.decode_from_transport(encoded_blob)
+                state = self.engine.restore_agent_state(blob)
 
                 # Logic to 'spawn' the agent in the local fleet
                 # if hasattr(self.fleet_manager, "assimilate_agent"):
@@ -69,53 +62,22 @@ class RemoteNeuralSynapse:
         elif msg_type == "ping":
             return {"status": "pong", "version": "Phase-319"}
 
-        elif msg_type == "task_offload":
-            task_desc = message.get("task", "")
-            sender = message.get("sender_id", "unknown")
-            logger.info(f"Synapse: Received offloaded task from {sender}: {task_desc[:50]}...")
-            
-            if hasattr(self.fleet_manager, "execute_reliable_task"):
-                try:
-                    # Execute locally (Task Preemption / Synergy)
-                    result = await self.fleet_manager.execute_reliable_task(task_desc)
-                    return {"status": "success", "result": result}
-                except Exception as e:
-                    logger.error(f"Synapse: Execution failed: {e}")
-                    return {"status": "error", "message": str(e)}
-            else:
-                 return {"status": "error", "message": "FleetManager capability missing."}
-
-        elif msg_type == "memory_query":
-            # Phase 4.0: Federated Memory Query
-            query = message.get("query", "")
-            agent_id = message.get("target_agent", "swarm_shared")
-            sender = message.get("sender_id", "unknown")
-            logger.info(f"Synapse: Processing federated memory query from {sender}: '{query}'")
-            
-            from src.core.base.common.memory_core import MemoryCore
-            try:
-                results: List[Dict[str, Any]] = MemoryCore().retrieve_knowledge(agent_id, query, mode="semantic", limit=3)
-                return {"status": "success", "results": results}
-            except Exception as e:
-                logger.error(f"Synapse: Memory query failed: {e}")
-                return {"status": "error", "message": str(e)}
-
         return {"status": "error", "message": "Unsupported synapse type."}
 
     async def teleport_agent_to_peer(self, agent: Any, peer_address: str, transport_port: int) -> bool:
         """
         Transmits an agent's neural state to a remote peer via ZMQ.
         """
-        blob: bytes = self.engine.capture_agent_state(agent)
+        blob = self.engine.capture_agent_state(agent)
         payload = {
             "type": "teleport",
             "agent_blob": self.engine.encode_for_transport(blob),
-            "sender_id": self.fleet_manager.fleet_id if hasattr(self.fleet_manager, "fleet_id") else "unknown",
+            "sender_id": self.fleet_manager.fleet_id if hasattr(self.fleet_manager, 'fleet_id') else "unknown"
         }
 
         logger.info(f"Synapse: Firing synaptic teleport of {agent.name} to {peer_address}:{transport_port}...")
 
-        response: Dict[str, Any] | None = await self.transport.send_to_peer(peer_address, transport_port, payload)
+        response = await self.transport.send_to_peer(peer_address, transport_port, payload)
         if response and response.get("status") == "success":
             logger.info(f"Synapse: Teleportation confirmed by peer: {response.get('message')}")
             return True

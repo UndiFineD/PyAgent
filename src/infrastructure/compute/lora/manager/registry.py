@@ -1,40 +1,17 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Registry.py module.
-"""
-
 from __future__ import annotations
-
-from _thread import RLock
 import threading
 from collections import OrderedDict
 from typing import Any, Dict, List, Optional
-
-from .adapter import LoRAAdapter
 from .config import LoRAConfig
-
+from .adapter import LoRAAdapter
 
 class LoRARegistry:
     """Registry for LoRA adapters with caching."""
-
-    def __init__(self, max_cached: int = 32) -> None:
+    def __init__(self, max_cached: int = 32):
         self._adapters: OrderedDict[str, LoRAAdapter] = OrderedDict()
-        self._max_cached: int = max_cached
-        self._lock: RLock = threading.RLock()
-        self._stats: Dict[str, int] = {"loads": 0, "cache_hits": 0, "evictions": 0}
+        self._max_cached = max_cached
+        self._lock = threading.RLock()
+        self._stats = {"loads": 0, "cache_hits": 0, "evictions": 0}
 
     def register(self, config: LoRAConfig) -> LoRAAdapter:
         with self._lock:
@@ -66,9 +43,7 @@ class LoRARegistry:
             return False
 
     def list_adapters(self) -> List[str]:
-        with self._lock:
-            return list(self._adapters.keys())
+        with self._lock: return list(self._adapters.keys())
 
     def get_stats(self) -> Dict[str, Any]:
-        with self._lock:
-            return {**self._stats, "cached": len(self._adapters), "max_cached": self._max_cached}
+        with self._lock: return {**self._stats, "cached": len(self._adapters), "max_cached": self._max_cached}

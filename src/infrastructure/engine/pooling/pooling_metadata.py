@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Phase 45: Pooling Infrastructure
 vLLM-inspired pooling metadata and cursor management.
@@ -26,29 +12,28 @@ Beyond vLLM:
 from __future__ import annotations
 
 import threading
+import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Dict, List, Optional, TypeVar
+from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, TypeVar, Union
 
 import numpy as np
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
-
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
     rust_core = None
 
 # Type variable for tensor types
-T = TypeVar("T")
+T = TypeVar('T')
 
 
 class PoolingStrategy(Enum):
     """Pooling strategies for sequence embeddings."""
-
     MEAN = auto()
     MAX = auto()
     FIRST = auto()
@@ -65,7 +50,6 @@ class PoolingCursor:
     Tracks the position within a sequence for pooling operations,
     supporting both contiguous and chunked prefill scenarios.
     """
-
     # Sequence tracking
     seq_start_idx: int
     seq_len: int
@@ -118,7 +102,6 @@ class PoolingStates:
 
     Tracks intermediate states for multi-pass pooling strategies.
     """
-
     # Accumulation state
     sum_hidden: Optional[np.ndarray] = None
     max_hidden: Optional[np.ndarray] = None
@@ -141,7 +124,7 @@ class PoolingStates:
         if strategy == PoolingStrategy.MEAN:
             self.sum_hidden = np.zeros(hidden_dim, dtype=np.float32)
         elif strategy == PoolingStrategy.MAX:
-            self.max_hidden = np.full(hidden_dim, float("-inf"), dtype=np.float32)
+            self.max_hidden = np.full(hidden_dim, float('-inf'), dtype=np.float32)
         elif strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             self.sum_hidden = np.zeros(hidden_dim, dtype=np.float32)
             self.attention_sum = 0.0
@@ -176,13 +159,14 @@ class PoolingStates:
         """Finalize and return pooled output."""
         if self.strategy == PoolingStrategy.MEAN:
             return self.sum_hidden / max(self.token_count, 1)
-        if self.strategy == PoolingStrategy.MAX:
+        elif self.strategy == PoolingStrategy.MAX:
             return self.max_hidden
-        if self.strategy in (PoolingStrategy.FIRST, PoolingStrategy.LAST, PoolingStrategy.CLS):
+        elif self.strategy in (PoolingStrategy.FIRST, PoolingStrategy.LAST, PoolingStrategy.CLS):
             return self.sum_hidden
-        if self.strategy == PoolingStrategy.ATTENTION_WEIGHTED:
+        elif self.strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             return self.sum_hidden / max(self.attention_sum, 1e-9)
-        raise ValueError(f"Unknown strategy: {self.strategy}")
+        else:
+            raise ValueError(f"Unknown strategy: {self.strategy}")
 
 
 @dataclass
@@ -192,7 +176,6 @@ class PoolingMetadata:
 
     Contains all information needed to perform pooling across a batch.
     """
-
     # Batch information
     batch_size: int
 
@@ -220,7 +203,7 @@ class PoolingMetadata:
         hidden_dim: int,
         strategy: PoolingStrategy = PoolingStrategy.MEAN,
         chunk_sizes: Optional[List[int]] = None,
-    ) -> "PoolingMetadata":
+    ) -> 'PoolingMetadata':
         """Create pooling metadata for a batch."""
         batch_size = len(seq_starts)
         is_chunked = chunk_sizes is not None
@@ -280,7 +263,7 @@ class Pooler(ABC):
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
         """Pool hidden states according to metadata."""
-        raise NotImplementedError("Subclasses must implement pool()")
+        pass
 
 
 class MeanPooler(Pooler):
@@ -338,7 +321,7 @@ class LastTokenPooler(Pooler):
 class AttentionWeightedPooler(Pooler):
     """Attention-weighted pooling implementation."""
 
-    def __init__(self, attention_head_idx: int = 0) -> None:
+    def __init__(self, attention_head_idx: int = 0):
         self.attention_head_idx = attention_head_idx
 
     def pool(
@@ -377,13 +360,14 @@ class PoolerFactory:
         """Create a pooler for the given strategy."""
         if strategy == PoolingStrategy.MEAN:
             return MeanPooler()
-        if strategy == PoolingStrategy.MAX:
+        elif strategy == PoolingStrategy.MAX:
             return MaxPooler()
-        if strategy in (PoolingStrategy.LAST, PoolingStrategy.FIRST, PoolingStrategy.CLS):
+        elif strategy in (PoolingStrategy.LAST, PoolingStrategy.FIRST, PoolingStrategy.CLS):
             return LastTokenPooler()
-        if strategy == PoolingStrategy.ATTENTION_WEIGHTED:
+        elif strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             return AttentionWeightedPooler()
-        raise ValueError(f"Unknown pooling strategy: {strategy}")
+        else:
+            raise ValueError(f"Unknown pooling strategy: {strategy}")
 
 
 @dataclass
@@ -393,7 +377,6 @@ class PoolerOutput:
 
     Contains pooled embeddings and metadata.
     """
-
     embeddings: List[np.ndarray]
     seq_ids: List[str]
     strategy: PoolingStrategy
@@ -401,7 +384,6 @@ class PoolerOutput:
 
     @property
     def batch_size(self) -> int:
-        """Get the number of sequences in the batch."""
         return len(self.embeddings)
 
     def to_numpy(self) -> np.ndarray:
@@ -425,7 +407,7 @@ class ChunkedPoolingManager:
         hidden_dim: int,
         max_chunk_size: int = 2048,
         strategy: PoolingStrategy = PoolingStrategy.MEAN,
-    ) -> None:
+    ):
         self.hidden_dim = hidden_dim
         self.max_chunk_size = max_chunk_size
         self.strategy = strategy
@@ -502,7 +484,7 @@ def pool_with_rust(
 
     Returns pooled embeddings if Rust is available.
     """
-    if HAS_RUST and hasattr(rust_core, "pool_sequences"):
+    if HAS_RUST and hasattr(rust_core, 'pool_sequences'):
         return rust_core.pool_sequences(
             hidden_states,
             seq_starts,
@@ -513,17 +495,17 @@ def pool_with_rust(
 
 
 __all__ = [
-    "PoolingStrategy",
-    "PoolingCursor",
-    "PoolingStates",
-    "PoolingMetadata",
-    "Pooler",
-    "MeanPooler",
-    "MaxPooler",
-    "LastTokenPooler",
-    "AttentionWeightedPooler",
-    "PoolerFactory",
-    "PoolerOutput",
-    "ChunkedPoolingManager",
-    "pool_with_rust",
+    'PoolingStrategy',
+    'PoolingCursor',
+    'PoolingStates',
+    'PoolingMetadata',
+    'Pooler',
+    'MeanPooler',
+    'MaxPooler',
+    'LastTokenPooler',
+    'AttentionWeightedPooler',
+    'PoolerFactory',
+    'PoolerOutput',
+    'ChunkedPoolingManager',
+    'pool_with_rust',
 ]

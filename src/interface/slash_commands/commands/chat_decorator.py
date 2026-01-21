@@ -204,42 +204,42 @@ def _format_message(
 ) -> str:
     """Format a message with safe HTML/CSS styling."""
     styles = STYLES_DARK if theme == "dark" else STYLES
-    
+
     # Escape content for safety
     safe_content = _escape_html(content)
-    
+
     # Preserve line breaks
     safe_content = safe_content.replace('\n', '<br>')
-    
+
     # Build the HTML
     style = _clean_style(styles.get(role, styles["ai"]))
-    
+
     parts = []
-    
+
     # Avatar (for human/ai only)
     if show_avatar and role in ("human", "ai"):
         avatar_style = _clean_style(styles.get(f"avatar_{role}", ""))
         emoji = "👤" if role == "human" else "🤖"
         parts.append(f'<span style="{avatar_style}">{emoji}</span>')
-    
+
     # Label
     if label:
         label_style = _clean_style(styles.get(f"label_{role}", styles.get("label_human", "")))
         parts.append(f'<span style="{label_style}">{_escape_html(label)}</span>')
-    
+
     # Language badge for code
     if role == "code" and language:
         lang_style = "background: #3d3d3d; color: #9cdcfe; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 8px; display: inline-block;"
         parts.append(f'<span style="{lang_style}">{_escape_html(language)}</span><br>')
-    
+
     # Content
     parts.append(safe_content)
-    
+
     # Timestamp
     if timestamp:
         ts_style = _clean_style(styles.get("timestamp", ""))
         parts.append(f'<span style="{ts_style}">{_escape_html(timestamp)}</span>')
-    
+
     inner = ''.join(parts)
     return f'<div style="{style}">{inner}</div>'
 
@@ -254,9 +254,9 @@ def _format_conversation(
     """Format a full conversation with multiple exchanges."""
     styles = STYLES_DARK if theme == "dark" else STYLES
     container_style = _clean_style(styles["container"])
-    
+
     parts = [f'<div style="{container_style}">']
-    
+
     for human_msg, ai_msg in exchanges:
         if human_msg:
             parts.append(_format_message(
@@ -274,7 +274,7 @@ def _format_conversation(
                 show_avatar=show_avatars,
                 theme=theme,
             ))
-    
+
     parts.append('</div>')
     return ''.join(parts)
 
@@ -293,13 +293,13 @@ def cmd_human(ctx: CommandContext) -> CommandResult:
     """Format text as a human message bubble."""
     if not ctx.args:
         return CommandResult.fail("Usage: /human <message text>")
-    
+
     text = ' '.join(ctx.args)
     theme = ctx.metadata.get("theme", "light")
     show_avatar = ctx.metadata.get("show_avatar", True)
     label = ctx.metadata.get("label", "You")
     timestamp = ctx.metadata.get("timestamp")
-    
+
     html_output = _format_message(
         text,
         "human",
@@ -308,7 +308,7 @@ def cmd_human(ctx: CommandContext) -> CommandResult:
         show_avatar=show_avatar,
         theme=theme,
     )
-    
+
     return CommandResult.ok(
         html_output,
         {
@@ -330,13 +330,13 @@ def cmd_ai(ctx: CommandContext) -> CommandResult:
     """Format text as an AI response bubble."""
     if not ctx.args:
         return CommandResult.fail("Usage: /ai <response text>")
-    
+
     text = ' '.join(ctx.args)
     theme = ctx.metadata.get("theme", "light")
     show_avatar = ctx.metadata.get("show_avatar", True)
     label = ctx.metadata.get("label", "Assistant")
     timestamp = ctx.metadata.get("timestamp")
-    
+
     html_output = _format_message(
         text,
         "ai",
@@ -345,7 +345,7 @@ def cmd_ai(ctx: CommandContext) -> CommandResult:
         show_avatar=show_avatar,
         theme=theme,
     )
-    
+
     return CommandResult.ok(
         html_output,
         {
@@ -367,17 +367,17 @@ def cmd_system_message(ctx: CommandContext) -> CommandResult:
     """Format text as a system notification."""
     if not ctx.args:
         return CommandResult.fail("Usage: /sysmsg <message text>")
-    
+
     text = ' '.join(ctx.args)
     theme = ctx.metadata.get("theme", "light")
-    
+
     html_output = _format_message(
         text,
         "system",
         show_avatar=False,
         theme=theme,
     )
-    
+
     return CommandResult.ok(
         html_output,
         {
@@ -398,10 +398,10 @@ def cmd_thinking(ctx: CommandContext) -> CommandResult:
     """Format text as AI internal thinking."""
     if not ctx.args:
         return CommandResult.fail("Usage: /thinking <reasoning text>")
-    
+
     text = ' '.join(ctx.args)
     theme = ctx.metadata.get("theme", "light")
-    
+
     html_output = _format_message(
         text,
         "thinking",
@@ -409,7 +409,7 @@ def cmd_thinking(ctx: CommandContext) -> CommandResult:
         show_avatar=False,
         theme=theme,
     )
-    
+
     return CommandResult.ok(
         html_output,
         {
@@ -430,7 +430,7 @@ def cmd_codeblock(ctx: CommandContext) -> CommandResult:
     """Format text as a code block with optional language."""
     if not ctx.args:
         return CommandResult.fail("Usage: /codeblock [language] <code>")
-    
+
     # Check if first arg is a known language
     known_langs = {
         "python", "py", "javascript", "js", "typescript", "ts", "rust", "go",
@@ -438,20 +438,20 @@ def cmd_codeblock(ctx: CommandContext) -> CommandResult:
         "html", "css", "sql", "bash", "shell", "powershell", "json", "yaml",
         "xml", "markdown", "md", "toml", "ini", "dockerfile", "makefile",
     }
-    
+
     language = None
     code_args = ctx.args
-    
+
     if ctx.args[0].lower() in known_langs:
         language = ctx.args[0]
         code_args = ctx.args[1:]
-    
+
     if not code_args:
         return CommandResult.fail("No code provided")
-    
+
     code = ' '.join(code_args)
     theme = ctx.metadata.get("theme", "light")
-    
+
     html_output = _format_message(
         code,
         "code",
@@ -459,7 +459,7 @@ def cmd_codeblock(ctx: CommandContext) -> CommandResult:
         show_avatar=False,
         theme=theme,
     )
-    
+
     return CommandResult.ok(
         html_output,
         {
@@ -480,9 +480,9 @@ def cmd_codeblock(ctx: CommandContext) -> CommandResult:
 def cmd_chat(ctx: CommandContext) -> CommandResult:
     """
     Format a conversation exchange.
-    
+
     Usage: /chat <human message> ||| <ai response>
-    
+
     Use ||| to separate human and AI messages.
     Multiple exchanges can be separated by |||.
     """
@@ -491,37 +491,37 @@ def cmd_chat(ctx: CommandContext) -> CommandResult:
             "Usage: /chat <human message> ||| <ai response>\n"
             "Use ||| to separate messages."
         )
-    
+
     full_text = ' '.join(ctx.args)
     parts = [p.strip() for p in full_text.split('|||')]
-    
+
     if len(parts) < 2:
         return CommandResult.fail(
             "Please separate human and AI messages with |||"
         )
-    
+
     # Pair up messages (human, ai, human, ai, ...)
     exchanges: list[tuple[str, str]] = []
     for i in range(0, len(parts) - 1, 2):
         human_msg = parts[i]
         ai_msg = parts[i + 1] if i + 1 < len(parts) else ""
         exchanges.append((human_msg, ai_msg))
-    
+
     # Handle odd number of parts (trailing human message)
     if len(parts) % 2 == 1 and len(parts) > 2:
         exchanges.append((parts[-1], ""))
-    
+
     theme = ctx.metadata.get("theme", "light")
     show_labels = ctx.metadata.get("show_labels", True)
     show_avatars = ctx.metadata.get("show_avatars", True)
-    
+
     html_output = _format_conversation(
         exchanges,
         theme=theme,
         show_labels=show_labels,
         show_avatars=show_avatars,
     )
-    
+
     return CommandResult.ok(
         html_output,
         {
@@ -542,17 +542,17 @@ def cmd_chat_theme(ctx: CommandContext) -> CommandResult:
     """Get the full CSS stylesheet for chat styling."""
     theme = ctx.first_arg or "light"
     styles = STYLES_DARK if theme == "dark" else STYLES
-    
+
     css_parts = []
     for name, style in styles.items():
         clean = _clean_style(style)
         css_parts.append(f".chat-{name} {{ {clean} }}")
-    
+
     css = '\n'.join(css_parts)
-    
+
     # Wrap in style tag
     html_output = f"<style>\n{css}\n</style>"
-    
+
     return CommandResult.ok(
         f"[Chat theme '{theme}' CSS generated]",
         {
@@ -575,36 +575,36 @@ def cmd_chat_preview(ctx: CommandContext) -> CommandResult:
     theme = ctx.first_arg or "light"
     if theme not in ("light", "dark"):
         theme = "light"
-    
+
     sample_exchanges = [
         ("Hello! Can you help me with Python?", "Of course! I'd be happy to help you with Python. What would you like to know?"),
         ("How do I read a file?", "You can use the open() function with a context manager:\n\nwith open('file.txt', 'r') as f:\n    content = f.read()"),
     ]
-    
+
     styles = STYLES_DARK if theme == "dark" else STYLES
     container_style = _clean_style(styles["container"])
-    
+
     parts = [f'<div style="{container_style}">']
-    
+
     # System message
     parts.append(_format_message(
         "Chat session started",
         "system",
         theme=theme,
     ))
-    
+
     # Sample exchanges
     for human_msg, ai_msg in sample_exchanges:
         parts.append(_format_message(human_msg, "human", label="You", theme=theme))
         parts.append(_format_message(ai_msg, "ai", label="Assistant", theme=theme))
-    
+
     # Thinking block
     parts.append(_format_message(
         "Analyzing the user's question about file handling...",
         "thinking",
         theme=theme,
     ))
-    
+
     # Code block
     parts.append(_format_message(
         "with open('example.txt', 'r') as f:\n    print(f.read())",
@@ -612,10 +612,10 @@ def cmd_chat_preview(ctx: CommandContext) -> CommandResult:
         language="python",
         theme=theme,
     ))
-    
+
     parts.append('</div>')
     html_output = ''.join(parts)
-    
+
     return CommandResult.ok(
         f"[Chat preview generated with '{theme}' theme]",
         {

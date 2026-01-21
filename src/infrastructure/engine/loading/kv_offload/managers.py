@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -26,14 +12,18 @@ from typing import Any, Dict, Iterable, List, Optional
 
 try:
     from ...core import rust_core
-
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 from .base import OffloadingBackend, OffloadingManager
-from .models import (BlockHash, BlockStatus, LoadStoreSpec, OffloadingEvent,
-                     PrepareStoreOutput)
+from .models import (
+    BlockHash,
+    BlockStatus,
+    LoadStoreSpec,
+    OffloadingEvent,
+    PrepareStoreOutput,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +40,7 @@ class LRUOffloadingManager(OffloadingManager):
         self,
         backend: OffloadingBackend,
         enable_events: bool = False,
-    ) -> None:
+    ):
         self.backend = backend
         self.blocks: OrderedDict[BlockHash, BlockStatus] = OrderedDict()
         self.events: Optional[List[OffloadingEvent]] = [] if enable_events else None
@@ -97,7 +87,9 @@ class LRUOffloadingManager(OffloadingManager):
     ) -> Optional[PrepareStoreOutput]:
         """Prepare to store blocks, evicting as needed."""
         # Filter already stored
-        block_hashes_to_store = [h for h in block_hashes if h not in self.blocks]
+        block_hashes_to_store = [
+            h for h in block_hashes if h not in self.blocks
+        ]
 
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
@@ -119,14 +111,12 @@ class LRUOffloadingManager(OffloadingManager):
             self.backend.free(self.blocks.pop(block_hash))
 
         if to_evict and self.events is not None:
-            self.events.append(
-                OffloadingEvent(
-                    block_hashes=to_evict,
-                    block_size=self.backend.block_size,
-                    medium=self.backend.medium,
-                    removed=True,
-                )
-            )
+            self.events.append(OffloadingEvent(
+                block_hashes=to_evict,
+                block_size=self.backend.block_size,
+                medium=self.backend.medium,
+                removed=True,
+            ))
 
         # Allocate new blocks
         blocks = self.backend.allocate_blocks(block_hashes_to_store)
@@ -164,14 +154,12 @@ class LRUOffloadingManager(OffloadingManager):
                     del self.blocks[block_hash]
 
         if stored and self.events is not None:
-            self.events.append(
-                OffloadingEvent(
-                    block_hashes=stored,
-                    block_size=self.backend.block_size,
-                    medium=self.backend.medium,
-                    removed=False,
-                )
-            )
+            self.events.append(OffloadingEvent(
+                block_hashes=stored,
+                block_size=self.backend.block_size,
+                medium=self.backend.medium,
+                removed=False,
+            ))
 
     def take_events(self) -> Iterable[OffloadingEvent]:
         """Yield and clear events."""
@@ -192,7 +180,7 @@ class ARCOffloadingManager(OffloadingManager):
         self,
         backend: OffloadingBackend,
         enable_events: bool = False,
-    ) -> None:
+    ):
         self.backend = backend
         self.target_t1_size: float = 0.0
 
@@ -248,13 +236,8 @@ class ARCOffloadingManager(OffloadingManager):
             elif block_hash in self.b1:
                 # Hit in ghost list → increase recency preference
                 delta = compute_arc_target_rust(
-                    len(self.t1),
-                    len(self.t2),
-                    len(self.b1),
-                    len(self.b2),
-                    self.target_t1_size,
-                    True,
-                    self.cache_capacity,
+                    len(self.t1), len(self.t2), len(self.b1), len(self.b2),
+                    self.target_t1_size, True, self.cache_capacity
                 )
                 self.target_t1_size = delta
                 self.b1.move_to_end(block_hash)
@@ -262,13 +245,8 @@ class ARCOffloadingManager(OffloadingManager):
             elif block_hash in self.b2:
                 # Hit in ghost list → increase frequency preference
                 delta = compute_arc_target_rust(
-                    len(self.t1),
-                    len(self.t2),
-                    len(self.b1),
-                    len(self.b2),
-                    self.target_t1_size,
-                    False,
-                    self.cache_capacity,
+                    len(self.t1), len(self.t2), len(self.b1), len(self.b2),
+                    self.target_t1_size, False, self.cache_capacity
                 )
                 self.target_t1_size = delta
                 self.b2.move_to_end(block_hash)
@@ -321,7 +299,10 @@ class ARCOffloadingManager(OffloadingManager):
         block_hashes: Iterable[BlockHash],
     ) -> Optional[PrepareStoreOutput]:
         """Prepare to store with ARC eviction."""
-        block_hashes_to_store = [h for h in block_hashes if h not in self.t1 and h not in self.t2]
+        block_hashes_to_store = [
+            h for h in block_hashes
+            if h not in self.t1 and h not in self.t2
+        ]
 
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
@@ -334,14 +315,12 @@ class ARCOffloadingManager(OffloadingManager):
             num_to_evict -= 1
 
         if evicted and self.events is not None:
-            self.events.append(
-                OffloadingEvent(
-                    block_hashes=evicted,
-                    block_size=self.backend.block_size,
-                    medium=self.backend.medium,
-                    removed=True,
-                )
-            )
+            self.events.append(OffloadingEvent(
+                block_hashes=evicted,
+                block_size=self.backend.block_size,
+                medium=self.backend.medium,
+                removed=True,
+            ))
 
         for block_hash in block_hashes_to_store:
             self.b1.pop(block_hash, None)
@@ -383,14 +362,12 @@ class ARCOffloadingManager(OffloadingManager):
                         del self.t2[block_hash]
 
         if stored and self.events is not None:
-            self.events.append(
-                OffloadingEvent(
-                    block_hashes=stored,
-                    block_size=self.backend.block_size,
-                    medium=self.backend.medium,
-                    removed=False,
-                )
-            )
+            self.events.append(OffloadingEvent(
+                block_hashes=stored,
+                block_size=self.backend.block_size,
+                medium=self.backend.medium,
+                removed=False,
+            ))
 
     def take_events(self) -> Iterable[OffloadingEvent]:
         """Yield and clear events."""
@@ -420,9 +397,12 @@ class TieredOffloadManager(OffloadingManager):
         self,
         backends: List[OffloadingBackend],
         enable_events: bool = False,
-    ) -> None:
+    ):
         self.backends = backends
-        self.managers = [LRUOffloadingManager(backend, enable_events) for backend in backends]
+        self.managers = [
+            LRUOffloadingManager(backend, enable_events)
+            for backend in backends
+        ]
         self.events: Optional[List[OffloadingEvent]] = [] if enable_events else None
         self._tier_map: Dict[BlockHash, int] = {}
 
@@ -534,12 +514,13 @@ def compute_arc_target_rust(
     """Compute new ARC target using Rust."""
     if HAS_RUST and hasattr(rust_core, "compute_arc_target_rust"):
         return rust_core.compute_arc_target_rust(
-            t1_size, t2_size, b1_size, b2_size, current_target, hit_in_b1, capacity
+            t1_size, t2_size, b1_size, b2_size,
+            current_target, hit_in_b1, capacity
         )
 
     if hit_in_b1:
         delta = max(1.0, b2_size / max(1, b1_size))
         return min(current_target + delta, float(capacity))
-
-    delta = max(1.0, b1_size / max(1, b2_size))
-    return max(current_target - delta, 0.0)
+    else:
+        delta = max(1.0, b1_size / max(1, b2_size))
+        return max(current_target - delta, 0.0)

@@ -19,12 +19,10 @@ Optimized for local inference and future trillion-parameter context handling.
 """
 
 from __future__ import annotations
-
-import logging
-import os
-from typing import Any, Optional
-
 from src.core.base.lifecycle.version import VERSION
+import logging
+from typing import Any
+import os
 
 __version__ = VERSION
 
@@ -57,8 +55,7 @@ class VllmNativeEngine:
         self.enabled = HAS_VLLM
 
     @classmethod
-    def get_instance(cls: type["VllmNativeEngine"], **kwargs: Any) -> 'VllmNativeEngine':
-        """Get the singleton instance of the native engine."""
+    def get_instance(cls, **kwargs) -> VllmNativeEngine:
         if cls._instance is None:
             cls._instance = VllmNativeEngine(**kwargs)
         return cls._instance
@@ -70,7 +67,6 @@ class VllmNativeEngine:
 
         if self._llm is None:
             try:
-                # pylint: disable=import-outside-toplevel
                 import torch
 
                 # Phase 108: Dynamic hardware detection
@@ -78,24 +74,31 @@ class VllmNativeEngine:
                 if "VLLM_TARGET_DEVICE" not in os.environ:
                     if torch.cuda.is_available():
                         os.environ["VLLM_TARGET_DEVICE"] = "cuda"
-                        logging.info("vLLM: CUDA detected. Using GPU for native inference.")
+                        logging.info(
+                            "vLLM: CUDA detected. Using GPU for native inference."
+                        )
                     else:
                         os.environ["VLLM_TARGET_DEVICE"] = "cpu"
-                        logging.warning("vLLM: No CUDA detected. Using CPU mode (Lower performance).")
+                        logging.warning(
+                            "vLLM: No CUDA detected. Using CPU mode (Lower performance)."
+                        )
 
                 logging.info(
-                    "Initializing Native vLLM: %s (Device: %s)...",
-                    self.model_name,
-                    os.environ.get("VLLM_TARGET_DEVICE", "auto"),
+                    f"Initializing Native vLLM: {self.model_name} (Device: {os.environ.get('VLLM_TARGET_DEVICE', 'auto')})..."
                 )
 
+                import torch
+
                 # Only check CUDA if we aren't explicitly targeting CPU
-                if os.environ.get("VLLM_TARGET_DEVICE") != "cpu" and not torch.cuda.is_available():
+                if (
+                    os.environ.get("VLLM_TARGET_DEVICE") != "cpu"
+                    and not torch.cuda.is_available()
+                ):
                     logging.warning("vLLM: No CUDA detected. Falling back to CPU mode.")
                     os.environ["VLLM_TARGET_DEVICE"] = "cpu"
 
                 # Configure for CPU if applicable
-                kwargs = {"model": self.model_name, "trust_remote_code": False}
+                kwargs = {"model": self.model_name, "trust_remote_code": True}
 
                 if os.environ.get("VLLM_TARGET_DEVICE") == "cpu":
                     kwargs["device"] = "cpu"
@@ -104,55 +107,12 @@ class VllmNativeEngine:
                     kwargs["tensor_parallel_size"] = self.tensor_parallel_size
 
                 self._llm = LLM(**kwargs)
-                return True
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error("Failed to start Native vLLM Engine: %s", e)
+                logging.info("Native vLLM Engine started successfully.")
+            except Exception as e:
+                logging.error(f"Failed to start Native vLLM Engine: {e}")
                 self.enabled = False
                 return False
         return True
-
-    def _format_prompt(self, prompt: str, system_prompt: str = "") -> str:
-        """Format the prompt with system prompt if provided."""
-        if system_prompt:
-            return f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:"
-        return prompt
-
-    def _build_sampling_params(
-        self,
-        temperature: float,
-        max_tokens: int,
-        guided_json: Optional[dict] = None,
-        guided_regex: Optional[str] = None,
-        guided_choice: Optional[list] = None,
-    ) -> "SamplingParams":
-        """Build sampling parameters with optional guided decoding."""
-        sampling_kwargs = {
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-            "top_p": 0.95,
-        }
-
-        if guided_json is not None:
-            sampling_kwargs["guided_json"] = guided_json
-        if guided_regex is not None:
-            sampling_kwargs["guided_regex"] = guided_regex
-        if guided_choice is not None:
-            sampling_kwargs["guided_choice"] = guided_choice
-
-        return SamplingParams(**sampling_kwargs)
-
-    def _build_generate_kwargs(self, lora_request: Optional[Any] = None) -> dict[str, Any]:
-        """Build generate kwargs with optional LoRA request."""
-        generate_kwargs = {}
-        if lora_request is not None:
-            generate_kwargs["lora_request"] = lora_request
-        return generate_kwargs
-
-    def _extract_generated_text(self, outputs: list) -> str:
-        """Extract the generated text from vLLM outputs."""
-        if outputs:
-            return outputs[0].outputs[0].text
-        return ""
 
     def generate(
         self,
@@ -185,16 +145,43 @@ class VllmNativeEngine:
             return ""
 
         try:
-            full_prompt = self._format_prompt(prompt, system_prompt)
-            sampling_params = self._build_sampling_params(
-                temperature, max_tokens, guided_json, guided_regex, guided_choice
+            # Format according to chat templates if possible, or simple concat
+            full_prompt = (
+                f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:"
+                if system_prompt
+                else prompt
             )
-            generate_kwargs = self._build_generate_kwargs(lora_request)
 
-            outputs = self._llm.generate([full_prompt], sampling_params, **generate_kwargs)
-            return self._extract_generated_text(outputs)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error("Native vLLM generation failed: %s", e)
+            # Build sampling params with optional guided decoding
+            sampling_kwargs = {
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+                "top_p": 0.95,
+            }
+
+            if guided_json is not None:
+                sampling_kwargs["guided_json"] = guided_json
+            if guided_regex is not None:
+                sampling_kwargs["guided_regex"] = guided_regex
+            if guided_choice is not None:
+                sampling_kwargs["guided_choice"] = guided_choice
+
+            sampling_params = SamplingParams(**sampling_kwargs)
+
+            # Build generate kwargs
+            generate_kwargs = {}
+            if lora_request is not None:
+                generate_kwargs["lora_request"] = lora_request
+
+            outputs = self._llm.generate(
+                [full_prompt], sampling_params, **generate_kwargs
+            )
+
+            if outputs:
+                return outputs[0].outputs[0].text
+            return ""
+        except Exception as e:
+            logging.error(f"Native vLLM generation failed: {e}")
             return ""
 
     def generate_json(
@@ -221,7 +208,7 @@ class VllmNativeEngine:
     def generate_choice(
         self,
         prompt: str,
-        choices: list[str],
+        choices: list,
         system_prompt: str = "",
     ) -> str:
         """Generate output constrained to specific choices."""
@@ -254,9 +241,7 @@ class VllmNativeEngine:
         if self._llm:
             # vLLM doesn't have a simple 'off' but we can delete reference
             # and try to trigger GC or rely on process exit.
-            # pylint: disable=import-outside-toplevel
             import gc
-
             import torch
 
             del self._llm
