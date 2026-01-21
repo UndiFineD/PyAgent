@@ -254,6 +254,61 @@ class CompiledGuidanceProgram:
         return state.is_complete
 
 
+class GuidanceGrammar:
+    """
+    Grammar wrapper for Guidance programs.
+    
+    Provides the standard grammar interface while wrapping
+    a Guidance program and state.
+    """
+    
+    def __init__(
+        self,
+        program: "CompiledGuidanceProgram",
+        tokenizer: Any,
+        state: Optional[GuidanceState] = None,
+    ):
+        self.program = program
+        self.tokenizer = tokenizer
+        self.state = state or program.create_state()
+    
+    def accept_token(self, token_id: int) -> bool:
+        """Accept a token."""
+        # Decode token to text
+        try:
+            if hasattr(self.tokenizer, 'decode'):
+                text = self.tokenizer.decode([token_id])
+            else:
+                text = f"token_{token_id}"
+            return self.accept_token_text(text)
+        except Exception:
+            return False
+    
+    def accept_token_text(self, text: str) -> bool:
+        """Accept a token by text."""
+        return self.state.accept_token(text)
+    
+    def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
+        """Fill bitmask for next token."""
+        self.program.fill_bitmask(self.state, bitmask)
+    
+    def is_terminated(self) -> bool:
+        """Check if grammar is terminated."""
+        return self.program.is_terminated(self.state)
+    
+    def reset(self) -> None:
+        """Reset grammar state."""
+        self.state.reset()
+    
+    def get_variable_values(self) -> Dict[str, str]:
+        """Get extracted variable values."""
+        return dict(self.state.variable_values)
+
+    def create_state(self) -> GuidanceState:
+        """Create a new state for this grammar."""
+        return self.program.create_state()
+
+
 class GuidanceBackend:
     """
     Guidance library backend for structured output.
@@ -295,7 +350,7 @@ class GuidanceBackend:
         self,
         template_str: str,
         variables: Optional[List[GuidanceVariable]] = None,
-    ) -> CompiledGuidanceProgram:
+    ) -> GuidanceGrammar:
         """Compile a Guidance template."""
         template = GuidanceTemplate(
             template_str=template_str,
@@ -307,7 +362,8 @@ class GuidanceBackend:
         with self._cache_lock:
             if cache_key in self._cache:
                 self._stats['cache_hits'] += 1
-                return self._cache[cache_key]
+                program = self._cache[cache_key]
+                return GuidanceGrammar(program, self.tokenizer)
         
         # Compile
         program = CompiledGuidanceProgram(
@@ -326,9 +382,9 @@ class GuidanceBackend:
             
             self._cache[cache_key] = program
         
-        return program
+        return GuidanceGrammar(program, self.tokenizer)
     
-    def compile_json_schema(self, schema: str) -> CompiledGuidanceProgram:
+    def compile_json_schema(self, schema: str) -> GuidanceGrammar:
         """Compile JSON schema to Guidance program."""
         # Parse schema
         try:
@@ -425,48 +481,6 @@ class AsyncGuidanceBackend(GuidanceBackend):
             self.compile_json_schema,
             schema,
         )
-
-
-class GuidanceGrammar:
-    """
-    Grammar wrapper for Guidance programs.
-    
-    Provides the standard grammar interface while wrapping
-    a Guidance program and state.
-    """
-    
-    def __init__(
-        self,
-        program: CompiledGuidanceProgram,
-        state: Optional[GuidanceState] = None,
-    ):
-        self.program = program
-        self.state = state or program.create_state()
-    
-    def accept_token(self, token_id: int) -> bool:
-        """Accept a token."""
-        # Would need tokenizer to decode
-        return True
-    
-    def accept_token_text(self, text: str) -> bool:
-        """Accept a token by text."""
-        return self.state.accept_token(text)
-    
-    def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
-        """Fill bitmask for next token."""
-        self.program.fill_bitmask(self.state, bitmask)
-    
-    def is_terminated(self) -> bool:
-        """Check if grammar is terminated."""
-        return self.program.is_terminated(self.state)
-    
-    def reset(self) -> None:
-        """Reset grammar state."""
-        self.state.reset()
-    
-    def get_variable_values(self) -> Dict[str, str]:
-        """Get extracted variable values."""
-        return dict(self.state.variable_values)
 
 
 __all__ = [
