@@ -59,7 +59,8 @@ async def main():
     except (AttributeError, RuntimeError) as e:
         print(f"DEBUG: Manual call failed: {e}")
 
-    print(f"DEBUG: Profiler calls for estimate_tokens_rust: {profiler.get_stats().get('estimate_tokens_rust', None)}")
+    stats = profiler.get_stats()
+    print(f"DEBUG: Profiler calls for estimate_tokens_rust: {stats.get('estimate_tokens_rust')}")
 
     suite = BenchmarkSuite()
 
