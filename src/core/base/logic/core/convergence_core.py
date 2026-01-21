@@ -51,7 +51,8 @@ class ConvergenceCore:
         Generates a strategic summary of gains since Phase 140.
         """
         summary = "# SWARM STRATEGIC SUMMARY: PROXIMA EVOLUTION\n\n"
-        summary += "## Overview\nTransitioned from a Python-heavy fleet to a Core/Shell architecture.\n\n"
+        summary += "## Overview\n"
+        summary += "Transitioned from a Python-heavy fleet to a Core/Shell architecture.\n\n"
         summary += "## Key Achievements (Phases 140-190)\n"
 
         achievements = [

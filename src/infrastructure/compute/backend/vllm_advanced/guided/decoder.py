@@ -205,7 +205,7 @@ class GuidedDecoder:
                 return json.loads(result)
             except json.JSONDecodeError as e:
                 self._stats["validation_failures"] += 1
-                logger.warning("Failed to parse JSON output: %s", str(e))
+                logger.warning("Failed to parse JSON output: %s", e)
                 return result
 
         return result
@@ -245,7 +245,7 @@ class GuidedDecoder:
         if validate and result:
             if not re.match(pattern_str, result):
                 self._stats["validation_failures"] += 1
-                logger.warning("Output doesn't match pattern: %s", str(pattern_str))
+                logger.warning("Output doesn't match pattern: %s", pattern_str)
 
         return result
 
