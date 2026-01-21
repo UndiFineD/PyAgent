@@ -62,4 +62,3 @@ class CrossAttentionManager(SingleTypeKVCacheManager):
     def get_num_blocks_needed(self, num_tokens: int) -> int:
         """Blocks needed for encoder sequence length."""
         return ceil(num_tokens / self.spec.block_size)
-

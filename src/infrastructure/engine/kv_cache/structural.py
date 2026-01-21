@@ -216,4 +216,3 @@ class BlockPool:
         events = self._eviction_events
         self._eviction_events = []
         return events
-
