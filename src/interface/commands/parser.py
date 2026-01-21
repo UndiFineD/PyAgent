@@ -6,25 +6,28 @@ from __future__ import annotations
 
 import re
 import time
-from dataclasses import dataclass
-from typing import Any, ClassVar, Callable
+import logging
+from typing import Any, ClassVar
 
 from .base import (
     CommandContext, 
     CommandResult, 
     ParsedCommand, 
-    ProcessedPrompt,
-    CommandHandler
+    ProcessedPrompt
 )
 from .registry import CommandRegistry
 from .builtins.system_commands import register_system_commands
 from .builtins.utility_commands import register_utility_commands
+
+logger = logging.getLogger(__name__)
+
 
 # Pattern: /command or /command arg1 arg2 (up to newline or next command)
 COMMAND_PATTERN = re.compile(
     r'/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)',
     re.MULTILINE
 )
+
 
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
@@ -99,32 +102,34 @@ class CommandParser:
     def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
         """
         Execute a single command.
-        
+
         Args:
             command: Command name (without prefix)
             args: Command arguments
             **metadata: Additional context metadata
-            
+
         Returns:
             CommandResult with output
         """
         defn = self.registry.get(command.lower())
         if not defn:
             return CommandResult.fail(f"Unknown command: {command}")
-        
+
         if defn.requires_args and not args:
             return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")
-        
+
         ctx = CommandContext(
             command=command,
             args=args or [],
             metadata=metadata,
         )
-        
+
         try:
             return defn.handler(ctx)
         except Exception as e:
+            logger.exception("Failed to execute command /%s", command)
             return CommandResult.fail(str(e))
+
     
     def process(
         self,
@@ -154,9 +159,11 @@ class CommandParser:
                 try:
                     result = defn.handler(ctx)
                 except Exception as e:
+                    logger.exception("Error in command handler for /%s", cmd.command)
                     result = CommandResult.fail(str(e))
             else:
                 result = CommandResult.fail(f"Unknown command: {cmd.command}")
+
             
             results.append((cmd, result))
         

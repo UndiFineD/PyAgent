@@ -1,6 +1,7 @@
+"""Advanced KV cache coordinators for complex use cases."""
 # SPDX-License-Identifier: Apache-2.0
 import threading
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Tuple
 from collections import defaultdict
 from .data_classes import CacheConfig, KVCacheBlocks
 from .coordinator import KVCacheCoordinator
@@ -10,9 +11,12 @@ class HierarchicalKVCacheCoordinator(KVCacheCoordinator):
     def __init__(self, config: CacheConfig, max_model_len: int, num_layers: int) -> None:
         super().__init__(config, max_model_len)
         self.num_layers = num_layers
-        self.layer_stats: Dict[int, Dict[str, int]] = defaultdict(lambda: {'allocations': 0, 'hits': 0})
-    
+        self.layer_stats: Dict[int, Dict[str, int]] = defaultdict(
+            lambda: {'allocations': 0, 'hits': 0}
+        )
+
     def allocate_for_layer(self, request_id: str, num_tokens: int, layer_idx: int) -> KVCacheBlocks:
+        """Allocate KV cache specifically for a specific model layer."""
         blocks = self.allocate(request_id, num_tokens)
         self.layer_stats[layer_idx]['allocations'] += 1
         return blocks
@@ -25,17 +29,24 @@ class PredictiveKVCacheCoordinator(KVCacheCoordinator):
         self.memory_budget = memory_budget_bytes
         self._length_history: List[int] = []
         self._avg_length: float = 256.0
-    
+
     def predict_length(self, prompt_length: int) -> int:
-        if not self._length_history: return int(self._avg_length)
+        """Predict the total sequence length for a given prompt."""
+        if not self._length_history:
+            return int(self._avg_length)
         return int(self._avg_length * 0.9 + prompt_length * 0.1)
-    
+
     def record_completion_length(self, length: int) -> None:
+        """Record the actual completion length to improve future predictions."""
         self._length_history.append(length)
-        if len(self._length_history) > 1000: self._length_history = self._length_history[-500:]
+        if len(self._length_history) > 1000:
+            self._length_history = self._length_history[-500:]
         self._avg_length = sum(self._length_history) / len(self._length_history)
-    
-    def allocate_predictive(self, request_id: str, current_tokens: int, prompt_length: int) -> KVCacheBlocks:
+
+    def allocate_predictive(
+        self, request_id: str, current_tokens: int, prompt_length: int
+    ) -> KVCacheBlocks:
+        """Allocate KV cache based on predicted future demand."""
         predicted = self.predict_length(prompt_length)
         target_tokens = max(current_tokens, predicted)
         return self.allocate(request_id, target_tokens)
@@ -48,18 +59,25 @@ class AsyncPrefetchCoordinator(KVCacheCoordinator):
         self.prefetch_queue_size = prefetch_queue_size
         self._prefetch_requests: List[Tuple[str, int]] = []
         self._prefetch_lock = threading.Lock()
-    
+
     def queue_prefetch(self, request_id: str, expected_tokens: int, priority: int = 0) -> None:
+        """Queue a prefetch request for future allocation."""
+        _ = priority  # Unused argument
         with self._prefetch_lock:
-            if len(self._prefetch_requests) < self.prefetch_queue_size: self._prefetch_requests.append((request_id, expected_tokens))
-    
+            if len(self._prefetch_requests) < self.prefetch_queue_size:
+                self._prefetch_requests.append((request_id, expected_tokens))
+
     def process_prefetch_queue(self, max_blocks: int = 10) -> int:
+        """Process pending prefetch requests from the queue."""
         processed = 0
         with self._prefetch_lock:
             while self._prefetch_requests and processed < max_blocks:
                 request_id, tokens = self._prefetch_requests.pop(0)
                 try:
-                    self.allocate(request_id, tokens); processed += 1
+                    self.allocate(request_id, tokens)
+                    processed += 1
                 except MemoryError:
-                    self._prefetch_requests.insert(0, (request_id, tokens)); break
+                    self._prefetch_requests.insert(0, (request_id, tokens))
+                    break
         return processed
+
