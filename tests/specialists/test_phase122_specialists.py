@@ -1,6 +1,7 @@
 import sys
 import os
 import unittest
+import asyncio
 from unittest.mock import patch
 from pathlib import Path
 
@@ -9,10 +10,10 @@ root = Path(__file__).resolve().parent.parent
 if str(root) not in sys.path:
     sys.path.append(str(root))
 
-from src.infrastructure.fleet.SecretManager import SecretManager
-from src.logic.agents.security.ImmuneSystemAgent import ImmuneSystemAgent
-from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
-from src.logic.agents.system.IdentityAgent import IdentityAgent as AgentIdentityAgent
+from src.infrastructure.fleet.secret_manager import SecretManager
+from src.logic.agents.security.immune_system_agent import ImmuneSystemAgent
+from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
+from src.logic.agents.system.identity_agent import IdentityAgent as AgentIdentityAgent
 
 
 class TestPhase122Specialists(unittest.TestCase):
@@ -42,15 +43,18 @@ class TestPhase122Specialists(unittest.TestCase):
         self.assertTrue(len(data["nodes"]) > 0)
         self.assertTrue(len(data["links"]) > 0)
 
-    @patch("src.core.base.BaseAgent.BaseAgent.think")
+    from unittest.mock import patch, AsyncMock
+    import asyncio
+
+    @patch("src.core.base.base_agent.BaseAgent.think", new_callable=AsyncMock)
     def test_immune_system_patching(self, mock_think) -> None:
         """Test that ImmuneSystemAgent can propose a patch via LLM."""
         mock_think.return_value = "FIXED_CODE_HERE"
         isa = ImmuneSystemAgent("dummy.py")
 
-        patch_code = isa.propose_autonomous_patch(
+        patch_code = asyncio.run(isa.propose_autonomous_patch(
             "Injection vulnerability", "def insecure(): pass"
-        )
+        ))
         self.assertIn("FIXED_CODE_HERE", patch_code)
         self.assertIn("### Autonomous Security Patch Proposal", patch_code)
         mock_think.assert_called_once()

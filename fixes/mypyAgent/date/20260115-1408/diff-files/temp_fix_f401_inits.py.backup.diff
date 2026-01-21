@@ -1,9 +1,0 @@
-diff --git a/temp/fix_f401_inits.py b/temp/fix_f401_inits.py
-index 5ed982a..61161a6 100644
---- a/temp/fix_f401_inits.py
-+++ b/temp/fix_f401_inits.py
-@@ -1,4 +1,3 @@
--import os
- import subprocess
- import json
- import re

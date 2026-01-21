@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 import logging
+import contextlib
 from typing import Any, Callable
 from .metrics import Metric
 from .observability_core import StreamingConfig
@@ -47,10 +48,8 @@ class StatsStreamManager:
         if name in self.streams:
             self.streams[name].add_data(data)
         for cb in self.subscribers.get(name, []):
-            try:
+            with contextlib.suppress(Exception):
                 cb(data)
-            except Exception:
-                pass
 
     def subscribe(self, name: str, callback: Callable[[Any], None]) -> None:
         self.subscribers.setdefault(name, []).append(callback)

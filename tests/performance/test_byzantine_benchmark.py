@@ -1,6 +1,6 @@
 import timeit
 import random
-from src.logic.agents.security.core.ByzantineCore import ByzantineCore
+from src.logic.agents.security.core.byzantine_core import ByzantineCore
 
 
 def benchmark_byzantine():

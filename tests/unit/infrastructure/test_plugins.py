@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 try:
-    from src.core.base.BaseManagers import PluginManager
+    from src.core.base.base_managers import PluginManager
 except ImportError:
     PluginManager = None  # type: ignore
 

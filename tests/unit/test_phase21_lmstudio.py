@@ -31,7 +31,7 @@ class TestLMStudioConfig:
     
     def test_default_config(self):
         """Test default configuration values."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioConfig
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioConfig
         
         config = LMStudioConfig()
         assert config.host == "localhost"
@@ -42,7 +42,7 @@ class TestLMStudioConfig:
     
     def test_config_from_env(self):
         """Test configuration from environment variables."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioConfig
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioConfig
         
         os.environ["LMSTUDIO_HOST"] = "192.168.1.100"
         os.environ["LMSTUDIO_PORT"] = "5000"
@@ -56,7 +56,7 @@ class TestLMStudioConfig:
     
     def test_api_host_property(self):
         """Test api_host property."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioConfig
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioConfig
         
         config = LMStudioConfig(host="example.com", port=8080)
         assert config.api_host == "example.com:8080"
@@ -67,7 +67,7 @@ class TestModelCache:
     
     def test_cache_set_get(self):
         """Test basic cache operations."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import ModelCache
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import ModelCache
         
         cache = ModelCache(ttl=300.0)
         
@@ -81,14 +81,14 @@ class TestModelCache:
     
     def test_cache_miss(self):
         """Test cache miss returns None."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import ModelCache
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import ModelCache
         
         cache = ModelCache()
         assert cache.get("nonexistent") is None
     
     def test_cache_expiration(self):
         """Test cache entry expiration."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import ModelCache, CachedModel
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import ModelCache, CachedModel
         
         cache = ModelCache(ttl=0.01)  # 10ms TTL
         
@@ -100,7 +100,7 @@ class TestModelCache:
     
     def test_prune_expired(self):
         """Test pruning expired entries."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import ModelCache
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import ModelCache
         
         cache = ModelCache(ttl=0.01)
         cache.set("a", MagicMock())
@@ -116,7 +116,7 @@ class TestLMStudioBackend:
     
     def test_sdk_check_not_available(self):
         """Test SDK availability check when not installed."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioBackend
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioBackend
         
         backend = LMStudioBackend(
             session=MagicMock(),
@@ -130,13 +130,13 @@ class TestLMStudioBackend:
     
     def test_backend_provider_id(self):
         """Test provider ID constant."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioBackend
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioBackend
         
         assert LMStudioBackend.PROVIDER_ID == "lmstudio"
     
     def test_get_info(self):
         """Test get_info method."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioBackend
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioBackend
         
         backend = LMStudioBackend(
             session=MagicMock(),
@@ -154,7 +154,7 @@ class TestLMStudioBackend:
     
     def test_chat_skipped_when_unavailable(self):
         """Test chat returns empty when backend unavailable."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioBackend
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioBackend
         
         connectivity = MagicMock()
         connectivity.is_endpoint_available.return_value = False
@@ -172,7 +172,7 @@ class TestLMStudioBackend:
     
     def test_disconnect(self):
         """Test disconnect clears resources."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import LMStudioBackend
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import LMStudioBackend
         
         backend = LMStudioBackend(
             session=MagicMock(),
@@ -194,19 +194,19 @@ class TestLMStudioConvenienceFunctions:
     
     def test_lmstudio_chat_import(self):
         """Test convenience function can be imported."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import lmstudio_chat
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import lmstudio_chat
         
         assert callable(lmstudio_chat)
     
     def test_lmstudio_stream_import(self):
         """Test streaming function can be imported."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import lmstudio_stream
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import lmstudio_stream
         
         assert callable(lmstudio_stream)
     
     def test_lmstudio_chat_async_import(self):
         """Test async function can be imported."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import lmstudio_chat_async
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import lmstudio_chat_async
         
         assert inspect.iscoroutinefunction(lmstudio_chat_async)
 
@@ -221,13 +221,13 @@ class TestMsgSpecAvailability:
     
     def test_is_msgspec_available(self):
         """Test availability check."""
-        from src.infrastructure.serialization.MsgSpecSerializer import is_msgspec_available
+        from src.infrastructure.serialization.msg_spec_serializer import is_msgspec_available
         
         assert is_msgspec_available() == True  # Should be installed
     
     def test_require_msgspec(self):
         """Test require function doesn't raise when available."""
-        from src.infrastructure.serialization.MsgSpecSerializer import require_msgspec
+        from src.infrastructure.serialization.msg_spec_serializer import require_msgspec
         
         # Should not raise
         require_msgspec()
@@ -238,7 +238,7 @@ class TestJSONEncoder:
     
     def test_encode_decode_dict(self):
         """Test encoding and decoding a dictionary."""
-        from src.infrastructure.serialization.MsgSpecSerializer import JSONEncoder
+        from src.infrastructure.serialization.msg_spec_serializer import JSONEncoder
         
         encoder = JSONEncoder()
         data = {"name": "test", "value": 42, "nested": {"a": 1}}
@@ -251,7 +251,7 @@ class TestJSONEncoder:
     
     def test_encode_str(self):
         """Test encoding to string."""
-        from src.infrastructure.serialization.MsgSpecSerializer import JSONEncoder
+        from src.infrastructure.serialization.msg_spec_serializer import JSONEncoder
         
         encoder = JSONEncoder()
         data = {"key": "value"}
@@ -262,7 +262,7 @@ class TestJSONEncoder:
     
     def test_decode_from_string(self):
         """Test decoding from string input."""
-        from src.infrastructure.serialization.MsgSpecSerializer import JSONEncoder
+        from src.infrastructure.serialization.msg_spec_serializer import JSONEncoder
         
         encoder = JSONEncoder()
         json_str = '{"name": "test"}'
@@ -272,7 +272,7 @@ class TestJSONEncoder:
     
     def test_decode_lines(self):
         """Test decoding newline-delimited JSON."""
-        from src.infrastructure.serialization.MsgSpecSerializer import JSONEncoder
+        from src.infrastructure.serialization.msg_spec_serializer import JSONEncoder
         
         encoder = JSONEncoder()
         ndjson = '{"id": 1}\n{"id": 2}\n{"id": 3}'
@@ -287,7 +287,7 @@ class TestMsgPackEncoder:
     
     def test_encode_decode(self):
         """Test MessagePack encoding and decoding."""
-        from src.infrastructure.serialization.MsgSpecSerializer import MsgPackEncoder
+        from src.infrastructure.serialization.msg_spec_serializer import MsgPackEncoder
         
         encoder = MsgPackEncoder()
         data = {"numbers": [1, 2, 3], "flag": True}
@@ -300,7 +300,7 @@ class TestMsgPackEncoder:
     
     def test_smaller_than_json(self):
         """Test MessagePack produces smaller output than JSON."""
-        from src.infrastructure.serialization.MsgSpecSerializer import (
+        from src.infrastructure.serialization.msg_spec_serializer import (
             JSONEncoder,
             MsgPackEncoder,
         )
@@ -321,7 +321,7 @@ class TestTypedSerializer:
     
     def test_typed_json_serialization(self):
         """Test type-safe JSON serialization."""
-        from src.infrastructure.serialization.MsgSpecSerializer import TypedSerializer
+        from src.infrastructure.serialization.msg_spec_serializer import TypedSerializer
         import msgspec
         
         class User(msgspec.Struct):
@@ -339,7 +339,7 @@ class TestTypedSerializer:
     
     def test_typed_msgpack_serialization(self):
         """Test type-safe MessagePack serialization."""
-        from src.infrastructure.serialization.MsgSpecSerializer import TypedSerializer
+        from src.infrastructure.serialization.msg_spec_serializer import TypedSerializer
         import msgspec
         
         class Config(msgspec.Struct):
@@ -357,7 +357,7 @@ class TestTypedSerializer:
     
     def test_encode_many(self):
         """Test encoding multiple objects."""
-        from src.infrastructure.serialization.MsgSpecSerializer import TypedSerializer
+        from src.infrastructure.serialization.msg_spec_serializer import TypedSerializer
         import msgspec
         
         class Item(msgspec.Struct):
@@ -379,7 +379,7 @@ class TestChatMessageStructs:
     
     def test_role_enum(self):
         """Test Role enum values."""
-        from src.infrastructure.serialization.MsgSpecSerializer import Role
+        from src.infrastructure.serialization.msg_spec_serializer import Role
         
         assert Role.SYSTEM == "system"
         assert Role.USER == "user"
@@ -388,7 +388,7 @@ class TestChatMessageStructs:
     
     def test_chat_message_struct(self):
         """Test ChatMessage struct."""
-        from src.infrastructure.serialization.MsgSpecSerializer import ChatMessage, Role
+        from src.infrastructure.serialization.msg_spec_serializer import ChatMessage, Role
         
         msg = ChatMessage(role=Role.USER, content="Hello!")
         assert msg.role == Role.USER
@@ -397,7 +397,7 @@ class TestChatMessageStructs:
     
     def test_chat_completion_request(self):
         """Test ChatCompletionRequest struct."""
-        from src.infrastructure.serialization.MsgSpecSerializer import (
+        from src.infrastructure.serialization.msg_spec_serializer import (
             ChatCompletionRequest,
             ChatMessage,
             Role,
@@ -423,7 +423,7 @@ class TestChatHelpers:
     
     def test_encode_chat_request(self):
         """Test encoding a chat request."""
-        from src.infrastructure.serialization.MsgSpecSerializer import encode_chat_request
+        from src.infrastructure.serialization.msg_spec_serializer import encode_chat_request
         
         messages = [
             {"role": "system", "content": "Be helpful"},
@@ -445,7 +445,7 @@ class TestBenchmarking:
     
     def test_benchmark_serialization(self):
         """Test serialization benchmarking."""
-        from src.infrastructure.serialization.MsgSpecSerializer import benchmark_serialization
+        from src.infrastructure.serialization.msg_spec_serializer import benchmark_serialization
         
         data = {"key": "value", "numbers": [1, 2, 3, 4, 5]}
         
@@ -472,7 +472,7 @@ class TestLLMClientIntegration:
     
     def test_lmstudio_backend_registered(self):
         """Test that lmstudio backend is registered in LLMClient."""
-        from src.infrastructure.backend.LLMClient import LLMClient
+        from src.infrastructure.backend.llm_client import LLMClient
         import requests
         
         with patch.object(requests, 'Session', return_value=MagicMock()):
@@ -482,7 +482,7 @@ class TestLLMClientIntegration:
     
     def test_llm_chat_via_lmstudio_method(self):
         """Test llm_chat_via_lmstudio method exists."""
-        from src.infrastructure.backend.LLMClient import LLMClient
+        from src.infrastructure.backend.llm_client import LLMClient
         import requests
         
         with patch.object(requests, 'Session', return_value=MagicMock()):
@@ -493,7 +493,7 @@ class TestLLMClientIntegration:
     
     def test_lmstudio_in_known_backends(self):
         """Test lmstudio is in smart_chat fallback chain."""
-        from src.infrastructure.backend.LLMClient import LLMClient
+        from src.infrastructure.backend.llm_client import LLMClient
         import requests
         
         # Check source code contains lmstudio in known_backends
@@ -518,7 +518,7 @@ class TestPhase21ModuleStructure:
     
     def test_lmstudio_backend_exports(self):
         """Test LMStudioBackend exports."""
-        from src.infrastructure.backend.llm_backends.LMStudioBackend import (
+        from src.infrastructure.backend.llm_backends.lm_studio_backend import (
             LMStudioBackend,
             LMStudioConfig,
             ModelCache,

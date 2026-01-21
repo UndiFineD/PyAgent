@@ -12,7 +12,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import ast
 import hashlib
 import json
@@ -20,7 +20,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from src.core.base.BaseAgent import BaseAgent
+from src.core.base.base_agent import BaseAgent
 from src.infrastructure.dev.agent_tests.enums import (
     TestPriority,
     TestStatus,

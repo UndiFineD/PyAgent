@@ -5,7 +5,7 @@ import logging
 
 # Add the workspace root to sys.path
 
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 import asyncio
 
 

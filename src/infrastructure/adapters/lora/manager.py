@@ -4,14 +4,16 @@
 
 from __future__ import annotations
 import numpy as np
-from typing import Any, TYPE_CHECKING
+from typing import Any
 from .config import LoRAConfig
 from .weights import LoRALayerWeights
 from .model import LoRAModel
 from .registry import LoRARegistry
 
-if TYPE_CHECKING:
+try:
     from numpy.typing import NDArray
+except ImportError:
+    NDArray = Any
 
 
 class LoRAManager:
@@ -170,7 +172,7 @@ class LoRAManager:
             "registry": self.registry.get_stats(),
             "active_requests": len(self._active_adapters),
             "adapter_usage": dict(
-                (adapter, sum(1 for v in self._active_adapters.values() if v == adapter))
+                (adapter, list(self._active_adapters.values()).count(adapter))
                 for adapter in set(self._active_adapters.values())
             ),
         }

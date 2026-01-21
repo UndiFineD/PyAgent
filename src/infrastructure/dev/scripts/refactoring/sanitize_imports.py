@@ -18,7 +18,7 @@ Sanitizes imports by ensuring proper spacing and structure.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 
 __version__ = VERSION

@@ -35,7 +35,7 @@ class TestPerformanceProfiling:
         """Test detecting potential performance issues."""
         with agent_dir_on_path():
             # Fix: Use correct path to CoderAgent
-            mod = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod = load_agent_module("src/logic/agents/development/coder_agent.py")
 
         code = """
 def slow_function(n):

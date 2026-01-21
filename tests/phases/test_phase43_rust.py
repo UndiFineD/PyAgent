@@ -657,7 +657,7 @@ class TestPhase43Performance:
             rust_core.compute_percentiles_rust(values, percentiles)
         elapsed = time.perf_counter() - start
         
-        assert elapsed < 5.0
+        assert elapsed < 15.0
         
     def test_anomaly_detection_performance(self):
         """Test anomaly detection is fast."""

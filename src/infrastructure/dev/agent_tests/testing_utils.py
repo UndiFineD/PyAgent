@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import hashlib
 import json
 from typing import Any
@@ -329,13 +329,13 @@ class ResultAggregator:
         earlier_rate = (
             sum(1 for r in earlier_results if r.status == TestStatus.PASSED)
             / len(earlier_results)
-            if len(earlier_results) > 0
+            if earlier_results
             else 0
         )
         later_rate = (
             sum(1 for r in later_results if r.status == TestStatus.PASSED)
             / len(later_results)
-            if len(later_results) > 0
+            if later_results
             else 0
         )
 

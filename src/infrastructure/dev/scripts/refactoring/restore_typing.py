@@ -15,7 +15,7 @@
 """Script for restoring standard typing and library imports that were masked."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import re
 

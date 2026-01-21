@@ -5,6 +5,7 @@
 import logging
 import time
 from typing import Any, Dict, List, Optional, Tuple
+from contextlib import suppress
 from .config import SpecMethod, SpeculativeConfig
 from .proposals import DraftProposal
 from .base import DrafterBase
@@ -12,20 +13,18 @@ from .base import DrafterBase
 logger = logging.getLogger(__name__)
 
 # Try to import numpy for efficient array operations
-try:
+NUMPY_AVAILABLE = False
+np = None
+with suppress(ImportError):
     import numpy as np
     NUMPY_AVAILABLE = True
-except ImportError:
-    NUMPY_AVAILABLE = False
-    np = None
 
 # Try to import numba for JIT acceleration
-try:
+NUMBA_AVAILABLE = False
+jit = njit = prange = None
+with suppress(ImportError):
     from numba import jit, njit, prange
     NUMBA_AVAILABLE = True
-except ImportError:
-    NUMBA_AVAILABLE = False
-    jit = njit = prange = None
 
 
 class NgramProposer(DrafterBase):

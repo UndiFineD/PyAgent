@@ -18,7 +18,7 @@ Knowledge Agent: Manages workspace knowledge and backlinks.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import sys
 import argparse
 import logging
@@ -33,7 +33,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-    from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 
 def main() -> None:

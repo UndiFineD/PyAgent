@@ -15,7 +15,7 @@
 """Script for fixing broken annotation imports by converting them to future imports."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import re
 

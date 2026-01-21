@@ -11,7 +11,7 @@ This package provides:
 - Adapter composition
 """
 
-from .LoRAManager import (
+from .lo_ra_manager import (
     # Enums
     LoRAMethod,
     AdapterStatus,

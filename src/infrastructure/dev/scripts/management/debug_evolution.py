@@ -16,12 +16,12 @@
 """Validation script for Phase 14: Autonomous Evolution & Self-Repair."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 import os
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.development.InfrastructureRepairAgent import (
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.logic.agents.development.infrastructure_repair_agent import (
     InfrastructureRepairAgent,
 )
 
@@ -56,7 +56,7 @@ def test_evolution_and_repair() -> None:
 
     print("\n--- Phase 14: Infrastructure Repair ---")
     repair_agent = InfrastructureRepairAgent(
-        str(root / "src/logic/agents/development/InfrastructureRepairAgent.py")
+        str(root / "src\logic\agents\development\infrastructure_repair_agent.py")
     )
 
     # We won't actually install anything in the test to avoid side effects, but we'll run the audit

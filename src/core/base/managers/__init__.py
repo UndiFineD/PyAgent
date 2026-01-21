@@ -18,37 +18,37 @@ Internal managers for prompt, conversation, auth, and batch processing.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION as VERSION
-from .PromptManagers import (
+from src.core.base.version import VERSION as VERSION
+from .prompt_managers import (
     PromptTemplateManager as PromptTemplateManager,
     PromptVersion as PromptVersion,
     PromptVersionManager as PromptVersionManager,
 )
-from .ConversationManagers import ConversationHistory as ConversationHistory
-from .AuthManagers import (
+from .conversation_managers import ConversationHistory as ConversationHistory
+from .auth_managers import (
     AuthenticationManager as AuthenticationManager,
     AuthManager as AuthManager,
 )
-from .BatchManagers import (
+from .batch_managers import (
     BatchRequest as BatchRequest,
     RequestBatcher as RequestBatcher,
 )
-from .ProcessorManagers import (
+from .processor_managers import (
     ResponsePostProcessor as ResponsePostProcessor,
     MultimodalProcessor as MultimodalProcessor,
     SerializationManager as SerializationManager,
 )
-from .OrchestrationManagers import (
+from .orchestration_managers import (
     AgentComposer as AgentComposer,
     ModelSelector as ModelSelector,
     QualityScorer as QualityScorer,
     ABTest as ABTest,
 )
-from .PluginManager import (
+from .plugin_manager import (
     PluginManager as PluginManager,
     PluginMetadata as PluginMetadata,
 )
-from .SystemManagers import (
+from .system_managers import (
     FilePriorityManager as FilePriorityManager,
     ResponseCache as ResponseCache,
     StatePersistence as StatePersistence,
@@ -56,7 +56,7 @@ from .SystemManagers import (
     HealthChecker as HealthChecker,
     ProfileManager as ProfileManager,
 )
-from .ResourceQuotaManager import (
+from .resource_quota_manager import (
     ResourceQuotaManager as ResourceQuotaManager,
     QuotaConfig as QuotaConfig,
 )

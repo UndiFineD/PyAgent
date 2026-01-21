@@ -11,7 +11,7 @@ This package provides:
 - Input size estimation for scheduling
 """
 
-from .InputPreprocessor import (
+from .input_preprocessor import (
     # Enums
     PromptType,
     InputFormat,

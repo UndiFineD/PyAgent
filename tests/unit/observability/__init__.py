@@ -78,8 +78,8 @@ __all__ = [
     "TestVisualizationGeneration",
 ]
 
-from .test_stats_UNIT import *  # noqa: F401, F403
-from .test_stats_INTEGRATION import *  # noqa: F401, F403
+from .test_stats_unit import *  # noqa: F401, F403
+from .test_stats_integration import *  # noqa: F401, F403
 from .advanced import *  # noqa: F401, F403
 from .edge_cases import *  # noqa: F401, F403
-from .test_stats_PERFORMANCE import *  # noqa: F401, F403
+from .test_stats_performance import *  # noqa: F401, F403

@@ -1,6 +1,6 @@
 import timeit
 import statistics
-from src.observability.stats.core.StabilityCore import StabilityCore, FleetMetrics
+from src.observability.stats.core.stability_core import StabilityCore, FleetMetrics
 
 
 def benchmark_stability():

@@ -325,9 +325,9 @@ class TestTestCoverageIntegration(unittest.TestCase):
         """Test reporting coverage by file."""
         coverage: Dict[str, float] = {
             "agent.py": 85.5,
-            "base_agent/entrypoint.py": 92.0,
+            "base_agent\entrypoint.py": 92.0,
             "agent_context.py": 78.5,
-            "errors/error_handler.py": 88.0,
+            "errors\error_handler.py": 88.0,
         }
 
         low_coverage: List[str] = [f for f, c in coverage.items() if c < 80]

@@ -19,7 +19,7 @@ def cmd_cache(ctx: CommandContext) -> CommandResult:
     
     # Check for common caches
     try:
-        from src.observability.logging.EnhancedLogger import get_dedup_cache_info
+        from src.observability.logging.enhanced_logger import get_dedup_cache_info
         cache_stats["logger_dedup"] = get_dedup_cache_info()
     except ImportError:
         pass
@@ -78,7 +78,7 @@ def cmd_counters(ctx: CommandContext) -> CommandResult:
 def cmd_telemetry(ctx: CommandContext) -> CommandResult:
     """Get telemetry/usage information."""
     try:
-        from src.observability.telemetry.UsageMessage import (
+        from src.observability.telemetry.usage_message import (
             detect_cloud_provider,
             is_usage_stats_enabled,
             get_platform_summary,
@@ -113,7 +113,7 @@ def cmd_telemetry(ctx: CommandContext) -> CommandResult:
 def cmd_logs(ctx: CommandContext) -> CommandResult:
     """Get log deduplication statistics."""
     try:
-        from src.observability.logging.EnhancedLogger import get_dedup_cache_info
+        from src.observability.logging.enhanced_logger import get_dedup_cache_info
         
         info = get_dedup_cache_info()
         

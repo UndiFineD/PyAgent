@@ -4,14 +4,16 @@
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Any, TYPE_CHECKING
+from typing import Any
 import numpy as np
 
 from .config import LoRAConfig
 from .weights import LoRALayerWeights
 
-if TYPE_CHECKING:
+try:
     from numpy.typing import NDArray
+except ImportError:
+    NDArray = Any
 
 
 @dataclass

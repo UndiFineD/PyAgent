@@ -55,7 +55,7 @@ class CommandContext:
     @property
     def rest_args(self) -> list[str]:
         """Get all arguments except the first."""
-        return self.args[1:] if len(self.args) > 1 else []
+        return self.args[1:]
 
 
 @dataclass
@@ -351,7 +351,7 @@ class ProcessedPrompt:
     @property
     def has_commands(self) -> bool:
         """Whether any commands were found."""
-        return len(self.commands) > 0
+        return bool(self.commands)
     
     @property
     def all_succeeded(self) -> bool:

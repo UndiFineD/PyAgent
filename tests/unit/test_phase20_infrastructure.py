@@ -35,7 +35,7 @@ class TestExtensionManager:
     
     def test_register_and_load(self):
         """Test basic registration and loading."""
-        from src.core.base.registry.ExtensionRegistry import ExtensionManager
+        from src.core.base.registry.extension_registry import ExtensionManager
         
         registry = ExtensionManager("test")
         
@@ -49,7 +49,7 @@ class TestExtensionManager:
     
     def test_register_class_programmatically(self):
         """Test programmatic registration."""
-        from src.core.base.registry.ExtensionRegistry import ExtensionManager
+        from src.core.base.registry.extension_registry import ExtensionManager
         
         registry = ExtensionManager("test")
         
@@ -62,7 +62,7 @@ class TestExtensionManager:
     
     def test_load_not_found(self):
         """Test loading non-existent class."""
-        from src.core.base.registry.ExtensionRegistry import ExtensionManager
+        from src.core.base.registry.extension_registry import ExtensionManager
         
         registry = ExtensionManager("test")
         
@@ -71,7 +71,7 @@ class TestExtensionManager:
     
     def test_list_registered(self):
         """Test listing registered classes."""
-        from src.core.base.registry.ExtensionRegistry import ExtensionManager
+        from src.core.base.registry.extension_registry import ExtensionManager
         
         registry = ExtensionManager("test")
         
@@ -90,7 +90,7 @@ class TestTypedExtensionManager:
     
     def test_typed_registration(self):
         """Test type-safe registration."""
-        from src.core.base.registry.ExtensionRegistry import TypedExtensionManager
+        from src.core.base.registry.extension_registry import TypedExtensionManager
         from abc import ABC, abstractmethod
         
         class BasePlugin(ABC):
@@ -109,7 +109,7 @@ class TestTypedExtensionManager:
     
     def test_invalid_type_registration(self):
         """Test that non-subclass registration fails."""
-        from src.core.base.registry.ExtensionRegistry import TypedExtensionManager
+        from src.core.base.registry.extension_registry import TypedExtensionManager
         
         class Base: pass
         
@@ -126,7 +126,7 @@ class TestMultiExtensionManager:
     
     def test_multiple_registrations(self):
         """Test multiple implementations per key."""
-        from src.core.base.registry.ExtensionRegistry import MultiExtensionManager
+        from src.core.base.registry.extension_registry import MultiExtensionManager
         
         registry = MultiExtensionManager("handlers")
         
@@ -152,7 +152,7 @@ class TestLazyExtensionManager:
     
     def test_lazy_loading(self):
         """Test lazy module loading."""
-        from src.core.base.registry.ExtensionRegistry import LazyExtensionManager
+        from src.core.base.registry.extension_registry import LazyExtensionManager
         
         registry = LazyExtensionManager("lazy")
         registry.register_lazy("json_encoder", "json:JSONEncoder")
@@ -177,7 +177,7 @@ class TestLazyDict:
     
     def test_lazy_evaluation(self):
         """Test that values are computed lazily."""
-        from src.core.base.utils.CollectionUtils import LazyDict
+        from src.core.base.utils.collection_utils import LazyDict
         
         computed = []
         
@@ -208,7 +208,7 @@ class TestLazyDict:
     
     def test_is_computed(self):
         """Test is_computed method."""
-        from src.core.base.utils.CollectionUtils import LazyDict
+        from src.core.base.utils.collection_utils import LazyDict
         
         d = LazyDict({"a": lambda: 1})
         
@@ -222,21 +222,21 @@ class TestListUtilities:
     
     def test_chunk_list(self):
         """Test chunking a list."""
-        from src.core.base.utils.CollectionUtils import chunk_list
+        from src.core.base.utils.collection_utils import chunk_list
         
         result = list(chunk_list([1, 2, 3, 4, 5], 2))
         assert result == [[1, 2], [3, 4], [5]]
     
     def test_flatten_2d_lists(self):
         """Test flattening nested lists."""
-        from src.core.base.utils.CollectionUtils import flatten_2d_lists
+        from src.core.base.utils.collection_utils import flatten_2d_lists
         
         result = flatten_2d_lists([[1, 2], [3, 4], [5]])
         assert result == [1, 2, 3, 4, 5]
     
     def test_is_list_of(self):
         """Test type guard for lists."""
-        from src.core.base.utils.CollectionUtils import is_list_of
+        from src.core.base.utils.collection_utils import is_list_of
         
         assert is_list_of([1, 2, 3], int)
         assert not is_list_of(["a", "b"], int)
@@ -244,7 +244,7 @@ class TestListUtilities:
     
     def test_unique(self):
         """Test unique with preserved order."""
-        from src.core.base.utils.CollectionUtils import unique
+        from src.core.base.utils.collection_utils import unique
         
         result = unique([1, 2, 1, 3, 2, 4])
         assert result == [1, 2, 3, 4]
@@ -255,7 +255,7 @@ class TestGroupingUtilities:
     
     def test_full_groupby(self):
         """Test groupby without requiring sorted input."""
-        from src.core.base.utils.CollectionUtils import full_groupby
+        from src.core.base.utils.collection_utils import full_groupby
         
         result = dict(full_groupby([1, 2, 3, 1, 2], key=lambda x: x % 2))
         assert result[1] == [1, 3, 1]
@@ -263,7 +263,7 @@ class TestGroupingUtilities:
     
     def test_partition(self):
         """Test partitioning items."""
-        from src.core.base.utils.CollectionUtils import partition
+        from src.core.base.utils.collection_utils import partition
         
         evens, odds = partition([1, 2, 3, 4, 5], lambda x: x % 2 == 0)
         assert evens == [2, 4]
@@ -275,7 +275,7 @@ class TestDictUtilities:
     
     def test_deep_merge_dicts(self):
         """Test recursive dictionary merge."""
-        from src.core.base.utils.CollectionUtils import deep_merge_dicts
+        from src.core.base.utils.collection_utils import deep_merge_dicts
         
         base = {"a": 1, "b": {"c": 2}}
         override = {"b": {"d": 3}}
@@ -285,7 +285,7 @@ class TestDictUtilities:
     
     def test_invert_dict(self):
         """Test dictionary inversion."""
-        from src.core.base.utils.CollectionUtils import invert_dict
+        from src.core.base.utils.collection_utils import invert_dict
         
         result = invert_dict({"a": 1, "b": 2})
         assert result == {1: "a", 2: "b"}
@@ -301,7 +301,7 @@ class TestRunOnce:
     
     def test_runs_only_once(self):
         """Test function runs only once."""
-        from src.core.base.utils.FuncUtils import run_once
+        from src.core.base.utils.func_utils import run_once
         
         counter = [0]
         
@@ -321,7 +321,7 @@ class TestDeprecation:
     
     def test_deprecate_kwargs(self):
         """Test keyword argument deprecation warning."""
-        from src.core.base.utils.FuncUtils import deprecate_kwargs
+        from src.core.base.utils.func_utils import deprecate_kwargs
         
         @deprecate_kwargs("old_param")
         def foo(new_param=None, old_param=None):
@@ -339,7 +339,7 @@ class TestSupportsKw:
     
     def test_supports_kw_basic(self):
         """Test supports_kw for basic functions."""
-        from src.core.base.utils.FuncUtils import supports_kw
+        from src.core.base.utils.func_utils import supports_kw
         
         def foo(a, b, c=None):
             pass
@@ -350,7 +350,7 @@ class TestSupportsKw:
     
     def test_supports_kw_with_kwargs(self):
         """Test supports_kw with **kwargs."""
-        from src.core.base.utils.FuncUtils import supports_kw
+        from src.core.base.utils.func_utils import supports_kw
         
         def foo(a, **kwargs):
             pass
@@ -363,7 +363,7 @@ class TestMemoize:
     
     def test_memoize_caches_results(self):
         """Test that results are cached."""
-        from src.core.base.utils.FuncUtils import memoize
+        from src.core.base.utils.func_utils import memoize
         
         call_count = [0]
         
@@ -386,7 +386,7 @@ class TestThrottle:
     
     def test_throttle_limits_calls(self):
         """Test that calls are throttled."""
-        from src.core.base.utils.FuncUtils import throttle
+        from src.core.base.utils.func_utils import throttle
         
         call_count = [0]
         
@@ -412,14 +412,14 @@ class TestIPDetection:
     
     def test_get_ip(self):
         """Test IP address detection."""
-        from src.infrastructure.network.NetworkUtils import get_ip
+        from src.infrastructure.network.network_utils import get_ip
         
         ip = get_ip()
         assert ip  # Should return something
     
     def test_is_valid_ipv4_address(self):
         """Test IPv4 validation."""
-        from src.infrastructure.network.NetworkUtils import is_valid_ipv4_address
+        from src.infrastructure.network.network_utils import is_valid_ipv4_address
         
         assert is_valid_ipv4_address("192.168.1.1")
         assert is_valid_ipv4_address("127.0.0.1")
@@ -428,7 +428,7 @@ class TestIPDetection:
     
     def test_is_valid_ipv6_address(self):
         """Test IPv6 validation."""
-        from src.infrastructure.network.NetworkUtils import is_valid_ipv6_address
+        from src.infrastructure.network.network_utils import is_valid_ipv6_address
         
         assert is_valid_ipv6_address("::1")
         assert is_valid_ipv6_address("2001:db8::1")
@@ -440,7 +440,7 @@ class TestHostPortParsing:
     
     def test_split_host_port_ipv4(self):
         """Test IPv4 host:port splitting."""
-        from src.infrastructure.network.NetworkUtils import split_host_port
+        from src.infrastructure.network.network_utils import split_host_port
         
         host, port = split_host_port("192.168.1.1:8080")
         assert host == "192.168.1.1"
@@ -448,7 +448,7 @@ class TestHostPortParsing:
     
     def test_split_host_port_ipv6(self):
         """Test IPv6 [host]:port splitting."""
-        from src.infrastructure.network.NetworkUtils import split_host_port
+        from src.infrastructure.network.network_utils import split_host_port
         
         host, port = split_host_port("[::1]:8080")
         assert host == "::1"
@@ -456,7 +456,7 @@ class TestHostPortParsing:
     
     def test_join_host_port(self):
         """Test joining host and port."""
-        from src.infrastructure.network.NetworkUtils import join_host_port
+        from src.infrastructure.network.network_utils import join_host_port
         
         assert join_host_port("localhost", 8080) == "localhost:8080"
         assert join_host_port("::1", 8080) == "[::1]:8080"
@@ -467,14 +467,14 @@ class TestPortDiscovery:
     
     def test_get_open_port(self):
         """Test finding an open port."""
-        from src.infrastructure.network.NetworkUtils import get_open_port
+        from src.infrastructure.network.network_utils import get_open_port
         
         port = get_open_port()
         assert 1024 <= port <= 65535
     
     def test_get_open_ports(self):
         """Test getting multiple open ports."""
-        from src.infrastructure.network.NetworkUtils import get_open_ports
+        from src.infrastructure.network.network_utils import get_open_ports
         
         ports = get_open_ports(3)
         assert len(ports) == 3
@@ -491,7 +491,7 @@ class TestEnvVar:
     
     def test_envvar_default(self):
         """Test EnvVar with default value."""
-        from src.core.config.EnvConfig import EnvVar
+        from src.core.config.env_config import EnvVar
         
         class Config:
             DEBUG = EnvVar("TEST_DEBUG_PHASE20", default=False)
@@ -501,7 +501,7 @@ class TestEnvVar:
     
     def test_envvar_from_environment(self):
         """Test EnvVar reading from environment."""
-        from src.core.config.EnvConfig import get_env_int
+        from src.core.config.env_config import get_env_int
         
         os.environ["TEST_PORT_PHASE20"] = "9000"
         try:
@@ -517,7 +517,7 @@ class TestEnvFunctions:
     
     def test_get_env_bool(self):
         """Test boolean environment variable."""
-        from src.core.config.EnvConfig import get_env_bool
+        from src.core.config.env_config import get_env_bool
         
         os.environ["TEST_BOOL_PHASE20"] = "true"
         try:
@@ -527,7 +527,7 @@ class TestEnvFunctions:
     
     def test_get_env_int(self):
         """Test integer environment variable."""
-        from src.core.config.EnvConfig import get_env_int
+        from src.core.config.env_config import get_env_int
         
         os.environ["TEST_INT_PHASE20"] = "42"
         try:
@@ -537,7 +537,7 @@ class TestEnvFunctions:
     
     def test_get_env_list(self):
         """Test list environment variable."""
-        from src.core.config.EnvConfig import get_env_list
+        from src.core.config.env_config import get_env_list
         
         os.environ["TEST_LIST_PHASE20"] = "a,b,c"
         try:
@@ -551,7 +551,7 @@ class TestTempEnv:
     
     def test_temp_env(self):
         """Test temporary environment variables."""
-        from src.core.config.EnvConfig import temp_env
+        from src.core.config.env_config import temp_env
         
         original = os.environ.get("TEST_TEMP_PHASE20")
         
@@ -566,7 +566,7 @@ class TestNamespacedConfig:
     
     def test_namespaced_config(self):
         """Test namespaced configuration access."""
-        from src.core.config.EnvConfig import NamespacedConfig
+        from src.core.config.env_config import NamespacedConfig
         
         os.environ["MYAPP_DEBUG"] = "true"
         os.environ["MYAPP_PORT"] = "9000"
@@ -589,7 +589,7 @@ class TestOtelAvailability:
     
     def test_is_otel_available(self):
         """Test checking if otel is available."""
-        from src.observability.tracing.OpenTelemetryTracer import is_otel_available
+        from src.observability.tracing.open_telemetry_tracer import is_otel_available
         
         # Just check it returns a boolean
         result = is_otel_available()
@@ -601,7 +601,7 @@ class TestSpanAttributes:
     
     def test_span_attributes_defined(self):
         """Test that standard span attributes are defined."""
-        from src.observability.tracing.OpenTelemetryTracer import SpanAttributes
+        from src.observability.tracing.open_telemetry_tracer import SpanAttributes
         
         assert SpanAttributes.GEN_AI_USAGE_PROMPT_TOKENS == "gen_ai.usage.prompt_tokens"
         assert SpanAttributes.GEN_AI_REQUEST_MODEL == "gen_ai.request.model"
@@ -613,7 +613,7 @@ class TestNullTracer:
     
     def test_null_tracer(self):
         """Test NullTracer for testing."""
-        from src.observability.tracing.OpenTelemetryTracer import get_null_tracer
+        from src.observability.tracing.open_telemetry_tracer import get_null_tracer
         
         tracer = get_null_tracer()
         
@@ -628,7 +628,7 @@ class TestSpanTiming:
     
     def test_span_timing(self):
         """Test timing checkpoint recording."""
-        from src.observability.tracing.OpenTelemetryTracer import SpanTiming
+        from src.observability.tracing.open_telemetry_tracer import SpanTiming
         
         timing = SpanTiming()
         
@@ -652,7 +652,7 @@ class TestTraceContextPropagation:
     
     def test_extract_trace_headers(self):
         """Test extracting trace headers."""
-        from src.observability.tracing.OpenTelemetryTracer import extract_trace_headers
+        from src.observability.tracing.open_telemetry_tracer import extract_trace_headers
         
         headers = {
             "traceparent": "00-abcd-1234-01",
@@ -667,7 +667,7 @@ class TestTraceContextPropagation:
     
     def test_contains_trace_headers(self):
         """Test checking for trace headers."""
-        from src.observability.tracing.OpenTelemetryTracer import contains_trace_headers
+        from src.observability.tracing.open_telemetry_tracer import contains_trace_headers
         
         assert contains_trace_headers({"traceparent": "..."})
         assert not contains_trace_headers({"content-type": "..."})
@@ -683,8 +683,8 @@ class TestPhase20Integration:
     
     def test_registry_with_collection_utils(self):
         """Test registry using collection utilities."""
-        from src.core.base.registry.ExtensionRegistry import ExtensionManager
-        from src.core.base.utils.CollectionUtils import unique
+        from src.core.base.registry.extension_registry import ExtensionManager
+        from src.core.base.utils.collection_utils import unique
         
         registry = ExtensionManager("test")
         
@@ -699,8 +699,8 @@ class TestPhase20Integration:
     
     def test_func_utils_with_tracing(self):
         """Test function utilities with tracing."""
-        from src.core.base.utils.FuncUtils import memoize
-        from src.observability.tracing.OpenTelemetryTracer import (
+        from src.core.base.utils.func_utils import memoize
+        from src.observability.tracing.open_telemetry_tracer import (
             get_null_tracer,
             SpanTiming,
         )

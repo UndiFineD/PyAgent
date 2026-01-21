@@ -2,12 +2,12 @@
 
 import unittest
 import os
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.security.PrivacyGuardAgent import PrivacyGuardAgent
-from src.logic.agents.system.MessagingAgent import MessagingAgent
-from src.logic.agents.swarm.FleetDeployerAgent import FleetDeployerAgent
-from src.logic.agents.cognitive.DynamicDecomposerAgent import DynamicDecomposerAgent
-from src.core.base.NeuralPruningEngine import NeuralPruningEngine
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.logic.agents.security.privacy_guard_agent import PrivacyGuardAgent
+from src.logic.agents.system.messaging_agent import MessagingAgent
+from src.logic.agents.swarm.fleet_deployer_agent import FleetDeployerAgent
+from src.logic.agents.cognitive.dynamic_decomposer_agent import DynamicDecomposerAgent
+from src.core.base.neural_pruning_engine import NeuralPruningEngine
 from pathlib import Path
 
 
@@ -103,7 +103,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
 
     def test_bootstrap_overlay(self) -> None:
         """Tests that RegistryOverlay is utilized."""
-        from src.infrastructure.fleet.RegistryOverlay import RegistryOverlay
+        from src.infrastructure.fleet.registry_overlay import RegistryOverlay
 
         overlay = RegistryOverlay(Path("data/memory/agent_store/test_overlay.json"))
         overlay.save_override("TestAgent", "test.module", "TestClass")

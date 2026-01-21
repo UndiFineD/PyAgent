@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum, Flag, auto
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 class ModelCapability(Flag):
     """Model capability flags."""
@@ -163,3 +163,11 @@ class VRAMEstimate:
     total_inference_gb: float
     recommended_gpu: str
     can_fit_on: List[str] = field(default_factory=list)
+
+    def estimate_max_context(self, gpu_memory_gb: float) -> int:
+        """Estimate max tokens that can fit in remaining VRAM."""
+        overhead = self.model_weights_gb + self.activation_memory_gb
+        remaining_gb = gpu_memory_gb - overhead
+        if remaining_gb <= 0:
+            return 0
+        return int((remaining_gb * 1024) / max(1e-6, self.kv_cache_per_token_mb))

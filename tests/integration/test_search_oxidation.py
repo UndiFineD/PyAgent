@@ -15,7 +15,7 @@ class TestSearchMeshCore:
     def test_core_import(self):
         """Test SearchMeshCore can be imported."""
         try:
-            from src.logic.agents.intelligence.core.SearchMeshCore import SearchMeshCore
+            from src.logic.agents.intelligence.core.search_mesh_core import SearchMeshCore
             core = SearchMeshCore()
             assert core is not None
         except ImportError as e:
@@ -24,7 +24,7 @@ class TestSearchMeshCore:
     def test_aggregate_empty_results(self):
         """Test aggregation with empty results."""
         try:
-            from src.logic.agents.intelligence.core.SearchMeshCore import SearchMeshCore
+            from src.logic.agents.intelligence.core.search_mesh_core import SearchMeshCore
             core = SearchMeshCore()
             
             results = core.aggregate_results({})
@@ -35,7 +35,7 @@ class TestSearchMeshCore:
     def test_aggregate_single_provider(self):
         """Test aggregation with single provider results."""
         try:
-            from src.logic.agents.intelligence.core.SearchMeshCore import SearchMeshCore
+            from src.logic.agents.intelligence.core.search_mesh_core import SearchMeshCore
             core = SearchMeshCore()
             
             raw_results = {
@@ -56,7 +56,7 @@ class TestSearchMeshCore:
     def test_aggregate_multiple_providers(self):
         """Test aggregation merges results from multiple providers."""
         try:
-            from src.logic.agents.intelligence.core.SearchMeshCore import SearchMeshCore
+            from src.logic.agents.intelligence.core.search_mesh_core import SearchMeshCore
             core = SearchMeshCore()
             
             raw_results = {
@@ -86,7 +86,7 @@ class TestSearchMeshCore:
     def test_aggregate_deduplication(self):
         """Test that duplicate URLs are properly handled."""
         try:
-            from src.logic.agents.intelligence.core.SearchMeshCore import SearchMeshCore
+            from src.logic.agents.intelligence.core.search_mesh_core import SearchMeshCore
             core = SearchMeshCore()
             
             raw_results = {
@@ -117,7 +117,7 @@ class TestSemanticSearchMeshAgent:
     def test_agent_creation(self):
         """Test agent can be created."""
         try:
-            from src.logic.agents.intelligence.SemanticSearchMeshAgent import SemanticSearchMeshAgent
+            from src.logic.agents.intelligence.semantic_search_mesh_agent import SemanticSearchMeshAgent
             agent = SemanticSearchMeshAgent(workspace_path=".")
             assert agent is not None
         except ImportError as e:
@@ -126,7 +126,7 @@ class TestSemanticSearchMeshAgent:
     def test_register_shard(self):
         """Test shard registration."""
         try:
-            from src.logic.agents.intelligence.SemanticSearchMeshAgent import SemanticSearchMeshAgent
+            from src.logic.agents.intelligence.semantic_search_mesh_agent import SemanticSearchMeshAgent
             agent = SemanticSearchMeshAgent(workspace_path=".")
             
             agent.register_shard("test_shard", {"vectors": [[0.1, 0.2, 0.3]]})
@@ -139,7 +139,7 @@ class TestSemanticSearchMeshAgent:
     def test_register_multiple_shards(self):
         """Test multiple shard registration."""
         try:
-            from src.logic.agents.intelligence.SemanticSearchMeshAgent import SemanticSearchMeshAgent
+            from src.logic.agents.intelligence.semantic_search_mesh_agent import SemanticSearchMeshAgent
             agent = SemanticSearchMeshAgent(workspace_path=".")
             
             agent.register_shard("shard_alpha", {"vectors": [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]})
@@ -153,7 +153,7 @@ class TestSemanticSearchMeshAgent:
     def test_federated_search(self):
         """Test federated search across shards."""
         try:
-            from src.logic.agents.intelligence.SemanticSearchMeshAgent import SemanticSearchMeshAgent
+            from src.logic.agents.intelligence.semantic_search_mesh_agent import SemanticSearchMeshAgent
             agent = SemanticSearchMeshAgent(workspace_path=".")
             
             agent.register_shard("shard_a", {"vectors": [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]})
@@ -172,7 +172,7 @@ class TestSemanticSearchMeshAgent:
     def test_federated_search_ranking(self):
         """Test that federated search returns ranked results."""
         try:
-            from src.logic.agents.intelligence.SemanticSearchMeshAgent import SemanticSearchMeshAgent
+            from src.logic.agents.intelligence.semantic_search_mesh_agent import SemanticSearchMeshAgent
             agent = SemanticSearchMeshAgent(workspace_path=".")
             
             # One shard with exact match, one with distant match

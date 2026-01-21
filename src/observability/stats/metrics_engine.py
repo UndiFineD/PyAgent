@@ -25,15 +25,19 @@ try:
 except ImportError:
 
     psutil = None
-from .exporters import PrometheusExporter, OTelManager, MetricsExporter
+from .exporters import (
+    PrometheusExporter,
+    OTelManager,
+    MetricsExporter,
+)
 
 try:
-    from src.observability.reports.GrafanaGenerator import (
+    from src.observability.reports.grafana_generator import (
         GrafanaDashboardGenerator as GrafanaGenerator,
     )
 except ImportError:
     GrafanaGenerator = None
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

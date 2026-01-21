@@ -3,10 +3,10 @@ from pathlib import Path
 
 # Add src to path
 
-from src.infrastructure.orchestration.swarm.DirectorAgent import DirectorAgent
-from src.logic.agents.development.RustAgent import RustAgent
-from src.logic.agents.development.GoAgent import GoAgent
-from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+from src.infrastructure.orchestration.swarm.director_agent import DirectorAgent
+from src.logic.agents.development.rust_agent import RustAgent
+from src.logic.agents.development.go_agent import GoAgent
+from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 
 def test_specialists_exist() -> None:

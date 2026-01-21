@@ -15,13 +15,13 @@
 # Add src to path
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 import sys
 import os
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.intelligence.WebAgent import WebAgent
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.logic.agents.intelligence.web_agent import WebAgent
 
 sys.path.append(str(Path(__file__).parent))
 
@@ -36,7 +36,7 @@ def test_phase_17() -> None:
 
     print("\n--- Phase 17: WebAgent (Simulation) ---")
     web_agent = WebAgent(
-        str(Path(workspace) / "src/logic/agents/intelligence/WebAgent.py")
+        str(Path(workspace) / "src\logic\agents\intelligence\web_agent.py")
     )
     search_results = web_agent.search_web("PyAgent GitHub")
     print(f"Search Results: {search_results}")
@@ -60,7 +60,7 @@ def test_phase_17() -> None:
     print(f"API Key Validated: {valid}")
     print(f"Quota Status: {status}")
 
-    if len(search_results) > 0 and "Dockerfile" in dockerfile and valid:
+    if search_results and "Dockerfile" in dockerfile and valid:
         print("\nWeb-Native & SaaS Deployment validation COMPLETED.")
     else:
         print("\nWeb-Native & SaaS Deployment validation FAILED.")

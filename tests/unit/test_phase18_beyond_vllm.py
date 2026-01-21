@@ -21,7 +21,7 @@ class TestCircuitBreaker:
     
     def test_circuit_starts_closed(self):
         """Test circuit starts in closed state."""
-        from src.infrastructure.resilience.CircuitBreaker import (
+        from src.infrastructure.resilience.circuit_breaker import (
             CircuitBreaker, CircuitState
         )
         
@@ -31,7 +31,7 @@ class TestCircuitBreaker:
     
     def test_circuit_opens_after_failures(self):
         """Test circuit opens after threshold failures."""
-        from src.infrastructure.resilience.CircuitBreaker import (
+        from src.infrastructure.resilience.circuit_breaker import (
             CircuitBreaker, CircuitState, CircuitBreakerError
         )
         
@@ -55,7 +55,7 @@ class TestCircuitBreaker:
     
     def test_circuit_half_open_after_timeout(self):
         """Test circuit transitions to half-open after timeout."""
-        from src.infrastructure.resilience.CircuitBreaker import (
+        from src.infrastructure.resilience.circuit_breaker import (
             CircuitBreaker, CircuitState
         )
         
@@ -79,7 +79,7 @@ class TestCircuitBreaker:
     
     def test_circuit_closes_after_success(self):
         """Test circuit closes after successful calls in half-open."""
-        from src.infrastructure.resilience.CircuitBreaker import (
+        from src.infrastructure.resilience.circuit_breaker import (
             CircuitBreaker, CircuitState
         )
         
@@ -115,7 +115,7 @@ class TestCircuitBreaker:
     
     def test_circuit_stats(self):
         """Test circuit breaker statistics."""
-        from src.infrastructure.resilience.CircuitBreaker import CircuitBreaker
+        from src.infrastructure.resilience.circuit_breaker import CircuitBreaker
         
         cb = CircuitBreaker(failure_threshold=5)
         
@@ -133,7 +133,7 @@ class TestCircuitBreaker:
     
     def test_circuit_decorator(self):
         """Test circuit breaker as decorator."""
-        from src.infrastructure.resilience.CircuitBreaker import CircuitBreaker
+        from src.infrastructure.resilience.circuit_breaker import CircuitBreaker
         
         cb = CircuitBreaker(failure_threshold=3)
         
@@ -150,7 +150,7 @@ class TestRetryStrategy:
     
     def test_retry_succeeds_first_try(self):
         """Test no retry needed on success."""
-        from src.infrastructure.resilience.RetryStrategy import RetryStrategy
+        from src.infrastructure.resilience.retry_strategy import RetryStrategy
         
         retry = RetryStrategy(max_attempts=3)
         
@@ -163,7 +163,7 @@ class TestRetryStrategy:
     
     def test_retry_after_failures(self):
         """Test retry succeeds after initial failures."""
-        from src.infrastructure.resilience.RetryStrategy import RetryStrategy
+        from src.infrastructure.resilience.retry_strategy import RetryStrategy
         
         retry = RetryStrategy(max_attempts=3, base_delay=0.01)
         
@@ -182,7 +182,7 @@ class TestRetryStrategy:
     
     def test_retry_exhausted(self):
         """Test RetryExhaustedError after max attempts."""
-        from src.infrastructure.resilience.RetryStrategy import (
+        from src.infrastructure.resilience.retry_strategy import (
             RetryStrategy, RetryExhaustedError
         )
         
@@ -199,7 +199,7 @@ class TestRetryStrategy:
     
     def test_retry_decorator(self):
         """Test retry as decorator."""
-        from src.infrastructure.resilience.RetryStrategy import retry
+        from src.infrastructure.resilience.retry_strategy import retry
         
         call_count = [0]
         
@@ -216,7 +216,7 @@ class TestRetryStrategy:
     
     def test_non_retryable_exception(self):
         """Test exceptions that should not be retried."""
-        from src.infrastructure.resilience.RetryStrategy import RetryStrategy
+        from src.infrastructure.resilience.retry_strategy import RetryStrategy
         
         retry = RetryStrategy(
             max_attempts=3,
@@ -239,7 +239,7 @@ class TestRateLimiter:
     
     def test_token_bucket_allows_burst(self):
         """Test token bucket allows burst up to capacity."""
-        from src.infrastructure.resilience.AdaptiveRateLimiter import TokenBucket
+        from src.infrastructure.resilience.adaptive_rate_limiter import TokenBucket
         
         bucket = TokenBucket(rate=10.0, capacity=20)
         
@@ -252,7 +252,7 @@ class TestRateLimiter:
     
     def test_token_bucket_refills(self):
         """Test token bucket refills over time."""
-        from src.infrastructure.resilience.AdaptiveRateLimiter import TokenBucket
+        from src.infrastructure.resilience.adaptive_rate_limiter import TokenBucket
         
         bucket = TokenBucket(rate=100.0, capacity=10)
         
@@ -270,7 +270,7 @@ class TestRateLimiter:
     
     def test_sliding_window_counter(self):
         """Test sliding window rate limiting."""
-        from src.infrastructure.resilience.AdaptiveRateLimiter import SlidingWindowCounter
+        from src.infrastructure.resilience.adaptive_rate_limiter import SlidingWindowCounter
         
         limiter = SlidingWindowCounter(limit=10, window_seconds=1.0)
         
@@ -286,7 +286,7 @@ class TestRateLimiter:
     
     def test_rate_limit_decorator(self):
         """Test rate_limit decorator."""
-        from src.infrastructure.resilience.AdaptiveRateLimiter import (
+        from src.infrastructure.resilience.adaptive_rate_limiter import (
             rate_limit, RateLimitExceededError
         )
         
@@ -304,7 +304,7 @@ class TestRateLimiter:
     
     def test_per_key_rate_limiter(self):
         """Test per-key rate limiting."""
-        from src.infrastructure.resilience.AdaptiveRateLimiter import PerKeyRateLimiter
+        from src.infrastructure.resilience.adaptive_rate_limiter import PerKeyRateLimiter
         
         limiter = PerKeyRateLimiter[str](rate=5.0, capacity=2)
         
@@ -323,7 +323,7 @@ class TestBloomFilter:
     
     def test_bloom_add_and_contains(self):
         """Test basic add and contains operations."""
-        from src.core.base.structures.BloomFilter import BloomFilter
+        from src.core.base.structures.bloom_filter import BloomFilter
         
         bf = BloomFilter(expected_items=1000, fp_rate=0.01)
         
@@ -336,7 +336,7 @@ class TestBloomFilter:
     
     def test_bloom_no_false_negatives(self):
         """Test that added items are always found."""
-        from src.core.base.structures.BloomFilter import BloomFilter
+        from src.core.base.structures.bloom_filter import BloomFilter
         
         bf = BloomFilter(expected_items=1000, fp_rate=0.01)
         
@@ -351,7 +351,7 @@ class TestBloomFilter:
     
     def test_bloom_false_positive_rate(self):
         """Test false positive rate is within bounds."""
-        from src.core.base.structures.BloomFilter import BloomFilter
+        from src.core.base.structures.bloom_filter import BloomFilter
         
         bf = BloomFilter(expected_items=1000, fp_rate=0.01)
         
@@ -374,7 +374,7 @@ class TestBloomFilter:
     
     def test_bloom_stats(self):
         """Test Bloom filter statistics."""
-        from src.core.base.structures.BloomFilter import BloomFilter
+        from src.core.base.structures.bloom_filter import BloomFilter
         
         bf = BloomFilter(expected_items=100, fp_rate=0.01)
         
@@ -388,7 +388,7 @@ class TestBloomFilter:
     
     def test_counting_bloom_remove(self):
         """Test counting Bloom filter with removal."""
-        from src.core.base.structures.BloomFilter import CountingBloomFilter
+        from src.core.base.structures.bloom_filter import CountingBloomFilter
         
         cbf = CountingBloomFilter(expected_items=100)
         
@@ -400,7 +400,7 @@ class TestBloomFilter:
     
     def test_scalable_bloom(self):
         """Test scalable Bloom filter grows automatically."""
-        from src.core.base.structures.BloomFilter import ScalableBloomFilter
+        from src.core.base.structures.bloom_filter import ScalableBloomFilter
         
         sbf = ScalableBloomFilter(initial_capacity=100, fp_rate=0.01)
         
@@ -422,7 +422,7 @@ class TestRingBuffer:
     
     def test_ring_buffer_basic(self):
         """Test basic ring buffer operations."""
-        from src.core.base.structures.RingBuffer import RingBuffer
+        from src.core.base.structures.ring_buffer import RingBuffer
         
         rb = RingBuffer[int](capacity=5)
         
@@ -435,7 +435,7 @@ class TestRingBuffer:
     
     def test_ring_buffer_overflow(self):
         """Test ring buffer overwrites oldest."""
-        from src.core.base.structures.RingBuffer import RingBuffer
+        from src.core.base.structures.ring_buffer import RingBuffer
         
         rb = RingBuffer[int](capacity=3)
         
@@ -447,7 +447,7 @@ class TestRingBuffer:
     
     def test_ring_buffer_pop(self):
         """Test pop operation."""
-        from src.core.base.structures.RingBuffer import RingBuffer
+        from src.core.base.structures.ring_buffer import RingBuffer
         
         rb = RingBuffer[int](capacity=5)
         rb.append(1)
@@ -460,7 +460,7 @@ class TestRingBuffer:
     
     def test_ring_buffer_peek(self):
         """Test peek operations."""
-        from src.core.base.structures.RingBuffer import RingBuffer
+        from src.core.base.structures.ring_buffer import RingBuffer
         
         rb = RingBuffer[int](capacity=5)
         rb.append(1)
@@ -473,7 +473,7 @@ class TestRingBuffer:
     
     def test_thread_safe_ring_buffer(self):
         """Test thread-safe ring buffer."""
-        from src.core.base.structures.RingBuffer import ThreadSafeRingBuffer
+        from src.core.base.structures.ring_buffer import ThreadSafeRingBuffer
         
         rb = ThreadSafeRingBuffer[int](capacity=100)
         
@@ -491,7 +491,7 @@ class TestRingBuffer:
     
     def test_time_series_buffer(self):
         """Test time series buffer."""
-        from src.core.base.structures.RingBuffer import TimeSeriesBuffer
+        from src.core.base.structures.ring_buffer import TimeSeriesBuffer
         
         ts = TimeSeriesBuffer[float](capacity=100)
         
@@ -503,7 +503,7 @@ class TestRingBuffer:
     
     def test_sliding_window_aggregator(self):
         """Test sliding window aggregator."""
-        from src.core.base.structures.RingBuffer import SlidingWindowAggregator
+        from src.core.base.structures.ring_buffer import SlidingWindowAggregator
         
         agg = SlidingWindowAggregator(window_seconds=1.0, bucket_seconds=0.1)
         
@@ -601,8 +601,8 @@ class TestIntegration:
     
     def test_circuit_breaker_with_retry(self):
         """Test circuit breaker combined with retry."""
-        from src.infrastructure.resilience.CircuitBreaker import CircuitBreaker
-        from src.infrastructure.resilience.RetryStrategy import RetryStrategy
+        from src.infrastructure.resilience.circuit_breaker import CircuitBreaker
+        from src.infrastructure.resilience.retry_strategy import RetryStrategy
         
         cb = CircuitBreaker(failure_threshold=5, recovery_timeout=0.1)
         retry = RetryStrategy(max_attempts=5, base_delay=0.01)
@@ -623,8 +623,8 @@ class TestIntegration:
     
     def test_bloom_with_ring_buffer(self):
         """Test Bloom filter for deduplication with ring buffer."""
-        from src.core.base.structures.BloomFilter import BloomFilter
-        from src.core.base.structures.RingBuffer import RingBuffer
+        from src.core.base.structures.bloom_filter import BloomFilter
+        from src.core.base.structures.ring_buffer import RingBuffer
         
         seen = BloomFilter(expected_items=1000, fp_rate=0.01)
         recent = RingBuffer[str](capacity=100)

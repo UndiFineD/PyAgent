@@ -28,7 +28,7 @@ from .strategies import (
 from .engine import PoolingEngine, create_pooling_engine
 
 # Connection Pooling
-from .ConnectionPool import (
+from .connection_pool import (
     ConnectionState,
     PoolStats,
     PooledConnection,

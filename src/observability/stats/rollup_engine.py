@@ -4,6 +4,7 @@
 # Phase 16: Rust acceleration for aggregation and percentile calculations
 
 from __future__ import annotations
+import contextlib
 import logging
 import math
 from datetime import datetime
@@ -42,10 +43,9 @@ class StatsRollupCalculator:
             return []
 
         unit = interval[-1]
-        try:
+        amount = 1
+        with contextlib.suppress(Exception):
             amount = int(interval[:-1])
-        except Exception:
-            amount = 1
 
         if unit == "m":
             bucket = 60 * amount
@@ -138,7 +138,7 @@ class StatsRollup:
         # Phase 16: Try Rust-accelerated aggregation
         result = None
         if _RUST_AVAILABLE:
-            try:
+            with contextlib.suppress(Exception):
                 if config.aggregation == AggregationType.SUM and hasattr(rust_core, "calculate_sum_rust"):
                     result = rust_core.calculate_sum_rust(all_values)
                 elif config.aggregation == AggregationType.AVG and hasattr(rust_core, "calculate_avg_rust"):
@@ -153,8 +153,6 @@ class StatsRollup:
                     result = rust_core.calculate_p95_rust(all_values)
                 elif config.aggregation == AggregationType.P99 and hasattr(rust_core, "calculate_p99_rust"):
                     result = rust_core.calculate_p99_rust(all_values)
-            except Exception:
-                result = None  # Fall through to Python
         
         # Python fallback if Rust didn't handle it
         if result is None:
@@ -233,10 +231,8 @@ class StatsQueryEngine:
             if aggregation:
                 values: list[float] = []
                 for r in rows:
-                    try:
+                    with contextlib.suppress(Exception):
                         values.append(float(r.get("value")))
-                    except Exception:
-                        continue
                 if not values:
                     agg_value = 0.0
                 else:
@@ -327,7 +323,7 @@ class CorrelationAnalyzer:
         keys = list(self._metric_history.keys())
 
         # Rust-accelerated O(N²) pairwise correlation
-        try:
+        with contextlib.suppress(ImportError, Exception):
             from rust_core import find_strong_correlations_rust
             metric_values = [self._metric_history[k] for k in keys]
             rust_results = find_strong_correlations_rust(metric_values, threshold)
@@ -343,8 +339,6 @@ class CorrelationAnalyzer:
                 self.correlations.append(result)
                 strong.append(result)
             return strong
-        except (ImportError, Exception):
-            pass  # Fall back to Python
 
         # Python fallback: Re-compute pairwise for all history (O(N^2) naive)
         strong = []

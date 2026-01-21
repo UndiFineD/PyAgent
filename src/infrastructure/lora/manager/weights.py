@@ -28,7 +28,8 @@ class LoRAWeights:
 def merge_adapters(adapters: List["LoRAAdapter"], weights: Optional[List[float]] = None) -> LoRAWeights:
     if not adapters: raise ValueError("No adapters to merge")
     if weights is None: weights = [1.0 / len(adapters)] * len(adapters)
-    if len(weights) != len(adapters): raise ValueError("Weight mismatch")
+    if len(weights) != len(adapters): 
+        raise ValueError("Number of weights must match adapters")
     
     merged = LoRAWeights()
     all_modules: Set[str] = set()

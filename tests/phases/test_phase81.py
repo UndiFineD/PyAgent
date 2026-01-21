@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.intelligence.ResearchSynthesisAgent import ResearchSynthesisAgent
+from src.logic.agents.intelligence.research_synthesis_agent import ResearchSynthesisAgent
 
 
 class TestResearchSynthesis(unittest.TestCase):

@@ -48,7 +48,7 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
             start = i * self.hop_length
             end = min(start + self.hop_length * 2, len(waveform))
             segment = waveform[start:end]
-            if len(segment) > 0:
+            if segment.size > 0:
                 features[i, 0] = np.sqrt(np.mean(segment ** 2))
         
         metadata = {

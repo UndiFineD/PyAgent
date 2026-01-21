@@ -9,9 +9,16 @@ PyAgent has evolved from a single-agent orchestrator into a multi-agent swarm ca
 The primary performance layer is now a Rust-based FFI bridge (`rust_core.pyd`).
 - **41% Acceleration**: CPU-bound tasks like cyclomatic complexity calculation, pattern matching, and JSON logging are delegated to Rust.
 - **CodeHealth Guard**: Phase 319 introduces Rust-native metrics (C901, MI) in `CodeHealthAuditor`, enabling latency-free workspace audits (< 5ms per file).
-- **Parallel Bulk Replace**: High-throughput file modification engine implemented in Rust to handle workspace-wide refactoring without event loop blockage.
+- **Other Options**: 
+    - **Current (Default)**: `rust_core` (FFI Bridge).
+    - **Alternative**: **Distributed Metrics Node** offloading heavy calculations to remote nodes via ZMQ for multi-machine swarm scaling.
 
-### 2. Voyager Decentralized Transport (`src/infrastructure/voyager/`)
+### 2. Synaptic Modularization & Logic Delegation
+PyAgent avoids monolithic agent design in favor of high-cohesion modularity.
+- **Mixin-Based Architecture**: Using `IdentityMixin`, `KnowledgeMixin`, `PersistenceMixin`, etc. to build specialized agents without deep inheritance trees.
+- **Logic Delegation**: Domain logic resides in `*Core` classes (e.g., `CoderCore`). The **Agent** class handles only high-level orchestration, AI prompting, and state management, while the **Core** class handles the pure computation or heavy processing.
+
+### 3. Voyager Decentralized Transport (`src/infrastructure/voyager/`)
 The "Voyager" layer provides a zero-broker, decentralized message bus for multi-node swarms.
 - **mDNS Discovery**: Uses `DiscoveryNode` (zeroconf) to advertise node capabilities and transport ports automatically on the local network.
 - **ZMQ Neural Synapse**: Implements the DEALER/ROUTER pattern for high-speed, asynchronous task teleportation between fleets.
@@ -48,6 +55,12 @@ All file-system modifications are wrapped in `StateTransaction`.
 ### 7. Mixin-Based Agent Modularization (`src/core/base/mixins/`)
 Following the Phase 317 complexity sweep, the monolithic `BaseAgent` (Complexity: 135) was refactored into a decentralized Mixin architecture.
 - **IdentityMixin**: Handles agent naming, versioning, and core metadata.
+- **ReflectionMixin**: Implements autonomous self-critique. After every reasoning pass, the agent performs a one-time self-reflection to verify correctness and logic integrity.
+
+### 8. Self-Learning & Lesson Aggregation (`src/logic/agents/swarm/core/`)
+The system now proactively learns from its own reasoning failures via the `LessonCore`.
+- **Mistake Harvesting**: If a reflection pass identifies a logic error or factual mistake, it records a `Lesson` (Error Pattern -> Cause -> Solution).
+- **Shared Memory**: Lessons are persisted and shared across the swarm, allowing one agent's failure to become a lesson for the entire fleet.
 
 ### 8. Phase 48: Advanced Memory & API Partitioning (v3.16.x)
 To manage extreme complexity and performance in inference sub-systems, major monolithic components were modularized into high-cohesion sub-packages.

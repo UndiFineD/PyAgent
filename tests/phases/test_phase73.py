@@ -1,6 +1,6 @@
 import unittest
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class TestPhase73(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestPhase73(unittest.TestCase):
         impact = self.fleet.dependency_graph.get_impact_scope("os")
         print(f"Impact of 'os': {impact}")
         # CoreEvolutionGuard should be in there
-        self.assertTrue(any("CoreEvolutionGuard" in m for m in impact))
+        self.assertTrue(any("core_evolution_guard" in m.lower() for m in impact))
 
         # Stats
         stats = self.fleet.dependency_graph.generate_graph_stats()

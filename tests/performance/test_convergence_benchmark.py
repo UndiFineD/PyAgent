@@ -1,5 +1,5 @@
 import timeit
-from src.core.base.core.ConvergenceCore import ConvergenceCore
+from src.core.base.core.convergence_core import ConvergenceCore
 
 
 def benchmark_convergence():

@@ -82,10 +82,10 @@ class MultiModalData:
     
     def is_empty(self) -> bool:
         return (
-            len(self.images) == 0
-            and len(self.videos) == 0
-            and len(self.audios) == 0
-            and len(self.embeds) == 0
+            not self.images
+            and not self.videos
+            and not self.audios
+            and not self.embeds
         )
     
     def get_modality_count(self, modality: ModalityType) -> int:
@@ -108,7 +108,7 @@ class MultiModalInputs:
     mm_kwargs: Dict[str, Any] = field(default_factory=dict)
     
     def has_multimodal(self) -> bool:
-        return any(len(embeds) > 0 for embeds in self.mm_embeddings.values())
+        return any(bool(embeds) for embeds in self.mm_embeddings.values())
     
     def get_placeholder_count(self) -> int:
         return sum(

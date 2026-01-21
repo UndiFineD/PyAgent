@@ -9,7 +9,7 @@ import pytest
 import numpy as np
 from typing import List
 
-from src.infrastructure.pooling.PoolingEngine import (
+from src.infrastructure.pooling.pooling_engine import (
     PoolingTask,
     PoolingStrategy,
     PoolingConfig,

@@ -1,16 +1,16 @@
 from typing import List
 
-from src.logic.agents.cognitive.context.models.SemanticSearchResult import (
+from src.logic.agents.cognitive.context.models.semantic_search_result import (
     SemanticSearchResult,
 )
 
 
 # Add src to path
 
-from src.logic.agents.cognitive.context.engines.SemanticSearchEngine import (
+from src.logic.agents.cognitive.context.engines.semantic_search_engine import (
     SemanticSearchEngine,
 )
-from src.logic.agents.cognitive.context.utils.SearchAlgorithm import SearchAlgorithm
+from src.logic.agents.cognitive.context.utils.search_algorithm import SearchAlgorithm
 
 
 def test_semantic_search_engine_integration() -> None:

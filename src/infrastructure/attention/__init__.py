@@ -11,7 +11,7 @@ Phase 34 modules:
 - BatchDCPWrapper: Batch disaggregated prefill-decode wrappers
 """
 
-from .AttentionBackendRegistry import (
+from .attention_backend_registry import (
     AttentionBackend,
     AttentionBackendEnum,
     AttentionBackendRegistry,
@@ -24,7 +24,7 @@ from .AttentionBackendRegistry import (
     TorchSDPABackend,
     get_attention_registry,
 )
-from .TritonAttentionOps import (
+from .triton_attention_ops import (
     AttentionBackend as TritonAttentionBackend,
     AttentionConfig,
     AttentionKernel,
@@ -35,7 +35,7 @@ from .TritonAttentionOps import (
     TritonAttentionOps,
     create_attention_ops,
 )
-from .BatchDCPWrapper import (
+from .batch_dcp_wrapper import (
     AllReduceStrategy,
     BatchDCPDecodeWrapper,
     BatchDCPPrefillWrapper,

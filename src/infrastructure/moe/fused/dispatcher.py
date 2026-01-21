@@ -35,14 +35,14 @@ class SparseDispatcher:
             if len(positions) > capacity:
                 positions = positions[:capacity]
             
-            if len(positions) > 0:
+            if positions.size > 0:
                 expert_inputs.append(x[positions])
                 expert_positions.append(positions)
                 
                 weights = []
                 for pos in positions:
                     k_idx = np.where(expert_indices[pos] == expert_idx)[0]
-                    if len(k_idx) > 0:
+                    if k_idx.size > 0:
                         weights.append(expert_weights[pos, k_idx[0]])
                     else:
                         weights.append(0.0)
@@ -66,7 +66,7 @@ class SparseDispatcher:
         for expert_idx, (outputs, positions, weights) in enumerate(
             zip(expert_outputs, expert_positions, expert_weights_list)
         ):
-            if len(positions) > 0:
+            if positions.size > 0:
                 for i, pos in enumerate(positions):
                     output[pos] += weights[i] * outputs[i]
         

@@ -8,7 +8,7 @@ for monitoring PyAgent system performance and health.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION as VERSION
+from src.core.base.version import VERSION as VERSION
 
 # Phase 317: Structured imports to restore package parity after Synaptic Modularization
 from .observability_core import (

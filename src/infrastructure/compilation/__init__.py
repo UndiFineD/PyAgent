@@ -11,7 +11,7 @@ Beyond vLLM:
 - Hybrid strategies
 """
 
-from .TorchCompileIntegration import (
+from .torch_compile_integration import (
     CompileMode,
     CompileBackend,
     CompileConfig,

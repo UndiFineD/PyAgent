@@ -1,5 +1,5 @@
 from hypothesis import given, strategies as st, settings, HealthCheck
-from src.logic.agents.security.core.ByzantineCore import ByzantineCore
+from src.logic.agents.security.core.byzantine_core import ByzantineCore
 
 
 class TestByzantineCore:

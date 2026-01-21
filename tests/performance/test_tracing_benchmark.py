@@ -1,6 +1,6 @@
 import timeit
 import statistics
-from src.observability.stats.core.TracingCore import TracingCore
+from src.observability.stats.core.tracing_core import TracingCore
 
 
 def benchmark_tracing():

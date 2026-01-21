@@ -1,6 +1,7 @@
 import unittest
+import asyncio
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class TestPhase74(unittest.TestCase):
@@ -12,9 +13,9 @@ class TestPhase74(unittest.TestCase):
         print("\nTesting Phase 74: Dynamic Tool Synthesis...")
 
         # Synthesize
-        res = self.fleet.tool_synthesis.synthesize_tool(
+        res = asyncio.run(self.fleet.tool_synthesis.synthesize_tool(
             "CSV Parsing", "Read CSV and sum column A"
-        )
+        ))
 
         print(f"Synthesis Result: {res}")
         self.assertEqual(res["status"], "synthesized")

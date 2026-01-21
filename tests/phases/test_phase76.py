@@ -1,6 +1,7 @@
 import unittest
+import asyncio
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class TestPhase76(unittest.TestCase):
@@ -24,12 +25,12 @@ class TestPhase76(unittest.TestCase):
         }
 
         # Distill
-        res1 = self.fleet.swarm_distillation.distill_agent_knowledge(
+        res1 = asyncio.run(self.fleet.swarm_distillation.distill_agent_knowledge(
             "CoderAgent", coder_kb
-        )
-        res2 = self.fleet.swarm_distillation.distill_agent_knowledge(
+        ))
+        res2 = asyncio.run(self.fleet.swarm_distillation.distill_agent_knowledge(
             "TesterAgent", tester_kb
-        )
+        ))
 
         print(f"Distilled Coder: {res1}")
         self.assertEqual(res1["agent"], "CoderAgent")

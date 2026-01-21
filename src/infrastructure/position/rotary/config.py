@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from dataclasses import dataclass, field
-from typing import List, Optional, Any
+from typing import List, Optional
 
 class RoPEVariant(Enum):
     """Supported RoPE variants."""
@@ -45,3 +45,7 @@ class RoPEConfig:
             self.rotary_dim = self.head_dim
         if self.original_max_position is None:
             self.original_max_position = self.max_position_embeddings
+        
+        # Automatic variant detection
+        if self.mrope_sections and self.variant == RoPEVariant.NEOX:
+            self.variant = RoPEVariant.MROPE

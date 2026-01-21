@@ -3,7 +3,7 @@
 
 import logging
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 logging.basicConfig(level=logging.INFO)
 

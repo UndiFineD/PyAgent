@@ -1,7 +1,7 @@
 """Unit tests for KnowledgeGraph and KnowledgeAgent indexing."""
 
 from typing import List
-from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 from pathlib import Path
 import logging
 

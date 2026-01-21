@@ -34,7 +34,7 @@ def create_tokenizer(config: TokenizerConfig) -> BaseTokenizer:
     return registry.get_tokenizer(config)
 
 
-def estimate_token_count(text: str, model_name: Optional[str] = None) -> int:
+def estimate_token_count(text: str, _model_name: Optional[str] = None) -> int:
     """Fast token count estimation."""
     try:
         import rust_core

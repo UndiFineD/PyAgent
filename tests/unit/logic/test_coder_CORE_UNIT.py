@@ -2,14 +2,14 @@
 """Test classes from test_agent_coder.py - core module."""
 
 from __future__ import annotations
-from src.core.base.types.AccessibilityIssue import AccessibilityIssue
-from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
-from src.core.base.types.AccessibilityReport import AccessibilityReport
-from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
-from src.core.base.types.ARIAAttribute import ARIAAttribute
-from src.core.base.types.ColorContrastResult import ColorContrastResult
-from src.core.base.types.WCAGLevel import WCAGLevel
-from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
+from src.core.base.types.accessibility_issue import AccessibilityIssue
+from src.core.base.types.accessibility_issue_type import AccessibilityIssueType
+from src.core.base.types.accessibility_report import AccessibilityReport
+from src.core.base.types.accessibility_severity import AccessibilitySeverity
+from src.core.base.types.aria_attribute import ARIAAttribute
+from src.core.base.types.color_contrast_result import ColorContrastResult
+from src.core.base.types.wcag_level import WCAGLevel
+from src.logic.agents.development.accessibility_agent import AccessibilityAgent
 
 from _thread import LockType
 import unittest
@@ -58,9 +58,7 @@ class TestAccessibilityIssueTypeEnum:
     def test_enum_values(self) -> None:
         """Test enum has expected values."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         assert AccessibilityIssueType.MISSING_ALT_TEXT.value == "missing_alt_text"
         assert AccessibilityIssueType.LOW_COLOR_CONTRAST.value == "low_color_contrast"
         assert AccessibilityIssueType.MISSING_LABEL.value == "missing_label"
@@ -69,9 +67,7 @@ class TestAccessibilityIssueTypeEnum:
     def test_all_members(self) -> None:
         """Test all enum members exist."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         members: List[Any] = list(AccessibilityIssueType)
         assert len(members) == 10
 
@@ -82,9 +78,7 @@ class TestAccessibilitySeverityEnum:
     def test_enum_values(self) -> None:
         """Test enum has expected values."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         assert AccessibilitySeverity.CRITICAL.value == 4
         assert AccessibilitySeverity.SERIOUS.value == 3
         assert AccessibilitySeverity.MODERATE.value == 2
@@ -93,9 +87,7 @@ class TestAccessibilitySeverityEnum:
     def test_severity_ordering(self) -> None:
         """Test severity values are ordered correctly."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         assert AccessibilitySeverity.MINOR.value < AccessibilitySeverity.MODERATE.value
         assert (
             AccessibilitySeverity.MODERATE.value < AccessibilitySeverity.SERIOUS.value
@@ -111,9 +103,7 @@ class TestWCAGLevelEnum:
     def test_enum_values(self) -> None:
         """Test enum has expected values."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         assert WCAGLevel.A.value == "A"
         assert WCAGLevel.AA.value == "AA"
         assert WCAGLevel.AAA.value == "AAA"
@@ -121,9 +111,7 @@ class TestWCAGLevelEnum:
     def test_all_levels(self) -> None:
         """Test all WCAG levels exist."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         assert len(list(WCAGLevel)) == 3
 
 
@@ -133,9 +121,7 @@ class TestAccessibilityIssueDataclass:
     def test_creation(self) -> None:
         """Test creating AccessibilityIssue."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         issue = AccessibilityIssue(
             issue_type=AccessibilityIssueType.MISSING_ALT_TEXT,
             severity=AccessibilitySeverity.CRITICAL,
@@ -153,9 +139,7 @@ class TestAccessibilityIssueDataclass:
     def test_defaults(self) -> None:
         """Test AccessibilityIssue defaults."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         issue = AccessibilityIssue(
             issue_type=AccessibilityIssueType.ARIA_MISSING,
             severity=AccessibilitySeverity.MODERATE,
@@ -175,9 +159,7 @@ class TestColorContrastResultDataclass:
     def test_creation(self) -> None:
         """Test creating ColorContrastResult."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         result = ColorContrastResult(
             foreground="#000000",
             background="#FFFFFF",
@@ -196,9 +178,7 @@ class TestAccessibilityReportDataclass:
     def test_creation(self) -> None:
         """Test creating AccessibilityReport."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         report = AccessibilityReport(
             file_path="test.html",
             issues=[],
@@ -214,9 +194,7 @@ class TestAccessibilityReportDataclass:
     def test_defaults(self) -> None:
         """Test AccessibilityReport defaults."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         report = AccessibilityReport(file_path="test.html")
         assert report.issues == []
         assert report.total_elements == 0
@@ -229,9 +207,7 @@ class TestARIAAttributeDataclass:
     def test_creation(self) -> None:
         """Test creating ARIAAttribute."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         attr = ARIAAttribute(name="aria-label", value="Submit button", is_valid=True)
         assert attr.name == "aria-label"
         assert attr.value == "Submit button"
@@ -244,9 +220,7 @@ class TestAccessibilityAnalyzer:
     def test_initialization(self) -> None:
         """Test AccessibilityAnalyzer initialization."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent(WCAGLevel.AA)
         assert analyzer.target_level == WCAGLevel.AA
         assert analyzer.issues == []
@@ -254,9 +228,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_html_missing_alt(self) -> None:
         """Test detecting missing alt text in HTML."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
@@ -270,9 +242,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_html_with_alt(self) -> None:
         """Test HTML with proper alt text has no alt issues."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         html_content = '<html><body><img src="test.jpg" alt="Test image"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
@@ -286,9 +256,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_html_missing_label(self) -> None:
         """Test detecting missing form labels in HTML."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         html_content = '<html><body><input type="text" id="name"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
@@ -302,9 +270,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_html_heading_hierarchy(self) -> None:
         """Test detecting heading hierarchy issues."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         # Page starts with h2 instead of h1
         html_content = "<html><body><h2>Title</h2></body></html>"
@@ -319,9 +285,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_javascript_click_without_keyboard(self) -> None:
         """Test detecting click handlers without keyboard support."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         js_content = "<button onClick={handleClick}>Click me</button>"
         report = analyzer.analyze_content(js_content, "javascript")
@@ -335,9 +299,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_javascript_interactive_div(self) -> None:
         """Test detecting interactive divs without proper roles."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         js_content = "<div onClick={handleClick}>Clickable</div>"
         report = analyzer.analyze_content(js_content, "javascript")
@@ -351,9 +313,7 @@ class TestAccessibilityAnalyzer:
     def test_check_color_contrast_high(self) -> None:
         """Test color contrast check with high contrast."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         result = analyzer.check_color_contrast("#000000", "#FFFFFF")
         assert result.contrast_ratio == 21.0
@@ -363,9 +323,7 @@ class TestAccessibilityAnalyzer:
     def test_check_color_contrast_low(self) -> None:
         """Test color contrast check with low contrast."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         result = analyzer.check_color_contrast("#777777", "#999999")
         assert result.passes_aa is False
@@ -373,9 +331,7 @@ class TestAccessibilityAnalyzer:
     def test_check_color_contrast_large_text(self) -> None:
         """Test color contrast check with large text requirements."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         result = analyzer.check_color_contrast("#555555", "#FFFFFF", is_large_text=True)
         # Large text has lower requirements (3:1 for AA)
@@ -384,9 +340,7 @@ class TestAccessibilityAnalyzer:
     def test_get_issues_by_severity(self) -> None:
         """Test filtering issues by severity."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         analyzer.analyze_content(html_content, "html")
@@ -400,9 +354,7 @@ class TestAccessibilityAnalyzer:
     def test_get_issues_by_wcag_level(self) -> None:
         """Test filtering issues by WCAG level."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         analyzer.analyze_content(html_content, "html")
@@ -412,9 +364,7 @@ class TestAccessibilityAnalyzer:
     def test_enable_disable_rules(self) -> None:
         """Test enabling and disabling rules."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         analyzer.disable_rule("1.1.1")
         assert analyzer.rules.get("1.1.1") is False
@@ -424,9 +374,7 @@ class TestAccessibilityAnalyzer:
     def test_compliance_score_calculation(self) -> None:
         """Test compliance score is calculated correctly."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         # Clean HTML should have high score
         html_content = """
@@ -445,9 +393,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_file_nonexistent(self, tmp_path: Path) -> None:
         """Test analyzing nonexistent file returns empty report."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         report = analyzer.analyze_file(str(tmp_path / "nonexistent.html"))
         assert report.issues == []
@@ -456,9 +402,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_file_html(self, tmp_path: Path) -> None:
         """Test analyzing HTML file."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         html_file: Path = tmp_path / "test.html"
         html_file.write_text('<html><body><img src="x.jpg"></body></html>')
         analyzer = AccessibilityAgent()
@@ -468,9 +412,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_python_ui(self) -> None:
         """Test analyzing Python UI code."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         python_content = """
 from tkinter import Button, Label
@@ -483,9 +425,7 @@ label=Label(root, text="Info")
     def test_recommendations_generated(self) -> None:
         """Test that recommendations are generated."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
         analyzer = AccessibilityAgent()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
@@ -504,9 +444,7 @@ class TestCodeRefactoring:
     def test_detect_refactoring_opportunity(self, tmp_path: Path) -> None:
         """Test detecting refactoring opportunities."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
 
         code = """
 def process(data) -> str:
@@ -528,9 +466,7 @@ def process(data) -> str:
     def test_suggest_simplification(self, tmp_path: Path) -> None:
         """Test suggesting code simplification."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
 
         code = "x=True if condition else False"
         target: Path = tmp_path / "test.py"
@@ -553,9 +489,7 @@ class TestMultiLanguageCodeGeneration:
     def test_generate_python_code(self, tmp_path: Path) -> None:
         """Test generating Python code."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "src/logic/agents/development/CoderAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/coder_agent.py")
 
         target: Path = tmp_path / "test.py"
         target.write_text("# Python code")

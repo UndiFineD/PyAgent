@@ -18,6 +18,7 @@ No I/O operations, no file access, no external calls.
 
 from __future__ import annotations
 import ast
+import contextlib
 import math
 import operator
 import logging
@@ -318,10 +319,8 @@ class DerivedMetricCalculator:
         """Calculate all derived metrics."""
         results = {}
         for name in self.derived_metrics:
-            try:
+            with contextlib.suppress(Exception):
                 results[name] = self.calculate(name, context)
-            except Exception:
-                pass
         return results
 
     def register_derived(self, name: str, dependencies: list[str], formula: str) -> Any:
@@ -342,13 +341,10 @@ class DerivedMetricCalculator:
                 )
 
         # Handle python format strings like "{a} + {b}"
+        expression = formula
         if "{" in formula and "}" in formula:
-            try:
+            with contextlib.suppress(Exception):
                 expression = formula.format(**values)
-            except Exception:
-                expression = formula
-        else:
-            expression = formula
 
         tree = ast.parse(expression, mode="eval")
         return self._safe_eval(tree.body, values)
@@ -379,46 +375,36 @@ class StatsRollupCore:
     def rollup_sum(self, values: List[float]) -> float:
         """Calculate sum of values (pure calculation)."""
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_sum_rust(values)  # type: ignore[attr-defined]
-            except Exception:
-                pass
         return sum(values) if values else 0.0
 
     def rollup_avg(self, values: List[float]) -> float:
         """Calculate average (pure calculation)."""
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_avg_rust(values)  # type: ignore[attr-defined]
-            except Exception:
-                pass
         return sum(values) / len(values) if values else 0.0
 
     def rollup_min(self, values: List[float]) -> float:
         """Calculate minimum (pure calculation)."""
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_min_rust(values)  # type: ignore[attr-defined]
-            except Exception:
-                pass
         return min(values) if values else 0.0
 
     def rollup_max(self, values: List[float]) -> float:
         """Calculate maximum (pure calculation)."""
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_max_rust(values)  # type: ignore[attr-defined]
-            except Exception:
-                pass
         return max(values) if values else 0.0
 
     def rollup_p50(self, values: List[float]) -> float:
         """Calculate 50th percentile (median) (pure calculation)."""
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_median_rust(values)  # type: ignore[attr-defined]
-            except Exception:
-                pass
         if not values:
             return 0.0
         sorted_vals = sorted(values)
@@ -456,10 +442,8 @@ class StatsRollupCore:
     def rollup_stddev(self, values: List[float]) -> float:
         """Calculate standard deviation (pure calculation)."""
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_stddev_rust(values)  # type: ignore[attr-defined]
-            except Exception:
-                pass
         if len(values) < 2:
             return 0.0
         mean = self.rollup_avg(values)
@@ -483,10 +467,8 @@ class CorrelationCore:
             Correlation coefficient (-1.0 to 1.0)
         """
         if rc:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.calculate_pearson_correlation_rust(series1, series2)  # type: ignore[attr-defined]
-            except Exception:
-                pass
 
         if len(series1) != len(series2) or len(series1) < 2:
             return 0.0

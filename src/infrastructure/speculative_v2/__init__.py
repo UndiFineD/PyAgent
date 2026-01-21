@@ -12,7 +12,7 @@ Provides:
 - SpeculativeTree: Tree structure for candidate tokens
 """
 
-from .SpeculativeDecoder import (
+from .speculative_decoder import (
     # Enums
     ProposerType,
     AcceptanceMethod,

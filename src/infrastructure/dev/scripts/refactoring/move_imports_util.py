@@ -15,7 +15,7 @@
 """Utility for moving specific standard library imports out of TYPE_CHECKING blocks to runtime."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import re
 

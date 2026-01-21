@@ -51,10 +51,10 @@ __all__ = [
     "TestWCAGLevelEnum",
 ]
 
-from .test_coder_UNIT import *  # noqa: F401, F403
-from .test_coder_CORE_UNIT import *  # noqa: F401, F403
-from .test_agent_UNIT import *  # noqa: F401, F403
-from .test_agent_CORE_UNIT import *  # noqa: F401, F403
-from .test_agent_ADVANCED_UNIT import *  # noqa: F401, F403
+from .test_coder_unit import *  # noqa: F401, F403
+from .test_coder_core_unit import *  # noqa: F401, F403
+from .test_agent_unit import *  # noqa: F401, F403
+from .test_agent_core_unit import *  # noqa: F401, F403
+from .test_agent_advanced_unit import *  # noqa: F401, F403
 from .advanced import *  # noqa: F401, F403
 from .edge_cases import *  # noqa: F401, F403

@@ -16,19 +16,19 @@ Core primitives and base classes for PyAgent.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION as VERSION
-from .BaseAgent import BaseAgent as BaseAgent
+from src.core.base.version import VERSION as VERSION
+from .base_agent import BaseAgent as BaseAgent
 from .models import (
     AgentConfig as AgentConfig,
     AgentState as AgentState,
     ResponseQuality as ResponseQuality,
     PromptTemplate as PromptTemplate,
 )
-from .BaseInterfaces import (
+from .base_interfaces import (
     AgentInterface as AgentInterface,
     OrchestratorInterface as OrchestratorInterface,
 )
-from .AgentPluginBase import AgentPluginBase as AgentPluginBase
-from .models.CoreEnums import HealthStatus as HealthStatus
+from .agent_plugin_base import AgentPluginBase as AgentPluginBase
+from .models.core_enums import HealthStatus as HealthStatus
 
 __version__ = VERSION

@@ -1,9 +1,11 @@
 
+import pytest
 import asyncio
 import logging
 from pathlib import Path
-from src.infrastructure.orchestration.swarm.DirectorAgent import DirectorAgent
+from src.infrastructure.orchestration.swarm.director_agent import DirectorAgent
 
+@pytest.mark.asyncio
 async def test_status_update():
     # Setup a mock improvements file
     test_file = Path("docs/prompt/test_improvements.md")

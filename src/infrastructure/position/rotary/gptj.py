@@ -84,4 +84,3 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
             return q_rotated, k_rotated
         
         raise RuntimeError("GPT-J RoPE requires PyTorch")
-```

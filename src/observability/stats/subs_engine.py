@@ -3,6 +3,7 @@
 # Subscription and annotation management engine.
 
 from __future__ import annotations
+import contextlib
 import hashlib
 import logging
 from datetime import datetime
@@ -195,10 +196,8 @@ class StatsSubscriptionManager:
     def notify(self, metric: str, value: Any) -> None:
         if isinstance(value, (int, float)):
             for cb in self.subscribers.get(metric, []):
-                try:
+                with contextlib.suppress(Exception):
                     cb(float(value))
-                except Exception:
-                    pass
             return
         import fnmatch
 
@@ -206,7 +205,5 @@ class StatsSubscriptionManager:
             if fnmatch.fnmatch(metric, sub.metric_pattern):
                 handler = self._delivery_handlers.get(sub.delivery_method)
                 if handler:
-                    try:
+                    with contextlib.suppress(Exception):
                         handler(str(value))
-                    except Exception:
-                        pass

@@ -4,11 +4,11 @@ import pytest
 import tempfile
 import types
 from pathlib import Path
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.CircuitBreaker import CircuitBreaker
-from src.core.base.AgentPluginBase import AgentPluginBase
-from src.core.base.models.CoreEnums import HealthStatus
+from src.infrastructure.fleet.agent_registry import AgentRegistry
+from src.core.base.base_agent import BaseAgent
+from src.core.base.circuit_breaker import CircuitBreaker
+from src.core.base.agent_plugin_base import AgentPluginBase
+from src.core.base.models.core_enums import HealthStatus
 
 
 @pytest.fixture
@@ -30,15 +30,15 @@ def agent_backend_module():
     # Lazy imports to avoid circular dependencies or import errors if modules are broken
 
     try:
-        from src.infrastructure.backend.RequestQueue import RequestQueue
-        from src.infrastructure.backend.RequestBatcher import RequestBatcher
-        from src.infrastructure.backend.RequestPriority import RequestPriority
-        from src.infrastructure.backend.SystemHealthMonitor import SystemHealthMonitor
+        from src.infrastructure.backend.request_queue import RequestQueue
+        from src.infrastructure.backend.request_batcher import RequestBatcher
+        from src.infrastructure.backend.request_priority import RequestPriority
+        from src.infrastructure.backend.system_health_monitor import SystemHealthMonitor
 
-        from src.infrastructure.backend.LoadBalancer import LoadBalancer
-        from src.infrastructure.backend.RequestTracer import RequestTracer
+        from src.infrastructure.backend.load_balancer import LoadBalancer
+        from src.infrastructure.backend.request_tracer import RequestTracer
 
-        from src.infrastructure.backend.AuditLogger import AuditLogger
+        from src.infrastructure.backend.audit_logger import AuditLogger
 
         mod.RequestQueue = RequestQueue
 
@@ -58,7 +58,7 @@ def base_agent_module():
     """Provides core base agent classes including BatchManagers."""
     mod = types.SimpleNamespace()
     try:
-        from src.core.base.BaseManagers.BatchManagers import BatchRequest, RequestBatcher
+        from src.core.base.managers.batch_managers import BatchRequest, RequestBatcher
 
         mod.BatchRequest = BatchRequest
         mod.RequestBatcher = RequestBatcher
