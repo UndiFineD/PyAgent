@@ -1,31 +1,13 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """Individual KV cache managers for different attention types."""
-
 # SPDX-License-Identifier: Apache-2.0
 from abc import ABC, abstractmethod
-from math import ceil
 from typing import Dict, List
-
+from math import ceil
 from .data_classes import CacheGroupSpec, KVCacheBlock
 from .structural import BlockPool
 
-
 class SingleTypeKVCacheManager(ABC):
     """Abstract base for single-type KV cache management."""
-
     def __init__(self, spec: CacheGroupSpec, block_pool: BlockPool) -> None:
         self.spec = spec
         self.block_pool = block_pool
@@ -61,7 +43,6 @@ class SingleTypeKVCacheManager(ABC):
 
 class FullAttentionManager(SingleTypeKVCacheManager):
     """Manager for full (standard) causal attention KV cache."""
-
     def get_num_blocks_needed(self, num_tokens: int) -> int:
         """Blocks needed for standard linear sequence length."""
         return ceil(num_tokens / self.spec.block_size)
@@ -69,7 +50,6 @@ class FullAttentionManager(SingleTypeKVCacheManager):
 
 class SlidingWindowManager(SingleTypeKVCacheManager):
     """Manager for sliding window attention KV cache."""
-
     def get_num_blocks_needed(self, num_tokens: int) -> int:
         """Blocks needed considering the sliding window constraint."""
         window = self.spec.sliding_window or num_tokens
@@ -79,7 +59,7 @@ class SlidingWindowManager(SingleTypeKVCacheManager):
 
 class CrossAttentionManager(SingleTypeKVCacheManager):
     """Manager for cross-attention KV cache (fixed length prompt/encoder)."""
-
     def get_num_blocks_needed(self, num_tokens: int) -> int:
         """Blocks needed for encoder sequence length."""
         return ceil(num_tokens / self.spec.block_size)
+

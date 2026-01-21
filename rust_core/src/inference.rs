@@ -2,6 +2,7 @@
 // Rust-accelerated helpers for speculative decoding, prefix caching, and KV cache management
 
 use pyo3::prelude::*;
+use pyo3::types::{PyDict, PyList, PyTuple};
 use std::collections::HashMap;
 
 // =============================================================================
@@ -33,26 +34,52 @@ pub fn ngram_match_rust(
     matches
 }
 
+/// Fused PackKV Attention (arXiv:2512.24449)
+/// Performs register-level decompression during attention matmul.
+/// Placeholder for phase 51 acceleration.
+#[pyfunction]
+#[pyo3(signature = (q, k_compressed, v_compressed, metadata_map, scale=None))]
+pub fn fused_packkv_attention_rust(
+    q: Vec<f32>,
+    _k_compressed: Vec<u8>,
+    _v_compressed: Vec<u8>,
+    _metadata_map: HashMap<i32, HashMap<String, f32>>,
+    _scale: Option<f32>,
+) -> PyResult<Vec<f32>> {
+    // In production, this would use a high-performance Rust/SIMD or CUDA/Triton bridge
+    // to perform matmul without full dequantization to VRAM.
+    Ok(q) // Placeholder
+}
+
 /// Build n-gram index from token sequence for fast lookup
 /// Returns HashMap mapping n-gram tuples to list of positions
 #[pyfunction]
 #[pyo3(signature = (tokens, n=4))]
 pub fn build_ngram_index_rust(
+    py: Python<'_>,
     tokens: Vec<i64>,
     n: usize,
-) -> HashMap<Vec<i64>, Vec<usize>> {
-    let mut index: HashMap<Vec<i64>, Vec<usize>> = HashMap::new();
+) -> PyResult<PyObject> {
+    let index = PyDict::new(py);
     
     if tokens.len() < n {
-        return index;
+        return Ok(index.to_object(py));
     }
     
     for i in 0..=tokens.len() - n {
-        let ngram = tokens[i..i + n].to_vec();
-        index.entry(ngram).or_default().push(i);
+        let ngram = PyTuple::new(py, &tokens[i..i + n]);
+        let list = match index.get_item(&ngram)? {
+            Some(obj) => obj.downcast_into::<PyList>()?,
+            None => {
+                let new_list = PyList::empty(py);
+                index.set_item(&ngram, &new_list)?;
+                new_list
+            }
+        };
+        list.append(i)?;
     }
     
-    index
+    Ok(index.to_object(py))
 }
 
 /// Find continuation candidates after matching n-grams
@@ -1176,12 +1203,12 @@ pub fn ngram_propose_rust(
 /// Expand EAGLE speculation tree structure
 /// Returns tree node indices for batch speculation
 #[pyfunction]
-#[pyo3(signature = (_draft_tokens, tree_width, tree_depth, _vocab_size=32000))]
+#[pyo3(signature = (draft_tokens, tree_width, tree_depth, vocab_size=32000))]
 pub fn eagle_tree_expand_rust(
-    _draft_tokens: Vec<Vec<i64>>,
+    draft_tokens: Vec<Vec<i64>>,
     tree_width: usize,
     tree_depth: usize,
-    _vocab_size: usize,
+    vocab_size: usize,
 ) -> Vec<Vec<usize>> {
     let mut tree_indices = Vec::new();
     
@@ -1206,6 +1233,10 @@ pub fn eagle_tree_expand_rust(
         
         current_level = next_level;
     }
+    
+    // Use parameters
+    let _ = draft_tokens;
+    let _ = vocab_size;
     
     tree_indices
 }
@@ -2075,7 +2106,7 @@ pub fn cudagraph_stats_compute_rust(
 #[pyfunction]
 pub fn dispatch_decision_rust(
     num_tokens: usize,
-    _num_reqs: usize,
+    num_reqs: usize,
     available_graph_keys: Vec<u64>,
     min_tokens: usize,
     max_tokens: usize,
@@ -2087,6 +2118,8 @@ pub fn dispatch_decision_rust(
         return 0; // EAGER
     }
     
+    // Ignore num_reqs for now, can be used for scaling
+    let _ = num_reqs;
     // Check if graph exists
     let has_graph = available_graph_keys.contains(&current_key);
     
@@ -2366,14 +2399,17 @@ pub fn compute_lru_eviction_rust(
 /// Returns updated target_t1_size
 #[pyfunction]
 pub fn compute_arc_target_rust(
-    _t1_size: usize,
-    _t2_size: usize,
+    t1_size: usize,
+    t2_size: usize,
     b1_size: usize,
     b2_size: usize,
     current_target: f64,
     hit_in_b1: bool,
     capacity: usize,
 ) -> f64 {
+    let _ = t1_size;
+    let _ = t2_size;
+    
     if hit_in_b1 {
         // B1 hit: favor recency, increase T1 target
         let delta = if b1_size > 0 {

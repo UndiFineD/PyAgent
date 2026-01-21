@@ -117,6 +117,7 @@ class CommandDefinition:
     """Whether arguments are required."""
 
 
+
 @dataclass
 class ParsedCommand:
     """A parsed command from the prompt."""

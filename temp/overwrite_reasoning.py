@@ -1,7 +1,9 @@
-import os
+"""
+Script to overwrite ReasoningEngine with a modular wrapper.
+"""
 
-file_path = r"c:\DEV\PyAgent\src\infrastructure\reasoning\ReasoningEngine.py"
-wrapper_content = """# Copyright (c) 2026 PyAgent Authors. All rights reserved.
+FILE_PATH = r"c:\DEV\PyAgent\src\infrastructure\reasoning\ReasoningEngine.py"
+WRAPPER_CONTENT = """# Copyright (c) 2026 PyAgent Authors. All rights reserved.
 \"\"\"
 ReasoningEngine: Wrapper for modular reasoning and tool call components.
 \"\"\"
@@ -37,7 +39,7 @@ __all__ = [
 ]
 """
 
-with open(file_path, "w", encoding="utf-8") as f:
-    f.write(wrapper_content)
+with open(FILE_PATH, "w", encoding="utf-8") as f:
+    f.write(WRAPPER_CONTENT)
 
-print(f"Successfully overwrote {file_path}")
+print(f"Successfully overwrote {FILE_PATH}")
