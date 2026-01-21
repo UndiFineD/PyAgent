@@ -4,13 +4,15 @@
 
 import math
 import numpy as np
-from typing import Any, TYPE_CHECKING
+from typing import Any
 from .config import LoRAConfig
 from .weights import LoRALayerWeights
 from .model import LoRAModel
 
-if TYPE_CHECKING:
+try:
     from numpy.typing import NDArray
+except ImportError:
+    NDArray = Any
 
 
 def create_lora_weights(

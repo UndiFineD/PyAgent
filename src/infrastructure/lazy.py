@@ -61,17 +61,17 @@ __all__ = [
 
 # Type checking imports for IDE support
 if TYPE_CHECKING:
-    from src.infrastructure.speculative_v2.EagleProposer import EagleProposer
-    from src.infrastructure.kv_transfer.ARCOffloadManager import ARCOffloadManager
-    from src.infrastructure.tools.ToolParserFramework import ToolParserRegistry
-    from src.infrastructure.reasoning.ReasoningEngine import ReasoningEngine
-    from src.infrastructure.attention.PagedAttentionEngine import PagedAttentionEngine
-    from src.infrastructure.kv_transfer.MooncakeConnector import MooncakeConnector
-    from src.infrastructure.kv_transfer.NixlConnector import NixlConnector
-    from src.infrastructure.worker.DisaggregatedPrefillWorker import DisaggregatedPrefillWorker
-    from src.infrastructure.worker.DecodeOnlyWorker import DecodeOnlyWorker
-    from src.infrastructure.kv_transfer.PipelineParallelTransfer import PipelineParallelTransfer
-    from src.infrastructure.kv_transfer.TensorParallelTransfer import TensorParallelTransfer
+    from src.infrastructure.speculative_v2.eagle_proposer import EagleProposer
+    from src.infrastructure.kv_transfer.arc_offload_manager import ARCOffloadManager
+    from src.infrastructure.tools.tool_parser_framework import ToolParserRegistry
+    from src.infrastructure.reasoning.reasoning_engine import ReasoningEngine
+    from src.infrastructure.attention.paged_attention_engine import PagedAttentionEngine
+    from src.infrastructure.kv_transfer.mooncake_connector import MooncakeConnector
+    from src.infrastructure.kv_transfer.nixl_connector import NixlConnector
+    from src.infrastructure.worker.disaggregated_prefill_worker import DisaggregatedPrefillWorker
+    from src.infrastructure.worker.decode_only_worker import DecodeOnlyWorker
+    from src.infrastructure.kv_transfer.pipeline_parallel_transfer import PipelineParallelTransfer
+    from src.infrastructure.kv_transfer.tensor_parallel_transfer import TensorParallelTransfer
 
 
 @lazy_import
@@ -91,7 +91,7 @@ def get_eagle_proposer() -> Type["EagleProposer"]:
         config = EagleConfig(tree_depth=4, tree_width=8)
         proposer = EagleProposer(config)
     """
-    from src.infrastructure.speculative_v2.EagleProposer import EagleProposer
+    from src.infrastructure.speculative_v2.eagle_proposer import EagleProposer
     return EagleProposer
 
 
@@ -114,7 +114,7 @@ def get_arc_offload_manager() -> Type["ARCOffloadManager"]:
             offload_device="cpu",
         )
     """
-    from src.infrastructure.kv_transfer.ARCOffloadManager import ARCOffloadManager
+    from src.infrastructure.kv_transfer.arc_offload_manager import ARCOffloadManager
     return ARCOffloadManager
 
 
@@ -135,7 +135,7 @@ def get_tool_parser_registry() -> Type["ToolParserRegistry"]:
         registry = ToolParserRegistry()
         parser = registry.get_parser("llama3")
     """
-    from src.infrastructure.tools.ToolParserFramework import ToolParserRegistry
+    from src.infrastructure.tools.tool_parser_framework import ToolParserRegistry
     return ToolParserRegistry
 
 
@@ -159,7 +159,7 @@ def get_reasoning_engine() -> Type["ReasoningEngine"]:
         )
         result = engine.reason(prompt)
     """
-    from src.infrastructure.reasoning.ReasoningEngine import ReasoningEngine
+    from src.infrastructure.reasoning.reasoning_engine import ReasoningEngine
     return ReasoningEngine
 
 
@@ -182,46 +182,46 @@ def get_paged_attention_engine() -> Type["PagedAttentionEngine"]:
             num_gpu_blocks=1024,
         )
     """
-    from src.infrastructure.attention.PagedAttentionEngine import PagedAttentionEngine
+    from src.infrastructure.attention.paged_attention_engine import PagedAttentionEngine
     return PagedAttentionEngine
 
 @lazy_import
 def get_mooncake_connector() -> Type["MooncakeConnector"]:
     """Lazily import and return the MooncakeConnector class."""
-    from src.infrastructure.kv_transfer.MooncakeConnector import MooncakeConnector
+    from src.infrastructure.kv_transfer.mooncake_connector import MooncakeConnector
     return MooncakeConnector
 
 
 @lazy_import
 def get_nixl_connector() -> Type["NixlConnector"]:
     """Lazily import and return the NixlConnector class."""
-    from src.infrastructure.kv_transfer.NixlConnector import NixlConnector
+    from src.infrastructure.kv_transfer.nixl_connector import NixlConnector
     return NixlConnector
 
 
 @lazy_import
 def get_prefill_worker() -> Type["DisaggregatedPrefillWorker"]:
     """Lazily import and return the DisaggregatedPrefillWorker class."""
-    from src.infrastructure.worker.DisaggregatedPrefillWorker import DisaggregatedPrefillWorker
+    from src.infrastructure.worker.disaggregated_prefill_worker import DisaggregatedPrefillWorker
     return DisaggregatedPrefillWorker
 
 
 @lazy_import
 def get_decode_worker() -> Type["DecodeOnlyWorker"]:
     """Lazily import and return the DecodeOnlyWorker class."""
-    from src.infrastructure.worker.DecodeOnlyWorker import DecodeOnlyWorker
+    from src.infrastructure.worker.decode_only_worker import DecodeOnlyWorker
     return DecodeOnlyWorker
 
 
 @lazy_import
 def get_pp_transfer() -> Type["PipelineParallelTransfer"]:
     """Lazily import and return the PipelineParallelTransfer class."""
-    from src.infrastructure.kv_transfer.PipelineParallelTransfer import PipelineParallelTransfer
+    from src.infrastructure.kv_transfer.pipeline_parallel_transfer import PipelineParallelTransfer
     return PipelineParallelTransfer
 
 
 @lazy_import
 def get_tp_transfer() -> Type["TensorParallelTransfer"]:
     """Lazily import and return the TensorParallelTransfer class."""
-    from src.infrastructure.kv_transfer.TensorParallelTransfer import TensorParallelTransfer
+    from src.infrastructure.kv_transfer.tensor_parallel_transfer import TensorParallelTransfer
     return TensorParallelTransfer

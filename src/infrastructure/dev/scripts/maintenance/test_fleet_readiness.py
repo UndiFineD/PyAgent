@@ -28,8 +28,8 @@ if str(project_root) not in sys.path:
 def test_imports():
     """Attempts to instantiate major agents to verify import health."""
     try:
-        from src.infrastructure.fleet.FleetManager import FleetManager
-        from src.logic.agents.development.HandyAgent import HandyAgent
+        from src.infrastructure.fleet.fleet_manager import FleetManager
+        from src.logic.agents.development.handy_agent import HandyAgent
         
         print(f"Detecting workspace root at: {project_root}")
         

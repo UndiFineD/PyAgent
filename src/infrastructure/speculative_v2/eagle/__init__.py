@@ -4,14 +4,14 @@
 EAGLE speculative decoding implementation.
 """
 
-from .Config import EagleConfig, EagleMethod, AttentionBackend
-from .Models import DraftOutput, DraftModelWrapper, SimpleDraftModel
-from .Tree import TreeNode, SpeculativeTree
-from .Stats import AcceptanceStats
-from .Base import (
+from .config import EagleConfig, EagleMethod, AttentionBackend
+from .models import DraftOutput, DraftModelWrapper, SimpleDraftModel
+from .tree import TreeNode, SpeculativeTree
+from .stats import AcceptanceStats
+from .base import (
     InputBuffer, CpuGpuBuffer, AttentionMetadata, TreeAttentionMetadata
 )
-from .Proposer import (
+from .proposer import (
     EagleProposer, EagleProposerFactory, AsyncEagleProposer
 )
 

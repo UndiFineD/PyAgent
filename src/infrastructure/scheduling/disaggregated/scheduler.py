@@ -4,7 +4,7 @@
 import asyncio
 import logging
 import time
-from typing import Dict, List, Optional, Any, Tuple, Set
+from typing import Dict, List, Optional, Any, Tuple
 
 from .enums import InstanceRole, SchedulingPolicy
 from .config import (
@@ -70,7 +70,7 @@ class DisaggregatedScheduler:
     def _create_selector(self, policy: SchedulingPolicy) -> InstanceSelector:
         """Create an instance selector for the given policy."""
         if policy not in self._SELECTOR_MAP:
-            logger.warning(f"Unknown policy {policy}, using round-robin")
+            logger.warning("Unknown policy %s, using round-robin", policy)
             policy = SchedulingPolicy.ROUND_ROBIN
         
         selector_cls = self._SELECTOR_MAP[policy]
@@ -99,13 +99,23 @@ class DisaggregatedScheduler:
         """Add a prefill instance to the pool."""
         instance.role = InstanceRole.PREFILL
         self._prefill_instances.append(instance)
-        logger.info(f"Added prefill instance: {instance.instance_id}")
+        logger.info("Added prefill instance: %s", instance.instance_id)
+
+    def get_instance_stats(self) -> Dict[str, Any]:
+        """Get statistics about instance pools."""
+        return {
+            "prefill_instances": len(self._prefill_instances),
+            "decode_instances": len(self._decode_instances),
+            "total_requests": self._total_requests,
+            "prefill_requests": self._prefill_requests,
+            "decode_requests": self._decode_requests,
+        }
 
     def add_decode_instance(self, instance: InstanceInfo) -> None:
         """Add a decode instance to the pool."""
         instance.role = InstanceRole.DECODE
         self._decode_instances.append(instance)
-        logger.info(f"Added decode instance: {instance.instance_id}")
+        logger.info("Added decode instance: %s", instance.instance_id)
 
     def remove_instance(self, instance_id: str) -> bool:
         """Remove an instance from the pool."""
@@ -113,7 +123,7 @@ class DisaggregatedScheduler:
             for i, inst in enumerate(instances):
                 if inst.instance_id == instance_id:
                     del instances[i]
-                    logger.info(f"Removed instance: {instance_id}")
+                    logger.info("Removed instance: %s", instance_id)
                     return True
         return False
 
@@ -219,6 +229,6 @@ class DisaggregatedScheduler:
                 for inst in self._prefill_instances + self._decode_instances:
                     if now - inst.last_heartbeat > 30:
                         inst.is_healthy = False
-            except Exception as e:
-                logger.error(f"Health check error: {e}")
+            except (RuntimeError, ValueError, TypeError) as e:
+                logger.error("Health check error: %s", e)
             await asyncio.sleep(10)

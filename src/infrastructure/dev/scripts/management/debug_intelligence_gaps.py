@@ -18,7 +18,7 @@ Debug script to identify intelligence gaps where IO/Shell operations are not rec
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import re
 

@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from typing import Any
 from pathlib import Path
 from .btree_store import BTreeKnowledgeStore
@@ -45,7 +45,7 @@ class KnowledgeEngine:
         """Lazy loading of CompressionAgent to avoid circular imports."""
         if self._compressor is None:
             try:
-                from src.logic.agents.system.CompressionAgent import CompressionAgent
+                from src.logic.agents.system.compression_agent import CompressionAgent
 
                 self._compressor = CompressionAgent(
                     str(self.base_path / "compression_config.json")

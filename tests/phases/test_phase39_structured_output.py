@@ -23,8 +23,7 @@ class TestStructuredOutputManager:
     
     def test_grammar_type_enum(self):
         """Test GrammarType enum values."""
-        from src.infrastructure.structured_output import StructuredOutputManager
-        from src.infrastructure.structured_output.StructuredOutputManager import GrammarType
+        from src.infrastructure.structured_output import GrammarType
         
         # Test enum members exist
         assert hasattr(GrammarType, 'JSON')
@@ -34,7 +33,7 @@ class TestStructuredOutputManager:
     
     def test_grammar_spec_creation(self):
         """Test GrammarSpec dataclass."""
-        from src.infrastructure.structured_output.StructuredOutputManager import (
+        from src.infrastructure.structured_output.structured_output_manager import (
             GrammarSpec, GrammarType
         )
         
@@ -55,7 +54,7 @@ class TestStructuredOutputManager:
     
     def test_manager_initialization(self):
         """Test StructuredOutputManager initialization."""
-        from src.infrastructure.structured_output import StructuredOutputManager
+        from src.infrastructure.structured_output import structured_output_manager
         
         manager = StructuredOutputManager(vocab_size=32000)
         
@@ -64,7 +63,7 @@ class TestStructuredOutputManager:
     
     def test_simple_regex_grammar(self):
         """Test SimpleRegexGrammar."""
-        from src.infrastructure.structured_output.StructuredOutputManager import (
+        from src.infrastructure.structured_output.structured_output_manager import (
             SimpleRegexGrammar, GrammarSpec, GrammarType
         )
         
@@ -82,7 +81,7 @@ class TestStructuredOutputManager:
     
     def test_choice_grammar(self):
         """Test ChoiceGrammar."""
-        from src.infrastructure.structured_output.StructuredOutputManager import (
+        from src.infrastructure.structured_output.structured_output_manager import (
             ChoiceGrammar, GrammarSpec, GrammarType
         )
         import json
@@ -104,7 +103,7 @@ class TestGrammarEngine:
     
     def test_fsm_state_dataclass(self):
         """Test FSMState dataclass."""
-        from src.infrastructure.structured_output.GrammarEngine import FSMState
+        from src.infrastructure.structured_output.grammar_engine import FSMState
         
         state = FSMState(
             state_id=0,
@@ -119,7 +118,7 @@ class TestGrammarEngine:
     
     def test_token_mask(self):
         """Test TokenMask operations."""
-        from src.infrastructure.structured_output.GrammarEngine import TokenMask
+        from src.infrastructure.structured_output.grammar_engine import TokenMask
         
         mask = TokenMask(vocab_size=100)
         
@@ -139,7 +138,7 @@ class TestGrammarEngine:
     
     def test_regex_grammar_build(self):
         """Test RegexGrammar FSM construction."""
-        from src.infrastructure.structured_output.GrammarEngine import RegexGrammar
+        from src.infrastructure.structured_output.grammar_engine import RegexGrammar
         
         grammar = RegexGrammar(vocab_size=128)
         fsm = grammar.build_fsm(r"ab+c")
@@ -149,7 +148,7 @@ class TestGrammarEngine:
     
     def test_json_schema_grammar(self):
         """Test JsonSchemaGrammar."""
-        from src.infrastructure.structured_output.GrammarEngine import JsonSchemaGrammar
+        from src.infrastructure.structured_output.grammar_engine import JsonSchemaGrammar
         import json
         
         schema = {
@@ -167,7 +166,7 @@ class TestGrammarEngine:
     
     def test_choice_grammar_trie(self):
         """Test ChoiceGrammar trie-based FSM."""
-        from src.infrastructure.structured_output.GrammarEngine import ChoiceGrammar
+        from src.infrastructure.structured_output.grammar_engine import ChoiceGrammar
         import json
         
         choices = ["apple", "banana", "cherry"]
@@ -184,7 +183,7 @@ class TestLogitProcessor:
     
     def test_constrained_processor(self):
         """Test ConstrainedLogitProcessor."""
-        from src.infrastructure.structured_output.LogitProcessor import (
+        from src.infrastructure.structured_output.logit_processor import (
             ConstrainedLogitProcessor
         )
         
@@ -206,7 +205,7 @@ class TestLogitProcessor:
     
     def test_bitmask_processor(self):
         """Test BitmaskLogitProcessor."""
-        from src.infrastructure.structured_output.LogitProcessor import (
+        from src.infrastructure.structured_output.logit_processor import (
             BitmaskLogitProcessor
         )
         
@@ -230,7 +229,7 @@ class TestLogitProcessor:
     
     def test_bias_processor(self):
         """Test BiasLogitProcessor."""
-        from src.infrastructure.structured_output.LogitProcessor import (
+        from src.infrastructure.structured_output.logit_processor import (
             BiasLogitProcessor, LogitBias
         )
         
@@ -249,7 +248,7 @@ class TestLogitProcessor:
     
     def test_composite_processor(self):
         """Test CompositeLogitProcessor."""
-        from src.infrastructure.structured_output.LogitProcessor import (
+        from src.infrastructure.structured_output.logit_processor import (
             CompositeLogitProcessor, TemperatureProcessor, TopKProcessor
         )
         
@@ -273,7 +272,7 @@ class TestLogitProcessor:
     
     def test_standard_processor_chain(self):
         """Test create_standard_processor_chain."""
-        from src.infrastructure.structured_output.LogitProcessor import (
+        from src.infrastructure.structured_output.logit_processor import (
             create_standard_processor_chain
         )
         
@@ -318,7 +317,7 @@ class TestSpeculativeDecodingV2:
     
     def test_ngram_proposer(self):
         """Test NgramProposer."""
-        from src.infrastructure.speculative_v2 import NgramProposer
+        from src.infrastructure.speculative_v2 import ngram_proposer
         
         proposer = NgramProposer(
             vocab_size=1000,
@@ -714,9 +713,8 @@ class TestPhase39Integration:
     
     def test_structured_output_with_speculative(self):
         """Test structured output with speculative decoding."""
-        from src.infrastructure.structured_output import StructuredOutputManager
-        from src.infrastructure.structured_output.StructuredOutputManager import (
-            GrammarSpec, GrammarType
+        from src.infrastructure.structured_output import (
+            StructuredOutputManager, GrammarSpec, GrammarType
         )
         from src.infrastructure.speculative_v2 import (
             SpeculativeDecoder, NgramProposer, SpeculativeVerifier

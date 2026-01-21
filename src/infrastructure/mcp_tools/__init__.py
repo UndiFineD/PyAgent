@@ -21,7 +21,7 @@ from .sse import SSEMCPServer
 from .local import LocalMCPServer
 from .adapter import SchemaAdapter
 from .registry import MCPServerRegistry, SessionManager
-from .MCPToolServer import (
+from .mcp_tool_server import (
     adapt_tool_schema,
     create_mcp_session,
     discover_mcp_servers,

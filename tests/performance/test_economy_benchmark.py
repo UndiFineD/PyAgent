@@ -1,6 +1,6 @@
 import time
 import random
-from src.infrastructure.fleet.core.EconomyCore import EconomyCore
+from src.infrastructure.fleet.core.economy_core import EconomyCore
 
 
 def test_economy_benchmark():

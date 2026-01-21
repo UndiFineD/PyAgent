@@ -1,9 +1,12 @@
+import pytest
+import asyncio
 from pathlib import Path
 
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
-def test_phase23() -> None:
+@pytest.mark.asyncio
+async def test_phase23() -> None:
     print("--- Phase 23 Verification: NAS & Core Expansion ---")
     workspace_root = Path(__file__).resolve().parents[2]
     fleet = FleetManager(str(workspace_root))
@@ -11,7 +14,7 @@ def test_phase23() -> None:
     # 1. Test NAS Agent
     print("\n[1/2] Testing Neural Architecture Search...")
     task = "High-speed tensor processing for financial sentiment"
-    arch = fleet.nas.search_optimal_architecture(task)
+    arch = await fleet.nas.search_optimal_architecture(task)
 
     if "architecture_type" in arch:
         print(

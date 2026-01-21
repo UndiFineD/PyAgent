@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from .Base import (
+from .base import (
     CommandContext,
     CommandResult,
     CommandDefinition,
@@ -15,8 +15,8 @@ from .Base import (
     CommandHandler,
     AsyncCommandHandler
 )
-from .Registry import CommandRegistry
-from .Parser import CommandParser, SlashCommands, parse_commands
+from .registry import CommandRegistry
+from .parser import CommandParser, SlashCommands, parse_commands
 
 # ============================================================================
 # Convenience Functions

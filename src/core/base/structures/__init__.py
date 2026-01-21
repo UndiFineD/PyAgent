@@ -3,19 +3,19 @@ Base data structures.
 
 Phase 18-19: Beyond vLLM - Advanced data structures and performance patterns.
 """
-from src.core.base.structures.BloomFilter import (
+from src.core.base.structures.bloom_filter import (
     BloomFilter,
     CountingBloomFilter,
     ScalableBloomFilter,
 )
-from src.core.base.structures.RingBuffer import (
+from src.core.base.structures.ring_buffer import (
     RingBuffer,
     ThreadSafeRingBuffer,
     TimeSeriesBuffer,
     TimestampedValue,
     SlidingWindowAggregator,
 )
-from src.core.base.structures.ObjectPool import (
+from src.core.base.structures.object_pool import (
     ObjectPool,
     TypedObjectPool,
     BufferPool,
@@ -25,7 +25,7 @@ from src.core.base.structures.ObjectPool import (
     pooled_dict,
     pooled_set,
 )
-from src.core.base.structures.LockFreeQueue import (
+from src.core.base.structures.lock_free_queue import (
     MPMCQueue,
     SPSCQueue,
     PriorityQueue,
@@ -33,7 +33,7 @@ from src.core.base.structures.LockFreeQueue import (
     BatchingQueue,
     QueueStats,
 )
-from src.core.base.structures.MemoryArena import (
+from src.core.base.structures.memory_arena import (
     MemoryArena,
     TypedArena,
     StackArena,

@@ -39,7 +39,7 @@ class TestWeightLoader:
     
     def test_weight_format_enum(self):
         """Test WeightFormat enum values."""
-        from src.infrastructure.loading.WeightLoader import WeightFormat
+        from src.infrastructure.loading.weight_loader import WeightFormat
         
         assert WeightFormat.SAFETENSORS.value > 0
         assert WeightFormat.PYTORCH.value > 0
@@ -49,7 +49,7 @@ class TestWeightLoader:
     
     def test_weight_spec_creation(self):
         """Test WeightSpec dataclass."""
-        from src.infrastructure.loading.WeightLoader import WeightSpec
+        from src.infrastructure.loading.weight_loader import WeightSpec
         
         spec = WeightSpec(
             name="model.layer.weight",
@@ -65,7 +65,7 @@ class TestWeightLoader:
     
     def test_load_stats(self):
         """Test LoadStats dataclass."""
-        from src.infrastructure.loading.WeightLoader import LoadStats
+        from src.infrastructure.loading.weight_loader import LoadStats
         
         stats = LoadStats(
             total_bytes=1024 * 1024 * 1024,  # 1GB
@@ -81,7 +81,7 @@ class TestWeightLoader:
     
     def test_atomic_writer(self):
         """Test AtomicWriter context manager."""
-        from src.infrastructure.loading.WeightLoader import AtomicWriter
+        from src.infrastructure.loading.weight_loader import AtomicWriter
         
         with tempfile.TemporaryDirectory() as tmpdir:
             filepath = Path(tmpdir) / "test_atomic.txt"
@@ -96,7 +96,7 @@ class TestWeightLoader:
     
     def test_atomic_writer_failure(self):
         """Test AtomicWriter rollback on failure."""
-        from src.infrastructure.loading.WeightLoader import AtomicWriter
+        from src.infrastructure.loading.weight_loader import AtomicWriter
         
         with tempfile.TemporaryDirectory() as tmpdir:
             filepath = Path(tmpdir) / "test_atomic_fail.txt"
@@ -118,7 +118,7 @@ class TestWeightLoader:
     
     def test_detect_weight_format(self):
         """Test weight format detection."""
-        from src.infrastructure.loading.WeightLoader import detect_weight_format, WeightFormat
+        from src.infrastructure.loading.weight_loader import detect_weight_format, WeightFormat
         
         assert detect_weight_format("model.safetensors") == WeightFormat.SAFETENSORS
         assert detect_weight_format("model.bin") == WeightFormat.PYTORCH
@@ -129,7 +129,7 @@ class TestWeightLoader:
     
     def test_filter_shared_tensors(self):
         """Test shared tensor filtering."""
-        from src.infrastructure.loading.WeightLoader import filter_shared_tensors
+        from src.infrastructure.loading.weight_loader import filter_shared_tensors
         
         # Create mock tensors
         class MockTensor:
@@ -152,7 +152,7 @@ class TestWeightLoader:
     
     def test_multi_thread_loader_worker_count(self):
         """Test adaptive worker count."""
-        from src.infrastructure.loading.WeightLoader import MultiThreadWeightLoader
+        from src.infrastructure.loading.weight_loader import MultiThreadWeightLoader
         
         loader = MultiThreadWeightLoader(
             max_workers=8,
@@ -166,7 +166,7 @@ class TestWeightLoader:
     
     def test_streaming_loader_priority(self):
         """Test StreamingWeightLoader priority handling."""
-        from src.infrastructure.loading.WeightLoader import StreamingWeightLoader
+        from src.infrastructure.loading.weight_loader import StreamingWeightLoader
         
         loader = StreamingWeightLoader(
             memory_budget_mb=512.0,
@@ -188,7 +188,7 @@ class TestShardedStateLoader:
     
     def test_shard_pattern_default(self):
         """Test default shard pattern."""
-        from src.infrastructure.loading.ShardedStateLoader import ShardPattern
+        from src.infrastructure.loading.sharded_state_loader import ShardPattern
         
         pattern = ShardPattern()
         
@@ -197,7 +197,7 @@ class TestShardedStateLoader:
     
     def test_shard_pattern_parse(self):
         """Test shard filename parsing."""
-        from src.infrastructure.loading.ShardedStateLoader import ShardPattern
+        from src.infrastructure.loading.sharded_state_loader import ShardPattern
         
         pattern = ShardPattern()
         
@@ -209,7 +209,7 @@ class TestShardedStateLoader:
     
     def test_sharded_tensor_local_shape(self):
         """Test ShardedTensor local shape calculation."""
-        from src.infrastructure.loading.ShardedStateLoader import ShardedTensor
+        from src.infrastructure.loading.sharded_state_loader import ShardedTensor
         
         tensor = ShardedTensor(
             name="weight",
@@ -224,7 +224,7 @@ class TestShardedStateLoader:
     
     def test_subtensor_filter(self):
         """Test SubtensorFilter for shared storage."""
-        from src.infrastructure.loading.ShardedStateLoader import SubtensorFilter
+        from src.infrastructure.loading.sharded_state_loader import SubtensorFilter
         
         # Basic filter test (without actual torch tensors)
         filter_obj = SubtensorFilter()
@@ -235,7 +235,7 @@ class TestShardedStateLoader:
     
     def test_sharded_state_loader_init(self):
         """Test ShardedStateLoader initialization."""
-        from src.infrastructure.loading.ShardedStateLoader import (
+        from src.infrastructure.loading.sharded_state_loader import (
             ShardedStateLoader, ShardPattern
         )
         
@@ -250,7 +250,7 @@ class TestShardedStateLoader:
     
     def test_incremental_loader_eviction(self):
         """Test IncrementalShardLoader cache eviction."""
-        from src.infrastructure.loading.ShardedStateLoader import (
+        from src.infrastructure.loading.sharded_state_loader import (
             ShardedStateLoader, IncrementalShardLoader
         )
         
@@ -275,7 +275,7 @@ class TestShardedStateLoader:
     
     def test_async_shard_loader(self):
         """Test AsyncShardLoader initialization."""
-        from src.infrastructure.loading.ShardedStateLoader import (
+        from src.infrastructure.loading.sharded_state_loader import (
             ShardedStateLoader, AsyncShardLoader
         )
         
@@ -299,7 +299,7 @@ class TestKVOffloadManager:
     
     def test_offload_medium_enum(self):
         """Test OffloadMedium enum."""
-        from src.infrastructure.loading.KVOffloadManager import OffloadMedium
+        from src.infrastructure.loading.kv_offload_manager import OffloadMedium
         
         assert OffloadMedium.GPU.value > 0
         assert OffloadMedium.CPU.value > 0
@@ -308,7 +308,7 @@ class TestKVOffloadManager:
     
     def test_block_status(self):
         """Test BlockStatus dataclass."""
-        from src.infrastructure.loading.KVOffloadManager import BlockStatus
+        from src.infrastructure.loading.kv_offload_manager import BlockStatus
         
         block = BlockStatus(
             address=1000,
@@ -324,7 +324,7 @@ class TestKVOffloadManager:
     
     def test_load_store_spec(self):
         """Test LoadStoreSpec dataclass."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             LoadStoreSpec, OffloadMedium
         )
         
@@ -338,7 +338,7 @@ class TestKVOffloadManager:
     
     def test_memory_backend(self):
         """Test MemoryBackend operations."""
-        from src.infrastructure.loading.KVOffloadManager import MemoryBackend
+        from src.infrastructure.loading.kv_offload_manager import MemoryBackend
         
         backend = MemoryBackend(
             capacity_blocks=10,
@@ -361,7 +361,7 @@ class TestKVOffloadManager:
     
     def test_lru_manager_lookup(self):
         """Test LRUOffloadingManager lookup."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             LRUOffloadingManager, MemoryBackend, BlockStatus
         )
         
@@ -381,7 +381,7 @@ class TestKVOffloadManager:
     
     def test_lru_manager_touch(self):
         """Test LRUOffloadingManager touch (LRU update)."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             LRUOffloadingManager, MemoryBackend, BlockStatus
         )
         
@@ -400,7 +400,7 @@ class TestKVOffloadManager:
     
     def test_lru_manager_prepare_store(self):
         """Test LRUOffloadingManager prepare_store with eviction."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             LRUOffloadingManager, MemoryBackend, BlockStatus
         )
         
@@ -420,7 +420,7 @@ class TestKVOffloadManager:
     
     def test_arc_manager_lookup(self):
         """Test ARCOffloadingManager lookup in T1/T2."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             ARCOffloadingManager, MemoryBackend, BlockStatus
         )
         
@@ -437,7 +437,7 @@ class TestKVOffloadManager:
     
     def test_arc_manager_touch_promotion(self):
         """Test ARCOffloadingManager touch promotes T1→T2."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             ARCOffloadingManager, MemoryBackend, BlockStatus
         )
         
@@ -455,7 +455,7 @@ class TestKVOffloadManager:
     
     def test_arc_manager_ghost_list(self):
         """Test ARCOffloadingManager ghost list adaptation."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             ARCOffloadingManager, MemoryBackend
         )
         
@@ -474,7 +474,7 @@ class TestKVOffloadManager:
     
     def test_arc_manager_stats(self):
         """Test ARCOffloadingManager stats property."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             ARCOffloadingManager, MemoryBackend, BlockStatus
         )
         
@@ -494,7 +494,7 @@ class TestKVOffloadManager:
     
     def test_tiered_manager(self):
         """Test TieredOffloadManager with multiple backends."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             TieredOffloadManager, MemoryBackend
         )
         
@@ -523,7 +523,7 @@ class TestExpertLoadBalancer:
     
     def test_expert_type_enum(self):
         """Test ExpertType enum."""
-        from src.infrastructure.loading.ExpertLoadBalancer import ExpertType
+        from src.infrastructure.loading.expert_load_balancer import ExpertType
         
         assert ExpertType.LOGICAL.value > 0
         assert ExpertType.PHYSICAL.value > 0
@@ -531,7 +531,7 @@ class TestExpertLoadBalancer:
     
     def test_eplb_metrics(self):
         """Test EplbMetrics dataclass."""
-        from src.infrastructure.loading.ExpertLoadBalancer import EplbMetrics
+        from src.infrastructure.loading.expert_load_balancer import EplbMetrics
         
         metrics = EplbMetrics(
             physical_to_logical=[[0, 1, 2, 0], [0, 1, 2, 1]],
@@ -544,7 +544,7 @@ class TestExpertLoadBalancer:
     
     def test_expert_mapping(self):
         """Test ExpertMapping class."""
-        from src.infrastructure.loading.ExpertLoadBalancer import ExpertMapping
+        from src.infrastructure.loading.expert_load_balancer import ExpertMapping
         
         mapping = ExpertMapping(
             phy_to_log=[[0, 1, 2, 0]],
@@ -560,7 +560,7 @@ class TestExpertLoadBalancer:
     def test_default_policy_balanced_packing(self):
         """Test DefaultEplbPolicy balanced packing."""
         pytest.importorskip("numpy")
-        from src.infrastructure.loading.ExpertLoadBalancer import DefaultEplbPolicy
+        from src.infrastructure.loading.expert_load_balancer import DefaultEplbPolicy
         
         weights = [[10.0, 5.0, 8.0, 3.0]]  # 4 groups, pack into 2
         
@@ -578,7 +578,7 @@ class TestExpertLoadBalancer:
     def test_default_policy_replicate_experts(self):
         """Test DefaultEplbPolicy expert replication."""
         pytest.importorskip("numpy")
-        from src.infrastructure.loading.ExpertLoadBalancer import DefaultEplbPolicy
+        from src.infrastructure.loading.expert_load_balancer import DefaultEplbPolicy
         
         weights = [[10.0, 5.0, 3.0]]  # 3 logical experts
         
@@ -593,7 +593,7 @@ class TestExpertLoadBalancer:
     def test_default_policy_rebalance(self):
         """Test DefaultEplbPolicy full rebalancing."""
         pytest.importorskip("numpy")
-        from src.infrastructure.loading.ExpertLoadBalancer import DefaultEplbPolicy
+        from src.infrastructure.loading.expert_load_balancer import DefaultEplbPolicy
         
         weights = [[10.0, 5.0, 3.0, 2.0]]
         
@@ -611,7 +611,7 @@ class TestExpertLoadBalancer:
     def test_locality_aware_policy(self):
         """Test LocalityAwarePolicy."""
         pytest.importorskip("numpy")
-        from src.infrastructure.loading.ExpertLoadBalancer import LocalityAwarePolicy
+        from src.infrastructure.loading.expert_load_balancer import LocalityAwarePolicy
         
         weights = [[10.0, 5.0, 3.0, 2.0]]
         
@@ -627,7 +627,7 @@ class TestExpertLoadBalancer:
     
     def test_expert_load_balancer_record_load(self):
         """Test ExpertLoadBalancer load recording."""
-        from src.infrastructure.loading.ExpertLoadBalancer import ExpertLoadBalancer
+        from src.infrastructure.loading.expert_load_balancer import ExpertLoadBalancer
         
         balancer = ExpertLoadBalancer(
             num_layers=2,
@@ -643,7 +643,7 @@ class TestExpertLoadBalancer:
     
     def test_expert_load_balancer_average(self):
         """Test ExpertLoadBalancer average load calculation."""
-        from src.infrastructure.loading.ExpertLoadBalancer import ExpertLoadBalancer
+        from src.infrastructure.loading.expert_load_balancer import ExpertLoadBalancer
         
         balancer = ExpertLoadBalancer(
             num_layers=1,
@@ -665,7 +665,7 @@ class TestExpertLoadBalancer:
     def test_expert_load_balancer_rebalance(self):
         """Test ExpertLoadBalancer rebalancing."""
         pytest.importorskip("numpy")
-        from src.infrastructure.loading.ExpertLoadBalancer import ExpertLoadBalancer
+        from src.infrastructure.loading.expert_load_balancer import ExpertLoadBalancer
         
         balancer = ExpertLoadBalancer(
             num_layers=1,
@@ -685,7 +685,7 @@ class TestExpertLoadBalancer:
     
     def test_async_rebalancer_should_rebalance(self):
         """Test AsyncExpertRebalancer threshold check."""
-        from src.infrastructure.loading.ExpertLoadBalancer import (
+        from src.infrastructure.loading.expert_load_balancer import (
             ExpertLoadBalancer, AsyncExpertRebalancer
         )
         
@@ -885,7 +885,7 @@ class TestPhase37Integration:
     
     def test_weight_loading_pipeline(self):
         """Test weight loading pipeline end-to-end."""
-        from src.infrastructure.loading.WeightLoader import (
+        from src.infrastructure.loading.weight_loader import (
             WeightSpec, LoadStats, detect_weight_format, WeightFormat
         )
         
@@ -901,7 +901,7 @@ class TestPhase37Integration:
     
     def test_kv_offload_with_arc(self):
         """Test KV offloading with ARC policy."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             ARCOffloadingManager, MemoryBackend
         )
         
@@ -927,7 +927,7 @@ class TestPhase37Integration:
     def test_expert_rebalancing_flow(self):
         """Test expert rebalancing end-to-end."""
         pytest.importorskip("numpy")
-        from src.infrastructure.loading.ExpertLoadBalancer import (
+        from src.infrastructure.loading.expert_load_balancer import (
             ExpertLoadBalancer, DefaultEplbPolicy
         )
         import numpy as np
@@ -981,7 +981,7 @@ class TestModuleImports:
     
     def test_import_weight_loader(self):
         """Test WeightLoader module imports."""
-        from src.infrastructure.loading.WeightLoader import (
+        from src.infrastructure.loading.weight_loader import (
             WeightFormat,
             WeightSpec,
             AtomicWriter,
@@ -993,7 +993,7 @@ class TestModuleImports:
     
     def test_import_sharded_state_loader(self):
         """Test ShardedStateLoader module imports."""
-        from src.infrastructure.loading.ShardedStateLoader import (
+        from src.infrastructure.loading.sharded_state_loader import (
             ShardPattern,
             ShardedTensor,
             SubtensorFilter,
@@ -1005,7 +1005,7 @@ class TestModuleImports:
     
     def test_import_kv_offload_manager(self):
         """Test KVOffloadManager module imports."""
-        from src.infrastructure.loading.KVOffloadManager import (
+        from src.infrastructure.loading.kv_offload_manager import (
             OffloadMedium,
             LoadStoreSpec,
             BlockStatus,
@@ -1019,7 +1019,7 @@ class TestModuleImports:
     
     def test_import_expert_load_balancer(self):
         """Test ExpertLoadBalancer module imports."""
-        from src.infrastructure.loading.ExpertLoadBalancer import (
+        from src.infrastructure.loading.expert_load_balancer import (
             ExpertType,
             EplbMetrics,
             ExpertMapping,

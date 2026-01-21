@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.system.PerformanceProfilingAgent import PerformanceProfilingAgent
+from src.logic.agents.system.performance_profiling_agent import PerformanceProfilingAgent
 
 
 class TestPerformanceProfiling(unittest.TestCase):

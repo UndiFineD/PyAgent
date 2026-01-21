@@ -1,6 +1,7 @@
 from __future__ import annotations
 import math
 import threading
+import contextlib
 from typing import Any, List, Optional, Union
 import numpy as np
 from .config import LogprobFormat, LogprobEntry, TopLogprob
@@ -32,6 +33,10 @@ class LogprobsProcessor:
                                       float(selected_logprobs[i]), tuple(tops), i))
         return entries
     
+    def process_batch(self, batch_logits: List[np.ndarray], batch_token_ids: List[np.ndarray], tokenizer: Optional[Any] = None) -> List[Union[FlatLogprobs, List[LogprobEntry]]]:
+        """Process a batch of logits."""
+        return [self.process_logits(logits, tids, tokenizer) for logits, tids in zip(batch_logits, batch_token_ids)]
+    
     def _log_softmax(self, logits: np.ndarray) -> np.ndarray:
         max_logits = np.max(logits, axis=-1, keepdims=True)
         shifted = logits - max_logits
@@ -39,8 +44,8 @@ class LogprobsProcessor:
 
     def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:
         if tokenizer:
-            try: return tokenizer.decode([tid])
-            except: pass
+            with contextlib.suppress(AttributeError, ValueError, RuntimeError):
+                return tokenizer.decode([tid])
         return f"<{tid}>"
 
 class StreamingLogprobs:
@@ -54,8 +59,22 @@ class StreamingLogprobs:
         self._top_k_lps = np.full((max_tokens, top_k), -float('inf'), dtype=np.float32)
         self._position = 0
         self._sum_logprobs = 0.0
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
     
+    @property
+    def num_tokens(self) -> int:
+        return self._position
+
+    @property
+    def mean_logprob(self) -> float:
+        with self._lock:
+            return self._sum_logprobs / self._position if self._position > 0 else 0.0
+
+    @property
+    def perplexity(self) -> float:
+        with self._lock:
+            return math.exp(-self.mean_logprob) if self._position > 0 else 1.0
+
     def add_token(self, token_id: int, logprob: float, top_k_ids: Optional[np.ndarray] = None, top_k_logprobs: Optional[np.ndarray] = None):
         with self._lock:
             if self._position >= self.max_tokens: return
@@ -66,6 +85,29 @@ class StreamingLogprobs:
                 self._top_k_ids[i, :k], self._top_k_lps[i, :k] = top_k_ids[:k], top_k_logprobs[:k]
             self._sum_logprobs += logprob
             self._position += 1
+    
+    def add_from_logits(self, logits: np.ndarray, token_id: int):
+        """Add a token from raw logits."""
+        max_logits = np.max(logits)
+        shifted = logits - max_logits
+        log_sum_exp = np.log(np.sum(np.exp(shifted)))
+        logprobs = shifted - log_sum_exp
+        
+        lp = logprobs[token_id]
+        indices = np.argsort(logprobs)[-self.top_k:][::-1]
+        lps = logprobs[indices]
+        
+        self.add_token(token_id, float(lp), indices, lps)
+    
+    def reset(self):
+        """Reset the accumulator."""
+        with self._lock:
+            self._position = 0
+            self._sum_logprobs = 0.0
+            self._token_ids.fill(0)
+            self._logprobs.fill(0)
+            self._top_k_ids.fill(0)
+            self._top_k_lps.fill(-float('inf'))
             
     def finalize(self) -> FlatLogprobs:
         with self._lock:

@@ -1,9 +1,12 @@
+import pytest
+import asyncio
 from pathlib import Path
 
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
-def test_phase22() -> None:
+@pytest.mark.asyncio
+async def test_phase22() -> None:
     print(
         "--- Phase 22 Verification: Federated Sovereignty & Recursive World Modeling ---"
     )
@@ -29,7 +32,7 @@ def test_phase22() -> None:
     )
     print("\n[2/2] Testing Recursive World Modeling (Interaction Simulation)...")
 
-    interaction = fleet.world_model.simulate_agent_interaction(
+    interaction = await fleet.world_model.simulate_agent_interaction(
         "Reasoner", "Reflector", "Implement a thread-safe signal registry"
     )
 

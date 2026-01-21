@@ -18,12 +18,12 @@ Debug script for testing Phases 20 (Visual/Multimodal) and 21 (Distributed Obser
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
-from src.logic.agents.cognitive.GraphMemoryAgent import GraphMemoryAgent
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
+from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent
 from src.core.base.MultiModalContextAgent import MultiModalContextAgent
 
 __version__ = VERSION
@@ -32,9 +32,9 @@ __version__ = VERSION
 def test_visualization_and_memory() -> None:
     print("\n--- Testing Phase 20: Visual & Multimodal ---")
     root = Path(str(Path(__file__).resolve().parents[5]) + "")
-    viz = VisualizerAgent(str(root / "src/logic/agents/cognitive/VisualizerAgent.py"))
+    viz = VisualizerAgent(str(root / "src\logic\agents\cognitive\visualizer_agent.py"))
 
-    mem = GraphMemoryAgent(str(root / "src/logic/agents/cognitive/GraphMemoryAgent.py"))
+    mem = GraphMemoryAgent(str(root / "src\logic\agents\cognitive\graph_memory_agent.py"))
 
     # 1. Test Integration
 
@@ -49,7 +49,7 @@ def test_visualization_and_memory() -> None:
     # 2. Test MultiModal (Simulated)
 
     mm = MultiModalContextAgent(
-        str(root / "src/logic/agents/system/MultiModalContextAgent.py")
+        str(root / "src\logic\agents\system\multi_modal_context_agent.py")
     )
 
     # Create a dummy file for testing
@@ -80,7 +80,7 @@ def test_observability() -> None:
     # Check OTel
     spans = fleet.telemetry.otel.export_spans()
     print(f"Exported {len(spans)} OTel spans.")
-    assert len(spans) > 0
+    assert spans
 
 
 def test_gui_backend() -> None:
@@ -91,7 +91,7 @@ def test_gui_backend() -> None:
     # File Explorer
     files = ui.list_workspace_files(".")
     print(f"File count: {len(files['items'])}")
-    assert len(files["items"]) > 0
+    assert files["items"]
 
     # Workflow Designer
     designer = ui.get_workflow_designer_state()

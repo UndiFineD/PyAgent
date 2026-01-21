@@ -8,7 +8,7 @@ Modules:
     MambaUtils: Utilities for Mamba computation
 """
 
-from src.infrastructure.ssm.MambaMixer import (
+from src.infrastructure.ssm.mamba_mixer import (
     MambaConfig,
     MambaState,
     MambaOutput,
@@ -19,7 +19,7 @@ from src.infrastructure.ssm.MambaMixer import (
     HybridMambaMixer,
 )
 
-from src.infrastructure.ssm.MambaUtils import (
+from src.infrastructure.ssm.mamba_utils import (
     compute_ssm_state_shape,
     compute_conv_state_shape,
     discretize_ssm,

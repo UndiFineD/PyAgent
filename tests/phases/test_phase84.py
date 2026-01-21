@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.security.SecurityAuditAgent import SecurityAuditAgent
+from src.logic.agents.security.security_audit_agent import SecurityAuditAgent
 
 
 class TestSecurityAudit(unittest.TestCase):

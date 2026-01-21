@@ -18,9 +18,9 @@ import tkinter as tk
 from tkinter import ttk
 import os
 from typing import Any
-from src.interface.ui.gui.WidgetLogger import WidgetLogger
-from src.interface.ui.gui.ProjectExplorer import ProjectExplorer
-from src.interface.ui.gui.AgentColumn import AgentColumn
+from src.interface.ui.gui.widget_logger import WidgetLogger
+from src.interface.ui.gui.project_explorer import ProjectExplorer
+from src.interface.ui.gui.agent_column import AgentColumn
 
 
 class TestGUIModular(unittest.TestCase):

@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     import torch
     from src.infrastructure.kv_transfer.arc.backend import Backend
     from src.infrastructure.kv_transfer.arc.types import LoadStoreSpec
-    from src.infrastructure.kv_transfer.KVzap import KVzapPruner, KVzapConfig
+    from src.infrastructure.kv_transfer.k_vzap import KVzapPruner, KVzapConfig
 
 
 class ARCOffloadManager(OffloadingManager):
@@ -35,7 +35,7 @@ class ARCOffloadManager(OffloadingManager):
         adaptation_speed: float = 1.0,
         kvzap_config: Optional['KVzapConfig'] = None
     ):
-        from src.infrastructure.kv_transfer.KVzap import KVzapPruner
+        from src.infrastructure.kv_transfer.k_vzap import KVzapPruner
         
         self.backend = backend
         self.adaptation_speed = adaptation_speed

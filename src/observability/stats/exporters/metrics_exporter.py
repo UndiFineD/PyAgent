@@ -18,7 +18,7 @@ Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cl
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 import time
 from .prometheus_exporter import PrometheusExporter

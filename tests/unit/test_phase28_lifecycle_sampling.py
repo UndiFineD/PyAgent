@@ -17,19 +17,19 @@ import math
 from typing import Dict, List, Set
 
 # Import Phase 28 modules
-from src.infrastructure.engine.RequestLifecycle import (
+from src.infrastructure.engine.request_lifecycle import (
     RequestStatus,
     FinishReason,
     Request,
     RequestQueue,
     RequestTracker,
 )
-from src.infrastructure.engine.EngineLifecycle import (
+from src.infrastructure.engine.engine_lifecycle import (
     EngineState,
     EngineConfig,
     EngineLifecycleManager,
 )
-from src.infrastructure.sampling.SamplingEngine import (
+from src.infrastructure.sampling.sampling_engine import (
     SamplingParams,
     SamplingState,
     TopKSampler,
@@ -43,7 +43,7 @@ from src.infrastructure.sampling.SamplingEngine import (
     SamplingPipeline,
     sample_logits,
 )
-from src.infrastructure.tokenization.IncrementalDetokenizer import (
+from src.infrastructure.tokenization.incremental_detokenizer import (
     DetokenizeResult,
     StopChecker,
     FastIncrementalDetokenizer,
@@ -470,7 +470,7 @@ class TestSamplers:
     
     def test_beam_search_sampler(self):
         """Test beam search initialization."""
-        from src.infrastructure.sampling.SamplingEngine import BeamSearchConfig
+        from src.infrastructure.sampling.sampling_engine import BeamSearchConfig
         
         config = BeamSearchConfig(
             beam_width=4,

@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.security.PrivacyGuardAgent import PrivacyGuardAgent
+from src.logic.agents.security.privacy_guard_agent import PrivacyGuardAgent
 
 
 class TestDataPrivacyGuard(unittest.TestCase):

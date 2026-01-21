@@ -139,4 +139,4 @@ class PriorityRequestQueue:
     
     def __bool__(self) -> bool:
         """Whether queue has requests."""
-        return len(self) > 0
+        return bool(len(self))

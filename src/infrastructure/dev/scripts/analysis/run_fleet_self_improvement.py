@@ -31,7 +31,7 @@ project_root = os.path.abspath(
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import json
 import time
 import logging
@@ -40,8 +40,8 @@ import subprocess
 import re
 from pathlib import Path
 from typing import Any
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.observability.StructuredLogger import StructuredLogger
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.observability.structured_logger import StructuredLogger
 
 # Phase 317: Specialized helpers to reduce complexity
 class DirectiveParser:
@@ -257,7 +257,7 @@ def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
 def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, Any]) -> None:
     """Updates FLEET_AUTO_DOC.md with cycle results."""
     doc_res = fleet.doc_gen_agent.extract_docs(
-        os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
+        os.path.join(root, "src\infrastructure\fleet\fleet_manager.py")
     )
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")
 

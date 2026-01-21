@@ -105,10 +105,10 @@ def test_run_subagent_delegates_to_agent_backend(
         calls.append((description, prompt, original_content))
         return "OK"
 
-    import src.infrastructure.backend.ExecutionEngine
+    import src.infrastructure.backend.execution_engine
 
     monkeypatch.setattr(
-        src.infrastructure.backend.ExecutionEngine,
+        src.infrastructure.backend.execution_engine,
         "run_subagent",
         fake_backend_run_subagent,
     )
@@ -135,10 +135,10 @@ def test_run_subagent_falls_back_to_original_content_when_backend_returns_none(
     ) -> None:
         return None
 
-    import src.infrastructure.backend.ExecutionEngine
+    import src.infrastructure.backend.execution_engine
 
     monkeypatch.setattr(
-        src.infrastructure.backend.ExecutionEngine,
+        src.infrastructure.backend.execution_engine,
         "run_subagent",
         fake_backend_run_subagent,
     )
@@ -168,7 +168,7 @@ def test_run_subagent_uses_github_models_backend(
             "subprocess.run should not be called for github-models backend"
         )
 
-    import src.infrastructure.backend.ExecutionEngine
+    import src.infrastructure.backend.execution_engine
 
     monkeypatch.setattr(subprocess, "run", boom)
 
@@ -191,7 +191,7 @@ def test_run_subagent_uses_github_models_backend(
         return FakeResponse()
 
     monkeypatch.setattr(
-        src.infrastructure.backend.ExecutionEngine.requests, "post", fake_post
+        src.infrastructure.backend.execution_engine.requests, "post", fake_post
     )
     agent = base_agent_module.BaseAgent("x.md")
 
@@ -206,6 +206,7 @@ def test_run_subagent_handles_subprocess_failures_gracefully(
     monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
 ) -> None:
     """Verify that subprocess failures (non-zero exit code) result in fallback response."""
+    import unittest.mock
 
     class Result:
         def __init__(self, returncode: int, stdout: str = "", stderr: str = "") -> None:
@@ -221,8 +222,7 @@ def test_run_subagent_handles_subprocess_failures_gracefully(
             return Result(0, "gh 2.0.0")
         return Result(1, "", "Process failed")
 
-    monkeypatch.delenv("DV_AGENT_BACKEND", raising=False)
-
+    monkeypatch.setenv("DV_AGENT_BACKEND", "copilot-cli")
     monkeypatch.setattr(subprocess, "run", fake_run_fail_all)
 
     agent = base_agent_module.BaseAgent("x.md")

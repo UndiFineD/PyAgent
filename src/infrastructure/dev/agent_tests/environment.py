@@ -16,7 +16,7 @@
 """Environment and data management for tests."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import random
 from dataclasses import dataclass, field
 from typing import Any

@@ -18,7 +18,7 @@ Enables real-time dashboards in Grafana and ELK stack.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from typing import Any
 
 __version__ = VERSION

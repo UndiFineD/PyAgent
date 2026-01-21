@@ -1,6 +1,6 @@
 import timeit
 import random
-from src.logic.agents.swarm.core.AuctionCore import AuctionCore
+from src.logic.agents.swarm.core.auction_core import AuctionCore
 
 
 def benchmark_auction():

@@ -166,7 +166,7 @@ class Request:
             raise RuntimeError(
                 f"Cannot add token to request in state {self.status}"
             )
-        was_empty = len(self.output_token_ids) == 0
+        was_empty = not self.output_token_ids
         self.output_token_ids.append(token_id)
         if was_empty:
             self.first_token_time = time.time()

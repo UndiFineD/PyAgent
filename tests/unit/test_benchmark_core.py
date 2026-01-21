@@ -4,7 +4,7 @@ Tests performance calculation logic before Rust conversion.
 """
 
 from hypothesis import given, strategies as st
-from src.logic.agents.development.core.BenchmarkCore import (
+from src.logic.agents.development.core.benchmark_core import (
     BenchmarkCore,
     BenchmarkResult,
 )
@@ -22,7 +22,7 @@ class TestBenchmarkCoreBasics:
     def test_calculate_baseline_single_result(self) -> None:
         """Test baseline calculation with single result."""
         core = BenchmarkCore()
-        results = [BenchmarkResult("agent1", 100.0, 50, True)]
+        results = [BenchmarkResult(name="agent1", duration=100.0, total_tokens=50, success=True)]
         result = core.calculate_baseline(results)
         assert result == 100.0
 
@@ -30,9 +30,9 @@ class TestBenchmarkCoreBasics:
         """Test baseline calculation with multiple results."""
         core = BenchmarkCore()
         results = [
-            BenchmarkResult("agent1", 100.0, 50, True),
-            BenchmarkResult("agent2", 200.0, 100, True),
-            BenchmarkResult("agent3", 300.0, 150, True),
+            BenchmarkResult(name="agent1", duration=100.0, total_tokens=50, success=True),
+            BenchmarkResult(name="agent2", duration=200.0, total_tokens=100, success=True),
+            BenchmarkResult(name="agent3", duration=300.0, total_tokens=150, success=True),
         ]
         result = core.calculate_baseline(results)
         assert result == 200.0
@@ -65,14 +65,14 @@ class TestBenchmarkCoreBasics:
     def test_score_efficiency_valid(self) -> None:
         """Test efficiency scoring with valid data."""
         core = BenchmarkCore()
-        result = BenchmarkResult("agent1", 100.0, 50, True)
+        result = BenchmarkResult(name="agent1", duration=100.0, total_tokens=50, success=True)
         score = core.score_efficiency(result)
         assert score == 2.0  # 100.0 / 50
 
     def test_score_efficiency_zero_tokens(self) -> None:
         """Test efficiency scoring with zero tokens."""
         core = BenchmarkCore()
-        result = BenchmarkResult("agent1", 100.0, 0, True)
+        result = BenchmarkResult(name="agent1", duration=100.0, total_tokens=0, success=True)
         score = core.score_efficiency(result)
         assert score == 0.0
 
@@ -89,7 +89,7 @@ class TestBenchmarkCorePropertyBased:
         """Property: Baseline is within min and max latencies."""
         core = BenchmarkCore()
         results = [
-            BenchmarkResult(f"agent{i}", lat, 10, True)
+            BenchmarkResult(name=f"agent{i}", duration=lat, total_tokens=10, success=True)
             for i, lat in enumerate(latencies)
         ]
         baseline = core.calculate_baseline(results)
@@ -121,7 +121,7 @@ class TestBenchmarkCorePropertyBased:
     def test_efficiency_score_positive(self, latency: float, tokens: int) -> None:
         """Property: Efficiency score is latency/tokens."""
         core = BenchmarkCore()
-        result = BenchmarkResult("agent", latency, tokens, True)
+        result = BenchmarkResult(name="agent", duration=latency, total_tokens=tokens, success=True)
         score = core.score_efficiency(result)
         expected = latency / tokens
         assert abs(score - expected) < 1e-9
@@ -134,8 +134,8 @@ class TestBenchmarkCoreEdgeCases:
         """Test baseline with very large latency values."""
         core = BenchmarkCore()
         results = [
-            BenchmarkResult("agent1", 1e6, 100, True),
-            BenchmarkResult("agent2", 1e6, 100, True),
+            BenchmarkResult(name="agent1", duration=1e6, total_tokens=100, success=True),
+            BenchmarkResult(name="agent2", duration=1e6, total_tokens=100, success=True),
         ]
         baseline = core.calculate_baseline(results)
         assert baseline == 1e6
@@ -144,8 +144,8 @@ class TestBenchmarkCoreEdgeCases:
         """Test baseline with very small latency values."""
         core = BenchmarkCore()
         results = [
-            BenchmarkResult("agent1", 0.001, 10, True),
-            BenchmarkResult("agent2", 0.002, 10, True),
+            BenchmarkResult(name="agent1", duration=0.001, total_tokens=10, success=True),
+            BenchmarkResult(name="agent2", duration=0.002, total_tokens=10, success=True),
         ]
         baseline = core.calculate_baseline(results)
         assert abs(baseline - 0.0015) < 1e-9
@@ -153,14 +153,14 @@ class TestBenchmarkCoreEdgeCases:
     def test_efficiency_with_many_tokens(self) -> None:
         """Test efficiency score with large token count."""
         core = BenchmarkCore()
-        result = BenchmarkResult("agent", 100.0, 100000, True)
+        result = BenchmarkResult(name="agent", duration=100.0, total_tokens=100000, success=True)
         score = core.score_efficiency(result)
         assert score == 0.001
 
     def test_efficiency_with_few_tokens(self) -> None:
         """Test efficiency score with small token count."""
         core = BenchmarkCore()
-        result = BenchmarkResult("agent", 100.0, 1, True)
+        result = BenchmarkResult(name="agent", duration=100.0, total_tokens=1, success=True)
         score = core.score_efficiency(result)
         assert score == 100.0
 

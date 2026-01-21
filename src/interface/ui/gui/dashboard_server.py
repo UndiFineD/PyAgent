@@ -19,7 +19,7 @@ Provides REST API and WebSocket interfaces for real-time telemetry and managemen
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Any
@@ -27,7 +27,7 @@ import json
 import logging
 from pathlib import Path
 from datetime import datetime
-from src.core.base.BaseManagers import HealthChecker
+from src.core.base.base_managers import HealthChecker
 
 # Internal Imports
 __version__ = VERSION

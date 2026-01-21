@@ -58,7 +58,7 @@ class Scheduler(ABC):
     
     def has_requests(self) -> bool:
         """Check if there are unfinished requests."""
-        return len(self.waiting) > 0 or len(self.running) > 0
+        return bool(self.waiting) or bool(self.running)
     
     def has_unfinished_requests(self) -> bool:
         """Alias for has_requests."""
@@ -66,7 +66,7 @@ class Scheduler(ABC):
     
     def has_finished_requests(self) -> bool:
         """Check if there are finished requests to report."""
-        return len(self.finished_req_ids) > 0
+        return bool(self.finished_req_ids)
     
     def get_num_unfinished_requests(self) -> int:
         """Get count of unfinished requests."""

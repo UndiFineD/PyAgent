@@ -4,8 +4,8 @@ from pathlib import Path
 
 # Add project root to sys.path
 
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry
-from src.core.base.Version import SDK_VERSION
+from src.infrastructure.fleet.agent_registry import AgentRegistry
+from src.core.base.version import SDK_VERSION
 
 
 def test_community_loading_workflow() -> None:
@@ -32,9 +32,9 @@ def test_community_loading_workflow() -> None:
     # Simulate 'fixing' it
 
     agents.registry_configs["HealTest"] = (
-        "src.logic.agents.development.CoderAgent",
+        "src.logic.agents.development.coder_agent",
         "CoderAgent",
-        "src/coder/agents/CoderAgent.py",
+        "src\coder\agents\CoderAgent.py",
     )
 
     # Trigger self-healing try_reload

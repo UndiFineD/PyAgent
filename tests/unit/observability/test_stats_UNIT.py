@@ -509,9 +509,9 @@ class TestPathLibUsage(unittest.TestCase):
 
         # Simulated file system
         files: List[Path] = [
-            Path("src / main.py"),
-            Path("src / utils.py"),
-            Path("tests / test.py"),
+            Path("src \ main.py"),
+            Path("src \ utils.py"),
+            Path("tests \ test.py"),
         ]
         py_files: List[Path] = [f for f in files if f.suffix == ".py"]
 

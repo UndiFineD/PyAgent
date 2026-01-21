@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import re
 from pathlib import Path
@@ -130,7 +130,7 @@ def main() -> None:
     print("Step 3: Applying specific class fixes...")
 
     # backend/CircuitBreaker.py
-    cb_path = Path("src/backend/CircuitBreaker.py")
+    cb_path = Path("src\backend\CircuitBreaker.py")
     if cb_path.exists():
         with open(cb_path, encoding="utf-8") as f:
             c = f.read()
@@ -148,10 +148,10 @@ def main() -> None:
                 f.write(c)
 
     # Remove blocking src/agent.py
-    agent_py = Path("src/agent.py")
+    agent_py = Path("src\agent.py")
     if agent_py.exists():
-        if not Path("src/agent_facade.py").exists():
-            agent_py.rename("src/agent_facade.py")
+        if not Path("src\agent_facade.py").exists():
+            agent_py.rename("src\agent_facade.py")
         else:
             agent_py.unlink()
 

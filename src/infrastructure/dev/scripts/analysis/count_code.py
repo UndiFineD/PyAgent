@@ -19,7 +19,7 @@ code statistics across the project.
 
 from __future__ import annotations
 from pathlib import Path
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import ast
 

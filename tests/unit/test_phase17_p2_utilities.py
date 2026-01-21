@@ -19,7 +19,7 @@ class TestLazyLoader:
     
     def test_lazy_import_basic(self):
         """Test basic lazy import."""
-        from src.core.base.utils.LazyLoader import lazy_import, LazyModule
+        from src.core.base.utils.lazy_loader import lazy_import, LazyModule
         
         # Lazy import json module
         json_mod = lazy_import('json')
@@ -33,7 +33,7 @@ class TestLazyLoader:
     
     def test_lazy_import_submodule(self):
         """Test lazy import of submodule."""
-        from src.core.base.utils.LazyLoader import lazy_import
+        from src.core.base.utils.lazy_loader import lazy_import
         
         # Import os.path lazily
         path_mod = lazy_import('os.path')
@@ -43,7 +43,7 @@ class TestLazyLoader:
     
     def test_optional_import_existing(self):
         """Test optional import of existing module."""
-        from src.core.base.utils.LazyLoader import optional_import
+        from src.core.base.utils.lazy_loader import optional_import
         
         # json exists - returns (module, True)
         json_mod, available = optional_import('json')
@@ -53,7 +53,7 @@ class TestLazyLoader:
     
     def test_optional_import_missing(self):
         """Test optional import of missing module."""
-        from src.core.base.utils.LazyLoader import optional_import
+        from src.core.base.utils.lazy_loader import optional_import
         
         # This module doesn't exist - returns (fallback, False)
         missing, available = optional_import('nonexistent_module_xyz_123')
@@ -62,7 +62,7 @@ class TestLazyLoader:
     
     def test_require_import_existing(self):
         """Test require import of existing module."""
-        from src.core.base.utils.LazyLoader import require_import
+        from src.core.base.utils.lazy_loader import require_import
         
         # json exists
         json_mod = require_import('json', 'pip install json')
@@ -70,7 +70,7 @@ class TestLazyLoader:
     
     def test_require_import_missing(self):
         """Test require import of missing module raises."""
-        from src.core.base.utils.LazyLoader import require_import
+        from src.core.base.utils.lazy_loader import require_import
         
         with pytest.raises(ImportError) as exc_info:
             require_import('nonexistent_module_xyz', 'pip install nonexistent')
@@ -79,7 +79,7 @@ class TestLazyLoader:
     
     def test_lazy_import_class(self):
         """Test LazyImport class load static method."""
-        from src.core.base.utils.LazyLoader import LazyImport
+        from src.core.base.utils.lazy_loader import LazyImport
         
         # Use the static method with module:attr spec
         OrderedDict = LazyImport.load('collections:OrderedDict')
@@ -89,7 +89,7 @@ class TestLazyLoader:
     
     def test_deferred_import_success(self):
         """Test DeferredImport context manager success."""
-        from src.core.base.utils.LazyLoader import DeferredImport
+        from src.core.base.utils.lazy_loader import DeferredImport
         
         with DeferredImport('json') as json_import:
             pass
@@ -100,7 +100,7 @@ class TestLazyLoader:
     
     def test_deferred_import_missing(self):
         """Test DeferredImport with missing module."""
-        from src.core.base.utils.LazyLoader import DeferredImport
+        from src.core.base.utils.lazy_loader import DeferredImport
         
         with DeferredImport('nonexistent_xyz_123') as missing_import:
             pass
@@ -115,7 +115,7 @@ class TestHashRegistry:
     
     def test_hash_sha256(self):
         """Test SHA256 hashing."""
-        from src.core.base.utils.HashRegistry import hash_sha256
+        from src.core.base.utils.hash_registry import hash_sha256
         
         result = hash_sha256(b"hello")
         expected = hashlib.sha256(b"hello").hexdigest()
@@ -123,7 +123,7 @@ class TestHashRegistry:
     
     def test_hash_md5(self):
         """Test MD5 hashing."""
-        from src.core.base.utils.HashRegistry import hash_md5
+        from src.core.base.utils.hash_registry import hash_md5
         
         result = hash_md5(b"hello")
         expected = hashlib.md5(b"hello", usedforsecurity=False).hexdigest()
@@ -131,7 +131,7 @@ class TestHashRegistry:
     
     def test_hash_fnv1a(self):
         """Test FNV-1a hashing."""
-        from src.core.base.utils.HashRegistry import hash_fnv1a
+        from src.core.base.utils.hash_registry import hash_fnv1a
         
         result = hash_fnv1a(b"hello")
         # FNV-1a is deterministic
@@ -140,7 +140,7 @@ class TestHashRegistry:
     
     def test_hash_xxhash64(self):
         """Test xxhash64 hashing."""
-        from src.core.base.utils.HashRegistry import hash_xxhash64
+        from src.core.base.utils.hash_registry import hash_xxhash64
         
         result = hash_xxhash64(b"hello")
         assert isinstance(result, str)
@@ -149,7 +149,7 @@ class TestHashRegistry:
     
     def test_safe_hash(self):
         """Test safe hash function."""
-        from src.core.base.utils.HashRegistry import safe_hash
+        from src.core.base.utils.hash_registry import safe_hash
         
         result = safe_hash(b"test data")
         assert isinstance(result, str)
@@ -158,7 +158,7 @@ class TestHashRegistry:
     
     def test_hash_algorithm_enum(self):
         """Test HashAlgorithm enum."""
-        from src.core.base.utils.HashRegistry import HashAlgorithm
+        from src.core.base.utils.hash_registry import HashAlgorithm
         
         # Enum uses auto() so values are integers, not strings
         assert HashAlgorithm.SHA256 is not None
@@ -167,7 +167,7 @@ class TestHashRegistry:
     
     def test_get_hash_fn(self):
         """Test getting hash function by algorithm."""
-        from src.core.base.utils.HashRegistry import get_hash_fn, HashAlgorithm
+        from src.core.base.utils.hash_registry import get_hash_fn, HashAlgorithm
         
         sha_fn = get_hash_fn(HashAlgorithm.SHA256)
         result = sha_fn(b"test")
@@ -176,7 +176,7 @@ class TestHashRegistry:
     
     def test_get_hash_fn_by_name(self):
         """Test getting hash function by name."""
-        from src.core.base.utils.HashRegistry import get_hash_fn_by_name
+        from src.core.base.utils.hash_registry import get_hash_fn_by_name
         
         sha_fn = get_hash_fn_by_name('sha256')
         result = sha_fn(b"test")
@@ -185,7 +185,7 @@ class TestHashRegistry:
     
     def test_hash_with(self):
         """Test hash_with convenience function."""
-        from src.core.base.utils.HashRegistry import hash_with
+        from src.core.base.utils.hash_registry import hash_with
         
         # hash_with uses string algorithm names
         result = hash_with(b"test", 'sha256')
@@ -194,7 +194,7 @@ class TestHashRegistry:
     
     def test_content_hasher_basic(self):
         """Test ContentHasher basic usage."""
-        from src.core.base.utils.HashRegistry import ContentHasher
+        from src.core.base.utils.hash_registry import ContentHasher
         
         # ContentHasher uses string algorithm names
         hasher = ContentHasher(algorithm='sha256')
@@ -204,7 +204,7 @@ class TestHashRegistry:
     
     def test_content_hasher_prefix(self):
         """Test ContentHasher with prefix."""
-        from src.core.base.utils.HashRegistry import ContentHasher
+        from src.core.base.utils.hash_registry import ContentHasher
         
         hasher = ContentHasher(algorithm='sha256', prefix="sha256")
         result = hasher.hash(b"content")
@@ -213,7 +213,7 @@ class TestHashRegistry:
     
     def test_content_hasher_truncate(self):
         """Test ContentHasher with truncation."""
-        from src.core.base.utils.HashRegistry import ContentHasher
+        from src.core.base.utils.hash_registry import ContentHasher
         
         hasher = ContentHasher(algorithm='sha256', truncate=8)
         result = hasher.hash(b"content")
@@ -223,7 +223,7 @@ class TestHashRegistry:
     
     def test_default_hasher(self):
         """Test default hasher instance."""
-        from src.core.base.utils.HashRegistry import default_hasher
+        from src.core.base.utils.hash_registry import default_hasher
         
         result = default_hasher.hash(b"test")
         assert isinstance(result, str)
@@ -232,7 +232,7 @@ class TestHashRegistry:
     
     def test_fast_hasher(self):
         """Test fast hasher instance."""
-        from src.core.base.utils.HashRegistry import fast_hasher
+        from src.core.base.utils.hash_registry import fast_hasher
         
         result = fast_hasher.hash(b"test")
         assert isinstance(result, str)
@@ -240,7 +240,7 @@ class TestHashRegistry:
     
     def test_cache_hasher(self):
         """Test cache hasher instance."""
-        from src.core.base.utils.HashRegistry import cache_hasher
+        from src.core.base.utils.hash_registry import cache_hasher
         
         result = cache_hasher.hash(b"test")
         assert isinstance(result, str)
@@ -250,7 +250,7 @@ class TestHashRegistry:
     
     def test_is_fips_mode(self):
         """Test FIPS mode detection."""
-        from src.core.base.utils.HashRegistry import is_fips_mode
+        from src.core.base.utils.hash_registry import is_fips_mode
         
         result = is_fips_mode()
         assert isinstance(result, bool)
@@ -261,7 +261,7 @@ class TestProfileDecorators:
     
     def test_timer_context(self):
         """Test timer context manager."""
-        from src.observability.profiling.ProfileDecorators import timer_context
+        from src.observability.profiling.profile_decorators import timer_context
         
         with timer_context("test_op") as timing:
             time.sleep(0.01)
@@ -272,7 +272,7 @@ class TestProfileDecorators:
     
     def test_timer_decorator(self, capsys):
         """Test timer decorator."""
-        from src.observability.profiling.ProfileDecorators import timer
+        from src.observability.profiling.profile_decorators import timer
         
         @timer("my_func")
         def slow_func():
@@ -287,7 +287,7 @@ class TestProfileDecorators:
     
     def test_cprofile_context(self):
         """Test cprofile context manager."""
-        from src.observability.profiling.ProfileDecorators import cprofile_context
+        from src.observability.profiling.profile_decorators import cprofile_context
         
         with cprofile_context(enabled=True) as result:
             sum(range(1000))
@@ -297,7 +297,7 @@ class TestProfileDecorators:
     
     def test_cprofile_context_disabled(self):
         """Test cprofile context when disabled."""
-        from src.observability.profiling.ProfileDecorators import cprofile_context
+        from src.observability.profiling.profile_decorators import cprofile_context
         
         with cprofile_context(enabled=False) as result:
             sum(range(1000))
@@ -307,7 +307,7 @@ class TestProfileDecorators:
     
     def test_cprofile_decorator(self):
         """Test cprofile decorator."""
-        from src.observability.profiling.ProfileDecorators import cprofile
+        from src.observability.profiling.profile_decorators import cprofile
         
         @cprofile(enabled=True, print_stats=False)
         def compute():
@@ -318,7 +318,7 @@ class TestProfileDecorators:
     
     def test_profile_result_summary(self):
         """Test ProfileResult summary generation."""
-        from src.observability.profiling.ProfileDecorators import ProfileResult
+        from src.observability.profiling.profile_decorators import ProfileResult
         
         result = ProfileResult(
             name='test',
@@ -334,7 +334,7 @@ class TestProfileDecorators:
     
     def test_profile_accumulator(self):
         """Test ProfileAccumulator."""
-        from src.observability.profiling.ProfileDecorators import ProfileAccumulator
+        from src.observability.profiling.profile_decorators import ProfileAccumulator
         
         acc = ProfileAccumulator()
         
@@ -353,7 +353,7 @@ class TestProfileDecorators:
     
     def test_global_track_decorator(self):
         """Test global track decorator."""
-        from src.observability.profiling.ProfileDecorators import (
+        from src.observability.profiling.profile_decorators import (
             track, get_profile_report, reset_profile_data
         )
         
@@ -379,7 +379,7 @@ class TestHashPerformance:
     
     def test_hash_speed_comparison(self):
         """Compare speed of different hash algorithms."""
-        from src.core.base.utils.HashRegistry import (
+        from src.core.base.utils.hash_registry import (
             hash_sha256, hash_md5, hash_xxhash64, hash_fnv1a
         )
         

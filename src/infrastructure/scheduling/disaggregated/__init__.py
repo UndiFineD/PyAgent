@@ -16,7 +16,8 @@ from .selectors import (
     HashSelector
 )
 from .scheduler import DisaggregatedScheduler
-from .factory import SchedulerFactory
+from .orchestrator import ProxyOrchestrator
+from .factory import SchedulerFactory, create_dcp_scheduler
 
 __all__ = [
     "InstanceRole",

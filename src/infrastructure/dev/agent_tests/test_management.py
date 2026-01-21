@@ -16,7 +16,7 @@
 """Test management and baseline utilities."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
@@ -355,7 +355,7 @@ class ContractValidator:
                 errors.append("body_type_mismatch")
 
         return ContractValidator.ValidationResult(
-            valid=(len(errors) == 0), errors=errors
+            valid=not errors, errors=errors
         )
 
 

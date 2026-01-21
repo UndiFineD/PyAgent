@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_stats.py"""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from src.observability.stats.observability_core import Alert
 from src.observability.stats.observability_core import AlertSeverity
 from src.observability.stats.observability_core import Metric
@@ -33,7 +33,7 @@ import csv
 import hashlib
 import json
 import logging
-from src.observability.StructuredLogger import StructuredLogger
+from src.observability.structured_logger import StructuredLogger
 import zlib
 
 __version__ = VERSION

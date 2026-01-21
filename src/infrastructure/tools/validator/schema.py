@@ -49,7 +49,7 @@ def validate_tool_call(
             if key not in properties:
                 errors.append(f"Unknown parameter: {key}")
     
-    return len(errors) == 0, errors
+    return not errors, errors
 
 
 def validate_tool_schema(schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
@@ -78,7 +78,7 @@ def validate_tool_schema(schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
             if "required" in params and not isinstance(params["required"], list):
                 errors.append("'parameters.required' must be a list")
     
-    return len(errors) == 0, errors
+    return not errors, errors
 
 
 def validate_argument_type(

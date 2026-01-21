@@ -5,7 +5,7 @@ Network Utilities Package - Phase 20
 Network operation utilities including IP detection and port management.
 """
 
-from .NetworkUtils import (
+from .network_utils import (
     # IP Detection
     get_ip,
     get_loopback_ip,
@@ -43,7 +43,7 @@ from .NetworkUtils import (
     get_network_interfaces,
     get_primary_interface,
 )
-from .LANDiscovery import LANDiscovery, PeerInfo
+from .lan_discovery import LANDiscovery, PeerInfo
 
 __all__ = [
     "get_ip",

@@ -13,7 +13,7 @@ Beyond vLLM:
 - Multi-stream dispatch
 """
 
-from .CUDAGraphManager import (
+from .cuda_graph_manager import (
     CUDAGraphMode,
     BatchDescriptor,
     CUDAGraphEntry,
@@ -26,7 +26,7 @@ from .CUDAGraphManager import (
     get_cudagraph_sizes,
 )
 
-from .UBatchProcessor import (
+from .u_batch_processor import (
     UBatchState,
     UBatchSlice,
     UBatchContext,
@@ -38,7 +38,7 @@ from .UBatchProcessor import (
     make_ubatch_contexts,
 )
 
-from .CudagraphDispatcher import (
+from .cudagraph_dispatcher import (
     DispatchMode,
     DispatchKey,
     DispatchStats,
@@ -53,7 +53,7 @@ from .CudagraphDispatcher import (
     get_padded_key,
 )
 
-from .InputBufferManager import (
+from .input_buffer_manager import (
     BufferState,
     BufferSpec,
     BufferEntry,

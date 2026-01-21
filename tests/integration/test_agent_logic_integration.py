@@ -6,7 +6,7 @@ from typing import List
 import time
 from pathlib import Path
 import sys
-from src.logic.agents.swarm.OrchestratorAgent import OrchestratorAgent
+from src.logic.agents.swarm.orchestrator_agent import OrchestratorAgent
 
 # Try to import test utilities
 try:

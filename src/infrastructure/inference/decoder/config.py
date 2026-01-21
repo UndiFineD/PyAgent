@@ -60,7 +60,7 @@ class DraftProposal:
         return len(self.token_ids)
     
     def is_empty(self) -> bool:
-        return len(self.token_ids) == 0
+        return not self.token_ids
 
 
 @dataclass

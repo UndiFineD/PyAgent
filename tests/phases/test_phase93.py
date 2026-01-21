@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.security.ComplianceAuditAgent import ComplianceAuditAgent
+from src.logic.agents.security.compliance_audit_agent import ComplianceAuditAgent
 
 
 class TestComplianceAudit(unittest.TestCase):

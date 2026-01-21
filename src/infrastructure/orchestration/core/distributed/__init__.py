@@ -4,7 +4,7 @@
 Distributed coordination package.
 """
 
-from .Config import (
+from .config import (
     EngineIdentity,
     EngineState,
     LoadBalancingStrategy,
@@ -12,8 +12,8 @@ from .Config import (
     WorkerIdentity,
     WorkerState,
 )
-from .Coordinator import DPCoordinator
-from .Executor import (
+from .coordinator import DPCoordinator
+from .executor import (
     DistributedExecutor,
     MultiProcessExecutor,
     create_distributed_executor,
@@ -22,19 +22,20 @@ from .Executor import (
     get_tp_rank,
     get_tp_size,
 )
-from .Messages import (
+from .client import MPClient
+from .messages import (
     ControlMessage,
     CoordinatorMessage,
     MetricsMessage,
     RequestMessage,
     ResponseMessage,
 )
-from .Sync import (
+from .sync import (
     DistributedSyncProvider,
     NixlSyncProvider,
     TCPSyncProvider,
 )
-from .Worker import BaseWorker, WorkerProcess
+from .worker import BaseWorker, WorkerProcess
 
 __all__ = [
     "EngineIdentity",
@@ -61,4 +62,5 @@ __all__ = [
     "TCPSyncProvider",
     "BaseWorker",
     "WorkerProcess",
+    "MPClient",
 ]

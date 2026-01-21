@@ -1,4 +1,5 @@
 # Strategic Improvement Directives (Phase 50)
+# This file (docs/prompt/prompt.txt) is the primary source for most prompting logic.
 # Priority: CRITICAL | Status: EVOLUTION PHASE 50 - TALON & AUTOMATION ✅ RESEARCH COMPLETE | 🚧 IMPLEMENTING
 # Rust Functions: 532 | Test Coverage: ~3064+ tests passing
 @focus: ["src/infrastructure/speculative_v2", "src/maintenance", "src/infrastructure/cloud"]

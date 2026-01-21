@@ -5,7 +5,7 @@ Extension Registry Package - Phase 20
 Plugin system for managing extensible component registries.
 """
 
-from .ExtensionRegistry import (
+from .extension_registry import (
     ExtensionManager,
     TypedExtensionManager,
     MultiExtensionManager,

@@ -8,14 +8,14 @@ Phase 33 modules:
 - NCCLCommunicator: NCCL collective operations
 """
 
-from .TensorParallelGroup import (
+from .tensor_parallel_group import (
     GroupCoordinator,
     ParallelConfig,
     ParallelMode,
     RankInfo,
     TensorParallelGroup,
 )
-from .NCCLCommunicator import (
+from .nccl_communicator import (
     CustomAllReduce,
     NCCLCommunicator,
     NCCLConfig,

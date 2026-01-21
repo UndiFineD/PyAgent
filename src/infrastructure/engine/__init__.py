@@ -15,7 +15,7 @@ Phase 30 additions:
 - EngineCoreClient: Engine communication clients
 """
 
-from .RequestLifecycle import (
+from .request_lifecycle import (
     FinishReason,
     Request,
     RequestEvent,
@@ -24,14 +24,14 @@ from .RequestLifecycle import (
     RequestStatus,
     RequestTracker,
 )
-from .EngineLifecycle import (
+from .engine_lifecycle import (
     EngineConfig,
     EngineLifecycleManager,
     EngineState,
 )
 
 # Phase 30: Engine Core
-from .EngineCore import (
+from .engine_core import (
     RequestStatus as CoreRequestStatus,
     FinishReason as CoreFinishReason,
     Request as CoreRequest,
@@ -49,7 +49,7 @@ from .EngineCore import (
 )
 
 # Phase 30: Output Processor
-from .OutputProcessor import (
+from .output_processor import (
     EventType,
     RequestEvent as OutputRequestEvent,
     LoRARequest,
@@ -66,7 +66,7 @@ from .OutputProcessor import (
 )
 
 # Phase 30: Incremental Detokenizer
-from .IncrementalDetokenizer import (
+from .incremental_detokenizer import (
     StopMatch,
     check_stop_strings,
     check_stop_strings_rust,
@@ -81,7 +81,7 @@ from .IncrementalDetokenizer import (
 )
 
 # Phase 30: Prefix Cache Manager
-from .PrefixCacheManager import (
+from .prefix_cache_manager import (
     HashAlgorithm,
     BlockHash,
     CacheBlock,
@@ -97,7 +97,7 @@ from .PrefixCacheManager import (
 )
 
 # Phase 30: Engine Core Client
-from .EngineCoreClient import (
+from .engine_core_client import (
     RequestType,
     ClientConfig,
     EngineCoreClient,

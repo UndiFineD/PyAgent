@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.swarm.SwarmDeploymentAgent import SwarmDeploymentAgent
+from src.logic.agents.swarm.swarm_deployment_agent import SwarmDeploymentAgent
 
 
 class TestSwarmDeployment(unittest.TestCase):

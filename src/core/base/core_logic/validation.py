@@ -1,5 +1,5 @@
 # Copyright 2026 PyAgent Authors
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Any
 from src.core.base.models import AgentConfig
 
 try:
@@ -44,3 +44,11 @@ class ValidationCore:
             if pattern in content.lower():
                 pass
         return True
+
+    def set_strategy(self, strategy: Any) -> str:
+        """Validate and set strategy state (Logic)."""
+        if strategy is None:
+            return "ERROR: Strategy cannot be None"
+        if not hasattr(strategy, "execute"):
+            return "ERROR: Strategy must have 'execute' method"
+        return f"SUCCESS: Set to {strategy.__class__.__name__}"

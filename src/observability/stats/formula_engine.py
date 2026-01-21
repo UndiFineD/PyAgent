@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 import ast
+import contextlib
 import logging
 import operator
 import re
@@ -59,15 +60,13 @@ class FormulaEngineCore:
     def calculate_logic(self, formula: str, variables: dict[str, Any]) -> float:
         """Core logic for calculating a formula result."""
         if rc and "AVG(" not in formula:
-            try:
+            with contextlib.suppress(Exception):
                 float_vars = {
                     k: float(v)
                     for k, v in variables.items()
                     if isinstance(v, (int, float))
                 }
                 return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
-            except Exception:
-                pass
 
         if "AVG(" in formula:
             match = re.search(r"AVG\(\{(\w+)\}\)", formula)

@@ -53,7 +53,7 @@ class FCFSQueue(deque, RequestQueue):
         return original_len - len(self)
     
     def __bool__(self) -> bool:
-        return len(self) > 0
+        return bool(len(self))
     
     def __iter__(self) -> Iterator[T]:
         return iter(deque.__iter__(self))

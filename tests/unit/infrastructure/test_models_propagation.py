@@ -13,13 +13,13 @@ def load_agent_module() -> Any:
     if str(repo_root) not in sys.path:
         sys.path.insert(0, str(repo_root))
 
-    import src.core.base.BaseAgent as agent_module
+    import src.core.base.base_agent as agent_module
 
     return agent_module
 
 
 def test_model_env_injected(monkeypatch, tmp_path) -> None:
-    from src.core.base.BaseAgent import BaseAgent as Agent
+    from src.core.base.base_agent import BaseAgent as Agent
 
     # prepare agent with models mapping
     models = {

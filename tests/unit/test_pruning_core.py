@@ -2,7 +2,7 @@ import unittest
 from hypothesis import given, strategies as st
 import math
 import time
-from src.core.base.core.PruningCore import PruningCore, SynapticWeight
+from src.core.base.core.pruning_core import PruningCore, SynapticWeight
 
 
 class TestPruningCore(unittest.TestCase):

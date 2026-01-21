@@ -42,10 +42,10 @@ def test_coder_agent_keyword_prompt_generates_suggestions(
         return_value="x=1 # AI GENERATED CONTENT"
     )
     monkeypatch.setitem(sys.modules, "rust_core", mock_rust)
-    async def fake_improve_content(self, prompt: str) -> str:
+    async def fake_improve_content(self, prompt: str, **kwargs: Any) -> str:
         return "x=1 # AI GENERATED CONTENT"
 
-    import src.core.base.BaseAgent
+    import src.core.base.base_agent
 
     print(f"DEBUG: src.core.base.BaseAgent type: {type(src.core.base.BaseAgent)}")
     if isinstance(src.core.base.BaseAgent, type):
@@ -59,7 +59,7 @@ def test_coder_agent_keyword_prompt_generates_suggestions(
         )
 
     with agent_dir_on_path():
-        mod = load_agent_module("logic/agents/development/CodeGeneratorAgent.py")
+        mod = load_agent_module("logic/agents/development/code_generator_agent.py")
 
     target = tmp_path / "x.py"
     target.write_text("# initial", encoding="utf-8")

@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json
-from typing import Any, Callable, Dict, List, Optional, Sequence
+import contextlib
+from typing import Callable, Dict, List, Optional, Sequence
 import numpy as np
 from .base import StructuredOutputGrammar
 from .config import GrammarSpec
@@ -42,10 +43,9 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         return True
     
     def _is_partial_match(self, text: str) -> bool:
-        try:
+        with contextlib.suppress(Exception):
             return self._pattern.match(text) is not None
-        except Exception:
-            return False
+        return False
     
     def validate_tokens(self, tokens: Sequence[int]) -> int:
         temp_text = self._generated_text

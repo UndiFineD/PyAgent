@@ -6,11 +6,11 @@ from pathlib import Path
 
 # Add project root to sys.path
 
-from src.infrastructure.fleet.OrchestratorRegistry import (
+from src.infrastructure.fleet.orchestrator_registry import (
     LazyOrchestratorMap,
     OrchestratorRegistry,
 )
-from src.core.base.Version import SDK_VERSION
+from src.core.base.version import SDK_VERSION
 
 
 class MockFleet:
@@ -46,7 +46,7 @@ def test_orchestrator_workflow() -> None:
     # Simulate 'fixing' it by pointing to a real class (e.g. MemoryEngine)
 
     orc_map._configs["HealTest"] = (
-        "src.logic.agents.cognitive.context.engines.MemoryEngine",
+        "src.logic.agents.cognitive.context.engines.memory_engine",
         "MemoryEngine",
         False,
         "",
