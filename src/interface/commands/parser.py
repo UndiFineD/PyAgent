@@ -10,9 +10,9 @@ import logging
 from typing import Any, ClassVar
 
 from .base import (
-    CommandContext, 
-    CommandResult, 
-    ParsedCommand, 
+    CommandContext,
+    CommandResult,
+    ParsedCommand,
     ProcessedPrompt
 )
 from .registry import CommandRegistry
@@ -41,12 +41,12 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
         List of parsed commands with positions
     """
     commands = []
-    
+
     for match in COMMAND_PATTERN.finditer(prompt):
         cmd_name = match.group(1).lower()
         args_str = match.group(2) or ""
         args = args_str.strip().split() if args_str.strip() else []
-        
+
         commands.append(ParsedCommand(
             command=cmd_name,
             args=args,
@@ -54,7 +54,7 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
             end=match.end(),
             raw=match.group(0),
         ))
-    
+
     return commands
 
 
@@ -62,15 +62,15 @@ class CommandParser:
     """
     Slash command parser and executor for chat prompts.
     """
-    
+
     # Global registry for built-in commands
     _global_registry: ClassVar[CommandRegistry] = CommandRegistry()
-    
+
     # Process start time for uptime
     _start_time: ClassVar[float] = time.time()
-    
+
     _builtins_registered: ClassVar[bool] = False
-    
+
     def __init__(
         self,
         *,
@@ -80,26 +80,33 @@ class CommandParser:
     ) -> None:
         """
         Initialize CommandParser.
-        
+
         Args:
             registry: Custom command registry (uses global if None)
             prefix: Command prefix (default: "/")
             include_builtins: Whether to include built-in commands
         """
-        self.registry = registry or (self._global_registry if include_builtins else CommandRegistry())
+        self.registry = registry or (
+            self._global_registry if include_builtins else CommandRegistry()
+        )
         self.prefix = prefix
-        
+
         # Ensure builtins are registered
         if include_builtins and not CommandParser._builtins_registered:
             register_system_commands(self._global_registry, self._start_time)
             register_utility_commands(self._global_registry)
             CommandParser._builtins_registered = True
-    
+
     def parse(self, prompt: str) -> list[ParsedCommand]:
         """Parse commands from prompt without executing."""
         return parse_commands(prompt)
-    
-    def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
+
+    def execute(
+        self,
+        command: str,
+        args: list[str] | None = None,
+        **metadata: Any
+    ) -> CommandResult:
         """
         Execute a single command.
 
@@ -116,7 +123,9 @@ class CommandParser:
             return CommandResult.fail(f"Unknown command: {command}")
 
         if defn.requires_args and not args:
-            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")
+            return CommandResult.fail(
+                f"Command /{command} requires arguments. Usage: {defn.usage}"
+            )
 
         ctx = CommandContext(
             command=command,
@@ -126,11 +135,10 @@ class CommandParser:
 
         try:
             return defn.handler(ctx)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logger.exception("Failed to execute command /%s", command)
             return CommandResult.fail(str(e))
 
-    
     def process(
         self,
         prompt: str,
@@ -144,7 +152,7 @@ class CommandParser:
         """
         parsed = self.parse(prompt)
         results: list[tuple[ParsedCommand, CommandResult]] = []
-        
+
         for cmd in parsed:
             ctx = CommandContext(
                 command=cmd.command,
@@ -153,20 +161,19 @@ class CommandParser:
                 prompt=prompt,
                 metadata=metadata,
             )
-            
+
             defn = self.registry.get(cmd.command)
             if defn:
                 try:
                     result = defn.handler(ctx)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught
                     logger.exception("Error in command handler for /%s", cmd.command)
                     result = CommandResult.fail(str(e))
             else:
                 result = CommandResult.fail(f"Unknown command: {cmd.command}")
 
-            
             results.append((cmd, result))
-        
+
         # Build processed prompt
         if not results:
             processed = prompt
@@ -184,21 +191,21 @@ class CommandParser:
                 processed = processed[:cmd.start] + replacement + processed[cmd.end:]
         else:
             processed = prompt
-        
+
         return ProcessedPrompt(
             original=prompt,
             processed=processed.strip(),
             commands=parsed,
             results=results,
         )
-    
+
     def get_help(self, command: str | None = None) -> str:
         """Get help text for a command or all commands."""
         if command:
             defn = self.registry.get(command)
             if not defn:
                 return f"Unknown command: {command}"
-            
+
             lines = [f"/{defn.name}"]
             if defn.aliases:
                 lines[0] += f" (aliases: {', '.join('/' + a for a in defn.aliases)})"
@@ -207,7 +214,7 @@ class CommandParser:
             if defn.usage:
                 lines.append(f"  Usage: {defn.usage}")
             return "\n".join(lines)
-        
+
         # List all commands
         commands = self.registry.list_commands()
         lines = ["Available commands:"]

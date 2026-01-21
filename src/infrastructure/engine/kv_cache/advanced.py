@@ -54,7 +54,9 @@ class PredictiveKVCacheCoordinator(KVCacheCoordinator):
 
 class AsyncPrefetchCoordinator(KVCacheCoordinator):
     """Coordinator with async prefetch support."""
-    def __init__(self, config: CacheConfig, max_model_len: int, prefetch_queue_size: int = 100) -> None:
+    def __init__(
+        self, config: CacheConfig, max_model_len: int, prefetch_queue_size: int = 100
+    ) -> None:
         super().__init__(config, max_model_len)
         self.prefetch_queue_size = prefetch_queue_size
         self._prefetch_requests: List[Tuple[str, int]] = []
@@ -80,4 +82,3 @@ class AsyncPrefetchCoordinator(KVCacheCoordinator):
                     self._prefetch_requests.insert(0, (request_id, tokens))
                     break
         return processed
-

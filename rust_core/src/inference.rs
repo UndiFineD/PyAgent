@@ -2,6 +2,7 @@
 // Rust-accelerated helpers for speculative decoding, prefix caching, and KV cache management
 
 use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
 use pyo3::types::{PyDict, PyList, PyTuple};
 use std::collections::HashMap;
 
@@ -38,7 +39,7 @@ pub fn ngram_match_rust(
 /// Performs register-level decompression during attention matmul.
 /// Placeholder for phase 51 acceleration.
 #[pyfunction]
-#[pyo3(signature = (q, k_compressed, v_compressed, metadata_map, scale=None))]
+#[pyo3(signature = (q, _k_compressed, _v_compressed, _metadata_map, _scale=None))]
 pub fn fused_packkv_attention_rust(
     q: Vec<f32>,
     _k_compressed: Vec<u8>,
@@ -63,11 +64,11 @@ pub fn build_ngram_index_rust(
     let index = PyDict::new(py);
     
     if tokens.len() < n {
-        return Ok(index.to_object(py));
+        return Ok(index.into_any().unbind());
     }
     
     for i in 0..=tokens.len() - n {
-        let ngram = PyTuple::new(py, &tokens[i..i + n]);
+        let ngram = PyTuple::new(py, &tokens[i..i + n])?;
         let list = match index.get_item(&ngram)? {
             Some(obj) => obj.downcast_into::<PyList>()?,
             None => {
@@ -79,7 +80,7 @@ pub fn build_ngram_index_rust(
         list.append(i)?;
     }
     
-    Ok(index.to_object(py))
+    Ok(index.into_any().unbind())
 }
 
 /// Find continuation candidates after matching n-grams
@@ -7396,4 +7397,92 @@ pub fn tree_verification_paths_rust(
     }
     
     paths
+}
+
+pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(ngram_match_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(fused_packkv_attention_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(build_ngram_index_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(find_continuations_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(build_suffix_array_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(suffix_search_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_block_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_block_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(lru_evict_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(lfu_evict_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(optimize_block_copy_order_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(defragment_blocks_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(verify_draft_tokens_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(verify_draft_probabilistic_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_throughput_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(aggregate_stats_window_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(ema_update_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_memory_pressure_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(blocks_to_free_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(uva_copy_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_write_indices_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(detect_anomalies_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_cache_hit_rate_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(analyze_trend_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(aggregate_iteration_stats_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(rejection_sample_verify_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_top_k_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_top_p_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_topk_topp_sample_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_apply_penalties_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(advanced_ngram_propose_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(encoder_content_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(encoder_cache_lru_evict_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(kv_cache_metrics_aggregate_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_typical_sampling_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_min_p_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(gumbel_noise_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(cache_observe_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(histogram_observe_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(sliding_window_hit_rate_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(counter_increment_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(gauge_update_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(lora_stats_update_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(lora_latency_percentile_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(lora_adapter_lru_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(sliding_window_stats_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(eviction_breakdown_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(memory_pressure_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(pool_sequences_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(pooling_cursor_advance_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(attention_weighted_pool_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_top_k_batch_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(sparse_logprobs_store_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(logprobs_to_lists_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(task_priority_sort_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(worker_health_check_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(future_batch_complete_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(xgrammar_bitmask_fill_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(grammar_cache_key_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_update_indices_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(bad_words_match_ngram_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(logit_bias_apply_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(min_p_threshold_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(structural_tag_parse_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(regex_dfa_transition_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(bad_words_trie_build_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(bad_words_prefix_check_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_grammar_mask_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(template_extract_variables_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_schema_paths_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(eagle_top_k_candidates_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(eagle_verify_accept_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(eagle_extrapolate_hidden_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(eagle_prepare_inputs_padded_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(ngram_find_match_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(ngram_fuzzy_match_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(prompt_lookup_propose_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(spec_decode_build_cu_indices_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(spec_decode_build_logits_indices_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(spec_decode_verify_rejection_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(block_table_slot_mapping_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(arc_adaptation_delta_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(lru_eviction_priority_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(tree_verification_paths_rust, m)?)?;
+    Ok(())
 }
