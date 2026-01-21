@@ -19,7 +19,7 @@ Inspired by mem0 and BabyAGI patterns.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from pathlib import Path
 from typing import Any
 from src.logic.agents.cognitive.context.engines.global_context_core import (

@@ -4,7 +4,7 @@ Tests the error code mapping system before Rust conversion.
 """
 
 from hypothesis import given, strategies as st
-from src.core.base.core.error_mapping_core import ErrorMappingCore
+from src.core.base.logic.core.error_mapping_core import ErrorMappingCore
 
 
 class TestErrorMappingCoreBasics:

@@ -1,6 +1,6 @@
 import unittest
 from hypothesis import given, strategies as st
-from src.core.base.core.autonomy_core import AutonomyCore
+from src.core.base.logic.core.autonomy_core import AutonomyCore
 
 
 class TestAutonomyCore(unittest.TestCase):

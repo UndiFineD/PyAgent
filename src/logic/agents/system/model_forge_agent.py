@@ -18,15 +18,15 @@ Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 import asyncio
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 from src.logic.agents.system.core.model_registry_core import ModelRegistryCore
 
 __version__ = VERSION

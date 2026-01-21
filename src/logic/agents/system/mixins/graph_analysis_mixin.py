@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any
-from src.core.base.base_utilities import as_tool
+from src.core.base.common.base_utilities import as_tool
 
 if TYPE_CHECKING:
     from src.logic.agents.system.topological_navigator import TopologicalNavigator

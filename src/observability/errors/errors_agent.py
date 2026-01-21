@@ -16,14 +16,14 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .error_category import ErrorCategory
 from .error_cluster import ErrorCluster
 from .error_entry import ErrorEntry
 from .error_pattern import ErrorPattern
 from .error_severity import ErrorSeverity
 from .suppression_rule import SuppressionRule
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from datetime import datetime
 from typing import Any
 import hashlib

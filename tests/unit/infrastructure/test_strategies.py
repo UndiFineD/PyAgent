@@ -6,7 +6,7 @@ import os
 
 # Add src to path
 
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.logic.strategies.direct_strategy import DirectStrategy
 from src.logic.strategies.chain_of_thought_strategy import ChainOfThoughtStrategy
 from src.logic.strategies.reflexion_strategy import ReflexionStrategy

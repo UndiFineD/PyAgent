@@ -14,7 +14,7 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import time
 from typing import Any, TYPE_CHECKING

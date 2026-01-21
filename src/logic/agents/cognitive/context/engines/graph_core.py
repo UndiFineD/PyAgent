@@ -19,7 +19,7 @@ Pure logic for AST-based code relationship analysis and graph management.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import ast
 from typing import Any
 

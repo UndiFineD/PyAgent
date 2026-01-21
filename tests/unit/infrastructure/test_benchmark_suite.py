@@ -4,7 +4,7 @@
 import pytest
 import asyncio
 from unittest.mock import MagicMock
-from src.infrastructure.benchmarks.benchmark_suite import BenchmarkSuite, BenchmarkResult
+from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite, BenchmarkResult
 
 class TestBenchmarkSuite:
     def test_benchmark_result_derived_metrics(self):

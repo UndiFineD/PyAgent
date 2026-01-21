@@ -18,12 +18,12 @@ Test Utils: Common utilities for agent and backend unit tests.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 from pathlib import Path
 from contextlib import contextmanager
 from collections.abc import Iterator
-from src.infrastructure.dev.test_utils import (
+from src.infrastructure.services.dev.test_utils import (
     FileSystemIsolator,
     LogCapturer,
     MockAIBackend,

@@ -2,14 +2,14 @@
 """Test classes from test_agent_coder.py - core module."""
 
 from __future__ import annotations
-from src.core.base.types.accessibility_issue import AccessibilityIssue
-from src.core.base.types.accessibility_issue_type import AccessibilityIssueType
-from src.core.base.types.accessibility_report import AccessibilityReport
-from src.core.base.types.accessibility_severity import AccessibilitySeverity
-from src.core.base.types.aria_attribute import ARIAAttribute
-from src.core.base.types.color_contrast_result import ColorContrastResult
-from src.core.base.types.wcag_level import WCAGLevel
-from src.logic.agents.development.accessibility_agent import AccessibilityAgent
+from src.core.base.common.types.accessibility_issue import AccessibilityIssue
+from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
+from src.core.base.common.types.accessibility_report import AccessibilityReport
+from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
+from src.core.base.common.types.aria_attribute import ARIAAttribute
+from src.core.base.common.types.color_contrast_result import ColorContrastResult
+from src.core.base.common.types.wcag_level import WCAGLevel
+from src.logic.agents.specialists.accessibility_agent import AccessibilityAgent
 
 from _thread import LockType
 import unittest

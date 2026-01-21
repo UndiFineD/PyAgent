@@ -39,7 +39,7 @@ class TestRemoteNeuralSynapse:
     def test_synapse_import(self):
         """Test RemoteNeuralSynapse can be imported."""
         try:
-            from src.infrastructure.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
             assert RemoteNeuralSynapse is not None
         except ImportError as e:
             pytest.skip(f"RemoteNeuralSynapse not available: {e}")
@@ -47,7 +47,7 @@ class TestRemoteNeuralSynapse:
     def test_synapse_creation(self):
         """Test synapse can be created."""
         try:
-            from src.infrastructure.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
             
             fleet = MockFleet("test-fleet")
             synapse = RemoteNeuralSynapse(fleet, transport_port=5560)
@@ -60,7 +60,7 @@ class TestRemoteNeuralSynapse:
     async def test_synapse_start_stop(self):
         """Test synapse can start and stop."""
         try:
-            from src.infrastructure.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
             
             fleet = MockFleet("test-fleet")
             synapse = RemoteNeuralSynapse(fleet, transport_port=5561)
@@ -83,7 +83,7 @@ class TestTeleportationEngine:
     def test_engine_import(self):
         """Test TeleportationEngine can be imported."""
         try:
-            from src.infrastructure.voyager.teleportation_engine import TeleportationEngine
+            from src.infrastructure.swarm.voyager.teleportation_engine import TeleportationEngine
             assert TeleportationEngine is not None
         except ImportError as e:
             pytest.skip(f"TeleportationEngine not available: {e}")
@@ -91,7 +91,7 @@ class TestTeleportationEngine:
     def test_engine_creation(self):
         """Test engine can be created."""
         try:
-            from src.infrastructure.voyager.teleportation_engine import TeleportationEngine
+            from src.infrastructure.swarm.voyager.teleportation_engine import TeleportationEngine
             
             engine = TeleportationEngine()
             assert engine is not None
@@ -106,7 +106,7 @@ class TestP2PCommunication:
     async def test_ping_pong(self):
         """Test P2P ping/pong communication."""
         try:
-            from src.infrastructure.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
             
             # Setup two nodes
             fleet_a = MockFleet("Fleet-A")
@@ -150,7 +150,7 @@ class TestP2PCommunication:
     async def test_agent_teleportation(self):
         """Test agent teleportation between nodes."""
         try:
-            from src.infrastructure.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
             
             fleet_a = MockFleet("Fleet-A")
             synapse_a = RemoteNeuralSynapse(fleet_a, transport_port=5564)

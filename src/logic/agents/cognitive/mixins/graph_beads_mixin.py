@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 import logging
-from src.core.base.base_utilities import as_tool
+from src.core.base.common.base_utilities import as_tool
 
 class GraphBeadsMixin:
     """Mixin for Beads task graph logic."""

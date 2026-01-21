@@ -18,9 +18,9 @@ Quality scoring and refactoring suggestion logic for CoderCore.
 
 from __future__ import annotations
 from typing import List, Dict, Any
-from src.core.base.types.code_metrics import CodeMetrics
-from src.core.base.types.code_smell import CodeSmell
-from src.core.base.types.quality_score import QualityScore
+from src.core.base.common.types.code_metrics import CodeMetrics
+from src.core.base.common.types.code_smell import CodeSmell
+from src.core.base.common.types.quality_score import QualityScore
 
 class CoderQualityMixin:
     """Mixin for computing quality scores and refactoring suggestions."""

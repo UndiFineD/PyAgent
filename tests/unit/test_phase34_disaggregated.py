@@ -32,7 +32,7 @@ class TestKVTransferConnector:
 
     def test_kv_connector_role_enum(self):
         """Test KVConnectorRole enum values."""
-        from src.infrastructure.kv_transfer import KVConnectorRole
+        from src.infrastructure.storage.kv_transfer import KVConnectorRole
         
         assert KVConnectorRole.PRODUCER.value == 1
         assert KVConnectorRole.CONSUMER.value == 2
@@ -40,7 +40,7 @@ class TestKVTransferConnector:
 
     def test_kv_transfer_config_defaults(self):
         """Test KVTransferConfig default values."""
-        from src.infrastructure.kv_transfer import KVTransferConfig
+        from src.infrastructure.storage.kv_transfer import KVTransferConfig
         
         config = KVTransferConfig()
         assert config.kv_connector == "DecodeBenchConnector"
@@ -49,7 +49,7 @@ class TestKVTransferConnector:
 
     def test_kv_transfer_config_custom(self):
         """Test KVTransferConfig with custom values."""
-        from src.infrastructure.kv_transfer import KVTransferConfig
+        from src.infrastructure.storage.kv_transfer import KVTransferConfig
         
         config = KVTransferConfig(
             kv_connector="NixlConnector",
@@ -62,7 +62,7 @@ class TestKVTransferConnector:
 
     def test_kv_transfer_config_properties(self):
         """Test KVTransferConfig properties."""
-        from src.infrastructure.kv_transfer import KVTransferConfig, KVConnectorRole
+        from src.infrastructure.storage.kv_transfer import KVTransferConfig, KVConnectorRole
         
         # Producer role
         config = KVTransferConfig(kv_role=KVConnectorRole.PRODUCER)
@@ -76,14 +76,14 @@ class TestKVTransferConnector:
 
     def test_kv_connector_metadata(self):
         """Test KVConnectorMetadata creation."""
-        from src.infrastructure.kv_transfer import KVConnectorMetadata
+        from src.infrastructure.storage.kv_transfer import KVConnectorMetadata
         
         metadata = KVConnectorMetadata()
         assert isinstance(metadata.reqs_to_fill, dict)
 
     def test_kv_cache_blocks(self):
         """Test KVCacheBlocks tracking."""
-        from src.infrastructure.kv_transfer import KVCacheBlocks
+        from src.infrastructure.storage.kv_transfer import KVCacheBlocks
         
         blocks = KVCacheBlocks(num_blocks=1024, block_size=16)
         assert blocks.num_blocks == 1024
@@ -91,7 +91,7 @@ class TestKVTransferConnector:
 
     def test_decode_bench_connector_creation(self):
         """Test DecodeBenchConnector instantiation."""
-        from src.infrastructure.kv_transfer import (
+        from src.infrastructure.storage.kv_transfer import (
             DecodeBenchConnector,
             KVTransferConfig,
         )
@@ -102,7 +102,7 @@ class TestKVTransferConnector:
 
     def test_connector_registry(self):
         """Test connector registry functionality."""
-        from src.infrastructure.kv_transfer import (
+        from src.infrastructure.storage.kv_transfer import (
             get_kv_connector,
             list_kv_connectors,
             KVTransferConfig,
@@ -129,7 +129,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_rope_variant_enum(self):
         """Test RoPEVariant enum values."""
-        from src.infrastructure.position import RoPEVariant
+        from src.infrastructure.engine.position import RoPEVariant
         
         assert RoPEVariant.NEOX.value == 1
         assert RoPEVariant.GPTJ.value == 2
@@ -138,7 +138,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_rope_config_defaults(self):
         """Test RoPEConfig default values."""
-        from src.infrastructure.position import RoPEConfig
+        from src.infrastructure.engine.position import RoPEConfig
         
         config = RoPEConfig()
         assert config.head_dim == 64
@@ -147,7 +147,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_rope_config_custom(self):
         """Test RoPEConfig with custom values."""
-        from src.infrastructure.position import RoPEConfig, RoPEScalingType
+        from src.infrastructure.engine.position import RoPEConfig, RoPEScalingType
         
         config = RoPEConfig(
             head_dim=128,
@@ -160,7 +160,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_rope_config_variant_detection(self):
         """Test RoPEConfig automatic variant detection."""
-        from src.infrastructure.position import RoPEConfig, RoPEVariant
+        from src.infrastructure.engine.position import RoPEConfig, RoPEVariant
         
         # MROPE config
         mrope_config = RoPEConfig(mrope_sections=[2, 2, 2])
@@ -168,7 +168,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_neox_rotary_embedding_forward(self):
         """Test NeoxRotaryEmbedding creation and cache computation."""
-        from src.infrastructure.position import NeoxRotaryEmbedding, RoPEConfig
+        from src.infrastructure.engine.position import NeoxRotaryEmbedding, RoPEConfig
         
         config = RoPEConfig(head_dim=64, max_position_embeddings=128)
         rope = NeoxRotaryEmbedding(config)
@@ -183,7 +183,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_gptj_rotary_embedding_forward(self):
         """Test GptJRotaryEmbedding forward pass - requires PyTorch."""
-        from src.infrastructure.position import GptJRotaryEmbedding, RoPEConfig
+        from src.infrastructure.engine.position import GptJRotaryEmbedding, RoPEConfig
         
         config = RoPEConfig(head_dim=64, is_neox_style=False)
         rope = GptJRotaryEmbedding(config)
@@ -204,7 +204,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_mrope_section_config(self):
         """Test MRotaryEmbedding section configuration - requires PyTorch."""
-        from src.infrastructure.position import MRotaryEmbedding, RoPEConfig
+        from src.infrastructure.engine.position import MRotaryEmbedding, RoPEConfig
         
         try:
             config = RoPEConfig(
@@ -221,7 +221,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_xd_rope_dynamic_scaling(self):
         """Test XDRotaryEmbedding dynamic NTK scaling."""
-        from src.infrastructure.position import XDRotaryEmbedding, RoPEConfig
+        from src.infrastructure.engine.position import XDRotaryEmbedding, RoPEConfig
         
         config = RoPEConfig(
             head_dim=64,
@@ -236,7 +236,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_rotary_embedding_engine_creation(self):
         """Test RotaryEmbeddingEngine creation."""
-        from src.infrastructure.position import RotaryEmbeddingEngine, RoPEConfig
+        from src.infrastructure.engine.position import RotaryEmbeddingEngine, RoPEConfig
         
         config = RoPEConfig(head_dim=64)
         engine = RotaryEmbeddingEngine(config)
@@ -244,7 +244,7 @@ class TestRotaryEmbeddingEngine:
 
     def test_rotary_embedding_engine_precomputed_cache(self):
         """Test precomputed cos/sin cache."""
-        from src.infrastructure.position import RotaryEmbeddingEngine, RoPEConfig
+        from src.infrastructure.engine.position import RotaryEmbeddingEngine, RoPEConfig
         
         config = RoPEConfig(head_dim=64, max_position_embeddings=128)
         engine = RotaryEmbeddingEngine(config)
@@ -413,7 +413,7 @@ class TestDisaggregatedScheduler:
 
     def test_instance_role_enum(self):
         """Test InstanceRole enum values."""
-        from src.infrastructure.scheduling import InstanceRole
+        from src.infrastructure.engine.scheduling import InstanceRole
         
         assert InstanceRole.PREFILL.value == 1
         assert InstanceRole.DECODE.value == 2
@@ -421,7 +421,7 @@ class TestDisaggregatedScheduler:
 
     def test_scheduling_policy_enum(self):
         """Test SchedulingPolicy enum values."""
-        from src.infrastructure.scheduling import SchedulingPolicy
+        from src.infrastructure.engine.scheduling import SchedulingPolicy
         
         assert SchedulingPolicy.ROUND_ROBIN.value == 1
         assert SchedulingPolicy.LEAST_LOADED.value == 2
@@ -429,7 +429,7 @@ class TestDisaggregatedScheduler:
 
     def test_instance_info_creation(self):
         """Test InstanceInfo dataclass."""
-        from src.infrastructure.scheduling import InstanceInfo, InstanceRole
+        from src.infrastructure.engine.scheduling import InstanceInfo, InstanceRole
         
         info = InstanceInfo(
             instance_id="prefill_0",
@@ -443,7 +443,7 @@ class TestDisaggregatedScheduler:
 
     def test_instance_info_load_score(self):
         """Test InstanceInfo load scoring."""
-        from src.infrastructure.scheduling import InstanceInfo, InstanceRole
+        from src.infrastructure.engine.scheduling import InstanceInfo, InstanceRole
         
         info = InstanceInfo(
             instance_id="decode_0",
@@ -458,7 +458,7 @@ class TestDisaggregatedScheduler:
 
     def test_dcp_config_defaults(self):
         """Test DCPConfig default values."""
-        from src.infrastructure.scheduling import DCPConfig
+        from src.infrastructure.engine.scheduling import DCPConfig
         
         config = DCPConfig()
         assert config.enabled == False
@@ -466,7 +466,7 @@ class TestDisaggregatedScheduler:
 
     def test_kv_transfer_params(self):
         """Test KVTransferParams creation and serialization."""
-        from src.infrastructure.scheduling import KVTransferParams
+        from src.infrastructure.engine.scheduling import KVTransferParams
         
         params = KVTransferParams(
             do_remote_prefill=True,
@@ -486,7 +486,7 @@ class TestDisaggregatedScheduler:
 
     def test_scheduled_request(self):
         """Test ScheduledRequest dataclass."""
-        from src.infrastructure.scheduling import ScheduledRequest
+        from src.infrastructure.engine.scheduling import ScheduledRequest
         
         request = ScheduledRequest(
             request_id="req_001",
@@ -498,7 +498,7 @@ class TestDisaggregatedScheduler:
 
     def test_round_robin_selector(self):
         """Test RoundRobinSelector instance selection."""
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.engine.scheduling import (
             RoundRobinSelector,
             InstanceInfo,
             InstanceRole,
@@ -519,7 +519,7 @@ class TestDisaggregatedScheduler:
 
     def test_least_loaded_selector(self):
         """Test LeastLoadedSelector instance selection."""
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.engine.scheduling import (
             LeastLoadedSelector,
             InstanceInfo,
             InstanceRole,
@@ -538,7 +538,7 @@ class TestDisaggregatedScheduler:
 
     def test_disaggregated_scheduler_creation(self):
         """Test DisaggregatedScheduler instantiation."""
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.engine.scheduling import (
             DCPConfig,
             DisaggregatedScheduler,
             InstanceInfo,
@@ -562,7 +562,7 @@ class TestDisaggregatedScheduler:
 
     def test_schedule_prefill(self):
         """Test prefill scheduling."""
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.engine.scheduling import (
             DCPConfig,
             DisaggregatedScheduler,
             InstanceInfo,
@@ -590,7 +590,7 @@ class TestDisaggregatedScheduler:
 
     def test_schedule_decode(self):
         """Test decode scheduling after prefill."""
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.engine.scheduling import (
             DCPConfig,
             DisaggregatedScheduler,
             InstanceInfo,
@@ -624,7 +624,7 @@ class TestDisaggregatedScheduler:
 
     def test_proxy_orchestrator(self):
         """Test ProxyOrchestrator request flow."""
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.engine.scheduling import (
             DCPConfig,
             DisaggregatedScheduler,
             InstanceInfo,
@@ -650,7 +650,7 @@ class TestDisaggregatedScheduler:
 
     def test_create_dcp_scheduler_factory(self):
         """Test factory function for scheduler creation."""
-        from src.infrastructure.scheduling import create_dcp_scheduler
+        from src.infrastructure.engine.scheduling import create_dcp_scheduler
         
         scheduler = create_dcp_scheduler(
             prefill_urls=["http://localhost:8000"],
@@ -672,14 +672,14 @@ class TestTritonAttentionOps:
 
     def test_attention_backend_enum(self):
         """Test AttentionBackend enum values."""
-        from src.infrastructure.attention import TritonAttentionBackend
+        from src.infrastructure.engine.attention import TritonAttentionBackend
         
         assert TritonAttentionBackend.TRITON.value == 1
         assert TritonAttentionBackend.NAIVE.value == 5
 
     def test_precision_mode_enum(self):
         """Test PrecisionMode enum values."""
-        from src.infrastructure.attention import PrecisionMode
+        from src.infrastructure.engine.attention import PrecisionMode
         
         assert PrecisionMode.FP32.value == 1
         assert PrecisionMode.FP16.value == 2
@@ -687,7 +687,7 @@ class TestTritonAttentionOps:
 
     def test_attention_config_defaults(self):
         """Test AttentionConfig default values."""
-        from src.infrastructure.attention import AttentionConfig
+        from src.infrastructure.engine.attention import AttentionConfig
         
         config = AttentionConfig()
         assert config.num_heads == 32
@@ -697,14 +697,14 @@ class TestTritonAttentionOps:
 
     def test_attention_config_gqa_ratio(self):
         """Test GQA ratio computation."""
-        from src.infrastructure.attention import AttentionConfig
+        from src.infrastructure.engine.attention import AttentionConfig
         
         config = AttentionConfig(num_heads=32, num_kv_heads=8)
         assert config.num_queries_per_kv == 4
 
     def test_attention_metadata(self):
         """Test AttentionMetadata creation."""
-        from src.infrastructure.attention.triton_attention_ops import AttentionMetadata
+        from src.infrastructure.engine.attention.triton_attention_ops import AttentionMetadata
         
         metadata = AttentionMetadata(
             seq_lens=[64, 128, 32],
@@ -716,7 +716,7 @@ class TestTritonAttentionOps:
 
     def test_naive_attention_forward(self):
         """Test NaiveAttention creation and config."""
-        from src.infrastructure.attention.triton_attention_ops import (
+        from src.infrastructure.engine.attention.triton_attention_ops import (
             NaiveAttention, 
             AttentionConfig, 
         )
@@ -735,7 +735,7 @@ class TestTritonAttentionOps:
     def test_sliding_window_attention(self):
         """Test SlidingWindowAttention kernel."""
         pytest.importorskip("torch")
-        from src.infrastructure.attention import SlidingWindowAttention, AttentionConfig, AttentionMetadata
+        from src.infrastructure.engine.attention import SlidingWindowAttention, AttentionConfig, AttentionMetadata
         import torch
         
         config = AttentionConfig(
@@ -758,7 +758,7 @@ class TestTritonAttentionOps:
 
     def test_kv_split_config(self):
         """Test KVSplitConfig for long contexts."""
-        from src.infrastructure.attention import KVSplitConfig
+        from src.infrastructure.engine.attention import KVSplitConfig
         
         config = KVSplitConfig(num_splits=8, max_context_per_split=1024)
         assert config.num_splits == 8
@@ -766,7 +766,7 @@ class TestTritonAttentionOps:
 
     def test_triton_attention_ops_backend_selection(self):
         """Test TritonAttentionOps automatic backend selection."""
-        from src.infrastructure.attention import TritonAttentionOps, AttentionConfig
+        from src.infrastructure.engine.attention import TritonAttentionOps, AttentionConfig
         
         config = AttentionConfig()
         ops = TritonAttentionOps(config)
@@ -776,7 +776,7 @@ class TestTritonAttentionOps:
 
     def test_create_attention_ops_factory(self):
         """Test factory function for attention operations."""
-        from src.infrastructure.attention import create_attention_ops
+        from src.infrastructure.engine.attention import create_attention_ops
         
         ops = create_attention_ops(num_heads=16, head_dim=64)
         assert ops is not None
@@ -792,7 +792,7 @@ class TestBatchDCPWrapper:
 
     def test_batch_phase_enum(self):
         """Test BatchPhase enum values."""
-        from src.infrastructure.attention import BatchPhase
+        from src.infrastructure.engine.attention import BatchPhase
         
         assert BatchPhase.PREFILL.value == 1
         assert BatchPhase.DECODE.value == 2
@@ -800,14 +800,14 @@ class TestBatchDCPWrapper:
 
     def test_all_reduce_strategy_enum(self):
         """Test AllReduceStrategy enum values."""
-        from src.infrastructure.attention import AllReduceStrategy
+        from src.infrastructure.engine.attention import AllReduceStrategy
         
         assert AllReduceStrategy.RING.value == 1
         assert AllReduceStrategy.NCCL.value == 4
 
     def test_batch_request_creation(self):
         """Test BatchRequest dataclass."""
-        from src.infrastructure.attention import BatchRequest
+        from src.infrastructure.engine.attention import BatchRequest
         
         request = BatchRequest(
             request_id="req_001",
@@ -819,7 +819,7 @@ class TestBatchDCPWrapper:
 
     def test_batch_metadata(self):
         """Test BatchMetadata creation."""
-        from src.infrastructure.attention import BatchMetadata, BatchPhase
+        from src.infrastructure.engine.attention import BatchMetadata, BatchPhase
         
         metadata = BatchMetadata(
             batch_id="batch_001",
@@ -831,7 +831,7 @@ class TestBatchDCPWrapper:
 
     def test_dcp_plan_config(self):
         """Test DCPPlanConfig defaults."""
-        from src.infrastructure.attention import DCPPlanConfig
+        from src.infrastructure.engine.attention import DCPPlanConfig
         
         config = DCPPlanConfig()
         assert config.max_batch_size == 256
@@ -839,7 +839,7 @@ class TestBatchDCPWrapper:
 
     def test_execution_plan(self):
         """Test ExecutionPlan creation."""
-        from src.infrastructure.attention import ExecutionPlan, BatchPhase
+        from src.infrastructure.engine.attention import ExecutionPlan, BatchPhase
         
         plan = ExecutionPlan(
             batch_id="plan_001",
@@ -850,7 +850,7 @@ class TestBatchDCPWrapper:
 
     def test_batch_dcp_prefill_wrapper_plan(self):
         """Test BatchDCPPrefillWrapper planning."""
-        from src.infrastructure.attention import (
+        from src.infrastructure.engine.attention import (
             BatchDCPPrefillWrapper,
             BatchMetadata,
             BatchPhase,
@@ -873,7 +873,7 @@ class TestBatchDCPWrapper:
 
     def test_batch_dcp_prefill_wrapper_run(self):
         """Test BatchDCPPrefillWrapper execution."""
-        from src.infrastructure.attention import (
+        from src.infrastructure.engine.attention import (
             BatchDCPPrefillWrapper,
             BatchMetadata,
             BatchPhase,
@@ -897,7 +897,7 @@ class TestBatchDCPWrapper:
 
     def test_batch_dcp_decode_wrapper_plan(self):
         """Test BatchDCPDecodeWrapper planning."""
-        from src.infrastructure.attention import (
+        from src.infrastructure.engine.attention import (
             BatchDCPDecodeWrapper,
             BatchMetadata,
             BatchPhase,
@@ -919,7 +919,7 @@ class TestBatchDCPWrapper:
 
     def test_unified_batch_wrapper(self):
         """Test UnifiedBatchWrapper for mixed batches."""
-        from src.infrastructure.attention import (
+        from src.infrastructure.engine.attention import (
             UnifiedBatchWrapper,
             BatchRequest,
             DCPPlanConfig,
@@ -943,14 +943,14 @@ class TestBatchDCPWrapper:
 
     def test_create_prefill_wrapper_factory(self):
         """Test factory function for prefill wrapper."""
-        from src.infrastructure.attention import create_prefill_wrapper
+        from src.infrastructure.engine.attention import create_prefill_wrapper
         
         wrapper = create_prefill_wrapper(max_batch_size=128)
         assert wrapper.config.max_batch_size == 128
 
     def test_create_decode_wrapper_factory(self):
         """Test factory function for decode wrapper."""
-        from src.infrastructure.attention import create_decode_wrapper
+        from src.infrastructure.engine.attention import create_decode_wrapper
         
         wrapper = create_decode_wrapper(max_batch_size=256, world_size=4)
         assert wrapper.config.world_size == 4
@@ -1174,8 +1174,8 @@ class TestPhase34Integration:
 
     def test_kv_transfer_with_scheduling(self):
         """Test KV transfer integration with scheduling."""
-        from src.infrastructure.kv_transfer import KVTransferConfig
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.storage.kv_transfer import KVTransferConfig
+        from src.infrastructure.engine.scheduling import (
             DCPConfig,
             DisaggregatedScheduler,
             InstanceInfo,
@@ -1207,7 +1207,7 @@ class TestPhase34Integration:
 
     def test_speculation_with_rope(self):
         """Test speculative decoding with RoPE integration."""
-        from src.infrastructure.position import RotaryEmbeddingEngine, RoPEConfig
+        from src.infrastructure.engine.position import RotaryEmbeddingEngine, RoPEConfig
         from src.inference.speculation import SpeculativeEngine, SpeculativeConfig, SpecMethod
         
         # Configure RoPE
@@ -1224,7 +1224,7 @@ class TestPhase34Integration:
 
     def test_batch_wrapper_with_attention(self):
         """Test batch wrapper with attention operations."""
-        from src.infrastructure.attention import (
+        from src.infrastructure.engine.attention import (
             BatchDCPPrefillWrapper,
             BatchMetadata,
             BatchPhase,
@@ -1258,7 +1258,7 @@ class TestPhase34Integration:
     @pytest.mark.asyncio
     async def test_async_orchestrator_flow(self):
         """Test async orchestrator flow."""
-        from src.infrastructure.scheduling import (
+        from src.infrastructure.engine.scheduling import (
             DCPConfig,
             DisaggregatedScheduler,
             InstanceInfo,

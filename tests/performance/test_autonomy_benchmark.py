@@ -1,6 +1,6 @@
 import timeit
 import statistics
-from src.core.base.core.autonomy_core import AutonomyCore
+from src.core.base.logic.core.autonomy_core import AutonomyCore
 
 
 def benchmark_autonomy():

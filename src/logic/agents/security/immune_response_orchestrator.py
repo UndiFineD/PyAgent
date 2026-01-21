@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import time
 from typing import Any
 
@@ -43,7 +43,7 @@ class ImmuneResponseOrchestrator:
         }
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.backend.local_context_recorder import (
+            from src.infrastructure.compute.backend.local_context_recorder import (
                 LocalContextRecorder,
             )
 

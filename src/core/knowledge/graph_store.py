@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import hashlib
 from .storage_base import KnowledgeStore
 from typing import Any

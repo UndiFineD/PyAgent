@@ -23,7 +23,7 @@ class TestStructuredOutputManager:
     
     def test_grammar_type_enum(self):
         """Test GrammarType enum values."""
-        from src.infrastructure.structured_output import GrammarType
+        from src.infrastructure.engine.structured import GrammarType
         
         # Test enum members exist
         assert hasattr(GrammarType, 'JSON')
@@ -33,7 +33,7 @@ class TestStructuredOutputManager:
     
     def test_grammar_spec_creation(self):
         """Test GrammarSpec dataclass."""
-        from src.infrastructure.structured_output.structured_output_manager import (
+        from src.infrastructure.engine.structured.structured_output_manager import (
             GrammarSpec, GrammarType
         )
         
@@ -54,7 +54,7 @@ class TestStructuredOutputManager:
     
     def test_manager_initialization(self):
         """Test StructuredOutputManager initialization."""
-        from src.infrastructure.structured_output import structured_output_manager
+        from src.infrastructure.engine.structured import structured_output_manager
         
         manager = StructuredOutputManager(vocab_size=32000)
         
@@ -63,7 +63,7 @@ class TestStructuredOutputManager:
     
     def test_simple_regex_grammar(self):
         """Test SimpleRegexGrammar."""
-        from src.infrastructure.structured_output.structured_output_manager import (
+        from src.infrastructure.engine.structured.structured_output_manager import (
             SimpleRegexGrammar, GrammarSpec, GrammarType
         )
         
@@ -81,7 +81,7 @@ class TestStructuredOutputManager:
     
     def test_choice_grammar(self):
         """Test ChoiceGrammar."""
-        from src.infrastructure.structured_output.structured_output_manager import (
+        from src.infrastructure.engine.structured.structured_output_manager import (
             ChoiceGrammar, GrammarSpec, GrammarType
         )
         import json
@@ -103,7 +103,7 @@ class TestGrammarEngine:
     
     def test_fsm_state_dataclass(self):
         """Test FSMState dataclass."""
-        from src.infrastructure.structured_output.grammar_engine import FSMState
+        from src.infrastructure.engine.structured.grammar_engine import FSMState
         
         state = FSMState(
             state_id=0,
@@ -118,7 +118,7 @@ class TestGrammarEngine:
     
     def test_token_mask(self):
         """Test TokenMask operations."""
-        from src.infrastructure.structured_output.grammar_engine import TokenMask
+        from src.infrastructure.engine.structured.grammar_engine import TokenMask
         
         mask = TokenMask(vocab_size=100)
         
@@ -138,7 +138,7 @@ class TestGrammarEngine:
     
     def test_regex_grammar_build(self):
         """Test RegexGrammar FSM construction."""
-        from src.infrastructure.structured_output.grammar_engine import RegexGrammar
+        from src.infrastructure.engine.structured.grammar_engine import RegexGrammar
         
         grammar = RegexGrammar(vocab_size=128)
         fsm = grammar.build_fsm(r"ab+c")
@@ -148,7 +148,7 @@ class TestGrammarEngine:
     
     def test_json_schema_grammar(self):
         """Test JsonSchemaGrammar."""
-        from src.infrastructure.structured_output.grammar_engine import JsonSchemaGrammar
+        from src.infrastructure.engine.structured.grammar_engine import JsonSchemaGrammar
         import json
         
         schema = {
@@ -166,7 +166,7 @@ class TestGrammarEngine:
     
     def test_choice_grammar_trie(self):
         """Test ChoiceGrammar trie-based FSM."""
-        from src.infrastructure.structured_output.grammar_engine import ChoiceGrammar
+        from src.infrastructure.engine.structured.grammar_engine import ChoiceGrammar
         import json
         
         choices = ["apple", "banana", "cherry"]
@@ -183,7 +183,7 @@ class TestLogitProcessor:
     
     def test_constrained_processor(self):
         """Test ConstrainedLogitProcessor."""
-        from src.infrastructure.structured_output.logit_processor import (
+        from src.infrastructure.engine.structured.logit_processor import (
             ConstrainedLogitProcessor
         )
         
@@ -205,7 +205,7 @@ class TestLogitProcessor:
     
     def test_bitmask_processor(self):
         """Test BitmaskLogitProcessor."""
-        from src.infrastructure.structured_output.logit_processor import (
+        from src.infrastructure.engine.structured.logit_processor import (
             BitmaskLogitProcessor
         )
         
@@ -229,7 +229,7 @@ class TestLogitProcessor:
     
     def test_bias_processor(self):
         """Test BiasLogitProcessor."""
-        from src.infrastructure.structured_output.logit_processor import (
+        from src.infrastructure.engine.structured.logit_processor import (
             BiasLogitProcessor, LogitBias
         )
         
@@ -248,7 +248,7 @@ class TestLogitProcessor:
     
     def test_composite_processor(self):
         """Test CompositeLogitProcessor."""
-        from src.infrastructure.structured_output.logit_processor import (
+        from src.infrastructure.engine.structured.logit_processor import (
             CompositeLogitProcessor, TemperatureProcessor, TopKProcessor
         )
         
@@ -272,7 +272,7 @@ class TestLogitProcessor:
     
     def test_standard_processor_chain(self):
         """Test create_standard_processor_chain."""
-        from src.infrastructure.structured_output.logit_processor import (
+        from src.infrastructure.engine.structured.logit_processor import (
             create_standard_processor_chain
         )
         
@@ -296,7 +296,7 @@ class TestSpeculativeDecodingV2:
     
     def test_speculative_tree(self):
         """Test SpeculativeTree structure."""
-        from src.infrastructure.speculative_v2 import SpeculativeTree
+        from src.infrastructure.engine.speculative import SpeculativeTree
         
         tree = SpeculativeTree(root_position=10)
         
@@ -317,7 +317,7 @@ class TestSpeculativeDecodingV2:
     
     def test_ngram_proposer(self):
         """Test NgramProposer."""
-        from src.infrastructure.speculative_v2 import ngram_proposer
+        from src.infrastructure.engine.speculative import ngram_proposer
         
         proposer = NgramProposer(
             vocab_size=1000,
@@ -335,7 +335,7 @@ class TestSpeculativeDecodingV2:
     
     def test_medusa_proposer(self):
         """Test MedusaProposer."""
-        from src.infrastructure.speculative_v2 import MedusaProposer
+        from src.infrastructure.engine.speculative import MedusaProposer
         
         proposer = MedusaProposer(
             vocab_size=100,
@@ -351,7 +351,7 @@ class TestSpeculativeDecodingV2:
     
     def test_speculative_verifier_greedy(self):
         """Test SpeculativeVerifier with greedy method."""
-        from src.infrastructure.speculative_v2 import (
+        from src.infrastructure.engine.speculative import (
             SpeculativeVerifier, AcceptanceMethod
         )
         
@@ -374,7 +374,7 @@ class TestSpeculativeDecodingV2:
     
     def test_speculative_decoder(self):
         """Test SpeculativeDecoder."""
-        from src.infrastructure.speculative_v2 import (
+        from src.infrastructure.engine.speculative import (
             SpeculativeDecoder, NgramProposer, SpeculativeVerifier
         )
         
@@ -398,7 +398,7 @@ class TestSpeculativeDecodingV2:
     
     def test_factory_functions(self):
         """Test factory functions for decoders."""
-        from src.infrastructure.speculative_v2 import (
+        from src.infrastructure.engine.speculative import (
             create_ngram_decoder, create_medusa_decoder
         )
         
@@ -418,7 +418,7 @@ class TestTensorizer:
     
     def test_tensor_metadata(self):
         """Test TensorMetadata serialization."""
-        from src.infrastructure.tensorizer import TensorMetadata, TensorDtype
+        from src.infrastructure.compute.tensorizer import TensorMetadata, TensorDtype
         
         meta = TensorMetadata(
             name="layer.weight",
@@ -438,7 +438,7 @@ class TestTensorizer:
     
     def test_write_and_read_tensor(self):
         """Test writing and reading tensors."""
-        from src.infrastructure.tensorizer import (
+        from src.infrastructure.compute.tensorizer import (
             TensorizerWriter, TensorizerReader, TensorizerConfig
         )
         
@@ -467,7 +467,7 @@ class TestTensorizer:
     
     def test_compression(self):
         """Test compressed tensor serialization."""
-        from src.infrastructure.tensorizer import (
+        from src.infrastructure.compute.tensorizer import (
             TensorizerWriter, TensorizerReader, TensorizerConfig, CompressionType
         )
         
@@ -487,7 +487,7 @@ class TestTensorizer:
     
     def test_parallel_loading(self):
         """Test parallel tensor loading."""
-        from src.infrastructure.tensorizer import (
+        from src.infrastructure.compute.tensorizer import (
             TensorizerWriter, TensorizerReader, TensorizerConfig
         )
         
@@ -511,7 +511,7 @@ class TestTensorizer:
     
     def test_streaming_reader(self):
         """Test streaming tensor reader."""
-        from src.infrastructure.tensorizer import (
+        from src.infrastructure.compute.tensorizer import (
             TensorizerWriter, StreamingTensorizerReader
         )
         
@@ -538,7 +538,7 @@ class TestTensorizer:
     
     def test_utility_functions(self):
         """Test save_model and load_model utilities."""
-        from src.infrastructure.tensorizer import save_model, load_model, get_model_info
+        from src.infrastructure.compute.tensorizer import save_model, load_model, get_model_info
         
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir) / "utility.tensors"
@@ -713,10 +713,10 @@ class TestPhase39Integration:
     
     def test_structured_output_with_speculative(self):
         """Test structured output with speculative decoding."""
-        from src.infrastructure.structured_output import (
+        from src.infrastructure.engine.structured import (
             StructuredOutputManager, GrammarSpec, GrammarType
         )
-        from src.infrastructure.speculative_v2 import (
+        from src.infrastructure.engine.speculative import (
             SpeculativeDecoder, NgramProposer, SpeculativeVerifier
         )
         
@@ -746,7 +746,7 @@ class TestPhase39Integration:
     
     def test_tensorizer_with_large_model(self):
         """Test tensorizer with larger model simulation."""
-        from src.infrastructure.tensorizer import save_model, load_model
+        from src.infrastructure.compute.tensorizer import save_model, load_model
         
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir) / "large_model.tensors"

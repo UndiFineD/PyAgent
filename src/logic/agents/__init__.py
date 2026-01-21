@@ -15,7 +15,7 @@
 """Agent namespace containing specialized swarm agent implementations."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION as VERSION
 from .swarm.orchestrator_agent import OrchestratorAgent as Agent
 
 __all__ = ["Agent"]

@@ -8,7 +8,7 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 
 # Import from the package
-from src.infrastructure.prompt_renderer import (
+from src.infrastructure.engine.prompt_renderer import (
     TruncationStrategy,
     RenderResult,
     PromptRenderer,

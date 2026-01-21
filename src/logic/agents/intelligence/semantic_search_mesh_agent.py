@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import asyncio
 from typing import Any
 from src.logic.agents.intelligence.core.search_mesh_core import SearchMeshCore

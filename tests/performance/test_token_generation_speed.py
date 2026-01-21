@@ -37,14 +37,14 @@ import pytest
 
 # Core imports
 try:
-    from src.core.base.base_agent import BaseAgent
-    from src.logic.agents.development.benchmark_agent import BenchmarkAgent
-    from src.infrastructure.backend.vllm_advanced.streaming_engine import (
+    from src.core.base.lifecycle.base_agent import BaseAgent
+    from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
+    from src.infrastructure.compute.backend.vllm_advanced.streaming_engine import (
         StreamingVllmEngine,
         StreamingConfig,
         TokenStreamIterator,
     )
-    from src.infrastructure.tokenizer.tokenizer_registry import estimate_token_count
+    from src.infrastructure.engine.tokenization.tokenizer_registry import estimate_token_count
     
     HAS_PYAGENT = True
 except ImportError:

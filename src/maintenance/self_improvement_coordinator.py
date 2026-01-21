@@ -31,7 +31,7 @@ class SelfImprovementCoordinator:
         self._init_discovery()
 
         # Phase 50: Budget & Cloud integration
-        from src.infrastructure.cloud.budget import BudgetManager
+        from src.infrastructure.services.cloud.budget import BudgetManager
         self.budget = BudgetManager(
             daily_limit=25.0, # Target from cloud_integration.md
             monthly_limit=250.0
@@ -40,7 +40,7 @@ class SelfImprovementCoordinator:
     def _init_discovery(self):
         """Initializes LANDiscovery for peer finding."""
         try:
-            from src.infrastructure.network.lan_discovery import LANDiscovery
+            from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
             secret_key = os.getenv("PYAGENT_SECRET")
             if not secret_key:
                 self.logger.warning("PYAGENT_SECRET not set; LAN discovery disabled for security.")
@@ -101,7 +101,7 @@ class SelfImprovementCoordinator:
 
         # 2. Discover registered MCP servers
         try:
-            from src.infrastructure.mcp_tools.registry import MCPServerRegistry
+            from src.infrastructure.services.mcp.registry import MCPServerRegistry
             registry = MCPServerRegistry()
             for name, server in registry.servers.items():
                 all_nodes.append({
@@ -116,7 +116,7 @@ class SelfImprovementCoordinator:
             
         # 3. Check persistent ConnectivityManager status
         try:
-            from src.core.base.connectivity_manager import ConnectivityManager
+            from src.core.base.logic.connectivity_manager import ConnectivityManager
             # Ensure connectivity status is checked from the source
             status_file = self.workspace_root / "data" / "logs" / "connectivity_status.json"
             if status_file.exists():
@@ -144,8 +144,8 @@ class SelfImprovementCoordinator:
         Phase 317: Automated Self-Healing Trigger.
         Reads health stats and documentation context to trigger repairs.
         """
-        from src.infrastructure.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
-        from src.infrastructure.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
+        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
+        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
         
         # Initialize orchestrator (which now loads overrides from docs/prompt)
         orchestrator = SelfHealingOrchestrator(None) # type: ignore
@@ -269,7 +269,7 @@ class SelfImprovementCoordinator:
         
         try:
             if status == "PLANNED" or status == "PLANNING":
-                from src.infrastructure.orchestration.swarm.director_agent import DirectorAgent
+                from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
                 self.logger.info(f"Handing off to DirectorAgent: {title}")
                 agent = DirectorAgent(str(self.improvements_file))
                 

@@ -15,7 +15,7 @@
 from __future__ import annotations
 import ast
 import math
-from src.core.base.types.code_metrics import CodeMetrics
+from src.core.base.common.types.code_metrics import CodeMetrics
 
 class CoderMetricsMixin:
     """Mixin for CoderCore to handle complex metrics calculations."""

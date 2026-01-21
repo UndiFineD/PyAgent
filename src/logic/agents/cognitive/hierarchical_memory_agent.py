@@ -18,11 +18,11 @@ Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Arc
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from pathlib import Path
 from .mixins.memory_storage_mixin import MemoryStorageMixin
 from .mixins.memory_query_mixin import MemoryQueryMixin
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 __version__ = VERSION
 
@@ -52,7 +52,7 @@ class HierarchicalMemoryAgent(BaseAgent, MemoryStorageMixin, MemoryQueryMixin):
     # Logic delegated to mixins
 
 if __name__ == "__main__":
-    from src.core.base.base_utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(
         HierarchicalMemoryAgent,

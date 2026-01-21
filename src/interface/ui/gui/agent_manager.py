@@ -20,7 +20,7 @@
 """Agent management logic for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from typing import Any
 from .agent_column import AgentColumn
 

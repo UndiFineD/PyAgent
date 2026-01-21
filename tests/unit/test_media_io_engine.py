@@ -12,7 +12,7 @@ import numpy as np
 from pathlib import Path
 from typing import List
 
-from src.infrastructure.mediaio import (
+from src.infrastructure.services.mediaio import (
     MediaType,
     ImageFormat,
     VideoFormat,

@@ -15,7 +15,7 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION as VERSION
 from .auto_fix_suggester import AutoFixSuggester as AutoFixSuggester
 from .blame_info import BlameInfo as BlameInfo
 from .blame_tracker import BlameTracker as BlameTracker

@@ -16,9 +16,9 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types import localization_language
-from src.core.base.types import localized_entry
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.types import localization_language
+from src.core.base.common.types import localized_entry
 
 __version__ = VERSION
 

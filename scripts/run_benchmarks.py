@@ -15,7 +15,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.infrastructure.benchmarks.benchmark_suite import BenchmarkSuite
+from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite
 
 async def main():
     suite = BenchmarkSuite()

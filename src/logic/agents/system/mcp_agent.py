@@ -19,14 +19,14 @@ Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import json
 import asyncio
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
-from src.infrastructure.fleet.mcp_connector import MCPConnector
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
+from src.infrastructure.swarm.fleet.mcp_connector import MCPConnector
 
 __version__ = VERSION
 

@@ -13,9 +13,9 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from typing import Any
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION

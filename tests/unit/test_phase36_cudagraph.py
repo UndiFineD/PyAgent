@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Tuple
 from unittest.mock import MagicMock, patch
 
 # Import Phase 36 Python modules
-from src.infrastructure.cuda.cuda_graph_manager import (
+from src.infrastructure.compute.cuda.cuda_graph_manager import (
     CUDAGraphMode,
     BatchDescriptor,
     CUDAGraphEntry,
@@ -31,7 +31,7 @@ from src.infrastructure.cuda.cuda_graph_manager import (
     get_cudagraph_sizes,
 )
 
-from src.infrastructure.cuda.u_batch_processor import (
+from src.infrastructure.compute.cuda.u_batch_processor import (
     UBatchState,
     UBatchSlice,
     UBatchContext,
@@ -43,7 +43,7 @@ from src.infrastructure.cuda.u_batch_processor import (
     make_ubatch_contexts,
 )
 
-from src.infrastructure.cuda.cudagraph_dispatcher import (
+from src.infrastructure.compute.cuda.cudagraph_dispatcher import (
     DispatchMode,
     DispatchKey,
     DispatchStats,
@@ -56,7 +56,7 @@ from src.infrastructure.cuda.cudagraph_dispatcher import (
     get_padded_key,
 )
 
-from src.infrastructure.cuda.input_buffer_manager import (
+from src.infrastructure.compute.cuda.input_buffer_manager import (
     BufferState,
     BufferSpec,
     BufferEntry,
@@ -67,7 +67,7 @@ from src.infrastructure.cuda.input_buffer_manager import (
     create_input_buffer_manager,
 )
 
-from src.infrastructure.compilation.torch_compile_integration import (
+from src.infrastructure.compute.compilation.torch_compile_integration import (
     CompileMode,
     CompileBackend,
     CompileConfig,

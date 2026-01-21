@@ -8,7 +8,7 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 
 # Import from the package
-from src.infrastructure.conversation import (
+from src.infrastructure.engine.conversation import (
     AgenticContext,
     ContextConfig,
     ContextManager,

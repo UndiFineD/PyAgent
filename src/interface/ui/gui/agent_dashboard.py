@@ -20,7 +20,7 @@
 """Dashboard component for managing multiple agent columns."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from typing import Any
 import tkinter as tk
 from tkinter import ttk

@@ -19,7 +19,7 @@ OrchestratorCore: Pure logic for swarm coordination.
 from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, Set
-from src.core.base.agent_core import AgentCore
+from src.core.base.lifecycle.agent_core import AgentCore
 
 try:
     import rust_core as rc

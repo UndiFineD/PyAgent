@@ -18,7 +18,7 @@ from __future__ import annotations
 import logging
 import time
 from typing import Any
-from src.core.base.base_utilities import as_tool
+from src.core.base.common.base_utilities import as_tool
 
 class GraphMIRIXMixin:
     """Mixin for MIRIX 6-component memory logic."""

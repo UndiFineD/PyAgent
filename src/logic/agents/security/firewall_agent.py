@@ -17,8 +17,8 @@ import json
 import re
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.infrastructure.orchestration.signals.signal_registry import SignalRegistry
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
 
 try:
     import rust_core

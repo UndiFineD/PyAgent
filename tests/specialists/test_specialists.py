@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Add src to path
 
-from src.infrastructure.orchestration.swarm.director_agent import DirectorAgent
+from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
 from src.logic.agents.development.rust_agent import RustAgent
 from src.logic.agents.development.go_agent import GoAgent
 from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent

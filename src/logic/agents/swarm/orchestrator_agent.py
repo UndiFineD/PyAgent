@@ -7,9 +7,9 @@ import logging
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.version import VERSION
-from src.core.base.base_agent import BaseAgent
-from src.core.base.agent_command_handler import AgentCommandHandler
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.execution.agent_command_handler import AgentCommandHandler
 from .orchestrator_features import OrchestratorFeatures
 
 __version__ = VERSION

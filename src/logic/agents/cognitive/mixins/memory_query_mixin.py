@@ -4,7 +4,7 @@
 from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
-from src.core.base.base_utilities import as_tool
+from src.core.base.common.base_utilities import as_tool
 
 if TYPE_CHECKING:
     from src.logic.agents.cognitive.hierarchical_memory_agent import HierarchicalMemoryAgent

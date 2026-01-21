@@ -1,5 +1,5 @@
 import timeit
-from src.core.base.core.resilience_core import ResilienceCore
+from src.core.base.logic.core.resilience_core import ResilienceCore
 
 
 def benchmark_resilience():

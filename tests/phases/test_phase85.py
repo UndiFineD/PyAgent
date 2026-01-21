@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.development.tech_debt_agent import TechDebtAgent
+from src.logic.agents.analysis.tech_debt_agent import TechDebtAgent
 
 
 class TestTechDebt(unittest.TestCase):

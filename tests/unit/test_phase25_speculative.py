@@ -26,7 +26,7 @@ class TestSpeculativeDecoder:
 
     def test_speculative_config_defaults(self):
         """Test SpeculativeConfig default values."""
-        from src.infrastructure.inference.speculative_decoder import SpeculativeConfig
+        from src.infrastructure.engine.inference.speculative_decoder import SpeculativeConfig
         
         config = SpeculativeConfig()
         assert config.num_speculative_tokens == 5
@@ -35,7 +35,7 @@ class TestSpeculativeDecoder:
 
     def test_speculative_config_custom(self):
         """Test SpeculativeConfig custom values."""
-        from src.infrastructure.inference.speculative_decoder import (
+        from src.infrastructure.engine.inference.speculative_decoder import (
             SpeculativeConfig,
             SpecMethod,
         )
@@ -53,7 +53,7 @@ class TestSpeculativeDecoder:
 
     def test_speculative_config_should_disable(self):
         """Test SpeculativeConfig batch size disabling."""
-        from src.infrastructure.inference.speculative_decoder import SpeculativeConfig
+        from src.infrastructure.engine.inference.speculative_decoder import SpeculativeConfig
         
         config = SpeculativeConfig(disable_by_batch_size=32)
         assert config.should_disable(16) is False
@@ -62,7 +62,7 @@ class TestSpeculativeDecoder:
 
     def test_draft_proposal_dataclass(self):
         """Test DraftProposal dataclass."""
-        from src.infrastructure.inference.speculative_decoder import DraftProposal
+        from src.infrastructure.engine.inference.speculative_decoder import DraftProposal
         
         proposal = DraftProposal(
             request_id="req-123",
@@ -75,7 +75,7 @@ class TestSpeculativeDecoder:
 
     def test_draft_proposal_empty(self):
         """Test DraftProposal empty check."""
-        from src.infrastructure.inference.speculative_decoder import DraftProposal
+        from src.infrastructure.engine.inference.speculative_decoder import DraftProposal
         
         proposal = DraftProposal(request_id="req-456", token_ids=[])
         assert proposal.is_empty() is True
@@ -83,7 +83,7 @@ class TestSpeculativeDecoder:
 
     def test_verification_result_dataclass(self):
         """Test VerificationResult dataclass."""
-        from src.infrastructure.inference.speculative_decoder import VerificationResult
+        from src.infrastructure.engine.inference.speculative_decoder import VerificationResult
         
         result = VerificationResult(
             request_id="req-123",
@@ -100,7 +100,7 @@ class TestSpeculativeDecoder:
 
     def test_verification_result_all_accepted(self):
         """Test VerificationResult all accepted case."""
-        from src.infrastructure.inference.speculative_decoder import VerificationResult
+        from src.infrastructure.engine.inference.speculative_decoder import VerificationResult
         
         result = VerificationResult(
             request_id="req-123",
@@ -113,7 +113,7 @@ class TestSpeculativeDecoder:
 
     def test_spec_decoding_metrics(self):
         """Test SpecDecodingMetrics tracking."""
-        from src.infrastructure.inference.speculative_decoder import SpecDecodingMetrics
+        from src.infrastructure.engine.inference.speculative_decoder import SpecDecodingMetrics
         
         metrics = SpecDecodingMetrics.new(num_spec_tokens=5)
         metrics.observe_draft(
@@ -131,7 +131,7 @@ class TestSpeculativeDecoder:
 
     def test_spec_method_enum(self):
         """Test SpecMethod enumeration."""
-        from src.infrastructure.inference.speculative_decoder import SpecMethod
+        from src.infrastructure.engine.inference.speculative_decoder import SpecMethod
         
         assert SpecMethod.NGRAM.value == "ngram"
         assert SpecMethod.SUFFIX.value == "suffix"
@@ -149,7 +149,7 @@ class TestPrefixCache:
 
     def test_prefix_cache_config_defaults(self):
         """Test PrefixCacheConfig default values."""
-        from src.infrastructure.cache.prefix_cache import PrefixCacheConfig
+        from src.infrastructure.storage.cache.prefix_cache import PrefixCacheConfig
         
         config = PrefixCacheConfig()
         assert config.block_size == 16
@@ -158,7 +158,7 @@ class TestPrefixCache:
 
     def test_prefix_cache_config_custom(self):
         """Test PrefixCacheConfig custom values."""
-        from src.infrastructure.cache.prefix_cache import (
+        from src.infrastructure.storage.cache.prefix_cache import (
             PrefixCacheConfig,
             EvictionPolicy,
         )
@@ -176,7 +176,7 @@ class TestPrefixCache:
 
     def test_cache_block_creation(self):
         """Test CacheBlock creation."""
-        from src.infrastructure.cache.prefix_cache import CacheBlock
+        from src.infrastructure.storage.cache.prefix_cache import CacheBlock
         
         block = CacheBlock(
             block_id=1,
@@ -190,7 +190,7 @@ class TestPrefixCache:
 
     def test_cache_block_touch(self):
         """Test CacheBlock touch updates access time."""
-        from src.infrastructure.cache.prefix_cache import CacheBlock
+        from src.infrastructure.storage.cache.prefix_cache import CacheBlock
         
         block = CacheBlock(block_id=1, token_ids=(1, 2, 3, 4), block_hash="abc123")
         old_time = block.last_access
@@ -202,7 +202,7 @@ class TestPrefixCache:
 
     def test_cache_block_acquire_release(self):
         """Test CacheBlock reference counting."""
-        from src.infrastructure.cache.prefix_cache import CacheBlock
+        from src.infrastructure.storage.cache.prefix_cache import CacheBlock
         
         block = CacheBlock(block_id=1, token_ids=(1, 2, 3, 4), block_hash="abc123")
         assert block.ref_count == 1
@@ -220,7 +220,7 @@ class TestPrefixCache:
 
     def test_prefix_cache_stats(self):
         """Test PrefixCacheStats tracking."""
-        from src.infrastructure.cache.prefix_cache import PrefixCacheStats
+        from src.infrastructure.storage.cache.prefix_cache import PrefixCacheStats
         
         stats = PrefixCacheStats()
         stats.record(num_tokens=100, num_hits=75)
@@ -232,7 +232,7 @@ class TestPrefixCache:
 
     def test_prefix_cache_stats_reset(self):
         """Test PrefixCacheStats reset."""
-        from src.infrastructure.cache.prefix_cache import PrefixCacheStats
+        from src.infrastructure.storage.cache.prefix_cache import PrefixCacheStats
         
         stats = PrefixCacheStats()
         stats.record(num_tokens=100, num_hits=75)
@@ -244,7 +244,7 @@ class TestPrefixCache:
 
     def test_compute_block_hash(self):
         """Test compute_block_hash function."""
-        from src.infrastructure.cache.prefix_cache import compute_block_hash
+        from src.infrastructure.storage.cache.prefix_cache import compute_block_hash
         
         tokens = (1, 2, 3, 4)
         hash1 = compute_block_hash(tokens)
@@ -255,7 +255,7 @@ class TestPrefixCache:
 
     def test_compute_block_hash_different_tokens(self):
         """Test compute_block_hash with different tokens."""
-        from src.infrastructure.cache.prefix_cache import compute_block_hash
+        from src.infrastructure.storage.cache.prefix_cache import compute_block_hash
         
         hash1 = compute_block_hash((1, 2, 3, 4))
         hash2 = compute_block_hash((1, 2, 3, 5))
@@ -264,7 +264,7 @@ class TestPrefixCache:
 
     def test_eviction_policy_enum(self):
         """Test EvictionPolicy enumeration."""
-        from src.infrastructure.cache.prefix_cache import EvictionPolicy
+        from src.infrastructure.storage.cache.prefix_cache import EvictionPolicy
         
         assert EvictionPolicy.LRU.value == "lru"
         assert EvictionPolicy.LFU.value == "lfu"
@@ -281,7 +281,7 @@ class TestKVCacheManager:
 
     def test_kv_cache_config_creation(self):
         """Test KVCacheConfig creation with required args."""
-        from src.infrastructure.cache.kv_cache_manager import KVCacheConfig
+        from src.infrastructure.storage.cache.kv_cache_manager import KVCacheConfig
         
         config = KVCacheConfig(
             num_layers=32,
@@ -295,7 +295,7 @@ class TestKVCacheManager:
 
     def test_kv_cache_config_kv_size(self):
         """Test KVCacheConfig KV size calculation."""
-        from src.infrastructure.cache.kv_cache_manager import KVCacheConfig, DType
+        from src.infrastructure.storage.cache.kv_cache_manager import KVCacheConfig, DType
         
         config = KVCacheConfig(
             num_layers=2,
@@ -308,7 +308,7 @@ class TestKVCacheManager:
 
     def test_device_type_enum(self):
         """Test DeviceType enumeration."""
-        from src.infrastructure.cache.kv_cache_manager import DeviceType
+        from src.infrastructure.storage.cache.kv_cache_manager import DeviceType
         
         assert DeviceType.CPU.value == "cpu"
         assert DeviceType.CUDA.value == "cuda"
@@ -316,7 +316,7 @@ class TestKVCacheManager:
 
     def test_dtype_enum(self):
         """Test DType enumeration."""
-        from src.infrastructure.cache.kv_cache_manager import DType
+        from src.infrastructure.storage.cache.kv_cache_manager import DType
         
         assert DType.FLOAT16.value == "float16"
         assert DType.FLOAT32.value == "float32"
@@ -325,7 +325,7 @@ class TestKVCacheManager:
 
     def test_kv_cache_block_creation(self):
         """Test KVCacheBlock creation."""
-        from src.infrastructure.cache.kv_cache_manager import KVCacheBlock, DeviceType
+        from src.infrastructure.storage.cache.kv_cache_manager import KVCacheBlock, DeviceType
         
         block = KVCacheBlock(
             block_id=0,
@@ -340,7 +340,7 @@ class TestKVCacheManager:
 
     def test_kv_cache_block_allocate(self):
         """Test KVCacheBlock allocation."""
-        from src.infrastructure.cache.kv_cache_manager import KVCacheBlock, DeviceType
+        from src.infrastructure.storage.cache.kv_cache_manager import KVCacheBlock, DeviceType
         
         block = KVCacheBlock(
             block_id=0,
@@ -361,7 +361,7 @@ class TestKVCacheManager:
 
     def test_kv_cache_block_acquire_release(self):
         """Test KVCacheBlock reference counting."""
-        from src.infrastructure.cache.kv_cache_manager import KVCacheBlock, DeviceType
+        from src.infrastructure.storage.cache.kv_cache_manager import KVCacheBlock, DeviceType
         
         block = KVCacheBlock(block_id=0, layer_idx=0, device=DeviceType.CPU)
         assert block.ref_count == 0
@@ -375,7 +375,7 @@ class TestKVCacheManager:
 
     def test_kv_cache_block_free(self):
         """Test KVCacheBlock free."""
-        from src.infrastructure.cache.kv_cache_manager import KVCacheBlock, DeviceType
+        from src.infrastructure.storage.cache.kv_cache_manager import KVCacheBlock, DeviceType
         
         block = KVCacheBlock(block_id=0, layer_idx=0, device=DeviceType.CPU)
         block.allocate(num_heads=4, head_dim=64, block_size=16, dtype=np.float16)
@@ -390,7 +390,7 @@ class TestKVCacheManager:
 
     def test_kv_cache_blocks_collection(self):
         """Test KVCacheBlocks collection."""
-        from src.infrastructure.cache.kv_cache_manager import KVCacheBlocks
+        from src.infrastructure.storage.cache.kv_cache_manager import KVCacheBlocks
         
         blocks = KVCacheBlocks()
         assert blocks.num_blocks == 0
@@ -575,7 +575,7 @@ class TestPhase25Integration:
 
     def test_speculative_decoder_with_stats(self):
         """Test SpeculativeDecoder with stats tracking."""
-        from src.infrastructure.inference.speculative_decoder import (
+        from src.infrastructure.engine.inference.speculative_decoder import (
             SpeculativeConfig,
             SpecDecodingMetrics,
             DraftProposal,
@@ -610,7 +610,7 @@ class TestPhase25Integration:
 
     def test_prefix_cache_stats_tracking(self):
         """Test PrefixCache with stats tracking."""
-        from src.infrastructure.cache.prefix_cache import (
+        from src.infrastructure.storage.cache.prefix_cache import (
             PrefixCacheConfig,
             PrefixCacheStats,
             compute_block_hash,
@@ -636,7 +636,7 @@ class TestPhase25Integration:
 
     def test_kv_cache_block_lifecycle(self):
         """Test KVCacheBlock complete lifecycle."""
-        from src.infrastructure.cache.kv_cache_manager import (
+        from src.infrastructure.storage.cache.kv_cache_manager import (
             KVCacheBlock,
             DeviceType,
         )
@@ -668,7 +668,7 @@ class TestPhase25Integration:
             SpecDecodingStats,
             PerfStats,
         )
-        from src.infrastructure.cache.prefix_cache import PrefixCacheStats
+        from src.infrastructure.storage.cache.prefix_cache import PrefixCacheStats
         
         # Create comprehensive stats
         stats = SchedulerStats()

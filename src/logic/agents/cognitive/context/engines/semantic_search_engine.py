@@ -17,7 +17,7 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.utils.search_algorithm import SearchAlgorithm
 from src.logic.agents.cognitive.context.models.semantic_search_result import (
     SemanticSearchResult,

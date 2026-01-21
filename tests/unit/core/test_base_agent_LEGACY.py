@@ -105,10 +105,10 @@ def test_run_subagent_delegates_to_agent_backend(
         calls.append((description, prompt, original_content))
         return "OK"
 
-    import src.infrastructure.backend.execution_engine
+    import src.infrastructure.compute.backend.execution_engine
 
     monkeypatch.setattr(
-        src.infrastructure.backend.execution_engine,
+        src.infrastructure.compute.backend.execution_engine,
         "run_subagent",
         fake_backend_run_subagent,
     )
@@ -135,10 +135,10 @@ def test_run_subagent_falls_back_to_original_content_when_backend_returns_none(
     ) -> None:
         return None
 
-    import src.infrastructure.backend.execution_engine
+    import src.infrastructure.compute.backend.execution_engine
 
     monkeypatch.setattr(
-        src.infrastructure.backend.execution_engine,
+        src.infrastructure.compute.backend.execution_engine,
         "run_subagent",
         fake_backend_run_subagent,
     )
@@ -168,7 +168,7 @@ def test_run_subagent_uses_github_models_backend(
             "subprocess.run should not be called for github-models backend"
         )
 
-    import src.infrastructure.backend.execution_engine
+    import src.infrastructure.compute.backend.execution_engine
 
     monkeypatch.setattr(subprocess, "run", boom)
 
@@ -191,7 +191,7 @@ def test_run_subagent_uses_github_models_backend(
         return FakeResponse()
 
     monkeypatch.setattr(
-        src.infrastructure.backend.execution_engine.requests, "post", fake_post
+        src.infrastructure.compute.backend.execution_engine.requests, "post", fake_post
     )
     agent = base_agent_module.BaseAgent("x.md")
 
@@ -457,7 +457,7 @@ def test_import_fallback_chain_for_agent_backend(
     # Verify that the agent_backend can be imported from scripts / agent
     with agent_dir_on_path():
         try:
-            from src.infrastructure.backend import execution_engine as agent_backend
+            from src.infrastructure.compute.backend import execution_engine as agent_backend
 
             assert hasattr(agent_backend, "BaseAgent") or hasattr(
                 agent_backend, "llm_chat_via_github_models"

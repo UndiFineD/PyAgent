@@ -20,7 +20,7 @@
 """Dialog and interaction management for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from typing import Any

@@ -6,7 +6,7 @@ import asyncio
 
 # Add project root to path
 
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 async def run_phase39():

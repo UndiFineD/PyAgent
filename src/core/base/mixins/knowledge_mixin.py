@@ -2,7 +2,7 @@
 # Knowledge Mixin for BaseAgent
 from typing import Any
 from pathlib import Path
-from src.core.base.sharded_knowledge_core import ShardedKnowledgeCore
+from src.core.base.logic.sharded_knowledge_core import ShardedKnowledgeCore
 
 class KnowledgeMixin:
     """Handles knowledge engines, memory, sharded storage, and templates."""

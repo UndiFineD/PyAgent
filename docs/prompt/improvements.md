@@ -14,8 +14,8 @@
    - Completed Splits:
      - SlashCommands.py -> src/interface/commands/
      - StructuredOutputGrammar.py -> src/infrastructure/decoding/grammar/
-     - EagleProposer.py -> src/infrastructure/speculative_v2/eagle/
-     - SpecDecodeMetadataV2.py -> src/infrastructure/speculative_v2/spec_decode/
+     - EagleProposer.py -> src.infrastructure.engine.speculative/eagle/
+     - SpecDecodeMetadataV2.py -> src.infrastructure.engine.speculative/spec_decode/
      - ReasoningEngine.py -> src/infrastructure/reasoning/
      - ConversationContext.py -> src/infrastructure/conversation/context/
      - PlatformInterface.py -> src/infrastructure/platform/
@@ -39,7 +39,7 @@
 4. **TALON: Confidence-Aware Speculative Decoding**
    - Status: IMPLEMENTING (arXiv:2601.07353)
    - Goal: Integrate confidence thresholds into tree pruning logic
-   - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`. Added comprehensive research summary in `data/Research/2601.07353v1/`.
+   - Progress: Adaptive Tree core implemented in `src.infrastructure.engine.speculative/eagle/Tree.py`. Added comprehensive research summary in `data/Research/2601.07353v1/`.
 
 5. **KV Cache Optimization (KVzap & TableCache)**
    - Status: INTEGRATED (arXiv:2601.07891)

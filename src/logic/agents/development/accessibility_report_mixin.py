@@ -2,8 +2,8 @@
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
-from src.core.base.types.accessibility_report import AccessibilityReport
-from src.core.base.types.accessibility_severity import AccessibilitySeverity
+from src.core.base.common.types.accessibility_report import AccessibilityReport
+from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
 
 class AccessibilityReportMixin:
     """Mixin for generating accessibility reports."""

@@ -9,7 +9,7 @@ import pytest
 import asyncio
 from typing import List
 
-from src.infrastructure.reasoning import (
+from src.infrastructure.engine.reasoning import (
     ReasoningFormat,
     ToolCallFormat,
     ParseState,

@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from fastapi import FastAPI
 from fastapi_mcp import FastApiMCP
 from src.logic.agents.development.spec_tool_agent import SpecToolAgent
