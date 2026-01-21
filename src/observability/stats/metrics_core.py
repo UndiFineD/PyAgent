@@ -243,8 +243,6 @@ class DerivedMetricCalculator:
         """Recursively evaluate an AST node (pure calculation)."""
         if isinstance(node, ast.Constant):
             return float(node.value)
-        elif hasattr(ast, "Num") and isinstance(node, ast.Num):
-            return float(node.n)
         elif isinstance(node, ast.BinOp):
             return self.operators[type(node.op)](
                 self._eval_node(node.left), self._eval_node(node.right)
