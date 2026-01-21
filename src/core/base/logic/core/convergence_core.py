@@ -1,3 +1,7 @@
+"""
+Core logic for Fleet Convergence and Health Management.
+"""
+
 from __future__ import annotations
 from typing import Any
 
@@ -22,9 +26,10 @@ class ConvergenceCore:
         """
         if rc:
             try:
+                # pylint: disable=no-member
                 # The Rust version returns HashMap<String, PyObject>
                 return rc.verify_fleet_health(agent_reports)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         healthy_count = sum(1 for status in agent_reports.values() if status)
@@ -41,7 +46,7 @@ class ConvergenceCore:
             ],
         }
 
-    def generate_strategic_summary(self, phase_history: list[dict[str, Any]]) -> str:
+    def generate_strategic_summary(self, _phase_history: list[dict[str, Any]]) -> str:
         """
         Generates a strategic summary of gains since Phase 140.
         """

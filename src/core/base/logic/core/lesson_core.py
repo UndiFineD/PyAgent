@@ -1,3 +1,7 @@
+"""
+Core logic for Agent Learning and Shared Memory.
+"""
+
 from __future__ import annotations
 import hashlib
 from dataclasses import dataclass
@@ -34,9 +38,10 @@ class LessonCore:
         """Generates a stable hash for an error message (ignoring line numbers/paths)."""
         if HAS_RUST:
             try:
+                # pylint: disable=no-member
                 # Assuming rust_core has this, otherwise fallback
                 return rc.generate_failure_hash(error_msg)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         # Simple normalization: lower case and strip numbers
         normalized = "".join([c for c in error_msg.lower() if not c.isdigit()])
@@ -74,9 +79,9 @@ class LessonCore:
             with open(self.persistence_path, "w", encoding="utf-8") as f:
                 import json
                 json.dump(data, f, indent=2)
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             import logging
-            logging.error(f"Failed to save lessons: {e}")
+            logging.error("Failed to save lessons: %s", e)
 
     def load_lessons(self) -> None:
         """Loads lessons from disk."""
@@ -90,9 +95,9 @@ class LessonCore:
                 self.lessons = [
                     Lesson(**l) for l in data.get("lessons", [])
                 ]
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             import logging
-            logging.error(f"Failed to load lessons: {e}")
+            logging.error("Failed to load lessons: %s", e)
 
     def get_related_lessons(
         self, error_msg: str, all_lessons: list[Lesson]

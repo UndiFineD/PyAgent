@@ -2,6 +2,7 @@
 
 We use Powershell, do not generate bash scripts
 we do not have grep, but we have installed ripgrep
+max-line-length=120
 
 ## Architecture & Design Patterns
 PyAgent is a multi-agent swarm system optimized for autonomous code improvement.
