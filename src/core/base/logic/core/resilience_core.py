@@ -33,6 +33,7 @@ class ResilienceCore:
     """
 
     @staticmethod
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def calculate_backoff(
         failure_count: int,
         threshold: int,
@@ -48,7 +49,7 @@ class ResilienceCore:
         if rc:
             try:
                 # pylint: disable=no-member
-                # rc.calculate_backoff(failure_count, threshold, base_timeout, multiplier, max_timeout)
+                # rc.calculate_backoff(...)
                 # Rust version assumes jitter_mode is full for simplicity if not provided.
                 return rc.calculate_backoff(
                     failure_count, threshold, base_timeout, multiplier, max_timeout
@@ -65,13 +66,12 @@ class ResilienceCore:
         if jitter_mode == "full":
             # AWS style Full Jitter: random between 0 and exponential backoff
             return random.uniform(base_timeout / 2, backoff)
-        elif jitter_mode == "equal":
+        if jitter_mode == "equal":
             # Half of backoff + random half
             return (backoff / 2) + random.uniform(0, backoff / 2)
-        else:
-            # Legacy 10% jitter
-            jitter = backoff * 0.1 * random.uniform(-1, 1)
-            return max(base_timeout / 2, backoff + jitter)
+        # Legacy 10% jitter
+        jitter = backoff * 0.1 * random.uniform(-1, 1)
+        return max(base_timeout / 2, backoff + jitter)
 
     @staticmethod
     def should_attempt_recovery(
@@ -107,6 +107,7 @@ class ResilienceCore:
         if rc:
             try:
                 if hasattr(rc, "evaluate_state_transition"):
+                    # pylint: disable=no-member
                     return rc.evaluate_state_transition(  # type: ignore[attr-defined]
                         current_state,
                         success_count,
@@ -155,7 +156,7 @@ class ResilienceCore:
                 if new_state == "CLOSED":
                     return "CLOSED", 0, 0
                 return current_state, failure_count, new_success_count
-            elif current_state == "CLOSED":
+            if current_state == "CLOSED":
                 return "CLOSED", 0, 0
             elif current_state == "OPEN":
                 # Success in OPEN state implies recovery (e.g. via probe or forced call)

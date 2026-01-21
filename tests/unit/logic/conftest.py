@@ -141,6 +141,7 @@ def agent_module() -> Any:
 def _inject_from_module(target_mod: Any, module_path: str, attr_names: list[str]) -> None:
     """Safely imports attributes from a module and injects them into the target."""
     try:
+        # pylint: disable=import-outside-toplevel
         from importlib import import_module
         source_mod = import_module(module_path)
         for attr in attr_names:
@@ -153,6 +154,7 @@ def _inject_from_module(target_mod: Any, module_path: str, attr_names: list[str]
 def _inject_special_shims(mod: Any) -> None:
     """Injects complex shims (classes/methods) that require customization."""
     try:
+        # pylint: disable=import-outside-toplevel
         from src.core.base.logic.agent_plugin_base import AgentPluginBase
         if hasattr(AgentPluginBase, "shutdown"):
             AgentPluginBase.shutdown = lambda self: None
@@ -161,12 +163,14 @@ def _inject_special_shims(mod: Any) -> None:
         pass
 
     try:
+        # pylint: disable=import-outside-toplevel
         from src.core.base.common.models.base_models import ValidationRule as RealValidationRule
         mod.ValidationRule = _create_legacy_validation_rule_shim(RealValidationRule)
     except ImportError:
         pass
 
     try:
+        # pylint: disable=import-outside-toplevel
         from src.core.base.logic.circuit_breaker import CircuitBreaker as RealCircuitBreaker
         mod.CircuitBreaker = _create_legacy_circuit_breaker_shim(RealCircuitBreaker)
     except ImportError:
@@ -176,7 +180,10 @@ def _inject_special_shims(mod: Any) -> None:
 def _create_legacy_validation_rule_shim(_real_cls: Any) -> Any:
     """Creates a shim for ValidationRule that supports legacy arguments."""
     class TestValidationRule:
-        def __init__(self, name, pattern="", message="Validation failed", severity="error", **kwargs):
+        """Legacy shim for ValidationRule."""
+        def __init__(
+            self, name, pattern="", message="Validation failed", severity="error", **kwargs
+        ):
             self.name = name
             self.file_pattern = pattern or kwargs.get("file_pattern", "")
             self.pattern = self.file_pattern
@@ -191,6 +198,7 @@ def _create_legacy_validation_rule_shim(_real_cls: Any) -> Any:
 def _create_legacy_circuit_breaker_shim(real_cls: Any) -> Any:
     """Creates a shim for CircuitBreaker with mock fallback."""
     class TestCircuitBreaker(real_cls):
+        """Legacy shim for CircuitBreaker."""
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             if not hasattr(self.resilience_core, "update_state"):
@@ -201,6 +209,7 @@ def _create_legacy_circuit_breaker_shim(real_cls: Any) -> Any:
 def _inject_legacy_agent_wrapper(mod: Any) -> None:
     """Injects the LegacyAgentWrapper into the module if BaseAgent is present."""
     if hasattr(mod, "BaseAgent"):
+        # pylint: disable=import-outside-toplevel
         from tests.utils.legacy_support import create_legacy_agent_wrapper
         # Create wrapper that inherits from the current BaseAgent
         LegacyAgent = create_legacy_agent_wrapper(mod.BaseAgent)
@@ -212,7 +221,7 @@ def _inject_legacy_agent_wrapper(mod: Any) -> None:
 @pytest.fixture
 def agent(mod: Any, tmp_path: Path) -> Any:
     """Create an Agent instance for testing."""
-    Agent = mod.Agent
+    agent_cls = mod.Agent
     test_file = tmp_path / "test_agent.py"
     test_file.write_text("print('hello')\n")
-    return Agent([str(test_file)])
+    return agent_cls([str(test_file)])

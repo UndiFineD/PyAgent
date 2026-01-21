@@ -1,5 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
+Reasoning parsers for structured agent outputs.
+Supports XML, JSON, and Markdown reasoning blocks.
+"""
 
 from .models import ReasoningResult, StreamingReasoningState
 from .base import ReasoningParser

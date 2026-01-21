@@ -241,9 +241,8 @@ class DerivedMetricCalculator:
             return self.operators[type(node.op)](self._eval_node(node.operand))
         # Handle Name nodes (variable substitution)
         if isinstance(node, ast.Name):
-            # This requires context, but _eval_node in strict mode doesn't have it?
-            # DerivedMetricCalculator usually should handle substitution BEFORE parsing or pass context.
-            # If check 'register_derived' usage, it might be storing dependencies.
+            # DerivedMetricCalculator should handle substitution before parsing
+            # or pass context to this method.
             # IMPORTANT: To support calculation with context, we need a method that accepts values.
             raise ValueError(
                 f"Variable {node.id} cannot be evaluated without context in _eval_node."
@@ -485,7 +484,9 @@ class ABTestCore:
                     control_values, treatment_values
                 )  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught
-                logger.warning("Rust calculate_statistical_significance failed: %s. Falling back to Python.", e)
+                logger.warning(
+                    "Rust calculate_statistical_significance failed: %s. Using Python fallback.", e
+                )
 
         if not control_values or not treatment_values:
             return {"p_value": 1.0, "t_statistic": 0.0, "effect_size": 0.0}

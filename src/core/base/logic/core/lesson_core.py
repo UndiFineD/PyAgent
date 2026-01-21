@@ -4,6 +4,8 @@ Core logic for Agent Learning and Shared Memory.
 
 from __future__ import annotations
 import hashlib
+import json
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -77,10 +79,8 @@ class LessonCore:
                 ]
             }
             with open(self.persistence_path, "w", encoding="utf-8") as f:
-                import json
                 json.dump(data, f, indent=2)
         except Exception as e: # pylint: disable=broad-exception-caught
-            import logging
             logging.error("Failed to save lessons: %s", e)
 
     def load_lessons(self) -> None:
@@ -89,14 +89,12 @@ class LessonCore:
             return
         try:
             with open(self.persistence_path, "r", encoding="utf-8") as f:
-                import json
                 data = json.load(f)
                 self.known_failures = set(data.get("known_failures", []))
                 self.lessons = [
                     Lesson(**l) for l in data.get("lessons", [])
                 ]
         except Exception as e: # pylint: disable=broad-exception-caught
-            import logging
             logging.error("Failed to load lessons: %s", e)
 
     def get_related_lessons(
