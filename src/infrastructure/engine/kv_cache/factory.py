@@ -31,7 +31,5 @@ def create_kv_cache_coordinator(
             config, max_model_len,
             prefetch_queue_size=kwargs.get('prefetch_queue_size', 100),
         )
-    return KVCacheCoordinator(config, max_model_len)
 
-    else:
-        raise ValueError(f"Unknown coordinator type: {coordinator_type}")
+    return KVCacheCoordinator(config, max_model_len)

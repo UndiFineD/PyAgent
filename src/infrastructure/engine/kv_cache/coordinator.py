@@ -90,7 +90,7 @@ class KVCacheCoordinator:
         blocks_per_group = [tuple(manager.get_blocks(request_id)) for manager in self.managers]
         return KVCacheBlocks(tuple(blocks_per_group))
 
-    def get_compression_metadata(self, request_id: str) -> Dict[int, Dict[str, Any]]:
+    def get_compression_metadata(self, _request_id: str) -> Dict[int, Dict[str, Any]]:
         """Collect compression metadata from all managers supporting it."""
         metadata = {}
         for manager in self.managers:
@@ -100,7 +100,9 @@ class KVCacheCoordinator:
                 metadata.update(getattr(manager, "compression_metadata"))
         return metadata
 
-    def cache_blocks(self, request_id: str, block_hashes: List[BlockHash], group_id: int = 0) -> None:
+    def cache_blocks(
+        self, request_id: str, block_hashes: List[BlockHash], group_id: int = 0
+    ) -> None:
         """Associate hashes with blocks to enable future prefix caching hits."""
         blocks = self.managers[group_id].get_blocks(request_id)
         for block, hash_ in zip(blocks, block_hashes):
@@ -138,4 +140,3 @@ class KVCacheCoordinator:
                 'total_evictions': self.block_pool.total_evictions
             }
         }
-

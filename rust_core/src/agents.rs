@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
+use pyo3::wrap_pyfunction;
 use std::collections::HashMap;
 use sha2::{Sha256, Digest};
 
@@ -992,4 +993,38 @@ impl CodeQualityCore {
 
         Ok(issues)
     }
+}
+
+pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(calculate_synaptic_weight, m)?)?;
+    m.add_function(wrap_pyfunction!(enforce_vram_quota, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_vcg_auction, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_agreement_score, m)?)?;
+    m.add_function(wrap_pyfunction!(select_committee, m)?)?;
+    m.add_function(wrap_pyfunction!(get_required_quorum, m)?)?;
+    m.add_function(wrap_pyfunction!(detect_deviating_hashes, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_bid_priority_score, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_gpu_surcharge, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_consensus_winner, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_new_utility, m)?)?;
+    m.add_function(wrap_pyfunction!(filter_relevant_memories, m)?)?;
+    m.add_function(wrap_pyfunction!(create_episode_struct, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_heuristic_plan, m)?)?;
+    m.add_function(wrap_pyfunction!(execute_dcap_cycle, m)?)?;
+    m.add_function(wrap_pyfunction!(analyze_paper, m)?)?;
+    m.add_function(wrap_pyfunction!(draft_tool_code, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_failure_hash, m)?)?;
+    m.add_function(wrap_pyfunction!(evaluate_bypass, m)?)?;
+    m.add_function(wrap_pyfunction!(filter_relevant_insights, m)?)?;
+    m.add_function(wrap_pyfunction!(detect_cultural_issues, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_python_symbols, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_markdown_backlinks, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_graph_entities_regex, m)?)?;
+    m.add_function(wrap_pyfunction!(aggregate_search_results, m)?)?;
+
+    m.add_class::<CoderCore>()?;
+    m.add_class::<ToolDraftingCore>()?;
+    m.add_class::<WebCore>()?;
+    m.add_class::<CodeQualityCore>()?;
+    Ok(())
 }
