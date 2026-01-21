@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from src.core.base.common.models import ReasoningResult, StreamingReasoningState
+from .models import ReasoningResult, StreamingReasoningState
 from .base import ReasoningParser
 from .registry import ReasoningParserManager, reasoning_parser
-from src.core.base.common.utils import extract_reasoning, create_streaming_parser
+from .utils import extract_reasoning, create_streaming_parser
 from .implementations.xml import XMLReasoningParser
 from .implementations.json import JSONReasoningParser
 from .implementations.markdown import MarkdownReasoningParser
