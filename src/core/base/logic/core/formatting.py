@@ -1,7 +1,7 @@
+"""Core formatting logic for PyAgent."""
 # Copyright 2026 PyAgent Authors
 import re
 import difflib
-from typing import List
 
 try:
     import rust_core as rc
@@ -9,6 +9,7 @@ except ImportError:
     rc = None
 
 class FormattingCore:
+    """Handles logic for normalizing and diffing content."""
     def fix_markdown(self, content: str) -> str:
         """Pure logic to normalize markdown content."""
         lines = content.splitlines()
@@ -21,10 +22,11 @@ class FormattingCore:
 
     def normalize_response(self, response: str) -> str:
         """Normalize response text for consistency."""
-        if rc:
+        if rc and hasattr(rc, "normalize_response"):
             try:
+                # pylint: disable=no-member
                 return rc.normalize_response(response)
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         normalized = response.strip().replace("\r\n", "\n")
         return " ".join(normalized.split())
@@ -33,11 +35,12 @@ class FormattingCore:
         """Logic for generating a unified diff. Accelerated by Rust."""
         if rc and hasattr(rc, "generate_unified_diff_rust"):
             try:
+                # pylint: disable=no-member
                 diff_text, _, _ = rc.generate_unified_diff_rust(
                     old_content, new_content, filename, 3
                 )
                 return diff_text
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         old_lines = old_content.splitlines(keepends=True)

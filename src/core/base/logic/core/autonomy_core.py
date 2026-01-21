@@ -1,3 +1,7 @@
+"""
+Core logic for Agent Autonomy and Self-Model.
+"""
+
 from __future__ import annotations
 
 
