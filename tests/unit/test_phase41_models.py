@@ -8,7 +8,7 @@ Tests for ModelRegistry module.
 import pytest
 from unittest.mock import Mock, patch
 
-from src.infrastructure.models.ModelRegistry import (
+from src.infrastructure.models.model_registry import (
     ModelCapability,
     ModelArchitecture,
     QuantizationType,

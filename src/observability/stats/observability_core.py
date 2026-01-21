@@ -3,6 +3,7 @@
 # Logic for core observability types and base classes.
 
 from __future__ import annotations
+import contextlib
 import json
 import logging
 import math
@@ -19,14 +20,7 @@ try:
 except ImportError:
     HAS_RUST = False
 
-try:
-    import matplotlib.pyplot as plt
-
-    has_matplotlib = True
-except ImportError:
-    plt = None  # type: ignore[assignment]
-    has_matplotlib = False
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -382,10 +376,8 @@ class StatsCore:
         values = [m.value for m in history]
         # Rust-accelerated linear regression
         if HAS_RUST:
-            try:
+            with contextlib.suppress(Exception):
                 return rc.linear_forecast_rust(values, periods)  # type: ignore[attr-defined]
-            except Exception:
-                pass
 
         n = len(values)
         x_mean = (n - 1) / 2
@@ -414,10 +406,12 @@ class StatsCore:
     @staticmethod
     def visualize_stats(stats: dict[str, Any]) -> None:
         """Generate CLI graphs for stats visualization."""
-        if not has_matplotlib:
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
             logging.warning("matplotlib not available for visualization")
-
             return
+        
         labels = list(stats.keys())
         values = list(stats.values())
         plt.figure(figsize=(10, 6))

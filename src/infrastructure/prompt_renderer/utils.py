@@ -7,6 +7,7 @@ Utility functions and loaders for prompt rendering.
 from __future__ import annotations
 
 import base64
+import contextlib
 from typing import Any, Dict, List, Optional, Tuple
 
 from .models import (
@@ -115,14 +116,12 @@ def apply_chat_template(
 ) -> str:
     """Apply chat template to messages."""
     if tokenizer is not None and hasattr(tokenizer, "apply_chat_template"):
-        try:
+        with contextlib.suppress(Exception):
             return tokenizer.apply_chat_template(
                 messages,
                 add_generation_prompt=add_generation_prompt,
                 tokenize=False,
             )
-        except Exception:
-            pass
 
     from .renderers import ChatRenderer
     renderer = ChatRenderer()

@@ -21,7 +21,7 @@ class TestAsyncEngineConfig:
     """Tests for AsyncEngineConfig."""
     
     def test_default_config(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import AsyncEngineConfig
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import AsyncEngineConfig
         
         config = AsyncEngineConfig()
         
@@ -31,7 +31,7 @@ class TestAsyncEngineConfig:
         assert config.enable_prefix_caching is True
     
     def test_custom_config(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import AsyncEngineConfig
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import AsyncEngineConfig
         
         config = AsyncEngineConfig(
             model="custom-model",
@@ -48,7 +48,7 @@ class TestRequestState:
     """Tests for RequestState enum."""
     
     def test_request_states(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import RequestState
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import RequestState
         
         assert RequestState.PENDING.name == "PENDING"
         assert RequestState.RUNNING.name == "RUNNING"
@@ -62,7 +62,7 @@ class TestAsyncRequestHandle:
     """Tests for AsyncRequestHandle."""
     
     def test_handle_creation(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import (
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import (
             AsyncRequestHandle, RequestState
         )
         
@@ -77,7 +77,7 @@ class TestAsyncRequestHandle:
         assert not handle.is_finished
     
     def test_handle_finished_states(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import (
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import (
             AsyncRequestHandle, RequestState
         )
         
@@ -96,7 +96,7 @@ class TestAsyncRequestHandle:
         assert not handle.is_finished
     
     def test_handle_metrics(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import AsyncRequestHandle
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import AsyncRequestHandle
         
         handle = AsyncRequestHandle(
             request_id="test",
@@ -114,7 +114,7 @@ class TestAsyncVllmEngine:
     """Tests for AsyncVllmEngine."""
     
     def test_engine_creation(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import AsyncVllmEngine
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import AsyncVllmEngine
         
         engine = AsyncVllmEngine()
         
@@ -122,7 +122,7 @@ class TestAsyncVllmEngine:
         assert engine._requests == {}
     
     def test_engine_singleton(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import (
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import (
             AsyncVllmEngine, AsyncEngineConfig
         )
         
@@ -135,7 +135,7 @@ class TestAsyncVllmEngine:
         assert engine1 is engine2
     
     def test_generate_request_id(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import AsyncVllmEngine
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import AsyncVllmEngine
         
         engine = AsyncVllmEngine()
         
@@ -147,7 +147,7 @@ class TestAsyncVllmEngine:
         assert id1 != id2
     
     def test_get_stats(self):
-        from src.infrastructure.backend.vllm_advanced.AsyncVllmEngine import AsyncVllmEngine
+        from src.infrastructure.backend.vllm_advanced.async_vllm_engine import AsyncVllmEngine
         
         engine = AsyncVllmEngine()
         stats = engine.get_stats()
@@ -165,7 +165,7 @@ class TestStreamingConfig:
     """Tests for StreamingConfig."""
     
     def test_default_config(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import StreamingConfig
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import StreamingConfig
         
         config = StreamingConfig()
         
@@ -178,7 +178,7 @@ class TestStreamToken:
     """Tests for StreamToken."""
     
     def test_token_creation(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import StreamToken
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import StreamToken
         
         token = StreamToken(
             text="Hello",
@@ -197,7 +197,7 @@ class TestTokenStreamIterator:
     
     @pytest.mark.asyncio
     async def test_iterator_put_and_get(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import (
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import (
             TokenStreamIterator, StreamToken
         )
         
@@ -220,7 +220,7 @@ class TestTokenStreamIterator:
     
     @pytest.mark.asyncio
     async def test_iterator_get_full_text(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import (
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import (
             TokenStreamIterator, StreamToken
         )
         
@@ -234,7 +234,7 @@ class TestTokenStreamIterator:
     
     @pytest.mark.asyncio
     async def test_iterator_error_handling(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import TokenStreamIterator
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import TokenStreamIterator
         
         iterator = TokenStreamIterator()
         
@@ -250,7 +250,7 @@ class TestStreamingVllmEngine:
     """Tests for StreamingVllmEngine."""
     
     def test_engine_creation(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import StreamingVllmEngine
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import StreamingVllmEngine
         
         engine = StreamingVllmEngine()
         
@@ -258,7 +258,7 @@ class TestStreamingVllmEngine:
         assert engine._llm is None
     
     def test_engine_singleton(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import StreamingVllmEngine
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import StreamingVllmEngine
         
         StreamingVllmEngine._instance = None
         
@@ -268,7 +268,7 @@ class TestStreamingVllmEngine:
         assert engine1 is engine2
     
     def test_get_stats(self):
-        from src.infrastructure.backend.vllm_advanced.StreamingEngine import StreamingVllmEngine
+        from src.infrastructure.backend.vllm_advanced.streaming_engine import StreamingVllmEngine
         
         engine = StreamingVllmEngine()
         stats = engine.get_stats()
@@ -286,7 +286,7 @@ class TestLoraConfig:
     """Tests for LoraConfig."""
     
     def test_default_config(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraConfig
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraConfig
         
         config = LoraConfig()
         
@@ -299,7 +299,7 @@ class TestLoraAdapter:
     """Tests for LoraAdapter."""
     
     def test_adapter_creation(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraAdapter, AdapterState
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraAdapter, AdapterState
         
         adapter = LoraAdapter(
             adapter_id=1,
@@ -312,7 +312,7 @@ class TestLoraAdapter:
         assert adapter.state == AdapterState.UNLOADED
     
     def test_adapter_hash(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraAdapter
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraAdapter
         
         adapter = LoraAdapter(
             adapter_id=1,
@@ -327,7 +327,7 @@ class TestLoraAdapter:
         assert len(hash1) == 12
     
     def test_adapter_mark_used(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraAdapter
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraAdapter
         
         adapter = LoraAdapter(adapter_id=1, name="test", path="/path")
         
@@ -342,14 +342,14 @@ class TestLoraRegistry:
     """Tests for LoraRegistry."""
     
     def test_registry_creation(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraRegistry
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraRegistry
         
         registry = LoraRegistry()
         
         assert len(registry.list_adapters()) == 0
     
     def test_register_adapter(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraRegistry
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraRegistry
         
         registry = LoraRegistry()
         
@@ -361,7 +361,7 @@ class TestLoraRegistry:
         assert len(registry.list_adapters()) == 1
     
     def test_register_duplicate(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraRegistry
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraRegistry
         
         registry = LoraRegistry()
         
@@ -372,7 +372,7 @@ class TestLoraRegistry:
         assert adapter2.path == "/path2"
     
     def test_unregister_adapter(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraRegistry
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraRegistry
         
         registry = LoraRegistry()
         
@@ -385,7 +385,7 @@ class TestLoraRegistry:
         assert len(registry.list_adapters()) == 0
     
     def test_get_adapter(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraRegistry
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraRegistry
         
         registry = LoraRegistry()
         registry.register("test", "/path")
@@ -399,7 +399,7 @@ class TestLoraRegistry:
         assert missing is None
     
     def test_find_by_base_model(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraRegistry
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraRegistry
         
         registry = LoraRegistry()
         
@@ -416,7 +416,7 @@ class TestLoraManager:
     """Tests for LoraManager."""
     
     def test_manager_creation(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager
         
         manager = LoraManager()
         
@@ -424,7 +424,7 @@ class TestLoraManager:
         assert len(manager._lru_cache) == 0
     
     def test_register_and_get(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager
         
         manager = LoraManager()
         
@@ -434,7 +434,7 @@ class TestLoraManager:
         assert adapter is retrieved
     
     def test_activate_adapter(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager, AdapterState
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager, AdapterState
         
         manager = LoraManager()
         manager.register_adapter("test", "/path")
@@ -448,7 +448,7 @@ class TestLoraManager:
         assert adapter.state == AdapterState.ACTIVE
     
     def test_activate_nonexistent(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager
         
         manager = LoraManager()
         
@@ -457,7 +457,7 @@ class TestLoraManager:
         assert result is False
     
     def test_deactivate_adapter(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager, AdapterState
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager, AdapterState
         
         manager = LoraManager()
         manager.register_adapter("test", "/path")
@@ -472,7 +472,7 @@ class TestLoraManager:
         assert adapter.state == AdapterState.LOADED
     
     def test_lru_eviction(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager, LoraConfig
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager, LoraConfig
         
         config = LoraConfig(max_loras=2)
         manager = LoraManager(config=config)
@@ -492,7 +492,7 @@ class TestLoraManager:
         assert "adapter1" not in manager._active_adapters
     
     def test_get_stats(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager
         
         manager = LoraManager()
         stats = manager.get_stats()
@@ -502,7 +502,7 @@ class TestLoraManager:
         assert "hit_rate" in stats
     
     def test_list_adapters(self):
-        from src.infrastructure.backend.vllm_advanced.LoraManager import LoraManager
+        from src.infrastructure.backend.vllm_advanced.lora_manager import LoraManager
         
         manager = LoraManager()
         manager.register_adapter("adapter1", "/path1")
@@ -526,7 +526,7 @@ class TestGuidedMode:
     """Tests for GuidedMode enum."""
     
     def test_modes(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedMode
         
         assert GuidedMode.NONE.name == "NONE"
         assert GuidedMode.JSON.name == "JSON"
@@ -538,7 +538,7 @@ class TestGuidedConfig:
     """Tests for GuidedConfig."""
     
     def test_default_config(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedConfig, GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedConfig, GuidedMode
         
         config = GuidedConfig()
         
@@ -546,7 +546,7 @@ class TestGuidedConfig:
         assert config.json_schema is None
     
     def test_json_mode_kwargs(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedConfig, GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedConfig, GuidedMode
         
         schema = {"type": "object", "properties": {"name": {"type": "string"}}}
         config = GuidedConfig(mode=GuidedMode.JSON, json_schema=schema)
@@ -557,7 +557,7 @@ class TestGuidedConfig:
         assert kwargs["guided_json"] == schema
     
     def test_regex_mode_kwargs(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedConfig, GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedConfig, GuidedMode
         
         config = GuidedConfig(mode=GuidedMode.REGEX, regex_pattern=r"\d{3}-\d{4}")
         
@@ -567,7 +567,7 @@ class TestGuidedConfig:
         assert kwargs["guided_regex"] == r"\d{3}-\d{4}"
     
     def test_choice_mode_kwargs(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedConfig, GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedConfig, GuidedMode
         
         config = GuidedConfig(mode=GuidedMode.CHOICE, choices=["yes", "no"])
         
@@ -581,7 +581,7 @@ class TestJsonSchema:
     """Tests for JsonSchema builder."""
     
     def test_basic_schema(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema
         
         schema = JsonSchema(title="Person", description="A person object")
         
@@ -592,7 +592,7 @@ class TestJsonSchema:
         assert result["description"] == "A person object"
     
     def test_add_string_property(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema
         
         schema = JsonSchema().add_string("name", required=True, min_length=1)
         
@@ -604,7 +604,7 @@ class TestJsonSchema:
         assert "name" in result["required"]
     
     def test_add_integer_property(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema
         
         schema = JsonSchema().add_integer("age", required=True, minimum=0, maximum=150)
         
@@ -615,7 +615,7 @@ class TestJsonSchema:
         assert result["properties"]["age"]["maximum"] == 150
     
     def test_add_array_property(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema
         
         schema = JsonSchema().add_array("tags", items_type="string", max_items=10)
         
@@ -626,7 +626,7 @@ class TestJsonSchema:
         assert result["properties"]["tags"]["maxItems"] == 10
     
     def test_add_enum_property(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema
         
         schema = JsonSchema().add_enum("status", ["active", "inactive", "pending"])
         
@@ -635,7 +635,7 @@ class TestJsonSchema:
         assert result["properties"]["status"]["enum"] == ["active", "inactive", "pending"]
     
     def test_fluent_api(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema
         
         schema = (JsonSchema()
             .add_string("name", required=True)
@@ -648,7 +648,7 @@ class TestJsonSchema:
         assert "name" in schema["required"]
     
     def test_to_guided_config(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema, GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema, GuidedMode
         
         schema = JsonSchema().add_string("test")
         config = schema.to_guided_config()
@@ -661,7 +661,7 @@ class TestRegexPattern:
     """Tests for RegexPattern builder."""
     
     def test_pattern_creation(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import RegexPattern
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import RegexPattern
         
         pattern = RegexPattern(pattern=r"\d+", name="digits")
         
@@ -669,13 +669,13 @@ class TestRegexPattern:
         assert pattern.name == "digits"
     
     def test_invalid_pattern(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import RegexPattern
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import RegexPattern
         
         with pytest.raises(ValueError, match="Invalid regex"):
             RegexPattern(pattern=r"[invalid")
     
     def test_predefined_patterns(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import RegexPattern
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import RegexPattern
         
         assert RegexPattern.EMAIL
         assert RegexPattern.URL
@@ -683,7 +683,7 @@ class TestRegexPattern:
         assert RegexPattern.UUID
     
     def test_factory_methods(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import RegexPattern
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import RegexPattern
         
         email = RegexPattern.email()
         assert email.name == "email"
@@ -692,14 +692,14 @@ class TestRegexPattern:
         assert date.name == "date_iso"
     
     def test_one_of(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import RegexPattern
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import RegexPattern
         
         pattern = RegexPattern.one_of(r"\d+", r"[a-z]+")
         
         assert "|" in pattern.pattern
     
     def test_to_guided_config(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import RegexPattern, GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import RegexPattern, GuidedMode
         
         pattern = RegexPattern(pattern=r"\d+")
         config = pattern.to_guided_config()
@@ -712,20 +712,20 @@ class TestChoiceConstraint:
     """Tests for ChoiceConstraint."""
     
     def test_constraint_creation(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import ChoiceConstraint
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import ChoiceConstraint
         
         constraint = ChoiceConstraint(choices=["a", "b", "c"])
         
         assert constraint.choices == ["a", "b", "c"]
     
     def test_empty_choices_error(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import ChoiceConstraint
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import ChoiceConstraint
         
         with pytest.raises(ValueError, match="At least one choice"):
             ChoiceConstraint(choices=[])
     
     def test_factory_methods(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import ChoiceConstraint
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import ChoiceConstraint
         
         yes_no = ChoiceConstraint.yes_no()
         assert yes_no.choices == ["yes", "no"]
@@ -738,7 +738,7 @@ class TestChoiceConstraint:
         assert rating.choices == ["1", "2", "3", "4", "5"]
     
     def test_to_guided_config(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import ChoiceConstraint, GuidedMode
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import ChoiceConstraint, GuidedMode
         
         constraint = ChoiceConstraint(["a", "b"])
         config = constraint.to_guided_config()
@@ -751,7 +751,7 @@ class TestGuidedDecoder:
     """Tests for GuidedDecoder main class."""
     
     def test_decoder_creation(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedDecoder
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedDecoder
         
         decoder = GuidedDecoder(model="test-model")
         
@@ -759,7 +759,7 @@ class TestGuidedDecoder:
         assert not decoder._initialized
     
     def test_decoder_singleton(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedDecoder
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedDecoder
         
         GuidedDecoder._instance = None
         
@@ -769,7 +769,7 @@ class TestGuidedDecoder:
         assert decoder1 is decoder2
     
     def test_get_stats(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import GuidedDecoder
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import GuidedDecoder
         
         decoder = GuidedDecoder()
         stats = decoder.get_stats()
@@ -836,7 +836,7 @@ class TestVllmNativeEngineAdvanced:
     """Test VllmNativeEngine with advanced features."""
     
     def test_generate_signature(self):
-        from src.infrastructure.backend.VllmNativeEngine import VllmNativeEngine
+        from src.infrastructure.backend.vllm_native_engine import VllmNativeEngine
         
         engine = VllmNativeEngine()
         
@@ -851,7 +851,7 @@ class TestVllmNativeEngineAdvanced:
         assert "guided_choice" in params
     
     def test_generate_json_method(self):
-        from src.infrastructure.backend.VllmNativeEngine import VllmNativeEngine
+        from src.infrastructure.backend.vllm_native_engine import VllmNativeEngine
         
         engine = VllmNativeEngine()
         
@@ -859,7 +859,7 @@ class TestVllmNativeEngineAdvanced:
         assert callable(engine.generate_json)
     
     def test_generate_choice_method(self):
-        from src.infrastructure.backend.VllmNativeEngine import VllmNativeEngine
+        from src.infrastructure.backend.vllm_native_engine import VllmNativeEngine
         
         engine = VllmNativeEngine()
         
@@ -867,7 +867,7 @@ class TestVllmNativeEngineAdvanced:
         assert callable(engine.generate_choice)
     
     def test_generate_regex_method(self):
-        from src.infrastructure.backend.VllmNativeEngine import VllmNativeEngine
+        from src.infrastructure.backend.vllm_native_engine import VllmNativeEngine
         
         engine = VllmNativeEngine()
         
@@ -879,7 +879,7 @@ class TestEndToEndSchemaBuilding:
     """End-to-end tests for schema building workflows."""
     
     def test_complex_schema_building(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import JsonSchema
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import JsonSchema
         
         # Build a complex person schema
         address_schema = (JsonSchema()
@@ -903,7 +903,7 @@ class TestEndToEndSchemaBuilding:
         assert result["properties"]["address"]["properties"]["city"]["type"] == "string"
     
     def test_config_chaining(self):
-        from src.infrastructure.backend.vllm_advanced.GuidedDecoder import (
+        from src.infrastructure.backend.vllm_advanced.guided_decoder import (
             JsonSchema, RegexPattern, ChoiceConstraint
         )
         

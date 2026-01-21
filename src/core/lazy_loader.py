@@ -186,8 +186,8 @@ class ModuleLazyLoader:
         from src.core.lazy_loader import ModuleLazyLoader
 
         _lazy = ModuleLazyLoader({
-            "EagleProposer": ("src.infrastructure.speculative_v2.EagleProposer", "EagleProposer"),
-            "ARCOffloadManager": ("src.infrastructure.kv_transfer.ARCOffloadManager", "ARCOffloadManager"),
+            "EagleProposer": ("src.infrastructure.speculative_v2.eagle_proposer", "EagleProposer"),
+            "ARCOffloadManager": ("src.infrastructure.kv_transfer.arc_offload_manager", "ARCOffloadManager"),
         })
 
         def __getattr__(name: str):

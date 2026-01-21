@@ -4,6 +4,7 @@ import queue
 import signal
 import threading
 import time
+import contextlib
 import traceback
 from typing import Any, Callable, Dict, List, Optional
 from src.infrastructure.executor.multiproc.base import Executor
@@ -169,8 +170,9 @@ class MultiprocExecutor(Executor):
                     ))
                     
             except Exception:
-                # Worker error - try to continue
-                pass
+                with contextlib.suppress(Exception):
+                    # Worker loop error - try to continue
+                    pass
     
     def _collect_results(self) -> None:
         """Collect results from workers."""
@@ -224,11 +226,9 @@ class MultiprocExecutor(Executor):
         """Restart a failed worker."""
         # Terminate old process
         if worker_id in self._workers:
-            try:
+            with contextlib.suppress(Exception):
                 self._workers[worker_id].terminate()
                 self._workers[worker_id].join(timeout=5.0)
-            except Exception:
-                pass
         
         # Start new process
         self._start_worker(worker_id)
@@ -242,25 +242,20 @@ class MultiprocExecutor(Executor):
         
         # Signal workers to stop
         for worker_id, control_queue in self._control_queues.items():
-            try:
+            with contextlib.suppress(Exception):
                 control_queue.put("shutdown")
-            except Exception:
-                pass
         
         # Wait for workers
         if graceful:
             for worker_id, process in self._workers.items():
-                try:
+                with contextlib.suppress(Exception):
                     process.join(timeout=5.0)
-                except Exception:
-                    pass
         
         # Terminate remaining
         for process in self._workers.values():
-            try:
-                process.terminate()
-            except Exception:
-                pass
+            with contextlib.suppress(Exception):
+                if process.is_alive():
+                    process.terminate()
         
         self._started = False
     

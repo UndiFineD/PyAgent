@@ -1,6 +1,7 @@
 import unittest
+import os
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class TestPhase72(unittest.TestCase):
@@ -12,7 +13,7 @@ class TestPhase72(unittest.TestCase):
         print("\nTesting Phase 72: Agentic Self-Evolution & Core Hardening...")
 
         # Test file
-        test_file = "src/logic/agents/system/CoreEvolutionGuard.py"
+        test_file = os.path.join("src", "logic", "agents", "system", "core_evolution_guard.py")
 
         # Take snapshot
 

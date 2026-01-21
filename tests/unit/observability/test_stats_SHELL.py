@@ -227,7 +227,7 @@ class TestStatsAgent(unittest.TestCase):
 
         from tests.utils.agent_test_utils import load_agent_module
 
-        _stats_module = load_agent_module("observability/stats/StatsAgent.py")
+        _stats_module = load_agent_module("src/observability/stats/stats_agent.py")
         self.StatsAgent = _stats_module.StatsAgent
 
         self.temp_dir: str = tempfile.mkdtemp()

@@ -29,7 +29,7 @@ class TestJSONTreeUtils:
     
     def test_json_iter_leaves_dict(self):
         """Test iterating leaves in a nested dict."""
-        from src.core.base.utils.JSONTreeUtils import json_iter_leaves
+        from src.core.base.utils.json_tree_utils import json_iter_leaves
         
         data = {"a": 1, "b": {"c": 2, "d": 3}}
         leaves = list(json_iter_leaves(data))
@@ -38,7 +38,7 @@ class TestJSONTreeUtils:
     
     def test_json_iter_leaves_list(self):
         """Test iterating leaves in nested lists."""
-        from src.core.base.utils.JSONTreeUtils import json_iter_leaves
+        from src.core.base.utils.json_tree_utils import json_iter_leaves
         
         data = [1, [2, 3], [[4, 5]]]
         leaves = list(json_iter_leaves(data))
@@ -47,7 +47,7 @@ class TestJSONTreeUtils:
     
     def test_json_iter_leaves_mixed(self):
         """Test iterating leaves in mixed structure."""
-        from src.core.base.utils.JSONTreeUtils import json_iter_leaves
+        from src.core.base.utils.json_tree_utils import json_iter_leaves
         
         data = {"a": [1, 2], "b": {"c": [3, 4]}}
         leaves = list(json_iter_leaves(data))
@@ -56,7 +56,7 @@ class TestJSONTreeUtils:
     
     def test_json_iter_leaves_with_path(self):
         """Test iterating leaves with their paths."""
-        from src.core.base.utils.JSONTreeUtils import json_iter_leaves_with_path
+        from src.core.base.utils.json_tree_utils import json_iter_leaves_with_path
         
         data = {"a": {"b": 1}, "c": 2}
         leaves = list(json_iter_leaves_with_path(data))
@@ -67,7 +67,7 @@ class TestJSONTreeUtils:
     
     def test_json_map_leaves(self):
         """Test mapping function over leaves."""
-        from src.core.base.utils.JSONTreeUtils import json_map_leaves
+        from src.core.base.utils.json_tree_utils import json_map_leaves
         
         data = {"a": 1, "b": {"c": 2}}
         result = json_map_leaves(lambda x: x * 2, data)
@@ -76,7 +76,7 @@ class TestJSONTreeUtils:
     
     def test_json_map_leaves_preserves_structure(self):
         """Test that mapping preserves structure."""
-        from src.core.base.utils.JSONTreeUtils import json_map_leaves
+        from src.core.base.utils.json_tree_utils import json_map_leaves
         
         data = [1, [2, 3], {"a": 4}]
         result = json_map_leaves(str, data)
@@ -85,7 +85,7 @@ class TestJSONTreeUtils:
     
     def test_json_reduce_leaves(self):
         """Test reducing leaves to single value."""
-        from src.core.base.utils.JSONTreeUtils import json_reduce_leaves
+        from src.core.base.utils.json_tree_utils import json_reduce_leaves
         
         data = {"a": 1, "b": {"c": 2, "d": 3}}
         result = json_reduce_leaves(lambda a, b: a + b, data)
@@ -94,7 +94,7 @@ class TestJSONTreeUtils:
     
     def test_json_reduce_leaves_with_initial(self):
         """Test reducing with initial value."""
-        from src.core.base.utils.JSONTreeUtils import json_reduce_leaves
+        from src.core.base.utils.json_tree_utils import json_reduce_leaves
         
         data = [1, 2, 3]
         result = json_reduce_leaves(lambda a, b: a + b, data, 10)
@@ -103,7 +103,7 @@ class TestJSONTreeUtils:
     
     def test_json_count_leaves(self):
         """Test counting leaves."""
-        from src.core.base.utils.JSONTreeUtils import json_count_leaves
+        from src.core.base.utils.json_tree_utils import json_count_leaves
         
         data = {"a": 1, "b": {"c": 2, "d": {"e": 3}}, "f": [4, 5]}
         count = json_count_leaves(data)
@@ -112,7 +112,7 @@ class TestJSONTreeUtils:
     
     def test_json_depth(self):
         """Test calculating depth."""
-        from src.core.base.utils.JSONTreeUtils import json_depth
+        from src.core.base.utils.json_tree_utils import json_depth
         
         assert json_depth("leaf") == 0
         assert json_depth({"a": 1}) == 1
@@ -121,7 +121,7 @@ class TestJSONTreeUtils:
     
     def test_json_flatten(self):
         """Test flattening nested structure."""
-        from src.core.base.utils.JSONTreeUtils import json_flatten
+        from src.core.base.utils.json_tree_utils import json_flatten
         
         data = {"a": {"b": 1, "c": 2}, "d": 3}
         flat = json_flatten(data)
@@ -130,7 +130,7 @@ class TestJSONTreeUtils:
     
     def test_json_flatten_with_arrays(self):
         """Test flattening with arrays."""
-        from src.core.base.utils.JSONTreeUtils import json_flatten
+        from src.core.base.utils.json_tree_utils import json_flatten
         
         data = {"a": [1, 2, 3]}
         flat = json_flatten(data)
@@ -139,7 +139,7 @@ class TestJSONTreeUtils:
     
     def test_json_unflatten(self):
         """Test unflattening to nested structure."""
-        from src.core.base.utils.JSONTreeUtils import json_unflatten
+        from src.core.base.utils.json_tree_utils import json_unflatten
         
         flat = {"a.b": 1, "a.c": 2, "d": 3}
         nested = json_unflatten(flat)
@@ -148,7 +148,7 @@ class TestJSONTreeUtils:
     
     def test_json_get_path(self):
         """Test getting value by path."""
-        from src.core.base.utils.JSONTreeUtils import json_get_path
+        from src.core.base.utils.json_tree_utils import json_get_path
         
         data = {"a": {"b": {"c": 42}}}
         
@@ -158,7 +158,7 @@ class TestJSONTreeUtils:
     
     def test_json_get_path_with_arrays(self):
         """Test getting value with array indices."""
-        from src.core.base.utils.JSONTreeUtils import json_get_path
+        from src.core.base.utils.json_tree_utils import json_get_path
         
         data = {"a": [1, 2, 3]}
         
@@ -166,7 +166,7 @@ class TestJSONTreeUtils:
     
     def test_json_set_path(self):
         """Test setting value by path."""
-        from src.core.base.utils.JSONTreeUtils import json_set_path
+        from src.core.base.utils.json_tree_utils import json_set_path
         
         data = {"a": {}}
         json_set_path(data, "a.b.c", 42)
@@ -175,7 +175,7 @@ class TestJSONTreeUtils:
     
     def test_json_filter_leaves(self):
         """Test filtering leaves by predicate."""
-        from src.core.base.utils.JSONTreeUtils import json_filter_leaves
+        from src.core.base.utils.json_tree_utils import json_filter_leaves
         
         data = {"a": 1, "b": 2, "c": 3, "d": 4}
         filtered = json_filter_leaves(lambda x: x > 2, data)
@@ -184,7 +184,7 @@ class TestJSONTreeUtils:
     
     def test_json_validate_leaves(self):
         """Test validating all leaves."""
-        from src.core.base.utils.JSONTreeUtils import json_validate_leaves
+        from src.core.base.utils.json_tree_utils import json_validate_leaves
         
         data = {"a": 1, "b": 2, "c": 3}
         
@@ -194,7 +194,7 @@ class TestJSONTreeUtils:
     
     def test_json_find_leaves(self):
         """Test finding leaves matching predicate."""
-        from src.core.base.utils.JSONTreeUtils import json_find_leaves
+        from src.core.base.utils.json_tree_utils import json_find_leaves
         
         data = {"a": 1, "b": {"c": 10}, "d": 5}
         matches = json_find_leaves(lambda x: x >= 5, data)
@@ -214,14 +214,14 @@ class TestDynamicImporter:
     
     def test_resolve_obj_by_qualname_module(self):
         """Test resolving a module."""
-        from src.core.base.utils.DynamicImporter import resolve_obj_by_qualname
+        from src.core.base.utils.dynamic_importer import resolve_obj_by_qualname
         
         json_mod = resolve_obj_by_qualname("json")
         assert json_mod is json
     
     def test_resolve_obj_by_qualname_class(self):
         """Test resolving a class."""
-        from src.core.base.utils.DynamicImporter import resolve_obj_by_qualname
+        from src.core.base.utils.dynamic_importer import resolve_obj_by_qualname
         from collections import OrderedDict
         
         cls = resolve_obj_by_qualname("collections.OrderedDict")
@@ -229,14 +229,14 @@ class TestDynamicImporter:
     
     def test_resolve_obj_by_qualname_function(self):
         """Test resolving a function."""
-        from src.core.base.utils.DynamicImporter import resolve_obj_by_qualname
+        from src.core.base.utils.dynamic_importer import resolve_obj_by_qualname
         
         loads = resolve_obj_by_qualname("json.loads")
         assert loads is json.loads
     
     def test_placeholder_module(self):
         """Test PlaceholderModule behavior."""
-        from src.core.base.utils.DynamicImporter import PlaceholderModule
+        from src.core.base.utils.dynamic_importer import PlaceholderModule
         
         placeholder = PlaceholderModule(
             "fake_module",
@@ -253,35 +253,35 @@ class TestDynamicImporter:
     
     def test_lazy_import_available(self):
         """Test lazy import of available module."""
-        from src.core.base.utils.DynamicImporter import lazy_import
+        from src.core.base.utils.dynamic_importer import lazy_import
         
         result = lazy_import("json")
         assert result is json
     
     def test_lazy_import_unavailable(self):
         """Test lazy import of unavailable module."""
-        from src.core.base.utils.DynamicImporter import lazy_import, PlaceholderModule
+        from src.core.base.utils.dynamic_importer import lazy_import, PlaceholderModule
         
         result = lazy_import("nonexistent_module_xyz")
         assert isinstance(result, PlaceholderModule)
     
     def test_safe_import_available(self):
         """Test safe import of available module."""
-        from src.core.base.utils.DynamicImporter import safe_import
+        from src.core.base.utils.dynamic_importer import safe_import
         
         result = safe_import("json")
         assert result is json
     
     def test_safe_import_unavailable(self):
         """Test safe import of unavailable module."""
-        from src.core.base.utils.DynamicImporter import safe_import
+        from src.core.base.utils.dynamic_importer import safe_import
         
         result = safe_import("nonexistent_module_xyz", default="fallback")
         assert result == "fallback"
     
     def test_lazy_module_registry(self):
         """Test LazyModuleRegistry."""
-        from src.core.base.utils.DynamicImporter import LazyModuleRegistry
+        from src.core.base.utils.dynamic_importer import LazyModuleRegistry
         
         registry = LazyModuleRegistry()
         registry.register("my_json", "json")
@@ -295,7 +295,7 @@ class TestDynamicImporter:
     
     def test_lazy_module_registry_class(self):
         """Test LazyModuleRegistry with class."""
-        from src.core.base.utils.DynamicImporter import LazyModuleRegistry
+        from src.core.base.utils.dynamic_importer import LazyModuleRegistry
         
         registry = LazyModuleRegistry()
         registry.register("ordered_dict", "collections.OrderedDict")
@@ -306,14 +306,14 @@ class TestDynamicImporter:
     
     def test_is_module_available(self):
         """Test checking module availability."""
-        from src.core.base.utils.DynamicImporter import is_module_available
+        from src.core.base.utils.dynamic_importer import is_module_available
         
         assert is_module_available("json") is True
         assert is_module_available("nonexistent_xyz") is False
     
     def test_get_module_version(self):
         """Test getting module version."""
-        from src.core.base.utils.DynamicImporter import get_module_version
+        from src.core.base.utils.dynamic_importer import get_module_version
         
         # pytest has a version
         version = get_module_version("pytest")
@@ -325,7 +325,7 @@ class TestDynamicImporter:
     
     def test_require_module(self):
         """Test requiring a module."""
-        from src.core.base.utils.DynamicImporter import require_module
+        from src.core.base.utils.dynamic_importer import require_module
         
         result = require_module("json")
         assert result is json
@@ -344,7 +344,7 @@ class TestHTTPClient:
     
     def test_http_connection_init(self):
         """Test HTTPConnection initialization."""
-        from src.infrastructure.network.HTTPClient import HTTPConnection
+        from src.infrastructure.network.http_client import HTTPConnection
         
         conn = HTTPConnection()
         assert conn.reuse_client is True
@@ -353,7 +353,7 @@ class TestHTTPClient:
     
     def test_http_connection_custom_config(self):
         """Test HTTPConnection with custom config."""
-        from src.infrastructure.network.HTTPClient import HTTPConnection
+        from src.infrastructure.network.http_client import HTTPConnection
         
         conn = HTTPConnection(
             reuse_client=False,
@@ -367,7 +367,7 @@ class TestHTTPClient:
     
     def test_url_validation(self):
         """Test URL validation."""
-        from src.infrastructure.network.HTTPClient import HTTPConnection
+        from src.infrastructure.network.http_client import HTTPConnection
         
         conn = HTTPConnection()
         
@@ -384,7 +384,7 @@ class TestHTTPClient:
     
     def test_headers(self):
         """Test header generation."""
-        from src.infrastructure.network.HTTPClient import HTTPConnection
+        from src.infrastructure.network.http_client import HTTPConnection
         
         conn = HTTPConnection(user_agent="TestAgent/1.0")
         headers = conn._headers(Authorization="Bearer token")
@@ -394,7 +394,7 @@ class TestHTTPClient:
     
     def test_retryable_client_init(self):
         """Test RetryableHTTPClient initialization."""
-        from src.infrastructure.network.HTTPClient import RetryableHTTPClient
+        from src.infrastructure.network.http_client import RetryableHTTPClient
         
         client = RetryableHTTPClient(
             max_retries=5,
@@ -408,7 +408,7 @@ class TestHTTPClient:
     
     def test_context_manager(self):
         """Test context manager protocol."""
-        from src.infrastructure.network.HTTPClient import HTTPClient
+        from src.infrastructure.network.http_client import HTTPClient
         
         with HTTPClient() as client:
             assert client._sync_client is None  # Not created until used
@@ -424,7 +424,7 @@ class TestReasoningParser:
     
     def test_reasoning_result_dataclass(self):
         """Test ReasoningResult dataclass."""
-        from src.core.base.parsers.ReasoningParser import ReasoningResult
+        from src.core.base.parsers.reasoning_parser import ReasoningResult
         
         result = ReasoningResult(
             reasoning="I think...",
@@ -437,7 +437,7 @@ class TestReasoningParser:
     
     def test_xml_parser_extract(self):
         """Test XML reasoning parser extraction."""
-        from src.core.base.parsers.ReasoningParser import XMLReasoningParser
+        from src.core.base.parsers.reasoning_parser import XMLReasoningParser
         
         parser = XMLReasoningParser()
         output = "<think>Let me analyze...</think>The answer is 42."
@@ -449,7 +449,7 @@ class TestReasoningParser:
     
     def test_xml_parser_no_reasoning(self):
         """Test XML parser with no reasoning block."""
-        from src.core.base.parsers.ReasoningParser import XMLReasoningParser
+        from src.core.base.parsers.reasoning_parser import XMLReasoningParser
         
         parser = XMLReasoningParser()
         output = "The answer is 42."
@@ -461,7 +461,7 @@ class TestReasoningParser:
     
     def test_xml_parser_multiple_blocks(self):
         """Test XML parser with multiple think blocks."""
-        from src.core.base.parsers.ReasoningParser import XMLReasoningParser
+        from src.core.base.parsers.reasoning_parser import XMLReasoningParser
         
         parser = XMLReasoningParser()
         output = "<think>First thought</think>Middle<think>Second thought</think>End"
@@ -474,7 +474,7 @@ class TestReasoningParser:
     
     def test_xml_parser_custom_tags(self):
         """Test XML parser with custom tags."""
-        from src.core.base.parsers.ReasoningParser import XMLReasoningParser
+        from src.core.base.parsers.reasoning_parser import XMLReasoningParser
         
         parser = XMLReasoningParser(start_tag="<reasoning>", end_tag="</reasoning>")
         output = "<reasoning>Analysis...</reasoning>Result"
@@ -486,7 +486,7 @@ class TestReasoningParser:
     
     def test_json_parser_extract(self):
         """Test JSON reasoning parser extraction."""
-        from src.core.base.parsers.ReasoningParser import JSONReasoningParser
+        from src.core.base.parsers.reasoning_parser import JSONReasoningParser
         
         parser = JSONReasoningParser()
         output = '{"reasoning": "I analyzed...", "answer": "42"}'
@@ -498,7 +498,7 @@ class TestReasoningParser:
     
     def test_json_parser_invalid_json(self):
         """Test JSON parser with invalid JSON."""
-        from src.core.base.parsers.ReasoningParser import JSONReasoningParser
+        from src.core.base.parsers.reasoning_parser import JSONReasoningParser
         
         parser = JSONReasoningParser()
         output = "Not valid JSON"
@@ -509,7 +509,7 @@ class TestReasoningParser:
     
     def test_markdown_parser_extract(self):
         """Test Markdown reasoning parser extraction."""
-        from src.core.base.parsers.ReasoningParser import MarkdownReasoningParser
+        from src.core.base.parsers.reasoning_parser import MarkdownReasoningParser
         
         parser = MarkdownReasoningParser()
         output = "```thinking\nAnalysis here\n```\nThe answer is 42."
@@ -521,7 +521,7 @@ class TestReasoningParser:
     
     def test_identity_parser(self):
         """Test identity (no-op) parser."""
-        from src.core.base.parsers.ReasoningParser import IdentityReasoningParser
+        from src.core.base.parsers.reasoning_parser import IdentityReasoningParser
         
         parser = IdentityReasoningParser()
         output = "Some output"
@@ -533,7 +533,7 @@ class TestReasoningParser:
     
     def test_parser_manager_get_parser(self):
         """Test ReasoningParserManager.get_reasoning_parser."""
-        from src.core.base.parsers.ReasoningParser import (
+        from src.core.base.parsers.reasoning_parser import (
             ReasoningParserManager,
             XMLReasoningParser,
             JSONReasoningParser,
@@ -547,7 +547,7 @@ class TestReasoningParser:
     
     def test_parser_manager_list_registered(self):
         """Test listing registered parsers."""
-        from src.core.base.parsers.ReasoningParser import ReasoningParserManager
+        from src.core.base.parsers.reasoning_parser import ReasoningParserManager
         
         registered = ReasoningParserManager.list_registered()
         
@@ -558,7 +558,7 @@ class TestReasoningParser:
     
     def test_parser_manager_create_parser(self):
         """Test creating parser instance via manager."""
-        from src.core.base.parsers.ReasoningParser import (
+        from src.core.base.parsers.reasoning_parser import (
             ReasoningParserManager,
             XMLReasoningParser,
         )
@@ -568,7 +568,7 @@ class TestReasoningParser:
     
     def test_parser_decorator(self):
         """Test @reasoning_parser decorator."""
-        from src.core.base.parsers.ReasoningParser import (
+        from src.core.base.parsers.reasoning_parser import (
             reasoning_parser,
             ReasoningParser,
             ReasoningParserManager,
@@ -601,7 +601,7 @@ class TestReasoningParser:
     
     def test_convenience_extract_reasoning(self):
         """Test convenience function."""
-        from src.core.base.parsers.ReasoningParser import extract_reasoning
+        from src.core.base.parsers.reasoning_parser import extract_reasoning
         
         output = "<think>Thinking...</think>Answer"
         result = extract_reasoning(output, parser_name="xml")
@@ -611,7 +611,7 @@ class TestReasoningParser:
     
     def test_streaming_state(self):
         """Test StreamingReasoningState."""
-        from src.core.base.parsers.ReasoningParser import StreamingReasoningState
+        from src.core.base.parsers.reasoning_parser import StreamingReasoningState
         
         state = StreamingReasoningState()
         assert state.accumulated_text == ""
@@ -629,8 +629,8 @@ class TestPhase22Integration:
     
     def test_jsontree_with_reasoning_output(self):
         """Test JSONTree with parsed reasoning output."""
-        from src.core.base.utils.JSONTreeUtils import json_flatten, json_iter_leaves
-        from src.core.base.parsers.ReasoningParser import extract_reasoning
+        from src.core.base.utils.json_tree_utils import json_flatten, json_iter_leaves
+        from src.core.base.parsers.reasoning_parser import extract_reasoning
         
         # Simulate model output in JSON format
         model_output = '{"reasoning": "Step 1: analyze\nStep 2: compute", "answer": "42"}'
@@ -651,11 +651,11 @@ class TestPhase22Integration:
     
     def test_dynamic_import_parser(self):
         """Test dynamically importing a parser."""
-        from src.core.base.utils.DynamicImporter import resolve_obj_by_qualname
+        from src.core.base.utils.dynamic_importer import resolve_obj_by_qualname
         
         # Resolve XMLReasoningParser dynamically
         parser_cls = resolve_obj_by_qualname(
-            "src.core.base.parsers.ReasoningParser.XMLReasoningParser"
+            "src.core.base.parsers.reasoning_parser.XMLReasoningParser"
         )
         
         parser = parser_cls()
@@ -666,12 +666,12 @@ class TestPhase22Integration:
     
     def test_lazy_registry_with_parsers(self):
         """Test lazy registry pattern with parsers."""
-        from src.core.base.utils.DynamicImporter import LazyModuleRegistry
+        from src.core.base.utils.dynamic_importer import LazyModuleRegistry
         
         registry = LazyModuleRegistry()
         registry.register_many({
-            "xml": "src.core.base.parsers.ReasoningParser.XMLReasoningParser",
-            "json": "src.core.base.parsers.ReasoningParser.JSONReasoningParser",
+            "xml": "src.core.base.parsers.reasoning_parser.XMLReasoningParser",
+            "json": "src.core.base.parsers.reasoning_parser.JSONReasoningParser",
         })
         
         # Not loaded yet

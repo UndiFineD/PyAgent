@@ -4,13 +4,13 @@ import unittest
 import json
 import os
 import shutil
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.security.ByzantineConsensusAgent import ByzantineConsensusAgent
-from src.logic.agents.system.MessagingAgent import MessagingAgent
-from src.logic.agents.cognitive.BayesianReasoningAgent import BayesianReasoningAgent
-from src.logic.agents.system.LoggingAgent import LoggingAgent
-from src.logic.agents.system.IdentityAgent import IdentityAgent as AgentIdentityAgent
-from src.infrastructure.orchestration.intel.RLSelector import RLSelector
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.logic.agents.security.byzantine_consensus_agent import ByzantineConsensusAgent
+from src.logic.agents.system.messaging_agent import MessagingAgent
+from src.logic.agents.cognitive.bayesian_reasoning_agent import BayesianReasoningAgent
+from src.logic.agents.system.logging_agent import LoggingAgent
+from src.logic.agents.system.identity_agent import IdentityAgent as AgentIdentityAgent
+from src.infrastructure.orchestration.intel.rl_selector import RLSelector
 from pathlib import Path
 
 

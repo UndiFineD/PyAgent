@@ -1,5 +1,6 @@
 from __future__ import annotations
 import threading
+import contextlib
 from typing import Any, Callable, Generic, List, Optional, TypeVar
 
 T = TypeVar('T')
@@ -24,10 +25,8 @@ class FutureWrapper(Generic[T]):
             self._result = result
             self._done.set()
             for callback in self._callbacks:
-                try:
+                with contextlib.suppress(Exception):
                     callback(self)
-                except Exception:
-                    pass
     
     def set_exception(self, error: Exception) -> None:
         """Set an exception."""
@@ -35,10 +34,8 @@ class FutureWrapper(Generic[T]):
             self._error = error
             self._done.set()
             for callback in self._callbacks:
-                try:
+                with contextlib.suppress(Exception):
                     callback(self)
-                except Exception:
-                    pass
     
     def result(self, timeout: Optional[float] = None) -> T:
         """Get the result, blocking if necessary."""

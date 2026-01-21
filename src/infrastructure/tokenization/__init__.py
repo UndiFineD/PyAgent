@@ -7,7 +7,7 @@ Provides incremental detokenization for streaming text generation,
 inspired by vLLM's transformers_utils/detokenizer.py architecture.
 """
 
-from .IncrementalDetokenizer import (
+from .incremental_detokenizer import (
     DetokenizeResult,
     FastIncrementalDetokenizer,
     IncrementalDetokenizer,

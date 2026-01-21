@@ -7,7 +7,7 @@ sandbox permissions.
 import unittest
 import logging
 from pathlib import Path
-from src.core.base.managers.PluginManager import PluginManager
+from src.core.base.managers.plugin_manager import PluginManager
 
 class TestPluginSandboxIntegration(unittest.TestCase):
     def setUp(self):
@@ -33,7 +33,7 @@ class TestPluginSandboxIntegration(unittest.TestCase):
             
             # Simulated execution
             # Current implementation of test_sandbox just returns True
-            res_src = plugin.run(Path("src/core/base/BaseAgent.py"), {})
+            res_src = plugin.run(Path("src\core\base\base_agent.py"), {})
             self.assertTrue(res_src)
 
             res_temp = plugin.run(Path("temp/test.txt"), {})

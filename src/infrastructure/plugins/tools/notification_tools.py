@@ -16,10 +16,11 @@
 """Notification tools for Slack and Discord webhooks."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import requests
 import logging
-from src.core.base.ConnectivityManager import ConnectivityManager
+import contextlib
+from src.core.base.connectivity_manager import ConnectivityManager
 
 __version__ = VERSION
 
@@ -38,8 +39,8 @@ def send_slack_notification(webhook_url: str, message: str) -> bool:
         cm.update_status("slack_webhook", True)
 
         # Intelligence: Record outgoing notification (Phase 108)
-        try:
-            from src.infrastructure.backend.LocalContextRecorder import (
+        with contextlib.suppress(Exception):
+            from src.infrastructure.backend.local_context_recorder import (
                 LocalContextRecorder,
             )
 
@@ -48,8 +49,6 @@ def send_slack_notification(webhook_url: str, message: str) -> bool:
             recorder.record_interaction(
                 "Slack", "Webhook", f"Notification to {webhook_url}", message
             )
-        except Exception:
-            pass
 
         return True
 
@@ -73,8 +72,8 @@ def send_discord_notification(webhook_url: str, message: str) -> bool:
         cm.update_status("discord_webhook", True)
 
         # Intelligence: Record outgoing notification (Phase 108)
-        try:
-            from src.infrastructure.backend.LocalContextRecorder import (
+        with contextlib.suppress(Exception):
+            from src.infrastructure.backend.local_context_recorder import (
                 LocalContextRecorder,
             )
 
@@ -82,8 +81,6 @@ def send_discord_notification(webhook_url: str, message: str) -> bool:
             recorder.record_interaction(
                 "Discord", "Webhook", f"Notification to {webhook_url}", message
             )
-        except Exception:
-            pass
 
         return True
     except Exception as e:

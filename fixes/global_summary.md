@@ -1,43 +1,43 @@
 # Global Maintenance Report
 
 <<<<<<< HEAD
-Run Date: 20260115-1641
+Run Date: 20260115_1641
 System State: ISSUES REMAIN
 
-## pytestAgent: ✅ Success
-Path: fixes\pytestAgent\date\20260115-1635
+## pytest_agent: ✅ Success
+Path: fixes/pytest_agent/date/20260115_1635
 
-## mypyAgent: ❌ Failed
-Path: fixes\mypyAgent\date\20260115-1635
+## mypy_agent: ❌ Failed
+Path: fixes/mypy_agent/date/20260115_1635
 
-## ruffAgent: ❌ Failed
-Path: fixes\ruffAgent\date\20260115-1635
+## ruff_agent: ❌ Failed
+Path: fixes/ruff_agent/date/20260115_1635
 
-## flake8Agent: ❌ Failed
-Path: fixes\flake8Agent\date\20260115-1635
+## flake8_agent: ❌ Failed
+Path: fixes/flake8_agent/date/20260115_1635
 
-## reminderAgent: ✅ Success
-Path: fixes\reminderAgent\date\20260115-1635
+## reminder_agent: ✅ Success
+Path: fixes/reminder_agent/date/20260115_1635
 =======
-Run Date: 20260115-1504
+Run Date: 20260115_1504
 System State: ISSUES REMAIN
 
-## pytestAgent: ❌ Failed
-Path: fixes\pytestAgent\date\20260115-1458
+## pytest_agent: ❌ Failed
+Path: fixes/pytest_agent/date/20260115_1458
 
-## mypyAgent: ❌ Failed
-Path: fixes\mypyAgent\date\20260115-1458
+## mypy_agent: ❌ Failed
+Path: fixes/mypy_agent/date/20260115_1458
 
-## ruffAgent: ❌ Failed
-Path: fixes\ruffAgent\date\20260115-1458
+## ruff_agent: ❌ Failed
+Path: fixes/ruff_agent/date/20260115_1458
 
-## flake8Agent: ❌ Failed
-Path: fixes\flake8Agent\date\20260115-1458
+## flake8_agent: ❌ Failed
+Path: fixes/flake8_agent/date/20260115_1458
 
-## unittestAgent: ❌ Failed
-Path: fixes\unittestAgent\date\20260115-1458
+## unittest_agent: ❌ Failed
+Path: fixes/unittest_agent/date/20260115_1458
 
-## reminderAgent: ✅ Success
-Path: fixes\reminderAgent\date\20260115-1458
->>>>>>> restore-point-20260115-1520
+## reminder_agent: ✅ Success
+Path: fixes/reminder_agent/date/20260115_1458
+>>>>>>> restore-point-20260115_1520
 

@@ -16,7 +16,7 @@ def test_context_agent_delegates_to_base(
     import asyncio
 
     with agent_dir_on_path():
-        mod = load_agent_module("logic/agents/cognitive/ContextAgent.py")
+        mod = load_agent_module("src/logic/agents/cognitive/context_agent.py")
 
     async def fake_run_subagent(
         self: Any, description: str, prompt: str, original_content: str = ""

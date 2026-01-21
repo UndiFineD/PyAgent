@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.cognitive.StrategicPlanningAgent import StrategicPlanningAgent
+from src.logic.agents.cognitive.strategic_planning_agent import StrategicPlanningAgent
 
 
 class TestStrategicPlanning(unittest.TestCase):

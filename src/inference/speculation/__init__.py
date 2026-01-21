@@ -6,7 +6,7 @@ Speculation module for accelerated LLM inference.
 Provides speculative decoding implementations for faster token generation.
 """
 
-from .SpeculativeEngine import (
+from .speculative_engine import (
     SpecMethod,
     SpeculativeConfig,
     DraftProposal,

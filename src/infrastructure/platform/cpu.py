@@ -13,10 +13,10 @@ from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,
+    DeviceInfo,
     DeviceFeature,
     AttentionBackend,
     QuantizationType,
-    CpuArchitecture,
 )
 from .base import Platform
 
@@ -35,13 +35,13 @@ class CpuPlatform(Platform):
     def get_device_count(self) -> int:
         return 1
 
-    def get_device_capability(self, device_id: int = 0) -> DeviceCapability:
+    def get_device_capability(self, _device_id: int = 0) -> DeviceCapability:
         return DeviceCapability(major=0, minor=0)
 
-    def get_device_name(self, device_id: int = 0) -> str:
+    def get_device_name(self, _device_id: int = 0) -> str:
         return platform.processor() or "CPU"
 
-    def get_memory_info(self, device_id: int = 0) -> MemoryInfo:
+    def get_memory_info(self, _device_id: int = 0) -> MemoryInfo:
         try:
             import psutil
             vm = psutil.virtual_memory()
@@ -54,7 +54,7 @@ class CpuPlatform(Platform):
         except ImportError:
             return MemoryInfo(total_bytes=0, free_bytes=0, used_bytes=0, reserved_bytes=0)
 
-    def get_device_features(self, device_id: int = 0) -> DeviceFeature:
+    def get_device_features(self, _device_id: int = 0) -> DeviceFeature:
         features = DeviceFeature.FP16
         try:
             import cpuinfo
@@ -76,5 +76,15 @@ class CpuPlatform(Platform):
     def get_attention_backends(self) -> List[AttentionBackend]:
         return [AttentionBackend.CPU, AttentionBackend.TORCH_SDPA, AttentionBackend.DEFAULT]
 
-    def select_attention_backend(self, capability: DeviceCapability) -> AttentionBackend:
+    def get_device_info(self, device_id: int = 0) -> DeviceInfo:
+        return DeviceInfo(
+            device_id=device_id,
+            name=self.get_device_name(device_id),
+            platform=self.get_platform_type(),
+            capability=self.get_device_capability(device_id),
+            memory=self.get_memory_info(device_id),
+            features=self.get_device_features(device_id),
+        )
+
+    def select_attention_backend(self, _capability: DeviceCapability) -> AttentionBackend:
         return AttentionBackend.CPU

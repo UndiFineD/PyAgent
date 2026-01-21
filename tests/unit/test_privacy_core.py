@@ -1,5 +1,5 @@
 from hypothesis import given, strategies as st
-from src.logic.agents.security.core.PrivacyCore import PrivacyCore
+from src.logic.agents.security.core.privacy_core import PrivacyCore
 
 
 class TestPrivacyCore:

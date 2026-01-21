@@ -15,7 +15,7 @@
 """Script for pruning large research research files to keep only recent relevant findings."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 
 __version__ = VERSION

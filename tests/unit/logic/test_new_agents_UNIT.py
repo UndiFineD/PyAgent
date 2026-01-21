@@ -1,8 +1,8 @@
 """Unit tests for the new agent infrastructure."""
 
 from typing import Any, Dict
-from src.logic.agents.system.ModelOptimizerAgent import ModelOptimizerAgent
-from src.logic.agents.cognitive.LatentReasoningAgent import LatentReasoningAgent
+from src.logic.agents.system.model_optimizer_agent import ModelOptimizerAgent
+from src.logic.agents.cognitive.latent_reasoning_agent import LatentReasoningAgent
 
 
 def test_hopper_optimization() -> None:

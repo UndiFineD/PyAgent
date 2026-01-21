@@ -14,13 +14,13 @@
 
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 import sqlite3
 from pathlib import Path
-from src.logic.agents.intelligence.SQLQueryAgent import SQLQueryAgent
-from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.logic.agents.intelligence.sql_query_agent import SQLQueryAgent
+from src.logic.agents.development.security_guard_agent import SecurityGuardAgent
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
@@ -45,7 +45,7 @@ def test_sql_and_adversarial() -> None:
     conn.close()
 
     sql_agent = SQLQueryAgent(
-        str(workspace / "src/logic/agents/intelligence/SQLQueryAgent.py")
+        str(workspace / "src\logic\agents\intelligence\sql_query_agent.py")
     )
     sql_agent.connect_local(str(db_path))
 
@@ -62,7 +62,7 @@ def test_sql_and_adversarial() -> None:
     print("\n--- Phase 19: Adversarial & Jailbreak Validation ---")
 
     guard = SecurityGuardAgent(
-        str(workspace / "src/logic/agents/development/SecurityGuardAgent.py")
+        str(workspace / "src\logic\agents\development\security_guard_agent.py")
     )
 
     jb_prompt = (

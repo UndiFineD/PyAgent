@@ -1,6 +1,6 @@
 import unittest
 from hypothesis import given, strategies as st
-from src.observability.stats.core.TracingCore import TracingCore
+from src.observability.stats.core.tracing_core import TracingCore
 
 
 class TestTracingCore(unittest.TestCase):

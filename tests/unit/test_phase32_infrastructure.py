@@ -24,7 +24,7 @@ class TestUvaBuffer:
     
     def test_buffer_creation(self):
         """Test UVA buffer creation."""
-        from src.core.base.structures.UvaBufferPool import UvaBuffer, BufferState
+        from src.core.base.structures.uva_buffer_pool import UvaBuffer, BufferState
         
         buffer = UvaBuffer(
             buffer_id=0,
@@ -39,7 +39,7 @@ class TestUvaBuffer:
     
     def test_buffer_state_transitions(self):
         """Test buffer state changes."""
-        from src.core.base.structures.UvaBufferPool import UvaBuffer, BufferState
+        from src.core.base.structures.uva_buffer_pool import UvaBuffer, BufferState
         
         buffer = UvaBuffer(buffer_id=1, size=1024)
         
@@ -51,7 +51,7 @@ class TestUvaBuffer:
     
     def test_buffer_stats(self):
         """Test buffer statistics."""
-        from src.core.base.structures.UvaBufferPool import BufferStats
+        from src.core.base.structures.uva_buffer_pool import BufferStats
         
         stats = BufferStats(
             allocations=100,
@@ -68,7 +68,7 @@ class TestUvaBufferPool:
     
     def test_pool_creation(self):
         """Test pool initialization."""
-        from src.core.base.structures.UvaBufferPool import (
+        from src.core.base.structures.uva_buffer_pool import (
             UvaBufferPool, AllocationStrategy
         )
         
@@ -83,7 +83,7 @@ class TestUvaBufferPool:
     
     def test_acquire_release(self):
         """Test buffer acquisition and release."""
-        from src.core.base.structures.UvaBufferPool import UvaBufferPool
+        from src.core.base.structures.uva_buffer_pool import UvaBufferPool
         
         pool = UvaBufferPool(buffer_count=2, buffer_size=1024)
         
@@ -107,7 +107,7 @@ class TestUvaBufferPool:
     
     def test_pool_exhaustion(self):
         """Test behavior when pool is exhausted."""
-        from src.core.base.structures.UvaBufferPool import UvaBufferPool
+        from src.core.base.structures.uva_buffer_pool import UvaBufferPool
         
         pool = UvaBufferPool(buffer_count=2, buffer_size=1024, max_buffers=2)
         
@@ -129,7 +129,7 @@ class TestUvaBufferPool:
     
     def test_pool_stats(self):
         """Test pool statistics."""
-        from src.core.base.structures.UvaBufferPool import UvaBufferPool
+        from src.core.base.structures.uva_buffer_pool import UvaBufferPool
         
         pool = UvaBufferPool(buffer_count=4, buffer_size=1024)
         
@@ -147,7 +147,7 @@ class TestUvaBackedTensor:
     def test_tensor_creation(self):
         """Test UVA-backed tensor creation."""
         pytest.importorskip("torch")
-        from src.core.base.structures.UvaBufferPool import UvaBackedTensor
+        from src.core.base.structures.uva_buffer_pool import UvaBackedTensor
         
         tensor = UvaBackedTensor(
             shape=(32, 64),
@@ -166,7 +166,7 @@ class TestStagedBatchWriter:
     
     def test_writer_creation(self):
         """Test staged batch writer creation."""
-        from src.core.base.structures.StagedBatchWriter import (
+        from src.core.base.structures.staged_batch_writer import (
             StagedBatchWriter, WritePolicy, CoalesceStrategy
         )
         
@@ -181,7 +181,7 @@ class TestStagedBatchWriter:
     
     def test_stage_writes(self):
         """Test staging write operations."""
-        from src.core.base.structures.StagedBatchWriter import StagedBatchWriter
+        from src.core.base.structures.staged_batch_writer import StagedBatchWriter
         
         writer = StagedBatchWriter()
         
@@ -194,7 +194,7 @@ class TestStagedBatchWriter:
     
     def test_clear_staged(self):
         """Test clearing staged writes."""
-        from src.core.base.structures.StagedBatchWriter import StagedBatchWriter
+        from src.core.base.structures.staged_batch_writer import StagedBatchWriter
         
         writer = StagedBatchWriter()
         
@@ -209,7 +209,7 @@ class TestStagedBatchWriter:
     
     def test_conflict_resolution_last_wins(self):
         """Test last-write-wins conflict resolution."""
-        from src.core.base.structures.StagedBatchWriter import (
+        from src.core.base.structures.staged_batch_writer import (
             StagedBatchWriter, WritePolicy
         )
         
@@ -231,7 +231,7 @@ class TestStagedBatchWriter:
     
     def test_coalesce_indices(self):
         """Test write index coalescing."""
-        from src.core.base.structures.StagedBatchWriter import coalesce_write_indices
+        from src.core.base.structures.staged_batch_writer import coalesce_write_indices
         
         indices = [100, 10, 50, 11, 12, 51]
         coalesced = coalesce_write_indices(indices, block_size=32)
@@ -248,7 +248,7 @@ class TestStagedWriteTensor:
     def test_staged_tensor_creation(self):
         """Test staged write tensor creation."""
         pytest.importorskip("torch")
-        from src.core.base.structures.StagedBatchWriter import StagedWriteTensor
+        from src.core.base.structures.staged_batch_writer import StagedWriteTensor
         
         tensor = StagedWriteTensor(
             shape=(100,),
@@ -268,7 +268,7 @@ class TestStreamManager:
     
     def test_stream_manager_creation(self):
         """Test stream manager creation."""
-        from src.core.base.core.MicroBatchContext import StreamManager
+        from src.core.base.core.micro_batch_context import StreamManager
         
         manager = StreamManager(
             num_compute_streams=2,
@@ -280,7 +280,7 @@ class TestStreamManager:
     
     def test_stream_round_robin(self):
         """Test round-robin stream allocation."""
-        from src.core.base.core.MicroBatchContext import StreamManager
+        from src.core.base.core.micro_batch_context import StreamManager
         
         manager = StreamManager(num_compute_streams=2)
         
@@ -299,7 +299,7 @@ class TestMicroBatchContext:
     
     def test_context_creation(self):
         """Test micro-batch context creation."""
-        from src.core.base.core.MicroBatchContext import MicroBatchContext
+        from src.core.base.core.micro_batch_context import MicroBatchContext
         
         ctx = MicroBatchContext(
             batch_size=100,
@@ -312,7 +312,7 @@ class TestMicroBatchContext:
     
     def test_micro_batch_iteration(self):
         """Test iterating over micro-batches."""
-        from src.core.base.core.MicroBatchContext import MicroBatchContext
+        from src.core.base.core.micro_batch_context import MicroBatchContext
         
         ctx = MicroBatchContext(batch_size=32, micro_batch_size=8)
         
@@ -330,7 +330,7 @@ class TestMicroBatchContext:
     
     def test_output_gathering(self):
         """Test gathering outputs from micro-batches."""
-        from src.core.base.core.MicroBatchContext import MicroBatchContext
+        from src.core.base.core.micro_batch_context import MicroBatchContext
         
         ctx = MicroBatchContext(batch_size=20, micro_batch_size=10)
         
@@ -345,7 +345,7 @@ class TestMicroBatchContext:
     
     def test_context_stats(self):
         """Test context statistics."""
-        from src.core.base.core.MicroBatchContext import MicroBatchContext
+        from src.core.base.core.micro_batch_context import MicroBatchContext
         
         ctx = MicroBatchContext(batch_size=30, micro_batch_size=10)
         
@@ -365,7 +365,7 @@ class TestAdaptiveMicroBatchContext:
     
     def test_adaptive_context(self):
         """Test adaptive micro-batch sizing."""
-        from src.core.base.core.MicroBatchContext import AdaptiveMicroBatchContext
+        from src.core.base.core.micro_batch_context import AdaptiveMicroBatchContext
         
         ctx = AdaptiveMicroBatchContext(
             batch_size=100,
@@ -385,7 +385,7 @@ class TestPooledStream:
     
     def test_stream_creation(self):
         """Test pooled stream creation."""
-        from src.core.base.core.CudaStreamPool import PooledStream, StreamPriority
+        from src.core.base.core.cuda_stream_pool import PooledStream, StreamPriority
         
         stream = PooledStream(
             stream_id=0,
@@ -397,7 +397,7 @@ class TestPooledStream:
     
     def test_stream_query(self):
         """Test stream query (simulated)."""
-        from src.core.base.core.CudaStreamPool import PooledStream
+        from src.core.base.core.cuda_stream_pool import PooledStream
         
         stream = PooledStream(stream_id=0)
         
@@ -410,7 +410,7 @@ class TestEventPool:
     
     def test_event_pool_creation(self):
         """Test event pool creation."""
-        from src.core.base.core.CudaStreamPool import EventPool
+        from src.core.base.core.cuda_stream_pool import EventPool
         
         pool = EventPool(initial_size=8, max_size=64)
         
@@ -418,7 +418,7 @@ class TestEventPool:
     
     def test_event_acquire_release(self):
         """Test event acquisition and release."""
-        from src.core.base.core.CudaStreamPool import EventPool
+        from src.core.base.core.cuda_stream_pool import EventPool
         
         pool = EventPool(initial_size=4)
         
@@ -435,7 +435,7 @@ class TestCudaStreamPool:
     
     def test_pool_creation(self):
         """Test stream pool creation."""
-        from src.core.base.core.CudaStreamPool import CudaStreamPool
+        from src.core.base.core.cuda_stream_pool import CudaStreamPool
         
         pool = CudaStreamPool(
             compute_streams=4,
@@ -448,7 +448,7 @@ class TestCudaStreamPool:
     
     def test_compute_stream_acquisition(self):
         """Test compute stream acquisition."""
-        from src.core.base.core.CudaStreamPool import CudaStreamPool
+        from src.core.base.core.cuda_stream_pool import CudaStreamPool
         
         pool = CudaStreamPool(compute_streams=2)
         
@@ -463,7 +463,7 @@ class TestCudaStreamPool:
     
     def test_stream_affinity(self):
         """Test stream affinity tracking."""
-        from src.core.base.core.CudaStreamPool import CudaStreamPool
+        from src.core.base.core.cuda_stream_pool import CudaStreamPool
         
         pool = CudaStreamPool(compute_streams=2, enable_affinity=True)
         
@@ -480,7 +480,7 @@ class TestCudaStreamPool:
     
     def test_pool_stats(self):
         """Test pool statistics."""
-        from src.core.base.core.CudaStreamPool import CudaStreamPool
+        from src.core.base.core.cuda_stream_pool import CudaStreamPool
         
         pool = CudaStreamPool(compute_streams=2, comm_streams=1)
         
@@ -502,7 +502,7 @@ class TestScheduledRequest:
     
     def test_request_creation(self):
         """Test request creation."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             ScheduledRequest, RequestPriority, RequestState
         )
         
@@ -519,7 +519,7 @@ class TestScheduledRequest:
     
     def test_request_preemption(self):
         """Test request preemption."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             ScheduledRequest, RequestPriority, RequestState, PreemptionReason
         )
         
@@ -539,7 +539,7 @@ class TestScheduledRequest:
     
     def test_request_resume(self):
         """Test request resumption."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             ScheduledRequest, PreemptionReason, RequestState
         )
         
@@ -558,7 +558,7 @@ class TestPriorityRequestQueue:
     
     def test_queue_push_pop(self):
         """Test basic queue operations."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             PriorityRequestQueue, ScheduledRequest, RequestPriority
         )
         
@@ -580,7 +580,7 @@ class TestPriorityRequestQueue:
     
     def test_queue_priority_ordering(self):
         """Test priority-based ordering."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             PriorityRequestQueue, ScheduledRequest, RequestPriority
         )
         
@@ -612,7 +612,7 @@ class TestAdvancedRequestScheduler:
     
     def test_scheduler_creation(self):
         """Test scheduler creation."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             AdvancedRequestScheduler, SchedulerConfig
         )
         
@@ -626,7 +626,7 @@ class TestAdvancedRequestScheduler:
     
     def test_add_request(self):
         """Test adding requests."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             AdvancedRequestScheduler, RequestPriority
         )
         
@@ -644,7 +644,7 @@ class TestAdvancedRequestScheduler:
     
     def test_schedule_batch(self):
         """Test scheduling a batch."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             AdvancedRequestScheduler, RequestPriority, SchedulerConfig
         )
         
@@ -663,7 +663,7 @@ class TestAdvancedRequestScheduler:
     
     def test_complete_request(self):
         """Test completing a request."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             AdvancedRequestScheduler, RequestState
         )
         
@@ -683,7 +683,7 @@ class TestAdvancedRequestScheduler:
     
     def test_abort_request(self):
         """Test aborting a request."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             AdvancedRequestScheduler, RequestState
         )
         
@@ -697,7 +697,7 @@ class TestAdvancedRequestScheduler:
     
     def test_scheduler_stats(self):
         """Test scheduler statistics."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             AdvancedRequestScheduler
         )
         
@@ -719,7 +719,7 @@ class TestPrefillChunk:
     
     def test_chunk_creation(self):
         """Test chunk creation."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             PrefillChunk, ChunkState
         )
         
@@ -743,7 +743,7 @@ class TestChunkedPrefillManager:
     
     def test_manager_creation(self):
         """Test manager creation."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager, ChunkedPrefillConfig
         )
         
@@ -757,7 +757,7 @@ class TestChunkedPrefillManager:
     
     def test_should_chunk(self):
         """Test chunking decision."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager, ChunkedPrefillConfig
         )
         
@@ -769,7 +769,7 @@ class TestChunkedPrefillManager:
     
     def test_compute_boundaries(self):
         """Test chunk boundary computation."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager, ChunkedPrefillConfig
         )
         
@@ -785,7 +785,7 @@ class TestChunkedPrefillManager:
     
     def test_create_chunks(self):
         """Test chunk creation."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager
         )
         
@@ -804,7 +804,7 @@ class TestChunkedPrefillManager:
     
     def test_schedule_chunks(self):
         """Test chunk scheduling."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager, ChunkState
         )
         
@@ -830,7 +830,7 @@ class TestChunkedPrefillManager:
     
     def test_chunk_dependencies(self):
         """Test chunk dependency handling."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager
         )
         
@@ -845,7 +845,7 @@ class TestChunkedPrefillManager:
     
     def test_merge_chunks(self):
         """Test merging chunk outputs."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager
         )
         
@@ -868,7 +868,7 @@ class TestChunkedPrefillManager:
     
     def test_manager_stats(self):
         """Test manager statistics."""
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager
         )
         
@@ -1050,10 +1050,10 @@ class TestPhase32Integration:
     
     def test_scheduler_with_chunked_prefill(self):
         """Test scheduler integration with chunked prefill."""
-        from src.infrastructure.scheduling.AdvancedRequestScheduler import (
+        from src.infrastructure.scheduling.advanced_request_scheduler import (
             AdvancedRequestScheduler, RequestPriority
         )
-        from src.infrastructure.scheduling.ChunkedPrefillManager import (
+        from src.infrastructure.scheduling.chunked_prefill_manager import (
             ChunkedPrefillManager, ChunkedPrefillConfig
         )
         
@@ -1080,7 +1080,7 @@ class TestPhase32Integration:
     
     def test_concurrent_buffer_pool(self):
         """Test concurrent access to buffer pool."""
-        from src.core.base.structures.UvaBufferPool import UvaBufferPool
+        from src.core.base.structures.uva_buffer_pool import UvaBufferPool
         
         pool = UvaBufferPool(buffer_count=4, buffer_size=1024)
         acquired = []

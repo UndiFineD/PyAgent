@@ -1,10 +1,13 @@
+import pytest
+import asyncio
 from pathlib import Path
 
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 import time
 
 
-def test_phase25() -> None:
+@pytest.mark.asyncio
+async def test_phase25() -> None:
     print("--- Phase 25 Verification: Quantum Entanglement & Reality Anchoring ---")
     workspace_root = Path(__file__).resolve().parents[2]
     fleet = FleetManager(str(workspace_root))
@@ -19,7 +22,7 @@ def test_phase25() -> None:
         {"key": "alert_level", "value": "critical"},
         sender="RemoteNode",
     )
-    time.sleep(0.5)
+    await asyncio.sleep(0.5)
 
     current_state = fleet.entanglement.get_all_state()
     if (
@@ -34,9 +37,9 @@ def test_phase25() -> None:
     print("\n[2/2] Testing Reality Anchor (Claim Verification)...")
     claim = "The PyAgent framework supports distributed quantum state mirroring."
 
-    sources = ["src/orchestration/EntanglementOrchestrator.py"]
+    sources = ["src\orchestration\EntanglementOrchestrator.py"]
 
-    verification = fleet.reality_anchor.verify_claim(claim, sources)
+    verification = await fleet.reality_anchor.verify_claim(claim, sources)
 
     if "verdict" in verification:
         print(

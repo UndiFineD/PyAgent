@@ -21,7 +21,7 @@ class TestRequestStatus:
     """Tests for RequestStatus enum."""
     
     def test_status_values(self):
-        from src.infrastructure.engine.EngineCore import RequestStatus
+        from src.infrastructure.engine.engine_core import RequestStatus
         
         assert RequestStatus.WAITING.name == "WAITING"
         assert RequestStatus.RUNNING.name == "RUNNING"
@@ -29,7 +29,7 @@ class TestRequestStatus:
         assert RequestStatus.ABORTED.name == "ABORTED"
     
     def test_all_statuses_defined(self):
-        from src.infrastructure.engine.EngineCore import RequestStatus
+        from src.infrastructure.engine.engine_core import RequestStatus
         
         statuses = list(RequestStatus)
         assert len(statuses) >= 4
@@ -39,7 +39,7 @@ class TestFinishReason:
     """Tests for FinishReason enum."""
     
     def test_reason_values(self):
-        from src.infrastructure.engine.EngineCore import FinishReason
+        from src.infrastructure.engine.engine_core import FinishReason
         
         assert FinishReason.STOP.name == "STOP"
         assert FinishReason.LENGTH.name == "LENGTH"
@@ -51,7 +51,7 @@ class TestRequest:
     """Tests for Request dataclass."""
     
     def test_request_creation(self):
-        from src.infrastructure.engine.EngineCore import Request, RequestStatus
+        from src.infrastructure.engine.engine_core import Request, RequestStatus
         
         request = Request(
             request_id="test-1",
@@ -65,7 +65,7 @@ class TestRequest:
         assert not request.is_finished()
     
     def test_request_with_params(self):
-        from src.infrastructure.engine.EngineCore import Request
+        from src.infrastructure.engine.engine_core import Request
         
         request = Request(
             request_id="test-2",
@@ -78,7 +78,7 @@ class TestRequest:
         assert request.client_index == 2
     
     def test_request_finished_state(self):
-        from src.infrastructure.engine.EngineCore import Request, RequestStatus, FinishReason
+        from src.infrastructure.engine.engine_core import Request, RequestStatus, FinishReason
         
         request = Request(request_id="test-3", prompt_token_ids=[1])
         
@@ -93,7 +93,7 @@ class TestSchedulerOutput:
     """Tests for SchedulerOutput dataclass."""
     
     def test_empty_output(self):
-        from src.infrastructure.engine.EngineCore import SchedulerOutput
+        from src.infrastructure.engine.engine_core import SchedulerOutput
         
         output = SchedulerOutput()
         
@@ -102,7 +102,7 @@ class TestSchedulerOutput:
         assert len(output.scheduled_requests) == 0
     
     def test_output_with_tokens(self):
-        from src.infrastructure.engine.EngineCore import SchedulerOutput
+        from src.infrastructure.engine.engine_core import SchedulerOutput
         
         output = SchedulerOutput(
             total_num_scheduled_tokens=100,
@@ -117,7 +117,7 @@ class TestSimpleScheduler:
     """Tests for SimpleScheduler."""
     
     def test_scheduler_add_request(self):
-        from src.infrastructure.engine.EngineCore import SimpleScheduler, Request
+        from src.infrastructure.engine.engine_core import SimpleScheduler, Request
         
         scheduler = SimpleScheduler(max_batch_size=4)
         request = Request(request_id="test", prompt_token_ids=[1, 2, 3])
@@ -128,7 +128,7 @@ class TestSimpleScheduler:
         assert scheduler.has_requests()
     
     def test_scheduler_schedule(self):
-        from src.infrastructure.engine.EngineCore import SimpleScheduler, Request
+        from src.infrastructure.engine.engine_core import SimpleScheduler, Request
         
         scheduler = SimpleScheduler(max_batch_size=4)
         
@@ -146,7 +146,7 @@ class TestSimpleScheduler:
         assert len(scheduler.waiting) == 0
     
     def test_scheduler_abort(self):
-        from src.infrastructure.engine.EngineCore import SimpleScheduler, Request, RequestStatus
+        from src.infrastructure.engine.engine_core import SimpleScheduler, Request, RequestStatus
         
         scheduler = SimpleScheduler()
         request = Request(request_id="test", prompt_token_ids=[1, 2])
@@ -160,7 +160,7 @@ class TestSimpleScheduler:
         assert request.status == RequestStatus.ABORTED
     
     def test_scheduler_batch_limit(self):
-        from src.infrastructure.engine.EngineCore import SimpleScheduler, Request
+        from src.infrastructure.engine.engine_core import SimpleScheduler, Request
         
         scheduler = SimpleScheduler(max_batch_size=2)
         
@@ -180,7 +180,7 @@ class TestEngineCore:
     """Tests for EngineCore main class."""
     
     def test_create_engine(self):
-        from src.infrastructure.engine.EngineCore import EngineCore, create_engine_core
+        from src.infrastructure.engine.engine_core import EngineCore, create_engine_core
         
         engine = create_engine_core()
         
@@ -189,7 +189,7 @@ class TestEngineCore:
         assert engine.executor is not None
     
     def test_add_and_step(self):
-        from src.infrastructure.engine.EngineCore import EngineCore, Request
+        from src.infrastructure.engine.engine_core import EngineCore, Request
         
         engine = EngineCore()
         request = Request(request_id="test", prompt_token_ids=[1, 2, 3])
@@ -201,7 +201,7 @@ class TestEngineCore:
         assert engine.scheduler.has_requests()
     
     def test_multiple_steps(self):
-        from src.infrastructure.engine.EngineCore import EngineCore, Request
+        from src.infrastructure.engine.engine_core import EngineCore, Request
         
         engine = EngineCore(log_stats=False)
         
@@ -219,7 +219,7 @@ class TestEngineCore:
         assert stats["total_requests"] == 3
     
     def test_abort_during_execution(self):
-        from src.infrastructure.engine.EngineCore import EngineCore, Request
+        from src.infrastructure.engine.engine_core import EngineCore, Request
         
         engine = EngineCore()
         
@@ -232,7 +232,7 @@ class TestEngineCore:
         assert "abort-me" not in [r.request_id for r in engine.scheduler.running]
     
     def test_empty_step(self):
-        from src.infrastructure.engine.EngineCore import EngineCore
+        from src.infrastructure.engine.engine_core import EngineCore
         
         engine = EngineCore()
         outputs, executed = engine.step()
@@ -245,7 +245,7 @@ class TestEngineCoreProc:
     """Tests for EngineCoreProc background process wrapper."""
     
     def test_proc_creation(self):
-        from src.infrastructure.engine.EngineCore import EngineCoreProc
+        from src.infrastructure.engine.engine_core import EngineCoreProc
         
         proc = EngineCoreProc(engine_index=0)
         
@@ -261,7 +261,7 @@ class TestSamplingParams:
     """Tests for SamplingParams."""
     
     def test_defaults(self):
-        from src.infrastructure.engine.OutputProcessor import SamplingParams
+        from src.infrastructure.engine.output_processor import SamplingParams
         
         params = SamplingParams()
         
@@ -270,7 +270,7 @@ class TestSamplingParams:
         assert params.skip_special_tokens is True
     
     def test_custom_params(self):
-        from src.infrastructure.engine.OutputProcessor import SamplingParams
+        from src.infrastructure.engine.output_processor import SamplingParams
         
         params = SamplingParams(
             max_tokens=512,
@@ -286,7 +286,7 @@ class TestEngineCoreRequest:
     """Tests for EngineCoreRequest."""
     
     def test_request_creation(self):
-        from src.infrastructure.engine.OutputProcessor import EngineCoreRequest, SamplingParams
+        from src.infrastructure.engine.output_processor import EngineCoreRequest, SamplingParams
         
         request = EngineCoreRequest(
             request_id="test-req",
@@ -303,7 +303,7 @@ class TestRequestState:
     """Tests for RequestState."""
     
     def test_state_creation(self):
-        from src.infrastructure.engine.OutputProcessor import RequestState
+        from src.infrastructure.engine.output_processor import RequestState
         
         state = RequestState(
             request_id="test",
@@ -318,7 +318,7 @@ class TestRequestState:
         assert not state.finished
     
     def test_state_update(self):
-        from src.infrastructure.engine.OutputProcessor import RequestState
+        from src.infrastructure.engine.output_processor import RequestState
         
         state = RequestState(
             request_id="test",
@@ -335,7 +335,7 @@ class TestRequestState:
         assert state.num_output_tokens == 2
     
     def test_state_finish(self):
-        from src.infrastructure.engine.OutputProcessor import RequestState, EventType
+        from src.infrastructure.engine.output_processor import RequestState, EventType
         
         state = RequestState(
             request_id="test",
@@ -352,7 +352,7 @@ class TestRequestState:
         assert any(e.event_type == EventType.FINISHED for e in state.events)
     
     def test_stream_interval(self):
-        from src.infrastructure.engine.OutputProcessor import RequestState
+        from src.infrastructure.engine.output_processor import RequestState
         
         state = RequestState(
             request_id="test",
@@ -372,7 +372,7 @@ class TestOutputProcessor:
     """Tests for OutputProcessor."""
     
     def test_processor_creation(self):
-        from src.infrastructure.engine.OutputProcessor import OutputProcessor
+        from src.infrastructure.engine.output_processor import OutputProcessor
         
         processor = OutputProcessor(tokenizer=None, log_stats=True)
         
@@ -380,7 +380,7 @@ class TestOutputProcessor:
         assert not processor.has_unfinished_requests()
     
     def test_add_request(self):
-        from src.infrastructure.engine.OutputProcessor import (
+        from src.infrastructure.engine.output_processor import (
             OutputProcessor, EngineCoreRequest, SamplingParams
         )
         
@@ -398,7 +398,7 @@ class TestOutputProcessor:
         assert processor.get_num_unfinished_requests() == 1
     
     def test_duplicate_request_error(self):
-        from src.infrastructure.engine.OutputProcessor import (
+        from src.infrastructure.engine.output_processor import (
             OutputProcessor, EngineCoreRequest, SamplingParams
         )
         
@@ -415,7 +415,7 @@ class TestOutputProcessor:
             processor.add_request(request, None)
     
     def test_process_outputs(self):
-        from src.infrastructure.engine.OutputProcessor import (
+        from src.infrastructure.engine.output_processor import (
             OutputProcessor, EngineCoreRequest, EngineCoreOutput, SamplingParams
         )
         
@@ -439,7 +439,7 @@ class TestOutputProcessor:
         assert len(result.request_outputs) >= 0  # May be batched
     
     def test_abort_requests(self):
-        from src.infrastructure.engine.OutputProcessor import (
+        from src.infrastructure.engine.output_processor import (
             OutputProcessor, EngineCoreRequest, SamplingParams
         )
         
@@ -465,7 +465,7 @@ class TestLoRARequestStates:
     """Tests for LoRA request tracking."""
     
     def test_lora_tracking(self):
-        from src.infrastructure.engine.OutputProcessor import LoRARequestStates, LoRARequest
+        from src.infrastructure.engine.output_processor import LoRARequestStates, LoRARequest
         
         states = LoRARequestStates()
         lora = LoRARequest(lora_id=1, lora_name="adapter-1")
@@ -477,7 +477,7 @@ class TestLoRARequestStates:
         assert len(states.active_loras[1]) == 2
     
     def test_lora_removal(self):
-        from src.infrastructure.engine.OutputProcessor import LoRARequestStates, LoRARequest
+        from src.infrastructure.engine.output_processor import LoRARequestStates, LoRARequest
         
         states = LoRARequestStates()
         lora = LoRARequest(lora_id=1, lora_name="adapter-1")
@@ -496,7 +496,7 @@ class TestCheckStopStrings:
     """Tests for stop string checking."""
     
     def test_no_match(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import check_stop_strings
+        from src.infrastructure.engine.incremental_detokenizer import check_stop_strings
         
         result = check_stop_strings(
             output_text="Hello world",
@@ -508,7 +508,7 @@ class TestCheckStopStrings:
         assert result is None
     
     def test_match_found(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import check_stop_strings
+        from src.infrastructure.engine.incremental_detokenizer import check_stop_strings
         
         result = check_stop_strings(
             output_text="Hello world<stop>",
@@ -523,7 +523,7 @@ class TestCheckStopStrings:
         assert truncate_pos == 11  # Position before <stop>
     
     def test_include_stop_in_output(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import check_stop_strings
+        from src.infrastructure.engine.incremental_detokenizer import check_stop_strings
         
         result = check_stop_strings(
             output_text="Result###end",
@@ -537,7 +537,7 @@ class TestCheckStopStrings:
         assert truncate_pos == 9  # Position after ###
     
     def test_empty_stop_list(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import check_stop_strings
+        from src.infrastructure.engine.incremental_detokenizer import check_stop_strings
         
         result = check_stop_strings(
             output_text="anything",
@@ -553,7 +553,7 @@ class TestNoOpDetokenizer:
     """Tests for NoOpDetokenizer."""
     
     def test_no_op(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import NoOpDetokenizer
+        from src.infrastructure.engine.incremental_detokenizer import NoOpDetokenizer
         
         detok = NoOpDetokenizer()
         
@@ -569,7 +569,7 @@ class TestSlowIncrementalDetokenizer:
     """Tests for SlowIncrementalDetokenizer."""
     
     def test_creation(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import SlowIncrementalDetokenizer
+        from src.infrastructure.engine.incremental_detokenizer import SlowIncrementalDetokenizer
         
         # Mock request
         @dataclass
@@ -600,14 +600,14 @@ class TestValidateUtf8:
     """Tests for UTF-8 validation."""
     
     def test_valid_utf8(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import validate_utf8
+        from src.infrastructure.engine.incremental_detokenizer import validate_utf8
         
         assert validate_utf8("Hello 世界")
         assert validate_utf8("")
         assert validate_utf8("αβγδ")
     
     def test_replacement_char_is_valid_unicode(self):
-        from src.infrastructure.engine.IncrementalDetokenizer import validate_utf8
+        from src.infrastructure.engine.incremental_detokenizer import validate_utf8
         
         # The replacement character is valid UTF-8 (just represents prior invalid bytes)
         # Our function checks if the string can be properly decoded as UTF-8
@@ -622,7 +622,7 @@ class TestHashAlgorithm:
     """Tests for HashAlgorithm enum."""
     
     def test_algorithms(self):
-        from src.infrastructure.engine.PrefixCacheManager import HashAlgorithm
+        from src.infrastructure.engine.prefix_cache_manager import HashAlgorithm
         
         assert HashAlgorithm.SHA256.value == "sha256"
         assert HashAlgorithm.XXHASH.value == "xxhash"
@@ -633,7 +633,7 @@ class TestBlockHash:
     """Tests for BlockHash dataclass."""
     
     def test_block_hash_creation(self):
-        from src.infrastructure.engine.PrefixCacheManager import BlockHash
+        from src.infrastructure.engine.prefix_cache_manager import BlockHash
         
         hash_value = b"\x00" * 32
         block_hash = BlockHash(
@@ -645,7 +645,7 @@ class TestBlockHash:
         assert block_hash.token_ids == (1, 2, 3, 4)
     
     def test_block_hash_equality(self):
-        from src.infrastructure.engine.PrefixCacheManager import BlockHash
+        from src.infrastructure.engine.prefix_cache_manager import BlockHash
         
         h1 = BlockHash(hash_value=b"abc", token_ids=(1, 2))
         h2 = BlockHash(hash_value=b"abc", token_ids=(1, 2))
@@ -659,7 +659,7 @@ class TestHashBlockTokens:
     """Tests for hash_block_tokens function."""
     
     def test_hash_first_block(self):
-        from src.infrastructure.engine.PrefixCacheManager import (
+        from src.infrastructure.engine.prefix_cache_manager import (
             hash_block_tokens, get_hash_function, HashAlgorithm
         )
         
@@ -675,7 +675,7 @@ class TestHashBlockTokens:
         assert block_hash.token_ids == (1, 2, 3, 4)
     
     def test_hash_chaining(self):
-        from src.infrastructure.engine.PrefixCacheManager import (
+        from src.infrastructure.engine.prefix_cache_manager import (
             hash_block_tokens, get_hash_function, HashAlgorithm
         )
         
@@ -690,7 +690,7 @@ class TestHashBlockTokens:
         assert block2.hash_value != block3.hash_value
     
     def test_hash_with_extra_keys(self):
-        from src.infrastructure.engine.PrefixCacheManager import (
+        from src.infrastructure.engine.prefix_cache_manager import (
             hash_block_tokens, get_hash_function, HashAlgorithm
         )
         
@@ -706,7 +706,7 @@ class TestPrefixCacheManager:
     """Tests for PrefixCacheManager."""
     
     def test_manager_creation(self):
-        from src.infrastructure.engine.PrefixCacheManager import PrefixCacheManager
+        from src.infrastructure.engine.prefix_cache_manager import PrefixCacheManager
         
         manager = PrefixCacheManager(block_size=16, max_blocks=100)
         
@@ -714,7 +714,7 @@ class TestPrefixCacheManager:
         assert manager.max_blocks == 100
     
     def test_compute_block_hashes(self):
-        from src.infrastructure.engine.PrefixCacheManager import PrefixCacheManager
+        from src.infrastructure.engine.prefix_cache_manager import PrefixCacheManager
         
         manager = PrefixCacheManager(block_size=4)
         
@@ -725,7 +725,7 @@ class TestPrefixCacheManager:
         assert len(hashes) == 3
     
     def test_cache_miss_then_hit(self):
-        from src.infrastructure.engine.PrefixCacheManager import PrefixCacheManager
+        from src.infrastructure.engine.prefix_cache_manager import PrefixCacheManager
         
         manager = PrefixCacheManager(block_size=4)
         
@@ -745,7 +745,7 @@ class TestPrefixCacheManager:
         assert num_matched == 2
     
     def test_lru_eviction(self):
-        from src.infrastructure.engine.PrefixCacheManager import PrefixCacheManager
+        from src.infrastructure.engine.prefix_cache_manager import PrefixCacheManager
         
         manager = PrefixCacheManager(block_size=4, max_blocks=2)
         
@@ -767,7 +767,7 @@ class TestPrefixCacheManager:
         assert stats["evictions"] >= 1
     
     def test_prefix_sharing(self):
-        from src.infrastructure.engine.PrefixCacheManager import PrefixCacheManager
+        from src.infrastructure.engine.prefix_cache_manager import PrefixCacheManager
         
         manager = PrefixCacheManager(block_size=4)
         
@@ -785,7 +785,7 @@ class TestPrefixCacheManager:
         assert num_matched == 1
     
     def test_stats(self):
-        from src.infrastructure.engine.PrefixCacheManager import PrefixCacheManager
+        from src.infrastructure.engine.prefix_cache_manager import PrefixCacheManager
         
         manager = PrefixCacheManager(block_size=4, max_blocks=10)
         
@@ -807,7 +807,7 @@ class TestComputePrefixMatch:
     """Tests for prefix matching utilities."""
     
     def test_full_match(self):
-        from src.infrastructure.engine.PrefixCacheManager import compute_prefix_match
+        from src.infrastructure.engine.prefix_cache_manager import compute_prefix_match
         
         hashes = [b"a", b"b", b"c"]
         match_len = compute_prefix_match(hashes, hashes)
@@ -815,7 +815,7 @@ class TestComputePrefixMatch:
         assert match_len == 3
     
     def test_partial_match(self):
-        from src.infrastructure.engine.PrefixCacheManager import compute_prefix_match
+        from src.infrastructure.engine.prefix_cache_manager import compute_prefix_match
         
         cached = [b"a", b"b", b"c"]
         request = [b"a", b"b", b"x"]
@@ -825,7 +825,7 @@ class TestComputePrefixMatch:
         assert match_len == 2
     
     def test_no_match(self):
-        from src.infrastructure.engine.PrefixCacheManager import compute_prefix_match
+        from src.infrastructure.engine.prefix_cache_manager import compute_prefix_match
         
         cached = [b"x"]
         request = [b"y"]
@@ -839,7 +839,7 @@ class TestComputeCacheKeys:
     """Tests for batch cache key computation."""
     
     def test_compute_keys(self):
-        from src.infrastructure.engine.PrefixCacheManager import compute_cache_keys
+        from src.infrastructure.engine.prefix_cache_manager import compute_cache_keys
         
         result = compute_cache_keys(
             request_ids=["req1", "req2"],
@@ -861,7 +861,7 @@ class TestClientConfig:
     """Tests for ClientConfig."""
     
     def test_defaults(self):
-        from src.infrastructure.engine.EngineCoreClient import ClientConfig
+        from src.infrastructure.engine.engine_core_client import ClientConfig
         
         config = ClientConfig()
         
@@ -869,7 +869,7 @@ class TestClientConfig:
         assert config.timeout_s == 60.0
     
     def test_custom_config(self):
-        from src.infrastructure.engine.EngineCoreClient import ClientConfig
+        from src.infrastructure.engine.engine_core_client import ClientConfig
         
         config = ClientConfig(max_batch_size=64, async_mode=True)
         
@@ -881,15 +881,15 @@ class TestInprocClient:
     """Tests for InprocClient."""
     
     def test_client_creation(self):
-        from src.infrastructure.engine.EngineCoreClient import InprocClient
+        from src.infrastructure.engine.engine_core_client import InprocClient
         
         client = InprocClient()
         
         assert client.engine_core is not None
     
     def test_add_and_get(self):
-        from src.infrastructure.engine.EngineCoreClient import InprocClient
-        from src.infrastructure.engine.OutputProcessor import EngineCoreRequest, SamplingParams
+        from src.infrastructure.engine.engine_core_client import InprocClient
+        from src.infrastructure.engine.output_processor import EngineCoreRequest, SamplingParams
         
         client = InprocClient()
         
@@ -906,7 +906,7 @@ class TestInprocClient:
         assert output is not None
     
     def test_shutdown(self):
-        from src.infrastructure.engine.EngineCoreClient import InprocClient
+        from src.infrastructure.engine.engine_core_client import InprocClient
         
         client = InprocClient()
         client.shutdown()  # Should not raise
@@ -916,14 +916,14 @@ class TestCreateClient:
     """Tests for client factory function."""
     
     def test_create_inproc(self):
-        from src.infrastructure.engine.EngineCoreClient import create_client, InprocClient
+        from src.infrastructure.engine.engine_core_client import create_client, InprocClient
         
         client = create_client("inproc")
         
         assert isinstance(client, InprocClient)
     
     def test_create_sync_mp(self):
-        from src.infrastructure.engine.EngineCoreClient import create_client, SyncMPClient
+        from src.infrastructure.engine.engine_core_client import create_client, SyncMPClient
         
         client = create_client("sync_mp")
         
@@ -933,7 +933,7 @@ class TestCreateClient:
             client.shutdown()
     
     def test_invalid_type(self):
-        from src.infrastructure.engine.EngineCoreClient import create_client
+        from src.infrastructure.engine.engine_core_client import create_client
         
         with pytest.raises(ValueError, match="Unknown client type"):
             create_client("invalid")
@@ -1118,8 +1118,8 @@ class TestEngineIntegration:
     """Integration tests combining multiple components."""
     
     def test_full_request_lifecycle(self):
-        from src.infrastructure.engine.EngineCore import EngineCore, Request
-        from src.infrastructure.engine.OutputProcessor import OutputProcessor, EngineCoreRequest, SamplingParams
+        from src.infrastructure.engine.engine_core import EngineCore, Request
+        from src.infrastructure.engine.output_processor import OutputProcessor, EngineCoreRequest, SamplingParams
         
         # Setup
         engine = EngineCore(log_stats=False)
@@ -1148,8 +1148,8 @@ class TestEngineIntegration:
         assert processor.has_unfinished_requests()
     
     def test_prefix_cache_with_engine(self):
-        from src.infrastructure.engine.EngineCore import EngineCore, Request
-        from src.infrastructure.engine.PrefixCacheManager import PrefixCacheManager
+        from src.infrastructure.engine.engine_core import EngineCore, Request
+        from src.infrastructure.engine.prefix_cache_manager import PrefixCacheManager
         
         engine = EngineCore(log_stats=False)
         cache_mgr = PrefixCacheManager(block_size=4)

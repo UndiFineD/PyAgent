@@ -3,7 +3,7 @@ import time
 
 # Ensure the project root is in PYTHONPATH
 
-from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import (
+from src.infrastructure.orchestration.healing.self_healing_orchestrator import (
     SelfHealingOrchestrator,
 )
 

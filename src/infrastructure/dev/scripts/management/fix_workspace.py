@@ -15,7 +15,7 @@
 """Script for reconciling workspace-wide module imports and missing __init__.py files."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import re
 
@@ -114,7 +114,7 @@ if os.path.exists(cb_path):
 agent_path = os.path.join("src", "agent.py")
 if os.path.exists(agent_path):
     os.rename(agent_path, os.path.join("src", "agent_facade.py"))
-    print("Renamed src/agent.py to src/agent_facade.py")
+    print("Renamed src\agent\py to src\agent_facade.py")
 
 print(
     f"Finished. Created {inits_count} __init__.py files. Updated {updated_count} files."

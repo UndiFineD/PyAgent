@@ -6,7 +6,7 @@ from pathlib import Path
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.infrastructure.orchestration.swarm.DirectorAgent import DirectorAgent
+from src.infrastructure.orchestration.swarm.director_agent import DirectorAgent
 
 import asyncio
 

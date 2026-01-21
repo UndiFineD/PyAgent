@@ -9,33 +9,33 @@ class TestMathUtils:
     """Test MathUtils module."""
     
     def test_cdiv(self):
-        from src.core.base.utils.MathUtils import cdiv
+        from src.core.base.utils.math_utils import cdiv
         assert cdiv(7, 3) == 3
         assert cdiv(6, 3) == 2
         assert cdiv(1, 3) == 1
         assert cdiv(0, 3) == 0
     
     def test_next_power_of_2(self):
-        from src.core.base.utils.MathUtils import next_power_of_2
+        from src.core.base.utils.math_utils import next_power_of_2
         assert next_power_of_2(7) == 8
         assert next_power_of_2(8) == 8
         assert next_power_of_2(1) == 1
         assert next_power_of_2(9) == 16
     
     def test_prev_power_of_2(self):
-        from src.core.base.utils.MathUtils import prev_power_of_2
+        from src.core.base.utils.math_utils import prev_power_of_2
         assert prev_power_of_2(7) == 4
         assert prev_power_of_2(8) == 8
         assert prev_power_of_2(1) == 1
     
     def test_round_up(self):
-        from src.core.base.utils.MathUtils import round_up
+        from src.core.base.utils.math_utils import round_up
         assert round_up(7, 4) == 8
         assert round_up(8, 4) == 8
         assert round_up(1, 4) == 4
     
     def test_round_down(self):
-        from src.core.base.utils.MathUtils import round_down
+        from src.core.base.utils.math_utils import round_down
         assert round_down(7, 4) == 4
         assert round_down(8, 4) == 8
 
@@ -44,14 +44,14 @@ class TestAtomicCounter:
     """Test AtomicCounter module."""
     
     def test_counter_basic(self):
-        from src.core.base.utils.AtomicCounter import Counter
+        from src.core.base.utils.atomic_counter import Counter
         c = Counter(10)
         assert c.value == 10
         assert c.inc() == 11
         assert c.dec() == 10
     
     def test_atomic_counter(self):
-        from src.core.base.utils.AtomicCounter import AtomicCounter
+        from src.core.base.utils.atomic_counter import AtomicCounter
         c = AtomicCounter(0)
         c.inc(5)
         c.inc(3)
@@ -60,7 +60,7 @@ class TestAtomicCounter:
         assert c.value == 6
     
     def test_atomic_flag(self):
-        from src.core.base.utils.AtomicCounter import AtomicFlag
+        from src.core.base.utils.atomic_counter import AtomicFlag
         f = AtomicFlag(False)
         assert not f.value
         f.set()
@@ -69,7 +69,7 @@ class TestAtomicCounter:
         assert not f.value
     
     def test_atomic_gauge(self):
-        from src.core.base.utils.AtomicCounter import AtomicGauge
+        from src.core.base.utils.atomic_counter import AtomicGauge
         g = AtomicGauge(0)
         g.inc(10)
         g.dec(3)

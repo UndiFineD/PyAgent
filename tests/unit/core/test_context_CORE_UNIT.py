@@ -26,9 +26,7 @@ class TestContextNotification:
     def test_alert_marker_detection(self, tmp_path: Path) -> None:
         """Test alert marker detection."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "logic/agents/cognitive/ContextAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/cognitive/context_agent.py")
 
         content = "> ⚠️ WARNING: This module is deprecated."
         target: Path = tmp_path / "test.description.md"
@@ -42,9 +40,7 @@ class TestContextNotification:
     def test_breaking_change_detection(self, tmp_path: Path) -> None:
         """Test breaking change detection."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module(
-                "logic/agents/cognitive/ContextAgent.py"
-            )
+            mod: sys.ModuleType = load_agent_module("src/logic/agents/cognitive/context_agent.py")
 
         content = "BREAKING CHANGE: API signature changed in v2.0"
         target: Path = tmp_path / "test.description.md"

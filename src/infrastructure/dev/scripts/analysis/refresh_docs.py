@@ -18,11 +18,11 @@ including API docs, architecture diagrams, and status reports.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 import sys
 import os
-from src.observability.reports.ReportGenerator import ReportGenerator
+from src.observability.reports.report_generator import ReportGenerator
 from pathlib import Path
 
 os.environ["PYTHONPATH"] = "."

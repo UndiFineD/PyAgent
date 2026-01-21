@@ -7,7 +7,7 @@ from pathlib import Path
 sys.path.append(os.getcwd())
 
 from unittest.mock import MagicMock, patch
-from src.maintenance.SelfImprovementCoordinator import SelfImprovementCoordinator
+from src.maintenance.self_improvement_coordinator import SelfImprovementCoordinator
 
 def mock_run_subagent(description, prompt, original_content=""):
     print(f"  [MOCK BACKEND] Called with description: {description}")
@@ -18,7 +18,7 @@ def mock_run_subagent(description, prompt, original_content=""):
         return """
         [
             {"agent": "MarkdownAgent", "file": "docs/AUTO_DOC.md", "prompt": "Create initial automation docs."},
-            {"agent": "CoderAgent", "file": "scripts/auto_doc.py", "prompt": "Create a script to automate documentation."}
+            {"agent": "CoderAgent", "file": "scripts\auto_doc.py", "prompt": "Create a script to automate documentation."}
         ]
         """
     

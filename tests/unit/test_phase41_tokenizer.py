@@ -8,7 +8,7 @@ Tests for TokenizerRegistry module.
 import pytest
 from unittest.mock import Mock, patch
 
-from src.infrastructure.tokenizer.TokenizerRegistry import (
+from src.infrastructure.tokenizer.tokenizer_registry import (
     TokenizerBackend,
     SpecialTokenHandling,
     TruncationStrategy,

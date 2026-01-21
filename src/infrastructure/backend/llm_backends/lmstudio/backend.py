@@ -15,7 +15,7 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from ..LLMBackend import LLMBackend
+from ..llm_backend import LLMBackend
 from .models import LMStudioConfig
 from .cache import ModelCache
 
@@ -411,7 +411,7 @@ class LMStudioBackend(LLMBackend):
         """Check if LM Studio is reachable and has models loaded."""
         try:
             models = self.list_loaded_models()
-            is_healthy = len(models) > 0
+            is_healthy = bool(models)
             self._update_status(self.PROVIDER_ID, is_healthy)
             return is_healthy
         except Exception:
@@ -429,5 +429,5 @@ class LMStudioBackend(LLMBackend):
             "sdk_available": self._check_sdk(),
             "loaded_models": loaded,
             "downloaded_models": downloaded,
-            "is_healthy": len(loaded) > 0,
+            "is_healthy": bool(loaded),
         }

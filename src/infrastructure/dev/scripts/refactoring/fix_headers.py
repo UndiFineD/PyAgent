@@ -19,7 +19,7 @@ COPYRIGHT_BLOCK = """# Copyright 2026 PyAgent Authors
 def fix_header(lines: list[str], filename: str = "") -> list[str]:
     shebang = None
     _future = "from __future__ import annotations\n"
-    _v_import = "from src.core.base.Version import VERSION\n"
+    _v_import = "from src.core.base.version import VERSION\n"
     _v_assign = "__version__ = VERSION\n"
 
     # Skip version injection for the version file itself

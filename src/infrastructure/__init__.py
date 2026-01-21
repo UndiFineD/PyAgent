@@ -33,7 +33,7 @@ from __future__ import annotations
 
 from typing import Any, List
 
-from src.core.base.Version import VERSION as VERSION
+from src.core.base.version import VERSION as VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
 __version__ = VERSION
@@ -42,39 +42,39 @@ __version__ = VERSION
 # Maps attribute name -> (module_path, attribute_name)
 _LAZY_MODULES = ModuleLazyLoader({
     "EagleProposer": (
-        "src.infrastructure.speculative_v2.EagleProposer",
+        "src.infrastructure.speculative_v2.eagle_proposer",
         "EagleProposer",
     ),
     "ARCOffloadManager": (
-        "src.infrastructure.kv_transfer.ARCOffloadManager",
+        "src.infrastructure.kv_transfer.arc_offload_manager",
         "ARCOffloadManager",
     ),
     "ToolParserRegistry": (
-        "src.infrastructure.tools.ToolParserFramework",
+        "src.infrastructure.tools.tool_parser_framework",
         "ToolParserRegistry",
     ),
     "ReasoningEngine": (
-        "src.infrastructure.reasoning.ReasoningEngine",
+        "src.infrastructure.reasoning.reasoning_engine",
         "ReasoningEngine",
     ),
     "PagedAttentionEngine": (
-        "src.infrastructure.attention.PagedAttentionEngine",
+        "src.infrastructure.attention.paged_attention_engine",
         "PagedAttentionEngine",
     ),
     "KVzapPruner": (
-        "src.infrastructure.kv_transfer.KVzap",
+        "src.infrastructure.kv_transfer.k_vzap",
         "KVzapPruner",
     ),
     "SynapticLink": (
-        "src.infrastructure.kv_transfer.LatentLink",
+        "src.infrastructure.kv_transfer.latent_link",
         "SynapticLink",
     ),
     "STEMManager": (
-        "src.infrastructure.engine.STEMScaling",
+        "src.infrastructure.engine.stem_scaling",
         "STEMManager",
     ),
     "TableCacheManager": (
-        "src.infrastructure.tools.TableCache",
+        "src.infrastructure.tools.table_cache",
         "TableCacheManager",
     ),
 })

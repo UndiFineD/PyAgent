@@ -54,3 +54,9 @@
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768690592.2038357}
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 1768690689.0005314}
+{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768935519.6055152}
+{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768937661.870613}
+{"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 1768941284.6599095}
+{"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 1768942766.0112526}
+{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768944697.724371}
+{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768945569.908562}

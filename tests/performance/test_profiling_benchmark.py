@@ -1,6 +1,6 @@
 import timeit
 import statistics
-from src.observability.stats.core.ProfilingCore import ProfilingCore, ProfileStats
+from src.observability.stats.core.profiling_core import ProfilingCore, ProfileStats
 
 
 def benchmark_profiling():

@@ -12,7 +12,7 @@ class LoRASlotManager:
         self._adapter_to_slot: Dict[str, int] = {}
         self._lock = threading.Lock()
     
-    def allocate(self, adapter_name: str, memory: int = 0) -> Optional[int]:
+    def allocate(self, adapter_name: str, memory_required: int = 0) -> Optional[int]:
         with self._lock:
             if adapter_name in self._adapter_to_slot:
                 sid = self._adapter_to_slot[adapter_name]
@@ -20,7 +20,7 @@ class LoRASlotManager:
                 return sid
             for s in self._slots:
                 if s.is_free:
-                    self._fill_slot(s, adapter_name, memory)
+                    self._fill_slot(s, adapter_name, memory_required)
                     return s.slot_id
             oldest = None
             otime = float('inf')
@@ -29,7 +29,7 @@ class LoRASlotManager:
                     oldest, otime = s, s.assigned_at
             if oldest:
                 if oldest.adapter_name: del self._adapter_to_slot[oldest.adapter_name]
-                self._fill_slot(oldest, adapter_name, memory)
+                self._fill_slot(oldest, adapter_name, memory_required)
                 return oldest.slot_id
             return None
     
@@ -50,11 +50,17 @@ class LoRASlotManager:
                 return True
             return False
             
+    def get_slot(self, name: str) -> Optional[AdapterSlot]:
+        with self._lock:
+            if name in self._adapter_to_slot:
+                return self._slots[self._adapter_to_slot[name]]
+            return None
+
     def get_active_adapters(self) -> List[str]:
         with self._lock: return [s.adapter_name for s in self._slots if s.adapter_name and s.is_active]
     
     def get_stats(self) -> Dict[str, Any]:
         with self._lock:
-            return {"total_slots": self.num_slots, "free_slots": sum(1 for s in self._slots if s.is_free),
-                    "active_slots": sum(1 for s in self._slots if s.is_active),
+            return {"total_slots": self.num_slots, "free_slots": sum(s.is_free for s in self._slots),
+                    "active_slots": sum(s.is_active for s in self._slots),
                     "loaded_adapters": len(self._adapter_to_slot)}

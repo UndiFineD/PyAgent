@@ -3,7 +3,7 @@ import os
 import asyncio
 from unittest import IsolatedAsyncioTestCase
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class TestPhase45(IsolatedAsyncioTestCase):

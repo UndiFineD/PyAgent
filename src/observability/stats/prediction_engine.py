@@ -3,6 +3,7 @@
 # Forecasting and change detection engine.
 
 from __future__ import annotations
+import contextlib
 import logging
 import math
 from typing import Any, Callable
@@ -56,11 +57,8 @@ class StatsChangeDetector:
             }
             self._changes.append(change_info)
             for listener in list(self._listeners):
-                try:
+                with contextlib.suppress(Exception):
                     listener(change_info)
-
-                except Exception:
-                    pass
         return changed
 
     def on_change(self, callback: Callable[[dict[str, Any]], None]) -> None:
@@ -110,7 +108,7 @@ class StatsForecaster:
         self, historical: list[float], periods: int = 2
     ) -> dict[str, list[float]]:
         # Rust optimization
-        try:
+        with contextlib.suppress(ImportError, AttributeError, Exception):
             import rust_core as rc
 
             preds, lower, upper = rc.predict_with_confidence_rust(
@@ -121,8 +119,6 @@ class StatsForecaster:
                 "confidence_lower": lower,
                 "confidence_upper": upper,
             }
-        except (ImportError, AttributeError):
-            pass
 
         # Python fallback
         preds = self.predict(historical, periods=periods)

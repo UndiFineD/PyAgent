@@ -16,10 +16,10 @@
 """Validation script for Phase 13: Distributed Intelligence & Swarm Optimization."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
@@ -32,7 +32,7 @@ def test_swarm_features() -> None:
 
     print("--- Phase 13: Swarm Consensus ---")
     # Register agents that have 'improve_content'
-    from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
+    from src.logic.agents.development.security_guard_agent import SecurityGuardAgent
 
     fleet.register_agent("Voter1", SecurityGuardAgent)
 

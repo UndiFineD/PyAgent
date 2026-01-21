@@ -1,7 +1,7 @@
 import unittest
 from hypothesis import given, strategies as st
 from unittest.mock import MagicMock
-from src.observability.stats.core.ProfilingCore import ProfilingCore, ProfileStats
+from src.observability.stats.core.profiling_core import ProfilingCore, ProfileStats
 
 
 class TestProfilingCore(unittest.TestCase):

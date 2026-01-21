@@ -6,7 +6,8 @@ N-gram Proposers - Implementation of speculative decoding token proposers.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+import contextlib
 
 import numpy as np
 
@@ -17,10 +18,8 @@ from src.infrastructure.sampling.ngram.index import SuffixIndex
 from src.infrastructure.sampling.ngram.accelerators import HAS_RUST
 
 # Try to import rust_core if available via accelerators module context
-try:
+with contextlib.suppress(ImportError):
     import rust_core
-except ImportError:
-    pass
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -60,8 +59,8 @@ class NgramProposer:
             return []
         
         # Use Rust if available
-        if HAS_RUST and hasattr(rust_core, 'ngram_propose_rust'):
-            result = rust_core.ngram_propose_rust(
+        if HAS_RUST and hasattr(rust_core, 'advanced_ngram_propose_rust'):
+            result = rust_core.advanced_ngram_propose_rust(
                 tokens_list,
                 self.config.min_n,
                 self.config.max_n,
@@ -70,11 +69,10 @@ class NgramProposer:
             return list(result) if result else []
         
         # Build/update suffix index if using
-        if self._suffix_index is not None:
-            if self._cached_tokens != tokens_list:
-                self._suffix_index.build(tokens_list)
-                self._cached_tokens = tokens_list.copy()
-        
+        if self._suffix_index is not None and self._cached_tokens != tokens_list:
+            self._suffix_index.build(tokens_list)
+            self._cached_tokens = tokens_list.copy()
+
         # Find best match
         best_proposal: list[int] = []
         best_score = -1.0
@@ -135,15 +133,13 @@ class NgramProposer:
         ngram: tuple[int, ...],
     ) -> list[int]:
         """Linear search for n-gram matches."""
-        matches = []
         n = len(ngram)
-        
-        for i in range(len(tokens) - n + 1):
-            if tuple(tokens[i:i + n]) == ngram:
-                matches.append(i)
-        
-        return matches
-    
+        return [
+            i
+            for i in range(len(tokens) - n + 1)
+            if tuple(tokens[i : i + n]) == ngram
+        ]
+
     def _get_continuation(
         self,
         tokens: list[int],
@@ -196,7 +192,7 @@ class NgramProposer:
         
         if HAS_RUST and hasattr(rust_core, 'batch_ngram_propose_rust'):
             return [
-                list(p) for p in rust_core.batch_ngram_propose_rust(
+                list(p) for p in getattr(rust_core, 'batch_ngram_propose_rust')(
                     batch_tokens,
                     self.config.min_n,
                     self.config.max_n,
@@ -204,12 +200,7 @@ class NgramProposer:
                 )
             ]
         
-        results = []
-        for tokens in batch_tokens:
-            proposal = self.propose(tokens, num_proposals)
-            results.append(proposal)
-        
-        return results
+        return [self.propose(tokens, num_proposals) for tokens in batch_tokens]
     
     def get_stats(self) -> ProposalStats:
         """Get proposal statistics."""

@@ -14,11 +14,11 @@
 # Ensure the project root is in PYTHONPATH
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import sys
 import logging
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 # Configure logging
 logging.basicConfig(
@@ -40,7 +40,7 @@ def main() -> None:
     # 1. Privacy Check (Latest Phase 95)
     logging.info("[Step 1] Privacy Check (PII Detection)")
     # Scan a few key files for PII
-    privacy_files = ["src/infrastructure/fleet/FleetManager.py", "requirements.txt"]
+    privacy_files = ["src\infrastructure\fleet\fleet_manager.py", "requirements.txt"]
     for pf in privacy_files:
         path = os.path.join(root, pf)
         if os.path.exists(path):
@@ -57,7 +57,7 @@ def main() -> None:
     # 2. Security Audit (Phase 84)
     logging.info("[Step 2] Security Audit (Secret Scanning)")
     security_findings = fleet.security_audit_agent.scan_file(
-        os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
+        os.path.join(root, "src\infrastructure\fleet\fleet_manager.py")
     )
     if security_findings:
         logging.info(f"  - Found {len(security_findings)} potential security issues.")
@@ -78,7 +78,7 @@ def main() -> None:
     # 4. Code Quality (Phase 87)
     logging.info("[Step 4] Code Quality (Style/Complexity)")
     quality_res = fleet.code_quality_agent.analyze_file_quality(
-        os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
+        os.path.join(root, "src\infrastructure\fleet\fleet_manager.py")
     )
     logging.info(f"  - FleetManager Quality Score: {quality_res['score']}/100")
     if quality_res["issues"]:

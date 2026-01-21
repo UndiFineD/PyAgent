@@ -16,7 +16,7 @@
 """Cross-browser and scheduling functionality."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from typing import Any
 from collections.abc import Callable
 from .enums import BrowserType

@@ -550,7 +550,7 @@ class TestParallelConfig:
     
     def test_default_config(self):
         """Test default parallel configuration."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             ParallelConfig,
         )
         
@@ -562,7 +562,7 @@ class TestParallelConfig:
     
     def test_distributed_config(self):
         """Test distributed configuration."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             ParallelConfig,
         )
         
@@ -579,7 +579,7 @@ class TestEngineIdentity:
     
     def test_create_identity(self):
         """Test creating engine identity."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             EngineIdentity,
         )
         
@@ -590,7 +590,7 @@ class TestEngineIdentity:
     
     def test_identity_str(self):
         """Test identity string representation."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             EngineIdentity,
         )
         
@@ -605,7 +605,7 @@ class TestDPCoordinator:
     
     def test_register_engine(self):
         """Test registering an engine."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             DPCoordinator,
             EngineIdentity,
             EngineState,
@@ -623,7 +623,7 @@ class TestDPCoordinator:
     
     def test_select_engine_round_robin(self):
         """Test round-robin engine selection."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             DPCoordinator,
             EngineIdentity,
             LoadBalancingStrategy,
@@ -649,7 +649,7 @@ class TestDPCoordinator:
     
     def test_deregister_engine(self):
         """Test deregistering an engine."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             DPCoordinator,
             EngineIdentity,
             ParallelConfig,
@@ -671,7 +671,7 @@ class TestMessages:
     
     def test_request_message(self):
         """Test RequestMessage creation."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             RequestMessage,
         )
         
@@ -682,7 +682,7 @@ class TestMessages:
     
     def test_response_message(self):
         """Test ResponseMessage creation."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             ResponseMessage,
         )
         
@@ -697,7 +697,7 @@ class TestMessages:
     
     def test_metrics_message(self):
         """Test MetricsMessage creation."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             MetricsMessage,
         )
         
@@ -716,7 +716,7 @@ class TestMPClient:
     
     def test_num_workers(self):
         """Test worker count before start."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             BaseWorker,
             MPClient,
             ParallelConfig,
@@ -745,7 +745,7 @@ class TestDistributedExecutor:
     
     def test_create_executor(self):
         """Test creating a distributed executor."""
-        from src.infrastructure.orchestration.core.DistributedCoordinator import (
+        from src.infrastructure.orchestration.core.distributed_coordinator import (
             BaseWorker,
             ParallelConfig,
             create_distributed_executor,

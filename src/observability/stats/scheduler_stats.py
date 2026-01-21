@@ -117,19 +117,19 @@ class SpecDecodingStats:
     
     @property
     def acceptance_rate(self) -> float:
-        if self.num_draft_tokens == 0:
+        if not self.num_draft_tokens:
             return 0.0
         return self.num_accepted_tokens / self.num_draft_tokens
     
     @property
     def avg_accepted_per_draft(self) -> float:
-        if self.num_drafts == 0:
+        if not self.num_drafts:
             return 0.0
         return self.num_accepted_tokens / self.num_drafts
     
     @property
     def position_acceptance_rates(self) -> list[float]:
-        if self.num_drafts == 0:
+        if not self.num_drafts:
             return [0.0] * len(self.num_accepted_tokens_per_pos)
         return [count / self.num_drafts for count in self.num_accepted_tokens_per_pos]
     
@@ -180,13 +180,13 @@ class CUDAGraphStats:
     
     @property
     def avg_capture_time_ms(self) -> float:
-        if self.num_captures == 0:
+        if not self.num_captures:
             return 0.0
         return self.capture_time_ms / self.num_captures
     
     @property
     def avg_replay_time_ms(self) -> float:
-        if self.num_replays == 0:
+        if not self.num_replays:
             return 0.0
         return self.replay_time_ms / self.num_replays
     
@@ -249,7 +249,7 @@ class PerfStats:
     
     @property
     def avg_step_time_ms(self) -> float:
-        if self.num_steps == 0:
+        if not self.num_steps:
             return 0.0
         return self.total_time_ms / self.num_steps
     

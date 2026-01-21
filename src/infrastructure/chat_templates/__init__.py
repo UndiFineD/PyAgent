@@ -1,3 +1,3 @@
 # Chat Template Registry - Phase 42
 # Dynamic chat template management
-from .ChatTemplateRegistry import *
+from .chat_template_registry import *

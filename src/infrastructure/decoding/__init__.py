@@ -6,7 +6,7 @@ Structured output grammar exports.
 Phase 26: Grammar-constrained decoding infrastructure.
 """
 
-from .StructuredOutputGrammar import (
+from .structured_output_grammar import (
     StructuredOutputOptions,
     StructuredOutputsParams,
     StructuredOutputGrammar,

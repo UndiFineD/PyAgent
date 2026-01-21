@@ -19,10 +19,10 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
-from src.core.base.BaseAgent import BaseAgent
+from src.core.base.base_agent import BaseAgent
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class ReportingAgent(BaseAgent):
@@ -41,82 +41,82 @@ class ReportingAgent(BaseAgent):
         logging.info("ReportingAgent: Initiating dashboard generation workflow...")
 
         # Load required agents if not present
-        from src.logic.agents.cognitive.MemoryConsolidationAgent import (
+        from src.logic.agents.cognitive.memory_consolidation_agent import (
             MemoryConsolidationAgent,
         )
         from src.observability.stats.transparency_agent import transparency_agent
-        from src.logic.agents.development.SpecToolAgent import SpecToolAgent
-        from src.logic.agents.system.KernelAgent import KernelAgent
-        from src.logic.agents.development.PullRequestAgent import PRAgent
-        from src.logic.agents.system.ConfigAgent import ConfigAgent
-        from src.logic.agents.development.TestAgent import TestAgent
-        from src.logic.agents.intelligence.BrowsingAgent import BrowsingAgent
-        from src.logic.agents.system.MCPAgent import MCPAgent
-        from src.logic.agents.development.ToolEvolutionAgent import ToolEvolutionAgent
-        from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
+        from src.logic.agents.development.spec_tool_agent import SpecToolAgent
+        from src.logic.agents.system.kernel_agent import KernelAgent
+        from src.logic.agents.development.pull_request_agent import PRAgent
+        from src.logic.agents.system.config_agent import ConfigAgent
+        from src.logic.agents.development.test_agent import TestAgent
+        from src.logic.agents.intelligence.browsing_agent import BrowsingAgent
+        from src.logic.agents.system.mcp_agent import MCPAgent
+        from src.logic.agents.development.tool_evolution_agent import ToolEvolutionAgent
+        from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
 
         self.fleet.register_agent(
             "Consolidator",
             MemoryConsolidationAgent,
             str(
                 self.workspace_root
-                / "src/logic/agents/cognitive/MemoryConsolidationAgent.py"
+                / "src\logic\agents\cognitive\memory_consolidation_agent.py"
             ),
         )
         self.fleet.register_agent(
             "Transparency",
             TransparencyAgent,
-            str(self.workspace_root / "src/observability/stats/TransparencyAgent.py"),
+            str(self.workspace_root / "src\observability\stats\transparency_agent.py"),
         )
         self.fleet.register_agent(
             "SpecAgent",
             SpecToolAgent,
-            str(self.workspace_root / "src/logic/agents/development/SpecToolAgent.py"),
+            str(self.workspace_root / "src\logic\agents\development\spec_tool_agent.py"),
         )
         self.fleet.register_agent(
             "Kernel",
             KernelAgent,
-            str(self.workspace_root / "src/logic/agents/system/KernelAgent.py"),
+            str(self.workspace_root / "src\logic\agents\system\kernel_agent.py"),
         )
         self.fleet.register_agent(
             "PR",
             PRAgent,
             str(
-                self.workspace_root / "src/logic/agents/development/PullRequestAgent.py"
+                self.workspace_root / "src\logic\agents\development\pull_request_agent.py"
             ),
         )
         self.fleet.register_agent(
             "Config",
             ConfigAgent,
-            str(self.workspace_root / "src/logic/agents/system/ConfigAgent.py"),
+            str(self.workspace_root / "src\logic\agents\system\config_agent.py"),
         )
         self.fleet.register_agent(
             "Test",
             TestAgent,
-            str(self.workspace_root / "src/logic/agents/development/TestAgent.py"),
+            str(self.workspace_root / "src\logic\agents\development\test_agent.py"),
         )
         self.fleet.register_agent(
             "Browser",
             BrowsingAgent,
-            str(self.workspace_root / "src/logic/agents/intelligence/BrowsingAgent.py"),
+            str(self.workspace_root / "src\logic\agents\intelligence\browsing_agent.py"),
         )
         self.fleet.register_agent(
             "MCP",
             MCPAgent,
-            str(self.workspace_root / "src/logic/agents/system/MCPAgent.py"),
+            str(self.workspace_root / "src\logic\agents\system\mcp_agent.py"),
         )
         self.fleet.register_agent(
             "Evolution",
             ToolEvolutionAgent,
             str(
                 self.workspace_root
-                / "src/logic/agents/development/ToolEvolutionAgent.py"
+                / "src\logic\agents\development\tool_evolution_agent.py"
             ),
         )
         self.fleet.register_agent(
             "Visualizer",
             VisualizerAgent,
-            str(self.workspace_root / "src/logic/agents/cognitive/VisualizerAgent.py"),
+            str(self.workspace_root / "src\logic\agents\cognitive\visualizer_agent.py"),
         )
 
         metrics = self.fleet.telemetry.get_metrics()
@@ -178,8 +178,8 @@ class ReportingAgent(BaseAgent):
 if __name__ == "__main__":
     # Local test
     import asyncio
-    from src.observability.StructuredLogger import StructuredLogger
-    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.observability.structured_logger import StructuredLogger
+    from src.infrastructure.fleet.fleet_manager import FleetManager
 
     logger = StructuredLogger(__name__)
     f = FleetManager()

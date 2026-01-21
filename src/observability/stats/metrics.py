@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 

@@ -1,6 +1,6 @@
 import logging
 import os
-from src.infrastructure.logging.core.LogRotationCore import LogRotationCore
+from src.infrastructure.logging.core.log_rotation_core import LogRotationCore
 
 
 def setup_fleet_logging(log_dir: str = "data/logs", health_score: float = 1.0) -> None:

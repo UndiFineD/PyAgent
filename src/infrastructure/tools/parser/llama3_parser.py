@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import contextlib
 from typing import Any, Dict, List, Optional, Tuple
 
 from .base import (
@@ -91,7 +92,7 @@ class Llama3ToolParser(ToolParser):
         
         # Simple parsing - handle key=value pairs
         # This is a simplified version; production would need proper parsing
-        try:
+        with contextlib.suppress(Exception):
             # Try to evaluate as Python dict
             # Safe alternative: parse manually
             parts = self._split_args(args_str)
@@ -104,8 +105,6 @@ class Llama3ToolParser(ToolParser):
                     
                     # Parse value
                     args[key] = self._parse_value(value)
-        except Exception:
-            pass
         
         return args
     

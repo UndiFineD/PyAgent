@@ -5,7 +5,7 @@ from unittest import IsolatedAsyncioTestCase
 
 # Ensure the project root is in PYTHONPATH
 
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class TestExplainability(IsolatedAsyncioTestCase):

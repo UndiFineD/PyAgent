@@ -18,7 +18,7 @@ Final strict scan for technical debt and placeholders.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import re
 from pathlib import Path

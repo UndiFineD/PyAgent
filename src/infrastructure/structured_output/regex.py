@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import sys
 import warnings
-from typing import Dict, FrozenSet, List, Optional, Set
+import contextlib
+from typing import Dict, Optional, Set
 
 from .models import FSMTransitionTable
 from .base import GrammarEngine
@@ -17,12 +18,28 @@ from .base import GrammarEngine
 if sys.version_info >= (3, 11):
     try:
         import re._parser as _sre_parse
+        import re._constants as _sre_constants
     except ImportError:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=DeprecationWarning)
-            import sre_parse as _sre_parse
+            import sre_parse as _sre_parse  # type: ignore
+            import sre_constants as _sre_constants  # type: ignore
 else:
-    import sre_parse as _sre_parse
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+        import sre_parse as _sre_parse  # type: ignore
+        import sre_constants as _sre_constants  # type: ignore
+
+# Align constants across different Python versions
+_LITERAL = _sre_constants.LITERAL
+_ANY = _sre_constants.ANY
+_IN = _sre_constants.IN
+_RANGE = _sre_constants.RANGE
+_SUBPATTERN = _sre_constants.SUBPATTERN
+_MAX_REPEAT = _sre_constants.MAX_REPEAT
+_MIN_REPEAT = _sre_constants.MIN_REPEAT
+_MAXREPEAT = _sre_constants.MAXREPEAT
+_BRANCH = getattr(_sre_constants, "BRANCH", None)
 
 
 class RegexGrammar(GrammarEngine):
@@ -44,14 +61,14 @@ class RegexGrammar(GrammarEngine):
         if spec in self._compiled_cache:
             return self._compiled_cache[spec]
         
-        try:
+        with contextlib.suppress(Exception):
             parsed = _sre_parse.parse(spec)
             nfa = self._build_nfa(parsed)
             dfa = self._nfa_to_dfa(nfa)
             self._compiled_cache[spec] = dfa
             return dfa
-        except Exception:
-            return self._build_simple_fsm(spec)
+            
+        return self._build_simple_fsm(spec)
     
     def _build_nfa(self, parsed) -> Dict:
         """Build NFA from parsed regex."""
@@ -67,7 +84,7 @@ class RegexGrammar(GrammarEngine):
                     if state not in nfa:
                         nfa[state] = {}
                     
-                    if op == _sre_parse.LITERAL:
+                    if op == _LITERAL:
                         char = chr(av)
                         new_state = state_counter[0]
                         state_counter[0] += 1
@@ -76,7 +93,7 @@ class RegexGrammar(GrammarEngine):
                         nfa[state][char].add(new_state)
                         new_end_states.add(new_state)
                     # (Other ops: ANY, IN, SUBPATTERN, REPEAT... matching the original logic)
-                    elif op == _sre_parse.ANY:
+                    elif op == _ANY:
                         new_state = state_counter[0]
                         state_counter[0] += 1
                         for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ":
@@ -84,27 +101,27 @@ class RegexGrammar(GrammarEngine):
                                 nfa[state][c] = set()
                             nfa[state][c].add(new_state)
                         new_end_states.add(new_state)
-                    elif op == _sre_parse.IN:
+                    elif op == _IN:
                         new_state = state_counter[0]
                         state_counter[0] += 1
                         for item_op, item_av in av:
-                            if item_op == _sre_parse.LITERAL:
+                            if item_op == _LITERAL:
                                 char = chr(item_av)
                                 if char not in nfa[state]:
                                     nfa[state][char] = set()
                                 nfa[state][char].add(new_state)
-                            elif item_op == _sre_parse.RANGE:
+                            elif item_op == _RANGE:
                                 for code in range(item_av[0], item_av[1] + 1):
                                     char = chr(code)
                                     if char not in nfa[state]:
                                         nfa[state][char] = set()
                                     nfa[state][char].add(new_state)
                         new_end_states.add(new_state)
-                    elif op == _sre_parse.SUBPATTERN:
+                    elif op == _SUBPATTERN:
                         _, _, _, subpattern = av
                         sub_end = process_pattern(subpattern, state)
                         new_end_states.update(sub_end)
-                    elif op == _sre_parse.MAX_REPEAT or op == _sre_parse.MIN_REPEAT:
+                    elif op == _MAX_REPEAT or op == _MIN_REPEAT:
                         min_count, max_count, subpattern = av
                         current_states = {state}
                         for _ in range(min(min_count, 10)):
@@ -113,7 +130,7 @@ class RegexGrammar(GrammarEngine):
                                 ends = process_pattern(subpattern, s)
                                 next_states.update(ends)
                             current_states = next_states
-                        if max_count > min_count or max_count == _sre_parse.MAXREPEAT:
+                        if max_count > min_count or max_count == _MAXREPEAT:
                             for s in current_states:
                                 loop_ends = process_pattern(subpattern, s)
                                 for end in loop_ends:

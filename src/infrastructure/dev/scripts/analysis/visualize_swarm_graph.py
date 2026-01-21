@@ -3,7 +3,7 @@
 import json
 import sys
 from pathlib import Path
-from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+from src.infrastructure.orchestration.signals.signal_registry import SignalRegistry
 
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 

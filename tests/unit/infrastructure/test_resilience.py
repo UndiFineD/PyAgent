@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Add the workspace root to sys.path
 
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
+from src.infrastructure.fleet.agent_registry import AgentRegistry, LazyAgentMap
 
 
 def test_resilience() -> None:

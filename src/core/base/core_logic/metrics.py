@@ -2,7 +2,7 @@
 import logging
 from typing import Any, Dict, Optional, List, Tuple
 from src.core.base.models import ResponseQuality, AgentPriority
-from src.core.base.AgentVerification import AgentVerifier
+from src.core.base.agent_verification import AgentVerifier
 
 try:
     import rust_core as rc

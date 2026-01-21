@@ -15,12 +15,12 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION as VERSION
+from src.core.base.version import VERSION as VERSION
 from collections.abc import Callable
-from .AgentStrategy import AgentStrategy as AgentStrategy
-from .ChainOfThoughtStrategy import ChainOfThoughtStrategy as ChainOfThoughtStrategy
-from .DirectStrategy import DirectStrategy as DirectStrategy
-from .ReflexionStrategy import ReflexionStrategy as ReflexionStrategy
+from .agent_strategy import AgentStrategy as AgentStrategy
+from .chain_of_thought_strategy import ChainOfThoughtStrategy as ChainOfThoughtStrategy
+from .direct_strategy import DirectStrategy as DirectStrategy
+from .reflexion_strategy import ReflexionStrategy as ReflexionStrategy
 
 # Type alias for the backend function signature
 # (prompt, system_prompt, history) -> response

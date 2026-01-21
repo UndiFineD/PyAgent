@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import pytest
-from src.logic.agents.security.ByzantineConsensusAgent import ByzantineConsensusAgent
+import asyncio
+from src.logic.agents.security.byzantine_consensus_agent import ByzantineConsensusAgent
 
 
-def test_red_queen_adversarial_flow() -> None:
+@pytest.mark.asyncio
+async def test_red_queen_adversarial_flow() -> None:
     """
     Validates that the swarm can detect and reject low-quality (adversarial) proposals.
     Phase 128: Digital Red Queen / Adversarial Evolution test.
@@ -22,7 +24,7 @@ def test_red_queen_adversarial_flow() -> None:
     }
 
     # 2. Run Byzantine Consensus
-    result = judge.run_committee_vote(task, proposals)
+    result = await judge.run_committee_vote(task, proposals)
 
     # 3. Assertions
     assert result["decision"] == "ACCEPTED"

@@ -15,7 +15,7 @@ class TestFleetEconomyAgent:
     def test_agent_creation(self):
         """Test FleetEconomyAgent can be created."""
         try:
-            from src.logic.agents.swarm.FleetEconomyAgent import FleetEconomyAgent
+            from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
             agent = FleetEconomyAgent()
             assert agent is not None
         except ImportError as e:
@@ -24,7 +24,7 @@ class TestFleetEconomyAgent:
     def test_get_total_savings(self):
         """Test total savings retrieval."""
         try:
-            from src.logic.agents.swarm.FleetEconomyAgent import FleetEconomyAgent
+            from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
             agent = FleetEconomyAgent()
             
             savings = agent.get_total_savings()
@@ -37,7 +37,7 @@ class TestFleetEconomyAgent:
     def test_savings_is_persistent(self):
         """Test that savings value persists across agent instances."""
         try:
-            from src.logic.agents.swarm.FleetEconomyAgent import FleetEconomyAgent
+            from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
             
             agent1 = FleetEconomyAgent()
             savings1 = agent1.get_total_savings()
@@ -57,7 +57,7 @@ class TestSynthesisCore:
     def test_core_creation(self):
         """Test SynthesisCore can be created."""
         try:
-            from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
+            from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
             core = SynthesisCore()
             assert core is not None
         except ImportError as e:
@@ -66,7 +66,7 @@ class TestSynthesisCore:
     def test_generate_edge_cases(self):
         """Test edge case generation triggers Rust."""
         try:
-            from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
+            from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
             core = SynthesisCore()
             
             if hasattr(core, 'generate_python_edge_cases'):
@@ -78,7 +78,7 @@ class TestSynthesisCore:
     def test_vectorize_insight(self):
         """Test insight vectorization triggers Rust."""
         try:
-            from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
+            from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
             core = SynthesisCore()
             
             if hasattr(core, 'vectorize_insight'):
@@ -97,8 +97,8 @@ class TestHardwareSavingsIntegration:
     async def test_savings_after_rust_operations(self):
         """Test savings tracking after Rust-accelerated operations."""
         try:
-            from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
-            from src.logic.agents.swarm.FleetEconomyAgent import FleetEconomyAgent
+            from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
+            from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
             
             fea = FleetEconomyAgent()
             sc = SynthesisCore()

@@ -4,15 +4,15 @@
 Grammar-constrained decoding package.
 """
 
-from .Base import (
+from .base import (
     StructuredOutputGrammar,
     StructuredOutputOptions,
     StructuredOutputsParams,
 )
-from .EBNFGrammar import EBNFGrammar, GrammarRule
-from .JsonConstraint import JSONSchemaGrammar
-from .RegexConstraint import ChoiceGrammar, RegexGrammar
-from .Registry import (
+from .ebnf_grammar import EBNFGrammar, GrammarRule
+from .json_constraint import JSONSchemaGrammar
+from .regex_constraint import ChoiceGrammar, RegexGrammar
+from .registry import (
     GrammarCompiler,
     StructuredOutputManager,
     compile_grammar,

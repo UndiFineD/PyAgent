@@ -51,9 +51,11 @@ class SuffixIndex:
     def lookup(self, ngram: tuple[int, ...]) -> list[int]:
         """Look up positions where n-gram appears."""
         n = len(ngram)
-        if n > self.max_n or n < 1:
-            return []
-        return self._index.get(n, {}).get(ngram, [])
+        return (
+            []
+            if n > self.max_n or n < 1
+            else self._index.get(n, {}).get(ngram, [])
+        )
     
     def get_continuations(
         self,
@@ -72,9 +74,7 @@ class SuffixIndex:
         
         for pos in positions:
             end_pos = pos + n
-            # Get up to k tokens following the match
-            cont = tokens[end_pos:end_pos + k]
-            if cont:
+            if cont := tokens[end_pos:end_pos + k]:
                 continuations.append((pos, cont))
         
         return continuations
@@ -129,7 +129,7 @@ class SuffixTreeProposer:
     def find_continuation(
         self,
         prefix: list[int],
-        tokens: list[int],
+        _tokens: list[int],
     ) -> list[int]:
         """Find continuation for prefix using suffix tree."""
         # Navigate tree

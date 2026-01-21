@@ -17,7 +17,8 @@ class LoRAManager:
         self._lock = threading.Lock()
     
     def load_adapter(self, config: LoRAConfig) -> LoRAInfo:
-        if config.rank > self.max_rank: raise ValueError("Max rank exceeded")
+        if config.rank > self.max_rank: 
+            raise ValueError(f"exceeds max_rank {self.max_rank}")
         adapter = self._registry.register(config)
         if adapter.info: return adapter.info
         raise RuntimeError(f"Failed to load {config.adapter_name}")

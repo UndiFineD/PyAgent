@@ -2,7 +2,7 @@ import unittest
 from hypothesis import given, strategies as st
 import hashlib
 import time
-from src.core.base.core.AuthCore import AuthCore
+from src.core.base.core.auth_core import AuthCore
 
 
 class TestAuthCore(unittest.TestCase):

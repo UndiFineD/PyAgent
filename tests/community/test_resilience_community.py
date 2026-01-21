@@ -4,7 +4,7 @@ from pathlib import Path
 
 # Add project root to sys.path
 
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry
+from src.infrastructure.fleet.agent_registry import AgentRegistry
 
 
 def test_broken_community_plugin() -> None:
@@ -19,7 +19,7 @@ def test_broken_community_plugin() -> None:
 
         # This should fail gracefully or show it's a stub
 
-        from src.infrastructure.fleet.ResilientStubs import ResilientStub
+        from src.infrastructure.fleet.resilient_stubs import ResilientStub
 
         if isinstance(agent, ResilientStub):
             print("Successfully caught broken plugin and returned ResilientStub!")

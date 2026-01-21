@@ -4,8 +4,8 @@ from pathlib import Path
 
 # Add project root to sys.path
 
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry
-from src.core.base.Version import SDK_VERSION
+from src.infrastructure.fleet.agent_registry import AgentRegistry
+from src.core.base.version import SDK_VERSION
 
 
 def test_community_demo() -> None:

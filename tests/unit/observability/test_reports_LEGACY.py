@@ -8,7 +8,7 @@ except ImportError:
 
 def test_sha256_text(report_module: Any) -> None:
     """Test SHA256 calculation."""
-    from src.observability.reports.ReportGeneratorCLI import _sha256_text
+    from src.observability.reports.report_generator_cli import _sha256_text
 
     text = "hello world"
     # echo -n "hello world" | sha256sum

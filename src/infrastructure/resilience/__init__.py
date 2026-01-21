@@ -3,7 +3,7 @@ Resilience infrastructure patterns.
 
 Phase 18: Beyond vLLM - Production-grade resilience patterns.
 """
-from src.infrastructure.resilience.CircuitBreaker import (
+from src.infrastructure.resilience.circuit_breaker import (
     CircuitBreaker,
     CircuitState,
     CircuitStats,
@@ -11,7 +11,7 @@ from src.infrastructure.resilience.CircuitBreaker import (
     CircuitBreakerRegistry,
     circuit_breaker,
 )
-from src.infrastructure.resilience.RetryStrategy import (
+from src.infrastructure.resilience.retry_strategy import (
     RetryStrategy,
     RetryStats,
     RetryExhaustedError,
@@ -19,7 +19,7 @@ from src.infrastructure.resilience.RetryStrategy import (
     RetryBudget,
     retry,
 )
-from src.infrastructure.resilience.AdaptiveRateLimiter import (
+from src.infrastructure.resilience.adaptive_rate_limiter import (
     TokenBucket,
     SlidingWindowCounter,
     AdaptiveRateLimiter,

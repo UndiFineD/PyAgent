@@ -44,7 +44,7 @@ class VerificationResult:
     @property
     def acceptance_rate(self) -> float:
         """Overall acceptance rate."""
-        if self.total_proposed == 0:
+        if not self.total_proposed:
             return 0.0
         return self.total_accepted / self.total_proposed
 
@@ -67,20 +67,20 @@ class SpecDecodingMetrics:
     
     @property
     def acceptance_rate(self) -> float:
-        if self.num_draft_tokens == 0:
+        if not self.num_draft_tokens:
             return 0.0
         return self.num_accepted_tokens / self.num_draft_tokens
     
     @property
     def draft_efficiency(self) -> float:
         """Tokens emitted per draft token (higher is better)."""
-        if self.num_draft_tokens == 0:
+        if not self.num_draft_tokens:
             return 0.0
         return self.num_emitted_tokens / self.num_draft_tokens
     
     def position_acceptance_rate(self, position: int) -> float:
         """Get acceptance rate for a specific position."""
-        if position >= len(self.position_proposed) or self.position_proposed[position] == 0:
+        if position >= len(self.position_proposed) or not self.position_proposed[position]:
             return 0.0
         return self.position_accepted[position] / self.position_proposed[position]
     
