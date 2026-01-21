@@ -10,12 +10,12 @@ from ..models import ReasoningResult, StreamingReasoningState
 class XMLReasoningParser(ReasoningParser):
     """
     Parser for XML-style think blocks.
-    
+
     Extracts reasoning from <think>...</think> or <reasoning>...</reasoning> tags.
     """
-    
+
     name: ClassVar[str] = "xml"
-    
+
     def __init__(
         self,
         tokenizer: Any = None,
@@ -31,27 +31,27 @@ class XMLReasoningParser(ReasoningParser):
             rf"{re.escape(start_tag)}(.*?){re.escape(end_tag)}",
             re.DOTALL,
         )
-    
+
     def is_reasoning_end(self, input_ids: list[int]) -> bool:
         if self.model_tokenizer is None:
             return False
         text = self.model_tokenizer.decode(input_ids)
         return self.end_tag in text
-    
+
     def extract_content_ids(self, input_ids: list[int]) -> list[int]:
         if self.model_tokenizer is None:
             return input_ids
-        
+
         text = self.model_tokenizer.decode(input_ids)
         content = self._extract_content(text)
         return self.model_tokenizer.encode(content, add_special_tokens=False)
-    
+
     def _extract_content(self, text: str) -> str:
         """Extract content after removing think blocks."""
         # Remove all think blocks
         content = self._pattern.sub("", text)
         return content.strip()
-    
+
     def extract_reasoning(
         self,
         model_output: str,
@@ -60,15 +60,15 @@ class XMLReasoningParser(ReasoningParser):
         # Find all think blocks
         matches = self._pattern.findall(model_output)
         reasoning = "\n".join(matches) if matches else None
-        
+
         # Get content without think blocks
         content = self._extract_content(model_output)
-        
+
         return ReasoningResult(
             reasoning=reasoning,
             content=content if content else None,
         )
-    
+
     def extract_reasoning_streaming(
         self,
         previous_text: str,
@@ -81,34 +81,34 @@ class XMLReasoningParser(ReasoningParser):
     ) -> tuple[ReasoningResult, StreamingReasoningState]:
         if state is None:
             state = StreamingReasoningState()
-        
+
         state.accumulated_text = current_text
         state.accumulated_tokens = list(current_token_ids)
-        
+
         # Check for start of reasoning
         if self.start_tag in current_text and not state.in_reasoning:
             state.in_reasoning = True
             # Extract text before start tag as content
             before_tag = current_text.split(self.start_tag)[0]
             state.content_buffer = before_tag
-        
+
         # Check for end of reasoning
         if self.end_tag in current_text and state.in_reasoning:
             state.in_reasoning = False
             state.reasoning_complete = True
-            
+
             # Extract the full reasoning
             match = self._pattern.search(current_text)
             if match:
                 state.reasoning_buffer = match.group(1)
-            
+
             # Get content after end tag
             after_tag = current_text.split(self.end_tag)[-1]
             state.content_buffer += after_tag
         elif state.reasoning_complete:
             # After reasoning is complete, accumulate content
             state.content_buffer = self._extract_content(current_text)
-        
+
         return ReasoningResult(
             reasoning=state.reasoning_buffer if state.reasoning_buffer else None,
             content=state.content_buffer if state.content_buffer else None,

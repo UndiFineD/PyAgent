@@ -21,14 +21,14 @@ class SpeculativeToken:
 class SpeculativeTree:
     """
     Tree structure for speculative tokens.
-    
+
     Represents a tree of candidate tokens where each node
     can have multiple children (branching speculation).
     """
     tokens: List[SpeculativeToken] = field(default_factory=list)
     root_position: int = 0
     max_depth: int = 0
-    
+
     def add_token(
         self,
         token_id: int,
@@ -40,9 +40,9 @@ class SpeculativeTree:
         depth = 0
         if parent_idx >= 0 and parent_idx < len(self.tokens):
             depth = self.tokens[parent_idx].depth + 1
-        
+
         self.max_depth = max(self.max_depth, depth)
-        
+
         token = SpeculativeToken(
             token_id=token_id,
             position=position,
@@ -52,7 +52,7 @@ class SpeculativeTree:
         )
         self.tokens.append(token)
         return len(self.tokens) - 1
-    
+
     def get_path_to_root(self, idx: int) -> List[int]:
         """Get path from token to root (reversed)."""
         path = []
@@ -60,22 +60,22 @@ class SpeculativeTree:
             path.append(self.tokens[idx].token_id)
             idx = self.tokens[idx].parent_idx
         return path[::-1]
-    
+
     def get_children(self, idx: int) -> List[int]:
         """Get indices of children for a node."""
         return [i for i, t in enumerate(self.tokens) if t.parent_idx == idx]
-    
+
     def get_leaves(self) -> List[int]:
         """Get indices of leaf nodes."""
         children_of = set(t.parent_idx for t in self.tokens)
         return [i for i in range(len(self.tokens)) if i not in children_of]
-    
+
     def to_sequences(self) -> List[List[int]]:
         """Convert tree to list of token sequences (root to each leaf)."""
         sequences = []
         for leaf_idx in self.get_leaves():
             sequences.append(self.get_path_to_root(leaf_idx))
         return sequences
-    
+
     def __len__(self) -> int:
         return len(self.tokens)

@@ -58,7 +58,7 @@ class MetricSpec:
     buckets: Optional[Tuple[float, ...]] = None
     namespace: str = "pyagent"
     subsystem: str = ""
-    
+
     @property
     def full_name(self) -> str:
         """Get full metric name with namespace."""
@@ -79,22 +79,22 @@ class MetricValue:
 
 class MetricCollector(ABC):
     """Abstract base for metric collectors."""
-    
+
     @abstractmethod
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
         """Increment a counter."""
         pass
-    
+
     @abstractmethod
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         """Set a gauge value."""
         pass
-    
+
     @abstractmethod
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         """Observe a value for histogram/summary."""
         pass
-    
+
     @abstractmethod
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
         """Get current value."""
@@ -103,35 +103,35 @@ class MetricCollector(ABC):
 
 class Counter(MetricCollector):
     """Thread-safe counter metric."""
-    
+
     def __init__(self, spec: MetricSpec):
         self.spec = spec
         self._values: Dict[Tuple[Tuple[str, str], ...], float] = {}
         self._lock = threading.Lock()
-    
+
     def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
-    
+
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
         key = self._label_key(labels)
         with self._lock:
             self._values[key] = self._values.get(key, 0.0) + value
-    
+
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         # Counters don't support set, only increment
         raise NotImplementedError("Counters only support increment")
-    
+
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         # For counters, observe is same as increment
         self.increment(value, labels)
-    
+
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
         key = self._label_key(labels)
         with self._lock:
             return self._values.get(key, 0.0)
-    
+
     def get_all(self) -> Dict[Tuple[Tuple[str, str], ...], float]:
         """Get all label combinations and values."""
         with self._lock:
@@ -140,38 +140,38 @@ class Counter(MetricCollector):
 
 class Gauge(MetricCollector):
     """Thread-safe gauge metric."""
-    
+
     def __init__(self, spec: MetricSpec):
         self.spec = spec
         self._values: Dict[Tuple[Tuple[str, str], ...], float] = {}
         self._lock = threading.Lock()
-    
+
     def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
-    
+
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
         key = self._label_key(labels)
         with self._lock:
             self._values[key] = self._values.get(key, 0.0) + value
-    
+
     def decrement(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
         self.increment(-value, labels)
-    
+
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         key = self._label_key(labels)
         with self._lock:
             self._values[key] = value
-    
+
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         self.set(value, labels)
-    
+
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
         key = self._label_key(labels)
         with self._lock:
             return self._values.get(key, 0.0)
-    
+
     def get_all(self) -> Dict[Tuple[Tuple[str, str], ...], float]:
         """Get all label combinations and values."""
         with self._lock:
@@ -187,20 +187,20 @@ class HistogramBucket:
 
 class Histogram(MetricCollector):
     """Thread-safe histogram metric with configurable buckets."""
-    
+
     DEFAULT_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, float('inf'))
-    
+
     def __init__(self, spec: MetricSpec):
         self.spec = spec
         self._buckets = spec.buckets or self.DEFAULT_BUCKETS
         self._data: Dict[Tuple[Tuple[str, str], ...], Dict[str, Any]] = {}
         self._lock = threading.Lock()
-    
+
     def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
-    
+
     def _get_or_create(self, key: Tuple[Tuple[str, str], ...]) -> Dict[str, Any]:
         if key not in self._data:
             self._data[key] = {
@@ -209,13 +209,13 @@ class Histogram(MetricCollector):
                 'count': 0,
             }
         return self._data[key]
-    
+
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
         raise NotImplementedError("Histograms only support observe")
-    
+
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         raise NotImplementedError("Histograms only support observe")
-    
+
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         key = self._label_key(labels)
         with self._lock:
@@ -225,7 +225,7 @@ class Histogram(MetricCollector):
             for bucket in self._buckets:
                 if value <= bucket:
                     data['buckets'][bucket] += 1
-    
+
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
         """Get the count."""
         key = self._label_key(labels)
@@ -233,14 +233,14 @@ class Histogram(MetricCollector):
             if key in self._data:
                 return self._data[key]['count']
             return 0.0
-    
+
     def get_sum(self, labels: Optional[Dict[str, str]] = None) -> float:
         key = self._label_key(labels)
         with self._lock:
             if key in self._data:
                 return self._data[key]['sum']
             return 0.0
-    
+
     def get_buckets(self, labels: Optional[Dict[str, str]] = None) -> Dict[float, int]:
         key = self._label_key(labels)
         with self._lock:
@@ -251,34 +251,34 @@ class Histogram(MetricCollector):
 
 class Summary(MetricCollector):
     """Thread-safe summary metric with quantiles."""
-    
+
     DEFAULT_QUANTILES = (0.5, 0.9, 0.95, 0.99)
-    
+
     def __init__(self, spec: MetricSpec, max_age_seconds: float = 60.0, max_samples: int = 1000):
         self.spec = spec
         self._max_age = max_age_seconds
         self._max_samples = max_samples
         self._data: Dict[Tuple[Tuple[str, str], ...], List[Tuple[float, float]]] = {}
         self._lock = threading.Lock()
-    
+
     def _label_key(self, labels: Optional[Dict[str, str]]) -> Tuple[Tuple[str, str], ...]:
         if not labels:
             return ()
         return tuple(sorted(labels.items()))
-    
+
     def _prune(self, samples: List[Tuple[float, float]], now: float) -> List[Tuple[float, float]]:
         cutoff = now - self._max_age
         pruned = [(t, v) for t, v in samples if t > cutoff]
         if len(pruned) > self._max_samples:
             pruned = pruned[-self._max_samples:]
         return pruned
-    
+
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
         raise NotImplementedError("Summaries only support observe")
-    
+
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         raise NotImplementedError("Summaries only support observe")
-    
+
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         key = self._label_key(labels)
         now = time.time()
@@ -288,7 +288,7 @@ class Summary(MetricCollector):
             samples = self._data[key]
             samples.append((now, value))
             self._data[key] = self._prune(samples, now)
-    
+
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
         """Get the count."""
         key = self._label_key(labels)
@@ -299,7 +299,7 @@ class Summary(MetricCollector):
                 self._data[key] = samples
                 return len(samples)
             return 0.0
-    
+
     def get_quantile(self, quantile: float, labels: Optional[Dict[str, str]] = None) -> float:
         key = self._label_key(labels)
         now = time.time()
@@ -318,24 +318,24 @@ class Summary(MetricCollector):
 class MetricsRegistry:
     """
     Central registry for all metrics.
-    
+
     Features:
     - Thread-safe metric registration
     - Multiprocessing support
     - Multiple backend support
     - Automatic cleanup
     """
-    
+
     _instance: Optional['MetricsRegistry'] = None
     _lock = threading.Lock()
-    
+
     def __init__(self, backend: MetricsBackend = MetricsBackend.PROMETHEUS):
         self._backend = backend
         self._metrics: Dict[str, MetricCollector] = {}
         self._metrics_lock = threading.Lock()
         self._multiproc_dir: Optional[tempfile.TemporaryDirectory] = None
         self._initialized = False
-    
+
     @classmethod
     def get_instance(cls, backend: MetricsBackend = MetricsBackend.PROMETHEUS) -> 'MetricsRegistry':
         """Get singleton instance."""
@@ -344,24 +344,24 @@ class MetricsRegistry:
                 if cls._instance is None:
                     cls._instance = cls(backend)
         return cls._instance
-    
+
     def setup_multiprocess(self) -> None:
         """Set up multiprocessing directory for prometheus."""
         if self._backend != MetricsBackend.PROMETHEUS:
             return
-        
+
         if "PROMETHEUS_MULTIPROC_DIR" not in os.environ:
             self._multiproc_dir = tempfile.TemporaryDirectory()
             os.environ["PROMETHEUS_MULTIPROC_DIR"] = self._multiproc_dir.name
-        
+
         self._initialized = True
-    
+
     def register(self, spec: MetricSpec) -> MetricCollector:
         """Register a new metric."""
         with self._metrics_lock:
             if spec.full_name in self._metrics:
                 return self._metrics[spec.full_name]
-            
+
             if spec.metric_type == MetricType.COUNTER:
                 collector = Counter(spec)
             elif spec.metric_type == MetricType.GAUGE:
@@ -372,15 +372,15 @@ class MetricsRegistry:
                 collector = Summary(spec)
             else:
                 raise ValueError(f"Unknown metric type: {spec.metric_type}")
-            
+
             self._metrics[spec.full_name] = collector
             return collector
-    
+
     def get(self, name: str) -> Optional[MetricCollector]:
         """Get a registered metric."""
         with self._metrics_lock:
             return self._metrics.get(name)
-    
+
     def counter(
         self,
         name: str,
@@ -399,7 +399,7 @@ class MetricsRegistry:
             subsystem=subsystem,
         )
         return self.register(spec)  # type: ignore
-    
+
     def gauge(
         self,
         name: str,
@@ -418,7 +418,7 @@ class MetricsRegistry:
             subsystem=subsystem,
         )
         return self.register(spec)  # type: ignore
-    
+
     def histogram(
         self,
         name: str,
@@ -439,7 +439,7 @@ class MetricsRegistry:
             subsystem=subsystem,
         )
         return self.register(spec)  # type: ignore
-    
+
     def summary(
         self,
         name: str,
@@ -458,7 +458,7 @@ class MetricsRegistry:
             subsystem=subsystem,
         )
         return self.register(spec)  # type: ignore
-    
+
     def collect_all(self) -> Dict[str, Any]:
         """Collect all metric values."""
         result = {}
@@ -491,12 +491,12 @@ class MetricsRegistry:
                         },
                     }
         return result
-    
+
     def reset(self) -> None:
         """Reset all metrics."""
         with self._metrics_lock:
             self._metrics.clear()
-    
+
     def shutdown(self) -> None:
         """Shutdown and cleanup."""
         self.reset()
@@ -509,16 +509,16 @@ class MetricsRegistry:
 class SampledCounter(Counter):
     """
     Counter with sampling for high-frequency operations.
-    
+
     Beyond vLLM: Rate-limited counter to prevent cardinality explosion.
     """
-    
+
     def __init__(self, spec: MetricSpec, sample_rate: float = 0.1):
         super().__init__(spec)
         self._sample_rate = sample_rate
         self._sample_counter = 0
         self._sample_lock = threading.Lock()
-    
+
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
         with self._sample_lock:
             self._sample_counter += 1
@@ -529,20 +529,20 @@ class SampledCounter(Counter):
 class RateLimitedGauge(Gauge):
     """
     Gauge with rate limiting for updates.
-    
+
     Beyond vLLM: Prevents excessive updates in hot paths.
     """
-    
+
     def __init__(self, spec: MetricSpec, min_interval: float = 0.1):
         super().__init__(spec)
         self._min_interval = min_interval
         self._last_update: Dict[Tuple[Tuple[str, str], ...], float] = {}
         self._rate_lock = threading.Lock()
-    
+
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
         key = self._label_key(labels)
         now = time.time()
-        
+
         with self._rate_lock:
             last = self._last_update.get(key, 0)
             if now - last >= self._min_interval:
@@ -553,10 +553,10 @@ class RateLimitedGauge(Gauge):
 # Pre-defined vLLM-compatible metrics
 class VLLMMetrics:
     """Collection of vLLM-compatible metrics."""
-    
+
     def __init__(self, registry: Optional[MetricsRegistry] = None):
         self.registry = registry or MetricsRegistry.get_instance()
-        
+
         # Request metrics
         self.num_requests_running = self.registry.gauge(
             "num_requests_running",
@@ -568,7 +568,7 @@ class VLLMMetrics:
             "Number of requests waiting in queue",
             subsystem="engine",
         )
-        
+
         # Token metrics
         self.num_prompt_tokens = self.registry.counter(
             "num_prompt_tokens_total",
@@ -580,7 +580,7 @@ class VLLMMetrics:
             "Total number of generation tokens produced",
             subsystem="engine",
         )
-        
+
         # Latency metrics
         self.request_latency = self.registry.histogram(
             "request_latency_seconds",
@@ -600,7 +600,7 @@ class VLLMMetrics:
             subsystem="engine",
             buckets=(0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, float('inf')),
         )
-        
+
         # Cache metrics
         self.cache_hit_rate = self.registry.gauge(
             "cache_hit_rate",
@@ -612,7 +612,7 @@ class VLLMMetrics:
             "KV cache usage fraction",
             subsystem="cache",
         )
-        
+
         # GPU metrics
         self.gpu_memory_used = self.registry.gauge(
             "gpu_memory_used_bytes",
@@ -620,7 +620,7 @@ class VLLMMetrics:
             labels=("device",),
             subsystem="gpu",
         )
-        
+
         # Speculative decoding metrics
         self.spec_decode_acceptance_rate = self.registry.gauge(
             "spec_decode_acceptance_rate",

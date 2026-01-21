@@ -73,8 +73,8 @@ class GUIAgent(BaseAgent):
 
     @as_tool
     async def design_layout(
-        self, 
-        framework: str, 
+        self,
+        framework: str,
         description: str,
         responsive: bool = True,
         accessibility: bool = True,
@@ -82,7 +82,7 @@ class GUIAgent(BaseAgent):
     ) -> Dict[str, Any]:
         """Generates GUI layout code based on description."""
         framework_enum = Framework(framework.lower()) if framework.lower() in [f.value for f in Framework] else Framework.REACT
-        
+
         prompt = (
             f"Framework: {framework_enum.value}\n"
             f"Description: {description}\n"
@@ -98,9 +98,9 @@ class GUIAgent(BaseAgent):
             "4. Accessibility attributes\n"
             "5. Brief comments explaining key sections"
         )
-        
+
         code = await self.improve_content(prompt)
-        
+
         return {
             "framework": framework_enum.value,
             "code": code,
@@ -125,14 +125,14 @@ class GUIAgent(BaseAgent):
             '  "suggested_actions": [{"action": "click|type|scroll", "target": "element_id", "purpose": "..."}]\n'
             "}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
-                
+
                 # Cache elements
                 for elem in data.get("elements", []):
                     ui_elem = UIElement(
@@ -143,17 +143,17 @@ class GUIAgent(BaseAgent):
                         clickable=elem.get("clickable", False)
                     )
                     self._element_cache[ui_elem.id] = ui_elem
-                
+
                 return data
         except Exception as e:
             logging.debug(f"GUIAgent: Parse error: {e}")
-        
+
         return {"raw": res}
 
     @as_tool
     async def generate_action_sequence(
-        self, 
-        goal: str, 
+        self,
+        goal: str,
         ui_dump: str
     ) -> Dict[str, Any]:
         """Generates a sequence of UI actions to achieve a goal."""
@@ -163,14 +163,14 @@ class GUIAgent(BaseAgent):
             "Generate a sequence of actions to achieve this goal:\n"
             "Output JSON: {'actions': [{'action': 'click|type|scroll|swipe|wait', 'target': 'element_id', 'value': 'text to type (if applicable)', 'reason': 'why this action'}]}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
-                
+
                 # Record actions
                 for action in data.get("actions", []):
                     self._action_history.append(UIAction(
@@ -178,17 +178,17 @@ class GUIAgent(BaseAgent):
                         target_id=action.get("target", ""),
                         parameters={"value": action.get("value"), "reason": action.get("reason")}
                     ))
-                
+
                 return data
         except Exception:
             pass
-        
+
         return {"raw": res}
 
     @as_tool
     async def create_component(
-        self, 
-        component_type: str, 
+        self,
+        component_type: str,
         props: Dict[str, Any],
         framework: str = "react"
     ) -> Dict[str, Any]:
@@ -204,9 +204,9 @@ class GUIAgent(BaseAgent):
             "5. Usage example\n"
             "Output the complete component code."
         )
-        
+
         code = await self.improve_content(prompt)
-        
+
         return {
             "component_type": component_type,
             "framework": framework,
@@ -229,21 +229,21 @@ class GUIAgent(BaseAgent):
             "6. Focus management issues\n\n"
             "Output JSON: {'score': 0-100, 'issues': [{'severity': 'critical|major|minor', 'description': '...', 'line': N, 'fix': '...'}], 'recommendations': [...]}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"raw": res}
 
     @as_tool
     async def convert_framework(
-        self, 
-        source_code: str, 
-        source_framework: str, 
+        self,
+        source_code: str,
+        source_framework: str,
         target_framework: str
     ) -> Dict[str, Any]:
         """Converts UI code between frameworks."""
@@ -258,9 +258,9 @@ class GUIAgent(BaseAgent):
             "5. Accessibility features\n"
             "Output the complete converted code."
         )
-        
+
         converted = await self.improve_content(prompt)
-        
+
         return {
             "source_framework": source_framework,
             "target_framework": target_framework,

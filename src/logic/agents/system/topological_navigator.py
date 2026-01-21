@@ -31,7 +31,7 @@ __version__ = VERSION
 
 class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin):
     """
-    Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships 
+    Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
     and determines the impact of changes using graph-based dependency analysis.
     """
 

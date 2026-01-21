@@ -31,13 +31,13 @@ class EntanglementOrchestrator:
         self.fleet = fleet
         self.version = VERSION
         self._state: Dict[str, Any] = {}
-        
+
         # Subscribe to sync signals if possible
         try:
             self.fleet.signal_bus.subscribe("entanglement_sync", self._on_sync)
         except Exception:
             pass
-            
+
         logging.info("EntanglementOrchestrator initialized.")
 
     def update_state(self, key: str, value: Any) -> None:

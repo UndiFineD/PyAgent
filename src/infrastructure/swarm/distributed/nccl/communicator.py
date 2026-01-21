@@ -29,14 +29,14 @@ except ImportError:
 class NCCLCommunicator:
     """
     Pure Python wrapper for NCCL collective operations.
-    
+
     Provides:
     - Standard collective operations with error handling
     - Automatic retry on transient failures
     - Stream-based async operations
     - CUDA graph compatibility
     """
-    
+
     def __init__(
         self,
         group: Any = None,
@@ -45,7 +45,7 @@ class NCCLCommunicator:
     ):
         """
         Initialize NCCL communicator.
-        
+
         Args:
             group: Process group (uses world group if None)
             config: NCCL configuration
@@ -54,7 +54,7 @@ class NCCLCommunicator:
         self.config = config or NCCLConfig()
         self.group = group
         self._stats = NCCLStats()
-        
+
         if HAS_TORCH:
             if device is None:
                 if torch.cuda.is_available():
@@ -68,7 +68,7 @@ class NCCLCommunicator:
         else:
             self.device = device or "cpu"
             self._stream = None
-        
+
         # Initialize world info
         if HAS_DIST and dist.is_initialized():
             self._world_size = dist.get_world_size(group)
@@ -76,29 +76,29 @@ class NCCLCommunicator:
         else:
             self._world_size = 1
             self._rank = 0
-        
+
         logger.debug(
             f"NCCLCommunicator initialized: rank={self._rank}/{self._world_size}"
         )
-    
+
     @property
     def world_size(self) -> int:
         """Get world size for this group."""
         return self._world_size
-    
+
     @property
     def rank(self) -> int:
         """Get rank in this group."""
         return self._rank
-    
+
     def _map_reduce_op(self, op: ReduceOp | str) -> Any:
         """Map our ReduceOp to dist.ReduceOp."""
         if not HAS_DIST:
             return None
-        
+
         if isinstance(op, str):
             op = ReduceOp[op.upper()]
-        
+
         mapping = {
             ReduceOp.SUM: dist.ReduceOp.SUM,
             ReduceOp.PROD: dist.ReduceOp.PRODUCT,
@@ -107,19 +107,19 @@ class NCCLCommunicator:
             ReduceOp.AVG: dist.ReduceOp.SUM,  # Will divide after
         }
         return mapping.get(op, dist.ReduceOp.SUM)
-    
+
     def _with_retry(self, op_name: str, fn: Callable) -> Any:
         """Execute operation with retry on failure."""
         last_error = None
         delay = self.config.retry_delay_seconds
-        
+
         for attempt in range(self.config.max_retries + 1):
             try:
                 return fn()
             except Exception as e:
                 last_error = e
                 self._stats.errors += 1
-                
+
                 if attempt < self.config.max_retries:
                     self._stats.retry_count += 1
                     logger.warning(
@@ -130,9 +130,9 @@ class NCCLCommunicator:
                     delay *= self.config.retry_backoff_factor
                 else:
                     logger.error(f"NCCL {op_name} failed after {attempt + 1} attempts: {e}")
-        
+
         raise last_error
-    
+
     @contextmanager
     def _timed_op(self, op_name: str, tensor: Any = None):
         """Context manager for timing operations."""
@@ -140,13 +140,13 @@ class NCCLCommunicator:
         yield
         elapsed = (time.perf_counter() - start) * 1000  # ms
         self._stats.total_time_ms += elapsed
-        
+
         if tensor is not None and HAS_TORCH:
             self._stats.total_bytes += tensor.numel() * tensor.element_size()
-        
+
         if self.config.log_all_ops:
             logger.debug(f"NCCL {op_name}: {elapsed:.2f}ms")
-    
+
     def all_reduce(
         self,
         tensor: Any,
@@ -157,16 +157,16 @@ class NCCLCommunicator:
         All-reduce tensor across all ranks.
         """
         self._stats.all_reduce_count += 1
-        
+
         if self._world_size == 1:
             return None
-        
+
         if not HAS_DIST or not dist.is_initialized():
             return None
-        
+
         reduce_op = self._map_reduce_op(op)
         is_avg = (op == ReduceOp.AVG or op == "avg")
-        
+
         def do_reduce():
             with self._timed_op("all_reduce", tensor):
                 handle = dist.all_reduce(
@@ -178,9 +178,9 @@ class NCCLCommunicator:
                 if is_avg and not async_op:
                     tensor.div_(self._world_size)
                 return handle
-        
+
         return self._with_retry("all_reduce", do_reduce)
-    
+
     def all_gather(
         self,
         tensor: Any,
@@ -191,16 +191,16 @@ class NCCLCommunicator:
         All-gather tensors from all ranks.
         """
         self._stats.all_gather_count += 1
-        
+
         if self._world_size == 1:
             return tensor
-        
+
         if not HAS_TORCH:
             return tensor
-        
+
         if not HAS_DIST or not dist.is_initialized():
             return tensor
-        
+
         def do_gather():
             with self._timed_op("all_gather", tensor):
                 tensor_list = [torch.empty_like(tensor) for _ in range(self._world_size)]
@@ -213,9 +213,9 @@ class NCCLCommunicator:
                 if async_op:
                     return handle, tensor_list
                 return torch.cat(tensor_list, dim=dim)
-        
+
         return self._with_retry("all_gather", do_gather)
-    
+
     def reduce_scatter(
         self,
         tensor: Any,
@@ -227,25 +227,25 @@ class NCCLCommunicator:
         Reduce-scatter: reduce then scatter result.
         """
         self._stats.reduce_scatter_count += 1
-        
+
         if self._world_size == 1:
             return tensor
-        
+
         if not HAS_TORCH:
             return tensor
-        
+
         if not HAS_DIST or not dist.is_initialized():
             chunk_size = tensor.shape[dim] // self._world_size
             start = self._rank * chunk_size
             return tensor.narrow(dim, start, chunk_size)
-        
+
         reduce_op = self._map_reduce_op(op)
-        
+
         def do_reduce_scatter():
             with self._timed_op("reduce_scatter", tensor):
                 input_chunks = list(tensor.chunk(self._world_size, dim=dim))
                 output = torch.empty_like(input_chunks[0])
-                
+
                 handle = dist.reduce_scatter(
                     output,
                     input_chunks,
@@ -254,9 +254,9 @@ class NCCLCommunicator:
                     async_op=async_op,
                 )
                 return handle if async_op else output
-        
+
         return self._with_retry("reduce_scatter", do_reduce_scatter)
-    
+
     def reduce_scatterv(
         self,
         tensor: Any,
@@ -269,21 +269,21 @@ class NCCLCommunicator:
         """
         if self._world_size == 1:
             return tensor
-        
+
         if not HAS_TORCH:
             return tensor
-        
+
         if not HAS_DIST or not dist.is_initialized():
             start = sum(output_sizes[:self._rank])
             return tensor.narrow(dim, start, output_sizes[self._rank])
-        
+
         reduce_op = self._map_reduce_op(op)
-        
+
         def do_reduce_scatterv():
             with self._timed_op("reduce_scatterv", tensor):
                 input_chunks = list(tensor.split(output_sizes, dim=dim))
                 output = torch.empty_like(input_chunks[self._rank])
-                
+
                 handle = dist.reduce_scatter(
                     output,
                     input_chunks,
@@ -291,9 +291,9 @@ class NCCLCommunicator:
                     group=self.group,
                 )
                 return output
-        
+
         return self._with_retry("reduce_scatterv", do_reduce_scatterv)
-    
+
     def broadcast(
         self,
         tensor: Any,
@@ -305,10 +305,10 @@ class NCCLCommunicator:
         """
         if self._world_size == 1:
             return None
-        
+
         if not HAS_DIST or not dist.is_initialized():
             return None
-        
+
         def do_broadcast():
             with self._timed_op("broadcast", tensor):
                 return dist.broadcast(
@@ -317,9 +317,9 @@ class NCCLCommunicator:
                     group=self.group,
                     async_op=async_op,
                 )
-        
+
         return self._with_retry("broadcast", do_broadcast)
-    
+
     def send(
         self,
         tensor: Any,
@@ -330,16 +330,16 @@ class NCCLCommunicator:
         Send tensor to destination rank.
         """
         self._stats.send_count += 1
-        
+
         if not HAS_DIST or not dist.is_initialized():
             return
-        
+
         def do_send():
             with self._timed_op("send", tensor):
                 dist.send(tensor, dst=dst, group=self.group, tag=tag)
-        
+
         self._with_retry("send", do_send)
-    
+
     def recv(
         self,
         tensor: Any,
@@ -350,32 +350,32 @@ class NCCLCommunicator:
         Receive tensor from source rank.
         """
         self._stats.recv_count += 1
-        
+
         if not HAS_DIST or not dist.is_initialized():
             return
-        
+
         def do_recv():
             with self._timed_op("recv", tensor):
                 dist.recv(tensor, src=src, group=self.group, tag=tag)
-        
+
         self._with_retry("recv", do_recv)
-    
+
     def barrier(self) -> None:
         """Synchronize all ranks in the group."""
         self._stats.barrier_count += 1
-        
+
         if self._world_size == 1:
             return
-        
+
         if not HAS_DIST or not dist.is_initialized():
             return
-        
+
         def do_barrier():
             with self._timed_op("barrier"):
                 dist.barrier(group=self.group)
-        
+
         self._with_retry("barrier", do_barrier)
-    
+
     @contextmanager
     def stream_context(self):
         """
@@ -386,12 +386,12 @@ class NCCLCommunicator:
                 yield
         else:
             yield
-    
+
     def synchronize(self) -> None:
         """Synchronize the communication stream."""
         if self._stream is not None and HAS_TORCH:
             self._stream.synchronize()
-    
+
     def get_stats(self) -> dict[str, Any]:
         """Get communicator statistics."""
         return {
@@ -408,7 +408,7 @@ class NCCLCommunicator:
             "total_time_ms": self._stats.total_time_ms,
             "errors": self._stats.errors,
         }
-    
+
     def reset_stats(self) -> None:
         """Reset statistics."""
         self._stats = NCCLStats()
@@ -418,7 +418,7 @@ class CustomAllReduce:
     """
     Custom all-reduce implementation for specific scenarios.
     """
-    
+
     def __init__(
         self,
         communicator: NCCLCommunicator,
@@ -426,7 +426,7 @@ class CustomAllReduce:
     ):
         """
         Initialize custom all-reduce.
-        
+
         Args:
             communicator: Base NCCL communicator
             threshold: Size threshold for custom implementation
@@ -435,7 +435,7 @@ class CustomAllReduce:
         self.threshold = threshold
         self._use_custom = False
         self._fallback_count = 0
-    
+
     def all_reduce(
         self,
         tensor: Any,
@@ -446,9 +446,9 @@ class CustomAllReduce:
         """
         if not HAS_TORCH:
             return
-        
+
         tensor_size = tensor.numel() * tensor.element_size()
-        
+
         if self._use_custom and tensor_size >= self.threshold:
             try:
                 self._custom_all_reduce(tensor, op)
@@ -456,10 +456,10 @@ class CustomAllReduce:
             except Exception as e:
                 logger.warning(f"Custom all-reduce failed, falling back to NCCL: {e}")
                 self._fallback_count += 1
-        
+
         # Fall back to NCCL
         self.comm.all_reduce(tensor, op=op)
-    
+
     def _custom_all_reduce(
         self,
         tensor: Any,
@@ -467,7 +467,7 @@ class CustomAllReduce:
     ) -> None:
         """Custom all-reduce implementation."""
         raise NotImplementedError("Custom all-reduce not yet implemented")
-    
+
     def get_stats(self) -> dict[str, Any]:
         """Get custom all-reduce statistics."""
         return {

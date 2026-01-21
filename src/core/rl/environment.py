@@ -124,10 +124,10 @@ class CodeImprovementEnvironment(RLEnvironment):
     def step(self, action: int) -> Tuple[Dict, float, bool, bool, Dict]:
         self._current_step += 1
         old_metrics = dict(self.metrics)
-        
+
         # Simulate action effects
         action_name = self.action_space.actions[action] if action < len(self.action_space.actions) else "skip"
-        
+
         if action_name == "refactor":
             self.metrics["complexity"] = max(1, self.metrics["complexity"] - 5)
             self.metrics["quality"] = min(1.0, self.metrics["quality"] + 0.05)
@@ -144,15 +144,15 @@ class CodeImprovementEnvironment(RLEnvironment):
         reward += (old_metrics["complexity"] - self.metrics["complexity"]) * 0.1
         reward += (self.metrics["coverage"] - old_metrics["coverage"]) * 5.0
         reward += (self.metrics["quality"] - old_metrics["quality"]) * 2.0
-        
+
         reward = self._shape_reward(reward, old_metrics, self.metrics)
         self._current_episode_reward += reward
         self.state = self._get_state()
 
         # Check termination
         self._terminated = (
-            self.metrics["complexity"] <= 10 and 
-            self.metrics["coverage"] >= 0.9 and 
+            self.metrics["complexity"] <= 10 and
+            self.metrics["coverage"] >= 0.9 and
             self.metrics["quality"] >= 0.9
         )
         self._truncated = self._current_step >= self.max_steps

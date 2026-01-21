@@ -14,17 +14,17 @@ class FleetDiscoveryMixin:
     """
     Mixin for FleetManager to support LAN-based peer discovery and synchronization.
     """
-    
+
     def init_discovery(self, agent_id: str, service_port: int = 8000):
         """Initializes the LAN discovery service."""
         # Security: Check for discovery secret in environment
         secret = os.environ.get("PYAGENT_DISCOVERY_SECRET")
-        
+
         metadata = {
             "version": getattr(self, "version", "unknown"),
             "capabilities": list(getattr(self, "_capability_hints", {}).keys())[:10]
         }
-        
+
         self._discovery = LANDiscovery(
             agent_id=agent_id,
             service_port=service_port,

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Verification script to ensure core fleet components are correctly refactored 
+Verification script to ensure core fleet components are correctly refactored
 and importable. Ported from temp/verify_refactor.py.
 """
 
@@ -30,15 +30,15 @@ def test_imports():
     try:
         from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
         from src.logic.agents.specialists.handy_agent import HandyAgent
-        
+
         print(f"Detecting workspace root at: {project_root}")
-        
+
         fleet = FleetManager(workspace_root=str(project_root))
         print("SUCCESS: FleetManager instantiated.")
-        
+
         handy = HandyAgent(file_path="dummy.py")
         print("SUCCESS: HandyAgent instantiated.")
-        
+
         return True
     except Exception as e:
         print(f"FAILURE: Error during instantiation: {e}")

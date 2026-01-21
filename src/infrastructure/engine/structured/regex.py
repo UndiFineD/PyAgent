@@ -46,7 +46,7 @@ class RegexGrammar(GrammarEngine):
     """
     Regex-based grammar engine.
     """
-    
+
     def __init__(
         self,
         vocab_size: int,
@@ -55,27 +55,27 @@ class RegexGrammar(GrammarEngine):
     ):
         super().__init__(vocab_size, token_strings, eos_token_id)
         self._compiled_cache: Dict[str, FSMTransitionTable] = {}
-    
+
     def build_fsm(self, spec: str) -> FSMTransitionTable:
         """Build DFA from regex pattern."""
         if spec in self._compiled_cache:
             return self._compiled_cache[spec]
-        
+
         with contextlib.suppress(Exception):
             parsed = _sre_parse.parse(spec)
             nfa = self._build_nfa(parsed)
             dfa = self._nfa_to_dfa(nfa)
             self._compiled_cache[spec] = dfa
             return dfa
-            
+
         return self._build_simple_fsm(spec)
-    
+
     def _build_nfa(self, parsed) -> Dict:
         """Build NFA from parsed regex."""
         nfa: Dict[int, Dict[str, Set[int]]] = {0: {}}
         state_counter = [1]
         accepting = set()
-        
+
         def process_pattern(pattern, start_state: int) -> Set[int]:
             end_states = {start_state}
             for op, av in pattern:
@@ -83,7 +83,7 @@ class RegexGrammar(GrammarEngine):
                 for state in end_states:
                     if state not in nfa:
                         nfa[state] = {}
-                    
+
                     if op == _LITERAL:
                         char = chr(av)
                         new_state = state_counter[0]
@@ -143,7 +143,7 @@ class RegexGrammar(GrammarEngine):
                         new_end_states.add(state)
                 end_states = new_end_states if new_end_states else end_states
             return end_states
-        
+
         final_states = process_pattern(parsed, 0)
         accepting.update(final_states)
         return {"nfa": nfa, "accepting": accepting, "initial": 0}

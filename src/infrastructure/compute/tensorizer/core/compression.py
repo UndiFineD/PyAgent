@@ -13,7 +13,7 @@ def compress_data(
     """Compress data using specified compression."""
     if compression == CompressionType.NONE:
         return data
-    
+
     if compression == CompressionType.ZSTD:
         try:
             import zstandard as zstd
@@ -21,18 +21,18 @@ def compress_data(
             return cctx.compress(data)
         except ImportError:
             return data
-    
+
     if compression == CompressionType.LZ4:
         try:
             import lz4.frame
             return lz4.frame.compress(data, compression_level=level)
         except ImportError:
             return data
-    
+
     if compression == CompressionType.GZIP:
         import gzip
         return gzip.compress(data, compresslevel=level)
-    
+
     return data
 
 
@@ -43,7 +43,7 @@ def decompress_data(
     """Decompress data using specified compression."""
     if compression == CompressionType.NONE:
         return data
-    
+
     if compression == CompressionType.ZSTD:
         try:
             import zstandard as zstd
@@ -51,16 +51,16 @@ def decompress_data(
             return dctx.decompress(data)
         except ImportError:
             return data
-    
+
     if compression == CompressionType.LZ4:
         try:
             import lz4.frame
             return lz4.frame.decompress(data)
         except ImportError:
             return data
-    
+
     if compression == CompressionType.GZIP:
         import gzip
         return gzip.decompress(data)
-    
+
     return data

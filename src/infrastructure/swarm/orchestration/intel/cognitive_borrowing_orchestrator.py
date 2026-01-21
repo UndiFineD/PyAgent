@@ -31,7 +31,7 @@ class CognitiveBorrowingOrchestrator:
         """Establishes a cognitive bridge between two domains."""
         logging.info(f"CognitiveBorrowing: Bridge established between {src} and {dst}")
         return True
-        
+
     def borrow_skill(self, agent_name: str, skill_name: str) -> str:
         """Borrows a skill pattern from an agent."""
         logging.info(f"CognitiveBorrowing: Borrowing {skill_name} from {agent_name}")

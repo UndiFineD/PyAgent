@@ -6,7 +6,7 @@ Each command module should use the @register decorator to register handlers.
 
 Example command module (commands/greet.py):
     from src.interface.slash_commands import register, CommandContext, CommandResult
-    
+
     @register("greet", description="Greet someone", aliases=["hi", "hello"])
     def cmd_greet(ctx: CommandContext) -> CommandResult:
         return CommandResult.ok(f"[Hello, {ctx.first_arg or 'world'}!]")

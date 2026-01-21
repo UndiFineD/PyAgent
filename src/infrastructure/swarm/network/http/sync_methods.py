@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 class SyncHTTPMixin:
     """Mixin providing synchronous HTTP methods."""
-    
+
     def get_response(
         self: HTTPConnection,
         url: str,
@@ -18,10 +18,10 @@ class SyncHTTPMixin:
     ) -> Any:
         """Make a GET request and return the response object."""
         self._validate_http_url(url)
-        
+
         client = self.get_sync_client()
         extra_headers = extra_headers or {}
-        
+
         return client.get(
             url,
             headers=self._headers(**extra_headers),
@@ -29,7 +29,7 @@ class SyncHTTPMixin:
             timeout=timeout or self.default_timeout,
             allow_redirects=allow_redirects,
         )
-    
+
     def get_bytes(
         self: HTTPConnection,
         url: str,
@@ -43,7 +43,7 @@ class SyncHTTPMixin:
         ) as r:
             r.raise_for_status()
             return r.content
-    
+
     def get_text(
         self: HTTPConnection,
         url: str,
@@ -57,7 +57,7 @@ class SyncHTTPMixin:
             if encoding:
                 r.encoding = encoding
             return r.text
-    
+
     def get_json(
         self: HTTPConnection,
         url: str,
@@ -68,7 +68,7 @@ class SyncHTTPMixin:
         with self.get_response(url, timeout=timeout) as r:
             r.raise_for_status()
             return r.json()
-    
+
     def post_json(
         self: HTTPConnection,
         url: str,
@@ -79,10 +79,10 @@ class SyncHTTPMixin:
     ) -> Any:
         """POST JSON data and return parsed JSON response."""
         self._validate_http_url(url)
-        
+
         client = self.get_sync_client()
         extra_headers = extra_headers or {}
-        
+
         r = client.post(
             url,
             json=data,
@@ -91,7 +91,7 @@ class SyncHTTPMixin:
         )
         r.raise_for_status()
         return r.json()
-    
+
     def download_file(
         self: HTTPConnection,
         url: str,
@@ -104,18 +104,18 @@ class SyncHTTPMixin:
         """Download a file from URL to local path."""
         save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         with self.get_response(url, stream=True, timeout=timeout) as r:
             r.raise_for_status()
-            
+
             total_size = int(r.headers.get("content-length", 0)) or None
             downloaded = 0
-            
+
             with save_path.open("wb") as f:
                 for chunk in r.iter_content(chunk_size=chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)
                     if progress_callback:
                         progress_callback(downloaded, total_size)
-        
+
         return save_path

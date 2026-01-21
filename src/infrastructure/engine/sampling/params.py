@@ -93,7 +93,7 @@ class SamplingState:
     generated_ids: List[int] = field(default_factory=list)
     token_counts: Dict[int, int] = field(default_factory=dict)
     prompt_token_ids: Optional[List[int]] = None
-    
+
     # Random state for reproducibility
     rng: Optional[np.random.Generator] = None
 

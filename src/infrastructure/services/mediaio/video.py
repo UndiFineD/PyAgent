@@ -22,7 +22,7 @@ from .models import (
 
 class VideoLoader(MediaLoader):
     """Load and process videos."""
-    
+
     def __init__(self):
         self._cv2_available = False
         try:
@@ -31,10 +31,10 @@ class VideoLoader(MediaLoader):
             self._cv2 = cv2
         except ImportError:
             pass
-    
+
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.VIDEO
-    
+
     async def load(
         self,
         source: Union[str, bytes, BinaryIO],
@@ -43,7 +43,7 @@ class VideoLoader(MediaLoader):
         """Load video from source."""
         if not self._cv2_available:
             raise RuntimeError("OpenCV required for video loading")
-        
+
         if isinstance(source, bytes):
             import tempfile
             with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as f:
@@ -53,7 +53,7 @@ class VideoLoader(MediaLoader):
         else:
             path = str(source)
             source_str = path
-        
+
         frames, timestamps, metadata = await self._load_frames(path, config)
         return VideoData(
             frames=frames,
@@ -61,7 +61,7 @@ class VideoLoader(MediaLoader):
             source=source_str,
             timestamps=timestamps,
         )
-    
+
     async def _load_frames(
         self,
         path: str,
@@ -75,17 +75,17 @@ class VideoLoader(MediaLoader):
             width = int(cap.get(self._cv2.CAP_PROP_FRAME_WIDTH))
             height = int(cap.get(self._cv2.CAP_PROP_FRAME_HEIGHT))
             duration = total_frames / fps if fps > 0 else 0
-            
+
             if config.frame_rate and config.frame_rate < fps:
                 step = fps / config.frame_rate
                 indices = [int(i * step) for i in range(int(total_frames / step))]
             else:
                 indices = list(range(total_frames))
-            
+
             if len(indices) > config.max_frames:
                 step = len(indices) / config.max_frames
                 indices = [indices[int(i * step)] for i in range(config.max_frames)]
-            
+
             frames = []
             timestamps = []
             for idx in indices:
@@ -101,7 +101,7 @@ class VideoLoader(MediaLoader):
                         )
                     frames.append(frame)
                     timestamps.append(idx / fps if fps > 0 else 0)
-            
+
             frames_arr = np.stack(frames, axis=0).astype(np.float32)
             timestamps_arr = np.array(timestamps, dtype=np.float32)
             if config.normalize:
@@ -109,7 +109,7 @@ class VideoLoader(MediaLoader):
                 mean = np.array(config.mean, dtype=np.float32).reshape(1, 1, 1, 3)
                 std = np.array(config.std, dtype=np.float32).reshape(1, 1, 1, 3)
                 frames_arr = (frames_arr - mean) / std
-            
+
             metadata = MediaMetadata(
                 media_type=MediaType.VIDEO,
                 format=VideoFormat.MP4,

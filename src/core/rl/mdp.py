@@ -27,17 +27,17 @@ class ExperienceReplayBuffer:
     capacity: int = 10000
     buffer: List[Transition] = field(default_factory=list)
     position: int = 0
-    
+
     def push(self, transition: Transition) -> None:
         if len(self.buffer) < self.capacity:
             self.buffer.append(transition)
         else:
             self.buffer[self.position] = transition
         self.position = (self.position + 1) % self.capacity
-    
+
     def sample(self, batch_size: int) -> List[Transition]:
         return random.sample(self.buffer, min(batch_size, len(self.buffer)))
-    
+
     def prioritized_sample(self, batch_size: int, alpha: float = 0.6) -> List[Transition]:
         """Samples with priority weighting."""
         priorities = [t.priority ** alpha for t in self.buffer]
@@ -52,7 +52,7 @@ class MDP:
     Implements: S (States), A (Actions), P(s'|s,a) (Transition Dynamics), R(s,a) (Rewards)
     Enhanced with value iteration, policy extraction, and model-based planning.
     """
-    
+
     def __init__(self, gamma: float = 0.99):
         self.transitions: List[Transition] = []
         self.states: List[Any] = []
@@ -70,14 +70,14 @@ class MDP:
         t = Transition(state, action, next_state, reward, done, timestamp or time.time())
         self.transitions.append(t)
         self.replay_buffer.push(t)
-        
-        if state not in self.states: 
+
+        if state not in self.states:
             self.states.append(state)
-        if next_state not in self.states: 
+        if next_state not in self.states:
             self.states.append(next_state)
-        if action not in self.actions: 
+        if action not in self.actions:
             self.actions.append(action)
-        
+
         # Update transition model P(s'|s,a)
         self.transition_model[(state, action)][next_state] += 1
         # Update reward model R(s,a)
@@ -111,14 +111,14 @@ class MDP:
                         r = self.get_expected_reward(state, action)
                         expected_value += p * (r + self.gamma * self.value_function[next_state])
                     action_values.append(expected_value)
-                
+
                 self.value_function[state] = max(action_values) if action_values else 0.0
                 delta = max(delta, abs(v - self.value_function[state]))
-            
+
             if delta < theta:
                 logger.info(f"MDP: Value iteration converged in {iteration + 1} iterations.")
                 return iteration + 1
-        
+
         logger.warning(f"MDP: Value iteration did not converge within {max_iterations} iterations.")
         return max_iterations
 

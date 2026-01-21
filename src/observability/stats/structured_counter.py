@@ -21,30 +21,30 @@ T = TypeVar("T", bound="StructuredCounter")
 class StructuredCounter:
     """
     Base class for structured metric counters.
-    
+
     Provides snapshot, diff, and testing utilities for tracking
     detailed metrics across operations.
-    
+
     Usage:
         @dataclass
         class MyCounter(StructuredCounter):
             requests_processed: int = 0
             cache_hits: int = 0
             cache_misses: int = 0
-        
+
         counter = MyCounter()
         counter.requests_processed += 1
-        
+
         # Test expected changes
         with counter.expect(requests_processed=1, cache_hits=1):
             counter.requests_processed += 1
             counter.cache_hits += 1
     """
-    
+
     def clone(self: T) -> T:
         """Create a deep copy of this counter."""
         return copy.deepcopy(self)
-    
+
     def reset(self) -> None:
         """Reset all counter fields to their default values."""
         for f in fields(self):
@@ -54,14 +54,14 @@ class StructuredCounter:
                 setattr(self, f.name, f.default_factory())
             else:
                 setattr(self, f.name, 0)
-    
+
     def diff(self: T, other: T) -> dict[str, int]:
         """
         Compute the difference between this counter and another.
-        
+
         Args:
             other: The baseline counter to compare against
-            
+
         Returns:
             Dictionary of field names to their differences (self - other)
         """
@@ -74,22 +74,22 @@ class StructuredCounter:
                 if diff != 0:
                     result[f.name] = diff
         return result
-    
+
     def as_dict(self) -> dict[str, Any]:
         """Convert counter to dictionary."""
         return {f.name: getattr(self, f.name) for f in fields(self)}
-    
+
     @contextmanager
     def expect(self, **kwargs: int) -> Generator[None, None, None]:
         """
         Context manager for testing expected counter changes.
-        
+
         Args:
             **kwargs: Expected changes for each counter field
-            
+
         Raises:
             AssertionError: If actual changes don't match expected
-            
+
         Example:
             with counter.expect(cache_hits=2, cache_misses=1):
                 # ... code that should increment cache_hits by 2, cache_misses by 1
@@ -103,12 +103,12 @@ class StructuredCounter:
                 f"after={getattr(self, name)}, expected_diff={expected_diff}, "
                 f"actual_diff={actual_diff}"
             )
-    
+
     def increment(self, field_name: str, amount: int = 1) -> None:
         """Increment a counter field by the given amount."""
         current = getattr(self, field_name)
         setattr(self, field_name, current + amount)
-    
+
     def decrement(self, field_name: str, amount: int = 1) -> None:
         """Decrement a counter field by the given amount."""
         current = getattr(self, field_name)
@@ -119,7 +119,7 @@ class StructuredCounter:
 class CompilationCounter(StructuredCounter):
     """
     Counter for tracking compilation-related metrics.
-    
+
     Based on vLLM's compilation counter pattern.
     """
     num_models_seen: int = 0
@@ -143,7 +143,7 @@ class RequestCounter(StructuredCounter):
     tokens_input: int = 0
 
 
-@dataclass  
+@dataclass
 class CacheCounter(StructuredCounter):
     """Counter for tracking cache-related metrics."""
     cache_hits: int = 0
@@ -151,7 +151,7 @@ class CacheCounter(StructuredCounter):
     cache_evictions: int = 0
     cache_insertions: int = 0
     cache_size: int = 0
-    
+
     @property
     def hit_ratio(self) -> float:
         """Compute cache hit ratio."""
@@ -168,7 +168,7 @@ class PoolCounter(StructuredCounter):
     objects_destroyed: int = 0
     pool_size: int = 0
     pool_capacity: int = 0
-    
+
     @property
     def active_objects(self) -> int:
         """Number of objects currently in use."""

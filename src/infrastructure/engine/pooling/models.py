@@ -46,7 +46,7 @@ class PoolingConfig:
     step_tag_ids: Optional[List[int]] = None     # Token IDs for step pooling
     classifier_head: bool = False                 # Use classification head
     num_labels: int = 2                           # Number of classification labels
-    
+
     def with_dimension(self, dim: int) -> "PoolingConfig":
         """Create copy with different truncation dimension."""
         return PoolingConfig(
@@ -69,16 +69,16 @@ class PoolingResult:
     strategy: PoolingStrategy                     # Strategy used
     normalized: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     @property
     def shape(self) -> Tuple[int, ...]:
         return self.embeddings.shape
-    
+
     @property
     def dimension(self) -> int:
         """Legacy access for dimension."""
         return self.dim
-    
+
     @property
     def strategy_used(self) -> PoolingStrategy:
         """Legacy access for strategy_used."""

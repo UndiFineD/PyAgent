@@ -27,7 +27,7 @@ def create_lora_request(
     """Create a LoRARequest directly."""
     if not HAS_LORA:
         return None
-    
+
     return LoRARequest(
         lora_name=name,
         lora_int_id=adapter_id,
@@ -44,12 +44,12 @@ def discover_adapters(
     """
     directory = Path(directory)
     adapters = []
-    
+
     for config_path in directory.rglob(pattern):
         try:
             with open(config_path) as f:
                 config = json.load(f)
-            
+
             adapters.append({
                 "name": config_path.parent.name,
                 "path": str(config_path.parent),
@@ -60,5 +60,5 @@ def discover_adapters(
             })
         except Exception as e:
             logger.debug(f"Failed to parse adapter config {config_path}: {e}")
-    
+
     return adapters

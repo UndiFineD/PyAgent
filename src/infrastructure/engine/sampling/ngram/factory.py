@@ -19,7 +19,7 @@ def create_ngram_proposer(
 ) -> NgramProposer:
     """
     Factory function to create n-gram proposer.
-    
+
     Args:
         strategy: "first", "longest", "recent", "weighted"
         use_suffix_tree: Use suffix tree indexing
@@ -32,13 +32,13 @@ def create_ngram_proposer(
         "recent": MatchingStrategy.RECENT,
         "weighted": MatchingStrategy.WEIGHTED,
     }
-    
+
     config = NgramConfig(
         strategy=strategy_map.get(strategy, MatchingStrategy.LONGEST),
         use_suffix_tree=use_suffix_tree,
         **kwargs,
     )
-    
+
     if adaptive:
         return AdaptiveNgramProposer(config)
     return NgramProposer(config)

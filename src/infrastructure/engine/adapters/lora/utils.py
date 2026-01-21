@@ -37,7 +37,7 @@ def create_lora_weights(
     else:  # zero
         lora_a = np.zeros((rank, in_features), dtype=np.float32)
         lora_b = np.zeros((out_features, rank), dtype=np.float32)
-    
+
     return LoRALayerWeights(
         lora_a=lora_a,
         lora_b=lora_b,
@@ -54,11 +54,11 @@ def create_lora_model(
     """Create a LoRA model with initialized weights."""
     config = config or LoRAConfig()
     model = LoRAModel(model_id=model_id, config=config)
-    
+
     for module_name, (in_features, out_features) in layer_dims.items():
         if module_name not in config.target_modules:
             continue
-        
+
         layer = create_lora_weights(
             in_features=in_features,
             out_features=out_features,
@@ -67,7 +67,7 @@ def create_lora_model(
             module_name=module_name,
         )
         model.add_layer(layer)
-    
+
     return model
 
 
@@ -77,14 +77,14 @@ def merge_lora_weights(
 ) -> dict[str, NDArray[np.float32]]:
     """Merge LoRA weights into base model weights."""
     merged = {}
-    
+
     for module_name, base_weight in base_weights.items():
         lora_layer = lora_model.get_layer(module_name)
         if lora_layer is not None:
             merged[module_name] = lora_layer.merge_into_base(base_weight)
         else:
             merged[module_name] = base_weight.copy()
-    
+
     return merged
 
 
@@ -96,14 +96,14 @@ def compute_effective_rank(
     """Compute effective rank of LoRA matrices."""
     # Compute BA product
     product = lora_b @ lora_a
-    
+
     # SVD
     _, s, _ = np.linalg.svd(product, full_matrices=False)
-    
+
     # Count significant singular values
     max_s = s[0] if len(s) > 0 else 0
     if max_s == 0:
         return 0
-    
+
     effective = int(np.sum(s / max_s > threshold))
     return effective

@@ -25,7 +25,7 @@ __version__ = VERSION
 
 class CooperativeCommunicationAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates 
+    Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
     high-speed signal synchronization and communication protocols between agent nodes.
     """
 

@@ -29,38 +29,38 @@ logger = logging.getLogger(__name__)
 
 class BaseWorker(ABC):
     """Abstract base class for distributed workers.
-    
+
     Workers receive requests, process them, and return results.
     """
-    
+
     def __init__(self, identity: WorkerIdentity):
         self.identity = identity
         self.state = WorkerState.STARTING
         self._total_processed = 0
         self._error_count = 0
-    
+
     @abstractmethod
     def initialize(self) -> None:
         """Initialize the worker (load models, etc.)."""
         ...
-    
+
     @abstractmethod
     def process(self, request: RequestMessage) -> ResponseMessage:
         """Process a single request.
-        
+
         Args:
             request: Request to process.
-        
+
         Returns:
             Response with output data.
         """
         ...
-    
+
     @abstractmethod
     def shutdown(self) -> None:
         """Clean up worker resources."""
         ...
-    
+
     def get_metrics(self) -> MetricsMessage:
         """Get worker metrics."""
         return MetricsMessage(
@@ -72,10 +72,10 @@ class BaseWorker(ABC):
 
 class WorkerProcess:
     """Wrapper for a worker running in a subprocess.
-    
+
     Inspired by vLLM's CoreEngineProc.
     """
-    
+
     def __init__(
         self,
         worker_id: int,
@@ -89,14 +89,14 @@ class WorkerProcess:
         self.engine_id = engine_id
         self.rank = rank
         self.world_size = world_size
-        
+
         self._process: Optional[mp.Process] = None
         self._request_queue: mp.Queue = mp.Queue()
         self._response_queue: mp.Queue = mp.Queue()
         self._control_queue: mp.Queue = mp.Queue()
         self._state = WorkerState.STOPPED
         self._metrics = MetricsMessage(worker_id=worker_id)
-    
+
     def start(self) -> None:
         """Start the worker process."""
         self._state = WorkerState.STARTING
@@ -116,7 +116,7 @@ class WorkerProcess:
         )
         self._process.start()
         logger.info("Started worker process %d (pid=%d)", self.worker_id, self._process.pid)
-    
+
     @staticmethod
     def _worker_main(
         worker_id: int,
@@ -136,13 +136,13 @@ class WorkerProcess:
             local_rank=rank,
             world_size=world_size,
         )
-        
+
         worker = worker_factory(identity)
-        
+
         try:
             worker.initialize()
             worker.state = WorkerState.RUNNING
-            
+
             while worker.state == WorkerState.RUNNING:
                 # Check for control messages
                 try:
@@ -157,12 +157,12 @@ class WorkerProcess:
                         response_queue.put(worker.get_metrics())
                 except queue.Empty:
                     pass
-                
+
                 # Process requests
                 try:
                     request = request_queue.get(timeout=0.1)
                     start = time.time()
-                    
+
                     try:
                         response = worker.process(request)
                         response.latency_ms = (time.time() - start) * 1000
@@ -173,41 +173,41 @@ class WorkerProcess:
                             error=str(e),
                         )
                         worker._error_count += 1
-                    
+
                     response_queue.put(response)
-                    
+
                 except queue.Empty:
                     continue
-        
+
         finally:
             worker.shutdown()
-    
+
     def stop(self, timeout: float = 5.0) -> None:
         """Stop the worker process."""
         if self._process is None:
             return
-        
+
         self._control_queue.put(ControlMessage(command="stop"))
         self._process.join(timeout=timeout)
-        
+
         if self._process.is_alive():
             logger.warning("Worker %d did not stop gracefully, terminating", self.worker_id)
             self._process.terminate()
             self._process.join(timeout=1.0)
-        
+
         self._state = WorkerState.STOPPED
-    
+
     def submit(self, request: RequestMessage) -> None:
         """Submit a request to the worker."""
         self._request_queue.put(request)
-    
+
     def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
         """Get a response from the worker."""
         try:
             return self._response_queue.get(timeout=timeout)
         except queue.Empty:
             return None
-    
+
     @property
     def is_alive(self) -> bool:
         """Check if the worker process is alive."""

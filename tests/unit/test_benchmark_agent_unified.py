@@ -17,7 +17,7 @@ class TestBenchmarkAgent:
         """Test that run_benchmark populates both results and benchmark_results."""
         agent = BenchmarkAgent("dummy_path.py")
         agent.run_benchmark("test_agent", "Summarize this text")
-        
+
         assert len(agent.results) == 1
         assert len(agent.benchmark_results) == 1
         assert isinstance(agent.benchmark_results[0], BenchmarkResult)
@@ -26,18 +26,18 @@ class TestBenchmarkAgent:
     def test_check_for_performance_regression(self):
         """Test performance regression check logic."""
         agent = BenchmarkAgent("dummy_path.py")
-        
+
         # Add some baseline results
         agent.benchmark_results = [
             BenchmarkResult(name="t1", duration=1.0, agent_id="a", success=True),
             BenchmarkResult(name="t2", duration=1.0, agent_id="a", success=True),
         ]
-        
+
         # Check for regression (1.5s vs 1.0s baseline)
         msg = agent.check_for_performance_regression("a", 1.5)
         assert "REGRESSION DETECTED" in msg
         assert "50.0%" in msg
-        
+
         # Check for no regression (0.9s vs 1.0s baseline)
         msg_no = agent.check_for_performance_regression("a", 0.9)
         assert msg_no is None or "REGRESSION" not in msg_no

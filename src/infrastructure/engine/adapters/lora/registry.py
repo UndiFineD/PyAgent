@@ -18,7 +18,7 @@ class LoRAModelEntry:
     load_time: float
     last_access: float
     access_count: int = 0
-    
+
     def touch(self):
         """Update access time and count."""
         self.last_access = time.time()
@@ -27,7 +27,7 @@ class LoRAModelEntry:
 
 class LoRARegistry:
     """Registry for managing multiple LoRA adapters."""
-    
+
     def __init__(
         self,
         max_memory_bytes: int = 1024 * 1024 * 1024,  # 1GB
@@ -38,21 +38,21 @@ class LoRARegistry:
         self.max_models = max_models
         self._models: OrderedDict[str, LoRAModelEntry] = OrderedDict()
         self._current_memory = 0
-    
+
     def register(self, model: LoRAModel) -> bool:
         """Register a LoRA model."""
         model_memory = model.get_memory_bytes()
-        
+
         # Evict if needed
         while (
             self._current_memory + model_memory > self.max_memory_bytes
             or len(self._models) >= self.max_models
         ) and self._models:
             self._evict_lru()
-        
+
         if self._current_memory + model_memory > self.max_memory_bytes:
             return False
-        
+
         now = time.time()
         entry = LoRAModelEntry(
             model=model,
@@ -63,42 +63,42 @@ class LoRARegistry:
         self._models[model.model_id] = entry
         self._models.move_to_end(model.model_id)
         self._current_memory += model_memory
-        
+
         return True
-    
+
     def get(self, model_id: str) -> LoRAModel | None:
         """Get a model by ID."""
         entry = self._models.get(model_id)
         if entry is None:
             return None
-        
+
         entry.touch()
         self._models.move_to_end(model_id)
         return entry.model
-    
+
     def unregister(self, model_id: str) -> bool:
         """Unregister a model."""
         entry = self._models.pop(model_id, None)
         if entry is None:
             return False
-        
+
         self._current_memory -= entry.model.get_memory_bytes()
         return True
-    
+
     def _evict_lru(self):
         """Evict least recently used model."""
         if not self._models:
             return
-        
+
         # Get LRU (first item)
         model_id, entry = next(iter(self._models.items()))
         self._current_memory -= entry.model.get_memory_bytes()
         del self._models[model_id]
-    
+
     def list_models(self) -> list[str]:
         """List all registered model IDs."""
         return list(self._models.keys())
-    
+
     def get_stats(self) -> dict[str, Any]:
         """Get registry statistics."""
         return {

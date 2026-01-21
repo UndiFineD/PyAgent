@@ -18,7 +18,7 @@ class EBNFGrammar(GrammarEngine):
     """
     EBNF/Lark grammar engine.
     """
-    
+
     def __init__(
         self,
         vocab_size: int,
@@ -27,12 +27,12 @@ class EBNFGrammar(GrammarEngine):
     ):
         super().__init__(vocab_size, token_strings, eos_token_id)
         self._rule_cache: Dict[str, FSMTransitionTable] = {}
-    
+
     def build_fsm(self, spec: str) -> FSMTransitionTable:
         """Build FSM from EBNF grammar."""
         if spec in self._rule_cache:
             return self._rule_cache[spec]
-        
+
         try:
             rules = self._parse_ebnf(spec)
             if "start" in rules:
@@ -44,7 +44,7 @@ class EBNFGrammar(GrammarEngine):
             return fsm
         except Exception:
             return self._build_literal_fsm(spec)
-    
+
     def _parse_ebnf(self, spec: str) -> Dict[str, str]:
         """Parse EBNF grammar into rules."""
         rules = {}
@@ -55,14 +55,14 @@ class EBNFGrammar(GrammarEngine):
                 name, expr = line.split(":", 1)
                 rules[name.strip()] = expr.strip()
         return rules
-    
+
     def _rule_to_fsm(self, rule: str, all_rules: Dict[str, str]) -> FSMTransitionTable:
         """Convert a single rule to FSM."""
         regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
         pattern = rule.replace(" ", "")
         pattern = re.sub(r'\[([^\]]+)\]', r'[\1]', pattern)
         return regex_engine.build_fsm(pattern)
-    
+
     def _build_literal_fsm(self, spec: str) -> FSMTransitionTable:
         """Build FSM for literal string matching."""
         fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))

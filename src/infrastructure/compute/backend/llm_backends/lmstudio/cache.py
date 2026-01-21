@@ -11,11 +11,11 @@ from .models import CachedModel
 
 class ModelCache:
     """Simple model cache with TTL."""
-    
+
     def __init__(self, ttl: float = 300.0):
         self._cache: dict[str, CachedModel] = {}
         self._ttl = ttl
-    
+
     def get(self, model_id: str) -> CachedModel | None:
         """Get cached model if not expired."""
         entry = self._cache.get(model_id)
@@ -26,7 +26,7 @@ class ModelCache:
             return None
         entry.touch()
         return entry
-    
+
     def set(self, model_id: str, model_info: Any) -> CachedModel:
         """Cache a model reference."""
         entry = CachedModel(
@@ -36,11 +36,11 @@ class ModelCache:
         )
         self._cache[model_id] = entry
         return entry
-    
+
     def clear(self) -> None:
         """Clear the cache."""
         self._cache.clear()
-    
+
     def prune_expired(self) -> int:
         """Remove expired entries, return count removed."""
         expired = [k for k, v in self._cache.items() if v.is_expired(self._ttl)]

@@ -17,18 +17,18 @@ logger = StructuredLogger(__name__)
 
 class InterFleetBridgeOrchestrator:
     """
-    InterFleetBridgeOrchestrator: Manages peer connectivity and 
+    InterFleetBridgeOrchestrator: Manages peer connectivity and
     cross-machine discovery for the Voyager Constellation.
     """
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet_manager = fleet_manager
         self.version = VERSION
-        
+
         # Phase 319: Default Voyager Ports
         self.mDNS_port = 8000
         self.zmq_port = 5555
         self.shared_state_cache: List[str] = []
-        
+
         self.discovery_node = DiscoveryNode(port=self.mDNS_port, transport_port=self.zmq_port)
         self.synapse = RemoteNeuralSynapse(fleet_manager, transport_port=self.zmq_port, discovery_node=self.discovery_node)
         self.is_active = False
@@ -39,11 +39,11 @@ class InterFleetBridgeOrchestrator:
         try:
             # 1. Start ZMQ Transport Server
             await self.synapse.start()
-            
+
             # 2. Start mDNS Advertisement
             await self.discovery_node.start_advertising()
             await self.discovery_node.start_discovery()
-            
+
             self.is_active = True
             logger.info("Voyager: Constellation synchronization and transport server active.")
         except Exception as e:
@@ -54,12 +54,12 @@ class InterFleetBridgeOrchestrator:
         logger.info(f"Voyager: Broadcasting signal {signal_name}")
         self.shared_state_cache.append(signal_name)
         # In a real implementation, this would send ZMQ messages to peers
-        
+
     def transmit_binary_packet(self, packet: bytes) -> bool:
         """Transmits a binary packet across the bridge."""
         logger.info(f"Voyager: Transmitting binary packet ({len(packet)} bytes)")
         return True
-        
+
     async def toggle_quantum_sync(self, state: bool) -> bool:
         """Toggles the quantum state synchronization layer."""
         logger.info(f"Voyager: Toggling quantum sync to {state}")
@@ -69,16 +69,16 @@ class InterFleetBridgeOrchestrator:
         """Connects to a remote fleet peer."""
         logger.info(f"Voyager: Connecting to peer {peer_id} at {address}")
         return True
-        
+
     def broadcast_state(self, key: str, value: Any) -> None:
         """Broadcasts a specific state variable to the constellation."""
         logger.info(f"Voyager: Broadcasting state {key}={value}")
         self.shared_state_cache.append(f"{key}:{value}")
-        
+
     def sync_external_state(self, peer_id: str, state: Dict[str, Any]) -> None:
         """Syncs state received from an external peer."""
         logger.info(f"Voyager: Syncing external state from {peer_id}")
-        
+
     def query_global_intelligence(self, query: str) -> str:
         """Queries the global constellation for a specific capability or state."""
         logger.info(f"Voyager: Querying global intelligence for {query}")
@@ -109,7 +109,7 @@ class InterFleetBridgeOrchestrator:
         if not target:
             logger.error(f"Voyager: Could not resolve peer '{peer_name}' for signal.")
             return {"status": "error", "message": "Peer not found"}
-            
+
         peer_ip, peer_port = target
         payload = {
             "type": signal_type,
@@ -122,14 +122,14 @@ class InterFleetBridgeOrchestrator:
         """Broadcasts a task opportunity to all discovered peers."""
         peers = self.get_known_peers()
         logger.info(f"Voyager: Broadcasting task to {len(peers)} peers: {task_description[:30]}...")
-        
+
         payload = {
             "type": "task_broadcast",
             "task": task_description,
             "metadata": metadata or {},
             "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")
         }
-        
+
         tasks = []
         for peer in peers:
             addrs = peer.get('addresses', [])
@@ -138,7 +138,7 @@ class InterFleetBridgeOrchestrator:
             addr = addrs[0]
             port = int(peer['properties'].get('transport_port', 5555))
             tasks.append(self.synapse.transport.send_to_peer(addr, port, payload))
-        
+
         if tasks:
             results = await asyncio.gather(*tasks, return_exceptions=True)
             logger.info(f"Voyager: Broadcast results: {len([r for r in results if not isinstance(r, Exception)])} successful.")

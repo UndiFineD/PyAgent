@@ -38,7 +38,7 @@ except ImportError:
 
 class MetacognitiveCore:
     """Pure logic core for metacognitive evaluation and intention prediction.
-    
+
     Phase 14 Rust Optimizations:
     - count_hedge_words_rust: Fast multi-pattern matching for hedge word detection
     - predict_intent_rust: Optimized pattern-based intent classification
@@ -81,11 +81,11 @@ class MetacognitiveCore:
     @staticmethod
     def calculate_confidence(reasoning_chain: str) -> dict[str, Any]:
         """Analyzes a reasoning chain for hedge words and length patterns.
-        
+
         Uses Rust-accelerated multi-pattern matching when available.
         """
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
-        
+
         # Rust-accelerated hedge word counting
         if RUST_AVAILABLE and hasattr(rc, 'count_hedge_words_rust'):
             try:

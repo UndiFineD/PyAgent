@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 def auto_select_client_mode(num_gpus: int = 1, use_dp: bool = False) -> ClientMode:
     """
     Auto-select client mode based on GPU topology.
-    
+
     Beyond vLLM: Automatic optimal configuration.
     """
     if num_gpus == 1 and not use_dp:
@@ -40,15 +40,15 @@ def create_engine_client(
 ) -> EngineCoreClientBase:
     """
     Factory function to create appropriate engine client.
-    
+
     Beyond vLLM: Unified factory with auto-selection.
     """
     if config is None:
         config = EngineClientConfig()
-    
+
     if config.auto_select_mode:
         config.mode = auto_select_client_mode(num_gpus, use_dp)
-    
+
     if config.mode == ClientMode.INPROC:
         client = InprocClient(config, engine_core)
     elif config.mode == ClientMode.SYNC_MP:
@@ -60,5 +60,5 @@ def create_engine_client(
         client = DPAsyncMPClient(config)
     else:
         raise ValueError(f"Unknown client mode: {config.mode}")
-    
+
     return client

@@ -6,7 +6,7 @@ from .config import FusedMoEConfig
 
 class AdaptiveMoELayer(FusedMoELayer):
     """Adaptive MoE layer with dynamic top-k selection and capacity management."""
-    
+
     def __init__(
         self,
         config: FusedMoEConfig,
@@ -23,7 +23,7 @@ class AdaptiveMoELayer(FusedMoELayer):
         self.expert_capacity = int(
             (config.num_experts * capacity_factor) / config.num_experts
         ) # Simplistic
-    
+
     def forward(
         self,
         x: np.ndarray,
@@ -34,11 +34,11 @@ class AdaptiveMoELayer(FusedMoELayer):
         current_top_k = int(np.clip(
             self.max_top_k * context_score, self.min_top_k, self.max_top_k
         ))
-        
+
         # Override top_k for this call
         original_top_k = self.config.top_k
         self.config.top_k = current_top_k
-        
+
         try:
             return super().forward(x, router_logits)
         finally:
@@ -46,7 +46,7 @@ class AdaptiveMoELayer(FusedMoELayer):
 
 class HierarchicalMoELayer:
     """Two-level hierarchical MoE for extreme scale."""
-    
+
     def __init__(
         self,
         config: FusedMoEConfig,
@@ -57,7 +57,7 @@ class HierarchicalMoELayer:
     ) -> None:
         self.num_clusters = num_clusters
         self.cluster_top_k = cluster_top_k
-        
+
         # Create clusters
         cluster_experts = config.num_experts // num_clusters
         self.clusters = [
@@ -73,7 +73,7 @@ class HierarchicalMoELayer:
             )
             for _ in range(num_clusters)
         ]
-        
+
         # Cluster router
         self.cluster_router = np.random.randn(
             config.hidden_size, num_clusters
@@ -83,10 +83,10 @@ class HierarchicalMoELayer:
         # 1. Route to clusters
         cluster_logits = x @ self.cluster_router
         cluster_probs = self._softmax(cluster_logits)
-        
+
         # 2. Select top clusters
         top_cluster_indices = np.argsort(cluster_probs, axis=-1)[:, -self.cluster_top_k:]
-        
+
         # 3. Dispatch and aggregate
         # This is a simplified version of hierarchical dispatch
         out = np.zeros_like(x)
@@ -95,14 +95,14 @@ class HierarchicalMoELayer:
             mask = np.any(top_cluster_indices == i, axis=-1)
             if not np.any(mask):
                 continue
-            
+
             cluster_out = self.clusters[i].forward(x[mask])
-            
+
             # Weighted addition based on cluster prob
             # Note: in real impl this is more complex
             probs = cluster_probs[mask, i:i+1]
             out[mask] += cluster_out * probs
-            
+
         return out
 
     def _softmax(self, x: np.ndarray) -> np.ndarray:

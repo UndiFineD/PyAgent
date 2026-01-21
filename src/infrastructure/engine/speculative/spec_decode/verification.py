@@ -30,11 +30,11 @@ class VerificationResult:
     target_logprobs: list[float] = field(default_factory=list)
     draft_logprobs: list[float] = field(default_factory=list)
     verification_latency_ms: float = 0.0
-    
+
     @property
     def all_accepted(self) -> bool:
         return all(self.acceptance_mask) if self.acceptance_mask else False
-    
+
     @property
     def acceptance_rate(self) -> float:
         if not self.acceptance_mask: return 0.0
@@ -43,7 +43,7 @@ class VerificationResult:
 
 class SpecDecodeVerifier:
     """Verifier for speculative decoding."""
-    
+
     def __init__(self, config: SpecDecodeConfig):
         self.config = config
         self.strategy = config.strategy
@@ -53,7 +53,7 @@ class SpecDecodeVerifier:
         self._total_proposed = 0
         self._total_accepted = 0
         self._lock = threading.Lock()
-    
+
     def verify(self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]) -> VerificationResult:
         metadata.verification_start_time = time.perf_counter()
         if self.strategy == VerificationStrategy.TYPICAL_ACCEPTANCE:
@@ -66,7 +66,7 @@ class SpecDecodeVerifier:
             self._total_proposed += len(metadata.draft_token_ids)
             self._total_accepted += result.num_accepted
         return result
-    
+
     def _verify_rejection_sampling(self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]) -> VerificationResult:
         if HAS_RUST and hasattr(rust_core, "spec_decode_verify_rejection_rust"):
             accepted, mask = getattr(rust_core, "spec_decode_verify_rejection_rust")(
@@ -85,7 +85,7 @@ class SpecDecodeVerifier:
                 break
         while len(mask) < len(metadata.draft_token_ids): mask.append(False)
         return VerificationResult(accepted_tokens=accepted, num_accepted=len(accepted), acceptance_mask=mask, target_logprobs=target_logprobs, draft_logprobs=draft_logprobs)
-    
+
     def _verify_typical_acceptance(self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]) -> VerificationResult:
         import random
         accepted, mask = [], []
@@ -100,7 +100,7 @@ class SpecDecodeVerifier:
                 break
         while len(mask) < len(metadata.draft_token_ids): mask.append(False)
         return VerificationResult(accepted_tokens=accepted, num_accepted=len(accepted), acceptance_mask=mask, target_logprobs=target_logprobs, draft_logprobs=draft_logprobs)
-    
+
     def verify_tree(self, tree_metadata: TreeVerificationMetadata, draft_logprobs: list[list[float]], target_logprobs: list[list[float]]) -> VerificationResult:
         best_path_idx, best_accepted, best_tokens, best_mask = -1, 0, [], []
         for path_idx in range(tree_metadata.num_paths):
@@ -113,7 +113,7 @@ class SpecDecodeVerifier:
                 best_accepted, best_path_idx, best_tokens, best_mask = result.num_accepted, path_idx, result.accepted_tokens, result.acceptance_mask
         tree_metadata.best_path_index = best_path_idx
         return VerificationResult(accepted_tokens=best_tokens, num_accepted=best_accepted, acceptance_mask=best_mask)
-    
+
     def get_overall_acceptance_rate(self) -> float:
         with self._lock:
             return self._total_accepted / self._total_proposed if self._total_proposed > 0 else 0.0

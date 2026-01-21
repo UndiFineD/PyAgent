@@ -72,11 +72,11 @@ class LegacyAgentMixin:
         if not self.diff_generator:
             from src.core.base.common.utils.diff_generator import DiffGenerator
             self.diff_generator = DiffGenerator()
-        
+
         original = ""
         if file_path.exists():
             original = file_path.read_text(errors="ignore")
-            
+
         return self.diff_generator.generate_diff(file_path, original, content)
 
     def enable_incremental_processing(self) -> None:
@@ -206,13 +206,13 @@ def create_legacy_agent_wrapper(BaseAgentClass):
     class LegacyAgentWrapper(LegacyAgentMixin, BaseAgentClass):
         """Wrapper to adapt new BaseAgent to legacy test expectations."""
 
-        def __init__(self, repo_root=None, dry_run=False, loop=None, enable_async=False, 
+        def __init__(self, repo_root=None, dry_run=False, loop=None, enable_async=False,
                      enable_multiprocessing=False, selective_agents=None, timeout_per_agent=None, *args, **kwargs):
             file_path = repo_root or (args[0] if args else None) or kwargs.get("file_path", ".")
             logging.warning(f"DEBUG WRAPPER: repo_root={repo_root}, args={args}, file_path={file_path}")
-            
+
             super().__init__(file_path=str(file_path))
-            self._init_legacy_attrs(repo_root, dry_run, loop, enable_async, enable_multiprocessing, 
+            self._init_legacy_attrs(repo_root, dry_run, loop, enable_async, enable_multiprocessing,
                                    selective_agents, timeout_per_agent, str(file_path))
 
         @property

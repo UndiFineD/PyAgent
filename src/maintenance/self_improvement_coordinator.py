@@ -25,7 +25,7 @@ class SelfImprovementCoordinator:
         self.cloud_policy_file = self.prompt_dir / "cloud_integration.md"
         self.logger = logging.getLogger(__name__)
         self.directives: Dict[str, Any] = {}
-        
+
         # Phase 320: LAN Discovery integration
         self.discovery: Optional[Any] = None
         self._init_discovery()
@@ -70,10 +70,10 @@ class SelfImprovementCoordinator:
                 # Extract "fixed prompt" sections
                 fixed_prompts = re.findall(r"-\s+(.*?)(?=\n-|\n\n|\n#|$)", content, re.DOTALL)
                 self.directives["fixed_prompts"].extend([p.strip().replace("\n", " ") for p in fixed_prompts])
-                
+
                 # Extract arXiv links
                 arxiv = re.findall(r"arxiv\.org/(?:abs|list)/[\w\.\/\?=&]+", content)
-                self.directives["research_links"].extend(arxiv)                
+                self.directives["research_links"].extend(arxiv)
                 # Extract potential peers mentioned in context
                 peers = re.findall(r"peer:\s*([\w\-]+)", content)
                 self.directives["target_peers"].extend(peers)
@@ -86,7 +86,7 @@ class SelfImprovementCoordinator:
         Uses LANDiscovery, MCPServerRegistry, and ConnectivityManager for discovery.
         """
         all_nodes = []
-        
+
         # 1. Discover local peers via LANDiscovery
         if self.discovery:
             with self.discovery._lock:
@@ -113,7 +113,7 @@ class SelfImprovementCoordinator:
             self.logger.debug(f"MCPServerRegistry not available for discovery: {e}")
         except Exception as e:
             self.logger.error(f"Error during MCP server discovery from registry: {e}", exc_info=True)
-            
+
         # 3. Check persistent ConnectivityManager status
         try:
             from src.core.base.logic.connectivity_manager import ConnectivityManager
@@ -146,28 +146,28 @@ class SelfImprovementCoordinator:
         """
         from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
         from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
-        
+
         # Initialize orchestrator (which now loads overrides from docs/prompt)
         orchestrator = SelfHealingOrchestrator(None) # type: ignore
-        
+
         # 1. Check Project Integrity (Imports/Syntax)
         integrity_report = orchestrator.check_project_integrity()
-        
+
         # 2. Check Codebase Health (Technical Debt)
         health_audit = orchestrator.run_health_audit()
-        
+
         # 3. Check for failed agents in health registry
         failed_agents = []
         if orchestrator.core is not None:
             failed_agents = orchestrator.core.detect_failures()
-            
+
         results = {
             "integrity": integrity_report,
             "health": health_audit,
             "failures": failed_agents,
             "actions_taken": []
         }
-        
+
         if failed_agents:
             self.logger.warning(f"Self-Healing: {len(failed_agents)} failures detected. Reviewing roadmap items...")
             for agent in failed_agents:
@@ -188,18 +188,18 @@ class SelfImprovementCoordinator:
         # 1. Check if peer is known and online
         peers = await self.discover_external_servers()
         target = next((p for p in peers if p["id"] == target_peer), None)
-        
+
         valid_statuses = {"online", "connected", "available"}
         if not target or target.get("status") not in valid_statuses:
             return {"status": "failed", "error": f"Peer {target_peer} is offline or unknown"}
 
         # 2. Simulate task dispatch (Integration with RequestQueue.py / DistributedCoordinator.py)
         # In Phase 51, this would use NixlConnector or MooncakeConnector for KV-warm transfer
-        await asyncio.sleep(0.5) 
-        
+        await asyncio.sleep(0.5)
+
         return {
-            "status": "success", 
-            "peer": target_peer, 
+            "status": "success",
+            "peer": target_peer,
             "task_id": f"rem_{int(time.time())}",
             "result": "Task accepted by remote coordinator"
         }
@@ -211,32 +211,32 @@ class SelfImprovementCoordinator:
             return []
 
         content = self.improvements_file.read_text(encoding="utf-8")
-        
+
         # Simple extraction logic for "High Priority" items
         high_priority_section = re.search(r"### High Priority\n(.*?)(?=\n###|\n==)", content, re.DOTALL)
         if not high_priority_section:
             return []
 
         items = re.findall(r"\d+\.\s+\*\*(.*?)\*\*\n\s+-\s+Status:\s+(.*?)\n", high_priority_section.group(1))
-        
+
         active_ideas = []
         for title, status in items:
             if status.strip() in ["PLANNED", "RESEARCH", "PLANNING"]:
                 active_ideas.append({"title": title.strip(), "status": status.strip()})
-        
+
         return active_ideas
 
     async def scan_for_research(self) -> List[str]:
         """Scans improvements.md for new research links (arXiv/ScienceDirect)."""
         if not self.improvements_file.exists():
             return []
-            
+
         content = self.improvements_file.read_text(encoding="utf-8")
         # Find arXiv links
         arxiv_links = re.findall(r"arxiv\.org/abs/(\d+\.\d+)", content)
         # Find ScienceDirect PIIs
         sciencedirect_links = re.findall(r"sciencedirect\.com/science/article/pii/(\w+)", content)
-        
+
         links = [f"https://arxiv.org/abs/{l}" for l in arxiv_links]
         links.extend([f"https://www.sciencedirect.com/science/article/pii/{l}" for l in sciencedirect_links])
         return list(set(links))
@@ -245,7 +245,7 @@ class SelfImprovementCoordinator:
         """Cross-references improvements with the strategic roadmap."""
         if not self.roadmap_file.exists():
             return
-            
+
         roadmap_content = self.roadmap_file.read_text(encoding="utf-8")
         for idea in active_ideas:
             if idea["title"] in roadmap_content:
@@ -266,23 +266,23 @@ class SelfImprovementCoordinator:
         """
         title = item["title"]
         status = item["status"]
-        
+
         try:
             if status == "PLANNED" or status == "PLANNING":
                 from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
                 self.logger.info(f"Handing off to DirectorAgent: {title}")
                 agent = DirectorAgent(str(self.improvements_file))
-                
+
                 # Hand off task to director
                 prompt = f"Improvement Task: {title}\nPlease decompose this and delegate to the appropriate specialists."
                 res = await agent.think(prompt)
                 print(f"  -> [DIRECTOR RESPONSE] {res[:200]}...")
-                
+
             elif status == "RESEARCH":
                 from src.logic.agents.intelligence.research_agent import ResearchAgent
                 self.logger.info(f"Handing off to ResearchAgent: {title}")
                 agent = ResearchAgent(str(self.improvements_file))
-                
+
                 # Find associated research links if any
                 links = await self.scan_for_research()
                 prompt = f"Research Task: {title}\nRelated links found: {links}"
@@ -299,17 +299,17 @@ class SelfImprovementCoordinator:
 async def main():
     coordinator = SelfImprovementCoordinator(os.getcwd())
     print("--- Starting Self-Improvement Cycle ---")
-    
+
     # 1. Discover active ideas
     active_ideas = await coordinator.run_discovery_cycle()
     await coordinator.sync_with_roadmap(active_ideas)
-    
+
     # 2. Scan for new research
     research_links = await coordinator.scan_for_research()
     print(f"[INFO] Found {len(research_links)} research links to monitor.")
     for link in research_links:
         print(f"  -> Monitoring: {link}")
-        
+
     # 3. Generate action plan
     await coordinator.generate_action_plan(active_ideas)
     print("--- Cycle Complete ---")

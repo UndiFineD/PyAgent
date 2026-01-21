@@ -20,18 +20,18 @@ async def test_status_update():
     try:
         agent = DirectorAgent(str(test_file))
         print(f"Initial status in file: {test_file.read_text()}")
-        
+
         # Manually trigger the status update logic
         agent._update_improvement_status("Test Improvement Task", "COMPLETED")
-        
+
         updated_content = test_file.read_text()
         print(f"Updated status in file: {updated_content}")
-        
+
         if "Status: COMPLETED" in updated_content:
             print("SUCCESS: Status updated correctly.")
         else:
             print("FAILURE: Status not updated.")
-            
+
     finally:
         if test_file.exists():
             test_file.unlink()

@@ -411,7 +411,7 @@ class StatsCore:
         except ImportError:
             logging.warning("matplotlib not available for visualization")
             return
-        
+
         labels = list(stats.keys())
         values = list(stats.values())
         plt.figure(figsize=(10, 6))

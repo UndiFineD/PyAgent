@@ -16,18 +16,18 @@ from .model_registry import (
     ModelCapability,
     ModelArchitecture,
     QuantizationType,
-    
+
     # Data classes
     ModelConfig,
     ModelInfo,
     ArchitectureSpec,
     VRAMEstimate,
-    
+
     # Core classes
     ModelRegistry,
     ArchitectureDetector,
     VRAMEstimator,
-    
+
     # Utilities
     register_model,
     get_model_info,
@@ -40,18 +40,18 @@ __all__ = [
     "ModelCapability",
     "ModelArchitecture",
     "QuantizationType",
-    
+
     # Data classes
     "ModelConfig",
     "ModelInfo",
     "ArchitectureSpec",
     "VRAMEstimate",
-    
+
     # Core classes
     "ModelRegistry",
     "ArchitectureDetector",
     "VRAMEstimator",
-    
+
     # Utilities
     "register_model",
     "get_model_info",

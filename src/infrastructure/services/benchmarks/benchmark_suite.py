@@ -44,25 +44,25 @@ class BenchmarkSuite:
         self.results: List[BenchmarkResult] = []
 
     def benchmark_tokenization(
-        self, 
-        test_texts: Dict[str, str], 
+        self,
+        test_texts: Dict[str, str],
         iterations: int = 1000,
         compare_rust: bool = True
     ) -> List[BenchmarkResult]:
         """Benchmarks token estimation speed across different text samples."""
         self.logger.info(f"Starting tokenization benchmark ({iterations} iterations)")
-        
+
         results = []
         for name, text in test_texts.items():
             # Warm-up
             estimate_token_count(text)
-            
+
             start = time.perf_counter()
             tokens = 0
             for _ in range(iterations):
                 tokens = estimate_token_count(text)
             duration = time.perf_counter() - start
-            
+
             res = BenchmarkResult(
                 name=f"Python Tokenization: {name}",
                 duration=duration,
@@ -80,13 +80,13 @@ class BenchmarkSuite:
             if compare_rust and rc and hasattr(rc, "estimate_tokens_rust"):
                 # Warm-up Rust
                 rc.estimate_tokens_rust(text)
-                
+
                 start_rust = time.perf_counter()
                 rust_tokens = 0
                 for _ in range(iterations):
                     rust_tokens = rc.estimate_tokens_rust(text)
                 duration_rust = time.perf_counter() - start_rust
-                
+
                 res_rust = BenchmarkResult(
                     name=f"Rust Tokenization: {name}",
                     duration=duration_rust,
@@ -100,7 +100,7 @@ class BenchmarkSuite:
                 )
                 results.append(res_rust)
                 self.results.append(res_rust)
-        
+
         return results
 
     async def benchmark_agent_performance(
@@ -112,29 +112,29 @@ class BenchmarkSuite:
     ) -> BenchmarkResult:
         """Benchmarks an agent's generation performance."""
         self.logger.info(f"Benchmarking agent {label} using method {method_name}")
-        
+
         input_tokens = estimate_token_count(prompt)
         start = time.perf_counter()
-        
+
         try:
             method = getattr(agent, method_name, None)
             if not method and hasattr(agent, "improve_content"):
                 method = agent.improve_content
-            
+
             if not method:
                 raise AttributeError(f"Agent does not have method {method_name} or improve_content")
-            
+
             # Handle both sync and async methods
             if inspect.iscoroutinefunction(method):
                 output = await method(prompt)
             else:
                 output = method(prompt)
-            
+
             duration = time.perf_counter() - start
-            
+
             output_tokens = estimate_token_count(str(output))
             total_tokens = input_tokens + output_tokens
-            
+
             res = BenchmarkResult(
                 name=label,
                 duration=duration,
@@ -152,7 +152,7 @@ class BenchmarkSuite:
                 error=str(e)
             )
             self.logger.error(f"Agent benchmark failed: {e}")
-            
+
         self.results.append(res)
         return res
 
@@ -164,26 +164,26 @@ class BenchmarkSuite:
     ) -> BenchmarkResult:
         """Runs a sustained throughput test for token estimation."""
         self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")
-        
+
         start_time = time.perf_counter()
         iterations = 0
         total_tokens = 0
         text_index = 0
-        
+
         while (time.perf_counter() - start_time) < duration_seconds:
             text = test_texts[text_index]
             tokens = estimate_token_count(text)
-            
+
             iterations += 1
             total_tokens += tokens
             text_index = (text_index + 1) % len(test_texts)
-            
+
             if progress_callback:
                 elapsed = time.perf_counter() - start_time
                 progress_callback(elapsed, iterations, total_tokens)
-                
+
         actual_duration = time.perf_counter() - start_time
-        
+
         res = BenchmarkResult(
             name=f"Sustained Throughput ({duration_seconds}s)",
             duration=actual_duration,
@@ -205,13 +205,13 @@ class BenchmarkSuite:
         print("=" * 80)
         print(f"{'Test Name':<35} {'Duration':<10} {'Tokens':<10} {'Tokens/s':<15}")
         print("-" * 80)
-        
+
         for res in self.results:
             if not res.success:
                 print(f"{res.name[:34]:<35} {'FAILED':<10} {'-':<10} {res.error[:15] if res.error else 'Unknown'}")
                 continue
-                
+
             print(f"{res.name[:34]:<35} {res.duration:<10.3f} {res.total_tokens:<10,} {res.tokens_per_sec:<15,.2f}")
-        
+
         print("-" * 80)
         print("End of results.\n")

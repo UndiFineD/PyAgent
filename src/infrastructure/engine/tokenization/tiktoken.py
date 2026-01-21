@@ -14,7 +14,7 @@ from .base import BaseTokenizer
 
 class TiktokenTokenizer(BaseTokenizer):
     """OpenAI tiktoken tokenizer wrapper."""
-    
+
     MODEL_ENCODINGS = {
         "gpt-4": "cl100k_base",
         "gpt-4o": "o200k_base",
@@ -24,12 +24,12 @@ class TiktokenTokenizer(BaseTokenizer):
         "text-embedding-3-small": "cl100k_base",
         "text-embedding-3-large": "cl100k_base",
     }
-    
+
     def __init__(self, config: TokenizerConfig):
         super().__init__(config)
         self._encoding = None
         self._load_tokenizer()
-    
+
     def _load_tokenizer(self):
         """Load tiktoken encoding."""
         try:
@@ -48,46 +48,46 @@ class TiktokenTokenizer(BaseTokenizer):
                         self._encoding = tiktoken.get_encoding("cl100k_base")
         except ImportError:
             raise ImportError("tiktoken package required for Tiktoken tokenizer")
-    
+
     @property
     def vocab_size(self) -> int:
         return self._encoding.n_vocab
-    
+
     @property
     def bos_token_id(self) -> Optional[int]:
         return None
-    
+
     @property
     def eos_token_id(self) -> Optional[int]:
         try:
             return self._encoding.encode("<|endoftext|>", allowed_special={"<|endoftext|>"})[0]
         except Exception:
             return None
-    
+
     @property
     def pad_token_id(self) -> Optional[int]:
         return None
-    
+
     def encode(
         self,
         text: str,
         add_special_tokens: bool = True,
     ) -> List[int]:
         return self._encoding.encode(text)
-    
+
     def decode(
         self,
         token_ids: Sequence[int],
         skip_special_tokens: bool = True,
     ) -> str:
         return self._encoding.decode(list(token_ids))
-    
+
     def encode_batch(
         self,
         texts: List[str],
         add_special_tokens: bool = True,
     ) -> List[List[int]]:
         return self._encoding.encode_batch(texts)
-    
+
     def estimate_tokens(self, text: str) -> int:
         return len(self._encoding.encode(text))

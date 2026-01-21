@@ -110,7 +110,7 @@ class SemanticSearchMeshAgent:
         for index in self.local_indices:
             shard_id = index["id"]
             vectors = index["meta"].get("vectors", [])
-            
+
             if HAS_RUST and vectors:
                 # Direct Rust acceleration for multi-vector search
                 matches = rust_core.top_k_cosine_similarity(query_embedding, vectors, limit)
@@ -132,7 +132,7 @@ class SemanticSearchMeshAgent:
                         "content": f"Match from {shard_id} (Simulated Similarity)",
                     }
                 )
-        
+
         # Sort combined results by score
         results.sort(key=lambda x: x["score"], reverse=True)
         return results[:limit]

@@ -14,12 +14,12 @@ from .base import BaseTokenizer
 
 class MistralTokenizer(BaseTokenizer):
     """Mistral tokenizer wrapper."""
-    
+
     def __init__(self, config: TokenizerConfig):
         super().__init__(config)
         self._tokenizer = None
         self._load_tokenizer()
-    
+
     def _load_tokenizer(self):
         """Load Mistral tokenizer."""
         try:
@@ -31,31 +31,31 @@ class MistralTokenizer(BaseTokenizer):
                 self.config.model_name,
                 trust_remote_code=True,
             )
-    
+
     @property
     def vocab_size(self) -> int:
         if hasattr(self._tokenizer, 'n_words'):
             return self._tokenizer.n_words
         return self._tokenizer.vocab_size
-    
+
     @property
     def bos_token_id(self) -> Optional[int]:
         if hasattr(self._tokenizer, 'bos_id'):
             return self._tokenizer.bos_id
         return self._tokenizer.bos_token_id
-    
+
     @property
     def eos_token_id(self) -> Optional[int]:
         if hasattr(self._tokenizer, 'eos_id'):
             return self._tokenizer.eos_id
         return self._tokenizer.eos_token_id
-    
+
     @property
     def pad_token_id(self) -> Optional[int]:
         if hasattr(self._tokenizer, 'pad_id'):
             return self._tokenizer.pad_id
         return getattr(self._tokenizer, 'pad_token_id', None)
-    
+
     def encode(
         self,
         text: str,
@@ -67,7 +67,7 @@ class MistralTokenizer(BaseTokenizer):
                 return result.tokens
             return result
         return self._tokenizer.encode(text, add_special_tokens=add_special_tokens)
-    
+
     def decode(
         self,
         token_ids: Sequence[int],

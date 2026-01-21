@@ -6,8 +6,8 @@ Pipeline-Parallel Aware KV Transfer.
 
 This module provides orchestration for KV cache transfers when Pipeline Parallelism (PP)
 is enabled. In PP scenarios, different layers of the model reside on different pipeline
-stages (processes/nodes). KV transfer must be coordinated such that each stage's 
-respective KV blocks are transferred to the correct corresponding stages in the 
+stages (processes/nodes). KV transfer must be coordinated such that each stage's
+respective KV blocks are transferred to the correct corresponding stages in the
 destination (prefill -> decode) group.
 
 Key Patterns:
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 class PipelineParallelTransfer:
     """
     Orchestrator for PP-aware KV transfer.
-    
+
     Coordinates multiple KV connectors across pipeline stages to ensure
     consistent transfer of a request's full KV context.
     """
@@ -55,11 +55,11 @@ class PipelineParallelTransfer:
         self.pp_rank = pp_rank
         self.pp_size = pp_size
         self.local_connector = local_connector
-        
+
         # Mapping of local layers to this stage
         self.local_layers: List[int] = []
-        
-        logger.info("PipelineParallelTransfer initialized for rank %d/%d", 
+
+        logger.info("PipelineParallelTransfer initialized for rank %d/%d",
                     pp_rank, pp_size)
 
     def _calculate_pp_stage_mapping_rust(self, num_layers: int, pp_size: int) -> Dict[int, int]:
@@ -78,7 +78,7 @@ class PipelineParallelTransfer:
 
     def sync_stage_transfer(self, layer_idx: int):
         """Barrier or sync point for a specific layer's transfer across stages."""
-        # Ensure that previous stages in the pipeline have flushed their data 
+        # Ensure that previous stages in the pipeline have flushed their data
         # if there are dependencies.
         pass
 

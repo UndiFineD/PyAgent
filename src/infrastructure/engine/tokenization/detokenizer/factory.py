@@ -39,10 +39,10 @@ def create_detokenizer(
             stop_token_ids=stop_token_ids or set(),
             eos_token_id=eos_token_id,
         )
-    
+
     # Check if tokenizer supports fast decoding
     is_fast = use_fast and hasattr(tokenizer, 'is_fast') and tokenizer.is_fast
-    
+
     if is_fast or use_fast:
         return FastIncrementalDetokenizer(
             tokenizer,
@@ -74,13 +74,13 @@ def detokenize_incrementally(
         spaces_between_special_tokens=spaces_between_special_tokens,
         stop_strings=stop_strings,
     )
-    
+
     # Process all tokens
     for token_id in token_ids:
         result = detokenizer.update(token_id)
         if result.finished:
             return result.full_text, result.stop_reason
-    
+
     # Finalize
     result = detokenizer.finalize()
     return result.full_text, result.stop_reason

@@ -8,20 +8,20 @@ from .weights import LoRAWeights
 
 class LoRAAdapter:
     """Represents a loaded LoRA adapter."""
-    
+
     def __init__(self, config: LoRAConfig):
         self.config = config
         self.weights: Optional[LoRAWeights] = None
         self.info: Optional[LoRAInfo] = None
         self._status = AdapterStatus.LOADING
         self._load_time_ms = 0.0
-    
+
     @property
     def name(self) -> str: return self.config.adapter_name
-    
+
     @property
     def status(self) -> AdapterStatus: return self._status
-    
+
     def load(self) -> bool:
         start = time.perf_counter()
         try:
@@ -30,24 +30,24 @@ class LoRAAdapter:
             elif path.suffix == ".safetensors": self.weights = self._load_st(path)
             elif path.suffix in (".pt", ".pth", ".bin"): self.weights = self._load_torch(path)
             else: raise ValueError(f"Unsupported format: {path}")
-            
+
             self._load_time_ms = (time.perf_counter() - start) * 1000
             self._status = AdapterStatus.READY
-            self.info = LoRAInfo(self.config.adapter_name, self.config.rank, self.config.alpha, 
-                               self.config.method, self.config.target_modules, 
-                               self.weights.num_parameters, self.weights.memory_bytes, 
+            self.info = LoRAInfo(self.config.adapter_name, self.config.rank, self.config.alpha,
+                               self.config.method, self.config.target_modules,
+                               self.weights.num_parameters, self.weights.memory_bytes,
                                self._status, self._load_time_ms)
             return True
         except Exception:
             self._status = AdapterStatus.ERROR
             return False
-            
+
     def _load_from_dir(self, path: Path) -> LoRAWeights:
         for f in ["adapter_model.safetensors", "adapter_model.bin"]:
             if (path / f).exists():
                 return self._load_st(path / f) if f.endswith("safetensors") else self._load_torch(path / f)
         raise FileNotFoundError(f"No weights in {path}")
-        
+
     def _load_st(self, path: Path) -> LoRAWeights:
         from safetensors import safe_open
         w = LoRAWeights()
@@ -58,7 +58,7 @@ class LoRAAdapter:
                 elif ".lora_B." in key.lower(): w.lora_b[m] = f.get_tensor(key)
         for m in w.lora_a: w.scales[m] = self.config.computed_scaling
         return w
-        
+
     def _load_torch(self, path: Path) -> LoRAWeights:
         import torch
         w = LoRAWeights()

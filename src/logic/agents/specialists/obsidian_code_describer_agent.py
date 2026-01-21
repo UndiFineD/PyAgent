@@ -47,7 +47,7 @@ class VaultNote:
 
 class ObsidianCodeDescriberAgent(BaseAgent):
     """
-    Agent specializing in describing code and generating markdown files 
+    Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
     """
 
@@ -65,8 +65,8 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
     @as_tool
     async def describe_file_to_vault(
-        self, 
-        target_file: str, 
+        self,
+        target_file: str,
         vault_path: str,
         include_classes: bool = True,
         include_functions: bool = True,
@@ -81,32 +81,32 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         self._vault_path.mkdir(parents=True, exist_ok=True)
 
         code_content = target.read_text(encoding="utf-8")
-        
+
         # Parse code structure
         entities = self._parse_code_entities(code_content, str(target))
-        
+
         # Generate main file note
         main_note = await self._generate_file_note(target, code_content, entities)
         notes_created = [self._save_note(main_note)]
-        
+
         # Generate notes for classes and functions if requested
         if include_classes:
             for entity in entities:
                 if entity.entity_type == "class":
                     class_note = await self._generate_entity_note(entity, code_content)
                     notes_created.append(self._save_note(class_note))
-        
+
         if include_functions:
             for entity in entities:
                 if entity.entity_type == "function" and not entity.name.startswith("_"):
                     func_note = await self._generate_entity_note(entity, code_content)
                     notes_created.append(self._save_note(func_note))
-        
+
         # Generate MOC (Map of Content) if requested
         if generate_moc:
             moc_note = self._generate_moc(target.stem, notes_created)
             notes_created.append(self._save_note(moc_note))
-        
+
         return {
             "success": True,
             "notes_created": notes_created,
@@ -126,21 +126,21 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         source = Path(source_dir)
         if not source.exists():
             return {"success": False, "error": f"Directory not found: {source_dir}"}
-        
+
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
-        
+
         # Find all matching files
         if recursive:
             files = list(source.rglob(file_pattern))
         else:
             files = list(source.glob(file_pattern))
-        
+
         results = []
         for file_path in files:
             try:
                 result = await self.describe_file_to_vault(
-                    str(file_path), 
+                    str(file_path),
                     vault_path,
                     include_classes=True,
                     include_functions=False  # Only top-level for bulk
@@ -148,11 +148,11 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 results.append({"file": str(file_path), "success": result.get("success")})
             except Exception as e:
                 results.append({"file": str(file_path), "success": False, "error": str(e)})
-        
+
         # Generate index note
         index_note = self._generate_index_note(source.name, results)
         self._save_note(index_note)
-        
+
         return {
             "success": True,
             "files_processed": len(files),
@@ -170,14 +170,14 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         """Generates a concept note linking multiple code files."""
         self._vault_path = Path(vault_path)
         self._vault_path.mkdir(parents=True, exist_ok=True)
-        
+
         # Read related files
         file_contents = []
         for file_path in related_files:
             with contextlib.suppress(Exception):
                 content = Path(file_path).read_text(encoding="utf-8")
                 file_contents.append({"path": file_path, "content": content[:2000]})
-        
+
         prompt = (
             f"Create an Obsidian concept note about: {concept}\n\n"
             f"Related code files:\n"
@@ -191,9 +191,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             "4. Notes relationships to other concepts\n"
             "Include YAML frontmatter with tags and aliases."
         )
-        
+
         note_content = await self.improve_content(prompt)
-        
+
         note = VaultNote(
             title=concept,
             note_type=NoteType.CONCEPT,
@@ -204,9 +204,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 "tags": ["concept", concept.lower().replace(" ", "-")]
             }
         )
-        
+
         saved_path = self._save_note(note)
-        
+
         return {
             "success": True,
             "note_path": saved_path,
@@ -224,9 +224,9 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         path = Path(note_path)
         if not path.exists():
             return {"success": False, "error": "Note not found"}
-        
+
         content = path.read_text(encoding="utf-8")
-        
+
         # Parse existing frontmatter
         fm_match = re.match(r"^---\n(.*?)\n---\n", content, re.DOTALL)
         if fm_match:
@@ -243,18 +243,18 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             # Add new frontmatter
             fm_str = "\n".join([f"{k}: {v}" for k, v in frontmatter_updates.items()])
             new_content = f"---\n{fm_str}\n---\n\n{content}"
-        
+
         path.write_text(new_content, encoding="utf-8")
         return {"success": True, "note_path": str(path)}
 
     def _parse_code_entities(self, code: str, file_path: str) -> List[CodeEntity]:
         """Parses code to extract documented entities."""
         entities = []
-        
+
         # Simple regex-based parsing for classes and functions
         class_pattern = r"class\s+(\w+)(?:\([^)]*\))?:"
         func_pattern = r"def\s+(\w+)\s*\([^)]*\):"
-        
+
         for match in re.finditer(class_pattern, code):
             entity = CodeEntity(
                 name=match.group(1),
@@ -264,7 +264,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             )
             entities.append(entity)
             self._entity_registry[entity.name] = entity
-        
+
         for match in re.finditer(func_pattern, code):
             entity = CodeEntity(
                 name=match.group(1),
@@ -274,13 +274,13 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             )
             entities.append(entity)
             self._entity_registry[entity.name] = entity
-        
+
         return entities
 
     async def _generate_file_note(self, target: Path, code: str, entities: List[CodeEntity]) -> VaultNote:
         """Generates a note for a file."""
         entity_links = ", ".join([f"[[{e.name}]]" for e in entities])
-        
+
         prompt = (
             f"Create an Obsidian note for the file: {target.name}\n\n"
             f"Code:\n```python\n{code[:3000]}\n```\n\n"
@@ -292,12 +292,12 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             "4. Notes usage patterns and examples\n"
             "Use [[wikilinks]] for cross-references. Output ONLY the markdown body (no frontmatter)."
         )
-        
+
         content = await self.improve_content(prompt)
-        
+
         # Extract wikilinks
         wikilinks = set(re.findall(r"\[\[([^\]]+)\]\]", content))
-        
+
         return VaultNote(
             title=target.stem,
             note_type=NoteType.FILE,
@@ -318,7 +318,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         pattern = rf"(class|def)\s+{entity.name}.*?(?=\n(?:class|def)\s|\Z)"
         match = re.search(pattern, code, re.DOTALL)
         entity_code = match.group(0)[:1500] if match else ""
-        
+
         prompt = (
             f"Create an Obsidian note for the {entity.entity_type}: {entity.name}\n\n"
             f"Code:\n```python\n{entity_code}\n```\n\n"
@@ -329,10 +329,10 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             "4. Links to related concepts using [[wikilinks]]\n"
             "Output ONLY the markdown body."
         )
-        
+
         content = await self.improve_content(prompt)
         wikilinks = set(re.findall(r"\[\[([^\]]+)\]\]", content))
-        
+
         return VaultNote(
             title=entity.name,
             note_type=NoteType.CLASS if entity.entity_type == "class" else NoteType.FUNCTION,
@@ -351,7 +351,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         """Generates a Map of Content note."""
         links = "\n".join([f"- [[{Path(n).stem}]]" for n in notes])
         content = f"# {name} - Map of Content\n\n## Notes\n\n{links}\n"
-        
+
         return VaultNote(
             title=f"{name} MOC",
             note_type=NoteType.INDEX,
@@ -368,7 +368,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         successful = [r for r in results if r.get("success")]
         links = "\n".join([f"- [[{Path(r['file']).stem}]]" for r in successful])
         content = f"# {name} - Code Documentation Index\n\n## Files\n\n{links}\n\n## Statistics\n\n- Total files: {len(results)}\n- Documented: {len(successful)}\n"
-        
+
         return VaultNote(
             title=f"{name} Index",
             note_type=NoteType.INDEX,
@@ -384,7 +384,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         """Saves a note to the vault."""
         if not self._vault_path:
             return ""
-        
+
         # Build frontmatter
         fm_lines = ["---"]
         for key, value in note.frontmatter.items():
@@ -393,13 +393,13 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             else:
                 fm_lines.append(f"{key}: {value}")
         fm_lines.append("---\n")
-        
+
         full_content = "\n".join(fm_lines) + note.content
-        
+
         note_path = self._vault_path / f"{note.title}.md"
         note_path.write_text(full_content, encoding="utf-8")
-        
+
         self._note_cache[note.title] = note
         logging.info(f"ObsidianCodeDescriber: Note saved at {note_path}")
-        
+
         return str(note_path)

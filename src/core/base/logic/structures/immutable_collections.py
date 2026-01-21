@@ -28,128 +28,128 @@ V = TypeVar("V")
 class ConstantList(Generic[T], Sequence[T]):
     """
     Immutable list wrapper that raises TypeError on mutation attempts.
-    
+
     Wraps an existing list and provides read-only access while maintaining
     full Sequence protocol compatibility.
-    
+
     Example:
         >>> data = [1, 2, 3, 4, 5]
         >>> const = ConstantList(data)
         >>> print(const[0])  # 1
         >>> const.append(6)  # TypeError: Cannot append to a constant list
     """
-    
+
     __slots__ = ("_data",)
-    
+
     def __init__(self, data: list[T]) -> None:
         """
         Wrap a list as immutable.
-        
+
         Args:
             data: The list to wrap (not copied, changes to original affect this)
         """
         self._data = data
-    
+
     # Mutation blockers
     def append(self, item: T) -> None:
         raise TypeError("Cannot append to a constant list")
-    
+
     def extend(self, items: Any) -> None:
         raise TypeError("Cannot extend a constant list")
-    
+
     def insert(self, index: int, item: T) -> None:
         raise TypeError("Cannot insert into a constant list")
-    
+
     def pop(self, index: int = -1) -> T:
         raise TypeError("Cannot pop from a constant list")
-    
+
     def remove(self, item: T) -> None:
         raise TypeError("Cannot remove from a constant list")
-    
+
     def clear(self) -> None:
         raise TypeError("Cannot clear a constant list")
-    
+
     def reverse(self) -> None:
         raise TypeError("Cannot reverse a constant list")
-    
+
     def sort(self, **kwargs: Any) -> None:
         raise TypeError("Cannot sort a constant list")
-    
+
     @overload
     def __setitem__(self, index: int, value: T) -> None: ...
-    
+
     @overload
     def __setitem__(self, s: slice, value: list[T]) -> None: ...
-    
+
     def __setitem__(self, index: int | slice, value: T | list[T]) -> None:
         raise TypeError("Cannot set item in a constant list")
-    
+
     def __delitem__(self, index: int | slice) -> None:
         raise TypeError("Cannot delete item from a constant list")
-    
+
     def __iadd__(self, other: Any) -> "ConstantList[T]":
         raise TypeError("Cannot modify a constant list")
-    
+
     def __imul__(self, n: int) -> "ConstantList[T]":
         raise TypeError("Cannot modify a constant list")
-    
+
     # Read operations
     @overload
     def __getitem__(self, index: int) -> T: ...
-    
+
     @overload
     def __getitem__(self, s: slice) -> list[T]: ...
-    
+
     def __getitem__(self, index: int | slice) -> T | list[T]:
         return self._data[index]
-    
+
     def __len__(self) -> int:
         return len(self._data)
-    
+
     def __iter__(self) -> Iterator[T]:
         return iter(self._data)
-    
+
     def __contains__(self, item: object) -> bool:
         return item in self._data
-    
+
     def __reversed__(self) -> Iterator[T]:
         return reversed(self._data)
-    
+
     def index(self, item: T, start: int = 0, stop: int | None = None) -> int:
         if stop is None:
             stop = len(self._data)
         return self._data.index(item, start, stop)
-    
+
     def count(self, item: T) -> int:
         return self._data.count(item)
-    
+
     def copy(self) -> list[T]:
         """Return a mutable copy of the underlying list."""
         return self._data.copy()
-    
+
     def __repr__(self) -> str:
         return f"ConstantList({self._data!r})"
-    
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, ConstantList):
             return self._data == other._data
         if isinstance(other, list):
             return self._data == other
         return NotImplemented
-    
+
     def __hash__(self) -> int:
         # Not hashable by default (underlying list may be mutable)
         raise TypeError("unhashable type: 'ConstantList'")
-    
+
     def __add__(self, other: list[T]) -> list[T]:
         return self._data + other
-    
+
     def __radd__(self, other: list[T]) -> list[T]:
         return other + self._data
-    
+
     def __mul__(self, n: int) -> list[T]:
         return self._data * n
-    
+
     def __rmul__(self, n: int) -> list[T]:
         return n * self._data
 
@@ -157,92 +157,92 @@ class ConstantList(Generic[T], Sequence[T]):
 class ConstantDict(Generic[K, V], Mapping[K, V]):
     """
     Immutable dictionary wrapper that raises TypeError on mutation attempts.
-    
+
     Example:
         >>> data = {"a": 1, "b": 2}
         >>> const = ConstantDict(data)
         >>> print(const["a"])  # 1
         >>> const["c"] = 3  # TypeError: Cannot set item in a constant dict
     """
-    
+
     __slots__ = ("_data",)
-    
+
     def __init__(self, data: dict[K, V]) -> None:
         """
         Wrap a dictionary as immutable.
-        
+
         Args:
             data: The dict to wrap (not copied)
         """
         self._data = data
-    
+
     # Mutation blockers
     def __setitem__(self, key: K, value: V) -> None:
         raise TypeError("Cannot set item in a constant dict")
-    
+
     def __delitem__(self, key: K) -> None:
         raise TypeError("Cannot delete item from a constant dict")
-    
+
     def pop(self, key: K, *default: V) -> V:
         raise TypeError("Cannot pop from a constant dict")
-    
+
     def popitem(self) -> tuple[K, V]:
         raise TypeError("Cannot popitem from a constant dict")
-    
+
     def clear(self) -> None:
         raise TypeError("Cannot clear a constant dict")
-    
+
     def update(self, *args: Any, **kwargs: Any) -> None:
         raise TypeError("Cannot update a constant dict")
-    
+
     def setdefault(self, key: K, default: V = None) -> V:  # type: ignore
         raise TypeError("Cannot setdefault in a constant dict")
-    
+
     # Read operations
     def __getitem__(self, key: K) -> V:
         return self._data[key]
-    
+
     def __len__(self) -> int:
         return len(self._data)
-    
+
     def __iter__(self) -> Iterator[K]:
         return iter(self._data)
-    
+
     def __contains__(self, key: object) -> bool:
         return key in self._data
-    
+
     def keys(self):
         return self._data.keys()
-    
+
     def values(self):
         return self._data.values()
-    
+
     def items(self):
         return self._data.items()
-    
+
     def get(self, key: K, default: V | None = None) -> V | None:
         return self._data.get(key, default)
-    
+
     def copy(self) -> dict[K, V]:
         """Return a mutable copy."""
         return self._data.copy()
-    
+
     def __repr__(self) -> str:
         return f"ConstantDict({self._data!r})"
-    
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, ConstantDict):
             return self._data == other._data
         if isinstance(other, dict):
             return self._data == other
         return NotImplemented
-    
+
     def __hash__(self) -> int:
         raise TypeError("unhashable type: 'ConstantDict'")
-    
+
     def __or__(self, other: dict[K, V]) -> dict[K, V]:
         return self._data | other
-    
+
     def __ror__(self, other: dict[K, V]) -> dict[K, V]:
         return other | self._data
 
@@ -250,22 +250,22 @@ class ConstantDict(Generic[K, V], Mapping[K, V]):
 class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
     """
     Immutable and hashable dictionary.
-    
+
     Unlike ConstantDict, FrozenDict creates a copy and is hashable,
     making it suitable for use as dictionary keys or set members.
-    
+
     Example:
         >>> fd = FrozenDict({"a": 1, "b": 2})
         >>> cache = {fd: "cached_value"}
         >>> print(hash(fd))  # Valid hash
     """
-    
+
     __slots__ = ("_data", "_hash")
-    
+
     def __init__(self, data: dict[K, V] | None = None, **kwargs: V) -> None:
         """
         Create a frozen dictionary.
-        
+
         Args:
             data: Optional dict to copy
             **kwargs: Additional key-value pairs
@@ -274,59 +274,59 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
             data = {}
         self._data: dict[K, V] = {**data, **kwargs}  # type: ignore
         self._hash: int | None = None
-    
+
     def __getitem__(self, key: K) -> V:
         return self._data[key]
-    
+
     def __len__(self) -> int:
         return len(self._data)
-    
+
     def __iter__(self) -> Iterator[K]:
         return iter(self._data)
-    
+
     def __contains__(self, key: object) -> bool:
         return key in self._data
-    
+
     def __hash__(self) -> int:
         if self._hash is None:
             # Use frozenset of items for hashing
             self._hash = hash(frozenset(self._data.items()))
         return self._hash
-    
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, FrozenDict):
             return self._data == other._data
         if isinstance(other, dict):
             return self._data == other
         return NotImplemented
-    
+
     def __repr__(self) -> str:
         return f"FrozenDict({self._data!r})"
-    
+
     def keys(self):
         return self._data.keys()
-    
+
     def values(self):
         return self._data.values()
-    
+
     def items(self):
         return self._data.items()
-    
+
     def get(self, key: K, default: V | None = None) -> V | None:
         return self._data.get(key, default)
-    
+
     def copy(self) -> dict[K, V]:
         """Return a mutable copy."""
         return self._data.copy()
-    
+
     def to_dict(self) -> dict[K, V]:
         """Alias for copy()."""
         return self._data.copy()
-    
+
     # Mutation blockers (for clarity, even though Mapping doesn't define them)
     def __setitem__(self, key: K, value: V) -> None:
         raise TypeError("'FrozenDict' object does not support item assignment")
-    
+
     def __delitem__(self, key: K) -> None:
         raise TypeError("'FrozenDict' object does not support item deletion")
 
@@ -334,10 +334,10 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
 def as_constant(obj: list[T] | dict[K, V]) -> ConstantList[T] | ConstantDict[K, V]:
     """
     Wrap a list or dict as immutable.
-    
+
     Args:
         obj: List or dict to wrap
-        
+
     Returns:
         ConstantList or ConstantDict wrapper
     """

@@ -72,7 +72,7 @@ class PenaltyConfig:
     positional_decay: float = 0.0        # Distance-based penalty decay
     bad_words_penalty: float = float('-inf')  # Penalty for bad words
     include_prompt: bool = True          # Include prompt tokens in penalty
-    
+
     def __post_init__(self) -> None:
         if self.repetition_penalty <= 0:
             raise ValueError(f"repetition_penalty must be > 0, got {self.repetition_penalty}")
@@ -88,24 +88,24 @@ class PenaltyState:
     ngram_counts: dict[tuple[int, ...], int] = field(default_factory=dict)
     last_n_tokens: list[int] = field(default_factory=list)
     repetition_rate: float = 0.0
-    
+
     def update_counts(self, token: int) -> None:
         """Update token counts."""
         self.token_counts[token] = self.token_counts.get(token, 0) + 1
         self.last_n_tokens.append(token)
-    
+
     def update_ngram(self, ngram: tuple[int, ...]) -> None:
         """Update n-gram counts."""
         self.ngram_counts[ngram] = self.ngram_counts.get(ngram, 0) + 1
-    
+
     def get_token_count(self, token: int) -> int:
         """Get count for a token."""
         return self.token_counts.get(token, 0)
-    
+
     def get_ngram_count(self, ngram: tuple[int, ...]) -> int:
         """Get count for an n-gram."""
         return self.ngram_counts.get(ngram, 0)
-    
+
     def reset(self) -> None:
         """Reset all state."""
         self.step = 0
@@ -118,20 +118,20 @@ class PenaltyState:
 class PenaltyEngine:
     """
     Comprehensive penalty engine for token penalization.
-    
+
     Implements vLLM's penalty application with extensions for:
     - Penalty scheduling
     - Positional decay
     - N-gram penalties
     - Context-aware strength
     """
-    
+
     def __init__(self, config: PenaltyConfig | None = None):
         self.config = config or PenaltyConfig()
         self.state = PenaltyState()
         self._bad_words: set[int] = set()
         self._bad_word_sequences: list[list[int]] = []
-    
+
     def apply_penalties(
         self,
         logits: NDArray[np.float32],
@@ -140,21 +140,21 @@ class PenaltyEngine:
     ) -> NDArray[np.float32]:
         """
         Apply all configured penalties to logits.
-        
+
         Args:
             logits: Input logits [batch, vocab] or [vocab]
             prompt_tokens: Prompt token IDs
             output_tokens: Previously generated token IDs
-            
+
         Returns:
             Penalized logits
         """
         squeeze = logits.ndim == 1
         if squeeze:
             logits = logits[np.newaxis, :]
-        
+
         result = logits.copy()
-        
+
         # Build token set for penalties
         penalty_tokens = set()
         if self.config.include_prompt and prompt_tokens is not None:
@@ -164,50 +164,50 @@ class PenaltyEngine:
             # Update state with output tokens
             for token in output_tokens:
                 self.state.update_counts(int(token))
-        
+
         # Get scheduled penalty values
         rep_penalty = self._get_scheduled_penalty(self.config.repetition_penalty)
         freq_penalty = self._get_scheduled_penalty(self.config.frequency_penalty, base=0.0)
         pres_penalty = self._get_scheduled_penalty(self.config.presence_penalty, base=0.0)
-        
+
         # Apply repetition penalty (multiplicative)
         if rep_penalty != 1.0:
             result = self._apply_repetition_penalty(result, penalty_tokens, rep_penalty)
-        
+
         # Apply frequency penalty (additive, proportional to count)
         if freq_penalty != 0.0:
             result = self._apply_frequency_penalty(
                 result, output_tokens or [], freq_penalty
             )
-        
+
         # Apply presence penalty (additive, binary)
         if pres_penalty != 0.0:
             result = self._apply_presence_penalty(result, penalty_tokens, pres_penalty)
-        
+
         # Apply n-gram penalty
         if self.config.ngram_penalty != 0.0 and output_tokens is not None:
             result = self._apply_ngram_penalty(
-                result, list(output_tokens), 
+                result, list(output_tokens),
                 self.config.ngram_size, self.config.ngram_penalty
             )
-        
+
         # Apply positional decay penalty
         if self.config.positional_decay != 0.0 and output_tokens is not None:
             result = self._apply_positional_penalty(
                 result, list(output_tokens), self.config.positional_decay
             )
-        
+
         # Apply bad words blocking
         if self._bad_words or self._bad_word_sequences:
             result = self._apply_bad_words(result, output_tokens or [])
-        
+
         # Update state
         self.state.step += 1
-        
+
         if squeeze:
             return result[0]
         return result
-    
+
     def _apply_repetition_penalty(
         self,
         logits: NDArray[np.float32],
@@ -219,7 +219,7 @@ class PenaltyEngine:
             return rust_core.apply_repetition_penalty_rust(
                 logits, list(token_set), penalty
             )
-        
+
         result = logits.copy()
         for token in token_set:
             if 0 <= token < result.shape[-1]:
@@ -228,7 +228,7 @@ class PenaltyEngine:
                 else:
                     result[..., token] *= penalty
         return result
-    
+
     def _apply_frequency_penalty(
         self,
         logits: NDArray[np.float32],
@@ -237,20 +237,20 @@ class PenaltyEngine:
     ) -> NDArray[np.float32]:
         """Apply additive frequency penalty (proportional to count)."""
         result = logits.copy()
-        
+
         # Count tokens
         counts = {}
         for token in output_tokens:
             t = int(token)
             counts[t] = counts.get(t, 0) + 1
-        
+
         # Apply penalty
         for token, count in counts.items():
             if 0 <= token < result.shape[-1]:
                 result[..., token] -= penalty * count
-        
+
         return result
-    
+
     def _apply_presence_penalty(
         self,
         logits: NDArray[np.float32],
@@ -263,7 +263,7 @@ class PenaltyEngine:
             if 0 <= token < result.shape[-1]:
                 result[..., token] -= penalty
         return result
-    
+
     def _apply_ngram_penalty(
         self,
         logits: NDArray[np.float32],
@@ -273,25 +273,25 @@ class PenaltyEngine:
     ) -> NDArray[np.float32]:
         """
         Apply n-gram repetition penalty.
-        
+
         Penalizes tokens that would complete an n-gram that has
         already appeared in the sequence.
         """
         if len(tokens) < n - 1:
             return logits
-        
+
         result = logits.copy()
-        
+
         # Build n-gram index from previous tokens
         ngram_set: set[tuple[int, ...]] = set()
         for i in range(len(tokens) - n + 1):
             ngram = tuple(tokens[i:i + n])
             ngram_set.add(ngram)
             self.state.update_ngram(ngram)
-        
+
         # Get current prefix (last n-1 tokens)
         prefix = tuple(tokens[-(n - 1):])
-        
+
         # Penalize tokens that would complete a repeated n-gram
         for ngram in ngram_set:
             if ngram[:-1] == prefix:
@@ -299,9 +299,9 @@ class PenaltyEngine:
                 if 0 <= next_token < result.shape[-1]:
                     count = self.state.get_ngram_count(ngram)
                     result[..., next_token] -= penalty * count
-        
+
         return result
-    
+
     def _apply_positional_penalty(
         self,
         logits: NDArray[np.float32],
@@ -310,12 +310,12 @@ class PenaltyEngine:
     ) -> NDArray[np.float32]:
         """
         Apply positional penalty with distance-based decay.
-        
+
         Recent tokens are penalized more than distant tokens.
         """
         result = logits.copy()
         n = len(tokens)
-        
+
         for i, token in enumerate(tokens):
             if 0 <= token < result.shape[-1]:
                 # Distance from current position
@@ -323,9 +323,9 @@ class PenaltyEngine:
                 # Exponential decay
                 penalty = math.exp(-decay * distance)
                 result[..., token] -= penalty
-        
+
         return result
-    
+
     def _apply_bad_words(
         self,
         logits: NDArray[np.float32],
@@ -333,18 +333,18 @@ class PenaltyEngine:
     ) -> NDArray[np.float32]:
         """Apply bad words blocking."""
         result = logits.copy()
-        
+
         # Single token bad words
         for token in self._bad_words:
             if 0 <= token < result.shape[-1]:
                 result[..., token] = self.config.bad_words_penalty
-        
+
         # Multi-token bad word sequences
         past = list(past_tokens)
         for sequence in self._bad_word_sequences:
             if len(sequence) <= 1:
                 continue
-            
+
             prefix_len = len(sequence) - 1
             if len(past) >= prefix_len:
                 if past[-prefix_len:] == sequence[:-1]:
@@ -352,9 +352,9 @@ class PenaltyEngine:
                     next_token = sequence[-1]
                     if 0 <= next_token < result.shape[-1]:
                         result[..., next_token] = self.config.bad_words_penalty
-        
+
         return result
-    
+
     def _get_scheduled_penalty(
         self,
         base_penalty: float,
@@ -363,19 +363,19 @@ class PenaltyEngine:
         """Get scheduled penalty value."""
         if self.config.penalty_schedule == PenaltySchedule.CONSTANT:
             return base_penalty
-        
+
         step = self.state.step
-        
+
         if self.config.penalty_schedule == PenaltySchedule.WARMUP:
             if step >= self.config.warmup_steps:
                 return base_penalty
             progress = step / max(1, self.config.warmup_steps)
             return base + (base_penalty - base) * progress
-        
+
         elif self.config.penalty_schedule == PenaltySchedule.DECAY:
             decay_factor = self.config.decay_rate ** step
             return base + (base_penalty - base) * decay_factor
-        
+
         elif self.config.penalty_schedule == PenaltySchedule.ADAPTIVE:
             # Increase penalty if seeing high repetition
             if self.state.repetition_rate > 0.5:
@@ -383,9 +383,9 @@ class PenaltyEngine:
             elif self.state.repetition_rate < 0.1:
                 return base_penalty * 0.8
             return base_penalty
-        
+
         return base_penalty
-    
+
     def add_bad_word(self, token_or_sequence: int | list[int]) -> None:
         """Add a bad word (single token or sequence)."""
         if isinstance(token_or_sequence, int):
@@ -395,27 +395,27 @@ class PenaltyEngine:
                 self._bad_words.add(token_or_sequence[0])
             else:
                 self._bad_word_sequences.append(list(token_or_sequence))
-    
+
     def clear_bad_words(self) -> None:
         """Clear all bad words."""
         self._bad_words.clear()
         self._bad_word_sequences.clear()
-    
+
     def reset(self) -> None:
         """Reset penalty state."""
         self.state.reset()
-    
+
     def get_token_stats(self) -> dict[str, Any]:
         """Get token repetition statistics."""
         total = sum(self.state.token_counts.values())
         unique = len(self.state.token_counts)
-        
+
         if total > 0:
             repetition_rate = 1.0 - (unique / total)
             self.state.repetition_rate = repetition_rate
         else:
             repetition_rate = 0.0
-        
+
         return {
             "total_tokens": total,
             "unique_tokens": unique,
@@ -428,11 +428,11 @@ class PenaltyEngine:
 class BatchPenaltyEngine:
     """
     Batch-optimized penalty engine.
-    
+
     Efficiently applies penalties to multiple sequences
     with different configurations.
     """
-    
+
     def apply_batch_penalties(
         self,
         logits: NDArray[np.float32],            # [batch, vocab]
@@ -444,20 +444,20 @@ class BatchPenaltyEngine:
     ) -> NDArray[np.float32]:
         """
         Apply penalties to batched logits with per-sequence parameters.
-        
+
         Returns:
             Penalized logits [batch, vocab]
         """
         batch_size, vocab_size = logits.shape
         result = logits.copy()
-        
+
         # Use Rust if available
         if HAS_RUST and hasattr(rust_core, 'batch_apply_penalties_rust'):
             return rust_core.batch_apply_penalties_rust(
                 logits, repetition_penalties, frequency_penalties,
                 presence_penalties, prompt_tokens, output_tokens
             )
-        
+
         for b in range(batch_size):
             engine = PenaltyEngine(PenaltyConfig(
                 repetition_penalty=float(repetition_penalties[b]),
@@ -469,7 +469,7 @@ class BatchPenaltyEngine:
                 prompt_tokens=prompt_tokens[b] if prompt_tokens else None,
                 output_tokens=output_tokens[b] if output_tokens else None,
             )
-        
+
         return result
 
 

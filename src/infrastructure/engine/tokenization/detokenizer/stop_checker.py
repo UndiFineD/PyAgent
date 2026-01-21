@@ -39,7 +39,7 @@ class StopChecker:
         self.stop_token_ids = stop_token_ids or set()
         self.eos_token_id = eos_token_id
         self.include_stop_string_in_output = include_stop_string_in_output
-        
+
         # Add EOS to stop tokens if provided
         if eos_token_id is not None:
             self.stop_token_ids.add(eos_token_id)
@@ -50,7 +50,7 @@ class StopChecker:
             if check_stop_tokens_rust(token_id, list(self.stop_token_ids)):
                 return token_id
             return None
-        
+
         if token_id in self.stop_token_ids:
             return token_id
         return None

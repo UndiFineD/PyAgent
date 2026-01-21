@@ -40,11 +40,11 @@ def reset_slash_commands() -> None:
 def process_prompt(prompt: str, **kwargs: Any) -> ProcessedPrompt:
     """
     Process a prompt with slash commands.
-    
+
     Args:
         prompt: The input prompt
         **kwargs: Additional options for processing
-        
+
     Returns:
         ProcessedPrompt with results
     """
@@ -54,12 +54,12 @@ def process_prompt(prompt: str, **kwargs: Any) -> ProcessedPrompt:
 def execute_command(command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
     """
     Execute a single slash command.
-    
+
     Args:
         command: Command name (without /)
         args: Command arguments
         **metadata: Additional context
-        
+
     Returns:
         CommandResult
     """
@@ -69,10 +69,10 @@ def execute_command(command: str, args: list[str] | None = None, **metadata: Any
 def get_help(command: str | None = None) -> str:
     """
     Get help text for commands.
-    
+
     Args:
         command: Specific command name, or None for all
-        
+
     Returns:
         Help text
     """

@@ -39,20 +39,20 @@ class KVTransferConfig:
     kv_buffer_size: int = int(1e9)  # 1GB default
     kv_buffer_device: str = "cuda"
     extra_config: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Advanced configuration
     retry_attempts: int = 3
     retry_delay: float = 0.1
     health_check_interval: float = 5.0
     connection_timeout: float = 30.0
-    
+
     def get_from_extra_config(self, key: str, default: Any = None) -> Any:
         return self.extra_config.get(key, default)
-    
+
     @property
     def is_producer(self) -> bool:
         return self.kv_role in (KVConnectorRole.PRODUCER, KVConnectorRole.BOTH)
-    
+
     @property
     def is_consumer(self) -> bool:
         return self.kv_role in (KVConnectorRole.CONSUMER, KVConnectorRole.BOTH)
@@ -75,15 +75,15 @@ class KVCacheBlocks:
     block_ids: List[List[int]] = field(default_factory=list)
     num_blocks: int = 0
     block_size: int = 16
-    
+
     def get_block_ids(self) -> List[List[int]]:
         return self.block_ids
-    
+
     def get_unhashed_block_ids(self) -> List[int]:
         if self.block_ids:
             return list(self.block_ids[0])
         return []
-    
+
     def total_tokens(self) -> int:
         return self.num_blocks * self.block_size
 

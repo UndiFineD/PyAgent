@@ -24,7 +24,7 @@ if str(project_root) not in sys.path:
 def find_affected_files(search_dir: Path, pattern: str) -> list:
     """Find all Python files containing the duplicate header pattern."""
     affected = []
-    
+
     for root, _, files in os.walk(search_dir):
         for file in files:
             if file.endswith(".py"):
@@ -36,7 +36,7 @@ def find_affected_files(search_dir: Path, pattern: str) -> list:
                         affected.append(str(path))
                 except Exception:
                     pass
-    
+
     return affected
 
 
@@ -44,7 +44,7 @@ def fix_duplicate_headers_rust(affected_files: list, replacements: dict) -> int:
     """Use Rust-accelerated bulk replacement."""
     try:
         from src.core.rust_bridge import RustBridge
-        
+
         results = RustBridge.bulk_replace_files(affected_files, replacements)
         return sum(1 for res in results.values() if res)
     except ImportError:
@@ -55,23 +55,23 @@ def fix_duplicate_headers_rust(affected_files: list, replacements: dict) -> int:
 def fix_duplicate_headers_python(affected_files: list, replacements: dict) -> int:
     """Python fallback for bulk replacement."""
     fixed = 0
-    
+
     for filepath in affected_files:
         try:
             with open(filepath, "r", encoding="utf-8", newline='') as f:
                 content = f.read()
-            
+
             modified = content
             for old, new in replacements.items():
                 modified = modified.replace(old, new)
-            
+
             if modified != content:
                 with open(filepath, "w", encoding="utf-8", newline='') as f:
                     f.write(modified)
                 fixed += 1
         except Exception as e:
             print(f"Error fixing {filepath}: {e}")
-    
+
     return fixed
 
 
@@ -80,7 +80,7 @@ def main():
     print("=" * 60)
     print("Duplicate License Header Fixer")
     print("=" * 60)
-    
+
     # The duplicate block to remove (Windows line endings)
     duplicate_block = (
         "# you may not use this file except in compliance with the License.\r\n"
@@ -90,36 +90,36 @@ def main():
         "# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n"
         "# limitations under the License."
     )
-    
+
     replacements = {duplicate_block: ""}
-    
+
     # Also check Unix line endings
     duplicate_block_unix = duplicate_block.replace("\r\n", "\n")
     replacements[duplicate_block_unix] = ""
-    
+
     # Search pattern
     search_pattern = "# you may not use this file except in compliance"
-    
+
     # Find affected files
     src_dir = project_root / "src"
     print(f"\nScanning: {src_dir}")
-    
+
     affected_files = find_affected_files(src_dir, search_pattern)
-    
+
     if not affected_files:
         print("\n✅ No files found with duplicate license headers.")
         return 0
-    
+
     print(f"\nFound {len(affected_files)} files with duplicate headers:")
     for f in affected_files[:10]:
         print(f"  - {Path(f).relative_to(project_root)}")
     if len(affected_files) > 10:
         print(f"  ... and {len(affected_files) - 10} more")
-    
+
     # Apply fixes
     print("\nApplying Rust-accelerated bulk fix...")
     fixed_count = fix_duplicate_headers_rust(affected_files, replacements)
-    
+
     print(f"\n✅ Successfully fixed {fixed_count} files.")
     return 0
 

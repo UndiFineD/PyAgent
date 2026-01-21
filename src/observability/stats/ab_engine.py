@@ -150,7 +150,7 @@ class ABComparator:
             return ABSignificanceResult(
                 p_value=1.0, is_significant=False, effect_size=0.0
             )
-        
+
         # Phase 16: Try Rust-accelerated t-test calculation
         if _RUST_AVAILABLE and hasattr(rust_core, "calculate_ttest_rust"):
             with contextlib.suppress(Exception):
@@ -161,7 +161,7 @@ class ABComparator:
                         is_significant=result.get("is_significant", False),
                         effect_size=result.get("effect_size", 0.0),
                     )
-        
+
         mean_a = sum(control_values) / len(control_values)
         mean_b = sum(treatment_values) / len(treatment_values)
         effect = mean_b - mean_a

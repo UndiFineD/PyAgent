@@ -50,12 +50,12 @@ class SlowIncrementalDetokenizer(IncrementalDetokenizer):
         """Decode tokens using simple full decode approach."""
         if not token_ids:
             return "", prefix_offset, read_offset
-        
+
         full_text = self.tokenizer.decode(
             token_ids,
             skip_special_tokens=self.skip_special_tokens,
         )
-        
+
         new_text = ""
         if len(full_text) > len(self._prev_text):
             if full_text.startswith(self._prev_text):
@@ -68,11 +68,11 @@ class SlowIncrementalDetokenizer(IncrementalDetokenizer):
                     else:
                         break
                 new_text = full_text[common_len:]
-        
+
         self._prev_text = full_text
-        
+
         # Update offsets
         new_prefix = len(token_ids)
         new_read = len(token_ids)
-        
+
         return new_text, new_prefix, new_read

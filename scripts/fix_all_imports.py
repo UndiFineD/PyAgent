@@ -11,7 +11,7 @@ def to_snake_case(name):
 def run_fix():
     root = Path(os.getcwd()).resolve()
     dirs = ["src", "tests", "scripts", "rust_core"]
-    
+
     # 1. Rename to snake_case
     for d in dirs:
         dp = root / d
@@ -49,10 +49,10 @@ def run_fix():
             rel = parts[dots-1:]
             if rel and rel[0].startswith("."): rel[0] = rel[0].lstrip(".")
             if rel and not rel[0]: rel.pop(0)
-            
+
             curr = current_file.parent.resolve()
             for _ in range(dots - 1): curr = curr.parent
-            
+
             res = []
             for p in rel:
                 key = (str(curr).lower(), p.replace("_", "").replace("-", "").lower())
@@ -80,7 +80,7 @@ def run_fix():
                             break
                     if curr: continue
                     else: return mod_str # External
-                
+
                 low = p.replace("_", "").replace("-", "").lower()
                 key = (str(curr).lower(), low)
                 if key in name_map:
@@ -134,7 +134,7 @@ def run_fix():
                             ln = f"{pre}{cmod}{suf if suf else ''}"
                             changed = True
                     nl.append(ln)
-                
+
                 text = "\n".join(nl) + ("\n" if content.endswith("\n") else "")
                 def repl(m):
                     q, s = m.group(1), m.group(2)

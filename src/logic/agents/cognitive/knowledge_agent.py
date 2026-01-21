@@ -32,7 +32,7 @@ HAS_CHROMADB = importlib.util.find_spec("chromadb") is not None
 
 class KnowledgeAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic 
+    Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic
     context, maintains the knowledge graph, and orchestrates RAG operations.
     """
 

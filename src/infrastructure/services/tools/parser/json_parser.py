@@ -23,23 +23,23 @@ from .base import (
 class JsonToolParser(ToolParser):
     """
     Generic JSON tool call parser.
-    
+
     Expects format:
     {"name": "function_name", "arguments": {...}}
     or
     {"function": {"name": "...", "arguments": {...}}}
     """
-    
+
     @property
     def parser_type(self) -> ToolParserType:
         return ToolParserType.GENERIC_JSON
-    
+
     def parse(self, text: str) -> ToolParseResult:
         result = ToolParseResult(raw_output=text)
-        
+
         # Try to find JSON objects
         json_matches = extract_json_from_text(text)
-        
+
         for i, json_str in enumerate(json_matches):
             try:
                 data = json.loads(json_str)
@@ -48,12 +48,12 @@ class JsonToolParser(ToolParser):
                     result.tool_calls.append(tool_call)
             except json.JSONDecodeError as e:
                 result.errors.append(f"JSON parse error: {e}")
-        
+
         # Extract non-tool content
         result.content = self._extract_content(text, json_matches)
-        
+
         return result
-    
+
     def _parse_json_object(
         self,
         data: Dict[str, Any],
@@ -65,7 +65,7 @@ class JsonToolParser(ToolParser):
             func = data["function"]
             name = func.get("name", "")
             args_raw = func.get("arguments", "{}")
-            
+
             if isinstance(args_raw, str):
                 try:
                     args = json.loads(args_raw)
@@ -73,28 +73,28 @@ class JsonToolParser(ToolParser):
                     args = {}
             else:
                 args = args_raw
-            
+
             return ToolCall(
                 id=data.get("id", self._generate_call_id(index)),
                 name=name,
                 arguments=args,
                 raw_arguments=args_raw if isinstance(args_raw, str) else json.dumps(args_raw),
             )
-        
+
         # Direct format
         if "name" in data:
             name = data["name"]
             args = data.get("arguments", data.get("parameters", {}))
-            
+
             return ToolCall(
                 id=data.get("id", self._generate_call_id(index)),
                 name=name,
                 arguments=args if isinstance(args, dict) else {},
                 raw_arguments=json.dumps(args),
             )
-        
+
         return None
-    
+
     def _extract_content(
         self,
         text: str,
@@ -105,7 +105,7 @@ class JsonToolParser(ToolParser):
         for match in json_matches:
             content = content.replace(match, "", 1)
         return content.strip()
-    
+
     def parse_streaming(
         self,
         delta: str,
@@ -113,7 +113,7 @@ class JsonToolParser(ToolParser):
     ) -> Tuple[StreamingToolState, Optional[ToolCall]]:
         state.buffer += delta
         completed_tool = None
-        
+
         # Track brace depth
         for char in delta:
             if char == '"' and (len(state.buffer) < 2 or state.buffer[-2] != '\\'):
@@ -141,18 +141,18 @@ class JsonToolParser(ToolParser):
                         except json.JSONDecodeError:
                             pass
                         state.in_tool_call = False
-        
+
         return state, completed_tool
-    
+
     def _extract_last_json(self, text: str) -> Optional[str]:
         """Extract the last complete JSON object."""
         brace_depth = 0
         start = -1
         in_string = False
-        
+
         for i in range(len(text) - 1, -1, -1):
             char = text[i]
-            
+
             if char == '"' and (i == 0 or text[i-1] != '\\'):
                 in_string = not in_string
             elif not in_string:
@@ -164,5 +164,5 @@ class JsonToolParser(ToolParser):
                     brace_depth -= 1
                     if brace_depth == 0:
                         return text[i:start+1]
-        
+
         return None

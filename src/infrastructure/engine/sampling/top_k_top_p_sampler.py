@@ -83,7 +83,7 @@ class SamplingConfig:
     epsilon: float = 0.0001  # For epsilon sampling
     backend: SamplingBackend = SamplingBackend.NUMPY
     seed: int | None = None
-    
+
     def __post_init__(self) -> None:
         if self.top_k < 0:
             raise ValueError(f"top_k must be >= 0, got {self.top_k}")
@@ -101,17 +101,17 @@ class SamplingState:
     step: int = 0
     current_temperature: float = 1.0
     entropy_history: list[float] = field(default_factory=list)
-    
+
     def update_step(self) -> None:
         """Increment step counter."""
         self.step += 1
-    
+
     def add_entropy(self, entropy: float) -> None:
         """Add entropy observation for adaptive scheduling."""
         self.entropy_history.append(entropy)
         if len(self.entropy_history) > 100:
             self.entropy_history.pop(0)
-    
+
     def reset(self) -> None:
         """Reset state."""
         self.step = 0
@@ -121,7 +121,7 @@ class SamplingState:
 
 class BaseSampler(ABC):
     """Abstract base class for samplers."""
-    
+
     @abstractmethod
     def sample(
         self,
@@ -130,7 +130,7 @@ class BaseSampler(ABC):
     ) -> NDArray[np.int32]:
         """Sample from logits."""
         ...
-    
+
     @abstractmethod
     def apply_top_k(
         self,
@@ -139,7 +139,7 @@ class BaseSampler(ABC):
     ) -> NDArray[np.float32]:
         """Apply top-k filtering."""
         ...
-    
+
     @abstractmethod
     def apply_top_p(
         self,
@@ -153,19 +153,19 @@ class BaseSampler(ABC):
 class TopKTopPSampler:
     """
     Unified Top-K/Top-P sampler with platform optimizations.
-    
+
     Implements vLLM's sampling with additional features:
     - Temperature scheduling
     - Nucleus variants (typical, eta, epsilon)
     - Min-P filtering
     - Multi-backend support
     """
-    
+
     def __init__(self, config: SamplingConfig | None = None):
         self.config = config or SamplingConfig()
         self.state = SamplingState(current_temperature=self.config.temperature)
         self._rng = np.random.default_rng(self.config.seed)
-    
+
     def sample(
         self,
         logits: NDArray[np.float32],
@@ -175,13 +175,13 @@ class TopKTopPSampler:
     ) -> NDArray[np.int32]:
         """
         Sample tokens from logits.
-        
+
         Args:
             logits: Input logits [batch_size, vocab_size] or [vocab_size]
             temperature: Override temperature (uses scheduled if None)
             top_k: Override top_k
             top_p: Override top_p
-            
+
         Returns:
             Sampled token indices
         """
@@ -189,34 +189,34 @@ class TopKTopPSampler:
         squeeze = logits.ndim == 1
         if squeeze:
             logits = logits[np.newaxis, :]
-        
+
         # Get current temperature
         if temperature is None:
             temperature = self._get_scheduled_temperature()
-        
+
         # Apply temperature
         if temperature != 1.0:
             logits = logits / temperature
-        
+
         # Apply filtering based on variant
         k = top_k if top_k is not None else self.config.top_k
         p = top_p if top_p is not None else self.config.top_p
-        
+
         logits = self._apply_filters(logits, k, p)
-        
+
         # Sample
         if HAS_RUST and hasattr(rust_core, 'topk_topp_sample_rust'):
             samples = rust_core.topk_topp_sample_rust(logits)
         else:
             samples = self._sample_numpy(logits)
-        
+
         # Update state
         self.state.update_step()
-        
+
         if squeeze:
             return samples[0]
         return samples
-    
+
     def _apply_filters(
         self,
         logits: NDArray[np.float32],
@@ -233,17 +233,17 @@ class TopKTopPSampler:
             logits = self._apply_epsilon_sampling(logits, self.config.epsilon)
         elif self.config.variant == NucleusSamplingVariant.MIN_P:
             logits = self._apply_min_p(logits, self.config.min_p)
-        
+
         # Apply top-k
         if k > 0:
             logits = self._apply_top_k(logits, k)
-        
+
         # Apply top-p
         if p < 1.0:
             logits = self._apply_top_p(logits, p)
-        
+
         return logits
-    
+
     def _apply_top_k(
         self,
         logits: NDArray[np.float32],
@@ -252,23 +252,23 @@ class TopKTopPSampler:
         """Apply top-k filtering."""
         if k <= 0 or k >= logits.shape[-1]:
             return logits
-        
+
         # Use Rust if available
         if HAS_RUST and hasattr(rust_core, 'apply_top_k_rust'):
             return rust_core.apply_top_k_rust(logits, k)
-        
+
         # NumPy implementation
         result = logits.copy()
         batch_size = logits.shape[0]
-        
+
         for b in range(batch_size):
             # Get k-th largest value
             kth_largest = np.partition(result[b], -k)[-k]
             # Mask out values below threshold
             result[b, result[b] < kth_largest] = -np.inf
-        
+
         return result
-    
+
     def _apply_top_p(
         self,
         logits: NDArray[np.float32],
@@ -277,32 +277,32 @@ class TopKTopPSampler:
         """Apply top-p (nucleus) filtering."""
         if p >= 1.0:
             return logits
-        
+
         # Use Rust if available
         if HAS_RUST and hasattr(rust_core, 'apply_top_p_rust'):
             return rust_core.apply_top_p_rust(logits, p)
-        
+
         # NumPy implementation
         result = logits.copy()
         batch_size = logits.shape[0]
-        
+
         for b in range(batch_size):
             # Sort and compute cumulative probabilities
             sorted_indices = np.argsort(-result[b])
             sorted_logits = result[b, sorted_indices]
             sorted_probs = self._softmax(sorted_logits)
             cumsum = np.cumsum(sorted_probs)
-            
+
             # Find cutoff
             cutoff_idx = np.searchsorted(cumsum, p)
             cutoff_idx = min(cutoff_idx + 1, len(sorted_indices))
-            
+
             # Mask out tokens beyond cutoff
             indices_to_remove = sorted_indices[cutoff_idx:]
             result[b, indices_to_remove] = -np.inf
-        
+
         return result
-    
+
     def _apply_min_p(
         self,
         logits: NDArray[np.float32],
@@ -311,14 +311,14 @@ class TopKTopPSampler:
         """Apply min-p filtering (tokens with prob < min_p * max_prob are removed)."""
         if min_p <= 0:
             return logits
-        
+
         result = logits.copy()
         probs = self._softmax(logits)
         max_probs = probs.max(axis=-1, keepdims=True)
         threshold = min_p * max_probs
         result[probs < threshold] = -np.inf
         return result
-    
+
     def _apply_typical_sampling(
         self,
         logits: NDArray[np.float32],
@@ -326,37 +326,37 @@ class TopKTopPSampler:
     ) -> NDArray[np.float32]:
         """
         Apply typical sampling (Meister et al., 2022).
-        
+
         Samples tokens whose information content is close to the expected
         information content (entropy).
         """
         result = logits.copy()
         probs = self._softmax(logits)
-        
+
         batch_size = logits.shape[0]
         for b in range(batch_size):
             # Compute entropy
             entropy = -np.sum(probs[b] * np.log(probs[b] + 1e-10))
-            
+
             # Compute absolute deviation from entropy
             log_probs = np.log(probs[b] + 1e-10)
             deviation = np.abs(-log_probs - entropy)
-            
+
             # Sort by deviation (closest to entropy first)
             sorted_indices = np.argsort(deviation)
             sorted_probs = probs[b, sorted_indices]
             cumsum = np.cumsum(sorted_probs)
-            
+
             # Find cutoff
             cutoff_idx = np.searchsorted(cumsum, mass)
             cutoff_idx = min(cutoff_idx + 1, len(sorted_indices))
-            
+
             # Mask out tokens beyond cutoff
             indices_to_remove = sorted_indices[cutoff_idx:]
             result[b, indices_to_remove] = -np.inf
-        
+
         return result
-    
+
     def _apply_eta_sampling(
         self,
         logits: NDArray[np.float32],
@@ -364,20 +364,20 @@ class TopKTopPSampler:
     ) -> NDArray[np.float32]:
         """
         Apply eta sampling.
-        
+
         Uses entropy-based threshold for token selection.
         """
         result = logits.copy()
         probs = self._softmax(logits)
-        
+
         batch_size = logits.shape[0]
         for b in range(batch_size):
             entropy = -np.sum(probs[b] * np.log(probs[b] + 1e-10))
             threshold = min(eta, np.sqrt(eta) * np.exp(-entropy))
             result[b, probs[b] < threshold] = -np.inf
-        
+
         return result
-    
+
     def _apply_epsilon_sampling(
         self,
         logits: NDArray[np.float32],
@@ -388,20 +388,20 @@ class TopKTopPSampler:
         probs = self._softmax(logits)
         result[probs < epsilon] = -np.inf
         return result
-    
+
     def _sample_numpy(self, logits: NDArray[np.float32]) -> NDArray[np.int32]:
         """Sample using NumPy."""
         probs = self._softmax(logits)
         batch_size = logits.shape[0]
         samples = np.zeros(batch_size, dtype=np.int32)
-        
+
         for b in range(batch_size):
             # Handle all -inf case
             valid_mask = ~np.isinf(logits[b])
             if not valid_mask.any():
                 samples[b] = 0
                 continue
-            
+
             # Renormalize
             p = probs[b].copy()
             p[~valid_mask] = 0
@@ -411,35 +411,35 @@ class TopKTopPSampler:
             else:
                 p = valid_mask.astype(np.float32)
                 p = p / p.sum()
-            
+
             samples[b] = self._rng.choice(len(p), p=p)
-        
+
         return samples
-    
+
     def _softmax(self, logits: NDArray[np.float32]) -> NDArray[np.float32]:
         """Numerically stable softmax."""
         max_logits = logits.max(axis=-1, keepdims=True)
         exp_logits = np.exp(logits - max_logits)
         return exp_logits / exp_logits.sum(axis=-1, keepdims=True)
-    
+
     def _get_scheduled_temperature(self) -> float:
         """Get temperature based on schedule."""
         if self.config.temperature_schedule == TemperatureSchedule.CONSTANT:
             return self.config.temperature
-        
+
         step = self.state.step
         max_steps = self.config.temperature_decay_steps
         t0 = self.config.temperature
         t_min = self.config.temperature_min
-        
+
         if self.config.temperature_schedule == TemperatureSchedule.LINEAR:
             progress = min(1.0, step / max_steps)
             return t0 - (t0 - t_min) * progress
-        
+
         elif self.config.temperature_schedule == TemperatureSchedule.COSINE:
             progress = min(1.0, step / max_steps)
             return t_min + (t0 - t_min) * (1 + math.cos(math.pi * progress)) / 2
-        
+
         elif self.config.temperature_schedule == TemperatureSchedule.ADAPTIVE:
             if len(self.state.entropy_history) < 5:
                 return t0
@@ -449,13 +449,13 @@ class TopKTopPSampler:
             if avg_entropy > target_entropy:
                 return max(t_min, t0 * 0.95)
             return min(t0, self.state.current_temperature * 1.05)
-        
+
         return self.config.temperature
-    
+
     def greedy_sample(self, logits: NDArray[np.float32]) -> NDArray[np.int32]:
         """Greedy (argmax) sampling."""
         return logits.argmax(axis=-1).astype(np.int32)
-    
+
     def reset(self) -> None:
         """Reset sampler state."""
         self.state.reset()
@@ -465,14 +465,14 @@ class TopKTopPSampler:
 class BatchTopKTopPSampler:
     """
     Batch-optimized top-k/top-p sampler.
-    
+
     Optimized for processing multiple requests with different
     sampling parameters efficiently.
     """
-    
+
     def __init__(self):
         self._default_sampler = TopKTopPSampler()
-    
+
     def sample_batch(
         self,
         logits: NDArray[np.float32],        # [batch, vocab]
@@ -482,7 +482,7 @@ class BatchTopKTopPSampler:
     ) -> NDArray[np.int32]:
         """
         Sample from batched logits with per-request parameters.
-        
+
         Returns:
             Sampled token indices [batch]
         """
@@ -490,15 +490,15 @@ class BatchTopKTopPSampler:
             return rust_core.batch_topk_topp_sample_rust(
                 logits, temperatures, top_ks, top_ps
             )
-        
+
         # Python fallback - process each request
         batch_size = logits.shape[0]
         samples = np.zeros(batch_size, dtype=np.int32)
-        
+
         for b in range(batch_size):
             # Apply temperature
             scaled_logits = logits[b:b+1] / max(temperatures[b], 1e-7)
-            
+
             # Sample with per-request params
             config = SamplingConfig(
                 temperature=1.0,  # Already applied
@@ -507,29 +507,29 @@ class BatchTopKTopPSampler:
             )
             sampler = TopKTopPSampler(config)
             samples[b] = sampler.sample(scaled_logits)[0]
-        
+
         return samples
 
 
 class GumbelSoftmaxSampler:
     """
     Gumbel-Softmax sampler for differentiable sampling.
-    
+
     Beyond vLLM: Supports differentiable sampling for gradient-based
     optimization scenarios.
     """
-    
+
     def __init__(self, temperature: float = 1.0, hard: bool = False):
         self.temperature = temperature
         self.hard = hard
-    
+
     def sample(
         self,
         logits: NDArray[np.float32],
     ) -> tuple[NDArray[np.float32], NDArray[np.int32]]:
         """
         Gumbel-softmax sample.
-        
+
         Returns:
             (soft_samples, hard_indices): Soft samples and discrete indices
         """
@@ -539,26 +539,26 @@ class GumbelSoftmaxSampler:
             # Sample from Gumbel(0, 1)
             u = np.random.random(logits.shape).astype(np.float32)
             gumbel = -np.log(-np.log(u + 1e-10) + 1e-10)
-        
+
         # Add Gumbel noise
         y = logits + gumbel
-        
+
         # Apply temperature
         y = y / self.temperature
-        
+
         # Softmax
         exp_y = np.exp(y - y.max(axis=-1, keepdims=True))
         soft = exp_y / exp_y.sum(axis=-1, keepdims=True)
-        
+
         # Hard samples (straight-through)
         hard_indices = np.argmax(y, axis=-1).astype(np.int32)
-        
+
         if self.hard:
             # Straight-through estimator
             hard_one_hot = np.zeros_like(soft)
             np.put_along_axis(hard_one_hot, hard_indices[:, np.newaxis], 1.0, axis=-1)
             soft = hard_one_hot  # Would use stop_gradient in actual training
-        
+
         return soft, hard_indices
 
 
@@ -571,7 +571,7 @@ def create_sampler(
 ) -> TopKTopPSampler:
     """
     Factory function to create sampler with specified configuration.
-    
+
     Args:
         backend: "numpy", "pytorch", "flashinfer", "aiter", "rust"
         variant: "standard", "typical", "eta", "epsilon", "min_p"
@@ -598,14 +598,14 @@ def create_sampler(
         "cosine": TemperatureSchedule.COSINE,
         "adaptive": TemperatureSchedule.ADAPTIVE,
     }
-    
+
     config = SamplingConfig(
         backend=backend_map.get(backend, SamplingBackend.NUMPY),
         variant=variant_map.get(variant, NucleusSamplingVariant.STANDARD),
         temperature_schedule=schedule_map.get(temperature_schedule, TemperatureSchedule.CONSTANT),
         **kwargs,
     )
-    
+
     return TopKTopPSampler(config)
 
 
@@ -616,26 +616,26 @@ def apply_top_k_top_p(
 ) -> NDArray[np.float32]:
     """
     Convenience function to apply top-k and/or top-p filtering.
-    
+
     Args:
         logits: Input logits [batch, vocab] or [vocab]
         k: Top-k value (None or 0 = disabled)
         p: Top-p value (None or 1.0 = disabled)
-        
+
     Returns:
         Filtered logits
     """
     sampler = TopKTopPSampler()
-    
+
     squeeze = logits.ndim == 1
     if squeeze:
         logits = logits[np.newaxis, :]
-    
+
     if k is not None and k > 0:
         logits = sampler._apply_top_k(logits, k)
     if p is not None and p < 1.0:
         logits = sampler._apply_top_p(logits, p)
-    
+
     if squeeze:
         return logits[0]
     return logits

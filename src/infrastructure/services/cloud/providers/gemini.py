@@ -23,21 +23,21 @@ from ..base import (
 class GeminiConnector(CloudProviderBase):
     """
     Connector for Google Gemini API.
-    
+
     Supports Gemini Pro, Gemini Ultra, and other Gemini model variants.
-    
+
     Example:
         connector = GeminiConnector(api_key="your-api-key")
-        
+
         request = InferenceRequest(
             messages=[{"role": "user", "content": "Hello!"}],
             model="gemini-pro",
         )
-        
+
         response = await connector.complete(request)
         print(response.content)
     """
-    
+
     # Pricing per 1M tokens (input/output) - approximate
     PRICING = {
         "gemini-pro": {"input": 0.50, "output": 1.50},
@@ -46,7 +46,7 @@ class GeminiConnector(CloudProviderBase):
         "gemini-1.5-pro": {"input": 3.50, "output": 10.50},
         "gemini-1.5-flash": {"input": 0.35, "output": 1.05},
     }
-    
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -59,19 +59,19 @@ class GeminiConnector(CloudProviderBase):
         self._project_id = project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
         self._location = location
         self._client = None
-    
+
     @property
     def name(self) -> str:
         return "Gemini"
-    
+
     @property
     def available_models(self) -> List[str]:
         return list(self.PRICING.keys())
-    
+
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         import httpx
         start_time = time.perf_counter()
-        
+
         if not self._api_key:
             raise AuthenticationError("Gemini API key is required.")
 
@@ -95,7 +95,7 @@ class GeminiConnector(CloudProviderBase):
                 response = await client.post(url, json=payload)
             except Exception as e:
                 raise CloudProviderError(f"Gemini connection failed: {e}")
-            
+
             if response.status_code == 429:
                 raise RateLimitError("Gemini API rate limit exceeded.")
             elif response.status_code != 200:
@@ -126,7 +126,7 @@ class GeminiConnector(CloudProviderBase):
     async def stream(self, request: InferenceRequest) -> AsyncIterator[InferenceResponse]:
         import httpx
         import json
-        
+
         if not self._api_key:
             raise AuthenticationError("Gemini API key is required.")
 
@@ -170,33 +170,33 @@ class GeminiConnector(CloudProviderBase):
     async def health_check(self) -> bool:
         """Check if Gemini API is accessible."""
         return self._api_key is not None
-    
+
     def estimate_cost(self, request: InferenceRequest) -> float:
         """
         Estimate cost for a Gemini request.
-        
+
         Args:
             request: The inference request.
-            
+
         Returns:
             Estimated cost in USD.
         """
         model = request.model
         pricing = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
-        
+
         # Rough estimate: assume 4 chars per token
         input_tokens = sum(len(m.get("content", "")) for m in request.messages) // 4
         output_tokens = request.max_tokens
-        
+
         input_cost = (input_tokens / 1_000_000) * pricing["input"]
         output_cost = (output_tokens / 1_000_000) * pricing["output"]
-        
+
         return input_cost + output_cost
-    
+
     def _format_messages(self, messages: List[Dict[str, str]]) -> str:
         """
         Format messages for Gemini API.
-        
+
         Gemini uses a different message format than OpenAI-style APIs.
         """
         # TODO: Implement proper message formatting for Gemini

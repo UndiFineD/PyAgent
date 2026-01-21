@@ -23,166 +23,166 @@ T = TypeVar('T')
 class RingBuffer(Generic[T]):
     """
     Fixed-size circular buffer with O(1) operations.
-    
+
     When full, new items overwrite the oldest items.
-    
+
     Example:
         >>> rb = RingBuffer(capacity=5)
         >>> for i in range(10):
         ...     rb.append(i)
-        >>> 
+        >>>
         >>> list(rb)  # [5, 6, 7, 8, 9] (oldest 0-4 overwritten)
     """
-    
+
     def __init__(self, capacity: int) -> None:
         """
         Initialize ring buffer.
-        
+
         Args:
             capacity: Maximum number of items
         """
         if capacity <= 0:
             raise ValueError("Capacity must be positive")
-        
+
         self._capacity = capacity
         self._buffer: list[T | None] = [None] * capacity
         self._head = 0  # Next write position
         self._tail = 0  # Next read position
         self._size = 0
         self._total_items = 0  # Total items ever added
-    
+
     @property
     def capacity(self) -> int:
         """Get buffer capacity."""
         return self._capacity
-    
+
     @property
     def size(self) -> int:
         """Get current item count."""
         return self._size
-    
+
     @property
     def is_empty(self) -> bool:
         """Check if buffer is empty."""
         return self._size == 0
-    
+
     @property
     def is_full(self) -> bool:
         """Check if buffer is full."""
         return self._size == self._capacity
-    
+
     def append(self, item: T) -> T | None:
         """
         Add item to buffer.
-        
+
         Args:
             item: Item to add
-            
+
         Returns:
             Overwritten item if buffer was full, None otherwise
         """
         overwritten = None
-        
+
         if self._size == self._capacity:
             # Buffer full, overwrite oldest
             overwritten = self._buffer[self._tail]
             self._tail = (self._tail + 1) % self._capacity
         else:
             self._size += 1
-        
+
         self._buffer[self._head] = item
         self._head = (self._head + 1) % self._capacity
         self._total_items += 1
-        
+
         return overwritten
-    
+
     def pop(self) -> T:
         """
         Remove and return oldest item.
-        
+
         Returns:
             Oldest item
-            
+
         Raises:
             IndexError: If buffer is empty
         """
         if self._size == 0:
             raise IndexError("Pop from empty buffer")
-        
+
         item = self._buffer[self._tail]
         self._buffer[self._tail] = None
         self._tail = (self._tail + 1) % self._capacity
         self._size -= 1
-        
+
         return item  # type: ignore
-    
+
     def peek(self) -> T:
         """
         Return oldest item without removing.
-        
+
         Returns:
             Oldest item
-            
+
         Raises:
             IndexError: If buffer is empty
         """
         if self._size == 0:
             raise IndexError("Peek from empty buffer")
-        
+
         return self._buffer[self._tail]  # type: ignore
-    
+
     def peek_newest(self) -> T:
         """
         Return newest item without removing.
-        
+
         Returns:
             Newest item
-            
+
         Raises:
             IndexError: If buffer is empty
         """
         if self._size == 0:
             raise IndexError("Peek from empty buffer")
-        
+
         idx = (self._head - 1) % self._capacity
         return self._buffer[idx]  # type: ignore
-    
+
     def clear(self) -> None:
         """Clear all items."""
         self._buffer = [None] * self._capacity
         self._head = 0
         self._tail = 0
         self._size = 0
-    
+
     def __len__(self) -> int:
         """Get item count."""
         return self._size
-    
+
     def __iter__(self) -> Iterator[T]:
         """Iterate from oldest to newest."""
         if self._size == 0:
             return
-        
+
         idx = self._tail
         for _ in range(self._size):
             yield self._buffer[idx]  # type: ignore
             idx = (idx + 1) % self._capacity
-    
+
     def __getitem__(self, index: int) -> T:
         """Get item by index (0 = oldest)."""
         if index < 0:
             index = self._size + index
-        
+
         if index < 0 or index >= self._size:
             raise IndexError("Index out of range")
-        
+
         actual_idx = (self._tail + index) % self._capacity
         return self._buffer[actual_idx]  # type: ignore
-    
+
     def to_list(self) -> list[T]:
         """Convert to list (oldest to newest)."""
         return list(self)
-    
+
     def get_stats(self) -> dict:
         """Get buffer statistics."""
         return {
@@ -197,56 +197,56 @@ class RingBuffer(Generic[T]):
 class ThreadSafeRingBuffer(Generic[T]):
     """
     Thread-safe version of RingBuffer.
-    
+
     Uses locking for safe concurrent access.
     """
-    
+
     def __init__(self, capacity: int) -> None:
         """Initialize thread-safe ring buffer."""
         self._buffer = RingBuffer[T](capacity)
         self._lock = threading.RLock()
-    
+
     @property
     def capacity(self) -> int:
         """Get buffer capacity."""
         return self._buffer.capacity
-    
+
     @property
     def size(self) -> int:
         """Get current item count."""
         with self._lock:
             return self._buffer.size
-    
+
     def append(self, item: T) -> T | None:
         """Add item to buffer."""
         with self._lock:
             return self._buffer.append(item)
-    
+
     def pop(self) -> T:
         """Remove and return oldest item."""
         with self._lock:
             return self._buffer.pop()
-    
+
     def peek(self) -> T:
         """Return oldest item without removing."""
         with self._lock:
             return self._buffer.peek()
-    
+
     def clear(self) -> None:
         """Clear all items."""
         with self._lock:
             self._buffer.clear()
-    
+
     def __len__(self) -> int:
         """Get item count."""
         with self._lock:
             return len(self._buffer)
-    
+
     def to_list(self) -> list[T]:
         """Convert to list (thread-safe snapshot)."""
         with self._lock:
             return self._buffer.to_list()
-    
+
     def get_stats(self) -> dict:
         """Get buffer statistics."""
         with self._lock:
@@ -258,7 +258,7 @@ class TimestampedValue(Generic[T]):
     """Value with timestamp for time-series data."""
     value: T
     timestamp: float
-    
+
     @classmethod
     def now(cls, value: T) -> 'TimestampedValue[T]':
         """Create with current timestamp."""
@@ -268,18 +268,18 @@ class TimestampedValue(Generic[T]):
 class TimeSeriesBuffer(Generic[T]):
     """
     Ring buffer with time-based operations.
-    
+
     Useful for metrics collection with time windows.
-    
+
     Example:
         >>> ts = TimeSeriesBuffer(capacity=1000, max_age_seconds=60.0)
-        >>> 
+        >>>
         >>> ts.append(100.5)  # Response time
         >>> ts.append(98.2)
-        >>> 
+        >>>
         >>> print(ts.get_window_stats(window_seconds=10.0))
     """
-    
+
     def __init__(
         self,
         capacity: int = 1000,
@@ -287,7 +287,7 @@ class TimeSeriesBuffer(Generic[T]):
     ) -> None:
         """
         Initialize time-series buffer.
-        
+
         Args:
             capacity: Maximum number of samples
             max_age_seconds: Optional max age for samples
@@ -295,12 +295,12 @@ class TimeSeriesBuffer(Generic[T]):
         self._buffer = ThreadSafeRingBuffer[TimestampedValue[T]](capacity)
         self._max_age = max_age_seconds
         self._lock = threading.RLock()
-    
+
     def append(self, value: T, timestamp: float | None = None) -> None:
         """Add value with optional timestamp."""
         ts = timestamp if timestamp is not None else time.time()
         self._buffer.append(TimestampedValue(value=value, timestamp=ts))
-    
+
     def get_values_in_window(
         self,
         window_seconds: float,
@@ -309,14 +309,14 @@ class TimeSeriesBuffer(Generic[T]):
         """Get values within time window."""
         current_time = now if now is not None else time.time()
         cutoff = current_time - window_seconds
-        
+
         values = []
         for item in self._buffer.to_list():
             if item.timestamp >= cutoff:
                 values.append(item.value)
-        
+
         return values
-    
+
     def get_window_stats(
         self,
         window_seconds: float,
@@ -324,13 +324,13 @@ class TimeSeriesBuffer(Generic[T]):
     ) -> dict:
         """Get statistics for values in window."""
         values = self.get_values_in_window(window_seconds, now)
-        
+
         if not values:
             return {
                 'count': 0,
                 'window_seconds': window_seconds,
             }
-        
+
         # Try to calculate numeric stats
         try:
             numeric_values = [float(v) for v in values]  # type: ignore
@@ -349,12 +349,12 @@ class TimeSeriesBuffer(Generic[T]):
                 'count': len(values),
                 'window_seconds': window_seconds,
             }
-    
+
     @property
     def size(self) -> int:
         """Get current item count."""
         return self._buffer.size
-    
+
     def clear(self) -> None:
         """Clear all values."""
         self._buffer.clear()
@@ -363,19 +363,19 @@ class TimeSeriesBuffer(Generic[T]):
 class SlidingWindowAggregator:
     """
     Efficient sliding window aggregation for streaming metrics.
-    
+
     Supports multiple aggregation functions with O(1) updates.
-    
+
     Example:
         >>> agg = SlidingWindowAggregator(window_seconds=60.0)
-        >>> 
+        >>>
         >>> agg.add(100.0)
         >>> agg.add(150.0)
         >>> agg.add(120.0)
-        >>> 
+        >>>
         >>> print(f"Avg: {agg.mean()}, P99: {agg.percentile(99)}")
     """
-    
+
     def __init__(
         self,
         window_seconds: float = 60.0,
@@ -383,7 +383,7 @@ class SlidingWindowAggregator:
     ) -> None:
         """
         Initialize sliding window aggregator.
-        
+
         Args:
             window_seconds: Total window duration
             bucket_seconds: Duration of each bucket
@@ -391,13 +391,13 @@ class SlidingWindowAggregator:
         self._window_seconds = window_seconds
         self._bucket_seconds = bucket_seconds
         self._num_buckets = int(window_seconds / bucket_seconds) + 1
-        
+
         # Buckets: (sum, count, min, max, values)
         self._buckets: list[dict] = [self._empty_bucket() for _ in range(self._num_buckets)]
         self._current_bucket_idx = 0
         self._current_bucket_start = time.time()
         self._lock = threading.Lock()
-    
+
     @staticmethod
     def _empty_bucket() -> dict:
         """Create empty bucket."""
@@ -408,58 +408,58 @@ class SlidingWindowAggregator:
             'max': float('-inf'),
             'values': [],
         }
-    
+
     def _rotate_buckets(self) -> None:
         """Rotate buckets if needed."""
         now = time.time()
         elapsed = now - self._current_bucket_start
-        
+
         if elapsed < self._bucket_seconds:
             return
-        
+
         # Calculate how many buckets to rotate
         buckets_to_rotate = int(elapsed / self._bucket_seconds)
-        
+
         for _ in range(min(buckets_to_rotate, self._num_buckets)):
             self._current_bucket_idx = (self._current_bucket_idx + 1) % self._num_buckets
             self._buckets[self._current_bucket_idx] = self._empty_bucket()
-        
+
         self._current_bucket_start = now
-    
+
     def add(self, value: float) -> None:
         """Add a value to the current bucket."""
         with self._lock:
             self._rotate_buckets()
-            
+
             bucket = self._buckets[self._current_bucket_idx]
             bucket['sum'] += value
             bucket['count'] += 1
             bucket['min'] = min(bucket['min'], value)
             bucket['max'] = max(bucket['max'], value)
             bucket['values'].append(value)
-    
+
     def _get_all_values(self) -> list[float]:
         """Get all values from all buckets."""
         with self._lock:
             self._rotate_buckets()
-            
+
             values = []
             for bucket in self._buckets:
                 values.extend(bucket['values'])
             return values
-    
+
     def count(self) -> int:
         """Get total count."""
         with self._lock:
             self._rotate_buckets()
             return sum(b['count'] for b in self._buckets)
-    
+
     def sum(self) -> float:
         """Get sum of all values."""
         with self._lock:
             self._rotate_buckets()
             return sum(b['sum'] for b in self._buckets)
-    
+
     def mean(self) -> float:
         """Get mean of all values."""
         with self._lock:
@@ -467,54 +467,54 @@ class SlidingWindowAggregator:
             total_sum = sum(b['sum'] for b in self._buckets)
             total_count = sum(b['count'] for b in self._buckets)
             return total_sum / total_count if total_count > 0 else 0.0
-    
+
     def min(self) -> float:
         """Get minimum value."""
         with self._lock:
             self._rotate_buckets()
             mins = [b['min'] for b in self._buckets if b['count'] > 0]
             return min(mins) if mins else 0.0
-    
+
     def max(self) -> float:
         """Get maximum value."""
         with self._lock:
             self._rotate_buckets()
             maxs = [b['max'] for b in self._buckets if b['count'] > 0]
             return max(maxs) if maxs else 0.0
-    
+
     def percentile(self, p: float) -> float:
         """
         Get percentile value.
-        
+
         Args:
             p: Percentile (0-100)
-            
+
         Returns:
             Percentile value
         """
         values = self._get_all_values()
-        
+
         if not values:
             return 0.0
-        
+
         values.sort()
         idx = int(len(values) * p / 100)
         idx = max(0, min(idx, len(values) - 1))
         return values[idx]
-    
+
     def get_stats(self) -> dict:
         """Get comprehensive statistics."""
         values = self._get_all_values()
         count = len(values)
-        
+
         if count == 0:
             return {
                 'count': 0,
                 'window_seconds': self._window_seconds,
             }
-        
+
         values.sort()
-        
+
         return {
             'count': count,
             'window_seconds': self._window_seconds,
@@ -529,7 +529,7 @@ class SlidingWindowAggregator:
             'p95': values[int(count * 0.95)],
             'p99': values[min(int(count * 0.99), count - 1)],
         }
-    
+
     def reset(self) -> None:
         """Reset all buckets."""
         with self._lock:

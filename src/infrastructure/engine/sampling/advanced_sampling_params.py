@@ -60,7 +60,7 @@ class TemperatureSchedule(Enum):
 class SamplingParams:
     """
     Base sampling parameters with vLLM parity.
-    
+
     Matches vLLM's sampling_params.py for compatibility.
     """
     # Basic sampling
@@ -68,36 +68,36 @@ class SamplingParams:
     top_p: float = 1.0
     top_k: int = -1                              # -1 means disabled
     min_p: float = 0.0
-    
+
     # Token limits
     max_tokens: Optional[int] = None
     min_tokens: int = 0
-    
+
     # Stop conditions
     stop: Optional[List[str]] = None             # Stop strings
     stop_token_ids: Optional[List[int]] = None   # Stop token IDs
     include_stop_str_in_output: bool = False
-    
+
     # Repetition control
     repetition_penalty: float = 1.0
     presence_penalty: float = 0.0
     frequency_penalty: float = 0.0
     no_repeat_ngram_size: int = 0
-    
+
     # Logprobs
     logprobs: Optional[int] = None               # Number of logprobs to return
     prompt_logprobs: Optional[int] = None        # Logprobs for prompt tokens
-    
+
     # Beam search
     best_of: int = 1
     n: int = 1                                   # Number of outputs
     use_beam_search: bool = False
-    
+
     # Advanced
     seed: Optional[int] = None
     skip_special_tokens: bool = True
     spaces_between_special_tokens: bool = True
-    
+
     def __post_init__(self):
         """Validate parameters."""
         if self.temperature < 0:
@@ -114,7 +114,7 @@ class SamplingParams:
 class AdvancedSamplingParams(SamplingParams):
     """
     Extended sampling parameters beyond vLLM.
-    
+
     Features:
     - Bad words blocking
     - Flat logprobs format
@@ -123,7 +123,7 @@ class AdvancedSamplingParams(SamplingParams):
     - Adaptive sampling based on entropy
     - Contextual repetition penalty
     """
-    
+
     # vLLM parity features
     bad_words: Optional[List[str]] = None        # Word sequences to block
     bad_words_ids: Optional[List[List[int]]] = None  # Token ID sequences to block
@@ -132,83 +132,83 @@ class AdvancedSamplingParams(SamplingParams):
     logit_bias: Optional[Dict[int, float]] = None  # Per-token bias
     skip_reading_prefix_cache: Optional[bool] = None  # Cache bypass
     output_kind: OutputKind = OutputKind.CUMULATIVE
-    
+
     # Beyond vLLM - Temperature scheduling
     temperature_schedule: TemperatureSchedule = TemperatureSchedule.CONSTANT
     temperature_decay_target: float = 0.1        # Target for decay
     temperature_decay_steps: int = 100           # Steps for decay
     temperature_warmup_steps: int = 0            # Warmup steps
-    
+
     # Beyond vLLM - Adaptive sampling
     entropy_threshold: float = 2.0               # Entropy threshold for adaptation
     adaptive_top_k: bool = False                 # Adapt top_k based on entropy
     adaptive_temperature: bool = False           # Adapt temperature based on entropy
     min_adaptive_k: int = 5                      # Minimum k for adaptive
     max_adaptive_k: int = 100                    # Maximum k for adaptive
-    
+
     # Beyond vLLM - Contextual repetition
     repetition_penalty_range: int = 1024         # Range for penalty application
     repetition_penalty_decay: float = 1.0        # Decay factor by distance
     repetition_penalty_slope: float = 0.0        # Slope for linear decay
-    
+
     # Beyond vLLM - Quality control
     confidence_threshold: float = 0.0            # Minimum token confidence
     entropy_sampling: bool = False               # Use entropy for sampling decisions
-    
+
     # Mirostat sampling
     mirostat_mode: int = 0                       # 0=disabled, 1=mirostat, 2=mirostat2
     mirostat_tau: float = 5.0                    # Target entropy
     mirostat_eta: float = 0.1                    # Learning rate
-    
+
     def get_temperature(self, step: int) -> float:
         """Get temperature for current step with scheduling."""
         if self.temperature_schedule == TemperatureSchedule.CONSTANT:
             return self.temperature
-        
+
         if step < self.temperature_warmup_steps:
             # Warmup phase
             progress = step / max(self.temperature_warmup_steps, 1)
             return self.temperature_decay_target + progress * (self.temperature - self.temperature_decay_target)
-        
+
         effective_step = step - self.temperature_warmup_steps
         decay_progress = min(effective_step / max(self.temperature_decay_steps, 1), 1.0)
-        
+
         if self.temperature_schedule == TemperatureSchedule.LINEAR_DECAY:
             return self.temperature - decay_progress * (self.temperature - self.temperature_decay_target)
-        
+
         elif self.temperature_schedule == TemperatureSchedule.COSINE_DECAY:
             cosine_factor = 0.5 * (1 + math.cos(math.pi * decay_progress))
             return self.temperature_decay_target + cosine_factor * (self.temperature - self.temperature_decay_target)
-        
+
         elif self.temperature_schedule == TemperatureSchedule.WARMUP_DECAY:
             return self.temperature - decay_progress * (self.temperature - self.temperature_decay_target)
-        
+
         return self.temperature
-    
+
     def get_adaptive_top_k(self, entropy: float) -> int:
         """Get adaptive top_k based on entropy."""
         if not self.adaptive_top_k:
             return self.top_k if self.top_k > 0 else self.max_adaptive_k
-        
+
         # Higher entropy -> larger k (more exploration)
         # Lower entropy -> smaller k (more exploitation)
         normalized = min(entropy / self.entropy_threshold, 2.0)
         k = int(self.min_adaptive_k + normalized * (self.max_adaptive_k - self.min_adaptive_k))
         return max(self.min_adaptive_k, min(k, self.max_adaptive_k))
-    
+
     def get_contextual_penalty(self, distance: int) -> float:
         """Get repetition penalty with distance decay."""
         if distance <= 0 or self.repetition_penalty == 1.0:
             return self.repetition_penalty
-        
+
         if distance > self.repetition_penalty_range:
             return 1.0  # No penalty beyond range
-        
+
         # Apply decay
         decay = self.repetition_penalty_decay ** distance
         if self.repetition_penalty_slope > 0:
             decay *= max(0, 1 - self.repetition_penalty_slope * distance)
-        
+
         penalty = 1.0 + (self.repetition_penalty - 1.0) * decay
         return max(1.0, penalty)
 
@@ -219,31 +219,31 @@ class AdvancedSamplingParams(SamplingParams):
 
 class LogitBiasBuilder:
     """Builder for complex logit bias configurations."""
-    
+
     def __init__(self):
         self._biases: Dict[int, float] = {}
-    
+
     def add_bias(self, token_id: int, bias: float) -> 'LogitBiasBuilder':
         """Add bias for a single token."""
         self._biases[token_id] = self._biases.get(token_id, 0.0) + bias
         return self
-    
+
     def ban_token(self, token_id: int) -> 'LogitBiasBuilder':
         """Ban a token (set very negative bias)."""
         self._biases[token_id] = -100.0
         return self
-    
+
     def prefer_token(self, token_id: int, strength: float = 5.0) -> 'LogitBiasBuilder':
         """Prefer a token."""
         self._biases[token_id] = self._biases.get(token_id, 0.0) + strength
         return self
-    
+
     def from_dict(self, biases: Dict[int, float]) -> 'LogitBiasBuilder':
         """Add biases from dictionary."""
         for tid, bias in biases.items():
             self.add_bias(tid, bias)
         return self
-    
+
     def build(self) -> Dict[int, float]:
         """Build final bias dictionary."""
         return self._biases.copy()
@@ -256,13 +256,13 @@ class LogitBiasBuilder:
 class BadWordsProcessor:
     """
     Processes bad words to block during generation.
-    
+
     Supports:
     - String-based bad words (requires tokenizer)
     - Token ID sequences
     - Dynamic blocking based on context
     """
-    
+
     def __init__(
         self,
         bad_words: Optional[List[str]] = None,
@@ -272,18 +272,18 @@ class BadWordsProcessor:
         self.bad_words = bad_words or []
         self.bad_words_ids = bad_words_ids or []
         self.tokenizer = tokenizer
-        
+
         # Convert string bad words to token IDs
         if self.bad_words and self.tokenizer:
             for word in self.bad_words:
                 tokens = self.tokenizer.encode(word)
                 if isinstance(tokens, list) and tokens:
                     self.bad_words_ids.append(tokens)
-    
+
     def get_banned_tokens(self, context_ids: List[int]) -> Set[int]:
         """Get tokens that should be banned given current context."""
         banned = set()
-        
+
         for bad_seq in self.bad_words_ids:
             if len(bad_seq) == 1:
                 # Single token - always ban
@@ -295,9 +295,9 @@ class BadWordsProcessor:
                     context_suffix = context_ids[-(seq_len - 1):]
                     if context_suffix == bad_seq[:-1]:
                         banned.add(bad_seq[-1])
-        
+
         return banned
-    
+
     def apply_to_logits(
         self,
         logits: np.ndarray,
@@ -317,14 +317,14 @@ class BadWordsProcessor:
 class TokenWhitelistProcessor:
     """
     Restricts generation to allowed tokens only.
-    
+
     Useful for constrained generation (e.g., JSON, code).
     """
-    
+
     def __init__(self, allowed_token_ids: List[int]):
         self.allowed_set = set(allowed_token_ids)
         self.mask = None
-    
+
     def build_mask(self, vocab_size: int) -> np.ndarray:
         """Build boolean mask for allowed tokens."""
         if self.mask is None or len(self.mask) != vocab_size:
@@ -333,7 +333,7 @@ class TokenWhitelistProcessor:
                 if 0 <= tid < vocab_size:
                     self.mask[tid] = True
         return self.mask
-    
+
     def apply_to_logits(
         self,
         logits: np.ndarray,
@@ -352,10 +352,10 @@ class TokenWhitelistProcessor:
 class MirostatSampler:
     """
     Mirostat sampling for controlled perplexity.
-    
+
     Ref: https://arxiv.org/abs/2007.14966
     """
-    
+
     def __init__(
         self,
         tau: float = 5.0,          # Target surprise
@@ -366,56 +366,56 @@ class MirostatSampler:
         self.eta = eta
         self.mode = mode
         self.mu = 2 * tau          # Initial estimate
-    
+
     def sample(self, logits: np.ndarray) -> Tuple[int, float]:
         """Sample using mirostat algorithm."""
         # Compute probabilities
         logits = logits - logits.max()
         probs = np.exp(logits)
         probs = probs / probs.sum()
-        
+
         # Sort by probability
         sorted_indices = np.argsort(-probs)
         sorted_probs = probs[sorted_indices]
-        
+
         if self.mode == 1:
             # Mirostat 1: Truncate based on estimated perplexity
             k = max(1, int(np.exp(self.mu)))
             k = min(k, len(sorted_probs))
-            
+
             # Renormalize
             selected_probs = sorted_probs[:k]
             selected_probs = selected_probs / selected_probs.sum()
-            
+
             # Sample
             choice = np.random.choice(k, p=selected_probs)
             token_id = sorted_indices[choice]
-            
+
             # Update mu
             surprise = -np.log2(probs[token_id])
             self.mu = self.mu - self.eta * (surprise - self.tau)
-            
+
         else:  # mode == 2
             # Mirostat 2: Use mu as temperature-like control
             # Compute surprise values
             surprises = -np.log2(sorted_probs + 1e-10)
-            
+
             # Find cutoff
             k = np.searchsorted(surprises, self.mu)
             k = max(1, min(k, len(sorted_probs)))
-            
+
             # Renormalize
             selected_probs = sorted_probs[:k]
             selected_probs = selected_probs / selected_probs.sum()
-            
+
             # Sample
             choice = np.random.choice(k, p=selected_probs)
             token_id = sorted_indices[choice]
-            
+
             # Update mu
             surprise = -np.log2(probs[token_id])
             self.mu = self.mu - self.eta * (surprise - self.tau)
-        
+
         return int(token_id), float(probs[token_id])
 
 
@@ -426,7 +426,7 @@ class MirostatSampler:
 class SamplingEngine:
     """
     Unified sampling engine with all advanced features.
-    
+
     Combines:
     - Temperature/top-k/top-p sampling
     - Bad words blocking
@@ -434,14 +434,14 @@ class SamplingEngine:
     - Mirostat sampling
     - Adaptive sampling
     """
-    
+
     def __init__(self, params: Union[SamplingParams, AdvancedSamplingParams]):
         self.params = params
         self._step = 0
         self._mirostat: Optional[MirostatSampler] = None
         self._bad_words: Optional[BadWordsProcessor] = None
         self._whitelist: Optional[TokenWhitelistProcessor] = None
-        
+
         # Initialize processors if needed
         if isinstance(params, AdvancedSamplingParams):
             if params.bad_words_ids:
@@ -454,7 +454,7 @@ class SamplingEngine:
                     eta=params.mirostat_eta,
                     mode=params.mirostat_mode
                 )
-    
+
     def sample(
         self,
         logits: np.ndarray,
@@ -462,37 +462,37 @@ class SamplingEngine:
     ) -> Tuple[int, float]:
         """Sample next token from logits."""
         logits = logits.copy()
-        
+
         # Apply bad words blocking
         if self._bad_words and context_ids:
             logits = self._bad_words.apply_to_logits(logits, context_ids)
-        
+
         # Apply whitelist
         if self._whitelist:
             logits = self._whitelist.apply_to_logits(logits)
-        
+
         # Apply logit bias
         if isinstance(self.params, AdvancedSamplingParams) and self.params.logit_bias:
             for tid, bias in self.params.logit_bias.items():
                 if 0 <= tid < len(logits):
                     logits[tid] += bias
-        
+
         # Use mirostat if enabled
         if self._mirostat:
             token_id, prob = self._mirostat.sample(logits)
             self._step += 1
             return token_id, prob
-        
+
         # Get temperature
         if isinstance(self.params, AdvancedSamplingParams):
             temp = self.params.get_temperature(self._step)
         else:
             temp = self.params.temperature
-        
+
         # Apply temperature
         if temp > 0:
             logits = logits / temp
-        
+
         # Apply top-k
         top_k = self.params.top_k
         if isinstance(self.params, AdvancedSamplingParams) and self.params.adaptive_top_k:
@@ -501,13 +501,13 @@ class SamplingEngine:
             probs = probs / probs.sum()
             entropy = -np.sum(probs * np.log(probs + 1e-10))
             top_k = self.params.get_adaptive_top_k(entropy)
-        
+
         if top_k > 0:
             indices = np.argsort(logits)[-top_k:]
             mask = np.ones_like(logits, dtype=bool)
             mask[indices] = False
             logits[mask] = -float('inf')
-        
+
         # Apply top-p
         if self.params.top_p < 1.0:
             probs = np.exp(logits - logits.max())
@@ -519,7 +519,7 @@ class SamplingEngine:
             mask = np.ones_like(logits, dtype=bool)
             mask[kept] = False
             logits[mask] = -float('inf')
-        
+
         # Apply min-p
         if self.params.min_p > 0:
             probs = np.exp(logits - logits.max())
@@ -527,24 +527,24 @@ class SamplingEngine:
             max_prob = probs.max()
             threshold = max_prob * self.params.min_p
             logits[probs < threshold] = -float('inf')
-        
+
         # Final probabilities and sampling
         probs = np.exp(logits - logits.max())
         probs = probs / probs.sum()
-        
+
         # Handle NaN/Inf
         if not np.isfinite(probs).all():
             probs = np.ones_like(probs) / len(probs)
-        
+
         # Sample
         if temp == 0:
             token_id = int(np.argmax(probs))
         else:
             token_id = int(np.random.choice(len(probs), p=probs))
-        
+
         self._step += 1
         return token_id, float(probs[token_id])
-    
+
     def reset(self):
         """Reset sampling state."""
         self._step = 0

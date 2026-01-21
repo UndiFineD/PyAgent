@@ -147,7 +147,7 @@ class TestRequestBatcher:
         """Test adding items to batcher."""
         from src.core.base.logic.managers.batch_managers import RequestBatcher
         from src.core.base.lifecycle.base_agent import BatchRequest
-        
+
         batcher = RequestBatcher(batch_size=2)
 
         batcher.add_request(BatchRequest(file_path=Path("req1")))
@@ -164,7 +164,7 @@ class TestSerializationManager:
     def test_serialization_basic(self, base_agent_module: Any) -> None:
         """Test basic serialization."""
         from src.core.base.logic.managers.processor_managers import SerializationManager
-        
+
         manager = SerializationManager()
 
         data = {"a": 1, "b": [2, 3]}
@@ -180,7 +180,7 @@ class TestFilePriorityManager:
     def test_priority_calculation(self, base_agent_module: Any) -> None:
         """Test calculating file priority."""
         from src.core.base.logic.managers.system_managers import FilePriorityManager
-        
+
         manager = FilePriorityManager()
 
         # High priority for important files
@@ -253,7 +253,7 @@ class TestPromptVersioningAndABTesting:
     def test_ab_test_variant_selection(self, base_agent_module: Any) -> None:
         """Test A/B test variant selection."""
         from src.core.base.logic.managers.orchestration_managers import ABTest
-        
+
         test = ABTest(
             name="prompt_test", variants=["control", "treatment"], weights=[0.5, 0.5]
         )
@@ -322,7 +322,7 @@ class TestAgentConfigurationProfiles:
     def test_health_metrics_collection(self, base_agent_module: Any) -> None:
         """Test health metrics calculation logic."""
         from src.core.base.logic.managers.system_managers import HealthChecker
-        
+
         checker = HealthChecker()
 
         for _ in range(5):
@@ -337,7 +337,7 @@ class TestAgentConfigurationProfiles:
         """Test profile inheritance logic."""
         from src.core.base.logic.managers.system_managers import ProfileManager
         from src.core.base.lifecycle.base_agent import ConfigProfile
-        
+
         manager = ProfileManager()
         base = ConfigProfile("base", {"timeout": 30, "retries": 3})
         custom = ConfigProfile("custom", {"timeout": 60}, parent="base")

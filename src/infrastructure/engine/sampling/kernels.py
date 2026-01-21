@@ -72,11 +72,11 @@ class TopPSampler(Sampler):
         if HAS_RUST and logits.ndim == 1:
             result = top_p_mask_rust(logits.tolist(), params.top_p)
             return np.array(result, dtype=logits.dtype)
-        
+
         was_1d = logits.ndim == 1
         if was_1d:
             logits = logits.reshape(1, -1)
-        
+
         batch_size, _ = logits.shape
         result = logits.copy()
         for i in range(batch_size):
@@ -87,7 +87,7 @@ class TopPSampler(Sampler):
             cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
             remove_indices = sorted_indices[cutoff_idx:]
             result[i, remove_indices] = -float("inf")
-        
+
         return result.squeeze(0) if was_1d else result
 
 
@@ -103,14 +103,14 @@ class TopKTopPSampler(Sampler):
         was_1d = result.ndim == 1
         if was_1d:
             result = result.reshape(1, -1)
-        
+
         if params.use_top_k:
             k = min(params.top_k, result.shape[-1])
             top_k_values = np.partition(result, -k, axis=-1)[..., -k:]
             threshold = np.min(top_k_values, axis=-1, keepdims=True)
             mask = result < threshold
             result = np.where(mask, -float("inf"), result)
-        
+
         if params.use_top_p:
             batch_size = result.shape[0]
             for i in range(batch_size):
@@ -126,14 +126,14 @@ class TopKTopPSampler(Sampler):
                 cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
                 remove_indices = sorted_indices[cutoff_idx:]
                 result[i, remove_indices] = -float("inf")
-        
+
         if params.use_min_p:
             probs = _softmax(result)
             max_prob = np.max(probs, axis=-1, keepdims=True)
             threshold = params.min_p * max_prob
             mask = probs < threshold
             result = np.where(mask, -float("inf"), result)
-        
+
         return result.squeeze(0) if was_1d else result
 
 

@@ -48,14 +48,14 @@ __all__ = [
     'BloomFilter',
     'CountingBloomFilter',
     'ScalableBloomFilter',
-    
+
     # Ring Buffers (Phase 18)
     'RingBuffer',
     'ThreadSafeRingBuffer',
     'TimeSeriesBuffer',
     'TimestampedValue',
     'SlidingWindowAggregator',
-    
+
     # Object Pools (Phase 19)
     'ObjectPool',
     'TypedObjectPool',
@@ -65,7 +65,7 @@ __all__ = [
     'pooled_list',
     'pooled_dict',
     'pooled_set',
-    
+
     # Queues (Phase 19)
     'MPMCQueue',
     'SPSCQueue',
@@ -73,7 +73,7 @@ __all__ = [
     'WorkStealingDeque',
     'BatchingQueue',
     'QueueStats',
-    
+
     # Memory Arenas (Phase 19)
     'MemoryArena',
     'TypedArena',

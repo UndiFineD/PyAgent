@@ -37,23 +37,23 @@ class SynthesisCore:
         """Lazily initializes and caches the Rust transformer."""
         if not HAS_RUST or SynthesisCore._rust_failed:
             return None
-        
+
         if SynthesisCore._transformer_cache is None:
             try:
                 # Use a hardware profile to auto-configure to available resources
                 profile = rust_core.HardwareProfile(None)
                 config = rust_core.TransformerConfig.auto_configure(profile)
-                
+
                 # We can't easily modify the config as attributes are read-only in this Rust build.
                 # However, the auto-configure logic already scales based on system memory.
                 # Caching it here ensures we only pay the initialization cost once.
-                
+
                 SynthesisCore._transformer_cache = rust_core.NeuralTransformer(config)
                 logging.info(f"SynthesisCore: Initialized Rust transformer.")
             except Exception as e:
                 logging.warning(f"SynthesisCore: Failed to initialize Rust transformer: {e}")
                 SynthesisCore._rust_failed = True
-        
+
         return SynthesisCore._transformer_cache
 
     def generate_python_edge_cases(self, count: int) -> list[str]:
@@ -63,7 +63,7 @@ class SynthesisCore:
                 res, stats = rust_core.generate_synthetic_snippets_with_stats(count)
                 print(f"[SynthesisCore] Generated {stats.token_count} tokens in {stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)")
                 print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f} (@ 0.0005 cent/token)")
-                
+
                 # Optional: persistent tracking via FleetEconomy
                 try:
                     from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
@@ -71,7 +71,7 @@ class SynthesisCore:
                     fea.log_hardware_savings("SynthesisCore/Generation", stats.token_count, stats.tps, stats.cost_usd)
                 except ImportError:
                     pass
-                
+
                 return res
             except Exception as e:
                 logging.debug(f"SynthesisCore: Rust generation failed: {e}")
@@ -95,14 +95,14 @@ class SynthesisCore:
                 if len(insight) > 100:
                     print(f"[SynthesisCore] Vectorized {stats.token_count} tokens at {stats.tps:.2f} t/s")
                     print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f}")
-                    
+
                     try:
                         from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
                         fea = FleetEconomyAgent()
                         fea.log_hardware_savings("SynthesisCore/Vectorization", stats.token_count, stats.tps, stats.cost_usd)
                     except ImportError:
                         pass
-                
+
                 return vec
             except Exception as e:
                 logging.debug(f"SynthesisCore: Rust vectorization failed: {e}")

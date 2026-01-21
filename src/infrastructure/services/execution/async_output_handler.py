@@ -45,26 +45,26 @@ class AsyncState(Enum):
 class CudaEvent:
     """
     Simulated CUDA event for synchronization.
-    
+
     In real implementation, wraps torch.cuda.Event.
     """
     name: str = ""
     recorded_at: Optional[float] = None
     synchronized: bool = False
-    
+
     def record(self) -> None:
         """Record the event."""
         self.recorded_at = time.perf_counter()
         self.synchronized = False
-    
+
     def synchronize(self) -> None:
         """Wait for the event."""
         self.synchronized = True
-    
+
     def query(self) -> bool:
         """Check if event is complete."""
         return self.synchronized or (self.recorded_at is not None)
-    
+
     def elapsed_time(self, other: "CudaEvent") -> float:
         """Get elapsed time between events in milliseconds."""
         if self.recorded_at is None or other.recorded_at is None:
@@ -80,17 +80,17 @@ class CudaEvent:
 class CudaStream:
     """
     Simulated CUDA stream for async operations.
-    
+
     In real implementation, wraps torch.cuda.Stream.
     """
     name: str = "default"
     _operations: List[Callable] = field(default_factory=list)
     _events: List[CudaEvent] = field(default_factory=list)
-    
+
     def wait_event(self, event: CudaEvent) -> None:
         """Make stream wait for an event."""
         event.synchronize()
-    
+
     def record_event(self, event: Optional[CudaEvent] = None) -> CudaEvent:
         """Record an event on the stream."""
         if event is None:
@@ -98,7 +98,7 @@ class CudaStream:
         event.record()
         self._events.append(event)
         return event
-    
+
     def synchronize(self) -> None:
         """Wait for all operations on stream."""
         for event in self._events:
@@ -113,7 +113,7 @@ class CudaStream:
 class AsyncOutput:
     """
     Container for async output with synchronization.
-    
+
     Based on vLLM's AsyncOutput pattern for overlapping
     compute and memory transfers.
     """
@@ -121,47 +121,47 @@ class AsyncOutput:
     sampled_token_ids: Optional[np.ndarray] = None
     logprobs: Optional[np.ndarray] = None
     hidden_states: Optional[np.ndarray] = None
-    
+
     # Sync events
     copy_event: Optional[CudaEvent] = None
     compute_event: Optional[CudaEvent] = None
-    
+
     # State
     state: AsyncState = AsyncState.PENDING
     error: Optional[Exception] = None
-    
+
     # Timing
     start_time: Optional[float] = None
     end_time: Optional[float] = None
-    
+
     def mark_started(self) -> None:
         """Mark output as started."""
         self.state = AsyncState.IN_PROGRESS
         self.start_time = time.perf_counter()
-    
+
     def mark_completed(self) -> None:
         """Mark output as completed."""
         self.state = AsyncState.COMPLETED
         self.end_time = time.perf_counter()
-    
+
     def mark_failed(self, error: Exception) -> None:
         """Mark output as failed."""
         self.state = AsyncState.FAILED
         self.error = error
         self.end_time = time.perf_counter()
-    
+
     def wait(self) -> None:
         """Wait for async operations to complete."""
         if self.copy_event:
             self.copy_event.synchronize()
         if self.compute_event:
             self.compute_event.synchronize()
-    
+
     @property
     def is_ready(self) -> bool:
         """Check if output is ready."""
         return self.state == AsyncState.COMPLETED
-    
+
     @property
     def elapsed_ms(self) -> float:
         """Get elapsed time in milliseconds."""
@@ -181,25 +181,25 @@ def async_copy_to_np(
 ) -> AsyncOutput:
     """
     Async copy GPU tensor to numpy array.
-    
+
     In real implementation, uses non-blocking copy.
     """
     output = AsyncOutput()
     output.mark_started()
-    
+
     try:
         # Simulate async copy (real impl uses pinned memory)
         dst = np.copy(src)
         output.sampled_token_ids = dst
-        
+
         # Record event
         if stream:
             output.copy_event = stream.record_event()
-        
+
         output.mark_completed()
     except Exception as e:
         output.mark_failed(e)
-    
+
     return output
 
 
@@ -222,20 +222,20 @@ def async_copy_batch(
 class AsyncBarrier:
     """
     Barrier for synchronizing async operations.
-    
+
     Collects outputs until a batch is ready.
     """
-    
+
     def __init__(self, count: int):
         self.count = count
         self._outputs: List[AsyncOutput] = []
         self._lock = threading.Lock()
         self._event = threading.Event()
-    
+
     def add(self, output: AsyncOutput) -> bool:
         """
         Add an output to the barrier.
-        
+
         Returns True when barrier is full.
         """
         with self._lock:
@@ -244,17 +244,17 @@ class AsyncBarrier:
                 self._event.set()
                 return True
             return False
-    
+
     def wait(self, timeout: Optional[float] = None) -> List[AsyncOutput]:
         """Wait for all outputs."""
         self._event.wait(timeout)
-        
+
         # Wait for all async operations
         for output in self._outputs:
             output.wait()
-        
+
         return self._outputs
-    
+
     def reset(self) -> None:
         """Reset the barrier."""
         with self._lock:
@@ -265,7 +265,7 @@ class AsyncBarrier:
 def async_barrier(outputs: List[AsyncOutput]) -> None:
     """
     Wait for all async outputs to complete.
-    
+
     Based on vLLM's async_barrier pattern.
     """
     for output in outputs:
@@ -279,21 +279,21 @@ def async_barrier(outputs: List[AsyncOutput]) -> None:
 class AsyncOutputHandler:
     """
     Handler for managing async outputs.
-    
+
     Provides queuing and batching of async results.
     """
-    
+
     def __init__(self, max_pending: int = 16):
         self.max_pending = max_pending
         self._pending: queue.Queue[AsyncOutput] = queue.Queue(maxsize=max_pending)
         self._completed: List[AsyncOutput] = []
         self._lock = threading.Lock()
         self._total_processed = 0
-    
+
     def submit(self, output: AsyncOutput) -> bool:
         """
         Submit an output for processing.
-        
+
         Returns False if queue is full.
         """
         try:
@@ -301,20 +301,20 @@ class AsyncOutputHandler:
             return True
         except queue.Full:
             return False
-    
+
     def poll(self) -> List[AsyncOutput]:
         """
         Poll for completed outputs.
-        
+
         Returns list of newly completed outputs.
         """
         newly_completed = []
-        
+
         # Check pending queue
         try:
             while True:
                 output = self._pending.get_nowait()
-                
+
                 if output.is_ready:
                     newly_completed.append(output)
                 else:
@@ -322,30 +322,30 @@ class AsyncOutputHandler:
                     self._pending.put_nowait(output)
         except queue.Empty:
             pass
-        
+
         with self._lock:
             self._completed.extend(newly_completed)
             self._total_processed += len(newly_completed)
-        
+
         return newly_completed
-    
+
     def wait_one(self, timeout: Optional[float] = None) -> Optional[AsyncOutput]:
         """Wait for one output to complete."""
         try:
             output = self._pending.get(timeout=timeout)
             output.wait()
-            
+
             with self._lock:
                 self._total_processed += 1
-            
+
             return output
         except queue.Empty:
             return None
-    
+
     def wait_all(self) -> List[AsyncOutput]:
         """Wait for all pending outputs."""
         outputs = []
-        
+
         while not self._pending.empty():
             try:
                 output = self._pending.get_nowait()
@@ -353,31 +353,31 @@ class AsyncOutputHandler:
                 outputs.append(output)
             except queue.Empty:
                 break
-        
+
         with self._lock:
             self._completed.extend(outputs)
             self._total_processed += len(outputs)
-        
+
         return outputs
-    
+
     def clear_completed(self) -> List[AsyncOutput]:
         """Clear and return completed outputs."""
         with self._lock:
             completed = self._completed[:]
             self._completed.clear()
             return completed
-    
+
     @property
     def num_pending(self) -> int:
         """Number of pending outputs."""
         return self._pending.qsize()
-    
+
     @property
     def num_completed(self) -> int:
         """Number of completed outputs."""
         with self._lock:
             return len(self._completed)
-    
+
     def stats(self) -> Dict[str, Any]:
         """Get handler statistics."""
         with self._lock:
@@ -396,10 +396,10 @@ class AsyncOutputHandler:
 class DoubleBuffer:
     """
     Double buffering for overlapping compute and transfer.
-    
+
     Maintains two buffers - one for current compute, one for transfer.
     """
-    
+
     def __init__(self, shape: tuple, dtype: np.dtype = np.float32):
         self.shape = shape
         self.dtype = dtype
@@ -409,22 +409,22 @@ class DoubleBuffer:
         ]
         self._current_idx = 0
         self._lock = threading.Lock()
-    
+
     @property
     def current(self) -> np.ndarray:
         """Get current compute buffer."""
         return self._buffers[self._current_idx]
-    
+
     @property
     def transfer(self) -> np.ndarray:
         """Get transfer buffer."""
         return self._buffers[1 - self._current_idx]
-    
+
     def swap(self) -> None:
         """Swap current and transfer buffers."""
         with self._lock:
             self._current_idx = 1 - self._current_idx
-    
+
     def reset(self) -> None:
         """Reset both buffers."""
         self._buffers[0].fill(0)

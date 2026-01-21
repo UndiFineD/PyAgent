@@ -29,9 +29,9 @@ class LMStudioBackend(LLMBackend):
     """
     LM Studio LLM Backend using the official SDK.
     """
-    
+
     PROVIDER_ID = "lmstudio"
-    
+
     def __init__(
         self,
         session: Any,
@@ -41,18 +41,18 @@ class LMStudioBackend(LLMBackend):
     ) -> None:
         """Initialize LM Studio backend."""
         super().__init__(session, connectivity_manager, recorder)
-        
+
         self.config = config or LMStudioConfig()
         self._model_cache = ModelCache(self.config.cache_ttl)
         self._client: Optional["lmstudio.Client"] = None
         self._async_client: Optional["lmstudio.AsyncClient"] = None
         self._sdk_available: bool | None = None
-    
+
     def _check_sdk(self) -> bool:
         """Check if LM Studio SDK is available."""
         if self._sdk_available is not None:
             return self._sdk_available
-        
+
         try:
             import lmstudio
             self._sdk_available = True
@@ -62,17 +62,17 @@ class LMStudioBackend(LLMBackend):
             self._sdk_available = False
             logger.warning("LM Studio SDK not available. Install with: pip install lmstudio")
             return False
-    
+
     def _get_client(self) -> "lmstudio.Client":
         """Get or create sync client."""
         if self._client is not None:
             return self._client
-        
+
         if not self._check_sdk():
             raise RuntimeError("LM Studio SDK not available")
-        
+
         import lmstudio
-        
+
         try:
             self._client = lmstudio.Client(self.config.api_host)
             logger.info(f"Connected to LM Studio at {self.config.api_host}")
@@ -81,17 +81,17 @@ class LMStudioBackend(LLMBackend):
             logger.error(f"Failed to connect to LM Studio: {e}")
             self._update_status(self.PROVIDER_ID, False)
             raise
-    
+
     def _get_async_client(self) -> "lmstudio.AsyncClient":
         """Get or create async client."""
         if self._async_client is not None:
             return self._async_client
-        
+
         if not self._check_sdk():
             raise RuntimeError("LM Studio SDK not available")
-        
+
         import lmstudio
-        
+
         try:
             self._async_client = lmstudio.AsyncClient(self.config.api_host)
             logger.info(f"Async connected to LM Studio at {self.config.api_host}")
@@ -99,7 +99,7 @@ class LMStudioBackend(LLMBackend):
         except Exception as e:
             logger.error(f"Failed to create async LM Studio client: {e}")
             raise
-    
+
     def disconnect(self) -> None:
         """Disconnect clients."""
         if self._client is not None:
@@ -108,12 +108,12 @@ class LMStudioBackend(LLMBackend):
             except Exception:
                 pass
             self._client = None
-        
+
         if self._async_client is not None:
             self._async_client = None
-        
+
         self._model_cache.clear()
-    
+
     def list_loaded_models(self) -> list[str]:
         """List currently loaded models in LM Studio."""
         try:
@@ -123,7 +123,7 @@ class LMStudioBackend(LLMBackend):
         except Exception as e:
             logger.debug(f"Failed to list loaded models: {e}")
             return []
-    
+
     def list_downloaded_models(self) -> list[str]:
         """List downloaded models available in LM Studio."""
         try:
@@ -133,7 +133,7 @@ class LMStudioBackend(LLMBackend):
         except Exception as e:
             logger.debug(f"Failed to list downloaded models: {e}")
             return []
-    
+
     def get_model(self, model: str = "") -> Any:
         """Get a loaded model handle, using cache if available."""
         # Check cache first
@@ -141,18 +141,18 @@ class LMStudioBackend(LLMBackend):
         cached = self._model_cache.get(cache_key)
         if cached is not None:
             return cached.model_info
-        
+
         import lmstudio
-        
+
         try:
             if model:
                 llm = lmstudio.llm(model)
             else:
                 llm = lmstudio.llm()
-            
+
             if self.config.cache_models:
                 self._model_cache.set(cache_key, llm)
-            
+
             return llm
         except lmstudio.LMStudioModelNotFoundError:
             logger.warning(f"Model '{model}' not found in LM Studio")
@@ -160,7 +160,7 @@ class LMStudioBackend(LLMBackend):
         except Exception as e:
             logger.error(f"Failed to get model '{model}': {e}")
             raise
-    
+
     def chat(
         self,
         prompt: str,
@@ -172,26 +172,26 @@ class LMStudioBackend(LLMBackend):
         if not self._is_working(self.PROVIDER_ID):
             logger.debug("LM Studio skipped due to connection cache.")
             return ""
-        
+
         if not self._check_sdk():
             return ""
-        
+
         import lmstudio
-        
+
         try:
             llm = self.get_model(model)
             chat = lmstudio.Chat(system_prompt)
             chat.add_user_message(prompt)
             config = self._build_prediction_config(**kwargs)
-            
+
             start_time = time.time()
             result = llm.respond(chat, config=config)
             elapsed = time.time() - start_time
-            
+
             response_text = str(result)
-            
+
             logger.debug(f"LM Studio response in {elapsed:.2f}s: {len(response_text)} chars")
-            
+
             self._record(
                 self.PROVIDER_ID,
                 model or "default",
@@ -200,9 +200,9 @@ class LMStudioBackend(LLMBackend):
                 system_prompt=system_prompt,
             )
             self._update_status(self.PROVIDER_ID, True)
-            
+
             return response_text
-            
+
         except lmstudio.LMStudioModelNotFoundError as e:
             logger.warning(f"LM Studio model not found: {e}")
             self._update_status(self.PROVIDER_ID, False)
@@ -233,7 +233,7 @@ class LMStudioBackend(LLMBackend):
             logger.debug(f"LM Studio call failed: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return ""
-    
+
     def chat_stream(
         self,
         prompt: str,
@@ -245,26 +245,26 @@ class LMStudioBackend(LLMBackend):
         """Stream chat completion tokens."""
         if not self._check_sdk():
             return
-        
+
         import lmstudio
-        
+
         try:
             llm = self.get_model(model)
             chat = lmstudio.Chat(system_prompt)
             chat.add_user_message(prompt)
             config = self._build_prediction_config(**kwargs)
-            
+
             full_response = []
-            
+
             for fragment in llm.respond_stream(chat, config=config):
                 text = str(fragment)
                 full_response.append(text)
-                
+
                 if on_fragment:
                     on_fragment(text)
-                
+
                 yield text
-            
+
             self._record(
                 self.PROVIDER_ID,
                 model or "default",
@@ -273,11 +273,11 @@ class LMStudioBackend(LLMBackend):
                 system_prompt=system_prompt,
             )
             self._update_status(self.PROVIDER_ID, True)
-            
+
         except Exception as e:
             logger.error(f"LM Studio streaming error: {e}")
             self._update_status(self.PROVIDER_ID, False)
-    
+
     async def chat_async(
         self,
         prompt: str,
@@ -288,20 +288,20 @@ class LMStudioBackend(LLMBackend):
         """Async chat completion via LM Studio."""
         if not self._check_sdk():
             return ""
-        
+
         import lmstudio
-        
+
         try:
             async with lmstudio.AsyncClient(self.config.api_host) as client:
                 llm = await client.llm.get(model) if model else await client.llm.get()
-                
+
                 chat = lmstudio.Chat(system_prompt)
                 chat.add_user_message(prompt)
                 config = self._build_prediction_config(**kwargs)
-                
+
                 result = await llm.respond(chat, config=config)
                 response_text = str(result)
-                
+
                 self._record(
                     self.PROVIDER_ID,
                     model or "default",
@@ -310,14 +310,14 @@ class LMStudioBackend(LLMBackend):
                     system_prompt=system_prompt,
                 )
                 self._update_status(self.PROVIDER_ID, True)
-                
+
                 return response_text
-                
+
         except Exception as e:
             logger.error(f"LM Studio async error: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return ""
-    
+
     def embed(
         self,
         texts: str | Sequence[str],
@@ -326,28 +326,28 @@ class LMStudioBackend(LLMBackend):
         """Generate embeddings for text(s)."""
         if not self._check_sdk():
             return []
-        
+
         import lmstudio
-        
+
         try:
             if model:
                 emb_model = lmstudio.embedding_model(model)
             else:
                 emb_model = lmstudio.embedding_model()
-            
+
             if isinstance(texts, str):
                 texts = [texts]
-            
+
             embeddings = []
             for text in texts:
                 vec = emb_model.embed(text)
                 embeddings.append(list(vec))
-            
+
             return embeddings
         except Exception as e:
             logger.error(f"LM Studio embedding error: {e}")
             return []
-    
+
     def chat_with_tools(
         self,
         prompt: str,
@@ -359,14 +359,14 @@ class LMStudioBackend(LLMBackend):
         """Chat with tool/function calling support."""
         if not self._check_sdk():
             return {"content": "", "tool_calls": []}
-        
+
         import lmstudio
-        
+
         try:
             llm = self.get_model(model)
             chat = lmstudio.Chat(system_prompt)
             chat.add_user_message(prompt)
-            
+
             tool_defs = [
                 lmstudio.ToolDefinition(
                     name=t.get("name", ""),
@@ -375,11 +375,11 @@ class LMStudioBackend(LLMBackend):
                 )
                 for t in tools
             ]
-            
+
             config = self._build_prediction_config(**kwargs)
-            
+
             result = llm.respond(chat, tools=tool_defs, config=config)
-            
+
             tool_calls = []
             if hasattr(result, "tool_calls") and result.tool_calls:
                 for tc in result.tool_calls:
@@ -387,7 +387,7 @@ class LMStudioBackend(LLMBackend):
                         "name": tc.name,
                         "arguments": tc.arguments,
                     })
-            
+
             return {
                 "content": str(result),
                 "tool_calls": tool_calls,
@@ -395,18 +395,18 @@ class LMStudioBackend(LLMBackend):
         except Exception as e:
             logger.error(f"LM Studio tool calling error: {e}")
             return {"content": "", "tool_calls": []}
-    
+
     def _build_prediction_config(self, **kwargs) -> Any:
         """Build prediction config from kwargs."""
         import lmstudio
-        
+
         return lmstudio.LlmPredictionConfig(
             temperature=kwargs.get("temperature", self.config.temperature),
             max_tokens=kwargs.get("max_tokens", self.config.max_tokens),
             top_p=kwargs.get("top_p", self.config.top_p),
             stop_strings=kwargs.get("stop", []),
         )
-    
+
     def health_check(self) -> bool:
         """Check if LM Studio is reachable and has models loaded."""
         try:
@@ -417,12 +417,12 @@ class LMStudioBackend(LLMBackend):
         except Exception:
             self._update_status(self.PROVIDER_ID, False)
             return False
-    
+
     def get_info(self) -> dict[str, Any]:
         """Get backend information."""
         loaded = self.list_loaded_models()
         downloaded = self.list_downloaded_models()
-        
+
         return {
             "provider": self.PROVIDER_ID,
             "host": self.config.api_host,

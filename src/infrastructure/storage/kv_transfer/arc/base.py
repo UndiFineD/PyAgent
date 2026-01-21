@@ -14,27 +14,27 @@ if TYPE_CHECKING:
 
 class OffloadingManager(ABC):
     """Abstract base for offloading managers."""
-    
+
     @abstractmethod
     def lookup(self, block_hashes: list[BlockHash]) -> int:
         """Look up blocks, return hit count."""
         pass
-    
+
     @abstractmethod
     def prepare_load(self, block_hashes: list[BlockHash]) -> LoadStoreSpec:
         """Prepare to load blocks."""
         pass
-    
+
     @abstractmethod
     def touch(self, block_hashes: list[BlockHash]) -> None:
         """Update access recency for blocks."""
         pass
-    
+
     @abstractmethod
     def complete_load(self, block_hashes: list[BlockHash]) -> None:
         """Complete load operation."""
         pass
-    
+
     @abstractmethod
     def prepare_store(
         self,

@@ -15,7 +15,7 @@ from pathlib import Path
 class TestAgentStatePersistence:
     def test_state_save_and_load(self, tmp_path: Path, base_agent_module: Any) -> None:
         from src.core.base.logic.managers.system_managers import StatePersistence
-        
+
         state_file: Path = tmp_path / "state.json"
         persistence = StatePersistence(state_file)
 
@@ -31,7 +31,7 @@ class TestContentBasedResponseCaching:
         self, base_agent_module: Any, tmp_path: Path
     ) -> None:
         from src.core.base.logic.managers.system_managers import ResponseCache
-        
+
         cache = ResponseCache(cache_dir=tmp_path)
         cache.set("prompt1", "response1")
         assert cache.get("prompt1") == "response1"
@@ -41,7 +41,7 @@ class TestAgentPluginLoading:
     def test_plugin_registration(self, base_agent_module: Any) -> None:
         from src.core.base.logic.managers.plugin_manager import PluginManager
         from src.core.base.lifecycle.base_agent import AgentHealthCheck
-        
+
         manager = PluginManager()
 
         class MockPlugin:
@@ -70,7 +70,7 @@ class TestAgentPluginLoading:
 class TestAgentHealthDiagnostics:
     def test_health_check_basic(self, base_agent_module: Any) -> None:
         from src.core.base.logic.managers.system_managers import HealthChecker
-        
+
         checker = HealthChecker()
         status = checker.check()
         assert "status" in status
@@ -79,7 +79,7 @@ class TestAgentHealthDiagnostics:
 class TestCustomAuthenticationMethods:
     def test_auth_token_method(self, base_agent_module: Any) -> None:
         from src.core.base.logic.managers.auth_managers import AuthMethod, AuthManager
-        
+
         manager = AuthManager()
         manager.set_method(AuthMethod.TOKEN, token="secret-token")
         headers = manager.get_headers()

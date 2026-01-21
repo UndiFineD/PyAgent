@@ -70,19 +70,19 @@ class MemoRagAgent(BaseAgent):
             try:
                 with open(shard_file, "r", encoding="utf-8") as f:
                     lines = [line.strip() for line in f if line.strip().startswith("[MEM]")]
-                
+
                 if lines:
                     from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
                     sc = SynthesisCore()
                     q_embedding = sc.vectorize_insight(query)
-                    
+
                     # Generate embeddings for lines (in a real system we would cache these)
                     line_embeddings = [sc.vectorize_insight(line) for line in lines]
-                    
+
                     # Fast Rust retrieval
                     matches = rust_core.top_k_cosine_similarity(q_embedding, line_embeddings, 2)
                     return [f"Semantic Clue [{score:.2f}] (shard: {shard_name}): {lines[idx]}" for idx, score in matches]
-                    
+
             except Exception as e:
                 logging.warning(f"MemoRAG semantic search failed: {e}")
 

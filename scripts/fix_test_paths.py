@@ -15,17 +15,17 @@ def fix_path_string(match):
         if len(parts) >= 2 and parts[-1] == 'py':
             filename = parts[-2]
             folders = parts[:-2]
-            
+
             # Convert filename to snake_case
             filename_snake = to_snake_case(filename)
-            
+
             # Reconstruct with slashes
             new_path_str = '/'.join(folders + [filename_snake + '.py'])
-            
+
             # Add 'src/' if it doesn't start with it and it's logic/observability/infrastructure/core
             if not new_path_str.startswith('src/') and any(new_path_str.startswith(p) for p in ['logic', 'observability', 'infrastructure', 'core', 'tools', 'interface', 'maintenance']):
                 new_path_str = 'src/' + new_path_str
-                
+
             return f'load_agent_module("{new_path_str}")'
     return match.group(0)
 

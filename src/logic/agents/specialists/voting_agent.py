@@ -82,9 +82,9 @@ class VotingAgent(BaseAgent):
         """Creates a new voting session."""
         self._session_counter += 1
         session_id = f"vote_{self._session_counter}"
-        
+
         voting_method = VotingMethod(method) if method in [m.value for m in VotingMethod] else VotingMethod.MAJORITY
-        
+
         session = VotingSession(
             session_id=session_id,
             question=question,
@@ -93,7 +93,7 @@ class VotingAgent(BaseAgent):
             status=VoteStatus.ACTIVE
         )
         self._sessions[session_id] = session
-        
+
         return {
             "session_id": session_id,
             "question": question,
@@ -115,21 +115,21 @@ class VotingAgent(BaseAgent):
         """Casts a vote in an active session."""
         if session_id not in self._sessions:
             return {"success": False, "error": f"Session {session_id} not found"}
-        
+
         session = self._sessions[session_id]
-        
+
         if session.status != VoteStatus.ACTIVE:
             return {"success": False, "error": f"Session is {session.status.value}"}
-        
+
         # Check if already voted
         if any(v.voter_id == voter_id for v in session.votes):
             return {"success": False, "error": f"Voter {voter_id} has already voted"}
-        
+
         # Validate choice
         if session.method != VotingMethod.RANKED_CHOICE:
             if choice not in session.options:
                 return {"success": False, "error": f"Invalid option: {choice}"}
-        
+
         vote = Vote(
             voter_id=voter_id,
             choice=choice,
@@ -138,7 +138,7 @@ class VotingAgent(BaseAgent):
             reasoning=reasoning
         )
         session.votes.append(vote)
-        
+
         return {
             "success": True,
             "session_id": session_id,
@@ -150,16 +150,16 @@ class VotingAgent(BaseAgent):
     async def cast_weighted_vote(self, options: List[str], weights: Dict[str, float]) -> Dict[str, Any]:
         """Determines the winner among options using provided weights (legacy method)."""
         logging.info("VotingAgent: Aggregating weighted votes...")
-        
+
         # Calculate weighted scores
         scores = {opt: 0.0 for opt in options}
         for opt in options:
             scores[opt] = weights.get(opt, 0.0)
-        
+
         # Find winner
         winner = max(scores, key=scores.get) if scores else None
         total = sum(scores.values())
-        
+
         # LLM analysis for context
         prompt = (
             f"Options: {options}\nWeights: {weights}\n\n"
@@ -167,13 +167,13 @@ class VotingAgent(BaseAgent):
             "Provide reasoning in JSON: {'recommendation': '...', 'confidence': 0-1, 'reasoning': '...'}"
         )
         analysis = await self.improve_content(prompt)
-        
+
         llm_analysis = {"raw": analysis}
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", analysis)
             if match:
                 llm_analysis = json.loads(match.group(1))
-        
+
         return {
             "winner": winner,
             "scores": scores,
@@ -186,12 +186,12 @@ class VotingAgent(BaseAgent):
         """Tallies votes and determines the winner."""
         if session_id not in self._sessions:
             return {"success": False, "error": f"Session {session_id} not found"}
-        
+
         session = self._sessions[session_id]
-        
+
         if not session.votes:
             return {"success": False, "error": "No votes cast"}
-        
+
         # Tally based on method
         if session.method == VotingMethod.MAJORITY:
             results = self._tally_majority(session)
@@ -207,11 +207,11 @@ class VotingAgent(BaseAgent):
             results = self._tally_quadratic(session)
         else:
             results = self._tally_majority(session)
-        
+
         session.results = results
         session.winner = results.get("winner")
         session.status = VoteStatus.COMPLETED if results.get("winner") else VoteStatus.TIED
-        
+
         return {
             "session_id": session_id,
             "method": session.method.value,
@@ -225,9 +225,9 @@ class VotingAgent(BaseAgent):
         """Gets the current status of a voting session."""
         if session_id not in self._sessions:
             return {"error": f"Session {session_id} not found"}
-        
+
         session = self._sessions[session_id]
-        
+
         return {
             "session_id": session_id,
             "question": session.question,
@@ -246,7 +246,7 @@ class VotingAgent(BaseAgent):
             f"**{p.get('agent', 'Agent')}**: {p.get('position', 'No position')}"
             for p in perspectives
         ])
-        
+
         prompt = (
             f"Question: {question}\n\n"
             f"Perspectives:\n{perspectives_text}\n\n"
@@ -257,14 +257,14 @@ class VotingAgent(BaseAgent):
             "4. Recommend the best path forward\n"
             "Output JSON: {'common_ground': [...], 'disagreements': [...], 'synthesis': '...', 'recommendation': '...', 'confidence': 0-1}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"raw": res}
 
     def _tally_majority(self, session: VotingSession) -> Dict[str, Any]:
@@ -273,10 +273,10 @@ class VotingAgent(BaseAgent):
         for vote in session.votes:
             if vote.choice in counts:
                 counts[vote.choice] += 1
-        
+
         max_votes = max(counts.values()) if counts else 0
         winners = [opt for opt, count in counts.items() if count == max_votes]
-        
+
         return {
             "counts": counts,
             "winner": winners[0] if len(winners) == 1 else None,
@@ -291,10 +291,10 @@ class VotingAgent(BaseAgent):
         for vote in session.votes:
             if vote.choice in scores:
                 scores[vote.choice] += vote.weight
-        
+
         max_score = max(scores.values()) if scores else 0
         winner = max(scores, key=scores.get) if max_score > 0 else None
-        
+
         return {
             "scores": scores,
             "winner": winner,
@@ -305,7 +305,7 @@ class VotingAgent(BaseAgent):
         """Instant-runoff ranked choice voting."""
         remaining = set(session.options)
         rounds = []
-        
+
         while len(remaining) > 1:
             # Count first preferences among remaining
             counts = {opt: 0 for opt in remaining}
@@ -315,20 +315,20 @@ class VotingAgent(BaseAgent):
                         if choice in remaining:
                             counts[choice] += 1
                             break
-            
+
             total = sum(counts.values())
             rounds.append(dict(counts))
-            
+
             # Check for majority
             for opt, count in counts.items():
                 if count > total / 2:
                     return {"winner": opt, "rounds": rounds, "method": "majority_reached"}
-            
+
             # Eliminate lowest
             if counts:
                 lowest = min(counts, key=counts.get)
                 remaining.remove(lowest)
-        
+
         return {
             "winner": list(remaining)[0] if remaining else None,
             "rounds": rounds,
@@ -339,40 +339,40 @@ class VotingAgent(BaseAgent):
         """Borda count voting."""
         n = len(session.options)
         scores = {opt: 0 for opt in session.options}
-        
+
         for vote in session.votes:
             if vote.rankings:
                 for rank, choice in enumerate(vote.rankings):
                     if choice in scores:
                         scores[choice] += (n - rank)
-        
+
         winner = max(scores, key=scores.get) if scores else None
-        
+
         return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}
 
     def _tally_approval(self, session: VotingSession) -> Dict[str, Any]:
         """Approval voting (rankings treated as approvals)."""
         counts = {opt: 0 for opt in session.options}
-        
+
         for vote in session.votes:
             if vote.rankings:
                 for choice in vote.rankings:
                     if choice in counts:
                         counts[choice] += 1
-        
+
         winner = max(counts, key=counts.get) if counts else None
-        
+
         return {"counts": counts, "winner": winner}
 
     def _tally_quadratic(self, session: VotingSession) -> Dict[str, Any]:
         """Quadratic voting (weight = sqrt of votes)."""
         import math
         scores = {opt: 0.0 for opt in session.options}
-        
+
         for vote in session.votes:
             if vote.choice in scores:
                 scores[vote.choice] += math.sqrt(vote.weight)
-        
+
         winner = max(scores, key=scores.get) if scores else None
-        
+
         return {"scores": {k: round(v, 3) for k, v in scores.items()}, "winner": winner}

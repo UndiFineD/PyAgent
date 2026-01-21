@@ -24,13 +24,13 @@ from pathlib import Path
 def fix_path_backslashes(target_dirs: list[str]):
     """Recursively fixes malformed path strings in Python files."""
     workspace_root = Path(__file__).resolve().parents[5]
-    
+
     for folder_rel in target_dirs:
         folder = workspace_root / folder_rel
         if not folder.exists():
             print(f"Skipping non-existent folder: {folder_rel}")
             continue
-            
+
         print(f"Checking {folder_rel} for path backslash errors...")
         for root, _, files in os.walk(folder):
             for file in files:
@@ -38,10 +38,10 @@ def fix_path_backslashes(target_dirs: list[str]):
                     path = Path(root) / file
                     try:
                         content = path.read_text(encoding='utf-8')
-                        
+
                         # Fix backslash escaping quote issue: c:\" -> c:\\"
                         new_content = content.replace('c:\\"', 'c:\\\\"').replace('C:\\"', 'C:\\\\"')
-                        
+
                         if new_content != content:
                             path.write_text(new_content, encoding='utf-8')
                             print(f"Fixed backslashes: {path.relative_to(workspace_root)}")
@@ -51,6 +51,6 @@ def fix_path_backslashes(target_dirs: list[str]):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fix malformed path backslashes.")
     parser.add_argument("--dirs", nargs="+", default=["src"], help="Directories to scan.")
-    
+
     args = parser.parse_args()
     fix_path_backslashes(args.dirs)

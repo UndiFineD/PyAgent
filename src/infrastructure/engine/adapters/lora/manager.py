@@ -18,7 +18,7 @@ except ImportError:
 
 class LoRAManager:
     """High-level manager for LoRA adapter serving."""
-    
+
     def __init__(
         self,
         registry: LoRARegistry | None = None,
@@ -28,7 +28,7 @@ class LoRAManager:
         self.registry = registry or LoRARegistry()
         self.default_config = default_config or LoRAConfig()
         self._active_adapters: dict[int, str] = {}  # request_id -> model_id
-    
+
     def load_adapter(
         self,
         model_id: str,
@@ -43,7 +43,7 @@ class LoRAManager:
             config=config,
             metadata=metadata or {},
         )
-        
+
         for module_name, (lora_a, lora_b) in weights.items():
             layer = LoRALayerWeights(
                 lora_a=lora_a.astype(np.float32),
@@ -53,19 +53,19 @@ class LoRAManager:
                 dropout=config.dropout,
             )
             model.add_layer(layer)
-        
+
         if not self.registry.register(model):
             raise RuntimeError(f"Failed to register LoRA model {model_id}")
-        
+
         return model
-    
+
     def unload_adapter(self, model_id: str) -> bool:
         """Unload a LoRA adapter."""
         self._active_adapters = {
             k: v for k, v in self._active_adapters.items() if v != model_id
         }
         return self.registry.unregister(model_id)
-    
+
     def set_request_adapter(
         self,
         request_id: int,
@@ -76,15 +76,15 @@ class LoRAManager:
             self._active_adapters.pop(request_id, None)
         else:
             self._active_adapters[request_id] = model_id
-    
+
     def get_request_adapter(self, request_id: int) -> str | None:
         """Get adapter for a request."""
         return self._active_adapters.get(request_id)
-    
+
     def clear_request(self, request_id: int):
         """Clear request's adapter binding."""
         self._active_adapters.pop(request_id, None)
-    
+
     def apply_lora(
         self,
         request_id: int,
@@ -96,17 +96,17 @@ class LoRAManager:
         model_id = self._active_adapters.get(request_id)
         if model_id is None:
             return base_output
-        
+
         model = self.registry.get(model_id)
         if model is None:
             return base_output
-        
+
         lora_output = model.forward(module_name, x)
         if lora_output is None:
             return base_output
-        
+
         return base_output + lora_output
-    
+
     def batched_apply_lora(
         self,
         request_ids: list[int],
@@ -116,42 +116,42 @@ class LoRAManager:
     ) -> NDArray[np.float32]:
         """Apply LoRA to batched outputs with different adapters."""
         outputs = base_outputs.copy()
-        
+
         adapter_groups: dict[str | None, list[int]] = {}
         for i, req_id in enumerate(request_ids):
             adapter_id = self._active_adapters.get(req_id)
             if adapter_id not in adapter_groups:
                 adapter_groups[adapter_id] = []
             adapter_groups[adapter_id].append(i)
-        
+
         for adapter_id, indices in adapter_groups.items():
             if adapter_id is None:
                 continue
-            
+
             model = self.registry.get(adapter_id)
             if model is None:
                 continue
-            
+
             layer = model.get_layer(module_name)
             if layer is None:
                 continue
-            
+
             batch_inputs = inputs[indices]
             lora_output = layer.forward(batch_inputs)
             outputs[indices] += lora_output
-        
+
         return outputs
-    
+
     def list_adapters(self) -> list[str]:
         """List all loaded adapters."""
         return self.registry.list_models()
-    
+
     def get_adapter_info(self, model_id: str) -> dict[str, Any] | None:
         """Get adapter information."""
         model = self.registry.get(model_id)
         if model is None:
             return None
-        
+
         return {
             "model_id": model.model_id,
             "config": {
@@ -165,7 +165,7 @@ class LoRAManager:
             "memory_bytes": model.get_memory_bytes(),
             "metadata": model.metadata,
         }
-    
+
     def get_stats(self) -> dict[str, Any]:
         """Get manager statistics."""
         return {

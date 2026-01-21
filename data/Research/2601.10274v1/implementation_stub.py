@@ -13,7 +13,7 @@ class LoadAwareReasoningScheduler:
             return 128 # Minimal "thinking"
         elif queue_length < 5: # Idle
             return 2048 # Maximum reasoning depth
-        
+
         # Adaptive scaling logic
         pressure_factor = 1.0 - (queue_length / 50.0)
         return int(2048 * pressure_factor)
