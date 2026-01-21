@@ -1,6 +1,8 @@
+"""Individual KV cache managers for different attention types."""
 # SPDX-License-Identifier: Apache-2.0
 from abc import ABC, abstractmethod
 from typing import Dict, List
+from math import ceil
 from .data_classes import CacheGroupSpec, KVCacheBlock
 from .structural import BlockPool
 
@@ -10,43 +12,54 @@ class SingleTypeKVCacheManager(ABC):
         self.spec = spec
         self.block_pool = block_pool
         self.request_blocks: Dict[str, List[KVCacheBlock]] = {}
-    
+
     @abstractmethod
-    def get_num_blocks_needed(self, num_tokens: int) -> int: pass
-    
+    def get_num_blocks_needed(self, num_tokens: int) -> int:
+        """Calculate number of blocks needed for a given sequence length."""
+
     def allocate(self, request_id: str, num_tokens: int) -> List[KVCacheBlock]:
+        """Allocate new blocks if needed for a specific request."""
         num_blocks = self.get_num_blocks_needed(num_tokens)
         current = len(self.request_blocks.get(request_id, []))
         needed = num_blocks - current
-        if needed <= 0: return []
+        if needed <= 0:
+            return []
         new_blocks = self.block_pool.allocate(needed)
-        if request_id not in self.request_blocks: self.request_blocks[request_id] = []
+        if request_id not in self.request_blocks:
+            self.request_blocks[request_id] = []
         self.request_blocks[request_id].extend(new_blocks)
         return new_blocks
-    
+
     def free(self, request_id: str) -> None:
+        """Release all blocks associated with a request back to the pool."""
         blocks = self.request_blocks.pop(request_id, [])
-        for block in blocks: self.block_pool.free(block)
-    
+        for block in blocks:
+            self.block_pool.free(block)
+
     def get_blocks(self, request_id: str) -> List[KVCacheBlock]:
+        """Get the list of blocks allocated for a request."""
         return self.request_blocks.get(request_id, [])
 
 
 class FullAttentionManager(SingleTypeKVCacheManager):
+    """Manager for full (standard) causal attention KV cache."""
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-        from math import ceil
+        """Blocks needed for standard linear sequence length."""
         return ceil(num_tokens / self.spec.block_size)
 
 
 class SlidingWindowManager(SingleTypeKVCacheManager):
+    """Manager for sliding window attention KV cache."""
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-        from math import ceil
+        """Blocks needed considering the sliding window constraint."""
         window = self.spec.sliding_window or num_tokens
         effective_tokens = min(num_tokens, window)
         return ceil(effective_tokens / self.spec.block_size)
 
 
 class CrossAttentionManager(SingleTypeKVCacheManager):
+    """Manager for cross-attention KV cache (fixed length prompt/encoder)."""
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-        from math import ceil
+        """Blocks needed for encoder sequence length."""
         return ceil(num_tokens / self.spec.block_size)
+
