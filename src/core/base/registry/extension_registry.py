@@ -52,11 +52,11 @@ _Base = TypeVar("_Base")
 class ExtensionManager:
     """
     A registry for managing pluggable extension classes.
-    
+
     Provides a simple mechanism to register and instantiate extension classes
     by name. Commonly used for plugin systems where different implementations
     can be swapped at runtime.
-    
+
     Example:
         >>> FOO_REGISTRY = ExtensionManager("foo")
         >>> @FOO_REGISTRY.register("my_impl")
@@ -67,20 +67,20 @@ class ExtensionManager:
         >>> foo.value
         123
     """
-    
+
     def __init__(self, name: str = "default") -> None:
         """Initialize an empty extension registry."""
         self.name = name
         self._name2class: dict[str, type] = {}
         self._lock = threading.RLock()
-    
+
     def register(self, name: str) -> Callable[[_T], _T]:
         """
         Decorator to register a class with the given name.
-        
+
         Args:
             name: The unique name to register the class under.
-            
+
         Returns:
             Decorator function that registers and returns the class.
         """
@@ -93,11 +93,11 @@ class ExtensionManager:
                 self._name2class[name] = cls_to_register
             return cls_to_register
         return wrap
-    
+
     def register_class(self, name: str, cls: type) -> None:
         """
         Register a class programmatically (without decorator).
-        
+
         Args:
             name: The unique name to register the class under.
             cls: The class to register.
@@ -108,14 +108,14 @@ class ExtensionManager:
                     f"Overwriting existing registration '{name}' in {self.name}"
                 )
             self._name2class[name] = cls
-    
+
     def unregister(self, name: str) -> bool:
         """
         Unregister a class by name.
-        
+
         Args:
             name: The name to unregister.
-            
+
         Returns:
             True if the class was unregistered, False if not found.
         """
@@ -124,19 +124,19 @@ class ExtensionManager:
                 del self._name2class[name]
                 return True
             return False
-    
+
     def load(self, cls_name: str, *args: Any, **kwargs: Any) -> Any:
         """
         Instantiate and return a registered extension class by name.
-        
+
         Args:
             cls_name: The registered name of the class to instantiate.
             *args: Positional arguments to pass to the constructor.
             **kwargs: Keyword arguments to pass to the constructor.
-            
+
         Returns:
             An instance of the registered class.
-            
+
         Raises:
             KeyError: If the class name is not registered.
         """
@@ -149,37 +149,37 @@ class ExtensionManager:
                 f"Available: {available}"
             )
         return cls(*args, **kwargs)
-    
+
     def get_class(self, cls_name: str) -> type | None:
         """
         Get a registered class without instantiation.
-        
+
         Args:
             cls_name: The registered name of the class.
-            
+
         Returns:
             The class if found, None otherwise.
         """
         with self._lock:
             return self._name2class.get(cls_name)
-    
+
     def has(self, name: str) -> bool:
         """Check if a class is registered under the given name."""
         with self._lock:
             return name in self._name2class
-    
+
     def list_registered(self) -> list[str]:
         """Return a list of all registered class names."""
         with self._lock:
             return list(self._name2class.keys())
-    
+
     def __contains__(self, name: str) -> bool:
         return self.has(name)
-    
+
     def __len__(self) -> int:
         with self._lock:
             return len(self._name2class)
-    
+
     def __repr__(self) -> str:
         return f"ExtensionManager({self.name!r}, registered={len(self)})"
 
@@ -192,7 +192,7 @@ class ExtensionManager:
 class TypedExtensionManager(Generic[_Base]):
     """
     A type-safe registry for managing extension classes of a specific base type.
-    
+
     Example:
         >>> class BasePlugin(ABC):
         ...     @abstractmethod
@@ -203,11 +203,11 @@ class TypedExtensionManager(Generic[_Base]):
         ...     def process(self, data: str) -> str:
         ...         return data.upper()
     """
-    
+
     def __init__(self, name: str, base_class: type[_Base]) -> None:
         """
         Initialize a typed extension registry.
-        
+
         Args:
             name: The name of this registry.
             base_class: The base class/interface all extensions must inherit from.
@@ -216,11 +216,11 @@ class TypedExtensionManager(Generic[_Base]):
         self.base_class = base_class
         self._name2class: dict[str, type[_Base]] = {}
         self._lock = threading.RLock()
-    
+
     def register(self, name: str) -> Callable[[type[_Base]], type[_Base]]:
         """
         Decorator to register a class with type checking.
-        
+
         Validates that the class inherits from the base class.
         """
         def wrap(cls_to_register: type[_Base]) -> type[_Base]:
@@ -237,7 +237,7 @@ class TypedExtensionManager(Generic[_Base]):
                 self._name2class[name] = cls_to_register
             return cls_to_register
         return wrap
-    
+
     def load(self, cls_name: str, *args: Any, **kwargs: Any) -> _Base:
         """Instantiate and return a registered extension."""
         with self._lock:
@@ -249,25 +249,25 @@ class TypedExtensionManager(Generic[_Base]):
                 f"Available: {available}"
             )
         return cls(*args, **kwargs)
-    
+
     def get_class(self, cls_name: str) -> type[_Base] | None:
         """Get a registered class without instantiation."""
         with self._lock:
             return self._name2class.get(cls_name)
-    
+
     def has(self, name: str) -> bool:
         """Check if a class is registered under the given name."""
         with self._lock:
             return name in self._name2class
-    
+
     def list_registered(self) -> list[str]:
         """Return a list of all registered class names."""
         with self._lock:
             return list(self._name2class.keys())
-    
+
     def __contains__(self, name: str) -> bool:
         return self.has(name)
-    
+
     def __len__(self) -> int:
         with self._lock:
             return len(self._name2class)
@@ -285,7 +285,7 @@ class ExtensionInfo:
     cls: type
     priority: int = 0
     metadata: dict[str, Any] = field(default_factory=dict)
-    
+
     def __lt__(self, other: "ExtensionInfo") -> bool:
         return self.priority > other.priority  # Higher priority first
 
@@ -293,10 +293,10 @@ class ExtensionInfo:
 class MultiExtensionManager:
     """
     Registry supporting multiple implementations per key with priority ordering.
-    
+
     Useful for plugin systems where multiple handlers can be registered
     for the same extension point.
-    
+
     Example:
         >>> HANDLERS = MultiExtensionManager("handlers")
         >>> @HANDLERS.register("format", priority=10)
@@ -305,12 +305,12 @@ class MultiExtensionManager:
         ... class XMLFormatter: ...
         >>> HANDLERS.get_all("format")  # Returns [JSONFormatter, XMLFormatter]
     """
-    
+
     def __init__(self, name: str = "default") -> None:
         self.name = name
         self._extensions: dict[str, list[ExtensionInfo]] = {}
         self._lock = threading.RLock()
-    
+
     def register(
         self,
         name: str,
@@ -319,7 +319,7 @@ class MultiExtensionManager:
     ) -> Callable[[_T], _T]:
         """
         Decorator to register a class with the given name and priority.
-        
+
         Args:
             name: The extension point name.
             priority: Higher priority extensions are loaded first.
@@ -339,7 +339,7 @@ class MultiExtensionManager:
                 self._extensions[name].sort()  # Sort by priority
             return cls_to_register
         return wrap
-    
+
     def get_first(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Get the highest priority extension instance."""
         with self._lock:
@@ -347,43 +347,43 @@ class MultiExtensionManager:
         if not extensions:
             raise KeyError(f"No extensions registered for '{name}'")
         return extensions[0].cls(*args, **kwargs)
-    
+
     def get_all(self, name: str, *args: Any, **kwargs: Any) -> list[Any]:
         """Get instances of all registered extensions for a name."""
         with self._lock:
             extensions = self._extensions.get(name, [])
         return [ext.cls(*args, **kwargs) for ext in extensions]
-    
+
     def get_classes(self, name: str) -> list[type]:
         """Get all registered classes for a name without instantiation."""
         with self._lock:
             extensions = self._extensions.get(name, [])
         return [ext.cls for ext in extensions]
-    
+
     def get_infos(self, name: str) -> list[ExtensionInfo]:
         """Get all extension infos for a name."""
         with self._lock:
             return list(self._extensions.get(name, []))
-    
+
     def has(self, name: str) -> bool:
         """Check if any extensions are registered for the given name."""
         with self._lock:
             return bool(self._extensions.get(name))
-    
+
     def list_extension_points(self) -> list[str]:
         """Return a list of all registered extension points."""
         with self._lock:
             return list(self._extensions.keys())
-    
+
     def count(self, name: str) -> int:
         """Count extensions registered for a name."""
         with self._lock:
             return len(self._extensions.get(name, []))
-    
+
     def clear(self, name: str | None = None) -> None:
         """
         Clear registrations.
-        
+
         Args:
             name: If provided, clear only this extension point.
                   If None, clear all registrations.
@@ -403,26 +403,26 @@ class MultiExtensionManager:
 class LazyExtensionManager:
     """
     Extension manager with lazy module loading.
-    
+
     Extensions are specified as 'module:class' strings and only loaded
     when accessed.
-    
+
     Example:
         >>> LAZY = LazyExtensionManager("lazy")
         >>> LAZY.register_lazy("json", "json:JSONEncoder")
         >>> encoder = LAZY.load("json")  # Imports json module only now
     """
-    
+
     def __init__(self, name: str = "default") -> None:
         self.name = name
         self._lazy_specs: dict[str, str] = {}
         self._loaded: dict[str, type] = {}
         self._lock = threading.RLock()
-    
+
     def register_lazy(self, name: str, spec: str) -> None:
         """
         Register a lazy extension.
-        
+
         Args:
             name: The name to register under.
             spec: The import spec in 'module:class' or 'module.submodule:class' format.
@@ -435,15 +435,15 @@ class LazyExtensionManager:
             self._lazy_specs[name] = spec
             # Clear cached load if re-registering
             self._loaded.pop(name, None)
-    
+
     def _import_class(self, spec: str) -> type:
         """Import a class from a module:class spec."""
         import importlib
-        
+
         module_path, class_name = spec.rsplit(":", 1)
         module = importlib.import_module(module_path)
         return getattr(module, class_name)
-    
+
     def load(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Load and instantiate a lazily registered extension."""
         with self._lock:
@@ -455,7 +455,7 @@ class LazyExtensionManager:
             else:
                 raise KeyError(f"Extension '{name}' not registered in {self.name}")
         return cls(*args, **kwargs)
-    
+
     def get_class(self, name: str) -> type:
         """Get the class without instantiation (triggers import if needed)."""
         with self._lock:
@@ -466,17 +466,17 @@ class LazyExtensionManager:
                 self._loaded[name] = cls
                 return cls
             raise KeyError(f"Extension '{name}' not registered in {self.name}")
-    
+
     def has(self, name: str) -> bool:
         """Check if an extension is registered."""
         with self._lock:
             return name in self._lazy_specs or name in self._loaded
-    
+
     def is_loaded(self, name: str) -> bool:
         """Check if an extension has been loaded (imported)."""
         with self._lock:
             return name in self._loaded
-    
+
     def list_registered(self) -> list[str]:
         """Return all registered extension names."""
         with self._lock:
@@ -491,30 +491,30 @@ class LazyExtensionManager:
 class GlobalRegistry:
     """
     A singleton registry for managing multiple extension managers.
-    
+
     Provides a centralized way to access all extension registries.
     """
-    
+
     _instance: "GlobalRegistry | None" = None
     _lock = threading.Lock()
-    
+
     def __new__(cls) -> "GlobalRegistry":
         with cls._lock:
             if cls._instance is None:
                 cls._instance = super().__new__(cls)
                 cls._instance._managers: dict[str, ExtensionManager] = {}
         return cls._instance
-    
+
     def get_or_create(self, name: str) -> ExtensionManager:
         """Get or create an extension manager by name."""
         if name not in self._managers:
             self._managers[name] = ExtensionManager(name)
         return self._managers[name]
-    
+
     def get(self, name: str) -> ExtensionManager | None:
         """Get an extension manager by name, or None if not found."""
         return self._managers.get(name)
-    
+
     def list_managers(self) -> list[str]:
         """List all registered manager names."""
         return list(self._managers.keys())
@@ -568,7 +568,7 @@ __all__ = [
     "GlobalRegistry",
     # Factory functions
     "create_registry",
-    "create_typed_registry", 
+    "create_typed_registry",
     "create_multi_registry",
     "create_lazy_registry",
     "get_global_registry",

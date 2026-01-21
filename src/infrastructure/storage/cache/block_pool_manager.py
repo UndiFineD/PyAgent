@@ -45,7 +45,7 @@ class Block:
     size_bytes: int = 0
     layer_id: Optional[int] = None
     metadata: dict[str, Any] = field(default_factory=dict)
-    
+
     def touch(self) -> None:
         """Update access time and count."""
         self.last_access = time.time()
@@ -88,7 +88,7 @@ class CacheMetrics:
     current_free: int = 0
     total_blocks: int = 0
     avg_block_age_s: float = 0.0
-    
+
     @property
     def hit_rate(self) -> float:
         """Calculate cache hit rate."""
@@ -99,32 +99,32 @@ class CacheMetrics:
 class KVCacheMetricsCollector:
     """
     Collector for KV cache metrics.
-    
+
     vLLM Pattern: KVCacheMetricsCollector from block_pool.py
     """
-    
+
     def __init__(self, pool: "BlockPool"):
         self.pool = pool
         self._eviction_events: list[EvictionEvent] = []
         self._max_events = 1000
         self._lock = threading.Lock()
-    
+
     def record_eviction(self, event: EvictionEvent) -> None:
         """Record an eviction event."""
         with self._lock:
             self._eviction_events.append(event)
             if len(self._eviction_events) > self._max_events:
                 self._eviction_events = self._eviction_events[-self._max_events:]
-    
+
     def get_metrics(self) -> CacheMetrics:
         """Get current cache metrics."""
         return self.pool.get_metrics()
-    
+
     def get_recent_evictions(self, limit: int = 100) -> list[EvictionEvent]:
         """Get recent eviction events."""
         with self._lock:
             return self._eviction_events[-limit:]
-    
+
     def get_eviction_rate(self, window_seconds: float = 60.0) -> float:
         """Get eviction rate per second over window."""
         with self._lock:
@@ -137,21 +137,21 @@ class KVCacheMetricsCollector:
 class ARCPolicy:
     """
     Adaptive Replacement Cache eviction policy.
-    
+
     Beyond vLLM: ARC balances recency (LRU) and frequency (LFU).
-    
+
     T1: Recent items (LRU of items seen once)
     T2: Frequent items (LRU of items seen more than once)
     B1: Ghost entries for recently evicted from T1
     B2: Ghost entries for recently evicted from T2
-    
+
     Parameter p: Target size of T1 (adapts based on hit patterns)
     """
-    
+
     def __init__(self, capacity: int, p_initial: float = 0.5):
         self.capacity = capacity
         self.p = p_initial * capacity  # Target size of T1
-        
+
         # T1: LRU of recently used (once)
         self._t1: OrderedDict[int, Block] = OrderedDict()
         # T2: LRU of frequently used (more than once)
@@ -160,16 +160,16 @@ class ARCPolicy:
         self._b1: OrderedDict[int, None] = OrderedDict()
         # B2: Ghost entries from T2
         self._b2: OrderedDict[int, None] = OrderedDict()
-        
+
         self._lock = threading.Lock()
-    
+
     def access(self, block: Block) -> bool:
         """
         Record access to block. Returns True if hit, False if miss.
         """
         with self._lock:
             block_id = block.block_id
-            
+
             # Case 1: Hit in T1
             if block_id in self._t1:
                 # Move to T2 (now frequent)
@@ -177,14 +177,14 @@ class ARCPolicy:
                 self._t2[block_id] = block
                 block.touch()
                 return True
-            
+
             # Case 2: Hit in T2
             if block_id in self._t2:
                 # Move to MRU position
                 self._t2.move_to_end(block_id)
                 block.touch()
                 return True
-            
+
             # Case 3: Miss - check ghosts
             if block_id in self._b1:
                 # Adapt: increase p (favor recency)
@@ -196,9 +196,9 @@ class ARCPolicy:
                 delta = max(1, len(self._b1) // max(1, len(self._b2)))
                 self.p = max(0, self.p - delta)
                 self._b2.pop(block_id)
-            
+
             return False
-    
+
     def insert(self, block: Block) -> Optional[int]:
         """
         Insert block into cache. Returns evicted block_id if needed.
@@ -206,17 +206,17 @@ class ARCPolicy:
         with self._lock:
             block_id = block.block_id
             evicted_id = None
-            
+
             # Check if we need to evict
             if len(self._t1) + len(self._t2) >= self.capacity:
                 evicted_id = self._evict()
-            
+
             # Insert into T1
             self._t1[block_id] = block
             block.touch()
-            
+
             return evicted_id
-    
+
     def _evict(self) -> Optional[int]:
         """Evict a block based on ARC policy."""
         # Choose whether to evict from T1 or T2
@@ -236,15 +236,15 @@ class ARCPolicy:
             if len(self._b2) > self.capacity:
                 self._b2.popitem(last=False)
             return evicted_id
-        
+
         return None
-    
+
     def remove(self, block_id: int) -> None:
         """Remove block from cache."""
         with self._lock:
             self._t1.pop(block_id, None)
             self._t2.pop(block_id, None)
-    
+
     def get_stats(self) -> dict[str, int]:
         """Get ARC statistics."""
         with self._lock:
@@ -261,13 +261,13 @@ class ARCPolicy:
 class BlockPool:
     """
     Block pool with LRU/ARC eviction and prefix caching.
-    
+
     vLLM Pattern: BlockPool from v1/core/block_pool.py
     """
-    
+
     def __init__(self, config: Optional[BlockPoolConfig] = None):
         self.config = config or BlockPoolConfig()
-        
+
         # Initialize blocks
         self._blocks: dict[int, Block] = {}
         for i in range(self.config.num_blocks):
@@ -276,13 +276,13 @@ class BlockPool:
                 state=BlockState.FREE,
                 size_bytes=self.config.block_size_bytes
             )
-        
+
         # Free block queue (LIFO for cache locality)
         self._free_queue: list[int] = list(range(self.config.num_blocks))
-        
+
         # Prefix cache: hash -> block_id
         self._cached_block_hash_to_block: dict[int, int] = {}
-        
+
         # Eviction policy
         if self.config.eviction_policy == "arc":
             self._arc = ARCPolicy(
@@ -291,20 +291,20 @@ class BlockPool:
             )
         else:
             self._arc = None
-        
+
         # LRU order for cached blocks (if not using ARC)
         self._lru_order: OrderedDict[int, float] = OrderedDict()
-        
+
         # Metrics
         self._metrics = CacheMetrics(total_blocks=self.config.num_blocks)
         self._metrics_collector = KVCacheMetricsCollector(self)
-        
+
         self._lock = threading.RLock()
-    
+
     def get_new_blocks(self, num_blocks: int) -> list[int]:
         """
         Allocate new blocks.
-        
+
         vLLM Pattern: BlockPool.get_new_blocks()
         """
         with self._lock:
@@ -312,12 +312,12 @@ class BlockPool:
                 # Try to evict cached blocks
                 needed = num_blocks - len(self._free_queue)
                 self._evict_cached_blocks(needed)
-            
+
             if len(self._free_queue) < num_blocks:
                 raise RuntimeError(
                     f"Not enough free blocks: need {num_blocks}, have {len(self._free_queue)}"
                 )
-            
+
             allocated: list[int] = []
             for _ in range(num_blocks):
                 block_id = self._free_queue.pop()
@@ -326,66 +326,66 @@ class BlockPool:
                 block.ref_count = 1
                 block.touch()
                 allocated.append(block_id)
-            
+
             self._metrics.allocations += num_blocks
             self._update_metrics()
-            
+
             return allocated
-    
+
     def free_blocks(self, block_ids: list[int]) -> None:
         """
         Free allocated blocks.
-        
+
         vLLM Pattern: BlockPool.free_blocks()
         """
         with self._lock:
             for block_id in block_ids:
                 if block_id not in self._blocks:
                     continue
-                
+
                 block = self._blocks[block_id]
-                
+
                 if block.state == BlockState.PINNED:
                     continue  # Cannot free pinned blocks
-                
+
                 block.ref_count = max(0, block.ref_count - 1)
-                
+
                 if block.ref_count == 0:
                     block.state = BlockState.FREE
                     block.block_hash = None
-                    
+
                     # Remove from caches
                     if block.block_hash and block.block_hash in self._cached_block_hash_to_block:
                         del self._cached_block_hash_to_block[block.block_hash]
-                    
+
                     if self._arc:
                         self._arc.remove(block_id)
                     else:
                         self._lru_order.pop(block_id, None)
-                    
+
                     self._free_queue.append(block_id)
-            
+
             self._metrics.frees += len(block_ids)
             self._update_metrics()
-    
+
     def cache_blocks(self, block_ids: list[int], block_hashes: list[int]) -> None:
         """
         Mark blocks as cached with content hashes.
-        
+
         vLLM Pattern: BlockPool.cache_blocks()
         """
         with self._lock:
             for block_id, block_hash in zip(block_ids, block_hashes):
                 if block_id not in self._blocks:
                     continue
-                
+
                 block = self._blocks[block_id]
                 block.state = BlockState.CACHED
                 block.block_hash = block_hash
-                
+
                 # Add to prefix cache
                 self._cached_block_hash_to_block[block_hash] = block_id
-                
+
                 # Add to eviction policy
                 if self._arc:
                     evicted = self._arc.insert(block)
@@ -393,52 +393,52 @@ class BlockPool:
                         self._handle_eviction(evicted, "capacity")
                 else:
                     self._lru_order[block_id] = time.time()
-            
+
             self._update_metrics()
-    
+
     def touch(self, block_ids: list[int]) -> None:
         """
         Touch blocks to update recency.
-        
+
         vLLM Pattern: BlockPool.touch()
         """
         with self._lock:
             for block_id in block_ids:
                 if block_id not in self._blocks:
                     continue
-                
+
                 block = self._blocks[block_id]
                 block.touch()
-                
+
                 if self._arc:
                     self._arc.access(block)
                 elif block_id in self._lru_order:
                     self._lru_order.move_to_end(block_id)
-    
+
     def lookup_cached_block(self, block_hash: int) -> Optional[int]:
         """
         Look up a cached block by hash.
-        
+
         vLLM Pattern: cached_block_hash_to_block lookup
         """
         with self._lock:
             block_id = self._cached_block_hash_to_block.get(block_hash)
-            
+
             if block_id is not None:
                 self._metrics.hits += 1
                 self.touch([block_id])
             else:
                 self._metrics.misses += 1
-            
+
             return block_id
-    
+
     def pin_blocks(self, block_ids: list[int]) -> None:
         """Pin blocks to prevent eviction."""
         with self._lock:
             for block_id in block_ids:
                 if block_id in self._blocks:
                     self._blocks[block_id].state = BlockState.PINNED
-    
+
     def unpin_blocks(self, block_ids: list[int]) -> None:
         """Unpin blocks to allow eviction."""
         with self._lock:
@@ -447,11 +447,11 @@ class BlockPool:
                     block = self._blocks[block_id]
                     if block.state == BlockState.PINNED:
                         block.state = BlockState.CACHED
-    
+
     def _evict_cached_blocks(self, num_needed: int) -> int:
         """Evict cached blocks to free space."""
         evicted = 0
-        
+
         if self._arc:
             # Use ARC policy
             for _ in range(num_needed):
@@ -467,19 +467,19 @@ class BlockPool:
             while evicted < num_needed and self._lru_order:
                 block_id, _ = self._lru_order.popitem(last=False)
                 block = self._blocks[block_id]
-                
+
                 if block.state == BlockState.PINNED:
                     continue
-                
+
                 self._handle_eviction(block_id, "capacity")
                 evicted += 1
-        
+
         return evicted
-    
+
     def _handle_eviction(self, block_id: int, reason: str) -> None:
         """Handle block eviction."""
         block = self._blocks[block_id]
-        
+
         # Record event
         event = EvictionEvent(
             block_id=block_id,
@@ -490,50 +490,50 @@ class BlockPool:
             access_count=block.access_count
         )
         self._metrics_collector.record_eviction(event)
-        
+
         # Remove from prefix cache
         if block.block_hash and block.block_hash in self._cached_block_hash_to_block:
             del self._cached_block_hash_to_block[block.block_hash]
-        
+
         # Reset block
         block.state = BlockState.FREE
         block.block_hash = None
         block.ref_count = 0
         block.access_count = 0
-        
+
         self._free_queue.append(block_id)
         self._metrics.evictions += 1
-    
+
     def _update_metrics(self) -> None:
         """Update current metrics."""
         free_count = sum(1 for b in self._blocks.values() if b.state == BlockState.FREE)
         cached_count = sum(1 for b in self._blocks.values() if b.state == BlockState.CACHED)
         allocated_count = sum(1 for b in self._blocks.values() if b.state == BlockState.ALLOCATED)
-        
+
         self._metrics.current_free = free_count
         self._metrics.current_cached = cached_count
         self._metrics.current_allocated = allocated_count
-        
+
         # Calculate average age
         now = time.time()
         ages = [now - b.last_access for b in self._blocks.values() if b.state != BlockState.FREE]
         self._metrics.avg_block_age_s = sum(ages) / len(ages) if ages else 0.0
-    
+
     def get_metrics(self) -> CacheMetrics:
         """Get current metrics."""
         with self._lock:
             self._update_metrics()
             return self._metrics
-    
+
     def get_metrics_collector(self) -> KVCacheMetricsCollector:
         """Get the metrics collector."""
         return self._metrics_collector
-    
+
     def get_num_free_blocks(self) -> int:
         """Get count of free blocks."""
         with self._lock:
             return len(self._free_queue)
-    
+
     def get_block(self, block_id: int) -> Optional[Block]:
         """Get block by ID."""
         return self._blocks.get(block_id)

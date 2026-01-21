@@ -16,7 +16,7 @@ class RequestLifecycle:
     """
     Enhanced request lifecycle tracking.
     """
-    
+
     def __init__(
         self,
         request_id: str,
@@ -28,7 +28,7 @@ class RequestLifecycle:
         self.prompt_tokens = prompt_tokens
         self.max_tokens = max_tokens
         self.lora_adapter = lora_adapter
-        
+
         self._status = RequestStatus.WAITING
         self._events: List[Tuple[float, str, Any]] = []
         self._state_times: Dict[RequestStatus, float] = {}
@@ -38,61 +38,61 @@ class RequestLifecycle:
         self._tokens_generated = 0
         self._preemption_count = 0
         self._lock = threading.Lock()
-        
+
         self._record_event("created", {
             'prompt_tokens': prompt_tokens,
             'max_tokens': max_tokens,
             'lora_adapter': lora_adapter,
         })
-    
+
     def _record_event(self, event_type: str, data: Any = None) -> None:
         """Record an event."""
         self._events.append((time.time(), event_type, data))
-    
+
     @property
     def status(self) -> RequestStatus:
         """Get current status."""
         with self._lock:
             return self._status
-    
+
     def transition_to(self, new_status: RequestStatus) -> None:
         """Transition to a new status."""
         with self._lock:
             now = time.time()
             old_status = self._status
-            
+
             # Record time spent in old status
             if old_status in self._state_times:
                 self._state_times[old_status] = now - self._state_times.get(
                     f"_start_{old_status}", self._created_time
                 )
-            
+
             self._status = new_status
             self._state_times[f"_start_{new_status}"] = now
-            
+
             if new_status == RequestStatus.PREEMPTED:
                 self._preemption_count += 1
-            
+
             self._record_event("state_transition", {
                 'from': old_status.name,
                 'to': new_status.name,
             })
-    
+
     def record_token(self) -> None:
         """Record a generated token."""
         with self._lock:
             now = time.time()
             self._tokens_generated += 1
-            
+
             if self._first_token_time is None:
                 self._first_token_time = now
                 self._record_event("first_token", {'time': now})
-    
+
     def finish(self, reason: str = "stopped") -> None:
         """Mark request as finished."""
         with self._lock:
             self._finish_time = time.time()
-            
+
             if reason == "stopped":
                 new_status = RequestStatus.FINISHED_STOPPED
             elif reason == "length":
@@ -101,13 +101,13 @@ class RequestLifecycle:
                 new_status = RequestStatus.FINISHED_ABORTED
             else:
                 new_status = RequestStatus.FINISHED_STOPPED
-            
+
             self._status = new_status
             self._record_event("finished", {
                 'reason': reason,
                 'tokens_generated': self._tokens_generated,
             })
-    
+
     @property
     def time_to_first_token(self) -> Optional[float]:
         """Get TTFT in seconds."""
@@ -115,7 +115,7 @@ class RequestLifecycle:
             if self._first_token_time:
                 return self._first_token_time - self._created_time
             return None
-    
+
     @property
     def total_latency(self) -> Optional[float]:
         """Get total latency in seconds."""
@@ -123,13 +123,13 @@ class RequestLifecycle:
             if self._finish_time:
                 return self._finish_time - self._created_time
             return None
-    
+
     @property
     def tokens_generated(self) -> int:
         """Get tokens generated."""
         with self._lock:
             return self._tokens_generated
-    
+
     @property
     def inter_token_latency(self) -> Optional[float]:
         """Get average inter-token latency."""
@@ -140,7 +140,7 @@ class RequestLifecycle:
                 return None
             decode_time = self._finish_time - self._first_token_time
             return decode_time / (self._tokens_generated - 1)
-    
+
     @property
     def throughput(self) -> Optional[float]:
         """Get tokens per second."""
@@ -148,12 +148,12 @@ class RequestLifecycle:
         if latency and latency > 0:
             return self._tokens_generated / latency
         return None
-    
+
     def get_events(self) -> List[Tuple[float, str, Any]]:
         """Get all events."""
         with self._lock:
             return list(self._events)
-    
+
     def get_timing_breakdown(self) -> Dict[str, float]:
         """Get timing breakdown by state."""
         with self._lock:
@@ -161,26 +161,26 @@ class RequestLifecycle:
             for status in RequestStatus:
                 if status in self._state_times:
                     result[status.name] = self._state_times[status]
-            
+
             if self._first_token_time:
                 result['time_to_first_token'] = (
                     self._first_token_time - self._created_time
                 )
             if self._finish_time:
                 result['total_latency'] = self._finish_time - self._created_time
-            
+
             return result
 
 
 class RequestLifecycleManager:
     """Manager for request lifecycles."""
-    
+
     def __init__(self, max_completed: int = 1000):
         self._active: Dict[str, RequestLifecycle] = {}
         self._completed: List[RequestLifecycle] = []
         self._max_completed = max_completed
         self._lock = threading.Lock()
-    
+
     def create(
         self,
         request_id: str,
@@ -198,12 +198,12 @@ class RequestLifecycleManager:
         with self._lock:
             self._active[request_id] = lifecycle
         return lifecycle
-    
+
     def get(self, request_id: str) -> Optional[RequestLifecycle]:
         """Get a request lifecycle."""
         with self._lock:
             return self._active.get(request_id)
-    
+
     def finish(self, request_id: str, reason: str = "stopped") -> None:
         """Finish a request."""
         with self._lock:
@@ -213,23 +213,23 @@ class RequestLifecycleManager:
                 self._completed.append(lifecycle)
                 if len(self._completed) > self._max_completed:
                     self._completed.pop(0)
-    
+
     def get_active_count(self) -> int:
         """Get number of active requests."""
         with self._lock:
             return len(self._active)
-    
+
     def get_completed_count(self) -> int:
         """Get number of completed requests."""
         with self._lock:
             return len(self._completed)
-    
+
     def get_aggregate_stats(self) -> Dict[str, float]:
         """Get aggregate statistics from completed requests."""
         with self._lock:
             if not self._completed:
                 return {}
-            
+
             ttft_values = [
                 r.time_to_first_token
                 for r in self._completed
@@ -250,7 +250,7 @@ class RequestLifecycleManager:
                 for r in self._completed
                 if r.throughput is not None
             ]
-            
+
             stats = {}
             if ttft_values:
                 stats['avg_ttft'] = sum(ttft_values) / len(ttft_values)
@@ -263,5 +263,5 @@ class RequestLifecycleManager:
                 stats['avg_latency'] = sum(latency_values) / len(latency_values)
             if throughput_values:
                 stats['avg_throughput'] = sum(throughput_values) / len(throughput_values)
-            
+
             return stats

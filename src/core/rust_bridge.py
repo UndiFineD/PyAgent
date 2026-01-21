@@ -25,7 +25,7 @@ class RustBridge:
         """Audited metrics calculation."""
         if not content or not isinstance(content, str):
             return {}
-            
+
         if not RUST_AVAILABLE or not hasattr(rc, "calculate_metrics_rust"):
             return {}
         try:
@@ -61,7 +61,7 @@ class RustBridge:
         """Audited parallel text replacement."""
         if not replacements:
             return content
-            
+
         if not RUST_AVAILABLE or not hasattr(rc, "bulk_replace_rust"):
             # Fallback
             result = content

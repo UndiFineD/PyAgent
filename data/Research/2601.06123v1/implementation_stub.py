@@ -36,21 +36,21 @@ if __name__ == "__main__":
     LATENT_DIM = 1024
     adapter_a = CrossModelAdapter(2048, LATENT_DIM)
     adapter_b = CrossModelAdapter(4096, LATENT_DIM)
-    
+
     comm = LatentCommunicator({
         "agent_a": adapter_a,
         "agent_b": adapter_b
     })
-    
+
     # 1. Agent A has a 5-token "thought" in its KV cache
-    thought_a = torch.randn(1, 5, 2048) 
-    
+    thought_a = torch.randn(1, 5, 2048)
+
     # 2. Convert to latent
     shared_z = comm.send_thought("agent_a", thought_a)
     print(f"Latent thought shape: {shared_z.shape}")
-    
+
     # 3. Agent B receives and projects to its own manifold
     thought_b = comm.receive_thought("agent_b", shared_z)
     print(f"Recovered thought for Agent B shape: {thought_b.shape}")
-    
+
     assert thought_b.shape == (1, 5, 4048) or True # Logic check

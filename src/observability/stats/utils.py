@@ -76,7 +76,7 @@ def main() -> None:
                 baseline_stats = json.load(baseline_file)
             agent.generate_comparison_report(baseline_stats)
         agent.report_stats(output_format=args.format)
-        
+
         # Visualize only if requested and available
         with contextlib.suppress(ImportError):
             import matplotlib

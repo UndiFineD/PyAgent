@@ -6,7 +6,7 @@ Decomposed into types, base, and specific client implementation modules.
 """
 
 from src.infrastructure.engine.engine_client.types import (
-    ClientMode, WorkerState, EngineClientConfig, 
+    ClientMode, WorkerState, EngineClientConfig,
     SchedulerOutput, EngineOutput, WorkerInfo
 )
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase

@@ -19,14 +19,14 @@ logger = logging.getLogger(__name__)
 class FlashAttentionBackend(AttentionBackend[None]):
     """
     FlashAttention-2 backend.
-    
+
     Optimized attention using tiling and recomputation.
     """
-    
+
     @staticmethod
     def get_name() -> str:
         return "flash_attn"
-    
+
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -48,7 +48,7 @@ class FlashAttentionBackend(AttentionBackend[None]):
             best_for_long_seqs=True,
             memory_efficient=True,
         )
-    
+
     def forward(
         self,
         query: Any,
@@ -66,15 +66,15 @@ class FlashAttentionBackend(AttentionBackend[None]):
             return TorchSDPABackend().forward(
                 query, key, value, kv_cache, metadata, scale
             )
-        
+
         # FlashAttention expects [batch, seqlen, heads, head_dim]
         # Reshape accordingly
         batch_seq, num_heads, head_dim = query.shape
-        
+
         q = query.unsqueeze(0)  # Add batch dim
         k = key.unsqueeze(0)
         v = value.unsqueeze(0)
-        
+
         # Compute
         output = flash_attn_func(
             q, k, v,
@@ -83,5 +83,5 @@ class FlashAttentionBackend(AttentionBackend[None]):
             window_size=(metadata.sliding_window, metadata.sliding_window)
             if metadata.sliding_window else (-1, -1),
         )
-        
+
         return output.squeeze(0)

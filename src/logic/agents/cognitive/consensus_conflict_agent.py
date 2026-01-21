@@ -23,7 +23,7 @@ __version__ = VERSION
 
 class ConsensusConflictAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements 
+    Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
     and resolves conflicts between agents in the swarm using voting systems.
     """
 

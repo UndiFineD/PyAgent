@@ -14,7 +14,7 @@ class RemoteNeuralSynapse:
     Manages the 'synaptic' firing of tasks and agents to remote peers.
     Implements the transport layer for Voyager Phase 1.1 using ZMQ.
     """
-    
+
     def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None):
         self.fleet_manager = fleet_manager
         self.engine = TeleportationEngine()
@@ -46,22 +46,22 @@ class RemoteNeuralSynapse:
         """
         msg_type = message.get("type", "unknown")
         logger.info(f"Synapse: Incoming {msg_type} from {message.get('sender_id', 'unknown')}")
-        
+
         if msg_type == "teleport":
             encoded_blob = message.get("agent_blob")
             if encoded_blob:
                 blob = self.engine.decode_from_transport(encoded_blob)
                 state = self.engine.restore_agent_state(blob)
-                
+
                 # Logic to 'spawn' the agent in the local fleet
                 # if hasattr(self.fleet_manager, "assimilate_agent"):
                 #     await self.fleet_manager.assimilate_agent(state)
-                
+
                 return {"status": "success", "message": f"Agent {state.get('name')} assimilated."}
-        
+
         elif msg_type == "ping":
             return {"status": "pong", "version": "Phase-319"}
-            
+
         return {"status": "error", "message": "Unsupported synapse type."}
 
     async def teleport_agent_to_peer(self, agent: Any, peer_address: str, transport_port: int) -> bool:
@@ -74,14 +74,14 @@ class RemoteNeuralSynapse:
             "agent_blob": self.engine.encode_for_transport(blob),
             "sender_id": self.fleet_manager.fleet_id if hasattr(self.fleet_manager, 'fleet_id') else "unknown"
         }
-        
+
         logger.info(f"Synapse: Firing synaptic teleport of {agent.name} to {peer_address}:{transport_port}...")
-        
+
         response = await self.transport.send_to_peer(peer_address, transport_port, payload)
         if response and response.get("status") == "success":
             logger.info(f"Synapse: Teleportation confirmed by peer: {response.get('message')}")
             return True
-            
+
         logger.error(f"Synapse: Teleportation failed or unconfirmed: {response}")
         return False
 
@@ -93,12 +93,12 @@ class RemoteNeuralSynapse:
         if not self.discovery_node:
             logger.error("Synapse: Cannot teleport by name - discovery_node not initialized.")
             return False
-            
+
         target = self.discovery_node.resolve_synapse_address(peer_name)
         if not target:
             logger.error(f"Synapse: Could not resolve peer name '{peer_name}' on local network.")
             return False
-            
+
         peer_ip, peer_port = target
         return await self.teleport_agent_to_peer(agent, peer_ip, peer_port)
 

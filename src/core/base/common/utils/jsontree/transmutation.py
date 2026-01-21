@@ -12,7 +12,7 @@ def json_flatten(
     Flatten a nested JSON structure to a single-level dict with dot-notation keys.
     """
     result: dict[str, _T] = {}
-    
+
     def _flatten(obj: Any, prefix: str = "") -> None:
         if isinstance(obj, dict):
             for k, v in obj.items():
@@ -27,7 +27,7 @@ def json_flatten(
                 _flatten(v, new_key)
         else:
             result[prefix] = obj
-    
+
     _flatten(value)
     return result
 
@@ -40,14 +40,14 @@ def json_unflatten(
     Reconstruct a nested JSON structure from a flattened dict.
     """
     result: dict[str, Any] = {}
-    
+
     for key, value in flat.items():
         parts = _parse_path(key, separator)
         current = result
-        
+
         for i, part in enumerate(parts[:-1]):
             next_part = parts[i + 1]
-            
+
             if isinstance(part, int):
                 while len(current) <= part:
                     current.append(None)
@@ -58,7 +58,7 @@ def json_unflatten(
                 if part not in current:
                     current[part] = [] if isinstance(next_part, int) else {}
                 current = current[part]
-        
+
         final_part = parts[-1]
         if isinstance(final_part, int):
             while len(current) <= final_part:
@@ -66,5 +66,5 @@ def json_unflatten(
             current[final_part] = value
         else:
             current[final_part] = value
-    
+
     return result

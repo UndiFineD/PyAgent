@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 class AsyncHTTPMixin:
     """Mixin providing asynchronous HTTP methods."""
-    
+
     async def async_get_response(
         self: HTTPConnection,
         url: str,
@@ -17,17 +17,17 @@ class AsyncHTTPMixin:
     ) -> Any:
         """Make an async GET request and return the response object."""
         self._validate_http_url(url)
-        
+
         client = await self.get_async_client()
         extra_headers = extra_headers or {}
-        
+
         return client.get(
             url,
             headers=self._headers(**extra_headers),
             timeout=timeout,
             allow_redirects=allow_redirects,
         )
-    
+
     async def async_get_bytes(
         self: HTTPConnection,
         url: str,
@@ -41,7 +41,7 @@ class AsyncHTTPMixin:
         ) as r:
             r.raise_for_status()
             return await r.read()
-    
+
     async def async_get_text(
         self: HTTPConnection,
         url: str,
@@ -53,7 +53,7 @@ class AsyncHTTPMixin:
         async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
             return await r.text(encoding=encoding)
-    
+
     async def async_get_json(
         self: HTTPConnection,
         url: str,
@@ -64,7 +64,7 @@ class AsyncHTTPMixin:
         async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
             return await r.json()
-    
+
     async def async_post_json(
         self: HTTPConnection,
         url: str,
@@ -75,10 +75,10 @@ class AsyncHTTPMixin:
     ) -> Any:
         """Async POST JSON data and return parsed JSON response."""
         self._validate_http_url(url)
-        
+
         client = await self.get_async_client()
         extra_headers = extra_headers or {}
-        
+
         async with client.post(
             url,
             json=data,
@@ -87,7 +87,7 @@ class AsyncHTTPMixin:
         ) as r:
             r.raise_for_status()
             return await r.json()
-    
+
     async def async_download_file(
         self: HTTPConnection,
         url: str,
@@ -100,18 +100,18 @@ class AsyncHTTPMixin:
         """Async download a file from URL to local path."""
         save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
-            
+
             total_size = int(r.headers.get("content-length", 0)) or None
             downloaded = 0
-            
+
             with save_path.open("wb") as f:
                 async for chunk in r.content.iter_chunked(chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)
                     if progress_callback:
                         progress_callback(downloaded, total_size)
-        
+
         return save_path

@@ -16,19 +16,19 @@ from src.interface.slash_commands.core import CommandContext, CommandResult
 def cmd_cache(ctx: CommandContext) -> CommandResult:
     """Get cache statistics."""
     cache_stats = {}
-    
+
     # Check for common caches
     try:
         from src.observability.logging.enhanced_logger import get_dedup_cache_info
         cache_stats["logger_dedup"] = get_dedup_cache_info()
     except ImportError:
         pass
-    
+
     total_entries = sum(
-        info.get("currsize", 0) if isinstance(info, dict) else 0 
+        info.get("currsize", 0) if isinstance(info, dict) else 0
         for info in cache_stats.values()
     )
-    
+
     return CommandResult.ok(
         output=f"[Caches: {len(cache_stats)} active, {total_entries} entries]",
         data={
@@ -52,11 +52,11 @@ def cmd_counters(ctx: CommandContext) -> CommandResult:
             RequestCounter,
             CacheCounter,
         )
-        
+
         # This would typically access global counter instances
         # For now, show available counter types
         counter_types = ["RequestCounter", "CacheCounter", "PoolCounter", "QueueCounter"]
-        
+
         return CommandResult.ok(
             output=f"[Counter types: {', '.join(counter_types)}]",
             data={"types": counter_types},
@@ -83,11 +83,11 @@ def cmd_telemetry(ctx: CommandContext) -> CommandResult:
             is_usage_stats_enabled,
             get_platform_summary,
         )
-        
+
         provider = detect_cloud_provider()
         enabled = is_usage_stats_enabled()
         summary = get_platform_summary()
-        
+
         return CommandResult.ok(
             output=f"[Provider: {provider}, Stats: {'enabled' if enabled else 'disabled'}]",
             data={
@@ -114,9 +114,9 @@ def cmd_logs(ctx: CommandContext) -> CommandResult:
     """Get log deduplication statistics."""
     try:
         from src.observability.logging.enhanced_logger import get_dedup_cache_info
-        
+
         info = get_dedup_cache_info()
-        
+
         return CommandResult.ok(
             output=f"[Log dedup caches: {len(info)} levels]",
             data={"caches": info},

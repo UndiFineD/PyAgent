@@ -19,14 +19,14 @@ logger = logging.getLogger(__name__)
 class FlashInferBackend(AttentionBackend[None]):
     """
     FlashInfer backend for decode-focused attention.
-    
+
     Optimized for single-token decode with PagedAttention.
     """
-    
+
     @staticmethod
     def get_name() -> str:
         return "flashinfer"
-    
+
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -47,7 +47,7 @@ class FlashInferBackend(AttentionBackend[None]):
             best_for_long_seqs=True,
             memory_efficient=True,
         )
-    
+
     def forward(
         self,
         query: Any,
@@ -65,7 +65,7 @@ class FlashInferBackend(AttentionBackend[None]):
             return TorchSDPABackend().forward(
                 query, key, value, kv_cache, metadata, scale
             )
-        
+
         # FlashInfer-specific implementation would go here
         # For now, fall back to SDPA
         return TorchSDPABackend().forward(

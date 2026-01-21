@@ -61,7 +61,7 @@ class RejectionConfig:
     max_spec_len: int = 128  # Maximum speculative tokens
     cache_probabilities: bool = True  # Cache intermediate probabilities
     streaming_mode: bool = False  # Enable streaming verification
-    
+
     def __post_init__(self) -> None:
         if self.temperature <= 0:
             raise ValueError(f"Temperature must be positive, got {self.temperature}")
@@ -78,14 +78,14 @@ class AcceptanceStats:
     total_bonus: int = 0
     position_acceptance: list[int] = field(default_factory=list)
     position_proposals: list[int] = field(default_factory=list)
-    
+
     @property
     def acceptance_rate(self) -> float:
         """Overall acceptance rate."""
         if self.total_proposals == 0:
             return 0.0
         return self.total_accepted / self.total_proposals
-    
+
     @property
     def position_rates(self) -> list[float]:
         """Acceptance rate per position."""
@@ -93,14 +93,14 @@ class AcceptanceStats:
             a / p if p > 0 else 0.0
             for a, p in zip(self.position_acceptance, self.position_proposals)
         ]
-    
+
     def update(self, accepted: int, proposed: int, recovered: int = 0, bonus: int = 0) -> None:
         """Update statistics with new batch."""
         self.total_proposals += proposed
         self.total_accepted += accepted
         self.total_recovered += recovered
         self.total_bonus += bonus
-    
+
     def update_position(self, position: int, accepted: bool) -> None:
         """Update position-specific statistics."""
         while len(self.position_acceptance) <= position:
@@ -109,7 +109,7 @@ class AcceptanceStats:
         self.position_proposals[position] += 1
         if accepted:
             self.position_acceptance[position] += 1
-    
+
     def reset(self) -> None:
         """Reset all statistics."""
         self.total_proposals = 0
@@ -129,7 +129,7 @@ class RejectionOutput:
     num_accepted: int
     num_recovered: int
     acceptance_mask: list[bool]     # Per-position acceptance mask
-    
+
     @property
     def all_tokens(self) -> list[int]:
         """All output tokens in order."""
@@ -137,7 +137,7 @@ class RejectionOutput:
         if self.bonus_token is not None:
             tokens.append(self.bonus_token)
         return tokens
-    
+
     @property
     def total_tokens(self) -> int:
         """Total number of tokens generated."""
@@ -147,10 +147,10 @@ class RejectionOutput:
 @runtime_checkable
 class ProbabilityProvider(Protocol):
     """Protocol for providing probability distributions."""
-    
+
     def get_target_probs(self, token_indices: list[int]) -> NDArray[np.float32]:
         """Get target model probabilities for tokens."""
-    
+
     def get_draft_probs(self, token_indices: list[int]) -> NDArray[np.float32]:
         """Get draft model probabilities for tokens."""
 
@@ -158,25 +158,25 @@ class ProbabilityProvider(Protocol):
 class RejectionSampler:
     """
     Implements rejection sampling for speculative decoding verification.
-    
+
     The algorithm works as follows:
     1. For each draft token at position i:
        - Accept with probability min(1, p_target(x) / p_draft(x))
        - If rejected, resample from adjusted distribution: max(0, p_target - p_draft)
     2. If all drafts accepted, sample bonus token from target
-    
+
     Beyond vLLM innovations:
     - Multiple rejection strategies (strict, lenient, adaptive)
     - Batch recovery for efficiency
     - Streaming verification for low latency
     - Position-aware acceptance statistics
     """
-    
+
     def __init__(self, config: RejectionConfig | None = None):
         self.config = config or RejectionConfig()
         self.stats = AcceptanceStats()
         self._prob_cache: dict[tuple[int, ...], NDArray[np.float32]] = {}
-    
+
     def verify_and_sample(
         self,
         draft_tokens: list[int],
@@ -187,14 +187,14 @@ class RejectionSampler:
     ) -> RejectionOutput:
         """
         Verify draft tokens against target and sample output.
-        
+
         Args:
             draft_tokens: Proposed draft token IDs
             draft_probs: Draft model probabilities [num_drafts, vocab_size]
             target_probs: Target model probabilities [num_drafts, vocab_size]
             bonus_probs: Target probabilities for bonus token [vocab_size]
             random_numbers: Pre-generated random numbers for reproducibility
-            
+
         Returns:
             RejectionOutput with accepted, recovered, and bonus tokens
         """
@@ -207,23 +207,23 @@ class RejectionSampler:
                 num_recovered=0,
                 acceptance_mask=[],
             )
-        
+
         num_drafts = len(draft_tokens)
         if random_numbers is None:
             random_numbers = np.random.random(num_drafts + 1).astype(np.float32)
-        
+
         # Use Rust acceleration if available
         if HAS_RUST and hasattr(rust_core, 'rejection_sample_verify_rust'):
             return self._verify_rust(
-                draft_tokens, draft_probs, target_probs, 
+                draft_tokens, draft_probs, target_probs,
                 bonus_probs, random_numbers
             )
-        
+
         return self._verify_python(
             draft_tokens, draft_probs, target_probs,
             bonus_probs, random_numbers
         )
-    
+
     def _verify_python(
         self,
         draft_tokens: list[int],
@@ -236,17 +236,17 @@ class RejectionSampler:
         accepted_tokens: list[int] = []
         recovered_tokens: list[int] = []
         acceptance_mask: list[bool] = []
-        
+
         num_drafts = len(draft_tokens)
         first_rejection_idx = num_drafts  # Index of first rejection
-        
+
         for i, token in enumerate(draft_tokens):
             p_target = target_probs[i, token]
             p_draft = draft_probs[i, token]
-            
+
             # Compute acceptance probability based on strategy
             accept_prob = self._compute_acceptance_prob(p_target, p_draft)
-            
+
             # Accept or reject
             if random_numbers[i] < accept_prob:
                 accepted_tokens.append(token)
@@ -257,7 +257,7 @@ class RejectionSampler:
                 acceptance_mask.append(False)
                 self.stats.update_position(i, False)
                 break
-        
+
         # Handle recovery if we had a rejection
         if first_rejection_idx < num_drafts:
             if self.config.recovery_mode == RecoveryMode.RESAMPLE:
@@ -272,12 +272,12 @@ class RejectionSampler:
             elif self.config.recovery_mode == RecoveryMode.FALLBACK:
                 # Greedy from target
                 recovered_tokens.append(int(np.argmax(target_probs[first_rejection_idx])))
-        
+
         # Bonus token if all accepted
         bonus_token = None
         if first_rejection_idx == num_drafts and bonus_probs is not None:
             bonus_token = self._sample_bonus(bonus_probs, random_numbers[-1])
-        
+
         # Update stats
         self.stats.update(
             accepted=len(accepted_tokens),
@@ -285,7 +285,7 @@ class RejectionSampler:
             recovered=len(recovered_tokens),
             bonus=1 if bonus_token is not None else 0,
         )
-        
+
         return RejectionOutput(
             accepted_tokens=accepted_tokens,
             recovered_tokens=recovered_tokens,
@@ -294,14 +294,14 @@ class RejectionSampler:
             num_recovered=len(recovered_tokens),
             acceptance_mask=acceptance_mask,
         )
-    
+
     def _compute_acceptance_prob(self, p_target: float, p_draft: float) -> float:
         """Compute acceptance probability based on strategy."""
         if p_draft <= 0:
             return 1.0 if p_target > 0 else 0.0
-        
+
         ratio = p_target / p_draft
-        
+
         if self.config.strategy == RejectionStrategy.STANDARD:
             return min(1.0, ratio)
         elif self.config.strategy == RejectionStrategy.STRICT:
@@ -315,9 +315,9 @@ class RejectionSampler:
             if self.stats.acceptance_rate < self.config.min_acceptance_ratio:
                 return min(1.0, ratio * 1.2)  # Be more lenient
             return min(1.0, ratio)
-        
+
         return min(1.0, ratio)
-    
+
     def _resample_from_adjusted(
         self,
         target_probs: NDArray[np.float32],
@@ -327,23 +327,23 @@ class RejectionSampler:
         """Resample from adjusted distribution max(0, p_target - p_draft)."""
         adjusted = np.maximum(0, target_probs - draft_probs)
         adjusted_sum = adjusted.sum()
-        
+
         if adjusted_sum <= 0:
             # Fall back to target distribution
             return int(np.argmax(target_probs))
-        
+
         # Normalize
         adjusted = adjusted / adjusted_sum
-        
+
         # Sample
         cumsum = np.cumsum(adjusted)
         return int(np.searchsorted(cumsum, random_number))
-    
+
     def _sample_bonus(self, probs: NDArray[np.float32], random_number: float) -> int:
         """Sample bonus token from target distribution."""
         cumsum = np.cumsum(probs)
         return int(np.searchsorted(cumsum, random_number * cumsum[-1]))
-    
+
     def _verify_rust(
         self,
         draft_tokens: list[int],
@@ -358,7 +358,7 @@ class RejectionSampler:
             draft_tokens, draft_probs, target_probs,
             bonus_probs, random_numbers
         )
-    
+
     def batch_verify(
         self,
         batch_draft_tokens: list[list[int]],
@@ -368,13 +368,13 @@ class RejectionSampler:
     ) -> list[RejectionOutput]:
         """
         Batch verification of multiple sequences.
-        
+
         Beyond vLLM: Optimized batch processing with shared random state.
         """
         results = []
         if batch_bonus_probs is None:
             batch_bonus_probs = [None] * len(batch_draft_tokens)
-        
+
         for drafts, d_probs, t_probs, b_probs in zip(
             batch_draft_tokens, batch_draft_probs, batch_target_probs, batch_bonus_probs
         ):
@@ -384,17 +384,17 @@ class RejectionSampler:
                 target_probs=t_probs,
                 bonus_probs=b_probs,
             ))
-        
+
         return results
-    
+
     def get_stats(self) -> AcceptanceStats:
         """Get current acceptance statistics."""
         return self.stats
-    
+
     def reset_stats(self) -> None:
         """Reset acceptance statistics."""
         self.stats.reset()
-    
+
     def clear_cache(self) -> None:
         """Clear probability cache."""
         self._prob_cache.clear()
@@ -403,11 +403,11 @@ class RejectionSampler:
 class StreamingRejectionSampler(RejectionSampler):
     """
     Streaming rejection sampler for low-latency verification.
-    
+
     Beyond vLLM: Verifies tokens incrementally as they arrive,
     enabling early termination and lower latency.
     """
-    
+
     def __init__(self, config: RejectionConfig | None = None):
         if config is None:
             config = RejectionConfig(streaming_mode=True)
@@ -415,7 +415,7 @@ class StreamingRejectionSampler(RejectionSampler):
         self._pending_tokens: list[int] = []
         self._pending_acceptance: list[bool] = []
         self._first_rejection_idx: int | None = None
-    
+
     def add_token(
         self,
         token: int,
@@ -425,32 +425,32 @@ class StreamingRejectionSampler(RejectionSampler):
     ) -> tuple[bool, bool]:
         """
         Add a single token for streaming verification.
-        
+
         Returns:
             (accepted, should_stop): Whether token was accepted and if we should stop
         """
         if self._first_rejection_idx is not None:
             # Already had a rejection, skip
             return False, True
-        
+
         if random_number is None:
             random_number = np.random.random()
-        
+
         accept_prob = self._compute_acceptance_prob(target_prob, draft_prob)
         accepted = random_number < accept_prob
-        
+
         self._pending_tokens.append(token)
         self._pending_acceptance.append(accepted)
-        
+
         position = len(self._pending_tokens) - 1
         self.stats.update_position(position, accepted)
-        
+
         if not accepted:
             self._first_rejection_idx = position
             return False, True
-        
+
         return True, False
-    
+
     def finalize(
         self,
         draft_probs: NDArray[np.float32] | None = None,
@@ -459,10 +459,10 @@ class StreamingRejectionSampler(RejectionSampler):
     ) -> RejectionOutput:
         """
         Finalize streaming verification and get output.
-        
+
         Args:
             draft_probs: Full draft probs if recovery needed
-            target_probs: Full target probs if recovery needed  
+            target_probs: Full target probs if recovery needed
             bonus_probs: Bonus token probs if all accepted
         """
         accepted_tokens = [
@@ -470,10 +470,10 @@ class StreamingRejectionSampler(RejectionSampler):
         ]
         recovered_tokens: list[int] = []
         bonus_token = None
-        
+
         # Handle recovery
         if self._first_rejection_idx is not None:
-            if (self.config.recovery_mode == RecoveryMode.RESAMPLE and 
+            if (self.config.recovery_mode == RecoveryMode.RESAMPLE and
                 draft_probs is not None and target_probs is not None):
                 recovered = self._resample_from_adjusted(
                     target_probs[self._first_rejection_idx],
@@ -487,7 +487,7 @@ class StreamingRejectionSampler(RejectionSampler):
         elif bonus_probs is not None:
             # All accepted, sample bonus
             bonus_token = self._sample_bonus(bonus_probs, np.random.random())
-        
+
         # Update stats
         self.stats.update(
             accepted=len(accepted_tokens),
@@ -495,7 +495,7 @@ class StreamingRejectionSampler(RejectionSampler):
             recovered=len(recovered_tokens),
             bonus=1 if bonus_token is not None else 0,
         )
-        
+
         result = RejectionOutput(
             accepted_tokens=accepted_tokens,
             recovered_tokens=recovered_tokens,
@@ -504,14 +504,14 @@ class StreamingRejectionSampler(RejectionSampler):
             num_recovered=len(recovered_tokens),
             acceptance_mask=self._pending_acceptance.copy(),
         )
-        
+
         # Reset state
         self._pending_tokens.clear()
         self._pending_acceptance.clear()
         self._first_rejection_idx = None
-        
+
         return result
-    
+
     def reset_stream(self) -> None:
         """Reset streaming state without finalizing."""
         self._pending_tokens.clear()
@@ -522,15 +522,15 @@ class StreamingRejectionSampler(RejectionSampler):
 class BatchRejectionSampler:
     """
     Optimized batch rejection sampler for high throughput.
-    
+
     Beyond vLLM: Vectorized operations for batch processing,
     memory-efficient probability handling, parallel verification.
     """
-    
+
     def __init__(self, config: RejectionConfig | None = None):
         self.config = config or RejectionConfig()
         self.stats = AcceptanceStats()
-    
+
     def batch_verify_vectorized(
         self,
         draft_tokens: NDArray[np.int32],      # [batch, max_spec_len]
@@ -541,38 +541,38 @@ class BatchRejectionSampler:
     ) -> tuple[NDArray[np.int32], NDArray[np.bool_], NDArray[np.int32]]:
         """
         Vectorized batch verification.
-        
+
         Returns:
             (output_tokens, acceptance_mask, output_lens)
         """
         batch_size, max_spec_len = draft_tokens.shape
         vocab_size = draft_probs.shape[-1]
-        
+
         # Use Rust if available
         if HAS_RUST and hasattr(rust_core, 'batch_rejection_verify_rust'):
             return rust_core.batch_rejection_verify_rust(
                 draft_tokens, draft_probs, target_probs, seq_lens,
                 bonus_probs if bonus_probs is not None else np.zeros((batch_size, vocab_size), dtype=np.float32),
             )
-        
+
         # Python fallback
         output_tokens = np.zeros((batch_size, max_spec_len + 1), dtype=np.int32)
         acceptance_mask = np.zeros((batch_size, max_spec_len), dtype=np.bool_)
         output_lens = np.zeros(batch_size, dtype=np.int32)
-        
+
         random_nums = np.random.random((batch_size, max_spec_len + 1)).astype(np.float32)
-        
+
         for b in range(batch_size):
             seq_len = seq_lens[b]
             first_reject = seq_len
-            
+
             for i in range(seq_len):
                 token = draft_tokens[b, i]
                 p_target = target_probs[b, i, token]
                 p_draft = draft_probs[b, i, token]
-                
+
                 accept_prob = min(1.0, p_target / max(p_draft, 1e-10))
-                
+
                 if random_nums[b, i] < accept_prob:
                     output_tokens[b, i] = token
                     acceptance_mask[b, i] = True
@@ -587,7 +587,7 @@ class BatchRejectionSampler:
                     else:
                         output_tokens[b, i] = np.argmax(target_probs[b, i])
                     break
-            
+
             if first_reject == seq_len and bonus_probs is not None:
                 # All accepted, add bonus
                 cumsum = np.cumsum(bonus_probs[b])
@@ -595,7 +595,7 @@ class BatchRejectionSampler:
                 output_lens[b] = seq_len + 1
             else:
                 output_lens[b] = first_reject + 1
-        
+
         return output_tokens, acceptance_mask, output_lens
 
 
@@ -609,7 +609,7 @@ def create_rejection_sampler(
 ) -> RejectionSampler | StreamingRejectionSampler | BatchRejectionSampler:
     """
     Factory function to create appropriate rejection sampler.
-    
+
     Args:
         strategy: "standard", "strict", "lenient", or "adaptive"
         recovery: "resample", "truncate", or "fallback"
@@ -628,14 +628,14 @@ def create_rejection_sampler(
         "truncate": RecoveryMode.TRUNCATE,
         "fallback": RecoveryMode.FALLBACK,
     }
-    
+
     config = RejectionConfig(
         strategy=strategy_map.get(strategy, RejectionStrategy.STANDARD),
         recovery_mode=recovery_map.get(recovery, RecoveryMode.RESAMPLE),
         streaming_mode=streaming,
         **kwargs,
     )
-    
+
     if batch_optimized:
         return BatchRejectionSampler(config)
     elif streaming:

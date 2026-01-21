@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 class DequantizedLinear:
     """Dequantized linear layer for inference."""
-    
+
     def __init__(
         self,
         qweight: QuantizedTensor,
@@ -17,7 +17,7 @@ class DequantizedLinear:
         self.qweight = qweight
         self.bias = bias
         self._dequant_cache: NDArray[np.float32] | None = None
-    
+
     def forward(
         self,
         x: NDArray[np.float32],
@@ -29,21 +29,21 @@ class DequantizedLinear:
             weight = self.qweight.dequantize()
             if use_cache:
                 self._dequant_cache = weight
-        
+
         output = x @ weight.T
-        
+
         if self.bias is not None:
             output = output + self.bias
-        
+
         return output
-    
+
     def clear_cache(self):
         self._dequant_cache = None
-    
+
     @property
     def in_features(self) -> int:
         return self.qweight.shape[1] if len(self.qweight.shape) >= 2 else self.qweight.shape[0]
-    
+
     @property
     def out_features(self) -> int:
         return self.qweight.shape[0]

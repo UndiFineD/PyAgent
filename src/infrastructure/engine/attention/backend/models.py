@@ -39,7 +39,7 @@ class AttentionCapabilities:
     supports_decode: bool = True
     supports_encoder: bool = True
     supports_cross: bool = False
-    
+
     # Feature support
     supports_sliding_window: bool = False
     supports_alibi: bool = False
@@ -48,12 +48,12 @@ class AttentionCapabilities:
     supports_prefix_caching: bool = False
     supports_cuda_graphs: bool = True
     supports_fp8: bool = False
-    
+
     # Hardware requirements
     requires_cuda: bool = True
     requires_bf16: bool = False
     min_sm_version: int = 70  # Volta+
-    
+
     # Performance hints
     best_for_short_seqs: bool = False
     best_for_long_seqs: bool = False
@@ -67,25 +67,25 @@ class AttentionMetadata:
     seq_lens: list[int] = field(default_factory=list)
     max_seq_len: int = 0
     context_lens: list[int] | None = None
-    
+
     # Paged attention
     block_tables: Any | None = None  # [batch, max_blocks]
     slot_mapping: Any | None = None  # [total_tokens]
-    
+
     # KV cache info
     kv_cache_dtype: str = "auto"
     num_kv_heads: int = 0
     head_size: int = 0
-    
+
     # Attention type
     attn_type: AttentionType = AttentionType.DECODE
-    
+
     # Sliding window
     sliding_window: int | None = None
-    
+
     # Misc
     use_cuda_graph: bool = False
     prefix_cache_hit: bool = False
-    
+
     # Compression (PackKV)
     compression_metadata: dict[int, dict[str, Any]] | None = None

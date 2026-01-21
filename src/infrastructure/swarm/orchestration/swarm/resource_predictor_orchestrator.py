@@ -31,12 +31,12 @@ class ResourcePredictorOrchestrator:
         """Ingests metrics for future forecasting."""
         logging.info(f"ResourcePredictor: Ingested {len(metrics)} metrics points.")
         return True
-        
+
     def forecast_usage(self) -> dict:
         """Forecasts future resource usage based on history."""
         logging.info("ResourcePredictor: Calculating forecast...")
         return {"forecasted_tokens": 5000, "confidence": 0.92}
-        
+
     def evaluate_scaling_needs(self, current_replicas: int) -> dict:
         """Evaluates if the swarm needs to scale up or down."""
         logging.info(f"ResourcePredictor: Evaluating scaling for {current_replicas} replicas.")

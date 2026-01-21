@@ -66,7 +66,7 @@ class WorkspaceAuditorMixin:
                         elif "Print statement" in msg:
                             if file_path not in results["print_statements"]:
                                 results["print_statements"].append(file_path)
-                
+
                 logging.info(f"WorkspaceAuditor: Rust-native scan completed for {len(rust_findings)} files.")
             except Exception as e:
                 logging.error(f"WorkspaceAuditor: Rust acceleration failed: {e}. Falling back.")
@@ -82,7 +82,7 @@ class WorkspaceAuditorMixin:
                 if not HAS_RUST:
                     if len(content) > 25000:
                         results["large_files"].append((str(file_path), len(content)))
-                    
+
                     todo_matches = re.finditer(r"#\s*TODO:?\s*(.*)", content, re.IGNORECASE)
                     for match in todo_matches:
                         results["todos"].append((str(file_path), match.group(1).strip()))
@@ -104,12 +104,12 @@ class WorkspaceAuditorMixin:
                                 results["undocumented_classes"].append(
                                     (str(file_path), node.name, node.lineno)
                                 )
-                    
+
                     if file_path.name != "__init__.py" and self._check_is_stub(tree):
                         results["stubs"].append(str(file_path))
 
                 except SyntaxError:
-                    continue 
+                    continue
 
             except Exception as e:
                 logging.debug(f"CodeHealthAuditor: Error scanning {file_path}: {e}")

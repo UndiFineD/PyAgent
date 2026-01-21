@@ -40,12 +40,12 @@ class BlockStatus:
     compressed: bool = False
     last_access_time: float = 0.0
     importance_score: float = 1.0  # KVzap importance score (arXiv:2601.07891)
-    
+
     @property
     def is_ready(self) -> bool:
         """Check if block is ready for reading."""
         return self.state == BlockState.READY
-    
+
     @property
     def can_evict(self) -> bool:
         """Check if block can be evicted."""

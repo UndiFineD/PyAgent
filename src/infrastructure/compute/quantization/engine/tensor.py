@@ -21,17 +21,17 @@ class QuantizedTensor:
         self.zero_point = zero_point
         self.shape = shape
         self.config = config
-    
+
     def dequantize(self) -> NDArray[np.float32]:
         from .utils import unpack_int4
-        
+
         if self.config.bits == 4:
             unpacked = unpack_int4(self.data)
         else:
             unpacked = self.data.astype(np.float32)
-        
+
         unpacked_reshaped = unpacked.reshape(self.shape)
-        
+
         if self.scale.size == 1:
             if self.zero_point is not None:
                 result = (unpacked_reshaped - self.zero_point.item()) * self.scale.item()
@@ -47,10 +47,10 @@ class QuantizedTensor:
             in_features = self.shape[1] if len(self.shape) > 1 else 1
             num_groups = self.scale.shape[1]
             group_size = (in_features + num_groups - 1) // num_groups
-            
+
             result = np.zeros(self.shape, dtype=np.float32)
             flat = unpacked_reshaped.reshape(out_features, -1)
-            
+
             for g in range(num_groups):
                 start = g * group_size
                 end = min(start + group_size, in_features)
@@ -63,16 +63,16 @@ class QuantizedTensor:
                 result = (unpacked_reshaped - self.zero_point) * self.scale
             else:
                 result = unpacked_reshaped * self.scale
-        
+
         return result.reshape(self.shape).astype(np.float32)
-    
+
     @property
     def memory_bytes(self) -> int:
         data_bytes = self.data.nbytes
         scale_bytes = self.scale.nbytes
         zp_bytes = self.zero_point.nbytes if self.zero_point is not None else 0
         return data_bytes + scale_bytes + zp_bytes
-    
+
     @property
     def compression_ratio(self) -> float:
         original_bytes = np.prod(self.shape) * 4  # FP32

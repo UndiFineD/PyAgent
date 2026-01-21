@@ -69,7 +69,7 @@ class AgentCommunicationBus:
                     result = await self.subscriber.recv_multipart()
                     if not result:
                         break
-                    
+
                     topic_bytes, payload_bytes = result
                     topic = topic_bytes.decode()
                     data = orjson.loads(payload_bytes)["data"]
@@ -135,7 +135,7 @@ if __name__ == "__main__":
             pass
 
         print("AgentBus running. Press Ctrl+C to stop.")
-        
+
         try:
             listener = asyncio.create_task(bus.start())
             await bus.broadcast("telemetry", {"status": "online"})

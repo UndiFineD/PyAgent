@@ -53,14 +53,14 @@ def json_reduce_leaves(
 ) -> _T | _U:
     """
     Apply a function of two arguments cumulatively to each leaf.
-    
+
     Reduces all leaves to a single value, from left to right.
-    
+
     Args:
         func: A binary function (accumulator, leaf) -> result.
         value: A nested JSON structure.
         initial: Optional initial value for the reduction.
-        
+
     Returns:
         The reduced value.
     """

@@ -12,7 +12,7 @@ class RequestQueueManager:
     """
     Manages multiple request queues with different policies.
     """
-    
+
     def __init__(
         self,
         policy: SchedulingPolicy = SchedulingPolicy.FCFS,
@@ -22,43 +22,43 @@ class RequestQueueManager:
         self.max_queue_size = max_queue_size
         self._queue = create_request_queue(policy)
         self._lock = threading.Lock()
-        
+
         # Statistics
         self.total_added = 0
         self.total_popped = 0
         self.total_removed = 0
         self.max_observed_size = 0
-    
+
     def add(self, request: QueuedRequest) -> bool:
         """Add request with admission control."""
         with self._lock:
             if len(self._queue) >= self.max_queue_size:
                 return False
-            
+
             self._queue.add(request)
             self.total_added += 1
             self.max_observed_size = max(self.max_observed_size, len(self._queue))
             return True
-    
+
     def pop(self) -> Optional[QueuedRequest]:
         """Pop next request."""
         with self._lock:
             if not self._queue:
                 return None
-            
+
             request = self._queue.pop()
             request.status = RequestStatus.SCHEDULED
             request.scheduled_time = time.time()
             self.total_popped += 1
             return request
-    
+
     def peek(self) -> Optional[QueuedRequest]:
         """Peek at next request."""
         with self._lock:
             if not self._queue:
                 return None
             return self._queue.peek()
-    
+
     def remove(self, request_id: str) -> bool:
         """Remove request by ID."""
         with self._lock:
@@ -68,10 +68,10 @@ class RequestQueueManager:
                         self.total_removed += 1
                         return True
             return False
-    
+
     def __len__(self) -> int:
         return len(self._queue)
-    
+
     def get_stats(self) -> Dict[str, Any]:
         """Get queue statistics."""
         with self._lock:

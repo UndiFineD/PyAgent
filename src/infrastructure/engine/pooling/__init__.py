@@ -57,7 +57,7 @@ __all__ = [
     "StepPooler",
     "PoolingEngine",
     "create_pooling_engine",
-    
+
     # Connection
     "ConnectionState",
     "PoolStats",

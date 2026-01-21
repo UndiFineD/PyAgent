@@ -24,7 +24,7 @@ print("-" * 70)
 try:
     from src.infrastructure.engine.tokenization.tokenizer_registry import estimate_token_count
     print("✅ TokenizerRegistry imported successfully")
-    
+
     # Test prompts
     test_texts = {
         "short": "Hello, how are you?",
@@ -32,20 +32,20 @@ try:
         "long": "Provide a comprehensive analysis of microservices architecture, including advantages, disadvantages, patterns, and best practices." * 3,
         "code": "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
     }
-    
+
     print("\nToken Estimation Results:")
     for name, text in test_texts.items():
         start = time.perf_counter()
         iterations = 1000
-        
+
         for _ in range(iterations):
             tokens = estimate_token_count(text)
-        
+
         duration = time.perf_counter() - start
         avg_time_us = (duration / iterations) * 1_000_000
-        
+
         print(f"  {name:10s}: {tokens:4d} tokens, {avg_time_us:6.2f}μs per call")
-    
+
 except ImportError as e:
     print(f"❌ Failed to import TokenizerRegistry: {e}")
 
@@ -56,29 +56,29 @@ print("-" * 70)
 try:
     import rust_core
     print("✅ Rust core available")
-    
+
     test_text = "This is a test sentence for token estimation." * 10
-    
+
     # Python version
     start = time.perf_counter()
     for _ in range(10000):
         py_tokens = estimate_token_count(test_text)
     py_duration = time.perf_counter() - start
-    
+
     # Rust version
     start = time.perf_counter()
     for _ in range(10000):
         rust_tokens = rust_core.estimate_tokens_rust(test_text)
     rust_duration = time.perf_counter() - start
-    
+
     speedup = py_duration / rust_duration
-    
+
     print(f"\nPerformance Comparison (10,000 iterations):")
     print(f"  Python: {py_duration*1000:.2f}ms")
     print(f"  Rust:   {rust_duration*1000:.2f}ms")
     print(f"  Speedup: {speedup:.2f}x")
     print(f"  Result match: {py_tokens == rust_tokens}")
-    
+
 except ImportError:
     print("⚠️  Rust core not available (performance acceleration disabled)")
 except Exception as e:
@@ -93,14 +93,14 @@ try:
         StreamingVllmEngine,
         StreamingConfig,
     )
-    
+
     engine = StreamingVllmEngine()
     if engine.is_available:
         print("✅ vLLM streaming engine available")
         print(f"   Config: {engine.config.model}")
     else:
         print("⚠️  vLLM not installed (streaming disabled)")
-    
+
 except ImportError as e:
     print(f"⚠️  StreamingEngine not available: {e}")
 
@@ -134,18 +134,18 @@ print("-" * 70)
 try:
     # Try to create a simple test that measures token generation
     # This is a mock test since we can't easily create an agent
-    
+
     test_prompt = "Write a Python function that adds two numbers."
     expected_response_tokens = 100  # Estimated
-    
+
     print(f"Test prompt: '{test_prompt}'")
     print(f"Estimated input tokens: {estimate_token_count(test_prompt)}")
     print(f"Expected output tokens: ~{expected_response_tokens}")
-    
+
     # Simulate a generation (would be actual agent call in real test)
     print("\n⚠️  Actual generation test requires agent initialization")
     print("   Use full benchmark script for end-to-end testing")
-    
+
 except Exception as e:
     print(f"❌ Generation test failed: {e}")
 

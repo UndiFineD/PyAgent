@@ -35,28 +35,28 @@ def init_distributed(
 ) -> TensorParallelGroup:
     """
     Initialize distributed tensor parallelism.
-    
+
     Args:
         config: Parallel configuration (uses env vars if None)
         rank: Global rank (uses env var if None)
-        
+
     Returns:
         TensorParallelGroup for collective operations
     """
     global _PARALLEL_CONFIG, _GROUP_COORDINATOR, _TP_GROUP
-    
+
     config = config or ParallelConfig.from_env()
     _PARALLEL_CONFIG = config
-    
+
     if rank is None:
         rank = int(os.environ.get("RANK", 0))
-    
+
     rank_info = RankInfo.compute(rank, config)
     _GROUP_COORDINATOR = GroupCoordinator(config, rank_info)
     _GROUP_COORDINATOR.initialize()
-    
+
     _TP_GROUP = TensorParallelGroup(_GROUP_COORDINATOR)
-    
+
     return _TP_GROUP
 
 

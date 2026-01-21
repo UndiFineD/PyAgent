@@ -10,14 +10,14 @@ class LoRAWeights:
     lora_b: Dict[str, np.ndarray] = field(default_factory=dict)
     scales: Dict[str, float] = field(default_factory=dict)
     dora_magnitudes: Optional[Dict[str, np.ndarray]] = None
-    
+
     @property
     def num_parameters(self) -> int:
         total = 0
         for m in self.lora_a:
             total += self.lora_a[m].size + self.lora_b[m].size
         return total
-    
+
     @property
     def memory_bytes(self) -> int:
         total = 0
@@ -28,14 +28,14 @@ class LoRAWeights:
 def merge_adapters(adapters: List["LoRAAdapter"], weights: Optional[List[float]] = None) -> LoRAWeights:
     if not adapters: raise ValueError("No adapters to merge")
     if weights is None: weights = [1.0 / len(adapters)] * len(adapters)
-    if len(weights) != len(adapters): 
+    if len(weights) != len(adapters):
         raise ValueError("Number of weights must match adapters")
-    
+
     merged = LoRAWeights()
     all_modules: Set[str] = set()
     for adapter in adapters:
         if adapter.weights: all_modules.update(adapter.weights.lora_a.keys())
-    
+
     for module in all_modules:
         m_a, m_b = None, None
         for adapter, weight in zip(adapters, weights):

@@ -33,14 +33,14 @@ def run_performance_test(duration_secs=60):
     start_all = time.time()
     total_tokens = 0
     iteration_times = []
-    
+
     while (time.time() - start_all) < duration_secs:
         it_start = time.time()
-        
+
         # We use vectorize to measure the end-to-end Rust implementation
         # including pooling and GQA attention
         model.vectorize(sample_text)
-        
+
         it_end = time.time()
         iteration_times.append(it_end - it_start)
         total_tokens += tokens_per_call

@@ -127,7 +127,7 @@ class VllmNativeEngine:
     ) -> str:
         """
         Generates text from the local model.
-        
+
         Args:
             prompt: Input prompt
             system_prompt: System prompt
@@ -137,7 +137,7 @@ class VllmNativeEngine:
             guided_json: Optional JSON schema for guided decoding
             guided_regex: Optional regex pattern for guided decoding
             guided_choice: Optional list of choices for guided decoding
-            
+
         Returns:
             Generated text
         """
@@ -158,14 +158,14 @@ class VllmNativeEngine:
                 "max_tokens": max_tokens,
                 "top_p": 0.95,
             }
-            
+
             if guided_json is not None:
                 sampling_kwargs["guided_json"] = guided_json
             if guided_regex is not None:
                 sampling_kwargs["guided_regex"] = guided_regex
             if guided_choice is not None:
                 sampling_kwargs["guided_choice"] = guided_choice
-            
+
             sampling_params = SamplingParams(**sampling_kwargs)
 
             # Build generate kwargs
@@ -183,7 +183,7 @@ class VllmNativeEngine:
         except Exception as e:
             logging.error(f"Native vLLM generation failed: {e}")
             return ""
-    
+
     def generate_json(
         self,
         prompt: str,
@@ -196,7 +196,7 @@ class VllmNativeEngine:
         json_system = "You must respond with valid JSON only."
         if system_prompt:
             json_system = f"{system_prompt}\n\n{json_system}"
-        
+
         return self.generate(
             prompt,
             system_prompt=json_system,
@@ -204,7 +204,7 @@ class VllmNativeEngine:
             max_tokens=max_tokens,
             guided_json=schema,
         )
-    
+
     def generate_choice(
         self,
         prompt: str,
@@ -219,7 +219,7 @@ class VllmNativeEngine:
             max_tokens=len(max(choices, key=len)) + 5,
             guided_choice=choices,
         ).strip()
-    
+
     def generate_regex(
         self,
         prompt: str,

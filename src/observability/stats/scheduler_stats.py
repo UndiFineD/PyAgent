@@ -28,12 +28,12 @@ class MetricExportFormat(str, Enum):
 @dataclass
 class PrefixCacheStats:
     """Statistics for prefix cache performance."""
-    
+
     num_tokens: int = 0
     num_hits: int = 0
     num_misses: int = 0
     preempted: bool = False
-    
+
     def record(
         self,
         num_tokens: int,
@@ -46,20 +46,20 @@ class PrefixCacheStats:
         self.num_misses += num_tokens - num_hits
         if preempted:
             self.preempted = True
-    
+
     @property
     def hit_rate(self) -> float:
         total = self.num_hits + self.num_misses
         if total == 0:
             return 0.0
         return self.num_hits / total
-    
+
     def reset(self) -> None:
         self.num_tokens = 0
         self.num_hits = 0
         self.num_misses = 0
         self.preempted = False
-    
+
     def clone(self) -> PrefixCacheStats:
         return PrefixCacheStats(
             num_tokens=self.num_tokens,
@@ -67,7 +67,7 @@ class PrefixCacheStats:
             num_misses=self.num_misses,
             preempted=self.preempted,
         )
-    
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "num_tokens": self.num_tokens,
@@ -81,24 +81,24 @@ class PrefixCacheStats:
 @dataclass
 class SpecDecodingStats:
     """Statistics for speculative decoding."""
-    
+
     num_spec_tokens: int = 5  # Max speculative tokens
     num_drafts: int = 0
     num_draft_tokens: int = 0
     num_accepted_tokens: int = 0
     num_accepted_tokens_per_pos: list[int] = field(default_factory=list)
-    
+
     def __post_init__(self):
         if not self.num_accepted_tokens_per_pos:
             self.num_accepted_tokens_per_pos = [0] * self.num_spec_tokens
-    
+
     @classmethod
     def new(cls, num_spec_tokens: int) -> SpecDecodingStats:
         return cls(
             num_spec_tokens=num_spec_tokens,
             num_accepted_tokens_per_pos=[0] * num_spec_tokens,
         )
-    
+
     def observe_draft(
         self,
         num_draft_tokens: int,
@@ -109,36 +109,36 @@ class SpecDecodingStats:
         self.num_drafts += 1
         self.num_draft_tokens += num_draft_tokens
         self.num_accepted_tokens += num_accepted_tokens
-        
+
         if accepted_positions:
             for pos in accepted_positions:
                 if 0 <= pos < len(self.num_accepted_tokens_per_pos):
                     self.num_accepted_tokens_per_pos[pos] += 1
-    
+
     @property
     def acceptance_rate(self) -> float:
         if not self.num_draft_tokens:
             return 0.0
         return self.num_accepted_tokens / self.num_draft_tokens
-    
+
     @property
     def avg_accepted_per_draft(self) -> float:
         if not self.num_drafts:
             return 0.0
         return self.num_accepted_tokens / self.num_drafts
-    
+
     @property
     def position_acceptance_rates(self) -> list[float]:
         if not self.num_drafts:
             return [0.0] * len(self.num_accepted_tokens_per_pos)
         return [count / self.num_drafts for count in self.num_accepted_tokens_per_pos]
-    
+
     def reset(self) -> None:
         self.num_drafts = 0
         self.num_draft_tokens = 0
         self.num_accepted_tokens = 0
         self.num_accepted_tokens_per_pos = [0] * self.num_spec_tokens
-    
+
     def clone(self) -> SpecDecodingStats:
         return SpecDecodingStats(
             num_spec_tokens=self.num_spec_tokens,
@@ -147,7 +147,7 @@ class SpecDecodingStats:
             num_accepted_tokens=self.num_accepted_tokens,
             num_accepted_tokens_per_pos=list(self.num_accepted_tokens_per_pos),
         )
-    
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "num_drafts": self.num_drafts,
@@ -162,34 +162,34 @@ class SpecDecodingStats:
 @dataclass
 class CUDAGraphStats:
     """Statistics for CUDA graph capture and replay."""
-    
+
     num_captures: int = 0
     num_replays: int = 0
     capture_time_ms: float = 0.0
     replay_time_ms: float = 0.0
     graph_memory_mb: float = 0.0
-    
+
     def record_capture(self, time_ms: float, memory_mb: float) -> None:
         self.num_captures += 1
         self.capture_time_ms += time_ms
         self.graph_memory_mb = max(self.graph_memory_mb, memory_mb)
-    
+
     def record_replay(self, time_ms: float) -> None:
         self.num_replays += 1
         self.replay_time_ms += time_ms
-    
+
     @property
     def avg_capture_time_ms(self) -> float:
         if not self.num_captures:
             return 0.0
         return self.capture_time_ms / self.num_captures
-    
+
     @property
     def avg_replay_time_ms(self) -> float:
         if not self.num_replays:
             return 0.0
         return self.replay_time_ms / self.num_replays
-    
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "num_captures": self.num_captures,
@@ -205,26 +205,26 @@ class CUDAGraphStats:
 @dataclass
 class PerfStats:
     """Performance timing breakdown."""
-    
+
     # Scheduler timing
     schedule_time_ms: float = 0.0
-    
+
     # Model timing
     model_forward_time_ms: float = 0.0
     model_execute_time_ms: float = 0.0
-    
+
     # Sampling timing
     sample_time_ms: float = 0.0
-    
+
     # Communication timing
     all_reduce_time_ms: float = 0.0
-    
+
     # Memory timing
     cache_swap_time_ms: float = 0.0
-    
+
     # Step counter
     num_steps: int = 0
-    
+
     def record_step(
         self,
         schedule_ms: float = 0.0,
@@ -236,7 +236,7 @@ class PerfStats:
         self.schedule_time_ms += schedule_ms
         self.model_forward_time_ms += forward_ms
         self.sample_time_ms += sample_ms
-    
+
     @property
     def total_time_ms(self) -> float:
         return (
@@ -246,13 +246,13 @@ class PerfStats:
             self.all_reduce_time_ms +
             self.cache_swap_time_ms
         )
-    
+
     @property
     def avg_step_time_ms(self) -> float:
         if not self.num_steps:
             return 0.0
         return self.total_time_ms / self.num_steps
-    
+
     def reset(self) -> None:
         self.schedule_time_ms = 0.0
         self.model_forward_time_ms = 0.0
@@ -261,7 +261,7 @@ class PerfStats:
         self.all_reduce_time_ms = 0.0
         self.cache_swap_time_ms = 0.0
         self.num_steps = 0
-    
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "num_steps": self.num_steps,
@@ -276,12 +276,12 @@ class PerfStats:
 @dataclass
 class KVCacheEvictionEvent:
     """Event tracking KV cache eviction."""
-    
+
     timestamp: float
     request_id: str
     num_blocks: int
     reason: str  # "memory_pressure", "timeout", "manual"
-    
+
     @classmethod
     def now(cls, request_id: str, num_blocks: int, reason: str) -> KVCacheEvictionEvent:
         return cls(
@@ -290,7 +290,7 @@ class KVCacheEvictionEvent:
             num_blocks=num_blocks,
             reason=reason,
         )
-    
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "timestamp": self.timestamp,
@@ -303,41 +303,41 @@ class KVCacheEvictionEvent:
 @dataclass
 class SchedulerStats:
     """Comprehensive scheduler statistics."""
-    
+
     # Queue state
     num_running_reqs: int = 0
     num_waiting_reqs: int = 0
-    
+
     # Step tracking
     step_counter: int = 0
     current_wave: int = 0
-    
+
     # KV cache usage
     kv_cache_usage: float = 0.0
-    
+
     # Prefix cache
     prefix_cache_stats: PrefixCacheStats = field(default_factory=PrefixCacheStats)
     connector_prefix_cache_stats: PrefixCacheStats | None = None
-    
+
     # Eviction events
     kv_cache_eviction_events: list[KVCacheEvictionEvent] = field(default_factory=list)
-    
+
     # Speculative decoding
     spec_decoding_stats: SpecDecodingStats | None = None
-    
+
     # KV connector (for disaggregated inference)
     kv_connector_stats: dict[str, Any] | None = None
-    
+
     # LoRA adapters
     waiting_lora_adapters: dict[str, int] = field(default_factory=dict)
     running_lora_adapters: dict[str, int] = field(default_factory=dict)
-    
+
     # CUDA graphs
     cudagraph_stats: CUDAGraphStats | None = None
-    
+
     # Performance
     perf_stats: PerfStats | None = None
-    
+
     def record_step(
         self,
         num_running: int,
@@ -349,15 +349,15 @@ class SchedulerStats:
         self.num_running_reqs = num_running
         self.num_waiting_reqs = num_waiting
         self.kv_cache_usage = kv_usage
-    
+
     def record_eviction(self, event: KVCacheEvictionEvent) -> None:
         """Record eviction event."""
         self.kv_cache_eviction_events.append(event)
-    
+
     @property
     def total_requests(self) -> int:
         return self.num_running_reqs + self.num_waiting_reqs
-    
+
     def reset(self) -> None:
         """Reset all stats."""
         self.num_running_reqs = 0
@@ -370,7 +370,7 @@ class SchedulerStats:
             self.spec_decoding_stats.reset()
         if self.perf_stats:
             self.perf_stats.reset()
-    
+
     def clone(self) -> SchedulerStats:
         """Create a snapshot of current stats."""
         return SchedulerStats(
@@ -384,7 +384,7 @@ class SchedulerStats:
             cudagraph_stats=self.cudagraph_stats,
             perf_stats=self.perf_stats,
         )
-    
+
     def as_dict(self) -> dict[str, Any]:
         result = {
             "num_running_reqs": self.num_running_reqs,
@@ -395,18 +395,18 @@ class SchedulerStats:
             "kv_cache_usage": self.kv_cache_usage,
             "prefix_cache": self.prefix_cache_stats.as_dict(),
         }
-        
+
         if self.spec_decoding_stats:
             result["spec_decoding"] = self.spec_decoding_stats.as_dict()
-        
+
         if self.cudagraph_stats:
             result["cudagraph"] = self.cudagraph_stats.as_dict()
-        
+
         if self.perf_stats:
             result["performance"] = self.perf_stats.as_dict()
-        
+
         return result
-    
+
     def to_prometheus(self) -> str:
         """Export as Prometheus format."""
         lines = [
@@ -418,28 +418,28 @@ class SchedulerStats:
             f'prefix_cache_hits_total {{}} {self.prefix_cache_stats.num_hits}',
             f'prefix_cache_misses_total {{}} {self.prefix_cache_stats.num_misses}',
         ]
-        
+
         if self.spec_decoding_stats:
             lines.extend([
                 f'spec_decode_drafts_total {{}} {self.spec_decoding_stats.num_drafts}',
                 f'spec_decode_acceptance_rate {{}} {self.spec_decoding_stats.acceptance_rate}',
             ])
-        
+
         return '\n'.join(lines)
 
 
 class SchedulerStatsCollector:
     """Collects and aggregates scheduler statistics over time."""
-    
+
     def __init__(self, window_size: int = 100):
         self.window_size = window_size
         self._history: list[SchedulerStats] = []
         self._current = SchedulerStats()
-    
+
     @property
     def current(self) -> SchedulerStats:
         return self._current
-    
+
     def record_step(
         self,
         num_running: int,
@@ -448,24 +448,24 @@ class SchedulerStatsCollector:
     ) -> None:
         """Record a scheduler step."""
         self._current.record_step(num_running, num_waiting, kv_usage)
-    
+
     def commit(self) -> SchedulerStats:
         """Commit current stats to history and reset."""
         snapshot = self._current.clone()
         self._history.append(snapshot)
-        
+
         # Trim history
         if len(self._history) > self.window_size:
             self._history = self._history[-self.window_size:]
-        
+
         self._current.reset()
         return snapshot
-    
+
     def get_averages(self) -> dict[str, float]:
         """Get average stats over history."""
         if not self._history:
             return {}
-        
+
         n = len(self._history)
         return {
             "avg_running_reqs": sum(s.num_running_reqs for s in self._history) / n,
@@ -473,7 +473,7 @@ class SchedulerStatsCollector:
             "avg_kv_usage": sum(s.kv_cache_usage for s in self._history) / n,
             "avg_prefix_hit_rate": sum(s.prefix_cache_stats.hit_rate for s in self._history) / n,
         }
-    
+
     def drain_events(self) -> list[KVCacheEvictionEvent]:
         """Get and clear eviction events."""
         events = list(self._current.kv_cache_eviction_events)

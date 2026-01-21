@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class RetryHTTPMixin:
     """Mixin providing retry logic for HTTP requests."""
-    
+
     def get_json_with_retry(
         self: HTTPConnection,
         url: str,
@@ -20,10 +20,10 @@ class RetryHTTPMixin:
     ) -> Any:
         """GET JSON with automatic retry on failure."""
         import requests
-        
+
         last_error: Exception | None = None
         delay = self.retry_delay
-        
+
         for attempt in range(self.max_retries + 1):
             try:
                 with self.get_response(url, timeout=timeout) as r:
@@ -45,9 +45,9 @@ class RetryHTTPMixin:
                     )
                     time.sleep(delay)
                     delay *= self.retry_backoff
-        
+
         raise last_error or RuntimeError("Max retries exceeded")
-    
+
     async def async_get_json_with_retry(
         self: HTTPConnection,
         url: str,
@@ -56,10 +56,10 @@ class RetryHTTPMixin:
     ) -> Any:
         """Async GET JSON with automatic retry on failure."""
         import aiohttp
-        
+
         last_error: Exception | None = None
         delay = self.retry_delay
-        
+
         for attempt in range(self.max_retries + 1):
             try:
                 async with await self.async_get_response(url, timeout=timeout) as r:
@@ -81,5 +81,5 @@ class RetryHTTPMixin:
                     )
                     await asyncio.sleep(delay)
                     delay *= self.retry_backoff
-        
+
         raise last_error or RuntimeError("Max retries exceeded")

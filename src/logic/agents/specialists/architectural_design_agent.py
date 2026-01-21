@@ -32,7 +32,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     """
     Agent specializing in hierarchical architectural design workflows.
     Implements the 5-stage framework identified in 2026 empirical studies
-    (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load 
+    (arXiv:2601.10696, ScienceDirect S2090447925006203) regarding cognitive load
     reduction and performance enhancement in AI-aided design.
     """
 
@@ -85,7 +85,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         """
         if not self.design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
-            
+
         prompt = f"Perform environmental simulation (sun/wind/terrain) for: {self.design_state['requirements']}"
         analysis = await self.run_subagent("environmental simulation", prompt)
         self.design_state["environmental_analysis"] = analysis
@@ -101,33 +101,33 @@ class ArchitecturalDesignAgent(BaseAgent):
         """
         if not self.design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
-            
+
         initial_prompt = (
             f"Based on requirements: {self.design_state['requirements']}, "
             f"generate a spatial concept. Refinement: {refinement or 'None'}. "
             "Focus on circulation, sun orientation, and volume distribution."
         )
-        
+
         # GAAD Loop (Generator-Critic)
         concept = await self.run_subagent("generator: producing spatial concept", initial_prompt)
-        
+
         critic_prompt = (
             f"Critique this architectural concept based on functional constraints: {concept}. "
             f"Verify against requirements: {self.design_state['requirements']}. "
             "Identify weaknesses in circulation or structural feasibility."
         )
         critique = await self.run_subagent("critic: evaluating concept", critic_prompt)
-        
+
         refinement_prompt = (
             f"Refine the following concept: '{concept}' based on this critique: '{critique}'. "
             "Produce the final optimized GAAD concept."
         )
         final_concept = await self.run_subagent("generator: refining concept", refinement_prompt)
-        
+
         self.design_state["concepts"].append(final_concept)
         self.current_phase = DesignPhase.CONCEPT_GENERATION
         return {
-            "phase": self.current_phase.value, 
+            "phase": self.current_phase.value,
             "initial_concept": concept,
             "internal_critique": critique,
             "final_optimized_concept": final_concept
@@ -136,13 +136,13 @@ class ArchitecturalDesignAgent(BaseAgent):
     @as_tool
     async def iterative_visual_refinement(self, visual_feedback: str) -> Dict[str, Any]:
         """
-        Phase 2.5: Visual Refinement Loop. 
+        Phase 2.5: Visual Refinement Loop.
         Implements the iterative visual feedback loop from arXiv:2601.10696.
         Reducing cognitive load through multi-turn visual refinement.
         """
         if self.current_phase != DesignPhase.CONCEPT_GENERATION:
             return {"error": "Must generate a concept before refinement."}
-            
+
         latest_concept = self.design_state["concepts"][-1]
         prompt = (
             f"Apply visual feedback: '{visual_feedback}' to the architectural concept: '{latest_concept}'. "
@@ -164,7 +164,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         if "approved" in critique.lower() or "proceed" in critique.lower():
             self.design_state["critique_passed"] = True
             return {"status": "Critique Accepted", "next_step": "Proceed to Design Development"}
-        
+
         self.design_state["critique_passed"] = False
         return {"status": "Critique Pending", "action": "Refine Concept"}
 
@@ -195,14 +195,14 @@ class ArchitecturalDesignAgent(BaseAgent):
         """
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
              logging.warning("Advancing to Production phase without full development.")
-             
+
         prompt = f"Generate production specs/ urban context match for: {json.dumps(self.design_state)}"
         specs = await self.run_subagent("finalizing production specs", prompt)
-        
+
         # Simulated Constructability Score calculation based on spec complexity
         score_prompt = f"Evaluate the constructability (0.0 to 1.0) of these specs: {specs}"
         score_str = await self.run_subagent("evaluating constructability", score_prompt)
-        
+
         self.metrics["constructability_score"] = 0.85
         with contextlib.suppress(Exception):
             import re
@@ -212,8 +212,8 @@ class ArchitecturalDesignAgent(BaseAgent):
 
         self.current_phase = DesignPhase.DESIGN_PRODUCTION
         return {
-            "phase": self.current_phase.value, 
-            "specs": specs, 
+            "phase": self.current_phase.value,
+            "specs": specs,
             "constructability_score": self.metrics["constructability_score"]
         }
 

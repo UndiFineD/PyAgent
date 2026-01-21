@@ -216,16 +216,16 @@ class LLMClient:
     ) -> str:
         """
         Call LM Studio local inference server (Phase 21).
-        
+
         Uses the lmstudio SDK for WebSocket-based communication.
         Supports streaming, tool calling, and embeddings.
-        
+
         Args:
             prompt: User message
             model: Model identifier (empty = any loaded model)
             system_prompt: System message
             **kwargs: Additional options (temperature, max_tokens, etc.)
-        
+
         Returns:
             Generated response text
         """

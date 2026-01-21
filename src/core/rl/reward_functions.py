@@ -90,14 +90,14 @@ class RewardFunctions:
 
 class CompositeRewardFunction:
     """Combines multiple reward functions with weights."""
-    
+
     def __init__(self):
         self.components: List[tuple[str, Callable, float]] = []
-    
+
     def add(self, name: str, fn: Callable, weight: float = 1.0) -> "CompositeRewardFunction":
         self.components.append((name, fn, weight))
         return self
-    
+
     def compute(self, **kwargs) -> RewardSignal:
         total = 0.0
         explanations = []
@@ -113,11 +113,11 @@ class CompositeRewardFunction:
 
 class RewardShaper:
     """Applies potential-based reward shaping to avoid changing optimal policy."""
-    
+
     def __init__(self, potential_fn: Callable[[Any], float], gamma: float = 0.99):
         self.potential_fn = potential_fn
         self.gamma = gamma
-    
+
     def shape(self, reward: float, state: Any, next_state: Any) -> float:
         """F(s,s') = γΦ(s') - Φ(s)"""
         shaping = self.gamma * self.potential_fn(next_state) - self.potential_fn(state)

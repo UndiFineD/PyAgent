@@ -33,7 +33,7 @@ class SelfHealingAgent(BaseAgent):
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self.telemetry = ObservabilityEngine(str(self.workspace_root))
-        
+
         # Phase 317: Dynamic prompt loading and coordinator integration
         from src.maintenance.self_improvement_coordinator import SelfImprovementCoordinator
         self.coordinator = SelfImprovementCoordinator(str(self.workspace_root))
@@ -48,7 +48,7 @@ class SelfHealingAgent(BaseAgent):
             "Suggest patches to the source code or configuration to prevent future failures. "
             "Check budget and available remote peers before proposing expensive cloud-based solutions."
         )
-        
+
         prompt_dir = self.workspace_root / "docs" / "prompt"
         context_file = prompt_dir / "context.txt"
         if context_file.exists():
@@ -70,7 +70,7 @@ class SelfHealingAgent(BaseAgent):
 
         import logging
         logger = logging.getLogger(__name__)
-        
+
         peers = []
         try:
             await self.coordinator.load_strategic_context()
@@ -91,12 +91,12 @@ class SelfHealingAgent(BaseAgent):
                 logger.warning("Could not extract budget metrics: %s", e)
 
         report = ["## 🌐 Network & Budget Report\n"]
-        
+
         if budget_info["known"]:
             report.append(f"**Budget**: ${budget_info['today_spend']:.2f} / ${budget_info['daily_limit']:.2f} (Remaining: ${budget_info['remaining']:.2f})")
         else:
             report.append("**Budget**: [Unknown/Unavailable]")
-        
+
         if peers:
             report.append("\n**Available Peers**:")
             for p in peers:
@@ -106,7 +106,7 @@ class SelfHealingAgent(BaseAgent):
                 report.append(f"- {p_id} ({p_type}): {p_status}")
         else:
             report.append("\n❌ No external peers or servers discovered.")
-            
+
         return "\n".join(report)
 
     @as_tool
@@ -120,15 +120,15 @@ class SelfHealingAgent(BaseAgent):
             "description": f"Perform deep analysis on: {error_msg}",
             "agent_type": "SelfHealing"
         }
-        
+
         try:
             res = await self.coordinator.execute_remote_task(task, target_peer)
         except Exception as e:
             return f"❌ Failed to dispatch to {target_peer}: {e}"
-        
+
         if not res or not isinstance(res, dict):
             return f"❌ Invalid response from {target_peer}"
-        
+
         if res.get("status") == "success":
             return f"✅ Remote healing task dispatched to {target_peer}. Task ID: {res.get('task_id', 'unknown')}"
         else:

@@ -26,7 +26,7 @@ __version__ = VERSION
 
 class SynthesisAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis, 
+    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
     merging specialized agent capabilities into optimized super-agent architectures.
     """
 

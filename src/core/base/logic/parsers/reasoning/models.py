@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 class ReasoningResult:
     """
     Result of reasoning extraction.
-    
+
     Attributes:
         reasoning: The extracted reasoning/thinking content.
         content: The extracted content/answer.
@@ -26,7 +26,7 @@ class ReasoningResult:
 class StreamingReasoningState:
     """
     State for streaming reasoning extraction.
-    
+
     Tracks the current state of reasoning extraction during streaming.
     """
     accumulated_text: str = ""

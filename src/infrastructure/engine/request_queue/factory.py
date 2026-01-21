@@ -16,11 +16,11 @@ def create_request_queue(
 ) -> RequestQueue:
     """
     Factory function to create request queue.
-    
+
     Args:
         policy: Scheduling policy
         **kwargs: Policy-specific arguments
-    
+
     Returns:
         RequestQueue instance
     """

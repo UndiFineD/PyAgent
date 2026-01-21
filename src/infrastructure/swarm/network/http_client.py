@@ -31,7 +31,7 @@ class RetryableHTTPClient(HTTPConnection, RetryHTTPMixin):
     """
     HTTP client with automatic retry on failures.
     """
-    
+
     def __init__(
         self,
         *,

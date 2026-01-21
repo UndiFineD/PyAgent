@@ -36,14 +36,14 @@ def json_map_leaves(
 ) -> _JSONTree[_U]:
     """
     Apply a function to each leaf in a nested JSON structure.
-    
+
     Preserves the structure of the input, replacing each leaf with
     the result of applying func to it.
-    
+
     Args:
         func: Function to apply to each leaf value.
         value: A nested JSON structure.
-        
+
     Returns:
         A new structure with the same shape, but with transformed leaves.
     """
@@ -63,14 +63,14 @@ def json_map_leaves_async(
 ) -> _JSONTree[_U]:
     """
     Apply a function to each leaf (async-ready version).
-    
+
     Same as json_map_leaves but can be used with async functions
     when combined with asyncio.gather.
-    
+
     Args:
         func: Function to apply to each leaf value.
         value: A nested JSON structure.
-        
+
     Returns:
         A new structure with transformed leaves.
     """

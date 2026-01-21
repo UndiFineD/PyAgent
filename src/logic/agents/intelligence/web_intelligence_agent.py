@@ -32,7 +32,7 @@ class WebIntelligenceAgent(BaseAgent):
         self.bing_api_key = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")
         self.google_api_key = os.environ.get("GOOGLE_SEARCH_API_KEY")
         self.google_cse_id = os.environ.get("GOOGLE_SEARCH_CSE_ID")
-        
+
         work_root = getattr(self, "_workspace_root", None)
         self.connectivity = ConnectivityManager(work_root)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
@@ -54,12 +54,12 @@ class WebIntelligenceAgent(BaseAgent):
     def search_web(self, query: str, provider: str = "duckduckgo", max_results: int = 5) -> str:
         """Performs a web search using specified provider (duckduckgo, bing, google)."""
         logging.info(f"WebIntelligence: Searching {provider} for '{query}'")
-        
+
         if provider == "bing":
             return self._search_bing(query, max_results)
         elif provider == "google":
             return self._search_google(query, max_results)
-        
+
         # Default/Fallback: DuckDuckGo
         return self._search_duckduckgo(query, max_results)
 
@@ -92,12 +92,12 @@ class WebIntelligenceAgent(BaseAgent):
             response = requests.get(url, timeout=15)
             response.raise_for_status()
             text = self.web_core.clean_html(response.text)
-            
+
             # Safety Scan
             injections = self.security_guard.scan_for_injection(text)
             if injections:
                 return f"ERROR: Content blocked for safety: {', '.join(injections)}"
-            
+
             return text
         except Exception as e:
             return f"Error fetching {url}: {e}"

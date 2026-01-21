@@ -16,7 +16,7 @@ class InterpretableCore:
     """
     InterpretableCore implements a logic-bridge for Sparse Autoencoders (SAE).
     It simulates the decomposition of LLM activations into human-interpretable features.
-    
+
     Phase 14 Rust Optimizations:
     - top_k_indices_rust: Fast top-K selection for activation sparsification
     - decompose_activations_rust: Vectorized activation decomposition
@@ -29,12 +29,12 @@ class InterpretableCore:
         """
         Simulates SAE decomposition.
         Identifies 'Active Neurons' and maps them to semantic labels.
-        
+
         Uses Rust-accelerated top-K selection when available for O(n) instead of O(n log n).
         """
         # Simulated 'Top-K' sparsification
         k = 10
-        
+
         # Rust-accelerated top-K selection using partial sort
         if RUST_AVAILABLE and hasattr(rc, 'top_k_indices_rust'):
             try:

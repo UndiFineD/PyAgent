@@ -11,13 +11,13 @@ from ..models import ReasoningResult, StreamingReasoningState
 class JSONReasoningParser(ReasoningParser):
     """
     Parser for JSON-structured reasoning outputs.
-    
+
     Expects output in format:
     {"reasoning": "...", "answer": "..."}
     """
-    
+
     name: ClassVar[str] = "json"
-    
+
     def __init__(
         self,
         tokenizer: Any = None,
@@ -29,7 +29,7 @@ class JSONReasoningParser(ReasoningParser):
         super().__init__(tokenizer, **kwargs)
         self.reasoning_key = reasoning_key
         self.answer_key = answer_key
-    
+
     def is_reasoning_end(self, input_ids: list[int]) -> bool:
         if self.model_tokenizer is None:
             return False
@@ -40,17 +40,17 @@ class JSONReasoningParser(ReasoningParser):
             return self.answer_key in data
         except json.JSONDecodeError:
             return False
-    
+
     def extract_content_ids(self, input_ids: list[int]) -> list[int]:
         if self.model_tokenizer is None:
             return input_ids
-        
+
         text = self.model_tokenizer.decode(input_ids)
         result = self.extract_reasoning(text)
         if result.content:
             return self.model_tokenizer.encode(result.content, add_special_tokens=False)
         return input_ids
-    
+
     def extract_reasoning(
         self,
         model_output: str,
@@ -74,9 +74,9 @@ class JSONReasoningParser(ReasoningParser):
                     )
                 except json.JSONDecodeError:
                     pass
-            
+
             return ReasoningResult(content=model_output)
-    
+
     def extract_reasoning_streaming(
         self,
         previous_text: str,
@@ -89,14 +89,14 @@ class JSONReasoningParser(ReasoningParser):
     ) -> tuple[ReasoningResult, StreamingReasoningState]:
         if state is None:
             state = StreamingReasoningState()
-        
+
         state.accumulated_text = current_text
-        
+
         # Try to parse as JSON
         result = self.extract_reasoning(current_text)
         if result.reasoning or result.content:
             state.reasoning_buffer = result.reasoning or ""
             state.content_buffer = result.content or ""
             state.reasoning_complete = True
-        
+
         return result, state

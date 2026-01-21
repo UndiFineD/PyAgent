@@ -24,22 +24,22 @@ from ..base import (
 class GroqConnector(CloudProviderBase):
     """
     Connector for Groq API.
-    
+
     Groq provides ultra-fast inference using their LPU (Language Processing Unit)
     technology. Optimized for low-latency use cases.
-    
+
     Example:
         connector = GroqConnector(api_key="your-api-key")
-        
+
         request = InferenceRequest(
             messages=[{"role": "user", "content": "Hello!"}],
             model="llama-3.1-70b-versatile",
         )
-        
+
         response = await connector.complete(request)
         print(response.content)
     """
-    
+
     # Pricing per 1M tokens (input/output) - Groq pricing
     PRICING = {
         "llama-3.1-405b-reasoning": {"input": 0.00, "output": 0.00},  # Free tier
@@ -50,9 +50,9 @@ class GroqConnector(CloudProviderBase):
         "mixtral-8x7b-32768": {"input": 0.24, "output": 0.24},
         "gemma2-9b-it": {"input": 0.20, "output": 0.20},
     }
-    
+
     BASE_URL = "https://api.groq.com/openai/v1"
-    
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -62,7 +62,7 @@ class GroqConnector(CloudProviderBase):
     ):
         """
         Initialize the Groq connector.
-        
+
         Args:
             api_key: Groq API key (or set GROQ_API_KEY env var).
             base_url: Override the default API base URL.
@@ -73,18 +73,18 @@ class GroqConnector(CloudProviderBase):
         self._api_key = api_key or os.getenv("GROQ_API_KEY")
         self._base_url = base_url or self.BASE_URL
         self._timeout = timeout
-        
+
         # TODO: Initialize Groq client (OpenAI-compatible)
         # from groq import AsyncGroq
         # self._client = AsyncGroq(api_key=self._api_key)
         # OR use httpx/aiohttp for direct API calls
         self._client = None
-    
+
     @property
     def name(self) -> str:
         """Return provider name."""
         return "Groq"
-    
+
     @property
     def available_models(self) -> List[str]:
         """Return list of available Groq models."""
@@ -104,21 +104,21 @@ class GroqConnector(CloudProviderBase):
             # Whisper (for audio)
             "whisper-large-v3",
         ]
-    
+
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         """
         Perform a completion request to Groq API.
-        
+
         Groq uses an OpenAI-compatible API format.
-        
+
         Args:
             request: The inference request.
-            
+
         Returns:
             InferenceResponse with the generated content.
         """
         start_time = time.perf_counter()
-        
+
         # TODO: Implement actual Groq API call
         # Groq uses OpenAI-compatible format
         # response = await self._client.chat.completions.create(
@@ -130,9 +130,9 @@ class GroqConnector(CloudProviderBase):
         # )
         # content = response.choices[0].message.content
         # usage = response.usage
-        
+
         latency_ms = (time.perf_counter() - start_time) * 1000
-        
+
         return InferenceResponse(
             content="[Groq response placeholder - implement API call]",
             tokens_used=0,
@@ -141,14 +141,14 @@ class GroqConnector(CloudProviderBase):
             provider=self.name,
             model=request.model,
         )
-    
+
     async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
         """
         Stream a completion from Groq API.
-        
+
         Args:
             request: The inference request.
-            
+
         Yields:
             String chunks of the response.
         """
@@ -163,13 +163,13 @@ class GroqConnector(CloudProviderBase):
         # async for chunk in response:
         #     if chunk.choices[0].delta.content:
         #         yield chunk.choices[0].delta.content
-        
+
         yield "[Groq streaming placeholder - implement API call]"
-    
+
     async def health_check(self) -> bool:
         """
         Check if Groq API is accessible.
-        
+
         Returns:
             True if the API is healthy.
         """
@@ -183,39 +183,39 @@ class GroqConnector(CloudProviderBase):
         #     self._is_healthy = False
         #     self._last_error = str(e)
         #     return False
-        
+
         return True  # Placeholder
-    
+
     def estimate_cost(self, request: InferenceRequest) -> float:
         """
         Estimate cost for a Groq request.
-        
+
         Groq is known for competitive pricing compared to other providers.
-        
+
         Args:
             request: The inference request.
-            
+
         Returns:
             Estimated cost in USD.
         """
         model = request.model
         pricing = self.PRICING.get(model, {"input": 0.5, "output": 0.5})
-        
+
         # Rough estimate: assume 4 chars per token
         input_tokens = sum(len(m.get("content", "")) for m in request.messages) // 4
         output_tokens = request.max_tokens
-        
+
         input_cost = (input_tokens / 1_000_000) * pricing["input"]
         output_cost = (output_tokens / 1_000_000) * pricing["output"]
-        
+
         return input_cost + output_cost
-    
+
     def get_rate_limits(self) -> Dict[str, Any]:
         """
         Get current rate limit information.
-        
+
         Groq has different rate limits per model and tier.
-        
+
         Returns:
             Dict with rate limit information.
         """

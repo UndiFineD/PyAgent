@@ -164,7 +164,7 @@ class BaseAgent(
             # In Phase 5/6, this triggers an 'agent_complete' event
             self._notify_webhooks("agent_complete", {"status": "success"})
             return "No prompt provided."
-            
+
         import asyncio
         try:
             # Check if there is an existing event loop
@@ -178,7 +178,7 @@ class BaseAgent(
                 result = "Async loop already running"
             else:
                 result = asyncio.run(self.run_async(prompt))
-                
+
             self._notify_webhooks("agent_complete", {"status": "success", "result": result})
             return result
         except Exception as e:
@@ -189,10 +189,10 @@ class BaseAgent(
         """Helper to notify registered webhooks."""
         if not hasattr(self, "_webhooks") or not self._webhooks:
             return
-            
+
         if not HAS_REQUESTS or requests is None:
             return
-            
+
         payload = {"event": event, "data": data, "agent": self.agent_name}
         for url in self._webhooks:
             try:
@@ -203,15 +203,15 @@ class BaseAgent(
     async def run_async(self, prompt: str) -> str:
         """Main execution entry point (formerly run)."""
         self.previous_content = self.current_content
-        
+
         # Reset reflection state for new task
         self.reset_reflection()
-        
+
         result = await self.think(prompt)
-        
+
         # Autonomous Self-Reflection (Phase 320)
         result = await self.reflect(prompt, result)
-        
+
         self.current_content = result
         return result
 
@@ -226,7 +226,7 @@ class BaseAgent(
         # 1. Governance & Quota Checks
         if hasattr(self, "_check_preemption"):
             await self._check_preemption()
-        
+
         if hasattr(self, "quotas"):
             exceeded, reason = self.quotas.check_quotas()
             if exceeded:
@@ -245,23 +245,23 @@ class BaseAgent(
         import asyncio
         try:
             from src.infrastructure import backend as ab
-            
+
             # Execute in thread to avoid blocking the async loop if the backend is sync
             result = await asyncio.to_thread(
-                ab.run_subagent, 
+                ab.run_subagent,
                 description=f"{self.__class__.__name__} core reasoning",
                 prompt=full_prompt,
                 original_content=self.current_content
             )
-            
+
             if result:
                 # Update stats/usage
                 if hasattr(self, "quotas"):
                     self.quotas.update_usage(len(full_prompt) // 4, len(result) // 4)
                 return result
-            
+
             return self._get_fallback_response()
-            
+
         except Exception as e:
             logging.error(f"Think execution failed: {e}")
             return f"Error encountered during agent reasoning: {str(e)}"
@@ -299,7 +299,7 @@ class BaseAgent(
                 if isinstance(result, (dict, list)):
                     from json import dumps
                     result = dumps(result)
-                
+
                 # Check for record_interaction or record
                 if hasattr(self.recorder, "record_interaction"):
                     self.recorder.record_interaction(

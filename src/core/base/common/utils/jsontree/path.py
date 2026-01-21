@@ -6,7 +6,7 @@ from src.core.base.common.utils.jsontree.types import JSONTree, _T, _U
 def _parse_path(path: str, separator: str = ".") -> list[str | int]:
     """Parse a dot-notation path into parts, handling array indices."""
     parts: list[str | int] = []
-    
+
     # Split by separator, but keep array indices
     for part in re.split(rf'(?<!\[){re.escape(separator)}', path):
         # Check for array indices
@@ -18,7 +18,7 @@ def _parse_path(path: str, separator: str = ".") -> list[str | int]:
             parts.append(int(part[1:-1]))
         else:
             parts.append(part)
-    
+
     return parts
 
 
@@ -30,19 +30,19 @@ def json_get_path(
 ) -> _T | _U:
     """
     Get a value from a nested structure using dot-notation path.
-    
+
     Args:
         value: A nested JSON structure.
         path: Dot-notation path (e.g., "a.b.c" or "a[0].b").
         default: Default value if path not found.
         separator: Separator for path parts.
-        
+
     Returns:
         The value at the path, or default if not found.
     """
     parts = _parse_path(path, separator)
     current: Any = value
-    
+
     try:
         for part in parts:
             if isinstance(part, int):
@@ -65,23 +65,23 @@ def json_set_path(
 ) -> dict[str, Any]:
     """
     Set a value in a nested structure using dot-notation path.
-    
+
     Args:
         value: A nested JSON structure (will be modified in place).
         path: Dot-notation path (e.g., "a.b.c").
         new_value: Value to set at the path.
         separator: Separator for path parts.
         create_missing: Create intermediate dicts/lists if missing.
-        
+
     Returns:
         The modified structure.
     """
     parts = _parse_path(path, separator)
     current: Any = value
-    
+
     for i, part in enumerate(parts[:-1]):
         next_part = parts[i + 1]
-        
+
         if isinstance(part, int):
             while len(current) <= part:
                 current.append(None)
@@ -92,7 +92,7 @@ def json_set_path(
             if part not in current and create_missing:
                 current[part] = [] if isinstance(next_part, int) else {}
             current = current[part]
-    
+
     final_part = parts[-1]
     if isinstance(final_part, int):
         while len(current) <= final_part:
@@ -100,5 +100,5 @@ def json_set_path(
         current[final_part] = new_value
     else:
         current[final_part] = new_value
-    
+
     return value

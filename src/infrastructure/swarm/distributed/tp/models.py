@@ -29,7 +29,7 @@ class ParallelMode(Enum):
 class ParallelConfig:
     """
     Configuration for distributed parallelism.
-    
+
     Defines the parallelism strategy across dimensions.
     """
     world_size: int = 1
@@ -38,16 +38,16 @@ class ParallelConfig:
     data_parallel_size: int = 1
     expert_parallel_size: int = 1
     context_parallel_size: int = 1
-    
+
     # Process group settings
     backend: str = "nccl"  # nccl, gloo, mpi
     init_method: str | None = None
-    
+
     def __post_init__(self):
         # Validate configuration
         expected_world = (
-            self.tensor_parallel_size * 
-            self.pipeline_parallel_size * 
+            self.tensor_parallel_size *
+            self.pipeline_parallel_size *
             self.data_parallel_size
         )
         if self.world_size == 1 and expected_world > 1:
@@ -56,7 +56,7 @@ class ParallelConfig:
             logger.warning(
                 f"World size {self.world_size} != TP*PP*DP = {expected_world}"
             )
-    
+
     @classmethod
     def from_env(cls) -> "ParallelConfig":
         """Create configuration from environment variables."""
@@ -80,7 +80,7 @@ class RankInfo:
     pp_rank: int  # Pipeline parallel rank
     dp_rank: int  # Data parallel rank
     node_rank: int = 0
-    
+
     @classmethod
     def compute(
         cls,
@@ -91,17 +91,17 @@ class RankInfo:
         tp_size = config.tensor_parallel_size
         pp_size = config.pipeline_parallel_size
         dp_size = config.data_parallel_size
-        
+
         # Compute DP, PP, TP ranks from global rank
         # Layout: [DP][PP][TP]
         tp_rank = global_rank % tp_size
         pp_rank = (global_rank // tp_size) % pp_size
         dp_rank = global_rank // (tp_size * pp_size)
-        
+
         # Local rank within node
         local_rank = int(os.environ.get("LOCAL_RANK", global_rank % 8))
         node_rank = global_rank // 8
-        
+
         return cls(
             global_rank=global_rank,
             local_rank=local_rank,

@@ -4,7 +4,7 @@ from .config import ModelArchitecture, ModelCapability
 
 class ArchitectureDetector:
     """Detect model architecture from config."""
-    
+
     ARCHITECTURE_PATTERNS = {
         "llama": ModelArchitecture.LLAMA, "mistral": ModelArchitecture.MISTRAL, "qwen2": ModelArchitecture.QWEN2,
         "qwen": ModelArchitecture.QWEN, "gemma2": ModelArchitecture.GEMMA2, "gemma": ModelArchitecture.GEMMA,
@@ -14,14 +14,14 @@ class ArchitectureDetector:
         "llava-next": ModelArchitecture.LLAVA_NEXT, "llava": ModelArchitecture.LLAVA,
         "whisper": ModelArchitecture.WHISPER,
     }
-    
+
     CONFIG_KEYS = {
         "LlamaForCausalLM": ModelArchitecture.LLAMA, "MistralForCausalLM": ModelArchitecture.MISTRAL,
         "Qwen2ForCausalLM": ModelArchitecture.QWEN2, "QWenLMHeadModel": ModelArchitecture.QWEN,
         "Gemma2ForCausalLM": ModelArchitecture.GEMMA2, "GemmaForCausalLM": ModelArchitecture.GEMMA,
         "DeepseekV3ForCausalLM": ModelArchitecture.DEEPSEEK_V3, "MixtralForCausalLM": ModelArchitecture.MIXTRAL,
     }
-    
+
     @classmethod
     def detect_from_config(cls, config: Dict[str, Any]) -> ModelArchitecture:
         architectures = config.get("architectures", [])
@@ -31,14 +31,14 @@ class ArchitectureDetector:
         for p, arch in cls.ARCHITECTURE_PATTERNS.items():
             if p in m_type: return arch
         return ModelArchitecture.CUSTOM
-    
+
     @classmethod
     def detect_from_name(cls, model_name: str) -> ModelArchitecture:
         n_lower = model_name.lower()
         for p, arch in cls.ARCHITECTURE_PATTERNS.items():
             if p in n_lower: return arch
         return ModelArchitecture.CUSTOM
-    
+
     @classmethod
     def detect_capabilities(cls, arch: ModelArchitecture, config: Optional[Dict[str, Any]] = None) -> ModelCapability:
         vision_archs = {ModelArchitecture.LLAVA, ModelArchitecture.LLAVA_NEXT, ModelArchitecture.PIXTRAL, ModelArchitecture.QWEN2_VL}

@@ -17,13 +17,13 @@ class JsonSchema:
     """
     JSON Schema builder for guided decoding.
     """
-    
+
     title: Optional[str] = None
     description: Optional[str] = None
     properties: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     required: List[str] = field(default_factory=list)
     additional_properties: bool = False
-    
+
     def add_property(
         self,
         name: str,
@@ -42,7 +42,7 @@ class JsonSchema:
     ) -> "JsonSchema":
         """Add a property to the schema."""
         prop: Dict[str, Any] = {"type": prop_type}
-        
+
         if description:
             prop["description"] = description
         if enum is not None:
@@ -61,27 +61,27 @@ class JsonSchema:
             prop["items"] = items
         if default is not None:
             prop["default"] = default
-        
+
         prop.update(kwargs)
         self.properties[name] = prop
-        
+
         if required and name not in self.required:
             self.required.append(name)
-        
+
         return self
-    
+
     def add_string(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
         return self.add_property(name, "string", required=required, **kwargs)
-    
+
     def add_integer(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
         return self.add_property(name, "integer", required=required, **kwargs)
-    
+
     def add_number(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
         return self.add_property(name, "number", required=required, **kwargs)
-    
+
     def add_boolean(self, name: str, required: bool = False, **kwargs) -> "JsonSchema":
         return self.add_property(name, "boolean", required=required, **kwargs)
-    
+
     def add_array(
         self,
         name: str,
@@ -97,11 +97,11 @@ class JsonSchema:
             extra["minItems"] = min_items
         if max_items is not None:
             extra["maxItems"] = max_items
-        
+
         return self.add_property(
             name, "array", required=required, items=items, **extra, **kwargs
         )
-    
+
     def add_object(
         self,
         name: str,
@@ -113,7 +113,7 @@ class JsonSchema:
         if required and name not in self.required:
             self.required.append(name)
         return self
-    
+
     def add_enum(
         self,
         name: str,
@@ -136,18 +136,18 @@ class JsonSchema:
                 prop_type = "string"
         else:
             prop_type = "string"
-        
+
         return self.add_property(
             name, prop_type, required=required, enum=values, **kwargs
         )
-    
+
     def build(self) -> Dict[str, Any]:
         """Build the JSON schema dictionary."""
         schema: Dict[str, Any] = {
             "type": "object",
             "properties": self.properties,
         }
-        
+
         if self.title:
             schema["title"] = self.title
         if self.description:
@@ -156,9 +156,9 @@ class JsonSchema:
             schema["required"] = self.required
         if not self.additional_properties:
             schema["additionalProperties"] = False
-        
+
         return schema
-    
+
     def to_guided_config(self) -> GuidedConfig:
         """Convert to GuidedConfig for use with decoder."""
         return GuidedConfig(

@@ -21,18 +21,18 @@ from typing_extensions import NotRequired, TypedDict, TypeIs
 class TextPrompt(TypedDict):
     """
     Schema for a text prompt.
-    
+
     The text will be tokenized before passing to the model.
     """
     prompt: str
     """The input text to be tokenized."""
-    
+
     multi_modal_data: NotRequired[dict[str, Any] | None]
     """Optional multi-modal data (images, audio, etc.)."""
-    
+
     mm_processor_kwargs: NotRequired[dict[str, Any] | None]
     """Optional processor kwargs for multi-modal handling."""
-    
+
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
 
@@ -40,24 +40,24 @@ class TextPrompt(TypedDict):
 class TokensPrompt(TypedDict):
     """
     Schema for a pre-tokenized prompt.
-    
+
     Token IDs are passed directly to the model.
     """
     prompt_token_ids: list[int]
     """List of token IDs to pass to the model."""
-    
+
     prompt: NotRequired[str]
     """Optional prompt text corresponding to token IDs."""
-    
+
     token_type_ids: NotRequired[list[int]]
     """Optional token type IDs for cross-encoder models."""
-    
+
     multi_modal_data: NotRequired[dict[str, Any] | None]
     """Optional multi-modal data."""
-    
+
     mm_processor_kwargs: NotRequired[dict[str, Any] | None]
     """Optional processor kwargs for multi-modal handling."""
-    
+
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
 
@@ -65,12 +65,12 @@ class TokensPrompt(TypedDict):
 class EmbedsPrompt(TypedDict):
     """
     Schema for a prompt provided via embeddings.
-    
+
     Pre-computed embeddings are passed directly to the model.
     """
     prompt_embeds: Any  # torch.Tensor or numpy array
     """The embeddings of the prompt."""
-    
+
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
 
@@ -78,12 +78,12 @@ class EmbedsPrompt(TypedDict):
 class DataPrompt(TypedDict):
     """
     Schema for generic data prompts.
-    
+
     Used for custom IO processor plugins.
     """
     data: Any
     """The input data."""
-    
+
     data_format: str
     """The format of the input data."""
 
@@ -97,7 +97,7 @@ SingletonPrompt: TypeAlias = str | TextPrompt | TokensPrompt | EmbedsPrompt
 Set of possible schemas for a single prompt:
 - A plain text string
 - A TextPrompt dict
-- A TokensPrompt dict  
+- A TokensPrompt dict
 - An EmbedsPrompt dict
 """
 
@@ -109,15 +109,15 @@ _T2 = TypeVar("_T2", bound=SingletonPrompt)
 class ExplicitEncoderDecoderPrompt(TypedDict, Generic[_T1, _T2]):
     """
     Schema for encoder/decoder model prompts.
-    
+
     Allows specifying separate encoder and decoder prompts.
     """
     encoder_prompt: _T1
     """The encoder prompt."""
-    
+
     decoder_prompt: _T2 | None
     """The decoder prompt (optional)."""
-    
+
     mm_processor_kwargs: NotRequired[dict[str, Any]]
     """Optional processor kwargs (at top level, not in sub-prompts)."""
 
@@ -133,10 +133,10 @@ PromptType: TypeAlias = SingletonPrompt | ExplicitEncoderDecoderPrompt
 def is_text_prompt(prompt: SingletonPrompt) -> TypeIs[TextPrompt]:
     """
     Check if prompt is a TextPrompt.
-    
+
     Args:
         prompt: Prompt to check
-        
+
     Returns:
         True if prompt is a TextPrompt dict
     """
@@ -151,10 +151,10 @@ def is_text_prompt(prompt: SingletonPrompt) -> TypeIs[TextPrompt]:
 def is_tokens_prompt(prompt: SingletonPrompt) -> TypeIs[TokensPrompt]:
     """
     Check if prompt is a TokensPrompt.
-    
+
     Args:
         prompt: Prompt to check
-        
+
     Returns:
         True if prompt is a TokensPrompt dict
     """
@@ -168,10 +168,10 @@ def is_tokens_prompt(prompt: SingletonPrompt) -> TypeIs[TokensPrompt]:
 def is_embeds_prompt(prompt: SingletonPrompt) -> TypeIs[EmbedsPrompt]:
     """
     Check if prompt is an EmbedsPrompt.
-    
+
     Args:
         prompt: Prompt to check
-        
+
     Returns:
         True if prompt is an EmbedsPrompt dict
     """
@@ -185,10 +185,10 @@ def is_embeds_prompt(prompt: SingletonPrompt) -> TypeIs[EmbedsPrompt]:
 def is_data_prompt(prompt: Any) -> TypeIs[DataPrompt]:
     """
     Check if prompt is a DataPrompt.
-    
+
     Args:
         prompt: Prompt to check
-        
+
     Returns:
         True if prompt is a DataPrompt dict
     """
@@ -202,10 +202,10 @@ def is_data_prompt(prompt: Any) -> TypeIs[DataPrompt]:
 def is_string_prompt(prompt: SingletonPrompt) -> TypeIs[str]:
     """
     Check if prompt is a plain string.
-    
+
     Args:
         prompt: Prompt to check
-        
+
     Returns:
         True if prompt is a string
     """
@@ -217,10 +217,10 @@ def is_explicit_encoder_decoder_prompt(
 ) -> TypeIs[ExplicitEncoderDecoderPrompt]:
     """
     Check if prompt is an ExplicitEncoderDecoderPrompt.
-    
+
     Args:
         prompt: Prompt to check
-        
+
     Returns:
         True if prompt has encoder_prompt and decoder_prompt keys
     """
@@ -238,10 +238,10 @@ def is_explicit_encoder_decoder_prompt(
 def parse_prompt(prompt: SingletonPrompt) -> dict[str, Any]:
     """
     Parse a prompt into a normalized dictionary.
-    
+
     Args:
         prompt: Prompt in any supported format
-        
+
     Returns:
         Normalized prompt dict with 'type' and prompt data
     """
@@ -272,10 +272,10 @@ def parse_prompt(prompt: SingletonPrompt) -> dict[str, Any]:
 def get_prompt_text(prompt: SingletonPrompt) -> str | None:
     """
     Extract text from a prompt if available.
-    
+
     Args:
         prompt: Prompt to extract text from
-        
+
     Returns:
         Prompt text or None if not available
     """
@@ -291,10 +291,10 @@ def get_prompt_text(prompt: SingletonPrompt) -> str | None:
 def get_prompt_token_ids(prompt: SingletonPrompt) -> list[int] | None:
     """
     Extract token IDs from a prompt if available.
-    
+
     Args:
         prompt: Prompt to extract tokens from
-        
+
     Returns:
         Token IDs or None if not available
     """
@@ -306,10 +306,10 @@ def get_prompt_token_ids(prompt: SingletonPrompt) -> list[int] | None:
 def has_multi_modal_data(prompt: SingletonPrompt) -> bool:
     """
     Check if a prompt has multi-modal data.
-    
+
     Args:
         prompt: Prompt to check
-        
+
     Returns:
         True if prompt has multi_modal_data
     """
@@ -331,12 +331,12 @@ def make_text_prompt(
 ) -> TextPrompt:
     """
     Create a TextPrompt.
-    
+
     Args:
         text: The prompt text
         multi_modal_data: Optional multi-modal data
         cache_salt: Optional cache salt
-        
+
     Returns:
         TextPrompt dict
     """
@@ -357,13 +357,13 @@ def make_tokens_prompt(
 ) -> TokensPrompt:
     """
     Create a TokensPrompt.
-    
+
     Args:
         token_ids: List of token IDs
         prompt_text: Optional corresponding text
         token_type_ids: Optional token type IDs
         cache_salt: Optional cache salt
-        
+
     Returns:
         TokensPrompt dict
     """
@@ -384,11 +384,11 @@ def make_embeds_prompt(
 ) -> EmbedsPrompt:
     """
     Create an EmbedsPrompt.
-    
+
     Args:
         embeds: Pre-computed embeddings
         cache_salt: Optional cache salt
-        
+
     Returns:
         EmbedsPrompt dict
     """
@@ -406,12 +406,12 @@ def make_encoder_decoder_prompt(
 ) -> ExplicitEncoderDecoderPrompt:
     """
     Create an ExplicitEncoderDecoderPrompt.
-    
+
     Args:
         encoder_prompt: The encoder prompt
         decoder_prompt: Optional decoder prompt
         mm_processor_kwargs: Optional multi-modal processor kwargs
-        
+
     Returns:
         ExplicitEncoderDecoderPrompt dict
     """
@@ -431,15 +431,15 @@ def make_encoder_decoder_prompt(
 def validate_prompt(prompt: PromptType) -> list[str]:
     """
     Validate a prompt and return any errors.
-    
+
     Args:
         prompt: Prompt to validate
-        
+
     Returns:
         List of validation error messages (empty if valid)
     """
     errors = []
-    
+
     if is_string_prompt(prompt):
         if not prompt.strip():
             errors.append("Empty string prompt")
@@ -460,7 +460,7 @@ def validate_prompt(prompt: PromptType) -> list[str]:
         enc_errors = validate_prompt(prompt["encoder_prompt"])
         for err in enc_errors:
             errors.append(f"encoder_prompt: {err}")
-        
+
         dec_prompt = prompt["decoder_prompt"]
         if dec_prompt is not None:
             dec_errors = validate_prompt(dec_prompt)
@@ -468,5 +468,5 @@ def validate_prompt(prompt: PromptType) -> list[str]:
                 errors.append(f"decoder_prompt: {err}")
     else:
         errors.append(f"Unknown prompt type: {type(prompt)}")
-    
+
     return errors

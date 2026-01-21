@@ -19,7 +19,7 @@ def compute_media_hash(
 ) -> MediaHash:
     """Compute hash for media content."""
     hasher = MultiModalHasher(algorithm=algorithm)
-    
+
     if media_type == MediaType.IMAGE or (media_type == MediaType.UNKNOWN and HAS_PIL):
         return hasher.hash_image(data)
     elif media_type == MediaType.AUDIO:
@@ -34,7 +34,7 @@ def compute_media_hash(
             hash_value = hasher.hash_bytes(data)
         else:
             hash_value = hasher.hash_bytes(str(data).encode())
-        
+
         return MediaHash(
             value=hash_value,
             algorithm=algorithm,

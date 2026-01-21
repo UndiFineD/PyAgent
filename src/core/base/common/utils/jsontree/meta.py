@@ -75,7 +75,7 @@ def json_find_leaves(
 ) -> list[tuple[str, _T]]:
     """Find all leaves matching a predicate, with their paths."""
     return [
-        (path, leaf) 
-        for path, leaf in json_iter_leaves_with_path(value) 
+        (path, leaf)
+        for path, leaf in json_iter_leaves_with_path(value)
         if predicate(leaf)
     ]

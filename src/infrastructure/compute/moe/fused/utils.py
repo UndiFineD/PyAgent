@@ -19,19 +19,19 @@ def determine_expert_map(
     """Calculate expert assignment for expert parallelism."""
     if ep_size == 1:
         return (global_num_experts, None, None)
-    
+
     if HAS_RUST and hasattr(rust_core, 'compute_expert_map_rust'):
         result = rust_core.compute_expert_map_rust(
             ep_size, ep_rank, global_num_experts, strategy.value
         )
         return result
-    
+
     base_experts = global_num_experts // ep_size
     remainder = global_num_experts % ep_size
     local_num_experts = base_experts + (1 if ep_rank < remainder else 0)
-    
+
     expert_map = np.full(global_num_experts, -1, dtype=np.int32)
-    
+
     if strategy == ExpertPlacementStrategy.LINEAR:
         start_idx = ep_rank * base_experts + min(ep_rank, remainder)
         expert_map[start_idx:start_idx + local_num_experts] = np.arange(
@@ -45,13 +45,13 @@ def determine_expert_map(
         expert_map[start_idx:start_idx + local_num_experts] = np.arange(
             local_num_experts, dtype=np.int32
         )
-    
+
     expert_mask = np.ones(
         global_num_experts + num_fused_shared_experts + 1, dtype=np.int32
     )
     expert_mask[-1] = 0
     expert_mask[:global_num_experts] = (expert_map > -1).astype(np.int32)
-    
+
     return (local_num_experts, expert_map, expert_mask)
 
 def get_compressed_expert_map(expert_map: np.ndarray) -> str:

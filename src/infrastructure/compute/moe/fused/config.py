@@ -24,14 +24,14 @@ class FusedMoEConfig:
     top_k: int
     hidden_size: int
     intermediate_size: int
-    
+
     num_expert_groups: int = 1
     num_redundant_experts: int = 0
     renormalize: bool = True
     use_grouped_topk: bool = False
     aux_loss_coef: float = 0.0
     activation: str = "silu"
-    
+
     def __post_init__(self) -> None:
         assert self.num_experts > 0, "num_experts must be positive"
         assert self.top_k > 0, "top_k must be positive"

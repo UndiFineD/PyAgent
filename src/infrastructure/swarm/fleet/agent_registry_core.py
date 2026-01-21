@@ -147,7 +147,7 @@ class AgentRegistryCore:
         if _RUST_CYCLES:
             with contextlib.suppress(AttributeError, RuntimeError, ValueError):
                 return detect_cycles_rust(list(dep_graph.items()))
-        
+
         visited = set()
         path: list[Any] = []
         cycles = []

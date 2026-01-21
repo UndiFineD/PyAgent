@@ -7,7 +7,7 @@ from .parsers import ReasoningParser, ToolParser
 
 class DeepSeekReasoningParser(ReasoningParser):
     """Parser for DeepSeek R1-style <think>...</think> blocks."""
-    
+
     def __init__(self):
         super().__init__(
             reasoning_format=ReasoningFormat.DEEPSEEK_R1,
@@ -15,12 +15,12 @@ class DeepSeekReasoningParser(ReasoningParser):
             end_marker="</think>"
         )
         self._pattern = re.compile(r'<think>(.*?)</think>', re.DOTALL)
-    
+
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
         blocks = []
         content_parts = []
         last_end = 0
-        
+
         for match in self._pattern.finditer(text):
             content_parts.append(text[last_end:match.start()])
             block = ThinkingBlock(
@@ -32,20 +32,20 @@ class DeepSeekReasoningParser(ReasoningParser):
             )
             blocks.append(block)
             last_end = match.end()
-        
+
         content_parts.append(text[last_end:])
         return ''.join(content_parts).strip(), blocks
-    
+
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         content_buffer = []
         thinking_buffer = []
         current_block_start = 0
         position = 0
-        
+
         for token in token_stream:
             self._buffer += token
             position += len(token)
-            
+
             while True:
                 if self._state == ParseState.IDLE:
                     idx = self._buffer.find(self.start_marker)
@@ -64,7 +64,7 @@ class DeepSeekReasoningParser(ReasoningParser):
                         self._buffer = self._buffer[idx + len(self.start_marker):]
                         self._state = ParseState.IN_THINK
                         current_block_start = position - len(self._buffer)
-                        
+
                 elif self._state == ParseState.IN_THINK:
                     idx = self._buffer.find(self.end_marker)
                     if idx == -1:
@@ -78,7 +78,7 @@ class DeepSeekReasoningParser(ReasoningParser):
                         thinking_content = self._buffer[:idx]
                         thinking_buffer.append(thinking_content)
                         yield (thinking_content, True)
-                        
+
                         block = ThinkingBlock(
                             content=''.join(thinking_buffer).strip(),
                             start_position=current_block_start,
@@ -87,17 +87,17 @@ class DeepSeekReasoningParser(ReasoningParser):
                         )
                         self._thinking_blocks.append(block)
                         thinking_buffer = []
-                        
+
                         self._buffer = self._buffer[idx + len(self.end_marker):]
                         self._state = ParseState.IDLE
-        
+
         if self._buffer:
             if self._state == ParseState.IN_THINK:
                 thinking_buffer.append(self._buffer)
             else:
                 content_buffer.append(self._buffer)
                 yield (self._buffer, False)
-        
+
         return ParseResult(
             content=''.join(content_buffer).strip(),
             thinking_blocks=self._thinking_blocks,
@@ -107,7 +107,7 @@ class DeepSeekReasoningParser(ReasoningParser):
 
 class QwenReasoningParser(ReasoningParser):
     """Parser for Qwen3-style reasoning with enable_thinking flag."""
-    
+
     def __init__(self, enable_thinking: bool = True):
         super().__init__(
             reasoning_format=ReasoningFormat.QWEN3,
@@ -116,15 +116,15 @@ class QwenReasoningParser(ReasoningParser):
         )
         self.enable_thinking = enable_thinking
         self._pattern = re.compile(r'<think>(.*?)</think>', re.DOTALL)
-    
+
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
         if not self.enable_thinking:
             return text, []
-        
+
         blocks = []
         content_parts = []
         last_end = 0
-        
+
         for match in self._pattern.finditer(text):
             content_parts.append(text[last_end:match.start()])
             thinking_content = match.group(1).strip()
@@ -137,19 +137,19 @@ class QwenReasoningParser(ReasoningParser):
             )
             blocks.append(block)
             last_end = match.end()
-        
+
         content_parts.append(text[last_end:])
         return ''.join(content_parts).strip(), blocks
-    
+
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         deepseek = DeepSeekReasoningParser()
         deepseek.reasoning_format = self.reasoning_format
-        
+
         for token, is_thinking in deepseek.parse_streaming(token_stream):
             if not self.enable_thinking and is_thinking:
                 continue
             yield (token, is_thinking)
-        
+
         return ParseResult(
             content="",
             thinking_blocks=deepseek._thinking_blocks,
@@ -158,7 +158,7 @@ class QwenReasoningParser(ReasoningParser):
 
 class GenericReasoningParser(ReasoningParser):
     """Configurable parser for any reasoning format."""
-    
+
     def __init__(self, start_marker: str = "<think>", end_marker: str = "</think>", nested: bool = False):
         super().__init__(
             reasoning_format=ReasoningFormat.GENERIC,
@@ -167,7 +167,7 @@ class GenericReasoningParser(ReasoningParser):
         )
         self.nested = nested
         self._pattern = re.compile(re.escape(start_marker) + r'(.*?)' + re.escape(end_marker), re.DOTALL)
-    
+
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
         blocks = []
         content_parts = []
@@ -184,7 +184,7 @@ class GenericReasoningParser(ReasoningParser):
             last_end = match.end()
         content_parts.append(text[last_end:])
         return ''.join(content_parts).strip(), blocks
-    
+
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         content = []
         thinking = []
@@ -245,7 +245,7 @@ class OpenAIToolParser(ToolParser):
     def __init__(self, strict: bool = False):
         super().__init__(ToolCallFormat.OPENAI, strict)
         self._function_pattern = re.compile(r'"function_call"\s*:\s*\{[^}]+\}', re.DOTALL)
-    
+
     def parse_tool_calls(self, text: str) -> List[ToolCall]:
         calls = []
         try:
@@ -274,7 +274,7 @@ class OpenAIToolParser(ToolParser):
         except (json.JSONDecodeError, KeyError):
             pass
         return calls
-    
+
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, Optional[ToolCall]], None, List[ToolCall]]:
         buffer = ""
         for token in token_stream:
@@ -286,7 +286,7 @@ class HermesToolParser(ToolParser):
     def __init__(self, strict: bool = False):
         super().__init__(ToolCallFormat.HERMES, strict)
         self._pattern = re.compile(r'<tool_call>\s*(.*?)\s*</tool_call>', re.DOTALL)
-    
+
     def parse_tool_calls(self, text: str) -> List[ToolCall]:
         calls = []
         for match in self._pattern.finditer(text):
@@ -307,7 +307,7 @@ class HermesToolParser(ToolParser):
                     raise
                 continue
         return calls
-    
+
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, Optional[ToolCall]], None, List[ToolCall]]:
         buffer = ""
         calls = []

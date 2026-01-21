@@ -3,9 +3,9 @@
 
 from .enums import InstanceRole, SchedulingPolicy
 from .config import (
-    InstanceInfo, 
-    DCPConfig, 
-    KVTransferParams, 
+    InstanceInfo,
+    DCPConfig,
+    KVTransferParams,
     ScheduledRequest
 )
 from .selectors import (

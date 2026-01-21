@@ -58,7 +58,7 @@ class WorkerState:
     consecutive_failures: int = 0
     locality_group: int = 0
     metadata: dict[str, Any] = field(default_factory=dict)
-    
+
     def update_latency(self, latency_ms: float) -> None:
         """Update average latency with EMA."""
         self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
@@ -72,11 +72,11 @@ class StepState:
     completed_count: int = 0
     start_time: float = field(default_factory=time.time)
     end_time: Optional[float] = None
-    
+
     @property
     def is_complete(self) -> bool:
         return self.completed_count >= self.request_count
-    
+
     @property
     def duration_ms(self) -> float:
         end = self.end_time or time.time()
@@ -90,7 +90,7 @@ class WaveState:
     completed_steps: int = 0
     start_time: float = field(default_factory=time.time)
     end_time: Optional[float] = None
-    
+
     @property
     def is_complete(self) -> bool:
         return self.completed_steps >= self.num_steps

@@ -15,18 +15,18 @@ class LoRAManager:
         self._slot_manager = LoRASlotManager(num_slots=max_gpu_slots)
         self._active_requests: Dict[str, LoRARequest] = {}
         self._lock = threading.Lock()
-    
+
     def load_adapter(self, config: LoRAConfig) -> LoRAInfo:
-        if config.rank > self.max_rank: 
+        if config.rank > self.max_rank:
             raise ValueError(f"exceeds max_rank {self.max_rank}")
         adapter = self._registry.register(config)
         if adapter.info: return adapter.info
         raise RuntimeError(f"Failed to load {config.adapter_name}")
-    
+
     def unload_adapter(self, name: str) -> bool:
         self._slot_manager.evict(name)
         return self._registry.unregister(name)
-    
+
     def add_request(self, request: LoRARequest) -> bool:
         adapter = self._registry.get(request.adapter_name)
         if not adapter: return False
@@ -35,14 +35,14 @@ class LoRAManager:
         if sid is None: return False
         with self._lock: self._active_requests[request.request_id] = request
         return True
-    
+
     def remove_request(self, rid: str):
         with self._lock:
             if rid in self._active_requests:
                 req = self._active_requests.pop(rid)
                 if not any(r.adapter_name == req.adapter_name for r in self._active_requests.values()):
                     self._slot_manager.release(req.adapter_name)
-    
+
     def get_adapter(self, name: str) -> Optional[LoRAAdapter]: return self._registry.get(name)
     def list_loaded_adapters(self) -> List[str]: return self._registry.list_adapters()
     def get_active_adapters(self) -> List[str]: return self._slot_manager.get_active_adapters()

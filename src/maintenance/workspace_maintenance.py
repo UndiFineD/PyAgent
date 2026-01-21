@@ -15,8 +15,8 @@ class WorkspaceMaintenance:
     """Consolidates file system auditing, naming convention enforcement, and cleanup."""
 
     DEFAULT_EXCLUSIONS = {
-        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache", 
-        ".ruff_cache", ".agent_cache", "target", "node_modules", 
+        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache",
+        ".ruff_cache", ".agent_cache", "target", "node_modules",
         ".hypothesis", "__pycache__"
     }
 
@@ -24,9 +24,9 @@ class WorkspaceMaintenance:
         self.workspace_root = Path(workspace_root).resolve()
 
     def find_large_files(
-        self, 
-        search_roots: List[str] = ["src"], 
-        threshold: int = 500, 
+        self,
+        search_roots: List[str] = ["src"],
+        threshold: int = 500,
         top_n: int = 10
     ) -> List[Tuple[int, Path]]:
         """
@@ -48,7 +48,7 @@ class WorkspaceMaintenance:
                     if filename.endswith(".py"):
                         filepath = Path(dirpath) / filename
                         count = self._get_line_count(filepath)
-                        
+
                         # Check for 'facade' keyword to skip if necessary (logic from find_large_files.py)
                         is_facade = False
                         try:
@@ -75,7 +75,7 @@ class WorkspaceMaintenance:
             # Skip excluded paths
             if any(part in self.DEFAULT_EXCLUSIONS for part in path.parts):
                 continue
-            
+
             # Skip hidden files
             if path.name.startswith("."):
                 continue
@@ -87,7 +87,7 @@ class WorkspaceMaintenance:
             stem = path.stem
             if not self._is_snake_case(stem):
                 violations.append(path.relative_to(self.workspace_root))
-        
+
         return violations
 
     def fix_naming_conventions(self, dry_run: bool = True) -> List[Tuple[Path, Path]]:
@@ -107,7 +107,7 @@ class WorkspaceMaintenance:
             for name in files:
                 if name in ["README.md", "LICENSE", "Cargo.toml", "package.json", "pytest.ini", "requirements.txt"]:
                     continue
-                
+
                 new_name = self._to_snake_case(name)
                 if new_name != name:
                     old_path = Path(root) / name
@@ -145,7 +145,7 @@ class WorkspaceMaintenance:
         path_obj = Path(name)
         stem = path_obj.stem
         suffix = path_obj.suffix
-        
+
         # Replace spaces and hyphens
         temp = stem.replace(" ", "_").replace("-", "_")
         # Split CamelCase
@@ -154,7 +154,7 @@ class WorkspaceMaintenance:
         # Clean up dots and underscores
         new_stem = s2.replace(".", "_")
         new_stem = re.sub("_+", "_", new_stem).strip("_")
-        
+
         return new_stem + suffix
 
     def _safe_rename(self, old_path: Path, new_path: Path) -> None:
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     print("--- Large Files ---")
     for count, path in maint.find_large_files():
         print(f"{count}: {path}")
-    
+
     print("\n--- Naming Violations ---")
     violations = maint.audit_naming_conventions()
     for v in violations[:10]:

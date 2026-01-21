@@ -83,7 +83,7 @@ class ByzantineConsensusAgent(BaseAgent):
                         )
                     except Exception:
                         pass
-                
+
                 import re
 
                 match = re.search(r"(\d+\.\d+)", score_response)

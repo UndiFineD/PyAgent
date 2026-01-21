@@ -14,35 +14,35 @@ from .models import TokenizerConfig, TokenizerInfo, TokenizeResult
 
 class BaseTokenizer(ABC):
     """Abstract base class for tokenizers."""
-    
+
     def __init__(self, config: TokenizerConfig):
         self.config = config
         self._info: Optional[TokenizerInfo] = None
-    
+
     @property
     @abstractmethod
     def vocab_size(self) -> int:
         """Size of the vocabulary."""
         pass
-    
+
     @property
     @abstractmethod
     def bos_token_id(self) -> Optional[int]:
         """Beginning of sequence token ID."""
         pass
-    
+
     @property
     @abstractmethod
     def eos_token_id(self) -> Optional[int]:
         """End of sequence token ID."""
         pass
-    
+
     @property
     @abstractmethod
     def pad_token_id(self) -> Optional[int]:
         """Padding token ID."""
         pass
-    
+
     @abstractmethod
     def encode(
         self,
@@ -51,7 +51,7 @@ class BaseTokenizer(ABC):
     ) -> List[int]:
         """Encode text to token IDs."""
         pass
-    
+
     @abstractmethod
     def decode(
         self,
@@ -60,7 +60,7 @@ class BaseTokenizer(ABC):
     ) -> str:
         """Decode token IDs to text."""
         pass
-    
+
     def batch_encode(
         self,
         texts: List[str],
@@ -68,7 +68,7 @@ class BaseTokenizer(ABC):
     ) -> List[List[int]]:
         """Batch encode multiple texts."""
         return [self.encode(text, add_special_tokens) for text in texts]
-    
+
     def batch_decode(
         self,
         token_ids_list: List[Sequence[int]],
@@ -76,7 +76,7 @@ class BaseTokenizer(ABC):
     ) -> List[str]:
         """Batch decode multiple token sequences."""
         return [self.decode(ids, skip_special_tokens) for ids in token_ids_list]
-    
+
     def tokenize(
         self,
         text: str,
@@ -90,7 +90,7 @@ class BaseTokenizer(ABC):
             attention_mask=[1] * len(input_ids),
             num_tokens=len(input_ids),
         )
-    
+
     def get_info(self) -> TokenizerInfo:
         """Get tokenizer information."""
         if self._info is None:
@@ -104,7 +104,7 @@ class BaseTokenizer(ABC):
                 model_name=self.config.model_name,
             )
         return self._info
-    
+
     def estimate_tokens(self, text: str) -> int:
         """Fast token count estimation without full tokenization."""
         return max(1, len(text) // 4)

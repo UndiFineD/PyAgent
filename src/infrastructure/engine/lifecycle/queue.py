@@ -79,7 +79,7 @@ class RequestQueue:
             request = self._requests.get(request_id)
             if request is None:
                 return None
-            
+
             request.finish(reason, stop_reason)
             self._running.discard(request_id)
             self._finished.append(request_id)
@@ -91,7 +91,7 @@ class RequestQueue:
             request = self._requests.get(request_id)
             if request is None:
                 return None
-            
+
             request.abort()
             self._waiting = deque(
                 rid for rid in self._waiting if rid != request_id
@@ -107,7 +107,7 @@ class RequestQueue:
         """Abort multiple requests."""
         if isinstance(request_ids, str):
             request_ids = [request_ids]
-        
+
         aborted = []
         for request_id in request_ids:
             request = self.abort_request(request_id)
@@ -121,7 +121,7 @@ class RequestQueue:
             request = self._requests.get(request_id)
             if request is None or not request.is_running():
                 return None
-            
+
             request.preempt()
             self._running.discard(request_id)
             self._waiting.appendleft(request_id)  # Add to front
@@ -179,7 +179,7 @@ class RequestQueue:
                 request = self._requests.get(request_id)
                 if request and request.finished_time and request.finished_time < cutoff:
                     to_remove.append(request_id)
-            
+
             for request_id in to_remove:
                 del self._requests[request_id]
                 removed += 1

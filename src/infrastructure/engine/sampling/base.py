@@ -62,13 +62,13 @@ class Sampler(ABC):
         probs = _softmax(logits)
         batch_size = probs.shape[0]
         samples = np.zeros(batch_size, dtype=np.int64)
-        
+
         for i in range(batch_size):
             if state and state.rng:
                 samples[i] = state.rng.choice(len(probs[i]), p=probs[i])
             else:
                 samples[i] = np.random.choice(len(probs[i]), p=probs[i])
-        
+
         return samples
 
 
@@ -92,11 +92,11 @@ def _sample_from_probs(
     """Sample token IDs from probability distribution."""
     batch_size = probs.shape[0]
     samples = np.zeros(batch_size, dtype=np.int64)
-    
+
     for i in range(batch_size):
         if state and state.rng:
             samples[i] = state.rng.choice(len(probs[i]), p=probs[i])
         else:
             samples[i] = np.random.choice(len(probs[i]), p=probs[i])
-    
+
     return samples

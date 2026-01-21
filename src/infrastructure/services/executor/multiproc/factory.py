@@ -8,7 +8,7 @@ from src.infrastructure.services.executor.multiproc.distributed import Distribut
 
 class ExecutorFactory:
     """Factory for creating executors."""
-    
+
     @staticmethod
     def create(
         backend: ExecutorBackend,

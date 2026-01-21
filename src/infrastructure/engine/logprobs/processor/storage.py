@@ -13,7 +13,7 @@ class FlatLogprobs:
     top_k_token_ids: np.ndarray
     top_k_logprobs: np.ndarray
     _token_strs: Optional[List[str]] = field(default=None, repr=False)
-    
+
     def __post_init__(self):
         assert len(self.token_ids.shape) == 1
         assert len(self.logprobs.shape) == 1
@@ -21,22 +21,22 @@ class FlatLogprobs:
         if len(self.top_k_token_ids.shape) == 2:
             assert self.top_k_token_ids.shape[0] == self.token_ids.shape[0]
             assert self.top_k_logprobs.shape == self.top_k_token_ids.shape
-    
+
     @property
     def num_tokens(self) -> int:
         return len(self.token_ids)
-    
+
     @property
     def top_k(self) -> int:
         if len(self.top_k_token_ids.shape) == 2:
             return self.top_k_token_ids.shape[1]
         return 0
-    
+
     @property
     def memory_bytes(self) -> int:
         return self.token_ids.nbytes + self.logprobs.nbytes + \
                self.top_k_token_ids.nbytes + self.top_k_logprobs.nbytes
-    
+
     def slice(self, start: int, end: int) -> "FlatLogprobs":
         return FlatLogprobs(
             self.token_ids[start:end],
@@ -44,7 +44,7 @@ class FlatLogprobs:
             self.top_k_token_ids[start:end],
             self.top_k_logprobs[start:end]
         )
-    
+
     def append(self, other: "FlatLogprobs") -> "FlatLogprobs":
         return FlatLogprobs(
             np.concatenate([self.token_ids, other.token_ids]),
@@ -52,15 +52,15 @@ class FlatLogprobs:
             np.concatenate([self.top_k_token_ids, other.top_k_token_ids]),
             np.concatenate([self.top_k_logprobs, other.top_k_logprobs])
         )
-    
+
     def mean_logprob(self) -> float:
         """Compute mean logprob."""
         return float(np.mean(self.logprobs)) if self.logprobs.size > 0 else 0.0
-    
+
     def perplexity(self) -> float:
         """Compute perplexity."""
         return float(np.exp(-np.mean(self.logprobs))) if self.logprobs.size > 0 else 1.0
-    
+
     @classmethod
     def empty(cls, top_k: int = 5) -> "FlatLogprobs":
         return cls(
@@ -69,7 +69,7 @@ class FlatLogprobs:
             np.zeros((0, top_k), dtype=np.int32),
             np.zeros((0, top_k), dtype=np.float32)
         )
-    
+
     @classmethod
     def from_entries(cls, entries: Sequence[LogprobEntry], top_k: int = 5) -> "FlatLogprobs":
         n = len(entries)
@@ -77,7 +77,7 @@ class FlatLogprobs:
         logprobs = np.zeros(n, dtype=np.float32)
         top_k_ids = np.zeros((n, top_k), dtype=np.int32)
         top_k_lps = np.full((n, top_k), -float('inf'), dtype=np.float32)
-        
+
         for i, entry in enumerate(entries):
             token_ids[i] = entry.token_id
             logprobs[i] = entry.logprob
@@ -85,7 +85,7 @@ class FlatLogprobs:
                 top_k_ids[i, j] = top.token_id
                 top_k_lps[i, j] = top.logprob
         return cls(token_ids, logprobs, top_k_ids, top_k_lps)
-    
+
     def to_entries(self, tokenizer: Optional[Any] = None) -> List[LogprobEntry]:
         entries = []
         for i in range(self.num_tokens):
@@ -97,13 +97,13 @@ class FlatLogprobs:
             tid = int(self.token_ids[i])
             entries.append(LogprobEntry(tid, self._decode(tid, tokenizer), float(self.logprobs[i]), tuple(top_logprobs), i))
         return entries
-    
+
     def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:
         if tokenizer:
             with contextlib.suppress(AttributeError, ValueError, RuntimeError):
                 return tokenizer.decode([tid])
         return f"<{tid}>"
-    
+
     def entropy_per_token(self) -> np.ndarray:
         max_lps = np.max(self.top_k_logprobs, axis=1, keepdims=True)
         exp_lps = np.exp(self.top_k_logprobs - max_lps)

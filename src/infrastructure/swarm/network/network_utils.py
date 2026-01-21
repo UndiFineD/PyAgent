@@ -64,11 +64,11 @@ def get_ip(
 ) -> str:
     """
     Get the machine's IP address.
-    
+
     Args:
         prefer_ipv4: If True, prefer IPv4 over IPv6.
         host_env_var: Optional environment variable to check first.
-    
+
     Returns:
         The detected IP address, or "0.0.0.0" if detection fails.
     """
@@ -77,7 +77,7 @@ def get_ip(
         env_ip = os.environ.get(host_env_var)
         if env_ip:
             return env_ip
-    
+
     # Try IPv4 first if preferred
     if prefer_ipv4:
         with contextlib.suppress(Exception):
@@ -85,20 +85,20 @@ def get_ip(
                 # Doesn't need to be reachable
                 s.connect(("8.8.8.8", 80))
                 return s.getsockname()[0]
-    
+
     # Try IPv6
     with contextlib.suppress(Exception):
         with socket.socket(socket.AF_INET6, socket.SOCK_DGRAM) as s:
             s.connect(("2001:4860:4860::8888", 80))
             return s.getsockname()[0]
-    
+
     # Try IPv4 if we didn't try it first
     if not prefer_ipv4:
         with contextlib.suppress(Exception):
             with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
                 s.connect(("8.8.8.8", 80))
                 return s.getsockname()[0]
-    
+
     warnings.warn(
         "Failed to detect IP address, using 0.0.0.0",
         RuntimeWarning,
@@ -110,15 +110,15 @@ def get_ip(
 def get_loopback_ip(loopback_env_var: str | None = None) -> str:
     """
     Get the loopback IP address (localhost).
-    
+
     Automatically detects whether to use IPv4 (127.0.0.1) or IPv6 (::1).
-    
+
     Args:
         loopback_env_var: Optional environment variable to check first.
-    
+
     Returns:
         The loopback IP address.
-        
+
     Raises:
         RuntimeError: If no loopback interface is available.
     """
@@ -126,15 +126,15 @@ def get_loopback_ip(loopback_env_var: str | None = None) -> str:
         env_ip = os.environ.get(loopback_env_var)
         if env_ip:
             return env_ip
-    
+
     # Test IPv4 loopback
     if test_bind("127.0.0.1", socket.AF_INET):
         return "127.0.0.1"
-    
+
     # Test IPv6 loopback
     if test_bind("::1", socket.AF_INET6):
         return "::1"
-    
+
     raise RuntimeError(
         "Neither 127.0.0.1 nor ::1 are bound to a local interface."
     )
@@ -163,7 +163,7 @@ def get_fqdn() -> str:
 def resolve_hostname(hostname: str) -> list[str]:
     """
     Resolve a hostname to its IP addresses.
-    
+
     Returns:
         List of IP addresses.
     """
@@ -219,15 +219,15 @@ def normalize_ip(address: str) -> str:
 def split_host_port(host_port: str) -> tuple[str, int]:
     """
     Parse a host:port string into components.
-    
+
     Handles IPv6 addresses with brackets: [::1]:8080
-    
+
     Args:
         host_port: String in format "host:port" or "[ipv6]:port"
-    
+
     Returns:
         Tuple of (host, port)
-    
+
     Raises:
         ValueError: If the format is invalid.
     """
@@ -252,13 +252,13 @@ def split_host_port(host_port: str) -> tuple[str, int]:
 def join_host_port(host: str, port: int) -> str:
     """
     Join a host and port into a string.
-    
+
     Handles IPv6 addresses by adding brackets.
-    
+
     Args:
         host: Hostname or IP address.
         port: Port number.
-    
+
     Returns:
         Formatted string "host:port" or "[ipv6]:port"
     """
@@ -279,15 +279,15 @@ def get_open_port(
 ) -> int:
     """
     Find an available port.
-    
+
     Args:
         start_port: Optional starting port to try.
         max_attempts: Maximum ports to try if start_port is specified.
         prefer_ipv4: If True, prefer IPv4 sockets.
-    
+
     Returns:
         An available port number.
-        
+
     Raises:
         RuntimeError: If no port is available.
     """
@@ -302,7 +302,7 @@ def get_open_port(
             except OSError:
                 continue
         raise RuntimeError(f"No available port in range {start_port}-{start_port + max_attempts}")
-    
+
     # Let OS assign a port
     try:
         family = socket.AF_INET if prefer_ipv4 else socket.AF_INET6
@@ -320,11 +320,11 @@ def get_open_port(
 def get_open_ports(count: int = 5, **kwargs: Any) -> list[int]:
     """
     Get multiple available ports.
-    
+
     Args:
         count: Number of ports to find.
         **kwargs: Additional arguments for get_open_port.
-    
+
     Returns:
         List of available port numbers.
     """
@@ -337,12 +337,12 @@ def get_open_ports(count: int = 5, **kwargs: Any) -> list[int]:
 def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
     """
     Check if a port is open (accepting connections).
-    
+
     Args:
         host: Host to check.
         port: Port to check.
         timeout: Connection timeout in seconds.
-    
+
     Returns:
         True if the port is accepting connections.
     """
@@ -361,40 +361,40 @@ def wait_for_port(
 ) -> bool:
     """
     Wait for a port to become available.
-    
+
     Args:
         host: Host to check.
         port: Port to check.
         timeout: Total timeout in seconds.
         poll_interval: Interval between checks.
-    
+
     Returns:
         True if port became available, False if timeout.
     """
     import time
     deadline = time.monotonic() + timeout
-    
+
     while time.monotonic() < deadline:
         if is_port_open(host, port, timeout=min(poll_interval, 0.5)):
             return True
         time.sleep(poll_interval)
-    
+
     return False
 
 
 def find_process_using_port(port: int) -> Any | None:
     """
     Find the process using a specific port.
-    
+
     Requires psutil.
-    
+
     Returns:
         psutil.Process if found, None otherwise.
     """
     if not HAS_PSUTIL:
         logger.warning("psutil not installed, cannot find process")
         return None
-    
+
     for conn in psutil.net_connections():
         if conn.laddr.port == port and conn.status == psutil.CONN_LISTEN:
             try:
@@ -412,11 +412,11 @@ def find_process_using_port(port: int) -> Any | None:
 def get_tcp_uri(ip: str, port: int) -> str:
     """
     Build a TCP URI string.
-    
+
     Args:
         ip: IP address.
         port: Port number.
-    
+
     Returns:
         URI in format "tcp://ip:port" or "tcp://[ipv6]:port"
     """
@@ -428,7 +428,7 @@ def get_tcp_uri(ip: str, port: int) -> str:
 def get_distributed_init_method(ip: str, port: int) -> str:
     """
     Get the distributed initialization method string.
-    
+
     Compatible with PyTorch distributed.
     """
     return get_tcp_uri(ip, port)
@@ -437,7 +437,7 @@ def get_distributed_init_method(ip: str, port: int) -> str:
 def parse_uri(uri: str) -> dict[str, Any]:
     """
     Parse a URI into components.
-    
+
     Returns:
         Dictionary with scheme, host, port, path, query, fragment.
     """
@@ -461,10 +461,10 @@ def parse_uri(uri: str) -> dict[str, Any]:
 def get_zmq_ipc_path(base_path: str | None = None) -> str:
     """
     Generate a unique ZeroMQ IPC path.
-    
+
     Args:
         base_path: Base directory for IPC sockets.
-    
+
     Returns:
         IPC URI string.
     """
@@ -482,13 +482,13 @@ def get_zmq_inproc_path() -> str:
 def close_zmq_sockets(sockets: Sequence[Any]) -> None:
     """
     Close ZeroMQ sockets with linger=0.
-    
+
     Args:
         sockets: Sequence of ZMQ sockets to close.
     """
     if not HAS_ZMQ:
         return
-    
+
     for sock in sockets:
         if sock is not None:
             with contextlib.suppress(Exception):
@@ -504,14 +504,14 @@ def zmq_socket_context(
 ) -> Iterator[Any]:
     """
     Context manager for ZMQ sockets with automatic cleanup.
-    
+
     Usage:
         >>> with zmq_socket_context(ctx, zmq.REQ) as sock:
         ...     sock.connect("tcp://localhost:5555")
     """
     if not HAS_ZMQ:
         raise RuntimeError("ZeroMQ is not installed")
-    
+
     sock = context.socket(socket_type)
     try:
         yield sock
@@ -522,10 +522,10 @@ def zmq_socket_context(
 def create_zmq_context(io_threads: int = 1) -> Any:
     """
     Create a new ZeroMQ context.
-    
+
     Args:
         io_threads: Number of I/O threads.
-    
+
     Returns:
         zmq.Context instance.
     """
@@ -537,10 +537,10 @@ def create_zmq_context(io_threads: int = 1) -> Any:
 def create_async_zmq_context(io_threads: int = 1) -> Any:
     """
     Create a new async ZeroMQ context.
-    
+
     Args:
         io_threads: Number of I/O threads.
-    
+
     Returns:
         zmq.asyncio.Context instance.
     """
@@ -557,18 +557,18 @@ def create_async_zmq_context(io_threads: int = 1) -> Any:
 def get_network_interfaces() -> dict[str, list[str]]:
     """
     Get all network interfaces and their IP addresses.
-    
+
     Requires psutil.
-    
+
     Returns:
         Dictionary mapping interface names to list of IP addresses.
     """
     if not HAS_PSUTIL:
         logger.warning("psutil not installed, limited interface info")
         return {"default": [get_ip()]}
-    
+
     result: dict[str, list[str]] = {}
-    
+
     for iface, addrs in psutil.net_if_addrs().items():
         ips = []
         for addr in addrs:
@@ -576,20 +576,20 @@ def get_network_interfaces() -> dict[str, list[str]]:
                 ips.append(addr.address)
         if ips:
             result[iface] = ips
-    
+
     return result
 
 
 def get_primary_interface() -> str | None:
     """
     Get the name of the primary network interface.
-    
+
     Returns:
         Interface name or None if not determinable.
     """
     if not HAS_PSUTIL:
         return None
-    
+
     # Get the interface used for default route
     with contextlib.suppress(Exception):
         import subprocess
@@ -603,7 +603,7 @@ def get_primary_interface() -> str | None:
                 if part.startswith("dev"):
                     idx = result.stdout.split().index("dev")
                     return result.stdout.split()[idx + 1]
-    
+
     return None
 
 

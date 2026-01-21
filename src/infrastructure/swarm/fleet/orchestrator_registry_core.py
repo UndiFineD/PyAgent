@@ -49,7 +49,7 @@ class OrchestratorRegistryCore:
             file = os.path.basename(rel_path)
             if file.endswith(".py") and not file.startswith("__"):
                 filename_base: str = file[:-3]
-                
+
                 # Convert filename to likely class name (snake_case -> PascalCase)
                 # e.g., "signal_bus_orchestrator" -> "SignalBusOrchestrator"
                 class_name = "".join(x.capitalize() for x in filename_base.split("_"))
@@ -77,7 +77,7 @@ class OrchestratorRegistryCore:
                     raw_short = class_name
                     for suffix in ["Orchestrator", "orchestrator", "_orchestrator"]:
                         raw_short = raw_short.replace(suffix, "")
-                    
+
                     short_key: str = self._to_snake_case(raw_short)
                     full_key: str = self._to_snake_case(class_name)
 

@@ -19,14 +19,14 @@ class PolicyGradientBuffer:
     rewards: List[float] = field(default_factory=list)
     log_probs: List[float] = field(default_factory=list)
     values: List[float] = field(default_factory=list)
-    
+
     def clear(self):
         self.states.clear()
         self.actions.clear()
         self.rewards.clear()
         self.log_probs.clear()
         self.values.clear()
-    
+
     def compute_returns(self, gamma: float = 0.99) -> List[float]:
         """Computes discounted returns."""
         returns = []
@@ -35,7 +35,7 @@ class PolicyGradientBuffer:
             G = r + gamma * G
             returns.insert(0, G)
         return returns
-    
+
     def compute_advantages(self, gamma: float = 0.99, lam: float = 0.95) -> List[float]:
         """Computes GAE (Generalized Advantage Estimation)."""
         advantages = []
@@ -52,13 +52,13 @@ class LearningAlgorithms:
 
     @staticmethod
     def q_learning_update(
-        q_table: Dict[Tuple[str, str], float], 
-        state: str, 
-        action: str, 
-        reward: float, 
-        next_state: str, 
+        q_table: Dict[Tuple[str, str], float],
+        state: str,
+        action: str,
+        reward: float,
+        next_state: str,
         actions: List[str],
-        alpha: float = 0.1, 
+        alpha: float = 0.1,
         gamma: float = 0.99
     ) -> float:
         """Standard Q-Learning update: Q(s,a) <- Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]"""
@@ -115,9 +115,9 @@ class LearningAlgorithms:
 
     @staticmethod
     def epsilon_greedy(
-        q_table: Dict[Tuple[str, str], float], 
-        state: str, 
-        actions: List[str], 
+        q_table: Dict[Tuple[str, str], float],
+        state: str,
+        actions: List[str],
         epsilon: float
     ) -> str:
         """ε-greedy exploration strategy."""
@@ -173,10 +173,10 @@ class LearningAlgorithms:
         """TD(λ) with eligibility traces."""
         # Compute TD error
         delta = reward + gamma * q_table.get((next_state, next_action), 0.0) - q_table.get((state, action), 0.0)
-        
+
         # Update eligibility trace
         eligibility_traces[(state, action)] = eligibility_traces.get((state, action), 0.0) + 1
-        
+
         # Update all Q-values
         for (s, a), e in list(eligibility_traces.items()):
             q_table[(s, a)] = q_table.get((s, a), 0.0) + alpha * delta * e
@@ -186,17 +186,17 @@ class LearningAlgorithms:
 
 class PolicyOptimizer:
     """High-level policy optimization utilities."""
-    
+
     @staticmethod
     def decay_epsilon(epsilon: float, min_epsilon: float = 0.01, decay_rate: float = 0.995) -> float:
         """Exponential epsilon decay."""
         return max(min_epsilon, epsilon * decay_rate)
-    
+
     @staticmethod
     def linear_epsilon_schedule(episode: int, total_episodes: int, start: float = 1.0, end: float = 0.01) -> float:
         """Linear epsilon schedule."""
         return start - (start - end) * min(1.0, episode / total_episodes)
-    
+
     @staticmethod
     def cosine_annealing_lr(step: int, total_steps: int, lr_max: float, lr_min: float = 0.0) -> float:
         """Cosine annealing learning rate schedule."""

@@ -36,7 +36,7 @@ class IncrementalDetokenizer(ABC):
         self.skip_special_tokens = skip_special_tokens
         self.spaces_between_special_tokens = spaces_between_special_tokens
         self.stop_checker = stop_checker
-        
+
         # State
         self.token_ids: List[int] = []
         self.prefix_offset: int = 0
@@ -84,11 +84,11 @@ class IncrementalDetokenizer(ABC):
                 finished=True,
                 stop_reason=self._stop_reason,
             )
-        
+
         # Normalize to list
         if isinstance(new_token_ids, int):
             new_token_ids = [new_token_ids]
-        
+
         # Check for stop tokens
         if self.stop_checker:
             for token_id in new_token_ids:
@@ -101,17 +101,17 @@ class IncrementalDetokenizer(ABC):
                 self.token_ids.extend(new_token_ids)
         else:
             self.token_ids.extend(new_token_ids)
-        
+
         # Decode tokens
         new_text, new_prefix, new_read = self._decode_tokens(
             self.token_ids,
             self.prefix_offset,
             self.read_offset,
         )
-        
+
         self.prefix_offset = new_prefix
         self.read_offset = new_read
-        
+
         # Check for stop strings
         if self.stop_checker and new_text:
             stop_string, text_before = self.stop_checker.check_text(
@@ -121,13 +121,13 @@ class IncrementalDetokenizer(ABC):
                 new_text = text_before[len(self.output_text):]
                 self._finished = True
                 self._stop_reason = stop_string
-        
+
         self.output_text += new_text
-        
+
         # If this is the final update, flush any buffered text
         if finished and not self._finished:
             self._finished = True
-        
+
         return DetokenizeResult(
             new_text=new_text,
             full_text=self.output_text,

@@ -14,14 +14,14 @@ def compute_entropy(logprobs: Sequence[float]) -> float:
     """Compute entropy from logprobs (assuming they're top-k)."""
     if not logprobs:
         return 0.0
-    
+
     max_lp = max(logprobs)
     probs = [math.exp(lp - max_lp) for lp in logprobs]
     total = sum(probs)
-    
+
     if total == 0:
         return 0.0
-    
+
     normalized = [p / total for p in probs]
     return -sum(p * math.log(p) for p in normalized if p > 0)
 

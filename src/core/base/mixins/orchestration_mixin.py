@@ -170,10 +170,10 @@ class OrchestrationMixin:
                 # FleetManager.agents is a LazyAgentMap
                 if agent_type in self.fleet.agents:
                     sub_agent = self.fleet.agents[agent_type]
-                    
+
                     # Log the delegation event
                     self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
-                    
+
                     # Execute with explicit target_file (Phase 317 thread-safety)
                     res = sub_agent.improve_content(prompt, target_file=target_file)
                     if asyncio.iscoroutine(res):
@@ -186,17 +186,17 @@ class OrchestrationMixin:
         try:
             from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
             from src.core.base.lifecycle.agent_core import BaseCore
-            
+
             ws_root = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
-            
+
             # Use the registry to get the agent map
             agent_map = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))
-            
+
             if agent_type in agent_map:
                 sub_agent = agent_map[agent_type]
-                
+
                 self.log_distributed("INFO", f"Delegated to registry agent: {agent_type}", target=target_file)
-                
+
                 # Execute with explicit target_file
                 res = sub_agent.improve_content(prompt, target_file=target_file)
                 if asyncio.iscoroutine(res):

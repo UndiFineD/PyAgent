@@ -6,8 +6,8 @@ Tensor-Parallel Aware KV Transfer.
 
 In Tensor Parallelism (TP), KV heads (and thus KV cache blocks) are partitioned
 across multiple GPUs within a single node or across nodes. This module ensures
-that KV transfer logic correctly handles partitioned blocks, either by 
-re-aggregating them for transfer or by performing parallel transfers of 
+that KV transfer logic correctly handles partitioned blocks, either by
+re-aggregating them for transfer or by performing parallel transfers of
 each shard.
 
 Key Patterns:
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 class TensorParallelTransfer:
     """
     Orchestrator for TP-aware KV transfer.
-    
+
     Handles the complexities of sharded KV caches where multiple TP ranks
     must coordinate their independent transfers to respective TP ranks
     in the destination group.
@@ -56,8 +56,8 @@ class TensorParallelTransfer:
         self.tp_rank = tp_rank
         self.tp_size = tp_size
         self.local_connector = local_connector
-        
-        logger.info("TensorParallelTransfer initialized for rank %d/%d", 
+
+        logger.info("TensorParallelTransfer initialized for rank %d/%d",
                     tp_rank, tp_size)
 
     def _aggregate_tp_metadata_rust(self, metadata_shards: List[bytes]) -> bytes:
@@ -68,7 +68,7 @@ class TensorParallelTransfer:
     def shard_aware_push(self, layer_name: str, kv_shard: Any, attn_metadata: Any):
         """
         Push a shard of the KV cache.
-        
+
         Each TP rank calls this for its portion of the KV heads.
         """
         # The connector handles the actual transport

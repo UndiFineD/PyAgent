@@ -29,7 +29,7 @@ class LoadStoreSpec:
     medium: OffloadMedium
     addresses: List[int] = field(default_factory=list)
     sizes: List[int] = field(default_factory=list)
-    
+
     @property
     def num_blocks(self) -> int:
         return len(self.block_hashes)
@@ -42,7 +42,7 @@ class BlockStatus:
     size: int = 0
     ref_cnt: int = 0
     is_ready: bool = False
-    
+
     @property
     def is_pinned(self) -> bool:
         """Block is pinned if it has references."""
