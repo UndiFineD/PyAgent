@@ -1,20 +1,27 @@
 """Pytest fixtures for test_agent tests."""
 
-import pytest
 import os
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-# Ensure git is in PATH for tests on Windows
-for possible_git in [
-    r"C:\Program Files\Git\cmd",
-    r"C:\Program Files (x86)\Git\cmd",
-    os.path.join(os.environ.get("LOCALAPPDATA", ""), "Programs", "Git", "cmd")
-]:
-    if os.path.exists(possible_git) and possible_git not in os.environ["PATH"]:
-        os.environ["PATH"] = possible_git + os.pathsep + os.environ["PATH"]
+import pytest
 
 from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
+
+
+def ensure_git_on_path() -> None:
+    """Ensure git is in PATH for tests on Windows."""
+    for possible_git in [
+        r"C:\Program Files\Git\cmd",
+        r"C:\Program Files (x86)\Git\cmd",
+        os.path.join(os.environ.get("LOCALAPPDATA", ""), "Programs", "Git", "cmd")
+    ]:
+        if os.path.exists(possible_git) and possible_git not in os.environ["PATH"]:
+            os.environ["PATH"] = possible_git + os.pathsep + os.environ["PATH"]
+
+
+# Call it early
+ensure_git_on_path()
 
 
 @pytest.fixture
@@ -25,28 +32,102 @@ def agent_module() -> Any:
 
         # Configuration for legacy injections
         injections = [
-            ("src.core.base.common.models.core_enums", ["AgentExecutionState", "AgentPriority", "ConfigFormat", "DiffOutputFormat", "HealthStatus", "LockType", "RateLimitStrategy"]),
-            ("src.core.base.common.utils.agent_priority_queue", ["AgentPriorityQueue"]),
-            ("src.core.base.common.utils.validation_rule_manager", ["ValidationRuleManager"]),
-            ("src.core.base.common.utils.telemetry_collector", ["TelemetryCollector"]),
-            ("src.core.base.common.utils.conditional_executor", ["ConditionalExecutor"]),
-            ("src.core.base.common.utils.template_manager", ["TemplateManager"]),
-            ("src.core.base.common.utils.result_cache", ["ResultCache"]),
-            ("src.core.base.common.utils.execution_scheduler", ["ExecutionScheduler"]),
-            ("src.core.base.common.utils.file_lock_manager", ["FileLockManager"]),
-            ("src.core.base.common.utils.rate_limiter", ["RateLimiter"]),
-            ("src.core.base.common.utils.diff_generator", ["DiffGenerator"]),
-            ("src.core.base.common.utils.file_lock", ["FileLock"]),
-            ("src.core.base.logic.dependency_graph", ["DependencyGraph"]),
-            ("src.core.base.common.config_loader", ["ConfigLoader"]),
-            ("src.core.base.lifecycle.graceful_shutdown", ["GracefulShutdown"]),
-            ("src.core.base.logic.incremental_processor", ["IncrementalProcessor"]),
-            ("src.core.base.logic.managers.system_managers", ["ProfileManager", "HealthChecker"]),
-            ("src.logic.agents.development.git_branch_processor", ["GitBranchProcessor"]),
-            ("src.logic.orchestration.agent_chain", ["AgentChain"]),
-            ("src.core.base.common.models.fleet_models", ["IncrementalState", "RateLimitConfig", "ShutdownState"]),
-            ("src.core.base.common.models.agent_models", ["AgentPluginConfig", "AgentHealthCheck"]),
-            ("src.core.base.common.models.base_models", ["ExecutionCondition", "DiffResult"]),
+            (
+                "src.core.base.common.models.core_enums",
+                [
+                    "AgentExecutionState",
+                    "AgentPriority",
+                    "ConfigFormat",
+                    "DiffOutputFormat",
+                    "HealthStatus",
+                    "LockType",
+                    "RateLimitStrategy"
+                ]
+            ),
+            (
+                "src.core.base.common.utils.agent_priority_queue",
+                ["AgentPriorityQueue"]
+            ),
+            (
+                "src.core.base.common.utils.validation_rule_manager",
+                ["ValidationRuleManager"]
+            ),
+            (
+                "src.core.base.common.utils.telemetry_collector",
+                ["TelemetryCollector"]
+            ),
+            (
+                "src.core.base.common.utils.conditional_executor",
+                ["ConditionalExecutor"]
+            ),
+            (
+                "src.core.base.common.utils.template_manager",
+                ["TemplateManager"]
+            ),
+            (
+                "src.core.base.common.utils.result_cache",
+                ["ResultCache"]
+            ),
+            (
+                "src.core.base.common.utils.execution_scheduler",
+                ["ExecutionScheduler"]
+            ),
+            (
+                "src.core.base.common.utils.file_lock_manager",
+                ["FileLockManager"]
+            ),
+            (
+                "src.core.base.common.utils.rate_limiter",
+                ["RateLimiter"]
+            ),
+            (
+                "src.core.base.common.utils.diff_generator",
+                ["DiffGenerator"]
+            ),
+            (
+                "src.core.base.common.utils.file_lock",
+                ["FileLock"]
+            ),
+            (
+                "src.core.base.logic.dependency_graph",
+                ["DependencyGraph"]
+            ),
+            (
+                "src.core.base.common.config_loader",
+                ["ConfigLoader"]
+            ),
+            (
+                "src.core.base.lifecycle.graceful_shutdown",
+                ["GracefulShutdown"]
+            ),
+            (
+                "src.core.base.logic.incremental_processor",
+                ["IncrementalProcessor"]
+            ),
+            (
+                "src.core.base.logic.managers.system_managers",
+                ["ProfileManager", "HealthChecker"]
+            ),
+            (
+                "src.logic.agents.development.git_branch_processor",
+                ["GitBranchProcessor"]
+            ),
+            (
+                "src.logic.orchestration.agent_chain",
+                ["AgentChain"]
+            ),
+            (
+                "src.core.base.common.models.fleet_models",
+                ["IncrementalState", "RateLimitConfig", "ShutdownState"]
+            ),
+            (
+                "src.core.base.common.models.agent_models",
+                ["AgentPluginConfig", "AgentHealthCheck"]
+            ),
+            (
+                "src.core.base.common.models.base_models",
+                ["ExecutionCondition", "DiffResult"]
+            ),
         ]
 
         for module_path, attr_names in injections:
@@ -92,7 +173,7 @@ def _inject_special_shims(mod: Any) -> None:
         pass
 
 
-def _create_legacy_validation_rule_shim(real_cls: Any) -> Any:
+def _create_legacy_validation_rule_shim(_real_cls: Any) -> Any:
     """Creates a shim for ValidationRule that supports legacy arguments."""
     class TestValidationRule:
         def __init__(self, name, pattern="", message="Validation failed", severity="error", **kwargs):
@@ -129,9 +210,9 @@ def _inject_legacy_agent_wrapper(mod: Any) -> None:
 
 
 @pytest.fixture
-def agent(agent_module: Any, tmp_path: Path) -> Any:
+def agent(mod: Any, tmp_path: Path) -> Any:
     """Create an Agent instance for testing."""
-    Agent = agent_module.Agent
+    Agent = mod.Agent
     test_file = tmp_path / "test_agent.py"
     test_file.write_text("print('hello')\n")
     return Agent([str(test_file)])

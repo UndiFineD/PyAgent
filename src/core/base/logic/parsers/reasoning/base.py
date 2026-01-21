@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""Base reasoning parser interface."""
+
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, ClassVar, Sequence
@@ -25,13 +27,13 @@ class ReasoningParser(ABC):
     # Class-level name for registration
     name: ClassVar[str] = "base"
 
-    def __init__(self, tokenizer: Any = None, **kwargs: Any) -> None:
+    def __init__(self, tokenizer: Any = None, **_kwargs: Any) -> None:
         """
         Initialize the reasoning parser.
 
         Args:
             tokenizer: Tokenizer for token-level operations (optional).
-            **kwargs: Additional configuration options.
+            **_kwargs: Additional configuration options.
         """
         self.model_tokenizer = tokenizer
 
@@ -60,14 +62,14 @@ class ReasoningParser(ABC):
     def is_reasoning_end_streaming(
         self,
         input_ids: list[int],
-        delta_ids: list[int],
+        _delta_ids: list[int],
     ) -> bool:
         """
         Check if reasoning ends during streaming (decode step).
 
         Args:
             input_ids: The entire model output token IDs.
-            delta_ids: The latest tokens from current decode step.
+            _delta_ids: The latest tokens from current decode step.
 
         Returns:
             True if reasoning section ends in delta_ids.

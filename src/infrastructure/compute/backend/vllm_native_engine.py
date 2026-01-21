@@ -21,7 +21,7 @@ Optimized for local inference and future trillion-parameter context handling.
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 import logging
-from typing import Any
+from typing import Any, Optional
 import os
 
 __version__ = VERSION
@@ -84,7 +84,9 @@ class VllmNativeEngine:
                         )
 
                 logging.info(
-                    f"Initializing Native vLLM: {self.model_name} (Device: {os.environ.get('VLLM_TARGET_DEVICE', 'auto')})..."
+                    "Initializing Native vLLM: %s (Device: %s)...",
+                    self.model_name,
+                    os.environ.get("VLLM_TARGET_DEVICE", "auto")
                 )
 
                 import torch
@@ -98,7 +100,7 @@ class VllmNativeEngine:
                     os.environ["VLLM_TARGET_DEVICE"] = "cpu"
 
                 # Configure for CPU if applicable
-                kwargs = {"model": self.model_name, "trust_remote_code": True}
+                kwargs = {"model": self.model_name, "trust_remote_code": False}
 
                 if os.environ.get("VLLM_TARGET_DEVICE") == "cpu":
                     kwargs["device"] = "cpu"
@@ -107,9 +109,9 @@ class VllmNativeEngine:
                     kwargs["tensor_parallel_size"] = self.tensor_parallel_size
 
                 self._llm = LLM(**kwargs)
-                logging.info("Native vLLM Engine started successfully.")
-            except Exception as e:
-                logging.error(f"Failed to start Native vLLM Engine: {e}")
+                return True
+            except Exception as e: # pylint: disable=broad-exception-caught
+                logging.error("Failed to start Native vLLM Engine: %s", e)
                 self.enabled = False
                 return False
         return True
@@ -180,8 +182,8 @@ class VllmNativeEngine:
             if outputs:
                 return outputs[0].outputs[0].text
             return ""
-        except Exception as e:
-            logging.error(f"Native vLLM generation failed: {e}")
+        except Exception as e: # pylint: disable=broad-exception-caught
+            logging.error("Native vLLM generation failed: %s", e)
             return ""
 
     def generate_json(

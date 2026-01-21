@@ -1,3 +1,7 @@
+"""
+Core logic for Agent Identity and Cryptographic Verification.
+"""
+
 from __future__ import annotations
 import hashlib
 import hmac
@@ -28,8 +32,9 @@ class IdentityCore:
         """Generates a stable, unique agent identifier based on public key and metadata."""
         if rc:
             try:
+                # pylint: disable=no-member
                 return rc.generate_agent_id(public_key, metadata)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         seed = f"{public_key}_{metadata.get('type', 'generic')}_{metadata.get('birth_cycle', 0)}"
         return hashlib.sha256(seed.encode()).hexdigest()[:16]
@@ -38,8 +43,9 @@ class IdentityCore:
         """Signs a payload using HMAC-SHA256 (simulating Ed25519 signing for pure-python)."""
         if rc:
             try:
+                # pylint: disable=no-member
                 return rc.sign_payload(payload, secret_key)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         return hmac.new(
             secret_key.encode(), payload.encode(), hashlib.sha256
@@ -49,8 +55,9 @@ class IdentityCore:
         """Verifies a payload signature (simulated verification)."""
         if rc:
             try:
+                # pylint: disable=no-member
                 return rc.verify_signature(payload, signature, public_key)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         # In a real implementation, this would use asymmetrical crypto.
         # For the Core logic, we simulate it by re-signing with the 'public_key'

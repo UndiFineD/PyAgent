@@ -1,3 +1,4 @@
+"""Analysis and metrics processing logic for fleet observability."""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Logic for metric analysis, profiling, stability, and forecasting.
@@ -5,23 +6,18 @@
 
 from __future__ import annotations
 import ast
+import contextlib
 import logging
 import math
 import operator
 import re
 import time
-import contextlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from .observability_core import (
-    DerivedMetric,
-    MetricCorrelation,
-)
-from .ab_engine import (
-    ABComparisonResult,
-    ABSignificanceResult,
-)
+
+from .observability_core import DerivedMetric, MetricCorrelation
+from .ab_engine import ABComparisonResult, ABSignificanceResult
 
 try:
     import rust_core as rc
@@ -62,10 +58,11 @@ class ProfilingCore:
     """Pure logic for cProfile aggregation and bottleneck analysis."""
 
     def analyze_stats(self, pstats_obj: Any, limit: int = 10) -> list[ProfileStats]:
+        """Convert pstats objects into a flat list of ProfileStats."""
         results: list[Any] = []
 
         pstats_obj.sort_stats("cumulative")
-        for func, (cc, nc, tt, ct, callers) in pstats_obj.stats.items():
+        for func, (cc, _, _, ct, _) in pstats_obj.stats.items():
             if len(results) >= limit:
                 break
             results.append(
@@ -254,6 +251,7 @@ class DerivedMetricCalculator:
             cast_values = {k: float(v) for k, v in metric_values.items()}
             with contextlib.suppress(Exception):
                 # The Rust version handles {dep} replacement internally
+                # pylint: disable=no-member
                 return float(rc.evaluate_formula(derived.formula, cast_values))
 
         formula = derived.formula
@@ -276,8 +274,8 @@ class DerivedMetricCalculator:
             result = self._eval_node(tree.body)
             self._cache[name] = result
             return result
-        except Exception as e:
-            logger.error(f"Failed to calculate {name}: {e}")
+        except Exception as e: # pylint: disable=broad-exception-caught
+            logger.error("Failed to calculate %s: %s", name, e)
             return None
 
 
@@ -336,12 +334,6 @@ class CorrelationAnalyzer:
         ]
 
 
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None  # type: ignore[assignment]
-
-
 class FormulaEngineCore:
     """Pure logic core for formula calculations."""
 
@@ -371,6 +363,7 @@ class FormulaEngineCore:
         raise TypeError(f"Unsupported operation: {type(node)}")
 
     def calculate_logic(self, formula: str, variables: dict[str, Any]) -> float:
+        """Evaluate a formula with variables."""
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
                 # Convert variables to dict[str, float] for Rust (excludes list/complex types)
@@ -379,7 +372,7 @@ class FormulaEngineCore:
                     for k, v in variables.items()
                     if isinstance(v, (int, float))
                 }
-
+                # pylint: disable=no-member
                 return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
 
         if "AVG(" in formula:
@@ -396,10 +389,11 @@ class FormulaEngineCore:
                 eval_f = eval_f.replace(f"{{{k}}}", str(v))
             tree = ast.parse(eval_f, mode="eval")
             return self._eval_node(tree.body)
-        except Exception:
+        except Exception: # pylint: disable=broad-exception-caught
             return 0.0
 
     def validate_logic(self, formula: str) -> dict[str, Any]:
+        """Validate if a formula is syntactically correct."""
         try:
             if any(s in formula for s in ["+++", "***", "---"]):
                 return {"is_valid": False, "error": "Invalid operator sequence"}
@@ -409,26 +403,31 @@ class FormulaEngineCore:
             ast.parse(test_f, mode="eval")
 
             return {"is_valid": True, "error": None}
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             return {"is_valid": False, "error": str(e)}
 
 
 class FormulaEngine:
+    """Orchestrates formula definition and calculation."""
     def __init__(self) -> None:
         self.formulas: dict[str, str] = {}
 
         self.core = FormulaEngineCore()
 
     def define(self, name: str, formula: str) -> None:
+        """Define a named formula."""
         self.formulas[name] = formula
 
     def calculate(self, f_or_n: str, variables: dict[str, Any] | None = None) -> float:
+        """Calculate a named formula or a raw expression."""
         f = self.formulas.get(f_or_n, f_or_n)
         return self.core.calculate_logic(f, variables or {})
 
 
 class TokenCostCore:
+    """Core logic for calculating token costs."""
     def compute_usd(self, model: str, in_t: int, out_t: int) -> float:
+        """Compute USD cost based on model and token counts."""
         mk = model.lower()
         p = MODEL_COSTS.get(mk) or next(
             (MODEL_COSTS[k] for k in MODEL_COSTS if k != "default" and k in mk),
@@ -438,16 +437,19 @@ class TokenCostCore:
 
 
 class TokenCostEngine:
+    """Service for managing token costs."""
     def __init__(self) -> None:
         self.core = TokenCostCore()
 
     def calculate_cost(
         self, model_name: str, input_tokens: int = 0, output_tokens: int = 0
     ) -> float:
+        """Calculate cost for a model call."""
         return self.core.compute_usd(model_name, input_tokens, output_tokens)
 
 
 class ModelFallbackCore:
+    """Logic for determining model fallback chains."""
     def __init__(self, chains: dict[str, list[str]] | None = None) -> None:
         self.chains = chains or {
             "high_performance": ["gpt-4o", "claude-3-5-sonnet", "gpt-4-turbo"],
@@ -456,6 +458,7 @@ class ModelFallbackCore:
         }
 
     def determine_next_model(self, cur: str) -> str | None:
+        """Determine the next model in the fallback chain."""
         for c in self.chains.values():
             if cur in c and c.index(cur) + 1 < len(c):
                 return c[c.index(cur) + 1]
@@ -464,24 +467,29 @@ class ModelFallbackCore:
 
 
 class ModelFallbackEngine:
+    """Service for handling model fallbacks."""
     def __init__(self, cost_engine: TokenCostEngine | None = None) -> None:
         self.cost_engine = cost_engine
         self.core = ModelFallbackCore()
 
-    def get_fallback_model(self, current_model: str, research: str = "") -> str | None:
+    def get_fallback_model(self, current_model: str, _research: str = "") -> str | None:
+        """Get the next model to use."""
         return self.core.determine_next_model(current_model)
 
 
 class StatsRollupCalculator:
+    """Calculate rolled-up statistics over time intervals."""
     def __init__(self) -> None:
         self._points: dict[str, list[tuple[float, float]]] = {}
 
     def add_point(self, m: str, ts: float, v: float) -> None:
+        """Add a data point."""
         if m not in self._points:
             self._points[m] = []
         self._points[m].append((float(ts), float(v)))
 
     def rollup(self, m: str, interval: str = "1h") -> list[float]:
+        """Roll up points into averages per bucket."""
         pts = self._points.get(m, [])
         if not pts:
             return []
@@ -492,16 +500,19 @@ class StatsRollupCalculator:
 
         if rc:
             with contextlib.suppress(Exception):
+                # pylint: disable=no-member
                 return rc.calculate_stats_rollup(pts, bucket)  # type: ignore[attr-defined]
 
         bkts: dict[int, list[float]] = {}
         for t, v in pts:
             bkts.setdefault(int(t) // int(bucket), []).append(float(v))
-        return [sum(bkts[k]) / len(bkts[k]) for k in sorted(bkts.keys())]
+        return [sum(vals) / len(vals) for _, vals in sorted(bkts.items())]
 
 
 class StatsForecaster:
+    """Basic forecasting logic for metrics."""
     def predict(self, hist: list[float], periods: int = 3) -> list[float]:
+        """Predict future points using simple trend analysis."""
         if periods <= 0 or not hist:
             return []
         if len(hist) == 1:
@@ -512,7 +523,9 @@ class StatsForecaster:
 
 
 class ABComparator:
+    """Compare sets of metrics for A/B testing."""
     def compare(self, a: dict[str, float], b: dict[str, float]) -> ABComparisonResult:
+        """Compare two sets of metrics."""
         common = sorted(set(a.keys()) & set(b.keys()))
         diffs = {
             k: float(b[k]) - float(a[k])
@@ -524,6 +537,7 @@ class ABComparator:
     def calculate_significance(
         self, ctrl: list[float], treat: list[float], alpha: float = 0.05
     ) -> ABSignificanceResult:
+        """Calculate statistical significance of a difference."""
         if not ctrl or not treat:
             return ABSignificanceResult(1.0, False, 0.0)
         ma, mb = sum(ctrl) / len(ctrl), sum(treat) / len(treat)
@@ -533,10 +547,12 @@ class ABComparator:
 
 
 class ResourceMonitor:
+    """Monitor system resources."""
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
 
     def get_current_stats(self) -> dict[str, Any]:
+        """Get current CPU and Memory usage."""
         stats = {"cpu_usage_pct": 0, "memory_usage_pct": 0, "status": "HEALTHY"}
         if HAS_PSUTIL:
             stats["cpu_usage_pct"] = psutil.cpu_percent()

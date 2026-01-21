@@ -9,7 +9,17 @@ from __future__ import annotations
 import json
 import logging
 import re
+import os
+import gc
 from typing import Any, Dict, List, Optional, Union
+
+# Check torch availability
+try:
+    import torch
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
+    torch = None
 
 # Check vLLM availability
 try:
@@ -23,7 +33,7 @@ except ImportError:
 
 # Check outlines availability
 try:
-    import outlines
+    import outlines # pylint: disable=unused-import
     HAS_OUTLINES = True
 except ImportError:
     HAS_OUTLINES = False
@@ -84,20 +94,17 @@ class GuidedDecoder:
             return True
 
         try:
-            import os
-            import torch
-
             if "VLLM_TARGET_DEVICE" not in os.environ:
-                if torch.cuda.is_available():
+                if HAS_TORCH and torch.cuda.is_available():
                     os.environ["VLLM_TARGET_DEVICE"] = "cuda"
                 else:
                     os.environ["VLLM_TARGET_DEVICE"] = "cpu"
 
-            logger.info(f"Initializing GuidedDecoder with model: {self.model}")
+            logger.info("Initializing GuidedDecoder with model: %s", self.model)
 
             kwargs = {
                 "model": self.model,
-                "trust_remote_code": True,
+                "trust_remote_code": False,
                 **self._llm_kwargs,
             }
 
@@ -112,8 +119,8 @@ class GuidedDecoder:
             logger.info("GuidedDecoder initialized successfully")
             return True
 
-        except Exception as e:
-            logger.error(f"Failed to initialize GuidedDecoder: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.error("Failed to initialize GuidedDecoder: %s", e)
             return False
 
     def generate(
@@ -154,8 +161,8 @@ class GuidedDecoder:
 
             return ""
 
-        except Exception as e:
-            logger.error(f"Guided generation failed: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.error("Guided generation failed: %s", e)
             return ""
 
     def generate_json(
@@ -198,7 +205,7 @@ class GuidedDecoder:
                 return json.loads(result)
             except json.JSONDecodeError as e:
                 self._stats["validation_failures"] += 1
-                logger.warning(f"Failed to parse JSON output: {e}")
+                logger.warning("Failed to parse JSON output: %s", str(e))
                 return result
 
         return result
@@ -238,7 +245,7 @@ class GuidedDecoder:
         if validate and result:
             if not re.match(pattern_str, result):
                 self._stats["validation_failures"] += 1
-                logger.warning(f"Output doesn't match pattern: {pattern_str}")
+                logger.warning("Output doesn't match pattern: %s", str(pattern_str))
 
         return result
 
@@ -316,17 +323,12 @@ class GuidedDecoder:
     def shutdown(self) -> None:
         """Shutdown and free resources."""
         if self._llm:
-            import gc
             del self._llm
             self._llm = None
             gc.collect()
 
-            try:
-                import torch
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
-            except ImportError:
-                pass
+            if HAS_TORCH and torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
             self._initialized = False
             logger.info("GuidedDecoder shut down")
