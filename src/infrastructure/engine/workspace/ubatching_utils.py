@@ -18,7 +18,12 @@ Optimizes execution by slicing larger batches into hardware-aligned segments.
 """
 
 import logging
+<<<<<<< HEAD
 from typing import Any, Dict, List
+=======
+from typing import List, Any, Optional, Dict
+import time
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -27,22 +32,39 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class UBatchingUtils:
     """
     Low-level utilities for micro-batch (UBatch) decomposition and coordination.
     Essential for 120fps synchronized multimodal pipelines.
     """
+<<<<<<< HEAD
 
     def __init__(self) -> None:
         self._stats: Dict[str, Any] = {"total_slices": 0, "avg_slice_size": 0.0, "sync_count": 0}
+=======
+    
+    def __init__(self):
+        self._stats: Dict[str, Any] = {
+            "total_slices": 0,
+            "avg_slice_size": 0.0,
+            "sync_count": 0
+        }
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     @staticmethod
     def slice_batch(batch: List[Any], min_slice: int = 4) -> List[List[Any]]:
         """
         Slices a batch into micro-batches for concurrent processing.
         """
+<<<<<<< HEAD
         return [batch[i : i + min_slice] for i in range(0, len(batch), min_slice)]
+=======
+        return [batch[i:i + min_slice] for i in range(0, len(batch), min_slice)]
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     @staticmethod
     def compute_optimal_slices(total_tokens: int, num_sms: int = 80) -> List[int]:
@@ -51,13 +73,21 @@ class UBatchingUtils:
         """
         if rc and hasattr(rc, "ubatch_slice_optimal_rust"):
             return rc.ubatch_slice_optimal_rust(total_tokens, num_sms)
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Fallback: Simple uniform slicing
         slice_size = max(1, total_tokens // num_sms)
         return [slice_size] * (total_tokens // slice_size)
 
     @staticmethod
+<<<<<<< HEAD
     def coordinate_threads(thread_id: int, total_threads: int) -> None:
+=======
+    def coordinate_threads(thread_id: int, total_threads: int):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Ensures strict thread ordering for DBO access within a UBatch.
         """
@@ -65,8 +95,12 @@ class UBatchingUtils:
             rc.ubatch_thread_wait_rust(thread_id, total_threads)
         else:
             # Emulated wait
+<<<<<<< HEAD
             import threading
             threading.Event().wait(0.001 * (thread_id / total_threads))
+=======
+            time.sleep(0.001 * (thread_id / total_threads))
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def get_ubatch_metrics(self) -> Dict[str, Any]:
         """Returns micro-batching performance metrics."""

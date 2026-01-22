@@ -28,7 +28,7 @@ class FinishReason(Enum):
 
 
 @dataclass
-class Request:
+class Request: # pylint: disable=too-many-instance-attributes
     """A request to be processed by the engine."""
     request_id: str
     prompt_token_ids: List[int]

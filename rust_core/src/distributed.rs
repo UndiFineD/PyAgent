@@ -57,7 +57,11 @@ pub fn load_balance_select_rust(ranks: Vec<usize>, loads: Vec<f64>) -> PyResult<
 }
 
 #[pyfunction]
+<<<<<<< HEAD
 pub fn multi_node_coordinate_rust(_node_id: usize, total_nodes: usize, shape: Vec<usize>) -> PyResult<HashMap<usize, Vec<usize>>> {
+=======
+pub fn multi_node_coordinate_rust(node_id: usize, total_nodes: usize, shape: Vec<usize>) -> PyResult<HashMap<usize, Vec<usize>>> {
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     // Phase 55: Topology-aware tensor split calculation
     let mut result = HashMap::new();
     let last_dim = shape[shape.len() - 1];

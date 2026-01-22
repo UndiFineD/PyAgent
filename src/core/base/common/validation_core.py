@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 """
 Standardized validation logic for reports, improvements, and configs.
 """
@@ -23,12 +24,23 @@ import json
 import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
+=======
+from __future__ import annotations
+import json
+import logging
+import fnmatch
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+from .base_core import BaseCore
+from src.core.base.common.models import ValidationRule
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 from src.core.base.common.models import ValidationRule
 
 from .base_core import BaseCore
@@ -36,12 +48,17 @@ from .base_core import BaseCore
 logger = logging.getLogger("pyagent.validation")
 
 
+=======
+logger = logging.getLogger("pyagent.validation")
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ValidationCore(BaseCore):
     """
     Standardized validation logic for reports, improvements, and configs.
     Pre-wired for high-speed Rust schema validation and content safety.
     """
 
+<<<<<<< HEAD
     def __init__(self, name: str = "ValidationCore", repo_root: Optional[Union[str, Path]] = None, **kwargs) -> None:
         super().__init__(name=name, repo_root=repo_root, **kwargs)
         self._rules: Dict[str, ValidationRule] = {}
@@ -113,6 +130,37 @@ class ValidationCore(BaseCore):
                     )
                 except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
                     results.append({"rule": rule.name, "passed": False, "severity": "error", "message": str(err)})
+=======
+    def __init__(self, name: str = "ValidationCore", root_path: Optional[str] = None) -> None:
+        super().__init__(name=name, root_path=root_path)
+        self._rules: Dict[str, ValidationRule] = {}
+
+    def add_rule(self, rule: ValidationRule) -> None:
+        self._rules[rule.name] = rule
+
+    def validate_content_by_rules(self, file_path: Path, content: str) -> List[Dict[str, Any]]:
+        """Validate content against applicable rules. Rust-accelerated for large files."""
+        if rc and hasattr(rc, "validate_content_rust"):
+            try:
+                # Passing rule patterns to Rust for bulk processing
+                return rc.validate_content_rust(str(file_path), content, list(self._rules.keys()))
+            except Exception:
+                pass
+
+        results = []
+        for rule in self._rules.values():
+            if fnmatch.fnmatch(file_path.name, rule.file_pattern):
+                try:
+                    passed = rule.validator(content, file_path)
+                    results.append({
+                        "rule": rule.name,
+                        "passed": passed,
+                        "severity": rule.severity,
+                        "message": None if passed else rule.error_message,
+                    })
+                except Exception as e:
+                    results.append({"rule": rule.name, "passed": False, "severity": "error", "message": str(e)})
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return results
 
     def validate_json_schema(self, data: Any, schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
@@ -122,6 +170,7 @@ class ValidationCore(BaseCore):
                 data_str = json.dumps(data) if not isinstance(data, str) else data
                 schema_str = json.dumps(schema)
                 # Rust returns (is_valid, error_list)
+<<<<<<< HEAD
                 return rc.json_schema_validate_rust(data_str, schema_str)  # pylint: disable=no-member
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
@@ -131,9 +180,23 @@ class ValidationCore(BaseCore):
         if not isinstance(data, dict):
             return False, ["Data must be a dictionary"]
 
+=======
+                return rc.json_schema_validate_rust(data_str, schema_str)
+            except Exception:
+                pass
+        
+        errors = []
+        if not isinstance(data, dict):
+            return False, ["Data must be a dictionary"]
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         required = schema.get("required", [])
         for key in required:
             if key not in data:
                 errors.append(f"Missing required key: {key}")
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return len(errors) == 0, errors

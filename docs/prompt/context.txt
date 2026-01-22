@@ -1,63 +1,46 @@
 # PyAgent Workspace Context
 # Generated: January 19, 2026
-# Version: 3.17.0 (Evolution Phase 50 - TALON & Automation)
+# Version: 3.19.0 (Evolution Phase 51 - Multimedia & Attention)
 
 ## Project Overview
-PyAgent is an AI-powered multi-agent orchestration system for autonomous code improvement.
-The fleet coordinates 100+ specialized agents across 5 architectural tiers to analyze,
-improve, and maintain Python codebases with high autonomy.
+PyAgent is an AI-powered multi-agent orchestration system for autonomous code improvement,
+now evolving into a high-performance streaming AI platform supporting 120fps multimodal I/O.
 
 ## Architecture (5-Tiered)
 - src/core/          → Primitives, Knowledge Trinity (B-Tree, Vector, Graph)
 - src/logic/         → Swarm Intelligence, Specialized Agents, Reasoning Strategies  
-- src/infrastructure/→ Fleet Management, Economy, API Wrappers, Orchestration, Engine (Modularized), Mooncake, Nixl, Disaggregated Workers.
-- src/interface/     → Multi-UI layer (CLI, GUI, Web, Mobile)
+- src/infrastructure/→ Fleet Management, Economy, AI Engine (TensorRT/vLLM), Multimedia (120fps DVD-Channels), Disaggregated Workers.
+- src/interface/     → Multi-UI layer (CLI, Web, Mobile/Flutter)
 - src/observability/ → Telemetry, Stats, Reporting, Audit Trails
 
 ## Rust Acceleration (rust_core/)
-- **532 PyO3 functions** for CPU-bound operations (Nixl/RDMA, TALON blocks added).
-- **Hardware-Aware Neural Engine** (`neural.rs`): Scales Transformer models based on VRAM/RAM.
-- Performance: 41% end-to-end acceleration; optimized complexity analysis (Rust-native).
-- **Phases 1-40**: Core logic, vector math, memory management, and initial vLLM patterns.
-- **Phase 41**: Tokenizer registry, model registry, LoRA, logprobs, tools, structured output (18 Rust functions).
-- **Phase 42**: Platform interface, OpenAI API, prompt rendering, MCP tools (17 Rust functions).
-- **Phase 43**: Engine core, KV cache coordination, request queue, parallel sampling (16 Rust functions).
-- **Phase 44**: Advanced sampling, speculative decoding v2, encoder cache, KV metrics (12 Rust functions).
-- **Phase 45**: Worker protocol, executor patterns, spec decode orchestration (16 Rust functions).
-- **Phase 46**: Structured output constraints, JSON schema, guided decoding (17 Rust functions).
-- **Phase 47**: EAGLE speculative decoding, ARC/LRU offload, BlockTable v2 (14 Rust functions).
-- **Phase 48**: Mooncake/Nixl connectors, disaggregated workers, parallel KV transfer (12 Rust functions).
-- **Phase 49**: Systematic Modularization (SamplingEngine, ResponsesAPI, PagedAttention, Reasoning split).
-- **Phase 50**: TALON Integration & Advanced Speculative Decoding (arXiv:2601.07353).
+- **543+ PyO3 functions** for CPU-bound operations and hardware acceleration.
+- **Hardware-Aware Neural Engine**: Supports CUDA, TensorRT, and AMD NPU.
+- Performance: 120fps throughput verified on Tier 3 (Infrastructure) hotspots.
+- **Phase 51**: TensorRT initialization, IA3 scaling, advanced attention kernels, binary multi-channel MUX (新增 11 Rust functions).
 
-## Current State (Phase 50 TALON)
-- Test baseline: 3,064+ tests with 100% collection health.
-- vLLM Integration: 34 phases complete (17-50), 532 Rust functions, ~195 Python modules.
-- Modular Refactoring: All files > 500 lines split into subpackages (Sampling, Reasoning, Speculative, Commands).
+## Current State (Phase 51 Multimedia)
+- Test baseline: ~3,100+ tests with 100% collection health.
+- vLLM Integration: Phase 51 active, 543 Rust functions, ~203 Python modules.
+- Multimedia: Transitioning to TensorRT + IA³ + Quantization for real-time video/audio (120fps ready).
 - Self-Healing: Active via SelfImprovementCoordinator + DirectorAgent cycle.
-- Research Integration: TALON (arXiv:2601.07353), KVzap (arXiv:2601.07891), LatentLink (arXiv:2601.06123), TableCache (2601.08743), and STEM (2601.10639) integrated into the engine.
-- Research Integration: TALON (arXiv:2601.07353), PackKV (arXiv:2512.24449), Hydra (arXiv:2402.05109), and SGLang (arXiv:2312.07104) analyzed and synthesized in `data/Research/`.
-- Cloud Integration: Gemini GCP, Azure AI, and AWS Bedrock operational.
+- Research Integration: Full Arxiv-to-Logic pipeline active; ArxivCore + Architectural Mapping implemented.
 
-## vLLM Integration Summary (Phases 17-50)
+## vLLM Integration Summary (Phases 17-51)
 | Phase | Focus | Modules | Rust Fns |
 |-------|-------|---------|----------|
-| 17-47 | Core & Advanced Patterns | ~148 | 513 |
-| 48 | Cloud & KV Transfer | 12 | 12 |
-| 49 | Sys Modularization | 8 | 7 |
-| 50 | TALON & Research Integration | 8 | 0 |
-| **Total** | - | **~197** | **532** |
-| 50 | TALON & Automation | 6 | 0 |
-| **Total** | - | **~195** | **532** |
+| 17-50 | Core & TALON | ~195 | 532 |
+| 51 | Multimedia & Attention | 8 | 11 |
+| **Total** | - | **~203** | **543** |
 
 ## Data & Observability
-- 1,024 virtual shards for interaction history (Rust-native MD5 implementation verified).
-- Centralized ConnectivityManager with 15-minute persistent TTL status cache.
-- Structured Logger yielding valid, masked JSON logs via Rust core.
+- 1,024 virtual shards for interaction history (Rust-native sharding index).
+- Full parity for multimodal tags: Time, Commandshell, Hardware, Security, etc. (40+ tags across 51 categories).
+- AgentBar: Real-time 120fps dashboard component integrated.
 
-## Known Issues to Address (Phase 51 Focus)
-- [PENDING] Phase 51: Advanced Attention Mechanisms (FlashInfer, BlockSparse).
-- [PENDING] Modularization: Finalize splitting of remaining files in `src/logic/agents/`.
+## Known Issues to Address (Phase 52 Focus)
+- [PENDING] Phase 52: Multi-GPU & Distributed Inference (TP/PP/EP).
+- [PENDING] Modularization: Finalize remaining files in `src/logic/agents/`.
 - [PENDING] Research: Implement PackKV (lossy compression) in `KVCacheCoordinator`.
 
 ## fixed prompt

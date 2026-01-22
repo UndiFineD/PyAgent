@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,3 +85,11 @@ class LockManager:
                 yield
             finally:
                 self._core.release_lock(resource_id)
+=======
+"""
+Manager for swarm locking.
+(Facade for src.core.base.common.lock_core)
+"""
+
+from src.core.base.common.lock_core import LockCore as LockManager
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

@@ -17,23 +17,36 @@ Core logic for signal broadcasting and pub-sub messaging.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 import logging
 import queue
 import threading
 from typing import Any, Callable, Dict, List
 
+=======
+import logging
+import queue
+import threading
+from typing import Any, Dict, List, Callable
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.signal")
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SignalCore(BaseCore):
     """
     Authoritative engine for agent signals and inter-process events.
     Standardizes subscription and broadcast logic across the swarm.
     """
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self) -> None:
         super().__init__()
         self._subscribers: Dict[str, List[Callable[[Any, str], None]]] = {}
@@ -43,17 +56,26 @@ class SignalCore(BaseCore):
         self._thread.start()
 
     def subscribe(self, signal_type: str, callback: Callable[[Any, str], None]) -> None:
+<<<<<<< HEAD
         """Subscribe to a specific signal type."""
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if signal_type not in self._subscribers:
             self._subscribers[signal_type] = []
         self._subscribers[signal_type].append(callback)
 
     def publish(self, signal_type: str, payload: Any, sender: str = "System") -> None:
+<<<<<<< HEAD
         """Publish a signal to the bus."""
         self._queue.put({"type": signal_type, "payload": payload, "sender": sender})
 
     def _process_bus(self) -> None:
         """Background thread process for handling the signal queue."""
+=======
+        self._queue.put({"type": signal_type, "payload": payload, "sender": sender})
+
+    def _process_bus(self) -> None:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         while self._running:
             try:
                 msg = self._queue.get(timeout=1.0)
@@ -65,14 +87,22 @@ class SignalCore(BaseCore):
                     for callback in self._subscribers[stype]:
                         try:
                             callback(payload, sender)
+<<<<<<< HEAD
                         except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
                             logger.error("SignalCore: Callback failed: %s", err)
+=======
+                        except Exception as e:
+                            logger.error(f"SignalCore: Callback failed: {e}")
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 self._queue.task_done()
             except queue.Empty:
                 continue
 
     def stop(self) -> None:
+<<<<<<< HEAD
         """Stop the signal bus processing thread."""
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self._running = False
         if self._thread.is_alive():
             self._thread.join(timeout=2.0)

@@ -33,7 +33,11 @@ from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
 from src.logic.agents.intelligence.arxiv_core import ArxivCore
 from src.logic.agents.intelligence.search_core import SearchCore
+<<<<<<< HEAD
 from src.logic.agents.intelligence.web_core import WebCore
+=======
+from src.logic.agents.intelligence.arxiv_core import ArxivCore
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
@@ -83,13 +87,21 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         path = self.arxiv_core.download_paper(pdf_url, filename)
         if not path:
             return "Failed to download paper."
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         text = self.arxiv_core.extract_text(path)
         # Scan for safety
         injections = self.security_guard.scan_for_injection(text)
         if injections:
             return f"ERROR: Content blocked for safety: {', '.join(injections)}"
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return text
 
     @as_tool

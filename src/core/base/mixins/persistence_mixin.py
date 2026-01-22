@@ -26,6 +26,7 @@ from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.common.models import AgentState, EventType
 from src.core.base.state.agent_history import AgentConversationHistory
 from src.core.base.state.agent_scratchpad import AgentScratchpad
+from src.core.base.common.file_system_core import FileSystemCore
 
 
 # pylint: disable=too-many-instance-attributes
@@ -40,10 +41,13 @@ class PersistenceMixin:
         self._event_hooks: dict[EventType, list[Any]] = {}
         self._metrics_data: dict[str, Any] = {}
         self._fs = FileSystemCore()
+<<<<<<< HEAD
         # Initializing fields that might be used by derived classes or dynamics
         self.previous_content: str = ""
         self.current_content: str = ""
         self._state_data: dict[str, Any] = {}
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     @property
     def state(self) -> AgentState:
@@ -109,6 +113,7 @@ class PersistenceMixin:
             return self._write_dry_run_diff()
 
         try:
+<<<<<<< HEAD
             # Phase 267: Transactional Safety
             from src.core.base.state.agent_state_manager import StateTransaction
 
@@ -118,6 +123,12 @@ class PersistenceMixin:
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("File write failed: %s", e)
+=======
+            return self._fs.atomic_write(self.file_path, content_to_write)
+        except Exception as e:
+            import logging
+            logging.error(f"File write failed: {e}")
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
 
     def _write_dry_run_diff(self) -> bool:
@@ -128,9 +139,14 @@ class PersistenceMixin:
 
         dry_run_dir = Path("temp/dry_runs")
         self._fs.ensure_directory(dry_run_dir)
+<<<<<<< HEAD
         file_path = getattr(self, "file_path")
         safe_name = file_path.name.replace("/", "_").replace("\\", "_")
         target: Path = dry_run_dir / f"{safe_name}.diff"
+=======
+        safe_name = self.file_path.name.replace("/", "_").replace("\\", "_")
+        target = dry_run_dir / f"{safe_name}.diff"
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self._fs.atomic_write(target, diff)
 
     def save_state(self) -> bool:

@@ -17,6 +17,7 @@ Core logic for fleet sharding and partitioning.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 from .base_core import BaseCore
 
@@ -25,18 +26,34 @@ try:
 except ImportError:
     rc = None
 
+=======
+import logging
+from typing import Any, List, Dict, Optional
+from .base_core import BaseCore
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
+logger = logging.getLogger("pyagent.sharding")
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class ShardCore(BaseCore):
     """
     Authoritative engine for agent and data partitioning.
     Handles shard assignment, rebalancing, and cross-shard routing.
     """
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def calculate_shard_id(self, key: str, shard_count: int) -> int:
         """
         Determines the shard ID for a given key.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
+<<<<<<< HEAD
         if rc and hasattr(rc, "calculate_shard_id_rust"):  # pylint: disable=no-member
             try:
                 return rc.calculate_shard_id_rust(  # pylint: disable=no-member
@@ -76,3 +93,16 @@ class ShardCore(BaseCore):
             return True
         except Exception:  # pylint: disable=broad-exception-caught
             return False
+=======
+        if rc and hasattr(rc, "calculate_shard_id_rust"):
+            try:
+                return rc.calculate_shard_id_rust(key, shard_count)
+            except Exception:
+                pass
+        
+        # Fallback to simple hash-based sharding
+        import hashlib
+        h = hashlib.md5(key.encode()).digest()
+        seed = int.from_bytes(h[:8], "big")
+        return seed % shard_count
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

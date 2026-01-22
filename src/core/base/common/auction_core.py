@@ -17,8 +17,12 @@ Core logic for Swarm Resource Auctioning.
 Implements the VCG auction model for truthful bidding.
 """
 
+<<<<<<< HEAD
 from typing import Any, Dict, List
 
+=======
+from typing import Any, List, Dict, Optional
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .base_core import BaseCore
 
 try:
@@ -26,11 +30,15 @@ try:
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class AuctionCore(BaseCore):
     """Authoritative engine for VCG-based resource auctions."""
 
     @staticmethod
+<<<<<<< HEAD
     def calculate_vcg_auction(bids: List[Dict[str, Any]], slots: int) -> List[Dict[str, Any]]:
         """Calculate winners and prices for a VCG auction.
 
@@ -76,5 +84,31 @@ class AuctionCore(BaseCore):
                 return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)  # type: ignore
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+    def calculate_vcg_auction(
+        bids: List[Dict[str, Any]], slots: int
+    ) -> List[Dict[str, Any]]:
+        if rc:
+            try:
+                return rc.calculate_vcg_auction(bids, slots)
+            except Exception:
+                pass
+        
+        if not bids: return []
+        sorted_bids = sorted(bids, key=lambda x: x["amount"], reverse=True)
+        winners = sorted_bids[:slots]
+        clearing_price = sorted_bids[slots]["amount"] if len(sorted_bids) > slots else 0.0
+        for w in winners: w["price_paid"] = clearing_price
+        return winners
+
+    @staticmethod
+    def enforce_vram_quota(
+        agent_vram_request: float, total_available: float, quota_percent: float = 0.2
+    ) -> bool:
+        if rc:
+            try:
+                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
         return agent_vram_request <= (total_available * quota_percent)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,3 +26,12 @@ class AuctionCore(StandardAuctionCore):
     """Facade for AuctionCore to maintain backward compatibility."""
 
     pass
+=======
+# Facade for AuctionCore
+from src.core.base.common.auction_core import AuctionCore as StandardAuctionCore
+
+class AuctionCore(StandardAuctionCore):
+    """Facade for AuctionCore to maintain backward compatibility."""
+    pass
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

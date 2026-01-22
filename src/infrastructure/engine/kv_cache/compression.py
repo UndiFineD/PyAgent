@@ -19,6 +19,7 @@ Dynamically manages KV-cache precision and eviction based on shard activity.
 
 import logging
 import time
+<<<<<<< HEAD
 from typing import Any, Dict
 
 from src.infrastructure.engine.kv_cache.context_sharder import \
@@ -27,23 +28,45 @@ from src.infrastructure.engine.kv_cache.context_sharder import \
 logger = logging.getLogger(__name__)
 
 
+=======
+from typing import List, Dict, Any
+from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager, ContextShard
+
+logger = logging.getLogger(__name__)
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class AdaptiveSwarmCompressor:
     """
     Monitors KV shards and applies compression to 'cold' shards.
     Balances between speed (uncompressed) and VRAM capacity (compressed).
     """
 
+<<<<<<< HEAD
     def __init__(self, shard_manager: ContextShardManager, idle_threshold_sec: float = 60.0) -> None:
         self.shard_manager = shard_manager
         self.idle_threshold_sec = idle_threshold_sec
         self.bit_depth_map = {"float16": 16, "fp8": 8, "int4": 4, "int2": 2}
 
     async def apply_pressure_quantization(self, vram_pressure: float) -> Dict[str, int]:
+=======
+    def __init__(self, shard_manager: ContextShardManager, idle_threshold_sec: float = 60.0):
+        self.shard_manager = shard_manager
+        self.idle_threshold_sec = idle_threshold_sec
+        self.bit_depth_map = {
+            "float16": 16,
+            "fp8": 8,
+            "int4": 4,
+            "int2": 2
+        }
+
+    async def apply_pressure_quantization(self, vram_pressure: float):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Phase 76: Dynamic compression based on VRAM pressure (0.0 to 1.0).
         Aggressively reduces bit-depth as pressure increases.
         """
         if vram_pressure < 0.5:
+<<<<<<< HEAD
             return {}  # Normal operation
 
         stats = {"scaled_down": 0}
@@ -55,6 +78,19 @@ class AdaptiveSwarmCompressor:
 
                 current_bits = self.bit_depth_map.get(shard.precision, 16)
 
+=======
+            return # Normal operation
+
+        stats = {"scaled_down": 0}
+        
+        for context_id, shards in self.shard_manager.context_registry.items():
+            for shard in shards:
+                if not shard.is_cached:
+                    continue
+                    
+                current_bits = self.bit_depth_map.get(shard.precision, 16)
+                
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 # Extreme pressure: Force INT2
                 if vram_pressure > 0.9 and current_bits > 2:
                     shard.precision = "int2"
@@ -67,6 +103,7 @@ class AdaptiveSwarmCompressor:
                 elif vram_pressure > 0.5 and current_bits > 8:
                     shard.precision = "fp8"
                     stats["scaled_down"] += 1
+<<<<<<< HEAD
 
         if stats["scaled_down"] > 0:
             load_pct = vram_pressure * 100
@@ -76,6 +113,12 @@ class AdaptiveSwarmCompressor:
             )
             logger.warning(msg)
 
+=======
+                    
+        if stats["scaled_down"] > 0:
+            logger.warning(f"MemPressure: Dynamically scaled {stats['scaled_down']} shards due to {vram_pressure*100:.1f}% load.")
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return stats
 
     async def run_optimization_cycle(self) -> Dict[str, Any]:
@@ -88,10 +131,17 @@ class AdaptiveSwarmCompressor:
         now = time.time()
         stats = {"compressed": 0, "evicted": 0, "kept": 0}
 
+<<<<<<< HEAD
         for _, shards in self.shard_manager.context_registry.items():
             for shard in shards:
                 idle_time = now - shard.last_access
 
+=======
+        for context_id, shards in self.shard_manager.context_registry.items():
+            for shard in shards:
+                idle_time = now - shard.last_access
+                
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 if idle_time > self.idle_threshold_sec:
                     # Cold: Evict or Max Compression
                     if shard.is_cached:
@@ -107,10 +157,17 @@ class AdaptiveSwarmCompressor:
                 else:
                     # Active
                     stats["kept"] += 1
+<<<<<<< HEAD
 
         return stats
 
     def touch_shard(self, context_id: str, token_index: int) -> None:
+=======
+                    
+        return stats
+
+    def touch_shard(self, context_id: str, token_index: int):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Updates last_access and restores precision if needed."""
         shards = self.shard_manager.context_registry.get(context_id, [])
         for shard in shards:
@@ -120,5 +177,9 @@ class AdaptiveSwarmCompressor:
                     logger.info(f"Compressor: Reloading evicted shard {shard.shard_id}")
                     shard.is_cached = True
                 if shard.precision != "float16":
+<<<<<<< HEAD
                     shard.precision = "float16"  # Decompress on access
+=======
+                    shard.precision = "float16" # Decompress on access
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 break

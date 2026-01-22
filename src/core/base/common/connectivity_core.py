@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 """
 Unified Connectivity and Networking Core.
 Handles low-level host networking and high-level agent communication.
@@ -25,6 +26,14 @@ import os
 import socket
 from typing import Any, Dict, Optional
 
+=======
+from __future__ import annotations
+import socket
+import contextlib
+import os
+import logging
+from typing import Any, Dict, Optional, Tuple
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .base_core import BaseCore
 
 try:
@@ -34,15 +43,24 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.connectivity")
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ConnectivityCore(BaseCore):
     """
     Unified Connectivity and Networking Core.
     Handles low-level host networking and high-level agent communication.
     """
+<<<<<<< HEAD
 
     def __init__(self, name: str = "ConnectivityCore", repo_root: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=repo_root)
+=======
+    
+    def __init__(self, name: str = "ConnectivityCore", root_path: Optional[str] = None) -> None:
+        super().__init__(name=name, root_path=root_path)
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.connections: Dict[str, Any] = {}
 
     # --- Agent-to-Agent Logic ---
@@ -52,6 +70,7 @@ class ConnectivityCore(BaseCore):
         Logic for establishing a connection.
         If rc is available, uses the Rust-accelerated binary pipeline.
         """
+<<<<<<< HEAD
         if rc and hasattr(rc, "establish_native_connection"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -60,11 +79,21 @@ class ConnectivityCore(BaseCore):
                 logger.warning("Rust establishment failed: %s. Falling back.", e)
 
         logger.info("ConnectivityCore: Establishing %s connection to %s", protocol, target_agent)
+=======
+        if rc and hasattr(rc, "establish_native_connection"):
+            try:
+                return rc.establish_native_connection(target_agent, protocol)
+            except Exception as e:
+                logger.warning(f"Rust establishment failed: {e}. Falling back.")
+        
+        logger.info(f"ConnectivityCore: Establishing {protocol} connection to {target_agent}")
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.connections[target_agent] = {"status": "active", "protocol": protocol}
         return True
 
     def transfer_payload(self, target_agent: str, payload: bytes) -> bool:
         """High-speed binary payload transfer."""
+<<<<<<< HEAD
         if rc and hasattr(rc, "transfer_binary_payload"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -72,11 +101,20 @@ class ConnectivityCore(BaseCore):
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust payload transfer failed: %s. Falling back.", e)
 
+=======
+        if rc and hasattr(rc, "transfer_binary_payload"):
+            try:
+                return rc.transfer_binary_payload(target_agent, payload)
+            except Exception as e:
+                logger.warning(f"Rust payload transfer failed: {e}. Falling back.")
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Python fallback logic
         return True
 
     def check_health(self, target_url: str) -> bool:
         """Rust-accelerated health check for remote agent endpoints."""
+<<<<<<< HEAD
         if rc and hasattr(rc, "check_health_rust"):  # pylint: disable=no-member
             # pylint: disable=no-member
             return rc.check_health_rust(target_url)  # type: ignore
@@ -90,6 +128,17 @@ class ConnectivityCore(BaseCore):
                 return response.status == 200
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+        if rc and hasattr(rc, "check_health_rust"):
+            return rc.check_health_rust(target_url)
+        
+        # Simple Python fallback
+        import urllib.request
+        try:
+            with urllib.request.urlopen(target_url, timeout=2) as response:
+                return response.status == 200
+        except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
 
     # --- Network Utilities (formerly NetworkCore) ---
@@ -104,13 +153,21 @@ class ConnectivityCore(BaseCore):
 
         af = socket.AF_INET if prefer_ipv4 else socket.AF_INET6
         target = ("8.8.8.8", 80) if prefer_ipv4 else ("2001:4860:4860::8888", 80)
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             with socket.socket(af, socket.SOCK_DGRAM) as s:
                 s.connect(target)
                 return s.getsockname()[0]
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+        except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return "127.0.0.1"
 
     @staticmethod

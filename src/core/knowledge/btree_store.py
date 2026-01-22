@@ -51,9 +51,14 @@ class BTreeKnowledgeStore(KnowledgeStore):
         hash_val = self._hash_key(key)
         tier1 = hash_val[:2]
         tier2 = hash_val[2:4]
+<<<<<<< HEAD
         
+=======
+
+        # Use Standardized infrastructure for directory management
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         shard_dir = self.storage_path / tier1 / tier2
-        shard_dir.mkdir(exist_ok=True, parents=True)
+        self._memory_core._fs.ensure_directory(shard_dir)
         db_path = shard_dir / "shard.db"
         
         conn = sqlite3.connect(db_path)

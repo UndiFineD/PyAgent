@@ -37,6 +37,7 @@ from typing import Any
 import logging
 
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.workspace_core import WorkspaceCore
 
 logger = logging.getLogger(__name__)
 
@@ -169,43 +170,19 @@ class BaseCore(LogicCore):
     """Pure logic core providing foundation for all agents."""
 
     def __init__(self, workspace_root: str | None = None) -> None:
-        self.workspace_root = workspace_root
+        self.workspace = WorkspaceCore(root_dir=workspace_root)
+        self.workspace_root = str(self.workspace.root_dir)
 
     @staticmethod
     def detect_workspace_root(file_path: Path) -> str:
         """Heuristic-based workspace root detection."""
-        root = os.environ.get("PYAGENT_WORKSPACE_ROOT")
-        if root:
-            return root
-
-        # Fallback heuristic: search upwards for .git or requirements.txt
-        curr = file_path.absolute()
-        for _ in range(5):
-            if (
-                (curr / ".git").exists()
-                or (curr / "requirements.txt").exists()
-                or (curr / "README.md").exists()
-            ):
-                return str(curr)
-            if curr.parent == curr:
-                break
-            curr = curr.parent
-
-        return str(file_path.parent.parent.parent)
+        return str(WorkspaceCore(root_dir=file_path.parent).root_dir)
 
     def is_path_ignored(
         self, path: Path, repo_root: Path, ignored_patterns: set[str]
     ) -> bool:
         """Check if a path should be ignored based on patterns."""
-        try:
-            relative_path = str(path.relative_to(repo_root)).replace("\\", "/")
-        except ValueError:
-            return True
-
-        if self._matches_ignored_patterns(relative_path, ignored_patterns):
-            return True
-
-        return self._is_default_ignored(relative_path)
+        return self.workspace.is_ignored(path)
 
     def _matches_ignored_patterns(
         self, relative_path: str, ignored_patterns: set[str]

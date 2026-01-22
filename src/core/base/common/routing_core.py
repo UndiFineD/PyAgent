@@ -17,6 +17,7 @@ Core logic for performance-based routing and task distribution.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 import os
 from typing import Any, Dict, Optional
@@ -28,13 +29,29 @@ try:
 except ImportError:
     rc = None
 
+=======
+import logging
+import os
+from typing import Any, List, Dict, Optional
+from .base_core import BaseCore
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
+logger = logging.getLogger("pyagent.routing")
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class RoutingCore(BaseCore):
     """
     Authoritative engine for task routing and provider selection.
     Balances latency, cost, and quality metrics across backend providers.
     """
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self) -> None:
         super().__init__()
         self.providers = [
@@ -49,12 +66,17 @@ class RoutingCore(BaseCore):
         self,
         task_type: str = "general",
         priority: str = "balanced",
+<<<<<<< HEAD
         performance_report: Optional[Dict[str, Any]] = None,
+=======
+        performance_report: Optional[Dict[str, Any]] = None
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> str:
         """
         Optimal provider selection logic.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
+<<<<<<< HEAD
         if rc and hasattr(rc, "select_provider_rust"):  # pylint: disable=no-member
             try:
                 return rc.select_provider_rust(  # pylint: disable=no-member
@@ -64,6 +86,14 @@ class RoutingCore(BaseCore):
  # pylint: disable=broad-exception-caught
                 pass
 
+=======
+        if rc and hasattr(rc, "select_provider_rust"):
+            try:
+                return rc.select_provider_rust(task_type, priority, performance_report or {})
+            except Exception:
+                pass
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Default logic (can be expanded with weighted averages)
         if performance_report:
             # Simple heuristic: lower latency for "latency" priority
@@ -71,5 +101,9 @@ class RoutingCore(BaseCore):
                 best_p = min(performance_report.items(), key=lambda x: x[1].get("avg_latency", 999))[0]
                 if best_p in self.providers:
                     return best_p
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return os.environ.get("DV_AGENT_BACKEND", "github_models")

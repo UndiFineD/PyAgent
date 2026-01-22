@@ -18,12 +18,17 @@ Provides support for interleaved modality tags and streaming sessions.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 from typing import Any, Dict, List
 
 from src.core.base.common.multimodal_core import (MultimodalCore,
                                                   MultimodalStreamSession)
 
+=======
+from typing import Any, Optional, Dict, List
+from src.core.base.common.multimodal_core import MultimodalCore, MultimodalStreamSession
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class MultimodalMixin:
     """
@@ -31,6 +36,7 @@ class MultimodalMixin:
     Enables handling of interleaved channel tracks and feedback loops.
     """
 
+<<<<<<< HEAD
     def __init__(self, **_kwargs: Any) -> None:
         self.multimodal_core = MultimodalCore()
         # Initialize a default stream session for the agent
@@ -46,6 +52,22 @@ class MultimodalMixin:
             "Use <Thought_...> for internal reasoning and "
             "<Hardware:NPU_...> for acceleration hooks.\n"
             "Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'."
+=======
+    def __init__(self, **kwargs: Any) -> None:
+        self.multimodal_core = MultimodalCore()
+        # Initialize a default stream session for the agent
+        self.multimodal_session = MultimodalStreamSession(self.multimodal_core)
+        
+    def get_multimodal_instructions(self) -> str:
+        """Returns the system instructions for the multimodal tag system."""
+        channels = ", ".join(self.multimodal_core.active_channels.keys())
+        return (
+            f"MODALITY PROTOCOL ENABLED.\n"
+            f"You can interleave modality tags in your output using the format <Type:Channel_ID>.\n"
+            f"Available Modalities: {channels}\n"
+            f"Use <Thought_...> for internal reasoning and <Hardware:NPU_...> for acceleration hooks.\n"
+            f"Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'."
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         )
 
     def process_multimodal_output(self, raw_output: str) -> List[Dict[str, Any]]:

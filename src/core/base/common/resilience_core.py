@@ -18,6 +18,7 @@ Standardizes retry, backoff, and circuit breaker logic across the swarm.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 import asyncio
 import functools
@@ -25,6 +26,14 @@ import logging
 import random
 import time
 from typing import Any, Callable, Coroutine, TypeVar, cast
+=======
+import random
+import time
+import asyncio
+import functools
+import logging
+from typing import Any, Callable, TypeVar, Coroutine, cast
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -67,12 +76,16 @@ class ResilienceCore(BaseCore):
                             break
                         wait = current_delay * (random.random() + 0.5)  # jitter
                         logger.warning(
+<<<<<<< HEAD
                             "Retrying %s (attempt %d/%d) after %.2fs due to: %s",
                             func.__name__,
                             attempt + 1,
                             retries,
                             wait,
                             e,
+=======
+                            f"Retrying {func.__name__} (attempt {attempt+1}/{retries}) after {wait:.2f}s due to: {e}"
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                         )
                         time.sleep(wait)
                         current_delay *= backoff
@@ -93,7 +106,13 @@ class ResilienceCore(BaseCore):
     ) -> Callable[[Callable[..., Coroutine[Any, Any, T]]], Callable[..., Coroutine[Any, Any, T]]]:
         """Asynchronous retry decorator with exponential backoff."""
 
+<<<<<<< HEAD
         def decorator(func: Callable[..., Coroutine[Any, Any, T]]) -> Callable[..., Coroutine[Any, Any, T]]:
+=======
+        def decorator(
+            func: Callable[..., Coroutine[Any, Any, T]]
+        ) -> Callable[..., Coroutine[Any, Any, T]]:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             @functools.wraps(func)
             async def wrapper(*args: Any, **kwargs: Any) -> T:
                 last_exception = None
@@ -107,12 +126,16 @@ class ResilienceCore(BaseCore):
                             break
                         wait = current_delay * (random.random() + 0.5)  # jitter
                         logger.warning(
+<<<<<<< HEAD
                             "Retrying %s (attempt %d/%d) after %.2fs due to: %s",
                             func.__name__,
                             attempt + 1,
                             retries,
                             wait,
                             e,
+=======
+                            f"Retrying {func.__name__} (attempt {attempt+1}/{retries}) after {wait:.2f}s due to: {e}"
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                         )
                         await asyncio.sleep(wait)
                         current_delay *= backoff
@@ -140,11 +163,18 @@ class ResilienceCore(BaseCore):
         if rc:
             try:
                 # Use Rust implementation for performance if available
+<<<<<<< HEAD
                 return rc.calculate_backoff(  # pylint: disable=no-member
                     failure_count, threshold, base_timeout, multiplier, max_timeout
                 )
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+                return rc.calculate_backoff(
+                    failure_count, threshold, base_timeout, multiplier, max_timeout
+                )
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         if failure_count < threshold:
@@ -157,12 +187,17 @@ class ResilienceCore(BaseCore):
             return random.uniform(base_timeout / 2, backoff)
         if jitter_mode == "equal":
             return (backoff / 2) + random.uniform(0, backoff / 2)
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Legacy 10% jitter
         jitter = backoff * 0.1 * random.uniform(-1, 1)
         return max(base_timeout / 2, backoff + jitter)
 
     @staticmethod
+<<<<<<< HEAD
     def should_attempt_recovery(last_failure_time: float, current_time: float, timeout: float) -> bool:
         """Determines if the cooldown period has passed."""
         if rc:
@@ -172,6 +207,18 @@ class ResilienceCore(BaseCore):
                 )
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+    def should_attempt_recovery(
+        last_failure_time: float, current_time: float, timeout: float
+    ) -> bool:
+        """Determines if the cooldown period has passed."""
+        if rc:
+            try:
+                return rc.should_attempt_recovery(
+                    last_failure_time, current_time, timeout
+                )
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
         return (current_time - last_failure_time) > timeout
 
@@ -189,15 +236,23 @@ class ResilienceCore(BaseCore):
         if rc:
             try:
                 if hasattr(rc, "evaluate_state_transition"):
+<<<<<<< HEAD
                     return rc.evaluate_state_transition(  # pylint: disable=no-member
+=======
+                    return rc.evaluate_state_transition(
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                         current_state,
                         success_count,
                         consecutive_successes_needed,
                         failure_count,
                         failure_threshold,
                     )
+<<<<<<< HEAD
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         if current_state == "CLOSED":
@@ -210,7 +265,10 @@ class ResilienceCore(BaseCore):
         return current_state
 
     @staticmethod
+<<<<<<< HEAD
     # pylint: disable=too-many-return-statements
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def update_state(
         current_state: str,
         is_success: bool,
@@ -240,11 +298,16 @@ class ResilienceCore(BaseCore):
                 return current_state, failure_count, new_success_count
             if current_state == "CLOSED":
                 return "CLOSED", 0, 0
+<<<<<<< HEAD
             if current_state == "OPEN":
+=======
+            elif current_state == "OPEN":
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 return "CLOSED", 0, 0
 
             return current_state, failure_count, new_success_count
 
+<<<<<<< HEAD
         new_failure_count = failure_count + 1
         if current_state == "HALF_OPEN":
             return "OPEN", new_failure_count, 0
@@ -257,3 +320,18 @@ class ResilienceCore(BaseCore):
             failure_threshold,
         )
         return new_state, new_failure_count, 0
+=======
+        else:
+            new_failure_count = failure_count + 1
+            if current_state == "HALF_OPEN":
+                return "OPEN", new_failure_count, 0
+
+            new_state = ResilienceCore.evaluate_state_transition(
+                current_state,
+                success_count,
+                consecutive_successes_needed,
+                new_failure_count,
+                failure_threshold,
+            )
+            return new_state, new_failure_count, 0
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

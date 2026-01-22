@@ -13,11 +13,16 @@
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
+<<<<<<< HEAD
 use std::path::Path;
+=======
+use std::path::{Path, PathBuf};
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 use walkdir::WalkDir;
 use glob::Pattern;
 use std::fs;
 use std::io::Write;
+<<<<<<< HEAD
 use pyo3::types::{PyList, PyDict, PyTuple, PyBool};
 use serde_json::{Value, Number, Map};
 
@@ -79,6 +84,8 @@ pub fn to_json_rust(data: &Bound<'_, PyAny>, indent: Option<usize>) -> PyResult<
     };
     Ok(s)
 }
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 /// Atomic save for JSON/YAML files (StorageCore Support).
 /// Ensures transactional speed and safety when writing large state files.
@@ -162,6 +169,9 @@ pub fn discover_files_rust(
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(discover_files_rust, m)?)?;
     m.add_function(wrap_pyfunction!(save_json_atomic_rust, m)?)?;
+<<<<<<< HEAD
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     Ok(())
 }

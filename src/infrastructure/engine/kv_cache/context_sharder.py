@@ -19,6 +19,7 @@ Allows multiple experts to share access to the same sharded context.
 """
 
 import logging
+<<<<<<< HEAD
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
@@ -30,35 +31,64 @@ logger = logging.getLogger(__name__)
 class ContextShard:
     """Metadata for a sharded slice of a long context."""
 
+=======
+import uuid
+import time
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
+
+@dataclass
+class ContextShard:
+    """Metadata for a sharded slice of a long context."""
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     shard_id: str
     tenant_id: str  # Phase 71: Multi-tenant isolation
     start_token: int
     end_token: int
     rank_id: int  # The DP-rank (node) holding this shard
+<<<<<<< HEAD
     replica_ranks: List[int] = field(default_factory=list)  # Phase 75: Fault tolerance mirroring
+=======
+    replica_ranks: List[int] = field(default_factory=list) # Phase 75: Fault tolerance mirroring
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     overlap_size: int = 0  # Phase 78: Context overlap for sliding windows
     is_cached: bool = True
     last_access: float = field(default_factory=time.time)
     precision: str = "float16"  # float16, fp8, int4, etc.
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ContextShardManager:
     """
     Manages distribution of long-context shards across the swarm.
     Prevents context replication bottleneck.
     """
+<<<<<<< HEAD
 
     def __init__(self, block_size: int = 1024, redundancy_factor: int = 1) -> None:
+=======
+    
+    def __init__(self, block_size: int = 1024, redundancy_factor: int = 1):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.block_size = block_size
         self.redundancy_factor = redundancy_factor
         self.context_registry: Dict[str, List[ContextShard]] = {}
         self.dead_ranks: set[int] = set()
 
+<<<<<<< HEAD
     def mark_rank_dead(self, rank_id: int) -> None:
+=======
+    def mark_rank_dead(self, rank_id: int):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Phase 75: Simulates hardware failure."""
         self.dead_ranks.add(rank_id)
         logger.warning(f"Rank {rank_id} marked as DEAD. Triggering failover lookup.")
 
+<<<<<<< HEAD
     def shard_context(
         self,
         context_id: str,
@@ -67,6 +97,14 @@ class ContextShardManager:
         tenant_id: str = "default_tenant",
         overlap: int = 0,
     ) -> List[ContextShard]:
+=======
+    def shard_context(self, 
+                      context_id: str, 
+                      total_tokens: int, 
+                      available_ranks: List[int], 
+                      tenant_id: str = "default_tenant",
+                      overlap: int = 0) -> List[ContextShard]:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Calculates how to split a long context across available ranks.
         Ensures shards are tagged with tenant_id for isolation.
@@ -74,20 +112,35 @@ class ContextShardManager:
         """
         if not available_ranks:
             raise ValueError("No available ranks for context sharding.")
+<<<<<<< HEAD
 
         num_shards = (total_tokens + self.block_size - 1) // self.block_size
         shards = []
 
+=======
+            
+        num_shards = (total_tokens + self.block_size - 1) // self.block_size
+        shards = []
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         for i in range(num_shards):
             start = i * self.block_size
             # Subtract overlap from start for all except first shard
             actual_start = max(0, start - overlap) if i > 0 else start
             end = min(start + self.block_size, total_tokens)
+<<<<<<< HEAD
 
             # Round-robin assignment to ranks
             rank_idx = i % len(available_ranks)
             rank = available_ranks[rank_idx]
 
+=======
+            
+            # Round-robin assignment to ranks
+            rank_idx = i % len(available_ranks)
+            rank = available_ranks[rank_idx]
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             # Phase 75: Mirroring
             replicas = []
             if self.redundancy_factor > 1:
@@ -101,6 +154,7 @@ class ContextShardManager:
                 end_token=end,
                 rank_id=rank,
                 replica_ranks=replicas,
+<<<<<<< HEAD
                 overlap_size=overlap if i > 0 else 0,
             )
             shards.append(shard)
@@ -115,6 +169,17 @@ class ContextShardManager:
     def get_rank_for_token(
         self, context_id: str, token_index: int, tenant_id: str = "default_tenant"
     ) -> Optional[int]:
+=======
+                overlap_size=overlap if i > 0 else 0
+            )
+            shards.append(shard)
+            
+        self.context_registry[context_id] = shards
+        logger.info(f"Context {context_id} ({total_tokens} tokens) sharded into {num_shards} pieces across {len(available_ranks)} ranks.")
+        return shards
+
+    def get_rank_for_token(self, context_id: str, token_index: int, tenant_id: str = "default_tenant") -> Optional[int]:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Returns which rank holds the shard containing the specific token.
         Enforces tenant isolation by only searching for shards owned by the tenant.
@@ -140,7 +205,11 @@ class ContextShardManager:
                 return shard.rank_id
         return None
 
+<<<<<<< HEAD
     def delete_context(self, context_id: str) -> bool:
+=======
+    def delete_context(self, context_id: str):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Phase 80: Explicitly removes a context and its shards from the registry."""
         if context_id in self.context_registry:
             num_shards = len(self.context_registry[context_id])

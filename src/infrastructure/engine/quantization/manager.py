@@ -19,7 +19,11 @@ Enables dynamic quantization switching (FP8, BitNet, AWQ) for high-efficiency in
 
 import logging
 from enum import Enum
+<<<<<<< HEAD
 from typing import Any, Dict, List, Optional
+=======
+from typing import Dict, List, Any, Optional
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -28,11 +32,15 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 
 class QuantizationMode(Enum):
     """
     Supported quantization modes.
     """
+=======
+class QuantizationMode(Enum):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     FP16 = "fp16"
     FP8 = "fp8"
     INT8 = "int8"
@@ -40,19 +48,31 @@ class QuantizationMode(Enum):
     BITNET_158 = "bitnet_158"  # 1.58-bit ternary quantization
     AWQ = "awq"  # Activation-aware Weight Quantization
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class QuantizationManager:
     """
     Manages quantization states and hardware-accelerated kernels.
     Integrates with rust_core for fast bit-unpacking and scale application.
     """
+<<<<<<< HEAD
 
     def __init__(self, initial_mode: QuantizationMode = QuantizationMode.FP16) -> None:
+=======
+    
+    def __init__(self, initial_mode: QuantizationMode = QuantizationMode.FP16):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.current_mode = initial_mode
         self.supported_modes: List[QuantizationMode] = [QuantizationMode.FP16]
         self._detect_hardware_support()
 
+<<<<<<< HEAD
     def _detect_hardware_support(self) -> None:
+=======
+    def _detect_hardware_support(self):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Detects available quantization support on current HW."""
         # Simulation for Phase 56/57
         self.supported_modes.append(QuantizationMode.FP8)
@@ -65,14 +85,24 @@ class QuantizationManager:
         Returns parameters for the inference kernel (scales, zero-points, bit-width).
         """
         target_mode = mode or self.current_mode
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         configs = {
             QuantizationMode.FP16: {"bits": 16, "type": "float", "accelerated": True},
             QuantizationMode.FP8: {"bits": 8, "type": "float", "accelerated": True, "e4m3_support": True},
             QuantizationMode.BITNET_158: {"bits": 1.58, "type": "ternary", "accelerated": False},
+<<<<<<< HEAD
             QuantizationMode.AWQ: {"bits": 4, "type": "int", "accelerated": True, "group_size": 128},
         }
 
+=======
+            QuantizationMode.AWQ: {"bits": 4, "type": "int", "accelerated": True, "group_size": 128}
+        }
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return configs.get(target_mode, configs[QuantizationMode.FP16])
 
     def apply_quantization(self, tensor: Any, mode: QuantizationMode) -> Any:
@@ -81,6 +111,7 @@ class QuantizationManager:
         """
         if mode not in self.supported_modes:
             raise ValueError(f"Quantization mode {mode} not supported on this hardware.")
+<<<<<<< HEAD
 
         logger.debug(f"Applying {mode.value} quantization")
 
@@ -90,6 +121,17 @@ class QuantizationManager:
         return tensor  # Fallback: return as is
 
     def switch_mode(self, new_mode: QuantizationMode) -> bool:
+=======
+            
+        logger.debug(f"Applying {mode.value} quantization")
+        
+        if rc and hasattr(rc, "quantize_tensor_rust"):
+            return rc.quantize_tensor_rust(tensor, mode.value)
+            
+        return tensor  # Fallback: return as is
+
+    def switch_mode(self, new_mode: QuantizationMode):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Dynamic hot-switching of quantization mode."""
         if new_mode in self.supported_modes:
             logger.info(f"QuantizationManager: Switching from {self.current_mode.value} to {new_mode.value}")

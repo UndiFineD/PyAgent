@@ -18,9 +18,14 @@ Supports hybrid block sizes, context parallel mapping, and PCP/DCP awareness.
 """
 
 import logging
+<<<<<<< HEAD
 from collections import deque
 from typing import Any, Dict, List, Optional
 
+=======
+from typing import Dict, List, Optional, Set, Any
+from collections import deque
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import numpy as np
 
 try:
@@ -30,23 +35,38 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class BlockTableV2:
     """
     Manages physical block mappings for PagedAttention with hybrid block size support.
     Integrates with context parallelism and prefix caching.
     """
+<<<<<<< HEAD
 
     def __init__(self, num_blocks: int, block_size: int = 16) -> None:
+=======
+    
+    def __init__(self, num_blocks: int, block_size: int = 16):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.num_blocks = num_blocks
         self.block_size = block_size  # Default block size
         self.free_blocks = deque(range(num_blocks))
         self.mapping: Dict[int, List[int]] = {}  # seq_id -> list of physical blocks
         self.ref_counts = np.zeros(num_blocks, dtype=np.int32)
+<<<<<<< HEAD
 
         # Phase 53: Hybrid support
         self.block_size_map: Dict[int, int] = {i: block_size for i in range(num_blocks)}
 
+=======
+        
+        # Phase 53: Hybrid support
+        self.block_size_map: Dict[int, int] = {i: block_size for i in range(num_blocks)}
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         logger.info(f"BlockTableV2 initialized with {num_blocks} blocks (base size: {block_size})")
 
     def allocate(self, seq_id: int, num_required_blocks: int) -> List[int]:
@@ -56,13 +76,21 @@ class BlockTableV2:
         if len(self.free_blocks) < num_required_blocks:
             logger.warning(f"OOM in BlockTable: Requested {num_required_blocks}, available {len(self.free_blocks)}")
             return []
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         blocks = []
         for _ in range(num_required_blocks):
             block = self.free_blocks.popleft()
             blocks.append(block)
             self.ref_counts[block] = 1
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.mapping[seq_id] = blocks
         return blocks
 
@@ -76,7 +104,11 @@ class BlockTableV2:
             return 0.0
         return ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100.0
 
+<<<<<<< HEAD
     def free(self, seq_id: int) -> None:
+=======
+    def free(self, seq_id: int):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Releases blocks associated with a sequence."""
         if seq_id in self.mapping:
             blocks = self.mapping.pop(seq_id)
@@ -86,7 +118,11 @@ class BlockTableV2:
                     self.free_blocks.append(block)
             logger.debug(f"Freed blocks for sequence {seq_id}")
 
+<<<<<<< HEAD
     def update_hybrid_mapping(self, block_id: int, new_size: int) -> None:
+=======
+    def update_hybrid_mapping(self, block_id: int, new_size: int):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Updates the size of a specific block for hybrid configurations.
         Used for adaptive granularity in Phase 53.
@@ -103,10 +139,17 @@ class BlockTableV2:
         blocks = self.get_block_table(seq_id)
         if not blocks:
             return None
+<<<<<<< HEAD
 
         if rc and hasattr(rc, "block_table_cp_mask_rust"):
             return rc.block_table_cp_mask_rust(blocks, rank, world_size)
 
+=======
+            
+        if rc and hasattr(rc, "block_table_cp_mask_rust"):
+            return rc.block_table_cp_mask_rust(blocks, rank, world_size)
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Fallback: Simple rank-based slicing
         chunk_size = len(blocks) // world_size
         start = rank * chunk_size
@@ -119,5 +162,9 @@ class BlockTableV2:
             "total_blocks": self.num_blocks,
             "free_blocks": len(self.free_blocks),
             "utilized_pct": ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100,
+<<<<<<< HEAD
             "active_sequences": len(self.mapping),
+=======
+            "active_sequences": len(self.mapping)
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }

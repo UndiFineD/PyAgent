@@ -17,35 +17,59 @@ Swarm Audit Service (Phase 69).
 Captures and persists decision-making trails for the MoE Swarm.
 """
 
+<<<<<<< HEAD
 import json
 import logging
 import os
 import time
 from typing import Any, Dict, List
 
+=======
+import logging
+import json
+import time
+import os
+from typing import List, Dict, Any, Optional
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from src.core.base.common.models.communication_models import SwarmAuditTrail
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SwarmAuditLogger:
     """
     Centralized logger for swarm consensus and routing decisions.
     Allows for post-hoc analysis of agent fleet behavior.
     """
+<<<<<<< HEAD
 
     def __init__(self, storage_path: str = "data/logs/swarm_audit.jsonl", log_to_file: bool = True) -> None:
         self.trails: Dict[str, List[SwarmAuditTrail]] = {}
         self.storage_path = storage_path
         self.log_to_file = log_to_file
 
+=======
+    
+    def __init__(self, storage_path: str = "data/logs/swarm_audit.jsonl", log_to_file: bool = True):
+        self.trails: Dict[str, List[SwarmAuditTrail]] = {}
+        self.storage_path = storage_path
+        self.log_to_file = log_to_file
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Ensure directory exists
         if self.log_to_file:
             os.makedirs(os.path.dirname(self.storage_path), exist_ok=True)
 
+<<<<<<< HEAD
     def log_event(
         self, task_id: str, event_type: str, description: str, data: Dict[str, Any], duration_ms: float = 0.0
     ):
+=======
+    def log_event(self, task_id: str, event_type: str, description: str, data: Dict[str, Any], duration_ms: float = 0.0):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Records a specific step in a swarm task."""
         trail = SwarmAuditTrail(
             request_id=task_id,
@@ -53,6 +77,7 @@ class SwarmAuditLogger:
             decision_summary=description,
             raw_data=data,
             timestamp=time.time(),
+<<<<<<< HEAD
             duration_ms=duration_ms,
         )
 
@@ -60,12 +85,22 @@ class SwarmAuditLogger:
             self.trails[task_id] = []
         self.trails[task_id].append(trail)
 
+=======
+            duration_ms=duration_ms
+        )
+        
+        if task_id not in self.trails:
+            self.trails[task_id] = []
+        self.trails[task_id].append(trail)
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if self.log_to_file:
             self._persist_event(trail)
 
     def _persist_event(self, event: SwarmAuditTrail):
         """Appends a single audit event to the JSONL log file."""
         try:
+<<<<<<< HEAD
             with open(self.storage_path, 'a', encoding='utf-8') as f:
                 f.write(
                     json.dumps(
@@ -81,6 +116,18 @@ class SwarmAuditLogger:
                     + "\n"
                 )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+=======
+            with open(self.storage_path, "a") as f:
+                f.write(json.dumps({
+                    "task_id": event.request_id,
+                    "event_type": event.step,
+                    "description": event.decision_summary,
+                    "data": event.raw_data,
+                    "timestamp": event.timestamp,
+                    "duration_ms": event.duration_ms
+                }) + "\n")
+        except Exception as e:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logger.error(f"Failed to persist audit event: {e}")
 
     def get_trail(self, task_id: str) -> List[SwarmAuditTrail]:

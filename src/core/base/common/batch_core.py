@@ -17,6 +17,7 @@ Core logic for batch request processing and queuing.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 from pathlib import Path
 from typing import Any, Callable, List, Optional
@@ -29,6 +30,17 @@ class BatchRequest:
     """Request in a batch processing queue."""
 
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+=======
+import logging
+from pathlib import Path
+from typing import Any, List, Optional, Callable
+from .base_core import BaseCore
+from .models import FilePriority, BatchResult
+
+class BatchRequest:
+    """Request in a batch processing queue."""
+    def __init__(
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self,
         file_path: Optional[Path] = None,
         prompt: Optional[str] = None,
@@ -44,13 +56,17 @@ class BatchRequest:
         self.items: List[Any] = []
 
     def add(self, item: Any) -> None:
+<<<<<<< HEAD
         """Add an item to the batch."""
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if self.max_size is not None and len(self.items) >= self.max_size:
             return
         self.items.append(item)
 
     @property
     def size(self) -> int:
+<<<<<<< HEAD
         """Return the number of items in the batch."""
         return len(self.items)
 
@@ -59,11 +75,21 @@ class BatchRequest:
         return processor(self.items)
 
 
+=======
+        return len(self.items)
+
+    def execute(self, processor: Callable[[List[Any]], List[Any]]) -> List[Any]:
+        return processor(self.items)
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class BatchCore(BaseCore):
     """
     Authoritative engine for batch request management.
     """
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, batch_size: int = 10, max_concurrent: int = 4) -> None:
         super().__init__()
         self.batch_size = batch_size
@@ -72,6 +98,7 @@ class BatchCore(BaseCore):
         self.results: List[BatchResult] = []
 
     def add_request(self, request: BatchRequest) -> None:
+<<<<<<< HEAD
         """Add a request to the queue."""
         self.queue.append(request)
 
@@ -81,4 +108,12 @@ class BatchCore(BaseCore):
 
     def sort_by_priority(self) -> List[BatchRequest]:
         """Return requests sorted by priority (Descending)."""
+=======
+        self.queue.append(request)
+
+    def clear_queue(self) -> None:
+        self.queue.clear()
+
+    def sort_by_priority(self) -> List[BatchRequest]:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return sorted(self.queue, key=lambda r: r.priority.value, reverse=True)

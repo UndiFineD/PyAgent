@@ -17,9 +17,15 @@ Content-based Block Hash Manager for Phase 53.
 Enables prefix caching and block sharing via cryptographic hashing of token sequences.
 """
 
+<<<<<<< HEAD
 import hashlib
 import logging
 from typing import Dict, List, Optional
+=======
+import logging
+import hashlib
+from typing import Dict, List, Optional, Any
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -28,29 +34,49 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class BlockHashManager:
     """
     Manages a registry of block hashes to enable deduplication and prefix caching.
     Supports high-speed hashing using Rust backend.
     """
+<<<<<<< HEAD
 
     def __init__(self) -> None:
         self.hash_to_block: Dict[str, int] = {}
         self.block_to_hash: Dict[int, str] = {}
 
+=======
+    
+    def __init__(self):
+        self.hash_to_block: Dict[str, int] = {}
+        self.block_to_hash: Dict[int, str] = {}
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def compute_hash(self, tokens: List[int]) -> str:
         """
         Computes a stable hash for a sequence of tokens.
         """
         if rc and hasattr(rc, "kv_block_hash_rust"):
             return rc.kv_block_hash_rust(tokens)
+<<<<<<< HEAD
 
         # Fallback: SHA256
         token_str = ",".join(map(str, tokens)).encode("utf-8")
         return hashlib.sha256(token_str).hexdigest()
 
     def register_block(self, block_id: int, tokens: List[int]) -> None:
+=======
+            
+        # Fallback: SHA256
+        token_str = ",".join(map(str, tokens)).encode('utf-8')
+        return hashlib.sha256(token_str).hexdigest()
+
+    def register_block(self, block_id: int, tokens: List[int]):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Registers a physical block with its token hash."""
         h = self.compute_hash(tokens)
         self.hash_to_block[h] = block_id
@@ -62,7 +88,11 @@ class BlockHashManager:
         h = self.compute_hash(tokens)
         return self.hash_to_block.get(h)
 
+<<<<<<< HEAD
     def invalidate_block(self, block_id: int) -> None:
+=======
+    def invalidate_block(self, block_id: int):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Removes a block from the hash registry."""
         if block_id in self.block_to_hash:
             h = self.block_to_hash.pop(block_id)
@@ -72,4 +102,11 @@ class BlockHashManager:
 
     def get_stats(self) -> Dict[str, int]:
         """Returns statistics on hash registry usage."""
+<<<<<<< HEAD
         return {"registered_hashes": len(self.hash_to_block), "tracked_blocks": len(self.block_to_hash)}
+=======
+        return {
+            "registered_hashes": len(self.hash_to_block),
+            "tracked_blocks": len(self.block_to_hash)
+        }
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

@@ -12,22 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for execution profiles and configuration management.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 from typing import Any, Dict, Optional
 
 from .base_core import BaseCore
 from .models import ExecutionProfile
 
+=======
+from typing import Any, Dict, Optional
+from .base_core import BaseCore
+from .models import ExecutionProfile, ConfigProfile
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class ProfileCore(BaseCore):
     """
@@ -40,6 +49,7 @@ class ProfileCore(BaseCore):
         self._active: Optional[str] = None
         self._register_defaults()
 
+<<<<<<< HEAD
     @property
     def profiles(self) -> Dict[str, ExecutionProfile]:
         """Returns the dictionary of registered profiles."""
@@ -116,3 +126,17 @@ class ProfileCore(BaseCore):
         if isinstance(profile, ExecutionProfile):
             return profile
         return None
+=======
+    def _register_defaults(self) -> None:
+        self._profiles["default"] = ExecutionProfile(name="default", timeout=120)
+        self._profiles["fast"] = ExecutionProfile(name="fast", timeout=60, parallel=True, workers=4)
+
+    def activate(self, name: str) -> None:
+        if name in self._profiles:
+            self._active = name
+
+    def get_active(self) -> Optional[ExecutionProfile]:
+        if self._active:
+            return self._profiles.get(self._active)
+        return self._profiles.get("default")
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

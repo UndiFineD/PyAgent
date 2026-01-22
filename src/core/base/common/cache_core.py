@@ -17,6 +17,7 @@ Core logic for response caching and prompt prefix mapping.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 import hashlib
 import json
@@ -31,6 +32,15 @@ try:
     import rust_core as rc
 except ImportError:
     rc = None
+=======
+import hashlib
+import json
+import logging
+from pathlib import Path
+from typing import Dict, Optional, Any
+from .base_core import BaseCore
+import time
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 
 class CacheCore(BaseCore):
@@ -48,6 +58,7 @@ class CacheCore(BaseCore):
         self.logger = logging.getLogger("pyagent.cache_core")
 
     def _get_cache_key(self, content: str) -> str:
+<<<<<<< HEAD
         if rc and hasattr(rc, "fast_cache_key_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -65,6 +76,25 @@ class CacheCore(BaseCore):
         """Stores a result in memory and disk cache."""
         key = self._get_cache_key(prompt)
         self.cache_data[key] = {"result": response, "timestamp": time.time(), "ttl": ttl_seconds}
+=======
+        try:
+            import rust_core as rc
+            return rc.fast_cache_key_rust(content)
+        except (ImportError, Exception):
+            pass
+        return hashlib.md5(content.encode()).hexdigest()
+
+    def _make_complex_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
+        return f"{file_path}:{agent_name}:{content_hash}"
+
+    def set(self, prompt: str, response: Any, ttl_seconds: int = 3600) -> None:
+        key = self._get_cache_key(prompt)
+        self.cache_data[key] = {
+            "result": response,
+            "timestamp": time.time(),
+            "ttl": ttl_seconds
+        }
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         if len(prompt) > 500:
             prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
@@ -72,6 +102,7 @@ class CacheCore(BaseCore):
 
         cache_file = self.cache_dir / f"{key}.json"
         try:
+<<<<<<< HEAD
             cache_file.write_text(
                 json.dumps({"prompt": prompt, "response": response, "timestamp": time.time(), "ttl": ttl_seconds})
             )
@@ -82,13 +113,32 @@ class CacheCore(BaseCore):
         """Retrieves a cached result if available and not expired."""
         key = self._get_cache_key(prompt)
 
+=======
+            cache_file.write_text(json.dumps({
+                "prompt": prompt,
+                "response": response,
+                "timestamp": time.time(),
+                "ttl": ttl_seconds
+            }))
+        except Exception as e:
+            self.logger.error(f"Failed to write cache file: {e}")
+
+    def get(self, prompt: str) -> Optional[Any]:
+        key = self._get_cache_key(prompt)
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Check memory cache
         if key in self.cache_data:
             cached = self.cache_data[key]
             if time.time() - cached["timestamp"] < cached["ttl"]:
                 return cached["result"]
+<<<<<<< HEAD
 
             del self.cache_data[key]
+=======
+            else:
+                del self.cache_data[key]
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         # Check disk cache
         cache_file = self.cache_dir / f"{key}.json"
@@ -99,10 +149,17 @@ class CacheCore(BaseCore):
                     self.cache_data[key] = {
                         "result": data["response"],
                         "timestamp": data["timestamp"],
+<<<<<<< HEAD
                         "ttl": data["ttl"],
                     }
                     return data["response"]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+                        "ttl": data["ttl"]
+                    }
+                    return data["response"]
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
         return None

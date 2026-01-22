@@ -1,103 +1,49 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Logic for core observability types and base classes.
+"""
+Observability core logic.
+(Facade for src.core.base.common.telemetry_core)
+"""
 
-from __future__ import annotations
-import contextlib
-import json
-import logging
-import math
-import zlib
+from src.core.base.common.telemetry_core import (
+    TelemetryCore as ObservabilityCore,
+    MetricType,
+    Metric,
+)
+
+# Additional types specific to Observability tier
+from typing import Any, Dict, List, Optional, Union, Callable
 from enum import Enum
-from datetime import datetime, timedelta
 from dataclasses import dataclass, field
-from typing import Any
-
-try:
-    import rust_core as rc
-
-    HAS_RUST = True
-except ImportError:
-    HAS_RUST = False
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class MetricType(Enum):
-    """Types of metrics."""
-
-    COUNTER = "counter"
-    GAUGE = "gauge"
-    HISTOGRAM = "histogram"
-
-    SUMMARY = "summary"
-
-
-@dataclass
-class Metric:
-    """A single metric."""
-
-    name: str
-
-    value: float
-    metric_type: MetricType
-
-    timestamp: str = ""
-    namespace: str = "default"
-
-    tags: dict[str, str] = field(default_factory=lambda: {})
-
-    # Compatibility: some tests treat history entries as (timestamp, value) tuples.
-    def __iter__(self) -> Any:
-        yield self.timestamp
-        yield self.value
-
-    def __getitem__(self, index: int) -> Any:
-        return (self.timestamp, self.value)[index]
-
 
 class AlertSeverity(Enum):
-    """Alert severity levels."""
-
     CRITICAL = 5
-
     HIGH = 4
-
     MEDIUM = 3
-
     LOW = 2
-
     INFO = 1
-
 
 @dataclass
 class Alert:
-    """An alert triggered by a threshold breach."""
-
     id: str
     metric_name: str
     current_value: float
-
     threshold_value: float
     severity: AlertSeverity
-
     message: str
     timestamp: str
 
-
 @dataclass
 class Threshold:
-    """Threshold configuration for alerting."""
-
     metric_name: str
     min_value: float | None = None
-
     max_value: float | None = None
-
-    severity: AlertSeverity | None = None  # Will be set to MEDIUM (3) by default
+    severity: AlertSeverity | None = None
     message: str = ""
+
+@dataclass
+class RollupConfig:
+    metric_name: str
+    interval: str
+    aggregation: str
 
     operator: str = ""  # For backwards compatibility
     value: float = 0.0  # For backwards compatibility
@@ -236,23 +182,18 @@ class RollupConfig:
     keep_raw: bool = True
 
 
+class StreamingProtocol(Enum):
+    """Protocols for real-time stats streaming."""
+
+    WEBSOCKET = "websocket"
+
+
 @dataclass
 class StreamingConfig:
     """Configuration for real-time stats streaming."""
 
     protocol: StreamingProtocol
     endpoint: str
-    port: int = 8080
-    auth_token: str = ""
-    heartbeat_interval: int = 30
-    reconnect_attempts: int = 3
-    buffer_size: int = 1000
-
-
-class StreamingProtocol(Enum):
-    """Protocols for real-time stats streaming."""
-
-    WEBSOCKET = "websocket"
     SSE = "server_sent_events"
 
     GRPC = "grpc"

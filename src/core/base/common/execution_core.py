@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,32 +17,52 @@
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
+=======
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Unified Execution Core for PyAgent.
 Handles concurrent, parallel, and serial task orchestration.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Callable, List
 
 from .base_core import BaseCore
+=======
+import asyncio
+import logging
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from typing import Any, List, Callable, Optional
+from src.core.base.common.base_core import BaseCore
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ExecutionCore(BaseCore):
     """
     Standard implementation for task orchestration.
     Supports ThreadPool, ProcessPool, and native Rust-based async scheduling.
     """
+<<<<<<< HEAD
 
     def __init__(self, max_workers: int = 4) -> None:
+=======
+    
+    def __init__(self, max_workers: int = 4):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__()
         self.max_workers = max_workers
         self._thread_pool = ThreadPoolExecutor(max_workers=max_workers)
@@ -49,8 +70,13 @@ class ExecutionCore(BaseCore):
     async def execute_parallel(self, tasks: List[Callable]) -> List[Any]:
         """Executes a list of callables in parallel using threads."""
         if rc and hasattr(rc, "execute_parallel_rust"):
+<<<<<<< HEAD
             return rc.execute_parallel_rust(tasks)  # pylint: disable=no-member
 
+=======
+            return rc.execute_parallel_rust(tasks)
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         loop = asyncio.get_event_loop()
         futures = [loop.run_in_executor(self._thread_pool, task) for task in tasks]
         return await asyncio.gather(*futures)

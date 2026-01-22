@@ -21,8 +21,14 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import os
 import yaml
+<<<<<<< HEAD
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+=======
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.logic.core.validation import ValidationCore
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __version__ = VERSION
 
@@ -31,6 +37,7 @@ class ConfigAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.validator = ValidationCore()
         self.workspace_root = self.file_path.parent.parent.parent
         self._system_prompt = (
             "You are the Config Agent. "
@@ -43,10 +50,15 @@ class ConfigAgent(BaseAgent):
     def validate_env(self) -> str:
         """Checks for required environment variables."""
         required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]
+<<<<<<< HEAD
         missing = [key for key in required if key not in os.environ]
         
+=======
+        success, missing = self.validator.validate_env_vars(required)
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         report = ["## ⚙️ Environment Validation\n"]
-        if not missing:
+        if success:
             report.append("✅ All required environment variables are set.")
         else:
             report.append(f"❌ **Missing variables**: {', '.join(missing)}")

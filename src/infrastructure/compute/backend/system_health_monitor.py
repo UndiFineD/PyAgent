@@ -4,9 +4,13 @@
 System Health Monitor.
 (Facade for src.core.base.common.health_core)
 """
+<<<<<<< HEAD
 
 from src.core.base.common.health_core import HealthCore as StandardHealthCore
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
+from src.core.base.common.health_core import HealthCore as StandardHealthCore
 
 class SystemHealthMonitor(StandardHealthCore):
     """Monitors backend health and manages failover.
@@ -24,6 +28,7 @@ class SystemHealthMonitor(StandardHealthCore):
         self.health_threshold = health_threshold
         self.window_size = window_size
         self.core = StabilityCore()
+<<<<<<< HEAD
         self._history: dict[str, list[tuple[bool, int]]] = {}
         self._status: dict[str, bool] = {}
 
@@ -76,3 +81,5 @@ class SystemHealthMonitor(StandardHealthCore):
                 best_backend = b
 
         return best_backend
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

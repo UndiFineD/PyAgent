@@ -15,5 +15,8 @@
 """Facade for AuthCore to maintain backward compatibility with AuthManager."""
 
 from .auth_core import AuthCore as AuthManager
+<<<<<<< HEAD
 
 __all__ = ["AuthManager"]
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

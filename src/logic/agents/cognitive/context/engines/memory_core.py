@@ -20,8 +20,11 @@ Delegates to the standardized src.core.base.common.memory_core.
 
 from __future__ import annotations
 from typing import Any
+<<<<<<< HEAD
 
 from src.core.base.lifecycle.version import VERSION
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from src.core.base.common.memory_core import MemoryCore as StandardMemoryCore
 
 __version__ = VERSION

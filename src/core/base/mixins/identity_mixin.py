@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+<<<<<<< HEAD
 """
 Module: identity_mixin
 Provides identity and metadata mixin for PyAgent agents.
@@ -15,6 +16,13 @@ Provides identity and metadata mixin for PyAgent agents.
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+=======
+# Identity Mixin for BaseAgent
+from typing import Any
+from src.core.base.common.models import AgentPriority
+from src.core.base.logic.core.identity_core import IdentityCore
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 """Identity Mixin for BaseAgent."""
 
@@ -30,8 +38,15 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
     """Handles agent identity, configuration, and capabilities."""
 
     def __init__(self, **kwargs: Any) -> None:
+<<<<<<< HEAD
         self.identity = IdentityCore(agent_type=self.__class__.__name__.lower().replace("agent", "") or "base")
         self.agent_name: str = self.identity.agent_type
+=======
+        self.identity = IdentityCore(
+            agent_type=self.__class__.__name__.lower().replace("agent", "") or "base"
+        )
+        self.agent_name = self.identity.agent_type
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
         self._suspended: bool = False

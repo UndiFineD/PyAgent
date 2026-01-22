@@ -18,16 +18,30 @@ AgentRegistry: Central registry for all active agent instances.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 import logging
 from typing import Any
 
 from src.core.base.common.registry_core import RegistryCore
 from src.core.base.lifecycle.version import VERSION
+=======
+import logging
+from typing import TYPE_CHECKING
+from src.core.base.common.registry_core import RegistryCore
+from src.core.base.lifecycle.version import VERSION
 
+if TYPE_CHECKING:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
+__version__ = VERSION
+
+<<<<<<< HEAD
 __version__: str = VERSION
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class AgentRegistry(RegistryCore["BaseAgent"]):
     """
@@ -42,6 +56,7 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
             cls._instance = super(AgentRegistry, cls).__new__(cls)
         return cls._instance
 
+<<<<<<< HEAD
     def __init__(self, **_kwargs: Any) -> None:
         if not hasattr(self, "_initialized"):
             super().__init__(name="AgentRegistry")
@@ -90,13 +105,35 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
         Returns:
             list[str]: List of registered agent names.
         """
+=======
+    def register(self, agent: BaseAgent) -> None:
+        """Register an agent instance."""
+        name = getattr(agent, "agent_name", str(id(agent)))
+        self.register(name, agent)
+        logging.debug(f"Agent '{name}' registered.")
+
+    def unregister(self, name: str) -> None:
+        """Unregister an agent instance."""
+        if super().unregister(name):
+            logging.debug(f"Agent '{name}' unregistered.")
+
+    def get_agent(self, name: str) -> BaseAgent | None:
+        """Retrieve an agent by name."""
+        return self.get(name)
+
+    def list_agents(self) -> list[str]:
+        """List names of all registered agents."""
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self.list_keys()
 
     @property
     def active_count(self) -> int:
+<<<<<<< HEAD
         """
         Return the number of active agents.
         Returns:
             int: Number of active agents.
         """
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return len(self._items)

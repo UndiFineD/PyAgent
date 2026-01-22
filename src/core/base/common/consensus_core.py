@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 """
 Core logic for multi-agent voting and consensus.
 Supports weighted voting and tie-breaking algorithms.
@@ -21,6 +22,10 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
+=======
+from __future__ import annotations
+from typing import List, Optional, Any, Dict
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .base_core import BaseCore
 
 try:
@@ -28,13 +33,17 @@ try:
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ConsensusCore(BaseCore):
     """
     Standardized logic for multi-agent voting and consensus.
     Supports weighted voting and tie-breaking.
     """
 
+<<<<<<< HEAD
     def __init__(self, name: str = "ConsensusCore", repo_root: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=repo_root)
 
@@ -46,6 +55,17 @@ class ConsensusCore(BaseCore):
                 return rc.calculate_consensus_winner(proposals, weights)  # type: ignore
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+    def __init__(self, name: str = "ConsensusCore", root_path: Optional[str] = None) -> None:
+        super().__init__(name=name, root_path=root_path)
+
+    def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
+        """Determines the winning proposal based on voting rules."""
+        if rc and hasattr(rc, "calculate_consensus_winner"):
+            try:
+                return rc.calculate_consensus_winner(proposals, weights)
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         if not proposals:

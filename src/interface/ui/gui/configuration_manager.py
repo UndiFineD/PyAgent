@@ -22,8 +22,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from typing import Any
-import json
-import os
+from src.core.base.common.storage_core import StorageCore
 
 __version__ = VERSION
 
@@ -40,15 +39,12 @@ class ConfigurationManager:
         self.load()
 
     def load(self) -> None:
-        if os.path.exists(self.config_file):
-            try:
-                with open(self.config_file) as f:
-                    disk_settings = json.load(f)
-                    self.settings.update(disk_settings)
-            except Exception:
-                pass
+        disk_settings = StorageCore.load_json(self.config_file)
+        if disk_settings:
+            self.settings.update(disk_settings)
 
     def save(self) -> None:
+<<<<<<< HEAD
         os.makedirs(os.path.dirname(self.config_file), exist_ok=True)
         with open(self.config_file, 'w') as f:
             json.dump(self.settings, f, indent=4)
@@ -62,3 +58,9 @@ class ConfigurationManager:
         # Also update environment variable for backend compatibility
         if key == "github_token_file":
             os.environ["DV_GITHUB_TOKEN_FILE"] = value
+=======
+        StorageCore.save_json(self.config_file, self.settings)
+        # Also update environment variable for backend compatibility
+        if "github_token_file" in self.settings:
+            os.environ["DV_GITHUB_TOKEN_FILE"] = self.settings["github_token_file"]
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

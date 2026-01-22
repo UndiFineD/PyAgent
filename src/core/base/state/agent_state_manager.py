@@ -22,14 +22,21 @@ State management for swarm agents.
 Handles persistence of agent memory, history, and metadata.
 """
 
+<<<<<<< HEAD
 import collections
 import json
 import logging
 from subprocess import CalledProcessError
 from subprocess import TimeoutExpired
+=======
+from __future__ import annotations
+from src.core.base.lifecycle.version import VERSION
+import logging
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import time
 from pathlib import Path
 from typing import Any
+from src.core.base.common.file_system_core import FileSystemCore
 
 from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.lifecycle.version import VERSION
@@ -64,7 +71,11 @@ class EmergencyEventLog:
         self.buffer.append(event)
         try:
             self._fs.atomic_write(self.log_path, "\n".join(self.buffer))
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+=======
+        except Exception as e:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
 
 
@@ -300,7 +311,11 @@ class StateTransaction:
         self.drift_detector.snapshot()
         for file in self.target_files:
             if file.exists():
+<<<<<<< HEAD
                 backup_path: Path = self.temp_dir / f"{file.name}_{self.id}.bak"
+=======
+                backup_path = self.temp_dir / f"{file.name}_{self.id}.bak"
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 self._fs.safe_copy(file, backup_path)
                 self.backups[file] = backup_path
         logging.info(f"Transaction {self.id} started. {len(self.backups)} files backed up.")
@@ -437,6 +452,7 @@ class AgentStateManager:
         path: Path | None = None,
     ) -> None:
         """Save agent state to disk."""
+        import json
         state_path: Path = path or file_path.with_suffix(".state.json")
         state: dict[str, Any] = {
             "file_path": str(file_path),

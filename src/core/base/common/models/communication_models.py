@@ -27,7 +27,23 @@ Defines context lineage and communication models for agent task attribution.
 
 @dataclass(slots=True)
 class CascadeContext:
+<<<<<<< HEAD
     """Context for tracking cascade operations and preventing infinite recursion."""
+=======
+    """
+    Context for recursive agent delegation (Phase 259/275).
+    Tracks depth and lineage to prevent infinite loops and provide tracing.
+    Includes tenant isolation for multi-tenant swarms (Phase 71).
+    """
+
+    task_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    tenant_id: str = "default_tenant"
+    security_scope: list[str] = field(default_factory=_empty_list_str)
+    correlation_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    root_task_id: str | None = None
+
+    parent_agent_id: str | None = None
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     task_id: str
     cascade_depth: int = 0
@@ -67,7 +83,16 @@ class CascadeContext:
             raise RecursionError("Recursive Improvement Loop Detected - Multiple recursive improvement failures")
 
         return CascadeContext(
+<<<<<<< HEAD
             task_id=child_task_id,
+=======
+            task_id=str(uuid.uuid4()),
+            tenant_id=self.tenant_id,
+            security_scope=self.security_scope.copy(),
+            correlation_id=self.correlation_id,
+            root_task_id=self.root_task_id or self.task_id,
+            parent_agent_id=agent_id,
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             cascade_depth=self.cascade_depth + 1,
             depth_limit=self.depth_limit,
             failure_history=self.failure_history.copy()
@@ -234,9 +259,14 @@ class SwarmAuditTrail:
     Detailed audit log for swarm decision making (Phase 69).
     Tracks routing, fusion, and expert selection reasoning.
     """
+<<<<<<< HEAD
 
     request_id: str
     step: str  # "routing", "execution", "fusion"
+=======
+    request_id: str
+    step: str # "routing", "execution", "fusion"
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     decision_summary: str
     raw_data: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     timestamp: float = field(default_factory=time.time)

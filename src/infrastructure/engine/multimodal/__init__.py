@@ -20,6 +20,7 @@ Multimodal input processing infrastructure.
 Phase 26: Unified handling for image, video, audio, and text modalities.
 """
 
+<<<<<<< HEAD
 from .multi_modal_processor import (MULTIMODAL_REGISTRY, AudioProcessor,  # noqa: F401
                                     BaseMultiModalProcessor, ImageProcessor,
                                     ModalityType, MultiModalConfig,
@@ -31,6 +32,27 @@ from .multi_modal_processor import (MULTIMODAL_REGISTRY, AudioProcessor,  # noqa
 from .muxer import ChannelType, Muxer  # noqa: F401
 from .quantized_engine import QuantizedMultimediaEngine  # noqa: F401
 from .tensorrt_loader import TensorRTLoader  # noqa: F401
+=======
+from .multi_modal_processor import (
+    ModalityType,
+    MultiModalConfig,
+    MultiModalData,
+    MultiModalInputs,
+    PlaceholderInfo,
+    BaseMultiModalProcessor,
+    ImageProcessor,
+    VideoProcessor,
+    AudioProcessor,
+    TextEmbedProcessor,
+    MultiModalRegistry,
+    MULTIMODAL_REGISTRY,
+    process_multimodal_inputs,
+    get_placeholder_tokens,
+)
+from .muxer import Muxer, ChannelType
+from .quantized_engine import QuantizedMultimediaEngine
+from .tensorrt_loader import TensorRTLoader
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __all__ = [
     # Enums and config

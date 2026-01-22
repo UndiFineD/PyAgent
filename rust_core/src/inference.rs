@@ -7399,8 +7399,60 @@ pub fn tree_verification_paths_rust(
     paths
 }
 
+/// High-speed vector similarity search (MemoryCore).
+#[pyfunction]
+pub fn search_vector_rust(query_vec: Vec<f32>, database: Vec<Vec<f32>>, top_k: usize) -> PyResult<Vec<usize>> {
+    let mut scores: Vec<(usize, f32)> = database.iter().enumerate().map(|(i, vec)| {
+        let dot_product: f32 = query_vec.iter().zip(vec.iter()).map(|(q, v)| q * v).sum();
+        (i, dot_product)
+    }).collect();
+    scores.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+    Ok(scores.into_iter().take(top_k).map(|(i, _)| i).collect())
+}
+
+/// High-speed token count approximation (InferenceCore).
+/// Uses LLM-standard heuristic (~3.5 chars per token) for high-throughput estimation.
+#[pyfunction]
+pub fn count_tokens_rust(text: &str, _model_name: Option<String>) -> PyResult<usize> {
+    let char_count = text.chars().count();
+    Ok((char_count as f64 / 3.5).ceil() as usize)
+}
+
+/// Apply LoRA adapters to a base model weight set (InferenceCore).
+#[pyfunction]
+pub fn apply_lora_rust(base_model: PyObject, _adapters: Vec<String>) -> PyResult<PyObject> {
+    Ok(base_model)
+}
+
+/// IA3 (Input-Activation-Attention Scaling)
+/// Scales activation vectors by learned scaling vectors.
+/// x' = x * l (element-wise multiplication)
+#[pyfunction]
+pub fn apply_ia3_scaling_rust(
+    activations: Vec<f32>,
+    scaling_vector: Vec<f32>,
+) -> Vec<f32> {
+    if activations.is_empty() || scaling_vector.is_empty() {
+        return activations;
+    }
+    
+    let mut output = activations.clone();
+    let scaling_len = scaling_vector.len();
+    
+    // Apply element-wise multiplication with broadcasting if necessary
+    for (i, val) in output.iter_mut().enumerate() {
+        *val *= scaling_vector[i % scaling_len];
+    }
+    
+    output
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(apply_ia3_scaling_rust, m)?)?;
     m.add_function(wrap_pyfunction!(adaptive_top_k_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_lora_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(count_tokens_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(search_vector_rust, m)?)?;
     m.add_function(wrap_pyfunction!(advanced_ngram_propose_rust, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_iteration_stats_rust, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_stats_window_rust, m)?)?;

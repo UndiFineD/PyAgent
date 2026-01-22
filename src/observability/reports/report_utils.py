@@ -22,6 +22,9 @@ from __future__ import annotations
 import ast
 import re
 from pathlib import Path
+from src.core.base.common.workspace_core import WorkspaceCore
+from src.core.base.common.analysis_core import AnalysisCore
+from src.core.base.common.file_system_core import FileSystemCore
 
 from src.core.base.common.analysis_core import AnalysisCore
 from src.core.base.common.file_system_core import FileSystemCore

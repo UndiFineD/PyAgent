@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Manager for response post-processing and multimodal inputs.
 (Facade for src.core.base.common.processor_core)
 """
+<<<<<<< HEAD
 
 from __future__ import annotations
 
@@ -64,3 +68,11 @@ class SerializationManager:
     def from_json(self, data: str) -> Any:
         """Parse from JSON."""
         return self._core.from_json(data)
+=======
+from src.core.base.common.processor_core import (
+    ProcessorCore as ResponsePostProcessor,
+    ProcessorCore as MultimodalProcessor
+)
+from src.core.base.common.serialization_core import SerializationCore as SerializationManager
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

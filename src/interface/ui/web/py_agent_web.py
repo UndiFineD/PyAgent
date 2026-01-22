@@ -18,7 +18,12 @@ Generates data structures for internal/external dashboard consumers.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
+=======
+from src.core.base.lifecycle.version import VERSION
+from .agent_bar import AgentBar
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import json
 import logging
 from pathlib import Path
@@ -39,6 +44,17 @@ class FleetWebUI:
         self.generative_registry: dict[str, dict[str, Any]] = {}  # Tambo Pattern
         self.agent_bar = AgentBar()
         self._register_default_components()
+<<<<<<< HEAD
+=======
+
+    def _register_default_components(self):
+        """Registers system default components."""
+        self.register_generative_component(
+            "AgentBar",
+            "Floating real-time metrics and multimodal control bar.",
+            {"status": "string", "metrics": "object"}
+        )
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def _register_default_components(self) -> None:
         """Registers system default components."""

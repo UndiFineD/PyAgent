@@ -31,11 +31,17 @@ pub struct ModalityPacket {
 #[pymethods]
 impl ModalityPacket {
     #[new]
+<<<<<<< HEAD
     pub fn new(channel_id: PyObject, modality_type: String, timestamp: f64, payload: Vec<u8>, _py: Python<'_>) -> Self {
         let channel_id_str = channel_id.to_string();
         
         ModalityPacket {
             channel_id: channel_id_str,
+=======
+    pub fn new(channel_id: String, modality_type: String, timestamp: f64, payload: Vec<u8>) -> Self {
+        ModalityPacket {
+            channel_id,
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             modality_type,
             timestamp,
             payload,

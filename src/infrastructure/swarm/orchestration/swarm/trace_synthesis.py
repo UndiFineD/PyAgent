@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 """
 Trace synthesis.py module.
 """
@@ -26,13 +27,26 @@ from src.infrastructure.swarm.orchestration.swarm.audit_logger import \
 logger = logging.getLogger(__name__)
 
 
+=======
+import logging
+from typing import List, Dict, Any, Optional
+from collections import defaultdict
+from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+
+logger = logging.getLogger(__name__)
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SwarmTraceSynthesizer:
     """
     Condenses raw audit logs into actionable 'Global Wisdom' (Phase 82).
     Analyzes historical expert pairings to optimize future MoE routing decisions.
     """
 
+<<<<<<< HEAD
     def __init__(self, audit_logger: SwarmAuditLogger) -> None:
+=======
+    def __init__(self, audit_logger: SwarmAuditLogger):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.audit_logger = audit_logger
         self.wisdom_cache: Dict[str, Any] = {}
 
@@ -45,7 +59,11 @@ class SwarmTraceSynthesizer:
         expert_counts = defaultdict(int)
         domain_success = defaultdict(list)
 
+<<<<<<< HEAD
         for _task_id, trail_steps in self.audit_logger.trails.items():
+=======
+        for task_id, trail_steps in self.audit_logger.trails.items():
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             # We look for tasks where we have both a routing decision and a fusion result
             routing_data = None
             fusion_data = None
@@ -61,7 +79,11 @@ class SwarmTraceSynthesizer:
             if routing_data and fusion_data:
                 experts = routing_data.get("selected_experts", [])
                 quality = fusion_data.get("fusion_quality", 0.5)
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 # Update domain-specific success
                 domain_success[domain].append(quality)
 
@@ -75,9 +97,15 @@ class SwarmTraceSynthesizer:
 
         # Normalize wisdom
         final_wisdom = {
+<<<<<<< HEAD
             "domain_baselines": {d: sum(s) / len(s) for d, s in domain_success.items()},
             "expert_synergies": {},
             "top_experts": sorted(expert_counts.items(), key=lambda x: x[1], reverse=True)[:5],
+=======
+            "domain_baselines": {d: sum(s)/len(s) for d, s in domain_success.items()},
+            "expert_synergies": {},
+            "top_experts": sorted(expert_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }
 
         for ex1, peers in expert_affinities.items():
@@ -89,7 +117,11 @@ class SwarmTraceSynthesizer:
         logger.info(f"[Phase 82] Wisdom Synthesis Complete. Domain Baselines: {len(final_wisdom['domain_baselines'])}")
         return final_wisdom
 
+<<<<<<< HEAD
     def get_recommendation(self, _domain: str) -> List[str]:
+=======
+    def get_recommendation(self, domain: str) -> List[str]:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Returns recommended experts based on synthesized wisdom."""
         # Simple logic: pick experts with highest domain success or synergetic pairs
         return [expert for expert, _ in self.wisdom_cache.get("top_experts", [])]

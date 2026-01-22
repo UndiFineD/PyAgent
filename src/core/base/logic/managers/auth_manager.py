@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Manager for Authentication.
 (Facade for src.core.base.common.auth_manager)
 """
 
+<<<<<<< HEAD
 from src.core.base.common.auth_manager import \
     AuthManager as StandardAuthManager
 
@@ -25,10 +29,24 @@ class AuthManager(StandardAuthManager):
     """
     Facade for StandardAuthManager to maintain backward compatibility.
     Authentication management is now centralized in the Infrastructure/Common tier.
+=======
+from src.core.base.common.auth_manager import AuthManager as StandardAuthManager
+
+
+class AuthManager(StandardAuthManager):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     """
+    Facade for StandardAuthManager to maintain backward compatibility.
+    Authentication management is now centralized in the Infrastructure/Common tier.
+    """
+    pass
 
 
 class AuthenticationManager(StandardAuthManager):
     """
     Facade for StandardAuthManager to maintain backward compatibility.
     """
+<<<<<<< HEAD
+=======
+    pass
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

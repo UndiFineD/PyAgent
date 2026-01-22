@@ -1,6 +1,11 @@
 // Phase 317: Hardware Acceleration Module
 // This module provides bindings and strategies for specialized hardware (NPUs, GPUs)
 
+<<<<<<< HEAD
+=======
+use std::ffi::CString;
+use std::os::raw::{c_char, c_int};
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 use pyo3::prelude::*;
 
 /// Registers hardware acceleration functions with the Python module.
@@ -46,6 +51,11 @@ pub fn run_tensorrt_inference_rust(
 /// Strategic planning for AMD NPU (Ryzen AI) support.
 /// Currently requires the AMD Ryzen AI SDK to be installed and linked.
 pub mod amd_npu {
+<<<<<<< HEAD
+=======
+    use super::*;
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     #[cfg(feature = "amd_npu")]
     #[link(name = "amd_npu")]
     extern "C" {
@@ -87,7 +97,11 @@ pub mod amd_npu {
 /// ROCm/HIP Acceleration Strategy
 pub mod rocm {
     // Strategy for AMD GPU acceleration using ROCm/HIP
+<<<<<<< HEAD
     pub fn _is_available() -> bool {
+=======
+    pub fn is_available() -> bool {
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         // Implementation for checking ROCm availability
         false
     }

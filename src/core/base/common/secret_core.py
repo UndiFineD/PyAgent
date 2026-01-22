@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+=======
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Unified Secret Core for PyAgent.
 Handles credential masking, policy validation, and naming standards.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 
 import re
 from typing import List
@@ -30,13 +36,29 @@ except ImportError:
     rc = None
 
 
+=======
+import re
+from typing import Any, Dict, List, Optional
+from src.core.base.common.base_core import BaseCore
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SecretCore(BaseCore):
     """
     Standard implementation for secret safety.
     Provides masking logic for logs and validation for naming.
     """
+<<<<<<< HEAD
 
     def __init__(self) -> None:
+=======
+    
+    def __init__(self):
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__()
         self.mask_patterns: List[re.Pattern] = [
             re.compile(r"(api_key=)([a-zA-Z0-9\-_]{5,})"),
@@ -45,9 +67,15 @@ class SecretCore(BaseCore):
 
     def mask_secret(self, text: str) -> str:
         """Masks sensitive information in strings (Rust accelerated)."""
+<<<<<<< HEAD
         if rc and hasattr(rc, "mask_sensitive_data_rust"):  # pylint: disable=no-member
             return rc.mask_sensitive_data_rust(text)  # pylint: disable=no-member
 
+=======
+        if rc and hasattr(rc, "mask_sensitive_data_rust"):
+            return rc.mask_sensitive_data_rust(text)
+            
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         masked_text = text
         for pattern in self.mask_patterns:
             masked_text = pattern.sub(r"\1********", masked_text)

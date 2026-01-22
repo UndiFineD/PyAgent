@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 """
 Core logic for inference, tokenization, and model adaptation.
 """
@@ -25,6 +26,14 @@ from ....infrastructure.engine.tokenization.utils import (estimate_token_count,
                                                           get_tokenizer)
 from .base_core import BaseCore
 from .models.communication_models import PromptTemplate
+=======
+from __future__ import annotations
+import logging
+from typing import Any, Dict, Optional, List
+from .base_core import BaseCore
+from src.core.base.common.models.communication_models import PromptTemplate
+from src.infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -33,15 +42,23 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.inference")
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class InferenceCore(BaseCore):
     """
     Unified Inference and Model Utilities Core.
     Handles tokenization, prompt rendering, and LoRA adapter management.
     """
 
+<<<<<<< HEAD
     def __init__(self, name: str = "InferenceCore", repo_root: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=repo_root)
+=======
+    def __init__(self, name: str = "InferenceCore", root_path: Optional[str] = None) -> None:
+        super().__init__(name=name, root_path=root_path)
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.templates: Dict[str, PromptTemplate] = {}
 
     def register_template(self, template: PromptTemplate) -> None:
@@ -52,21 +69,36 @@ class InferenceCore(BaseCore):
         """Render a registered template by name."""
         if template_name in self.templates:
             return self.templates[template_name].render(**kwargs)
+<<<<<<< HEAD
 
         # Fallback: check if it's a raw template string
         if "{" in template_name and "}" in template_name:
             return template_name.format(**kwargs)
 
+=======
+        
+        # Fallback: check if it's a raw template string
+        if "{" in template_name and "}" in template_name:
+            return template_name.format(**kwargs)
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         raise ValueError(f"Template '{template_name}' not found.")
 
     def count_tokens(self, text: str, model_name: Optional[str] = None) -> int:
         """Consistent token counting across the fleet (Rust-accelerated)."""
+<<<<<<< HEAD
         if rc and hasattr(rc, "count_tokens_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.count_tokens_rust(text, model_name)  # type: ignore
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
+=======
+        if rc and hasattr(rc, "count_tokens_rust"):
+            try:
+                return rc.count_tokens_rust(text, model_name)
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
         return estimate_token_count(text, model_name)
 
@@ -81,6 +113,7 @@ class InferenceCore(BaseCore):
         Applies LoRA adapters to a base model.
         Hot path for Rust migration (rc.apply_lora_rust).
         """
+<<<<<<< HEAD
         if rc and hasattr(rc, "apply_lora_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -88,5 +121,13 @@ class InferenceCore(BaseCore):
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Rust LoRA application failed: %s", e)
 
+=======
+        if rc and hasattr(rc, "apply_lora_rust"):
+            try:
+                return rc.apply_lora_rust(base_model, adapters)
+            except Exception as e:
+                logger.error(f"Rust LoRA application failed: {e}")
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Python fallback (placeholder for actual linear algebra)
         return base_model

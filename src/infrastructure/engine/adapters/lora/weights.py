@@ -73,7 +73,11 @@ class LoRALayerWeights:
                 orig_shape = x.shape
                 x_flat = x.reshape(-1, self.in_features).astype(np.float32)
                 batch_size = x_flat.shape[0]
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 result_flat = rc.lora_forward_rust(
                     x_flat.flatten().tolist(),
                     self.lora_a.flatten().tolist(),
@@ -82,6 +86,7 @@ class LoRALayerWeights:
                     self.in_features,
                     self.out_features,
                     self.rank,
+<<<<<<< HEAD
                     self.scaling,
                 )
 
@@ -89,6 +94,15 @@ class LoRALayerWeights:
                 new_shape = list(orig_shape[:-1]) + [self.out_features]
                 return np.array(result_flat, dtype=np.float32).reshape(new_shape)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+=======
+                    self.scaling
+                )
+                
+                # Reshape back to original dimensions as needed
+                new_shape = list(orig_shape[:-1]) + [self.out_features]
+                return np.array(result_flat, dtype=np.float32).reshape(new_shape)
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         # x @ A.T @ B.T * scaling
@@ -116,10 +130,17 @@ class LoRALayerWeights:
                     self.out_features,
                     self.in_features,
                     self.rank,
+<<<<<<< HEAD
                     self.scaling,
                 )
                 return np.array(merged_flat, dtype=np.float32).reshape(base_weight.shape)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+=======
+                    self.scaling
+                )
+                return np.array(merged_flat, dtype=np.float32).reshape(base_weight.shape)
+            except Exception:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         # W_merged = W_base + B @ A * scaling
@@ -134,7 +155,10 @@ class LoRALayerWeights:
 @dataclass
 class IA3LayerWeights:
     """IA3 (Input-Activation-Attention Scaling) weights for a single layer."""
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     scaling_vector: NDArray[np.float32]  # [features]
     module_name: str
 
@@ -147,9 +171,15 @@ class IA3LayerWeights:
             try:
                 res = rc.apply_ia3_scaling_rust(x.flatten().tolist(), self.scaling_vector.tolist())
                 return np.array(res, dtype=np.float32).reshape(x.shape)
+<<<<<<< HEAD
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
+=======
+            except Exception:
+                pass
+        
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return x * self.scaling_vector
 
     def get_memory_bytes(self) -> int:

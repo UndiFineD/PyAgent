@@ -29,10 +29,14 @@ import shutil
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+<<<<<<< HEAD
 from typing import Any, Callable, Pattern
 
 from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.lifecycle.version import VERSION
+=======
+from src.core.base.common.file_system_core import FileSystemCore
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 # Rust acceleration for hot-path logging
 try:
@@ -87,7 +91,11 @@ class StructuredLogger:
                 with gzip.open(compressed_file, 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
             self._fs.delete(self.log_file)  # Delete original
+<<<<<<< HEAD
         except OSError as e:  # pylint: disable=broad-exception-caught, unused-variable
+=======
+        except Exception as e:
+>>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.error(f"StructuredLogger compression failed: {e}")
             import traceback
             traceback.print_exc()
