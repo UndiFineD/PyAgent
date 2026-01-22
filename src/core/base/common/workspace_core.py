@@ -197,6 +197,7 @@ class WorkspaceCore:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 patterns = rc.parse_codeignore_rust(str(ignore_path))  # pylint: disable=no-member
                 return set(patterns)
             except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
@@ -209,6 +210,10 @@ class WorkspaceCore:
                 patterns = rc.parse_codeignore_rust(str(ignore_path)) # type: ignore
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 return set(patterns)
+=======
+                patterns = rc.parse_codeignore_rust(str(ignore_path)) # type: ignore
+                return set(patterns)
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             except Exception as e: # pylint: disable=broad-exception-caught
                 self.logger.warning(f"Rust ignore parsing failed: {e}")
 <<<<<<< HEAD

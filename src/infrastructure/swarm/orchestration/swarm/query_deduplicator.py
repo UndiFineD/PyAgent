@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Query deduplicator.py module.
 """
@@ -28,6 +29,8 @@ from src.infrastructure.engine.models.similarity import \
 logger: logging.Logger = logging.getLogger(__name__)
 
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import logging
 import asyncio
 import time
@@ -35,7 +38,10 @@ from typing import Dict, Any, Optional, List
 from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 class SwarmQueryDeduplicator:
     """
@@ -43,6 +49,7 @@ class SwarmQueryDeduplicator:
     If a similar query is already being processed, returns a 'Wait and Join' signal.
     """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self, similarity_service: EmbeddingSimilarityService, threshold: float = 0.98) -> None:
         self.similarity_service: EmbeddingSimilarityService = similarity_service
@@ -52,6 +59,11 @@ class SwarmQueryDeduplicator:
         self.similarity_service = similarity_service
         self.threshold = threshold
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+    def __init__(self, similarity_service: EmbeddingSimilarityService, threshold: float = 0.98):
+        self.similarity_service = similarity_service
+        self.threshold = threshold
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         # maps task_id -> {prompt, future, start_time}
         self.inflight_queries: Dict[str, Dict[str, Any]] = {}
         # maps hash(prompt) -> result (short-term cache)
@@ -64,16 +76,21 @@ class SwarmQueryDeduplicator:
         """
         # Exact match check (fast)
 <<<<<<< HEAD
+<<<<<<< HEAD
         exact_hash: int = hash(prompt)
 =======
         exact_hash = hash(prompt)
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        exact_hash = hash(prompt)
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         if exact_hash in self.recent_results:
             logger.info(f"[Phase 86] Deduplicator: Exact hit for task {task_id}. Serving from recent results.")
             return self.recent_results[exact_hash]
 
         # Semantic check against inflight queries
         for inflight_id, data in self.inflight_queries.items():
+<<<<<<< HEAD
 <<<<<<< HEAD
             similarity: float = await self.similarity_service.compute_similarity(prompt, data["prompt"])
             if similarity >= self.threshold:
@@ -94,6 +111,8 @@ class SwarmQueryDeduplicator:
         if task_id in self.inflight_queries:
             data: Dict[str, Any] = self.inflight_queries.pop(task_id)
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             similarity = await self.similarity_service.compute_similarity(prompt, data["prompt"])
             if similarity >= self.threshold:
                 logger.info(f"[Phase 86] Deduplicator: Semantic collision ({similarity:.3f}). "
@@ -114,12 +133,16 @@ class SwarmQueryDeduplicator:
         """Marks a query as done and notifies all joiners."""
         if task_id in self.inflight_queries:
             data = self.inflight_queries.pop(task_id)
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             data["future"].set_result(result)
             # Cache for immediate future exact repeats
             self.recent_results[hash(data["prompt"])] = result
             logger.debug(f"[Phase 86] Deduplicator: Completed task {task_id} and notified joiners.")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def cleanup(self) -> None:
         """Prunes stale entries."""
@@ -128,5 +151,10 @@ class SwarmQueryDeduplicator:
         """Prunes stale entries."""
         cutoff = time.time() - 3600 # 1 hour
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+    def cleanup(self):
+        """Prunes stale entries."""
+        cutoff = time.time() - 3600 # 1 hour
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         # Cleanup recent_results could be added here
         pass

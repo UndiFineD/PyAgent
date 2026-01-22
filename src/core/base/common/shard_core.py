@@ -20,6 +20,7 @@ from __future__ import annotations
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from .base_core import BaseCore
 
@@ -34,6 +35,8 @@ except ImportError:
 import logging
 =======
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 from typing import Any, List, Dict, Optional
 from .base_core import BaseCore
 
@@ -43,6 +46,7 @@ except ImportError:
     rc = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 logger = logging.getLogger("pyagent.sharding")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -51,6 +55,8 @@ logger = logging.getLogger("pyagent.sharding")
 
 =======
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class ShardCore(BaseCore):
     """
     Authoritative engine for agent and data partitioning.
@@ -68,6 +74,7 @@ class ShardCore(BaseCore):
         Determines the shard ID for a given key.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -118,6 +125,10 @@ class ShardCore(BaseCore):
         if rc and hasattr(rc, "calculate_shard_id_rust"): # pylint: disable=no-member
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
+=======
+        if rc and hasattr(rc, "calculate_shard_id_rust"): # pylint: disable=no-member
+            try:
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 return rc.calculate_shard_id_rust(key, shard_count) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass

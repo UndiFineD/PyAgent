@@ -44,6 +44,7 @@ import socket
 from typing import Any, Dict, Optional
 from dataclasses import dataclass
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.core.base.common.base_core import BaseCore
 from src.core.base.lifecycle.version import VERSION, SDK_VERSION
 <<<<<<< HEAD
@@ -54,6 +55,10 @@ from src.core.base.lifecycle.version import VERSION, SDK_VERSION
 from .base_core import BaseCore
 from ..lifecycle.version import SDK_VERSION
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from .base_core import BaseCore
+from ..lifecycle.version import SDK_VERSION
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -137,6 +142,7 @@ class IdentityCore(BaseCore):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "generate_agent_id"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -160,12 +166,19 @@ class IdentityCore(BaseCore):
                 return rc.generate_agent_id(public_key, metadata) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        if rc and hasattr(rc, "generate_agent_id"): # pylint: disable=no-member
+            try:
+                return rc.generate_agent_id(public_key, metadata) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         seed = f"{public_key}_{metadata.get('type', 'generic')}_{metadata.get('birth_cycle', 0)}"
         return hashlib.sha256(seed.encode()).hexdigest()[:16]
 
     def sign_payload(self, payload: str, secret_key: str) -> str:
         """Signs a payload using HMAC-SHA256 (simulating Ed25519 signing for pure-python)."""
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -210,6 +223,10 @@ class IdentityCore(BaseCore):
         if rc and hasattr(rc, "sign_payload"): # pylint: disable=no-member
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
+=======
+        if rc and hasattr(rc, "sign_payload"): # pylint: disable=no-member
+            try:
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 return rc.sign_payload(payload, secret_key) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass

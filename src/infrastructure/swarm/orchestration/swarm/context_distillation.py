@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Context distillation.py module.
 """
@@ -26,19 +27,25 @@ logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import logging
 import numpy as np
 from typing import List, Dict, Any, Tuple, Optional
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class ContextDistiller:
     """
     Compresses long-context KV shards into essential 'Landmark' tokens (Phase 89).
     Enables ultra-fast P2P migration by sending only the most informative context summary.
     """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self, target_reduction: float = 0.5) -> None:
         self.target_reduction = target_reduction
@@ -47,11 +54,16 @@ class ContextDistiller:
         self, kv_data: np.ndarray, attention_scores: Optional[np.ndarray] = None
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
     def __init__(self, target_reduction: float = 0.5):
         self.target_reduction = target_reduction
 
     def distill_shard(self, kv_data: np.ndarray, attention_scores: Optional[np.ndarray] = None) -> Tuple[np.ndarray, Dict[str, Any]]:
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         """
         Reduces a KV tensor by selecting high-impact tokens.
         If no attention scores are provided, it uses uniform sampling.
@@ -59,32 +71,43 @@ class ContextDistiller:
         seq_len = kv_data.shape[0]
         keep_count = int(seq_len * (1.0 - self.target_reduction))
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         if attention_scores is not None:
             # Select top-k tokens based on attention
             indices = np.argsort(attention_scores)[-keep_count:]
             indices.sort()  # Keep temporal order
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         
         if attention_scores is not None:
             # Select top-k tokens based on attention
             indices = np.argsort(attention_scores)[-keep_count:]
             indices.sort() # Keep temporal order
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         else:
             # Uniform sampling
             indices = np.linspace(0, seq_len - 1, keep_count, dtype=int)
 
         distilled_kv = kv_data[indices]
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         metadata = {
             "original_len": seq_len,
             "distilled_len": keep_count,
             "indices": indices.tolist(),
+<<<<<<< HEAD
 <<<<<<< HEAD
             "compression_ratio": seq_len / keep_count,
         }
@@ -94,6 +117,11 @@ class ContextDistiller:
         }
         
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+            "compression_ratio": seq_len / keep_count
+        }
+        
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         logger.info(f"[Phase 89] ContextDistillation: Reduced shard from {seq_len} to {keep_count} tokens.")
         return distilled_kv, metadata
 
@@ -105,6 +133,7 @@ class ContextDistiller:
         orig_len = metadata["original_len"]
         feat_dim = distilled_kv.shape[1]
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         # Simple zero-padding or linear interpolation simulation
         reconstructed = np.zeros((orig_len, feat_dim))
@@ -114,6 +143,8 @@ class ContextDistiller:
             reconstructed[idx] = distilled_kv[i]
 
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         
         # Simple zero-padding or linear interpolation simulation
         reconstructed = np.zeros((orig_len, feat_dim))
@@ -122,5 +153,8 @@ class ContextDistiller:
         for i, idx in enumerate(indices):
             reconstructed[idx] = distilled_kv[i]
             
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         return reconstructed

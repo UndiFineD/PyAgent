@@ -20,6 +20,7 @@ Implements the VCG auction model for truthful bidding.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict, List
 
 =======
@@ -31,6 +32,9 @@ from typing import Any, List, Dict, Optional
 =======
 from typing import Any, List, Dict
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from typing import Any, List, Dict
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 from .base_core import BaseCore
 
 try:
@@ -122,6 +126,7 @@ class AuctionCore(BaseCore):
         if rc and hasattr(rc, "enforce_vram_quota"): # pylint: disable=no-member
             try:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)
             except Exception:
 <<<<<<< HEAD
@@ -132,5 +137,9 @@ class AuctionCore(BaseCore):
                 return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         return agent_vram_request <= (total_available * quota_percent)

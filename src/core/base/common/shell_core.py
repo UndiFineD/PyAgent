@@ -115,6 +115,7 @@ class ShellCore:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 from ..configuration.config_manager import \
                     CoreConfigManager  # pylint: disable=import-outside-toplevel
 
@@ -162,6 +163,9 @@ class ShellCore:
 =======
                 from ..configuration.config_manager import CoreConfigManager
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+                from ..configuration.config_manager import CoreConfigManager
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 self.repo_root = CoreConfigManager().root_dir
             except (ImportError, Exception): # pylint: disable=broad-exception-caught
                 self.repo_root = Path.cwd()

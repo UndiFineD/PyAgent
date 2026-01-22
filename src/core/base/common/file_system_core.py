@@ -46,6 +46,7 @@ import tempfile
 import fnmatch
 from pathlib import Path
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Optional, Union
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.utils.file_lock_manager import FileLockManager
@@ -55,17 +56,23 @@ from src.core.base.common.models import LockType
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 from typing import Any, Optional, Union, List, Set
 from .storage_core import StorageCore
 from .utils.file_lock_manager import FileLockManager
 from .models import LockType
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -80,6 +87,8 @@ from typing import Any, Optional, Union, List, Set
 
 =======
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class FileSystemCore:
     """
     Centralized handler for file system operations.
@@ -269,7 +278,7 @@ class FileSystemCore:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
             
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Atomic write failed for {p}: {e}")
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
@@ -285,6 +294,7 @@ class FileSystemCore:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to copy %s to %s: %s", src, dst, e)
 =======
@@ -296,6 +306,9 @@ class FileSystemCore:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             self.logger.error(f"Failed to copy {src} to {dst}: {e}")
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
@@ -305,6 +318,7 @@ class FileSystemCore:
         try:
             shutil.move(str(src), str(dst))
             return True
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -319,6 +333,9 @@ class FileSystemCore:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             self.logger.error(f"Failed to move {src} to {dst}: {e}")
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
@@ -335,6 +352,7 @@ class FileSystemCore:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to delete %s: %s", p, e)
 =======
@@ -346,6 +364,9 @@ class FileSystemCore:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             self.logger.error(f"Failed to delete {p}: {e}")
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False

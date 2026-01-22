@@ -83,11 +83,15 @@ class StorageCore:
 =======
             with open(p, 'r', encoding='utf-8') as f:
                 return json.load(f)
+<<<<<<< HEAD
         except Exception as e:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         except Exception as e: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to load JSON from %s: %s", p, e)
             return default
 
@@ -109,8 +113,9 @@ class StorageCore:
 <<<<<<< HEAD
 
             # Use Rust acceleration for atomic, high-speed write if available
-            if rc and hasattr(rc, "save_json_atomic_rust"):
+            if rc and hasattr(rc, "save_json_atomic_rust"): # pylint: disable=no-member
                 content = json.dumps(data, indent=indent)
+<<<<<<< HEAD
                 if rc.save_json_atomic_rust(str(p), content):  # pylint: disable=no-member
                     return
 
@@ -124,11 +129,14 @@ class StorageCore:
             # Use Rust acceleration for atomic, high-speed write if available
             if rc and hasattr(rc, "save_json_atomic_rust"): # pylint: disable=no-member
                 content = json.dumps(data, indent=indent)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 if rc.save_json_atomic_rust(str(p), content): # type: ignore
                     return
 
             with open(p, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=indent)
+<<<<<<< HEAD
 <<<<<<< HEAD
         except Exception as e:
 <<<<<<< HEAD
@@ -138,6 +146,9 @@ class StorageCore:
 =======
         except Exception as e: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to save JSON to %s: %s", p, e)
 
     @staticmethod
@@ -161,11 +172,15 @@ class StorageCore:
 =======
             with open(p, 'r', encoding='utf-8') as f:
                 return yaml.safe_load(f)
+<<<<<<< HEAD
         except Exception as e:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         except Exception as e: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to load YAML from %s: %s", p, e)
             return default
 
@@ -197,11 +212,15 @@ class StorageCore:
 =======
             with open(p, 'w', encoding='utf-8') as f:
                 yaml.dump(data, f, default_flow_style=False)
+<<<<<<< HEAD
         except Exception as e:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         except Exception as e: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to save YAML to %s: %s", p, e)
 
     @staticmethod

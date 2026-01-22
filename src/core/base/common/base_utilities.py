@@ -18,10 +18,14 @@
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.core.base.Version import VERSION
 =======
 from ..lifecycle.version import VERSION
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from ..lifecycle.version import VERSION
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import json
 import logging
 import argparse
@@ -41,16 +45,22 @@ if TYPE_CHECKING:
 
 try:
 <<<<<<< HEAD
+<<<<<<< HEAD
     from src.logic.strategies import PlanExecutor as agent_strategies
 except ImportError:
     sys.path.append(str(Path(__file__).parent.parent.parent))
     from src.logic.strategies import PlanExecutor as agent_strategies
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
     from ....logic.strategies import plan_executor as agent_strategies
 except (ImportError, ValueError):
     from src.logic.strategies import plan_executor as agent_strategies
 
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 __version__ = VERSION
 
 # Shared cores

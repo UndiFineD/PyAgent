@@ -47,6 +47,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, List
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.shell_core import ShellCore
 <<<<<<< HEAD
@@ -57,6 +58,10 @@ from src.core.base.common.shell_core import ShellCore
 from .base_core import BaseCore
 from .shell_core import ShellCore
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from .base_core import BaseCore
+from .shell_core import ShellCore
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -125,6 +130,7 @@ class GitCore(BaseCore):
                 pass
             
 <<<<<<< HEAD
+<<<<<<< HEAD
         file_args = "." if not files else " ".join(files)
         self.shell.run(f"git add {file_args}")
         self.shell.run(f"git commit -m \"{message}\"")
@@ -133,13 +139,18 @@ class GitCore(BaseCore):
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         if files:
             self.shell.execute(["git", "add"] + files)
         else:
             self.shell.execute(["git", "add", "."])
             
         self.shell.execute(["git", "commit", "-m", message])
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         return True
 
     def get_status(self) -> str:
@@ -165,6 +176,7 @@ class GitCore(BaseCore):
         """Creates or switches to a branch."""
         if self.no_git: return False
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.shell.run(f"git checkout -b {name}")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -173,4 +185,7 @@ class GitCore(BaseCore):
 =======
         self.shell.execute(["git", "checkout", "-b", name])
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        self.shell.execute(["git", "checkout", "-b", name])
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         return True

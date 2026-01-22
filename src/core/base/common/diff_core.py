@@ -44,6 +44,7 @@ import difflib
 import logging
 from typing import Any, Dict, Optional, List
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.models import DiffOutputFormat, DiffResult
 <<<<<<< HEAD
@@ -54,6 +55,10 @@ from src.core.base.common.models import DiffOutputFormat, DiffResult
 from .base_core import BaseCore
 from .models import DiffOutputFormat, DiffResult
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from .base_core import BaseCore
+from .models import DiffOutputFormat, DiffResult
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc

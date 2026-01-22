@@ -53,6 +53,11 @@ try:
 except ImportError:
     rc = None
 
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
 
 class CacheCore(BaseCore):
     """
@@ -69,6 +74,7 @@ class CacheCore(BaseCore):
         self.logger = logging.getLogger("pyagent.cache_core")
 
     def _get_cache_key(self, content: str) -> str:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -98,12 +104,17 @@ class CacheCore(BaseCore):
         except (ImportError, Exception):
             pass
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         if rc and hasattr(rc, "fast_cache_key_rust"): # pylint: disable=no-member
             try:
                 return rc.fast_cache_key_rust(content) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         return hashlib.md5(content.encode()).hexdigest()
 
     def _make_complex_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
@@ -199,6 +210,7 @@ class CacheCore(BaseCore):
                     }
                     return data["response"]
 <<<<<<< HEAD
+<<<<<<< HEAD
             except Exception:
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -207,5 +219,8 @@ class CacheCore(BaseCore):
 =======
             except Exception: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         return None

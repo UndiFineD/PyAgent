@@ -20,6 +20,7 @@ from __future__ import annotations
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import os
 from typing import Any, Dict, Optional
@@ -39,6 +40,10 @@ import logging
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import os
 from typing import Any, Dict, Optional
+=======
+import os
+from typing import Any, Dict, Optional
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 from .base_core import BaseCore
 
 try:
@@ -46,6 +51,7 @@ try:
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 logger = logging.getLogger("pyagent.routing")
 <<<<<<< HEAD
@@ -55,6 +61,8 @@ logger = logging.getLogger("pyagent.routing")
 
 =======
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class RoutingCore(BaseCore):
     """
     Authoritative engine for task routing and provider selection.
@@ -98,6 +106,7 @@ class RoutingCore(BaseCore):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "select_provider_rust"):  # pylint: disable=no-member
             try:
                 return rc.select_provider_rust(  # pylint: disable=no-member
@@ -115,6 +124,10 @@ class RoutingCore(BaseCore):
         if rc and hasattr(rc, "select_provider_rust"): # pylint: disable=no-member
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
+=======
+        if rc and hasattr(rc, "select_provider_rust"): # pylint: disable=no-member
+            try:
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 return rc.select_provider_rust(task_type, priority, performance_report or {}) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass

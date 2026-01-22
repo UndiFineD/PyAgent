@@ -165,6 +165,7 @@ class RegistryCore(BaseCore, Generic[T]):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "topological_sort_rust"):  # pylint: disable=no-member
             try:
                 return rc.topological_sort_rust(nodes, edges)  # type: ignore # pylint: disable=no-member
@@ -176,17 +177,22 @@ class RegistryCore(BaseCore, Generic[T]):
         if rc and hasattr(rc, "topological_sort_rust"):
             return rc.topological_sort_rust(nodes, edges)
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         if rc and hasattr(rc, "topological_sort_rust"): # pylint: disable=no-member
             try:
                 return rc.topological_sort_rust(nodes, edges) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         if rc and hasattr(rc, "topological_sort_rust"):
             return rc.topological_sort_rust(nodes, edges)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Simple Kahn's algorithm fallback

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Strategic Improvement Directives (Phase 50)
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -151,13 +152,50 @@ to become the best streaming ai out there (120fps DVD-channel capability).
 - block_table_defrag_rust - Block defragmentation
 - kv_offload_batch_transfer_rust - Batch KV transfer
 =======
+=======
+# Strategic Improvement Directives (Version 4.0.0)
+# This file (docs/prompt/prompt.txt) is the primary source for swarm-level prompting logic.
+# Priority: CRITICAL | Status: PHASE 91 - LIQUIDITY & CACHE INVALIDATION 🚧 PLANNING
+# Rust Functions: 680 | Test Coverage: ~4500+ tests passing
+@focus: ["src.infrastructure.swarm.orchestration", "src.infrastructure.liquidity", "rust_core/src"]
+
+---
+
+## Phase 90: The Swarm Singularity ✅ COMPLETE
+@location: ["src.infrastructure.swarm.meta", "src.infrastructure.swarm.p2p"]
+
+### Implemented Work
+1. **Federated Meta-Optimizer**: Autonomous hyperparameter self-tuning based on grid telemetry.
+2. **Context Distillation**: Landmark-based KV-cache compression for high-speed P2P migration.
+3. **LSH Memory Sharding**: $O(1)$ semantic retrieval for 1M+ token contexts.
+4. **Query De-duplication**: Semantic joining of inflight tasks to minimize redundant reasoning.
+5. **Knowledge Bridge**: Cross-tenant anonymized learning synthesis.
+
+---
+
+## Active Work: Phase 91 - Swarm Liquidity 🚧 PLANNING
+@location: ["src.infrastructure.liquidity", "rust_core/src"]
+
+### Planned Objectives
+1. **Semantic Cache Invalidation**: Real-time purging of stale LSH buckets.
+2. **Neural Context Pruning**: Entropy-based attention mask pruning for VRAM efficiency.
+3. **RDMA State Sync**: Instantaneous swarm snapshots for fault-tolerant state agreement.
+
+---
+
+## Completed Phases Summary
+
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 | Phase | Focus | Modules | Rust | Tests |
 |-------|-------|---------|------|-------|
 | 1-50  | Core & TALON | ~195 | 532 | ~3100 |
 | 51-70 | Infrastructure| ~25  | 80  | ~800  |
 | 71-90 | Swarm Evolution| ~20 | 68  | ~600  |
 | **Total** | - | **~240** | **680** | **~4500** |
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 ---
 
@@ -169,6 +207,7 @@ to become the best streaming ai out there (120fps DVD-channel capability).
 - **Resource Ethics**: Use the Meta-Optimizer to balance VRAM pressure vs. inference accuracy.
 - **Transaction Integrity**: Ensure all swarm state changes follow `StateTransaction` protocol.
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 ### Implemented Modules (6 Python)
 1. **RejectionSampler.py** - Speculative decoding verification (600 lines)
@@ -353,6 +392,8 @@ to become the best streaming ai out there (120fps DVD-channel capability).
    - Capability detection (TEXT, VISION, AUDIO, TOOL_USE, EMBEDDING, MULTIMODAL)
 =======
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
    - VRAM estimation with context scaling and batch size considerations
    - ArchitectureDetector for config-based and name-based detection
 3. **LoRAManager.py** - Adapter lifecycle management (600 lines)

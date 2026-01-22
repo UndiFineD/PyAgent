@@ -24,17 +24,24 @@ from src.core.base.utils._helpers import (
 from typing import Any
 from .models import AgentPluginConfig, RateLimitConfig
 from .utils.helpers import (
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
     _empty_dict_str_any,
     _empty_plugin_config_list,
     _empty_list_str,
     _empty_dict_str_int,
 )
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.core.base.version import VERSION
 =======
 from ..lifecycle.version import VERSION
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from ..lifecycle.version import VERSION
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 __version__ = VERSION
 

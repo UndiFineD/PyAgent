@@ -38,16 +38,22 @@ from typing import List, Optional
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class AutonomyCore(BaseCore):
     """
     Standard implementation for Agent Autonomy and Self-Model.
@@ -72,6 +78,7 @@ class AutonomyCore(BaseCore):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
         """Rust-accelerated autonomy evaluation."""
         if rc and hasattr(rc, "evaluate_autonomy_score"):  # pylint: disable=no-member
@@ -86,6 +93,8 @@ class AutonomyCore(BaseCore):
     def identify_blind_spots(self, success_rate: float, task_diversity: float) -> List[str]:
 =======
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
     def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
         """Rust-accelerated autonomy evaluation."""
         if rc and hasattr(rc, "evaluate_autonomy_score"): # pylint: disable=no-member
@@ -95,7 +104,10 @@ class AutonomyCore(BaseCore):
                 pass
         return 0.5 # Default fallback
 
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
     def identify_blind_spots(
         self, success_rate: float, task_diversity: float
     ) -> List[str]:

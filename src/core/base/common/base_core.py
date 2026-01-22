@@ -30,6 +30,7 @@ from typing import Any, Dict, Optional, Union
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from ..lifecycle.version import VERSION
 from .base_interfaces import Component, Loadable, Saveable
@@ -47,11 +48,16 @@ from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.workspace_core import WorkspaceCore
 from src.core.base.lifecycle.version import VERSION
 =======
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 from .base_interfaces import Loadable, Saveable, Component
 from .storage_core import StorageCore
 from .workspace_core import WorkspaceCore
 from ..lifecycle.version import VERSION
+<<<<<<< HEAD
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 logger = logging.getLogger("pyagent.core")
 
@@ -120,6 +126,7 @@ class BaseCore(Loadable, Saveable, Component):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)
 =======
@@ -131,6 +138,9 @@ class BaseCore(Loadable, Saveable, Component):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error(f"[{self.name}] Failed to save state to {save_path}: {e}")
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False

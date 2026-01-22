@@ -35,6 +35,7 @@ import logging
 from typing import Any, Dict, Optional, List
 from .base_core import BaseCore
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.core.base.common.models.communication_models import PromptTemplate
 from src.infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
 <<<<<<< HEAD
@@ -45,6 +46,10 @@ from src.infrastructure.engine.tokenization.utils import estimate_token_count, g
 from .models.communication_models import PromptTemplate
 from ...infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from .models.communication_models import PromptTemplate
+from ...infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -114,6 +119,7 @@ class InferenceCore(BaseCore):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "count_tokens_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -137,6 +143,12 @@ class InferenceCore(BaseCore):
                 return rc.count_tokens_rust(text, model_name) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+        if rc and hasattr(rc, "count_tokens_rust"): # pylint: disable=no-member
+            try:
+                return rc.count_tokens_rust(text, model_name) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         return estimate_token_count(text, model_name)
 
@@ -151,6 +163,7 @@ class InferenceCore(BaseCore):
         Applies LoRA adapters to a base model.
         Hot path for Rust migration (rc.apply_lora_rust).
         """
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -169,6 +182,10 @@ class InferenceCore(BaseCore):
         if rc and hasattr(rc, "apply_lora_rust"): # pylint: disable=no-member
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
+=======
+        if rc and hasattr(rc, "apply_lora_rust"): # pylint: disable=no-member
+            try:
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 return rc.apply_lora_rust(base_model, adapters) # type: ignore
             except Exception as e: # pylint: disable=broad-exception-caught
                 logger.error(f"Rust LoRA application failed: {e}")

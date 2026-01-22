@@ -48,6 +48,7 @@ import hashlib
 from pathlib import Path
 from typing import Any, Dict, Optional, List
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.core.base.common.base_core import BaseCore
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -56,6 +57,9 @@ from src.core.base.common.base_core import BaseCore
 =======
 from .base_core import BaseCore
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+=======
+from .base_core import BaseCore
+>>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
