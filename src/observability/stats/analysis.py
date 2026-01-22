@@ -18,6 +18,7 @@ from typing import Any
 
 from .observability_core import DerivedMetric, MetricCorrelation
 from .ab_engine import ABComparisonResult, ABSignificanceResult
+from src.core.base.common.formula_core import FormulaCore
 
 try:
     import rust_core as rc
@@ -193,47 +194,6 @@ class DerivedMetricCalculator:
     def __init__(self) -> None:
         self.derived_metrics: dict[str, DerivedMetric] = {}
         self._cache: dict[str, float] = {}
-        self.operators = {
-            ast.Add: operator.add,
-            ast.Sub: operator.sub,
-            ast.Mult: operator.mul,
-            ast.Div: operator.truediv,
-            ast.Pow: operator.pow,
-            ast.BitXor: operator.xor,
-            ast.USub: operator.neg,
-            ast.UAdd: operator.pos,
-        }
-
-    # pylint: disable=too-many-return-statements
-    def _eval_node(self, node: ast.AST) -> float:
-        """Recursively evaluate AST nodes for math formulas."""
-        if isinstance(node, ast.Constant):
-            return float(node.value)
-        if isinstance(node, ast.BinOp):
-            return self.operators[type(node.op)](
-                self._eval_node(node.left), self._eval_node(node.right)
-            )
-        if isinstance(node, ast.UnaryOp):
-            return self.operators[type(node.op)](self._eval_node(node.operand))
-
-        if isinstance(node, ast.Call):
-            if isinstance(node.func, ast.Name):
-                func_name = node.func.id
-                args = [self._eval_node(a) for a in node.args]
-
-                if func_name == "abs":
-                    return abs(args[0])
-                if func_name == "max":
-                    return max(args)
-                if func_name == "min":
-                    return min(args)
-                if func_name == "sqrt":
-                    return math.sqrt(args[0])
-                if func_name == "pow":
-                    return math.pow(args[0], args[1])
-            raise TypeError(f"Unsupported function: {node.func}")
-
-        raise TypeError(f"Unsupported operation: {type(node)}")
 
     def register_derived(
         self, name: str, dependencies: list[str], formula: str, description: str = ""
@@ -266,24 +226,8 @@ class DerivedMetricCalculator:
                 # pylint: disable=no-member
                 return float(rc.evaluate_formula(derived.formula, cast_values))
 
-        formula = derived.formula
-        for dep in derived.dependencies:
-            formula = formula.replace(f"{{{dep}}}", str(metric_values[dep]))
         try:
-            dangerous = [
-                "import",
-                "open",
-                "os.",
-                "subprocess",
-                "sys.",
-                "eval",
-                "exec",
-                "__",
-            ]
-            if any(kw in formula for kw in dangerous):
-                return None
-            tree = ast.parse(formula, mode="eval")
-            result = self._eval_node(tree.body)
+            result = FormulaCore.evaluate(derived.formula, metric_values)
             self._cache[name] = result
             return result
         except Exception as e: # pylint: disable=broad-exception-caught
@@ -352,29 +296,7 @@ class FormulaEngineCore:
     """Pure logic core for formula calculations."""
 
     def __init__(self) -> None:
-        self.operators = {
-            ast.Add: operator.add,
-            ast.Sub: operator.sub,
-            ast.Mult: operator.mul,
-            ast.Div: operator.truediv,
-            ast.Pow: operator.pow,
-            ast.BitXor: operator.xor,
-            ast.USub: operator.neg,
-            ast.UAdd: operator.pos,
-        }
-
-    def _eval_node(self, node: ast.AST) -> float:
-        if isinstance(node, ast.Constant):
-            return float(node.value)
-
-        elif isinstance(node, ast.BinOp):
-            return self.operators[type(node.op)](
-                self._eval_node(node.left), self._eval_node(node.right)
-            )
-        elif isinstance(node, ast.UnaryOp):
-            return self.operators[type(node.op)](self._eval_node(node.operand))
-
-        raise TypeError(f"Unsupported operation: {type(node)}")
+        pass
 
     def calculate_logic(self, formula: str, variables: dict[str, Any]) -> float:
         """Evaluate a formula with variables."""
@@ -389,6 +311,7 @@ class FormulaEngineCore:
                 # pylint: disable=no-member
                 return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
 
+        # Handle simple AVG aggregate manually if needed, or refine FormulaCore to handle it
         if "AVG(" in formula:
             match = re.search(r"AVG\(\{(\w+)\}\)", formula)
             if match and match.group(1) in variables:
@@ -396,13 +319,9 @@ class FormulaEngineCore:
                 if isinstance(vals, list) and vals:
                     return sum(vals) / len(vals)
             return 0.0
-        try:
-            eval_f = formula
 
-            for k, v in variables.items():
-                eval_f = eval_f.replace(f"{{{k}}}", str(v))
-            tree = ast.parse(eval_f, mode="eval")
-            return self._eval_node(tree.body)
+        try:
+            return FormulaCore.evaluate(formula, variables)
         except Exception: # pylint: disable=broad-exception-caught
             return 0.0
 
@@ -411,6 +330,8 @@ class FormulaEngineCore:
         try:
             if any(s in formula for s in ["+++", "***", "---"]):
                 return {"is_valid": False, "error": "Invalid operator sequence"}
+            
+            # Use FormulaCore evaluation style for validation or just parse
             test_f = formula
             for v in re.findall(r"\{(\w+)\}", formula):
                 test_f = test_f.replace(f"{{{v}}}", "1")

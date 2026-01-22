@@ -99,6 +99,26 @@ class ArchitecturalDesignAgent(BaseAgent):
         Leverages hierarchical reasoning to maintain global design coherence.
         Includes a GAAD (Generative-Adversarial Architecture Design) loop for internal refinement.
         """
+        # ... implementation ...
+        return {} # Placeholder
+
+    @as_tool
+    async def map_research_to_logic(self, research_data: str) -> str:
+        """
+        Maps research findings (summaries, papers) to specific Agent logic or infrastructure changes.
+        Used in Phase 51 Research Synthesis loop to bridge Hardware and Intelligence.
+        """
+        logging.info("ArchitecturalDesignAgent: Mapping research to system logic.")
+        prompt = (
+            "Analyze the following research findings and propose technical implementation mappings for PyAgent:\n"
+            "1. AI Model Scaling (IA³, LoRA, Adapters).\n"
+            "2. Hardware Acceleration (TensorRT, CUDA, FP8).\n"
+            "3. Communication Protocols (MUX/DEMUX, 120fps sync).\n"
+            "Output the proposal as a set of actionable 'Improvement' items for the improvements.md file."
+        )
+        
+        mapping = await super().think(f"{prompt}\n\nRESEARCH:\n{research_data}")
+        return mapping
         if not self.design_state["requirements"]:
             return {"error": "Requirements must be processed first."}
 
@@ -226,6 +246,24 @@ class ArchitecturalDesignAgent(BaseAgent):
         presentation = await self.run_subagent("synthesizing presentation", prompt)
         self.current_phase = DesignPhase.POST_PRODUCTION
         return {"phase": self.current_phase.value, "presentation_link": presentation}
+
+    @as_tool
+    async def process_research_brief(self, research_content: str) -> Dict[str, Any]:
+        """
+        Specialized tool for Phase 51 Research Synthesis.
+        Parses Arxiv paper content and extracts architectural requirements for system evolution.
+        """
+        logging.info("ArchitecturalDesignAgent: Processing research brief for system evolution.")
+        prompt = (
+            "You are acting as the Chief Architect. "
+            "Examine this research content and identify:\n"
+            "1. Core Alogrithmic Changes (e.g. IA3 vs LoRA).\n"
+            "2. Infrastructure Requirements (e.g. TensorRT engine params).\n"
+            "3. Multi-Agent Coordination updates.\n"
+            "Return a structured architectural directive."
+        )
+        directive = await super().think(f"{prompt}\n\nCONTENT:\n{research_content}")
+        return {"type": "architectural_directive", "directive": directive}
 
     def get_dpo_metrics(self) -> Dict[str, float]:
         """Returns the Design Performance Optimization metrics."""

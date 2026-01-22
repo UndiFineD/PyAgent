@@ -1012,7 +1012,33 @@ pub fn compute_cache_keys_rust(
     Ok(result)
 }
 
+/// Merge LoRA weights into base weight (LoRA Management).
+/// Performs W_base + (B @ A * scaling) in high-performance Rust.
+#[pyfunction]
+pub fn merge_lora_weights_rust(
+    base_weight: Vec<f32>,
+    lora_a: Vec<f32>,
+    lora_b: Vec<f32>,
+    scaling: f32,
+    rank: usize,
+    in_features: usize,
+    out_features: usize,
+) -> PyResult<Vec<f32>> {
+    let mut result = base_weight;
+    for i in 0..out_features {
+        for j in 0..in_features {
+            let mut delta = 0.0f32;
+            for r in 0..rank {
+                delta += lora_b[i * rank + r] * lora_a[r * in_features + j];
+            }
+            result[i * in_features + j] += delta * scaling;
+        }
+    }
+    Ok(result)
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(merge_lora_weights_rust, m)?)?;
     m.add_function(wrap_pyfunction!(attention_softmax_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_dequantize_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_descriptor_hash_rust, m)?)?;

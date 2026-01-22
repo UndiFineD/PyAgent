@@ -38,6 +38,7 @@ from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
 from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
 from src.core.base.mixins.governance_mixin import GovernanceMixin
 from src.core.base.mixins.reflection_mixin import ReflectionMixin
+from src.core.base.mixins.multimodal_mixin import MultimodalMixin
 
 # from src.infrastructure.compute.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
 
@@ -71,6 +72,7 @@ class BaseAgent(
     OrchestrationMixin,
     GovernanceMixin,
     ReflectionMixin,
+    MultimodalMixin,
 ):
     """
     Core AI Agent Shell (Synaptic modularization Phase 317).
@@ -109,7 +111,7 @@ class BaseAgent(
         """Get a registered plugin."""
         return cls._plugins.get(name)
 
-    def __init__(self, file_path: str, **kwargs: Any) -> None:
+    def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
         """Initialize the BaseAgent with decentralized initialization."""
         self.file_path = Path(file_path)
         self._workspace_root = kwargs.get("repo_root") or BaseCore.detect_workspace_root(self.file_path)
@@ -130,6 +132,7 @@ class BaseAgent(
         )
         OrchestrationMixin.__init__(self, **kwargs)
         ReflectionMixin.__init__(self, **kwargs)
+        MultimodalMixin.__init__(self, **kwargs)
 
         self._config = self.agent_logic_core.load_config_from_env()
         GovernanceMixin.__init__( self, config=self._config, **kwargs)
@@ -235,7 +238,14 @@ class BaseAgent(
 
         # 2. Prompt Construction
         # Combine system prompt, history, and current task
-        full_prompt = f"SYSTEM: {self._system_prompt}\n\n"
+        sys_prompt = self._system_prompt
+        # Inject multimodal instructions if mixin is present (Dynamically to avoid overwrite in __init__)
+        if hasattr(self, "get_multimodal_instructions"):
+            mm_instr = self.get_multimodal_instructions()
+            if mm_instr not in sys_prompt:
+                sys_prompt += f"\n\n{mm_instr}"
+
+        full_prompt = f"SYSTEM: {sys_prompt}\n\n"
         if hasattr(self, "_build_prompt_with_history"):
             full_prompt += self._build_prompt_with_history(prompt)
         else:

@@ -4,6 +4,8 @@ use std::collections::HashMap;
 use sha2::{Sha256, Sha512, Digest};
 use rand::Rng;
 use hmac::{Hmac, Mac};
+use std::fs;
+use std::io::Write;
 type HmacSha256 = Hmac<Sha256>;
 
 // === AutonomyCore Implementations ===
@@ -231,7 +233,7 @@ pub fn is_in_refractory(current_time: f64, refractory_until: f64) -> PyResult<bo
 
 /// Update weight on fire (PruningCore).
 #[pyfunction]
-pub fn update_weight_on_fire(current_weight: f64, success: bool) -> PyResult<f64> {
+pub fn update_weight_on_fire_rust(current_weight: f64, success: bool) -> PyResult<f64> {
     if success {
         Ok(f64::min(current_weight * 1.1, 1.0))
     } else {
@@ -540,7 +542,39 @@ fn json_escape_into(output: &mut String, s: &str) {
         }
     }
 }
+/// Atomic save for system state (BaseCore Support).
+/// Ensures transactional speed and safety when writing large state files.
+#[pyfunction]
+pub fn save_atomic_rust(path: &str, content: &str) -> PyResult<()> {
+    let temp_path = format!("{}.tmp", path);
+    {
+        let mut file = fs::File::create(&temp_path)?;
+        file.write_all(content.as_bytes())?;
+        file.sync_all()?;
+    }
+    fs::rename(temp_path, path)?;
+    Ok(())
+}
+
+/// High-speed parsing of multi-GB configuration sharded files (Common/Config).
+#[pyfunction]
+pub fn parse_config_rust(content: &str) -> PyResult<HashMap<String, String>> {
+    let mut config = HashMap::new();
+    for line in content.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        if let Some((key, value)) = line.split_once('=') {
+            config.insert(key.trim().to_string(), value.trim().to_string());
+        }
+    }
+    Ok(config)
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(save_atomic_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_config_rust, m)?)?;
     m.add_function(wrap_pyfunction!(build_log_entry_rust, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_anchoring_fallback, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_backoff, m)?)?;
@@ -565,7 +599,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(should_prune, m)?)?;
     m.add_function(wrap_pyfunction!(sign_payload, m)?)?;
     m.add_function(wrap_pyfunction!(to_snake_case_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(update_weight_on_fire, m)?)?;
+    m.add_function(wrap_pyfunction!(update_weight_on_fire_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_identity, m)?)?;
     m.add_function(wrap_pyfunction!(verify_auth_proof, m)?)?;
     m.add_function(wrap_pyfunction!(verify_fleet_health, m)?)?;

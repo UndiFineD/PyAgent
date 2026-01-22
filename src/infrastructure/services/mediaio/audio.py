@@ -10,9 +10,13 @@ import io
 from pathlib import Path
 from typing import BinaryIO, Tuple, Union
 
-import numpy as np
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
 
-from .base import MediaLoader
+
+class AudioLoader(MediaLoader):
 from .models import (
     AudioData,
     AudioFormat,
@@ -142,6 +146,16 @@ class AudioLoader(MediaLoader):
         target_sr: int
     ) -> np.ndarray:
         """Resample audio."""
+        if rc and hasattr(rc, "resample_audio_rust"):
+            if waveform.ndim == 1:
+                return np.array(rc.resample_audio_rust(waveform.tolist(), orig_sr, target_sr), dtype=np.float32)
+            else:
+                # Resample each channel
+                resampled_channels = []
+                for channel in waveform:
+                    resampled_channels.append(rc.resample_audio_rust(channel.tolist(), orig_sr, target_sr))
+                return np.array(resampled_channels, dtype=np.float32)
+
         if self._librosa_available:
             return self._librosa.resample(waveform, orig_sr=orig_sr, target_sr=target_sr)
         ratio = target_sr / orig_sr

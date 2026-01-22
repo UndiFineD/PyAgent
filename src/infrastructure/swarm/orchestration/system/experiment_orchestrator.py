@@ -37,7 +37,7 @@ class ExperimentOrchestrator(BaseAgent):
     evolution is backed by rigorous benchmarking.
     """
 
-    def __init__(self, file_path: str) -> None:
+    def __init__(self, file_path: str = ".") -> None:
         super().__init__(file_path)
         self.experiments_file: str = "data/logs/experiments/log.json"
         self._system_prompt: str = (

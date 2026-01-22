@@ -19,6 +19,7 @@ Generates data structures for internal/external dashboard consumers.
 
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
+from .agent_bar import AgentBar
 import json
 import logging
 from typing import Any
@@ -33,6 +34,16 @@ class FleetWebUI:
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet = fleet_manager
         self.generative_registry: dict[str, dict[str, Any]] = {}  # Tambo Pattern
+        self.agent_bar = AgentBar()
+        self._register_default_components()
+
+    def _register_default_components(self):
+        """Registers system default components."""
+        self.register_generative_component(
+            "AgentBar",
+            "Floating real-time metrics and multimodal control bar.",
+            {"status": "string", "metrics": "object"}
+        )
 
     def register_generative_component(
         self, name: str, description: str, props_schema: dict[str, Any]

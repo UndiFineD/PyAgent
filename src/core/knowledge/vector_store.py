@@ -23,43 +23,35 @@ __version__ = VERSION
 
 class VectorKnowledgeStore(KnowledgeStore):
     """
-    Handles vector-based knowledge storage using ChromaDB.
-    Isolated per agent.
+    Handles vector-based knowledge storage.
+    Delegates to MemoryCore for unified semantic handling (Rust/ChromaDB).
     """
-
-    def __init__(self, agent_id: str, storage_path: Any) -> None:
-        super().__init__(agent_id, storage_path)
-        try:
-            import chromadb
-
-            self.client = chromadb.PersistentClient(path=str(self.storage_path))
-            self.collection = self.client.get_or_create_collection(
-                name=f"{agent_id}_knowledge"
-            )
-        except (ImportError, AttributeError):
-            self.client = None
-            logging.warning(
-                "ChromaDB not installed or incompatible, VectorKnowledgeStore will be disabled."
-            )
 
     def store(
         self, key: str, value: str, metadata: dict[str, Any] | None = None
     ) -> bool:
-        if not self.client:
-            return False
-        self.collection.add(
-            documents=[value], metadatas=[metadata] if metadata else [{}], ids=[key]
+        return self._memory_core.store_knowledge(
+            agent_id=self.agent_id,
+            key=key,
+            content=value,
+            mode="semantic",
+            metadata=metadata
         )
-        return True
 
     def retrieve(self, query: str, limit: int = 5) -> list[Any]:
-        if not self.client:
-            return []
-        results = self.collection.query(query_texts=[query], n_results=limit)
-        return results.get("documents", [[]])[0]
+        results = self._memory_core.retrieve_knowledge(
+            agent_id=self.agent_id,
+            query=query,
+            mode="semantic",
+            limit=limit
+        )
+        # Extract content from standardized results
+        return [r["content"] for r in results if "content" in r]
 
     def delete(self, key: str) -> bool:
-        if not self.client:
-            return False
-        self.collection.delete(ids=[key])
-        return True
+        """Standardized deletion via MemoryCore."""
+        return self._memory_core.delete_knowledge(
+            agent_id=self.agent_id,
+            key=key,
+            mode="semantic"
+        )
