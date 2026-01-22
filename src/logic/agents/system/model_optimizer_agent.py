@@ -22,6 +22,11 @@ import logging
 import json
 from typing import Any
 
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
 
 class ModelOptimizerAgent(BaseAgent):
     """
@@ -74,7 +79,13 @@ class ModelOptimizerAgent(BaseAgent):
             return strategy
 
         # Check for NPU (FastFlowLM / Ryzen AI Pattern)
-        if "npu_dna2" in hardware_features:
+        npu_available = "npu_dna2" in hardware_features
+        if not npu_available and rc and hasattr(rc, "initialize_npu"):
+            # Check if Rust-based initialization succeeds
+            if rc.initialize_npu() == 0:
+                npu_available = True
+
+        if npu_available:
             strategy["acceleration"] = "FastFlowLM (NPU Optimized)"
             strategy["estimated_speed"] = "Fast (PPA Efficient)"
             return strategy

@@ -669,7 +669,49 @@ pub fn predict_with_confidence_rust(historical: Vec<f64>, periods: i32) -> PyRes
     Ok((predictions, lower, upper))
 }
 
+/// Calculate rolling average of a sequence.
+#[pyfunction]
+pub fn rolling_avg(values: Vec<f64>, window: usize) -> Vec<f64> {
+    if window == 0 || values.is_empty() {
+        return vec![];
+    }
+    let mut result = Vec::with_capacity(values.len());
+    for i in 0..values.len() {
+        let start = if i >= window { i - window + 1 } else { 0 };
+        let slice = &values[start..=i];
+        result.push(slice.iter().sum::<f64>() / slice.len() as f64);
+    }
+    result
+}
+
+/// Calculate percentiles of a dataset.
+#[pyfunction]
+pub fn percentiles(mut values: Vec<f64>, p_values: Vec<f64>) -> Vec<f64> {
+    if values.is_empty() {
+        return vec![0.0; p_values.len()];
+    }
+    values.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    p_values.into_iter().map(|p| {
+        let idx = ((p / 100.0) * (values.len() - 1) as f64) as usize;
+        values[idx]
+    }).collect()
+}
+
+/// Aggregate multiple metric streams into a single rollup (TelemetryCore).
+#[pyfunction]
+pub fn aggregate_metrics(metrics: HashMap<String, Vec<f64>>) -> HashMap<String, f64> {
+    let mut result = HashMap::new();
+    for (name, vals) in metrics {
+        if !vals.is_empty() {
+            let sum: f64 = vals.iter().sum();
+            result.insert(name, sum / vals.len() as f64);
+        }
+    }
+    result
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(aggregate_metrics, m)?)?;
     m.add_function(wrap_pyfunction!(assess_response_quality, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_avg, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_baseline, m)?)?;
@@ -701,8 +743,10 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(identify_bottlenecks, m)?)?;
     m.add_function(wrap_pyfunction!(is_in_stasis, m)?)?;
     m.add_function(wrap_pyfunction!(normalize_response, m)?)?;
+    m.add_function(wrap_pyfunction!(percentiles, m)?)?;
     m.add_function(wrap_pyfunction!(predict_linear, m)?)?;
     m.add_function(wrap_pyfunction!(predict_with_confidence_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(rolling_avg, m)?)?;
     m.add_function(wrap_pyfunction!(score_efficiency, m)?)?;
     m.add_function(wrap_pyfunction!(select_best_model, m)?)?;
     Ok(())

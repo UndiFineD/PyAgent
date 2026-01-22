@@ -1,52 +1,18 @@
-import logging
-import os
-from typing import Any
-from src.infrastructure.compute.backend.runner_backends import BackendHandlers
+"""
+Routing engine for task distribution.
+(Facade for src.core.base.common.routing_core)
+"""
 
+from src.core.base.common.routing_core import RoutingCore as StandardRoutingCore
 
-class RoutingEngine:
-    """
-    Phase 248: PERFORMANCE-BASED ROUTING
-    Phase 300: FEDERATED SOVEREIGNTY ROUTING
-    Weights latency (TTFT/TPS) vs. quality to route tasks to the optimal provider.
-    Now supports routing to external federated clusters.
-    """
-
-    def __init__(self) -> None:
-        self.providers = [
-            "github_models",
-            "openai",
-            "codex",
-            "local",
-            "federated_cluster",
-        ]
-        logging.debug("RoutingEngine initialized")
-
-    def select_provider(
-        self,
-        task_type: str = "general",
-        priority: str = "balanced",
-        federated: bool = False,
-    ) -> str:
-        """
-        Selects the best provider based on task type and performance metrics.
-
-        Args:
-            task_type: "classification", "summarization", "coding", "reasoning"
-            priority: "latency", "quality", "cost", "balanced"
-            federated: If True, prioritizes external swarm cooperation (Phase 300)
-        """
+class RoutingEngine(StandardRoutingCore):
+    """Facade for RoutingCore."""
+    
+    def select_provider(self, task_type="general", priority="balanced", federated=False):
+        """Legacy compatibility wrapper."""
         if federated:
-            logging.info(
-                "RoutingEngine: Redirecting to federated cluster for sovereign negotiation."
-            )
             return "federated_cluster"
-
-        report = BackendHandlers.get_performance_report()
-        logging.debug(f"RoutingEngine: Performance Report: {report}")
-
-        # Default fallback
-        preferred = os.environ.get("DV_AGENT_BACKEND", "github_models")
+        return self.select_best_provider(task_type, priority)
 
         if priority == "latency":
             # Select provider with lowest TTFT or highest TPS

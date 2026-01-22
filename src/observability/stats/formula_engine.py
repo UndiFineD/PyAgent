@@ -1,64 +1,38 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Formula processing and calculation engine.
+
+"""
+Formula processing and calculation engine.
+(Facade for src.core.base.common.formula_core)
+"""
 
 from __future__ import annotations
 import ast
-import contextlib
-import logging
-import operator
 import re
-from typing import Any
+import logging
+import contextlib
+from typing import Any, Dict, Optional
 from dataclasses import dataclass
+
+from src.core.base.common.formula_core import FormulaCore
 
 try:
     import rust_core as rc
 except ImportError:
-    rc = None  # type: ignore[assignment]
-
-logger = logging.getLogger(__name__)
-
+    rc = None
 
 @dataclass
 class FormulaValidation:
-    """Result of formula validation."""
+    """Result of a formula validation check."""
+    is_valid: bool
+    error: Optional[str] = None
 
-    is_valid: bool = True
-    error: str = ""
+class FormulaEngineCore(FormulaCore):
+    """Extended formula core for observability specific needs (e.g. AVG)."""
 
-
-class FormulaEngineCore:
-    """Pure logic core for formula calculations."""
-
-    def __init__(self) -> None:
-        self.operators: dict[type[ast.AST], Any] = {
-            ast.Add: operator.add,
-            ast.Sub: operator.sub,
-            ast.Mult: operator.mul,
-            ast.Div: operator.truediv,
-            ast.Pow: operator.pow,
-            ast.BitXor: operator.xor,
-            ast.USub: operator.neg,
-            ast.UAdd: operator.pos,
-        }
-
-    def _eval_node(self, node: ast.AST) -> float:
-        """Recursively evaluate an AST node."""
-        if isinstance(node, ast.Constant):
-            if isinstance(node.value, (int, float)):
-                return float(node.value)
-            raise TypeError(f"Constant of type {type(node.value)} is not a number")
-        elif isinstance(node, ast.BinOp):
-            return self.operators[type(node.op)](
-                self._eval_node(node.left), self._eval_node(node.right)
-            )
-        elif isinstance(node, ast.UnaryOp):
-            return self.operators[type(node.op)](self._eval_node(node.operand))
-        else:
-            raise TypeError(f"Unsupported operation: {type(node)}")
-
-    def calculate_logic(self, formula: str, variables: dict[str, Any]) -> float:
-        """Core logic for calculating a formula result."""
+    def calculate_logic(self, formula: str, variables: Dict[str, Any]) -> float:
+        """Core logic for calculating a formula result with support for aggregates."""
+        # Check Rust acceleration first
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
                 float_vars = {
@@ -66,8 +40,13 @@ class FormulaEngineCore:
                     for k, v in variables.items()
                     if isinstance(v, (int, float))
                 }
-                return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
+                # Support both naming conventions
+                if hasattr(rc, "evaluate_formula"):
+                    return rc.evaluate_formula(formula, float_vars)
+                elif hasattr(rc, "evaluate_formula_rust"):
+                    return rc.evaluate_formula_rust(formula, float_vars)
 
+        # Handle simple AVG aggregate manually
         if "AVG(" in formula:
             match = re.search(r"AVG\(\{(\w+)\}\)", formula)
             if match:
@@ -79,16 +58,20 @@ class FormulaEngineCore:
             return 0.0
 
         try:
+            # Substitute variables in format {var_name}
             eval_formula = formula
+            substituted_vars = {}
             for var_name, var_value in variables.items():
-                eval_formula = eval_formula.replace(f"{{{var_name}}}", str(var_value))
-            tree = ast.parse(eval_formula, mode="eval")
-
-            return self._eval_node(tree.body)
+                if f"{{{var_name}}}" in eval_formula:
+                    # If it's a simple substitution, we can do it via string or dict
+                    substituted_vars[var_name] = float(var_value)
+            
+            # Use base class evaluate if possible
+            return self.evaluate(formula.replace("{", "").replace("}", ""), substituted_vars)
         except Exception:
             return 0.0
 
-    def validate_logic(self, formula: str) -> dict[str, Any]:
+    def validate_logic(self, formula: str) -> Dict[str, Any]:
         """Core logic for validating formula syntax."""
         try:
             if any(seq in formula for seq in ["+++", "***", "---"]):
@@ -104,12 +87,11 @@ class FormulaEngineCore:
         except Exception as e:
             return {"is_valid": False, "error": str(e)}
 
-
 class FormulaEngine:
     """Processes metric formulas and calculations using safe AST evaluation."""
 
     def __init__(self) -> None:
-        self.formulas: dict[str, str] = {}
+        self.formulas: Dict[str, str] = {}
         self.core = FormulaEngineCore()
 
     def define(self, name: str, formula: str) -> None:
@@ -119,7 +101,7 @@ class FormulaEngine:
         self.define(name, formula)
 
     def calculate(
-        self, formula_or_name: str, variables: dict[str, Any] | None = None
+        self, formula_or_name: str, variables: Dict[str, Any] | None = None
     ) -> float:
         variables = variables or {}
         formula = self.formulas.get(formula_or_name, formula_or_name)

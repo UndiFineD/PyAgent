@@ -17,7 +17,6 @@ from src.core.base.lifecycle.version import VERSION
 import hashlib
 from .storage_base import KnowledgeStore
 from typing import Any
-import json
 from pathlib import Path
 
 __version__ = VERSION
@@ -27,6 +26,7 @@ class GraphKnowledgeStore(KnowledgeStore):
     """
     Sharded Graph storage for relational and ontological knowledge.
     Scales to trillions of triples by sharding nodes across the filesystem.
+    Utilization of MemoryCore for standardized backend.
     """
 
     def _hash_node(self, node_id: str) -> str:
@@ -38,6 +38,7 @@ class GraphKnowledgeStore(KnowledgeStore):
         tier1 = hash_val[:2]
         tier2 = hash_val[2:4]
 
+        # Use MemoryCore via base class to ensure path alignment
         shard_dir = self.storage_path / tier1 / tier2
         shard_dir.mkdir(exist_ok=True, parents=True)
         return shard_dir / f"{node_id}.json"
@@ -45,23 +46,22 @@ class GraphKnowledgeStore(KnowledgeStore):
     def store(self, node: str, target: Any, relationship: str = "related_to") -> bool:
         path = self._get_node_path(node)
 
-        if path.exists():
-            with open(path) as f:
-                data = json.load(f)
-        else:
+        # Use memory_core.retrieve_knowledge logic or standardized load_json
+        data = self._memory_core._storage.load_json(path)
+        if not data:
             data = {"id": node, "edges": []}
 
         data["edges"].append({"to": target, "type": relationship})
 
-        with open(path, "w") as f:
-            json.dump(data, f)
+        # Atomic write via storage core
+        self._memory_core._storage.save_json(path, data)
         return True
 
     def retrieve(self, node: str, limit: int = 5) -> list[Any]:
         path = self._get_node_path(node)
-        if path.exists():
-            with open(path) as f:
-                return json.load(f).get("edges", [])[:limit]
+        data = self._memory_core._storage.load_json(path)
+        if data:
+            return data.get("edges", [])[:limit]
         return []
 
     def delete(self, node: str) -> bool:

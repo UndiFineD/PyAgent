@@ -14,27 +14,23 @@
 
 
 """
-MemoryCore logic for PyAgent.
-Handles episode structuring, utility scoring, and rank-based filtering.
+MemoryCore logic for PyAgent (Facade).
+Delegates to the standardized src.core.base.common.memory_core.
 """
 
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from typing import Any
-from datetime import datetime
-
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None  # type: ignore[assignment]
+from src.core.base.common.memory_core import MemoryCore as StandardMemoryCore
 
 __version__ = VERSION
 
 
 class MemoryCore:
-    """Logic for episodic memory construction and utility estimation."""
+    """Logic for episodic memory construction and utility estimation (Facade)."""
 
     def __init__(self, baseline_utility: float = 0.5) -> None:
+        self._core = StandardMemoryCore()
         self.baseline_utility = baseline_utility
 
     def create_episode(
@@ -46,40 +42,22 @@ class MemoryCore:
         metadata: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Pure logic to construct an episode and calculate utility."""
-        if rc:
-            try:
-                meta = metadata or {}
-                return rc.create_episode_struct(
-                    agent_name, task, outcome, success, meta, self.baseline_utility
-                )  # type: ignore[attr-defined]
-            except Exception:
-                pass
-
-        timestamp = datetime.now().isoformat()
-        utility_score = self.baseline_utility
-
-        if success:
-            utility_score += 0.2
-        else:
-            utility_score -= 0.3
-
-        return {
-            "timestamp": timestamp,
-            "agent": agent_name,
-            "task": task,
-            "outcome": outcome,
-            "success": success,
-            "utility_score": max(0.0, min(1.0, utility_score)),
-            "metadata": metadata or {},
-        }
+        return self._core.create_episode(
+            agent_id=agent_name,
+            task=task,
+            content=outcome,
+            success=success,
+            metadata=metadata,
+            base_utility=self.baseline_utility
+        )
 
     def format_for_indexing(self, episode: dict[str, Any]) -> str:
         """Standardized string representation for vector databases."""
         return (
-            f"Agent: {episode['agent']}\n"
-            f"Task: {episode['task']}\n"
-            f"Outcome: {episode['outcome']}\n"
-            f"Success: {episode['success']}"
+            f"Agent: {episode.get('agent_id')}\n"
+            f"Task: {episode.get('task')}\n"
+            f"Outcome: {episode.get('content')}\n"
+            f"Success: {episode.get('success')}"
         )
 
     def calculate_new_utility(self, old_score: float, increment: float) -> float:
@@ -90,4 +68,4 @@ class MemoryCore:
         self, memories: list[dict[str, Any]], min_utility: float = 0.3
     ) -> list[dict[str, Any]]:
         """Filters memories by utility threshold."""
-        return [m for m in memories if m.get("utility_score", 0.0) >= min_utility]
+        return self._core.rank_memories(memories, limit=len(memories), min_utility=min_utility)

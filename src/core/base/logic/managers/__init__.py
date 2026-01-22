@@ -25,7 +25,7 @@ from .prompt_managers import (
     PromptVersionManager as PromptVersionManager,
 )
 from .conversation_managers import ConversationHistory as ConversationHistory
-from .auth_managers import (
+from .auth_manager import (
     AuthenticationManager as AuthenticationManager,
     AuthManager as AuthManager,
 )

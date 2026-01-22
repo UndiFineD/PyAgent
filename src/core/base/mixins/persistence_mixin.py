@@ -4,6 +4,7 @@ from typing import Any, List
 from src.core.base.common.models import AgentState, EventType
 from src.core.base.state.agent_history import AgentConversationHistory
 from src.core.base.state.agent_scratchpad import AgentScratchpad
+from src.core.base.common.file_system_core import FileSystemCore
 
 class PersistenceMixin:
     """Handles agent state, history, scratchpad, metrics, and file persistence."""
@@ -15,6 +16,7 @@ class PersistenceMixin:
         self._webhooks: List[str] = []
         self._event_hooks: dict[EventType, list[Any]] = {}
         self._metrics_data: dict[str, Any] = {}
+        self._fs = FileSystemCore()
 
     @property
     def state(self) -> AgentState:
@@ -76,9 +78,7 @@ class PersistenceMixin:
             return self._write_dry_run_diff()
 
         try:
-            self.file_path.parent.mkdir(parents=True, exist_ok=True)
-            self.file_path.write_text(content_to_write, encoding="utf-8")
-            return True
+            return self._fs.atomic_write(self.file_path, content_to_write)
         except Exception as e:
             import logging
             logging.error(f"File write failed: {e}")
@@ -92,11 +92,10 @@ class PersistenceMixin:
             return True
 
         dry_run_dir = Path("temp/dry_runs")
-        dry_run_dir.mkdir(parents=True, exist_ok=True)
+        self._fs.ensure_directory(dry_run_dir)
         safe_name = self.file_path.name.replace("/", "_").replace("\\", "_")
         target = dry_run_dir / f"{safe_name}.diff"
-        target.write_text(diff, encoding="utf-8")
-        return True
+        return self._fs.atomic_write(target, diff)
 
     def save_state(self) -> bool:
         """Saves current state snapshot."""

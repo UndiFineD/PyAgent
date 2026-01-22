@@ -23,6 +23,7 @@ import contextlib
 from pathlib import Path
 from typing import Any
 from collections.abc import Iterator
+from src.core.base.common.shell_core import ShellCore
 
 __version__ = VERSION
 
@@ -39,6 +40,7 @@ class AgentCommandHandler:
         self.repo_root: Path = repo_root
         self.models: dict[str, Any] = models_config or {}
         self.recorder: Any = recorder
+        self.shell = ShellCore(repo_root=repo_root)
 
     def _record(
         self, action: str, result: str, meta: dict[str, Any] | None = None
@@ -58,60 +60,40 @@ class AgentCommandHandler:
     ) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
 
-        def attempt_command() -> subprocess.CompletedProcess[str]:
-            logging.debug(
-                f"Running command: {' '.join(cmd[:3])}... (timeout={timeout}s)"
-            )
-            try:
-                local_cmd, env = self._prepare_command_environment(list(cmd))
+        local_cmd, env = self._prepare_command_environment(list(cmd))
 
-                result = subprocess.run(
-                    local_cmd,
-                    cwd=self.repo_root,
-                    capture_output=True,
-                    text=True,
-                    timeout=timeout,
-                    encoding="utf-8",
-                    errors="replace",
-                    check=False,
-                    env=env,
-                )
-                logging.debug(f"Command completed with returncode={result.returncode}")
-                self._record(
-                    " ".join(cmd), f"RC={result.returncode}\n{result.stdout[:1000]}"
-                )
-                return result
-            except subprocess.TimeoutExpired:
-                logging.error(
-                    f"Command timed out after {timeout}s: {' '.join(cmd[:3])}..."
-                )
-                self._record(" ".join(cmd), "Error: TimeoutExpired")
-                return subprocess.CompletedProcess(
-                    cmd, returncode=-1, stdout="", stderr="Timeout expired"
-                )
-            except OSError as e:
-                logging.error(f"Command failed to start: {e}")
-                self._record(" ".join(cmd), f"Error: OSError {str(e)}")
-                return subprocess.CompletedProcess(
-                    cmd, returncode=-2, stdout="", stderr=str(e)
-                )
-
-        # Retry logic with exponential backoff
+        # Retry logic handled internally or via loop
         for i in range(max_retries):
-            res = attempt_command()
-            if res.returncode == 0 or i == max_retries - 1:
-                return res
+            logging.debug(
+                f"Running command: {' '.join(local_cmd[:3])}... (timeout={timeout}s)"
+            )
+            
+            res = self.shell.execute(local_cmd, timeout=timeout, env=env)
+            
+            logging.debug(f"Command completed with returncode={res.returncode}")
+            self._record(
+                " ".join(cmd), f"RC={res.returncode}\n{res.stdout[:1000]}"
+            )
+
+            # Convert ShellResult to CompletedProcess for compatibility
+            result = subprocess.CompletedProcess(
+                cmd=res.command,
+                returncode=res.returncode,
+                stdout=res.stdout,
+                stderr=res.stderr
+            )
+
+            if result.returncode == 0 or i == max_retries - 1:
+                return result
 
             wait_time = float(2**i)
             logging.warning(
-                f"Command failed (rc={res.returncode}). Retrying in {wait_time}s... (Attempt {i + 1}/{max_retries})"
+                f"Command failed (rc={result.returncode}). Retrying in {wait_time}s... (Attempt {i + 1}/{max_retries})"
             )
-            # Use threading.Event().wait for better interruptibility than block-waits
             import threading
-
             threading.Event().wait(timeout=wait_time)
 
-        return res
+        return result
 
     def _prepare_command_environment(
         self, cmd: list[str]

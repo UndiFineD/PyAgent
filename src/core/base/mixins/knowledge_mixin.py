@@ -2,13 +2,17 @@
 # Knowledge Mixin for BaseAgent
 from typing import Any
 from pathlib import Path
+from src.core.base.common.memory_core import MemoryCore
 from src.core.base.logic.sharded_knowledge_core import ShardedKnowledgeCore
 
 class KnowledgeMixin:
     """Handles knowledge engines, memory, sharded storage, and templates."""
 
     def __init__(self, agent_name: str, workspace_root: Path, **kwargs: Any) -> None:
-        # Knowledge Trinity initialization
+        self.agent_name = agent_name
+        self.memory_core = MemoryCore()
+        
+        # Legacy Knowledge Trinity support
         try:
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
             self.knowledge = KnowledgeEngine(
@@ -17,18 +21,28 @@ class KnowledgeMixin:
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
 
-        # Memory
-        try:
-            from src.logic.agents.cognitive.long_term_memory import LongTermMemory
-            self.memory = LongTermMemory(agent_name=agent_name)
-        except (ImportError, ModuleNotFoundError):
-            self.memory = None
-
         self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
         self._local_global_context: Any = None
         self._workspace_root = workspace_root
         self._notes: list[str] = []
         self._prompt_templates: dict[str, Any] = {}
+
+    def store_episode(self, task: str, content: str, success: bool, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Creates and stores an episodic memory via MemoryCore."""
+        episode = self.memory_core.create_episode(
+            agent_id=self.agent_name,
+            task=task,
+            content=content,
+            success=success,
+            metadata=metadata
+        )
+        self.memory_core.store_knowledge(
+            agent_id=self.agent_name,
+            key=f"ep_{episode['timestamp'].replace(':', '-')}",
+            content=episode,
+            mode="structured"
+        )
+        return episode
 
     def take_note(self, content: str) -> None:
         """Stores a temporary note in memory."""

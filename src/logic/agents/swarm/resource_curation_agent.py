@@ -31,7 +31,7 @@ __version__ = VERSION
 class ResourceCurationAgent(BaseAgent):
     """Manages the 'Good Read Unit' and research link lifecycle."""
 
-    def __init__(self, file_path: str) -> None:
+    def __init__(self, file_path: str = ".") -> None:
         super().__init__(file_path)
         self.library_path = "data/memory/knowledge_exports/research_library.json"
         self._system_prompt = (

@@ -22,11 +22,15 @@ from .multi_modal_processor import (
     process_multimodal_inputs,
     get_placeholder_tokens,
 )
+from .muxer import Muxer, ChannelType
+from .quantized_engine import QuantizedMultimediaEngine
+from .tensorrt_loader import TensorRTLoader
 
 __all__ = [
     # Enums and config
     "ModalityType",
     "MultiModalConfig",
+    "ChannelType",
     # Data classes
     "MultiModalData",
     "MultiModalInputs",
@@ -37,6 +41,9 @@ __all__ = [
     "VideoProcessor",
     "AudioProcessor",
     "TextEmbedProcessor",
+    "Muxer",
+    "QuantizedMultimediaEngine",
+    "TensorRTLoader",
     # Registry
     "MultiModalRegistry",
     "MULTIMODAL_REGISTRY",

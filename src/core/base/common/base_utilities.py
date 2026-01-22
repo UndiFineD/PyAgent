@@ -28,6 +28,9 @@ import re
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
+from src.core.base.common.shell_core import ShellCore
+from src.core.base.common.workspace_core import WorkspaceCore
+from src.core.base.common.file_system_core import FileSystemCore
 
 if TYPE_CHECKING:
     from .agent import BaseAgent
@@ -39,17 +42,18 @@ except ImportError:
     from src.logic.strategies import plan_executor as agent_strategies
 __version__ = VERSION
 
+# Shared cores
+_shell = ShellCore()
+_ws = WorkspaceCore()
+_fs = FileSystemCore()
+
 
 def strip_ansi_codes(text: str) -> str:
     """
     Removes ANSI escape sequences (color codes, formatting) from a string.
     Useful for processing terminal output from external tools.
     """
-    if not text:
-        return ""
-    # Comprehensive ANSI regex for @-Z, [, and ? sequences
-    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
-    return ansi_escape.sub("", text)
+    return _shell.strip_ansi(text)
 
 
 def bulk_replace(
@@ -74,12 +78,12 @@ def bulk_replace(
     results = {}
     for path_in in file_paths:
         path = Path(path_in)
-        if not path.exists():
+        if not _fs.exists(path):
             results[str(path)] = False
             continue
 
         try:
-            content = path.read_text(encoding="utf-8")
+            content = _fs.read_text(path)
             if use_regex:
                 new_content, count = re.subn(old_pattern, new_string, content)
                 changed = count > 0
@@ -88,7 +92,7 @@ def bulk_replace(
                 new_content = content.replace(old_pattern, new_string)
 
             if changed:
-                path.write_text(new_content, encoding="utf-8")
+                _fs.atomic_write(path, new_content)
                 results[str(path)] = True
             else:
                 results[str(path)] = False
