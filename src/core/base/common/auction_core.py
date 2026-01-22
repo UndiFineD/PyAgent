@@ -17,7 +17,7 @@ Core logic for Swarm Resource Auctioning.
 Implements the VCG auction model for truthful bidding.
 """
 
-from typing import Any, List, Dict, Optional
+from typing import Any, List, Dict
 from .base_core import BaseCore
 
 try:
@@ -32,10 +32,10 @@ class AuctionCore(BaseCore):
     def calculate_vcg_auction(
         bids: List[Dict[str, Any]], slots: int
     ) -> List[Dict[str, Any]]:
-        if rc:
+        if rc and hasattr(rc, "calculate_vcg_auction"): # pylint: disable=no-member
             try:
-                return rc.calculate_vcg_auction(bids, slots)
-            except Exception:
+                return rc.calculate_vcg_auction(bids, slots) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
         if not bids: return []
@@ -49,9 +49,9 @@ class AuctionCore(BaseCore):
     def enforce_vram_quota(
         agent_vram_request: float, total_available: float, quota_percent: float = 0.2
     ) -> bool:
-        if rc:
+        if rc and hasattr(rc, "enforce_vram_quota"): # pylint: disable=no-member
             try:
-                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)
-            except Exception:
+                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         return agent_vram_request <= (total_available * quota_percent)

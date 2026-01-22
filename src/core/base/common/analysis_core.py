@@ -5,7 +5,7 @@
 import ast
 import re
 from pathlib import Path
-from typing import List, Set, Optional
+from typing import List, Set
 
 try:
     import rust_core as rc
@@ -20,10 +20,10 @@ class AnalysisCore:
     @staticmethod
     def calculate_complexity(source: str) -> int:
         """Calculate cyclomatic complexity (Rust accelerated)."""
-        if rc and hasattr(rc, "analyze_complexity_rust"):
+        if rc and hasattr(rc, "calculate_complexity_rust"):
             try:
-                return rc.analyze_complexity_rust(source)
-            except Exception:
+                return rc.calculate_complexity_rust(source)
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         # Fallback to simple count of control flow keywords
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
@@ -35,17 +35,20 @@ class AnalysisCore:
     @staticmethod
     def get_imports(source_or_path: str | Path) -> List[str]:
         """Extract all top-level imports from source or a file (Rust accelerated)."""
-        if rc and hasattr(rc, "get_imports_rust"):
-            if isinstance(source_or_path, Path):
-                return rc.get_imports_rust(source_or_path.read_text(encoding="utf-8"))
-            return rc.get_imports_rust(source_or_path)
+        if rc and hasattr(rc, "get_imports_rust"): # pylint: disable=no-member
+            try:
+                if isinstance(source_or_path, Path):
+                    return rc.get_imports_rust(source_or_path.read_text(encoding="utf-8")) # type: ignore
+                return rc.get_imports_rust(source_or_path) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
 
         try:
             if isinstance(source_or_path, Path):
                 tree = ast.parse(source_or_path.read_text(encoding="utf-8"), feature_version=(3, 11))
             else:
                 tree = ast.parse(source_or_path, feature_version=(3, 11))
-        except Exception:
+        except Exception: # pylint: disable=broad-exception-caught
             return []
 
         imports: List[str] = []

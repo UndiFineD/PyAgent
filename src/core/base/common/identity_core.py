@@ -7,11 +7,10 @@ import hmac
 import os
 import uuid
 import socket
-import logging
 from typing import Any, Dict, Optional
 from dataclasses import dataclass
-from src.core.base.common.base_core import BaseCore
-from src.core.base.lifecycle.version import VERSION, SDK_VERSION
+from .base_core import BaseCore
+from ..lifecycle.version import SDK_VERSION
 
 try:
     import rust_core as rc
@@ -63,20 +62,20 @@ class IdentityCore(BaseCore):
 
     def generate_agent_id(self, public_key: str, metadata: dict[str, Any]) -> str:
         """Generates a stable, unique agent identifier based on public key and metadata."""
-        if rc and hasattr(rc, "generate_agent_id"):
+        if rc and hasattr(rc, "generate_agent_id"): # pylint: disable=no-member
             try:
-                return rc.generate_agent_id(public_key, metadata)
-            except Exception:
+                return rc.generate_agent_id(public_key, metadata) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         seed = f"{public_key}_{metadata.get('type', 'generic')}_{metadata.get('birth_cycle', 0)}"
         return hashlib.sha256(seed.encode()).hexdigest()[:16]
 
     def sign_payload(self, payload: str, secret_key: str) -> str:
         """Signs a payload using HMAC-SHA256 (simulating Ed25519 signing for pure-python)."""
-        if rc and hasattr(rc, "sign_payload"):
+        if rc and hasattr(rc, "sign_payload"): # pylint: disable=no-member
             try:
-                return rc.sign_payload(payload, secret_key)
-            except Exception:
+                return rc.sign_payload(payload, secret_key) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         return hmac.new(
             secret_key.encode(), payload.encode(), hashlib.sha256
@@ -84,10 +83,10 @@ class IdentityCore(BaseCore):
 
     def verify_signature(self, payload: str, signature: str, public_key: str) -> bool:
         """Verifies a payload signature (simulated verification)."""
-        if rc and hasattr(rc, "verify_signature"):
+        if rc and hasattr(rc, "verify_signature"): # pylint: disable=no-member
             try:
-                return rc.verify_signature(payload, signature, public_key)
-            except Exception:
+                return rc.verify_signature(payload, signature, public_key) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         # In a real implementation, this would use asymmetrical crypto.
         return self.sign_payload(payload, public_key) == signature

@@ -10,7 +10,7 @@ import os
 import time
 import logging
 from typing import Optional, Dict
-from src.core.base.common.base_core import BaseCore
+from .base_core import BaseCore
 
 class LockCore(BaseCore):
     """

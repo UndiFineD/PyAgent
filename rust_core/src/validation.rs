@@ -18,7 +18,7 @@ use serde_json::Value;
 /// Validate JSON against a schema (Common/Validation).
 #[pyfunction]
 pub fn json_schema_validate_rust(json_str: &str, schema_str: &str) -> PyResult<bool> {
-    let json: Value = serde_json::from_str(json_str)
+    let _json: Value = serde_json::from_str(json_str)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid JSON: {}", e)))?;
     let _schema: Value = serde_json::from_str(schema_str)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid Schema: {}", e)))?;

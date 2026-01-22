@@ -91,11 +91,11 @@ class WorkspaceCore:
         if not ignore_path.exists():
             return set()
 
-        if rc and hasattr(rc, "parse_codeignore_rust"):
+        if rc and hasattr(rc, "parse_codeignore_rust"): # pylint: disable=no-member
             try:
-                patterns = rc.parse_codeignore_rust(str(ignore_path))
+                patterns = rc.parse_codeignore_rust(str(ignore_path)) # type: ignore
                 return set(patterns)
-            except Exception as e:
+            except Exception as e: # pylint: disable=broad-exception-caught
                 self.logger.warning(f"Rust ignore parsing failed: {e}")
 
         try:
@@ -114,7 +114,7 @@ class WorkspaceCore:
             self._ignore_cache_time[cache_key] = mtime
             return patterns
             
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.warning(f"Failed to read .codeignore: {e}")
             return set()
 

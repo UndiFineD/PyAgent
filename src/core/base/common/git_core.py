@@ -9,8 +9,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, List
-from src.core.base.common.base_core import BaseCore
-from src.core.base.common.shell_core import ShellCore
+from .base_core import BaseCore
+from .shell_core import ShellCore
 
 try:
     import rust_core as rc
@@ -33,21 +33,27 @@ class GitCore(BaseCore):
         """Commits changes to the repository."""
         if self.no_git: return False
         
-        if rc and hasattr(rc, "git_commit_rust"):
-            return rc.git_commit_rust(str(self.repo_root), message, files)
+        if rc and hasattr(rc, "git_commit_rust"): # pylint: disable=no-member
+            try:
+                return rc.git_commit_rust(str(self.repo_root), message, files) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
             
-        file_args = "." if not files else " ".join(files)
-        self.shell.run(f"git add {file_args}")
-        self.shell.run(f"git commit -m \"{message}\"")
+        if files:
+            self.shell.execute(["git", "add"] + files)
+        else:
+            self.shell.execute(["git", "add", "."])
+            
+        self.shell.execute(["git", "commit", "-m", message])
         return True
 
     def get_status(self) -> str:
         """Retrieves the current git status."""
         if self.no_git: return ""
-        return self.shell.run("git status").stdout
+        return self.shell.execute(["git", "status"]).stdout
 
     def branch(self, name: str) -> bool:
         """Creates or switches to a branch."""
         if self.no_git: return False
-        self.shell.run(f"git checkout -b {name}")
+        self.shell.execute(["git", "checkout", "-b", name])
         return True
