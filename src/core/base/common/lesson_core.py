@@ -8,7 +8,7 @@ import logging
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import List, Set, Dict, Any, Optional
-from src.core.base.common.base_core import BaseCore
+from .base_core import BaseCore
 
 try:
     import rust_core as rc

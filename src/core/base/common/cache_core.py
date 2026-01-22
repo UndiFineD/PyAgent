@@ -25,6 +25,11 @@ from typing import Dict, Optional, Any
 from .base_core import BaseCore
 import time
 
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
 
 class CacheCore(BaseCore):
     """
@@ -41,11 +46,11 @@ class CacheCore(BaseCore):
         self.logger = logging.getLogger("pyagent.cache_core")
 
     def _get_cache_key(self, content: str) -> str:
-        try:
-            import rust_core as rc
-            return rc.fast_cache_key_rust(content)
-        except (ImportError, Exception):
-            pass
+        if rc and hasattr(rc, "fast_cache_key_rust"): # pylint: disable=no-member
+            try:
+                return rc.fast_cache_key_rust(content) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
         return hashlib.md5(content.encode()).hexdigest()
 
     def _make_complex_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
@@ -71,7 +76,7 @@ class CacheCore(BaseCore):
                 "timestamp": time.time(),
                 "ttl": ttl_seconds
             }))
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Failed to write cache file: {e}")
 
     def get(self, prompt: str) -> Optional[Any]:
@@ -97,6 +102,6 @@ class CacheCore(BaseCore):
                         "ttl": data["ttl"]
                     }
                     return data["response"]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         return None

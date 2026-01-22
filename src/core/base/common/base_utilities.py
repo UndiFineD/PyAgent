@@ -17,7 +17,7 @@
 """Utility classes for BaseAgent framework."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+from ..lifecycle.version import VERSION
 import json
 import logging
 import argparse
@@ -28,18 +28,18 @@ import re
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
-from src.core.base.common.shell_core import ShellCore
-from src.core.base.common.workspace_core import WorkspaceCore
-from src.core.base.common.file_system_core import FileSystemCore
+from .shell_core import ShellCore
+from .workspace_core import WorkspaceCore
+from .file_system_core import FileSystemCore
 
 if TYPE_CHECKING:
     from .agent import BaseAgent
 
 try:
+    from ....logic.strategies import plan_executor as agent_strategies
+except (ImportError, ValueError):
     from src.logic.strategies import plan_executor as agent_strategies
-except ImportError:
-    sys.path.append(str(Path(__file__).parent.parent.parent))
-    from src.logic.strategies import plan_executor as agent_strategies
+
 __version__ = VERSION
 
 # Shared cores
@@ -68,7 +68,11 @@ def bulk_replace(
     Phase 318: Rust-Native Parallel Engine.
     """
     # 1. High-Speed Rust Acceleration (Phase 318)
-    from src.core.rust_bridge import RustBridge
+    try:
+        from ...rust_bridge import RustBridge
+    except (ImportError, ValueError):
+        from src.core.rust_bridge import RustBridge
+        
     if RustBridge.is_rust_active():
         str_paths = [str(p) for p in file_paths]
         replacements = {old_pattern: new_string}
@@ -96,7 +100,7 @@ def bulk_replace(
                 results[str(path)] = True
             else:
                 results[str(path)] = False
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             logging.error(f"BulkReplace: Failed to process {path}: {e}")
             results[str(path)] = False
 
@@ -162,7 +166,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                                 "timestamp_ms": int(time.time() * 1000),
                             },
                         )
-                    except Exception as e:
+                    except Exception as e: # pylint: disable=broad-exception-caught
                         logging.debug(f"Failed to record tool interaction: {e}")
 
                 return result
@@ -202,7 +206,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                                 "timestamp_ms": int(time.time() * 1000),
                             },
                         )
-                    except Exception as e:
+                    except Exception as e: # pylint: disable=broad-exception-caught
                         logging.debug(f"Failed to record tool interaction: {e}")
 
                 return result

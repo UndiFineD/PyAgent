@@ -1197,7 +1197,6 @@ pub fn parse_xml_tool_call_rust(
 }
 
 #[pyfunction]
-#[pyfunction]
 pub fn find_literal_rust(content: &str, search: &str) -> PyResult<i64> {
     // Phase 130: Optimized string search (KMP-lite)
     match content.find(search) {
