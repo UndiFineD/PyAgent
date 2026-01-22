@@ -1,8 +1,6 @@
 // Phase 317: Hardware Acceleration Module
 // This module provides bindings and strategies for specialized hardware (NPUs, GPUs)
 
-use std::ffi::CString;
-use std::os::raw::{c_char, c_int};
 use pyo3::prelude::*;
 
 /// Registers hardware acceleration functions with the Python module.

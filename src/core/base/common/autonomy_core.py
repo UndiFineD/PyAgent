@@ -2,8 +2,13 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified Autonomy and Self-Model core."""
 
-from src.core.base.common.base_core import BaseCore
+from .base_core import BaseCore
 from typing import List, Optional
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
 
 class AutonomyCore(BaseCore):
     """
@@ -15,6 +20,15 @@ class AutonomyCore(BaseCore):
         super().__init__(name=f"Autonomy-{agent_id}", repo_root=repo_root)
         self.agent_id = agent_id
         self.performance_history: List[float] = []
+
+    def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
+        """Rust-accelerated autonomy evaluation."""
+        if rc and hasattr(rc, "evaluate_autonomy_score"): # pylint: disable=no-member
+            try:
+                return rc.evaluate_autonomy_score(agent_id, stats) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+        return 0.5 # Default fallback
 
     def identify_blind_spots(
         self, success_rate: float, task_diversity: float

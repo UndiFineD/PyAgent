@@ -4,7 +4,7 @@
 
 import logging
 from typing import Dict, Any, List, Optional, TypeVar, Generic, Callable, Tuple
-from src.core.base.common.base_core import BaseCore
+from .base_core import BaseCore
 
 T = TypeVar('T')
 
@@ -30,8 +30,11 @@ class RegistryCore(BaseCore, Generic[T]):
 
     def detect_cycles(self, nodes: List[str], edges: List[Tuple[str, str]]) -> bool:
         """High-speed cycle detection for dependency graphs."""
-        if rc and hasattr(rc, "detect_cycles_rust"):
-            return rc.detect_cycles_rust(nodes, edges)
+        if rc and hasattr(rc, "detect_cycles_rust"): # pylint: disable=no-member
+            try:
+                return rc.detect_cycles_rust(nodes, edges) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
         
         # Simple DFS fallback
         visited = set()
@@ -58,8 +61,11 @@ class RegistryCore(BaseCore, Generic[T]):
 
     def topological_sort(self, nodes: List[str], edges: List[Tuple[str, str]]) -> List[str]:
         """Rust-accelerated topological sort for agent task ordering."""
-        if rc and hasattr(rc, "topological_sort_rust"):
-            return rc.topological_sort_rust(nodes, edges)
+        if rc and hasattr(rc, "topological_sort_rust"): # pylint: disable=no-member
+            try:
+                return rc.topological_sort_rust(nodes, edges) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
         
         # Simple Kahn's algorithm fallback
         in_degree = {n: 0 for n in nodes}
@@ -91,7 +97,7 @@ class RegistryCore(BaseCore, Generic[T]):
         for hook in self._hooks["on_register"]:
             try:
                 hook(key, item)
-            except Exception as e:
+            except Exception as e: # pylint: disable=broad-exception-caught
                 logger.error(f"[{self.name}] Registry hook 'on_register' failed for {key}: {e}")
         
         return True

@@ -6,19 +6,17 @@ import os
 import shutil
 import logging
 import tempfile
+import fnmatch
 from pathlib import Path
-from typing import Any, Optional, Union
-from src.core.base.common.storage_core import StorageCore
-from src.core.base.common.utils.file_lock_manager import FileLockManager
-from src.core.base.common.models import LockType
+from typing import Any, Optional, Union, List, Set
+from .storage_core import StorageCore
+from .utils.file_lock_manager import FileLockManager
+from .models import LockType
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
-
-import fnmatch
-from typing import Any, Optional, Union, List, Set
 
 class FileSystemCore:
     """
@@ -35,12 +33,12 @@ class FileSystemCore:
     def discover_files(self, root: Path, patterns: List[str] = ["*"], ignore: Optional[List[str]] = None) -> List[Path]:
         """Discovers files matching patterns, respecting ignore list."""
         # Use Rust-accelerated directory walking if available
-        if rc and hasattr(rc, "walk_directory_rust"):
+        if rc and hasattr(rc, "discover_files_rust"):  # pylint: disable=no-member
             try:
-                # Assuming rust_core.walk_directory_rust(root, patterns, ignore)
-                files = rc.walk_directory_rust(str(root), patterns, ignore or [])
+                # Map Python call to Rust name
+                files = rc.discover_files_rust(str(root), patterns, ignore or []) # type: ignore
                 return [Path(f) for f in files]
-            except Exception as e:
+            except Exception as e: # pylint: disable=broad-exception-caught
                 self.logger.warning(f"Rust directory walking failed: {e}")
 
         found = []
@@ -104,7 +102,7 @@ class FileSystemCore:
             os.replace(tmp_path, p)
             return True
             
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Atomic write failed for {p}: {e}")
             return False
         finally:
@@ -116,7 +114,7 @@ class FileSystemCore:
         try:
             shutil.copy2(src, dst)
             return True
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Failed to copy {src} to {dst}: {e}")
             return False
 
@@ -125,7 +123,7 @@ class FileSystemCore:
         try:
             shutil.move(str(src), str(dst))
             return True
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Failed to move {src} to {dst}: {e}")
             return False
 
@@ -138,7 +136,7 @@ class FileSystemCore:
             else:
                 p.unlink(missing_ok=True)
             return True
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Failed to delete {p}: {e}")
             return False
 
@@ -160,6 +158,6 @@ class FileSystemCore:
                 for byte_block in iter(lambda: f.read(4096), b""):
                     sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Failed to calculate hash for {p}: {e}")
             return None
