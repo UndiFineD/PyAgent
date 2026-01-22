@@ -13,7 +13,7 @@ import numpy as np
 
 
 @dataclass(frozen=True)
-class MambaConfig:
+class MambaConfig: # pylint: disable=too-many-instance-attributes
     """
     Configuration for Mamba mixer.
     """

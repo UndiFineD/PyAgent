@@ -30,6 +30,7 @@ import gzip
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
+from src.core.base.common.file_system_core import FileSystemCore
 
 # Rust acceleration for hot-path logging
 try:
@@ -63,10 +64,11 @@ class StructuredLogger:
         self.agent_id = agent_id
         self.trace_id = trace_id or f"trace_{int(time.time())}"
         self.log_file = Path(log_file)
+        self._fs = FileSystemCore()
         self._ensure_log_dir()
 
     def _ensure_log_dir(self) -> None:
-        self.log_file.parent.mkdir(parents=True, exist_ok=True)
+        self._fs.ensure_directory(self.log_file.parent)
         # Phase 277: Compress if > 100MB
         if self.log_file.exists() and self.log_file.stat().st_size > 100 * 1024 * 1024:
             self._compress_logs()
@@ -85,7 +87,7 @@ class StructuredLogger:
             with open(self.log_file, "rb") as f_in:
                 with gzip.open(compressed_file, "wb") as f_out:
                     shutil.copyfileobj(f_in, f_out)
-            self.log_file.unlink()  # Delete original
+            self._fs.delete(self.log_file)  # Delete original
         except Exception as e:
             logging.error(f"StructuredLogger compression failed: {e}")
 

@@ -139,6 +139,67 @@ class SelfImprovementCoordinator:
         self.logger.info(f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes.")
         return all_nodes
 
+    async def research_synthesis_loop(self):
+        """
+        Phase 51: Automated Research Synthesis Loop.
+        Workflow: Find -> Summarize -> Map to Logic -> Implement -> Test -> documentation sync.
+        """
+        self.logger.info("Initiating Phase 51 Research Synthesis Loop...")
+        
+        # 1. Identify targets from strategic context
+        await self.load_strategic_context()
+        topics = [p.split(":", 1)[1].strip() for p in self.directives["fixed_prompts"] if p.lower().startswith("research:")]
+        
+        if not topics:
+            self.logger.info("No explicit research topics found. Checking for general multimodal cues.")
+            if any("multimodal" in p.lower() for p in self.directives["fixed_prompts"]):
+                topics = ["multimodal ia3 scaling tensorrt"]
+            else:
+                return
+
+        # 2. Instantiate Director for cross-agent orchestration
+        from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
+        # Use a temporary or the main improvements file
+        director = DirectorAgent(str(self.improvements_file))
+
+        for topic in topics:
+            self.logger.info(f"Synthesizing research for topic: {topic}")
+            goal = (
+                f"Research Task: Explore {topic} on Arxiv. "
+                "1. Download papers to data/research. "
+                "2. Use ArchitecturalDesignAgent to map findings to IA3 and MUX configurations. "
+                "3. Delegate implementation to CoderAgent. "
+                "4. Update improvements.md with the synthesis results."
+            )
+            # This triggers the Director's project planning logic
+            await director.think(f"Improvement Task: {goal}")
+
+    async def cloud_orchestration_loop(self):
+        """
+        Phase 51: Distributed Cloud Coordination.
+        Manages task offloading to discovered peers and cloud-hosted MCPServers.
+        Integrates with BudgetManager for cost control.
+        """
+        self.logger.info("Initiating Cloud Orchestration Loop...")
+        
+        # 1. Discover nodes
+        nodes = await self.discover_external_servers()
+        active_peers = [n for n in nodes if n["status"] in ["online", "connected", "available"]]
+        
+        if not active_peers:
+            self.logger.info("No active cloud or LAN peers found for offloading.")
+            return
+
+        # 2. Audit Budget
+        current_burn = self.budget.get_current_burn()
+        if current_burn >= self.budget.daily_limit:
+            self.logger.warning(f"Daily cloud budget (${self.budget.daily_limit}) reached. Throttling offloads.")
+            return
+
+        # 3. Identify offloadable tasks (Complexity > 0.8)
+        self.logger.info(f"Active Fleet: {len(active_peers)} nodes available. Current Burn: ${current_burn:.2f}")
+        # In a real scenario, this would pop from a RequestQueue and call execute_remote_task
+
     async def run_healing_cycle(self):
         """
         Phase 317: Automated Self-Healing Trigger.

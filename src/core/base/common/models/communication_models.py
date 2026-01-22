@@ -31,9 +31,12 @@ class CascadeContext:
     """
     Context for recursive agent delegation (Phase 259/275).
     Tracks depth and lineage to prevent infinite loops and provide tracing.
+    Includes tenant isolation for multi-tenant swarms (Phase 71).
     """
 
     task_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    tenant_id: str = "default_tenant"
+    security_scope: list[str] = field(default_factory=_empty_list_str)
     correlation_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     root_task_id: str | None = None
 
@@ -46,6 +49,8 @@ class CascadeContext:
         """Create a child context for the next level of delegation."""
         return CascadeContext(
             task_id=str(uuid.uuid4()),
+            tenant_id=self.tenant_id,
+            security_scope=self.security_scope.copy(),
             correlation_id=self.correlation_id,
             root_task_id=self.root_task_id or self.task_id,
             parent_agent_id=agent_id,
@@ -98,11 +103,120 @@ class ConversationHistory:
         if len(self.messages) > self.max_messages:
             self.messages = self.messages[-self.max_messages :]
 
-    def get_context(self) -> list[ConversationMessage]:
-        return self.messages.copy()
 
-    def clear(self) -> None:
-        self.messages.clear()
+@dataclass(slots=True)
+class SpeculativeProposal:
+    """
+    Draft proposal from a lower-tier agent to a higher-tier agent (Phase 56).
+    Used in speculative swarm mode to accelerate decision making.
+    """
+
+    request_id: str
+    draft_content: str
+    confidence_score: float
+    proposer_id: str
+    metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    timestamp: float = field(default_factory=time.time)
+
+
+@dataclass(slots=True)
+class VerificationOutcome:
+    """
+    Outcome of a speculative proposal verification (Phase 56).
+    Determines if the draft was accepted, rejected, or partially modified.
+    """
+
+    proposal_id: str
+    accepted: bool
+    final_content: str
+    accepted_length: int
+    correction_applied: bool
+    verifier_id: str
+    latency_delta: float = 0.0
+
+
+@dataclass(slots=True)
+class AsyncSpeculativeToken:
+    """
+    A single token yielded by the speculative async pipeline (Phase 60).
+    Includes a flag indicating if it's a 'draft' or 'verified' token.
+    """
+
+    token: str
+    is_draft: bool
+    sequence_index: int
+    timestamp: float = field(default_factory=time.time)
+
+
+@dataclass(slots=True)
+class PipelineCorrection:
+    """
+    signal to roll back and correct the output stream (Phase 60).
+    """
+
+    rollback_to_index: int
+    correct_tokens: list[str]
+    reason: str = "speculative_mismatch"
+
+
+@dataclass(slots=True)
+class ExpertProfile:
+    """
+    Metadata about an agent's expertise for MoE routing (Phase 61).
+    """
+
+    agent_id: str
+    domains: list[str] = field(default_factory=_empty_list_str)
+    performance_score: float = 1.0  # 0.0 to 1.0
+    specialization_vector: list[float] = field(default_factory=_empty_list_str)  # Embedding
+    model_family: str = "unknown"
+    max_tokens: int = 4096
+    is_replica: bool = False
+    parent_id: str | None = None
+    acceleration_type: str = "standard"  # standard, fp8_bitnet, h100_tensor, etc. (Phase 74)
+
+
+@dataclass(slots=True)
+class MoERoutingDecision:
+    """
+    The result of routing a task through the MoE Gatekeeper (Phase 61).
+    """
+
+    task_id: str
+    selected_experts: list[str]  # Top-K agent IDs
+    routing_weights: list[float]
+    metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    timestamp: float = field(default_factory=time.time)
+
+
+@dataclass(slots=True)
+class SwarmAuditTrail:
+    """
+    Detailed audit log for swarm decision making (Phase 69).
+    Tracks routing, fusion, and expert selection reasoning.
+    """
+    request_id: str
+    step: str # "routing", "execution", "fusion"
+    decision_summary: str
+    raw_data: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    timestamp: float = field(default_factory=time.time)
+    duration_ms: float = 0.0
+
+
+@dataclass(slots=True)
+class ExpertEvaluation:
+    """
+    Feedback evaluation for an expert's performance on a specific task (Phase 68).
+    Used to drive Expert Specialization Evolution.
+    """
+
+    expert_id: str
+    task_id: str
+    is_correct: bool
+    quality_score: float  # 0.0 to 1.0
+    latency: float = 0.0
+    feedback_notes: str = ""
+    timestamp: float = field(default_factory=time.time)
 
 
 class PromptTemplateManager:

@@ -19,13 +19,12 @@ Handles persistence of agent memory, history, and metadata.
 
 from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
-import json
 import logging
-import shutil
 import time
 import collections
 from pathlib import Path
 from typing import Any
+from src.core.base.common.file_system_core import FileSystemCore
 
 __version__ = VERSION
 
@@ -38,6 +37,7 @@ class EmergencyEventLog:
     ) -> None:
         self.log_path = log_path
         self.buffer = collections.deque(maxlen=10)
+        self._fs = FileSystemCore()
 
         self._load_buffer()
 
@@ -55,9 +55,7 @@ class EmergencyEventLog:
 
         self.buffer.append(event)
         try:
-            self.log_path.parent.mkdir(parents=True, exist_ok=True)
-
-            self.log_path.write_text("\n".join(self.buffer), encoding="utf-8")
+            self._fs.atomic_write(self.log_path, "\n".join(self.buffer))
         except Exception as e:
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
 
@@ -76,14 +74,15 @@ class StateTransaction:
 
         self.backups: dict[Path, Path] = {}
         self.temp_dir = Path("temp/transactions")
-        self.temp_dir.mkdir(parents=True, exist_ok=True)
+        self._fs = FileSystemCore()
+        self._fs.ensure_directory(self.temp_dir)
         self.id = f"tx_{int(time.time() * 1000)}"
 
     def __enter__(self) -> StateTransaction:
         for file in self.target_files:
             if file.exists():
                 backup_path = self.temp_dir / f"{file.name}_{self.id}.bak"
-                shutil.copy2(file, backup_path)
+                self._fs.safe_copy(file, backup_path)
                 self.backups[file] = backup_path
         logging.info(
             f"Transaction {self.id} started. {len(self.backups)} files backed up."
@@ -107,7 +106,7 @@ class StateTransaction:
         """Restore files from backups after failure."""
         for original, backup in self.backups.items():
             if backup.exists():
-                shutil.copy2(backup, original)
+                self._fs.safe_copy(backup, original)
                 backup.unlink()
         logging.warning(f"Transaction {self.id} ROLLED BACK. Files restored.")
 
@@ -125,6 +124,7 @@ class AgentStateManager:
         path: Path | None = None,
     ) -> None:
         """Save agent state to disk."""
+        import json
         state_path: Path = path or file_path.with_suffix(".state.json")
         state: dict[str, Any] = {
             "file_path": str(file_path),
@@ -133,7 +133,7 @@ class AgentStateManager:
             "state_data": state_data,
             "history_length": history_len,
         }
-        state_path.write_text(json.dumps(state, indent=2), encoding="utf-8")
+        FileSystemCore().atomic_write(state_path, json.dumps(state, indent=2))
         logging.debug(f"State saved to {state_path}")
 
     @staticmethod

@@ -101,3 +101,24 @@ class ContextRecorderInterface(Protocol):
         meta: dict[str, Any] | None = None,
     ) -> None:
         raise NotImplementedError()
+
+
+@runtime_checkable
+class Loadable(Protocol):
+    """Protocol for objects that can load their state from disk."""
+    def load(self, path: Path | None = None) -> bool:
+        ...
+
+
+@runtime_checkable
+class Saveable(Protocol):
+    """Protocol for objects that can save their state to disk."""
+    def save(self, path: Path | None = None) -> bool:
+        ...
+
+
+@runtime_checkable
+class Component(Protocol):
+    """Base interface for all PyAgent components with a name and version."""
+    name: str
+    version: str

@@ -2,12 +2,17 @@
 # Identity Mixin for BaseAgent
 from typing import Any
 from src.core.base.common.models import AgentPriority
+from src.core.base.logic.core.identity_core import IdentityCore
+
 
 class IdentityMixin:
     """Handles agent identity, configuration, and capabilities."""
 
     def __init__(self, **kwargs: Any) -> None:
-        self.agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
+        self.identity = IdentityCore(
+            agent_type=self.__class__.__name__.lower().replace("agent", "") or "base"
+        )
+        self.agent_name = self.identity.agent_type
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
         self._suspended: bool = False

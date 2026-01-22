@@ -1,7 +1,7 @@
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 use pyo3::wrap_pyfunction;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use sha2::{Sha256, Digest};
 
 /// Calculates synaptic weight in Rust for 10x performance gain.
@@ -57,6 +57,36 @@ pub fn calculate_vcg_auction(_py: Python<'_>, bids: Vec<Bound<'_, PyDict>>, slot
     }
     
     Ok(winners)
+}
+
+/// Calculate VCG Auction (AuctionCore Mapping Alias).
+#[pyfunction]
+pub fn calculate_vcg_prices(py: Python<'_>, bids: Vec<Bound<'_, PyDict>>, slots: usize) -> PyResult<Vec<PyObject>> {
+    calculate_vcg_auction(py, bids, slots)
+}
+
+/// Detect failed agents based on timeouts and error counts (StabilityCore).
+#[pyfunction]
+pub fn detect_failed_agents_rust(
+    agents_data: Vec<(String, f64, i32, i32)>, // name, last_seen, errors, max_errors
+    now: f64,
+    timeout: f64,
+) -> Vec<(String, String)> {
+    let mut failures = Vec::new();
+    for (name, last_seen, errors, max_errors) in agents_data {
+        if now - last_seen > timeout {
+            failures.push((name, "timeout".to_string()));
+        } else if errors >= max_errors {
+            failures.push((name, "error_threshold_exceeded".to_string()));
+        }
+    }
+    failures
+}
+
+/// Calculate synaptic decay across agent graphs (PruningCore).
+#[pyfunction]
+pub fn calculate_decay_rust(weights: Vec<f64>, decay_rate: f64) -> Vec<f64> {
+    weights.into_iter().map(|w| w * (1.0 - decay_rate)).collect()
 }
 
 // === ByzantineCore Implementations ===
@@ -995,7 +1025,50 @@ impl CodeQualityCore {
     }
 }
 
+/// Detect cycles in agent dependency graphs (Common/Registry).
+#[pyfunction]
+pub fn detect_cycles_rust(adj_list: HashMap<String, Vec<String>>) -> PyResult<bool> {
+    let mut visited = HashSet::new();
+    let mut rec_stack = HashSet::new();
+    
+    for node in adj_list.keys() {
+        if has_cycle(node, &adj_list, &mut visited, &mut rec_stack) {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+fn has_cycle(
+    node: &str, 
+    adj: &HashMap<String, Vec<String>>, 
+    visited: &mut HashSet<String>, 
+    rec_stack: &mut HashSet<String>
+) -> bool {
+    if rec_stack.contains(node) {
+        return true;
+    }
+    if visited.contains(node) {
+        return false;
+    }
+    
+    visited.insert(node.to_string());
+    rec_stack.insert(node.to_string());
+    
+    if let Some(neighbors) = adj.get(node) {
+        for neighbor in neighbors {
+            if has_cycle(neighbor, adj, visited, rec_stack) {
+                return true;
+            }
+        }
+    }
+    
+    rec_stack.remove(node);
+    false
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(detect_cycles_rust, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_score_rust, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_search_results, m)?)?;
     m.add_function(wrap_pyfunction!(analyze_paper, m)?)?;
@@ -1003,14 +1076,17 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_agreement_score, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_bid_priority_score, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_consensus_winner, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_decay_rust, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_gpu_surcharge, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_new_utility, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_superposition_weights, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_synaptic_weight, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_vcg_auction, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_vcg_prices, m)?)?;
     m.add_function(wrap_pyfunction!(create_episode_struct, m)?)?;
     m.add_function(wrap_pyfunction!(detect_cultural_issues, m)?)?;
     m.add_function(wrap_pyfunction!(detect_deviating_hashes, m)?)?;
+    m.add_function(wrap_pyfunction!(detect_failed_agents_rust, m)?)?;
     m.add_function(wrap_pyfunction!(draft_tool_code, m)?)?;
     m.add_function(wrap_pyfunction!(enforce_vram_quota, m)?)?;
     m.add_function(wrap_pyfunction!(evaluate_bypass, m)?)?;

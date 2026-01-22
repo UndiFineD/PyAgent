@@ -17,6 +17,7 @@ from src.core.base.lifecycle.version import VERSION
 from abc import ABC, abstractmethod
 from typing import Any
 from pathlib import Path
+from src.core.base.common.memory_core import MemoryCore
 
 __version__ = VERSION
 
@@ -27,6 +28,8 @@ class KnowledgeStore(ABC):
     def __init__(self, agent_id: str, storage_path: Path) -> None:
         self.agent_id = agent_id
         self.storage_path = storage_path
+        self._memory_core = MemoryCore()
+        # Initialize paths via standard core
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod

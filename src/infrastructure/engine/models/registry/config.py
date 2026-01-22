@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Model configuration and metadata registry."""
+
 from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum, Flag, auto
@@ -88,7 +92,7 @@ class ModelFormat(Enum):
     TENSORRT = auto()
 
 @dataclass
-class ModelConfig:
+class ModelConfig: # pylint: disable=too-many-instance-attributes
     """Model configuration."""
     model_name: str
     architecture: Optional[ModelArchitecture] = None
@@ -105,7 +109,7 @@ class ModelConfig:
         return hash((self.model_name, self.architecture, self.quantization))
 
 @dataclass
-class ArchitectureSpec:
+class ArchitectureSpec: # pylint: disable=too-many-instance-attributes
     """Architecture specification."""
     name: str
     architecture: ModelArchitecture
@@ -121,7 +125,7 @@ class ArchitectureSpec:
     architecture_patterns: List[str] = field(default_factory=list)
 
 @dataclass
-class ModelInfo:
+class ModelInfo: # pylint: disable=too-many-instance-attributes
     """Information about a model."""
     name: str
     architecture: ModelArchitecture
@@ -141,17 +145,25 @@ class ModelInfo:
 
     @property
     def is_multimodal(self) -> bool:
+        """Check if the model has multimodal capabilities."""
         return bool(self.capabilities & ModelCapability.MULTIMODAL)
 
     @property
     def has_gqa(self) -> bool:
+        """Check if the model uses Grouped-Query Attention."""
         return self.num_kv_heads is not None and self.num_kv_heads < self.num_attention_heads
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert model info to a serializable dictionary."""
         return {
-            "name": self.name, "architecture": self.architecture.name, "num_params": self.num_params,
-            "num_layers": self.num_layers, "hidden_size": self.hidden_size, "vocab_size": self.vocab_size,
-            "max_seq_len": self.max_seq_len, "is_multimodal": self.is_multimodal,
+            "name": self.name,
+            "architecture": self.architecture.name,
+            "num_params": self.num_params,
+            "num_layers": self.num_layers,
+            "hidden_size": self.hidden_size,
+            "vocab_size": self.vocab_size,
+            "max_seq_len": self.max_seq_len,
+            "is_multimodal": self.is_multimodal,
         }
 
 @dataclass

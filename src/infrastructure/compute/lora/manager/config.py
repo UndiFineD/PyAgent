@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Configuration and data structures for LoRA adapter management."""
+
 from __future__ import annotations
 import time
 from dataclasses import dataclass, field
@@ -36,7 +40,7 @@ class TargetModule(Enum):
     EMBED_TOKENS = "embed_tokens"
 
 @dataclass
-class LoRAConfig:
+class LoRAConfig: # pylint: disable=too-many-instance-attributes
     """LoRA adapter configuration."""
     adapter_name: str
     adapter_path: str
@@ -44,7 +48,9 @@ class LoRAConfig:
     alpha: float = 16.0
     dropout: float = 0.0
     method: LoRAMethod = LoRAMethod.LORA
-    target_modules: List[str] = field(default_factory=lambda: ["q_proj", "k_proj", "v_proj", "o_proj"])
+    target_modules: List[str] = field(
+        default_factory=lambda: ["q_proj", "k_proj", "v_proj", "o_proj"]
+    )
     modules_to_save: List[str] = field(default_factory=list)
     use_rslora: bool = False
     use_dora: bool = False
@@ -54,8 +60,11 @@ class LoRAConfig:
 
     @property
     def computed_scaling(self) -> float:
-        if self.scaling is not None: return self.scaling
-        if self.use_rslora: return self.alpha / (self.rank ** 0.5)
+        """Calculate the LoRA scaling factor."""
+        if self.scaling is not None:
+            return self.scaling
+        if self.use_rslora:
+            return self.alpha / (self.rank ** 0.5)
         return self.alpha / self.rank
 
     def __hash__(self) -> int:
@@ -73,7 +82,7 @@ class LoRARequest:
         return hash((self.request_id, self.adapter_name))
 
 @dataclass
-class LoRAInfo:
+class LoRAInfo: # pylint: disable=too-many-instance-attributes
     """Information about a loaded adapter."""
     adapter_name: str
     rank: int
@@ -87,6 +96,7 @@ class LoRAInfo:
     last_used: float = field(default_factory=time.time)
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert info to a serializable dictionary."""
         return {
             "adapter_name": self.adapter_name,
             "rank": self.rank,
@@ -109,4 +119,5 @@ class AdapterSlot:
 
     @property
     def is_free(self) -> bool:
+        """Check if the slot is currently free."""
         return self.adapter_name is None

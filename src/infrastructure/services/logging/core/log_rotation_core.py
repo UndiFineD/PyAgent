@@ -4,6 +4,7 @@ import gzip
 import shutil
 import contextlib
 from datetime import datetime
+from src.core.base.common.file_system_core import FileSystemCore
 
 
 class LogRotationCore:
@@ -15,6 +16,7 @@ class LogRotationCore:
     def __init__(self, log_dir: str, max_size_bytes: int = 10 * 1024 * 1024) -> None:
         self.log_dir = log_dir
         self.max_size_bytes = max_size_bytes
+        self._fs = FileSystemCore()
 
     def should_rotate(self, file_path: str) -> bool:
         """Checks if a log file exceeds the size limit."""
@@ -36,7 +38,7 @@ class LogRotationCore:
 
         with contextlib.suppress(Exception):
             # Rename for rotation
-            shutil.move(file_path, rotated_path)
+            self._fs.move(file_path, rotated_path)
 
             # Compress
             with open(rotated_path, "rb") as f_in:
@@ -44,7 +46,7 @@ class LogRotationCore:
                     shutil.copyfileobj(f_in, f_out)
 
             # Remove uncompressed rotated file
-            os.remove(rotated_path)
+            self._fs.delete(rotated_path)
             return compressed_path
 
         # If compression fails, try to restore or at least leave the rotated file

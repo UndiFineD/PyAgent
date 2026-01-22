@@ -12,6 +12,11 @@ except ImportError:
     from typing import Any
     NDArray = Any
 
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
 
 @dataclass
 class LoRALayerWeights:
@@ -43,6 +48,31 @@ class LoRALayerWeights:
         apply_dropout: bool = False,
     ) -> NDArray[np.float32]:
         """Compute LoRA output."""
+        # Try Rust acceleration for inference
+        if rc and not apply_dropout and hasattr(rc, "lora_forward_rust"):
+            try:
+                # Handle ndarray to flat list
+                orig_shape = x.shape
+                x_flat = x.reshape(-1, self.in_features).astype(np.float32)
+                batch_size = x_flat.shape[0]
+                
+                result_flat = rc.lora_forward_rust(
+                    x_flat.flatten().tolist(),
+                    self.lora_a.flatten().tolist(),
+                    self.lora_b.flatten().tolist(),
+                    batch_size,
+                    self.in_features,
+                    self.out_features,
+                    self.rank,
+                    self.scaling
+                )
+                
+                # Reshape back to original dimensions as needed
+                new_shape = list(orig_shape[:-1]) + [self.out_features]
+                return np.array(result_flat, dtype=np.float32).reshape(new_shape)
+            except Exception:
+                pass
+
         # x @ A.T @ B.T * scaling
         hidden = x @ self.lora_a.T  # [..., rank]
 
@@ -58,6 +88,22 @@ class LoRALayerWeights:
         base_weight: NDArray[np.float32],
     ) -> NDArray[np.float32]:
         """Merge LoRA weights into base weight."""
+        # Try Rust acceleration
+        if rc and hasattr(rc, "lora_merge_rust"):
+            try:
+                merged_flat = rc.lora_merge_rust(
+                    base_weight.flatten().tolist(),
+                    self.lora_a.flatten().tolist(),
+                    self.lora_b.flatten().tolist(),
+                    self.out_features,
+                    self.in_features,
+                    self.rank,
+                    self.scaling
+                )
+                return np.array(merged_flat, dtype=np.float32).reshape(base_weight.shape)
+            except Exception:
+                pass
+
         # W_merged = W_base + B @ A * scaling
         delta = self.lora_b @ self.lora_a * self.scaling
         return base_weight + delta
@@ -65,6 +111,31 @@ class LoRALayerWeights:
     def get_memory_bytes(self) -> int:
         """Memory usage in bytes."""
         return self.lora_a.nbytes + self.lora_b.nbytes
+
+
+@dataclass
+class IA3LayerWeights:
+    """IA3 (Input-Activation-Attention Scaling) weights for a single layer."""
+    scaling_vector: NDArray[np.float32]  # [features]
+    module_name: str
+
+    def forward(
+        self,
+        x: NDArray[np.float32],
+    ) -> NDArray[np.float32]:
+        """Apply IA3 scaling."""
+        if rc and hasattr(rc, "apply_ia3_scaling_rust"):
+            try:
+                res = rc.apply_ia3_scaling_rust(x.flatten().tolist(), self.scaling_vector.tolist())
+                return np.array(res, dtype=np.float32).reshape(x.shape)
+            except Exception:
+                pass
+        
+        return x * self.scaling_vector
+
+    def get_memory_bytes(self) -> int:
+        """Memory usage in bytes."""
+        return self.scaling_vector.nbytes
 
 
 @dataclass
