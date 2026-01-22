@@ -716,7 +716,7 @@ pub fn speech_vad_rust(
 pub fn calculate_mel_features_rust(
     samples: Vec<f32>,
     num_mel_bins: usize,
-    sample_rate: usize,
+    _sample_rate: usize,
 ) -> PyResult<Vec<f32>> {
     if samples.is_empty() { return Ok(Vec::new()); }
     
@@ -1402,7 +1402,7 @@ pub fn calculate_vision_saliency_rust(
                     let idx = ((r * grid_size + y) * width + (c * grid_size + x)) * 3;
                     if idx + 2 < pixels.len() {
                         // Weighted luminance energy
-                        energy += (pixels[idx] as f32 * 0.299 + pixels[idx+1] as f32 * 0.587 + pixels[idx+2] as f32 * 0.114);
+                        energy += pixels[idx] as f32 * 0.299 + pixels[idx+1] as f32 * 0.587 + pixels[idx+2] as f32 * 0.114;
                     }
                 }
             }
@@ -1434,7 +1434,7 @@ pub fn match_vision_color_profiles_rust(
         }
     }
     
-    let sample_n = n / 4;
+    let _sample_n = n / 4;
     let gains = [
         (sum_ref[0] as f32 / sum_curr[0] as f32).max(0.5).min(2.0),
         (sum_ref[1] as f32 / sum_curr[1] as f32).max(0.5).min(2.0),
@@ -1475,7 +1475,6 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_dynamic_modality_weights_rust, m)?)?;
     m.add_function(wrap_pyfunction!(parse_modality_stream_rust, m)?)?;
     m.add_function(wrap_pyfunction!(switch_modality_channel_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(align_modality_sequence_rust, m)?)?;
     m.add_function(wrap_pyfunction!(project_modality_embeddings_rust, m)?)?;
     m.add_function(wrap_pyfunction!(speech_vad_rust, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_mel_features_rust, m)?)?;

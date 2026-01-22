@@ -17,7 +17,6 @@ Core logic for fleet sharding and partitioning.
 """
 
 from __future__ import annotations
-import logging
 from typing import Any, List, Dict, Optional
 from .base_core import BaseCore
 
@@ -25,8 +24,6 @@ try:
     import rust_core as rc
 except ImportError:
     rc = None
-
-logger = logging.getLogger("pyagent.sharding")
 
 class ShardCore(BaseCore):
     """
@@ -38,10 +35,10 @@ class ShardCore(BaseCore):
         Determines the shard ID for a given key.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
-        if rc and hasattr(rc, "calculate_shard_id_rust"):
+        if rc and hasattr(rc, "calculate_shard_id_rust"): # pylint: disable=no-member
             try:
-                return rc.calculate_shard_id_rust(key, shard_count)
-            except Exception:
+                return rc.calculate_shard_id_rust(key, shard_count) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
         # Fallback to simple hash-based sharding

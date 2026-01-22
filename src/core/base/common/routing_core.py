@@ -17,17 +17,14 @@ Core logic for performance-based routing and task distribution.
 """
 
 from __future__ import annotations
-import logging
 import os
-from typing import Any, List, Dict, Optional
+from typing import Any, Dict, Optional
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
-
-logger = logging.getLogger("pyagent.routing")
 
 class RoutingCore(BaseCore):
     """
@@ -54,10 +51,10 @@ class RoutingCore(BaseCore):
         Optimal provider selection logic.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
-        if rc and hasattr(rc, "select_provider_rust"):
+        if rc and hasattr(rc, "select_provider_rust"): # pylint: disable=no-member
             try:
-                return rc.select_provider_rust(task_type, priority, performance_report or {})
-            except Exception:
+                return rc.select_provider_rust(task_type, priority, performance_report or {}) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
         # Default logic (can be expanded with weighted averages)

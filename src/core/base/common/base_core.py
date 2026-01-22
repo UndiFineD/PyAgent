@@ -5,10 +5,10 @@
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
-from src.core.base.common.base_interfaces import Loadable, Saveable, Component
-from src.core.base.common.storage_core import StorageCore
-from src.core.base.common.workspace_core import WorkspaceCore
-from src.core.base.lifecycle.version import VERSION
+from .base_interfaces import Loadable, Saveable, Component
+from .storage_core import StorageCore
+from .workspace_core import WorkspaceCore
+from ..lifecycle.version import VERSION
 
 logger = logging.getLogger("pyagent.core")
 
@@ -53,7 +53,7 @@ class BaseCore(Loadable, Saveable, Component):
             else:
                 self._storage.save_json(save_path, self._state)
             return True
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             logger.error(f"[{self.name}] Failed to save state to {save_path}: {e}")
             return False
 

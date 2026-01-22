@@ -20,7 +20,7 @@ import base64
 from typing import Any, Dict, Optional
 from dataclasses import dataclass
 from .base_core import BaseCore
-from src.core.base.common.models import AuthConfig, AuthMethod
+from .models import AuthConfig, AuthMethod
 
 try:
     import rust_core as rc
@@ -50,29 +50,29 @@ class AuthCore(BaseCore):
 
     def generate_challenge(self, agent_id: str) -> str:
         """Generates a unique challenge for an agent."""
-        if rc and hasattr(rc, "generate_challenge"):
+        if rc and hasattr(rc, "generate_challenge"): # pylint: disable=no-member
             try:
-                return rc.generate_challenge(agent_id)
-            except Exception:
+                return rc.generate_challenge(agent_id) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         seed = f"{agent_id}_{time.time()}_{hashlib.sha256(str(time.time()).encode()).hexdigest()}"
         return hashlib.sha256(seed.encode()).hexdigest()
 
     def generate_proof(self, challenge: str, secret_key: str) -> str:
         """Generates a proof for a challenge using a secret key."""
-        if rc and hasattr(rc, "generate_auth_proof"):
+        if rc and hasattr(rc, "generate_auth_proof"): # pylint: disable=no-member
             try:
-                return rc.generate_auth_proof(challenge, secret_key)
-            except Exception:
+                return rc.generate_auth_proof(challenge, secret_key) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         return hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
 
     def verify_proof(self, challenge: str, proof: str, expected_secret_hash: str) -> bool:
         """Verifies proof against the expected secret hash."""
-        if rc and hasattr(rc, "verify_auth_proof"):
+        if rc and hasattr(rc, "verify_auth_proof"): # pylint: disable=no-member
             try:
-                return rc.verify_auth_proof(challenge, proof, expected_secret_hash)
-            except Exception:
+                return rc.verify_auth_proof(challenge, proof, expected_secret_hash) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
         return proof == hashlib.sha512(f"{challenge}:{expected_secret_hash}".encode()).hexdigest()

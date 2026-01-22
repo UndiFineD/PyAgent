@@ -10,7 +10,7 @@ import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from typing import Any, List, Callable, Optional
-from src.core.base.common.base_core import BaseCore
+from .base_core import BaseCore
 
 try:
     import rust_core as rc

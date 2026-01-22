@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified Fleet Convergence and Health core."""
 
-from src.core.base.common.base_core import BaseCore
+from .base_core import BaseCore
 from typing import Dict, Any, List, Optional
 
 try:
