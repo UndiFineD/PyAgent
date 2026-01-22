@@ -13,17 +13,21 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Unified Pruning and Synaptic Decay core.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 import logging
@@ -33,12 +37,17 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import math
 import time
 import logging
 from dataclasses import dataclass, field
 from typing import Any, Optional, Dict, List
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .base_core import BaseCore
 
 try:
@@ -49,6 +58,7 @@ except ImportError:
 logger = logging.getLogger("pyagent.pruning")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 @dataclass
 class SynapticWeight:
@@ -59,6 +69,11 @@ class SynapticWeight:
 class SynapticWeight:
     """State tracking for neural synaptic weights during swarm pruning."""
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+@dataclass
+class SynapticWeight:
+    """State tracking for neural synaptic weights during swarm pruning."""
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     agent_id: str
     weight: float = 1.0  # 0.0 to 1.0
     last_fired: float = field(default_factory=time.time)
@@ -66,14 +81,18 @@ class SynapticWeight:
     refractory_until: float = 0.0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class PruningCore(BaseCore):
     """
     Standard implementation for neural pruning and synaptic decay.
     Handles weight calculations and pruning decisions across the swarm.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, name: str = "Pruning", repo_root: Optional[str] = None) -> None:
@@ -83,6 +102,11 @@ class PruningCore(BaseCore):
     def __init__(self, name: str = "Pruning", repo_root: Optional[str] = None):
         super().__init__(name=name, root_path=repo_root)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, name: str = "Pruning", repo_root: Optional[str] = None):
+        super().__init__(name=name, root_path=repo_root)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.weights: Dict[str, SynapticWeight] = {}
         self.interaction_history: List[tuple[str, str, float]] = []
         self.current_cycle: int = 0
@@ -93,6 +117,7 @@ class PruningCore(BaseCore):
         if len(self.interaction_history) > 1000:
             self.interaction_history.pop(0)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     @property
     def active_synapses(self) -> Dict[str, SynapticWeight]:
@@ -153,6 +178,8 @@ class PruningCore(BaseCore):
             self.weights[agent_id] = SynapticWeight(agent_id=agent_id)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def calculate_decay(self, age_seconds: float, half_life: float = 3600.0) -> float:
         """Calculate exponential decay for a synaptic weight."""
         # Check for bulk decay optimization in Rust
@@ -170,13 +197,17 @@ class PruningCore(BaseCore):
         if agent_id not in self.weights:
             self.weights[agent_id] = SynapticWeight(agent_id=agent_id)
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         sync = self.weights[agent_id]
         current_weight = sync.weight
 
         # Check for Rust acceleration
         if rc and hasattr(rc, "update_weight_on_fire_rust"):
             try:
+<<<<<<< HEAD
 <<<<<<< HEAD
                 # pylint: disable=no-member
                 new_weight = rc.update_weight_on_fire_rust(current_weight, success)  # type: ignore
@@ -185,18 +216,24 @@ class PruningCore(BaseCore):
                 return new_weight
             except Exception as e:  # pylint: disable=broad-exception-caught
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 new_weight = rc.update_weight_on_fire_rust(current_weight, success)
                 sync.weight = new_weight
                 sync.last_fired = time.time()
                 return new_weight
             except Exception:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         if success:
             sync.weight = min(current_weight * 1.1, 1.0)
         else:
             sync.weight = max(current_weight * 0.8, 0.1)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         sync.last_fired = time.time()
@@ -225,6 +262,8 @@ class PruningCore(BaseCore):
         return weight < threshold
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         sync.last_fired = time.time()
         return sync.weight
@@ -243,20 +282,28 @@ class PruningCore(BaseCore):
                 pass
         return time.time() < sync.refractory_until
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def prune_swarm(self, threshold: float = 0.15) -> List[str]:
         """Identify agents whose synaptic weight has dropped below the threshold."""
         now = time.time()
         to_prune = []
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         for agent_id, sync in self.weights.items():
             decayed_weight = sync.weight * self.calculate_decay(now - sync.last_fired)
             if decayed_weight < threshold:
                 to_prune.append(agent_id)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         return to_prune
@@ -281,3 +328,7 @@ class PruningCore(BaseCore):
         
         return to_prune
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+        return to_prune
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

@@ -4,6 +4,7 @@ Sharding and partitioning logic.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from __future__ import annotations
 from src.core.base.version import VERSION
@@ -23,6 +24,9 @@ class ShardManager:
 =======
 from src.core.base.common.shard_core import ShardCore as ShardManager
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.shard_core import ShardCore as ShardManager
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.workspace_root = Path(workspace_root)
         self.shards: dict[str, set[str]] = {} # Shard name to agent names
         self.agent_to_shard: dict[str, str] = {}

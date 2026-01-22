@@ -18,16 +18,22 @@ Manages engine state transitions across multiple DP ranks to ensure wave coheren
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import asyncio
 import logging
 from enum import Enum
 from typing import Dict
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 import asyncio
 from typing import Dict, List, Optional, Any
 from enum import Enum
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -37,9 +43,12 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SyncState(Enum):
     READY = 0
     WAVE_RUNNING = 1
@@ -47,18 +56,25 @@ class SyncState(Enum):
     PAUSED = 3
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class DPEngineSync:
     """
     Ensures all DP ranks are synchronized before starting or ending a request wave.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, rank: int, world_size: int):
         self.rank = rank
         self.world_size = world_size
@@ -69,20 +85,28 @@ class DPEngineSync:
         """Marks a rank as ready for the next wave."""
         self.ready_map[rank_id] = True
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def all_ready(self) -> bool:
         """Checks if all ranks in the world have signaled readiness."""
         if rc and hasattr(rc, "wave_sync_check_rust"):
             # Efficient bitmask check
             return rc.wave_sync_check_rust(list(self.ready_map.values()))
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return all(self.ready_map.values())
 
     def reset_ready(self):
@@ -94,10 +118,14 @@ class DPEngineSync:
     async def wait_for_barrier(self, timeout: float = 5.0):
         """
 <<<<<<< HEAD
+<<<<<<< HEAD
         Non-blocking barrier wait. In a real system, this would involve
 =======
         Non-blocking barrier wait. In a real system, this would involve 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        Non-blocking barrier wait. In a real system, this would involve 
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         nccl/zmq communication.
         """
         start_time = asyncio.get_event_loop().time()

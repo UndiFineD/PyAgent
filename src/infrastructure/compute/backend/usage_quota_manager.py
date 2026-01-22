@@ -4,6 +4,7 @@ Manager for usage quotas.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Manager for usage quotas.
 (Facade for src.core.base.common.resource_core)
@@ -106,3 +107,6 @@ class UsageQuotaManager:
 =======
 from src.core.base.common.resource_core import ResourceCore as UsageQuotaManager
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.resource_core import ResourceCore as UsageQuotaManager
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

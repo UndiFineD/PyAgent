@@ -4,6 +4,7 @@ Signal bus for agent-to-agent communication.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Signal bus for agent-to-agent communication.
 (Facade for src.core.base.common.signal_core)
@@ -20,6 +21,9 @@ class SignalBusOrchestrator(StandardSignalCore):
 =======
 from src.core.base.common.signal_core import SignalCore as SignalBusOrchestrator
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.signal_core import SignalCore as SignalBusOrchestrator
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def _process_bus(self) -> None:
         """Internal loop to process signals asynchronously."""

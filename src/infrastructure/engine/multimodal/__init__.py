@@ -52,7 +52,10 @@ from .multi_modal_processor import (
 from .muxer import Muxer, ChannelType
 from .quantized_engine import QuantizedMultimediaEngine
 from .tensorrt_loader import TensorRTLoader
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __all__ = [
     # Enums and config

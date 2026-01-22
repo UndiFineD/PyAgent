@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +26,8 @@ T = TypeVar("T")
 try:
     import rust_core as rc  # pylint: disable=import-error
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified Registry core for all PyAgent components."""
@@ -37,21 +40,28 @@ T = TypeVar('T')
 
 try:
     import rust_core as rc
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.registry")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class RegistryCore(BaseCore, Generic[T]):
     """
     Generic registry to handle Tools, Signals, Plugins, and Capabilities.
     Standardizes registration, lookup, and lifecycle management.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, name: str = "generic") -> None:
@@ -69,6 +79,8 @@ class RegistryCore(BaseCore, Generic[T]):
                 pass
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, name: str):
         BaseCore.__init__(self, name=name)
         self._items: Dict[str, T] = {}
@@ -82,12 +94,16 @@ class RegistryCore(BaseCore, Generic[T]):
         if rc and hasattr(rc, "detect_cycles_rust"):
             return rc.detect_cycles_rust(nodes, edges)
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Simple DFS fallback
         visited = set()
         path = set()
         adj = {n: [] for n in nodes}
         for u, v in edges:
+<<<<<<< HEAD
 <<<<<<< HEAD
             if u in adj:
                 adj[u].append(v)
@@ -98,20 +114,30 @@ class RegistryCore(BaseCore, Generic[T]):
             
         def has_cycle(v):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            if u in adj: adj[u].append(v)
+            
+        def has_cycle(v):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             visited.add(v)
             path.add(v)
             for neighbor in adj.get(v, []):
                 if neighbor not in visited:
+<<<<<<< HEAD
 <<<<<<< HEAD
                     if has_cycle(neighbor):
                         return True
 =======
                     if has_cycle(neighbor): return True
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                    if has_cycle(neighbor): return True
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 elif neighbor in path:
                     return True
             path.remove(v)
             return False
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         for node in nodes:
@@ -119,15 +145,21 @@ class RegistryCore(BaseCore, Generic[T]):
                 if has_cycle(node):
                     return True
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         for node in nodes:
             if node not in visited:
                 if has_cycle(node): return True
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return False
 
     def topological_sort(self, nodes: List[str], edges: List[Tuple[str, str]]) -> List[str]:
         """Rust-accelerated topological sort for agent task ordering."""
+<<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "topological_sort_rust"):  # pylint: disable=no-member
             try:
@@ -141,6 +173,11 @@ class RegistryCore(BaseCore, Generic[T]):
             return rc.topological_sort_rust(nodes, edges)
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "topological_sort_rust"):
+            return rc.topological_sort_rust(nodes, edges)
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Simple Kahn's algorithm fallback
         in_degree = {n: 0 for n in nodes}
         adj = {n: [] for n in nodes}
@@ -149,10 +186,14 @@ class RegistryCore(BaseCore, Generic[T]):
                 adj[u].append(v)
                 in_degree[v] += 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         queue = [n for n in nodes if in_degree[n] == 0]
         sorted_nodes = []
         while queue:
@@ -162,6 +203,7 @@ class RegistryCore(BaseCore, Generic[T]):
                 in_degree[v] -= 1
                 if in_degree[v] == 0:
                     queue.append(v)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         return sorted_nodes if len(sorted_nodes) == len(nodes) else []
@@ -194,6 +236,8 @@ class RegistryCore(BaseCore, Generic[T]):
                 logger.error("[%s] Registry hook 'on_register' failed for %s: %s", self.name, key, e)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         return sorted_nodes if len(sorted_nodes) == len(nodes) else []
 
@@ -210,7 +254,10 @@ class RegistryCore(BaseCore, Generic[T]):
             except Exception as e:
                 logger.error(f"[{self.name}] Registry hook 'on_register' failed for {key}: {e}")
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return True
 
     def unregister(self, key: str) -> Optional[T]:
@@ -221,12 +268,17 @@ class RegistryCore(BaseCore, Generic[T]):
                 try:
                     hook(key, item)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error("[%s] Registry hook 'on_unregister' failed for %s: %s", self.name, key, e)
 =======
                 except Exception as e:
                     logger.error(f"[{self.name}] Registry hook 'on_unregister' failed for {key}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                except Exception as e:
+                    logger.error(f"[{self.name}] Registry hook 'on_unregister' failed for {key}: {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return item
 
     def get(self, key: str) -> Optional[T]:

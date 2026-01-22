@@ -4,6 +4,7 @@ Validator for report data integrity.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Validator for report data integrity.
 (Facade for src.core.base.common.validation_core)
@@ -63,6 +64,19 @@ class ReportValidator(ValidationCore):
     def verify_hash(self, content: str, expected: str) -> bool:
         import hashlib
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.validation_core import ValidationCore
+
+class ReportValidator(ValidationCore):
+    """Facade for ValidationCore specialized for reports."""
+    
+    def validate(self, content: str) -> dict:
+        errors = self.validate_report({"summary": content, "agent_name": "unknown", "timestamp": 0})
+        return {"valid": not errors, "errors": errors}
+
+    def verify_hash(self, content: str, expected: str) -> bool:
+        import hashlib
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         actual = hashlib.sha256(content.encode()).hexdigest()[:16]
         return actual == expected
 

@@ -18,19 +18,26 @@ Core logic for system health monitoring and diagnostics.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import subprocess
 import sys
 import time
 from pathlib import Path
+<<<<<<< HEAD
 <<<<<<< HEAD
 from typing import Any, Dict, List, Optional, Union
 
 =======
 from typing import Any, Dict, List, Optional
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Any, Dict, List, Optional
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .base_core import BaseCore
 from .models import AgentHealthCheck, HealthStatus
 
@@ -40,14 +47,18 @@ except ImportError:
     rc = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class HealthCore(BaseCore):
     """
     Authoritative engine for health checks across the swarm.
     """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self, workspace_root: Optional[Union[str, Path]] = None) -> None:
         super().__init__(repo_root=workspace_root)
@@ -62,6 +73,8 @@ class HealthCore(BaseCore):
             result = subprocess.run(["git", "--version"], capture_output=True, text=True, timeout=5, check=False)
             self._record_diagnostic_event("git_check")
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, workspace_root: Optional[Path] = None) -> None:
         super().__init__()
         self.workspace_root = workspace_root or Path.cwd()
@@ -71,13 +84,17 @@ class HealthCore(BaseCore):
         start_time = time.time()
         try:
             result = subprocess.run(["git", "--version"], capture_output=True, text=True, timeout=5)
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             ms = (time.time() - start_time) * 1000
             if result.returncode == 0:
                 return AgentHealthCheck(
                     agent_name="git",
                     status=HealthStatus.HEALTHY,
                     response_time_ms=ms,
+<<<<<<< HEAD
 <<<<<<< HEAD
                     details={"version": result.stdout.strip()},
                 )
@@ -97,6 +114,8 @@ class HealthCore(BaseCore):
     def check_python(self) -> AgentHealthCheck:
         """Return details about the current Python environment."""
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     details={"version": result.stdout.strip()}
                 )
         except Exception as e:
@@ -104,20 +123,28 @@ class HealthCore(BaseCore):
         return AgentHealthCheck(agent_name="git", status=HealthStatus.UNHEALTHY)
 
     def check_python(self) -> AgentHealthCheck:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return AgentHealthCheck(
             agent_name="python",
             status=HealthStatus.HEALTHY,
             response_time_ms=0,
 <<<<<<< HEAD
+<<<<<<< HEAD
             details={"version": sys.version, "executable": sys.executable},
 =======
             details={"version": sys.version, "executable": sys.executable}
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            details={"version": sys.version, "executable": sys.executable}
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         )
 
     def check_fleet_health(self, agent_heartbeats: Dict[str, float]) -> List[str]:
         """Detect stale agents using high-speed Rust core if available."""
+<<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "detect_failed_agents_rust"):  # pylint: disable=no-member
             # pylint: disable=no-member
@@ -128,10 +155,16 @@ class HealthCore(BaseCore):
              return rc.detect_failed_agents_rust(agent_heartbeats, 30.0)
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "detect_failed_agents_rust"):
+             return rc.detect_failed_agents_rust(agent_heartbeats, 30.0)
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Fallback
         now = time.time()
         return [name for name, last_seen in agent_heartbeats.items() if (now - last_seen) > 30.0]
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def record_request(self, agent_id: str, success: bool) -> None:
         """Record a request for health tracking."""
@@ -183,4 +216,9 @@ class HealthCore(BaseCore):
         self.results["python"] = self.check_python()
         self.results["git"] = self.check_git()
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def run_all(self) -> Dict[str, AgentHealthCheck]:
+        self.results["python"] = self.check_python()
+        self.results["git"] = self.check_git()
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self.results

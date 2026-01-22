@@ -116,6 +116,7 @@ class ContextRecorderInterface(Protocol):  # pylint: disable=too-few-public-meth
 
 @runtime_checkable
 <<<<<<< HEAD
+<<<<<<< HEAD
 class Loadable(Protocol):  # pylint: disable=too-few-public-methods
     """Protocol for objects that can load their state from disk."""
 
@@ -136,6 +137,8 @@ class Component(Protocol):  # pylint: disable=too-few-public-methods
     """Base interface for all PyAgent components with a name and version."""
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class Loadable(Protocol):
     """Protocol for objects that can load their state from disk."""
     def load(self, path: Path | None = None) -> bool:
@@ -152,6 +155,9 @@ class Saveable(Protocol):
 @runtime_checkable
 class Component(Protocol):
     """Base interface for all PyAgent components with a name and version."""
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     name: str
     version: str

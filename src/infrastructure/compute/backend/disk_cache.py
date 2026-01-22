@@ -6,6 +6,7 @@ Disk-based cache for persistent storage.
 from src.core.base.common.cache_core import CacheCore as StandardCacheCore
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Disk-based cache for persistent storage."""
 
 from __future__ import annotations
@@ -25,6 +26,11 @@ class DiskCache(StandardCacheCore):
     """Facade for CacheCore."""
     pass
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class DiskCache(StandardCacheCore):
+    """Facade for CacheCore."""
+    pass
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def __init__(self, cache_dir: Path, ttl_seconds: float | None = None) -> None:
         """Initialize disk cache.

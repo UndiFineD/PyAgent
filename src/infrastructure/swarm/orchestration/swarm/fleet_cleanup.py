@@ -11,21 +11,28 @@ Ensures the swarm doesn't suffer from resource exhaustion.
 import logging
 import time
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from typing import List, Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class FleetDecommissioner:
     """
     Scans the swarm and performs resource cleanup.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, gatekeeper: Any, shard_manager: Any, idle_timeout: float = 3600.0) -> None:
@@ -33,6 +40,10 @@ class FleetDecommissioner:
     
     def __init__(self, gatekeeper: Any, shard_manager: Any, idle_timeout: float = 3600.0):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, gatekeeper: Any, shard_manager: Any, idle_timeout: float = 3600.0):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.gatekeeper = gatekeeper
         self.shard_manager = shard_manager
         self.idle_timeout = idle_timeout
@@ -44,6 +55,7 @@ class FleetDecommissioner:
         now = time.time()
         stats = {"agents_pruned": 0, "contexts_purged": 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         # 1. Prune Low-Performance Agents (failed evolution)
         # We don't delete them from the dict entirely to allow for 'hibernation',
@@ -52,11 +64,17 @@ class FleetDecommissioner:
         # 1. Prune Low-Performance Agents (failed evolution)
         # We don't delete them from the dict entirely to allow for 'hibernation', 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+        # 1. Prune Low-Performance Agents (failed evolution)
+        # We don't delete them from the dict entirely to allow for 'hibernation', 
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # but we remove them from active routing.
         to_prune = []
         for agent_id, profile in self.gatekeeper.experts.items():
             if profile.performance_score < 0.1:
                 to_prune.append(agent_id)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         for agent_id in to_prune:
@@ -69,13 +87,18 @@ class FleetDecommissioner:
             stats["agents_pruned"] += 1
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 
         for agent_id in to_prune:
             logger.warning(f"FleetCleanup: Pruning low-perf agent {agent_id} (Score {self.gatekeeper.experts[agent_id].performance_score})")
             del self.gatekeeper.experts[agent_id]
             stats["agents_pruned"] += 1
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # 2. Purge Idle Contexts
         contexts_to_delete = []
         for context_id, shards in self.shard_manager.context_registry.items():
@@ -85,16 +108,22 @@ class FleetDecommissioner:
                 if now - latest_access > self.idle_timeout:
                     contexts_to_delete.append(context_id)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         for context_id in contexts_to_delete:
             self.shard_manager.delete_context(context_id)
             stats["contexts_purged"] += 1
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     
         for context_id in contexts_to_delete:
             self.shard_manager.delete_context(context_id)
             stats["contexts_purged"] += 1
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return stats

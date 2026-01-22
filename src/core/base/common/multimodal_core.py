@@ -18,6 +18,7 @@ Inspired by Stream-Omni (ICTNLP).
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 from .multimodal_buffer import TemporalModalityBuffer
 from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
 # Re-export modules to maintain backward compatibility
@@ -34,6 +35,8 @@ __all__ = [
     "MultimodalStreamSession",
 ]
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional, Tuple, Union, Callable
@@ -863,4 +866,7 @@ class MultimodalStreamSession:
             deltas = self.vision_enc.encode(frames[i])
             stream.append(deltas) # P-frames
         return stream
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

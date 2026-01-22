@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +37,8 @@ class ShellResult:
     """The result of a shell command execution."""
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified shell execution core for all PyAgent services."""
@@ -60,7 +63,10 @@ except ImportError:
 @dataclass(frozen=True)
 class ShellResult:
     """The result of a shell command execution."""
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     command: List[str]
     returncode: int
     stdout: str
@@ -68,6 +74,7 @@ class ShellResult:
     duration: float
     success: bool = field(init=False)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __post_init__(self) -> None:
         # success is True if returncode is 0
@@ -77,6 +84,11 @@ class ShellResult:
         # success is True if returncode is 0
         object.__setattr__(self, 'success', self.returncode == 0)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __post_init__(self):
+        # success is True if returncode is 0
+        object.__setattr__(self, 'success', self.returncode == 0)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def __str__(self) -> str:
         return f"ShellResult(rc={self.returncode}, success={self.success}, duration={self.duration:.2f}s)"
@@ -89,14 +101,19 @@ class ShellCore:
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, repo_root: Optional[Union[str, Path]] = None) -> None:
 =======
     def __init__(self, repo_root: Optional[Union[str, Path]] = None):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self, repo_root: Optional[Union[str, Path]] = None):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if repo_root:
             self.repo_root = Path(repo_root)
         else:
             try:
+<<<<<<< HEAD
 <<<<<<< HEAD
                 from ..configuration.config_manager import \
                     CoreConfigManager  # pylint: disable=import-outside-toplevel
@@ -139,6 +156,8 @@ class ShellCore:
                 sanitized[k] = v
         return sanitized
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 from src.core.base.configuration.config_manager import CoreConfigManager
                 self.repo_root = CoreConfigManager().root_dir
             except ImportError:
@@ -182,7 +201,10 @@ class ShellCore:
             "AGENT_MODELS_CONFIG", "PYAGENT_ENV"
         }
         return {k: v for k, v in env.items() if k.upper() in allow_list}
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def strip_ansi(self, text: str) -> str:
         """Removes ANSI escape sequences from a string."""
@@ -190,6 +212,7 @@ class ShellCore:
             return ""
         return self._ansi_escape.sub("", text)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     # pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
     async def execute_async(
@@ -201,6 +224,8 @@ class ShellCore:
         capture_output: bool = True,
         sanitize: bool = True,
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     async def execute_async(
         self, 
         cmd: List[str], 
@@ -209,13 +234,17 @@ class ShellCore:
         cwd: Optional[Union[str, Path]] = None,
         capture_output: bool = True,
         sanitize: bool = True
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> ShellResult:
         """Execute a command asynchronously."""
         start_time = time.perf_counter()
         current_env = os.environ.copy()
         if env:
             current_env.update(env)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         if sanitize:
@@ -224,19 +253,25 @@ class ShellCore:
         working_dir = cwd or self.repo_root
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         if sanitize:
             current_env = self.sanitize_env(current_env)
             
         working_dir = cwd or self.repo_root
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             process = await asyncio.create_subprocess_exec(
                 *cmd,
                 stdout=asyncio.subprocess.PIPE if capture_output else asyncio.subprocess.DEVNULL,
                 stderr=asyncio.subprocess.PIPE if capture_output else asyncio.subprocess.DEVNULL,
                 env=current_env,
+<<<<<<< HEAD
 <<<<<<< HEAD
                 cwd=working_dir,
             )
@@ -246,6 +281,8 @@ class ShellCore:
                 stdout = stdout_bytes.decode("utf-8", errors="replace") if stdout_bytes else ""
                 stderr = stderr_bytes.decode("utf-8", errors="replace") if stderr_bytes else ""
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 cwd=working_dir
             )
             
@@ -253,7 +290,10 @@ class ShellCore:
                 stdout_bytes, stderr_bytes = await asyncio.wait_for(process.communicate(), timeout=timeout)
                 stdout = stdout_bytes.decode('utf-8', errors='replace') if stdout_bytes else ""
                 stderr = stderr_bytes.decode('utf-8', errors='replace') if stderr_bytes else ""
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             except asyncio.TimeoutError:
                 process.kill()
                 await process.wait()
@@ -264,6 +304,7 @@ class ShellCore:
                 returncode=process.returncode or 0,
                 stdout=stdout,
                 stderr=stderr,
+<<<<<<< HEAD
 <<<<<<< HEAD
                 duration=time.perf_counter() - start_time,
             )
@@ -313,6 +354,8 @@ class ShellCore:
         working_dir = cwd or self.repo_root
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 duration=time.perf_counter() - start_time
             )
             
@@ -336,7 +379,10 @@ class ShellCore:
             
         working_dir = cwd or self.repo_root
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             result = subprocess.run(
                 cmd,
@@ -348,6 +394,7 @@ class ShellCore:
                 encoding="utf-8",
                 errors="replace",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 check=check,
             )
 
@@ -356,11 +403,17 @@ class ShellCore:
             )
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                check=check
+            )
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return ShellResult(
                 command=cmd,
                 returncode=result.returncode,
                 stdout=result.stdout,
                 stderr=result.stderr,
+<<<<<<< HEAD
 <<<<<<< HEAD
                 duration=time.perf_counter() - start_time,
             )
@@ -370,6 +423,11 @@ class ShellCore:
             )
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                duration=time.perf_counter() - start_time
+            )
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         except subprocess.TimeoutExpired as e:
             return ShellResult(
                 command=cmd,
@@ -377,16 +435,22 @@ class ShellCore:
                 stdout=e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or ""),
                 stderr=e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or ""),
 <<<<<<< HEAD
+<<<<<<< HEAD
                 duration=time.perf_counter() - start_time,
             )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to execute %s: %s", cmd[0], e)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 duration=time.perf_counter() - start_time
             )
         except Exception as e:
             self.logger.error(f"Failed to execute {cmd[0]}: {e}")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
     def redact_command(self, cmd: List[str], sensitive_patterns: List[str]) -> List[str]:

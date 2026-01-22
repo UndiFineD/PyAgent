@@ -9,6 +9,7 @@ Reduces CPU overhead during swarm rebalancing.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import asyncio
 import logging
 import time
@@ -20,6 +21,8 @@ logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 import asyncio
 import time
@@ -28,12 +31,16 @@ from .context_sharder import ContextShardManager, ContextShard
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class P2PMigrationEngine:
     """
     Handles shard transfers between nodes in the swarm grid.
     Optimizes for proximity and load.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, shard_manager: ContextShardManager) -> None:
@@ -42,13 +49,18 @@ class P2PMigrationEngine:
 
     async def migrate_shard(self, context_id: str, shard_index: int, target_rank: int) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     
     def __init__(self, shard_manager: ContextShardManager):
         self.shard_manager = shard_manager
         self.migration_history: List[Dict[str, Any]] = []
 
     async def migrate_shard(self, context_id: str, shard_index: int, target_rank: int):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Migrates a specific shard to a new node.
         Simulates an RDMA transfer by bypassing standard I/O waits.
@@ -56,6 +68,7 @@ class P2PMigrationEngine:
         shards = self.shard_manager.context_registry.get(context_id, [])
         if shard_index >= len(shards):
             raise IndexError("Shard index out of range for migration.")
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         shard = shards[shard_index]
@@ -79,6 +92,8 @@ class P2PMigrationEngine:
         )
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         shard = shards[shard_index]
         source_rank = shard.rank_id
@@ -103,18 +118,27 @@ class P2PMigrationEngine:
             "duration_ms": duration
         })
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         logger.info(f"P2P Migration: {shard.shard_id} successfully moved in {duration:.2f}ms.")
 
     def get_migration_stats(self) -> Dict[str, Any]:
         """Returns cumulative migration metrics."""
 <<<<<<< HEAD
+<<<<<<< HEAD
         history = self.migration_history
         count = max(1, len(history))
         return {"total_migrations": len(history), "avg_duration_ms": sum(m["duration_ms"] for m in history) / count}
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return {
             "total_migrations": len(self.migration_history),
             "avg_duration_ms": sum(m["duration_ms"] for m in self.migration_history) / max(1, len(self.migration_history))
         }
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

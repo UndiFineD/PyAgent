@@ -4,6 +4,7 @@ Manager for git operations.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Manager for git operations.
 (Facade for src.core.base.common.git_core)
@@ -21,6 +22,9 @@ class AgentGitHandler:
 =======
 from src.core.base.common.git_core import GitCore as AgentGitHandler
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.git_core import GitCore as AgentGitHandler
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:
         self.repo_root: Path = repo_root
@@ -50,21 +54,28 @@ from src.core.base.common.git_core import GitCore as AgentGitHandler
             res = self.shell.execute(["git", "status", "--porcelain"])
             status = res.stdout.strip()
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             if not status:
                 logging.info("No changes to commit.")
                 return
 
             res = self.shell.execute(["git", "commit", "-m", message], check=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
             logging.info("Successfully committed changes: %s", message)
             self._record(f"commit: {message}", "success", {"files": files})
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Error during git commit: %s", e)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.info(f"Successfully committed changes: {message}")
             self._record(f"commit: {message}", "success", {"files": files})
         except Exception as e:
@@ -78,10 +89,14 @@ from src.core.base.common.git_core import GitCore as AgentGitHandler
             return False
         try:
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.shell.execute(["git", "checkout", "-b", branch_name], check=True)
 =======
             res = self.shell.execute(["git", "checkout", "-b", branch_name], check=True)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            res = self.shell.execute(["git", "checkout", "-b", branch_name], check=True)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.info(f"Created branch: {branch_name}")
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable

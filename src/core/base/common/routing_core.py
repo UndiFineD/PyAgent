@@ -18,6 +18,7 @@ Core logic for performance-based routing and task distribution.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import os
 from typing import Any, Dict, Optional
@@ -30,6 +31,8 @@ except ImportError:
     rc = None
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 import os
 from typing import Any, List, Dict, Optional
@@ -41,7 +44,10 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.routing")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class RoutingCore(BaseCore):
     """
@@ -49,9 +55,12 @@ class RoutingCore(BaseCore):
     Balances latency, cost, and quality metrics across backend providers.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self) -> None:
         super().__init__()
         self.providers = [
@@ -67,15 +76,20 @@ class RoutingCore(BaseCore):
         task_type: str = "general",
         priority: str = "balanced",
 <<<<<<< HEAD
+<<<<<<< HEAD
         performance_report: Optional[Dict[str, Any]] = None,
 =======
         performance_report: Optional[Dict[str, Any]] = None
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        performance_report: Optional[Dict[str, Any]] = None
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> str:
         """
         Optimal provider selection logic.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
+<<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "select_provider_rust"):  # pylint: disable=no-member
             try:
@@ -87,13 +101,18 @@ class RoutingCore(BaseCore):
                 pass
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc and hasattr(rc, "select_provider_rust"):
             try:
                 return rc.select_provider_rust(task_type, priority, performance_report or {})
             except Exception:
                 pass
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Default logic (can be expanded with weighted averages)
         if performance_report:
             # Simple heuristic: lower latency for "latency" priority
@@ -102,8 +121,12 @@ class RoutingCore(BaseCore):
                 if best_p in self.providers:
                     return best_p
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return os.environ.get("DV_AGENT_BACKEND", "github_models")

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +26,8 @@ from .base_core import BaseCore
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified Error Mapping core."""
@@ -32,17 +35,24 @@ from .base_core import BaseCore
 from src.core.base.common.base_core import BaseCore
 from typing import Dict, Optional
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ErrorMappingCore(BaseCore):
     """
     Standard implementation for mapping system exceptions to PA-xxxx codes.
     Provides standardized error descriptions and troubleshooting links.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     # Primary Error Code Map
     ERROR_CODES: Dict[str, str] = {
         # 10xx: Infrastructure & I/O
@@ -69,10 +79,14 @@ class ErrorMappingCore(BaseCore):
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, repo_root: Optional[str] = None) -> None:
 =======
     def __init__(self, repo_root: Optional[str] = None):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self, repo_root: Optional[str] = None):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__(name="ErrorMapping", repo_root=repo_root)
 
     @classmethod
@@ -92,9 +106,13 @@ class ErrorMappingCore(BaseCore):
             "PA-1001": "FileSystemError: The workspace could not be accessed.",
             "PA-2001": "ModelTimeout: The LLM backend did not respond in time.",
 <<<<<<< HEAD
+<<<<<<< HEAD
             "PA-4002": ("SafetyFilterTriggered: The generated content was blocked by safety guardrails."),
 =======
             "PA-4002": "SafetyFilterTriggered: The generated content was blocked by safety guardrails.",
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            "PA-4002": "SafetyFilterTriggered: The generated content was blocked by safety guardrails.",
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }
         return descriptions.get(error_code, "Unknown System Error")

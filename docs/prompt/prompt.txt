@@ -1,14 +1,20 @@
 # Strategic Improvement Directives (Phase 50)
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Priority: CRITICAL | Status: EVOLUTION PHASE 50 - TALON & AUTOMATION ✅ RESEARCH COMPLETE | 🚧 IMPLEMENTING
 # Rust Functions: 532 | Test Coverage: ~3064+ tests passing
 @focus: ["src/infrastructure/speculative_v2", "src/maintenance", "src/infrastructure/cloud"]
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # This file (docs/prompt/prompt.txt) is the primary source for most prompting logic.
 # Priority: CRITICAL | Status: EVOLUTION PHASE 51 - MULTIMEDIA & ATTENTION 🚧 IMPLEMENTING
 # Rust Functions: 543 | Test Coverage: ~3085+ tests passing
 @focus: ["src.infrastructure.engine.multimodal", "src/maintenance", "rust_core/src"]
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 ## Quick Reference - Completed Phases
 
@@ -24,12 +30,17 @@
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Phase 50: TALON & Self-Improvement Automation ✅ RESEARCH | 🚧 IMPLEMENTING
 @location: ["src/infrastructure/speculative_v2", "src/maintenance"]
 =======
 ## Phase 51: Multimedia & Attention 🚧 IMPLEMENTING
 @location: ["src.infrastructure.engine.multimodal", "rust_core/src"]
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+## Phase 51: Multimedia & Attention 🚧 IMPLEMENTING
+@location: ["src.infrastructure.engine.multimodal", "rust_core/src"]
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 ### Active Work
 1. **120fps Multimodal I/O**:
@@ -49,11 +60,15 @@
 ### Implemented Work
 1. **TALON Implementation**: arXiv:2601.07353 integration.
 <<<<<<< HEAD
+<<<<<<< HEAD
    - Confidence-aware pruning in `src/infrastructure/speculative_v2/eagle/Tree.py`.
    - Adaptive tree depth based on verification stats.
 =======
    - Confidence-aware pruning and adaptive tree depth.
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+   - Confidence-aware pruning and adaptive tree depth.
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 2. **Self-Improvement Automation**:
    - Coordinator research synthesis loop (ArxivCore integration).
    - Distributed Cloud Orchestration with budget pooling.

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +21,14 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for model selection and routing.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 import logging
@@ -36,22 +40,30 @@ from .models import ModelConfig
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 from .base_core import BaseCore
 from .models import ModelConfig
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 @dataclass
 class ModelSelectorCore(BaseCore):
     """
     Authoritative engine for selecting models based on agent type and task size.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     models: Dict[str, ModelConfig] = field(
         default_factory=lambda: {
             "default": ModelConfig(model_id="gpt-3.5-turbo"),
@@ -67,6 +79,7 @@ class ModelSelectorCore(BaseCore):
 
     def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """
         Selects the best model based on agent type and workload size.
         """
@@ -76,5 +89,9 @@ class ModelSelectorCore(BaseCore):
         if agent_type == "coding" and token_estimate > 4000:
             logging.info(f"Routing high-token task ({token_estimate}) to GLM-4.7.")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if agent_type == "coding" and token_estimate > 4000:
+            logging.info(f"Routing high-token task ({token_estimate}) to GLM-4.7.")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return self.models.get("coding", self.models["default"])
         return self.models.get(agent_type, self.models["default"])

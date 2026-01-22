@@ -18,6 +18,7 @@ Streams hybrid (draft + verified) tokens with support for low-latency rollbacks.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import asyncio
 import logging
 from typing import Any, AsyncGenerator, Dict, List, Union
@@ -29,6 +30,8 @@ logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 import asyncio
 import time
@@ -39,12 +42,16 @@ from src.core.base.common.models.communication_models import (
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SpeculativeAsyncPipeline:
     """
     Manages hybrid token generation streaming.
     Utilizes speculative swarm to 'guess' next tokens and correct them asynchronously.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, orchestrator: Any) -> None:
@@ -52,23 +59,34 @@ class SpeculativeAsyncPipeline:
     
     def __init__(self, orchestrator: Any):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, orchestrator: Any):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.orchestrator = orchestrator
         self.stream_history: List[str] = []
 
     async def generate_stream(
 <<<<<<< HEAD
+<<<<<<< HEAD
         self, task: str, draft_agent: str, target_agent: str
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self, 
         task: str, 
         draft_agent: str, 
         target_agent: str
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> AsyncGenerator[Union[AsyncSpeculativeToken, PipelineCorrection], None]:
         """
         Main entry point for speculative async streaming.
         """
         self.stream_history = []
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         # 1. Trigger the speculative orchestrator
@@ -81,6 +99,8 @@ class SpeculativeAsyncPipeline:
         draft_task = asyncio.create_task(self.orchestrator.execute_speculative_task(task, draft_agent, target_agent))
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         # 1. Trigger the speculative orchestrator
         # In a real async engine, we'd start the draft and yield its chunks as they arrive.
@@ -93,12 +113,16 @@ class SpeculativeAsyncPipeline:
             task, draft_agent, target_agent
         ))
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Simulate 'optimistic' yielding of a draft prefix if available immediately
         # (Usually from a fast look-up or small model)
         draft_chunks = ["Sure, ", "here ", "is ", "the ", "answer: "]
         for i, chunk in enumerate(draft_chunks):
             self.stream_history.append(chunk)
+<<<<<<< HEAD
 <<<<<<< HEAD
             yield AsyncSpeculativeToken(token=chunk, is_draft=True, sequence_index=i)
             await asyncio.sleep(0.01)  # Low latency simulation
@@ -107,6 +131,8 @@ class SpeculativeAsyncPipeline:
         outcome = await draft_task
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             yield AsyncSpeculativeToken(
                 token=chunk, 
                 is_draft=True, 
@@ -117,7 +143,10 @@ class SpeculativeAsyncPipeline:
         # 2. Wait for orchestrator verification result
         outcome = await draft_task
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if outcome.accepted:
             # Continue streaming the remainder of the verified content
             # We skip the prefix we already optimistically sent
@@ -127,6 +156,7 @@ class SpeculativeAsyncPipeline:
             for i, chunk in enumerate(remaining.split(" "), start=len(draft_chunks)):
                 token = chunk + " "
                 self.stream_history.append(token)
+<<<<<<< HEAD
 <<<<<<< HEAD
                 yield AsyncSpeculativeToken(token=token, is_draft=False, sequence_index=i)
         else:
@@ -142,6 +172,8 @@ class SpeculativeAsyncPipeline:
             self.stream_history = correction.correct_tokens
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 yield AsyncSpeculativeToken(
                     token=token,
                     is_draft=False,
@@ -162,11 +194,15 @@ class SpeculativeAsyncPipeline:
             # Update history
             self.stream_history = correction.correct_tokens
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def get_latency_report(self) -> Dict[str, Any]:
         """Calculates 'Perceptual Latency' vs 'Standard Latency'."""
         # Simulation
         return {
+<<<<<<< HEAD
 <<<<<<< HEAD
             "perceptual_ttft_ms": 12.0,  # Time to first draft token
             "actual_ttft_ms": 45.0,  # Time to first verified token
@@ -176,4 +212,9 @@ class SpeculativeAsyncPipeline:
             "actual_ttft_ms": 45.0,     # Time to first verified token
             "reduction_factor": 3.75
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            "perceptual_ttft_ms": 12.0, # Time to first draft token
+            "actual_ttft_ms": 45.0,     # Time to first verified token
+            "reduction_factor": 3.75
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +33,8 @@ from .models import LockType
 from .storage_core import StorageCore
 from .utils.file_lock_manager import FileLockManager
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified file system core for atomic I/O and shared access."""
@@ -45,7 +48,10 @@ from typing import Any, Optional, Union
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.utils.file_lock_manager import FileLockManager
 from src.core.base.common.models import LockType
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -53,10 +59,15 @@ except ImportError:
     rc = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import fnmatch
 from typing import Any, Optional, Union, List, Set
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+import fnmatch
+from typing import Any, Optional, Union, List, Set
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class FileSystemCore:
     """
@@ -65,15 +76,20 @@ class FileSystemCore:
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, lock_manager: Optional[FileLockManager] = None) -> None:
 =======
     def __init__(self, lock_manager: Optional[FileLockManager] = None):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self, lock_manager: Optional[FileLockManager] = None):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.logger = logging.getLogger("pyagent.fs")
         self.lock_manager = lock_manager or FileLockManager()
         self.storage = StorageCore()
         self._ignore_patterns: Set[str] = set()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def discover_files(
         self, root: Path, patterns: Optional[List[str]] = None, ignore: Optional[List[str]] = None
@@ -110,6 +126,8 @@ class FileSystemCore:
                 continue
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def discover_files(self, root: Path, patterns: List[str] = ["*"], ignore: Optional[List[str]] = None) -> List[Path]:
         """Discovers files matching patterns, respecting ignore list."""
         # Use Rust-accelerated directory walking if available
@@ -135,7 +153,10 @@ class FileSystemCore:
                     break
             if should_ignore: continue
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             # Check match patterns
             for pat in patterns:
                 if fnmatch.fnmatch(path.name, pat):
@@ -145,14 +166,20 @@ class FileSystemCore:
 
     def atomic_write(
 <<<<<<< HEAD
+<<<<<<< HEAD
         self, path: Union[str, Path], content: str, encoding: str = "utf-8", use_lock: bool = True
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self, 
         path: Union[str, Path], 
         content: str, 
         encoding: str = "utf-8",
         use_lock: bool = True
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> bool:
         """
         Write content to a file atomically by using a temporary file.
@@ -161,23 +188,32 @@ class FileSystemCore:
         p = Path(path)
         lock = None
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             if use_lock:
                 lock = self.lock_manager.acquire_lock(p, LockType.EXCLUSIVE)
                 if not lock:
 <<<<<<< HEAD
+<<<<<<< HEAD
                     self.logger.error("Failed to acquire lock for atomic write: %s", p)
 =======
                     self.logger.error(f"Failed to acquire lock for atomic write: {p}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                    self.logger.error(f"Failed to acquire lock for atomic write: {p}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     return False
 
             # Ensure parent directory exists
             p.parent.mkdir(parents=True, exist_ok=True)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
             # Create temporary file in the same directory to ensure same filesystem (for os.rename)
@@ -188,6 +224,8 @@ class FileSystemCore:
                 tmp_path = Path(tmp_file.name)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
             # Create temporary file in the same directory to ensure same filesystem (for os.rename)
             with tempfile.NamedTemporaryFile(
@@ -200,11 +238,15 @@ class FileSystemCore:
                 tmp_file.write(content)
                 tmp_path = Path(tmp_file.name)
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             # Atomic rename (on POSIX)
             # On Windows, os.replace replaces existing, os.rename might not
             os.replace(tmp_path, p)
             return True
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -214,6 +256,11 @@ class FileSystemCore:
         except Exception as e:
             self.logger.error(f"Atomic write failed for {p}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+        except Exception as e:
+            self.logger.error(f"Atomic write failed for {p}: {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
         finally:
             if lock:
@@ -225,12 +272,17 @@ class FileSystemCore:
             shutil.copy2(src, dst)
             return True
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to copy %s to %s: %s", src, dst, e)
 =======
         except Exception as e:
             self.logger.error(f"Failed to copy {src} to {dst}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e:
+            self.logger.error(f"Failed to copy {src} to {dst}: {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
 
     def move(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
@@ -239,12 +291,17 @@ class FileSystemCore:
             shutil.move(str(src), str(dst))
             return True
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to move %s to %s: %s", src, dst, e)
 =======
         except Exception as e:
             self.logger.error(f"Failed to move {src} to {dst}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e:
+            self.logger.error(f"Failed to move {src} to {dst}: {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
 
     def delete(self, path: Union[str, Path]) -> bool:
@@ -257,12 +314,17 @@ class FileSystemCore:
                 p.unlink(missing_ok=True)
             return True
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to delete %s: %s", p, e)
 =======
         except Exception as e:
             self.logger.error(f"Failed to delete {p}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e:
+            self.logger.error(f"Failed to delete {p}: {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
 
     def ensure_directory(self, path: Union[str, Path]) -> Path:
@@ -271,6 +333,7 @@ class FileSystemCore:
         p.mkdir(parents=True, exist_ok=True)
         return p
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def exists(self, path: Union[str, Path]) -> bool:
         """Checks if a path exists."""
@@ -287,11 +350,17 @@ class FileSystemCore:
         """Calculate SHA256 hash of a file."""
         import hashlib
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def get_file_hash(self, path: Union[str, Path]) -> Optional[str]:
+        """Calculate SHA256 hash of a file."""
+        import hashlib
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         p = Path(path)
         if not p.exists():
             return None
         try:
             sha256_hash = hashlib.sha256()
+<<<<<<< HEAD
 <<<<<<< HEAD
             with open(p, 'rb', encoding='utf-8') as f:
                 for byte_block in iter(lambda: f.read(4096), b""):
@@ -300,11 +369,16 @@ class FileSystemCore:
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to calculate hash for %s: %s", p, e)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             with open(p, "rb") as f:
                 for byte_block in iter(lambda: f.read(4096), b""):
                     sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
         except Exception as e:
             self.logger.error(f"Failed to calculate hash for {p}: {e}")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return None

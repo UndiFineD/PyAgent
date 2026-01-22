@@ -42,12 +42,15 @@ class PersistenceMixin:
         self._metrics_data: dict[str, Any] = {}
         self._fs = FileSystemCore()
 <<<<<<< HEAD
+<<<<<<< HEAD
         # Initializing fields that might be used by derived classes or dynamics
         self.previous_content: str = ""
         self.current_content: str = ""
         self._state_data: dict[str, Any] = {}
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     @property
     def state(self) -> AgentState:
@@ -114,6 +117,7 @@ class PersistenceMixin:
 
         try:
 <<<<<<< HEAD
+<<<<<<< HEAD
             # Phase 267: Transactional Safety
             from src.core.base.state.agent_state_manager import StateTransaction
 
@@ -124,6 +128,8 @@ class PersistenceMixin:
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("File write failed: %s", e)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return self._fs.atomic_write(self.file_path, content_to_write)
         except Exception as e:
             import logging
@@ -140,6 +146,7 @@ class PersistenceMixin:
         dry_run_dir = Path("temp/dry_runs")
         self._fs.ensure_directory(dry_run_dir)
 <<<<<<< HEAD
+<<<<<<< HEAD
         file_path = getattr(self, "file_path")
         safe_name = file_path.name.replace("/", "_").replace("\\", "_")
         target: Path = dry_run_dir / f"{safe_name}.diff"
@@ -147,6 +154,10 @@ class PersistenceMixin:
         safe_name = self.file_path.name.replace("/", "_").replace("\\", "_")
         target = dry_run_dir / f"{safe_name}.diff"
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        safe_name = self.file_path.name.replace("/", "_").replace("\\", "_")
+        target = dry_run_dir / f"{safe_name}.diff"
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self._fs.atomic_write(target, diff)
 
     def save_state(self) -> bool:

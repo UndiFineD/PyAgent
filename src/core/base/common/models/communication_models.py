@@ -260,6 +260,7 @@ class SwarmAuditTrail:
     Tracks routing, fusion, and expert selection reasoning.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     request_id: str
     step: str  # "routing", "execution", "fusion"
@@ -267,6 +268,10 @@ class SwarmAuditTrail:
     request_id: str
     step: str # "routing", "execution", "fusion"
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    request_id: str
+    step: str # "routing", "execution", "fusion"
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     decision_summary: str
     raw_data: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     timestamp: float = field(default_factory=time.time)

@@ -19,6 +19,7 @@ Provides semantic similarity calculation between text snippets using local or re
 
 import logging
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import List
 
 import numpy as np
@@ -26,6 +27,10 @@ import numpy as np
 import numpy as np
 from typing import List, Optional, Any
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+import numpy as np
+from typing import List, Optional, Any
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -35,13 +40,17 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class EmbeddingSimilarityService:
     """
     Handles similarity calculations for speculative verification.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, model_name: str = "all-MiniLM-L6-v2") -> None:
@@ -49,6 +58,10 @@ class EmbeddingSimilarityService:
     
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.model_name = model_name
         self._cache: dict[str, np.ndarray] = {}
 
@@ -59,6 +72,7 @@ class EmbeddingSimilarityService:
         """
         if text in self._cache:
             return self._cache[text]
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         # Simulation: Generate a deterministic pseudo-random embedding based on text
@@ -71,6 +85,8 @@ class EmbeddingSimilarityService:
         embedding /= np.linalg.norm(embedding)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         # Simulation: Generate a pseudo-random embedding based on text hash
         # In real scenario, this would call a model.
@@ -79,7 +95,10 @@ class EmbeddingSimilarityService:
         # Normalize
         embedding /= np.linalg.norm(embedding)
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self._cache[text] = embedding
         return embedding
 
@@ -90,16 +109,22 @@ class EmbeddingSimilarityService:
         emb1 = await self.get_embedding(text1)
         emb2 = await self.get_embedding(text2)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         if rc and hasattr(rc, "cosine_similarity_rust"):
             return rc.cosine_similarity_rust(emb1, emb2)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         if rc and hasattr(rc, "cosine_similarity_rust"):
             return rc.cosine_similarity_rust(emb1, emb2)
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Python fallback
         return float(np.dot(emb1, emb2))
 

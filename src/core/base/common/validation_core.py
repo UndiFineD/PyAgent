@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Standardized validation logic for reports, improvements, and configs.
 """
@@ -25,6 +26,8 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from __future__ import annotations
 import json
 import logging
@@ -33,13 +36,17 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from .base_core import BaseCore
 from src.core.base.common.models import ValidationRule
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 from src.core.base.common.models import ValidationRule
 
@@ -52,12 +59,17 @@ logger = logging.getLogger("pyagent.validation")
 logger = logging.getLogger("pyagent.validation")
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+logger = logging.getLogger("pyagent.validation")
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ValidationCore(BaseCore):
     """
     Standardized validation logic for reports, improvements, and configs.
     Pre-wired for high-speed Rust schema validation and content safety.
     """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self, name: str = "ValidationCore", repo_root: Optional[Union[str, Path]] = None, **kwargs) -> None:
         super().__init__(name=name, repo_root=repo_root, **kwargs)
@@ -131,6 +143,8 @@ class ValidationCore(BaseCore):
                 except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
                     results.append({"rule": rule.name, "passed": False, "severity": "error", "message": str(err)})
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, name: str = "ValidationCore", root_path: Optional[str] = None) -> None:
         super().__init__(name=name, root_path=root_path)
         self._rules: Dict[str, ValidationRule] = {}
@@ -160,7 +174,10 @@ class ValidationCore(BaseCore):
                     })
                 except Exception as e:
                     results.append({"rule": rule.name, "passed": False, "severity": "error", "message": str(e)})
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return results
 
     def validate_json_schema(self, data: Any, schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
@@ -170,6 +187,7 @@ class ValidationCore(BaseCore):
                 data_str = json.dumps(data) if not isinstance(data, str) else data
                 schema_str = json.dumps(schema)
                 # Rust returns (is_valid, error_list)
+<<<<<<< HEAD
 <<<<<<< HEAD
                 return rc.json_schema_validate_rust(data_str, schema_str)  # pylint: disable=no-member
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -181,6 +199,8 @@ class ValidationCore(BaseCore):
             return False, ["Data must be a dictionary"]
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 return rc.json_schema_validate_rust(data_str, schema_str)
             except Exception:
                 pass
@@ -189,14 +209,21 @@ class ValidationCore(BaseCore):
         if not isinstance(data, dict):
             return False, ["Data must be a dictionary"]
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         required = schema.get("required", [])
         for key in required:
             if key not in data:
                 errors.append(f"Missing required key: {key}")
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return len(errors) == 0, errors

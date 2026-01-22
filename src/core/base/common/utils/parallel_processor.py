@@ -2,6 +2,7 @@
 Manager for parallel execution.
 (Facade for src.core.base.common.execution_core)
 """
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 # you may not use this file except in compliance with the License.
@@ -40,6 +41,10 @@ class ParallelProcessor:
 =======
 from src.core.base.common.execution_core import ExecutionCore as ParallelProcessor
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+
+from src.core.base.common.execution_core import ExecutionCore as ParallelProcessor
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def __init__(self, max_workers: int = 4) -> None:
         """

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +18,17 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Unified Scaling Core for PyAgent.
 Handles resource calculation, fleet expansion logic, and anti-flapping protocols.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 import math
@@ -37,6 +43,8 @@ except ImportError:
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import math
 import time
 from typing import Any, Dict, List, Optional
@@ -47,12 +55,16 @@ try:
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ScalingCore(BaseCore):
     """
     Core implementation for computing scaling decisions.
     Optimized for high-frequency resource monitoring.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self) -> None:
@@ -60,11 +72,16 @@ class ScalingCore(BaseCore):
     
     def __init__(self):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__()
         self.load_history: List[float] = []
 
     def compute_moving_average(self, current_load: float, window_size: int = 10) -> float:
         """Compute the SMA for load balancing."""
+<<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "compute_ma_rust"):  # pylint: disable=no-member
             return rc.compute_ma_rust(self.load_history, current_load, window_size)  # pylint: disable=no-member
@@ -74,6 +91,11 @@ class ScalingCore(BaseCore):
             return rc.compute_ma_rust(self.load_history, current_load, window_size)
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "compute_ma_rust"):
+            return rc.compute_ma_rust(self.load_history, current_load, window_size)
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.load_history.append(current_load)
         if len(self.load_history) > window_size:
             self.load_history.pop(0)
@@ -82,9 +104,13 @@ class ScalingCore(BaseCore):
     def calculate_required_replicas(self, avg_load: float, target_load: float, current_replicas: int) -> int:
         """Calculate the target replica count."""
 <<<<<<< HEAD
+<<<<<<< HEAD
         if avg_load <= 0:
             return current_replicas
 =======
         if avg_load <= 0: return current_replicas
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if avg_load <= 0: return current_replicas
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return math.ceil(current_replicas * (avg_load / target_load))

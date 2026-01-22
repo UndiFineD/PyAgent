@@ -21,6 +21,10 @@ Provides identity and metadata mixin for PyAgent agents.
 from typing import Any
 from src.core.base.common.models import AgentPriority
 from src.core.base.logic.core.identity_core import IdentityCore
+<<<<<<< HEAD
+=======
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
@@ -39,14 +43,20 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
 
     def __init__(self, **kwargs: Any) -> None:
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.identity = IdentityCore(agent_type=self.__class__.__name__.lower().replace("agent", "") or "base")
         self.agent_name: str = self.identity.agent_type
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.identity = IdentityCore(
             agent_type=self.__class__.__name__.lower().replace("agent", "") or "base"
         )
         self.agent_name = self.identity.agent_type
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
         self._suspended: bool = False

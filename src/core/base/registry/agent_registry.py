@@ -19,6 +19,7 @@ AgentRegistry: Central registry for all active agent instances.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import logging
 from typing import Any
@@ -26,6 +27,8 @@ from typing import Any
 from src.core.base.common.registry_core import RegistryCore
 from src.core.base.lifecycle.version import VERSION
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 from typing import TYPE_CHECKING
 from src.core.base.common.registry_core import RegistryCore
@@ -38,10 +41,13 @@ if TYPE_CHECKING:
 __version__ = VERSION
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 __version__: str = VERSION
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class AgentRegistry(RegistryCore["BaseAgent"]):
     """
@@ -123,11 +129,15 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
 
     def list_agents(self) -> list[str]:
         """List names of all registered agents."""
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self.list_keys()
 
     @property
     def active_count(self) -> int:
+<<<<<<< HEAD
 <<<<<<< HEAD
         """
         Return the number of active agents.
@@ -136,4 +146,6 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
         """
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return len(self._items)

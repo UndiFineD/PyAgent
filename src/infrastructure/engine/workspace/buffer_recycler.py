@@ -18,6 +18,7 @@ Reduces allocation overhead by reusing fixed-size memory blocks (size-classes).
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import collections
 import logging
 from typing import Dict, List, Optional
@@ -26,6 +27,11 @@ import logging
 from typing import Dict, List, Any, Optional
 import collections
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+import logging
+from typing import Dict, List, Any, Optional
+import collections
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -35,14 +41,18 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class BufferRecycler:
     """
     Manages pools of reusable buffers categorized by size-classes.
     Essential for high-frequency 120fps streaming operations.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, size_classes: Optional[List[int]] = None) -> None:
@@ -50,15 +60,23 @@ class BufferRecycler:
     
     def __init__(self, size_classes: Optional[List[int]] = None):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, size_classes: Optional[List[int]] = None):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Default size classes: 4KB, 64KB, 1MB, 16MB
         self.size_classes = size_classes or [4096, 65536, 1048576, 16777216]
         self._pools: Dict[int, collections.deque] = {sc: collections.deque() for sc in self.size_classes}
         self._active_refs: Dict[id, int] = {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         logger.info(f"BufferRecycler initialized with {len(self.size_classes)} size classes")
 
     def acquire(self, required_size: int) -> bytearray:
@@ -69,6 +87,7 @@ class BufferRecycler:
         # Find smallest size class that fits
         target_size = next((sc for sc in self.size_classes if sc >= required_size), required_size)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         if rc and hasattr(rc, "buffer_recycle_acquire_rust"):
             try:
@@ -78,39 +97,54 @@ class BufferRecycler:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         if rc and hasattr(rc, "buffer_recycle_acquire_rust"):
             try:
                 buf = rc.buffer_recycle_acquire_rust(target_size)
                 if buf: return buf
             except Exception:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         pool = self._pools.get(target_size)
         if pool and len(pool) > 0:
             return pool.popleft()
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         return bytearray(target_size)
 
     def release(self, buffer: bytearray) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         return bytearray(target_size)
 
     def release(self, buffer: bytearray):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Releases a buffer back into the appropriate pool.
         """
         size = len(buffer)
         if size in self._pools:
 <<<<<<< HEAD
+<<<<<<< HEAD
             if len(self._pools[size]) < 100:  # Cap pool size
 =======
             if len(self._pools[size]) < 100: # Cap pool size
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            if len(self._pools[size]) < 100: # Cap pool size
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 self._pools[size].append(buffer)
             else:
                 del buffer

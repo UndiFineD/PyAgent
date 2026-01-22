@@ -28,10 +28,14 @@ import numpy as np
 
 @dataclass(frozen=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
 class MambaConfig:  # pylint: disable=too-many-instance-attributes
 =======
 class MambaConfig: # pylint: disable=too-many-instance-attributes
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class MambaConfig: # pylint: disable=too-many-instance-attributes
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     """
     Configuration for Mamba mixer.
     """

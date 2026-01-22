@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +18,16 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """BaseCore providing foundation for all PyAgent services."""
 
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 from ..lifecycle.version import VERSION
@@ -33,6 +39,8 @@ logger = logging.getLogger("pyagent.core")
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from src.core.base.common.base_interfaces import Loadable, Saveable, Component
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.workspace_core import WorkspaceCore
@@ -40,18 +48,25 @@ from src.core.base.lifecycle.version import VERSION
 
 logger = logging.getLogger("pyagent.core")
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class BaseCore(Loadable, Saveable, Component):
     """
     Standardized base for all Core/Service classes.
     Handles standard I/O, naming, and versioning.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     def __init__(self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None) -> None:
 =======
     def __init__(self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.name = name or self.__class__.__name__
         self.version = VERSION
         self.workspace = WorkspaceCore(root_dir=repo_root)
@@ -73,10 +88,14 @@ class BaseCore(Loadable, Saveable, Component):
         else:
             data = self._storage.load_json(load_path)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if data:
             self._state.update(data)
             return True
@@ -92,12 +111,17 @@ class BaseCore(Loadable, Saveable, Component):
                 self._storage.save_json(save_path, self._state)
             return True
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)
 =======
         except Exception as e:
             logger.error(f"[{self.name}] Failed to save state to {save_path}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e:
+            logger.error(f"[{self.name}] Failed to save state to {save_path}: {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
 
     def __repr__(self) -> str:

@@ -5,6 +5,7 @@ Manager for batch processing.
 from src.core.base.common.batch_core import BatchRequest, BatchCore as RequestBatcher
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Manager for batch processing.
 (Facade for src.core.base.common.batch_core)
@@ -43,3 +44,5 @@ class RequestBatcher:
         return len(self._core.queue)
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

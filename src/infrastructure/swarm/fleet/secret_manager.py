@@ -1,7 +1,19 @@
+<<<<<<< HEAD
+"""
+Secret logic handler.
+(Facade for src.core.base.common.secret_core)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Secret logic handler.
 (Facade for src.core.base.common.secret_core)
 """
+
+from src.core.base.common.secret_core import SecretCore as StandardSecretCore
+
+class SecretManager(StandardSecretCore):
+    """Facade for SecretCore."""
+    pass
 
 from src.core.base.common.secret_core import SecretCore as StandardSecretCore
 

@@ -23,6 +23,7 @@ Handles persistence of agent memory, history, and metadata.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import collections
 import json
 import logging
@@ -33,6 +34,11 @@ from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 import logging
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from __future__ import annotations
+from src.core.base.lifecycle.version import VERSION
+import logging
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import time
 from pathlib import Path
 from typing import Any
@@ -72,8 +78,11 @@ class EmergencyEventLog:
         try:
             self._fs.atomic_write(self.log_path, "\n".join(self.buffer))
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         except Exception as e:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
@@ -315,7 +324,10 @@ class StateTransaction:
                 backup_path: Path = self.temp_dir / f"{file.name}_{self.id}.bak"
 =======
                 backup_path = self.temp_dir / f"{file.name}_{self.id}.bak"
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 self._fs.safe_copy(file, backup_path)
                 self.backups[file] = backup_path
         logging.info(f"Transaction {self.id} started. {len(self.backups)} files backed up.")

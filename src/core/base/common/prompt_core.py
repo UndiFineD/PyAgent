@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +21,14 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for prompt template management and versioning.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 from datetime import datetime
@@ -35,6 +39,8 @@ from .models import PromptTemplate
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 import random
 from datetime import datetime
@@ -42,15 +48,21 @@ from typing import Any, Dict, List, Optional
 from .base_core import BaseCore
 from .models import PromptTemplate
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class PromptCore(BaseCore):
     """
     Authoritative engine for prompt templates and A/B testing.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self) -> None:
         super().__init__()
         self.templates: Dict[str, PromptTemplate] = {}
@@ -58,6 +70,7 @@ class PromptCore(BaseCore):
         self.active_version: Optional[str] = None
 
     def register_template(self, template: PromptTemplate) -> None:
+<<<<<<< HEAD
 <<<<<<< HEAD
         """
         Registers a new prompt template.
@@ -79,10 +92,16 @@ class PromptCore(BaseCore):
 
     def render_template(self, name: str, **kwargs: Any) -> str:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        self.templates[template.name] = template
+
+    def render_template(self, name: str, **kwargs: Any) -> str:
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if name not in self.templates:
             raise KeyError(f"Template '{name}' not found")
         return self.templates[name].render(**kwargs)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 class PromptVersion:
@@ -93,6 +112,9 @@ class PromptVersion:
 =======
 class PromptVersion:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class PromptVersion:
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(
         self,
         version_id: str,
@@ -106,6 +128,7 @@ class PromptVersion:
         self.created_at = datetime.now()
         self.weight = weight
         self.metrics: Dict[str, float] = {}
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def update_metrics(self, new_metrics: Dict[str, float]) -> None:
@@ -121,3 +144,5 @@ class PromptVersion:
         }
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

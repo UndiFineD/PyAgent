@@ -13,17 +13,21 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Standardized Base for all stateful Managers in the swarm.
 Inherits from BaseCore for lifecycle and I/O.
 """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 import logging
 from typing import Any, Dict, Optional
@@ -32,17 +36,23 @@ from .base_core import BaseCore
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from __future__ import annotations
 import logging
 from typing import Any, Dict
 from .base_core import BaseCore
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class BaseManager(BaseCore):
     """
     Standard implementation for stateful Managers.
     Provides a dictionary-based state cache and standard operations.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, name: Optional[str] = None) -> None:
@@ -50,6 +60,10 @@ class BaseManager(BaseCore):
     
     def __init__(self, name: str | None = None) -> None:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, name: str | None = None) -> None:
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__()
         self._name = name or self.__class__.__name__
         self._state: Dict[str, Any] = {}
@@ -59,10 +73,14 @@ class BaseManager(BaseCore):
         """Set a state value in the manager's cache."""
         self._state[key] = value
 <<<<<<< HEAD
+<<<<<<< HEAD
         self._logger.debug("State set: %s = %s", key, value)
 =======
         self._logger.debug(f"State set: {key} = {value}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        self._logger.debug(f"State set: {key} = {value}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def get_state(self, key: str, default: Any = None) -> Any:
         """Retrieve a state value from the manager's cache."""

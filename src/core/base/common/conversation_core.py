@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from __future__ import annotations
 from src.core.base.version import VERSION
@@ -30,6 +31,8 @@ class ConversationHistory:
 
     def add(self, role: MessageRole, content: str) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for conversation history and message management.
 """
@@ -49,17 +52,24 @@ class ConversationCore(BaseCore):
         self.max_messages = max_messages
 
     def add_message(self, role: MessageRole, content: str) -> None:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
             self.messages = self.messages[-self.max_messages:]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def get_context(self) -> list[ConversationMessage]:
 =======
     def get_history(self) -> List[ConversationMessage]:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def get_history(self) -> List[ConversationMessage]:
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self.messages.copy()
 
     def clear(self) -> None:

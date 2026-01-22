@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Reward predictor.py module.
 """
@@ -24,12 +25,17 @@ logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 from typing import List, Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ExpertRewardPredictor:
     """
     Calculates expected rewards and routing offsets for swarm experts (Phase 83).
@@ -49,20 +55,27 @@ class ExpertRewardPredictor:
         biases = {}
         top_experts = {item[0]: 1.0 for item in self.wisdom.get("top_experts", [])}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         # Expert synergies can also inform bias: if an expert has high average synergy, they are flexible
         synergies = self.wisdom.get("expert_synergies", {})
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         # Expert synergies can also inform bias: if an expert has high average synergy, they are flexible
         synergies = self.wisdom.get("expert_synergies", {})
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         for ex_id, peers in synergies.items():
             avg_synergy = sum(peers.values()) / max(1, len(peers))
             # 10% bias toward experts with high synergy
             biases[ex_id] = 0.1 * avg_synergy
+<<<<<<< HEAD
 <<<<<<< HEAD
 
             # Additional 5% boost for top-tier experts
@@ -70,12 +83,17 @@ class ExpertRewardPredictor:
                 biases[ex_id] += 0.05
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
             # Additional 5% boost for top-tier experts
             if ex_id in top_experts:
                 biases[ex_id] += 0.05
                 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return biases
 
     def adjust_routing(self, agent_id: str, base_similarity: float, domain: str = "general") -> float:
@@ -84,6 +102,7 @@ class ExpertRewardPredictor:
         """
         bias = self.expert_biases.get(agent_id, 0.0)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         # Check domain-specific baselines
         domain_baseline = self.wisdom.get("domain_baselines", {}).get(domain, 0.5)
@@ -91,13 +110,18 @@ class ExpertRewardPredictor:
         multiplier = 1.0 + (domain_baseline * 0.2)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         # Check domain-specific baselines
         domain_baseline = self.wisdom.get("domain_baselines", {}).get(domain, 0.5)
         # If the domain itself is high-performing, we trust experts more (scaling)
         multiplier = 1.0 + (domain_baseline * 0.2) 
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         adjusted_score = (base_similarity + bias) * multiplier
         return max(0.0, adjusted_score)
 

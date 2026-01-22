@@ -23,7 +23,10 @@ from __future__ import annotations
 =======
 from src.core.base.lifecycle.version import VERSION
 from .agent_bar import AgentBar
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import json
 import logging
 from pathlib import Path
@@ -45,7 +48,18 @@ class FleetWebUI:
         self.agent_bar = AgentBar()
         self._register_default_components()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+
+    def _register_default_components(self):
+        """Registers system default components."""
+        self.register_generative_component(
+            "AgentBar",
+            "Floating real-time metrics and multimodal control bar.",
+            {"status": "string", "metrics": "object"}
+        )
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def _register_default_components(self):
         """Registers system default components."""

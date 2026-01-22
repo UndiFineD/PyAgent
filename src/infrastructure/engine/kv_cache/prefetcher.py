@@ -19,6 +19,7 @@ Warms up upcoming KV shards before they are requested by experts.
 
 import logging
 <<<<<<< HEAD
+<<<<<<< HEAD
 from collections import deque
 from typing import Deque, Dict
 
@@ -31,6 +32,8 @@ logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from typing import List, Dict, Deque
 from collections import deque
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
@@ -38,18 +41,24 @@ from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompress
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ContextPrefetcher:
     """
     Analyzes token-access patterns to predict future context requirements.
     Works in tandem with AdaptiveSwarmCompressor to 'warm up' cold shards.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     def __init__(
         self, shard_manager: ContextShardManager, compressor: AdaptiveSwarmCompressor, lookahead_shards: int = 2
     ) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     
     def __init__(
         self, 
@@ -57,7 +66,10 @@ class ContextPrefetcher:
         compressor: AdaptiveSwarmCompressor,
         lookahead_shards: int = 2
     ):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.shard_manager = shard_manager
         self.compressor = compressor
         self.lookahead_shards = lookahead_shards
@@ -66,26 +78,36 @@ class ContextPrefetcher:
         self.history_size = 10
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def record_access(self, context_id: str, token_index: int) -> None:
 =======
     def record_access(self, context_id: str, token_index: int):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def record_access(self, context_id: str, token_index: int):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Records a context access and triggers predictive prefetching.
         """
         if context_id not in self.access_history:
             self.access_history[context_id] = deque(maxlen=self.history_size)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         history = self.access_history[context_id]
         history.append(token_index)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         history = self.access_history[context_id]
         history.append(token_index)
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Determine direction of access (Sequential vs Jump)
         if len(history) >= 2:
             delta = history[-1] - history[-2]
@@ -97,25 +119,35 @@ class ContextPrefetcher:
                 self._prefetch_sequential(context_id, token_index, direction=-1)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def _prefetch_sequential(self, context_id: str, current_token: int, direction: int = 1) -> None:
 =======
     def _prefetch_sequential(self, context_id: str, current_token: int, direction: int = 1):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def _prefetch_sequential(self, context_id: str, current_token: int, direction: int = 1):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Predicts and warms up the next few shards in the sequence.
         """
         block_size = self.shard_manager.block_size
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         for i in range(1, self.lookahead_shards + 1):
             next_token = current_token + (i * block_size * direction)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         for i in range(1, self.lookahead_shards + 1):
             next_token = current_token + (i * block_size * direction)
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             # Check if this token is within known shards
             rank_id = self.shard_manager.get_rank_for_token(context_id, next_token)
             if rank_id is not None:

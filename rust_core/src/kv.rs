@@ -51,10 +51,14 @@ pub fn block_table_cp_mask_rust(blocks: Vec<usize>, rank: usize, world_size: usi
 
 #[pyfunction]
 <<<<<<< HEAD
+<<<<<<< HEAD
 pub fn kv_cache_sync_rust(_rank: usize, _world_size: usize) -> PyResult<()> {
 =======
 pub fn kv_cache_sync_rust(rank: usize, world_size: usize) -> PyResult<()> {
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+pub fn kv_cache_sync_rust(rank: usize, world_size: usize) -> PyResult<()> {
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     // Phase 53: Multi-GPU KV-cache metadata synchronization
     Ok(())
 }

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +21,14 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for file priority and task ordering.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 import fnmatch
@@ -36,13 +40,18 @@ from .models import FilePriority, FilePriorityConfig
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import fnmatch
 from pathlib import Path
 from typing import List, Optional
 from .base_core import BaseCore
 from .models import FilePriority, FilePriorityConfig
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class PriorityCore(BaseCore):
     """
     Authoritative engine for determining file priorities.
@@ -62,20 +71,27 @@ class PriorityCore(BaseCore):
 
     def get_priority(self, path: Path) -> FilePriority:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """
         Determines the priority level for a given file path.
         """
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         path_str = str(path)
         for pattern, priority in self.config.path_patterns.items():
             if fnmatch.fnmatch(path_str, pattern):
                 return priority
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         ext = path.suffix.lower()
         if ext in self.config.extension_priorities:
             return self.config.extension_priorities[ext]
@@ -86,9 +102,12 @@ class PriorityCore(BaseCore):
 
     def sort_by_priority(self, paths: List[Path]) -> List[Path]:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """
         Sorts a list of file paths by their priority level in descending order.
         """
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)

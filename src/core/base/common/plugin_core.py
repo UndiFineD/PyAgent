@@ -18,14 +18,18 @@ Core logic for plugin discovery, loading, and registration.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import importlib
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+<<<<<<< HEAD
 <<<<<<< HEAD
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
@@ -53,6 +57,8 @@ class PluginMetadata:
     """Strictly typed metadata for a plugin."""
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from .base_core import BaseCore
 
@@ -62,7 +68,10 @@ if TYPE_CHECKING:
 @dataclass
 class PluginMetadata:
     """Strictly typed metadata for a plugin."""
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     module_path: str
     class_name: str
     needs_fleet: bool = True
@@ -75,6 +84,7 @@ class PluginMetadata:
 
     def get(self, key: str, default: Any = None) -> Any:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Retrieves an attribute value."""
         return getattr(self, key, default)
 
@@ -84,6 +94,10 @@ class PluginMetadata:
         return getattr(self, key, default)
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        return getattr(self, key, default)
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class PluginCore(BaseCore):
     """
     Authoritative engine for discovering and managing plugins.
@@ -96,25 +110,34 @@ class PluginCore(BaseCore):
         self.registry_path = self.plugins_dir / "manifest.json"
         self.loaded_meta: Dict[str, PluginMetadata] = {}
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.active_plugins: Dict[str, Any] = {}  # Any to avoid circular dependency on logic
 =======
         self.active_plugins: Dict[str, Any] = {} # Any to avoid circular dependency on logic
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        self.active_plugins: Dict[str, Any] = {} # Any to avoid circular dependency on logic
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.logger = logging.getLogger("pyagent.plugin_core")
 
         if not self.plugins_dir.exists():
             try:
                 self.plugins_dir.mkdir(parents=True, exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
             except OSError:
 =======
             except Exception:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            except Exception:
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
     def discover(self) -> List[str]:
         """Scans manifest and directory for compatible plugins."""
         discovered = []
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         # 1. Load from central manifest if it exists
@@ -195,6 +218,8 @@ class PluginCore(BaseCore):
         except (TypeError, ValueError, KeyError) as e:
             self.logger.warning("Skipping malformed plugin meta '%s': %s", key, e)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if self.registry_path.exists():
             try:
                 with open(self.registry_path) as f:
@@ -217,11 +242,15 @@ class PluginCore(BaseCore):
             except Exception as e:
                 self.logger.error(f"Failed to load plugin manifest: {e}")
         return discovered
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def validate_version(self, required_version: str, current_version: str) -> bool:
         """Centralized semantic version gatekeeper."""
         # Simple version check if VersionGate is not available
+<<<<<<< HEAD
 <<<<<<< HEAD
         if VersionGate:
             try:
@@ -230,6 +259,8 @@ class PluginCore(BaseCore):
                 pass
         return True  # Default to true if validator is missing
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             from src.infrastructure.swarm.fleet.version_gate import VersionGate
             if VersionGate:
@@ -237,7 +268,10 @@ class PluginCore(BaseCore):
         except ImportError:
             pass
         return True # Default to true if validator is missing
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def load_plugin(self, plugin_name: str) -> Optional[Any]:
         """Loads and initializes a plugin instance."""
@@ -247,9 +281,13 @@ class PluginCore(BaseCore):
         meta = self.loaded_meta[plugin_name]
         try:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             import importlib
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            import importlib
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             if meta.restricted_mode:
                 return self._load_sandboxed_plugin(plugin_name, meta)
 
@@ -257,6 +295,7 @@ class PluginCore(BaseCore):
             plugin_class = getattr(module, meta.class_name)
 
             instance = plugin_class()
+<<<<<<< HEAD
 <<<<<<< HEAD
             if hasattr(instance, "setup"):
                 instance.setup()
@@ -267,6 +306,8 @@ class PluginCore(BaseCore):
                 if hasattr(health, "status") and health.status != HealthStatus.HEALTHY:
                     self.logger.error("Plugin '%s' failed health check", plugin_name)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             if hasattr(instance, 'setup'):
                 instance.setup()
 
@@ -275,11 +316,15 @@ class PluginCore(BaseCore):
                 health = instance.health_check()
                 if hasattr(health, 'status') and health.status != "healthy":
                     self.logger.error(f"Plugin '{plugin_name}' failed health check")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     return None
 
             self.active_plugins[plugin_name] = instance
             return instance
+<<<<<<< HEAD
 <<<<<<< HEAD
         except (ImportError, AttributeError, RuntimeError) as e:
             self.logger.error("Failed to load plugin '%s': %s", plugin_name, e)
@@ -287,11 +332,16 @@ class PluginCore(BaseCore):
         except Exception as e:
             self.logger.error(f"Failed to load plugin '{plugin_name}': {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e:
+            self.logger.error(f"Failed to load plugin '{plugin_name}': {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return None
 
     def _load_sandboxed_plugin(self, name: str, meta: PluginMetadata) -> Optional[Any]:
         """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""
         try:
+<<<<<<< HEAD
 <<<<<<< HEAD
             if docker is None:
                 raise ImportError("Docker SDK not installed")
@@ -302,6 +352,8 @@ class PluginCore(BaseCore):
         except (ImportError, RuntimeError) as e:
             self.logger.warning("Plugin '%s': Docker sandbox unavailable (%s).", name, e)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             import docker
             client = docker.from_env()
             client.ping()
@@ -309,57 +361,80 @@ class PluginCore(BaseCore):
             return self._setup_permission_proxy(name, meta)
         except Exception as e:
             self.logger.warning(f"Plugin '{name}': Docker sandbox unavailable ({e}).")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return self._setup_permission_proxy(name, meta)
 
     def _setup_permission_proxy(self, name: str, meta: PluginMetadata) -> Any:
         """Enforces permissions via a runtime wrapper."""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         import importlib
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        import importlib
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         module = importlib.import_module(meta.module_path)
         plugin_class = getattr(module, meta.class_name)
         instance = plugin_class()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if hasattr(instance, "run"):
 =======
         if hasattr(instance, 'run'):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if hasattr(instance, 'run'):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             original_run = instance.run
             allowed_permissions = meta.permissions or []
 
             def restricted_run(file_path: Path, context: Dict[str, Any]) -> bool:
                 if "read:src" not in allowed_permissions and "src" in str(file_path):
 <<<<<<< HEAD
+<<<<<<< HEAD
                     self.logger.error("Permission Denied: Plugin '%s' attempted to read 'src' path.", name)
 =======
                     self.logger.error(f"Permission Denied: Plugin '{name}' attempted to read 'src' path.")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                    self.logger.error(f"Permission Denied: Plugin '{name}' attempted to read 'src' path.")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     return False
                 return original_run(file_path, context)
 
             instance.run = restricted_run
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if hasattr(instance, "setup"):
 =======
         if hasattr(instance, 'setup'):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if hasattr(instance, 'setup'):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             instance.setup()
         self.active_plugins[name] = instance
         return instance
 
     def activate_all(self) -> None:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Activates all discovered plugins."""
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         for name in self.loaded_meta:
             self.load_plugin(name)
 
     def deactivate(self, name: str) -> None:
+<<<<<<< HEAD
 <<<<<<< HEAD
         """Deactivates a specific plugin by name."""
         if name in self.active_plugins:
@@ -370,6 +445,11 @@ class PluginCore(BaseCore):
             plugin = self.active_plugins[name]
             if hasattr(plugin, 'shutdown'):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if name in self.active_plugins:
+            plugin = self.active_plugins[name]
+            if hasattr(plugin, 'shutdown'):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 plugin.shutdown()
             del self.active_plugins[name]
 
@@ -377,10 +457,14 @@ class PluginCore(BaseCore):
         """Manually registers a plugin instance."""
         self.active_plugins[name] = plugin
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.logger.info("Plugin registered: %s", name)
 =======
         self.logger.info(f"Plugin registered: {name}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        self.logger.info(f"Plugin registered: {name}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def get_plugin(self, name: str) -> Optional[Any]:
         """Retrieves a registered plugin by name."""
@@ -390,6 +474,7 @@ class PluginCore(BaseCore):
         """Gracefully shuts down all active plugins."""
         for name, plugin in self.active_plugins.items():
 <<<<<<< HEAD
+<<<<<<< HEAD
             if hasattr(plugin, "shutdown"):
                 try:
                     plugin.shutdown()
@@ -397,11 +482,16 @@ class PluginCore(BaseCore):
                 except (RuntimeError, AttributeError) as e:
                     self.logger.error("Error during plugin shutdown (%s): %s", name, e)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             if hasattr(plugin, 'shutdown'):
                 try:
                     plugin.shutdown()
                     self.logger.info(f"Plugin shutdown: {name}")
                 except Exception as e:
                     self.logger.error(f"Error during plugin shutdown ({name}): {e}")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.active_plugins.clear()

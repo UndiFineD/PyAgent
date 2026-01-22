@@ -36,12 +36,18 @@ class KnowledgeEngine:
         self.agent_id = agent_id
         self.base_path = base_path / agent_id
 <<<<<<< HEAD
+<<<<<<< HEAD
         
 =======
         self._memory_core = MemoryCore()
 
         # Aligned with MemoryCore partitioned base
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        self._memory_core = MemoryCore()
+
+        # Aligned with MemoryCore partitioned base
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.btree = BTreeKnowledgeStore(agent_id, self.base_path / "structured")
         self.vector = VectorKnowledgeStore(agent_id, self.base_path / "semantic")
         self.graph = GraphKnowledgeStore(agent_id, self.base_path / "relational")
@@ -97,7 +103,10 @@ class KnowledgeEngine:
         self.pruning.log_access(key)  # Mark as vital on store
 
         # Delegate to specialized stores which now use MemoryCore backend
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if mode == "vector":
             return self.vector.store(key, content, kwargs.get("metadata"))
         elif mode == "btree":
@@ -113,7 +122,10 @@ class KnowledgeEngine:
         
         # General store via MemoryCore if mode is generic
         return self._memory_core.store_knowledge(self.agent_id, key, content, mode)
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def query(self, query: Any, mode: str = "vector", limit: int = 5) -> list[Any]:
         """Query knowledge using specialized or generic mechanisms."""
@@ -126,8 +138,11 @@ class KnowledgeEngine:
         elif mode == "graph":
             return self.graph.retrieve(query, limit)
 <<<<<<< HEAD
+<<<<<<< HEAD
         return []
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         # Fallback to general MemoryCore retrieval
         return self._memory_core.retrieve_knowledge(self.agent_id, str(query), mode, limit)
@@ -142,4 +157,7 @@ class KnowledgeEngine:
             return self.graph.delete(key)
         
         return self._memory_core.delete_knowledge(self.agent_id, key, mode)
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

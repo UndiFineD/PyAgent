@@ -6,6 +6,7 @@ Cache with time-to-live expiration.
 from src.core.base.common.cache_core import CacheCore as StandardCacheCore
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
@@ -24,6 +25,11 @@ class TTLCache(StandardCacheCore):
     """Facade for CacheCore."""
     pass
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class TTLCache(StandardCacheCore):
+    """Facade for CacheCore."""
+    pass
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     Caches responses with configurable TTL, automatically expiring stale entries.
 

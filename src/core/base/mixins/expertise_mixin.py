@@ -18,6 +18,7 @@ Allows agents to declare their domains and performance metrics for MoE routing.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, List, Optional
 
 from src.core.base.common.models.communication_models import ExpertProfile
@@ -28,10 +29,16 @@ from typing import List, Optional
 from src.core.base.common.models.communication_models import ExpertProfile
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import List, Optional
+from src.core.base.common.models.communication_models import ExpertProfile
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ExpertiseMixin:
     """
     Mixin for agents that participate in Cross-Model MoE.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, *args, **kwargs) -> None:
@@ -39,24 +46,35 @@ class ExpertiseMixin:
     
     def __init__(self, *args, **kwargs):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, *args, **kwargs):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__(*args, **kwargs)
         self.expertise_profile: Optional[ExpertProfile] = None
 
     def declare_expertise(
 <<<<<<< HEAD
+<<<<<<< HEAD
         self, domains: List[str], performance_score: float = 1.0, model_family: str = "unknown"
     ) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self, 
         domains: List[str], 
         performance_score: float = 1.0,
         model_family: str = "unknown"
     ):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Registers the agent's expertise profile.
         """
         # Note: agent_id should be available on the base agent
+<<<<<<< HEAD
 <<<<<<< HEAD
         agent_id: Any | str = getattr(self, "agent_id", "unknown_agent")
 
@@ -65,6 +83,8 @@ class ExpertiseMixin:
         )
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         agent_id = getattr(self, "agent_id", "unknown_agent")
         
         self.expertise_profile = ExpertProfile(
@@ -74,7 +94,10 @@ class ExpertiseMixin:
             model_family=model_family
         )
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def get_expert_profile(self) -> Optional[ExpertProfile]:
         """Returns the current expertise profile."""
         return self.expertise_profile

@@ -19,6 +19,7 @@ Provides consensus mechanisms to merge outputs from multiple experts in an MoE s
 
 import logging
 <<<<<<< HEAD
+<<<<<<< HEAD
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -34,6 +35,8 @@ class FusionResult:
     """The result of a weighted expert fusion operation."""
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import asyncio
 from typing import List, Dict, Any, Union, Optional
 from dataclasses import dataclass
@@ -45,16 +48,22 @@ logger = logging.getLogger(__name__)
 @dataclass
 class FusionResult:
     """The result of a weighted expert fusion operation."""
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     merged_content: str
     consensus_score: float
     contributing_experts: List[str]
     metadata: Dict[str, Any]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class WeightedExpertFusion:
     """
     Handles merging of agent outputs using various consensus strategies.
@@ -65,14 +74,19 @@ class WeightedExpertFusion:
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, similarity_service: Any = None, audit_logger: Optional[SwarmAuditLogger] = None) -> None:
 =======
     def __init__(self, similarity_service: Any = None, audit_logger: Optional[SwarmAuditLogger] = None):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self, similarity_service: Any = None, audit_logger: Optional[SwarmAuditLogger] = None):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.similarity_service = similarity_service
         self.audit_logger = audit_logger
 
     async def fuse_outputs(
+<<<<<<< HEAD
 <<<<<<< HEAD
         self,
         outputs: List[str],
@@ -81,13 +95,18 @@ class WeightedExpertFusion:
         mode: str = "weighted_plurality",
         task_id: Optional[str] = None,
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self, 
         outputs: List[str], 
         weights: List[float], 
         expert_ids: List[str],
         mode: str = "weighted_plurality",
         task_id: Optional[str] = None
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> FusionResult:
         """
         Main fusion entry point.
@@ -106,10 +125,14 @@ class WeightedExpertFusion:
                 consensus_score=weights[0],
                 contributing_experts=[expert_ids[0]],
 <<<<<<< HEAD
+<<<<<<< HEAD
                 metadata={"mode": "fallback_top_1"},
 =======
                 metadata={"mode": "fallback_top_1"}
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                metadata={"mode": "fallback_top_1"}
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             )
 
         if self.audit_logger and task_id:
@@ -118,27 +141,39 @@ class WeightedExpertFusion:
                 event_type="expert_fusion",
                 description=f"Merged expert results using {mode}",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 data={"consensus_score": result.consensus_score, "experts": result.contributing_experts, "mode": mode},
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 data={
                     "consensus_score": result.consensus_score,
                     "experts": result.contributing_experts,
                     "mode": mode
                 }
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             )
 
         return result
 
     async def _weighted_plurality(
 <<<<<<< HEAD
+<<<<<<< HEAD
         self, outputs: List[str], weights: List[float], expert_ids: List[str]
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self, 
         outputs: List[str], 
         weights: List[float], 
         expert_ids: List[str]
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> FusionResult:
         """
         Classic majority-vote weighted by expert scores.
@@ -147,22 +182,29 @@ class WeightedExpertFusion:
         for out, weight in zip(outputs, weights):
             scores[out] = scores.get(out, 0.0) + weight
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         best_output = max(scores, key=scores.get)
         total_weight = sum(weights)
         consensus_score = scores[best_output] / total_weight if total_weight > 0 else 0
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         best_output = max(scores, key=scores.get)
         total_weight = sum(weights)
         consensus_score = scores[best_output] / total_weight if total_weight > 0 else 0
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return FusionResult(
             merged_content=best_output,
             consensus_score=consensus_score,
             contributing_experts=expert_ids,
+<<<<<<< HEAD
 <<<<<<< HEAD
             metadata={"strategy": "weighted_plurality", "vote_distribution": scores},
         )
@@ -170,6 +212,8 @@ class WeightedExpertFusion:
     async def _semantic_consensus(
         self, outputs: List[str], weights: List[float], expert_ids: List[str]
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             metadata={"strategy": "weighted_plurality", "vote_distribution": scores}
         )
 
@@ -178,7 +222,10 @@ class WeightedExpertFusion:
         outputs: List[str], 
         weights: List[float], 
         expert_ids: List[str]
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> FusionResult:
         """
         Finds the answer that is semantically closest to all other weighted answers.
@@ -188,16 +235,21 @@ class WeightedExpertFusion:
             # Fallback to weighted plurality if no similarity service
             return await self._weighted_plurality(outputs, weights, expert_ids)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Calculate similarity matrix (Simplified for Phase 62)
         mean_scores = []
         for i, anchor in enumerate(outputs):
             sims = await self.similarity_service.batch_similarity(anchor, outputs)
             weighted_sim = sum(s * w for s, w in zip(sims, weights))
             mean_scores.append(weighted_sim)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         best_idx = int(np.argmax(mean_scores))
@@ -207,13 +259,22 @@ class WeightedExpertFusion:
         best_idx = int(np.argmax(mean_scores))
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+        best_idx = int(np.argmax(mean_scores))
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return FusionResult(
             merged_content=outputs[best_idx],
             consensus_score=float(mean_scores[best_idx]),
             contributing_experts=expert_ids,
 <<<<<<< HEAD
+<<<<<<< HEAD
             metadata={"strategy": "semantic_consensus", "best_index": best_idx},
 =======
             metadata={"strategy": "semantic_consensus", "best_index": best_idx}
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            metadata={"strategy": "semantic_consensus", "best_index": best_idx}
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         )

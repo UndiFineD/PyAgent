@@ -4,6 +4,7 @@ Manager for result caching.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Manager for result caching.
 (Facade for src.core.base.common.cache_core)
@@ -71,3 +72,6 @@ class ResultCache:
 =======
 from src.core.base.common.cache_core import CacheCore as ResultCache
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.cache_core import CacheCore as ResultCache
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,8 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration and data structures for LoRA adapter management."""
@@ -66,10 +69,14 @@ class TargetModule(Enum):
 
 @dataclass
 <<<<<<< HEAD
+<<<<<<< HEAD
 class LoRAConfig:  # pylint: disable=too-many-instance-attributes
 =======
 class LoRAConfig: # pylint: disable=too-many-instance-attributes
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class LoRAConfig: # pylint: disable=too-many-instance-attributes
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     """LoRA adapter configuration."""
 
     adapter_name: str
@@ -95,10 +102,14 @@ class LoRAConfig: # pylint: disable=too-many-instance-attributes
             return self.scaling
         if self.use_rslora:
 <<<<<<< HEAD
+<<<<<<< HEAD
             return self.alpha / (self.rank**0.5)
 =======
             return self.alpha / (self.rank ** 0.5)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            return self.alpha / (self.rank ** 0.5)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self.alpha / self.rank
 
     def __hash__(self) -> int:
@@ -120,10 +131,14 @@ class LoRARequest:
 
 @dataclass
 <<<<<<< HEAD
+<<<<<<< HEAD
 class LoRAInfo:  # pylint: disable=too-many-instance-attributes
 =======
 class LoRAInfo: # pylint: disable=too-many-instance-attributes
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class LoRAInfo: # pylint: disable=too-many-instance-attributes
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     """Information about a loaded adapter."""
 
     adapter_name: str

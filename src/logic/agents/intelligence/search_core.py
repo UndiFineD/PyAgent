@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +16,15 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 SearchCore logic for PyAgent.
 (Facade for src.core.base.common.search_core)
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
@@ -30,6 +34,11 @@ from typing import Any
 from src.core.base.common.search_core import SearchCore as StandardSearchCore
 
 from src.core.base.common.search_core import SearchCore as StandardSearchCore
+=======
+import logging
+from typing import Any
+from src.core.base.common.search_core import SearchCore as StandardSearchCore
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -39,9 +48,12 @@ except ImportError:
     HAS_RUST = False
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SearchCore(StandardSearchCore):
     """Facade for SearchCore logic, providing specialized parsing."""
 
@@ -52,6 +64,7 @@ class SearchCore(StandardSearchCore):
             try:
                 return rc.parse_bing_results_rust(data)
 <<<<<<< HEAD
+<<<<<<< HEAD
             except (RuntimeError, ValueError, TypeError):
                 pass
 
@@ -60,6 +73,11 @@ class SearchCore(StandardSearchCore):
                 pass
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            except Exception:
+                pass
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         results: list[str] = []
         for v in data.get("webPages", {}).get("value", []):
             name = v.get("name", "Untitled Result")
@@ -75,8 +93,11 @@ class SearchCore(StandardSearchCore):
             try:
                 return rc.parse_google_results_rust(data)
 <<<<<<< HEAD
+<<<<<<< HEAD
             except (RuntimeError, ValueError, TypeError):
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             except Exception:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
@@ -95,8 +116,11 @@ class SearchCore(StandardSearchCore):
             try:
                 return rc.parse_ddg_results_rust(data)
 <<<<<<< HEAD
+<<<<<<< HEAD
             except (RuntimeError, ValueError, TypeError):
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             except Exception:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass

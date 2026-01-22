@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Load balancer.py module.
 """
@@ -30,6 +31,8 @@ from src.infrastructure.swarm.orchestration.swarm.telemetry import \
 logger: logging.Logger = logging.getLogger(__name__)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import asyncio
 import logging
 from typing import List, Dict, Any, Optional
@@ -38,7 +41,10 @@ from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManag
 from src.infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
 
 logger = logging.getLogger(__name__)
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class SwarmLoadBalancer:
     """
@@ -47,6 +53,7 @@ class SwarmLoadBalancer:
     """
 
     def __init__(
+<<<<<<< HEAD
 <<<<<<< HEAD
         self,
         telemetry: SwarmTelemetryService,
@@ -64,6 +71,8 @@ class SwarmLoadBalancer:
 
     async def run_balancing_cycle(self) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self, 
         telemetry: SwarmTelemetryService, 
         shard_manager: ContextShardManager,
@@ -79,7 +88,10 @@ class SwarmLoadBalancer:
         self.balancing_active = True
 
     async def run_balancing_cycle(self):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Executed periodically to check for imbalances and trigger P2P migrations.
         """
@@ -87,12 +99,17 @@ class SwarmLoadBalancer:
             return
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         metrics: Dict[str, Any] = self.telemetry.get_grid_metrics()
 
 =======
         metrics = self.telemetry.get_grid_metrics()
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        metrics = self.telemetry.get_grid_metrics()
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         hot_ranks: List[int] = []
         cool_ranks: List[int] = []
 
@@ -118,14 +135,19 @@ class SwarmLoadBalancer:
             # Find shards currently on this rank
             shards_on_hot_rank = self._get_shards_on_rank(hot_rank)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             if not shards_on_hot_rank:
                 continue
 
             # Pick the first available cool rank
+<<<<<<< HEAD
 <<<<<<< HEAD
             target_rank: int = cool_ranks[0]
 
@@ -148,6 +170,8 @@ class SwarmLoadBalancer:
                 break
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             target_rank = cool_ranks[0]
             
             # Pick a shard to move (e.g., the first one)
@@ -161,7 +185,10 @@ class SwarmLoadBalancer:
                 # After one migration, re-sort or break to avoid over-filling a cool rank in one pass
                 break 
             except Exception as e:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 logger.error(f"Failed to migrate shard during load balancing: {e}")
 
     def _get_shards_on_rank(self, rank_id: int) -> List[tuple]:
@@ -175,19 +202,27 @@ class SwarmLoadBalancer:
         return res
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     async def start_loop(self, interval: float = 5.0) -> None:
 =======
     async def start_loop(self, interval: float = 5.0):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    async def start_loop(self, interval: float = 5.0):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Starts a background balancing loop."""
         while self.balancing_active:
             await self.run_balancing_cycle()
             await asyncio.sleep(interval)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def stop(self) -> None:
 =======
     def stop(self):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def stop(self):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Stops the balancing service."""
         self.balancing_active = False

@@ -4,6 +4,7 @@ Validates improvements with automated testing.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 """Auto-extracted class from agent_improvements.py"""
 
@@ -22,6 +23,9 @@ class ImprovementValidator:
 =======
 from src.core.base.common.validation_core import ValidationCore as ImprovementValidator
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.validation_core import ValidationCore as ImprovementValidator
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     Runs validation rules and automated tests on improvements.
 

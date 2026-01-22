@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Heterogeneous speculator.py module.
 """
@@ -27,6 +28,8 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
 logger: logging.Logger = logging.getLogger(__name__)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 import asyncio
 from typing import List, Dict, Any, Optional, Tuple
@@ -34,7 +37,10 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatek
 from src.core.base.common.models.communication_models import ExpertProfile
 
 logger = logging.getLogger(__name__)
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class HeterogeneousSpeculator:
     """
@@ -43,12 +49,17 @@ class HeterogeneousSpeculator:
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, gatekeeper: MoEGatekeeper) -> None:
         self.gatekeeper: MoEGatekeeper = gatekeeper
 =======
     def __init__(self, gatekeeper: MoEGatekeeper):
         self.gatekeeper = gatekeeper
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self, gatekeeper: MoEGatekeeper):
+        self.gatekeeper = gatekeeper
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def identify_speculative_pairs(self, domain: str) -> List[Tuple[str, str]]:
         """
@@ -56,6 +67,7 @@ class HeterogeneousSpeculator:
         Drafters: acceleration_type in ['fp8_bitnet', 'int4_quant']
         Verifiers: acceleration_type in ['h100_tensor', 'standard']
         """
+<<<<<<< HEAD
 <<<<<<< HEAD
         experts: List[ExpertProfile] = list(self.gatekeeper.experts.values())
 
@@ -71,6 +83,8 @@ class HeterogeneousSpeculator:
             if e.acceleration_type in ["h100_tensor", "standard"]
         ]
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         experts = list(self.gatekeeper.experts.values())
         
         # Filter by domain
@@ -78,7 +92,10 @@ class HeterogeneousSpeculator:
         
         drafters = [e for e in domain_experts if e.acceleration_type in ["fp8_bitnet", "int4_quant"]]
         verifiers = [e for e in domain_experts if e.acceleration_type in ["h100_tensor", "standard"]]
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         pairs = []
         # Greedily pair top-performing drafters with top-performing verifiers
@@ -92,18 +109,24 @@ class HeterogeneousSpeculator:
         return pairs
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     async def execute_task(self, task: str, domain: str, _orchestrator: Any) -> MoERoutingDecision | dict[str, str]:
         """
         Convenience method to run a task through the swarm's speculative pipe.
         """
         pairs: List[Tuple[str]] = self.identify_speculative_pairs(domain)
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     async def execute_task(self, task: str, domain: str, orchestrator: Any):
         """
         Convenience method to run a task through the swarm's speculative pipe.
         """
         pairs = self.identify_speculative_pairs(domain)
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if not pairs:
             # Fallback to standard MoE routing
             logger.warning("No speculative pairs found, falling back to standard MoE.")
@@ -113,12 +136,18 @@ class HeterogeneousSpeculator:
         # In a real integration, we'd call SpeculativeSwarmOrchestrator.execute_speculative_task
         # Here we simulate the handoff
 <<<<<<< HEAD
+<<<<<<< HEAD
         return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return {
             "mode": "speculative",
             "drafter": drafter_id,
             "verifier": verifier_id,
             "task": task
         }
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

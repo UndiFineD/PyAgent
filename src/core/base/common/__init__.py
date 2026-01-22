@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,6 +55,8 @@ from .time_core import TimeCore  # noqa: F401
 from .validation_core import ValidationCore  # noqa: F401
 from .workspace_core import WorkspaceCore  # noqa: F401
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -94,7 +97,10 @@ from .multimodal_core import (
 from .hardware_core import HardwareCore
 from .shell_core import ShellCore
 from .time_core import TimeCore
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __all__ = [
     "BaseCore",

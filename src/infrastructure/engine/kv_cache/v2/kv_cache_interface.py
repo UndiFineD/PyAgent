@@ -19,6 +19,7 @@ Manages multi-group block allocation and dynamic layer-aware caching.
 
 import logging
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import List, Optional
 
 import torch
@@ -29,6 +30,11 @@ from typing import Dict, List, Optional, Any, Tuple
 import torch
 from .block_table import BlockTableV2
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Dict, List, Optional, Any, Tuple
+import torch
+from .block_table import BlockTableV2
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -38,18 +44,24 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class KVCacheInterfaceV2:
     """
     High-level interface for managing hierarchical KV-Cache.
     Supports dynamic block allocation and multi-GPU synchronization.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     def __init__(self, num_layers: int, num_heads: int, head_size: int, num_blocks: int, block_size: int = 16) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     
     def __init__(self, 
                  num_layers: int, 
@@ -57,11 +69,15 @@ class KVCacheInterfaceV2:
                  head_size: int, 
                  num_blocks: int, 
                  block_size: int = 16):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.num_layers = num_layers
         self.num_heads = num_heads
         self.head_size = head_size
         self.block_size = block_size
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         self.block_table = BlockTableV2(num_blocks, block_size)
@@ -74,6 +90,8 @@ class KVCacheInterfaceV2:
 
     def initialize_storage(self, device: str = "cuda", dtype: torch.dtype = torch.float16) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         self.block_table = BlockTableV2(num_blocks, block_size)
         
@@ -84,7 +102,10 @@ class KVCacheInterfaceV2:
         logger.info(f"KVCacheInterfaceV2 created: {num_layers} layers, {num_heads} heads, {num_blocks} blocks")
 
     def initialize_storage(self, device: str = "cuda", dtype: torch.dtype = torch.float16):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Allocates the physical KV tensors on the specified device."""
         shape = (self.block_table.num_blocks, self.num_layers, self.num_heads, self.block_size, self.head_size)
         self.k_cache = torch.zeros(shape, device=device, dtype=dtype)
@@ -104,10 +125,14 @@ class KVCacheInterfaceV2:
         return len(blocks) > 0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def sync_multi_gpu(self, rank: int, world_size: int) -> None:
 =======
     def sync_multi_gpu(self, rank: int, world_size: int):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def sync_multi_gpu(self, rank: int, world_size: int):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Synchronizes block tables across multiple GPUs for distributed inference.
         """
@@ -117,10 +142,14 @@ class KVCacheInterfaceV2:
             logger.debug(f"Multi-GPU sync simulated for rank {rank}")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def purge(self) -> None:
 =======
     def purge(self):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def purge(self):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Clears all cached data and resets metadata."""
         self.block_table.free_blocks = list(range(self.block_table.num_blocks))
         self.block_table.mapping.clear()

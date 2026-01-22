@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +16,15 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Orchestration Managers for multi-agent workflows.
 (Facade for src.core.base.common.orchestration_core)
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 from typing import Any
@@ -68,3 +72,12 @@ from src.core.base.common.orchestration_core import (
 from src.core.base.common.model_selector_core import ModelSelectorCore as ModelSelector
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.orchestration_core import (
+    OrchestrationCore as AgentComposer,
+    QualityScorer,
+    ABTest
+)
+from src.core.base.common.model_selector_core import ModelSelectorCore as ModelSelector
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

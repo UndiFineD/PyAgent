@@ -4,6 +4,7 @@ Manager for agent files and discovery.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Manager for agent files and discovery.
 """
@@ -126,3 +127,6 @@ class AgentFileManager:
 =======
 from src.core.base.common.file_system_core import FileSystemCore as AgentFileManager
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.file_system_core import FileSystemCore as AgentFileManager
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

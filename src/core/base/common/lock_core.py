@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +22,16 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Unified Locking Core for PyAgent.
 Handles local file locks and distributed swarm locks.
 """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 import time
 from typing import Any, Dict
@@ -33,19 +39,25 @@ from typing import Any, Dict
 from .base_core import BaseCore
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from __future__ import annotations
 import os
 import time
 import logging
 from typing import Optional, Dict
 from src.core.base.common.base_core import BaseCore
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class LockCore(BaseCore):
     """
     Standard implementation for resource locking.
     Supports both file-based advisory locks and in-memory swarm locks.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self) -> None:
@@ -77,6 +89,8 @@ class LockCore(BaseCore):
                     return True
             time.sleep(0.05)  # Shorter sleep for responsiveness
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     
     def __init__(self):
         super().__init__()
@@ -90,11 +104,15 @@ class LockCore(BaseCore):
                 self.active_locks[lock_id] = time.time()
                 return True
             time.sleep(0.1)
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return False
 
     def release_lock(self, lock_id: str) -> None:
         """Release a held lock."""
+<<<<<<< HEAD
 <<<<<<< HEAD
         if lock_id in self.active_locks:
             self.active_locks.pop(lock_id)
@@ -105,6 +123,9 @@ class LockCore(BaseCore):
 =======
         self.active_locks.pop(lock_id, None)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        self.active_locks.pop(lock_id, None)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def is_locked(self, lock_id: str) -> bool:
         """Check if a resource is currently locked."""

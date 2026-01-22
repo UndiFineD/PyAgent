@@ -2,10 +2,15 @@
 // This module provides bindings and strategies for specialized hardware (NPUs, GPUs)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 use std::ffi::CString;
 use std::os::raw::{c_char, c_int};
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+use std::ffi::CString;
+use std::os::raw::{c_char, c_int};
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 use pyo3::prelude::*;
 
 /// Registers hardware acceleration functions with the Python module.
@@ -52,10 +57,15 @@ pub fn run_tensorrt_inference_rust(
 /// Currently requires the AMD Ryzen AI SDK to be installed and linked.
 pub mod amd_npu {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     use super::*;
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    use super::*;
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     #[cfg(feature = "amd_npu")]
     #[link(name = "amd_npu")]
     extern "C" {
@@ -98,10 +108,14 @@ pub mod amd_npu {
 pub mod rocm {
     // Strategy for AMD GPU acceleration using ROCm/HIP
 <<<<<<< HEAD
+<<<<<<< HEAD
     pub fn _is_available() -> bool {
 =======
     pub fn is_available() -> bool {
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    pub fn is_available() -> bool {
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         // Implementation for checking ROCm availability
         false
     }

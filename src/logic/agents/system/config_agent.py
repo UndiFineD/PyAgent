@@ -28,7 +28,10 @@ from src.core.base.utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.logic.core.validation import ValidationCore
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __version__ = VERSION
 
@@ -51,9 +54,12 @@ class ConfigAgent(BaseAgent):
         """Checks for required environment variables."""
         required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]
 <<<<<<< HEAD
+<<<<<<< HEAD
         missing = [key for key in required if key not in os.environ]
         
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         success, missing = self.validator.validate_env_vars(required)
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

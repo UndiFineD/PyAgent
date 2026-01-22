@@ -18,6 +18,7 @@ Manages the lifecycle of the inference engine, error recovery, and async state t
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import asyncio
 import logging
 =======
@@ -25,6 +26,11 @@ import logging
 import asyncio
 from typing import Dict, List, Optional, Any
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+import logging
+import asyncio
+from typing import Dict, List, Optional, Any
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from enum import Enum
 
 try:
@@ -35,6 +41,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 class EngineState(Enum):
     """
@@ -43,6 +50,9 @@ class EngineState(Enum):
 =======
 class EngineState(Enum):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class EngineState(Enum):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     STARTING = 0
     RUNNING = 1
     COOLDOWN = 2
@@ -50,14 +60,18 @@ class EngineState(Enum):
     STOPPED = 4
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class EngineCoordinator:
     """
     Coordinates the global engine state and recovery procedures.
     Integrates with Rust for high-throughput state transitions.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self) -> None:
@@ -67,6 +81,8 @@ class EngineCoordinator:
 
     def transition_to(self, new_state: EngineState) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     
     def __init__(self):
         self.state = EngineState.STOPPED
@@ -74,11 +90,15 @@ class EngineCoordinator:
         self._max_errors = 5
         
     def transition_to(self, new_state: EngineState):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Transitions the engine to a new state with safety checks.
         """
         old_state = self.state
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         if rc and hasattr(rc, "engine_state_transition_rust"):
@@ -89,6 +109,8 @@ class EngineCoordinator:
 
     async def handle_error(self, error_msg: str) -> bool:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         if rc and hasattr(rc, "engine_state_transition_rust"):
             rc.engine_state_transition_rust(old_state.value, new_state.value)
@@ -97,12 +119,16 @@ class EngineCoordinator:
         logger.info(f"Engine transitioned from {old_state.name} to {new_state.name}")
 
     async def handle_error(self, error_msg: str):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Self-healing logic for engine errors.
         """
         self._error_count += 1
         logger.error(f"Engine Error #{self._error_count}: {error_msg}")
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         if self._error_count >= self._max_errors:
@@ -110,12 +136,17 @@ class EngineCoordinator:
             return False
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         if self._error_count >= self._max_errors:
             self.transition_to(EngineState.ERROR)
             return False
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Attempt soft restart
         self.transition_to(EngineState.COOLDOWN)
         await asyncio.sleep(1.0)
@@ -123,19 +154,27 @@ class EngineCoordinator:
         return True
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def reset_stats(self) -> None:
 =======
     def reset_stats(self):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def reset_stats(self):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Resets coordinator statistics."""
         self._error_count = 0
         if self.state == EngineState.ERROR:
             self.transition_to(EngineState.STOPPED)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def is_healthy(self) -> bool:
         """Returns True if the engine is in a functional state."""
         return self.state in [EngineState.RUNNING, EngineState.STARTING, EngineState.COOLDOWN]

@@ -56,7 +56,10 @@ class BTreeKnowledgeStore(KnowledgeStore):
 =======
 
         # Use Standardized infrastructure for directory management
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         shard_dir = self.storage_path / tier1 / tier2
         self._memory_core._fs.ensure_directory(shard_dir)
         db_path = shard_dir / "shard.db"

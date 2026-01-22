@@ -20,10 +20,13 @@ Provides knowledge and context management mixin for PyAgent agents.
 
 from pathlib import Path
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from src.core.base.common.memory_core import MemoryCore
 from src.core.base.logic.sharded_knowledge_core import ShardedKnowledgeCore
 
@@ -42,7 +45,10 @@ class KnowledgeMixin:
         self.agent_name = agent_name
         self.memory_core = MemoryCore()
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Legacy Knowledge Trinity support
         try:
             # pylint: disable=import-outside-toplevel
@@ -53,8 +59,11 @@ class KnowledgeMixin:
             self.knowledge = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.sharded_knowledge: ShardedKnowledgeCore = ShardedKnowledgeCore(base_path=workspace_root / "data/agents")
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self._local_global_context: Any = None
@@ -63,6 +72,7 @@ class KnowledgeMixin:
         self._prompt_templates: dict[str, Any] = {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def store_episode(
         self, task: str, content: str, success: bool, metadata: dict[str, Any] | None = None
     ) -> dict[str, Any]:
@@ -70,6 +80,8 @@ class KnowledgeMixin:
         episode: Dict[str, Any] = self.memory_core.create_episode(
             agent_id=self.agent_name, task=task, content=content, success=success, metadata=metadata
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def store_episode(self, task: str, content: str, success: bool, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
         """Creates and stores an episodic memory via MemoryCore."""
         episode = self.memory_core.create_episode(
@@ -78,17 +90,24 @@ class KnowledgeMixin:
             content=content,
             success=success,
             metadata=metadata
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         )
         self.memory_core.store_knowledge(
             agent_id=self.agent_name,
             key=f"ep_{episode['timestamp'].replace(':', '-')}",
             content=episode,
 <<<<<<< HEAD
+<<<<<<< HEAD
             mode="structured",
 =======
             mode="structured"
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            mode="structured"
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         )
         return episode
 

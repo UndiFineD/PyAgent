@@ -15,20 +15,28 @@
 """
 Multi-Node Executor for Phase 55.
 <<<<<<< HEAD
+<<<<<<< HEAD
 Handles cross-node communication and execution management for Tensor Parallel (TP)
 =======
 Handles cross-node communication and execution management for Tensor Parallel (TP) 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+Handles cross-node communication and execution management for Tensor Parallel (TP) 
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 across physical machine boundaries.
 """
 
 import logging
 import socket
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict
 =======
 from typing import Dict, List, Optional, Any
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Dict, List, Optional, Any
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -38,29 +46,40 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class MultiNodeExecutor:
     """
     Manages execution across multiple nodes.
     Interfaces with NCCL or custom high-speed interconnects.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, node_id: int, total_nodes: int):
         self.node_id = node_id
         self.total_nodes = total_nodes
         self.hostname = socket.gethostname()
         self.ip = socket.gethostbyname(self.hostname)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         logger.info(f"MultiNodeExecutor initialized on Node {node_id}/{total_nodes} ({self.ip})")
 
     def coordinate_tp_split(self, tensor_shape: tuple) -> Dict[int, tuple]:
@@ -71,28 +90,38 @@ class MultiNodeExecutor:
         if rc and hasattr(rc, "multi_node_coordinate_rust"):
             return rc.multi_node_coordinate_rust(self.node_id, self.total_nodes, tensor_shape)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         # Fallback: simple uniform split on final dimension
         last_dim = tensor_shape[-1]
         chunk = last_dim // self.total_nodes
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         # Fallback: simple uniform split on final dimension
         last_dim = tensor_shape[-1]
         chunk = last_dim // self.total_nodes
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         splits = {}
         for i in range(self.total_nodes):
             start = i * chunk
             end = start + chunk if i != self.total_nodes - 1 else last_dim
             splits[i] = tensor_shape[:-1] + (end - start,)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return splits
 
     def sync_global_metadata(self, metadata: Dict[str, Any]):

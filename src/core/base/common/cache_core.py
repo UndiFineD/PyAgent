@@ -18,6 +18,7 @@ Core logic for response caching and prompt prefix mapping.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import hashlib
 import json
@@ -33,6 +34,8 @@ try:
 except ImportError:
     rc = None
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import hashlib
 import json
 import logging
@@ -40,7 +43,10 @@ from pathlib import Path
 from typing import Dict, Optional, Any
 from .base_core import BaseCore
 import time
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 
 class CacheCore(BaseCore):
@@ -58,6 +64,7 @@ class CacheCore(BaseCore):
         self.logger = logging.getLogger("pyagent.cache_core")
 
     def _get_cache_key(self, content: str) -> str:
+<<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "fast_cache_key_rust"):  # pylint: disable=no-member
             try:
@@ -77,6 +84,8 @@ class CacheCore(BaseCore):
         key = self._get_cache_key(prompt)
         self.cache_data[key] = {"result": response, "timestamp": time.time(), "ttl": ttl_seconds}
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             import rust_core as rc
             return rc.fast_cache_key_rust(content)
@@ -94,7 +103,10 @@ class CacheCore(BaseCore):
             "timestamp": time.time(),
             "ttl": ttl_seconds
         }
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         if len(prompt) > 500:
             prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
@@ -102,6 +114,7 @@ class CacheCore(BaseCore):
 
         cache_file = self.cache_dir / f"{key}.json"
         try:
+<<<<<<< HEAD
 <<<<<<< HEAD
             cache_file.write_text(
                 json.dumps({"prompt": prompt, "response": response, "timestamp": time.time(), "ttl": ttl_seconds})
@@ -114,6 +127,8 @@ class CacheCore(BaseCore):
         key = self._get_cache_key(prompt)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             cache_file.write_text(json.dumps({
                 "prompt": prompt,
                 "response": response,
@@ -126,12 +141,16 @@ class CacheCore(BaseCore):
     def get(self, prompt: str) -> Optional[Any]:
         key = self._get_cache_key(prompt)
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Check memory cache
         if key in self.cache_data:
             cached = self.cache_data[key]
             if time.time() - cached["timestamp"] < cached["ttl"]:
                 return cached["result"]
+<<<<<<< HEAD
 <<<<<<< HEAD
 
             del self.cache_data[key]
@@ -139,6 +158,10 @@ class CacheCore(BaseCore):
             else:
                 del self.cache_data[key]
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            else:
+                del self.cache_data[key]
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         # Check disk cache
         cache_file = self.cache_dir / f"{key}.json"
@@ -150,16 +173,22 @@ class CacheCore(BaseCore):
                         "result": data["response"],
                         "timestamp": data["timestamp"],
 <<<<<<< HEAD
+<<<<<<< HEAD
                         "ttl": data["ttl"],
                     }
                     return data["response"]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                         "ttl": data["ttl"]
                     }
                     return data["response"]
             except Exception:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
         return None

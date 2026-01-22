@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Tenant bridge.py module.
 """
@@ -27,13 +28,18 @@ logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 from typing import List, Dict, Any, Optional
 from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import SwarmTraceSynthesizer
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class TenantKnowledgeBridge:
     """
     Safely transfers orchestration insights between tenants (Phase 84).
@@ -41,10 +47,14 @@ class TenantKnowledgeBridge:
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, synthesizer: SwarmTraceSynthesizer) -> None:
 =======
     def __init__(self, synthesizer: SwarmTraceSynthesizer):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self, synthesizer: SwarmTraceSynthesizer):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.synthesizer = synthesizer
 
     def generate_anonymized_insights(self) -> Dict[str, Any]:
@@ -53,6 +63,7 @@ class TenantKnowledgeBridge:
         Returns a 'Global Harmony' map of agent synergies.
         """
         raw_wisdom = self.synthesizer.synthesize_wisdom()
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         # Scrubbing logic:
@@ -70,6 +81,8 @@ class TenantKnowledgeBridge:
             f"[Phase 84] Anonymized knowledge bridge generated. Synergy count: {len(anonymized['expert_synergies'])}"
         )
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         # Scrubbing logic: 
         # 1. Remove domain baselines (could reveal tenant-specific data distribution)
@@ -86,7 +99,10 @@ class TenantKnowledgeBridge:
         }
         
         logger.info(f"[Phase 84] Anonymized knowledge bridge generated. Synergy count: {len(anonymized['expert_synergies'])}")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return anonymized
 
     def apply_cross_tenant_wisdom(self, target_predictor: Any, global_wisdom: Dict[str, Any]):
@@ -96,10 +112,14 @@ class TenantKnowledgeBridge:
         current_synergies = target_predictor.wisdom.get("expert_synergies", {})
         global_synergies = global_wisdom.get("expert_synergies", {})
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Merge by taking average or max synergy
         for ex, peers in global_synergies.items():
             if ex not in current_synergies:
@@ -109,6 +129,7 @@ class TenantKnowledgeBridge:
                     # Simple update: keep highest observed synergy
                     current_synergies[ex][peer] = max(current_synergies[ex].get(peer, 0.0), val)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         target_predictor.wisdom["expert_synergies"] = current_synergies
         # Recompute biases in the predictor (needs a method for that)
@@ -117,6 +138,8 @@ class TenantKnowledgeBridge:
 
         logger.info("[Phase 84] Applied global cross-tenant wisdom to reward predictor.")
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         target_predictor.wisdom["expert_synergies"] = current_synergies
         # Recompute biases in the predictor (needs a method for that)
@@ -124,4 +147,7 @@ class TenantKnowledgeBridge:
             target_predictor.expert_biases = target_predictor._precompute_biases()
         
         logger.info(f"[Phase 84] Applied global cross-tenant wisdom to reward predictor.")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

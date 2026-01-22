@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +18,17 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Unified Configuration Core for PyAgent.
 Combines loading, merging, and dot-notation access logic.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 import json
@@ -33,6 +39,8 @@ from typing import Any, Dict
 from .base_core import BaseCore
 from .models import ConfigFormat
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import os
 import json
 import logging
@@ -40,13 +48,17 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Union, List
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.models import ConfigFormat
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 class ConfigObject:  # pylint: disable=too-few-public-methods
@@ -58,6 +70,11 @@ class ConfigObject:
     """A dictionary wrapper that allows dot-notation access."""
     def __init__(self, data: Dict[str, Any]):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class ConfigObject:
+    """A dictionary wrapper that allows dot-notation access."""
+    def __init__(self, data: Dict[str, Any]):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         for key, value in data.items():
             if isinstance(value, dict):
                 setattr(self, key, ConfigObject(value))
@@ -68,9 +85,12 @@ class ConfigObject:
 
     def get(self, key: str, default: Any = None) -> Any:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Standard getter for dot-notation keys."""
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             val = self
             for part in key.split("."):
@@ -80,19 +100,26 @@ class ConfigObject:
             return default
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ConfigCore(BaseCore):
     """
     Standard implementation for configuration management.
     Handles multi-format loading and hierarchical merging.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     SUPPORTED_EXTENSIONS = {
         ".yaml": ConfigFormat.YAML,
         ".yml": ConfigFormat.YAML,
@@ -101,6 +128,7 @@ class ConfigCore(BaseCore):
         ".ini": ConfigFormat.INI,
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self, workspace_root: Path | str | None = None) -> None:
         super().__init__()
@@ -174,16 +202,22 @@ class ConfigCore(BaseCore):
         return default
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, workspace_root: Path | None = None):
         super().__init__()
         self.workspace_root = workspace_root or Path(".")
         self.configs: Dict[str, ConfigObject] = {}
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def load_config(self, path: Path) -> ConfigObject:
         """Load and return a configuration object."""
         if not path.exists():
             return ConfigObject({})
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         # Try Rust-accelerated fast loading for flat configs
@@ -195,6 +229,8 @@ class ConfigCore(BaseCore):
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         # Try Rust-accelerated fast loading for flat configs
         if rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]:
@@ -202,16 +238,23 @@ class ConfigCore(BaseCore):
                 data = rc.load_config_rust(str(path))
                 return ConfigObject(data)
             except Exception:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         ext = path.suffix.lower()
         fmt = self.SUPPORTED_EXTENSIONS.get(ext, ConfigFormat.JSON)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             content = path.read_text()
             data = self._parse(content, fmt)
@@ -219,16 +262,22 @@ class ConfigCore(BaseCore):
             self.configs[path.name] = cfg
             return cfg
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("ConfigCore: Failed to load %s: %s", path, e)
 =======
         except Exception as e:
             logging.error(f"ConfigCore: Failed to load {path}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e:
+            logging.error(f"ConfigCore: Failed to load {path}: {e}")
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return ConfigObject({})
 
     def merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
         """Deep merge two config dicts. Rust-accelerated for large trees."""
+<<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "merge_configs_rust"):  # pylint: disable=no-member
             try:
@@ -239,13 +288,18 @@ class ConfigCore(BaseCore):
                 pass
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc and hasattr(rc, "merge_configs_rust"):
             try:
                 return rc.merge_configs_rust(base, override)
             except Exception:
                 pass
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Python fallback
         merged = base.copy()
         for key, value in override.items():
@@ -256,6 +310,7 @@ class ConfigCore(BaseCore):
         return merged
 
     def _parse(self, content: str, fmt: ConfigFormat) -> Dict[str, Any]:
+<<<<<<< HEAD
 <<<<<<< HEAD
         """Parses configuration content based on format."""
         data: Any = {}
@@ -284,8 +339,13 @@ class ConfigCore(BaseCore):
             return {"items": data}
         return data if isinstance(data, dict) else {}
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if fmt == ConfigFormat.JSON:
             return json.loads(content)
         # Add YAML/TOML fallbacks here
         return {}
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

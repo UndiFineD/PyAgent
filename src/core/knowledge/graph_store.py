@@ -17,11 +17,15 @@ from src.core.base.version import VERSION
 import hashlib
 from .storage_base import KnowledgeStore
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, List
 import json
 =======
 from typing import Any
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Any
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from pathlib import Path
 
 __version__ = VERSION
@@ -46,7 +50,10 @@ class GraphKnowledgeStore(KnowledgeStore):
 =======
 
         # Use MemoryCore via base class to ensure path alignment
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         shard_dir = self.storage_path / tier1 / tier2
         shard_dir.mkdir(exist_ok=True, parents=True)
         return shard_dir / f"{node_id}.json"
@@ -54,20 +61,27 @@ class GraphKnowledgeStore(KnowledgeStore):
     def store(self, node: str, target: Any, relationship: str = "related_to") -> bool:
         path = self._get_node_path(node)
 <<<<<<< HEAD
+<<<<<<< HEAD
         
         if path.exists():
             with open(path) as f:
                 data = json.load(f)
         else:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         # Use memory_core.retrieve_knowledge logic or standardized load_json
         data = self._memory_core._storage.load_json(path)
         if not data:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             data = {"id": node, "edges": []}
             
         data["edges"].append({"to": target, "type": relationship})
+<<<<<<< HEAD
 <<<<<<< HEAD
         
         with open(path, "w") as f:
@@ -77,6 +91,11 @@ class GraphKnowledgeStore(KnowledgeStore):
         # Atomic write via storage core
         self._memory_core._storage.save_json(path, data)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+
+        # Atomic write via storage core
+        self._memory_core._storage.save_json(path, data)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return True
 
     def retrieve(self, node: str, limit: int = 5) -> list[Any]:

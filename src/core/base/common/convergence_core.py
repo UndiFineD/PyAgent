@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +20,18 @@ from typing import Any, Dict, List, Optional
 
 from .base_core import BaseCore
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified Fleet Convergence and Health core."""
 
 from src.core.base.common.base_core import BaseCore
 from typing import Dict, Any, List, Optional
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -33,14 +39,18 @@ except ImportError:
     rc = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class ConvergenceCore(BaseCore):
     """
     Standard implementation for Fleet Convergence and Health Management.
     Handles 'Full Fleet Sync' summaries and health verification.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
@@ -48,10 +58,15 @@ class ConvergenceCore(BaseCore):
     
     def __init__(self, workspace_root: Optional[str] = None):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, workspace_root: Optional[str] = None):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__(name="Convergence", repo_root=workspace_root)
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:
         """Verifies if all registered agents are healthy."""
+<<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "verify_fleet_health"):  # pylint: disable=no-member
             try:
@@ -61,12 +76,17 @@ class ConvergenceCore(BaseCore):
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc:
             try:
                 # Use Rust for high-throughput health checking
                 return rc.verify_fleet_health(agent_reports)
             except Exception:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         healthy_count = sum(1 for status in agent_reports.values() if status)
@@ -78,12 +98,18 @@ class ConvergenceCore(BaseCore):
             "healthy_count": healthy_count,
             "total_count": total_count,
 <<<<<<< HEAD
+<<<<<<< HEAD
             "failed_agents": [name for name, status in agent_reports.items() if not status],
 =======
             "failed_agents": [
                 name for name, status in agent_reports.items() if not status
             ],
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            "failed_agents": [
+                name for name, status in agent_reports.items() if not status
+            ],
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }
 
     def generate_strategic_summary(self, _phase_history: List[Dict[str, Any]]) -> str:

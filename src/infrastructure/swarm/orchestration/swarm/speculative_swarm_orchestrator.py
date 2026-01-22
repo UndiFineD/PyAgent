@@ -20,6 +20,7 @@ Enables cross-agent speculative execution where fast agents draft for accurate a
 import logging
 import time
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict, Optional
 
 from src.core.base.common.models.communication_models import (
@@ -31,6 +32,8 @@ logger = logging.getLogger(__name__)
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import asyncio
 from typing import Dict, List, Any, Optional
 from src.core.base.common.models.communication_models import (
@@ -40,12 +43,16 @@ from src.infrastructure.engine.models.similarity import EmbeddingSimilarityServi
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class SpeculativeSwarmOrchestrator:
     """
     Coordinates speculative agent execution.
     Reduces latency by allowing a 'draft' agent to propose thoughts while a 'target' agent verifies.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, fleet_manager: Any, similarity_threshold: float = 0.85) -> None:
@@ -53,16 +60,23 @@ class SpeculativeSwarmOrchestrator:
     
     def __init__(self, fleet_manager: Any, similarity_threshold: float = 0.85):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, fleet_manager: Any, similarity_threshold: float = 0.85):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.fleet = fleet_manager
         self.similarity_service = EmbeddingSimilarityService()
         self.similarity_threshold = similarity_threshold
         self.active_speculations: Dict[str, SpeculativeProposal] = {}
+<<<<<<< HEAD
 <<<<<<< HEAD
         self.stats = {"total_speculations": 0, "accepted_proposals": 0, "total_latency_saved": 0.0}
 
     async def execute_speculative_task(
         self, task: str, draft_agent_id: str, target_agent_id: str, context: Optional[CascadeContext] = None
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.stats = {
             "total_speculations": 0,
             "accepted_proposals": 0,
@@ -75,13 +89,17 @@ class SpeculativeSwarmOrchestrator:
         draft_agent_id: str, 
         target_agent_id: str,
         context: Optional[CascadeContext] = None
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     ) -> VerificationOutcome:
         """
         Executes a task using speculative swarm logic.
         """
         start_time = time.perf_counter()
         self.stats["total_speculations"] += 1
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         # 1. Start the drafting agent (Fast tier)
@@ -95,6 +113,8 @@ class SpeculativeSwarmOrchestrator:
         draft_result = await draft_task
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         
         # 1. Start the drafting agent (Fast tier)
         logger.info(f"SpeculativeSwarm: Drafting task via {draft_agent_id}")
@@ -108,11 +128,15 @@ class SpeculativeSwarmOrchestrator:
         # For Phase 56, we wait for the draft then verify
         draft_result = await draft_task
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         proposal = SpeculativeProposal(
             request_id=str(time.time()),
             draft_content=draft_result.get("content", ""),
             confidence_score=draft_result.get("confidence", 0.5),
+<<<<<<< HEAD
 <<<<<<< HEAD
             proposer_id=draft_agent_id,
         )
@@ -137,6 +161,8 @@ class SpeculativeSwarmOrchestrator:
         accepted = similarity >= self.similarity_threshold
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             proposer_id=draft_agent_id
         )
         
@@ -163,7 +189,10 @@ class SpeculativeSwarmOrchestrator:
         )
         accepted = similarity >= self.similarity_threshold
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         outcome = VerificationOutcome(
             proposal_id=proposal.request_id,
             accepted=accepted,
@@ -172,6 +201,7 @@ class SpeculativeSwarmOrchestrator:
             correction_applied=not accepted,
             verifier_id=target_agent_id,
 <<<<<<< HEAD
+<<<<<<< HEAD
             latency_delta=end_time - start_time,
         )
 
@@ -179,13 +209,18 @@ class SpeculativeSwarmOrchestrator:
             self.stats["accepted_proposals"] += 1
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             latency_delta=end_time - start_time
         )
         
         if accepted:
             self.stats["accepted_proposals"] += 1
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return outcome
 
     def get_efficiency_metrics(self) -> Dict[str, Any]:
@@ -193,18 +228,26 @@ class SpeculativeSwarmOrchestrator:
         acceptance_rate = (
             self.stats["accepted_proposals"] / self.stats["total_speculations"]
 <<<<<<< HEAD
+<<<<<<< HEAD
             if self.stats["total_speculations"] > 0
             else 0
 =======
             if self.stats["total_speculations"] > 0 else 0
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            if self.stats["total_speculations"] > 0 else 0
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         )
         return {
             "acceptance_rate": acceptance_rate,
             "total_speculations": self.stats["total_speculations"],
 <<<<<<< HEAD
+<<<<<<< HEAD
             "total_latency_saved": self.stats["total_latency_saved"],
 =======
             "total_latency_saved": self.stats["total_latency_saved"]
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            "total_latency_saved": self.stats["total_latency_saved"]
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }

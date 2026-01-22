@@ -19,6 +19,7 @@ Provides support for interleaved modality tags and streaming sessions.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from typing import Any, Dict, List
 
@@ -29,6 +30,10 @@ from src.core.base.common.multimodal_core import (MultimodalCore,
 from typing import Any, Optional, Dict, List
 from src.core.base.common.multimodal_core import MultimodalCore, MultimodalStreamSession
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Any, Optional, Dict, List
+from src.core.base.common.multimodal_core import MultimodalCore, MultimodalStreamSession
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class MultimodalMixin:
     """
@@ -36,6 +41,7 @@ class MultimodalMixin:
     Enables handling of interleaved channel tracks and feedback loops.
     """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self, **_kwargs: Any) -> None:
         self.multimodal_core = MultimodalCore()
@@ -53,6 +59,8 @@ class MultimodalMixin:
             "<Hardware:NPU_...> for acceleration hooks.\n"
             "Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'."
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, **kwargs: Any) -> None:
         self.multimodal_core = MultimodalCore()
         # Initialize a default stream session for the agent
@@ -67,7 +75,10 @@ class MultimodalMixin:
             f"Available Modalities: {channels}\n"
             f"Use <Thought_...> for internal reasoning and <Hardware:NPU_...> for acceleration hooks.\n"
             f"Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'."
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         )
 
     def process_multimodal_output(self, raw_output: str) -> List[Dict[str, Any]]:

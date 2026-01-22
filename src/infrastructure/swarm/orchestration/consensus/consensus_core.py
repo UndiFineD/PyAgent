@@ -20,6 +20,7 @@ Contains pure logic for tallying votes, handling ties, and selecting winners.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from src.core.base.common import ConsensusCore
 
@@ -29,6 +30,9 @@ class StandardConsensusCore(ConsensusCore):
 =======
 from src.core.base.common import ConsensusCore
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common import ConsensusCore
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class StandardConsensusCore(ConsensusCore):
     """Facade for ConsensusCore in the consensus tier."""
@@ -39,4 +43,7 @@ class StandardConsensusCore(ConsensusCore):
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

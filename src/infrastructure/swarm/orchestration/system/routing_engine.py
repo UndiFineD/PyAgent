@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +16,13 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Routing engine for task distribution.
 (Facade for src.core.base.common.routing_core)
 """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 import os
@@ -31,20 +35,27 @@ from src.core.base.common.routing_core import \
 from src.infrastructure.compute.backend.runner_backends import BackendHandlers
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 from src.core.base.common.routing_core import RoutingCore as StandardRoutingCore
 
 class RoutingEngine(StandardRoutingCore):
     """Facade for RoutingCore."""
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def select_provider(self, task_type="general", priority="balanced", federated=False):
         """Legacy compatibility wrapper."""
         if federated:
             return "federated_cluster"
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         report = BackendHandlers.get_performance_report()
@@ -52,6 +63,9 @@ class RoutingEngine(StandardRoutingCore):
 =======
         return self.select_best_provider(task_type, priority)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        return self.select_best_provider(task_type, priority)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         if priority == "latency":
             # Select provider with lowest TTFT or highest TPS

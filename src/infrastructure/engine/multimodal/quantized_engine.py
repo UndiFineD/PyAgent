@@ -19,6 +19,7 @@ Handles FP8/INT8/INT4 pipelines for video and audio data.
 
 from __future__ import annotations
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import logging
 from typing import Tuple
@@ -30,6 +31,11 @@ import logging
 from typing import Tuple, List, Optional, Dict, Any
 import numpy as np
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+import logging
+from typing import Tuple, List, Optional, Dict, Any
+import numpy as np
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .tensorrt_loader import TensorRTLoader
 
 try:
@@ -40,13 +46,17 @@ except ImportError:
 logger = logging.getLogger("pyagent.multimodal.quantized")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class QuantizedMultimediaEngine:
     """
     Accelerates multimodal data processing using low-bit quantization.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, mode: str = "FP8") -> None:
@@ -54,6 +64,10 @@ class QuantizedMultimediaEngine:
     
     def __init__(self, mode: str = "FP8"):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    
+    def __init__(self, mode: str = "FP8"):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.mode = mode
         self.loader = TensorRTLoader()
         logger.info(f"Quantized Engine initialized in {mode} mode.")
@@ -80,10 +94,14 @@ class QuantizedMultimediaEngine:
             output = rc.cross_modal_attention_rust(q.tolist(), k.tolist(), v.tolist(), float(scale))
             return np.array(output, dtype=np.float32)
 <<<<<<< HEAD
+<<<<<<< HEAD
         return q  # No-op fallback
 =======
         return q # No-op fallback
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        return q # No-op fallback
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def check_coherence(self, stream_a: np.ndarray, stream_b: np.ndarray) -> float:
         """
@@ -101,10 +119,14 @@ class QuantizedMultimediaEngine:
             q_vals, scale, zp = rc.quantize_asymmetric_rust(data.flatten().tolist(), bits)
             return np.array(q_vals, dtype=np.uint8), scale, zp
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Fallback
         qmax = (1 << bits) - 1
         min_val, max_val = data.min(), data.max()
@@ -114,12 +136,16 @@ class QuantizedMultimediaEngine:
         return quantized, scale, zp
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def dequantize_media(
         self, quantized: np.ndarray, scale: float, zp: int, original_shape: Tuple[int, ...]
     ) -> np.ndarray:
 =======
     def dequantize_media(self, quantized: np.ndarray, scale: float, zp: int, original_shape: Tuple[int, ...]) -> np.ndarray:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def dequantize_media(self, quantized: np.ndarray, scale: float, zp: int, original_shape: Tuple[int, ...]) -> np.ndarray:
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """
         Restore media data from quantized format.
         """
@@ -136,8 +162,12 @@ class QuantizedMultimediaEngine:
             scaled = rc.apply_ia3_scaling_rust(activations.flatten().tolist(), scaling.tolist())
             return np.array(scaled, dtype=np.float32).reshape(activations.shape)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
             
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return activations * scaling

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 """
 Agent bar.py module.
@@ -10,11 +11,16 @@ Agent bar.py module.
 from typing import Any, Dict
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # Copyright 2026 PyAgent Authors
 # AgentBar: Real-time status and control component for Phase 51 Multimedia.
 
 from typing import Dict, List, Any
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class AgentBar:
     """
@@ -22,6 +28,7 @@ class AgentBar:
     Integrates with the 120fps DVD-channel MUXer.
     """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self) -> None:
         self.status = "IDLE"
@@ -31,10 +38,16 @@ class AgentBar:
         self.status = "IDLE"
         self.active_channels = ["TEXT", "AUDIO", "VIDEO"]
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def __init__(self):
+        self.status = "IDLE"
+        self.active_channels = ["TEXT", "AUDIO", "VIDEO"]
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.throughput_fps = 0.0
         self.latency_ms = 0.0
         self.sync_offset_ms = 0.0
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def update_metrics(self, fps: float, latency: float, sync: float) -> None:
         """Updates the real-time performance metrics."""
@@ -43,13 +56,18 @@ class AgentBar:
         self.sync_offset_ms: float = sync
         self.status: str = "ACTIVE" if fps > 0 else "IDLE"
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def update_metrics(self, fps: float, latency: float, sync: float):
         """Updates the real-time performance metrics."""
         self.throughput_fps = fps
         self.latency_ms = latency
         self.sync_offset_ms = sync
         self.status = "ACTIVE" if fps > 0 else "IDLE"
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def render_props(self) -> Dict[str, Any]:
         """Returns properties for React/Vue front-end rendering."""
@@ -61,25 +79,35 @@ class AgentBar:
                     "fps": round(self.throughput_fps, 1),
                     "latency": f"{round(self.latency_ms, 2)}ms",
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "sync": f"{round(self.sync_offset_ms, 2)}ms",
 =======
                     "sync": f"{round(self.sync_offset_ms, 2)}ms"
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                    "sync": f"{round(self.sync_offset_ms, 2)}ms"
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 },
                 "channels": [
                     {"name": "TEXT", "active": True, "type": "0x01"},
                     {"name": "AUDIO", "active": self.throughput_fps > 0, "type": "0x02"},
+<<<<<<< HEAD
 <<<<<<< HEAD
                     {"name": "VIDEO", "active": self.throughput_fps > 50, "type": "0x03"},
                 ],
                 "theme": "quantum-dark",
             },
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     {"name": "VIDEO", "active": self.throughput_fps > 50, "type": "0x03"}
                 ],
                 "theme": "quantum-dark"
             }
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }
 
     def get_styles(self) -> str:

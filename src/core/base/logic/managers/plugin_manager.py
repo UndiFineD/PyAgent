@@ -2,6 +2,7 @@
 Manager for plugin discovery, loading, and registration.
 (Facade for src.core.base.common.plugin_core)
 """
+<<<<<<< HEAD
 
 """
 Manager for plugin discovery, loading, and registration.
@@ -24,12 +25,22 @@ from src.core.base.common.plugin_core import (
 )
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+
+from __future__ import annotations
+from src.core.base.common.plugin_core import (
+    PluginCore as StandardPluginManager,
+    PluginMetadata as StandardPluginMetadata
+)
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class PluginMetadata(StandardPluginMetadata):
     """
     Facade for StandardPluginMetadata to maintain backward compatibility.
     """
     pass
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 class PluginManager(StandardPluginManager):
@@ -46,3 +57,12 @@ class PluginManager(StandardPluginManager):
     pass
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+class PluginManager(StandardPluginManager):
+    """
+    Facade for PluginCore to maintain backward compatibility.
+    Plugin management is now centralized in the Infrastructure/Common tier.
+    """
+    pass
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

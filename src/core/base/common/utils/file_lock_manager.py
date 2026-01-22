@@ -4,6 +4,7 @@ Manager for file locking.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Manager for file locking.
 (Facade for src.core.base.common.lock_core)
@@ -76,3 +77,6 @@ class FileLockManager:
 =======
 from src.core.base.common.lock_core import LockCore as FileLockManager
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.lock_core import LockCore as FileLockManager
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

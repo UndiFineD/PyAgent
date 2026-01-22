@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,8 +44,26 @@ class ResourceQuotaManager(StandardResourceQuotaManager):
 __all__ = ["QuotaConfig", "ResourceQuotaManager"]
 =======
     """
+=======
+"""
+Manager for Resource Quotas and budget enforcement.
+(Facade for src.core.base.common.resource_core)
+"""
+
+from src.core.base.common.resource_core import (
+    ResourceCore as StandardResourceQuotaManager,
+    QuotaConfig,
+    ResourceUsage
+)
+
+class ResourceQuotaManager(StandardResourceQuotaManager):
+    """
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     Facade for ResourceCore to maintain backward compatibility.
     Resource enforcement logic is now centralized in the Infrastructure/Common tier.
     """
     pass
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

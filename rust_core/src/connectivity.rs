@@ -16,10 +16,14 @@ use pyo3::prelude::*;
 /// High-throughput binary framing and multiplexing (Common/Connectivity).
 #[pyfunction]
 <<<<<<< HEAD
+<<<<<<< HEAD
 pub fn establish_native_connection(target_agent: &str, _protocol: &str) -> PyResult<bool> {
 =======
 pub fn establish_native_connection(target_agent: &str, protocol: &str) -> PyResult<bool> {
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+pub fn establish_native_connection(target_agent: &str, protocol: &str) -> PyResult<bool> {
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     // Placeholder for native socket establishment
     Ok(!target_agent.is_empty())
 }

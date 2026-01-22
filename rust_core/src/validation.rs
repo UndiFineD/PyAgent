@@ -19,10 +19,14 @@ use serde_json::Value;
 #[pyfunction]
 pub fn json_schema_validate_rust(json_str: &str, schema_str: &str) -> PyResult<bool> {
 <<<<<<< HEAD
+<<<<<<< HEAD
     let _json: Value = serde_json::from_str(json_str)
 =======
     let json: Value = serde_json::from_str(json_str)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    let json: Value = serde_json::from_str(json_str)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid JSON: {}", e)))?;
     let _schema: Value = serde_json::from_str(schema_str)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid Schema: {}", e)))?;

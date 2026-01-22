@@ -4,6 +4,7 @@ Configuration loader.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Configuration loader.
 (Facade for src.core.base.common.config_core)
@@ -15,3 +16,6 @@ __all__ = ["ConfigLoader"]
 =======
 from src.core.base.common.config_core import ConfigCore as ConfigLoader
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.config_core import ConfigCore as ConfigLoader
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

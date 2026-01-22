@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +31,8 @@ logger = logging.getLogger("pyagent.platform")
 
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified platform and hardware detection core."""
@@ -42,11 +45,15 @@ from typing import Dict, Any, Optional
 
 logger = logging.getLogger("pyagent.platform")
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class PlatformCore:
     """
     Standardized detector for environment, OS, and hardware capabilities.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     _instance: Optional["PlatformCore"] = None
@@ -57,11 +64,17 @@ class PlatformCore:
 
     def __new__(cls):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    _instance: Optional['PlatformCore'] = None
+
+    def __new__(cls):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if cls._instance is None:
             cls._instance = super(PlatformCore, cls).__new__(cls)
             cls._instance._initialize()
         return cls._instance
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def __init__(self) -> None:
         # Attributes are initialized in _initialize for singleton consistency
@@ -78,10 +91,14 @@ class PlatformCore:
 =======
     def _initialize(self):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    def _initialize(self):
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.system = platform.system()
         self.release = platform.release()
         self.machine = platform.machine()
         self.python_version = sys.version.split()[0]
+<<<<<<< HEAD
 <<<<<<< HEAD
         self._is_windows = self.system == "Windows"
         self._is_linux = self.system == "Linux"
@@ -91,29 +108,40 @@ class PlatformCore:
     def is_windows(self) -> bool:
         """Returns True if the current OS is Windows."""
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self._is_windows = (self.system == "Windows")
         self._is_linux = (self.system == "Linux")
         self._is_darwin = (self.system == "Darwin")
 
     @property
     def is_windows(self) -> bool:
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self._is_windows
 
     @property
     def is_linux(self) -> bool:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Returns True if the current OS is Linux."""
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self._is_linux
 
     @property
     def is_macos(self) -> bool:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Returns True if the current OS is macOS."""
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self._is_darwin
 
     def get_info(self) -> Dict[str, Any]:
@@ -133,11 +161,15 @@ class PlatformCore:
         """Basic resource usage without full psutil dependency requirement."""
         try:
 <<<<<<< HEAD
+<<<<<<< HEAD
             import psutil  # pylint: disable=import-outside-toplevel
 
 =======
             import psutil
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            import psutil
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             cpu = psutil.cpu_percent(interval=None)
             mem = psutil.virtual_memory()._asdict()
             return {"cpu_percent": cpu, "memory": mem}
@@ -150,6 +182,7 @@ class PlatformCore:
         if os.environ.get("CUDA_VISIBLE_DEVICES") == "-1":
             return False
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         try:
             import torch  # pylint: disable=import-outside-toplevel
@@ -161,6 +194,8 @@ class PlatformCore:
 
                 return len(tf.config.list_physical_devices("GPU")) > 0
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
         try:
             import torch
@@ -169,6 +204,9 @@ class PlatformCore:
             try:
                 import tensorflow as tf
                 return len(tf.config.list_physical_devices('GPU')) > 0
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             except ImportError:
                 return False

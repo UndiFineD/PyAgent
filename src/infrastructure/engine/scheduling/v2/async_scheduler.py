@@ -19,19 +19,25 @@ Implements non-blocking scheduling updates, speculative token handling, and stru
 
 import logging
 <<<<<<< HEAD
+<<<<<<< HEAD
 import time
 from typing import Any, Dict, List
 
 from src.infrastructure.engine.request_queue.v2.request_queue import RequestQueueV2
 from src.infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import asyncio
 from typing import Dict, List, Optional, Any, Set
 import time
 
 from .scheduler_output import SchedulerOutput, ScheduledSequence
 from ...request_queue.v2.request_queue import RequestQueueV2
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -39,17 +45,22 @@ except ImportError:
     rc = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 logger: logging.Logger = logging.getLogger(__name__)
 
 =======
 logger = logging.getLogger(__name__)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+logger = logging.getLogger(__name__)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class AsyncSchedulerV2:
     """
     Advanced async scheduler emphasizing non-blocking execution and speculation.
     Part of Phase 54 Engine Evolution.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __init__(self, max_batched_tokens: int = 4096) -> None:
@@ -58,13 +69,18 @@ class AsyncSchedulerV2:
         self.active_outputs: Dict[float, SchedulerOutput] = {}
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     
     def __init__(self, max_batched_tokens: int = 4096):
         self.max_batched_tokens = max_batched_tokens
         self.request_queue = RequestQueueV2()
         self.active_outputs: Dict[float, SchedulerOutput] = {}
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Performance tracking
         self.schedule_latency_ms: List[float] = []
 
@@ -72,6 +88,7 @@ class AsyncSchedulerV2:
         """
         Performs an asynchronous scheduling step.
         """
+<<<<<<< HEAD
 <<<<<<< HEAD
         start_time: float = time.perf_counter()
 
@@ -81,6 +98,8 @@ class AsyncSchedulerV2:
         requests: List[Any] = self.request_queue.pop_next_batch(self.max_batched_tokens)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         start_time = time.perf_counter()
         
         output = SchedulerOutput(max_num_batched_tokens=self.max_batched_tokens)
@@ -88,7 +107,10 @@ class AsyncSchedulerV2:
         # 1. Pop requests from queue
         requests = self.request_queue.pop_next_batch(self.max_batched_tokens)
         
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # 2. Map to ScheduledSequence
         for req in requests:
             seq = ScheduledSequence(
@@ -97,23 +119,30 @@ class AsyncSchedulerV2:
                 output_len=req.output_len,
                 tokens=req.tokens,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 spec_tokens=getattr(req, "spec_tokens", None),
                 priority=int(req.priority.value),
             )
             output.add_sequence(seq)
 
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 spec_tokens=getattr(req, 'spec_tokens', None),
                 priority=int(req.priority.value)
             )
             output.add_sequence(seq)
             
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # 3. Apply Rust-accelerated updates if available
         if rc and hasattr(rc, "async_schedule_update_rust"):
             try:
                 # Optimized metadata update
                 rc.async_schedule_update_rust(output.get_seq_ids())
+<<<<<<< HEAD
 <<<<<<< HEAD
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug(f"Rust schedule update fallback: {e}")
@@ -132,6 +161,8 @@ class AsyncSchedulerV2:
 
     def add_request(self, request: Any) -> None:
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             except Exception as e:
                 logger.debug(f"Rust schedule update fallback: {e}")
 
@@ -148,7 +179,10 @@ class AsyncSchedulerV2:
         return output
 
     def add_request(self, request: Any):
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Pass-through to the priority queue."""
         self.request_queue.add_request(request)
 

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +16,13 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Manager for response post-processing and multimodal inputs.
 (Facade for src.core.base.common.processor_core)
 """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 from __future__ import annotations
@@ -76,3 +80,11 @@ from src.core.base.common.processor_core import (
 from src.core.base.common.serialization_core import SerializationCore as SerializationManager
 
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from src.core.base.common.processor_core import (
+    ProcessorCore as ResponsePostProcessor,
+    ProcessorCore as MultimodalProcessor
+)
+from src.core.base.common.serialization_core import SerializationCore as SerializationManager
+
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

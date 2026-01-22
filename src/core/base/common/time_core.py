@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +21,8 @@ Unified time and timestamp management core.
 import time
 from datetime import datetime, timezone
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified time and timestamp management core."""
@@ -28,7 +31,10 @@ import time
 from datetime import datetime, timezone
 from typing import Optional
 
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -36,9 +42,12 @@ except ImportError:
     rc = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class TimeCore:
     """
     Ensures consistent time handling across the swarm (UTC focused).
@@ -48,6 +57,7 @@ class TimeCore:
     def now() -> datetime:
         """Get current UTC datetime."""
         if rc and hasattr(rc, "get_utc_timestamp_rust"):
+<<<<<<< HEAD
 <<<<<<< HEAD
             try:
                 ts = rc.get_utc_timestamp_rust()  # pylint: disable=no-member
@@ -59,12 +69,17 @@ class TimeCore:
             ts = rc.get_utc_timestamp_rust()
             return datetime.fromtimestamp(ts, tz=timezone.utc)
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            ts = rc.get_utc_timestamp_rust()
+            return datetime.fromtimestamp(ts, tz=timezone.utc)
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return datetime.now(timezone.utc)
 
     @staticmethod
     def timestamp() -> float:
         """Get current UTC timestamp."""
         if rc and hasattr(rc, "get_utc_timestamp_rust"):
+<<<<<<< HEAD
 <<<<<<< HEAD
             try:
                 return float(rc.get_utc_timestamp_rust())  # pylint: disable=no-member
@@ -74,6 +89,9 @@ class TimeCore:
 =======
             return float(rc.get_utc_timestamp_rust())
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            return float(rc.get_utc_timestamp_rust())
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return time.time()
 
     @classmethod

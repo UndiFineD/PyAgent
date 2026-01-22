@@ -45,6 +45,7 @@ class ConfigurationManager:
 
     def save(self) -> None:
 <<<<<<< HEAD
+<<<<<<< HEAD
         os.makedirs(os.path.dirname(self.config_file), exist_ok=True)
         with open(self.config_file, 'w') as f:
             json.dump(self.settings, f, indent=4)
@@ -64,3 +65,9 @@ class ConfigurationManager:
         if "github_token_file" in self.settings:
             os.environ["DV_GITHUB_TOKEN_FILE"] = self.settings["github_token_file"]
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        StorageCore.save_json(self.config_file, self.settings)
+        # Also update environment variable for backend compatibility
+        if "github_token_file" in self.settings:
+            os.environ["DV_GITHUB_TOKEN_FILE"] = self.settings["github_token_file"]
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

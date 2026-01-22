@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +21,14 @@
 
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for execution profiles and configuration management.
 """
 
 from __future__ import annotations
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 from typing import Any, Dict, Optional
@@ -37,6 +41,11 @@ from typing import Any, Dict, Optional
 from .base_core import BaseCore
 from .models import ExecutionProfile, ConfigProfile
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Any, Dict, Optional
+from .base_core import BaseCore
+from .models import ExecutionProfile, ConfigProfile
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class ProfileCore(BaseCore):
     """
@@ -49,6 +58,7 @@ class ProfileCore(BaseCore):
         self._active: Optional[str] = None
         self._register_defaults()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     @property
     def profiles(self) -> Dict[str, ExecutionProfile]:
@@ -127,6 +137,8 @@ class ProfileCore(BaseCore):
             return profile
         return None
 =======
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def _register_defaults(self) -> None:
         self._profiles["default"] = ExecutionProfile(name="default", timeout=120)
         self._profiles["fast"] = ExecutionProfile(name="fast", timeout=60, parallel=True, workers=4)
@@ -139,4 +151,7 @@ class ProfileCore(BaseCore):
         if self._active:
             return self._profiles.get(self._active)
         return self._profiles.get("default")
+<<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
