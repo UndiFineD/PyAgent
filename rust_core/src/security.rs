@@ -282,8 +282,93 @@ pub fn scan_insecure_patterns_rust(content: &str) -> PyResult<Vec<(String, Strin
     Ok(findings)
 }
 
+/// Specialized Auth Challenge generation (AuthCore).
+#[pyfunction]
+pub fn generate_challenge(agent_id: &str) -> PyResult<String> {
+    let mut hasher = sha2::Sha256::new();
+    hasher.update(agent_id.as_bytes());
+    hasher.update(std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e.to_string()))?.as_secs().to_string().as_bytes());
+    Ok(format!("{:x}", hasher.finalize()))
+}
+
+/// Specialized Auth Proof generation (AuthCore).
+#[pyfunction]
+pub fn generate_auth_proof(challenge: &str, secret_key: &str) -> PyResult<String> {
+    let mut hasher = sha2::Sha512::new();
+    hasher.update(format!("{}:{}", challenge, secret_key).as_bytes());
+    Ok(format!("{:x}", hasher.finalize()))
+}
+
+/// Specialized Auth Proof verification (AuthCore).
+#[pyfunction]
+pub fn verify_auth_proof(challenge: &str, proof: &str, expected_secret_hash: &str) -> PyResult<bool> {
+    let mut hasher = sha2::Sha512::new();
+    hasher.update(format!("{}:{}", challenge, expected_secret_hash).as_bytes());
+    let calculated = format!("{:x}", hasher.finalize());
+    Ok(calculated == proof)
+}
+
+/// High-speed JSON Schema validation (ValidationCore).
+/// Returns (is_valid, error_list).
+#[pyfunction]
+pub fn validate_json_schema_rust(data_json: &str, schema_json: &str) -> PyResult<(bool, Vec<String>)> {
+    let mut errors = Vec::new();
+    let data: serde_json::Value = match serde_json::from_str(data_json) {
+        Ok(v) => v,
+        Err(e) => {
+            errors.push(format!("Data JSON error: {}", e));
+            return Ok((false, errors));
+        }
+    };
+    let schema: serde_json::Value = match serde_json::from_str(schema_json) {
+        Ok(v) => v,
+        Err(e) => {
+            errors.push(format!("Schema JSON error: {}", e));
+            return Ok((false, errors));
+        }
+    };
+    if let Some(required) = schema.get("required").and_then(|r| r.as_array()) {
+        for req in required {
+            if let Some(key) = req.as_str() {
+                if data.get(key).is_none() {
+                    errors.push(format!("Missing required field: {}", key));
+                }
+            }
+        }
+    }
+    Ok((errors.is_empty(), errors))
+}
+
+/// High-speed file content safety scan (ValidationCore).
+#[pyfunction]
+pub fn validate_content_rust(file_path: &str, content: &str, rule_names: Vec<String>) -> PyResult<Vec<std::collections::HashMap<String, String>>> {
+    let mut results = Vec::new();
+    let unsafe_patterns = [
+        ("eval", r"eval\s*\("),
+        ("exec", r"exec\s*\("),
+        ("os_system", r"os\.system\s*\("),
+        ("subprocess", r"subprocess\.run\s*\("),
+    ];
+    for (name, pattern) in unsafe_patterns {
+        if rule_names.contains(&name.to_string()) || rule_names.is_empty() {
+            let re = Regex::new(pattern).unwrap();
+            if re.is_match(content) {
+                let mut res = std::collections::HashMap::new();
+                res.insert("rule".to_string(), name.to_string());
+                res.insert("file_path".to_string(), file_path.to_string());
+                res.insert("passed".to_string(), "false".to_string());
+                res.insert("message".to_string(), format!("Unsafe pattern detected: {}", name));
+                results.push(res);
+            }
+        }
+    }
+    Ok(results)
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(analyze_thought_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_auth_proof, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_challenge, m)?)?;
     m.add_function(wrap_pyfunction!(scan_code_vulnerabilities_rust, m)?)?;
     m.add_function(wrap_pyfunction!(scan_hardcoded_secrets_rust, m)?)?;
     m.add_function(wrap_pyfunction!(scan_injections_rust, m)?)?;
@@ -291,5 +376,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(scan_optimization_patterns_rust, m)?)?;
     m.add_function(wrap_pyfunction!(scan_pii_rust, m)?)?;
     m.add_function(wrap_pyfunction!(scan_secrets_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_content_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_json_schema_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(verify_auth_proof, m)?)?;
     Ok(())
 }

@@ -24,6 +24,7 @@ import operator
 import logging
 from typing import Any, Dict, List, Tuple
 from dataclasses import dataclass
+from src.core.base.common.formula_core import FormulaCore
 
 try:
     import rust_core as rc
@@ -218,52 +219,6 @@ class DerivedMetricCalculator:
     def __init__(self) -> None:
         """Initialize calculator."""
         self.derived_metrics: dict[str, Any] = {}
-        self.operators = {
-            ast.Add: operator.add,
-            ast.Sub: operator.sub,
-            ast.Mult: operator.mul,
-            ast.Div: operator.truediv,
-            ast.Pow: operator.pow,
-            ast.BitXor: operator.xor,
-            ast.USub: operator.neg,
-            ast.UAdd: operator.pos,
-        }
-
-    def _eval_node(self, node: ast.AST) -> float:
-        """Recursively evaluate an AST node (pure calculation)."""
-        if isinstance(node, ast.Constant):
-            return float(node.value)
-        if isinstance(node, ast.BinOp):
-            return self.operators[type(node.op)](
-                self._eval_node(node.left), self._eval_node(node.right)
-            )
-        if isinstance(node, ast.UnaryOp):
-            return self.operators[type(node.op)](self._eval_node(node.operand))
-        # Handle Name nodes (variable substitution)
-        if isinstance(node, ast.Name):
-            # DerivedMetricCalculator should handle substitution before parsing
-            # or pass context to this method.
-            # IMPORTANT: To support calculation with context, we need a method that accepts values.
-            raise ValueError(
-                f"Variable {node.id} cannot be evaluated without context in _eval_node."
-            )
-        if isinstance(node, ast.Call):
-            if isinstance(node.func, ast.Name):
-                func_name = node.func.id
-                args = [self._eval_node(a) for a in node.args]
-                if func_name == "abs":
-                    return abs(args[0])
-                if func_name == "max":
-                    return max(args)
-                if func_name == "min":
-                    return min(args)
-                if func_name == "sqrt":
-                    return math.sqrt(args[0])
-                if func_name == "pow":
-                    return math.pow(args[0], args[1])
-            raise TypeError(f"Unsupported function: {node.func}")
-
-        raise TypeError(f"Unsupported operation: {type(node)}")
 
     def calculate(self, metric_name: str, context: dict[str, float]) -> float:
         """Calculate derived metric value."""
@@ -307,29 +262,7 @@ class DerivedMetricCalculator:
             except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning("Rust evaluate_formula failed: %s. Falling back to Python.", e)
 
-        # Handle python format strings like "{a} + {b}"
-        expression = formula
-        if "{" in formula and "}" in formula:
-            with contextlib.suppress(Exception):
-                expression = formula.format(**values)
-
-        tree = ast.parse(expression, mode="eval")
-        return self._safe_eval(tree.body, values)
-
-    def _safe_eval(self, node: ast.AST, values: Dict[str, float]) -> float:
-        """Safely evaluate AST node with variable substitution."""
-        if isinstance(node, ast.Constant):
-            return float(node.value)
-        if isinstance(node, ast.Name):
-            if node.id not in values:
-                raise ValueError(f"Unknown variable: {node.id}")
-            return float(values[node.id])
-        if isinstance(node, ast.BinOp):
-            left = self._safe_eval(node.left, values)
-            right = self._safe_eval(node.right, values)
-            return self.operators[type(node.op)](left, right)
-
-        raise TypeError(f"Unsupported operation: {type(node)}")
+        return FormulaCore.evaluate(formula, values)
 
 
 class StatsRollupCore:

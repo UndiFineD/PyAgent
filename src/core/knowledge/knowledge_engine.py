@@ -16,6 +16,7 @@ from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from typing import Any
 from pathlib import Path
+from src.core.base.common.memory_core import MemoryCore
 from .btree_store import BTreeKnowledgeStore
 from .vector_store import VectorKnowledgeStore
 from .graph_store import GraphKnowledgeStore
@@ -27,6 +28,7 @@ __version__ = VERSION
 class KnowledgeEngine:
     """
     Central engine for managing multi-modal knowledge storage.
+    Delegates to MemoryCore for infrastructure and utility scoring.
     Automatically routes data to B-Tree, Vector, or Graph stores.
     Supports recursive compression of 'cold' memory blocks (Phase 128).
     """
@@ -34,7 +36,9 @@ class KnowledgeEngine:
     def __init__(self, agent_id: str, base_path: Path) -> None:
         self.agent_id = agent_id
         self.base_path = base_path / agent_id
+        self._memory_core = MemoryCore()
 
+        # Aligned with MemoryCore partitioned base
         self.btree = BTreeKnowledgeStore(agent_id, self.base_path / "structured")
         self.vector = VectorKnowledgeStore(agent_id, self.base_path / "semantic")
         self.graph = GraphKnowledgeStore(agent_id, self.base_path / "relational")
@@ -89,6 +93,7 @@ class KnowledgeEngine:
         key = kwargs.get("key", str(hash(content)))
         self.pruning.log_access(key)  # Mark as vital on store
 
+        # Delegate to specialized stores which now use MemoryCore backend
         if mode == "vector":
             return self.vector.store(key, content, kwargs.get("metadata"))
         elif mode == "btree":
@@ -97,14 +102,31 @@ class KnowledgeEngine:
             return self.graph.store(
                 content, kwargs.get("target"), kwargs.get("relationship", "related_to")
             )
-        return False
+        
+        # General store via MemoryCore if mode is generic
+        return self._memory_core.store_knowledge(self.agent_id, key, content, mode)
 
     def query(self, query: Any, mode: str = "vector", limit: int = 5) -> list[Any]:
+        """Query knowledge using specialized or generic mechanisms."""
         self.pruning.log_access(str(query))
+        
         if mode == "vector":
             return self.vector.retrieve(query, limit)
         elif mode == "btree":
             return self.btree.retrieve(query, limit)
         elif mode == "graph":
             return self.graph.retrieve(query, limit)
-        return []
+            
+        # Fallback to general MemoryCore retrieval
+        return self._memory_core.retrieve_knowledge(self.agent_id, str(query), mode, limit)
+
+    def delete(self, key: str, mode: str = "vector") -> bool:
+        """Standardized deletion across modes."""
+        if mode == "vector":
+            return self.vector.delete(key)
+        elif mode == "btree":
+            return self.btree.delete(key)
+        elif mode == "graph":
+            return self.graph.delete(key)
+        
+        return self._memory_core.delete_knowledge(self.agent_id, key, mode)

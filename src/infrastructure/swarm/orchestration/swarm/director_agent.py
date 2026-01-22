@@ -45,10 +45,17 @@ class DirectorAgent(BaseAgent):
             "Your goal is to manage complex multi-file projects. "
             "You have the authority to delegate tasks to other specialized agents:\n"
             "- CoderAgent: For implementation/refactoring.\n"
-            "- SearchAgent: For web research.\n"
-            "- TestsAgent: For unit testing.\n"
-            "- SecurityAgent: For auditing.\n"
-            "- ArchitectAgent: For system design.\n\n"
+            "- WebIntelligenceAgent: For deep web research, Arxiv synthesis, and navigation.\n"
+            "- TestsAgent: For unit testing and verification.\n"
+            "- SecurityAgent: For auditing and safety scanning.\n"
+            "- ArchitectAgent: For system design and IA³ configuration.\n\n"
+            "RESEARCH WORKFLOW:\n"
+            "If a task requires modern research (Phase 51+), follow this workflow:\n"
+            "1. Search: Use WebIntelligenceAgent's search_arxiv tools.\n"
+            "2. Data: Download papers/summaries to data/research/.\n"
+            "3. Map: Use ArchitectAgent to map findings to Agent Logic (e.g., IA³ layers).\n"
+            "4. Implement: Use CoderAgent to apply changes.\n"
+            "5. Track: Update docs/improvements.md and .improvements.md files.\n\n"
             "When given a task, break it down into steps. For each step, specify:\n"
             "1. The target file.\n"
             "2. The agent type to use.\n"
@@ -67,9 +74,11 @@ class DirectorAgent(BaseAgent):
         src_path = Path(ws_root) / "src"
 
         # Scan src/data/agents, src/logic/agents, and orchestration folders
-        for p in src_path.rglob("*Agent.py"):
-            if p.name not in ["BaseAgent.py", "DirectorAgent.py"]:
-                agents.append(p.stem)
+        for p in src_path.rglob("*_agent.py"):
+            if p.name not in ["base_agent.py", "director_agent.py"]:
+                # Convert snake_case to PascalCase for easier LLM identification
+                name = "".join(part.capitalize() for part in p.stem.split("_"))
+                agents.append(name)
 
         # Ensure we unique and sort
         return sorted(list(set(agents)))

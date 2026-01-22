@@ -23,6 +23,26 @@ mod text;
 mod inference;
 mod multimodal;
 mod quantlora;
+mod hardware;
+mod fs;
+mod metrics;
+mod config;
+mod auction;
+mod registry;
+mod template;
+mod validation;
+mod memory;
+mod search;
+mod analysis;
+mod connectivity;
+mod kv;
+mod shell;
+mod time;
+mod mux;
+mod attention;
+mod workspace;
+mod scheduling;
+mod distributed;
 
 /// A Python module implemented in Rust.
 #[pymodule]
@@ -38,6 +58,26 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     inference::register(m)?;
     multimodal::register(m)?;
     quantlora::register(m)?;
+    hardware::register(m)?;
+    fs::register(m)?;
+    metrics::register(m)?;
+    config::register(m)?;
+    auction::register(m)?;
+    registry::register(m)?;
+    template::register(m)?;
+    validation::register(m)?;
+    memory::register(m)?;
+    search::register(m)?;
+    analysis::register(m)?;
+    connectivity::register(m)?;
+    kv::register(m)?;
+    shell::register(m)?;
+    time::register(m)?;
+    mux::register(m)?;
+    attention::register(m)?;
+    workspace::register(m)?;
+    scheduling::register(m)?;
+    distributed::register(m)?;
 
     Ok(())
 }

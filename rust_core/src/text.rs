@@ -1980,7 +1980,41 @@ pub fn scan_workspace_quality_rust(
 }
 
 
+/// Apply template variables (Common/Template).
+/// Optimized for high-throughput string substitution in massive prompt batches.
+#[pyfunction]
+pub fn apply_template_rust(template: &str, variables: HashMap<String, String>) -> PyResult<String> {
+    let mut result = template.to_string();
+    for (k, v) in variables {
+        let placeholder = format!("{{{{{}}}}}", k);
+        result = result.replace(&placeholder, &v);
+    }
+    Ok(result)
+}
+
+/// Calculate cyclomatic complexity (Common/Analysis).
+/// Fast branching-keyword-based calculation during agent linting.
+#[pyfunction]
+pub fn calculate_complexity_rust(code: &str) -> PyResult<i32> {
+    let keywords = ["if ", "for ", "while ", "case ", "catch ", " && ", " || "];
+    let mut count = 1;
+    for line in code.lines() {
+        let line = line.trim();
+        if line.starts_with("//") || line.starts_with("#") {
+            continue;
+        }
+        for kw in keywords {
+            if line.contains(kw) {
+                count += 1;
+            }
+        }
+    }
+    Ok(count)
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(calculate_complexity_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_template_rust, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_file_metrics_rust, m)?)?;
     m.add_function(wrap_pyfunction!(analyze_code_quality_rust, m)?)?;
     m.add_function(wrap_pyfunction!(analyze_failure_strategy_rust, m)?)?;

@@ -6,6 +6,7 @@ from typing import Any
 
 import pytest
 
+# pylint: disable=import-error
 from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 
 
@@ -179,7 +180,7 @@ def _inject_special_shims(mod: Any) -> None:
 
 def _create_legacy_validation_rule_shim(_real_cls: Any) -> Any:
     """Creates a shim for ValidationRule that supports legacy arguments."""
-    class TestValidationRule:
+    class TestValidationRule: # pylint: disable=too-few-public-methods,too-many-instance-attributes
         """Legacy shim for ValidationRule."""
         def __init__(
             self, name, pattern="", message="Validation failed", severity="error", **kwargs
@@ -197,7 +198,7 @@ def _create_legacy_validation_rule_shim(_real_cls: Any) -> Any:
 
 def _create_legacy_circuit_breaker_shim(real_cls: Any) -> Any:
     """Creates a shim for CircuitBreaker with mock fallback."""
-    class TestCircuitBreaker(real_cls):
+    class TestCircuitBreaker(real_cls): # pylint: disable=too-few-public-methods
         """Legacy shim for CircuitBreaker."""
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -209,13 +210,13 @@ def _create_legacy_circuit_breaker_shim(real_cls: Any) -> Any:
 def _inject_legacy_agent_wrapper(mod: Any) -> None:
     """Injects the LegacyAgentWrapper into the module if BaseAgent is present."""
     if hasattr(mod, "BaseAgent"):
-        # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel,import-error
         from tests.utils.legacy_support import create_legacy_agent_wrapper
         # Create wrapper that inherits from the current BaseAgent
-        LegacyAgent = create_legacy_agent_wrapper(mod.BaseAgent)
-        mod.Agent = LegacyAgent
+        legacy_agent = create_legacy_agent_wrapper(mod.BaseAgent)
+        mod.Agent = legacy_agent
         # Also alias BaseAgent to the wrapper for legacy tests that use mod.BaseAgent
-        mod.BaseAgent = LegacyAgent
+        mod.BaseAgent = legacy_agent
 
 
 @pytest.fixture

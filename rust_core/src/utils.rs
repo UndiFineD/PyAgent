@@ -2,6 +2,7 @@
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 use std::collections::{HashMap, HashSet};
+use std::fs;
 
 /// Fast hashing for shard lookup (Phase 131).
 /// Uses a simplified FNV-1a hash for sub-millisecond page access.
@@ -1195,7 +1196,62 @@ pub fn parse_xml_tool_call_rust(
     Ok(None)
 }
 
+#[pyfunction]
+#[pyfunction]
+pub fn find_literal_rust(content: &str, search: &str) -> PyResult<i64> {
+    // Phase 130: Optimized string search (KMP-lite)
+    match content.find(search) {
+        Some(pos) => Ok(pos as i64),
+        None => Ok(-1),
+    }
+}
+
+#[pyfunction]
+pub fn generate_hash(data: &str) -> PyResult<String> {
+    // Phase 131: SHA-256 integrity calculation
+    use sha2::{Sha256, Digest};
+    let mut hasher = Sha256::new();
+    hasher.update(data.as_bytes());
+    let result = hasher.finalize();
+    Ok(format!("{:x}", result))
+}
+
+#[pyfunction]
+pub fn verify_integrity(data: &str, expected_hash: &str) -> PyResult<bool> {
+    let actual = generate_hash(data)?;
+    Ok(actual == expected_hash)
+}
+
+/// Bulk hash files for filesystem integrity (FileSystemCore).
+#[pyfunction]
+pub fn bulk_hash_files_rust(paths: Vec<String>) -> PyResult<HashMap<String, String>> {
+    use sha2::{Sha256, Digest};
+    let mut results = HashMap::new();
+    for path in paths {
+        if let Ok(content) = fs::read(&path) {
+            let mut hasher = Sha256::new();
+            hasher.update(&content);
+            results.insert(path, hex::encode(hasher.finalize()));
+        }
+    }
+    Ok(results)
+}
+
+/// Adler-32 based sharding (KnowledgeCore).
+#[pyfunction]
+pub fn get_adler32_shard(key: &str, shard_count: usize) -> PyResult<usize> {
+    let mut a: u32 = 1;
+    let mut b: u32 = 0;
+    for byte in key.as_bytes() {
+        a = (a + *byte as u32) % 65521;
+        b = (b + a) % 65521;
+    }
+    let adler = (b << 16) | a;
+    Ok((adler as usize) % shard_count)
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(bulk_hash_files_rust, m)?)?;
     m.add_function(wrap_pyfunction!(apply_latency_spike, m)?)?;
     m.add_function(wrap_pyfunction!(apply_repetition_penalty_rust, m)?)?;
     m.add_function(wrap_pyfunction!(apply_temperature_rust, m)?)?;
@@ -1247,5 +1303,9 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(validate_prompt_rust, m)?)?;
     m.add_function(wrap_pyfunction!(validate_tensor_shape_rust, m)?)?;
     m.add_function(wrap_pyfunction!(xxhash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(find_literal_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_hash, m)?)?;
+    m.add_function(wrap_pyfunction!(verify_integrity, m)?)?;
+    m.add_function(wrap_pyfunction!(get_adler32_shard, m)?)?;
     Ok(())
 }

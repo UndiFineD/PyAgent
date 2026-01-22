@@ -18,13 +18,16 @@ from src.core.base.lifecycle.version import VERSION
 import ast
 import re
 from pathlib import Path
+from src.core.base.common.workspace_core import WorkspaceCore
+from src.core.base.common.analysis_core import AnalysisCore
+from src.core.base.common.file_system_core import FileSystemCore
 
 __version__ = VERSION
 
 # Constants used by helpers
-
-AGENT_DIR = Path(__file__).resolve().parent.parent.parent
-REPO_ROOT = AGENT_DIR.parent
+_workspace = WorkspaceCore()
+_analysis = AnalysisCore()
+_fs = FileSystemCore()
 
 
 def _read_text(path: Path) -> str:
@@ -34,8 +37,7 @@ def _read_text(path: Path) -> str:
 
 def _is_pytest_test_file(path: Path) -> bool:
     """Check if file is a pytest test file."""
-
-    return path.name.startswith("test_") and path.name.endswith(".py")
+    return _analysis.is_pytest_file(path)
 
 
 def _looks_like_pytest_import_problem(path: Path) -> str | None:
@@ -55,6 +57,8 @@ def _looks_like_pytest_import_problem(path: Path) -> str | None:
 
 def _find_imports(tree: ast.AST) -> list[str]:
     """Find all top-level imports in an AST."""
+    # Note: AnalysisCore.get_imports handles tree as well or source.
+    # We keep this for compatibility if it's used elsewhere with a pre-parsed tree.
     imports: list[str] = []
 
     for node in ast.walk(tree):
@@ -77,7 +81,7 @@ def _find_imports(tree: ast.AST) -> list[str]:
 
 def _detect_argparse(source: str) -> bool:
     """Check if source uses argparse."""
-    return "argparse" in source
+    return _analysis.detect_library_usage(source, "argparse")
 
 
 def _placeholder_test_note(path: Path, source: str) -> str | None:
@@ -91,10 +95,7 @@ def _placeholder_test_note(path: Path, source: str) -> str | None:
 
 def _rel(path: Path) -> str:
     """Get relative path string for display."""
-    try:
-        return str(path.relative_to(REPO_ROOT)).replace("\\", "/")
-    except ValueError:
-        return str(path).replace("\\", "/")
+    return _workspace.get_relative_path(path)
 
 
 def _find_issues(tree: ast.AST, source: str) -> list[str]:

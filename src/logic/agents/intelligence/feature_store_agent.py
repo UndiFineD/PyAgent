@@ -37,7 +37,7 @@ class FeatureStoreAgent(BaseAgent):
     Integrated with SynthesisCore for feature vectorization and insight merging.
     """
 
-    def __init__(self, file_path: str) -> None:
+    def __init__(self, file_path: str = ".") -> None:
         super().__init__(file_path)
         self.feature_dir = Path("data/memory/agent_store/features")
         self.feature_dir.mkdir(parents=True, exist_ok=True)

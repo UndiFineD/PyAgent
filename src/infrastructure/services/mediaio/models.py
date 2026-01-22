@@ -146,8 +146,13 @@ class MediaLoadConfig:
 
     # GPU settings
     use_gpu_decode: bool = True
+    use_tensorrt: bool = False
     device: str = "cuda:0"
 
     # Caching
     enable_cache: bool = True
     cache_dir: Optional[str] = None
+
+    # Distributed / Remote settings
+    use_nixl: bool = False
+    use_mooncake: bool = False

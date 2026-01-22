@@ -17,6 +17,7 @@ from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 from src.logic.agents.intelligence.web_core import WebCore
 from src.logic.agents.intelligence.search_core import SearchCore
+from src.logic.agents.intelligence.arxiv_core import ArxivCore
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
@@ -38,6 +39,7 @@ class WebIntelligenceAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
         self.web_core = WebCore()
         self.search_core = SearchCore()
+        self.arxiv_core = ArxivCore()
         self.security_guard = SecurityGuardAgent(file_path)
 
         self._system_prompt = (
@@ -49,6 +51,29 @@ class WebIntelligenceAgent(BaseAgent):
         )
 
     # --- SEARCH TOOLS (Consolidated from SearchAgent) ---
+
+    @as_tool
+    def search_arxiv(self, query: str, max_results: int = 5) -> str:
+        """Searches Arxiv for research papers and returns summarized metadata."""
+        logging.info(f"WebIntelligence: Searching Arxiv for '{query}'")
+        results = self.arxiv_core.search(query, max_results)
+        return self.arxiv_core.summarize_results(results)
+
+    @as_tool
+    def fetch_arxiv_paper(self, pdf_url: str, filename: str) -> str:
+        """Downloads an Arxiv paper and extracts its text for analysis."""
+        logging.info(f"WebIntelligence: Fetching Arxiv paper {pdf_url}")
+        path = self.arxiv_core.download_paper(pdf_url, filename)
+        if not path:
+            return "Failed to download paper."
+        
+        text = self.arxiv_core.extract_text(path)
+        # Scan for safety
+        injections = self.security_guard.scan_for_injection(text)
+        if injections:
+            return f"ERROR: Content blocked for safety: {', '.join(injections)}"
+            
+        return text
 
     @as_tool
     def search_web(self, query: str, provider: str = "duckduckgo", max_results: int = 5) -> str:
