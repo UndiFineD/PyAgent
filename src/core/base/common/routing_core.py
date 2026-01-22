@@ -19,6 +19,7 @@ Core logic for performance-based routing and task distribution.
 from __future__ import annotations
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import os
 from typing import Any, Dict, Optional
@@ -34,8 +35,10 @@ except ImportError:
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
+=======
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import os
-from typing import Any, List, Dict, Optional
+from typing import Any, Dict, Optional
 from .base_core import BaseCore
 
 try:
@@ -43,12 +46,15 @@ try:
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 logger = logging.getLogger("pyagent.routing")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
+=======
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class RoutingCore(BaseCore):
     """
     Authoritative engine for task routing and provider selection.
@@ -91,6 +97,7 @@ class RoutingCore(BaseCore):
         """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "select_provider_rust"):  # pylint: disable=no-member
             try:
                 return rc.select_provider_rust(  # pylint: disable=no-member
@@ -104,9 +111,12 @@ class RoutingCore(BaseCore):
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc and hasattr(rc, "select_provider_rust"):
+=======
+        if rc and hasattr(rc, "select_provider_rust"): # pylint: disable=no-member
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
-                return rc.select_provider_rust(task_type, priority, performance_report or {})
-            except Exception:
+                return rc.select_provider_rust(task_type, priority, performance_report or {}) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
 <<<<<<< HEAD

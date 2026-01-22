@@ -192,8 +192,9 @@ class WorkspaceCore:
         if not ignore_path.exists():
             return set()
 
-        if rc and hasattr(rc, "parse_codeignore_rust"):
+        if rc and hasattr(rc, "parse_codeignore_rust"): # pylint: disable=no-member
             try:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                 patterns = rc.parse_codeignore_rust(str(ignore_path))  # pylint: disable=no-member
@@ -204,8 +205,11 @@ class WorkspaceCore:
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 patterns = rc.parse_codeignore_rust(str(ignore_path))
+=======
+                patterns = rc.parse_codeignore_rust(str(ignore_path)) # type: ignore
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 return set(patterns)
-            except Exception as e:
+            except Exception as e: # pylint: disable=broad-exception-caught
                 self.logger.warning(f"Rust ignore parsing failed: {e}")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -242,7 +246,7 @@ class WorkspaceCore:
             self._ignore_cache_time[cache_key] = mtime
             return patterns
             
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.warning(f"Failed to read .codeignore: {e}")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

@@ -19,6 +19,7 @@ Implements the VCG auction model for truthful bidding.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict, List
 
 =======
@@ -27,6 +28,9 @@ from typing import Any, List, Dict, Optional
 =======
 from typing import Any, List, Dict, Optional
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Any, List, Dict
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 from .base_core import BaseCore
 
 try:
@@ -98,10 +102,10 @@ class AuctionCore(BaseCore):
     def calculate_vcg_auction(
         bids: List[Dict[str, Any]], slots: int
     ) -> List[Dict[str, Any]]:
-        if rc:
+        if rc and hasattr(rc, "calculate_vcg_auction"): # pylint: disable=no-member
             try:
-                return rc.calculate_vcg_auction(bids, slots)
-            except Exception:
+                return rc.calculate_vcg_auction(bids, slots) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
         if not bids: return []
@@ -115,13 +119,18 @@ class AuctionCore(BaseCore):
     def enforce_vram_quota(
         agent_vram_request: float, total_available: float, quota_percent: float = 0.2
     ) -> bool:
-        if rc:
+        if rc and hasattr(rc, "enforce_vram_quota"): # pylint: disable=no-member
             try:
+<<<<<<< HEAD
                 return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)
             except Exception:
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         return agent_vram_request <= (total_available * quota_percent)

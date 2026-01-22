@@ -43,7 +43,9 @@ import os
 import shutil
 import logging
 import tempfile
+import fnmatch
 from pathlib import Path
+<<<<<<< HEAD
 from typing import Any, Optional, Union
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.utils.file_lock_manager import FileLockManager
@@ -52,12 +54,19 @@ from src.core.base.common.models import LockType
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Any, Optional, Union, List, Set
+from .storage_core import StorageCore
+from .utils.file_lock_manager import FileLockManager
+from .models import LockType
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -69,6 +78,8 @@ import fnmatch
 from typing import Any, Optional, Union, List, Set
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
+=======
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class FileSystemCore:
     """
     Centralized handler for file system operations.
@@ -131,12 +142,12 @@ class FileSystemCore:
     def discover_files(self, root: Path, patterns: List[str] = ["*"], ignore: Optional[List[str]] = None) -> List[Path]:
         """Discovers files matching patterns, respecting ignore list."""
         # Use Rust-accelerated directory walking if available
-        if rc and hasattr(rc, "walk_directory_rust"):
+        if rc and hasattr(rc, "discover_files_rust"):  # pylint: disable=no-member
             try:
-                # Assuming rust_core.walk_directory_rust(root, patterns, ignore)
-                files = rc.walk_directory_rust(str(root), patterns, ignore or [])
+                # Map Python call to Rust name
+                files = rc.discover_files_rust(str(root), patterns, ignore or []) # type: ignore
                 return [Path(f) for f in files]
-            except Exception as e:
+            except Exception as e: # pylint: disable=broad-exception-caught
                 self.logger.warning(f"Rust directory walking failed: {e}")
 
         found = []
@@ -253,7 +264,7 @@ class FileSystemCore:
             self.logger.error("Atomic write failed for %s: %s", p, e)
 =======
             
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Atomic write failed for {p}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -273,10 +284,14 @@ class FileSystemCore:
             return True
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to copy %s to %s: %s", src, dst, e)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             self.logger.error(f"Failed to copy {src} to {dst}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -292,10 +307,14 @@ class FileSystemCore:
             return True
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to move %s to %s: %s", src, dst, e)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             self.logger.error(f"Failed to move {src} to {dst}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -315,10 +334,14 @@ class FileSystemCore:
             return True
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to delete %s: %s", p, e)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             self.logger.error(f"Failed to delete {p}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -375,7 +398,7 @@ class FileSystemCore:
                 for byte_block in iter(lambda: f.read(4096), b""):
                     sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Failed to calculate hash for {p}: {e}")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

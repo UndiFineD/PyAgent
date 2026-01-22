@@ -19,6 +19,7 @@ Core logic for fleet sharding and partitioning.
 from __future__ import annotations
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from .base_core import BaseCore
 
@@ -31,6 +32,8 @@ except ImportError:
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
+=======
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 from typing import Any, List, Dict, Optional
 from .base_core import BaseCore
 
@@ -39,12 +42,15 @@ try:
 except ImportError:
     rc = None
 
+<<<<<<< HEAD
 logger = logging.getLogger("pyagent.sharding")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
+=======
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class ShardCore(BaseCore):
     """
     Authoritative engine for agent and data partitioning.
@@ -62,6 +68,7 @@ class ShardCore(BaseCore):
         Determines the shard ID for a given key.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "calculate_shard_id_rust"):  # pylint: disable=no-member
@@ -107,9 +114,12 @@ class ShardCore(BaseCore):
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc and hasattr(rc, "calculate_shard_id_rust"):
+=======
+        if rc and hasattr(rc, "calculate_shard_id_rust"): # pylint: disable=no-member
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
-                return rc.calculate_shard_id_rust(key, shard_count)
-            except Exception:
+                return rc.calculate_shard_id_rust(key, shard_count) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
         # Fallback to simple hash-based sharding

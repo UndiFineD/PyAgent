@@ -29,6 +29,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Union
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from ..lifecycle.version import VERSION
 from .base_interfaces import Component, Loadable, Saveable
@@ -45,6 +46,12 @@ from src.core.base.common.base_interfaces import Loadable, Saveable, Component
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.workspace_core import WorkspaceCore
 from src.core.base.lifecycle.version import VERSION
+=======
+from .base_interfaces import Loadable, Saveable, Component
+from .storage_core import StorageCore
+from .workspace_core import WorkspaceCore
+from ..lifecycle.version import VERSION
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 logger = logging.getLogger("pyagent.core")
 
@@ -112,10 +119,14 @@ class BaseCore(Loadable, Saveable, Component):
             return True
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error(f"[{self.name}] Failed to save state to {save_path}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======

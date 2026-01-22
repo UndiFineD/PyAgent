@@ -3,6 +3,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 use std::ffi::CString;
 use std::os::raw::{c_char, c_int};
@@ -11,6 +12,8 @@ use std::os::raw::{c_char, c_int};
 use std::ffi::CString;
 use std::os::raw::{c_char, c_int};
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 use pyo3::prelude::*;
 
 /// Registers hardware acceleration functions with the Python module.

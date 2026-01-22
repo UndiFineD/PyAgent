@@ -44,14 +44,13 @@ class ShellResult:
 """Unified shell execution core for all PyAgent services."""
 
 import os
-import sys
 import logging
 import asyncio
 import subprocess
 import time
 import re
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Union, Tuple
+from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass, field
 
 
@@ -115,6 +114,7 @@ class ShellCore:
             try:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 from ..configuration.config_manager import \
                     CoreConfigManager  # pylint: disable=import-outside-toplevel
 
@@ -159,38 +159,15 @@ class ShellCore:
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 from src.core.base.configuration.config_manager import CoreConfigManager
+=======
+                from ..configuration.config_manager import CoreConfigManager
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 self.repo_root = CoreConfigManager().root_dir
-            except ImportError:
+            except (ImportError, Exception): # pylint: disable=broad-exception-caught
                 self.repo_root = Path.cwd()
             
         self.logger = logging.getLogger("pyagent.shell")
         self._ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
-
-    def execute(self, cmd: List[str], timeout: int = 120) -> ShellResult:
-        """Synchronous execution, Rust-accelerated for high-speed spawning."""
-        start_time = time.perf_counter()
-        if rc and hasattr(rc, "execute_shell_rust"):
-            try:
-                code, stdout, stderr = rc.execute_shell_rust(cmd[0], cmd[1:])
-                return ShellResult(
-                    command=cmd,
-                    returncode=code,
-                    stdout=stdout,
-                    stderr=stderr,
-                    duration=time.perf_counter() - start_time
-                )
-            except Exception as e:
-                self.logger.warning(f"Rust shell execution failed: {e}")
-        
-        # Python fallback
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-        return ShellResult(
-            command=cmd,
-            returncode=proc.returncode,
-            stdout=proc.stdout,
-            stderr=proc.stderr,
-            duration=time.perf_counter() - start_time
-        )
 
     def sanitize_env(self, env: Dict[str, str]) -> Dict[str, str]:
         """Filters environment variables to prevent secret leakage."""
@@ -373,6 +350,21 @@ class ShellCore:
     ) -> ShellResult:
         """Execute a command synchronously."""
         start_time = time.perf_counter()
+
+        # Use Rust-accelerated directory walking if available
+        if rc and hasattr(rc, "execute_shell_rust") and not env and not cwd: # pylint: disable=no-member
+            try:
+                code, stdout, stderr = rc.execute_shell_rust(cmd[0], cmd[1:]) # type: ignore
+                return ShellResult(
+                    command=cmd,
+                    returncode=code,
+                    stdout=stdout,
+                    stderr=stderr,
+                    duration=time.perf_counter() - start_time
+                )
+            except Exception as e: # pylint: disable=broad-exception-caught
+                self.logger.warning(f"Rust shell execution failed: {e}")
+
         current_env = os.environ.copy()
         if env:
             current_env.update(env)

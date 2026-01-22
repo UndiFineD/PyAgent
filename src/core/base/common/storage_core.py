@@ -77,6 +77,7 @@ class StorageCore:
 =======
             with open(p, 'r', encoding='utf-8') as f:
                 return json.load(f)
+<<<<<<< HEAD
         except Exception as e:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -84,6 +85,9 @@ class StorageCore:
                 return json.load(f)
         except Exception as e:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to load JSON from %s: %s", p, e)
             return default
 
@@ -118,18 +122,22 @@ class StorageCore:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             
             # Use Rust acceleration for atomic, high-speed write if available
-            if rc and hasattr(rc, "save_json_atomic_rust"):
+            if rc and hasattr(rc, "save_json_atomic_rust"): # pylint: disable=no-member
                 content = json.dumps(data, indent=indent)
-                if rc.save_json_atomic_rust(str(p), content):
+                if rc.save_json_atomic_rust(str(p), content): # type: ignore
                     return
 
             with open(p, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=indent)
+<<<<<<< HEAD
         except Exception as e:
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to save JSON to %s: %s", p, e)
 
     @staticmethod
@@ -147,6 +155,7 @@ class StorageCore:
 =======
             with open(p, 'r', encoding='utf-8') as f:
                 return yaml.safe_load(f)
+<<<<<<< HEAD
         except Exception as e:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -154,6 +163,9 @@ class StorageCore:
                 return yaml.safe_load(f)
         except Exception as e:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to load YAML from %s: %s", p, e)
             return default
 
@@ -179,6 +191,7 @@ class StorageCore:
 =======
             with open(p, 'w', encoding='utf-8') as f:
                 yaml.dump(data, f, default_flow_style=False)
+<<<<<<< HEAD
         except Exception as e:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -186,6 +199,9 @@ class StorageCore:
                 yaml.dump(data, f, default_flow_style=False)
         except Exception as e:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to save YAML to %s: %s", p, e)
 
     @staticmethod

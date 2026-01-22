@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 use regex::{Regex, RegexSet};
+use sha2::Digest;
 use std::collections::HashSet;
 use walkdir::WalkDir;
 

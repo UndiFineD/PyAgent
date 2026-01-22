@@ -33,13 +33,21 @@ except ImportError:
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Unified Autonomy and Self-Model core."""
 
-from src.core.base.common.base_core import BaseCore
+from .base_core import BaseCore
 from typing import List, Optional
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class AutonomyCore(BaseCore):
     """
     Standard implementation for Agent Autonomy and Self-Model.
@@ -63,6 +71,7 @@ class AutonomyCore(BaseCore):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
         """Rust-accelerated autonomy evaluation."""
         if rc and hasattr(rc, "evaluate_autonomy_score"):  # pylint: disable=no-member
@@ -76,6 +85,17 @@ class AutonomyCore(BaseCore):
 
     def identify_blind_spots(self, success_rate: float, task_diversity: float) -> List[str]:
 =======
+=======
+    def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
+        """Rust-accelerated autonomy evaluation."""
+        if rc and hasattr(rc, "evaluate_autonomy_score"): # pylint: disable=no-member
+            try:
+                return rc.evaluate_autonomy_score(agent_id, stats) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+        return 0.5 # Default fallback
+
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
     def identify_blind_spots(
         self, success_rate: float, task_diversity: float
     ) -> List[str]:

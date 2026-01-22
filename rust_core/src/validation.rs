@@ -20,6 +20,7 @@ use serde_json::Value;
 pub fn json_schema_validate_rust(json_str: &str, schema_str: &str) -> PyResult<bool> {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     let _json: Value = serde_json::from_str(json_str)
 =======
     let json: Value = serde_json::from_str(json_str)
@@ -27,6 +28,9 @@ pub fn json_schema_validate_rust(json_str: &str, schema_str: &str) -> PyResult<b
 =======
     let json: Value = serde_json::from_str(json_str)
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    let _json: Value = serde_json::from_str(json_str)
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid JSON: {}", e)))?;
     let _schema: Value = serde_json::from_str(schema_str)
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(format!("Invalid Schema: {}", e)))?;

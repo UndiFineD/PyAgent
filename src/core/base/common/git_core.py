@@ -46,12 +46,17 @@ from .shell_core import ShellCore
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, List
+<<<<<<< HEAD
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.shell_core import ShellCore
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from .base_core import BaseCore
+from .shell_core import ShellCore
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -113,9 +118,13 @@ class GitCore(BaseCore):
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if self.no_git: return False
         
-        if rc and hasattr(rc, "git_commit_rust"):
-            return rc.git_commit_rust(str(self.repo_root), message, files)
+        if rc and hasattr(rc, "git_commit_rust"): # pylint: disable=no-member
+            try:
+                return rc.git_commit_rust(str(self.repo_root), message, files) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
             
+<<<<<<< HEAD
         file_args = "." if not files else " ".join(files)
         self.shell.run(f"git add {file_args}")
         self.shell.run(f"git commit -m \"{message}\"")
@@ -123,6 +132,14 @@ class GitCore(BaseCore):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if files:
+            self.shell.execute(["git", "add"] + files)
+        else:
+            self.shell.execute(["git", "add", "."])
+            
+        self.shell.execute(["git", "commit", "-m", message])
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         return True
 
     def get_status(self) -> str:
@@ -142,14 +159,18 @@ class GitCore(BaseCore):
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if self.no_git: return ""
-        return self.shell.run("git status").stdout
+        return self.shell.execute(["git", "status"]).stdout
 
     def branch(self, name: str) -> bool:
         """Creates or switches to a branch."""
         if self.no_git: return False
+<<<<<<< HEAD
         self.shell.run(f"git checkout -b {name}")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        self.shell.execute(["git", "checkout", "-b", name])
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         return True

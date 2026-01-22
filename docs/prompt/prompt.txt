@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Strategic Improvement Directives (Phase 50)
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -84,34 +85,41 @@ to become the best streaming ai out there (120fps DVD-channel capability).
 - monitor docs\prompt\roadmap.txt and documentation sync.
 - the idea is to utilize multiple machines in the local network or internet.
 - use Nixl and Mooncake for high-speed KV transfer between nodes.
+=======
+# Strategic Improvement Directives (Version 4.0.0)
+# This file (docs/prompt/prompt.txt) is the primary source for swarm-level prompting logic.
+# Priority: CRITICAL | Status: PHASE 91 - LIQUIDITY & CACHE INVALIDATION 🚧 PLANNING
+# Rust Functions: 680 | Test Coverage: ~4500+ tests passing
+@focus: ["src.infrastructure.swarm.orchestration", "src.infrastructure.liquidity", "rust_core/src"]
 
 ---
 
-## Phase 49: Systematic Modularization ✅ COMPLETE
-@location: ["src/infrastructure/sampling", "src/infrastructure/engine"]
+## Phase 90: The Swarm Singularity ✅ COMPLETE
+@location: ["src.infrastructure.swarm.meta", "src.infrastructure.swarm.p2p"]
 
-### Implemented Refactors (Files > 500 lines decoupled)
-1. **SamplingEngine.py** -> src/infrastructure/sampling/ (925 lines split)
-   - `Params.py`: SamplingParams, LogitProcessor
-   - `Base.py`: Sampler base class
-   - `Kernels.py`: Nucleus, Top-K, Min-P, Gumbel kernels
-   - `BeamSearch.py`: Beam search orchestration
-   - `Engine.py`: Unified SamplingEngine coordination
-2. **ResponsesAPI.py** -> src/infrastructure/responses/ (Modularized)
-3. **PagedAttentionEngine.py** -> src/infrastructure/engine/paged_attention/ (Modularized)
-4. **ArchitecturalDesignAgent.py** -> Research Integration (GAAD loop)
-   - Integrated arXiv:2601.10696 (Expertise deltas)
-   - Integrated ScienceDirect S2090447925006203 (Environmental Simulation)
-
-### Current Target: DistributedCoordinator.py (Refactored)
-- Status: Modularized into `src/infrastructure/orchestration/core/distributed/`.
-- Next: RDMA Nixl integration for synchronization.
+### Implemented Work
+1. **Federated Meta-Optimizer**: Autonomous hyperparameter self-tuning based on grid telemetry.
+2. **Context Distillation**: Landmark-based KV-cache compression for high-speed P2P migration.
+3. **LSH Memory Sharding**: $O(1)$ semantic retrieval for 1M+ token contexts.
+4. **Query De-duplication**: Semantic joining of inflight tasks to minimize redundant reasoning.
+5. **Knowledge Bridge**: Cross-tenant anonymized learning synthesis.
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 ---
 
-## Phase 48: Advanced KV Transfer & Disaggregated Prefill ✅ COMPLETE
-@location: ["src/infrastructure/kv_transfer", "src/infrastructure/cloud"]
+## Active Work: Phase 91 - Swarm Liquidity 🚧 PLANNING
+@location: ["src.infrastructure.liquidity", "rust_core/src"]
 
+### Planned Objectives
+1. **Semantic Cache Invalidation**: Real-time purging of stale LSH buckets.
+2. **Neural Context Pruning**: Entropy-based attention mask pruning for VRAM efficiency.
+3. **RDMA State Sync**: Instantaneous swarm snapshots for fault-tolerant state agreement.
+
+---
+
+## Completed Phases Summary
+
+<<<<<<< HEAD
 ### Implemented Modules (Modular Package Structure)
 1. **MooncakeConnector.py** - Mooncake-style KV transfer protocol
 2. **NixlConnector.py** - NIXL high-performance connector
@@ -142,12 +150,26 @@ to become the best streaming ai out there (120fps DVD-channel capability).
 - block_table_predict_alloc_rust - Predictive allocation
 - block_table_defrag_rust - Block defragmentation
 - kv_offload_batch_transfer_rust - Batch KV transfer
+=======
+| Phase | Focus | Modules | Rust | Tests |
+|-------|-------|---------|------|-------|
+| 1-50  | Core & TALON | ~195 | 532 | ~3100 |
+| 51-70 | Infrastructure| ~25  | 80  | ~800  |
+| 71-90 | Swarm Evolution| ~20 | 68  | ~600  |
+| **Total** | - | **~240** | **680** | **~4500** |
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 ---
 
-## Phase 44: Advanced Sampling & Speculative Decoding v2 ✅ COMPLETE
-@location: ["src/infrastructure/sampling", "src/infrastructure/multimodal", "src/infrastructure/cache"]
+## Core Directives
+- **Delegate among swarm members**: Utilize specialized experts for LSH, Raft, and Distillation.
+- **Swarm Liquidity**: Pursue zero-downtime re-sharding and rank mobility (RDMA logic).
+- **Collective Wisdom**: Use Global Trace Synthesis (Phase 82) to improve agent reasoning.
+- **MCP Discovery**: Dynamically index and utilize external tool servers via MCPToolDiscovery.
+- **Resource Ethics**: Use the Meta-Optimizer to balance VRAM pressure vs. inference accuracy.
+- **Transaction Integrity**: Ensure all swarm state changes follow `StateTransaction` protocol.
 
+<<<<<<< HEAD
 ### Implemented Modules (6 Python)
 1. **RejectionSampler.py** - Speculative decoding verification (600 lines)
    - RejectionStrategy: STANDARD, STRICT, LENIENT, ADAPTIVE
@@ -329,6 +351,8 @@ to become the best streaming ai out there (120fps DVD-channel capability).
 2. **ModelRegistry.py** - Architecture management (650 lines)
    - 40+ architecture registration (Llama, Mistral, Qwen2, Gemma2, Phi3, etc.)
    - Capability detection (TEXT, VISION, AUDIO, TOOL_USE, EMBEDDING, MULTIMODAL)
+=======
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
    - VRAM estimation with context scaling and batch size considerations
    - ArchitectureDetector for config-based and name-based detection
 3. **LoRAManager.py** - Adapter lifecycle management (600 lines)

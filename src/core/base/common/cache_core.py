@@ -48,6 +48,11 @@ import time
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
 
 class CacheCore(BaseCore):
     """
@@ -64,6 +69,7 @@ class CacheCore(BaseCore):
         self.logger = logging.getLogger("pyagent.cache_core")
 
     def _get_cache_key(self, content: str) -> str:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "fast_cache_key_rust"):  # pylint: disable=no-member
@@ -91,6 +97,13 @@ class CacheCore(BaseCore):
             return rc.fast_cache_key_rust(content)
         except (ImportError, Exception):
             pass
+=======
+        if rc and hasattr(rc, "fast_cache_key_rust"): # pylint: disable=no-member
+            try:
+                return rc.fast_cache_key_rust(content) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         return hashlib.md5(content.encode()).hexdigest()
 
     def _make_complex_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
@@ -135,7 +148,7 @@ class CacheCore(BaseCore):
                 "timestamp": time.time(),
                 "ttl": ttl_seconds
             }))
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             self.logger.error(f"Failed to write cache file: {e}")
 
     def get(self, prompt: str) -> Optional[Any]:
@@ -185,10 +198,14 @@ class CacheCore(BaseCore):
                         "ttl": data["ttl"]
                     }
                     return data["response"]
+<<<<<<< HEAD
             except Exception:
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         return None

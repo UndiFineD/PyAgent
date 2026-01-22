@@ -33,6 +33,7 @@ import re
 from pathlib import Path
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import List, Set
 =======
 from typing import List, Set, Optional
@@ -40,6 +41,9 @@ from typing import List, Set, Optional
 =======
 from typing import List, Set, Optional
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import List, Set
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -63,6 +67,7 @@ class AnalysisCore:
         """Calculate cyclomatic complexity (Rust accelerated)."""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -80,6 +85,12 @@ class AnalysisCore:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "calculate_complexity_rust"):
+            try:
+                return rc.calculate_complexity_rust(source)
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         # Fallback to simple count of control flow keywords
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
@@ -109,6 +120,7 @@ class AnalysisCore:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def get_imports(source_or_path: str | Path) -> List[str]:
         """Extract all top-level imports from source or a file (Rust accelerated)."""
+<<<<<<< HEAD
         if rc and hasattr(rc, "get_imports_rust"):
             if isinstance(source_or_path, Path):
                 return rc.get_imports_rust(source_or_path.read_text(encoding="utf-8"))
@@ -117,12 +129,22 @@ class AnalysisCore:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "get_imports_rust"): # pylint: disable=no-member
+            try:
+                if isinstance(source_or_path, Path):
+                    return rc.get_imports_rust(source_or_path.read_text(encoding="utf-8")) # type: ignore
+                return rc.get_imports_rust(source_or_path) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
         try:
             if isinstance(source_or_path, Path):
                 tree = ast.parse(source_or_path.read_text(encoding="utf-8"), feature_version=(3, 11))
             else:
                 tree = ast.parse(source_or_path, feature_version=(3, 11))
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -133,6 +155,9 @@ class AnalysisCore:
 =======
         except Exception:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             return []
 
         imports: List[str] = []

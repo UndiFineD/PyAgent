@@ -33,6 +33,7 @@ from datetime import datetime
 from pathlib import Path
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict, List, Optional
 
 from .file_system_core import FileSystemCore
@@ -48,6 +49,11 @@ from typing import Any, Dict, List, Optional, Union
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.common.file_system_core import FileSystemCore
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from typing import Any, Dict, List, Optional
+from .storage_core import StorageCore
+from .file_system_core import FileSystemCore
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -139,8 +145,9 @@ class MemoryCore:
         Create a standardized episodic memory record.
         Hot path for Rust acceleration (utility scoring).
         """
-        if rc and hasattr(rc, "create_episode_struct"):
+        if rc and hasattr(rc, "create_episode_struct"): # pylint: disable=no-member
             try:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                 # pylint: disable=no-member
@@ -153,9 +160,12 @@ class MemoryCore:
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 return rc.create_episode_struct(
+=======
+                return rc.create_episode_struct( # type: ignore
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                     agent_id, task, content, success, metadata or {}, base_utility
                 )
-            except Exception as e:
+            except Exception as e: # pylint: disable=broad-exception-caught
                 logger.warning(f"Rust create_episode_struct failed: {e}")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -196,8 +206,9 @@ class MemoryCore:
         Rank memories by utility score and recency.
         Hot path for Rust acceleration.
         """
-        if rc and hasattr(rc, "rank_memories_rust"):
+        if rc and hasattr(rc, "rank_memories_rust"): # pylint: disable=no-member
             try:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                 # pylint: disable=no-member
@@ -207,6 +218,10 @@ class MemoryCore:
 =======
                 return rc.rank_memories_rust(memories, limit, min_utility)
             except Exception as e:
+=======
+                return rc.rank_memories_rust(memories, limit, min_utility) # type: ignore
+            except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 logger.warning(f"Rust rank_memories_rust failed: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -237,6 +252,7 @@ class MemoryCore:
 
     def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> List[Dict[str, str]]:
         """Rust-accelerated graph traversal for complex memory retrieval."""
+<<<<<<< HEAD
         if rc and hasattr(rc, "retrieve_memory_graph_rust"):
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -249,6 +265,13 @@ class MemoryCore:
 
 =======
             return rc.retrieve_memory_graph_rust(root_id, depth)
+=======
+        if rc and hasattr(rc, "retrieve_memory_graph_rust"): # pylint: disable=no-member
+            try:
+                return rc.retrieve_memory_graph_rust(root_id, depth) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -303,10 +326,14 @@ class MemoryCore:
             return True
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to store %s knowledge for %s: %s", mode, agent_id, e)
 =======
         except Exception as e:
+=======
+        except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error(f"Failed to store {mode} knowledge for {agent_id}: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -344,7 +371,7 @@ class MemoryCore:
                 ids=[key]
             )
             return True
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             logger.warning(f"ChromaDB storage failed for {agent_id}: {e}")
             return False
 
@@ -389,8 +416,9 @@ class MemoryCore:
 
     def _retrieve_semantic(self, agent_id: str, query: str, limit: int) -> List[Dict[str, Any]]:
         """Internal helper for semantic retrieval."""
-        if rc and hasattr(rc, "semantic_search"):
+        if rc and hasattr(rc, "semantic_search"): # pylint: disable=no-member
             try:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                 # pylint: disable=no-member
@@ -410,6 +438,10 @@ class MemoryCore:
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 return rc.semantic_search(agent_id, query, limit)
             except Exception as e:
+=======
+                return rc.semantic_search(agent_id, query, limit) # type: ignore
+            except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 logger.warning(f"Rust semantic search failed: {e}")
 
         try:
@@ -445,7 +477,7 @@ class MemoryCore:
                     "metadata": metas[i]
                 })
             return output
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             logger.warning(f"ChromaDB retrieval failed for {agent_id}: {e}")
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -491,10 +523,14 @@ class MemoryCore:
                 return True
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Failed to delete %s knowledge: %s", mode, e)
 =======
             except Exception as e:
+=======
+            except Exception as e: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 logger.error(f"Failed to delete {mode} knowledge: {e}")
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======

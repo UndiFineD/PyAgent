@@ -43,12 +43,17 @@ from .models import DiffOutputFormat, DiffResult
 import difflib
 import logging
 from typing import Any, Dict, Optional, List
+<<<<<<< HEAD
 from src.core.base.common.base_core import BaseCore
 from src.core.base.common.models import DiffOutputFormat, DiffResult
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from .base_core import BaseCore
+from .models import DiffOutputFormat, DiffResult
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc

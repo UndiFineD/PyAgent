@@ -41,11 +41,15 @@ import base64
 from typing import Any, Dict, Optional
 from dataclasses import dataclass
 from .base_core import BaseCore
+<<<<<<< HEAD
 from src.core.base.common.models import AuthConfig, AuthMethod
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from .models import AuthConfig, AuthMethod
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -106,6 +110,7 @@ class AuthCore(BaseCore):
         """Generates a unique challenge for an agent."""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "generate_challenge"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -123,12 +128,19 @@ class AuthCore(BaseCore):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "generate_challenge"): # pylint: disable=no-member
+            try:
+                return rc.generate_challenge(agent_id) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         seed = f"{agent_id}_{time.time()}_{hashlib.sha256(str(time.time()).encode()).hexdigest()}"
         return hashlib.sha256(seed.encode()).hexdigest()
 
     def generate_proof(self, challenge: str, secret_key: str) -> str:
         """Generates a proof for a challenge using a secret key."""
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "generate_auth_proof"):  # pylint: disable=no-member
@@ -148,11 +160,18 @@ class AuthCore(BaseCore):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "generate_auth_proof"): # pylint: disable=no-member
+            try:
+                return rc.generate_auth_proof(challenge, secret_key) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         return hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
 
     def verify_proof(self, challenge: str, proof: str, expected_secret_hash: str) -> bool:
         """Verifies proof against the expected secret hash."""
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if rc and hasattr(rc, "verify_auth_proof"):  # pylint: disable=no-member
@@ -173,9 +192,12 @@ class AuthCore(BaseCore):
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc and hasattr(rc, "verify_auth_proof"):
+=======
+        if rc and hasattr(rc, "verify_auth_proof"): # pylint: disable=no-member
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
-                return rc.verify_auth_proof(challenge, proof, expected_secret_hash)
-            except Exception:
+                return rc.verify_auth_proof(challenge, proof, expected_secret_hash) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         
         return proof == hashlib.sha512(f"{challenge}:{expected_secret_hash}".encode()).hexdigest()

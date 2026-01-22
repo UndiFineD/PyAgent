@@ -34,12 +34,17 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, Optional, List
 from .base_core import BaseCore
+<<<<<<< HEAD
 from src.core.base.common.models.communication_models import PromptTemplate
 from src.infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
 <<<<<<< HEAD
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+from .models.communication_models import PromptTemplate
+from ...infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 
 try:
     import rust_core as rc
@@ -108,6 +113,7 @@ class InferenceCore(BaseCore):
         """Consistent token counting across the fleet (Rust-accelerated)."""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "count_tokens_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -125,6 +131,12 @@ class InferenceCore(BaseCore):
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+        if rc and hasattr(rc, "count_tokens_rust"): # pylint: disable=no-member
+            try:
+                return rc.count_tokens_rust(text, model_name) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 pass
         return estimate_token_count(text, model_name)
 
@@ -141,6 +153,7 @@ class InferenceCore(BaseCore):
         """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if rc and hasattr(rc, "apply_lora_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
@@ -152,9 +165,12 @@ class InferenceCore(BaseCore):
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc and hasattr(rc, "apply_lora_rust"):
+=======
+        if rc and hasattr(rc, "apply_lora_rust"): # pylint: disable=no-member
+>>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             try:
-                return rc.apply_lora_rust(base_model, adapters)
-            except Exception as e:
+                return rc.apply_lora_rust(base_model, adapters) # type: ignore
+            except Exception as e: # pylint: disable=broad-exception-caught
                 logger.error(f"Rust LoRA application failed: {e}")
         
 <<<<<<< HEAD
