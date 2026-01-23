@@ -49,7 +49,7 @@ posthog==5.4.0
 prometheus-fastapi-instrumentator==7.1.0
 prometheus_client==0.23.1
 # protobuf==6.33.2
-pypdf==6.5.0
+pypdf==6.6.0
 # python-dateutil==2.9.0.post0
 pytz==2025.2
 safetensors==0.7.0
