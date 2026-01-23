@@ -1,13 +1,27 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Core storage utilities for PyAgent."""
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Core storage utilities for PyAgent.
+"""
 
 import json
-import yaml
 import logging
-import os
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Union
+
+import yaml
 
 try:
     import rust_core as rc
@@ -41,11 +55,11 @@ class StorageCore:
         p = Path(path)
         try:
             p.parent.mkdir(parents=True, exist_ok=True)
-            
+
             # Use Rust acceleration for atomic, high-speed write if available
-            if rc and hasattr(rc, "save_json_atomic_rust"): # pylint: disable=no-member
+            if rc and hasattr(rc, "save_json_atomic_rust"):
                 content = json.dumps(data, indent=indent)
-                if rc.save_json_atomic_rust(str(p), content): # type: ignore
+                if rc.save_json_atomic_rust(str(p), content):  # pylint: disable=no-member
                     return
 
             with open(p, 'w', encoding='utf-8') as f:

@@ -22,7 +22,7 @@ from typing import Any, Dict, Optional
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc # pylint: disable=import-error
 except ImportError:
     rc = None
 
@@ -53,10 +53,12 @@ class RoutingCore(BaseCore):
         """
         if rc and hasattr(rc, "select_provider_rust"): # pylint: disable=no-member
             try:
-                return rc.select_provider_rust(task_type, priority, performance_report or {}) # type: ignore
+                return rc.select_provider_rust( # pylint: disable=no-member
+                    task_type, priority, performance_report or {}
+                ) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
-        
+
         # Default logic (can be expanded with weighted averages)
         if performance_report:
             # Simple heuristic: lower latency for "latency" priority
@@ -64,5 +66,5 @@ class RoutingCore(BaseCore):
                 best_p = min(performance_report.items(), key=lambda x: x[1].get("avg_latency", 999))[0]
                 if best_p in self.providers:
                     return best_p
-        
+
         return os.environ.get("DV_AGENT_BACKEND", "github_models")

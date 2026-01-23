@@ -12,17 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 Core logic for multi-agent orchestration and workflow management.
 """
 
 from __future__ import annotations
-import logging
 import random
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Callable, TYPE_CHECKING
+from typing import Any, Dict, List, Callable, TYPE_CHECKING
 from .base_core import BaseCore
-from .models import ModelConfig, ComposedAgent
+from .models import ComposedAgent
 
 if TYPE_CHECKING:
     from src.core.base.logic.agent import BaseAgent
@@ -38,10 +42,16 @@ class OrchestrationCore(BaseCore):
         self.execution_order: List[str] = []
 
     def add_agent(self, agent: ComposedAgent) -> None:
+        """
+        Adds an agent to the orchestration registry.
+        """
         self.agents.append(agent)
         self._calculate_execution_order()
 
     def _calculate_execution_order(self) -> None:
+        """
+        Computes the topological sort of agents based on dependencies.
+        """
         sorted_agents: List[str] = []
         visited: set[str] = set()
         temp: set[str] = set()
@@ -71,11 +81,15 @@ class OrchestrationCore(BaseCore):
         prompt: str,
         agent_factory: Callable[[str, str], Any],
     ) -> Dict[str, str]:
+        """
+        Executes the registered agents in the calculated order.
+        """
         self.results.clear()
         current_content = ""
         for agent_type in self.execution_order:
             agent_config = next((a for a in self.agents if a.agent_type == agent_type), None)
-            if not agent_config: continue
+            if not agent_config:
+                continue
             agent = agent_factory(agent_type, file_path)
             enhanced_prompt = prompt
             for dep in agent_config.depends_on:
@@ -90,11 +104,23 @@ class OrchestrationCore(BaseCore):
 
 @dataclass
 class QualityScorer:
+    """
+    Evaluates text quality based on weighted criteria.
+    """
     criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
+
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
+        """
+        Adds a single scoring criterion.
+        """
         self.criteria[name] = (func, weight)
+
     def score(self, text: str) -> float:
-        if not self.criteria: return min(1.0, len(text) / 200.0)
+        """
+        Calculates the weighted average score for a given text.
+        """
+        if not self.criteria:
+            return min(1.0, len(text) / 200.0)
         total_weight, total_score = 0.0, 0.0
         for func, weight in self.criteria.values():
             total_score += func(text) * weight
@@ -103,12 +129,22 @@ class QualityScorer:
 
 @dataclass
 class ABTest:
+    """
+    Simple A/B testing harness for variants.
+    """
     name: str
     variants: List[str]
     weights: List[float] = field(default_factory=list)
     variant_counts: Dict[str, int] = field(default_factory=dict)
+
     def __post_init__(self) -> None:
-        for v in self.variants: self.variant_counts[v] = 0
-        if not self.weights: self.weights = [1.0 / len(self.variants)] * len(self.variants)
+        for v in self.variants:
+            self.variant_counts[v] = 0
+        if not self.weights:
+            self.weights = [1.0 / len(self.variants)] * len(self.variants)
+
     def select_variant(self) -> str:
+        """
+        Selects a variant based on defined weights.
+        """
         return random.choices(self.variants, weights=self.weights, k=1)[0]

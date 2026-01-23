@@ -22,12 +22,12 @@ async def test_autonomous_tool_discovery():
     # 1. Setup Mock MCP Agent
     mock_mcp = MagicMock()
     mock_mcp.list_mcp_servers = AsyncMock(return_value="github, google")
-    
+
     # 2. Setup Mock Similarity
     mock_sim = MagicMock()
     # Always return a mock embedding
     mock_sim.get_embedding = AsyncMock(return_value=np.zeros(384))
-    
+
     # Simulate high similarity for "search" related tasks
     async def side_effect(emb1, emb2):
         return 0.95 # Highly similar
@@ -47,13 +47,13 @@ async def test_autonomous_tool_discovery():
 async def test_tool_discovery_no_match():
     mock_mcp = MagicMock()
     mock_mcp.list_mcp_servers = AsyncMock(return_value="github")
-    
+
     mock_sim = MagicMock()
     mock_sim.get_embedding = AsyncMock(return_value=np.random.randn(384))
     mock_sim.compute_similarity = AsyncMock(return_value=0.1) # low score
 
     discovery = AutonomousToolDiscovery(mock_mcp, mock_sim)
     tool = await discovery.find_external_tool("order a pizza", threshold=0.5)
-    
+
     assert tool is None
     print("[Phase 87] Autonomous discovery correctly ignored low-similarity tools.")

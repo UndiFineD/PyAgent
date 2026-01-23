@@ -34,7 +34,7 @@ class QuantizedMultimediaEngine:
     """
     Accelerates multimodal data processing using low-bit quantization.
     """
-    
+
     def __init__(self, mode: str = "FP8"):
         self.mode = mode
         self.loader = TensorRTLoader()
@@ -78,7 +78,7 @@ class QuantizedMultimediaEngine:
         if rc and hasattr(rc, "quantize_asymmetric_rust"):
             q_vals, scale, zp = rc.quantize_asymmetric_rust(data.flatten().tolist(), bits)
             return np.array(q_vals, dtype=np.uint8), scale, zp
-            
+
         # Fallback
         qmax = (1 << bits) - 1
         min_val, max_val = data.min(), data.max()
@@ -103,5 +103,5 @@ class QuantizedMultimediaEngine:
         if rc and hasattr(rc, "apply_ia3_scaling_rust"):
             scaled = rc.apply_ia3_scaling_rust(activations.flatten().tolist(), scaling.tolist())
             return np.array(scaled, dtype=np.float32).reshape(activations.shape)
-            
+
         return activations * scaling

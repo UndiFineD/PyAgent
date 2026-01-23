@@ -16,25 +16,25 @@ async def test_self_healing_rerouting():
     gatekeeper = MoEGatekeeper(sim_service)
     orchestrator = CrossModelMoEOrchestrator(gatekeeper)
     orchestrator.timeout_sec = 0.1 # Short timeout for test
-    
+
     # Setup two experts
     gatekeeper.register_expert(ExpertProfile(agent_id="e1", domains=["fail"], performance_score=1.0))
     gatekeeper.register_expert(ExpertProfile(agent_id="e2", domains=["fail"], performance_score=0.8))
-    
+
     # Expert 1: Fails (Timeout or Exception)
     mock_e1 = MagicMock()
     mock_e1.process_request = AsyncMock(side_effect=asyncio.TimeoutError())
-    
+
     # Expert 2: Succeeds
     mock_e2 = MagicMock()
     mock_e2.process_request = AsyncMock(return_value="Success after failover")
-    
+
     orchestrator.register_agent_instance("e1", mock_e1)
     orchestrator.register_agent_instance("e2", mock_e2)
-    
+
     # Run task: e1 should fail and e2 should be picked
     result = await orchestrator.execute_moe_task("Test healing", mode="best_expert")
-    
+
     assert result == "Success after failover"
     assert orchestrator.expert_health["e1"] is False
     assert orchestrator.expert_health["e2"] is True
@@ -45,22 +45,22 @@ async def test_self_healing_mixture_partial_failure():
     gatekeeper = MoEGatekeeper(sim_service)
     orchestrator = CrossModelMoEOrchestrator(gatekeeper)
     orchestrator.timeout_sec = 0.1
-    
+
     gatekeeper.register_expert(ExpertProfile(agent_id="e1", domains=["general"], performance_score=1.0))
     gatekeeper.register_expert(ExpertProfile(agent_id="e2", domains=["general"], performance_score=0.9))
-    
+
     # e1 fails, e2 succeeds
     mock_e1 = MagicMock()
     mock_e1.process_request = AsyncMock(side_effect=RuntimeError("Crash"))
     mock_e2 = MagicMock()
     mock_e2.process_request = AsyncMock(return_value="Safe result")
-    
+
     orchestrator.register_agent_instance("e1", mock_e1)
     orchestrator.register_agent_instance("e2", mock_e2)
-    
+
     # Mixture should still work if at least one expert succeeds
     result = await orchestrator.execute_moe_task("Test mixture healing", mode="mixture")
-    
+
     assert result == "Safe result"
     assert orchestrator.expert_health["e1"] is False
     assert orchestrator.expert_health["e2"] is True

@@ -28,8 +28,8 @@ class SwarmLoadBalancer:
     """
 
     def __init__(
-        self, 
-        telemetry: SwarmTelemetryService, 
+        self,
+        telemetry: SwarmTelemetryService,
         shard_manager: ContextShardManager,
         migration_engine: P2PMigrationEngine,
         hot_threshold: float = 0.85,
@@ -50,7 +50,7 @@ class SwarmLoadBalancer:
             return
 
         metrics = self.telemetry.get_grid_metrics()
-        
+
         hot_ranks: List[int] = []
         cool_ranks: List[int] = []
 
@@ -75,23 +75,23 @@ class SwarmLoadBalancer:
         for hot_rank in hot_ranks:
             # Find shards currently on this rank
             shards_on_hot_rank = self._get_shards_on_rank(hot_rank)
-            
+
             if not shards_on_hot_rank:
                 continue
 
             # Pick the first available cool rank
             target_rank = cool_ranks[0]
-            
+
             # Pick a shard to move (e.g., the first one)
             context_id, shard_idx = shards_on_hot_rank[0]
-            
+
             logger.info(f"[Phase 81] LoadBalancer: Hot spot detected on Rank {hot_rank} ({metrics[f'rank_{hot_rank}_util']:.2f}). "
                         f"Migrating {context_id} shard {shard_idx} to Rank {target_rank}.")
-            
+
             try:
                 await self.migration_engine.migrate_shard(context_id, shard_idx, target_rank)
                 # After one migration, re-sort or break to avoid over-filling a cool rank in one pass
-                break 
+                break
             except Exception as e:
                 logger.error(f"Failed to migrate shard during load balancing: {e}")
 

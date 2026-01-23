@@ -43,7 +43,7 @@ class ReflectionMixin:
         if not self._reflection_enabled or self._reflection_count >= self._max_reflections:
             return result
 
-        logging.info(f"[{self.__class__.__name__}] Initiating one-time self-reflection...")
+        logging.info("[%s] Initiating one-time self-reflection...", self.__class__.__name__)
         self._reflection_count += 1
 
         # Craft reflection instructions
@@ -64,11 +64,12 @@ class ReflectionMixin:
             # We use the agent's think method to process the reflection
             # We temporarily disable reflection for this call to prevent recursion
             self._reflection_enabled = False
-            reflection_output = await self.think(reflection_instructions)
+            reflection_output = await getattr(self, "think")(reflection_instructions)
             self._reflection_enabled = True
 
             if reflection_output.strip().upper() == "VERIFIED":
-                logging.info(f"[{self.__class__.__name__}] Self-reflection confirmed output stability.")
+                logging.info("[%s] Self-reflection confirmed output stability.",
+                             self.__class__.__name__)
                 return result
 
             # Mistake found - record a lesson
@@ -79,12 +80,13 @@ class ReflectionMixin:
                 impact_score=0.8
             )
             self._lesson_core.record_lesson(lesson)
-            logging.warning(f"[{self.__class__.__name__}] Mistake identified; corrective lesson recorded.")
+            logging.warning("[%s] Mistake identified; corrective lesson recorded.",
+                            self.__class__.__name__)
 
             return reflection_output
 
-        except Exception as e:
-            logging.error(f"[{self.__class__.__name__}] Reflection cycle failed: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.error("[%s] Reflection cycle failed: %s", self.__class__.__name__, e)
             self._reflection_enabled = True
             return result
 

@@ -330,7 +330,7 @@ class FormulaEngineCore:
         try:
             if any(s in formula for s in ["+++", "***", "---"]):
                 return {"is_valid": False, "error": "Invalid operator sequence"}
-            
+
             # Use FormulaCore evaluation style for validation or just parse
             test_f = formula
             for v in re.findall(r"\{(\w+)\}", formula):

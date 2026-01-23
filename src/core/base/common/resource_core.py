@@ -18,7 +18,7 @@ Core logic for Resource Quotas and budget enforcement.
 
 from __future__ import annotations
 import time
-from typing import Any, Tuple, Optional
+from typing import Any, Tuple, Optional, Dict
 from dataclasses import dataclass, field
 from .base_core import BaseCore
 
@@ -41,10 +41,12 @@ class ResourceUsage:
 
     @property
     def total_tokens(self) -> int:
+        """Calculate total tokens consumed."""
         return self.tokens_input + self.tokens_output
 
     @property
     def elapsed_time(self) -> float:
+        """Calculate elapsed time in seconds."""
         return time.time() - self.start_time
 
 
@@ -81,7 +83,10 @@ class ResourceCore(BaseCore):
             and self.usage.elapsed_time >= self.config.max_time_seconds
         ):
             self._is_interrupted = True
-            self._interrupt_reason = f"Time quota exceeded ({self.usage.elapsed_time:.2f}s >= {self.config.max_time_seconds}s)"
+            self._interrupt_reason = (
+                f"Time quota exceeded ({self.usage.elapsed_time:.2f}s >= "
+                f"{self.config.max_time_seconds}s)"
+            )
             return True, self._interrupt_reason
 
         if self.config.max_cycles and self.usage.cycles >= self.config.max_cycles:
@@ -93,10 +98,12 @@ class ResourceCore(BaseCore):
 
     @property
     def is_interrupted(self) -> bool:
+        """Check if the session has been interrupted."""
         return self._is_interrupted
 
     @property
     def interrupt_reason(self) -> Optional[str]:
+        """Get the reason for interruption, if any."""
         return self._interrupt_reason
 
     def get_report(self) -> Dict[str, Any]:

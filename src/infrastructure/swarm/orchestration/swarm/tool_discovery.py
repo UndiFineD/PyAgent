@@ -37,7 +37,7 @@ class AutonomousToolDiscovery:
         # Mocking parsing for now - in production, MCPAgent should return structured data
         # For Phase 87, we'll assume a list of servers to probe
         servers = ["github", "brave_search", "google_maps"] # Mock probe list
-        
+
         for server in servers:
             try:
                 # Mock calling a list_tools tool on the server
@@ -47,7 +47,7 @@ class AutonomousToolDiscovery:
                     {"name": f"{server}_search", "desc": f"Search using {server} API"},
                     {"name": f"{server}_mutate", "desc": f"Modify resources on {server}"}
                 ]
-                
+
                 for tool in simulated_tools:
                     tool_id = f"{server}:{tool['name']}"
                     emb = await self.similarity_service.get_embedding(tool['desc'])
@@ -66,7 +66,7 @@ class AutonomousToolDiscovery:
             await self.refresh_tool_index()
 
         task_emb = await self.similarity_service.get_embedding(task_prompt)
-        
+
         best_tool = None
         best_score = -1.0
 
@@ -75,7 +75,7 @@ class AutonomousToolDiscovery:
             if score > best_score:
                 best_score = score
                 best_tool = data
-        
+
         if best_tool and best_score >= threshold:
             logger.info(f"[Phase 87] Tool Discovery: Found external tool '{best_tool['name']}' with score {best_score:.3f}")
             return {
@@ -83,5 +83,5 @@ class AutonomousToolDiscovery:
                 "server": best_tool["server"],
                 "score": best_score
             }
-        
+
         return None

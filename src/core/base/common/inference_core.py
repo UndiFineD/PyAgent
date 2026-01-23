@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core logic for inference, tokenization, and model adaptation.
+"""
+
 from __future__ import annotations
 import logging
 from typing import Any, Dict, Optional, List
 from .base_core import BaseCore
 from .models.communication_models import PromptTemplate
-from ...infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
+from ....infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
 
 try:
     import rust_core as rc
@@ -44,19 +48,20 @@ class InferenceCore(BaseCore):
         """Render a registered template by name."""
         if template_name in self.templates:
             return self.templates[template_name].render(**kwargs)
-        
+
         # Fallback: check if it's a raw template string
         if "{" in template_name and "}" in template_name:
             return template_name.format(**kwargs)
-        
+
         raise ValueError(f"Template '{template_name}' not found.")
 
     def count_tokens(self, text: str, model_name: Optional[str] = None) -> int:
         """Consistent token counting across the fleet (Rust-accelerated)."""
-        if rc and hasattr(rc, "count_tokens_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "count_tokens_rust"):  # pylint: disable=no-member
             try:
-                return rc.count_tokens_rust(text, model_name) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                # pylint: disable=no-member
+                return rc.count_tokens_rust(text, model_name)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return estimate_token_count(text, model_name)
 
@@ -71,11 +76,12 @@ class InferenceCore(BaseCore):
         Applies LoRA adapters to a base model.
         Hot path for Rust migration (rc.apply_lora_rust).
         """
-        if rc and hasattr(rc, "apply_lora_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "apply_lora_rust"):  # pylint: disable=no-member
             try:
-                return rc.apply_lora_rust(base_model, adapters) # type: ignore
-            except Exception as e: # pylint: disable=broad-exception-caught
-                logger.error(f"Rust LoRA application failed: {e}")
-        
+                # pylint: disable=no-member
+                return rc.apply_lora_rust(base_model, adapters)  # type: ignore
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                logger.error("Rust LoRA application failed: %s", e)
+
         # Python fallback (placeholder for actual linear algebra)
         return base_model

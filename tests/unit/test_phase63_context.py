@@ -16,7 +16,7 @@ async def test_context_sharding_logic():
     manager = ContextShardManager(block_size=100)
     # Shard 1000 tokens across 3 ranks
     shards = manager.shard_context("doc1", 1000, [0, 1, 2])
-    
+
     assert len(shards) == 10
     # Token 250 should be in shard 2, which is rank 2 (250 // 100 = 2, 2 % 3 = 2)
     assert manager.get_rank_for_token("doc1", 250) == 2
@@ -29,27 +29,27 @@ async def test_locality_aware_routing():
     gatekeeper = MoEGatekeeper(sim_service)
     context_manager = ContextShardManager(block_size=100)
     orchestrator = ContextAwareMoEOrchestrator(gatekeeper, context_manager)
-    
+
     # Experts
     e1_profile = ExpertProfile(agent_id="e1", domains=["general"])
     e2_profile = ExpertProfile(agent_id="e2", domains=["general"])
     gatekeeper.register_expert(e1_profile)
     gatekeeper.register_expert(e2_profile)
-    
+
     # Locations: Expert 1 is on Rank 0, Expert 2 is on Rank 1
     orchestrator.register_expert_location("e1", 0)
     orchestrator.register_expert_location("e2", 1)
-    
+
     # Mock context: Token 50 is on Rank 1
     context_manager.shard_context("doc", 100, [0, 1])
-    
+
     # Mock Execution
     mock_agent = MagicMock()
     mock_agent.process_request = AsyncMock(return_value="Success")
     orchestrator.register_agent_instance("e2", mock_agent)
     orchestrator.register_agent_instance("e1", MagicMock())
-    
-    # Route for task focusing on Token 50 (Rank 1). 
+
+    # Route for task focusing on Token 50 (Rank 1).
     # Even if e1/e2 are semantically equal, e2 should win due to locality (Rank 1).
     result = await orchestrator.execute_context_task("Tell me about part 50", "doc", focus_token=50)
     assert result == "Success"

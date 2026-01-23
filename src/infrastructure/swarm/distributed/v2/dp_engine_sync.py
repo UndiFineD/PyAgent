@@ -39,7 +39,7 @@ class DPEngineSync:
     """
     Ensures all DP ranks are synchronized before starting or ending a request wave.
     """
-    
+
     def __init__(self, rank: int, world_size: int):
         self.rank = rank
         self.world_size = world_size
@@ -49,13 +49,13 @@ class DPEngineSync:
     def mark_ready(self, rank_id: int):
         """Marks a rank as ready for the next wave."""
         self.ready_map[rank_id] = True
-        
+
     def all_ready(self) -> bool:
         """Checks if all ranks in the world have signaled readiness."""
         if rc and hasattr(rc, "wave_sync_check_rust"):
             # Efficient bitmask check
             return rc.wave_sync_check_rust(list(self.ready_map.values()))
-            
+
         return all(self.ready_map.values())
 
     def reset_ready(self):
@@ -66,7 +66,7 @@ class DPEngineSync:
 
     async def wait_for_barrier(self, timeout: float = 5.0):
         """
-        Non-blocking barrier wait. In a real system, this would involve 
+        Non-blocking barrier wait. In a real system, this would involve
         nccl/zmq communication.
         """
         start_time = asyncio.get_event_loop().time()

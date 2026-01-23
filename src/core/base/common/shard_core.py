@@ -17,11 +17,10 @@ Core logic for fleet sharding and partitioning.
 """
 
 from __future__ import annotations
-from typing import Any, List, Dict, Optional
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc # pylint: disable=import-error
 except ImportError:
     rc = None
 
@@ -37,12 +36,14 @@ class ShardCore(BaseCore):
         """
         if rc and hasattr(rc, "calculate_shard_id_rust"): # pylint: disable=no-member
             try:
-                return rc.calculate_shard_id_rust(key, shard_count) # type: ignore
+                return rc.calculate_shard_id_rust( # pylint: disable=no-member
+                    key, shard_count
+                ) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
-        
+
         # Fallback to simple hash-based sharding
-        import hashlib
+        import hashlib # pylint: disable=import-outside-toplevel
         h = hashlib.md5(key.encode()).digest()
         seed = int.from_bytes(h[:8], "big")
         return seed % shard_count

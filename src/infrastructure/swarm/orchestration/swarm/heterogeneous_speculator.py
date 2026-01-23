@@ -36,10 +36,10 @@ class HeterogeneousSpeculator:
         Verifiers: acceleration_type in ['h100_tensor', 'standard']
         """
         experts = list(self.gatekeeper.experts.values())
-        
+
         # Filter by domain
         domain_experts = [e for e in experts if domain in e.domains or "general" in e.domains]
-        
+
         drafters = [e for e in domain_experts if e.acceleration_type in ["fp8_bitnet", "int4_quant"]]
         verifiers = [e for e in domain_experts if e.acceleration_type in ["h100_tensor", "standard"]]
 

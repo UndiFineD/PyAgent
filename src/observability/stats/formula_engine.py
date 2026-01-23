@@ -65,7 +65,7 @@ class FormulaEngineCore(FormulaCore):
                 if f"{{{var_name}}}" in eval_formula:
                     # If it's a simple substitution, we can do it via string or dict
                     substituted_vars[var_name] = float(var_value)
-            
+
             # Use base class evaluate if possible
             return self.evaluate(formula.replace("{", "").replace("}", ""), substituted_vars)
         except Exception:

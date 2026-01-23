@@ -26,7 +26,7 @@ class SearchCore(StandardSearchCore):
                 return rc.parse_bing_results_rust(data)
             except Exception:
                 pass
-        
+
         results: list[str] = []
         for v in data.get("webPages", {}).get("value", []):
             name = v.get("name", "Untitled Result")

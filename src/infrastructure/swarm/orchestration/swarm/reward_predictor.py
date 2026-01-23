@@ -35,19 +35,19 @@ class ExpertRewardPredictor:
         """Calculates a global bias for each expert based on general success."""
         biases = {}
         top_experts = {item[0]: 1.0 for item in self.wisdom.get("top_experts", [])}
-        
+
         # Expert synergies can also inform bias: if an expert has high average synergy, they are flexible
         synergies = self.wisdom.get("expert_synergies", {})
-        
+
         for ex_id, peers in synergies.items():
             avg_synergy = sum(peers.values()) / max(1, len(peers))
             # 10% bias toward experts with high synergy
             biases[ex_id] = 0.1 * avg_synergy
-            
+
             # Additional 5% boost for top-tier experts
             if ex_id in top_experts:
                 biases[ex_id] += 0.05
-                
+
         return biases
 
     def adjust_routing(self, agent_id: str, base_similarity: float, domain: str = "general") -> float:
@@ -55,12 +55,12 @@ class ExpertRewardPredictor:
         Adjusts the raw similarity score with a historical reward bias.
         """
         bias = self.expert_biases.get(agent_id, 0.0)
-        
+
         # Check domain-specific baselines
         domain_baseline = self.wisdom.get("domain_baselines", {}).get(domain, 0.5)
         # If the domain itself is high-performing, we trust experts more (scaling)
-        multiplier = 1.0 + (domain_baseline * 0.2) 
-        
+        multiplier = 1.0 + (domain_baseline * 0.2)
+
         adjusted_score = (base_similarity + bias) * multiplier
         return max(0.0, adjusted_score)
 

@@ -1,9 +1,21 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Unified Autonomy and Self-Model core."""
 
-from .base_core import BaseCore
 from typing import List, Optional
+from .base_core import BaseCore
 
 try:
     import rust_core as rc
@@ -15,7 +27,7 @@ class AutonomyCore(BaseCore):
     Standard implementation for Agent Autonomy and Self-Model.
     Provides logic for identifying blind spots and calculating evolution sleep intervals.
     """
-    
+
     def __init__(self, agent_id: str, repo_root: Optional[str] = None):
         super().__init__(name=f"Autonomy-{agent_id}", repo_root=repo_root)
         self.agent_id = agent_id
@@ -25,6 +37,7 @@ class AutonomyCore(BaseCore):
         """Rust-accelerated autonomy evaluation."""
         if rc and hasattr(rc, "evaluate_autonomy_score"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.evaluate_autonomy_score(agent_id, stats) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
@@ -45,10 +58,9 @@ class AutonomyCore(BaseCore):
         """Returns sleep seconds for the Background Evolution Daemon."""
         if optimization_score >= 1.0:
             return 3600  # 1 hour
-        elif optimization_score > 0.8:
+        if optimization_score > 0.8:
             return 600  # 10 minutes
-        else:
-            return 60  # 1 minute (high activity)
+        return 60  # 1 minute (high activity)
 
     def generate_self_improvement_plan(self, blind_spots: List[str]) -> str:
         """Constructs a directive for the agent to use in its next improvement cycle."""

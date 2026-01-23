@@ -12,8 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core logic for multi-agent voting and consensus.
+Supports weighted voting and tie-breaking algorithms.
+"""
+
 from __future__ import annotations
-from typing import List, Optional, Any, Dict
+from typing import List, Optional, Dict
 from .base_core import BaseCore
 
 try:
@@ -32,10 +37,11 @@ class ConsensusCore(BaseCore):
 
     def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
         """Determines the winning proposal based on voting rules."""
-        if rc and hasattr(rc, "calculate_consensus_winner"):
+        if rc and hasattr(rc, "calculate_consensus_winner"): # pylint: disable=no-member
             try:
-                return rc.calculate_consensus_winner(proposals, weights)
-            except Exception:
+                # pylint: disable=no-member
+                return rc.calculate_consensus_winner(proposals, weights) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         if not proposals:

@@ -70,8 +70,8 @@ async def test_no_balancing_when_stable():
     migration_engine.migrate_shard = AsyncMock()
 
     balancer = SwarmLoadBalancer(mock_telemetry, shard_manager, migration_engine)
-    
+
     await balancer.run_balancing_cycle()
-    
+
     migration_engine.migrate_shard.assert_not_called()
     print("[Phase 81] Load balancer correctly remained idle during stable utilization.")

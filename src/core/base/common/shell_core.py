@@ -1,5 +1,17 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Unified shell execution core for all PyAgent services."""
 
 import os
@@ -9,12 +21,12 @@ import subprocess
 import time
 import re
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Union
+from typing import List, Dict, Optional, Union
 from dataclasses import dataclass, field
 
 
 try:
-    import rust_core as rc
+    import rust_core as rc # pylint: disable=import-error
 except ImportError:
     rc = None
 
@@ -47,11 +59,13 @@ class ShellCore:
             self.repo_root = Path(repo_root)
         else:
             try:
-                from ..configuration.config_manager import CoreConfigManager
-                self.repo_root = CoreConfigManager().root_dir
+                from ..configuration.config_manager import CoreConfigManager # pylint: disable=import-outside-toplevel
+                # CoreConfigManager inherits from BaseCore which provides repo_root
+                config = CoreConfigManager()
+                self.repo_root = getattr(config, "repo_root", Path.cwd())
             except (ImportError, Exception): # pylint: disable=broad-exception-caught
                 self.repo_root = Path.cwd()
-            
+
         self.logger = logging.getLogger("pyagent.shell")
         self._ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 
@@ -71,10 +85,11 @@ class ShellCore:
             return ""
         return self._ansi_escape.sub("", text)
 
+    # pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
     async def execute_async(
-        self, 
-        cmd: List[str], 
-        timeout: int = 120, 
+        self,
+        cmd: List[str],
+        timeout: int = 120,
         env: Optional[Dict[str, str]] = None,
         cwd: Optional[Union[str, Path]] = None,
         capture_output: bool = True,
@@ -85,12 +100,12 @@ class ShellCore:
         current_env = os.environ.copy()
         if env:
             current_env.update(env)
-            
+
         if sanitize:
             current_env = self.sanitize_env(current_env)
-            
+
         working_dir = cwd or self.repo_root
-        
+
         try:
             process = await asyncio.create_subprocess_exec(
                 *cmd,
@@ -99,7 +114,7 @@ class ShellCore:
                 env=current_env,
                 cwd=working_dir
             )
-            
+
             try:
                 stdout_bytes, stderr_bytes = await asyncio.wait_for(process.communicate(), timeout=timeout)
                 stdout = stdout_bytes.decode('utf-8', errors='replace') if stdout_bytes else ""
@@ -116,15 +131,16 @@ class ShellCore:
                 stderr=stderr,
                 duration=time.perf_counter() - start_time
             )
-            
-        except Exception as e:
-            self.logger.error(f"Failed to execute {cmd[0]}: {e}")
+
+        except Exception as e: # pylint: disable=broad-exception-caught
+            self.logger.error("Failed to execute %s: %s", cmd[0], e)
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def execute(
-        self, 
-        cmd: List[str], 
-        timeout: int = 120, 
+        self,
+        cmd: List[str],
+        timeout: int = 120,
         env: Optional[Dict[str, str]] = None,
         cwd: Optional[Union[str, Path]] = None,
         check: bool = False
@@ -135,7 +151,7 @@ class ShellCore:
         # Use Rust-accelerated directory walking if available
         if rc and hasattr(rc, "execute_shell_rust") and not env and not cwd: # pylint: disable=no-member
             try:
-                code, stdout, stderr = rc.execute_shell_rust(cmd[0], cmd[1:]) # type: ignore
+                code, stdout, stderr = rc.execute_shell_rust(cmd[0], cmd[1:]) # type: ignore # pylint: disable=no-member
                 return ShellResult(
                     command=cmd,
                     returncode=code,
@@ -144,14 +160,14 @@ class ShellCore:
                     duration=time.perf_counter() - start_time
                 )
             except Exception as e: # pylint: disable=broad-exception-caught
-                self.logger.warning(f"Rust shell execution failed: {e}")
+                self.logger.warning("Rust shell execution failed: %s", e)
 
         current_env = os.environ.copy()
         if env:
             current_env.update(env)
-            
+
         working_dir = cwd or self.repo_root
-        
+
         try:
             result = subprocess.run(
                 cmd,
@@ -164,7 +180,7 @@ class ShellCore:
                 errors="replace",
                 check=check
             )
-            
+
             return ShellResult(
                 command=cmd,
                 returncode=result.returncode,
@@ -172,7 +188,7 @@ class ShellCore:
                 stderr=result.stderr,
                 duration=time.perf_counter() - start_time
             )
-            
+
         except subprocess.TimeoutExpired as e:
             return ShellResult(
                 command=cmd,
@@ -181,8 +197,8 @@ class ShellCore:
                 stderr=e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or ""),
                 duration=time.perf_counter() - start_time
             )
-        except Exception as e:
-            self.logger.error(f"Failed to execute {cmd[0]}: {e}")
+        except Exception as e: # pylint: disable=broad-exception-caught
+            self.logger.error("Failed to execute %s: %s", cmd[0], e)
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
     def redact_command(self, cmd: List[str], sensitive_patterns: List[str]) -> List[str]:

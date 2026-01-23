@@ -41,7 +41,7 @@ class QuantizationManager:
     Manages quantization states and hardware-accelerated kernels.
     Integrates with rust_core for fast bit-unpacking and scale application.
     """
-    
+
     def __init__(self, initial_mode: QuantizationMode = QuantizationMode.FP16):
         self.current_mode = initial_mode
         self.supported_modes: List[QuantizationMode] = [QuantizationMode.FP16]
@@ -60,14 +60,14 @@ class QuantizationManager:
         Returns parameters for the inference kernel (scales, zero-points, bit-width).
         """
         target_mode = mode or self.current_mode
-        
+
         configs = {
             QuantizationMode.FP16: {"bits": 16, "type": "float", "accelerated": True},
             QuantizationMode.FP8: {"bits": 8, "type": "float", "accelerated": True, "e4m3_support": True},
             QuantizationMode.BITNET_158: {"bits": 1.58, "type": "ternary", "accelerated": False},
             QuantizationMode.AWQ: {"bits": 4, "type": "int", "accelerated": True, "group_size": 128}
         }
-        
+
         return configs.get(target_mode, configs[QuantizationMode.FP16])
 
     def apply_quantization(self, tensor: Any, mode: QuantizationMode) -> Any:
@@ -76,12 +76,12 @@ class QuantizationManager:
         """
         if mode not in self.supported_modes:
             raise ValueError(f"Quantization mode {mode} not supported on this hardware.")
-            
+
         logger.debug(f"Applying {mode.value} quantization")
-        
+
         if rc and hasattr(rc, "quantize_tensor_rust"):
             return rc.quantize_tensor_rust(tensor, mode.value)
-            
+
         return tensor  # Fallback: return as is
 
     def switch_mode(self, new_mode: QuantizationMode):

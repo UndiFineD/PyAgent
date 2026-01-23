@@ -34,7 +34,7 @@ class ContextDistiller:
         """
         seq_len = kv_data.shape[0]
         keep_count = int(seq_len * (1.0 - self.target_reduction))
-        
+
         if attention_scores is not None:
             # Select top-k tokens based on attention
             indices = np.argsort(attention_scores)[-keep_count:]
@@ -44,14 +44,14 @@ class ContextDistiller:
             indices = np.linspace(0, seq_len - 1, keep_count, dtype=int)
 
         distilled_kv = kv_data[indices]
-        
+
         metadata = {
             "original_len": seq_len,
             "distilled_len": keep_count,
             "indices": indices.tolist(),
             "compression_ratio": seq_len / keep_count
         }
-        
+
         logger.info(f"[Phase 89] ContextDistillation: Reduced shard from {seq_len} to {keep_count} tokens.")
         return distilled_kv, metadata
 
@@ -62,12 +62,12 @@ class ContextDistiller:
         """
         orig_len = metadata["original_len"]
         feat_dim = distilled_kv.shape[1]
-        
+
         # Simple zero-padding or linear interpolation simulation
         reconstructed = np.zeros((orig_len, feat_dim))
         indices = metadata["indices"]
-        
+
         for i, idx in enumerate(indices):
             reconstructed[idx] = distilled_kv[i]
-            
+
         return reconstructed

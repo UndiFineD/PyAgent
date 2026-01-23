@@ -66,7 +66,8 @@ class ResilienceCore(BaseCore):
                             break
                         wait = current_delay * (random.random() + 0.5)  # jitter
                         logger.warning(
-                            f"Retrying {func.__name__} (attempt {attempt+1}/{retries}) after {wait:.2f}s due to: {e}"
+                            "Retrying %s (attempt %d/%d) after %.2fs due to: %s",
+                            func.__name__, attempt + 1, retries, wait, e
                         )
                         time.sleep(wait)
                         current_delay *= backoff
@@ -103,7 +104,12 @@ class ResilienceCore(BaseCore):
                             break
                         wait = current_delay * (random.random() + 0.5)  # jitter
                         logger.warning(
-                            f"Retrying {func.__name__} (attempt {attempt+1}/{retries}) after {wait:.2f}s due to: {e}"
+                            "Retrying %s (attempt %d/%d) after %.2fs due to: %s",
+                            func.__name__,
+                            attempt + 1,
+                            retries,
+                            wait,
+                            e,
                         )
                         await asyncio.sleep(wait)
                         current_delay *= backoff
@@ -131,10 +137,10 @@ class ResilienceCore(BaseCore):
         if rc:
             try:
                 # Use Rust implementation for performance if available
-                return rc.calculate_backoff(
+                return rc.calculate_backoff( # pylint: disable=no-member
                     failure_count, threshold, base_timeout, multiplier, max_timeout
                 )
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         if failure_count < threshold:
@@ -147,7 +153,7 @@ class ResilienceCore(BaseCore):
             return random.uniform(base_timeout / 2, backoff)
         if jitter_mode == "equal":
             return (backoff / 2) + random.uniform(0, backoff / 2)
-        
+
         # Legacy 10% jitter
         jitter = backoff * 0.1 * random.uniform(-1, 1)
         return max(base_timeout / 2, backoff + jitter)
@@ -159,10 +165,10 @@ class ResilienceCore(BaseCore):
         """Determines if the cooldown period has passed."""
         if rc:
             try:
-                return rc.should_attempt_recovery(
+                return rc.should_attempt_recovery( # pylint: disable=no-member
                     last_failure_time, current_time, timeout
                 )
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         return (current_time - last_failure_time) > timeout
 
@@ -180,14 +186,14 @@ class ResilienceCore(BaseCore):
         if rc:
             try:
                 if hasattr(rc, "evaluate_state_transition"):
-                    return rc.evaluate_state_transition(
+                    return rc.evaluate_state_transition( # pylint: disable=no-member
                         current_state,
                         success_count,
                         consecutive_successes_needed,
                         failure_count,
                         failure_threshold,
                     )
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         if current_state == "CLOSED":
@@ -200,6 +206,7 @@ class ResilienceCore(BaseCore):
         return current_state
 
     @staticmethod
+    # pylint: disable=too-many-return-statements
     def update_state(
         current_state: str,
         is_success: bool,
@@ -229,21 +236,20 @@ class ResilienceCore(BaseCore):
                 return current_state, failure_count, new_success_count
             if current_state == "CLOSED":
                 return "CLOSED", 0, 0
-            elif current_state == "OPEN":
+            if current_state == "OPEN":
                 return "CLOSED", 0, 0
 
             return current_state, failure_count, new_success_count
 
-        else:
-            new_failure_count = failure_count + 1
-            if current_state == "HALF_OPEN":
-                return "OPEN", new_failure_count, 0
+        new_failure_count = failure_count + 1
+        if current_state == "HALF_OPEN":
+            return "OPEN", new_failure_count, 0
 
-            new_state = ResilienceCore.evaluate_state_transition(
-                current_state,
-                success_count,
-                consecutive_successes_needed,
-                new_failure_count,
-                failure_threshold,
-            )
-            return new_state, new_failure_count, 0
+        new_state = ResilienceCore.evaluate_state_transition(
+            current_state,
+            success_count,
+            consecutive_successes_needed,
+            new_failure_count,
+            failure_threshold,
+        )
+        return new_state, new_failure_count, 0

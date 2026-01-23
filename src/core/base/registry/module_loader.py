@@ -96,6 +96,8 @@ class ModuleLoader:
             return getattr(module, agent_type)
         except (ImportError, AttributeError, ModuleNotFoundError) as e:
             logging.error(
-                f"ModuleLoader: Failed to load class {agent_type} from {module_path}. Error: {e}"
+                "ModuleLoader: Failed to load class %s from %s. Error: %s",
+                agent_type, module_path, e
             )
+            raise
             raise ImportError(f"Could not load agent class {agent_type}") from e

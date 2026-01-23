@@ -19,7 +19,7 @@ AgentRegistry: Central registry for all active agent instances.
 
 from __future__ import annotations
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from src.core.base.common.registry_core import RegistryCore
 from src.core.base.lifecycle.version import VERSION
 
@@ -42,16 +42,28 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
             cls._instance = super(AgentRegistry, cls).__new__(cls)
         return cls._instance
 
-    def register(self, agent: BaseAgent) -> None:
-        """Register an agent instance."""
-        name = getattr(agent, "agent_name", str(id(agent)))
-        self.register(name, agent)
-        logging.debug(f"Agent '{name}' registered.")
+    def __init__(self, **_kwargs: Any) -> None:
+        if not hasattr(self, "_initialized"):
+            super().__init__(name="AgentRegistry")
+            self._initialized = True
 
-    def unregister(self, name: str) -> None:
-        """Unregister an agent instance."""
-        if super().unregister(name):
-            logging.debug(f"Agent '{name}' unregistered.")
+    def register_instance(self, agent: BaseAgent) -> bool:
+        """
+        Register an agent instance using its internal agent_name.
+        Delegates to the underlying RegistryCore.register method.
+        """
+        name = getattr(agent, "agent_name", str(id(agent)))
+        success = super().register(name, agent)
+        if success:
+            logging.debug("Agent '%s' registered.", name)
+        return success
+
+    def unregister_instance(self, name: str) -> bool:
+        """Unregister an agent instance by name."""
+        success = super().unregister(name)
+        if success:
+            logging.debug("Agent '%s' unregistered.", name)
+        return success
 
     def get_agent(self, name: str) -> BaseAgent | None:
         """Retrieve an agent by name."""
@@ -63,4 +75,5 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
 
     @property
     def active_count(self) -> int:
+        """Return the number of active agents."""
         return len(self._items)

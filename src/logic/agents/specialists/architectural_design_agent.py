@@ -116,7 +116,7 @@ class ArchitecturalDesignAgent(BaseAgent):
             "3. Communication Protocols (MUX/DEMUX, 120fps sync).\n"
             "Output the proposal as a set of actionable 'Improvement' items for the improvements.md file."
         )
-        
+
         mapping = await super().think(f"{prompt}\n\nRESEARCH:\n{research_data}")
         return mapping
         if not self.design_state["requirements"]:
