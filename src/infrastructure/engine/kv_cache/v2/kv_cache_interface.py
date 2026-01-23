@@ -34,24 +34,24 @@ class KVCacheInterfaceV2:
     High-level interface for managing hierarchical KV-Cache.
     Supports dynamic block allocation and multi-GPU synchronization.
     """
-    
-    def __init__(self, 
-                 num_layers: int, 
-                 num_heads: int, 
-                 head_size: int, 
-                 num_blocks: int, 
+
+    def __init__(self,
+                 num_layers: int,
+                 num_heads: int,
+                 head_size: int,
+                 num_blocks: int,
                  block_size: int = 16):
         self.num_layers = num_layers
         self.num_heads = num_heads
         self.head_size = head_size
         self.block_size = block_size
-        
+
         self.block_table = BlockTableV2(num_blocks, block_size)
-        
+
         # Physical storage (placeholder for Torch tensors)
         self.k_cache: Optional[torch.Tensor] = None
         self.v_cache: Optional[torch.Tensor] = None
-        
+
         logger.info(f"KVCacheInterfaceV2 created: {num_layers} layers, {num_heads} heads, {num_blocks} blocks")
 
     def initialize_storage(self, device: str = "cuda", dtype: torch.dtype = torch.float16):

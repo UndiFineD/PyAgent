@@ -16,12 +16,13 @@
 """Specialized manager for handling agent improvement iterations."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
-import sys
 from pathlib import Path
+import sys
 from typing import Any
-from src.core.base.lifecycle.version import is_gate_open, EVOLUTION_PHASE
+
+from src.core.base.lifecycle.version import VERSION, is_gate_open, EVOLUTION_PHASE
+from src.core.base.common.utils.core_utils import fix_markdown_content
 
 __version__ = VERSION
 
@@ -32,7 +33,7 @@ class AgentUpdateManager:
     Implements Version Gatekeeping to prevent unstable mutations.
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         repo_root: Path,
         models: dict[str, Any],
@@ -53,7 +54,8 @@ class AgentUpdateManager:
         """Internal version gate check."""
         if not is_gate_open(self.min_gate_phase):
             logging.warning(
-                f"AgentUpdateManager: Evolution Gate Closed. Required Phase: {self.min_gate_phase}, Current: {EVOLUTION_PHASE}"
+                "AgentUpdateManager: Evolution Gate Closed. Required Phase: %s, Current: %s",
+                self.min_gate_phase, EVOLUTION_PHASE
             )
             return False
         return True
@@ -74,11 +76,9 @@ class AgentUpdateManager:
 
         # Create errors file if it doesn't exist
         if not errors_file.exists():
-            from src.core.base.common.utils.core_utils import fix_markdown_content
-
             content = f"# Errors\n\nNo errors reported for {code_file.name}.\n"
             errors_file.write_text(fix_markdown_content(content), encoding="utf-8")
-            logging.info(f"Created {errors_file.relative_to(self.repo_root)}")
+            logging.info("Created %s", errors_file.relative_to(self.repo_root))
             changes_made = True
 
         # Update errors
@@ -95,15 +95,13 @@ class AgentUpdateManager:
 
         # Create improvements file if it doesn't exist
         if not improvements_file.exists():
-            from src.core.base.common.utils.core_utils import fix_markdown_content
-
             content = (
                 f"# Improvements\n\nNo improvements suggested for {code_file.name}.\n"
             )
             improvements_file.write_text(
                 fix_markdown_content(content), encoding="utf-8"
             )
-            logging.info(f"Created {improvements_file.relative_to(self.repo_root)}")
+            logging.info("Created %s", improvements_file.relative_to(self.repo_root))
             changes_made = True
 
         # Update improvements
@@ -130,8 +128,8 @@ class AgentUpdateManager:
             content = improvements_file.read_text(encoding="utf-8")
             all_pending = self.core.parse_improvements_content(content)
             return self.core.score_improvement_items(all_pending)
-        except Exception as e:
-            logging.warning(f"AgentUpdateManager: Failed to read improvements: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning("AgentUpdateManager: Failed to read improvements: %s", e)
             return []
 
     def _mark_improvements_fixed(
@@ -144,9 +142,9 @@ class AgentUpdateManager:
             content = improvements_file.read_text(encoding="utf-8")
             new_content = self.core.update_fixed_items(content, fixed_items)
             improvements_file.write_text(new_content, encoding="utf-8")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.warning(
-                f"AgentUpdateManager: Failed to update improvements file: {e}"
+                "AgentUpdateManager: Failed to update improvements file: %s", e
             )
 
     def _log_changes(self, changes_file: Path, fixed_items: list[str]) -> None:
@@ -158,8 +156,8 @@ class AgentUpdateManager:
             new_entries = self.core.generate_changelog_entries(fixed_items)
             new_content = content.rstrip() + "\n\n" + new_entries + "\n"
             changes_file.write_text(new_content, encoding="utf-8")
-        except Exception as e:
-            logging.warning(f"AgentUpdateManager: Failed to update changes file: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning("AgentUpdateManager: Failed to update changes file: %s", e)
 
     def update_changelog_context_tests(self, code_file: Path) -> bool:
         """Update changelog, context, and tests for a file."""
@@ -171,7 +169,6 @@ class AgentUpdateManager:
         changes_file = dir_path / f"{base}.changes.md"
         context_file = dir_path / f"{base}.description.md"
         changes_made = False
-        from src.core.base.common.utils.core_utils import fix_markdown_content
 
         # Create changelog if needed
         if not changes_file.exists():

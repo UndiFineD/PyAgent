@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 Core logic for file priority and task ordering.
 """
@@ -41,11 +46,14 @@ class PriorityCore(BaseCore):
         }
 
     def get_priority(self, path: Path) -> FilePriority:
+        """
+        Determines the priority level for a given file path.
+        """
         path_str = str(path)
         for pattern, priority in self.config.path_patterns.items():
             if fnmatch.fnmatch(path_str, pattern):
                 return priority
-        
+
         ext = path.suffix.lower()
         if ext in self.config.extension_priorities:
             return self.config.extension_priorities[ext]
@@ -55,4 +63,7 @@ class PriorityCore(BaseCore):
         return self.config.default_priority
 
     def sort_by_priority(self, paths: List[Path]) -> List[Path]:
+        """
+        Sorts a list of file paths by their priority level in descending order.
+        """
         return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)

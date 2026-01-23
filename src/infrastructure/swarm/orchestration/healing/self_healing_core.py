@@ -24,7 +24,7 @@ from src.core.base.common import StabilityCore
 
 class SelfHealingCore(StabilityCore):
     """Facade delegating to StabilityCore implementation."""
-    
+
     def __init__(self, timeout_seconds: float = 30.0, max_errors: int = 5) -> None:
         super().__init__(name="SelfHealingCore")
         self.timeout_seconds = timeout_seconds

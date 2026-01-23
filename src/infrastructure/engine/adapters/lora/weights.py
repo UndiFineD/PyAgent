@@ -55,7 +55,7 @@ class LoRALayerWeights:
                 orig_shape = x.shape
                 x_flat = x.reshape(-1, self.in_features).astype(np.float32)
                 batch_size = x_flat.shape[0]
-                
+
                 result_flat = rc.lora_forward_rust(
                     x_flat.flatten().tolist(),
                     self.lora_a.flatten().tolist(),
@@ -66,7 +66,7 @@ class LoRALayerWeights:
                     self.rank,
                     self.scaling
                 )
-                
+
                 # Reshape back to original dimensions as needed
                 new_shape = list(orig_shape[:-1]) + [self.out_features]
                 return np.array(result_flat, dtype=np.float32).reshape(new_shape)
@@ -130,7 +130,7 @@ class IA3LayerWeights:
                 return np.array(res, dtype=np.float32).reshape(x.shape)
             except Exception:
                 pass
-        
+
         return x * self.scaling_vector
 
     def get_memory_bytes(self) -> int:

@@ -1,5 +1,17 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Unified Identity core for all PyAgent services."""
 
 import hashlib
@@ -64,6 +76,7 @@ class IdentityCore(BaseCore):
         """Generates a stable, unique agent identifier based on public key and metadata."""
         if rc and hasattr(rc, "generate_agent_id"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.generate_agent_id(public_key, metadata) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
@@ -74,6 +87,7 @@ class IdentityCore(BaseCore):
         """Signs a payload using HMAC-SHA256 (simulating Ed25519 signing for pure-python)."""
         if rc and hasattr(rc, "sign_payload"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.sign_payload(payload, secret_key) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
@@ -85,6 +99,7 @@ class IdentityCore(BaseCore):
         """Verifies a payload signature (simulated verification)."""
         if rc and hasattr(rc, "verify_signature"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.verify_signature(payload, signature, public_key) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass

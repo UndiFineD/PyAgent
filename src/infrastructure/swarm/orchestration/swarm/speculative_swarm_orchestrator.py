@@ -33,7 +33,7 @@ class SpeculativeSwarmOrchestrator:
     Coordinates speculative agent execution.
     Reduces latency by allowing a 'draft' agent to propose thoughts while a 'target' agent verifies.
     """
-    
+
     def __init__(self, fleet_manager: Any, similarity_threshold: float = 0.85):
         self.fleet = fleet_manager
         self.similarity_service = EmbeddingSimilarityService()
@@ -46,9 +46,9 @@ class SpeculativeSwarmOrchestrator:
         }
 
     async def execute_speculative_task(
-        self, 
-        task: str, 
-        draft_agent_id: str, 
+        self,
+        task: str,
+        draft_agent_id: str,
         target_agent_id: str,
         context: Optional[CascadeContext] = None
     ) -> VerificationOutcome:
@@ -57,49 +57,49 @@ class SpeculativeSwarmOrchestrator:
         """
         start_time = time.perf_counter()
         self.stats["total_speculations"] += 1
-        
+
         # 1. Start the drafting agent (Fast tier)
         logger.info(f"SpeculativeSwarm: Drafting task via {draft_agent_id}")
         draft_task = self.fleet.delegate_task(
-            task, 
-            draft_agent_id, 
+            task,
+            draft_agent_id,
             context=context.next_level(draft_agent_id) if context else None
         )
-        
+
         # 2. In real scenario, we might start the target agent's prefill/context loading in parallel
         # For Phase 56, we wait for the draft then verify
         draft_result = await draft_task
-        
+
         proposal = SpeculativeProposal(
             request_id=str(time.time()),
             draft_content=draft_result.get("content", ""),
             confidence_score=draft_result.get("confidence", 0.5),
             proposer_id=draft_agent_id
         )
-        
+
         # 3. Verification by Target Agent (Accurate tier)
         logger.info(f"SpeculativeSwarm: Verifying proposal via {target_agent_id}")
         verify_prompt = (
             f"Verify and refine this draft completion for the task: '{task}'\n"
             f"Draft: {proposal.draft_content}"
         )
-        
+
         verify_task = self.fleet.delegate_task(
             verify_prompt,
             target_agent_id,
             context=context.next_level(target_agent_id) if context else None
         )
-        
+
         final_result = await verify_task
         end_time = time.perf_counter()
-        
+
         # 4. Analyze outcome using semantic similarity (Phase 57)
         similarity = await self.similarity_service.compute_similarity(
-            proposal.draft_content, 
+            proposal.draft_content,
             final_result.get("content", "")
         )
         accepted = similarity >= self.similarity_threshold
-        
+
         outcome = VerificationOutcome(
             proposal_id=proposal.request_id,
             accepted=accepted,
@@ -109,10 +109,10 @@ class SpeculativeSwarmOrchestrator:
             verifier_id=target_agent_id,
             latency_delta=end_time - start_time
         )
-        
+
         if accepted:
             self.stats["accepted_proposals"] += 1
-            
+
         return outcome
 
     def get_efficiency_metrics(self) -> Dict[str, Any]:

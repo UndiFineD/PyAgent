@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,6 +37,7 @@ class NeuralPruningEngine:
         Falls back to Python if Rust module is not compiled.
         """
         try:
+            # pylint: disable=import-outside-toplevel
             import rust_core as rc
 
             return rc.calculate_synaptic_weight(inputs, weights)  # type: ignore[attr-defined]

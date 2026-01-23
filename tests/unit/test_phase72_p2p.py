@@ -12,20 +12,20 @@ async def test_shard_migration_flow():
     """Verifies that shards can be moved between ranks successfully."""
     manager = ContextShardManager(block_size=1024)
     migration_engine = P2PMigrationEngine(manager)
-    
+
     # Setup context on Rank 0
     manager.shard_context("long_doc", 2048, [0])
     assert manager.context_registry["long_doc"][0].rank_id == 0
     assert manager.context_registry["long_doc"][1].rank_id == 0
-    
+
     # Migrate Shard 1 to Rank 5
     await migration_engine.migrate_shard("long_doc", 1, 5)
-    
+
     assert manager.context_registry["long_doc"][0].rank_id == 0
     assert manager.context_registry["long_doc"][1].rank_id == 5
-    
+
     stats = migration_engine.get_migration_stats()
     assert stats["total_migrations"] == 1
     assert stats["avg_duration_ms"] > 0
-    
+
     print(f"\nPhase 72: P2P Shard Migration verified. Stats: {stats}")

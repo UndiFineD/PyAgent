@@ -41,21 +41,21 @@ class EngineCoordinator:
     Coordinates the global engine state and recovery procedures.
     Integrates with Rust for high-throughput state transitions.
     """
-    
+
     def __init__(self):
         self.state = EngineState.STOPPED
         self._error_count = 0
         self._max_errors = 5
-        
+
     def transition_to(self, new_state: EngineState):
         """
         Transitions the engine to a new state with safety checks.
         """
         old_state = self.state
-        
+
         if rc and hasattr(rc, "engine_state_transition_rust"):
             rc.engine_state_transition_rust(old_state.value, new_state.value)
-            
+
         self.state = new_state
         logger.info(f"Engine transitioned from {old_state.name} to {new_state.name}")
 
@@ -65,11 +65,11 @@ class EngineCoordinator:
         """
         self._error_count += 1
         logger.error(f"Engine Error #{self._error_count}: {error_msg}")
-        
+
         if self._error_count >= self._max_errors:
             self.transition_to(EngineState.ERROR)
             return False
-            
+
         # Attempt soft restart
         self.transition_to(EngineState.COOLDOWN)
         await asyncio.sleep(1.0)
@@ -81,7 +81,7 @@ class EngineCoordinator:
         self._error_count = 0
         if self.state == EngineState.ERROR:
             self.transition_to(EngineState.STOPPED)
-            
+
     def is_healthy(self) -> bool:
         """Returns True if the engine is in a functional state."""
         return self.state in [EngineState.RUNNING, EngineState.STARTING, EngineState.COOLDOWN]

@@ -30,7 +30,7 @@ class SemanticHasher:
         # Random projection matrix
         np.random.seed(42)  # Deterministic projections across the swarm nodes
         self.projections = np.random.randn(num_bits, dimension)
-        
+
         # The hash table: bucket_id -> set(shard_identifiers)
         self.buckets: Dict[int, Set[str]] = {}
 
@@ -45,7 +45,7 @@ class SemanticHasher:
         projections = np.dot(self.projections, embedding)
         # Convert signs to bits
         bits = (projections > 0).astype(int)
-        
+
         # Convert bit array to integer
         hash_val = 0
         for bit in bits:

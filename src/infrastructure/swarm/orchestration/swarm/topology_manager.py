@@ -18,7 +18,7 @@ class TopologyManager:
     """
     Monitors swarm health and automatically scales expert replicas.
     """
-    
+
     def __init__(self, gatekeeper: Any, clone_threshold: int = 100):
         self.gatekeeper = gatekeeper
         self.clone_threshold = clone_threshold
@@ -28,7 +28,7 @@ class TopologyManager:
     def record_usage(self, agent_id: str):
         """Increments usage counter and triggers cloning if threshold met."""
         self.request_counts[agent_id] = self.request_counts.get(agent_id, 0) + 1
-        
+
         if self.request_counts[agent_id] >= self.clone_threshold:
             asyncio.create_task(self.clone_expert(agent_id))
             self.request_counts[agent_id] = 0 # Reset counter after cloning
@@ -41,12 +41,12 @@ class TopologyManager:
         """
         if agent_id not in self.gatekeeper.experts:
             return
-            
+
         master_profile = self.gatekeeper.experts[agent_id]
         replica_id = f"{agent_id}_replica_{len(self.replicas.get(agent_id, [])) + 1}"
-        
+
         logger.info(f"Cloning expert {agent_id} to {replica_id} due to high demand.")
-        
+
         # Create replica profile
         replica_profile = ExpertProfile(
             agent_id=replica_id,
@@ -56,9 +56,9 @@ class TopologyManager:
             is_replica=True,
             parent_id=agent_id
         )
-        
+
         self.gatekeeper.register_expert(replica_profile)
-        
+
         if agent_id not in self.replicas:
             self.replicas[agent_id] = []
         self.replicas[agent_id].append(replica_id)

@@ -32,17 +32,17 @@ async def test_routing_with_reward_bias():
     # 2. Setup Gatekeeper with 2 identical experts
     mock_sim = MagicMock()
     mock_sim.get_embedding = AsyncMock(return_value=np.zeros(384))
-    
+
     gatekeeper = MoEGatekeeper(mock_sim, reward_predictor=predictor)
-    
+
     # Expert A: standard
     p_a = ExpertProfile(agent_id="expert_a", domains=["coding"], performance_score=1.0)
     p_a.specialization_vector = [1.0] * 384
-    
+
     # Expert B: same specs as A, but is in the wisdom 'top experts'
     p_b = ExpertProfile(agent_id="expert_b", domains=["coding"], performance_score=1.0)
     p_b.specialization_vector = [1.0] * 384
-    
+
     gatekeeper.register_expert(p_a)
     gatekeeper.register_expert(p_b)
 

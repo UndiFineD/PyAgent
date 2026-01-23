@@ -29,7 +29,6 @@ from __future__ import annotations
 import difflib
 import fnmatch
 import hashlib
-import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -179,7 +178,7 @@ class BaseCore(LogicCore):
         return str(WorkspaceCore(root_dir=file_path.parent).root_dir)
 
     def is_path_ignored(
-        self, path: Path, repo_root: Path, ignored_patterns: set[str]
+        self, path: Path, _repo_root: Path | None = None, _ignored_patterns: set[str] | None = None
     ) -> bool:
         """Check if a path should be ignored based on patterns."""
         return self.workspace.is_ignored(path)
@@ -288,7 +287,7 @@ class AgentCore(BaseCore):
                         new_lines.append(line.replace("- [ ]", "- [x]"))
                         updated = True
                         break
-                    elif "[x]" not in line and "[Fixed]" not in line:
+                    if "[x]" not in line and "[Fixed]" not in line:
                         new_lines.append(line + " [Fixed]")
                         updated = True
                         break
@@ -320,7 +319,7 @@ class AgentCore(BaseCore):
 
         return prioritized + remaining
 
-    def get_agent_command(
+    def get_agent_command(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         python_exe: str,
         script_name: str,

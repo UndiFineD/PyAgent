@@ -36,7 +36,7 @@ class LocalityManager:
     Groups ranks by physical/logical proximity (Rack, Region, or Subnet).
     Used to optimize data parallelism and KV-cache offloading across nodes.
     """
-    
+
     def __init__(self):
         self.groups: Dict[str, LocalityGroup] = {}
         self.rank_to_group: Dict[int, str] = {}
@@ -47,10 +47,10 @@ class LocalityManager:
         if not locality_tag:
             # Fallback: simple heuristic based on hostname/IP if possible
             locality_tag = self.local_hostname if rank_id == 0 else "remote-cluster"
-            
+
         if locality_tag not in self.groups:
             self.groups[locality_tag] = LocalityGroup(locality_tag)
-            
+
         self.groups[locality_tag].ranks.add(rank_id)
         self.rank_to_group[rank_id] = locality_tag
         logger.info(f"Locality: Registered Rank {rank_id} in {locality_tag}")
@@ -69,17 +69,17 @@ class LocalityManager:
         """
         if not self.groups:
             return {"default": list(range(total_shards))}
-            
+
         shards_per_group = {}
         group_names = list(self.groups.keys())
-        
+
         # Simple balanced sharding across groups
         for i in range(total_shards):
             g = group_names[i % len(group_names)]
             if g not in shards_per_group:
                 shards_per_group[g] = []
             shards_per_group[g].append(i)
-            
+
         return shards_per_group
 
     def suggest_coordinator_rank(self, locality_tag: str) -> Optional[int]:

@@ -39,14 +39,17 @@ class SignalCore(BaseCore):
         self._thread.start()
 
     def subscribe(self, signal_type: str, callback: Callable[[Any, str], None]) -> None:
+        """Subscribe to a specific signal type."""
         if signal_type not in self._subscribers:
             self._subscribers[signal_type] = []
         self._subscribers[signal_type].append(callback)
 
     def publish(self, signal_type: str, payload: Any, sender: str = "System") -> None:
+        """Publish a signal to the bus."""
         self._queue.put({"type": signal_type, "payload": payload, "sender": sender})
 
     def _process_bus(self) -> None:
+        """Background thread process for handling the signal queue."""
         while self._running:
             try:
                 msg = self._queue.get(timeout=1.0)
@@ -58,13 +61,14 @@ class SignalCore(BaseCore):
                     for callback in self._subscribers[stype]:
                         try:
                             callback(payload, sender)
-                        except Exception as e:
-                            logger.error(f"SignalCore: Callback failed: {e}")
+                        except Exception as err:  # pylint: disable=broad-exception-caught
+                            logger.error("SignalCore: Callback failed: %s", err)
                 self._queue.task_done()
             except queue.Empty:
                 continue
 
     def stop(self) -> None:
+        """Stop the signal bus processing thread."""
         self._running = False
         if self._thread.is_alive():
             self._thread.join(timeout=2.0)

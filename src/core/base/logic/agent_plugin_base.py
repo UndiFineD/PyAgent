@@ -16,12 +16,13 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.models import AgentHealthCheck, AgentPriority, HealthStatus
 from abc import ABC, abstractmethod
+import logging
 from pathlib import Path
 from typing import Any
-import logging
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.models import AgentHealthCheck, AgentPriority, HealthStatus
 
 __version__ = VERSION
 
@@ -71,7 +72,6 @@ class AgentPluginBase(ABC):
 
     def setup(self) -> None:
         """Called once when plugin is loaded. Override for initialization."""
-        pass
 
     @abstractmethod
     def shutdown(self) -> None:
@@ -80,7 +80,6 @@ class AgentPluginBase(ABC):
 
     def teardown(self) -> None:
         """Called once when plugin is unloaded. Override for cleanup."""
-        pass
 
     def health_check(self) -> AgentHealthCheck:
         """Check plugin health status.

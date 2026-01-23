@@ -23,7 +23,7 @@ def test_meta_optimization_loop():
         "avg_vram_util": 0.95,        # Too high
         "speculative_acceptance_rate": 0.40 # Too low
     }
-    
+
     initial_config = {
         "distillation_ratio": 0.5,
         "similarity_threshold": 0.85
@@ -37,7 +37,7 @@ def test_meta_optimization_loop():
     # 3. Verify Tuned parameters
     assert updates["distillation_ratio"] > 0.5
     assert updates["similarity_threshold"] > 0.85
-    
+
     final_config = optimizer.get_optimized_config()
     assert final_config["distillation_ratio"] == updates["distillation_ratio"]
     print(f"\n[Phase 90] MetaOptimizer successfully nudged hyperparameters: {updates}")

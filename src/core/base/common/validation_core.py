@@ -12,19 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Standardized validation logic for reports, improvements, and configs.
+"""
+
 from __future__ import annotations
+import fnmatch
 import json
 import logging
-import fnmatch
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from .base_core import BaseCore
-from src.core.base.common.models import ValidationRule
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
+from src.core.base.common.models import ValidationRule
+from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.validation")
 
@@ -39,6 +44,7 @@ class ValidationCore(BaseCore):
         self._rules: Dict[str, ValidationRule] = {}
 
     def add_rule(self, rule: ValidationRule) -> None:
+        """Register a new validation rule."""
         self._rules[rule.name] = rule
 
     def validate_content_by_rules(self, file_path: Path, content: str) -> List[Dict[str, Any]]:
@@ -46,8 +52,8 @@ class ValidationCore(BaseCore):
         if rc and hasattr(rc, "validate_content_rust"):
             try:
                 # Passing rule patterns to Rust for bulk processing
-                return rc.validate_content_rust(str(file_path), content, list(self._rules.keys()))
-            except Exception:
+                return rc.validate_content_rust(str(file_path), content, list(self._rules.keys()))  # pylint: disable=no-member
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         results = []
@@ -61,8 +67,13 @@ class ValidationCore(BaseCore):
                         "severity": rule.severity,
                         "message": None if passed else rule.error_message,
                     })
-                except Exception as e:
-                    results.append({"rule": rule.name, "passed": False, "severity": "error", "message": str(e)})
+                except Exception as err:  # pylint: disable=broad-exception-caught
+                    results.append({
+                        "rule": rule.name,
+                        "passed": False,
+                        "severity": "error",
+                        "message": str(err)
+                    })
         return results
 
     def validate_json_schema(self, data: Any, schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
@@ -72,17 +83,17 @@ class ValidationCore(BaseCore):
                 data_str = json.dumps(data) if not isinstance(data, str) else data
                 schema_str = json.dumps(schema)
                 # Rust returns (is_valid, error_list)
-                return rc.json_schema_validate_rust(data_str, schema_str)
-            except Exception:
+                return rc.json_schema_validate_rust(data_str, schema_str)  # pylint: disable=no-member
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
-        
+
         errors = []
         if not isinstance(data, dict):
             return False, ["Data must be a dictionary"]
-        
+
         required = schema.get("required", [])
         for key in required:
             if key not in data:
                 errors.append(f"Missing required key: {key}")
-        
+
         return len(errors) == 0, errors

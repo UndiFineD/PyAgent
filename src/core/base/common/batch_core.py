@@ -17,7 +17,6 @@ Core logic for batch request processing and queuing.
 """
 
 from __future__ import annotations
-import logging
 from pathlib import Path
 from typing import Any, List, Optional, Callable
 from .base_core import BaseCore
@@ -25,7 +24,8 @@ from .models import FilePriority, BatchResult
 
 class BatchRequest:
     """Request in a batch processing queue."""
-    def __init__(
+
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         file_path: Optional[Path] = None,
         prompt: Optional[str] = None,
@@ -41,15 +41,18 @@ class BatchRequest:
         self.items: List[Any] = []
 
     def add(self, item: Any) -> None:
+        """Add an item to the batch."""
         if self.max_size is not None and len(self.items) >= self.max_size:
             return
         self.items.append(item)
 
     @property
     def size(self) -> int:
+        """Return the number of items in the batch."""
         return len(self.items)
 
     def execute(self, processor: Callable[[List[Any]], List[Any]]) -> List[Any]:
+        """Process the items in the batch."""
         return processor(self.items)
 
 class BatchCore(BaseCore):
@@ -64,10 +67,13 @@ class BatchCore(BaseCore):
         self.results: List[BatchResult] = []
 
     def add_request(self, request: BatchRequest) -> None:
+        """Add a request to the queue."""
         self.queue.append(request)
 
     def clear_queue(self) -> None:
+        """Clear all requests from the queue."""
         self.queue.clear()
 
     def sort_by_priority(self) -> List[BatchRequest]:
+        """Return requests sorted by priority (Descending)."""
         return sorted(self.queue, key=lambda r: r.priority.value, reverse=True)

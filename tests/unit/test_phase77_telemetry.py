@@ -16,27 +16,27 @@ async def test_telemetry_aggregation():
     gatekeeper = MoEGatekeeper(similarity_service=None)
     shard_manager = ContextShardManager(block_size=512, redundancy_factor=2)
     topology = TopologyManager(gatekeeper=gatekeeper)
-    
+
     telemetry = SwarmTelemetryService(gatekeeper, shard_manager, topology)
-    
+
     # 2. Inject some state
     gatekeeper.register_expert(ExpertProfile(agent_id="test_agent_1", domains=["test"]))
     shard_manager.shard_context("doc_1", 1024, [0, 1])
     shard_manager.mark_rank_dead(99)
-    
+
     # 3. Collect metrics
     metrics = telemetry.get_grid_metrics()
-    
+
     assert metrics["routing"]["total_experts"] == 1
     assert metrics["context"]["total_shards"] == 2
     assert metrics["context"]["dead_ranks"] == 1
     assert metrics["swarm_health"] == "degraded"
-    
+
     # Check bit-depth (default should be float16)
     assert metrics["context"]["shards_by_precision"]["float16"] == 2
-    
+
     # Check Prometheus export
     prom_data = telemetry.export_prometheus()
     assert "swarm_total_shards 2" in prom_data
-    
+
     print("\nPhase 77: Swarm telemetry aggregation verified.")

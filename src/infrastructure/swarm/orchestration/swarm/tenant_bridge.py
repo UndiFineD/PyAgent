@@ -33,12 +33,12 @@ class TenantKnowledgeBridge:
         Returns a 'Global Harmony' map of agent synergies.
         """
         raw_wisdom = self.synthesizer.synthesize_wisdom()
-        
-        # Scrubbing logic: 
+
+        # Scrubbing logic:
         # 1. Remove domain baselines (could reveal tenant-specific data distribution)
         # 2. Keep expert synergies (these are properties of the engine architecture)
         # 3. Keep top experts list
-        
+
         anonymized = {
             "expert_synergies": raw_wisdom.get("expert_synergies", {}),
             "top_experts": raw_wisdom.get("top_experts", []),
@@ -47,7 +47,7 @@ class TenantKnowledgeBridge:
                 "protection": "differential_orchestration_privacy"
             }
         }
-        
+
         logger.info(f"[Phase 84] Anonymized knowledge bridge generated. Synergy count: {len(anonymized['expert_synergies'])}")
         return anonymized
 
@@ -57,7 +57,7 @@ class TenantKnowledgeBridge:
         """
         current_synergies = target_predictor.wisdom.get("expert_synergies", {})
         global_synergies = global_wisdom.get("expert_synergies", {})
-        
+
         # Merge by taking average or max synergy
         for ex, peers in global_synergies.items():
             if ex not in current_synergies:
@@ -66,10 +66,10 @@ class TenantKnowledgeBridge:
                 for peer, val in peers.items():
                     # Simple update: keep highest observed synergy
                     current_synergies[ex][peer] = max(current_synergies[ex].get(peer, 0.0), val)
-        
+
         target_predictor.wisdom["expert_synergies"] = current_synergies
         # Recompute biases in the predictor (needs a method for that)
         if hasattr(target_predictor, "_precompute_biases"):
             target_predictor.expert_biases = target_predictor._precompute_biases()
-        
+
         logger.info(f"[Phase 84] Applied global cross-tenant wisdom to reward predictor.")

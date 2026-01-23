@@ -31,12 +31,12 @@ class SwarmAuditLogger:
     Centralized logger for swarm consensus and routing decisions.
     Allows for post-hoc analysis of agent fleet behavior.
     """
-    
+
     def __init__(self, storage_path: str = "data/logs/swarm_audit.jsonl", log_to_file: bool = True):
         self.trails: Dict[str, List[SwarmAuditTrail]] = {}
         self.storage_path = storage_path
         self.log_to_file = log_to_file
-        
+
         # Ensure directory exists
         if self.log_to_file:
             os.makedirs(os.path.dirname(self.storage_path), exist_ok=True)
@@ -51,11 +51,11 @@ class SwarmAuditLogger:
             timestamp=time.time(),
             duration_ms=duration_ms
         )
-        
+
         if task_id not in self.trails:
             self.trails[task_id] = []
         self.trails[task_id].append(trail)
-        
+
         if self.log_to_file:
             self._persist_event(trail)
 

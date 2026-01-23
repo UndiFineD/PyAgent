@@ -19,15 +19,27 @@ Core logic for plugin discovery, loading, and registration.
 from __future__ import annotations
 import json
 import logging
+import importlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from .base_core import BaseCore
 
+try:
+    import docker
+except ImportError:
+    docker = None
+
+try:
+    from src.infrastructure.swarm.fleet.version_gate import VersionGate
+except ImportError:
+    VersionGate = None
+
 if TYPE_CHECKING:
     from src.core.base.logic.agent_plugin_base import AgentPluginBase
 
 @dataclass
+# pylint: disable=too-many-instance-attributes
 class PluginMetadata:
     """Strictly typed metadata for a plugin."""
     module_path: str
@@ -41,8 +53,10 @@ class PluginMetadata:
     restricted_mode: bool = False
 
     def get(self, key: str, default: Any = None) -> Any:
+        """Retrieves an attribute value."""
         return getattr(self, key, default)
 
+# pylint: disable=too-many-instance-attributes
 class PluginCore(BaseCore):
     """
     Authoritative engine for discovering and managing plugins.
@@ -60,7 +74,7 @@ class PluginCore(BaseCore):
         if not self.plugins_dir.exists():
             try:
                 self.plugins_dir.mkdir(parents=True, exist_ok=True)
-            except Exception:
+            except OSError:
                 pass
 
     def discover(self) -> List[str]:
@@ -68,7 +82,7 @@ class PluginCore(BaseCore):
         discovered = []
         if self.registry_path.exists():
             try:
-                with open(self.registry_path) as f:
+                with open(self.registry_path, encoding="utf-8") as f:
                     data = json.load(f)
                     for key, raw_meta in data.items():
                         try:
@@ -83,21 +97,20 @@ class PluginCore(BaseCore):
                                 meta = PluginMetadata(**raw_meta)
                             self.loaded_meta[key] = meta
                             discovered.append(key)
-                        except Exception as e:
-                            self.logger.warning(f"Skipping malformed plugin meta '{key}': {e}")
-            except Exception as e:
-                self.logger.error(f"Failed to load plugin manifest: {e}")
+                        except (TypeError, ValueError, KeyError) as e:
+                            self.logger.warning("Skipping malformed plugin meta '%s': %s", key, e)
+            except (json.JSONDecodeError, OSError) as e:
+                self.logger.error("Failed to load plugin manifest: %s", e)
         return discovered
 
     def validate_version(self, required_version: str, current_version: str) -> bool:
         """Centralized semantic version gatekeeper."""
         # Simple version check if VersionGate is not available
-        try:
-            from src.infrastructure.swarm.fleet.version_gate import VersionGate
-            if VersionGate:
+        if VersionGate:
+            try:
                 return VersionGate.is_compatible(current_version, required_version)
-        except ImportError:
-            pass
+            except (AttributeError, RuntimeError):
+                pass
         return True # Default to true if validator is missing
 
     def load_plugin(self, plugin_name: str) -> Optional[Any]:
@@ -107,7 +120,6 @@ class PluginCore(BaseCore):
 
         meta = self.loaded_meta[plugin_name]
         try:
-            import importlib
             if meta.restricted_mode:
                 return self._load_sandboxed_plugin(plugin_name, meta)
 
@@ -122,30 +134,30 @@ class PluginCore(BaseCore):
             if hasattr(instance, 'health_check'):
                 health = instance.health_check()
                 if hasattr(health, 'status') and health.status != "healthy":
-                    self.logger.error(f"Plugin '{plugin_name}' failed health check")
+                    self.logger.error("Plugin '%s' failed health check", plugin_name)
                     return None
 
             self.active_plugins[plugin_name] = instance
             return instance
-        except Exception as e:
-            self.logger.error(f"Failed to load plugin '{plugin_name}': {e}")
+        except (ImportError, AttributeError, RuntimeError) as e:
+            self.logger.error("Failed to load plugin '%s': %s", plugin_name, e)
             return None
 
     def _load_sandboxed_plugin(self, name: str, meta: PluginMetadata) -> Optional[Any]:
         """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""
         try:
-            import docker
+            if docker is None:
+                raise ImportError("Docker SDK not installed")
             client = docker.from_env()
             client.ping()
-            self.logger.info(f"Plugin '{name}': Using Docker sandbox.")
+            self.logger.info("Plugin '%s': Using Docker sandbox.", name)
             return self._setup_permission_proxy(name, meta)
-        except Exception as e:
-            self.logger.warning(f"Plugin '{name}': Docker sandbox unavailable ({e}).")
+        except (ImportError, RuntimeError) as e:
+            self.logger.warning("Plugin '%s': Docker sandbox unavailable (%s).", name, e)
             return self._setup_permission_proxy(name, meta)
 
     def _setup_permission_proxy(self, name: str, meta: PluginMetadata) -> Any:
         """Enforces permissions via a runtime wrapper."""
-        import importlib
         module = importlib.import_module(meta.module_path)
         plugin_class = getattr(module, meta.class_name)
         instance = plugin_class()
@@ -156,7 +168,10 @@ class PluginCore(BaseCore):
 
             def restricted_run(file_path: Path, context: Dict[str, Any]) -> bool:
                 if "read:src" not in allowed_permissions and "src" in str(file_path):
-                    self.logger.error(f"Permission Denied: Plugin '{name}' attempted to read 'src' path.")
+                    self.logger.error(
+                        "Permission Denied: Plugin '%s' attempted to read 'src' path.",
+                        name
+                    )
                     return False
                 return original_run(file_path, context)
 
@@ -168,10 +183,12 @@ class PluginCore(BaseCore):
         return instance
 
     def activate_all(self) -> None:
+        """Activates all discovered plugins."""
         for name in self.loaded_meta:
             self.load_plugin(name)
 
     def deactivate(self, name: str) -> None:
+        """Deactivates a specific plugin by name."""
         if name in self.active_plugins:
             plugin = self.active_plugins[name]
             if hasattr(plugin, 'shutdown'):
@@ -181,7 +198,7 @@ class PluginCore(BaseCore):
     def register_plugin(self, name: str, plugin: Any) -> None:
         """Manually registers a plugin instance."""
         self.active_plugins[name] = plugin
-        self.logger.info(f"Plugin registered: {name}")
+        self.logger.info("Plugin registered: %s", name)
 
     def get_plugin(self, name: str) -> Optional[Any]:
         """Retrieves a registered plugin by name."""
@@ -193,7 +210,7 @@ class PluginCore(BaseCore):
             if hasattr(plugin, 'shutdown'):
                 try:
                     plugin.shutdown()
-                    self.logger.info(f"Plugin shutdown: {name}")
-                except Exception as e:
-                    self.logger.error(f"Error during plugin shutdown ({name}): {e}")
+                    self.logger.info("Plugin shutdown: %s", name)
+                except (RuntimeError, AttributeError) as e:
+                    self.logger.error("Error during plugin shutdown (%s): %s", name, e)
         self.active_plugins.clear()

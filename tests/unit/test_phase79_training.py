@@ -11,7 +11,7 @@ from src.infrastructure.swarm.orchestration.swarm.swarm_training import SwarmTra
 async def test_swarm_lora_merging():
     """Verifies that adapters from multiple experts can be merged into a global adapter."""
     coordinator = SwarmTrainingCoordinator(node_id="master_rank")
-    
+
     # Simulate two experts providing their local LoRA adapters
     expert_a_adapter = {
         "domain": "rust_coding",
@@ -23,12 +23,12 @@ async def test_swarm_lora_merging():
         "weight": 0.2,
         "tensors": [0.0] * 128
     }
-    
+
     merged = await coordinator.merge_peer_loras("rust_coding", [expert_a_adapter, expert_b_adapter])
-    
+
     assert merged["domain"] == "rust_coding"
     # Weighted average: (1.0 * 0.8 + 0.0 * 0.2) / (0.8 + 0.2) = 0.8
     assert pytest.approx(merged["weights"][0]) == 0.8
     assert "consensus_score" in merged
-    
+
     print("\nPhase 79: P2P Swarm Training & LoRA Merging verified.")

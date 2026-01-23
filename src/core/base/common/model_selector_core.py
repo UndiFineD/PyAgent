@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 Core logic for model selection and routing.
 """
@@ -19,7 +24,7 @@ Core logic for model selection and routing.
 from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, Optional
+from typing import Dict
 from .base_core import BaseCore
 from .models import ModelConfig
 
@@ -42,7 +47,10 @@ class ModelSelectorCore(BaseCore):
             self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
 
     def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
+        """
+        Selects the best model based on agent type and workload size.
+        """
         if agent_type == "coding" and token_estimate > 4000:
-            logging.info(f"Routing high-token task ({token_estimate}) to GLM-4.7.")
+            logging.info("Routing high-token task (%d) to GLM-4.7.", token_estimate)
             return self.models.get("coding", self.models["default"])
         return self.models.get(agent_type, self.models["default"])

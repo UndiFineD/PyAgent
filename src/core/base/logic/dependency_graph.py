@@ -16,8 +16,9 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import graphlib
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -85,7 +86,7 @@ class DependencyGraph:
         try:
             ts.prepare()
         except graphlib.CycleError as e:
-            raise ValueError(f"Circular dependency detected: {e}")
+            raise ValueError(f"Circular dependency detected: {e}") from e
 
         batches: list[list[str]] = []
         while ts.is_active():

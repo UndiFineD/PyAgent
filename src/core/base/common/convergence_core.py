@@ -1,9 +1,21 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Unified Fleet Convergence and Health core."""
 
-from .base_core import BaseCore
 from typing import Dict, Any, List, Optional
+from .base_core import BaseCore
 
 try:
     import rust_core as rc
@@ -15,17 +27,18 @@ class ConvergenceCore(BaseCore):
     Standard implementation for Fleet Convergence and Health Management.
     Handles 'Full Fleet Sync' summaries and health verification.
     """
-    
+
     def __init__(self, workspace_root: Optional[str] = None):
         super().__init__(name="Convergence", repo_root=workspace_root)
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:
         """Verifies if all registered agents are healthy."""
-        if rc:
+        if rc and hasattr(rc, "verify_fleet_health"): # pylint: disable=no-member
             try:
                 # Use Rust for high-throughput health checking
-                return rc.verify_fleet_health(agent_reports)
-            except Exception:
+                # pylint: disable=no-member
+                return rc.verify_fleet_health(agent_reports) # type: ignore
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         healthy_count = sum(1 for status in agent_reports.values() if status)

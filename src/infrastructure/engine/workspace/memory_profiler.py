@@ -33,7 +33,7 @@ class MemoryProfiler:
     Profiles workspace memory usage with sub-millisecond precision.
     Integrates with Rust for high-throughput allocation tracking.
     """
-    
+
     def __init__(self):
         self.snapshots: List[Dict[str, Any]] = []
         self.peak_memory = 0
@@ -43,7 +43,7 @@ class MemoryProfiler:
         """Captures current memory state and fragmentation metrics."""
         usage = 0
         frag = 0.0
-        
+
         if rc and hasattr(rc, "memory_profile_rust"):
             try:
                 stats = rc.memory_profile_rust()
@@ -54,7 +54,7 @@ class MemoryProfiler:
 
         if usage > self.peak_memory:
             self.peak_memory = usage
-            
+
         snapshot = {
             "timestamp": time.time() - self.start_time,
             "label": label,
@@ -68,7 +68,7 @@ class MemoryProfiler:
         """Analyzes allocation patterns to detect leaks or inefficiencies."""
         if not self.snapshots:
             return {}
-            
+
         return {
             "duration": time.time() - self.start_time,
             "peak_mb": self.peak_memory / (1024 * 1024),

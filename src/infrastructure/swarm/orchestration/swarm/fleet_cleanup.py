@@ -18,7 +18,7 @@ class FleetDecommissioner:
     """
     Scans the swarm and performs resource cleanup.
     """
-    
+
     def __init__(self, gatekeeper: Any, shard_manager: Any, idle_timeout: float = 3600.0):
         self.gatekeeper = gatekeeper
         self.shard_manager = shard_manager
@@ -30,20 +30,20 @@ class FleetDecommissioner:
         """
         now = time.time()
         stats = {"agents_pruned": 0, "contexts_purged": 0}
-        
+
         # 1. Prune Low-Performance Agents (failed evolution)
-        # We don't delete them from the dict entirely to allow for 'hibernation', 
+        # We don't delete them from the dict entirely to allow for 'hibernation',
         # but we remove them from active routing.
         to_prune = []
         for agent_id, profile in self.gatekeeper.experts.items():
             if profile.performance_score < 0.1:
                 to_prune.append(agent_id)
-                
+
         for agent_id in to_prune:
             logger.warning(f"FleetCleanup: Pruning low-perf agent {agent_id} (Score {self.gatekeeper.experts[agent_id].performance_score})")
             del self.gatekeeper.experts[agent_id]
             stats["agents_pruned"] += 1
-            
+
         # 2. Purge Idle Contexts
         contexts_to_delete = []
         for context_id, shards in self.shard_manager.context_registry.items():
@@ -52,9 +52,9 @@ class FleetDecommissioner:
                 latest_access = max(s.last_access for s in shards)
                 if now - latest_access > self.idle_timeout:
                     contexts_to_delete.append(context_id)
-                    
+
         for context_id in contexts_to_delete:
             self.shard_manager.delete_context(context_id)
             stats["contexts_purged"] += 1
-            
+
         return stats

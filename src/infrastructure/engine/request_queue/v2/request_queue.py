@@ -35,12 +35,12 @@ class RequestQueueV2:
     Priority-based async queue for inference requests.
     Uses deadline-aware scheduling and fair-share policies.
     """
-    
+
     def __init__(self):
         self._waiting: List[Tuple[float, int, Any]] = [] # (priority_score, timestamp, request)
         self._running: Dict[int, Any] = {}
         self._counter = 0
-        
+
     def add_request(self, request: Any):
         """
         Calculates priority and adds request to the waiting queue.
@@ -48,7 +48,7 @@ class RequestQueueV2:
         """
         priority = getattr(request, 'priority', RequestPriority.NORMAL)
         deadline = getattr(request, 'deadline', time.time() + 60.0)
-        
+
         score = 0.0
         if rc and hasattr(rc, "request_priority_compute_rust"):
             score = rc.request_priority_compute_rust(int(priority.value), deadline)
@@ -56,7 +56,7 @@ class RequestQueueV2:
             # Fallback priority scoring
             urgency = max(0, deadline - time.time())
             score = float(priority.value) - (1.0 / (urgency + 1e-6))
-            
+
         self._counter += 1
         heapq.heappush(self._waiting, (score, self._counter, request))
         logger.debug(f"Added request {getattr(request, 'request_id', 'unknown')} with score {score:.4f}")
@@ -67,14 +67,14 @@ class RequestQueueV2:
         """
         batch = []
         current_tokens = 0
-        
+
         # Temporary storage for requests that don't fit
         skipped = []
-        
+
         while self._waiting and current_tokens < max_tokens:
             score, count, req = heapq.heappop(self._waiting)
             req_tokens = getattr(req, 'num_tokens', 1)
-            
+
             if current_tokens + req_tokens <= max_tokens:
                 batch.append(req)
                 current_tokens += req_tokens
@@ -82,23 +82,23 @@ class RequestQueueV2:
                 skipped.append((score, count, req))
                 # If it's a priority queue, we might stop here or keep looking for smaller requests
                 # For Phase 54 we continue to look for smaller requests to maximize utilization
-                
+
         # Push skipped back
         for item in skipped:
             heapq.heappush(self._waiting, item)
-            
+
         return batch
 
     def get_queue_stats(self) -> Dict[str, Any]:
         """Returns statistics on queue depth and urgency."""
         if not self._waiting:
             return {"depth": 0, "max_urgency": 0.0}
-            
+
         max_urgency = 0.0
         if rc and hasattr(rc, "deadline_urgency_rust"):
             deadlines = [getattr(r[2], 'deadline', 0) for r in self._waiting]
             max_urgency = rc.deadline_urgency_rust(deadlines)
-            
+
         return {
             "depth": len(self._waiting),
             "max_urgency": max_urgency,

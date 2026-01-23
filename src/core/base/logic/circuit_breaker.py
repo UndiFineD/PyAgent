@@ -16,19 +16,18 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+import inspect
 import logging
 import time
-import asyncio
-import inspect
 from typing import Any
 from collections.abc import Callable
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.resilience_core import ResilienceCore
-from src.observability.stats.exporters import otel_manager
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-instance-attributes,too-many-arguments,too-many-positional-arguments
 class CircuitBreaker:
     """Circuit breaker pattern for failing backends with Jittered Backoff.
 
@@ -49,7 +48,7 @@ class CircuitBreaker:
         failure_threshold: int = 5,
         recovery_timeout: int = 60,
         backoff_multiplier: float = 1.5,
-        otel_manager: OTelManager | None = None,
+        otel_manager: Any | None = None,
     ) -> None:
         """Initialize circuit breaker.
 
@@ -100,7 +99,7 @@ class CircuitBreaker:
     def _export_to_otel(self, old_state: str, new_state: str) -> None:
         """Exports state transition to OTel and StructuredLogger (Phase 273)."""
         logging.info(
-            f"CircuitBreaker '{self.name}': Transition {old_state} -> {new_state}"
+            "CircuitBreaker '%s': Transition %s -> %s", self.name, old_state, new_state
         )
 
         if self.otel_manager:
@@ -123,7 +122,7 @@ class CircuitBreaker:
         if self.state != "OPEN":
             return True
 
-        logging.debug(f"CircuitBreaker '{self.name}': Probing backend health...")
+        logging.debug("CircuitBreaker '%s': Probing backend health...", self.name)
         try:
             # Perform the actual health check provided by the backend wrapper
             if inspect.iscoroutinefunction(health_check_func):
@@ -133,15 +132,16 @@ class CircuitBreaker:
 
             if result:
                 logging.info(
-                    f"CircuitBreaker '{self.name}': Probe SUCCEEDED. Transitioning to HALF_OPEN early."
+                    "CircuitBreaker '%s': Probe SUCCEEDED. Transitioning to HALF_OPEN early.",
+                    self.name
                 )
                 old_state = self.state
                 self.state = "HALF_OPEN"
                 self.success_count = 1
                 self._export_to_otel(old_state, self.state)
                 return True
-        except Exception as e:
-            logging.debug(f"CircuitBreaker '{self.name}': Probe failed: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.debug("CircuitBreaker '%s': Probe failed: %s", self.name, e)
 
         return False
 
@@ -154,12 +154,14 @@ class CircuitBreaker:
                 self.state = "HALF_OPEN"
                 self.success_count = 0
                 logging.warning(
-                    f"Circuit breaker '{self.name}' entering HALF_OPEN state (after {int(current_timeout)}s backoff)"
+                    "Circuit breaker '%s' entering HALF_OPEN state (after %ds backoff)",
+                    self.name, int(current_timeout)
                 )
                 self._export_to_otel(old_state, self.state)
             else:
-                raise Exception(
-                    f"Circuit breaker '{self.name}' is OPEN (retry in {int(current_timeout - (time.time() - self.last_failure_time))}s)"
+                retry_in = int(current_timeout - (time.time() - self.last_failure_time))
+                raise RuntimeError(
+                    f"Circuit breaker '{self.name}' is OPEN (retry in {retry_in}s)"
                 )
 
         try:
@@ -167,7 +169,6 @@ class CircuitBreaker:
             self.on_success()
             return result
         except Exception:
-            # noqa: F841
             self.on_failure()
             raise
 
@@ -187,7 +188,8 @@ class CircuitBreaker:
 
         if old_state != self.state:
             logging.info(
-                f"Circuit breaker '{self.name}' transitioned from {old_state} to {self.state}"
+                "Circuit breaker '%s' transitioned from %s to %s",
+                self.name, old_state, self.state
             )
             self._export_to_otel(old_state, self.state)
 
@@ -208,6 +210,7 @@ class CircuitBreaker:
 
         if old_state != self.state:
             logging.error(
-                f"Circuit breaker '{self.name}' transitioned from {old_state} to {self.state}"
+                "Circuit breaker '%s' transitioned from %s to %s",
+                self.name, old_state, self.state
             )
             self._export_to_otel(old_state, self.state)

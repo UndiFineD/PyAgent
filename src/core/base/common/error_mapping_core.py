@@ -1,16 +1,32 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 """Unified Error Mapping core."""
 
-from .base_core import BaseCore
 from typing import Dict, Optional
+from .base_core import BaseCore
 
 class ErrorMappingCore(BaseCore):
     """
     Standard implementation for mapping system exceptions to PA-xxxx codes.
     Provides standardized error descriptions and troubleshooting links.
     """
-    
+
     # Primary Error Code Map
     ERROR_CODES: Dict[str, str] = {
         # 10xx: Infrastructure & I/O
@@ -55,6 +71,9 @@ class ErrorMappingCore(BaseCore):
         descriptions = {
             "PA-1001": "FileSystemError: The workspace could not be accessed.",
             "PA-2001": "ModelTimeout: The LLM backend did not respond in time.",
-            "PA-4002": "SafetyFilterTriggered: The generated content was blocked by safety guardrails.",
+            "PA-4002": (
+                "SafetyFilterTriggered: The generated content was "
+                "blocked by safety guardrails."
+            ),
         }
         return descriptions.get(error_code, "Unknown System Error")

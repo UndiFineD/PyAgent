@@ -21,7 +21,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 from .base_core import BaseCore
 from .models import AgentHealthCheck, HealthStatus
 
@@ -41,9 +41,16 @@ class HealthCore(BaseCore):
         self.results: Dict[str, AgentHealthCheck] = {}
 
     def check_git(self) -> AgentHealthCheck:
+        """Check if git is installed and responsive."""
         start_time = time.time()
         try:
-            result = subprocess.run(["git", "--version"], capture_output=True, text=True, timeout=5)
+            result = subprocess.run(
+                ["git", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=False
+            )
             ms = (time.time() - start_time) * 1000
             if result.returncode == 0:
                 return AgentHealthCheck(
@@ -52,11 +59,16 @@ class HealthCore(BaseCore):
                     response_time_ms=ms,
                     details={"version": result.stdout.strip()}
                 )
-        except Exception as e:
-            return AgentHealthCheck(agent_name="git", status=HealthStatus.UNHEALTHY, error_message=str(e))
+        except (subprocess.SubprocessError, OSError) as e:
+            return AgentHealthCheck(
+                agent_name="git",
+                status=HealthStatus.UNHEALTHY,
+                error_message=str(e)
+            )
         return AgentHealthCheck(agent_name="git", status=HealthStatus.UNHEALTHY)
 
     def check_python(self) -> AgentHealthCheck:
+        """Return details about the current Python environment."""
         return AgentHealthCheck(
             agent_name="python",
             status=HealthStatus.HEALTHY,
@@ -66,14 +78,16 @@ class HealthCore(BaseCore):
 
     def check_fleet_health(self, agent_heartbeats: Dict[str, float]) -> List[str]:
         """Detect stale agents using high-speed Rust core if available."""
-        if rc and hasattr(rc, "detect_failed_agents_rust"):
-             return rc.detect_failed_agents_rust(agent_heartbeats, 30.0)
-        
+        if rc and hasattr(rc, "detect_failed_agents_rust"):  # pylint: disable=no-member
+            # pylint: disable=no-member
+            return rc.detect_failed_agents_rust(agent_heartbeats, 30.0)
+
         # Fallback
         now = time.time()
         return [name for name, last_seen in agent_heartbeats.items() if (now - last_seen) > 30.0]
 
     def run_all(self) -> Dict[str, AgentHealthCheck]:
+        """Execute all registers health checks."""
         self.results["python"] = self.check_python()
         self.results["git"] = self.check_git()
         return self.results

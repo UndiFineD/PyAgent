@@ -1,13 +1,27 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 """Unified Lesson and Learning core."""
 
 import hashlib
-import json
-import logging
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import List, Set, Dict, Any, Optional
+from typing import List, Set, Optional
 from .base_core import BaseCore
 
 try:
@@ -30,18 +44,28 @@ class LessonCore(BaseCore):
     Inherits from BaseCore for standardized persistence.
     """
 
-    def __init__(self, persistence_path: Optional[str] = None, repo_root: Optional[str] = None):
+    def __init__(
+        self,
+        persistence_path: Optional[str] = None,
+        repo_root: Optional[str] = None
+    ):
         super().__init__(name="Lesson", repo_root=repo_root)
         self.known_failures: Set[str] = set()
         self.lessons: List[Lesson] = []
-        self.persistence_path = Path(persistence_path) if persistence_path else self.get_state_path()
+        if persistence_path:
+            self.persistence_path = Path(persistence_path)
+        else:
+            self.persistence_path = self.get_state_path()
         self.load_lessons()
 
     def generate_failure_hash(self, error_msg: str) -> str:
         """Generates a stable hash for an error message."""
         if HAS_RUST:
-            try: return rc.generate_failure_hash(error_msg)
-            except Exception: pass
+            try:
+                # pylint: disable=no-member
+                return rc.generate_failure_hash(error_msg)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
+                pass
         normalized = "".join([c for c in error_msg.lower() if not c.isdigit()])
         return hashlib.sha256(normalized.encode()).hexdigest()
 

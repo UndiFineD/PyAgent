@@ -18,7 +18,7 @@ class SwarmTelemetryService:
     """
     Collects real-time statistics from swarm orchestration layers.
     """
-    
+
     def __init__(self, gatekeeper: Any, shard_manager: Any, topology_manager: Any):
         self.gatekeeper = gatekeeper
         self.shard_manager = shard_manager
@@ -33,18 +33,18 @@ class SwarmTelemetryService:
             "total_experts": len(self.gatekeeper.experts),
             "cache_size": len(self.gatekeeper.routing_cache)
         }
-        
+
         # 2. Topology Metrics
         topology_stats = self.topology_manager.get_topology_stats()
-        
+
         # 3. Context & Sharding Metrics
         shards = []
         for context_shards in self.shard_manager.context_registry.values():
             shards.extend(context_shards)
-            
+
         precision_counts = Counter(s.precision for s in shards)
         mirror_count = sum(len(s.replica_ranks) for s in shards)
-        
+
         context_stats = {
             "total_contexts": len(self.shard_manager.context_registry),
             "total_shards": len(shards),
@@ -52,7 +52,7 @@ class SwarmTelemetryService:
             "dead_ranks": len(self.shard_manager.dead_ranks),
             "shards_by_precision": dict(precision_counts)
         }
-        
+
         return {
             "routing": routing_stats,
             "topology": topology_stats,
