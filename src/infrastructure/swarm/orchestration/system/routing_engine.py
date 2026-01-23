@@ -1,75 +1,22 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Routing engine for task distribution.
 (Facade for src.core.base.common.routing_core)
 """
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-import os
-from typing import Any
-
-from src.core.base.common.routing_core import \
-    RoutingCore as StandardRoutingCore
-
-# Assuming BackendHandlers should be imported or mocked if not found
-from src.infrastructure.compute.backend.runner_backends import BackendHandlers
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 from src.core.base.common.routing_core import RoutingCore as StandardRoutingCore
 
 class RoutingEngine(StandardRoutingCore):
     """Facade for RoutingCore."""
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def select_provider(self, task_type="general", priority="balanced", federated=False):
         """Legacy compatibility wrapper."""
         if federated:
             return "federated_cluster"
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-        report = BackendHandlers.get_performance_report()
-        preferred: str = os.environ.get("DV_AGENT_BACKEND", "github_models")
-=======
         return self.select_best_provider(task_type, priority)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        return self.select_best_provider(task_type, priority)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         if priority == "latency":
             # Select provider with lowest TTFT or highest TPS
-            best_provider: str = preferred
+            best_provider = preferred
             min_ttft = float("inf")
             for p, metrics in report.items():
                 if metrics["ttft"] < min_ttft:

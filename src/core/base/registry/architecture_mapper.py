@@ -12,29 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
+"""
+ArchitectureMapper: Auto-generates Mermaid C4 diagrams for the project.
+"""
 
-import logging
 import os
+import logging
 from pathlib import Path
 
 # Configure module-level logging
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ArchitectureMapper:
-    """Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
-    
+    """
+    Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
     Maps relations between Core, Infrastructure, Logic, and Observability.
     """
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.output_path: Path = self.workspace_root / "docs" / "architecture" / "system_context.md"
+        self.output_path = (
+            self.workspace_root / "docs" / "architecture" / "system_context.md"
+        )
 
     def generate_diagram(self) -> str:
         """Constructs the Mermaid C4 diagram string."""
-        mermaid: list[str] = [
+        mermaid = [
             "C4Context",
             "    title System Context diagram for PyAgent Fleet",
             "    ",
@@ -72,27 +76,45 @@ class ArchitectureMapper:
     def run(self) -> None:
         """Generates and saves the markdown file."""
         logger.info("Mapping PyAgent architecture...")
-        diagram: str = self.generate_diagram()
+        diagram = self.generate_diagram()
 
-        md_content: str = f"""# Architecture: System Context
+        md_content = f"""# Architecture: System Context
 
-This diagram provides a high-level overview of the PyAgent Fleet architecture,
-mapping the inter-dependencies between major system boundaries.
+This diagram provides a high-level overview of the PyAgent Fleet architecture, mapping the inter-dependencies between major system boundaries.
 
 ## System Context Diagram
 
 ```mermaid
+
+
+
+
+
+
+
+
+
+
 {diagram}
 ```
+
+
+
+
+
 
 ## Boundaries
 
 | Boundary | Description | Key Modules |
 |----------|-------------|-------------|
-| **Core** | Fundamental logic and workspace integrity. | `DependencyGraph`, `IncrementalProcessor` |
-| **Infrastructure** | Fleet orchestration and sharding. | `AsyncFleetManager`, `ShardingOrchestrator` |
-| **Logic** | Specialized agents for evolution tasks. | `CognitiveAgents`, `CoderAgent` |
-| **Observability** | Telemetry and logging. | `StructuredLogger`, `OTelManager`, `GPUMonitor` |
+
+| **Core** | Fundamental logic, versioning, and workspace integrity. | `DependencyGraph`, `IncrementalProcessor`, `version.py` |
+| **Infrastructure** | Fleet orchestration, sharding, and external resource management. | `AsyncFleetManager`, `ShardingOrchestrator`, `SecretManager` |
+| **Logic** | The specialized agents performing the evolution tasks. | `CognitiveAgents`, `CoderAgent`, `SecurityAuditAgent` |
+| **Observability** | Telemetry, logging, and metrics aggregation. | `StructuredLogger`, `OTelManager`, `GPUMonitor` |
+
+
+
 
 
 ---

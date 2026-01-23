@@ -32,13 +32,13 @@ def test_config_get_settings():
 def test_config_env_override():
     """Test that environment variables correctly override configuration settings."""
     original_temp = config.get("models.coder.temperature", 0.7)
-    
+
     os.environ["PYAGENT_MODELS__CODER__TEMPERATURE"] = "0.99"
     config.refresh()
-    
+
     new_temp = config.get("models.coder.temperature")
     assert new_temp == 0.99
-    
+
     # Cleanup env
     del os.environ["PYAGENT_MODELS__CODER__TEMPERATURE"]
     config.refresh()

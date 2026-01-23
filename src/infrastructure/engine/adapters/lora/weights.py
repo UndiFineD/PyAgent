@@ -1,32 +1,15 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """LoRA layer weight implementations."""
 
 from __future__ import annotations
-
 from dataclasses import dataclass
-
 import numpy as np
 
 try:
     from numpy.typing import NDArray
 except ImportError:
     from typing import Any
-
     NDArray = Any
 
 try:
@@ -38,7 +21,6 @@ except ImportError:
 @dataclass
 class LoRALayerWeights:
     """LoRA weights for a single layer."""
-
     lora_a: NDArray[np.float32]  # [rank, in_features]
     lora_b: NDArray[np.float32]  # [out_features, rank]
     scaling: float
@@ -73,15 +55,7 @@ class LoRALayerWeights:
                 orig_shape = x.shape
                 x_flat = x.reshape(-1, self.in_features).astype(np.float32)
                 batch_size = x_flat.shape[0]
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-                
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-                
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 result_flat = rc.lora_forward_rust(
                     x_flat.flatten().tolist(),
                     self.lora_a.flatten().tolist(),
@@ -90,29 +64,13 @@ class LoRALayerWeights:
                     self.in_features,
                     self.out_features,
                     self.rank,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    self.scaling,
+                    self.scaling
                 )
 
                 # Reshape back to original dimensions as needed
                 new_shape = list(orig_shape[:-1]) + [self.out_features]
                 return np.array(result_flat, dtype=np.float32).reshape(new_shape)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-                    self.scaling
-                )
-                
-                # Reshape back to original dimensions as needed
-                new_shape = list(orig_shape[:-1]) + [self.out_features]
-                return np.array(result_flat, dtype=np.float32).reshape(new_shape)
             except Exception:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         # x @ A.T @ B.T * scaling
@@ -140,23 +98,10 @@ class LoRALayerWeights:
                     self.out_features,
                     self.in_features,
                     self.rank,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    self.scaling,
-                )
-                return np.array(merged_flat, dtype=np.float32).reshape(base_weight.shape)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     self.scaling
                 )
                 return np.array(merged_flat, dtype=np.float32).reshape(base_weight.shape)
             except Exception:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 pass
 
         # W_merged = W_base + B @ A * scaling
@@ -171,13 +116,6 @@ class LoRALayerWeights:
 @dataclass
 class IA3LayerWeights:
     """IA3 (Input-Activation-Attention Scaling) weights for a single layer."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     scaling_vector: NDArray[np.float32]  # [features]
     module_name: str
 
@@ -190,21 +128,9 @@ class IA3LayerWeights:
             try:
                 res = rc.apply_ia3_scaling_rust(x.flatten().tolist(), self.scaling_vector.tolist())
                 return np.array(res, dtype=np.float32).reshape(x.shape)
-<<<<<<< HEAD
-<<<<<<< HEAD
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
-=======
-            except Exception:
-                pass
-        
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            except Exception:
-                pass
-        
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return x * self.scaling_vector
 
     def get_memory_bytes(self) -> int:
@@ -215,7 +141,6 @@ class IA3LayerWeights:
 @dataclass
 class PackedLoRAWeights:
     """Packed LoRA weights for fused QKV or gate+up projections."""
-
     lora_a: NDArray[np.float32]  # [num_layers, rank, in_features]
     lora_b: NDArray[np.float32]  # [num_layers, out_features, rank]
     scalings: list[float]

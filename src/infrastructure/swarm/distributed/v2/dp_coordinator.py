@@ -18,26 +18,11 @@ Handles ZMQ-based request coordination, wave tracking, and stats publishing.
 """
 
 import logging
-<<<<<<< HEAD
-<<<<<<< HEAD
-import time
-from typing import Any, Dict, List, Optional
-
-import zmq
-import zmq.asyncio
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import json
 import time
 from typing import Dict, List, Optional, Any
 import zmq
 import zmq.asyncio
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .locality_manager import LocalityManager
 
 try:
@@ -47,51 +32,22 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class DPCoordinatorV2:
     """
     Coordinates inference requests across multiple data-parallel (DP) ranks.
     Uses ZMQ for low-latency state distribution and wave tracking.
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self, port: int = 5555, is_master: bool = False):
         self.port = port
         self.is_master = is_master
         self.ctx = zmq.asyncio.Context()
         self.socket = self.ctx.socket(zmq.PUB if is_master else zmq.SUB)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         self.current_wave = 0
         self.rank_stats: Dict[int, Any] = {}
         self.locality = LocalityManager()
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-        
-        self.current_wave = 0
-        self.rank_stats: Dict[int, Any] = {}
-        self.locality = LocalityManager()
-        
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if not is_master:
             self.socket.setsockopt(zmq.SUBSCRIBE, b"")
 
@@ -111,29 +67,13 @@ class DPCoordinatorV2:
         """
         if not self.is_master:
             return
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.current_wave += 1
         message = {
             "type": "NEW_WAVE",
             "wave_id": self.current_wave,
             "request_ids": request_ids,
-<<<<<<< HEAD
-<<<<<<< HEAD
-            "timestamp": time.time(),
-=======
             "timestamp": time.time()
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            "timestamp": time.time()
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }
         await self.socket.send_json(message)
         logger.debug(f"Published Wave {self.current_wave} with {len(request_ids)} requests")
@@ -144,30 +84,14 @@ class DPCoordinatorV2:
         """
         if not self.is_master:
             return
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.current_wave += 1
         message = {
             "type": "LOCALITY_WAVE",
             "wave_id": self.current_wave,
             "request_ids": request_ids,
             "locality": locality_tag,
-<<<<<<< HEAD
-<<<<<<< HEAD
-            "timestamp": time.time(),
-=======
             "timestamp": time.time()
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            "timestamp": time.time()
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }
         await self.socket.send_json(message)
         logger.info(f"Published Locality Wave {self.current_wave} to {locality_tag}")
@@ -176,29 +100,13 @@ class DPCoordinatorV2:
         """Receives a wave update or status message."""
         if self.is_master:
             return None
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             msg = await self.socket.recv_json()
             if msg.get("type") == "NEW_WAVE":
                 self.current_wave = msg["wave_id"]
             return msg
-<<<<<<< HEAD
-<<<<<<< HEAD
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
         except Exception as e:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        except Exception as e:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logger.error(f"ZMQ Receive failed: {e}")
             return None
 
@@ -208,38 +116,16 @@ class DPCoordinatorV2:
         """
         if rc and hasattr(rc, "dp_stats_aggregate_rust"):
             return rc.dp_stats_aggregate_rust(self.rank_stats)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         # Fallback basic aggregation
         if not self.rank_stats:
             return {}
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-            
-        # Fallback basic aggregation
-        if not self.rank_stats:
-            return {}
-            
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         avg_latency = sum(s.get("latency", 0) for s in self.rank_stats.values()) / len(self.rank_stats)
         return {
             "avg_latency": avg_latency,
             "total_throughput": sum(s.get("throughput", 0) for s in self.rank_stats.values()),
-<<<<<<< HEAD
-<<<<<<< HEAD
-            "wave_count": self.current_wave,
-=======
             "wave_count": self.current_wave
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            "wave_count": self.current_wave
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }
 
     async def close(self):

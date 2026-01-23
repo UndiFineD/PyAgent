@@ -7,81 +7,31 @@ Swarm Topology Manager (Phase 70).
 Handles dynamic expert cloning and load-based re-assignment.
 """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import asyncio
-import logging
-from typing import Any, Dict, List
-
-=======
 import logging
 import asyncio
 from typing import List, Dict, Any, Optional
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-import logging
-import asyncio
-from typing import List, Dict, Any, Optional
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from src.core.base.common.models.communication_models import ExpertProfile
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class TopologyManager:
     """
     Monitors swarm health and automatically scales expert replicas.
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-    def __init__(self, gatekeeper: Any, clone_threshold: int = 100) -> None:
-        self.gatekeeper = gatekeeper
-        self.clone_threshold = clone_threshold
-        self.request_counts: Dict[str, int] = {}
-        self.replicas: Dict[str, List[str]] = {}  # master_id -> [replica_id1, ...]
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    
     def __init__(self, gatekeeper: Any, clone_threshold: int = 100):
         self.gatekeeper = gatekeeper
         self.clone_threshold = clone_threshold
         self.request_counts: Dict[str, int] = {}
         self.replicas: Dict[str, List[str]] = {} # master_id -> [replica_id1, ...]
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def record_usage(self, agent_id: str):
         """Increments usage counter and triggers cloning if threshold met."""
         self.request_counts[agent_id] = self.request_counts.get(agent_id, 0) + 1
-<<<<<<< HEAD
-<<<<<<< HEAD
-        logger.debug(f"TopologyManager: Usage for {agent_id} is {self.request_counts[agent_id]}")
 
-        if self.request_counts[agent_id] >= self.clone_threshold:
-            logger.info(f"TopologyManager: Triggering clone for {agent_id}")
-            asyncio.create_task(self.clone_expert(agent_id))
-            self.request_counts[agent_id] = 0  # Reset counter after cloning
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-        
         if self.request_counts[agent_id] >= self.clone_threshold:
             asyncio.create_task(self.clone_expert(agent_id))
             self.request_counts[agent_id] = 0 # Reset counter after cloning
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     async def clone_expert(self, agent_id: str):
         """
@@ -91,27 +41,12 @@ class TopologyManager:
         """
         if agent_id not in self.gatekeeper.experts:
             return
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         master_profile = self.gatekeeper.experts[agent_id]
         replica_id = f"{agent_id}_replica_{len(self.replicas.get(agent_id, [])) + 1}"
 
         logger.info(f"Cloning expert {agent_id} to {replica_id} due to high demand.")
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-            
-        master_profile = self.gatekeeper.experts[agent_id]
-        replica_id = f"{agent_id}_replica_{len(self.replicas.get(agent_id, [])) + 1}"
-        
-        logger.info(f"Cloning expert {agent_id} to {replica_id} due to high demand.")
-        
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Create replica profile
         replica_profile = ExpertProfile(
             agent_id=replica_id,
@@ -119,25 +54,11 @@ class TopologyManager:
             performance_score=master_profile.performance_score,
             specialization_vector=master_profile.specialization_vector,
             is_replica=True,
-<<<<<<< HEAD
-<<<<<<< HEAD
-            parent_id=agent_id,
-        )
-
-        self.gatekeeper.register_expert(replica_profile)
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             parent_id=agent_id
         )
-        
+
         self.gatekeeper.register_expert(replica_profile)
-        
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+
         if agent_id not in self.replicas:
             self.replicas[agent_id] = []
         self.replicas[agent_id].append(replica_id)
@@ -147,13 +68,5 @@ class TopologyManager:
         return {
             "active_masters": len(self.replicas),
             "total_replicas": sum(len(v) for v in self.replicas.values()),
-<<<<<<< HEAD
-<<<<<<< HEAD
-            "clones": self.replicas,
-=======
             "clones": self.replicas
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            "clones": self.replicas
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         }

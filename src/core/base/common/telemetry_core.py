@@ -18,86 +18,36 @@ Provides high-performance aggregation, alerting, and cross-tier observability.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-import time
-import logging
-from enum import Enum
-from dataclasses import dataclass, field
 from typing import Dict, List, Any, Optional
-from .base_core import BaseCore
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.telemetry")
 
-
 class MetricType(Enum):
     """Enumeration of supported metric types."""
-
-=======
-logger = logging.getLogger("pyagent.telemetry")
-
-class MetricType(Enum):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-logger = logging.getLogger("pyagent.telemetry")
-
-class MetricType(Enum):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 @dataclass
 class Metric:
     """Representation of a single metric data point."""
-
-=======
-@dataclass
-class Metric:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-@dataclass
-class Metric:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     name: str
     value: float
     metric_type: MetricType = MetricType.GAUGE
     timestamp: float = field(default_factory=time.time)
     tags: Dict[str, str] = field(default_factory=dict)
-<<<<<<< HEAD
-<<<<<<< HEAD
-    namespace: str = "default"
-    unit: str = ""
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
     def __iter__(self) -> Any:
@@ -107,51 +57,27 @@ class Metric:
     def __getitem__(self, index: int) -> Any:
         return (self.timestamp, self.value)[index]
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class TelemetryCore(BaseCore):
     """
     Authoritative engine for system metrics and event tracking.
     Standardizes how agents and infrastructure report health and performance.
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self) -> None:
         super().__init__()
         self._metrics_buffer: List[Metric] = []
         self._alerts: List[Dict[str, Any]] = []
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     def record_metric(
-        self, name: str, value: float, mtype: MetricType = MetricType.GAUGE, tags: Optional[Dict[str, str]] = None
+        self,
+        name: str,
+        value: float,
+        mtype: MetricType = MetricType.GAUGE,
+        tags: Optional[Dict[str, str]] = None
     ) -> None:
         """Records a single metric point."""
         metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
         self._metrics_buffer.append(metric)
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    def record_metric(self, name: str, value: float, mtype: MetricType = MetricType.GAUGE, tags: Optional[Dict[str, str]] = None) -> None:
-        """Records a single metric point."""
-        metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
-        self._metrics_buffer.append(metric)
-        
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Trim buffer if too large (10k points)
         if len(self._metrics_buffer) > 10000:
             self._metrics_buffer = self._metrics_buffer[-5000:]
@@ -164,47 +90,24 @@ class TelemetryCore(BaseCore):
         if rc and hasattr(rc, "calculate_rollups"):
             try:
                 # Optimized Rust rollup calculation
-<<<<<<< HEAD
-<<<<<<< HEAD
                 return rc.calculate_rollups(  # pylint: disable=no-member
-                    [(m.name, m.timestamp, m.value) for m in self._metrics_buffer],
-                    metric_name,
-                    window_seconds,
-                    time.time(),
-                )
-            except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.debug("Rust calculate_rollups failed, falling back: %s", err)
-
-        now = time.time()
-        relevant = [
-            m.value for m in self._metrics_buffer if m.name == metric_name and (now - m.timestamp) < window_seconds
-        ]
-
-        if not relevant:
-            return {"avg": 0.0, "max": 0.0, "count": 0}
-
-        return {"avg": sum(relevant) / len(relevant), "max": max(relevant), "count": len(relevant)}
-
-    def clear(self) -> None:
-        """Clears all buffered metrics and alerts."""
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-                return rc.calculate_rollups(
                     [(m.name, m.timestamp, m.value) for m in self._metrics_buffer],
                     metric_name,
                     window_seconds,
                     time.time()
                 )
-            except Exception as e:
-                logger.debug("Rust calculate_rollups failed, falling back: %s", e)
-        
+            except Exception as err:  # pylint: disable=broad-exception-caught
+                logger.debug("Rust calculate_rollups failed, falling back: %s", err)
+
         now = time.time()
-        relevant = [m.value for m in self._metrics_buffer if m.name == metric_name and (now - m.timestamp) < window_seconds]
-        
+        relevant = [
+            m.value for m in self._metrics_buffer
+            if m.name == metric_name and (now - m.timestamp) < window_seconds
+        ]
+
         if not relevant:
             return {"avg": 0.0, "max": 0.0, "count": 0}
-            
+
         return {
             "avg": sum(relevant) / len(relevant),
             "max": max(relevant),
@@ -212,9 +115,6 @@ class TelemetryCore(BaseCore):
         }
 
     def clear(self) -> None:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+        """Clears all buffered metrics and alerts."""
         self._metrics_buffer.clear()
         self._alerts.clear()

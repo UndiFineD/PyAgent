@@ -18,36 +18,16 @@ AgentRegistry: Central registry for all active agent instances.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 import logging
-from typing import Any
-
-from src.core.base.common.registry_core import RegistryCore
-from src.core.base.lifecycle.version import VERSION
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from src.core.base.common.registry_core import RegistryCore
 from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __version__ = VERSION
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-__version__: str = VERSION
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class AgentRegistry(RegistryCore["BaseAgent"]):
     """
@@ -62,66 +42,28 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
             cls._instance = super(AgentRegistry, cls).__new__(cls)
         return cls._instance
 
-<<<<<<< HEAD
     def __init__(self, **_kwargs: Any) -> None:
         if not hasattr(self, "_initialized"):
             super().__init__(name="AgentRegistry")
             self._initialized = True
 
-    def register_instance(self, agent) -> bool:
+    def register_instance(self, agent: BaseAgent) -> bool:
         """
         Register an agent instance using its internal agent_name.
-        Args:
-            agent: The agent instance to register.
-        Returns:
-            bool: True if registration succeeded, False otherwise.
+        Delegates to the underlying RegistryCore.register method.
         """
-        name: str = getattr(agent, "agent_name", str(id(agent)))
-        success: bool = super().register(name, agent)
+        name = getattr(agent, "agent_name", str(id(agent)))
+        success = super().register(name, agent)
         if success:
             logging.debug("Agent '%s' registered.", name)
         return success
 
     def unregister_instance(self, name: str) -> bool:
-        """
-        Unregister an agent instance by name.
-        Args:
-            name (str): The name of the agent to unregister.
-        Returns:
-            bool: True if the agent was unregistered, False otherwise.
-        """
+        """Unregister an agent instance by name."""
         success = super().unregister(name)
         if success:
             logging.debug("Agent '%s' unregistered.", name)
-        return bool(success)
-
-    def get_agent(self, name: str) -> Any | None:
-        """
-        Retrieve an agent by name.
-        Args:
-            name (str): The name of the agent to retrieve.
-        Returns:
-            BaseAgent | None: The agent instance if found, else None.
-        """
-        return self.get(name)
-
-    def list_agents(self) -> list[str]:
-        """
-        List names of all registered agents.
-        Returns:
-            list[str]: List of registered agent names.
-        """
-=======
-    def register(self, agent: BaseAgent) -> None:
-        """Register an agent instance."""
-        name = getattr(agent, "agent_name", str(id(agent)))
-        self.register(name, agent)
-        logging.debug(f"Agent '{name}' registered.")
-
-    def unregister(self, name: str) -> None:
-        """Unregister an agent instance."""
-        if super().unregister(name):
-            logging.debug(f"Agent '{name}' unregistered.")
+        return success
 
     def get_agent(self, name: str) -> BaseAgent | None:
         """Retrieve an agent by name."""
@@ -129,23 +71,9 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
 
     def list_agents(self) -> list[str]:
         """List names of all registered agents."""
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self.list_keys()
 
     @property
     def active_count(self) -> int:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        """
-        Return the number of active agents.
-        Returns:
-            int: Number of active agents.
-        """
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+        """Return the number of active agents."""
         return len(self._items)

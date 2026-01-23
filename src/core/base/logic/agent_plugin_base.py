@@ -16,17 +16,15 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-
-import logging
 from abc import ABC, abstractmethod
+import logging
 from pathlib import Path
 from typing import Any
 
-from src.core.base.common.models import (AgentHealthCheck, AgentPriority,
-                                         HealthStatus)
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.models import AgentHealthCheck, AgentPriority, HealthStatus
 
-__version__: str = VERSION
+__version__ = VERSION
 
 
 class AgentPluginBase(ABC):
@@ -54,10 +52,10 @@ class AgentPluginBase(ABC):
             priority: Execution priority.
             config: Plugin - specific configuration.
         """
-        self.name: str = name
-        self.priority: AgentPriority = priority
-        self.config: dict[str, Any] = config or {}
-        self.logger: logging.Logger = logging.getLogger(f"plugin.{name}")
+        self.name = name
+        self.priority = priority
+        self.config = config or {}
+        self.logger = logging.getLogger(f"plugin.{name}")
 
     @abstractmethod
     def run(self, file_path: Path, context: dict[str, Any]) -> bool:

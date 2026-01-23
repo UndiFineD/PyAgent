@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,23 +22,6 @@ from pathlib import Path
 from typing import Any, Union
 
 import yaml
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Core storage utilities for PyAgent."""
-
-import json
-import yaml
-import logging
-import os
-from pathlib import Path
-from typing import Any, Optional, Union
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -49,13 +30,6 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.storage")
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class StorageCore:
     """
     Centralized I/O logic for JSON and YAML.
@@ -69,86 +43,28 @@ class StorageCore:
         if not p.exists():
             return default
         try:
-<<<<<<< HEAD
-<<<<<<< HEAD
-            with open(p, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
             with open(p, 'r', encoding='utf-8') as f:
                 return json.load(f)
-<<<<<<< HEAD
-        except Exception as e:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            with open(p, 'r', encoding='utf-8') as f:
-                return json.load(f)
-<<<<<<< HEAD
-        except Exception as e:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
         except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-        except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to load JSON from %s: %s", p, e)
             return default
 
     @staticmethod
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def save_json(path: Union[str, Path], data: Any, indent: int = 4) -> None:
-=======
     def save_json(path: Union[str, Path], data: Any, indent: int = 4):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    def save_json(path: Union[str, Path], data: Any, indent: int = 4):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Safely save data to a JSON file, creating directories if needed."""
         p = Path(path)
         try:
             p.parent.mkdir(parents=True, exist_ok=True)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
             # Use Rust acceleration for atomic, high-speed write if available
-            if rc and hasattr(rc, "save_json_atomic_rust"): # pylint: disable=no-member
+            if rc and hasattr(rc, "save_json_atomic_rust"):
                 content = json.dumps(data, indent=indent)
-<<<<<<< HEAD
                 if rc.save_json_atomic_rust(str(p), content):  # pylint: disable=no-member
-                    return
-
-            with open(p, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=indent)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-            
-            # Use Rust acceleration for atomic, high-speed write if available
-            if rc and hasattr(rc, "save_json_atomic_rust"): # pylint: disable=no-member
-                content = json.dumps(data, indent=indent)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-                if rc.save_json_atomic_rust(str(p), content): # type: ignore
                     return
 
             with open(p, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=indent)
-<<<<<<< HEAD
-<<<<<<< HEAD
-        except Exception as e:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
         except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-        except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to save JSON to %s: %s", p, e)
 
     @staticmethod
@@ -158,87 +74,26 @@ class StorageCore:
         if not p.exists():
             return default
         try:
-<<<<<<< HEAD
-<<<<<<< HEAD
-            with open(p, "r", encoding="utf-8") as f:
-                return yaml.safe_load(f)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
             with open(p, 'r', encoding='utf-8') as f:
                 return yaml.safe_load(f)
-<<<<<<< HEAD
-        except Exception as e:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            with open(p, 'r', encoding='utf-8') as f:
-                return yaml.safe_load(f)
-<<<<<<< HEAD
-        except Exception as e:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
         except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-        except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to load YAML from %s: %s", p, e)
             return default
 
     @staticmethod
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def save_yaml(path: Union[str, Path], data: Any) -> None:
-=======
     def save_yaml(path: Union[str, Path], data: Any):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    def save_yaml(path: Union[str, Path], data: Any):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Safely save data to a YAML file, creating directories if needed."""
         p = Path(path)
         try:
             p.parent.mkdir(parents=True, exist_ok=True)
-<<<<<<< HEAD
-<<<<<<< HEAD
-            with open(p, "w", encoding="utf-8") as f:
-                yaml.dump(data, f, default_flow_style=False)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
             with open(p, 'w', encoding='utf-8') as f:
                 yaml.dump(data, f, default_flow_style=False)
-<<<<<<< HEAD
-        except Exception as e:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            with open(p, 'w', encoding='utf-8') as f:
-                yaml.dump(data, f, default_flow_style=False)
-<<<<<<< HEAD
-        except Exception as e:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
         except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-        except Exception as e: # pylint: disable=broad-exception-caught
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             logger.error("Failed to save YAML to %s: %s", p, e)
 
     @staticmethod
     def to_json(data: Any, indent: int = 4) -> str:
         """Convert data to a JSON formatted string."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if rc and hasattr(rc, "to_json_rust"):
-            try:
-                # Assuming rc.to_json_rust returns a string
-                return rc.to_json_rust(data, indent)
-            except Exception as e:  # pylint: disable=broad-exception-caught
-                logger.warning("Rust to_json failed, falling back to Python: %s", e)
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return json.dumps(data, indent=indent)
 
     @staticmethod

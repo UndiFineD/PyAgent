@@ -18,28 +18,6 @@ Optimizes expert routing for long-context tasks by considering KV-cache locality
 """
 
 import logging
-<<<<<<< HEAD
-<<<<<<< HEAD
-from typing import Any, Dict
-
-from src.infrastructure.engine.kv_cache.context_sharder import \
-    ContextShardManager
-from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import \
-    CrossModelMoEOrchestrator
-
-logger = logging.getLogger(__name__)
-
-
-class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
-    """
-    Enhances MoE by preferring experts located on nodes that already hold
-    relevant context shards.
-    """
-
-    def __init__(self, gatekeeper: Any, context_manager: ContextShardManager) -> None:
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from typing import List, Optional, Any, Dict
 from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import CrossModelMoEOrchestrator
 from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
@@ -49,29 +27,17 @@ logger = logging.getLogger(__name__)
 
 class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
     """
-    Enhances MoE by preferring experts located on nodes that already hold 
+    Enhances MoE by preferring experts located on nodes that already hold
     relevant context shards.
     """
-    
+
     def __init__(self, gatekeeper: Any, context_manager: ContextShardManager):
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         super().__init__(gatekeeper)
         self.context_manager = context_manager
         # Mapping of expert_id to their running DP-rank
         self.expert_rank_map: Dict[str, int] = {}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def register_expert_location(self, expert_id: str, rank_id: int) -> None:
-=======
     def register_expert_location(self, expert_id: str, rank_id: int):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    def register_expert_location(self, expert_id: str, rank_id: int):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.expert_rank_map[expert_id] = rank_id
 
     async def execute_context_task(self, task: str, context_id: str, focus_token: int = 0) -> Any:
@@ -80,66 +46,29 @@ class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
         """
         # 1. Get standard routing decision
         decision = await self.gatekeeper.route_task(task)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         # 2. Get context locality
         target_rank = self.context_manager.get_rank_for_token(context_id, focus_token)
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-        
-        # 2. Get context locality
-        target_rank = self.context_manager.get_rank_for_token(context_id, focus_token)
-        
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if target_rank is not None:
             # Re-rank experts: if an expert is on the target_rank, boost its routing weight
             new_experts = []
             new_weights = []
-<<<<<<< HEAD
-<<<<<<< HEAD
 
             for i, expert_id in enumerate(decision.selected_experts):
                 weight = decision.routing_weights[i]
                 expert_rank = self.expert_rank_map.get(expert_id)
 
-                if expert_rank == target_rank:
-                    logger.debug(f"Locality Boost: Expert {expert_id} is on rank {target_rank}")
-                    weight *= 1.5  # 50% boost for locality
-
-                new_experts.append(expert_id)
-                new_weights.append(weight)
-
-            # Normalize again
-            total = sum(new_weights)
-            decision.routing_weights = [w / total for w in new_weights]
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-            
-            for i, expert_id in enumerate(decision.selected_experts):
-                weight = decision.routing_weights[i]
-                expert_rank = self.expert_rank_map.get(expert_id)
-                
                 if expert_rank == target_rank:
                     logger.debug(f"Locality Boost: Expert {expert_id} is on rank {target_rank}")
                     weight *= 1.5 # 50% boost for locality
-                
+
                 new_experts.append(expert_id)
                 new_weights.append(weight)
-                
+
             # Normalize again
             total = sum(new_weights)
             decision.routing_weights = [w/total for w in new_weights]
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             # Re-sort
             sorted_pairs = sorted(zip(new_experts, decision.routing_weights), key=lambda x: x[1], reverse=True)
             decision.selected_experts = [p[0] for p in sorted_pairs]

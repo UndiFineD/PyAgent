@@ -36,7 +36,7 @@ from src.core.base.common import ConsensusCore
 
 class StandardConsensusCore(ConsensusCore):
     """Facade for ConsensusCore in the consensus tier."""
-    
+
     def __init__(self, mode: str = "plurality") -> None:
         super().__init__(name="ConsensusCore")
         self.mode = mode

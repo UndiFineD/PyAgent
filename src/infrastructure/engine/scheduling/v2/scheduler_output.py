@@ -17,33 +17,13 @@ Asynchronous Scheduler Output models for Phase 54.
 Handles complete output structures, speculative tokens, and structured metadata.
 """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set
-
-=======
 from typing import Dict, List, Optional, Any, Set
 from dataclasses import dataclass, field
 import time
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from typing import Dict, List, Optional, Any, Set
-from dataclasses import dataclass, field
-import time
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 @dataclass
 class ScheduledSequence:
     """Represents a sequence scheduled for execution."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     seq_id: int
     prompt_len: int
     output_len: int
@@ -52,61 +32,26 @@ class ScheduledSequence:
     priority: int = 0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 @dataclass
 class SchedulerOutput:
     """
     Comprehensive output structure containing all info for the execution engine.
     Part of Phase 54 Async Evolution.
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
-
     scheduled_seqs: List[ScheduledSequence] = field(default_factory=list)
     ignored_seqs: List[int] = field(default_factory=list)
 
-=======
-    scheduled_seqs: List[ScheduledSequence] = field(default_factory=list)
-    ignored_seqs: List[int] = field(default_factory=list)
-    
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    scheduled_seqs: List[ScheduledSequence] = field(default_factory=list)
-    ignored_seqs: List[int] = field(default_factory=list)
-    
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     # Execution constraints
     max_num_batched_tokens: int = 2048
     blocks_to_swap_in: Dict[int, int] = field(default_factory=dict)
     blocks_to_swap_out: Dict[int, int] = field(default_factory=dict)
     blocks_to_copy: Dict[int, List[int]] = field(default_factory=dict)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     # Async metadata
     timestamp: float = field(default_factory=time.time)
     placeholder_ids: Set[int] = field(default_factory=set)
 
-    def add_sequence(self, seq: ScheduledSequence) -> None:
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    
-    # Async metadata
-    timestamp: float = field(default_factory=time.time)
-    placeholder_ids: Set[int] = field(default_factory=set)
-    
     def add_sequence(self, seq: ScheduledSequence):
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Adds a sequence to the current batch."""
         self.scheduled_seqs.append(seq)
 

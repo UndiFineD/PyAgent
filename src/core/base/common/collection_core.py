@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,26 +18,10 @@
 # limitations under the License.
 """Unified collection and data structure management core."""
 
-from typing import Any, Dict, Iterable, List, TypeVar
+from typing import Any, Dict, List, TypeVar, Iterable
 
 T = TypeVar("T")
 
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Unified collection and data structure management core."""
-
-from typing import Any, Dict, List, TypeVar, Iterable, Callable
-
-T = TypeVar("T")
-
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class CollectionCore:
     """
     Standardized utilities for complex data structures and collections.
@@ -59,15 +41,7 @@ class CollectionCore:
     def chunk_list(data: List[T], size: int) -> Iterable[List[T]]:
         """Yield successive chunks from a list."""
         for i in range(0, len(data), size):
-<<<<<<< HEAD
-<<<<<<< HEAD
-            yield data[i : i + size]
-=======
             yield data[i:i + size]
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            yield data[i:i + size]
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     @staticmethod
     def flatten(nested_list: List[List[T]]) -> List[T]:

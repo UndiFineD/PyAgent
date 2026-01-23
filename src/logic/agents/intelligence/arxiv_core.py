@@ -12,24 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"""
-Arxiv core.py module.
-"""
-
-import logging
-import os
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-
-import arxiv
-import fitz  # PyMuPDF
-
-from src.infrastructure.security.network.firewall import ReverseProxyFirewall
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import arxiv
 import fitz  # PyMuPDF
 import os
@@ -37,23 +19,11 @@ import requests
 import logging
 from typing import List, Dict, Any, Optional
 from pathlib import Path
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class ArxivCore:
     """Core logic for interacting with Arxiv research papers."""
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, download_dir: str = "data/research") -> None:
-=======
     def __init__(self, download_dir: str = "data/research"):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    def __init__(self, download_dir: str = "data/research"):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self._workspace_root = os.getcwd()
         self.download_dir = Path(self._workspace_root) / download_dir
         self.download_dir.mkdir(parents=True, exist_ok=True)
@@ -61,36 +31,12 @@ class ArxivCore:
 
     def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
         """Search Arxiv for papers matching the query."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-        search = arxiv.Search(query=query, max_results=max_results, sort_by=arxiv.SortCriterion.Relevance)
-
-        results = []
-        try:
-            for result in self.client.results(search):
-                results.append(
-                    {
-                        "id": result.entry_id,
-                        "title": result.title,
-                        "summary": result.summary,
-                        "authors": [a.name for a in result.authors],
-                        "pdf_url": result.pdf_url,
-                        "published": result.published.isoformat(),
-                        "comment": result.comment,
-                    }
-                )
-        except (RuntimeError, ValueError) as e:
-            logging.error(f"Arxiv search error: {e}")
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         search = arxiv.Search(
             query=query,
             max_results=max_results,
             sort_by=arxiv.SortCriterion.Relevance
         )
-        
+
         results = []
         try:
             for result in self.client.results(search):
@@ -105,47 +51,22 @@ class ArxivCore:
                 })
         except Exception as e:
             logging.error(f"Arxiv search error: {e}")
-            
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+
         return results
 
     def download_paper(self, pdf_url: str, filename: str) -> Optional[Path]:
         """Download a paper PDF from Arxiv."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-        firewall = ReverseProxyFirewall()
         try:
             if not filename.endswith(".pdf"):
                 filename += ".pdf"
 
-            target_path = self.download_dir / filename
-            response = firewall.get(pdf_url, timeout=30)
-            response.raise_for_status()
-
-            target_path.write_bytes(response.content)
-            return target_path
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-        try:
-            if not filename.endswith(".pdf"):
-                filename += ".pdf"
-            
             target_path = self.download_dir / filename
             response = requests.get(pdf_url, timeout=30)
             response.raise_for_status()
-            
+
             target_path.write_bytes(response.content)
             return target_path
         except Exception as e:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.error(f"Failed to download Arxiv paper: {e}")
             return None
 
@@ -153,15 +74,7 @@ class ArxivCore:
         """Extract text content from a PDF file."""
         if not pdf_path.exists():
             return "File not found."
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         try:
             doc = fitz.open(str(pdf_path))
             text = ""
@@ -169,15 +82,7 @@ class ArxivCore:
                 text += page.get_text()
             doc.close()
             return text
-<<<<<<< HEAD
-<<<<<<< HEAD
-        except (RuntimeError, IOError) as e:
-=======
         except Exception as e:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        except Exception as e:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.error(f"Text extraction failed: {e}")
             return f"Extraction failed: {e}"
 
@@ -185,15 +90,7 @@ class ArxivCore:
         """Format search results into a readable summary block."""
         if not results:
             return "No papers found."
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         block = "### Arxiv Research Results\n\n"
         for i, res in enumerate(results, 1):
             block += f"{i}. **{res['title']}** ({res['published'][:10]})\n"

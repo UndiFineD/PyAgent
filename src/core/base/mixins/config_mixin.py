@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,35 +15,13 @@
 """Mixin for agent configuration access."""
 
 from typing import Any
-
-from src.core.base.common.config_core import ConfigCore
-from src.core.base.configuration.config_manager import config
-
-
-class ConfigMixin:
-    """Provides configuration access to agents."""
-
-    @property
-    def config(self) -> ConfigCore:
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Mixin for agent configuration access."""
-
-from typing import Any
 from src.core.base.configuration.config_manager import config
 
 class ConfigMixin:
     """Provides configuration access to agents."""
-    
+
     @property
     def config(self):
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         """Access the global configuration manager."""
         return config
 

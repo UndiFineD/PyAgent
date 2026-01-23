@@ -16,15 +16,13 @@
 """Specialized manager for handling agent improvement iterations."""
 
 from __future__ import annotations
-
 import logging
-import sys
 from pathlib import Path
+import sys
 from typing import Any
 
+from src.core.base.lifecycle.version import VERSION, is_gate_open, EVOLUTION_PHASE
 from src.core.base.common.utils.core_utils import fix_markdown_content
-from src.core.base.lifecycle.version import (EVOLUTION_PHASE, VERSION,
-                                             is_gate_open)
 
 __version__ = VERSION
 
@@ -54,11 +52,10 @@ class AgentUpdateManager:
 
     def _check_gate(self) -> bool:
         """Internal version gate check."""
-        if not is_gate_open(self.min_gate_phase, encoding='utf-8'):
+        if not is_gate_open(self.min_gate_phase):
             logging.warning(
                 "AgentUpdateManager: Evolution Gate Closed. Required Phase: %s, Current: %s",
-                self.min_gate_phase,
-                EVOLUTION_PHASE,
+                self.min_gate_phase, EVOLUTION_PHASE
             )
             return False
         return True
@@ -87,7 +84,9 @@ class AgentUpdateManager:
         # Update errors
         prompt = f"Analyze and improve the error report for {code_file.name}"
         script_path = str(Path(__file__).parent.parent.parent / "errors" / "main.py")
-        cmd = self.core.get_agent_command(sys.executable, script_path, str(errors_file), prompt, self.strategy)
+        cmd = self.core.get_agent_command(
+            sys.executable, script_path, str(errors_file), prompt, self.strategy
+        )
         with self.command_handler.with_agent_env("errors"):
             result = self.command_handler.run_command(cmd)
 
@@ -96,15 +95,23 @@ class AgentUpdateManager:
 
         # Create improvements file if it doesn't exist
         if not improvements_file.exists():
-            content = f"# Improvements\n\nNo improvements suggested for {code_file.name}.\n"
-            improvements_file.write_text(fix_markdown_content(content), encoding="utf-8")
+            content = (
+                f"# Improvements\n\nNo improvements suggested for {code_file.name}.\n"
+            )
+            improvements_file.write_text(
+                fix_markdown_content(content), encoding="utf-8"
+            )
             logging.info("Created %s", improvements_file.relative_to(self.repo_root))
             changes_made = True
 
         # Update improvements
         prompt = f"Suggest and improve improvements for {code_file.name}"
-        script_path = str(Path(__file__).parent.parent.parent / "improvements" / "main.py")
-        cmd = self.core.get_agent_command(sys.executable, script_path, str(improvements_file), prompt, self.strategy)
+        script_path = str(
+            Path(__file__).parent.parent.parent / "improvements" / "main.py"
+        )
+        cmd = self.core.get_agent_command(
+            sys.executable, script_path, str(improvements_file), prompt, self.strategy
+        )
         with self.command_handler.with_agent_env("improvements"):
             result = self.command_handler.run_command(cmd)
 
@@ -121,11 +128,13 @@ class AgentUpdateManager:
             content = improvements_file.read_text(encoding="utf-8")
             all_pending = self.core.parse_improvements_content(content)
             return self.core.score_improvement_items(all_pending)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.warning("AgentUpdateManager: Failed to read improvements: %s", e)
             return []
 
-    def _mark_improvements_fixed(self, improvements_file: Path, fixed_items: list[str]) -> None:
+    def _mark_improvements_fixed(
+        self, improvements_file: Path, fixed_items: list[str]
+    ) -> None:
         """Mark items as fixed in the improvements file."""
         if not improvements_file.exists() or not fixed_items:
             return
@@ -133,8 +142,10 @@ class AgentUpdateManager:
             content = improvements_file.read_text(encoding="utf-8")
             new_content = self.core.update_fixed_items(content, fixed_items)
             improvements_file.write_text(new_content, encoding="utf-8")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning("AgentUpdateManager: Failed to update improvements file: %s", e)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning(
+                "AgentUpdateManager: Failed to update improvements file: %s", e
+            )
 
     def _log_changes(self, changes_file: Path, fixed_items: list[str]) -> None:
         """Log fixed improvements to the changes file."""
@@ -145,7 +156,7 @@ class AgentUpdateManager:
             new_entries = self.core.generate_changelog_entries(fixed_items)
             new_content = content.rstrip() + "\n\n" + new_entries + "\n"
             changes_file.write_text(new_content, encoding="utf-8")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.warning("AgentUpdateManager: Failed to update changes file: %s", e)
 
     def update_changelog_context_tests(self, code_file: Path) -> bool:
@@ -168,7 +179,9 @@ class AgentUpdateManager:
         # Update changelog agent
         prompt = f"Update the changelog for {code_file.name} with recent changes"
         script_path = str(Path(__file__).parent.parent.parent / "changes" / "main.py")
-        cmd = self.core.get_agent_command(sys.executable, script_path, str(changes_file), prompt, self.strategy)
+        cmd = self.core.get_agent_command(
+            sys.executable, script_path, str(changes_file), prompt, self.strategy
+        )
         with self.command_handler.with_agent_env("changes"):
             result = self.command_handler.run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout:
@@ -182,7 +195,9 @@ class AgentUpdateManager:
 
         prompt = f"Update the description for {code_file.name} based on current code"
         script_path = str(Path(__file__).parent.parent.parent / "context" / "main.py")
-        cmd = self.core.get_agent_command(sys.executable, script_path, str(context_file), prompt, self.strategy)
+        cmd = self.core.get_agent_command(
+            sys.executable, script_path, str(context_file), prompt, self.strategy
+        )
         with self.command_handler.with_agent_env("context"):
             result = self.command_handler.run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout:
@@ -198,9 +213,13 @@ class AgentUpdateManager:
         if not self._check_gate():
             return False
 
-        prompt = f"Update the code in {code_file.name} to implement pending improvements"
+        prompt = (
+            f"Update the code in {code_file.name} to implement pending improvements"
+        )
         script_path = str(Path(__file__).parent.parent.parent / "coder" / "main.py")
-        cmd = self.core.get_agent_command(sys.executable, script_path, str(code_file), prompt, self.strategy)
+        cmd = self.core.get_agent_command(
+            sys.executable, script_path, str(code_file), prompt, self.strategy
+        )
         with self.command_handler.with_agent_env("coder"):
             result = self.command_handler.run_command(cmd)
 

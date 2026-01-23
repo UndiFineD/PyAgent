@@ -25,18 +25,18 @@ def test_cross_tenant_bridge_transfer():
     # Tenant A found that Expert X and Y work great together (1.0)
     logger_a.log_event("t_a", "routing", "...", {"domain": "math", "selected_experts": ["ex_x", "ex_y"]})
     logger_a.log_event("t_a", "fusion", "...", {"fusion_quality": 1.0})
-    
+
     synth_a = SwarmTraceSynthesizer(logger_a)
     bridge = TenantKnowledgeBridge(synth_a)
-    
+
     # 2. Setup Tenant B (The Target)
     # Tenant B starts with no knowledge
     predictor_b = ExpertRewardPredictor({"expert_synergies": {}, "top_experts": []})
-    
+
     # 3. Transfer Knowledge
     global_insights = bridge.generate_anonymized_insights()
     bridge.apply_cross_tenant_wisdom(predictor_b, global_insights)
-    
+
     # 4. Verify Transfer
     # Tenant B should now know that Expert X and Y are synergetic
     val = predictor_b.get_synergy_boost("ex_x", "ex_y")
@@ -49,10 +49,10 @@ def test_scrubbing_anonymity():
         "domain_baselines": {"secret_project_x": 0.99},
         "expert_synergies": {"e1": {"e2": 0.5}}
     }
-    
+
     bridge = TenantKnowledgeBridge(mock_synth)
     insights = bridge.generate_anonymized_insights()
-    
+
     assert "domain_baselines" not in insights
     assert "expert_synergies" in insights
     print("[Phase 84] Cross-tenant bridge correctly scrubbed sensitive domain data.")

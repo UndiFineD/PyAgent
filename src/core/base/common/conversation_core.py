@@ -12,33 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import List
-from src.core.base.models import MessageRole, ConversationMessage
-
-__version__ = VERSION
-
-class ConversationHistory:
-    """Manages a conversation history with message storage and retrieval."""
-
-    def __init__(self, max_messages: int = 100) -> None:
-        self.messages: list[ConversationMessage] = []
-        self.max_messages = max_messages
-
-    def add(self, role: MessageRole, content: str) -> None:
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for conversation history and message management.
 """
 
 from __future__ import annotations
-from typing import List, Optional
+from typing import List
 from .base_core import BaseCore
 from .models import MessageRole, ConversationMessage
 
@@ -52,25 +31,16 @@ class ConversationCore(BaseCore):
         self.max_messages = max_messages
 
     def add_message(self, role: MessageRole, content: str) -> None:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+        """Add a new message to the conversation history."""
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
             self.messages = self.messages[-self.max_messages:]
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def get_context(self) -> list[ConversationMessage]:
-=======
     def get_history(self) -> List[ConversationMessage]:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    def get_history(self) -> List[ConversationMessage]:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+        """Return a copy of the conversation history."""
         return self.messages.copy()
 
     def clear(self) -> None:
+        """Clear the conversation history."""
         self.messages.clear()

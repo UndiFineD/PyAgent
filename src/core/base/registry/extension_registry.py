@@ -88,7 +88,8 @@ class ExtensionManager:
             with self._lock:
                 if name in self._name2class:
                     logger.warning(
-                        f"Overwriting existing registration '{name}' in {self.name}"
+                        "Overwriting existing registration '%s' in %s",
+                        name, self.name
                     )
                 self._name2class[name] = cls_to_register
             return cls_to_register
@@ -105,7 +106,8 @@ class ExtensionManager:
         with self._lock:
             if name in self._name2class:
                 logger.warning(
-                    f"Overwriting existing registration '{name}' in {self.name}"
+                    "Overwriting existing registration '%s' in %s",
+                    name, self.name
                 )
             self._name2class[name] = cls
 

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,61 +13,13 @@
 # limitations under the License.
 
 
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for connectivity.
 (Facade for src.core.base.common.connectivity_core)
 """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-from typing import Any
-from src.core.base.common.connectivity_core import \
-    ConnectivityCore as StandardConnectivityCore
-
-
-class ConnectivityCore(StandardConnectivityCore):
-    """Facade for ConnectivityCore."""
-
-
-class BinaryTransport:
-    """
-    Utility for packing and unpacking binary payloads.
-    Uses msgpack and zlib for compression.
-    """
-
-    @staticmethod
-    def pack(data: Any, compress: bool = False) -> bytes:
-        """Pack data into binary format."""
-        import msgpack
-        packed = msgpack.packb(data, use_bin_type=True)
-        if compress:
-            import zlib
-            packed = zlib.compress(packed)
-        return packed
-
-    @staticmethod
-    def unpack(data: bytes, compressed: bool = False) -> Any:
-        """Unpack data from binary format."""
-        import msgpack
-        if compressed:
-            import zlib
-            data = zlib.decompress(data)
-        return msgpack.unpackb(data, raw=False)
-=======
 from src.core.base.common.connectivity_core import ConnectivityCore as StandardConnectivityCore
 
-class ConnectivityCore(StandardConnectivityCore):
-    """Facade for ConnectivityCore."""
-    pass
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from src.core.base.common.connectivity_core import ConnectivityCore as StandardConnectivityCore
 
 class ConnectivityCore(StandardConnectivityCore):
     """Facade for ConnectivityCore."""
-    pass
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

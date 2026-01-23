@@ -12,18 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 """
 Core logic for fleet stability, health monitoring, and anomaly detection.
 """
 
 from __future__ import annotations
-
-import contextlib
 import time
+import contextlib
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 try:
     import rust_core as rc  # pylint: disable=no-member
@@ -32,35 +29,9 @@ except ImportError:
 
 from .base_core import BaseCore
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-from __future__ import annotations
-import time
-import contextlib
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
-from .base_core import BaseCore
-
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-
 @dataclass
 class HealthStatus:
     """Status tracking for individual agents or components."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     component_id: str
     is_alive: bool = True
     last_seen: float = field(default_factory=time.time)
@@ -69,36 +40,21 @@ class HealthStatus:
     status_msg: str = "ok"
     metrics: Dict[str, Any] = field(default_factory=dict)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class StabilityCore(BaseCore):
     """
     Standardized logic for fleet stability, health monitoring, and anomaly detection.
     Inherits from BaseCore for lifecycle and persistence.
     """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, name: str = "StabilityCore", repo_root: Optional[str] = None) -> None:
-        super().__init__(name=name, repo_root=repo_root)
-=======
     def __init__(self, name: str = "StabilityCore", root_path: Optional[str] = None) -> None:
         super().__init__(name=name, root_path=root_path)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    def __init__(self, name: str = "StabilityCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.timeout_seconds: float = 30.0
         self.max_errors: int = 5
         self.health_registry: Dict[str, HealthStatus] = {}
 
-    def update_status(self, component_id: str, latency: float = 0.0, error: bool = False, **metrics) -> bool:
+    def update_status(
+        self, component_id: str, latency: float = 0.0, error: bool = False, **metrics
+    ) -> bool:
         """Updates internal status for a component."""
         now = time.time()
         if component_id not in self.health_registry:
@@ -108,15 +64,7 @@ class StabilityCore(BaseCore):
         status.last_seen = now
         status.latency_ms = latency
         status.metrics.update(metrics)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if error:
             status.error_count += 1
         else:
@@ -128,32 +76,16 @@ class StabilityCore(BaseCore):
     def detect_failures(self) -> List[str]:
         """Returns a list of IDs that are considered failed."""
         now = time.time()
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if rc and hasattr(rc, "detect_failed_agents_rust"):
             with contextlib.suppress(Exception):
                 agent_data = [
                     (name, status.last_seen, status.error_count, self.max_errors)
                     for name, status in self.health_registry.items()
                 ]
-<<<<<<< HEAD
-<<<<<<< HEAD
                 failures = rc.detect_failed_agents_rust(  # pylint: disable=no-member
                     agent_data, now, self.timeout_seconds
                 )
-=======
-                failures = rc.detect_failed_agents_rust(agent_data, now, self.timeout_seconds)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-                failures = rc.detect_failed_agents_rust(agent_data, now, self.timeout_seconds)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 for name, reason in failures:
                     if name in self.health_registry:
                         self.health_registry[name].is_alive = False

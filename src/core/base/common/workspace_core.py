@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,85 +18,34 @@ Unified workspace and path management core.
 
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Union
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Unified workspace and path management core."""
-
-import os
-import logging
-from pathlib import Path
 from typing import Set, Dict, Optional, Union, List
-import time
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class WorkspaceCore:
     """
     Centralized handler for workspace-wide path logic and file ignore rules.
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-    _instance: Optional["WorkspaceCore"] = None
+    _instance: Optional['WorkspaceCore'] = None
     _ignore_cache: Dict[str, Set[str]] = {}
     _ignore_cache_time: Dict[str, float] = {}
     _initialized: bool = False
 
-    def __new__(cls, root_dir: Optional[Union[str, Path]] = None) -> "WorkspaceCore":
-        """Singleton pattern for workspace core."""
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    _instance: Optional['WorkspaceCore'] = None
-    _ignore_cache: Dict[str, Set[str]] = {}
-    _ignore_cache_time: Dict[str, float] = {}
-
     def __new__(cls, root_dir: Optional[Union[str, Path]] = None):
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+        """Singleton pattern for workspace core."""
         if cls._instance is None:
             cls._instance = super(WorkspaceCore, cls).__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, root_dir: Optional[Union[str, Path]] = None) -> None:
+    def __init__(self, root_dir: Optional[Union[str, Path]] = None):
         """Initialize the workspace root and logger."""
         if self._initialized:
             return
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    def __init__(self, root_dir: Optional[Union[str, Path]] = None):
-        if self._initialized:
-            return
-            
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if root_dir:
             self.root_dir = Path(root_dir)
         else:
@@ -106,27 +53,14 @@ class WorkspaceCore:
             curr = Path.cwd()
             self.root_dir = curr
             for parent in [curr] + list(curr.parents):
-<<<<<<< HEAD
-<<<<<<< HEAD
                 if (
-                    (parent / ".git").exists()
-                    or (parent / "pyproject.toml").exists()
-                    or (parent / "requirements.txt").exists()
+                    (parent / ".git").exists() or
+                    (parent / "pyproject.toml").exists() or
+                    (parent / "requirements.txt").exists()
                 ):
                     self.root_dir = parent
                     break
 
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-                if (parent / ".git").exists() or (parent / "pyproject.toml").exists() or (parent / "requirements.txt").exists():
-                    self.root_dir = parent
-                    break
-            
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.logger = logging.getLogger("pyagent.workspace")
         self._initialized = True
 
@@ -155,28 +89,12 @@ class WorkspaceCore:
             except ValueError:
                 # Not in workspace, can't be ignored by workspace rules
                 return False
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-                
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-                
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         patterns = self.get_ignore_patterns()
         # Basic glob matching for simplicity in this core
         # In a real scenario, we might use a library like 'pathspec'
         path_str = str(path).replace("\\", "/")
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         for pattern in patterns:
             if pattern.endswith("/") and path_str.startswith(pattern.rstrip("/")):
                 return True
@@ -192,34 +110,12 @@ class WorkspaceCore:
         if not ignore_path.exists():
             return set()
 
-        if rc and hasattr(rc, "parse_codeignore_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "parse_codeignore_rust"):
             try:
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
                 patterns = rc.parse_codeignore_rust(str(ignore_path))  # pylint: disable=no-member
                 return set(patterns)
-            except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as err:  # pylint: disable=broad-exception-caught
                 self.logger.warning("Rust ignore parsing failed: %s", err)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-                patterns = rc.parse_codeignore_rust(str(ignore_path))
-=======
-                patterns = rc.parse_codeignore_rust(str(ignore_path)) # type: ignore
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-                return set(patterns)
-=======
-                patterns = rc.parse_codeignore_rust(str(ignore_path)) # type: ignore
-                return set(patterns)
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-            except Exception as e: # pylint: disable=broad-exception-caught
-                self.logger.warning(f"Rust ignore parsing failed: {e}")
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         try:
             mtime = ignore_path.stat().st_mtime
@@ -228,35 +124,17 @@ class WorkspaceCore:
 
             content = ignore_path.read_text(encoding="utf-8")
             patterns = {
-<<<<<<< HEAD
-<<<<<<< HEAD
-                line.strip() for line in content.split("\n") if line.strip() and not line.strip().startswith("#")
-            }
-
-            self._ignore_cache[cache_key] = patterns
-            self._ignore_cache_time[cache_key] = mtime
-            return patterns
-
-        except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.warning("Failed to read .codeignore: %s", err)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 line.strip()
                 for line in content.split("\n")
                 if line.strip() and not line.strip().startswith("#")
             }
-            
+
             self._ignore_cache[cache_key] = patterns
             self._ignore_cache_time[cache_key] = mtime
             return patterns
-            
-        except Exception as e: # pylint: disable=broad-exception-caught
-            self.logger.warning(f"Failed to read .codeignore: {e}")
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+
+        except Exception as err:  # pylint: disable=broad-exception-caught
+            self.logger.warning("Failed to read .codeignore: %s", err)
             return set()
 
     def list_files(self, relative_path: str = ".", pattern: str = "*") -> List[Path]:
@@ -264,15 +142,7 @@ class WorkspaceCore:
         target_dir = self.root_dir / relative_path
         if not target_dir.exists():
             return []
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         files = []
         for file in target_dir.rglob(pattern):
             if not self.is_ignored(file):

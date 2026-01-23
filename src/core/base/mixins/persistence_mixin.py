@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: persistence_mixin
-Provides persistence and transactional safety mixin for PyAgent agents.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +17,6 @@ Provides persistence and transactional safety mixin for PyAgent agents.
 import logging
 from pathlib import Path
 from typing import Any, List
-
-from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.common.models import AgentState, EventType
 from src.core.base.state.agent_history import AgentConversationHistory
 from src.core.base.state.agent_scratchpad import AgentScratchpad
@@ -41,16 +35,10 @@ class PersistenceMixin:
         self._event_hooks: dict[EventType, list[Any]] = {}
         self._metrics_data: dict[str, Any] = {}
         self._fs = FileSystemCore()
-<<<<<<< HEAD
-<<<<<<< HEAD
         # Initializing fields that might be used by derived classes or dynamics
         self.previous_content: str = ""
         self.current_content: str = ""
         self._state_data: dict[str, Any] = {}
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     @property
     def state(self) -> AgentState:
@@ -64,19 +52,22 @@ class PersistenceMixin:
 
     def _trigger_event(self, event_type: EventType, data: dict[str, Any]) -> None:
         """Triggers local events and hooks."""
-        hooks: List[Any] = self._event_hooks.get(event_type, [])
+        hooks = self._event_hooks.get(event_type, [])
         for hook in hooks:
             try:
                 hook(data)
-            except (AttributeError, TypeError, ValueError) as e:
-                # Log hook execution errors but don't crash the agent
-                logging.warning("Event hook execution failed: %s", e)
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
 
     def generate_diff(self) -> str:
         """Generate a unified diff between original and improved content."""
-        if hasattr(self, "core") and hasattr(self, "previous_content") and hasattr(self, "current_content"):
+        if (hasattr(self, "core") and
+                hasattr(self, "previous_content") and
+                hasattr(self, "current_content")):
             return getattr(self, "core").calculate_diff(
-                self.previous_content, self.current_content, filename=str(getattr(self, "file_path", "unknown"))
+                self.previous_content,
+                self.current_content,
+                filename=str(getattr(self, "file_path", "unknown"))
             )
         return ""
 
@@ -92,7 +83,7 @@ class PersistenceMixin:
 
         try:
             self.previous_content = getattr(self, "file_path").read_text(encoding="utf-8")
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception: # pylint: disable=broad-exception-caught
             self.previous_content = ""
         return self.previous_content
 
@@ -101,14 +92,15 @@ class PersistenceMixin:
         if not hasattr(self, "current_content") or not hasattr(self, "file_path"):
             return False
 
-        content_to_write: str = self.current_content
+        content_to_write = self.current_content
         file_path = getattr(self, "file_path")
         suffix = file_path.suffix.lower()
         if suffix in {".md", ".markdown"} or file_path.name.lower().endswith(".plan.md"):
             if hasattr(self, "core"):
                 content_to_write = getattr(self, "core").fix_markdown(content_to_write)
 
-        if hasattr(self, "core") and not getattr(self, "core").validate_content_safety(content_to_write):
+        if (hasattr(self, "core") and
+                not getattr(self, "core").validate_content_safety(content_to_write)):
             logging.error("Security violation detected in %s", file_path.name)
             return False
 
@@ -116,48 +108,22 @@ class PersistenceMixin:
             return self._write_dry_run_diff()
 
         try:
-<<<<<<< HEAD
-<<<<<<< HEAD
-            # Phase 267: Transactional Safety
-            from src.core.base.state.agent_state_manager import StateTransaction
-
-            # Use transactional wrapper for safety and potential validation
-            with StateTransaction([file_path], run_tests=False):
-                self._fs.atomic_write(file_path, content_to_write)
-            return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            return self._fs.atomic_write(file_path, content_to_write)
+        except Exception as e: # pylint: disable=broad-exception-caught
             logging.error("File write failed: %s", e)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-            return self._fs.atomic_write(self.file_path, content_to_write)
-        except Exception as e:
-            import logging
-            logging.error(f"File write failed: {e}")
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return False
 
     def _write_dry_run_diff(self) -> bool:
         """Saves a diff for verification without modifying the file."""
-        diff: str = self.get_diff()
+        diff = self.get_diff()
         if not diff:
             return True
 
         dry_run_dir = Path("temp/dry_runs")
         self._fs.ensure_directory(dry_run_dir)
-<<<<<<< HEAD
-<<<<<<< HEAD
         file_path = getattr(self, "file_path")
         safe_name = file_path.name.replace("/", "_").replace("\\", "_")
-        target: Path = dry_run_dir / f"{safe_name}.diff"
-=======
-        safe_name = self.file_path.name.replace("/", "_").replace("\\", "_")
         target = dry_run_dir / f"{safe_name}.diff"
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        safe_name = self.file_path.name.replace("/", "_").replace("\\", "_")
-        target = dry_run_dir / f"{safe_name}.diff"
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return self._fs.atomic_write(target, diff)
 
     def save_state(self) -> bool:

@@ -18,26 +18,11 @@ Synchronizes separate channels for video, audio, and text.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-import logging
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List, Optional
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import logging
 import time
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 try:
     import rust_core as rc
@@ -46,65 +31,26 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.multimodal.muxer")
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 class ChannelType(Enum):
-    """Enumeration of supported modality channel types."""
-=======
-class ChannelType(Enum):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-class ChannelType(Enum):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     TEXT = 0x01
     AUDIO = 0x02
     VIDEO = 0x03
     COMMAND = 0x04
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 @dataclass
 class ModalityChannel:
-    """Configuration for a specific modality streaming channel."""
-=======
-@dataclass
-class ModalityChannel:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-@dataclass
-class ModalityChannel:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     name: str
     modality_type: str
     fps: float = 120.0
     buffer_size: int = 1024
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class Muxer:
     """
     Coordinates multiple high-speed modality channels.
     Supports "DVD-style" separate streams for video, audio, and text.
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-    def __init__(self, target_fps: float = 120.0) -> None:
-=======
-    
     def __init__(self, target_fps: float = 120.0):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    
-    def __init__(self, target_fps: float = 120.0):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.target_fps = target_fps
         self.channels: Dict[str, ModalityChannel] = {}
         self.active = False
@@ -117,22 +63,10 @@ class Muxer:
         packets = [
             {"channel_id": 1, "modality_type": "VIDEO", "payload": video},
             {"channel_id": 2, "modality_type": "AUDIO", "payload": audio},
-<<<<<<< HEAD
-<<<<<<< HEAD
-            {"channel_id": 3, "modality_type": "TEXT", "payload": text.encode("utf-8")},
-        ]
-        return self.mux(packets)
-
-    def add_channel(self, name: str, m_type: str, fps: Optional[float] = None) -> None:
-        """Register a new modality channel."""
-        self.channels[name] = ModalityChannel(name=name, modality_type=m_type, fps=fps or self.target_fps)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             {"channel_id": 3, "modality_type": "TEXT", "payload": text.encode("utf-8")}
         ]
         return self.mux(packets)
-    
+
     def add_channel(self, name: str, m_type: str, fps: Optional[float] = None):
         """Register a new modality channel."""
         self.channels[name] = ModalityChannel(
@@ -140,10 +74,6 @@ class Muxer:
             modality_type=m_type,
             fps=fps or self.target_fps
         )
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         logger.info(f"Registered channel: {name} ({m_type}) at {fps or self.target_fps} fps")
 
     def mux(self, raw_packets: List[Dict[str, Any]]) -> bytes:
@@ -153,21 +83,6 @@ class Muxer:
         if rc and hasattr(rc, "mux_channels_rust") and hasattr(rc, "ModalityPacket"):
             packets = []
             for p in raw_packets:
-<<<<<<< HEAD
-<<<<<<< HEAD
-                packets.append(
-                    rc.ModalityPacket(
-                        p["channel_id"], p["modality_type"], p.get("timestamp", time.time()), p["payload"]
-                    )
-                )
-            return bytes(rc.mux_channels_rust(packets))
-
-        # Fallback (Slow)
-        # 0xDEADBEEF Magic Header for synchronization
-        header = b"\xef\xbe\xad\xde"
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 packets.append(rc.ModalityPacket(
                     p["channel_id"],
                     p["modality_type"],
@@ -175,14 +90,10 @@ class Muxer:
                     p["payload"]
                 ))
             return bytes(rc.mux_channels_rust(packets))
-            
+
         # Fallback (Slow)
         # 0xDEADBEEF Magic Header for synchronization
-        header = b"\xef\xbe\xad\xde" 
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+        header = b"\xef\xbe\xad\xde"
         return header + b"".join([p["payload"] for p in raw_packets])
 
     def demux(self, stream_data: bytes) -> List[Dict[str, Any]]:
@@ -196,25 +107,11 @@ class Muxer:
                     "channel_id": p.channel_id,
                     "modality_type": p.modality_type,
                     "timestamp": p.timestamp,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    "payload": p.payload,
-                }
-                for p in packets
-            ]
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     "payload": p.payload
                 }
                 for p in packets
             ]
-            
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+
         return []
 
     def synchronize(self, packets: List[Dict[str, Any]], jitter_ms: float = 8.33) -> Dict[int, List[Dict[str, Any]]]:
@@ -225,30 +122,15 @@ class Muxer:
         if rc and hasattr(rc, "synchronize_channels_rust") and hasattr(rc, "ModalityPacket"):
             rust_packets = []
             for p in packets:
-<<<<<<< HEAD
-<<<<<<< HEAD
-                rust_packets.append(
-                    rc.ModalityPacket(p["channel_id"], p["modality_type"], p["timestamp"], p["payload"])
-                )
-
-            result = rc.synchronize_channels_rust(rust_packets, jitter_ms)
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 rust_packets.append(rc.ModalityPacket(
                     p["channel_id"],
                     p["modality_type"],
                     p["timestamp"],
                     p["payload"]
                 ))
-            
+
             result = rc.synchronize_channels_rust(rust_packets, jitter_ms)
-            
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+
             # Convert back to Python dicts
             sync_map = {}
             for bucket, p_list in result.items():
@@ -257,28 +139,12 @@ class Muxer:
                         "channel_id": p.channel_id,
                         "modality_type": p.modality_type,
                         "timestamp": p.timestamp,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                        "payload": p.payload,
-=======
                         "payload": p.payload
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-                        "payload": p.payload
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                     }
                     for p in p_list
                 ]
             return sync_map
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         # Basic Python fallback (simplified)
         sync_map = {}
         window = jitter_ms / 1000.0

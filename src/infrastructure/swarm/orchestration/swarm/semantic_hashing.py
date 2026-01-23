@@ -12,62 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"""
-Semantic hashing.py module.
-"""
-
-import logging
-from typing import Dict, List, Set
-
-import numpy as np
-
-logger = logging.getLogger(__name__)
-
-
-=======
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import numpy as np
 import logging
 from typing import List, Dict, Any, Set
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class SemanticHasher:
     """
     Implements Locality Sensitive Hashing (LSH) for swarm contexts (Phase 88).
     Allows O(1) or O(log N) lookup of semantically related context shards across ranks.
     """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, dimension: int = 384, num_bits: int = 16) -> None:
-=======
     def __init__(self, dimension: int = 384, num_bits: int = 16):
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-    def __init__(self, dimension: int = 384, num_bits: int = 16):
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         self.dimension = dimension
         self.num_bits = num_bits
         # Random projection matrix
         np.random.seed(42)  # Deterministic projections across the swarm nodes
         self.projections = np.random.randn(num_bits, dimension)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-        
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         # The hash table: bucket_id -> set(shard_identifiers)
         self.buckets: Dict[int, Set[str]] = {}
 
@@ -76,29 +39,13 @@ class SemanticHasher:
         if len(embedding) != self.dimension:
             # Simple padding/truncation for flex
             temp = np.zeros(self.dimension)
-<<<<<<< HEAD
-<<<<<<< HEAD
-            temp[: min(len(embedding), self.dimension)] = embedding[: min(len(embedding), self.dimension)]
-=======
             temp[:min(len(embedding), self.dimension)] = embedding[:min(len(embedding), self.dimension)]
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-            temp[:min(len(embedding), self.dimension)] = embedding[:min(len(embedding), self.dimension)]
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             embedding = temp
 
         projections = np.dot(self.projections, embedding)
         # Convert signs to bits
         bits = (projections > 0).astype(int)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-        
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         # Convert bit array to integer
         hash_val = 0
         for bit in bits:

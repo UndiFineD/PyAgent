@@ -17,20 +17,8 @@ Core logic for Hardware Acceleration and NPU interaction.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 import logging
 from typing import Optional
-
-=======
-import logging
-from typing import Optional
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-import logging
-from typing import Optional
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from .base_core import BaseCore
 
 try:
@@ -40,71 +28,28 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.hardware")
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class HardwareCore(BaseCore):
     """
     Standard interface for hardware-specific optimizations (NPU, GPU).
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-    def __init__(self, name: str = "HardwareCore", repo_root: Optional[str] = None) -> None:
-        super().__init__(name=name, repo_root=repo_root)
-=======
-    
     def __init__(self, name: str = "HardwareCore", root_path: Optional[str] = None) -> None:
         super().__init__(name=name, root_path=root_path)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    
-    def __init__(self, name: str = "HardwareCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self._npu_status = False
 
     def initialize_npu(self) -> bool:
         """Attempts to initialize NPU acceleration via Rust core."""
-<<<<<<< HEAD
-<<<<<<< HEAD
         if rc and hasattr(rc, "initialize_npu"):  # pylint: disable=no-member
             # pylint: disable=no-member
             result = rc.initialize_npu()
             self._npu_status = result == 0
-=======
-        if rc and hasattr(rc, "initialize_npu"):
-            result = rc.initialize_npu()
-            self._npu_status = (result == 0)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        if rc and hasattr(rc, "initialize_npu"):
-            result = rc.initialize_npu()
-            self._npu_status = (result == 0)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             return self._npu_status
         return False
 
     def run_npu_model(self, model_path: str) -> bool:
         """Executes a model on the NPU."""
-<<<<<<< HEAD
-<<<<<<< HEAD
         if rc and hasattr(rc, "run_npu_model") and self._npu_status:  # pylint: disable=no-member
             # pylint: disable=no-member
             result = rc.run_npu_model(model_path)
             return result == 0
-=======
-        if rc and hasattr(rc, "run_npu_model") and self._npu_status:
-            result = rc.run_npu_model(model_path)
-            return (result == 0)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        if rc and hasattr(rc, "run_npu_model") and self._npu_status:
-            result = rc.run_npu_model(model_path)
-            return (result == 0)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return False

@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
-"""
-Module: identity_mixin
-Provides identity and metadata mixin for PyAgent agents.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,24 +11,10 @@ Provides identity and metadata mixin for PyAgent agents.
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-=======
-# Identity Mixin for BaseAgent
-from typing import Any
-from src.core.base.common.models import AgentPriority
-from src.core.base.logic.core.identity_core import IdentityCore
-<<<<<<< HEAD
-=======
-
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 """Identity Mixin for BaseAgent."""
 
-from asyncio import AbstractEventLoop
-from asyncio import AbstractEventLoop
 from typing import Any
-
 from src.core.base.common.models import AgentPriority
 from src.core.base.logic.core.identity_core import IdentityCore
 
@@ -42,26 +23,13 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
     """Handles agent identity, configuration, and capabilities."""
 
     def __init__(self, **kwargs: Any) -> None:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.identity = IdentityCore(agent_type=self.__class__.__name__.lower().replace("agent", "") or "base")
-        self.agent_name: str = self.identity.agent_type
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.identity = IdentityCore(
             agent_type=self.__class__.__name__.lower().replace("agent", "") or "base"
         )
         self.agent_name = self.identity.agent_type
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
         self._suspended: bool = False
-        # Phase 259: Context lineage tracking
-        self.context: Any = None
 
     def get_capabilities(self) -> list[str]:
         """Return the agent capabilities."""
@@ -72,9 +40,9 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
         try:
             # pylint: disable=import-outside-toplevel
             import asyncio
-
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
-                SignalRegistry
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import (
+                SignalRegistry,
+            )
 
             signals = SignalRegistry()
             # Note: We expect the class using this mixin to have agent_logic_core
@@ -85,18 +53,20 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
 
                 try:
                     try:
-                        loop: AbstractEventLoop = asyncio.get_running_loop()
+                        loop = asyncio.get_running_loop()
                     except RuntimeError:
-                        loop: AbstractEventLoop = asyncio.new_event_loop()
+                        loop = asyncio.new_event_loop()
                         asyncio.set_event_loop(loop)
 
                     if loop.is_running():
-                        asyncio.create_task(signals.emit("agent_capability_registration", payload))
+                        asyncio.create_task(
+                            signals.emit("agent_capability_registration", payload)
+                        )
                     else:
-                        loop.run_until_complete(signals.emit("agent_capability_registration", payload))
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    # pylint: disable=broad-exception-caught
+                        loop.run_until_complete(
+                            signals.emit("agent_capability_registration", payload)
+                        )
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             pass

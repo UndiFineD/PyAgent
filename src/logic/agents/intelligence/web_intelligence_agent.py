@@ -1,53 +1,28 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Unified Web Intelligence Agent for PyAgent.
-Consolidates Search, Web Navigation, Browsing, and Self-Search.
-"""
+# Unified Web Intelligence Agent for PyAgent.
+# Consolidates Search, Web Navigation, Browsing, and Self-Search.
 
 from __future__ import annotations
-
-import logging
 import os
-from pathlib import Path
-
+import logging
+import time
 import requests
-
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
+from pathlib import Path
+from typing import Any, List, Dict, Optional
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
-from src.logic.agents.intelligence.arxiv_core import ArxivCore
-from src.logic.agents.intelligence.search_core import SearchCore
-<<<<<<< HEAD
-<<<<<<< HEAD
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 from src.logic.agents.intelligence.web_core import WebCore
-=======
+from src.logic.agents.intelligence.search_core import SearchCore
 from src.logic.agents.intelligence.arxiv_core import ArxivCore
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from src.logic.agents.intelligence.arxiv_core import ArxivCore
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
 
-
-class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class WebIntelligenceAgent(BaseAgent):
     """
     Unified agent for web research, autonomous navigation, and internal self-search.
     Consolidates SearchAgent, WebAgent, BrowsingAgent, and SelfSearchAgent.
@@ -91,29 +66,13 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         path = self.arxiv_core.download_paper(pdf_url, filename)
         if not path:
             return "Failed to download paper."
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         text = self.arxiv_core.extract_text(path)
         # Scan for safety
         injections = self.security_guard.scan_for_injection(text)
         if injections:
             return f"ERROR: Content blocked for safety: {', '.join(injections)}"
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return text
 
     @as_tool
@@ -123,7 +82,7 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         if provider == "bing":
             return self._search_bing(query, max_results)
-        if provider == "google":
+        elif provider == "google":
             return self._search_google(query, max_results)
 
         # Default/Fallback: DuckDuckGo
@@ -131,27 +90,21 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _search_duckduckgo(self, query: str, max_results: int) -> str:
         try:
-            # pylint: disable=import-error
             from duckduckgo_search import DDGS
-
             with DDGS() as ddgs:
                 raw = list(ddgs.text(query, max_results=max_results))
                 results = self.search_core.parse_ddg_results(raw)
                 return self.search_core.format_results_block(results, "DDG")
-        except (RuntimeError, ValueError, ImportError) as e:
+        except Exception as e:
             return f"DuckDuckGo search failed: {e}"
 
     def _search_bing(self, query: str, max_results: int) -> str:
-        _ = max_results
-        if not self.bing_api_key:
-            return "Bing API Key not configured."
+        if not self.bing_api_key: return "Bing API Key not configured."
         # Simulated implementation for brevity
         return f"Bing results for '{query}' (Simulated)."
 
     def _search_google(self, query: str, max_results: int) -> str:
-        _ = max_results
-        if not self.google_api_key:
-            return "Google API Key not configured."
+        if not self.google_api_key: return "Google API Key not configured."
         # Simulated implementation for brevity
         return f"Google results for '{query}' (Simulated)."
 
@@ -171,7 +124,7 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 return f"ERROR: Content blocked for safety: {', '.join(injections)}"
 
             return text
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             return f"Error fetching {url}: {e}"
 
     @as_tool
@@ -187,8 +140,7 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Uses 'Structured Self-Search' to extract latent knowledge from training data."""
         return f"<SelfSearchTask>\nQuery: {query}\n[Simulated Internal Recall Result]\n</SelfSearchTask>"
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        _ = target_file
-        if "http" in prompt:
-            return self.fetch_web_content(prompt)
-        return self.search_web(prompt)
+    def improve_content(self, query: str) -> str:
+        if "http" in query:
+            return self.fetch_web_content(query)
+        return self.search_web(query)

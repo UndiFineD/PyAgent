@@ -21,14 +21,12 @@
 """Utility functions used by the Agent classes."""
 
 from __future__ import annotations
-
-import importlib.util
 import logging
+import importlib.util
 import sys
-from collections.abc import Callable
 from pathlib import Path
 from typing import Any, cast
-
+from collections.abc import Callable
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -86,7 +84,9 @@ def load_codeignore(root: Path) -> set[str]:
             logging.debug("Loading .codeignore patterns from %s", codeignore_path)
             content = codeignore_path.read_text(encoding="utf-8")
             patterns = {
-                line.strip() for line in content.split("\n") if line.strip() and not line.strip().startswith("#")
+                line.strip()
+                for line in content.split("\n")
+                if line.strip() and not line.strip().startswith("#")
             }
             logging.info("Loaded %d ignore patterns from .codeignore", len(patterns))
 
@@ -130,7 +130,11 @@ def setup_logging(verbosity: str | None = None) -> None:
 
     # Determine level from environment or argument
 
-    level = levels.get(str(verbosity).lower(), logging.WARNING) if verbosity else logging.WARNING
+    level = (
+        levels.get(str(verbosity).lower(), logging.WARNING)
+        if verbosity
+        else logging.WARNING
+    )
 
     logging.basicConfig(
         level=level,
@@ -151,7 +155,7 @@ def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None
         agent_instance.process_file(file_path)
         logging.info("[worker] Completed %s", file_path.name)
         return file_path
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logging.error("[worker] Failed: %s", e)
         return None
 

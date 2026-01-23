@@ -46,7 +46,7 @@ from ..lifecycle.version import VERSION
 __version__ = VERSION
 
 @dataclass
-class AgentConfig:
+class AgentConfig:  # pylint: disable=too-many-instance-attributes
     """Full agent configuration loaded from config file.
 
     Attributes:

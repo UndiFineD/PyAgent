@@ -3,39 +3,30 @@ Manager for git operations.
 (Facade for src.core.base.common.git_core)
 """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"""
-Manager for git operations.
-(Facade for src.core.base.common.git_core)
-"""
-
 import logging
 from pathlib import Path
 from typing import Any
-
-from src.core.base.common.shell_core import ShellCore
-
+from ..git_core import GitCore as AgentGitHandlerBase
+from ..shell_core import ShellCore
 
 class AgentGitHandler:
     """Facade for Git operations with recording support."""
-=======
-from src.core.base.common.git_core import GitCore as AgentGitHandler
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from src.core.base.common.git_core import GitCore as AgentGitHandler
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-
-    def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:
+    def __init__(
+        self, repo_root: Path, no_git: bool = False, recorder: Any = None
+    ) -> None:
         self.repo_root: Path = repo_root
         self.no_git: bool = no_git
         self.recorder: Any = recorder
         self.shell = ShellCore(repo_root=repo_root)
 
-    def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
+    def _record(
+        self, action: str, result: str, meta: dict[str, Any] | None = None
+    ) -> None:
         """Internal helper to record git operations if recorder is available."""
         if self.recorder:
-            self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result, meta=meta)
+            self.recorder.record_interaction(
+                provider="Git", model="cli", prompt=action, result=result, meta=meta
+            )
 
     def commit_changes(self, message: str, files: list[str] | None = None) -> None:
         """Commit changes to the repository."""
@@ -53,34 +44,16 @@ from src.core.base.common.git_core import GitCore as AgentGitHandler
             # Check if there are changes to commit
             res = self.shell.execute(["git", "status", "--porcelain"])
             status = res.stdout.strip()
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             if not status:
                 logging.info("No changes to commit.")
                 return
 
             res = self.shell.execute(["git", "commit", "-m", message], check=True)
-<<<<<<< HEAD
-<<<<<<< HEAD
             logging.info("Successfully committed changes: %s", message)
             self._record(f"commit: {message}", "success", {"files": files})
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e: # pylint: disable=broad-exception-caught
             logging.error("Error during git commit: %s", e)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-            logging.info(f"Successfully committed changes: {message}")
-            self._record(f"commit: {message}", "success", {"files": files})
-        except Exception as e:
-            logging.error(f"Error during git commit: {e}")
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             self._record(f"commit: {message}", f"error: {str(e)}")
 
     def create_branch(self, branch_name: str) -> bool:
@@ -88,17 +61,9 @@ from src.core.base.common.git_core import GitCore as AgentGitHandler
         if self.no_git:
             return False
         try:
-<<<<<<< HEAD
-<<<<<<< HEAD
-            self.shell.execute(["git", "checkout", "-b", branch_name], check=True)
-=======
             res = self.shell.execute(["git", "checkout", "-b", branch_name], check=True)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            res = self.shell.execute(["git", "checkout", "-b", branch_name], check=True)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             logging.info(f"Created branch: {branch_name}")
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"Failed to create branch {branch_name}: {e}")
             return False

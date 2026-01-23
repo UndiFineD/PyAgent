@@ -12,28 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-Internal managers for prompt, conversation, auth, and batch processing.
-"""
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+"""Lifecycle definitions for core modules."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
-from .PromptManagers import PromptTemplateManager as PromptTemplateManager, PromptVersion as PromptVersion, PromptVersionManager as PromptVersionManager
-from .ConversationManagers import ConversationHistory as ConversationHistory
-from .AuthManagers import AuthenticationManager as AuthenticationManager, AuthManager as AuthManager
-from .BatchManagers import BatchRequest as BatchRequest, RequestBatcher as RequestBatcher
-from .ProcessorManagers import ResponsePostProcessor as ResponsePostProcessor, MultimodalProcessor as MultimodalProcessor, SerializationManager as SerializationManager
-from .OrchestrationManagers import AgentComposer as AgentComposer, ModelSelector as ModelSelector, QualityScorer as QualityScorer, ABTest as ABTest
-from .PluginManager import PluginManager as PluginManager, PluginMetadata as PluginMetadata
-from .SystemManagers import (
-    FilePriorityManager as FilePriorityManager,
-    ResponseCache as ResponseCache,
-    StatePersistence as StatePersistence, 
-    EventManager as EventManager,
-    HealthChecker as HealthChecker,
-    ProfileManager as ProfileManager
-)
-from .ResourceQuotaManager import ResourceQuotaManager as ResourceQuotaManager, QuotaConfig as QuotaConfig
+from abc import ABC, abstractmethod
+from typing import Any
 
-__version__ = VERSION
+
+class BaseModule(ABC):
+    """
+    Base class for all core modules in the swarm.
+    Standardizes the lifecycle of global specialized logic.
+    """
+
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
+        self.config = config or {}
+        self.initialized = False
+
+    def initialize(self) -> bool:
+        """Sets up the module resources."""
+        self.initialized = True
+        return True
+
+    @abstractmethod
+    def execute(self, *args: Any, **kwargs: Any) -> Any:
+        """Main entry point for module logic."""
+
+    def shutdown(self) -> bool:
+        """Cleans up the module resources."""
+        self.initialized = False
+        return True

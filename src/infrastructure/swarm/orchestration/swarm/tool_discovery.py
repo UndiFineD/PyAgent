@@ -12,49 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"""
-Tool discovery.py module.
-"""
-
-import logging
-from typing import Any, Dict, Optional
-
-from src.infrastructure.engine.models.similarity import \
-    EmbeddingSimilarityService
-
-logger = logging.getLogger(__name__)
-
-
-=======
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import logging
 from typing import List, Dict, Any, Optional
 from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 class AutonomousToolDiscovery:
     """
     Dynamically expands swarm capabilities by discovering MCP tools (Phase 87).
     Allows the swarm to 'learn' about new external APIs without manual registration.
     """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, mcp_agent: Any, similarity_service: EmbeddingSimilarityService) -> None:
-=======
     def __init__(self, mcp_agent: Any, similarity_service: EmbeddingSimilarityService):
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-    def __init__(self, mcp_agent: Any, similarity_service: EmbeddingSimilarityService):
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         self.mcp_agent = mcp_agent
         self.similarity_service = similarity_service
         # Cached tool descriptions and their embeddings
@@ -63,25 +33,11 @@ class AutonomousToolDiscovery:
     async def refresh_tool_index(self):
         """Fetches all tools from all MCP servers and indexes them semantically."""
         # 1. Get server list
-<<<<<<< HEAD
-<<<<<<< HEAD
-        await self.mcp_agent.list_mcp_servers()
-        # Mocking parsing for now - in production, MCPAgent should return structured data
-        # For Phase 87, we'll assume a list of servers to probe
-        servers = ["github", "brave_search", "google_maps"]  # Mock probe list
-
-=======
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
         servers_report = await self.mcp_agent.list_mcp_servers()
         # Mocking parsing for now - in production, MCPAgent should return structured data
         # For Phase 87, we'll assume a list of servers to probe
         servers = ["github", "brave_search", "google_maps"] # Mock probe list
-        
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+
         for server in servers:
             try:
                 # Mock calling a list_tools tool on the server
@@ -89,27 +45,9 @@ class AutonomousToolDiscovery:
                 # For this implementation, we simulate discovered tools:
                 simulated_tools = [
                     {"name": f"{server}_search", "desc": f"Search using {server} API"},
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    {"name": f"{server}_mutate", "desc": f"Modify resources on {server}"},
-                ]
-
-                for tool in simulated_tools:
-                    tool_id = f"{server}:{tool['name']}"
-                    emb = await self.similarity_service.get_embedding(tool["desc"])
-                    self.tool_index[tool_id] = {
-                        "server": server,
-                        "name": tool["name"],
-                        "desc": tool["desc"],
-                        "embedding": emb,
-                    }
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-=======
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                     {"name": f"{server}_mutate", "desc": f"Modify resources on {server}"}
                 ]
-                
+
                 for tool in simulated_tools:
                     tool_id = f"{server}:{tool['name']}"
                     emb = await self.similarity_service.get_embedding(tool['desc'])
@@ -120,10 +58,6 @@ class AutonomousToolDiscovery:
                         "embedding": emb
                     }
             except Exception as e:
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
                 logger.error(f"Failed to index tools for MCP server {server}: {e}")
 
     async def find_external_tool(self, task_prompt: str, threshold: float = 0.7) -> Optional[Dict[str, Any]]:
@@ -132,42 +66,16 @@ class AutonomousToolDiscovery:
             await self.refresh_tool_index()
 
         task_emb = await self.similarity_service.get_embedding(task_prompt)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-        best_tool = None
-        best_score = -1.0
-
-        for _tool_id, data in self.tool_index.items():
-=======
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-        
         best_tool = None
         best_score = -1.0
 
         for tool_id, data in self.tool_index.items():
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
             score = await self.similarity_service.compute_similarity(task_emb, data["embedding"])
             if score > best_score:
                 best_score = score
                 best_tool = data
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-        if best_tool and best_score >= threshold:
-            logger.info(
-                f"[Phase 87] Tool Discovery: Found external tool '{best_tool['name']}' with score {best_score:.3f}"
-            )
-            return {"tool_id": best_tool["name"], "server": best_tool["server"], "score": best_score}
-
-=======
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-        
         if best_tool and best_score >= threshold:
             logger.info(f"[Phase 87] Tool Discovery: Found external tool '{best_tool['name']}' with score {best_score:.3f}")
             return {
@@ -175,9 +83,5 @@ class AutonomousToolDiscovery:
                 "server": best_tool["server"],
                 "score": best_score
             }
-        
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+
         return None

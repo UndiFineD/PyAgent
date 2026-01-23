@@ -16,13 +16,11 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-
 import inspect
 import logging
 import time
-from collections.abc import Callable
 from typing import Any
-
+from collections.abc import Callable
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.resilience_core import ResilienceCore
 
@@ -71,7 +69,9 @@ class CircuitBreaker:
         self.failure_count = 0
         self.success_count = 0
         self.last_failure_time = 0.0
-        self.consecutive_successes_needed = 3  # Phase 231 requirement for "Wait-for-Success"
+        self.consecutive_successes_needed = (
+            3  # Phase 231 requirement for "Wait-for-Success"
+        )
 
         self.resilience_core = ResilienceCore()
         self.otel_manager = otel_manager
@@ -86,7 +86,7 @@ class CircuitBreaker:
             "consecutive_successes_needed": self.consecutive_successes_needed,
         }
 
-    def get_current_timeout(self) -> float:
+    def _get_current_timeout(self) -> float:
         """Calculates current timeout using ResilienceCore math."""
         return self.resilience_core.calculate_backoff(
             self.failure_count,
@@ -98,7 +98,9 @@ class CircuitBreaker:
 
     def _export_to_otel(self, old_state: str, new_state: str) -> None:
         """Exports state transition to OTel and StructuredLogger (Phase 273)."""
-        logging.info("CircuitBreaker '%s': Transition %s -> %s", self.name, old_state, new_state)
+        logging.info(
+            "CircuitBreaker '%s': Transition %s -> %s", self.name, old_state, new_state
+        )
 
         if self.otel_manager:
             span_id = self.otel_manager.start_span(
@@ -129,13 +131,16 @@ class CircuitBreaker:
                 result = health_check_func()
 
             if result:
-                logging.info("CircuitBreaker '%s': Probe SUCCEEDED. Transitioning to HALF_OPEN early.", self.name)
+                logging.info(
+                    "CircuitBreaker '%s': Probe SUCCEEDED. Transitioning to HALF_OPEN early.",
+                    self.name
+                )
                 old_state = self.state
                 self.state = "HALF_OPEN"
                 self.success_count = 1
                 self._export_to_otel(old_state, self.state)
                 return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.debug("CircuitBreaker '%s': Probe failed: %s", self.name, e)
 
         return False
@@ -143,7 +148,7 @@ class CircuitBreaker:
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Execute function through circuit breaker."""
         if self.state == "OPEN":
-            current_timeout = self.get_current_timeout()
+            current_timeout = self._get_current_timeout()
             if time.time() - self.last_failure_time > current_timeout:
                 old_state = self.state
                 self.state = "HALF_OPEN"
@@ -155,45 +160,57 @@ class CircuitBreaker:
                 self._export_to_otel(old_state, self.state)
             else:
                 retry_in = int(current_timeout - (time.time() - self.last_failure_time))
-                raise RuntimeError(f"Circuit breaker '{self.name}' is OPEN (retry in {retry_in}s)")
+                raise RuntimeError(
+                    f"Circuit breaker '{self.name}' is OPEN (retry in {retry_in}s)"
+                )
 
         try:
             result = func(*args, **kwargs)
             self.on_success()
             return result
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:
             self.on_failure()
             raise
 
     def on_success(self) -> None:
         """Record successful call via ResilienceCore."""
         old_state = self.state
-        self.state, self.failure_count, self.success_count = self.resilience_core.update_state(
-            self.state,
-            True,
-            self.failure_count,
-            self.success_count,
-            self.last_failure_time,
-            self._get_thresholds(),
+        self.state, self.failure_count, self.success_count = (
+            self.resilience_core.update_state(
+                self.state,
+                True,
+                self.failure_count,
+                self.success_count,
+                self.last_failure_time,
+                self._get_thresholds(),
+            )
         )
 
         if old_state != self.state:
-            logging.info("Circuit breaker '%s' transitioned from %s to %s", self.name, old_state, self.state)
+            logging.info(
+                "Circuit breaker '%s' transitioned from %s to %s",
+                self.name, old_state, self.state
+            )
             self._export_to_otel(old_state, self.state)
 
     def on_failure(self) -> None:
         """Record failed call via ResilienceCore."""
         old_state = self.state
         self.last_failure_time = time.time()
-        self.state, self.failure_count, self.success_count = self.resilience_core.update_state(
-            self.state,
-            False,
-            self.failure_count,
-            self.success_count,
-            self.last_failure_time,
-            self._get_thresholds(),
+        self.state, self.failure_count, self.success_count = (
+            self.resilience_core.update_state(
+                self.state,
+                False,
+                self.failure_count,
+                self.success_count,
+                self.last_failure_time,
+                self._get_thresholds(),
+            )
         )
 
         if old_state != self.state:
-            logging.error("Circuit breaker '%s' transitioned from %s to %s", self.name, old_state, self.state)
+            logging.error(
+                "Circuit breaker '%s' transitioned from %s to %s",
+                self.name, old_state, self.state
+            )
             self._export_to_otel(old_state, self.state)

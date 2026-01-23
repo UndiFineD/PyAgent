@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,78 +19,36 @@
 """Unified Lesson and Learning core."""
 
 import hashlib
-from dataclasses import asdict, dataclass
-from pathlib import Path
-from typing import List, Optional, Set
-
-from .base_core import BaseCore
-
-try:
-    import rust_core as rc
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Unified Lesson and Learning core."""
-
-import hashlib
-import json
-import logging
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import List, Set, Dict, Any, Optional
+from typing import List, Set, Optional
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 @dataclass
 class Lesson:
     """Captures a learned pattern or error correction for shared memory."""
-
-=======
-@dataclass
-class Lesson:
-    """Captures a learned pattern or error correction for shared memory."""
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-@dataclass
-class Lesson:
-    """Captures a learned pattern or error correction for shared memory."""
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     error_pattern: str
     cause: str
     solution: str
     impact_score: float = 0.5
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 class LessonCore(BaseCore):
     """
     Standard implementation for managing shared learnings across the fleet.
     Inherits from BaseCore for standardized persistence.
     """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, persistence_path: Optional[str] = None, repo_root: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        persistence_path: Optional[str] = None,
+        repo_root: Optional[str] = None
+    ):
         super().__init__(name="Lesson", repo_root=repo_root)
         self.known_failures: Set[str] = set()
         self.lessons: List[Lesson] = []
@@ -100,39 +56,16 @@ class LessonCore(BaseCore):
             self.persistence_path = Path(persistence_path)
         else:
             self.persistence_path = self.get_state_path()
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    def __init__(self, persistence_path: Optional[str] = None, repo_root: Optional[str] = None):
-        super().__init__(name="Lesson", repo_root=repo_root)
-        self.known_failures: Set[str] = set()
-        self.lessons: List[Lesson] = []
-        self.persistence_path = Path(persistence_path) if persistence_path else self.get_state_path()
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.load_lessons()
 
     def generate_failure_hash(self, error_msg: str) -> str:
         """Generates a stable hash for an error message."""
         if HAS_RUST:
-<<<<<<< HEAD
-<<<<<<< HEAD
             try:
                 # pylint: disable=no-member
                 return rc.generate_failure_hash(error_msg)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
-=======
-            try: return rc.generate_failure_hash(error_msg)
-            except Exception: pass
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            try: return rc.generate_failure_hash(error_msg)
-            except Exception: pass
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         normalized = "".join([c for c in error_msg.lower() if not c.isdigit()])
         return hashlib.sha256(normalized.encode()).hexdigest()
 
@@ -151,20 +84,10 @@ class LessonCore(BaseCore):
 
     def save_lessons(self) -> None:
         """Persists lessons to disk."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-        data = {"known_failures": list(self.known_failures), "lessons": [asdict(lesson) for lesson in self.lessons]}
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         data = {
             "known_failures": list(self.known_failures),
             "lessons": [asdict(l) for l in self.lessons]
         }
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self._storage.save_json(self.persistence_path, data)
 
     def load_lessons(self) -> None:
@@ -172,12 +95,4 @@ class LessonCore(BaseCore):
         data = self._storage.load_json(self.persistence_path)
         if data:
             self.known_failures = set(data.get("known_failures", []))
-<<<<<<< HEAD
-<<<<<<< HEAD
-            self.lessons = [Lesson(**lesson) for lesson in data.get("lessons", [])]
-=======
             self.lessons = [Lesson(**l) for l in data.get("lessons", [])]
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            self.lessons = [Lesson(**l) for l in data.get("lessons", [])]
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

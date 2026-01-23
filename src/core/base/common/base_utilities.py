@@ -17,15 +17,6 @@
 """Utility classes for BaseAgent framework."""
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
-from src.core.base.Version import VERSION
-=======
-from ..lifecycle.version import VERSION
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-from ..lifecycle.version import VERSION
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 import json
 import logging
 import argparse
@@ -36,6 +27,7 @@ import re
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
+from ..lifecycle.version import VERSION
 from .shell_core import ShellCore
 from .workspace_core import WorkspaceCore
 from .file_system_core import FileSystemCore
@@ -44,23 +36,10 @@ if TYPE_CHECKING:
     from .agent import BaseAgent
 
 try:
-<<<<<<< HEAD
-<<<<<<< HEAD
-    from src.logic.strategies import PlanExecutor as agent_strategies
-except ImportError:
-    sys.path.append(str(Path(__file__).parent.parent.parent))
-    from src.logic.strategies import PlanExecutor as agent_strategies
-=======
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-    from ....logic.strategies import plan_executor as agent_strategies
+    from ....logic import strategies as agent_strategies
 except (ImportError, ValueError):
-    from src.logic.strategies import plan_executor as agent_strategies
+    from src.logic import strategies as agent_strategies
 
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 __version__ = VERSION
 
 # Shared cores
@@ -90,10 +69,12 @@ def bulk_replace(
     """
     # 1. High-Speed Rust Acceleration (Phase 318)
     try:
+        # pylint: disable=import-outside-toplevel
         from ...rust_bridge import RustBridge
     except (ImportError, ValueError):
+        # pylint: disable=import-outside-toplevel
         from src.core.rust_bridge import RustBridge
-        
+
     if RustBridge.is_rust_active():
         str_paths = [str(p) for p in file_paths]
         replacements = {old_pattern: new_string}
@@ -122,8 +103,7 @@ def bulk_replace(
             else:
                 results[str(path)] = False
         except Exception as e: # pylint: disable=broad-exception-caught
-            logging.error(f"BulkReplace: Failed to process {path}: {e}")
-            results[str(path)] = False
+            logging.error("BulkReplace: Failed to process %s: %s", path, e)
 
     return results
 
@@ -148,6 +128,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     Automatically records tool interactions to the fleet context shards for autonomous learning.
     Can be used as @as_tool or @as_tool(priority=10).
     """
+    # pylint: disable=import-outside-toplevel
     from functools import wraps
     import time
 
@@ -158,7 +139,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
             async def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
                 # Phase 108: Enhanced Traceability
                 logging.debug(
-                    f"Executing async tool {func.__name__} on {self.__class__.__name__}"
+                    "Executing async tool %s on %s", func.__name__, self.__class__.__name__
                 )
 
                 result = await func(self, *args, **kwargs)
@@ -174,7 +155,10 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                         if len(shard_result) > 2000:
                             shard_result = shard_result[:2000] + "... [TRUNCATED]"
 
-                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
+                        prompt_trace = (
+                            f"TOOL_EXECUTION: {func.__name__}\n"
+                            f"Args: {args}\nKwargs: {kwargs}"
+                        )
 
                         self.fleet.recorder.record_interaction(
                             provider="agent_tool",
@@ -188,7 +172,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                             },
                         )
                     except Exception as e: # pylint: disable=broad-exception-caught
-                        logging.debug(f"Failed to record tool interaction: {e}")
+                        logging.debug("Failed to record tool interaction: %s", e)
 
                 return result
         else:
@@ -198,7 +182,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                 # Phase 108: Enhanced Traceability
 
                 logging.debug(
-                    f"Executing tool {func.__name__} on {self.__class__.__name__}"
+                    "Executing tool %s on %s", func.__name__, self.__class__.__name__
                 )
 
                 result = func(self, *args, **kwargs)
@@ -214,7 +198,10 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                         if len(shard_result) > 2000:
                             shard_result = shard_result[:2000] + "... [TRUNCATED]"
 
-                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
+                        prompt_trace = (
+                            f"TOOL_EXECUTION: {func.__name__}\n"
+                            f"Args: {args}\nKwargs: {kwargs}"
+                        )
 
                         self.fleet.recorder.record_interaction(
                             provider="agent_tool",
@@ -228,10 +215,11 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                             },
                         )
                     except Exception as e: # pylint: disable=broad-exception-caught
-                        logging.debug(f"Failed to record tool interaction: {e}")
+                        logging.debug("Failed to record tool interaction: %s", e)
 
                 return result
 
+        # pylint: disable=protected-access
         wrapper._is_tool = True
         wrapper._tool_priority = priority
         if category:
@@ -307,7 +295,7 @@ def create_main_function(
 
         # If delegation is requested via CLI
         if args.delegate:
-            logging.info(f"CLI Delegation: {agent_class.__name__} -> {args.delegate}")
+            logging.info("CLI Delegation: %s -> %s", agent_class.__name__, args.delegate)
             result = agent.delegate_to(args.delegate, args.prompt)
             if args.json:
                 sys.stdout.write(json.dumps({"delegation_result": result}) + "\n")
@@ -318,6 +306,7 @@ def create_main_function(
         # Normal execution
         # Honor parent/guard flag to avoid cascading agent invocations
         if getattr(args, "no_cascade", False) or os.environ.get("DV_AGENT_PARENT"):
+            # pylint: disable=protected-access
             agent._no_cascade = True
             logging.info(
                 "No-cascade mode enabled for this agent (prevents spawning other agents)"
@@ -325,11 +314,11 @@ def create_main_function(
 
         # Set strategy based on argument
         if args.strategy == "cot":
-            agent.set_strategy(agent_strategies.ChainOfThoughtStrategy())  # type: ignore[attr-defined]
+            agent.set_strategy(agent_strategies.ChainOfThoughtStrategy())
         elif args.strategy == "reflexion":
-            agent.set_strategy(agent_strategies.ReflexionStrategy())  # type: ignore[attr-defined]
+            agent.set_strategy(agent_strategies.ReflexionStrategy())
         else:
-            agent.set_strategy(agent_strategies.DirectStrategy())  # type: ignore[attr-defined]
+            agent.set_strategy(agent_strategies.DirectStrategy())
 
         agent.read_previous_content()
         agent.improve_content(args.prompt)
@@ -348,12 +337,12 @@ def create_main_function(
         else:
             if diff:
                 logging.info(
-                    f"{agent_class.__name__.replace('Agent', '').lower()} updated:"
+                    "%s updated:", agent_class.__name__.replace('Agent', '').lower()
                 )
                 logging.info(diff)
             else:
                 logging.info(
-                    f"No changes made to {agent_class.__name__.replace('Agent', '').lower()}."
+                    "No changes made to %s.", agent_class.__name__.replace('Agent', '').lower()
                 )
 
     return main

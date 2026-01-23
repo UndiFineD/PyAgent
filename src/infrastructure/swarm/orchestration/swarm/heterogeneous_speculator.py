@@ -86,10 +86,10 @@ class HeterogeneousSpeculator:
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         experts = list(self.gatekeeper.experts.values())
-        
+
         # Filter by domain
         domain_experts = [e for e in experts if domain in e.domains or "general" in e.domains]
-        
+
         drafters = [e for e in domain_experts if e.acceleration_type in ["fp8_bitnet", "int4_quant"]]
         verifiers = [e for e in domain_experts if e.acceleration_type in ["h100_tensor", "standard"]]
 <<<<<<< HEAD

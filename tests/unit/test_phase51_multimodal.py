@@ -13,9 +13,9 @@ def test_muxer_binary_sync():
     audio = b"\x01\x02\x03\x04"
     video = b"\x05\x06\x07\x08"
     text = "Hello Phase 51"
-    
+
     packet = muxer.synchronize_tick(audio, video, text)
-    
+
     # Check Magic Header (0xDEADBEEF in Little Endian is EF BE AD DE)
     assert packet.startswith(b"\xef\xbe\xad\xde")
     assert len(packet) > 12 # Header + lengths + some data
@@ -24,7 +24,7 @@ def test_ia3_scaling_fallback():
     engine = QuantizedMultimediaEngine(mode="FP8")
     activations = np.ones((1, 10), dtype=np.float32)
     scaling = np.array([2.0] * 10, dtype=np.float32)
-    
+
     # Simple Python fallback check
     result = engine.apply_stream_ia3(activations, scaling)
     assert np.allclose(result, 2.0)
@@ -40,7 +40,7 @@ def test_cross_modal_alignment_logic():
     # Mock some features
     video_feat = np.random.rand(5, 128).astype(np.float32)
     audio_feat = np.random.rand(5, 128).astype(np.float32)
-    
+
     # Should work (returns range if Rust not compiled, or aligned indices if it is)
     alignment = engine.align_streams(video_feat, audio_feat)
     assert len(alignment) == 5

@@ -17,15 +17,15 @@ Synaptic Mixins Package.
 This package contains modular capability components for BaseAgent.
 """
 
-from .config_mixin import ConfigMixin  # noqa: F401
-from .expertise_mixin import ExpertiseMixin  # noqa: F401
-from .governance_mixin import GovernanceMixin  # noqa: F401
-from .identity_mixin import IdentityMixin  # noqa: F401
-from .knowledge_mixin import KnowledgeMixin  # noqa: F401
-from .multimodal_mixin import MultimodalMixin  # noqa: F401
-from .orchestration_mixin import OrchestrationMixin  # noqa: F401
-from .persistence_mixin import PersistenceMixin  # noqa: F401
-from .reflection_mixin import ReflectionMixin  # noqa: F401
+from .identity_mixin import IdentityMixin
+from .persistence_mixin import PersistenceMixin
+from .knowledge_mixin import KnowledgeMixin
+from .orchestration_mixin import OrchestrationMixin
+from .governance_mixin import GovernanceMixin
+from .reflection_mixin import ReflectionMixin
+from .multimodal_mixin import MultimodalMixin
+from .config_mixin import ConfigMixin
+from .expertise_mixin import ExpertiseMixin
 
 __all__ = [
     "IdentityMixin",

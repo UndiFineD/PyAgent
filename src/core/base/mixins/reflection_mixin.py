@@ -17,11 +17,9 @@ Reflection Mixin: Enables autonomous self-critique and lesson learning for all a
 """
 
 from __future__ import annotations
-
 import logging
 from typing import Any
-
-from src.core.base.logic.core.lesson_core import Lesson, LessonCore
+from src.core.base.logic.core.lesson_core import LessonCore, Lesson
 
 
 class ReflectionMixin:
@@ -70,7 +68,8 @@ class ReflectionMixin:
             self._reflection_enabled = True
 
             if reflection_output.strip().upper() == "VERIFIED":
-                logging.info("[%s] Self-reflection confirmed output stability.", self.__class__.__name__)
+                logging.info("[%s] Self-reflection confirmed output stability.",
+                             self.__class__.__name__)
                 return result
 
             # Mistake found - record a lesson
@@ -78,14 +77,15 @@ class ReflectionMixin:
                 error_pattern=f"Task: {prompt[:100]}",
                 cause="Initial reasoning failed reflection check",
                 solution="Refined during self-critique pass",
-                impact_score=0.8,
+                impact_score=0.8
             )
             self._lesson_core.record_lesson(lesson)
-            logging.warning("[%s] Mistake identified; corrective lesson recorded.", self.__class__.__name__)
+            logging.warning("[%s] Mistake identified; corrective lesson recorded.",
+                            self.__class__.__name__)
 
             return reflection_output
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error("[%s] Reflection cycle failed: %s", self.__class__.__name__, e)
             self._reflection_enabled = True
             return result

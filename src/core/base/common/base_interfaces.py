@@ -19,10 +19,8 @@ Provides structural typing (Protocols) for agents, orchestrators, and components
 """
 
 from __future__ import annotations
-
 from pathlib import Path
-from typing import Any, Protocol, runtime_checkable
-
+from typing import Protocol, runtime_checkable, Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -99,10 +97,10 @@ class CoreInterface(Protocol):
 
 
 @runtime_checkable
-class ContextRecorderInterface(Protocol):  # pylint: disable=too-few-public-methods
+class ContextRecorderInterface(Protocol): # pylint: disable=too-few-public-methods
     """Interface for cognitive recording and context harvesting."""
 
-    def record_interaction(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def record_interaction( # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         provider: str,
         model: str,
@@ -115,49 +113,21 @@ class ContextRecorderInterface(Protocol):  # pylint: disable=too-few-public-meth
 
 
 @runtime_checkable
-<<<<<<< HEAD
-<<<<<<< HEAD
-class Loadable(Protocol):  # pylint: disable=too-few-public-methods
+class Loadable(Protocol): # pylint: disable=too-few-public-methods
     """Protocol for objects that can load their state from disk."""
-
     def load(self, path: Path | None = None) -> bool:
         """Loads state from file."""
 
 
 @runtime_checkable
-class Saveable(Protocol):  # pylint: disable=too-few-public-methods
+class Saveable(Protocol): # pylint: disable=too-few-public-methods
     """Protocol for objects that can save their state to disk."""
-
     def save(self, path: Path | None = None) -> bool:
         """Saves state to file."""
 
 
 @runtime_checkable
-class Component(Protocol):  # pylint: disable=too-few-public-methods
+class Component(Protocol): # pylint: disable=too-few-public-methods
     """Base interface for all PyAgent components with a name and version."""
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-class Loadable(Protocol):
-    """Protocol for objects that can load their state from disk."""
-    def load(self, path: Path | None = None) -> bool:
-        ...
-
-
-@runtime_checkable
-class Saveable(Protocol):
-    """Protocol for objects that can save their state to disk."""
-    def save(self, path: Path | None = None) -> bool:
-        ...
-
-
-@runtime_checkable
-class Component(Protocol):
-    """Base interface for all PyAgent components with a name and version."""
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     name: str
     version: str

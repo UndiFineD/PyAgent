@@ -13,16 +13,22 @@
 # limitations under the License.
 
 
+"""
+Execution handler for agent commands.
+"""
+
 from __future__ import annotations
-from src.core.base.Version import VERSION
-import os
-import sys
-import logging
-import subprocess
 import contextlib
+import logging
+import os
+import subprocess
+import sys
+import threading
 from pathlib import Path
 from typing import Any
 from collections.abc import Iterator
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.shell_core import ShellCore
 
 __version__ = VERSION
@@ -63,21 +69,22 @@ class AgentCommandHandler:
         local_cmd, env = self._prepare_command_environment(list(cmd))
 
         # Retry logic handled internally or via loop
+        result = None
         for i in range(max_retries):
             logging.debug(
-                f"Running command: {' '.join(local_cmd[:3])}... (timeout={timeout}s)"
+                "Running command: %s... (timeout=%ss)", " ".join(local_cmd[:3]), timeout
             )
-            
+
             res = self.shell.execute(local_cmd, timeout=timeout, env=env)
-            
-            logging.debug(f"Command completed with returncode={res.returncode}")
+
+            logging.debug("Command completed with returncode=%s", res.returncode)
             self._record(
                 " ".join(cmd), f"RC={res.returncode}\n{res.stdout[:1000]}"
             )
 
             # Convert ShellResult to CompletedProcess for compatibility
             result = subprocess.CompletedProcess(
-                cmd=res.command,
+                args=res.command,
                 returncode=res.returncode,
                 stdout=res.stdout,
                 stderr=res.stderr
@@ -88,11 +95,16 @@ class AgentCommandHandler:
 
             wait_time = float(2**i)
             logging.warning(
-                f"Command failed (rc={result.returncode}). Retrying in {wait_time}s... (Attempt {i + 1}/{max_retries})"
+                "Command failed (rc=%s). Retrying in %ss... (Attempt %s/%s)",
+                result.returncode, wait_time, i + 1, max_retries
             )
-            import threading
             threading.Event().wait(timeout=wait_time)
 
+        if result is None:
+            # Fallback for static analysis, though flow ensures it's set
+            return subprocess.CompletedProcess(
+                args=cmd, returncode=1, stdout="", stderr="Execution failed"
+            )
         return result
 
     def _prepare_command_environment(
@@ -110,7 +122,7 @@ class AgentCommandHandler:
                 and local_cmd[0] == sys.executable
                 and Path(local_cmd[1]).name.startswith("agent_")
             )
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         if is_agent_script:
@@ -127,7 +139,7 @@ class AgentCommandHandler:
                 )
                 if agent_name:
                     env.update(self._get_agent_env_vars(agent_name))
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         return local_cmd, env

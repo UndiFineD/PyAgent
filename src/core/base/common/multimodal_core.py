@@ -39,10 +39,15 @@ __all__ = [
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from __future__ import annotations
 import logging
+import math
+import re
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+
+import numpy as np
+
+from src.infrastructure.engine.multimodal import Muxer, QuantizedMultimediaEngine
 from .base_core import BaseCore
-from .models.core_enums import InputType
-from src.infrastructure.engine.multimodal import Muxer, ChannelType, QuantizedMultimediaEngine
 
 try:
     import rust_core as rc
@@ -50,6 +55,9 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.multimodal")
+
+# pylint: disable=no-member, too-few-public-methods, too-many-public-methods, too-many-instance-attributes
+# pylint: disable=too-many-arguments, too-many-locals, too-many-positional-arguments, line-too-long
 
 class StreamState:
     """State management for incomplete modality tags in a stream."""
@@ -67,6 +75,7 @@ class TemporalModalityBuffer:
         self.timestamps: List[float] = []
 
     def push(self, frame: bytes, timestamp: float):
+        """Add a frame and timestamp to the buffer."""
         self.frames.append(frame)
         self.timestamps.append(timestamp)
         if len(self.frames) > self.max_size:
@@ -102,16 +111,16 @@ class StreamingVisionEncoder:
         """Encode frame: returns full bytes for keyframes, or deltas for P-frames."""
         if entropy > 0:
             self.adapt_threshold(entropy)
-            
+
         if self.prev_frame is None:
             self.prev_frame = frame
             return frame # Keyframe
-        
+
         if rc and hasattr(rc, "calculate_visual_deltas_rust"):
             deltas = rc.calculate_visual_deltas_rust(list(self.prev_frame), list(frame), self.threshold)
             self.prev_frame = frame
             return deltas
-        
+
         self.prev_frame = frame
         return frame
 
@@ -137,16 +146,16 @@ class StreamingAudioProcessor:
         """
         self.buffer.extend(chunk)
         frames = []
-        
+
         while len(self.buffer) >= self.frame_size:
             frame = self.buffer[:self.frame_size]
             self.buffer = self.buffer[self.frame_size:]
-            
+
             # Check for voice activity
             is_active = True
             if rc and hasattr(rc, "speech_vad_rust"):
                 is_active = rc.speech_vad_rust(frame, 0.01)
-            
+
             if is_active:
                 if rc and hasattr(rc, "calculate_mel_features_rust"):
                     features = rc.calculate_mel_features_rust(frame, 80, self.sample_rate)
@@ -154,7 +163,7 @@ class StreamingAudioProcessor:
                 else:
                     # Generic fallback
                     frames.append([sum(frame) / len(frame)] * 80)
-                    
+
         return frames
 
 class MultimodalCore(BaseCore):
@@ -222,7 +231,7 @@ class MultimodalCore(BaseCore):
         Switch the active channel for a specific modality (e.g. switch Audio to 'EN').
         """
         self.active_channels[modality] = channel_id
-        logger.info(f"Modality {modality} channel switched to: {channel_id}")
+        logger.info("Modality %s channel switched to: %s", modality, channel_id)
 
     def parse_and_filter_stream(self, stream_id: str, chunk: str) -> List[Dict[str, Any]]:
         """
@@ -237,15 +246,15 @@ class MultimodalCore(BaseCore):
         """
         if stream_id not in self._stream_states:
             self._stream_states[stream_id] = StreamState()
-        
+
         state = self._stream_states[stream_id]
         full_content = state.buffer + chunk
-        
+
         # We need to ensure we don't cut a tag in half
         # If there's an open '<' without a '>', buffer it
         last_open_angle = full_content.rfind('<')
         last_close_angle = full_content.rfind('>')
-        
+
         if last_open_angle > last_close_angle:
             # Tag is potentially split
             to_parse = full_content[:last_open_angle]
@@ -253,7 +262,7 @@ class MultimodalCore(BaseCore):
         else:
             to_parse = full_content
             state.buffer = ""
-            
+
         return self.parse_stream(to_parse)
 
     def register_media(self, tag: str, uri: str) -> None:
@@ -281,15 +290,14 @@ class MultimodalCore(BaseCore):
         """
         if rc and hasattr(rc, "calculate_mel_features_rust"):
             return rc.calculate_mel_features_rust(samples, num_bins, 16000)
-        
+
         # Fallback: simple energy distribution
-        import numpy as np
         chunks = np.array_split(samples, num_bins)
         return [float(np.log10(np.mean(c**2) + 1e-10)) for c in chunks]
 
     def synchronize_streams(
-        self, 
-        transcriptions: List[Tuple[float, str]], 
+        self,
+        transcriptions: List[Tuple[float, str]],
         responses: List[Tuple[float, str]]
     ) -> List[Tuple[float, str, str]]:
         """
@@ -297,19 +305,19 @@ class MultimodalCore(BaseCore):
         """
         if rc and hasattr(rc, "synchronize_modalities_rust"):
             return rc.synchronize_modalities_rust(transcriptions, responses)
-        
+
         # Python fallback: Time-based matching
         synced = []
         for t_time, t_text in transcriptions:
             # Find closest response matching the time
-            closest = min(responses, key=lambda x: abs(x[0] - t_time), default=(0, ""))
+            closest = min(responses, key=lambda x, t=t_time: abs(x[0] - t), default=(0, ""))
             synced.append((t_time, t_text, closest[1] if abs(closest[0] - t_time) < 2.0 else ""))
         return synced
 
     def project_alignment(
-        self, 
-        embedding: List[float], 
-        weights: List[float], 
+        self,
+        embedding: List[float],
+        weights: List[float],
         bias: Optional[List[float]] = None
     ) -> List[float]:
         """
@@ -319,9 +327,8 @@ class MultimodalCore(BaseCore):
             in_dim = len(embedding)
             out_dim = len(weights) // in_dim
             return rc.project_modality_embeddings_rust(embedding, weights, bias, in_dim, out_dim)
-        
+
         # Simple Python implementation
-        import numpy as np
         emb_arr = np.array(embedding)
         in_dim = len(embedding)
         out_dim = len(weights) // in_dim
@@ -346,7 +353,7 @@ class MultimodalCore(BaseCore):
         if rc and hasattr(rc, "image_grid_split_rust"):
             tiles = rc.image_grid_split_rust(list(pixels), width, height, rows, cols)
             return [bytes(t) for t in tiles]
-        
+
         # Basic Python chunking fallback
         tile_w, tile_h = width // cols, height // rows
         tiles = []
@@ -365,8 +372,7 @@ class MultimodalCore(BaseCore):
         """
         if rc and hasattr(rc, "calculate_dynamic_modality_weights_rust"):
             return rc.calculate_dynamic_modality_weights_rust(audio_energy, text_density)
-        
-        import math
+
         ea, et = math.exp(audio_energy), math.exp(text_density)
         s = ea + et
         return ea / s, et / s
@@ -391,26 +397,25 @@ class MultimodalCore(BaseCore):
             ]
 
         # Basic Python fallback with channel support
-        import re
         parts = []
         last_idx = 0
         # Supports <Type:Channel_ID> or <Type_ID> (DVD-style) or <Thought>...</Thought>
         # Using DOTALL to allow thoughts to span lines
         # Expanded to support systemic tags like <Security:Isolation_DENY> or <Time_2026...>
         pattern = re.compile(
-            r"<([A-Z][a-zA-Z0-9]+)(?::([^>_ ]+))?_([^>]+)>|<(Thought)>(.*?)</Thought>", 
+            r"<([A-Z][a-zA-Z0-9]+)(?::([^>_ ]+))?_([^>]+)>|<(Thought)>(.*?)</Thought>",
             re.DOTALL
         )
         for match in pattern.finditer(content):
             if match.start() > last_idx:
                 parts.append({
-                    "type": "text", 
-                    "modality": "text", 
-                    "channel": "default", 
-                    "id": None, 
+                    "type": "text",
+                    "modality": "text",
+                    "channel": "default",
+                    "id": None,
                     "content": content[last_idx:match.start()]
                 })
-            
+
             if match.group(4) and match.group(4).lower() == "thought":
                 parts.append({
                     "type": "modality",
@@ -423,25 +428,25 @@ class MultimodalCore(BaseCore):
                 m_type = match.group(1)
                 channel = match.group(2) or "default"
                 m_id = match.group(3)
-                
+
                 parts.append({
-                    "type": "media" if m_type in ["Audio", "Video", "Image"] else "modality", 
-                    "modality": m_type, 
-                    "channel": channel, 
-                    "id": m_id, 
+                    "type": "media" if m_type in ["Audio", "Video", "Image"] else "modality",
+                    "modality": m_type,
+                    "channel": channel,
+                    "id": m_id,
                     "content": None
                 })
             last_idx = match.end()
-            
+
         if last_idx < len(content):
             parts.append({
-                "type": "text", 
-                "modality": "text", 
-                "channel": "default", 
-                "id": None, 
+                "type": "text",
+                "modality": "text",
+                "channel": "default",
+                "id": None,
                 "content": content[last_idx:]
             })
-            
+
         return parts
 
     def select_channels(self, fragments: List[Dict[str, Any]], channels: Dict[str, str]) -> List[Dict[str, Any]]:
@@ -465,7 +470,7 @@ class MultimodalCore(BaseCore):
                 }
                 for r in result
             ]
-            
+
         # Python fallback
         output = []
         for f in fragments:
@@ -475,7 +480,7 @@ class MultimodalCore(BaseCore):
                 m_type = f["modality"]
                 current_ch = f["channel"]
                 target_ch = channels.get(m_type)
-                
+
                 if not target_ch or current_ch == target_ch or current_ch == "default":
                     output.append(f)
         return output
@@ -487,9 +492,8 @@ class MultimodalCore(BaseCore):
         if rc and hasattr(rc, "create_vision_mosaic_rust"):
             mosaic = rc.create_vision_mosaic_rust([list(f) for f in feeds], width, height, rows, cols)
             return bytes(mosaic)
-        
+
         # Simple Python concatenation fallback
-        import numpy as np
         feed_arrays = [np.frombuffer(f, dtype=np.uint8).reshape(height, width, 3) for f in feeds]
         row_images = []
         for r in range(rows):
@@ -510,7 +514,7 @@ class MultimodalCore(BaseCore):
             weights = [1.0] * len(tracks)
         if rc and hasattr(rc, "audio_mix_tracks_rust"):
             return rc.audio_mix_tracks_rust(tracks, weights)
-        
+
         # Simple Python mix
         max_len = max(len(t) for t in tracks) if tracks else 0
         output = [0.0] * max_len
@@ -546,7 +550,7 @@ class MultimodalCore(BaseCore):
         if rc and hasattr(rc, "extract_vision_roi_rust"):
             roi = rc.extract_vision_roi_rust(list(pixels), width, height, x, y, rw, rh)
             return bytes(roi)
-        
+
         # Simple Python crop
         row_size = width * 3
         roi = bytearray()
@@ -564,39 +568,39 @@ class MultimodalCore(BaseCore):
         return 0.0 # Fallback: straight ahead
 
     def overlay_vision(
-        self, 
-        base: bytes, 
-        overlay: bytes, 
-        base_size: Tuple[int, int], 
-        overlay_size: Tuple[int, int], 
+        self,
+        base: bytes,
+        overlay: bytes,
+        base_size: Tuple[int, int],
+        overlay_size: Tuple[int, int],
         position: Tuple[int, int] = (0, 0),
         alpha: float = 1.0
     ) -> bytes:
         """Overlay a camera feed (PiP) on a base video frame."""
         if rc and hasattr(rc, "overlay_vision_feeds_rust"):
             res = rc.overlay_vision_feeds_rust(
-                list(base), list(overlay), 
-                base_size[0], base_size[1], 
-                overlay_size[0], overlay_size[1], 
-                position[0], position[1], 
+                list(base), list(overlay),
+                base_size[0], base_size[1],
+                overlay_size[0], overlay_size[1],
+                position[0], position[1],
                 alpha
             )
             return bytes(res)
         return base # Fallback: return base if untransformable
 
     def transform_vision(
-        self, 
-        pixels: bytes, 
-        src_size: Tuple[int, int], 
-        dst_size: Tuple[int, int], 
+        self,
+        pixels: bytes,
+        src_size: Tuple[int, int],
+        dst_size: Tuple[int, int],
         keep_aspect: bool = True,
         pad_color: Tuple[int, int, int] = (0, 0, 0)
     ) -> bytes:
         """Resize or pad a camera feed to fit target dimensions."""
         if rc and hasattr(rc, "transform_vision_feed_rust"):
             res = rc.transform_vision_feed_rust(
-                list(pixels), src_size[0], src_size[1], 
-                dst_size[0], dst_size[1], 
+                list(pixels), src_size[0], src_size[1],
+                dst_size[0], dst_size[1],
                 keep_aspect, pad_color
             )
             return bytes(res)
@@ -612,78 +616,50 @@ class MultimodalCore(BaseCore):
     def synchronize_color_profiles(self, pixels: bytes, reference: bytes) -> bytes:
         """Match the color/brightness of a feed to a reference feed (unify cameras)."""
         if rc and hasattr(rc, "match_vision_color_profiles_rust"):
-            res = rc.match_vision_color_profiles_rust(list(pixels), list(reference))
-            return bytes(res)
+            return bytes(rc.match_vision_color_profiles_rust(list(pixels), list(reference)))
         return pixels
 
-    def get_saliency_map(self, pixels: bytes, size: Tuple[int, int], grid_size: int = 16) -> List[float]:
-        """Identify regions of interest based on visual energy (Luminance)."""
-        if rc and hasattr(rc, "calculate_vision_saliency_rust"):
-            return rc.calculate_vision_saliency_rust(list(pixels), size[0], size[1], grid_size)
-        return []
-
-    def extract_roi(
-        self, 
-        pixels: bytes, 
-        size: Tuple[int, int], 
-        roi: Tuple[int, int, int, int]
-    ) -> bytes:
-        """Extract and zoom into a Region of Interest (ROI) (e.g. crop x,y,w,h)."""
-        if rc and hasattr(rc, "extract_vision_roi_rust"):
-            res = rc.extract_vision_roi_rust(
-                list(pixels), size[0], size[1], 
-                roi[0], roi[1], roi[2], roi[3]
-            )
-            return bytes(res)
-        
-        # Python fallback
-        import numpy as np
-        arr = np.frombuffer(pixels, dtype=np.uint8).reshape(size[1], size[0], 3)
-        crop = arr[roi[1]:roi[1]+roi[3], roi[0]:roi[0]+roi[2]]
-        return crop.tobytes()
-
     def apply_layout(
-        self, 
-        feeds: List[bytes], 
-        sizes: List[Tuple[int, int]], 
-        target_size: Tuple[int, int], 
+        self,
+        feeds: List[bytes],
+        sizes: List[Tuple[int, int]],
+        target_size: Tuple[int, int],
         template: str = "grid"
     ) -> bytes:
         """Apply a complex vision layout (e.g. sidebar, grid) to multiple feeds."""
         if rc and hasattr(rc, "layout_vision_feeds_rust"):
             res = rc.layout_vision_feeds_rust(
-                [list(f) for f in feeds], 
-                sizes, 
-                target_size[0], target_size[1], 
+                [list(f) for f in feeds],
+                sizes,
+                target_size[0], target_size[1],
                 template
             )
             return bytes(res)
-        
+
         # Fallback to simple mosaic if layout rust is missing
         if template == "grid":
             return self.create_mosaic(feeds, sizes[0][0], sizes[0][1], 2, 2)
         return feeds[0] if feeds else b""
 
     def fuse_modalities(
-        self, 
-        vision_emb: List[float], 
-        audio_emb: List[float], 
+        self,
+        vision_emb: List[float],
+        audio_emb: List[float],
         dim: int = 4096
     ) -> List[float]:
         """Apply cross-modality gating (Logic: Audio weights Vision tokens)."""
         if rc and hasattr(rc, "calculate_multimodal_fusion_rust"):
             return rc.calculate_multimodal_fusion_rust(vision_emb, audio_emb, dim)
-        
+
         # Python implementation: Gated Multimodal Fusion
-        import numpy as np
         v = np.array(vision_emb).reshape(-1, dim)
         a = np.array(audio_emb).reshape(-1, dim).mean(axis=0)
         gate = 1.0 / (1.0 + np.exp(-a))
         return (v * gate).flatten().tolist()
 
     def align_modalities(
-        self, 
-        text_embedding: List[float], 
+        self,
+        text_embedding: List[float],
         vision_embedding: List[float],
         embedding_dim: int = 4096
     ) -> List[float]:
@@ -693,7 +669,7 @@ class MultimodalCore(BaseCore):
         """
         if rc and hasattr(rc, "align_modality_sequence_rust"):
             return rc.align_modality_sequence_rust(text_embedding, vision_embedding, embedding_dim)
-        
+
         # Python fallback: concatenate vision sequence then text sequence
         return vision_embedding + text_embedding
 
@@ -707,7 +683,7 @@ class MultimodalCore(BaseCore):
             "media": [],
             "aligned_embeddings": [] # List of (dim, sequence)
         }
-        
+
         for item in inputs:
             itype = item.get("type")
             if itype == "text":
@@ -715,22 +691,22 @@ class MultimodalCore(BaseCore):
             elif itype == "media":
                 m_type = item.get("modality", "image")
                 m_id = item.get("id")
-                
+
                 # Logic: Resolve embedding from storage and project it
                 # For now, we simulate the alignment step
                 processed["media"].append(item)
-                
+
                 # Mock embedding for demonstration of the alignment logic
-                mock_emb = [0.1] * 4096 
+                mock_emb = [0.1] * 4096
                 mock_weights = [0.01] * (4096 * 4096)
-                
+
                 # Apply Rust-accelerated projection
                 aligned = self.project_alignment(mock_emb, mock_weights)
                 processed["aligned_embeddings"].append(aligned)
-                
+
                 # Insert token placeholder in text
                 processed["text"] += f"<{m_type.capitalize()}_{m_id}>"
-                
+
         return processed
 
 
@@ -762,21 +738,26 @@ class MultimodalStreamSession:
         packet = self.core.mux_dvd_channels(audio, video, text)
         return packet
 
-    def process_input_frame(self, audio: List[float], image: Optional[bytes] = None, width: int = 640, height: int = 480) -> Dict[str, Any]:
+    def process_input_frame(
+        self,
+        audio: List[float],
+        image: Optional[bytes] = None,
+        width: int = 640,
+        height: int = 480
+    ) -> Dict[str, Any]:
         """
         Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
         Includes smart dynamic focus and adaptive bandwidth.
         """
         # Update temporal memory
-        import time
         timestamp = time.time()
-        
+
         if image:
             self.temporal_mem.push(image, timestamp)
-            
+
         # Calculate dynamics (entropy) for adaptive compression from short-term memory
         entropy = self.temporal_mem.get_dynamics()
-            
+
         result = {
             "audio_features": self.audio_proc.push(audio),
             "vision_deltas": None,
@@ -784,11 +765,11 @@ class MultimodalStreamSession:
             "active_roi": None,
             "dynamics": entropy
         }
-        
+
         if image:
             # Encode with adaptive threshold
             result["vision_deltas"] = self.vision_enc.encode(image, entropy=entropy)
-            
+
             # Smart Focus: Find most salient region and "zoom"
             saliency = self.core.get_saliency_map(image, width, height)
             if saliency:
@@ -796,25 +777,25 @@ class MultimodalStreamSession:
                 max_idx = saliency.index(max(saliency))
                 grid_cols = width // 16
                 y_grid, x_grid = divmod(max_idx, grid_cols)
-                
+
                 # Extract 224x224 ROI around focal point (CLIP/LLAVA size)
                 rx = max(0, min(width - 224, x_grid * 16 - 112))
                 ry = max(0, min(height - 224, y_grid * 16 - 112))
                 result["active_roi"] = self.core.extract_roi(image, width, height, rx, ry, 224, 224)
-        
+
         # If stereo audio, estimate direction
         if len(audio) > 1024 and len(audio) % 2 == 0:
             left = audio[0::2]
             right = audio[1::2]
             result["spatial_angle"] = self.core.calculate_audio_direction(left, right)
-            
+
         self.input_history.append(result)
         return result
 
     def set_output_channel(self, modality: str, channel_id: str):
         """Switch the tracked channel (e.g. swap audio to 'FR')."""
         self.channels[modality] = channel_id
-        
+
     def filter_response(self, raw_stream: str) -> List[Dict[str, Any]]:
         """
         Parses an LLM response chunk and filters it according to current DVD-style channels.
@@ -858,10 +839,10 @@ class MultimodalStreamSession:
         stream = []
         if not frames:
             return stream
-            
+
         base = frames[0]
         stream.append(base) # Keyframe
-        
+
         for i in range(1, len(frames)):
             deltas = self.vision_enc.encode(frames[i])
             stream.append(deltas) # P-frames

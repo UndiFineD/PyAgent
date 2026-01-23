@@ -12,63 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Core logic for multi-agent orchestration and workflow management.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 import random
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Callable, Dict, List
-
+from typing import Any, Dict, List, Callable, TYPE_CHECKING
 from .base_core import BaseCore
 from .models import ComposedAgent
 
 if TYPE_CHECKING:
-    pass
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-import logging
-import random
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Callable, TYPE_CHECKING
-from .base_core import BaseCore
-from .models import ModelConfig, ComposedAgent
-
-if TYPE_CHECKING:
     from src.core.base.logic.agent import BaseAgent
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class OrchestrationCore(BaseCore):
     """
     Authoritative engine for multi-agent workflows.
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     def __init__(self) -> None:
         super().__init__()
         self.agents: List[ComposedAgent] = []
@@ -76,28 +42,16 @@ class OrchestrationCore(BaseCore):
         self.execution_order: List[str] = []
 
     def add_agent(self, agent: ComposedAgent) -> None:
-<<<<<<< HEAD
-<<<<<<< HEAD
         """
         Adds an agent to the orchestration registry.
         """
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.agents.append(agent)
         self._calculate_execution_order()
 
     def _calculate_execution_order(self) -> None:
-<<<<<<< HEAD
-<<<<<<< HEAD
         """
         Computes the topological sort of agents based on dependencies.
         """
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         sorted_agents: List[str] = []
         visited: set[str] = set()
         temp: set[str] = set()
@@ -127,58 +81,32 @@ class OrchestrationCore(BaseCore):
         prompt: str,
         agent_factory: Callable[[str, str], Any],
     ) -> Dict[str, str]:
-<<<<<<< HEAD
-<<<<<<< HEAD
         """
         Executes the registered agents in the calculated order.
         """
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         self.results.clear()
         current_content = ""
         for agent_type in self.execution_order:
             agent_config = next((a for a in self.agents if a.agent_type == agent_type), None)
-<<<<<<< HEAD
-<<<<<<< HEAD
             if not agent_config:
                 continue
-=======
-            if not agent_config: continue
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            if not agent_config: continue
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             agent = agent_factory(agent_type, file_path)
             enhanced_prompt = prompt
             for dep in agent_config.depends_on:
                 if dep in self.results:
                     enhanced_prompt += f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if current_content and hasattr(agent, "previous_content"):
-=======
             if current_content and hasattr(agent, 'previous_content'):
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-            if current_content and hasattr(agent, 'previous_content'):
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
                 agent.previous_content = current_content
             result = agent.improve_content(enhanced_prompt)
             self.results[agent_type] = result
             current_content = result
         return self.results
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 @dataclass
 class QualityScorer:
     """
     Evaluates text quality based on weighted criteria.
     """
-
     criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
 
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
@@ -193,49 +121,21 @@ class QualityScorer:
         """
         if not self.criteria:
             return min(1.0, len(text) / 200.0)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-@dataclass
-class QualityScorer:
-    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
-    def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
-        self.criteria[name] = (func, weight)
-    def score(self, text: str) -> float:
-        if not self.criteria: return min(1.0, len(text) / 200.0)
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         total_weight, total_score = 0.0, 0.0
         for func, weight in self.criteria.values():
             total_score += func(text) * weight
             total_weight += weight
         return total_score / total_weight if total_weight > 0 else 0.0
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 @dataclass
 class ABTest:
     """
     Simple A/B testing harness for variants.
     """
-
-=======
-@dataclass
-class ABTest:
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-@dataclass
-class ABTest:
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     name: str
     variants: List[str]
     weights: List[float] = field(default_factory=list)
     variant_counts: Dict[str, int] = field(default_factory=dict)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     def __post_init__(self) -> None:
         for v in self.variants:
@@ -247,15 +147,4 @@ class ABTest:
         """
         Selects a variant based on defined weights.
         """
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    def __post_init__(self) -> None:
-        for v in self.variants: self.variant_counts[v] = 0
-        if not self.weights: self.weights = [1.0 / len(self.variants)] * len(self.variants)
-    def select_variant(self) -> str:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return random.choices(self.variants, weights=self.weights, k=1)[0]
