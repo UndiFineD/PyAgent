@@ -30,10 +30,10 @@ class ContextPrefetcher:
     Analyzes token-access patterns to predict future context requirements.
     Works in tandem with AdaptiveSwarmCompressor to 'warm up' cold shards.
     """
-    
+
     def __init__(
-        self, 
-        shard_manager: ContextShardManager, 
+        self,
+        shard_manager: ContextShardManager,
         compressor: AdaptiveSwarmCompressor,
         lookahead_shards: int = 2
     ):
@@ -50,10 +50,10 @@ class ContextPrefetcher:
         """
         if context_id not in self.access_history:
             self.access_history[context_id] = deque(maxlen=self.history_size)
-        
+
         history = self.access_history[context_id]
         history.append(token_index)
-        
+
         # Determine direction of access (Sequential vs Jump)
         if len(history) >= 2:
             delta = history[-1] - history[-2]
@@ -69,10 +69,10 @@ class ContextPrefetcher:
         Predicts and warms up the next few shards in the sequence.
         """
         block_size = self.shard_manager.block_size
-        
+
         for i in range(1, self.lookahead_shards + 1):
             next_token = current_token + (i * block_size * direction)
-            
+
             # Check if this token is within known shards
             rank_id = self.shard_manager.get_rank_for_token(context_id, next_token)
             if rank_id is not None:

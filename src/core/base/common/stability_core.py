@@ -12,17 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core logic for fleet stability, health monitoring, and anomaly detection.
+"""
+
 from __future__ import annotations
 import time
 import contextlib
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
-from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+from .base_core import BaseCore
 
 @dataclass
 class HealthStatus:
@@ -47,7 +52,9 @@ class StabilityCore(BaseCore):
         self.max_errors: int = 5
         self.health_registry: Dict[str, HealthStatus] = {}
 
-    def update_status(self, component_id: str, latency: float = 0.0, error: bool = False, **metrics) -> bool:
+    def update_status(
+        self, component_id: str, latency: float = 0.0, error: bool = False, **metrics
+    ) -> bool:
         """Updates internal status for a component."""
         now = time.time()
         if component_id not in self.health_registry:
@@ -57,7 +64,7 @@ class StabilityCore(BaseCore):
         status.last_seen = now
         status.latency_ms = latency
         status.metrics.update(metrics)
-        
+
         if error:
             status.error_count += 1
         else:
@@ -69,14 +76,16 @@ class StabilityCore(BaseCore):
     def detect_failures(self) -> List[str]:
         """Returns a list of IDs that are considered failed."""
         now = time.time()
-        
+
         if rc and hasattr(rc, "detect_failed_agents_rust"):
             with contextlib.suppress(Exception):
                 agent_data = [
                     (name, status.last_seen, status.error_count, self.max_errors)
                     for name, status in self.health_registry.items()
                 ]
-                failures = rc.detect_failed_agents_rust(agent_data, now, self.timeout_seconds)
+                failures = rc.detect_failed_agents_rust(  # pylint: disable=no-member
+                    agent_data, now, self.timeout_seconds
+                )
                 for name, reason in failures:
                     if name in self.health_registry:
                         self.health_registry[name].is_alive = False

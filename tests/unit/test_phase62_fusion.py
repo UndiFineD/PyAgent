@@ -14,11 +14,11 @@ from src.core.base.common.models.communication_models import ExpertProfile
 @pytest.mark.asyncio
 async def test_weighted_plurality_fusion():
     fusion = WeightedExpertFusion()
-    
+
     outputs = ["Answer A", "Answer B", "Answer A"]
     weights = [0.4, 0.5, 0.3] # Answer A total = 0.7, Answer B total = 0.5
     expert_ids = ["e1", "e2", "e3"]
-    
+
     result = await fusion.fuse_outputs(outputs, weights, expert_ids, mode="weighted_plurality")
     assert result.merged_content == "Answer A"
     assert result.consensus_score > 0.5
@@ -28,23 +28,23 @@ async def test_moe_orchestrator_mixture_mode():
     sim_service = EmbeddingSimilarityService()
     gatekeeper = MoEGatekeeper(sim_service)
     orchestrator = CrossModelMoEOrchestrator(gatekeeper)
-    
+
     # Setup two experts
     expert1_profile = ExpertProfile(agent_id="e1", domains=["test"], performance_score=1.0)
     expert2_profile = ExpertProfile(agent_id="e2", domains=["test"], performance_score=0.8)
-    
+
     gatekeeper.register_expert(expert1_profile)
     gatekeeper.register_expert(expert2_profile)
-    
+
     # Mock behavior
     mock_e1 = MagicMock()
     mock_e1.process_request = AsyncMock(return_value="Result X")
     mock_e2 = MagicMock()
-    mock_e2.process_request = AsyncMock(return_value="Result X") 
-    
+    mock_e2.process_request = AsyncMock(return_value="Result X")
+
     orchestrator.register_agent_instance("e1", mock_e1)
     orchestrator.register_agent_instance("e2", mock_e2)
-    
+
     # Mixture execution
     result = await orchestrator.execute_moe_task("Sample prompt", mode="mixture")
     assert result == "Result X"

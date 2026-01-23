@@ -16,9 +16,9 @@
 """Logging configuration for PyAgent."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 import os
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -70,4 +70,4 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         format="%(asctime)s - %(levelname)s - %(message)s",
         datefmt="%H:%M:%S",
     )
-    logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
+    logging.debug("Logging configured at level: %s", logging.getLevelName(level))

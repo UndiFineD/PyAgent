@@ -24,7 +24,7 @@ def test_block_table_allocation_v2():
     blocks = bt.allocate(seq_id=42, num_required_blocks=5)
     assert len(blocks) == 5
     assert bt.get_utilization() == 5.0
-    
+
     # Test hybrid size update
     bt.update_hybrid_mapping(blocks[0], new_size=32)
     assert bt.block_size_map[blocks[0]] == 32
@@ -35,7 +35,7 @@ def test_kv_cache_interface_storage():
     # Note: On CI might want to use 'cpu' instead of 'cuda'
     device = "cuda" if torch.cuda.is_available() else "cpu"
     interface.initialize_storage(device=device)
-    
+
     assert interface.k_cache is not None
     assert interface.k_cache.shape == (10, 2, 8, 16, 64)
     assert interface.k_cache.device.type in ["cuda", "cpu"]
@@ -44,14 +44,14 @@ def test_block_hash_manager():
     """Test prefix caching via block hashing."""
     manager = BlockHashManager()
     tokens = [1, 2, 3, 4, 5]
-    
+
     # Register a block
     manager.register_block(block_id=7, tokens=tokens)
-    
+
     # Precise lookup
     found_id = manager.find_block_by_tokens(tokens)
     assert found_id == 7
-    
+
     # Miss lookup
     assert manager.find_block_by_tokens([1, 2, 3]) is None
 
@@ -59,12 +59,12 @@ def test_context_parallel_mask():
     """Test CP mask generation in block table."""
     bt = BlockTableV2(num_blocks=100)
     blocks = bt.allocate(seq_id=1, num_required_blocks=10)
-    
+
     # Rank 0 of 2
     mask0 = bt.get_context_parallel_mask(seq_id=1, rank=0, world_size=2)
     assert len(mask0) == 5
     assert mask0 == blocks[:5]
-    
+
     # Rank 1 of 2
     mask1 = bt.get_context_parallel_mask(seq_id=1, rank=1, world_size=2)
     assert len(mask1) == 5

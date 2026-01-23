@@ -18,12 +18,13 @@ Handles subprocess spawning, environment propagation, and interaction recording.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+import json
+import logging
 import os
 import subprocess
-import logging
-import asyncio
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.shell_core import ShellCore
 
 __version__ = VERSION
@@ -43,7 +44,7 @@ class ShellExecutor:
         return cls._core
 
     @staticmethod
-    async def async_run_command(
+    async def async_run_command(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         cmd: list[str],
         workspace_root: str,
         agent_name: str,
@@ -52,11 +53,11 @@ class ShellExecutor:
         timeout: int = 120,
     ) -> subprocess.CompletedProcess[str]:
         """Phase 266: Asynchronous subprocess execution via ShellCore."""
+        _ = agent_name
         core = ShellExecutor._get_core()
-        
+
         env = {}
         if models_config:
-            import json
             env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
 
         # Use common core for execution
@@ -78,14 +79,14 @@ class ShellExecutor:
             )
 
         return subprocess.CompletedProcess(
-            args=cmd, 
-            returncode=result.returncode, 
-            stdout=result.stdout, 
+            args=cmd,
+            returncode=result.returncode,
+            stdout=result.stdout,
             stderr=result.stderr
         )
 
     @staticmethod
-    def run_command(
+    def run_command(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         cmd: list[str],
         workspace_root: str,
         agent_name: str,
@@ -95,15 +96,15 @@ class ShellExecutor:
         max_retries: int = 1,
     ) -> subprocess.CompletedProcess[str]:
         """Run a command via core synchronous execution."""
-        # For simplicity, we can use ShellCore's execute_sync logic if we add it, 
+        _ = agent_name
+        # For simplicity, we can use ShellCore's execute_sync logic if we add it,
         # or just keep subprocess.run for now but ensure env parity.
         core = ShellExecutor._get_core()
-        
+
         env = os.environ.copy()
         if models_config:
-            import json
             env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
-        
+
         env = core.sanitize_env(env)
 
         last_error = None
@@ -130,15 +131,15 @@ class ShellExecutor:
 
                 return result
             except subprocess.TimeoutExpired as e:
-                logging.warning(f"Timeout (attempt {attempt + 1}/{max_retries})")
+                logging.warning("Timeout (attempt %s/%s)", attempt + 1, max_retries)
                 last_error = e
-            except Exception as e:
-                logging.error(f"Execution failure: {e}")
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                logging.error("Execution failure: %s", e)
                 last_error = e
 
         if isinstance(last_error, subprocess.TimeoutExpired):
             raise last_error
-        
+
         return subprocess.CompletedProcess(
             args=cmd, returncode=1, stdout="", stderr=str(last_error)
         )

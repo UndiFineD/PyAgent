@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +22,10 @@ from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 
 # Phase 317: Modularized Verification Classes
-from .verification.agent_verifier import AgentVerifier as AgentVerifier
-from .verification.code_health_auditor import CodeHealthAuditor as CodeHealthAuditor
-from .verification.code_integrity_verifier import CodeIntegrityVerifier as CodeIntegrityVerifier
+from .verification.agent_verifier import AgentVerifier
+from .verification.code_health_auditor import CodeHealthAuditor
+from .verification.code_integrity_verifier import CodeIntegrityVerifier
 
 __version__ = VERSION
+
+__all__ = ["AgentVerifier", "CodeHealthAuditor", "CodeIntegrityVerifier"]

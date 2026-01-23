@@ -27,10 +27,10 @@ logger = logging.getLogger(__name__)
 
 class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
     """
-    Enhances MoE by preferring experts located on nodes that already hold 
+    Enhances MoE by preferring experts located on nodes that already hold
     relevant context shards.
     """
-    
+
     def __init__(self, gatekeeper: Any, context_manager: ContextShardManager):
         super().__init__(gatekeeper)
         self.context_manager = context_manager
@@ -46,26 +46,26 @@ class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
         """
         # 1. Get standard routing decision
         decision = await self.gatekeeper.route_task(task)
-        
+
         # 2. Get context locality
         target_rank = self.context_manager.get_rank_for_token(context_id, focus_token)
-        
+
         if target_rank is not None:
             # Re-rank experts: if an expert is on the target_rank, boost its routing weight
             new_experts = []
             new_weights = []
-            
+
             for i, expert_id in enumerate(decision.selected_experts):
                 weight = decision.routing_weights[i]
                 expert_rank = self.expert_rank_map.get(expert_id)
-                
+
                 if expert_rank == target_rank:
                     logger.debug(f"Locality Boost: Expert {expert_id} is on rank {target_rank}")
                     weight *= 1.5 # 50% boost for locality
-                
+
                 new_experts.append(expert_id)
                 new_weights.append(weight)
-                
+
             # Normalize again
             total = sum(new_weights)
             decision.routing_weights = [w/total for w in new_weights]

@@ -16,15 +16,17 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
+import logging
+from pathlib import Path
+import time
+from typing import Any
+
+import blake3
+import cbor2
+import orjson
+
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models import IncrementalState
-from pathlib import Path
-from typing import Any
-import logging
-import time
-import blake3
-import orjson
-import cbor2
 
 __version__ = VERSION
 
@@ -61,24 +63,25 @@ class IncrementalProcessor:
             json_state = self.state_file.with_suffix(".json")
             if json_state.exists():
                 try:
+                    # pylint: disable=no-member
                     data = orjson.loads(json_state.read_bytes())
                     self._apply_state_data(data)
                     logging.info(
-                        f"Migrated incremental state from {json_state} to CBOR"
+                        "Migrated incremental state from %s to CBOR", json_state
                     )
                     return
-                except Exception as e:
-                    logging.warning(f"Failed to migrate from JSON: {e}")
+                except Exception as e:  # pylint: disable=broad-exception-caught
+                    logging.warning("Failed to migrate from JSON: %s", e)
             return
 
         try:
             data = cbor2.loads(self.state_file.read_bytes())
             self._apply_state_data(data)
             logging.info(
-                f"Loaded incremental state (CBOR/BLAKE3) from {self.state_file}"
+                "Loaded incremental state (CBOR/BLAKE3) from %s", self.state_file
             )
-        except Exception as e:
-            logging.warning(f"Failed to load state with CBOR: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning("Failed to load state with CBOR: %s", e)
 
     def _apply_state_data(self, data: dict[str, Any]) -> None:
         """Applies loaded data to the IncrementalState model."""
@@ -100,21 +103,22 @@ class IncrementalProcessor:
             }
             # cbor2.dumps returns bytes
             self.state_file.write_bytes(cbor2.dumps(data))
-            logging.debug(f"Saved incremental state using CBOR to {self.state_file}")
-        except Exception as e:
-            logging.warning(f"Failed to save state: {e}")
+            logging.debug("Saved incremental state using CBOR to %s", self.state_file)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning("Failed to save state: %s", e)
 
     def _compute_file_hash(self, file_path: Path) -> str:
         """Compute BLAKE3 hash of file content using buffered reads (Phase 271)."""
         try:
+            # pylint: disable=not-callable
             hasher = blake3.blake3()
             with open(file_path, "rb") as f:
                 # Read in 64KB chunks to prevent memory spikes
                 while chunk := f.read(65536):
                     hasher.update(chunk)
             return hasher.hexdigest()
-        except Exception as e:
-            logging.debug(f"Hash calculation failed for {file_path}: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.debug("Hash calculation failed for %s: %s", file_path, e)
             return ""
 
     def validate_hashes(self, files: list[Path]) -> list[Path]:
@@ -128,7 +132,7 @@ class IncrementalProcessor:
                 current_hash = self._compute_file_hash(file_path)
                 if current_hash != self.state.file_hashes[path_str]:
                     logging.warning(
-                        f"IncrementalProcessor: DETECTED MUTATION in {path_str}"
+                        "IncrementalProcessor: DETECTED MUTATION in %s", path_str
                     )
                     mutated.append(file_path)
         return mutated
@@ -175,7 +179,8 @@ class IncrementalProcessor:
             batches.append(current_batch)
 
         logging.info(
-            f"Batched {len(files)} files into {len(batches)} efficient processing units."
+            "Batched %d files into %d efficient processing units.",
+            len(files), len(batches)
         )
         return batches
 
@@ -206,10 +211,10 @@ class IncrementalProcessor:
                     new_hash = self._compute_file_hash(file_path)
                     if new_hash != self.state.file_hashes.get(path_str, ""):
                         changed.append(file_path)
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 changed.append(file_path)
 
-        logging.info(f"Incremental: {len(changed)}/{len(files)} files changed")
+        logging.info("Incremental: %d/%d files changed", len(changed), len(files))
         return changed
 
     def mark_processed(self, file_path: Path) -> None:

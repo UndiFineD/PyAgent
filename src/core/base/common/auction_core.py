@@ -32,26 +32,51 @@ class AuctionCore(BaseCore):
     def calculate_vcg_auction(
         bids: List[Dict[str, Any]], slots: int
     ) -> List[Dict[str, Any]]:
+        """Calculate winners and prices for a VCG auction.
+
+        Args:
+            bids: List of dictionaries with 'amount' and 'agent_id'.
+            slots: Number of slots available for the auction.
+
+        Returns:
+            List of winning bids with 'price_paid' attribute.
+        """
         if rc and hasattr(rc, "calculate_vcg_auction"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.calculate_vcg_auction(bids, slots) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
-        
-        if not bids: return []
+
+        if not bids:
+            return []
         sorted_bids = sorted(bids, key=lambda x: x["amount"], reverse=True)
         winners = sorted_bids[:slots]
         clearing_price = sorted_bids[slots]["amount"] if len(sorted_bids) > slots else 0.0
-        for w in winners: w["price_paid"] = clearing_price
+        for w in winners:
+            w["price_paid"] = clearing_price
         return winners
 
     @staticmethod
     def enforce_vram_quota(
         agent_vram_request: float, total_available: float, quota_percent: float = 0.2
     ) -> bool:
+        """Enforce resource quotas for VRAM allocation.
+
+        Args:
+            agent_vram_request: Requested amount of VRAM.
+            total_available: Total VRAM available in the system.
+            quota_percent: Maximum percentage allowed for a single agent.
+
+        Returns:
+            True if within quota, False otherwise.
+        """
         if rc and hasattr(rc, "enforce_vram_quota"): # pylint: disable=no-member
             try:
-                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent) # type: ignore
+                # pylint: disable=no-member
+                return rc.enforce_vram_quota(
+                    agent_vram_request, total_available, quota_percent
+                ) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
         return agent_vram_request <= (total_available * quota_percent)

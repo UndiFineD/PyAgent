@@ -31,7 +31,7 @@ class TensorRTLoader:
     async def load_engine(self, model_id: str, precision: str = "fp16") -> bool:
         """Loads or builds a TensorRT engine for the given model and precision."""
         engine_path = self.engine_dir / f"{model_id}_{precision}.engine"
-        
+
         if engine_path.exists():
             self.logger.info(f"Loading cached TensorRT engine: {engine_path}")
             # In a real environment, this would call tensorrt.Runtime
@@ -44,7 +44,7 @@ class TensorRTLoader:
             self.logger.warning(f"Engine {engine_path} not found. Build required.")
             # Trigger build via trtexec or builder API
             return False
-            
+
         return False
 
     def run_inference(self, model_id: str, inputs: List[np.ndarray]) -> List[np.ndarray]:
@@ -59,12 +59,12 @@ class TensorRTLoader:
             # Convert numpy inputs to List[List[f32]] for Rust FFI
             flat_inputs = [i.flatten().tolist() for i in inputs]
             engine_ptr = self.active_engines[model_id]
-            
+
             raw_outputs = rust_core.run_tensorrt_inference_rust(engine_ptr, flat_inputs)
-            
+
             # Reconstruct numpy arrays (simplified for this bridge)
             return [np.array(o, dtype=np.float32) for o in raw_outputs]
-            
+
         return [np.zeros_like(i) for i in inputs]
 
     def optimize_multimodal_batch(self, video_frames: np.ndarray, audio_samples: np.ndarray) -> Dict[str, np.ndarray]:

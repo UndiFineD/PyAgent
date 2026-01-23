@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 """
 Unified Pruning and Synaptic Decay core.
 """
@@ -21,7 +25,7 @@ import math
 import time
 import logging
 from dataclasses import dataclass, field
-from typing import Any, Optional, Dict, List
+from typing import Optional, Dict, List
 from .base_core import BaseCore
 
 try:
@@ -45,7 +49,7 @@ class PruningCore(BaseCore):
     Standard implementation for neural pruning and synaptic decay.
     Handles weight calculations and pruning decisions across the swarm.
     """
-    
+
     def __init__(self, name: str = "Pruning", repo_root: Optional[str] = None):
         super().__init__(name=name, root_path=repo_root)
         self.weights: Dict[str, SynapticWeight] = {}
@@ -62,37 +66,39 @@ class PruningCore(BaseCore):
         """Calculate exponential decay for a synaptic weight."""
         # Check for bulk decay optimization in Rust
         if rc and hasattr(rc, "calculate_decay_rust"):
-             # For a single value, bulk decay isn't usually faster but we follow the pattern
-             try:
-                 return rc.calculate_decay_rust([1.0], age_seconds / half_life)[0]
-             except Exception:
-                 pass
-        
+            # For a single value, bulk decay isn't usually faster but we follow the pattern
+            try:
+                # pylint: disable=no-member
+                return rc.calculate_decay_rust([1.0], age_seconds / half_life)[0]  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
+                pass
+
         return math.exp(-0.693 * age_seconds / half_life)
 
     def update_weight_on_fire(self, agent_id: str, success: bool) -> float:
         """Updates synaptic weight based on task outcome."""
         if agent_id not in self.weights:
             self.weights[agent_id] = SynapticWeight(agent_id=agent_id)
-        
+
         sync = self.weights[agent_id]
         current_weight = sync.weight
 
         # Check for Rust acceleration
         if rc and hasattr(rc, "update_weight_on_fire_rust"):
             try:
-                new_weight = rc.update_weight_on_fire_rust(current_weight, success)
+                # pylint: disable=no-member
+                new_weight = rc.update_weight_on_fire_rust(current_weight, success)  # type: ignore
                 sync.weight = new_weight
                 sync.last_fired = time.time()
                 return new_weight
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if success:
             sync.weight = min(current_weight * 1.1, 1.0)
         else:
             sync.weight = max(current_weight * 0.8, 0.1)
-        
+
         sync.last_fired = time.time()
         return sync.weight
 
@@ -100,13 +106,14 @@ class PruningCore(BaseCore):
         """Checks if an agent is in a synaptic refractory period."""
         if agent_id not in self.weights:
             return False
-        
+
         sync = self.weights[agent_id]
         if rc and hasattr(rc, "is_in_refractory_rust"):
             try:
                 # Assuming Rust takes a dict or value
-                return rc.is_in_refractory_rust(sync.refractory_until)
-            except Exception:
+                # pylint: disable=no-member
+                return rc.is_in_refractory_rust(sync.refractory_until)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return time.time() < sync.refractory_until
 
@@ -114,10 +121,10 @@ class PruningCore(BaseCore):
         """Identify agents whose synaptic weight has dropped below the threshold."""
         now = time.time()
         to_prune = []
-        
+
         for agent_id, sync in self.weights.items():
             decayed_weight = sync.weight * self.calculate_decay(now - sync.last_fired)
             if decayed_weight < threshold:
                 to_prune.append(agent_id)
-        
+
         return to_prune

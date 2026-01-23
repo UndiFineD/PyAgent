@@ -38,7 +38,7 @@ def test_dvd_channel_registration(workspace_manager):
     success = workspace_manager.register_dvd_channel(1, buffer_size=4096)
     assert success is True
     assert 1 in workspace_manager._channels
-    
+
     # Test sync beat
     workspace_manager.global_sync_beat()
     assert workspace_manager.last_sync_time > 0
@@ -55,7 +55,7 @@ def test_memory_profiler():
     profiler = MemoryProfiler()
     snapshot = profiler.take_snapshot("start")
     assert snapshot["usage_bytes"] >= 0
-    
+
     profiler.take_snapshot("end")
     patterns = profiler.analyze_patterns()
     assert patterns["snapshot_count"] == 2
@@ -65,10 +65,10 @@ def test_buffer_recycler():
     recycler = BufferRecycler()
     buf1 = recycler.acquire(1024) # Fits in 4KB class
     assert len(buf1) == 4096
-    
+
     recycler.release(buf1)
     stats = recycler.get_stats()
     assert stats["4096"] == 1
-    
+
     buf2 = recycler.acquire(1024)
     assert buf2 is buf1 # Should be recycled

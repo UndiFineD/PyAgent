@@ -40,17 +40,17 @@ class SchedulerOutput:
     """
     scheduled_seqs: List[ScheduledSequence] = field(default_factory=list)
     ignored_seqs: List[int] = field(default_factory=list)
-    
+
     # Execution constraints
     max_num_batched_tokens: int = 2048
     blocks_to_swap_in: Dict[int, int] = field(default_factory=dict)
     blocks_to_swap_out: Dict[int, int] = field(default_factory=dict)
     blocks_to_copy: Dict[int, List[int]] = field(default_factory=dict)
-    
+
     # Async metadata
     timestamp: float = field(default_factory=time.time)
     placeholder_ids: Set[int] = field(default_factory=set)
-    
+
     def add_sequence(self, seq: ScheduledSequence):
         """Adds a sequence to the current batch."""
         self.scheduled_seqs.append(seq)

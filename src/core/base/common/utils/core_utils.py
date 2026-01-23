@@ -12,17 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Utility functions used by the Agent classes."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 import importlib.util
 import sys
 from pathlib import Path
 from typing import Any, cast
 from collections.abc import Callable
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -69,21 +74,21 @@ def load_codeignore(root: Path) -> set[str]:
             file_mtime = codeignore_path.stat().st_mtime
             cache_time = _CODEIGNORE_CACHE_TIME.get(cache_key, 0)
             if file_mtime == cache_time:
-                logging.debug(f"Using cached .codeignore patterns for {cache_key}")
+                logging.debug("Using cached .codeignore patterns for %s", cache_key)
                 return _CODEIGNORE_CACHE[cache_key]
         except OSError:
             pass
 
     if codeignore_path.exists():
         try:
-            logging.debug(f"Loading .codeignore patterns from {codeignore_path}")
+            logging.debug("Loading .codeignore patterns from %s", codeignore_path)
             content = codeignore_path.read_text(encoding="utf-8")
             patterns = {
                 line.strip()
                 for line in content.split("\n")
                 if line.strip() and not line.strip().startswith("#")
             }
-            logging.info(f"Loaded {len(patterns)} ignore patterns from .codeignore")
+            logging.info("Loaded %d ignore patterns from .codeignore", len(patterns))
 
             # Cache the patterns
 
@@ -95,10 +100,10 @@ def load_codeignore(root: Path) -> set[str]:
                 pass
 
             return patterns
-        except Exception as e:
-            logging.warning(f"Could not read .codeignore file: {e}")
+        except OSError as e:
+            logging.warning("Could not read .codeignore file: %s", e)
     else:
-        logging.debug(f"No .codeignore file found at {codeignore_path}")
+        logging.debug("No .codeignore file found at %s", codeignore_path)
     return set()
 
 
@@ -137,7 +142,7 @@ def setup_logging(verbosity: str | None = None) -> None:
         datefmt="%H:%M:%S",
     )
     if level <= logging.DEBUG:
-        logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
+        logging.debug("Logging configured at level: %s", logging.getLevelName(level))
 
 
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None:
@@ -146,17 +151,22 @@ def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None
     This function must be at module level to be pickleable for multiprocessing.
     """
     try:
-        logging.debug(f"[worker] Processing {file_path.name}")
+        logging.debug("[worker] Processing %s", file_path.name)
         agent_instance.process_file(file_path)
-        logging.info(f"[worker] Completed {file_path.name}")
+        logging.info("[worker] Completed %s", file_path.name)
         return file_path
-    except Exception as e:
-        logging.error(f"[worker] Failed: {e}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        logging.error("[worker] Failed: %s", e)
         return None
 
 
 def _load_fix_markdown_content() -> Callable[[str], str]:
     """Load the markdown fixer module dynamically."""
+
+    def _fallback(text: str) -> str:
+        """Fallback function that returns text as-is."""
+        return text
+
     # Calculate path from this file's location: src/classes/agent/utils.py
     # We need to go: utils.py -> agent -> classes -> src -> ../fix
     this_file = Path(__file__)
@@ -164,22 +174,19 @@ def _load_fix_markdown_content() -> Callable[[str], str]:
     target_file = fix_dir / "fix_markdown_lint.py"
 
     if not target_file.exists():
-        logging.debug(f"Markdown fixer not found at {target_file}. Using fallback.")
-
-        def _fallback(text: str) -> str:
-            return text
-
+        logging.debug("Markdown fixer not found at %s. Using fallback.", target_file)
         return _fallback
 
     spec = importlib.util.spec_from_file_location("fix_markdown_lint", str(target_file))
     if spec and spec.loader:
-        module = importlib.util.module_from_spec(spec)
-        sys.modules["fix_markdown_lint"] = module
-        spec.loader.exec_module(module)
-        return cast(Callable[[str], str], module.fix_markdown_content)
-
-    def _fallback(text: str) -> str:
-        return text
+        try:
+            module = importlib.util.module_from_spec(spec)
+            sys.modules["fix_markdown_lint"] = module
+            spec.loader.exec_module(module)
+            return cast(Callable[[str], str], module.fix_markdown_content)
+        except (ImportError, AttributeError, OSError) as e:
+            logging.warning("Failed to load markdown fixer: %s. Using fallback.", e)
+            return _fallback
 
     return _fallback
 

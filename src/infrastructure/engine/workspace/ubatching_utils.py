@@ -33,7 +33,7 @@ class UBatchingUtils:
     Low-level utilities for micro-batch (UBatch) decomposition and coordination.
     Essential for 120fps synchronized multimodal pipelines.
     """
-    
+
     def __init__(self):
         self._stats: Dict[str, Any] = {
             "total_slices": 0,
@@ -55,7 +55,7 @@ class UBatchingUtils:
         """
         if rc and hasattr(rc, "ubatch_slice_optimal_rust"):
             return rc.ubatch_slice_optimal_rust(total_tokens, num_sms)
-            
+
         # Fallback: Simple uniform slicing
         slice_size = max(1, total_tokens // num_sms)
         return [slice_size] * (total_tokens // slice_size)

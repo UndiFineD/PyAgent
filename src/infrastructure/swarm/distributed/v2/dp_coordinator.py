@@ -37,17 +37,17 @@ class DPCoordinatorV2:
     Coordinates inference requests across multiple data-parallel (DP) ranks.
     Uses ZMQ for low-latency state distribution and wave tracking.
     """
-    
+
     def __init__(self, port: int = 5555, is_master: bool = False):
         self.port = port
         self.is_master = is_master
         self.ctx = zmq.asyncio.Context()
         self.socket = self.ctx.socket(zmq.PUB if is_master else zmq.SUB)
-        
+
         self.current_wave = 0
         self.rank_stats: Dict[int, Any] = {}
         self.locality = LocalityManager()
-        
+
         if not is_master:
             self.socket.setsockopt(zmq.SUBSCRIBE, b"")
 
@@ -67,7 +67,7 @@ class DPCoordinatorV2:
         """
         if not self.is_master:
             return
-            
+
         self.current_wave += 1
         message = {
             "type": "NEW_WAVE",
@@ -84,7 +84,7 @@ class DPCoordinatorV2:
         """
         if not self.is_master:
             return
-            
+
         self.current_wave += 1
         message = {
             "type": "LOCALITY_WAVE",
@@ -100,7 +100,7 @@ class DPCoordinatorV2:
         """Receives a wave update or status message."""
         if self.is_master:
             return None
-            
+
         try:
             msg = await self.socket.recv_json()
             if msg.get("type") == "NEW_WAVE":
@@ -116,11 +116,11 @@ class DPCoordinatorV2:
         """
         if rc and hasattr(rc, "dp_stats_aggregate_rust"):
             return rc.dp_stats_aggregate_rust(self.rank_stats)
-            
+
         # Fallback basic aggregation
         if not self.rank_stats:
             return {}
-            
+
         avg_latency = sum(s.get("latency", 0) for s in self.rank_stats.values()) / len(self.rank_stats)
         return {
             "avg_latency": avg_latency,

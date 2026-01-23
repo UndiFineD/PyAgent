@@ -16,13 +16,14 @@
 """Centralized connectivity management with TTL-based status caching."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import json
 import logging
-import time
 import os
+import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -31,19 +32,20 @@ class ConnectivityManager:
     """Manages connection status for external APIs with persistent 15-minute TTL caching."""
 
     _instance = None
+    _initialized = False
 
-    def __new__(cls, *args, **kwargs) -> ConnectivityManager:
+    def __new__(cls, *args: Any, **kwargs: Any) -> ConnectivityManager:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self, workspace_root: str | None = None) -> None:
         # Only init once if it's a singleton
-        if hasattr(self, "_initialized") and self._initialized:
+        if self._initialized:
             return
         self.workspace_root = Path(workspace_root) if workspace_root else None
         self._conn_status_file = (
-            self.workspace_root / "data/logs" / "connectivity_status.json"
+            self.workspace_root / "data" / "logs" / "connectivity_status.json"
             if self.workspace_root
             else None
         )
@@ -57,9 +59,10 @@ class ConnectivityManager:
         """Loads the connection status from disk."""
         if self._conn_status_file and self._conn_status_file.exists():
             try:
-                with open(self._conn_status_file) as f:
+                # pylint: disable=unspecified-encoding
+                with open(self._conn_status_file, "r") as f:
                     return json.load(f)
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 return {}
         return {}
 
@@ -69,10 +72,11 @@ class ConnectivityManager:
             try:
                 os.makedirs(self._conn_status_file.parent, exist_ok=True)
                 self._cache["__preferred__"] = self._preferred_cache
+                # pylint: disable=unspecified-encoding
                 with open(self._conn_status_file, "w") as f:
                     json.dump(self._cache, f)
-            except Exception as e:
-                logging.error(f"ConnectivityManager: Failed to save status: {e}")
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                logging.error("ConnectivityManager: Failed to save status: %s", e)
 
     def get_preferred_endpoint(self, group: str) -> str | None:
         """Returns the last known working endpoint for a group if within TTL."""
@@ -98,8 +102,10 @@ class ConnectivityManager:
 
             if elapsed < target_ttl:
                 if not is_working:
+                    retry_in = int(target_ttl - elapsed)
                     logging.debug(
-                        f"ConnectivityManager: Skipping '{endpoint_id}' (cached offline, retrying in {int(target_ttl - elapsed)}s)"
+                        "ConnectivityManager: Skipping '%s' (cached offline, retrying in %ds)",
+                        endpoint_id, retry_in
                     )
                 return is_working
         return True  # Default to True or if TTL expired
@@ -129,7 +135,8 @@ class ConnectivityManager:
 
         self._cache[endpoint_id] = status
         logging.debug(
-            f"ConnectivityManager: Endpoint '{endpoint_id}' TPS tracked: {status['last_tps']} (avg: {status['avg_tps']})"
+            "ConnectivityManager: Endpoint '%s' TPS tracked: %s (avg: %s)",
+            endpoint_id, status["last_tps"], status["avg_tps"]
         )
         self._save_status()
 
@@ -151,7 +158,7 @@ class ConnectivityManager:
         self.update_status(endpoint, online)
 
     def check_and_execute(
-        self, endpoint_id: str, func: callable, *args, **kwargs
+        self, endpoint_id: str, func: Callable[..., Any], *args: Any, **kwargs: Any
     ) -> Any:
         """Executes a function only if endpoint is available, updating status on failure."""
         if not self.is_endpoint_available(endpoint_id):
@@ -163,7 +170,8 @@ class ConnectivityManager:
             return result
         except Exception as e:
             logging.warning(
-                f"ConnectivityManager: Endpoint '{endpoint_id}' failed: {e}"
+                "ConnectivityManager: Endpoint '%s' failed: %s",
+                endpoint_id, e
             )
             self.update_status(endpoint_id, False)
             raise e

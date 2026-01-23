@@ -1,5 +1,20 @@
-# c:\DEV\PyAgent\src\core\base\ArchitectureMapper.py
-# Evolution Phase 236: Documentation Architecture - Mermaid C4 System Context Diagram
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+ArchitectureMapper: Auto-generates Mermaid C4 diagrams for the project.
+"""
 
 import os
 import logging
@@ -27,8 +42,8 @@ class ArchitectureMapper:
             "C4Context",
             "    title System Context diagram for PyAgent Fleet",
             "    ",
-            '    Person(dev, "Developer", "Lead Architect evolving the Swarm Intelligence.")',
-            '    Person(admin, "Administrator", "Manages deployments and fleet health.")',
+            '    Person(dev, "Developer", "Lead Architect of Swarm Intelligence.")',
+            '    Person(admin, "Administrator", "Manages deployments.")',
             "    ",
             '    Enterprise_Boundary(b0, "PyAgent Swarm") {',
             '        System(core, "Core Logic", "Versioning, Dependency Resolving, BLAKE3 Hashing.")',
@@ -111,7 +126,7 @@ This diagram provides a high-level overview of the PyAgent Fleet architecture, m
         with open(self.output_path, "w", encoding="utf-8") as f:
             f.write(md_content)
 
-        logger.info(f"Architecture map generated: {self.output_path}")
+        logger.info("Architecture map generated: %s", self.output_path)
 
 
 if __name__ == "__main__":

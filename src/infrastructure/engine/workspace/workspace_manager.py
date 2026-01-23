@@ -36,7 +36,7 @@ class WorkspaceManager:
     Manages Distributed Byte Objects (DBO) and synchronized memory workspaces.
     Part of Phase 52 Evolutionary Neuro-Optimization.
     """
-    
+
     _instance: Optional['WorkspaceManager'] = None
     _lock = threading.Lock()
 
@@ -50,18 +50,18 @@ class WorkspaceManager:
     def __init__(self, size_mb: int = 2048):
         if self._initialized:
             return
-            
+
         self.total_size = size_mb * 1024 * 1024
         self.allocated = 0
         self._workspaces: Dict[str, Any] = {}
         self._channels: Dict[int, Any] = {}
         self._magic_header = 0xDEADBEEF
         self.predictive = PredictiveWorkspace(self)
-        
+
         # Performance metrics
         self.last_sync_time = time.time()
         self.sync_jitters: List[float] = []
-        
+
         if rc and hasattr(rc, "workspace_init_rust"):
             try:
                 self._handle = rc.workspace_init_rust(self.total_size)
@@ -71,7 +71,7 @@ class WorkspaceManager:
                 self._handle = None
         else:
             self._handle = None
-            
+
         self._initialized = True
         logger.info(f"WorkspaceManager initialized with {size_mb}MB total capacity")
 
@@ -89,7 +89,7 @@ class WorkspaceManager:
         if self.allocated + size > self.total_size:
             logger.error(f"Workspace overflow: Attempted {size} bytes, {self.total_size - self.allocated} left")
             return None
-            
+
         self.predictive.record_allocation(size)
 
         if rc and self._handle and hasattr(rc, "workspace_alloc_rust"):
@@ -136,10 +136,10 @@ class WorkspaceManager:
         self.sync_jitters.append(jitter)
         if len(self.sync_jitters) > 120:
             self.sync_jitters.pop(0)
-            
+
         if rc and hasattr(rc, "workspace_sync_beat_rust"):
             rc.workspace_sync_beat_rust(self._handle)
-            
+
         self.last_sync_time = now
 
     def get_utilization(self) -> float:

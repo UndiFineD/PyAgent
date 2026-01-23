@@ -23,20 +23,20 @@ async def test_semantic_deduplication_join():
     mock_sim = MagicMock()
     # Simulate high similarity between slightly different strings
     mock_sim.compute_similarity = AsyncMock(return_value=0.99)
-    
+
     deduper = SwarmQueryDeduplicator(mock_sim, threshold=0.95)
 
     # 2. Register first query
     fut1 = await deduper.register_query("Explain quantum computing roughly", "task_001")
     assert fut1 is None # Should be new
-    
+
     # 3. Register second similar query
     fut2 = await deduper.register_query("Explain quantum computing please", "task_002")
     assert fut2 is not None # Should find task_001's future
-    
+
     # 4. Complete first and check second
     deduper.complete_query("task_001", "Quantum is cool.")
-    
+
     result = await fut2
     assert result == "Quantum is cool."
     print("\n[Phase 86] Deduplicator successfully joined two similar inflight queries.")
@@ -45,10 +45,10 @@ async def test_semantic_deduplication_join():
 async def test_exact_hash_cache():
     mock_sim = MagicMock()
     deduper = SwarmQueryDeduplicator(mock_sim)
-    
+
     await deduper.register_query("Hello", "t1")
     deduper.complete_query("t1", "Hi")
-    
+
     # Second registration for exact same string should return result directly (mocked in our logic to return result if cached)
     res = await deduper.register_query("Hello", "t2")
     assert res == "Hi"

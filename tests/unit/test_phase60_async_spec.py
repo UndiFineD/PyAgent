@@ -14,7 +14,7 @@ from src.core.base.common.models.communication_models import (
 async def test_async_pipeline_success_flow():
     # Mock orchestrator
     mock_orch = MagicMock()
-    
+
     # Mock outcome (accepted)
     outcome = VerificationOutcome(
         proposal_id="test",
@@ -24,16 +24,16 @@ async def test_async_pipeline_success_flow():
         correction_applied=False,
         verifier_id="target"
     )
-    
+
     mock_orch.execute_speculative_task = AsyncMock(return_value=outcome)
-    
+
     pipeline = SpeculativeAsyncPipeline(mock_orch)
-    
+
     tokens = []
     async for item in pipeline.generate_stream("test task", "draft", "target"):
         if isinstance(item, AsyncSpeculativeToken):
             tokens.append(item)
-            
+
     # Check that we received draft tokens followed by verified tokens
     assert any(t.is_draft for t in tokens)
     assert any(not t.is_draft for t in tokens)
@@ -42,7 +42,7 @@ async def test_async_pipeline_success_flow():
 @pytest.mark.asyncio
 async def test_async_pipeline_rollback_flow():
     mock_orch = MagicMock()
-    
+
     # Mock outcome (REJECTED)
     outcome = VerificationOutcome(
         proposal_id="test",
@@ -52,15 +52,15 @@ async def test_async_pipeline_rollback_flow():
         correction_applied=True,
         verifier_id="target"
     )
-    
+
     mock_orch.execute_speculative_task = AsyncMock(return_value=outcome)
-    
+
     pipeline = SpeculativeAsyncPipeline(mock_orch)
-    
+
     events = []
     async for item in pipeline.generate_stream("bad task", "draft", "target"):
         events.append(item)
-        
+
     # We should have received several draft tokens AND a PipelineCorrection
     assert any(isinstance(e, PipelineCorrection) for e in events)
     correction = next(e for e in events if isinstance(e, PipelineCorrection))

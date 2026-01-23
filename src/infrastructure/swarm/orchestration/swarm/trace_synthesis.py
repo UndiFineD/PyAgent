@@ -54,7 +54,7 @@ class SwarmTraceSynthesizer:
             if routing_data and fusion_data:
                 experts = routing_data.get("selected_experts", [])
                 quality = fusion_data.get("fusion_quality", 0.5)
-                
+
                 # Update domain-specific success
                 domain_success[domain].append(quality)
 

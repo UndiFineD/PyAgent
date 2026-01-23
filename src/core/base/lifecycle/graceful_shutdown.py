@@ -16,14 +16,15 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.models import ShutdownState
-from pathlib import Path
-from typing import Any, cast
 import json
 import logging
 import signal
 import time
+from pathlib import Path
+from typing import Any, cast
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.models import ShutdownState
 
 __version__ = VERSION
 
@@ -69,10 +70,10 @@ class GracefulShutdown:
             signal.signal(signal.SIGTERM, self._original_sigterm)
         logging.debug("Restored original signal handlers")
 
-    def _handle_signal(self, signum: int, frame: Any) -> None:
+    def _handle_signal(self, signum: int, _frame: Any) -> None:
         """Handle shutdown signal."""
         signal_name = signal.Signals(signum).name
-        logging.warning(f"Received {signal_name}, initiating graceful shutdown...")
+        logging.warning("Received %s, initiating graceful shutdown...", signal_name)
         self.state.shutdown_requested = True
         self._save_state()
 
@@ -121,8 +122,8 @@ class GracefulShutdown:
                 "start_time": self.state.start_time,
             }
             self.state_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:
-            logging.error(f"Failed to save shutdown state: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.error("Failed to save shutdown state: %s", e)
 
     def load_resume_state(self) -> ShutdownState | None:
         """Load state for resuming an interrupted run.
@@ -146,12 +147,12 @@ class GracefulShutdown:
                 start_time=data.get("start_time", time.time()),
             )
             logging.info(
-                f"Loaded resume state: {len(state.completed_files)} completed, "
-                f"{len(state.pending_files)} pending"
+                "Loaded resume state: %s completed, %s pending",
+                len(state.completed_files), len(state.pending_files)
             )
             return state
-        except Exception as e:
-            logging.warning(f"Failed to load resume state: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning("Failed to load resume state: %s", e)
             return None
 
     def cleanup(self) -> None:

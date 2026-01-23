@@ -37,12 +37,12 @@ class AsyncSchedulerV2:
     Advanced async scheduler emphasizing non-blocking execution and speculation.
     Part of Phase 54 Engine Evolution.
     """
-    
+
     def __init__(self, max_batched_tokens: int = 4096):
         self.max_batched_tokens = max_batched_tokens
         self.request_queue = RequestQueueV2()
         self.active_outputs: Dict[float, SchedulerOutput] = {}
-        
+
         # Performance tracking
         self.schedule_latency_ms: List[float] = []
 
@@ -51,12 +51,12 @@ class AsyncSchedulerV2:
         Performs an asynchronous scheduling step.
         """
         start_time = time.perf_counter()
-        
+
         output = SchedulerOutput(max_num_batched_tokens=self.max_batched_tokens)
-        
+
         # 1. Pop requests from queue
         requests = self.request_queue.pop_next_batch(self.max_batched_tokens)
-        
+
         # 2. Map to ScheduledSequence
         for req in requests:
             seq = ScheduledSequence(
@@ -68,7 +68,7 @@ class AsyncSchedulerV2:
                 priority=int(req.priority.value)
             )
             output.add_sequence(seq)
-            
+
         # 3. Apply Rust-accelerated updates if available
         if rc and hasattr(rc, "async_schedule_update_rust"):
             try:
@@ -81,12 +81,12 @@ class AsyncSchedulerV2:
         now = time.time()
         self.active_outputs = {k: v for k, v in self.active_outputs.items() if now - k < 60.0}
         self.active_outputs[now] = output
-        
+
         latency = (time.perf_counter() - start_time) * 1000.0
         self.schedule_latency_ms.append(latency)
         if len(self.schedule_latency_ms) > 100:
             self.schedule_latency_ms.pop(0)
-            
+
         return output
 
     def add_request(self, request: Any):
