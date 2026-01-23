@@ -20,20 +20,7 @@ and recovery strategy selection.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 from src.core.base.common import StabilityCore
-
-
-class SelfHealingCore(StabilityCore):
-    """Facade delegating to StabilityCore implementation."""
-=======
-from src.core.base.common import StabilityCore
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from src.core.base.common import StabilityCore
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 class SelfHealingCore(StabilityCore):
     """Facade delegating to StabilityCore implementation."""
