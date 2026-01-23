@@ -10,13 +10,10 @@ Modularized via the 'core_logic' subpackage to maintain <500 line limit.
 from __future__ import annotations
 import logging
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable
+from typing import Any, Dict, List, Tuple, Callable
 from src.core.base.common.models import (
     AgentConfig,
-    ResponseQuality,
-    AgentPriority,
     ConversationMessage,
-    EventType,
 )
 
 # Phase 317: Modularized Logic Mixins
@@ -36,6 +33,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+# pylint: disable=too-many-ancestors
 class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, EventCore):
     """Pure logic core for agent operations (Rust-convertible).
 
@@ -44,6 +42,7 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
 
     def __init__(self) -> None:
         """Initialize the core logic engine."""
+        super().__init__()
         self.context_pool: Dict[str, Any] = {}
 
     def fix_markdown_content(self, content: str) -> str:
@@ -113,14 +112,15 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
 
     def collect_tools(self, agent: Any) -> List[Tuple[Callable, str, int]]:
         """Scans agent for methods decorated with @as_tool (Logic only)."""
-        import inspect
+        import inspect  # pylint: disable=import-outside-toplevel
 
         collected = []
         for _, method in inspect.getmembers(agent, predicate=inspect.ismethod):
-            if hasattr(method, "_is_tool") and method._is_tool:
+            # Using getattr to avoid protected-access warnings for dynamic attributes
+            if getattr(method, "_is_tool", False):
                 category: str = agent.__class__.__name__.replace("Agent", "").lower()
                 if hasattr(method, "_tool_category"):
-                    category = method._tool_category
+                    category = getattr(method, "_tool_category")
                 priority: int = getattr(method, "_tool_priority", 0)
                 collected.append((method, category, priority))
         return collected

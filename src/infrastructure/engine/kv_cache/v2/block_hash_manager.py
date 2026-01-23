@@ -33,18 +33,18 @@ class BlockHashManager:
     Manages a registry of block hashes to enable deduplication and prefix caching.
     Supports high-speed hashing using Rust backend.
     """
-    
+
     def __init__(self):
         self.hash_to_block: Dict[str, int] = {}
         self.block_to_hash: Dict[int, str] = {}
-        
+
     def compute_hash(self, tokens: List[int]) -> str:
         """
         Computes a stable hash for a sequence of tokens.
         """
         if rc and hasattr(rc, "kv_block_hash_rust"):
             return rc.kv_block_hash_rust(tokens)
-            
+
         # Fallback: SHA256
         token_str = ",".join(map(str, tokens)).encode('utf-8')
         return hashlib.sha256(token_str).hexdigest()

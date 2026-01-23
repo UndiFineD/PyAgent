@@ -7,7 +7,7 @@ from src.core.base.common.routing_core import RoutingCore as StandardRoutingCore
 
 class RoutingEngine(StandardRoutingCore):
     """Facade for RoutingCore."""
-    
+
     def select_provider(self, task_type="general", priority="balanced", federated=False):
         """Legacy compatibility wrapper."""
         if federated:

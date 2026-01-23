@@ -36,7 +36,7 @@ class ArxivCore:
             max_results=max_results,
             sort_by=arxiv.SortCriterion.Relevance
         )
-        
+
         results = []
         try:
             for result in self.client.results(search):
@@ -51,7 +51,7 @@ class ArxivCore:
                 })
         except Exception as e:
             logging.error(f"Arxiv search error: {e}")
-            
+
         return results
 
     def download_paper(self, pdf_url: str, filename: str) -> Optional[Path]:
@@ -59,11 +59,11 @@ class ArxivCore:
         try:
             if not filename.endswith(".pdf"):
                 filename += ".pdf"
-            
+
             target_path = self.download_dir / filename
             response = requests.get(pdf_url, timeout=30)
             response.raise_for_status()
-            
+
             target_path.write_bytes(response.content)
             return target_path
         except Exception as e:
@@ -74,7 +74,7 @@ class ArxivCore:
         """Extract text content from a PDF file."""
         if not pdf_path.exists():
             return "File not found."
-            
+
         try:
             doc = fitz.open(str(pdf_path))
             text = ""
@@ -90,7 +90,7 @@ class ArxivCore:
         """Format search results into a readable summary block."""
         if not results:
             return "No papers found."
-            
+
         block = "### Arxiv Research Results\n\n"
         for i, res in enumerate(results, 1):
             block += f"{i}. **{res['title']}** ({res['published'][:10]})\n"

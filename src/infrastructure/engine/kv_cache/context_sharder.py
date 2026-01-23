@@ -45,7 +45,7 @@ class ContextShardManager:
     Manages distribution of long-context shards across the swarm.
     Prevents context replication bottleneck.
     """
-    
+
     def __init__(self, block_size: int = 1024, redundancy_factor: int = 1):
         self.block_size = block_size
         self.redundancy_factor = redundancy_factor
@@ -57,10 +57,10 @@ class ContextShardManager:
         self.dead_ranks.add(rank_id)
         logger.warning(f"Rank {rank_id} marked as DEAD. Triggering failover lookup.")
 
-    def shard_context(self, 
-                      context_id: str, 
-                      total_tokens: int, 
-                      available_ranks: List[int], 
+    def shard_context(self,
+                      context_id: str,
+                      total_tokens: int,
+                      available_ranks: List[int],
                       tenant_id: str = "default_tenant",
                       overlap: int = 0) -> List[ContextShard]:
         """
@@ -70,20 +70,20 @@ class ContextShardManager:
         """
         if not available_ranks:
             raise ValueError("No available ranks for context sharding.")
-            
+
         num_shards = (total_tokens + self.block_size - 1) // self.block_size
         shards = []
-        
+
         for i in range(num_shards):
             start = i * self.block_size
             # Subtract overlap from start for all except first shard
             actual_start = max(0, start - overlap) if i > 0 else start
             end = min(start + self.block_size, total_tokens)
-            
+
             # Round-robin assignment to ranks
             rank_idx = i % len(available_ranks)
             rank = available_ranks[rank_idx]
-            
+
             # Phase 75: Mirroring
             replicas = []
             if self.redundancy_factor > 1:
@@ -100,7 +100,7 @@ class ContextShardManager:
                 overlap_size=overlap if i > 0 else 0
             )
             shards.append(shard)
-            
+
         self.context_registry[context_id] = shards
         logger.info(f"Context {context_id} ({total_tokens} tokens) sharded into {num_shards} pieces across {len(available_ranks)} ranks.")
         return shards

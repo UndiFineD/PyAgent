@@ -49,14 +49,14 @@ class AdaptiveSwarmCompressor:
             return # Normal operation
 
         stats = {"scaled_down": 0}
-        
+
         for context_id, shards in self.shard_manager.context_registry.items():
             for shard in shards:
                 if not shard.is_cached:
                     continue
-                    
+
                 current_bits = self.bit_depth_map.get(shard.precision, 16)
-                
+
                 # Extreme pressure: Force INT2
                 if vram_pressure > 0.9 and current_bits > 2:
                     shard.precision = "int2"
@@ -69,10 +69,10 @@ class AdaptiveSwarmCompressor:
                 elif vram_pressure > 0.5 and current_bits > 8:
                     shard.precision = "fp8"
                     stats["scaled_down"] += 1
-                    
+
         if stats["scaled_down"] > 0:
             logger.warning(f"MemPressure: Dynamically scaled {stats['scaled_down']} shards due to {vram_pressure*100:.1f}% load.")
-        
+
         return stats
 
     async def run_optimization_cycle(self) -> Dict[str, Any]:
@@ -88,7 +88,7 @@ class AdaptiveSwarmCompressor:
         for context_id, shards in self.shard_manager.context_registry.items():
             for shard in shards:
                 idle_time = now - shard.last_access
-                
+
                 if idle_time > self.idle_threshold_sec:
                     # Cold: Evict or Max Compression
                     if shard.is_cached:
@@ -104,7 +104,7 @@ class AdaptiveSwarmCompressor:
                 else:
                     # Active
                     stats["kept"] += 1
-                    
+
         return stats
 
     def touch_shard(self, context_id: str, token_index: int):

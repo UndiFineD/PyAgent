@@ -1,30 +1,57 @@
 #!/usr/bin/env python3
-# Orchestration Mixin for BaseAgent
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Orchestration Mixin for BaseAgent."""
+
+import asyncio
+import logging
+import sys
+from pathlib import Path
 from typing import Any
+
 
 class OrchestrationMixin:
     """Handles registry, tools, strategies, and distributed logging."""
 
-    def __init__(self, **kwargs: Any) -> None:
+    def __init__(self, **_kwargs: Any) -> None:
         self.fleet: Any = None
         self._strategy: Any = None
 
         try:
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+            # pylint: disable=import-outside-toplevel
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import (
+                SignalRegistry,
+            )
             self.registry = SignalRegistry()
         except (ImportError, ValueError):
             self.registry = None
 
         try:
-            from src.infrastructure.swarm.orchestration.system.tool_registry import ToolRegistry
+            # pylint: disable=import-outside-toplevel
+            from src.infrastructure.swarm.orchestration.system.tool_registry import (
+                ToolRegistry,
+            )
             self.tool_registry = ToolRegistry()
         except (ImportError, ValueError):
             self.tool_registry = None
 
     @property
     def strategy(self) -> Any:
+        """Access the execution strategy."""
         if not hasattr(self, "_strategy") or self._strategy is None:
             try:
+                # pylint: disable=import-outside-toplevel
                 from src.logic.strategies.direct_strategy import DirectStrategy
                 self._strategy = DirectStrategy()
             except (ImportError, ModuleNotFoundError):
@@ -33,6 +60,7 @@ class OrchestrationMixin:
 
     @strategy.setter
     def strategy(self, value: Any) -> None:
+        """Set the execution strategy."""
         self._strategy = value
 
     def set_strategy(self, strategy: Any) -> None:
@@ -40,19 +68,19 @@ class OrchestrationMixin:
         self._strategy = strategy
 
     def register_tools(self, registry: Any) -> None:
+        """Register agent tools with a registry."""
         if not registry:
             return
         # Assumes agent_logic_core and __class__ are available
         if hasattr(self, "agent_logic_core"):
-            for method, cat, prio in self.agent_logic_core.collect_tools(self):
+            for method, cat, prio in getattr(self, "agent_logic_core").collect_tools(self):
                 registry.register_tool(self.__class__.__name__, method, cat, prio)
 
     def log_distributed(self, level: str, message: str, **kwargs: Any) -> None:
         """Publishes a log to the distributed logging system."""
-        if hasattr(self, "fleet") and self.fleet:
-            logging_agent = self.fleet.agents.get("Logging")
+        if hasattr(self, "fleet") and getattr(self, "fleet"):
+            logging_agent = getattr(self, "fleet").agents.get("Logging")
             if logging_agent:
-                import asyncio
                 try:
                     loop = asyncio.get_running_loop()
                     loop.create_task(
@@ -70,33 +98,34 @@ class OrchestrationMixin:
     async def run_subagent(
         self, description: str, prompt: str, original_content: str = ""
     ) -> str:
+        """Run a subagent to handle a task."""
         if hasattr(self, "quotas"):
-            exceeded, reason = self.quotas.check_quotas()
+            exceeded, reason = getattr(self, "quotas").check_quotas()
             if exceeded:
+                # pylint: disable=import-outside-toplevel
                 from src.core.base.common.base_exceptions import CycleInterrupt
                 raise CycleInterrupt(reason)
 
         try:
+            # pylint: disable=import-outside-toplevel
             from src.infrastructure.compute.backend import execution_engine as ab
         except ImportError:
-            import sys
-            from pathlib import Path
             sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+            # pylint: disable=import-outside-toplevel
             from src.infrastructure.compute.backend import execution_engine as ab
 
-        import asyncio
         result: str | None = await asyncio.to_thread(
             ab.run_subagent, description, prompt, original_content
         )
 
         if hasattr(self, "quotas") and result:
-             self.quotas.update_usage(len(prompt) // 4, len(result) // 4)
+            getattr(self, "quotas").update_usage(len(prompt) // 4, len(result) // 4)
 
         if result is None:
             if original_content:
                 return original_content
             if hasattr(self, "_get_fallback_response"):
-                return self._get_fallback_response()
+                return getattr(self, "_get_fallback_response")()
             return original_content
         return result
 
@@ -104,10 +133,9 @@ class OrchestrationMixin:
         """Improve content using a subagent (respected strategy if set)."""
         actual_path = None
         if target_file:
-            from pathlib import Path
             actual_path = Path(target_file)
         elif hasattr(self, "file_path"):
-            actual_path = self.file_path
+            actual_path = getattr(self, "file_path")
 
         description = (
             f"Improve {actual_path.name}"
@@ -121,8 +149,8 @@ class OrchestrationMixin:
 
             async def backend_call(
                 p: str,
-                sp: str | None = None,
-                h: list[dict[str, str]] | None = None,
+                _sp: str | None = None,
+                _h: list[dict[str, str]] | None = None,
             ) -> str:
                 # We ignore sp and h for now as run_subagent doesn't support them yet
                 # but they could be injected into the prompt if needed.
@@ -139,7 +167,9 @@ class OrchestrationMixin:
 
     @staticmethod
     def get_backend_status() -> dict[str, Any]:
+        """Get the status of the execution backend."""
         try:
+            # pylint: disable=import-outside-toplevel
             from src.infrastructure import backend as ab
         except ImportError:
             return {}
@@ -147,7 +177,9 @@ class OrchestrationMixin:
 
     @staticmethod
     def describe_backends() -> str:
+        """Return a description of available backends."""
         try:
+            # pylint: disable=import-outside-toplevel
             from src.infrastructure import backend as ab
         except ImportError:
             return "Backends unavailable"
@@ -158,18 +190,15 @@ class OrchestrationMixin:
         Synaptic Delegation: Hands off a sub-task to a specialized agent.
         Supports both fleet-managed agents and dynamic on-demand instantiation.
         """
-        import logging
-        from pathlib import Path
-        import asyncio
-
-        logging.info(f"[{self.__class__.__name__}] Delegating task to {agent_type} (Target: {target_file})")
+        logging.info("[%s] Delegating task to %s (Target: %s)",
+                     self.__class__.__name__, agent_type, target_file)
 
         # 1. Attempt delegation via Fleet Manager (if attached)
-        if hasattr(self, "fleet") and self.fleet:
+        if hasattr(self, "fleet") and getattr(self, "fleet"):
             try:
                 # FleetManager.agents is a LazyAgentMap
-                if agent_type in self.fleet.agents:
-                    sub_agent = self.fleet.agents[agent_type]
+                if agent_type in getattr(self, "fleet").agents:
+                    sub_agent = getattr(self, "fleet").agents[agent_type]
 
                     # Log the delegation event
                     self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
@@ -179,15 +208,18 @@ class OrchestrationMixin:
                     if asyncio.iscoroutine(res):
                         return await res
                     return res
-            except Exception as e:
-                logging.warning(f"Fleet delegation failed for {agent_type}: {e}")
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                logging.warning("Fleet delegation failed for %s: %s", agent_type, e)
 
         # 2. Dynamic Import Fallback (via AgentRegistry)
         try:
+            # pylint: disable=import-outside-toplevel
             from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
+            # pylint: disable=import-outside-toplevel
             from src.core.base.lifecycle.agent_core import BaseCore
 
-            ws_root = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
+            ws_root = (getattr(self, "_workspace_root", None) or
+                       Path(BaseCore.detect_workspace_root(Path.cwd())))
 
             # Use the registry to get the agent map
             agent_map = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))
@@ -203,8 +235,8 @@ class OrchestrationMixin:
                     return await res
                 return res
 
-        except Exception as e:
-            logging.error(f"Registry delegation failed for {agent_type}: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.error("Registry delegation failed for %s: %s", agent_type, e)
             return f"Error: Registry lookup of {agent_type} failed. {str(e)}"
 
         return f"Error: Agent {agent_type} not found in system catalogs."

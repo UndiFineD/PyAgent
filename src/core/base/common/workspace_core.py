@@ -1,12 +1,24 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Unified workspace and path management core."""
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-import os
+"""
+Unified workspace and path management core.
+"""
+
 import logging
 from pathlib import Path
 from typing import Set, Dict, Optional, Union, List
-import time
 
 try:
     import rust_core as rc
@@ -20,17 +32,20 @@ class WorkspaceCore:
     _instance: Optional['WorkspaceCore'] = None
     _ignore_cache: Dict[str, Set[str]] = {}
     _ignore_cache_time: Dict[str, float] = {}
+    _initialized: bool = False
 
     def __new__(cls, root_dir: Optional[Union[str, Path]] = None):
+        """Singleton pattern for workspace core."""
         if cls._instance is None:
             cls._instance = super(WorkspaceCore, cls).__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
     def __init__(self, root_dir: Optional[Union[str, Path]] = None):
+        """Initialize the workspace root and logger."""
         if self._initialized:
             return
-            
+
         if root_dir:
             self.root_dir = Path(root_dir)
         else:
@@ -38,10 +53,14 @@ class WorkspaceCore:
             curr = Path.cwd()
             self.root_dir = curr
             for parent in [curr] + list(curr.parents):
-                if (parent / ".git").exists() or (parent / "pyproject.toml").exists() or (parent / "requirements.txt").exists():
+                if (
+                    (parent / ".git").exists() or
+                    (parent / "pyproject.toml").exists() or
+                    (parent / "requirements.txt").exists()
+                ):
                     self.root_dir = parent
                     break
-            
+
         self.logger = logging.getLogger("pyagent.workspace")
         self._initialized = True
 
@@ -70,12 +89,12 @@ class WorkspaceCore:
             except ValueError:
                 # Not in workspace, can't be ignored by workspace rules
                 return False
-                
+
         patterns = self.get_ignore_patterns()
         # Basic glob matching for simplicity in this core
         # In a real scenario, we might use a library like 'pathspec'
         path_str = str(path).replace("\\", "/")
-        
+
         for pattern in patterns:
             if pattern.endswith("/") and path_str.startswith(pattern.rstrip("/")):
                 return True
@@ -91,12 +110,12 @@ class WorkspaceCore:
         if not ignore_path.exists():
             return set()
 
-        if rc and hasattr(rc, "parse_codeignore_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "parse_codeignore_rust"):
             try:
-                patterns = rc.parse_codeignore_rust(str(ignore_path)) # type: ignore
+                patterns = rc.parse_codeignore_rust(str(ignore_path))  # pylint: disable=no-member
                 return set(patterns)
-            except Exception as e: # pylint: disable=broad-exception-caught
-                self.logger.warning(f"Rust ignore parsing failed: {e}")
+            except Exception as err:  # pylint: disable=broad-exception-caught
+                self.logger.warning("Rust ignore parsing failed: %s", err)
 
         try:
             mtime = ignore_path.stat().st_mtime
@@ -109,13 +128,13 @@ class WorkspaceCore:
                 for line in content.split("\n")
                 if line.strip() and not line.strip().startswith("#")
             }
-            
+
             self._ignore_cache[cache_key] = patterns
             self._ignore_cache_time[cache_key] = mtime
             return patterns
-            
-        except Exception as e: # pylint: disable=broad-exception-caught
-            self.logger.warning(f"Failed to read .codeignore: {e}")
+
+        except Exception as err:  # pylint: disable=broad-exception-caught
+            self.logger.warning("Failed to read .codeignore: %s", err)
             return set()
 
     def list_files(self, relative_path: str = ".", pattern: str = "*") -> List[Path]:
@@ -123,7 +142,7 @@ class WorkspaceCore:
         target_dir = self.root_dir / relative_path
         if not target_dir.exists():
             return []
-            
+
         files = []
         for file in target_dir.rglob(pattern):
             if not self.is_ignored(file):

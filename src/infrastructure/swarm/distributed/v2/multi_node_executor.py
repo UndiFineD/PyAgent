@@ -14,7 +14,7 @@
 
 """
 Multi-Node Executor for Phase 55.
-Handles cross-node communication and execution management for Tensor Parallel (TP) 
+Handles cross-node communication and execution management for Tensor Parallel (TP)
 across physical machine boundaries.
 """
 
@@ -34,13 +34,13 @@ class MultiNodeExecutor:
     Manages execution across multiple nodes.
     Interfaces with NCCL or custom high-speed interconnects.
     """
-    
+
     def __init__(self, node_id: int, total_nodes: int):
         self.node_id = node_id
         self.total_nodes = total_nodes
         self.hostname = socket.gethostname()
         self.ip = socket.gethostbyname(self.hostname)
-        
+
         logger.info(f"MultiNodeExecutor initialized on Node {node_id}/{total_nodes} ({self.ip})")
 
     def coordinate_tp_split(self, tensor_shape: tuple) -> Dict[int, tuple]:
@@ -50,17 +50,17 @@ class MultiNodeExecutor:
         """
         if rc and hasattr(rc, "multi_node_coordinate_rust"):
             return rc.multi_node_coordinate_rust(self.node_id, self.total_nodes, tensor_shape)
-            
+
         # Fallback: simple uniform split on final dimension
         last_dim = tensor_shape[-1]
         chunk = last_dim // self.total_nodes
-        
+
         splits = {}
         for i in range(self.total_nodes):
             start = i * chunk
             end = start + chunk if i != self.total_nodes - 1 else last_dim
             splits[i] = tensor_shape[:-1] + (end - start,)
-            
+
         return splits
 
     def sync_global_metadata(self, metadata: Dict[str, Any]):

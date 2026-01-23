@@ -3,8 +3,14 @@ Manager for git operations.
 (Facade for src.core.base.common.git_core)
 """
 
-from src.core.base.common.git_core import GitCore as AgentGitHandler
+import logging
+from pathlib import Path
+from typing import Any
+from ..git_core import GitCore as AgentGitHandlerBase
+from ..shell_core import ShellCore
 
+class AgentGitHandler:
+    """Facade for Git operations with recording support."""
     def __init__(
         self, repo_root: Path, no_git: bool = False, recorder: Any = None
     ) -> None:
@@ -38,16 +44,16 @@ from src.core.base.common.git_core import GitCore as AgentGitHandler
             # Check if there are changes to commit
             res = self.shell.execute(["git", "status", "--porcelain"])
             status = res.stdout.strip()
-            
+
             if not status:
                 logging.info("No changes to commit.")
                 return
 
             res = self.shell.execute(["git", "commit", "-m", message], check=True)
-            logging.info(f"Successfully committed changes: {message}")
+            logging.info("Successfully committed changes: %s", message)
             self._record(f"commit: {message}", "success", {"files": files})
-        except Exception as e:
-            logging.error(f"Error during git commit: {e}")
+        except Exception as e: # pylint: disable=broad-exception-caught
+            logging.error("Error during git commit: %s", e)
             self._record(f"commit: {message}", f"error: {str(e)}")
 
     def create_branch(self, branch_name: str) -> bool:

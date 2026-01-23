@@ -12,14 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 """
 Standardized Base for all stateful Managers in the swarm.
 Inherits from BaseCore for lifecycle and I/O.
 """
 
-from __future__ import annotations
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from .base_core import BaseCore
 
 class BaseManager(BaseCore):
@@ -27,8 +30,8 @@ class BaseManager(BaseCore):
     Standard implementation for stateful Managers.
     Provides a dictionary-based state cache and standard operations.
     """
-    
-    def __init__(self, name: str | None = None) -> None:
+
+    def __init__(self, name: Optional[str] = None) -> None:
         super().__init__()
         self._name = name or self.__class__.__name__
         self._state: Dict[str, Any] = {}
@@ -37,7 +40,7 @@ class BaseManager(BaseCore):
     def set_state(self, key: str, value: Any) -> None:
         """Set a state value in the manager's cache."""
         self._state[key] = value
-        self._logger.debug(f"State set: {key} = {value}")
+        self._logger.debug("State set: %s = %s", key, value)
 
     def get_state(self, key: str, default: Any = None) -> Any:
         """Retrieve a state value from the manager's cache."""

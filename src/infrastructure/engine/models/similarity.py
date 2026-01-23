@@ -32,7 +32,7 @@ class EmbeddingSimilarityService:
     """
     Handles similarity calculations for speculative verification.
     """
-    
+
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
         self.model_name = model_name
         self._cache: dict[str, np.ndarray] = {}
@@ -44,14 +44,14 @@ class EmbeddingSimilarityService:
         """
         if text in self._cache:
             return self._cache[text]
-            
+
         # Simulation: Generate a pseudo-random embedding based on text hash
         # In real scenario, this would call a model.
         np.random.seed(hash(text) % (2**32))
         embedding = np.random.randn(384).astype(np.float32)
         # Normalize
         embedding /= np.linalg.norm(embedding)
-        
+
         self._cache[text] = embedding
         return embedding
 
@@ -61,10 +61,10 @@ class EmbeddingSimilarityService:
         """
         emb1 = await self.get_embedding(text1)
         emb2 = await self.get_embedding(text2)
-        
+
         if rc and hasattr(rc, "cosine_similarity_rust"):
             return rc.cosine_similarity_rust(emb1, emb2)
-            
+
         # Python fallback
         return float(np.dot(emb1, emb2))
 

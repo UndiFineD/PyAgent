@@ -20,16 +20,15 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import time
 from pathlib import Path
 from typing import Dict, Optional, Any
 from .base_core import BaseCore
-import time
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
-
 
 class CacheCore(BaseCore):
     """
@@ -48,15 +47,18 @@ class CacheCore(BaseCore):
     def _get_cache_key(self, content: str) -> str:
         if rc and hasattr(rc, "fast_cache_key_rust"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.fast_cache_key_rust(content) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
         return hashlib.md5(content.encode()).hexdigest()
 
     def _make_complex_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
+        """Constructs a unique cache key from multiple dimensions."""
         return f"{file_path}:{agent_name}:{content_hash}"
 
     def set(self, prompt: str, response: Any, ttl_seconds: int = 3600) -> None:
+        """Stores a result in memory and disk cache."""
         key = self._get_cache_key(prompt)
         self.cache_data[key] = {
             "result": response,
@@ -77,18 +79,19 @@ class CacheCore(BaseCore):
                 "ttl": ttl_seconds
             }))
         except Exception as e: # pylint: disable=broad-exception-caught
-            self.logger.error(f"Failed to write cache file: {e}")
+            self.logger.error("Failed to write cache file: %s", e)
 
     def get(self, prompt: str) -> Optional[Any]:
+        """Retrieves a cached result if available and not expired."""
         key = self._get_cache_key(prompt)
-        
+
         # Check memory cache
         if key in self.cache_data:
             cached = self.cache_data[key]
             if time.time() - cached["timestamp"] < cached["ttl"]:
                 return cached["result"]
-            else:
-                del self.cache_data[key]
+
+            del self.cache_data[key]
 
         # Check disk cache
         cache_file = self.cache_dir / f"{key}.json"

@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class FederatedMetaOptimizer:
     """
     Swarm-wide autonomous hyperparameter tuner (Phase 90).
-    Adjusts dynamic bit-scaling, migration thresholds, and distillation ratios 
+    Adjusts dynamic bit-scaling, migration thresholds, and distillation ratios
     to maximize fleet-wide throughput vs. accuracy (Pareto optimization).
     """
 
@@ -35,15 +35,15 @@ class FederatedMetaOptimizer:
         Analyzes recent telemetry and nudges hyperparameters toward better efficiency.
         """
         metrics = self.telemetry.get_grid_metrics()
-        
+
         # 1. Check Latency vs. Throughput
         p99_latency = metrics.get("p99_latency_ms", 500)
         avg_vram_util = metrics.get("avg_vram_util", 0.5)
-        
+
         # Goal: Keep latency < 400ms while keeping VRAM < 80%
-        
+
         updates = {}
-        
+
         # Nudge bit-scaling: If VRAM is too high, increase compression
         if avg_vram_util > 0.8:
             new_target = min(0.9, self.config.get("distillation_ratio", 0.5) + 0.05)
@@ -60,7 +60,7 @@ class FederatedMetaOptimizer:
         # Apply updates
         self.config.update(updates)
         self.history.append({"metrics": metrics, "updates": updates})
-        
+
         return updates
 
     def get_optimized_config(self) -> Dict[str, Any]:

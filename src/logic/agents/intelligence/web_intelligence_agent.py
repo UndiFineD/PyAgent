@@ -66,13 +66,13 @@ class WebIntelligenceAgent(BaseAgent):
         path = self.arxiv_core.download_paper(pdf_url, filename)
         if not path:
             return "Failed to download paper."
-        
+
         text = self.arxiv_core.extract_text(path)
         # Scan for safety
         injections = self.security_guard.scan_for_injection(text)
         if injections:
             return f"ERROR: Content blocked for safety: {', '.join(injections)}"
-            
+
         return text
 
     @as_tool

@@ -27,7 +27,7 @@ class SwarmConsensus:
     Manages replicated state across the swarm.
     Prevents configuration drift in large fleets.
     """
-    
+
     def __init__(self, node_id: str, peers: List[str]):
         self.node_id = node_id
         self.peers = peers
@@ -42,7 +42,7 @@ class SwarmConsensus:
         if not self.is_leader:
             # In a real Raft, we'd forward to leader. Here we simulate leadership for the test.
             logger.debug(f"Node {self.node_id} proposing change as candidate leader.")
-            self.is_leader = True 
+            self.is_leader = True
 
         new_entry = LogEntry(
             index=len(self.log),
@@ -50,13 +50,13 @@ class SwarmConsensus:
             command={"key": key, "val": value}
         )
         self.log.append(new_entry)
-        
+
         # Simulate replication to peers
         success_count = 1
         for peer in self.peers:
             if await self._replicate_to_peer(peer, new_entry):
                 success_count += 1
-                
+
         if success_count > (len(self.peers) + 1) / 2:
             self._commit_entry(new_entry)
             return True

@@ -25,4 +25,3 @@ class ResilienceCore(StandardResilienceCore):
     Facade for StandardResilienceCore to maintain backward compatibility.
     Resilience logic is now centralized in the Infrastructure/Common tier.
     """
-    pass

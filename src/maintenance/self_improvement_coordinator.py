@@ -145,11 +145,11 @@ class SelfImprovementCoordinator:
         Workflow: Find -> Summarize -> Map to Logic -> Implement -> Test -> documentation sync.
         """
         self.logger.info("Initiating Phase 51 Research Synthesis Loop...")
-        
+
         # 1. Identify targets from strategic context
         await self.load_strategic_context()
         topics = [p.split(":", 1)[1].strip() for p in self.directives["fixed_prompts"] if p.lower().startswith("research:")]
-        
+
         if not topics:
             self.logger.info("No explicit research topics found. Checking for general multimodal cues.")
             if any("multimodal" in p.lower() for p in self.directives["fixed_prompts"]):
@@ -181,11 +181,11 @@ class SelfImprovementCoordinator:
         Integrates with BudgetManager for cost control.
         """
         self.logger.info("Initiating Cloud Orchestration Loop...")
-        
+
         # 1. Discover nodes
         nodes = await self.discover_external_servers()
         active_peers = [n for n in nodes if n["status"] in ["online", "connected", "available"]]
-        
+
         if not active_peers:
             self.logger.info("No active cloud or LAN peers found for offloading.")
             return

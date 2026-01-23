@@ -33,13 +33,13 @@ class BufferRecycler:
     Manages pools of reusable buffers categorized by size-classes.
     Essential for high-frequency 120fps streaming operations.
     """
-    
+
     def __init__(self, size_classes: Optional[List[int]] = None):
         # Default size classes: 4KB, 64KB, 1MB, 16MB
         self.size_classes = size_classes or [4096, 65536, 1048576, 16777216]
         self._pools: Dict[int, collections.deque] = {sc: collections.deque() for sc in self.size_classes}
         self._active_refs: Dict[id, int] = {}
-        
+
         logger.info(f"BufferRecycler initialized with {len(self.size_classes)} size classes")
 
     def acquire(self, required_size: int) -> bytearray:
@@ -49,7 +49,7 @@ class BufferRecycler:
         """
         # Find smallest size class that fits
         target_size = next((sc for sc in self.size_classes if sc >= required_size), required_size)
-        
+
         if rc and hasattr(rc, "buffer_recycle_acquire_rust"):
             try:
                 buf = rc.buffer_recycle_acquire_rust(target_size)
@@ -60,7 +60,7 @@ class BufferRecycler:
         pool = self._pools.get(target_size)
         if pool and len(pool) > 0:
             return pool.popleft()
-            
+
         return bytearray(target_size)
 
     def release(self, buffer: bytearray):

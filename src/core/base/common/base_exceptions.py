@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Standard exception types for the PyAgent base framework."""
+
 from __future__ import annotations
 
 

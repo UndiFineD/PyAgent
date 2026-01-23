@@ -21,12 +21,12 @@ def test_heterogeneous_pairing():
     # 1. Setup Gatekeeper with different hardware experts
     mock_sim = MagicMock() # Not used for pairing logic
     gatekeeper = MoEGatekeeper(mock_sim)
-    
+
     # Fast Drafter (FP8)
     e_fast = ExpertProfile(agent_id="ex_fast", domains=["coding"], acceleration_type="fp8_bitnet")
     # Accurate Verifier (Standard)
     e_slow = ExpertProfile(agent_id="ex_slow", domains=["coding"], acceleration_type="standard")
-    
+
     # Irrelevant agent (wrong domain)
     e_other = ExpertProfile(agent_id="ex_other", domains=["marketing"], acceleration_type="fp8_bitnet")
 

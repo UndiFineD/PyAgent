@@ -48,9 +48,9 @@ class WeightedExpertFusion:
         self.audit_logger = audit_logger
 
     async def fuse_outputs(
-        self, 
-        outputs: List[str], 
-        weights: List[float], 
+        self,
+        outputs: List[str],
+        weights: List[float],
         expert_ids: List[str],
         mode: str = "weighted_plurality",
         task_id: Optional[str] = None
@@ -89,9 +89,9 @@ class WeightedExpertFusion:
         return result
 
     async def _weighted_plurality(
-        self, 
-        outputs: List[str], 
-        weights: List[float], 
+        self,
+        outputs: List[str],
+        weights: List[float],
         expert_ids: List[str]
     ) -> FusionResult:
         """
@@ -100,11 +100,11 @@ class WeightedExpertFusion:
         scores = {}
         for out, weight in zip(outputs, weights):
             scores[out] = scores.get(out, 0.0) + weight
-            
+
         best_output = max(scores, key=scores.get)
         total_weight = sum(weights)
         consensus_score = scores[best_output] / total_weight if total_weight > 0 else 0
-        
+
         return FusionResult(
             merged_content=best_output,
             consensus_score=consensus_score,
@@ -113,9 +113,9 @@ class WeightedExpertFusion:
         )
 
     async def _semantic_consensus(
-        self, 
-        outputs: List[str], 
-        weights: List[float], 
+        self,
+        outputs: List[str],
+        weights: List[float],
         expert_ids: List[str]
     ) -> FusionResult:
         """
@@ -125,16 +125,16 @@ class WeightedExpertFusion:
         if not self.similarity_service:
             # Fallback to weighted plurality if no similarity service
             return await self._weighted_plurality(outputs, weights, expert_ids)
-            
+
         # Calculate similarity matrix (Simplified for Phase 62)
         mean_scores = []
         for i, anchor in enumerate(outputs):
             sims = await self.similarity_service.batch_similarity(anchor, outputs)
             weighted_sim = sum(s * w for s, w in zip(sims, weights))
             mean_scores.append(weighted_sim)
-            
+
         best_idx = int(np.argmax(mean_scores))
-        
+
         return FusionResult(
             merged_content=outputs[best_idx],
             consensus_score=float(mean_scores[best_idx]),

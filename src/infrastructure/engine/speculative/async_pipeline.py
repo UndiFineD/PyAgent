@@ -32,48 +32,48 @@ class SpeculativeAsyncPipeline:
     Manages hybrid token generation streaming.
     Utilizes speculative swarm to 'guess' next tokens and correct them asynchronously.
     """
-    
+
     def __init__(self, orchestrator: Any):
         self.orchestrator = orchestrator
         self.stream_history: List[str] = []
 
     async def generate_stream(
-        self, 
-        task: str, 
-        draft_agent: str, 
+        self,
+        task: str,
+        draft_agent: str,
         target_agent: str
     ) -> AsyncGenerator[Union[AsyncSpeculativeToken, PipelineCorrection], None]:
         """
         Main entry point for speculative async streaming.
         """
         self.stream_history = []
-        
+
         # 1. Trigger the speculative orchestrator
         # In a real async engine, we'd start the draft and yield its chunks as they arrive.
         # Here we simulate the hybrid flow.
-        
+
         logger.info(f"Pipeline: Starting speculative stream for {task}")
-        
+
         # Start drafting
         draft_task = asyncio.create_task(self.orchestrator.execute_speculative_task(
             task, draft_agent, target_agent
         ))
-        
+
         # Simulate 'optimistic' yielding of a draft prefix if available immediately
         # (Usually from a fast look-up or small model)
         draft_chunks = ["Sure, ", "here ", "is ", "the ", "answer: "]
         for i, chunk in enumerate(draft_chunks):
             self.stream_history.append(chunk)
             yield AsyncSpeculativeToken(
-                token=chunk, 
-                is_draft=True, 
+                token=chunk,
+                is_draft=True,
                 sequence_index=i
             )
             await asyncio.sleep(0.01) # Low latency simulation
-            
+
         # 2. Wait for orchestrator verification result
         outcome = await draft_task
-        
+
         if outcome.accepted:
             # Continue streaming the remainder of the verified content
             # We skip the prefix we already optimistically sent
@@ -91,7 +91,7 @@ class SpeculativeAsyncPipeline:
         else:
             # 3. Handle Rollback
             logger.warning(f"Pipeline: Speculative mismatch detected. Issuing rollback.")
-            
+
             # Simple logic: rollback everything and send the correct content
             # In production, we'd rollback only the divergent tokens.
             correction = PipelineCorrection(
@@ -99,10 +99,10 @@ class SpeculativeAsyncPipeline:
                 correct_tokens=outcome.final_content.split(" ")
             )
             yield correction
-            
+
             # Update history
             self.stream_history = correction.correct_tokens
-            
+
     def get_latency_report(self) -> Dict[str, Any]:
         """Calculates 'Perceptual Latency' vs 'Standard Latency'."""
         # Simulation

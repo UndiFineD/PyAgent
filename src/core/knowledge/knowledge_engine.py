@@ -102,21 +102,21 @@ class KnowledgeEngine:
             return self.graph.store(
                 content, kwargs.get("target"), kwargs.get("relationship", "related_to")
             )
-        
+
         # General store via MemoryCore if mode is generic
         return self._memory_core.store_knowledge(self.agent_id, key, content, mode)
 
     def query(self, query: Any, mode: str = "vector", limit: int = 5) -> list[Any]:
         """Query knowledge using specialized or generic mechanisms."""
         self.pruning.log_access(str(query))
-        
+
         if mode == "vector":
             return self.vector.retrieve(query, limit)
         elif mode == "btree":
             return self.btree.retrieve(query, limit)
         elif mode == "graph":
             return self.graph.retrieve(query, limit)
-            
+
         # Fallback to general MemoryCore retrieval
         return self._memory_core.retrieve_knowledge(self.agent_id, str(query), mode, limit)
 
@@ -128,5 +128,5 @@ class KnowledgeEngine:
             return self.btree.delete(key)
         elif mode == "graph":
             return self.graph.delete(key)
-        
+
         return self._memory_core.delete_knowledge(self.agent_id, key, mode)

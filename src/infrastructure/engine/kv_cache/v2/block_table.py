@@ -34,17 +34,17 @@ class BlockTableV2:
     Manages physical block mappings for PagedAttention with hybrid block size support.
     Integrates with context parallelism and prefix caching.
     """
-    
+
     def __init__(self, num_blocks: int, block_size: int = 16):
         self.num_blocks = num_blocks
         self.block_size = block_size  # Default block size
         self.free_blocks = deque(range(num_blocks))
         self.mapping: Dict[int, List[int]] = {}  # seq_id -> list of physical blocks
         self.ref_counts = np.zeros(num_blocks, dtype=np.int32)
-        
+
         # Phase 53: Hybrid support
         self.block_size_map: Dict[int, int] = {i: block_size for i in range(num_blocks)}
-        
+
         logger.info(f"BlockTableV2 initialized with {num_blocks} blocks (base size: {block_size})")
 
     def allocate(self, seq_id: int, num_required_blocks: int) -> List[int]:
@@ -54,13 +54,13 @@ class BlockTableV2:
         if len(self.free_blocks) < num_required_blocks:
             logger.warning(f"OOM in BlockTable: Requested {num_required_blocks}, available {len(self.free_blocks)}")
             return []
-            
+
         blocks = []
         for _ in range(num_required_blocks):
             block = self.free_blocks.popleft()
             blocks.append(block)
             self.ref_counts[block] = 1
-            
+
         self.mapping[seq_id] = blocks
         return blocks
 
@@ -101,10 +101,10 @@ class BlockTableV2:
         blocks = self.get_block_table(seq_id)
         if not blocks:
             return None
-            
+
         if rc and hasattr(rc, "block_table_cp_mask_rust"):
             return rc.block_table_cp_mask_rust(blocks, rank, world_size)
-            
+
         # Fallback: Simple rank-based slicing
         chunk_size = len(blocks) // world_size
         start = rank * chunk_size

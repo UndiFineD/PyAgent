@@ -12,12 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core logic for authentication and authorization.
+Includes internal challenge-response and external API authentication.
+"""
+
 from __future__ import annotations
 import hashlib
 import time
 import logging
 import base64
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 from dataclasses import dataclass
 from .base_core import BaseCore
 from .models import AuthConfig, AuthMethod
@@ -52,6 +57,7 @@ class AuthCore(BaseCore):
         """Generates a unique challenge for an agent."""
         if rc and hasattr(rc, "generate_challenge"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.generate_challenge(agent_id) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
@@ -62,6 +68,7 @@ class AuthCore(BaseCore):
         """Generates a proof for a challenge using a secret key."""
         if rc and hasattr(rc, "generate_auth_proof"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.generate_auth_proof(challenge, secret_key) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
@@ -71,10 +78,11 @@ class AuthCore(BaseCore):
         """Verifies proof against the expected secret hash."""
         if rc and hasattr(rc, "verify_auth_proof"): # pylint: disable=no-member
             try:
+                # pylint: disable=no-member
                 return rc.verify_auth_proof(challenge, proof, expected_secret_hash) # type: ignore
             except Exception: # pylint: disable=broad-exception-caught
                 pass
-        
+
         return proof == hashlib.sha512(f"{challenge}:{expected_secret_hash}".encode()).hexdigest()
 
     # --- External API Auth ---
@@ -83,7 +91,7 @@ class AuthCore(BaseCore):
         """Provides authentication headers based on configuration."""
         headers: Dict[str, str] = {}
         method = config.method
-        
+
         if method == AuthMethod.API_KEY:
             headers["X-API-Key"] = config.api_key
         elif method == AuthMethod.BEARER_TOKEN:
@@ -97,7 +105,7 @@ class AuthCore(BaseCore):
             token = self.token_cache.get(cache_key) or config.token
             if token:
                 headers["Authorization"] = f"Bearer {token}"
-            
+
         headers.update(config.custom_headers)
         return headers
 

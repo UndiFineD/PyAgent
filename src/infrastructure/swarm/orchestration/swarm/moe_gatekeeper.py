@@ -32,9 +32,9 @@ class MoEGatekeeper:
     Orchestrates expert selection across the swarm.
     Unlike compute-level MoE, this works at the task/agent level.
     """
-    
-    def __init__(self, 
-                 similarity_service: EmbeddingSimilarityService, 
+
+    def __init__(self,
+                 similarity_service: EmbeddingSimilarityService,
                  audit_logger: Optional[SwarmAuditLogger] = None,
                  topology_manager: Optional[Any] = None,
                  reward_predictor: Optional[Any] = None):
@@ -75,10 +75,10 @@ class MoEGatekeeper:
         if cache_key in self.routing_cache:
             logger.debug(f"Gatekeeper: Cache hit for task '{task_prompt[:20]}...'")
             return self.routing_cache[cache_key]
-            
+
         task_emb = await self.similarity_service.get_embedding(task_prompt)
         decision = await self._compute_routing(task_prompt, task_emb, top_k)
-        
+
         # Phase 70: Track usage for dynamic scaling/cloning
         if self.topology_manager:
             for expert_id in decision.selected_experts:
@@ -87,7 +87,7 @@ class MoEGatekeeper:
         # Cache Update
         if len(self.routing_cache) < self.max_cache_size:
             self.routing_cache[cache_key] = decision
-            
+
         return decision
 
     async def batch_route_tasks(self, task_prompts: List[str], top_k: int = 2) -> List[MoERoutingDecision]:
@@ -103,12 +103,12 @@ class MoEGatekeeper:
         """Internal logic for calculating weights."""
         scores = []
         agent_ids = list(self.experts.keys())
-        
+
         for agent_id in agent_ids:
             profile = self.experts[agent_id]
             # Use specialization vector if available, otherwise fallback to domain keyword similarity simulation
             expert_vec = np.array(profile.specialization_vector)
-            
+
             if len(expert_vec) == 0:
                 # Mock a vector based on domains if empty
                 # Use a specific seed based on the domain string for deterministic testing
@@ -116,36 +116,36 @@ class MoEGatekeeper:
                 expert_vec = np.random.randn(384).astype(np.float32)
                 expert_vec /= np.linalg.norm(expert_vec)
                 profile.specialization_vector = expert_vec.tolist()
-                
+
             similarity = float(np.dot(task_emb, expert_vec))
             # Phase 68 fix: Ensure similarity is non-negative before multiplying by performance
             clamped_similarity = max(0.01, similarity)
-            
+
             # Phase 74: Heterogeneous Hardware Boosting
             # Prefer hardware-accelerated experts if the task is complex/large
             hardware_multiplier = 1.0
             if profile.acceleration_type in ["fp8_bitnet", "h100_tensor"]:
                 hardware_multiplier = 1.2
-                
+
             final_score = clamped_similarity * profile.performance_score * hardware_multiplier
-            
+
             # Phase 83: Reward Predictor Tuning (RL Feedback)
             if self.reward_predictor:
                 final_score = self.reward_predictor.adjust_routing(agent_id, final_score)
 
             scores.append(final_score)
-            
+
         # Convert to numpy for sorting
         scores_arr = np.array(scores)
         top_indices = np.argsort(scores_arr)[-top_k:][::-1]
-        
+
         selected_experts = [agent_ids[i] for i in top_indices]
         weights = [float(scores_arr[i]) for i in top_indices]
-        
+
         # Softmax weights
         exp_weights = np.exp(weights - np.max(weights))
         normalized_weights = (exp_weights / exp_weights.sum()).tolist()
-        
+
         decision = MoERoutingDecision(
             task_id="moe_" + prompt[:16].replace(" ", "_"),
             selected_experts=selected_experts,

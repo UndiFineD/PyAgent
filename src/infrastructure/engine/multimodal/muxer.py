@@ -49,7 +49,7 @@ class Muxer:
     Coordinates multiple high-speed modality channels.
     Supports "DVD-style" separate streams for video, audio, and text.
     """
-    
+
     def __init__(self, target_fps: float = 120.0):
         self.target_fps = target_fps
         self.channels: Dict[str, ModalityChannel] = {}
@@ -66,7 +66,7 @@ class Muxer:
             {"channel_id": 3, "modality_type": "TEXT", "payload": text.encode("utf-8")}
         ]
         return self.mux(packets)
-    
+
     def add_channel(self, name: str, m_type: str, fps: Optional[float] = None):
         """Register a new modality channel."""
         self.channels[name] = ModalityChannel(
@@ -90,10 +90,10 @@ class Muxer:
                     p["payload"]
                 ))
             return bytes(rc.mux_channels_rust(packets))
-            
+
         # Fallback (Slow)
         # 0xDEADBEEF Magic Header for synchronization
-        header = b"\xef\xbe\xad\xde" 
+        header = b"\xef\xbe\xad\xde"
         return header + b"".join([p["payload"] for p in raw_packets])
 
     def demux(self, stream_data: bytes) -> List[Dict[str, Any]]:
@@ -111,7 +111,7 @@ class Muxer:
                 }
                 for p in packets
             ]
-            
+
         return []
 
     def synchronize(self, packets: List[Dict[str, Any]], jitter_ms: float = 8.33) -> Dict[int, List[Dict[str, Any]]]:
@@ -128,9 +128,9 @@ class Muxer:
                     p["timestamp"],
                     p["payload"]
                 ))
-            
+
             result = rc.synchronize_channels_rust(rust_packets, jitter_ms)
-            
+
             # Convert back to Python dicts
             sync_map = {}
             for bucket, p_list in result.items():
@@ -144,7 +144,7 @@ class Muxer:
                     for p in p_list
                 ]
             return sync_map
-            
+
         # Basic Python fallback (simplified)
         sync_map = {}
         window = jitter_ms / 1000.0

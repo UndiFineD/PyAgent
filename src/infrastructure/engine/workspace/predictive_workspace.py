@@ -30,13 +30,13 @@ class PredictiveWorkspace:
     Analyzes historical allocation patterns to pre-warm memory buffers.
     Reduces allocation latency in high-throughput streaming scenarios.
     """
-    
+
     def __init__(self, workspace_manager: Any, window_size: int = 50):
         self.workspace = workspace_manager
         self.history = deque(maxlen=window_size)
         self.pre_allocated_buffers: Dict[int, List[memoryview]] = {}
         self.prediction_margin = 1.2  # 20% overhead for safety
-        
+
         # Statistics
         self.cache_hits = 0
         self.cache_misses = 0
@@ -44,7 +44,7 @@ class PredictiveWorkspace:
     def record_allocation(self, size: int):
         """Records a successful allocation to refine future predictions."""
         self.history.append(size)
-        
+
     def predict_next_batch_requirement(self) -> int:
         """
         Predicts the memory required for the next inference wave.
@@ -52,7 +52,7 @@ class PredictiveWorkspace:
         """
         if not self.history:
             return 0
-            
+
         # Weighted average favors recent requests
         weights = np.linspace(0.5, 1.0, len(self.history))
         avg_size = np.average(self.history, weights=weights)
@@ -80,7 +80,7 @@ class PredictiveWorkspace:
         if size in self.pre_allocated_buffers and self.pre_allocated_buffers[size]:
             self.cache_hits += 1
             return self.pre_allocated_buffers[size].pop(0)
-        
+
         self.cache_misses += 1
         return None
 
@@ -88,12 +88,12 @@ class PredictiveWorkspace:
         """Analyzes recent traffic to identify recurring batch sizes."""
         if not self.history:
             return {}
-            
+
         # Count frequency of sizes (binned to nearest 1KB)
         binned = [round(h / 1024) * 1024 for h in self.history]
         unique, counts = np.unique(binned, return_counts=True)
         patterns = sorted(zip(unique, counts), key=lambda x: x[1], reverse=True)
-        
+
         return {
             "top_patterns": patterns[:3],
             "hit_rate": self.cache_hits / (self.cache_hits + self.cache_misses) if (self.cache_hits + self.cache_misses) > 0 else 0
