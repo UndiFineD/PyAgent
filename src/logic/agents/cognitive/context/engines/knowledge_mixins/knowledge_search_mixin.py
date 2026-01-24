@@ -20,6 +20,10 @@ Knowledge search mixin for workspace-wide queries.
 Knowledge search mixin for workspace-wide queries.
 """
 
+"""
+Knowledge search mixin for workspace-wide queries.
+"""
+
 from pathlib import Path
 
 class KnowledgeSearchMixin:

@@ -63,6 +63,7 @@ class TokenizerLike(Protocol):
 
 
 
+
 @dataclass
 class DetokenizeResult:
     """
