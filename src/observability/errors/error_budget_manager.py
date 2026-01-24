@@ -16,9 +16,12 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .error_budget import ErrorBudget
+
 from datetime import datetime, timedelta
+
+from src.core.base.lifecycle.version import VERSION
+
+from .error_budget import ErrorBudget
 
 __version__ = VERSION
 
@@ -37,9 +40,7 @@ class ErrorBudgetManager:
         """Initialize the error budget manager."""
         self.budgets: dict[str, ErrorBudget] = {}
 
-    def create_budget(
-        self, name: str, total: float, period_days: int = 30
-    ) -> ErrorBudget:
+    def create_budget(self, name: str, total: float, period_days: int = 30) -> ErrorBudget:
         """Create an error budget.
 
         Args:

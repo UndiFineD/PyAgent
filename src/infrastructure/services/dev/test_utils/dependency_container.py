@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any, TypeVar
-from collections.abc import Callable
-import logging
+
 import inspect
+import logging
+from collections.abc import Callable
+from typing import Any, TypeVar
+
+from src.core.base.lifecycle.version import VERSION
 
 T = TypeVar("T")
 

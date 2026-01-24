@@ -18,10 +18,12 @@ Tests Agent: Maintains and updates test suites for the workspace.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import sys
 from pathlib import Path
+
 from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.services.dev.agent_tests.agents import TestsAgent
 
 # Ensure project root and src are in path for modular imports

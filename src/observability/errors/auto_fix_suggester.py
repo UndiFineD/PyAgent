@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
+
+import re
+
 from src.core.base.lifecycle.version import VERSION
+
 from .error_entry import ErrorEntry
 from .fix_suggestion import FixSuggestion
-import re
 
 __version__ = VERSION
 
@@ -40,7 +43,9 @@ class AutoFixSuggester:
             r"NameError: name '(\w+)' is not defined": "Define variable '{0}' before use or import it",
             r"ImportError: No module named '(\w+)'": "Install module with: pip install {0}",
             r"TypeError: unsupported operand type": "Check operand types and convert if necessary",
-            r"AttributeError: '(\w+)' object has no attribute '(\w+)'": "Check if '{1}' exists on {0} object or use hasattr()",
+            r"AttributeError: '(\w+)' object has no attribute '(\w+)'": (
+                "Check if '{1}' exists on {0} object or use hasattr()"
+            ),
             r"IndexError: list index out of range": "Check list bounds before accessing index",
             r"KeyError: '(\w+)'": "Use .get('{0}', default) or check key existence",
         }

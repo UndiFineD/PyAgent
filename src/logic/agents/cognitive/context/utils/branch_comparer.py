@@ -21,6 +21,8 @@ from src.logic.agents.cognitive.context.models.branch_comparison import BranchCo
 
 __version__ = VERSION
 
+__version__ = VERSION
+
 
 class BranchComparer:
     """Compares context across git branches.
@@ -38,15 +40,18 @@ class BranchComparer:
         self._last_comparison: BranchComparison | None = None
 
     def set_branches(self, branch_a: str, branch_b: str) -> None:
+        """Sets the branches to compare."""
         self.branch_a = branch_a
         self.branch_b = branch_b
 
     def get_modified_files(self) -> list[str]:
+        """Returns the list of modified files from the last comparison."""
         if not self._last_comparison:
             return []
         return list(self._last_comparison.modified_files)
 
     def summarize(self, comparison: BranchComparison) -> str:
+        """Return a string summary of the comparison."""
         return (
             f"Compare {comparison.branch_a} -> {comparison.branch_b}: "
             f"only_in_a={len(comparison.files_only_in_a)}, "

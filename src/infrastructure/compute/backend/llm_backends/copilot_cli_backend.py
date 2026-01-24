@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Copilot cli backend.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import subprocess
+
+from src.core.base.lifecycle.version import VERSION
+
 from .llm_backend import LLMBackend
 
 __version__ = VERSION
@@ -38,22 +45,19 @@ class CopilotCliBackend(LLMBackend):
 
         timeout_s = kwargs.get("timeout_s", 30)
         import time
+
         start_t = time.time()
         try:
             # Phase 141 Fix: Windows command line length limit (WinError 206)
             # gh copilot suggest doesn't need the full strategic roadmap, just a task summary.
             # Phase 317 expansion: Increasing to 4000 to allow more context for code fixes.
             max_char = 4000
-            safe_prompt = (
-                prompt[:max_char] + "..." if len(prompt) > max_char else prompt
-            )
+            safe_prompt = prompt[:max_char] + "..." if len(prompt) > max_char else prompt
 
             # We use 'shell' type because suggest works best with it,
             # though it's still far from a full LLM.
             cmd = ["gh", "copilot", "suggest", "-t", "shell", safe_prompt]
-            process = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=timeout_s, encoding="utf-8"
-            )
+            process = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_s, encoding="utf-8")
             latency = time.time() - start_t
 
             if process.returncode == 0:

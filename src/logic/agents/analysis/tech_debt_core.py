@@ -11,14 +11,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Tech debt core.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import ast
 from typing import Any
 
+from src.core.base.lifecycle.version import VERSION
+
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -83,10 +90,6 @@ class TechDebtCore:
         return issues
 
     @staticmethod
-    def identify_hotspots(
-        reports: list[dict[str, Any]], limit: int = 5
-    ) -> list[dict[str, Any]]:
+    def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
         """Sorts and returns major technical debt hotspots."""
-        return sorted(reports, key=lambda x: x.get("issue_count", 0), reverse=True)[
-            :limit
-        ]
+        return sorted(reports, key=lambda x: x.get("issue_count", 0), reverse=True)[:limit]

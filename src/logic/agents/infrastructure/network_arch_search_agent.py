@@ -12,14 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Network arch search agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -40,16 +46,12 @@ class NetworkArchSearchAgent(BaseAgent):
         )
 
     @as_tool
-    async def search_optimal_architecture(
-        self, task_requirement: str, latency_target_ms: int = 50
-    ) -> dict[str, Any]:
+    async def search_optimal_architecture(self, task_requirement: str, latency_target_ms: int = 50) -> dict[str, Any]:
         """
         Searches for the optimal neural architecture components for a given task.
         Returns a specification for a LoRA or small model adapter.
         """
-        logging.info(
-            f"NASAgent: Searching for architecture optimized for: {task_requirement}"
-        )
+        logging.info(f"NASAgent: Searching for architecture optimized for: {task_requirement}")
 
         prompt = (
             f"Task Requirement: {task_requirement}\n"

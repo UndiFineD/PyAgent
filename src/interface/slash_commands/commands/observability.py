@@ -1,9 +1,23 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Cache and observability commands.
 """
 
-from src.interface.slash_commands.registry import register
 from src.interface.slash_commands.core import CommandContext, CommandResult
+from src.interface.slash_commands.registry import register
 
 
 @register(
@@ -19,15 +33,14 @@ def cmd_cache(ctx: CommandContext) -> CommandResult:
 
     # Check for common caches
     try:
-        from src.observability.logging.enhanced_logger import get_dedup_cache_info
+        from src.observability.logging.enhanced_logger import \
+            get_dedup_cache_info
+
         cache_stats["logger_dedup"] = get_dedup_cache_info()
     except ImportError:
         pass
 
-    total_entries = sum(
-        info.get("currsize", 0) if isinstance(info, dict) else 0
-        for info in cache_stats.values()
-    )
+    total_entries = sum(info.get("currsize", 0) if isinstance(info, dict) else 0 for info in cache_stats.values())
 
     return CommandResult.ok(
         output=f"[Caches: {len(cache_stats)} active, {total_entries} entries]",
@@ -47,25 +60,14 @@ def cmd_cache(ctx: CommandContext) -> CommandResult:
 )
 def cmd_counters(ctx: CommandContext) -> CommandResult:
     """Get structured counter statistics."""
-    try:
-        from src.observability.stats.structured_counter import (
-            RequestCounter,
-            CacheCounter,
-        )
+    # This would typically access global counter instances
+    # For now, show available counter types
+    counter_types = ["RequestCounter", "CacheCounter", "PoolCounter", "QueueCounter"]
 
-        # This would typically access global counter instances
-        # For now, show available counter types
-        counter_types = ["RequestCounter", "CacheCounter", "PoolCounter", "QueueCounter"]
-
-        return CommandResult.ok(
-            output=f"[Counter types: {', '.join(counter_types)}]",
-            data={"types": counter_types},
-        )
-    except ImportError:
-        return CommandResult.ok(
-            output="[Counters: Module not available]",
-            data={"available": False},
-        )
+    return CommandResult.ok(
+        output=f"[Counter types: {', '.join(counter_types)}]",
+        data={"types": counter_types},
+    )
 
 
 @register(
@@ -79,10 +81,8 @@ def cmd_telemetry(ctx: CommandContext) -> CommandResult:
     """Get telemetry/usage information."""
     try:
         from src.observability.telemetry.usage_message import (
-            detect_cloud_provider,
-            is_usage_stats_enabled,
-            get_platform_summary,
-        )
+            detect_cloud_provider, get_platform_summary,
+            is_usage_stats_enabled)
 
         provider = detect_cloud_provider()
         enabled = is_usage_stats_enabled()
@@ -113,7 +113,8 @@ def cmd_telemetry(ctx: CommandContext) -> CommandResult:
 def cmd_logs(ctx: CommandContext) -> CommandResult:
     """Get log deduplication statistics."""
     try:
-        from src.observability.logging.enhanced_logger import get_dedup_cache_info
+        from src.observability.logging.enhanced_logger import \
+            get_dedup_cache_info
 
         info = get_dedup_cache_info()
 

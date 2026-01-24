@@ -18,21 +18,25 @@ Provides consensus mechanisms to merge outputs from multiple experts in an MoE s
 """
 
 import logging
-import asyncio
-from typing import List, Dict, Any, Union, Optional
 from dataclasses import dataclass
-from collections import Counter
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+
 from .audit_logger import SwarmAuditLogger
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class FusionResult:
     """The result of a weighted expert fusion operation."""
+
     merged_content: str
     consensus_score: float
     contributing_experts: List[str]
     metadata: Dict[str, Any]
+
 
 class WeightedExpertFusion:
     """
@@ -53,7 +57,7 @@ class WeightedExpertFusion:
         weights: List[float],
         expert_ids: List[str],
         mode: str = "weighted_plurality",
-        task_id: Optional[str] = None
+        task_id: Optional[str] = None,
     ) -> FusionResult:
         """
         Main fusion entry point.
@@ -71,7 +75,7 @@ class WeightedExpertFusion:
                 merged_content=outputs[0],
                 consensus_score=weights[0],
                 contributing_experts=[expert_ids[0]],
-                metadata={"mode": "fallback_top_1"}
+                metadata={"mode": "fallback_top_1"},
             )
 
         if self.audit_logger and task_id:
@@ -79,20 +83,13 @@ class WeightedExpertFusion:
                 task_id=task_id,
                 event_type="expert_fusion",
                 description=f"Merged expert results using {mode}",
-                data={
-                    "consensus_score": result.consensus_score,
-                    "experts": result.contributing_experts,
-                    "mode": mode
-                }
+                data={"consensus_score": result.consensus_score, "experts": result.contributing_experts, "mode": mode},
             )
 
         return result
 
     async def _weighted_plurality(
-        self,
-        outputs: List[str],
-        weights: List[float],
-        expert_ids: List[str]
+        self, outputs: List[str], weights: List[float], expert_ids: List[str]
     ) -> FusionResult:
         """
         Classic majority-vote weighted by expert scores.
@@ -109,14 +106,11 @@ class WeightedExpertFusion:
             merged_content=best_output,
             consensus_score=consensus_score,
             contributing_experts=expert_ids,
-            metadata={"strategy": "weighted_plurality", "vote_distribution": scores}
+            metadata={"strategy": "weighted_plurality", "vote_distribution": scores},
         )
 
     async def _semantic_consensus(
-        self,
-        outputs: List[str],
-        weights: List[float],
-        expert_ids: List[str]
+        self, outputs: List[str], weights: List[float], expert_ids: List[str]
     ) -> FusionResult:
         """
         Finds the answer that is semantically closest to all other weighted answers.
@@ -139,5 +133,5 @@ class WeightedExpertFusion:
             merged_content=outputs[best_idx],
             consensus_score=float(mean_scores[best_idx]),
             contributing_experts=expert_ids,
-            metadata={"strategy": "semantic_consensus", "best_index": best_idx}
+            metadata={"strategy": "semantic_consensus", "best_index": best_idx},
         )

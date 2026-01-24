@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 PrefixCacheManager - Block-level content-addressable caching.
 
@@ -8,18 +22,19 @@ hashing for prefix caching with LRU eviction.
 from __future__ import annotations
 
 import hashlib
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional, Sequence, Set, Tuple
-from collections import OrderedDict
 import logging
+import time
+from collections import OrderedDict
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
 logger = logging.getLogger(__name__)
 
 
 class HashAlgorithm(Enum):
     """Supported hash algorithms for prefix caching."""
+
     SHA256 = "sha256"
     XXHASH = "xxhash"
     MD5 = "md5"
@@ -32,6 +47,7 @@ class BlockHash:
 
     Includes the hash value and the token IDs for verification.
     """
+
     hash_value: bytes
     token_ids: Tuple[int, ...]
     extra_keys: Optional[Tuple[Any, ...]] = None
@@ -48,6 +64,7 @@ class BlockHash:
 @dataclass
 class CacheBlock:
     """A cached KV block."""
+
     block_id: int
     block_hash: BlockHash
     ref_count: int = 0
@@ -68,6 +85,7 @@ def get_hash_function(algorithm: HashAlgorithm) -> Callable[[bytes], bytes]:
     elif algorithm == HashAlgorithm.XXHASH:
         try:
             import xxhash
+
             return lambda data: xxhash.xxh3_128(data).digest()
         except ImportError:
             logger.warning("xxhash not available, falling back to SHA256")
@@ -107,16 +125,16 @@ def hash_block_tokens(
         data_parts.append(parent_block_hash.hash_value)
 
     # Include token IDs
-    token_bytes = bytes(str(list(curr_block_token_ids)), 'utf-8')
+    token_bytes = bytes(str(list(curr_block_token_ids)), "utf-8")
     data_parts.append(token_bytes)
 
     # Include extra keys
     if extra_keys:
-        extra_bytes = bytes(str(extra_keys), 'utf-8')
+        extra_bytes = bytes(str(extra_keys), "utf-8")
         data_parts.append(extra_bytes)
 
     # Combine and hash
-    combined = b''.join(data_parts)
+    combined = b"".join(data_parts)
     hash_value = hash_function(combined)
 
     return BlockHash(
@@ -137,6 +155,7 @@ def hash_block_tokens_rust(
     """
     try:
         from rust_core import hash_block_tokens_rust as _rust_impl
+
         return _rust_impl(parent_hash, token_ids, extra_keys)
     except ImportError:
         hash_fn = get_hash_function(HashAlgorithm.XXHASH)
@@ -405,6 +424,7 @@ def compute_prefix_match_rust(
     """Rust-accelerated prefix matching."""
     try:
         from rust_core import compute_prefix_match_rust as _rust_impl
+
         return _rust_impl(cached_hashes, request_hashes)
     except ImportError:
         return compute_prefix_match(cached_hashes, request_hashes)
@@ -456,6 +476,7 @@ def compute_cache_keys_rust(
     """Rust-accelerated batch cache key computation."""
     try:
         from rust_core import compute_cache_keys_rust as _rust_impl
+
         return _rust_impl(request_ids, token_ids_list, block_size)
     except ImportError:
         return compute_cache_keys(request_ids, token_ids_list, block_size)

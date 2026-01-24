@@ -17,6 +17,7 @@ OrchestratorDelegates: Delegation methods for OrchestratorAgent.
 """
 
 from __future__ import annotations
+
 import logging
 from pathlib import Path
 from typing import Any
@@ -34,9 +35,7 @@ class OrchestratorDelegates:
 
     def restore_from_snapshot(self, file_path: Path, snapshot_id: str) -> bool:
         """Delegates to AgentFileManager."""
-        return getattr(self, "file_manager").restore_from_snapshot(
-            file_path, snapshot_id
-        )
+        return getattr(self, "file_manager").restore_from_snapshot(file_path, snapshot_id)
 
     def load_cascading_codeignore(self, directory: Path | None = None) -> set[str]:
         """Delegates to AgentFileManager."""
@@ -45,9 +44,7 @@ class OrchestratorDelegates:
     def find_code_files(self) -> list[Path]:
         """Delegates to AgentFileManager."""
         logging.info("Searching for code files (delegated to AgentFileManager)...")
-        code_files = getattr(self, "file_manager").find_code_files(
-            max_files=getattr(self, "max_files")
-        )
+        code_files = getattr(self, "file_manager").find_code_files(max_files=getattr(self, "max_files"))
         code_files = sorted(code_files)
         logging.info(f"Found {len(code_files)} code files.")
         return code_files
@@ -80,9 +77,7 @@ class OrchestratorDelegates:
         """Delegates to AgentNotificationManager."""
         getattr(self, "notifications").register_callback(callback)
 
-    def send_webhook_notification(
-        self, event_name: str, event_data: dict[str, Any]
-    ) -> None:
+    def send_webhook_notification(self, event_name: str, event_data: dict[str, Any]) -> None:
         """Delegates to AgentNotificationManager."""
         getattr(self, "notifications").notify(event_name, event_data)
 
@@ -92,12 +87,8 @@ class OrchestratorDelegates:
 
     async def async_process_files(self, files: list[Path]) -> list[Path]:
         """Delegates to ParallelProcessor."""
-        return await getattr(self, "parallel_processor").async_process_files(
-            files, getattr(self, "process_file")
-        )
+        return await getattr(self, "parallel_processor").async_process_files(files, getattr(self, "process_file"))
 
     def process_files_threaded(self, files: list[Path]) -> list[Path]:
         """Delegates to ParallelProcessor."""
-        return getattr(self, "parallel_processor").process_files_threaded(
-            files, getattr(self, "process_file")
-        )
+        return getattr(self, "parallel_processor").process_files_threaded(files, getattr(self, "process_file"))

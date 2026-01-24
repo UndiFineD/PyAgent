@@ -15,17 +15,15 @@
 """Models for fleet - wide state and resource management."""
 
 from __future__ import annotations
+
 import time
 from dataclasses import dataclass, field
 from typing import Any
+
+from .base_models import (_empty_dict_str_any, _empty_dict_str_float,
+                          _empty_dict_str_int, _empty_dict_str_str,
+                          _empty_list_str)
 from .core_enums import RateLimitStrategy
-from .base_models import (
-    _empty_dict_str_any,
-    _empty_dict_str_float,
-    _empty_dict_str_str,
-    _empty_list_str,
-    _empty_dict_str_int,
-)
 
 
 @dataclass(slots=True)
@@ -71,13 +69,16 @@ class TokenBudget:
 
     @property
     def used(self) -> int:
+        """Total tokens used across all allocations."""
         return sum(self.allocations.values())
 
     @property
     def remaining(self) -> int:
+        """Remaining tokens in the budget."""
         return max(0, self.total - self.used)
 
     def allocate(self, name: str, tokens: int) -> None:
+        """Allocate tokens for a specific consumer."""
         capped = min(
             tokens,
             self.total - sum(v for k, v in self.allocations.items() if k != name),
@@ -85,6 +86,7 @@ class TokenBudget:
         self.allocations[name] = max(0, capped)
 
     def release(self, name: str) -> None:
+        """Release token allocation for a consumer."""
         self.allocations.pop(name, None)
 
 

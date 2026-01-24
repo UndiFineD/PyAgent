@@ -18,8 +18,10 @@ Sanitizes imports by ensuring proper spacing and structure.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

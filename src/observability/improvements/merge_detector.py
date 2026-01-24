@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
 from src.core.base.lifecycle.version import VERSION
+
 from .improvement import Improvement
 from .merge_candidate import MergeCandidate
 
 # Rust acceleration imports
 try:
     from rust_core import find_similar_pairs_rust
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -60,7 +63,7 @@ class MergeDetector:
                     (
                         imp.id,
                         imp.title,
-                        imp.category.value if hasattr(imp.category, 'value') else str(imp.category),
+                        imp.category.value if hasattr(imp.category, "value") else str(imp.category),
                         imp.file_path,
                     )
                     for imp in improvements

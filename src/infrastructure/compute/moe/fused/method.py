@@ -1,16 +1,39 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Method.py module.
+"""
+
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
+from typing import Any
+
 import numpy as np
-from typing import Any, TYPE_CHECKING
+
 from .config import FusedMoEConfig, FusedMoEParallelConfig
 from .utils import determine_expert_map
 
 try:
     import torch
     import torch.nn.functional as F
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
+
 
 class FusedMoEMethodBase(ABC):
     """Base class for MoE computation methods."""
@@ -35,6 +58,7 @@ class FusedMoEMethodBase(ABC):
     ) -> Any:
         pass
 
+
 class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
     """Unquantized MoE computation method."""
 
@@ -53,33 +77,15 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
 
         if not HAS_TORCH:
             return {
-                "w1": np.zeros(
-                    (local_num_experts, config.intermediate_size, config.hidden_size),
-                    dtype=np.float32
-                ),
-                "w2": np.zeros(
-                    (local_num_experts, config.hidden_size, config.intermediate_size),
-                    dtype=np.float32
-                ),
-                "w3": np.zeros(
-                    (local_num_experts, config.intermediate_size, config.hidden_size),
-                    dtype=np.float32
-                ),
+                "w1": np.zeros((local_num_experts, config.intermediate_size, config.hidden_size), dtype=np.float32),
+                "w2": np.zeros((local_num_experts, config.hidden_size, config.intermediate_size), dtype=np.float32),
+                "w3": np.zeros((local_num_experts, config.intermediate_size, config.hidden_size), dtype=np.float32),
             }
 
         return {
-            "w1": torch.zeros(
-                local_num_experts, config.intermediate_size, config.hidden_size,
-                device=device
-            ),
-            "w2": torch.zeros(
-                local_num_experts, config.hidden_size, config.intermediate_size,
-                device=device
-            ),
-            "w3": torch.zeros(
-                local_num_experts, config.intermediate_size, config.hidden_size,
-                device=device
-            ),
+            "w1": torch.zeros(local_num_experts, config.intermediate_size, config.hidden_size, device=device),
+            "w2": torch.zeros(local_num_experts, config.hidden_size, config.intermediate_size, device=device),
+            "w3": torch.zeros(local_num_experts, config.intermediate_size, config.hidden_size, device=device),
         }
 
     def apply(
@@ -102,9 +108,6 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
         renormalize: bool,
         weights: dict[str, np.ndarray],
     ) -> np.ndarray:
-        batch_size, hidden_size = x.shape
-        num_experts = router_logits.shape[-1]
-
         routing_weights = np.exp(router_logits - router_logits.max(axis=-1, keepdims=True))
         routing_weights = routing_weights / routing_weights.sum(axis=-1, keepdims=True)
 
@@ -114,6 +117,7 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
         if renormalize:
             top_k_weights = top_k_weights / top_k_weights.sum(axis=-1, keepdims=True)
 
+        batch_size = x.shape[0]
         output = np.zeros_like(x)
         for i in range(batch_size):
             for k in range(top_k):
@@ -150,7 +154,7 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
 
         for k in range(top_k):
             expert_indices = top_k_indices[:, k]
-            expert_weights = top_k_weights[:, k:k+1]
+            expert_weights = top_k_weights[:, k : k + 1]
 
             for expert_idx in expert_indices.unique():
                 mask = expert_indices == expert_idx

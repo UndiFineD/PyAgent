@@ -16,10 +16,11 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
+
+from src.core.base.common.types.changelog_entry import ChangelogEntry
+from src.core.base.common.types.compliance_category import ComplianceCategory
+from src.core.base.common.types.compliance_result import ComplianceResult
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types import changelog_entry
-from src.core.base.common.types import compliance_category
-from src.core.base.common.types import compliance_result
 
 __version__ = VERSION
 
@@ -38,9 +39,7 @@ class ComplianceChecker:
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]
     LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]
 
-    def check_security_compliance(
-        self, entries: list[ChangelogEntry]
-    ) -> ComplianceResult:
+    def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
         """Check security compliance.
 
         Args:
@@ -55,13 +54,8 @@ class ComplianceChecker:
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
                 if entry.category != "Security":
-                    issues.append(
-                        f"Security-related entry not in Security category: "
-                        f"{entry.description[:50]}"
-                    )
-                    recommendations.append(
-                        "Move security-related entries to the Security section"
-                    )
+                    issues.append(f"Security-related entry not in Security category: {entry.description[:50]}")
+                    recommendations.append("Move security-related entries to the Security section")
         return ComplianceResult(
             category=ComplianceCategory.SECURITY,
             passed=not issues,
@@ -84,9 +78,7 @@ class ComplianceChecker:
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
                 issues.append(f"Entry may need legal review: {entry.description[:50]}")
-                recommendations.append(
-                    "Have legal team review license / copyright changes"
-                )
+                recommendations.append("Have legal team review license / copyright changes")
         return ComplianceResult(
             category=ComplianceCategory.LEGAL,
             passed=not issues,

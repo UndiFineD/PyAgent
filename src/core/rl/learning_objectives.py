@@ -1,12 +1,17 @@
+
+"""
+Learning objectives.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Learning Objectives and Goals for Fleet Optimization - Phase 319 Enhanced
 
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable
-from enum import Enum
+
 import time
-import math
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
 
 class ObjectiveStatus(Enum):
     NOT_STARTED = "not_started"
@@ -15,15 +20,18 @@ class ObjectiveStatus(Enum):
     FAILED = "failed"
     STALLED = "stalled"
 
+
 class ObjectiveType(Enum):
     MAXIMIZE = "maximize"
     MINIMIZE = "minimize"
     TARGET = "target"
     THRESHOLD = "threshold"
 
+
 @dataclass
 class LearningObjective:
     """Represents a learning objective with tracking and evaluation."""
+
     name: str
     target_metric: str
     target_value: float
@@ -66,11 +74,7 @@ class LearningObjective:
 
     def update(self, new_value: float) -> None:
         """Updates the current value and records history."""
-        self.history.append({
-            "value": new_value,
-            "timestamp": time.time(),
-            "progress": self.progress
-        })
+        self.history.append({"value": new_value, "timestamp": time.time(), "progress": self.progress})
         self.current_value = new_value
 
         if self.status == ObjectiveStatus.NOT_STARTED:
@@ -79,9 +83,11 @@ class LearningObjective:
         if self.is_achieved:
             self.status = ObjectiveStatus.ACHIEVED
 
+
 @dataclass
 class ObjectiveConstraint:
     """Defines a constraint that must be satisfied."""
+
     name: str
     metric: str
     min_value: Optional[float] = None
@@ -94,6 +100,7 @@ class ObjectiveConstraint:
             return False
         return True
 
+
 class ObjectiveTracker:
     """Manages high-level goals for the self-improving fleet."""
 
@@ -104,33 +111,33 @@ class ObjectiveTracker:
                 target_metric="agents_per_node",
                 target_value=50.0,
                 objective_type=ObjectiveType.MAXIMIZE,
-                priority=0.8
+                priority=0.8,
             ),
             LearningObjective(
                 name="Accuracy",
                 target_metric="f1_score",
                 target_value=0.95,
                 objective_type=ObjectiveType.TARGET,
-                priority=1.0
+                priority=1.0,
             ),
             LearningObjective(
                 name="Efficiency",
                 target_metric="latency_s",
                 target_value=0.5,
                 objective_type=ObjectiveType.MINIMIZE,
-                priority=0.9
+                priority=0.9,
             ),
             LearningObjective(
                 name="Reliability",
                 target_metric="uptime_pct",
                 target_value=99.9,
                 objective_type=ObjectiveType.THRESHOLD,
-                priority=1.0
-            )
+                priority=1.0,
+            ),
         ]
         self.constraints: List[ObjectiveConstraint] = [
             ObjectiveConstraint("memory_limit", "memory_gb", max_value=32.0),
-            ObjectiveConstraint("cost_limit", "daily_cost_usd", max_value=100.0)
+            ObjectiveConstraint("cost_limit", "daily_cost_usd", max_value=100.0),
         ]
         self._objective_weights: Dict[str, float] = {}
         self._recalculate_weights()
@@ -245,21 +252,15 @@ class ObjectiveTracker:
                     "target": obj.target_value,
                     "progress": f"{obj.progress:.1%}",
                     "status": obj.status.value,
-                    "type": obj.objective_type.value
+                    "type": obj.objective_type.value,
                 }
                 for obj in self.objectives
             ],
             "constraints": [
-                {
-                    "name": c.name,
-                    "metric": c.metric,
-                    "min": c.min_value,
-                    "max": c.max_value
-                }
-                for c in self.constraints
+                {"name": c.name, "metric": c.metric, "min": c.min_value, "max": c.max_value} for c in self.constraints
             ],
             "bottleneck": self.get_bottleneck().name if self.get_bottleneck() else None,
-            "next_priority": self.get_priority_objective().name if self.get_priority_objective() else None
+            "next_priority": self.get_priority_objective().name if self.get_priority_objective() else None,
         }
 
     def get_objective_by_name(self, name: str) -> Optional[LearningObjective]:

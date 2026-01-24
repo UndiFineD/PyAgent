@@ -24,7 +24,14 @@ class TestCodeQuality(unittest.TestCase):
         self.cargo_file = "Cargo.toml"
         with open(self.cargo_file, "w") as f:
             f.write(
-                '[package]\nname = "test_project"\nversion = "0.1.0"\nedition = "2021"\n\n[[bin]]\nname = "test_project"\npath = "main.rs"\n\n[dependencies]\n'
+                '[package]\n'
+                'name = "test_project"\n'
+                'version = "0.1.0"\n'
+                'edition = "2021"\n\n'
+                '[[bin]]\n'
+                'name = "test_project"\n'
+                'path = "main.rs"\n\n'
+                '[dependencies]\n'
             )
 
     def tearDown(self):

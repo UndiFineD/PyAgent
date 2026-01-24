@@ -16,7 +16,9 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
+
 from src.core.base.lifecycle.version import VERSION
+
 from .response_transformer_base import ResponseTransformerBase
 
 __version__ = VERSION

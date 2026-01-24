@@ -15,16 +15,15 @@
 """Models for agent configuration, state, and plugins."""
 
 from __future__ import annotations
+
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
-from .core_enums import HealthStatus, AgentPriority
-from .base_models import (
-    _empty_dict_str_any,
-    _empty_list_str,
-    _empty_dict_str_callable_any_any,
-)
+
+from .base_models import (_empty_dict_str_any,
+                          _empty_dict_str_callable_any_any, _empty_list_str)
+from .core_enums import AgentPriority, HealthStatus
 
 
 @dataclass(slots=True)
@@ -98,16 +97,16 @@ class ExecutionProfile:
 class AgentPipeline:
     """Chains agent steps sequentially."""
 
-    steps: dict[str, Callable[[Any], Any]] = field(
-        default_factory=_empty_dict_str_callable_any_any
-    )
+    steps: dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)
     step_order: list[str] = field(default_factory=_empty_list_str)
 
     def add_step(self, name: str, func: Callable[[Any], Any]) -> None:
+        """Add an execution step to the pipeline."""
         self.steps[name] = func
         self.step_order.append(name)
 
     def execute(self, data: Any) -> Any:
+        """Execute all steps in the pipeline sequentially."""
         result = data
         for step_name in self.step_order:
             result = self.steps[step_name](result)
@@ -118,14 +117,14 @@ class AgentPipeline:
 class AgentParallel:
     """Executes agent branches in parallel conceptually."""
 
-    branches: dict[str, Callable[[Any], Any]] = field(
-        default_factory=_empty_dict_str_callable_any_any
-    )
+    branches: dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)
 
     def add_branch(self, name: str, func: Callable[[Any], Any]) -> None:
+        """Add a parallel execution branch."""
         self.branches[name] = func
 
     def execute(self, data: Any) -> dict[str, Any]:
+        """Execute all branches in parallel and return combined results."""
         return {name: func(data) for name, func in self.branches.items()}
 
 
@@ -134,19 +133,18 @@ class AgentRouter:
     """Routes input based on conditions."""
 
     default_handler: Callable[[Any], Any] | None = None
-    routes: list[tuple[Callable[[Any], bool], Callable[[Any], Any]]] = field(
-        default_factory=list
-    )
+    routes: list[tuple[Callable[[Any], bool], Callable[[Any], Any]]] = field(default_factory=list)
 
-    def add_route(
-        self, condition: Callable[[Any], bool], handler: Callable[[Any], Any]
-    ) -> None:
+    def add_route(self, condition: Callable[[Any], bool], handler: Callable[[Any], Any]) -> None:
+        """Add a conditional route."""
         self.routes.append((condition, handler))
 
     def set_default(self, handler: Callable[[Any], Any]) -> None:
+        """Set the default handler for unmatched routes."""
         self.default_handler = handler
 
     def route(self, data: Any) -> Any:
+        """Route the input data based on registered conditions."""
         for condition, handler in self.routes:
             if condition(data):
                 return handler(data)

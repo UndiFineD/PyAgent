@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 NgramProposer: N-gram Based Speculative Decoding
 
@@ -16,20 +30,21 @@ Based on vLLM v1 patterns with PyAgent innovations.
 
 from __future__ import annotations
 
-import threading
-from dataclasses import dataclass
-from collections import defaultdict
 import contextlib
+import threading
+from collections import defaultdict
+from dataclasses import dataclass
 
 with contextlib.suppress(ImportError):
     import rust_core
 
-HAS_RUST = 'rust_core' in globals()
+HAS_RUST = "rust_core" in globals()
 
 
 @dataclass(frozen=True, slots=True)
 class NgramConfig:
     """Configuration for N-gram proposer."""
+
     min_n: int = 1  # Minimum n-gram length
     max_n: int = 4  # Maximum n-gram length
     num_speculative_tokens: int = 5  # Number of tokens to propose
@@ -42,6 +57,7 @@ class NgramConfig:
 @dataclass(slots=True)
 class NgramMatch:
     """Represents an n-gram match in the context."""
+
     position: int  # Position in context where match starts
     length: int  # Length of the matching n-gram
     following_tokens: list[int]  # Tokens following the match
@@ -51,6 +67,7 @@ class NgramMatch:
 @dataclass(slots=True)
 class NgramProposalResult:
     """Result of n-gram proposal."""
+
     draft_tokens: list[int]
     match_info: NgramMatch | None = None
     confidence: float = 0.0
@@ -99,7 +116,7 @@ class NgramCache:
                 # Keep only recent positions
                 self._cache[key] = positions[-10:]
 
-        for key in to_remove[:len(to_remove) // 2]:
+        for key in to_remove[: len(to_remove) // 2]:
             del self._cache[key]
             self._size -= 1
 
@@ -136,10 +153,7 @@ class NgramProposer:
         self._lock = threading.Lock()
 
     def propose(
-        self,
-        token_ids: list[int],
-        _request_id: str = "",
-        excluded_tokens: set[int] | None = None
+        self, token_ids: list[int], _request_id: str = "", excluded_tokens: set[int] | None = None
     ) -> NgramProposalResult:
         """
         Generate draft token proposals using n-gram matching.
@@ -167,41 +181,28 @@ class NgramProposer:
             prefix = token_ids[-n:]
             match = self._find_match(token_ids[:-1], prefix, excluded)
 
-            if match and len(match.following_tokens) > (
-                len(best_match.following_tokens) if best_match else 0
-            ):
+            if match and len(match.following_tokens) > (len(best_match.following_tokens) if best_match else 0):
                 best_match = match
 
         if best_match is None:
             return NgramProposalResult(draft_tokens=[], confidence=0.0)
 
         # Limit to k tokens
-        draft_tokens = best_match.following_tokens[:self.k]
+        draft_tokens = best_match.following_tokens[: self.k]
         confidence = best_match.score * (len(draft_tokens) / self.k)
 
-        return NgramProposalResult(
-            draft_tokens=draft_tokens,
-            match_info=best_match,
-            confidence=confidence
-        )
+        return NgramProposalResult(draft_tokens=draft_tokens, match_info=best_match, confidence=confidence)
 
-    def _find_match(
-        self,
-        context: list[int],
-        prefix: list[int],
-        excluded: set[int]
-    ) -> NgramMatch | None:
+    def _find_match(self, context: list[int], prefix: list[int], excluded: set[int]) -> NgramMatch | None:
         """Find best matching n-gram in context."""
         if HAS_RUST and hasattr(rust_core, "ngram_find_match_rust"):
-            if result := getattr(rust_core, "ngram_find_match_rust")(
-                context, prefix, list(excluded), self.k
-            ):
+            if result := getattr(rust_core, "ngram_find_match_rust")(context, prefix, list(excluded), self.k):
                 pos, length, following = result
                 return NgramMatch(
                     position=pos,
                     length=length,
                     following_tokens=following,
-                    score=self._compute_score(pos, len(context))
+                    score=self._compute_score(pos, len(context)),
                 )
             return None
 
@@ -212,7 +213,7 @@ class NgramProposer:
 
         # Search from end (more recent matches preferred)
         for i in range(len(context) - n, -1, -1):
-            if context[i:i+n] == prefix:
+            if context[i : i + n] == prefix:
                 # Found match, get following tokens
                 start = i + n
                 end = min(start + self.k, len(context))
@@ -233,7 +234,7 @@ class NgramProposer:
             position=best_pos,
             length=n,
             following_tokens=best_following,
-            score=self._compute_score(best_pos, len(context))
+            score=self._compute_score(best_pos, len(context)),
         )
 
     def _compute_score(self, position: int, context_len: int) -> float:
@@ -241,9 +242,7 @@ class NgramProposer:
         return 1.0 if context_len == 0 else 0.5 + 0.5 * (position + 1) / context_len
 
     def batch_propose(
-        self,
-        batch_token_ids: list[list[int]],
-        batch_request_ids: list[str] | None = None
+        self, batch_token_ids: list[list[int]], batch_request_ids: list[str] | None = None
     ) -> list[NgramProposalResult]:
         """
         Batch version of n-gram proposal.
@@ -264,9 +263,7 @@ class NgramProposer:
             return self._batch_propose_sequential(batch_token_ids, batch_request_ids)
 
     def _batch_propose_sequential(
-        self,
-        batch_token_ids: list[list[int]],
-        batch_request_ids: list[str] | None
+        self, batch_token_ids: list[list[int]], batch_request_ids: list[str] | None
     ) -> list[NgramProposalResult]:
         """Sequential batch proposal."""
         results = []
@@ -277,9 +274,7 @@ class NgramProposer:
         return results
 
     def _batch_propose_parallel(
-        self,
-        batch_token_ids: list[list[int]],
-        batch_request_ids: list[str] | None
+        self, batch_token_ids: list[list[int]], batch_request_ids: list[str] | None
     ) -> list[NgramProposalResult]:
         """Parallel batch proposal using threading."""
         num_requests = len(batch_token_ids)
@@ -308,11 +303,7 @@ class NgramProposer:
 
         return [r for r in results if r is not None]
 
-    def propose_fuzzy(
-        self,
-        token_ids: list[int],
-        max_distance: int = 1
-    ) -> NgramProposalResult:
+    def propose_fuzzy(self, token_ids: list[int], max_distance: int = 1) -> NgramProposalResult:
         """
         Fuzzy n-gram matching with edit distance tolerance.
 
@@ -323,28 +314,22 @@ class NgramProposer:
 
         if HAS_RUST and hasattr(rust_core, "ngram_fuzzy_match_rust"):
             if result := getattr(rust_core, "ngram_fuzzy_match_rust")(
-                token_ids[:-1],
-                token_ids[-self.max_n:],
-                self.k,
-                max_distance
+                token_ids[:-1], token_ids[-self.max_n :], self.k, max_distance
             ):
                 draft_tokens, score = result
-                return NgramProposalResult(
-                    draft_tokens=draft_tokens,
-                    confidence=score
-                )
+                return NgramProposalResult(draft_tokens=draft_tokens, confidence=score)
             return NgramProposalResult(draft_tokens=[], confidence=0.0)
 
         # Python implementation with simple fuzzy matching
         context = token_ids[:-1]
-        prefix = token_ids[-self.max_n:]
+        prefix = token_ids[-self.max_n :]
         n = len(prefix)
 
         best_following: list[int] = []
         best_score = 0.0
 
         for i in range(len(context) - n + 1):
-            candidate = context[i:i+n]
+            candidate = context[i : i + n]
             distance = self._hamming_distance(prefix, candidate)
 
             if distance <= max_distance:
@@ -359,10 +344,7 @@ class NgramProposer:
                     best_following = following
                     best_score = score
 
-        return NgramProposalResult(
-            draft_tokens=best_following,
-            confidence=best_score * (len(best_following) / self.k)
-        )
+        return NgramProposalResult(draft_tokens=best_following, confidence=best_score * (len(best_following) / self.k))
 
     def _hamming_distance(self, a: list[int], b: list[int]) -> int:
         """Compute Hamming distance between two sequences."""
@@ -401,7 +383,7 @@ class WeightedNgramProposer(NgramProposer):
         """Update n-gram statistics from tokens."""
         for n in range(self.min_n, self.max_n + 1):
             for i in range(len(token_ids) - n + 1):
-                ngram = tuple(token_ids[i:i+n])
+                ngram = tuple(token_ids[i : i + n])
                 count, _ = self._ngram_stats.get(ngram, (0, 0))
                 self._ngram_stats[ngram] = (count + 1, i)
 
@@ -414,21 +396,12 @@ class PromptLookupProposer:
     that are likely to continue in generation.
     """
 
-    def __init__(
-        self,
-        min_lookup_len: int = 3,
-        max_lookup_len: int = 10,
-        num_speculative_tokens: int = 5
-    ):
+    def __init__(self, min_lookup_len: int = 3, max_lookup_len: int = 10, num_speculative_tokens: int = 5):
         self.min_len = min_lookup_len
         self.max_len = max_lookup_len
         self.k = num_speculative_tokens
 
-    def propose(
-        self,
-        prompt_tokens: list[int],
-        generated_tokens: list[int]
-    ) -> list[int]:
+    def propose(self, prompt_tokens: list[int], generated_tokens: list[int]) -> list[int]:
         """
         Propose tokens by looking up patterns in prompt.
 
@@ -444,8 +417,7 @@ class PromptLookupProposer:
 
         if HAS_RUST and hasattr(rust_core, "prompt_lookup_propose_rust"):
             return getattr(rust_core, "prompt_lookup_propose_rust")(
-                prompt_tokens, generated_tokens,
-                self.min_len, self.max_len, self.k
+                prompt_tokens, generated_tokens, self.min_len, self.max_len, self.k
             )
 
         # Try different suffix lengths
@@ -457,7 +429,7 @@ class PromptLookupProposer:
 
             # Search in prompt
             for i in range(len(prompt_tokens) - suffix_len):
-                if prompt_tokens[i:i+suffix_len] == suffix:
+                if prompt_tokens[i : i + suffix_len] == suffix:
                     # Found match, return following tokens
                     start = i + suffix_len
                     end = min(start + self.k, len(prompt_tokens))
@@ -479,16 +451,11 @@ class HybridNgramProposer:
         self.prompt_lookup = PromptLookupProposer(
             min_lookup_len=config.min_n,
             max_lookup_len=config.max_n,
-            num_speculative_tokens=config.num_speculative_tokens
+            num_speculative_tokens=config.num_speculative_tokens,
         )
         self.config = config
 
-    def propose(
-        self,
-        token_ids: list[int],
-        prompt_len: int = 0,
-        use_fuzzy: bool = False
-    ) -> NgramProposalResult:
+    def propose(self, token_ids: list[int], prompt_len: int = 0, use_fuzzy: bool = False) -> NgramProposalResult:
         """
         Propose using best available method.
 
@@ -520,38 +487,19 @@ class NgramProposerFactory:
     """Factory for creating N-gram proposers."""
 
     @staticmethod
-    def create_simple(
-        num_speculative_tokens: int = 5,
-        min_n: int = 1,
-        max_n: int = 4
-    ) -> NgramProposer:
+    def create_simple(num_speculative_tokens: int = 5, min_n: int = 1, max_n: int = 4) -> NgramProposer:
         """Create simple n-gram proposer."""
-        config = NgramConfig(
-            min_n=min_n,
-            max_n=max_n,
-            num_speculative_tokens=num_speculative_tokens
-        )
+        config = NgramConfig(min_n=min_n, max_n=max_n, num_speculative_tokens=num_speculative_tokens)
         return NgramProposer(config)
 
     @staticmethod
-    def create_weighted(
-        num_speculative_tokens: int = 5,
-        decay_factor: float = 0.9
-    ) -> WeightedNgramProposer:
+    def create_weighted(num_speculative_tokens: int = 5, decay_factor: float = 0.9) -> WeightedNgramProposer:
         """Create weighted n-gram proposer."""
         config = NgramConfig(num_speculative_tokens=num_speculative_tokens)
         return WeightedNgramProposer(config, decay_factor=decay_factor)
 
     @staticmethod
-    def create_hybrid(
-        num_speculative_tokens: int = 5,
-        min_n: int = 1,
-        max_n: int = 4
-    ) -> HybridNgramProposer:
+    def create_hybrid(num_speculative_tokens: int = 5, min_n: int = 1, max_n: int = 4) -> HybridNgramProposer:
         """Create hybrid n-gram proposer."""
-        config = NgramConfig(
-            min_n=min_n,
-            max_n=max_n,
-            num_speculative_tokens=num_speculative_tokens
-        )
+        config = NgramConfig(min_n=min_n, max_n=max_n, num_speculative_tokens=num_speculative_tokens)
         return HybridNgramProposer(config)

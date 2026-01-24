@@ -12,20 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Honeypot agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import time
+
 import logging
+import time
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
-from src.logic.agents.security.core.red_queen_core import RedQueenCore, AttackVector
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.security.core.red_queen_core import (AttackVector,
+                                                           RedQueenCore)
 
 __version__ = VERSION
 
 
-class HoneypotAgent(BaseAgent):
+class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Detects and neutralizes prompt injection and adversarial attacks.
     Integrated with RedQueenCore for adversarial prompt evolution testing.
@@ -99,9 +106,7 @@ class HoneypotAgent(BaseAgent):
         for strategy in self.core.MUTATION_STRATEGIES:
             attacks.append(self.core.mutate_prompt(base_task, strategy))
 
-        logging.info(
-            f"Honeypot: Generated {len(attacks)} test attacks for task: {base_task[:20]}"
-        )
+        logging.info(f"Honeypot: Generated {len(attacks)} test attacks for task: {base_task[:20]}")
         return attacks
 
     @as_tool
@@ -109,7 +114,5 @@ class HoneypotAgent(BaseAgent):
         """Returns statistics on trapped adversarial attempts."""
         return {
             "attempts_neutralized": len(self.trapped_attempts),
-            "last_trap_time": self.trapped_attempts[-1]["timestamp"]
-            if self.trapped_attempts
-            else None,
+            "last_trap_time": self.trapped_attempts[-1]["timestamp"] if self.trapped_attempts else None,
         }

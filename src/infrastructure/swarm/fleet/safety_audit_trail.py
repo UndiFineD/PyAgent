@@ -16,12 +16,14 @@
 """Persistent audit log for safety violations and adversarial attempts."""
 
 from __future__ import annotations
-from typing import Any
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import logging
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -42,9 +44,7 @@ class SafetyAuditTrail:
             except Exception as e:
                 logging.error(f"SafetyAuditTrail: Error loading log: {e}")
 
-    def log_violation(
-        self, agent_name: str, task: str, violations: list, level: str = "HIGH"
-    ) -> str:
+    def log_violation(self, agent_name: str, task: str, violations: list, level: str = "HIGH") -> str:
         """Records a new safety violation."""
         entry = {
             "timestamp": datetime.now().isoformat(),
@@ -68,4 +68,9 @@ class SafetyAuditTrail:
         """Returns a human-readable summary of recently logged threats."""
         if not self.violations:
             return "No safety violations recorded."
-        return f"Safety Audit: {len(self.violations)} threats recorded. Latest: {self.violations[-1]['level']} at {self.violations[-1]['timestamp']}"
+        latest = self.violations[-1]
+        msg = (
+            f"Safety Audit: {len(self.violations)} threats recorded. "
+            f"Latest: {latest['level']} at {latest['timestamp']}"
+        )
+        return msg

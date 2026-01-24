@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Collection Utilities Module - Phase 20: Production Infrastructure
 ==================================================================
@@ -24,23 +38,9 @@ from __future__ import annotations
 
 import itertools
 from collections import defaultdict
-from collections.abc import (
-    Callable,
-    Generator,
-    Hashable,
-    Iterable,
-    Iterator,
-    Mapping,
-    MutableMapping,
-    Sequence,
-)
-from typing import (
-    Any,
-    Generic,
-    Literal,
-    TypeVar,
-    overload,
-)
+from collections.abc import (Callable, Generator, Hashable, Iterable, Iterator,
+                             Mapping)
+from typing import Any, Generic, Literal, TypeVar
 
 from typing_extensions import TypeIs
 
@@ -193,10 +193,10 @@ def is_list_of(
 
     if check == "first":
         return isinstance(value[0], typ)
-    elif check == "all":
+    if check == "all":
         return all(isinstance(v, typ) for v in value)
-    else:
-        raise ValueError(f"Invalid check mode: {check}")
+
+    raise ValueError(f"Invalid check mode: {check}")
 
 
 def chunk_list(lst: list[T], chunk_size: int) -> Generator[list[T], None, None]:
@@ -210,7 +210,7 @@ def chunk_list(lst: list[T], chunk_size: int) -> Generator[list[T], None, None]:
     if chunk_size <= 0:
         raise ValueError("chunk_size must be positive")
     for i in range(0, len(lst), chunk_size):
-        yield lst[i:i + chunk_size]
+        yield lst[i : i + chunk_size]
 
 
 def chunk_iter(iterable: Iterable[T], chunk_size: int) -> Generator[list[T], None, None]:
@@ -272,11 +272,7 @@ def flatten_deep(nested: Any, max_depth: int = -1) -> list[Any]:
 # ============================================================================
 
 
-def full_groupby(
-    values: Iterable[V],
-    *,
-    key: Callable[[V], K]
-) -> Iterable[tuple[K, list[V]]]:
+def full_groupby(values: Iterable[V], *, key: Callable[[V], K]) -> Iterable[tuple[K, list[V]]]:
     """
     Group items by key, without requiring sorted input.
 
@@ -294,10 +290,7 @@ def full_groupby(
     return groups.items()
 
 
-def partition(
-    values: Iterable[T],
-    predicate: Callable[[T], bool]
-) -> tuple[list[T], list[T]]:
+def partition(values: Iterable[T], predicate: Callable[[T], bool]) -> tuple[list[T], list[T]]:
     """
     Partition items into two lists based on a predicate.
 
@@ -369,12 +362,7 @@ def swap_dict_values(obj: dict[K, V], key1: K, key2: K) -> None:
         obj.pop(key1, None)
 
 
-def deep_merge_dicts(
-    base: dict[str, Any],
-    override: dict[str, Any],
-    *,
-    inplace: bool = False
-) -> dict[str, Any]:
+def deep_merge_dicts(base: dict[str, Any], override: dict[str, Any], *, inplace: bool = False) -> dict[str, Any]:
     """
     Recursively merge two dictionaries.
 
@@ -389,11 +377,7 @@ def deep_merge_dicts(
     result = base if inplace else dict(base)
 
     for key, value in override.items():
-        if (
-            key in result
-            and isinstance(result[key], dict)
-            and isinstance(value, dict)
-        ):
+        if key in result and isinstance(result[key], dict) and isinstance(value, dict):
             result[key] = deep_merge_dicts(result[key], value)
         else:
             result[key] = value
@@ -490,10 +474,7 @@ def unique_by(iterable: Iterable[T], key: Callable[[T], Hashable]) -> list[T]:
 # ============================================================================
 
 
-def sliding_window(
-    iterable: Iterable[T],
-    size: int
-) -> Generator[tuple[T, ...], None, None]:
+def sliding_window(iterable: Iterable[T], size: int) -> Generator[tuple[T, ...], None, None]:
     """
     Yield sliding windows of a specified size.
 

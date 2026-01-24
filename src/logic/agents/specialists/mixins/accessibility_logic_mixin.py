@@ -1,13 +1,21 @@
+
+"""
+Accessibility logic mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
-from typing import TYPE_CHECKING
-from src.core.base.common.types.accessibility_report import AccessibilityReport
+
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+from src.core.base.common.types.accessibility_report import AccessibilityReport
 
 if TYPE_CHECKING:
-    from src.logic.agents.specialists.accessibility_agent import AccessibilityAgent
+    from src.logic.agents.specialists.accessibility_agent import \
+        AccessibilityAgent
+
 
 class AccessibilityLogicMixin:
     """Mixin for entry-point analysis logic and rule management in AccessibilityAgent."""
@@ -28,9 +36,7 @@ class AccessibilityLogicMixin:
             self._analyze_javascript_ui(content)
         return self._generate_report(file_path)
 
-    def analyze_content(
-        self: AccessibilityAgent, content: str, file_type: str = "html"
-    ) -> AccessibilityReport:
+    def analyze_content(self: AccessibilityAgent, content: str, file_type: str = "html") -> AccessibilityReport:
         """Analyze content string for accessibility issues."""
         self.issues.clear()
         if file_type == "html":

@@ -18,11 +18,12 @@ Synchronizes separate channels for video, audio, and text.
 """
 
 from __future__ import annotations
+
 import logging
 import time
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 try:
     import rust_core as rc
@@ -31,11 +32,13 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.multimodal.muxer")
 
+
 class ChannelType(Enum):
     TEXT = 0x01
     AUDIO = 0x02
     VIDEO = 0x03
     COMMAND = 0x04
+
 
 @dataclass
 class ModalityChannel:
@@ -43,6 +46,7 @@ class ModalityChannel:
     modality_type: str
     fps: float = 120.0
     buffer_size: int = 1024
+
 
 class Muxer:
     """
@@ -63,17 +67,13 @@ class Muxer:
         packets = [
             {"channel_id": 1, "modality_type": "VIDEO", "payload": video},
             {"channel_id": 2, "modality_type": "AUDIO", "payload": audio},
-            {"channel_id": 3, "modality_type": "TEXT", "payload": text.encode("utf-8")}
+            {"channel_id": 3, "modality_type": "TEXT", "payload": text.encode("utf-8")},
         ]
         return self.mux(packets)
 
     def add_channel(self, name: str, m_type: str, fps: Optional[float] = None):
         """Register a new modality channel."""
-        self.channels[name] = ModalityChannel(
-            name=name,
-            modality_type=m_type,
-            fps=fps or self.target_fps
-        )
+        self.channels[name] = ModalityChannel(name=name, modality_type=m_type, fps=fps or self.target_fps)
         logger.info(f"Registered channel: {name} ({m_type}) at {fps or self.target_fps} fps")
 
     def mux(self, raw_packets: List[Dict[str, Any]]) -> bytes:
@@ -83,12 +83,11 @@ class Muxer:
         if rc and hasattr(rc, "mux_channels_rust") and hasattr(rc, "ModalityPacket"):
             packets = []
             for p in raw_packets:
-                packets.append(rc.ModalityPacket(
-                    p["channel_id"],
-                    p["modality_type"],
-                    p.get("timestamp", time.time()),
-                    p["payload"]
-                ))
+                packets.append(
+                    rc.ModalityPacket(
+                        p["channel_id"], p["modality_type"], p.get("timestamp", time.time()), p["payload"]
+                    )
+                )
             return bytes(rc.mux_channels_rust(packets))
 
         # Fallback (Slow)
@@ -107,7 +106,7 @@ class Muxer:
                     "channel_id": p.channel_id,
                     "modality_type": p.modality_type,
                     "timestamp": p.timestamp,
-                    "payload": p.payload
+                    "payload": p.payload,
                 }
                 for p in packets
             ]
@@ -122,12 +121,9 @@ class Muxer:
         if rc and hasattr(rc, "synchronize_channels_rust") and hasattr(rc, "ModalityPacket"):
             rust_packets = []
             for p in packets:
-                rust_packets.append(rc.ModalityPacket(
-                    p["channel_id"],
-                    p["modality_type"],
-                    p["timestamp"],
-                    p["payload"]
-                ))
+                rust_packets.append(
+                    rc.ModalityPacket(p["channel_id"], p["modality_type"], p["timestamp"], p["payload"])
+                )
 
             result = rc.synchronize_channels_rust(rust_packets, jitter_ms)
 
@@ -139,7 +135,7 @@ class Muxer:
                         "channel_id": p.channel_id,
                         "modality_type": p.modality_type,
                         "timestamp": p.timestamp,
-                        "payload": p.payload
+                        "payload": p.payload,
                     }
                     for p in p_list
                 ]

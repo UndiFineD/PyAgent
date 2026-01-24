@@ -15,8 +15,10 @@
 """Script for finding all legacy import patterns across the workspace."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 results = []
@@ -28,11 +30,7 @@ for root_dir in ["src", "tests"]:
                 try:
                     with open(path, encoding="utf-8") as f:
                         for i, line in enumerate(f):
-                            if (
-                                "from agent_" in line
-                                or "import agent_" in line
-                                or "from classes." in line
-                            ):
+                            if "from agent_" in line or "import agent_" in line or "from classes." in line:
                                 results.append(f"{path}:{i + 1}:{line.strip()}")
                 except Exception:
                     pass

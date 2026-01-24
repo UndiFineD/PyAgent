@@ -18,9 +18,12 @@ Monitors system load and spawns new agent instances as needed.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
+
+from src.core.base.lifecycle.version import VERSION
+
 from .scaling_core import ScalingCore
 
 __version__ = VERSION
@@ -36,9 +39,7 @@ class ScalingManager:
         self.fleet = fleet_manager
         self.core = ScalingCore(scale_threshold=5.0, window_size=10, backoff_seconds=60)
 
-    def record_metric(
-        self, agent_name: str, value: float, metric_type: str = "latency"
-    ) -> None:
+    def record_metric(self, agent_name: str, value: float, metric_type: str = "latency") -> None:
         """Records a metric and checks if scaling is required."""
         self.core.add_metric(agent_name, value, metric_type=metric_type)
 
@@ -48,9 +49,7 @@ class ScalingManager:
     def _execute_scale_out(self, agent_name: str) -> None:
         """Spawns a new instance of an agent if load is too high."""
         load_score = self.core.calculate_weighted_load(agent_name)
-        logging.warning(
-            f"SCALING: High load score ({load_score:.2f}) detected for {agent_name}. Spawning replica."
-        )
+        logging.warning(f"SCALING: High load score ({load_score:.2f}) detected for {agent_name}. Spawning replica.")
 
         # Replica naming logic
         replica_name = f"{agent_name}_replica_{int(time.time())}"

@@ -16,6 +16,7 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
+
 import graphlib
 
 from src.core.base.lifecycle.version import VERSION

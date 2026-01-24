@@ -16,8 +16,11 @@
 """Test optimization and coverage analysis."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .models import TestCase
 
 __version__ = VERSION
@@ -77,9 +80,7 @@ class TestSuiteOptimizer:
         """Suggest tests that could be removed."""
         suggestions: list[dict[str, Any]] = []
         for test_id in self.find_redundant_tests():
-            suggestions.append(
-                {"test_id": test_id, "reason": "fully_redundant", "confidence": 0.9}
-            )
+            suggestions.append({"test_id": test_id, "reason": "fully_redundant", "confidence": 0.9})
         for id_a, id_b, overlap in self.find_overlapping_tests():
             cov_a = len(self.coverage_map.get(id_a, set()))
             cov_b = len(self.coverage_map.get(id_b, set()))
@@ -109,9 +110,7 @@ class TestSuiteOptimizer:
             all_coverage |= set(cov)
 
         redundant = set(self.find_redundant_tests())
-        kept = [
-            test_id for test_id in self.coverage_map.keys() if test_id not in redundant
-        ]
+        kept = [test_id for test_id in self.coverage_map.keys() if test_id not in redundant]
 
         kept_coverage: set[str] = set()
         for test_id in kept:
@@ -162,9 +161,7 @@ class CoverageGapAnalyzer:
 
     def add_uncovered(self, item: str) -> None:
         """Mark item as uncovered."""
-        self._covered_lines.setdefault("__legacy_total__", set()).add(
-            hash(item) & 0x7FFFFFFF
-        )
+        self._covered_lines.setdefault("__legacy_total__", set()).add(hash(item) & 0x7FFFFFFF)
 
     def get_coverage_percentage_legacy(self) -> float:
         """Get coverage percentage (legacy aggregate)."""

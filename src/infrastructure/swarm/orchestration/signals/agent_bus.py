@@ -18,13 +18,15 @@ Uses ZeroMQ for high-performance inter-process messaging.
 """
 
 from __future__ import annotations
-import zmq
-import zmq.asyncio
-import orjson
-import logging
+
 import asyncio
 import inspect
+import logging
 from typing import Any, Callable
+
+import orjson
+import zmq
+import zmq.asyncio
 
 
 class AgentCommunicationBus:
@@ -95,11 +97,11 @@ class AgentCommunicationBus:
         """Stops the bus and cleans up sockets."""
 
         self._running = False
-        if hasattr(self, 'publisher') and not self.publisher.closed:
+        if hasattr(self, "publisher") and not self.publisher.closed:
             self.publisher.close(linger=0)
-        if hasattr(self, 'subscriber') and not self.subscriber.closed:
+        if hasattr(self, "subscriber") and not self.subscriber.closed:
             self.subscriber.close(linger=0)
-        if hasattr(self, 'context'):
+        if hasattr(self, "context"):
             self.context.term()
 
 
@@ -108,7 +110,7 @@ if __name__ == "__main__":
     import sys
 
     # ZeroMQ on Windows requires SelectorEventLoop
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
     async def run_example() -> None:

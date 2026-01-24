@@ -12,13 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Architect agent.py module.
+"""
+
+# pylint: disable=too-many-ancestors
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -43,10 +51,11 @@ class ArchitectAgent(BaseAgent):
         """
         Analyzes logs and suggests a structural change to the fleet or base agent.
         """
+        _ = performance_logs
         logging.info("ArchitectAgent: Analyzing logs for architectural pivot.")
         return {
             "component": "FleetManager.AgentRegistry",
             "proposed_change": "Switch to Rust-based FFI bridge for registry scans",
             "impact": "High (90% faster boot)",
-            "priority": 1
+            "priority": 1,
         }

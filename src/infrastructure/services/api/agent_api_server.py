@@ -17,15 +17,19 @@ FastAPI-based API gateway for the PyAgent fleet.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
-from typing import Any
+
 import json
 import time
 from pathlib import Path
+from typing import Any
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from pydantic import BaseModel
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.api.fleet_load_balancer import \
+    FleetLoadBalancer
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.infrastructure.services.api.fleet_load_balancer import FleetLoadBalancer
 
 __version__ = VERSION
 
@@ -84,25 +88,19 @@ async def root() -> dict[str, Any]:
 
 @app.get("/agents")
 async def list_agents() -> dict[str, Any]:
-    return {
-        "agents": [{"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()]
-    }
+    return {"agents": [{"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()]}
 
 
 @app.get("/discovery/peers")
 async def list_discovery_peers() -> dict[str, Any]:
     """Returns the list of peers discovered on the LAN."""
-    return {
-        "peers": [p.to_dict() for p in fleet.get_lan_peers()]
-    }
+    return {"peers": [p.to_dict() for p in fleet.get_lan_peers()]}
 
 
 @app.get("/discovery/peers/fastest")
 async def list_fastest_peers() -> dict[str, Any]:
     """Returns the top 5 lowest-latency peers discovered."""
-    return {
-        "peers": [p.to_dict() for p in fleet.get_fastest_peers()]
-    }
+    return {"peers": [p.to_dict() for p in fleet.get_fastest_peers()]}
 
 
 @app.post("/task")

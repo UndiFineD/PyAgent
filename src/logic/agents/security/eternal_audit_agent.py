@@ -12,22 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Eternal audit agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
-import json
-import time
+
 import hashlib
+import json
+import logging
 import os
+import time
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class EternalAuditAgent(BaseAgent):
+class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Agent that maintains an append-only verifiable audit trail of all swarm activities.
     Uses hashing to ensure temporal integrity (simulated blockchain).
@@ -61,13 +67,11 @@ class EternalAuditAgent(BaseAgent):
         if os.path.exists(self.current_shard):
             try:
                 with open(self.current_shard, "rb") as f:
-                    f.seek(
-                        -min(1024, os.path.getsize(self.current_shard)), 2
-                    )  # Go to end
+                    f.seek(-min(1024, os.path.getsize(self.current_shard)), 2)  # Go to end
                     last_line = f.readlines()[-1].decode("utf-8")
                     last_entry = json.loads(last_line)
                     self.last_hash = last_entry.get("hash", self.last_hash)
-            except Exception:
+            except (IOError, IndexError, ValueError):
                 pass
 
     @as_tool
@@ -76,9 +80,10 @@ class EternalAuditAgent(BaseAgent):
         Records an event in the verifiable audit trail.
         """
         # Selective pruning: check if action or details contain critical keywords
-        is_critical = any(
-            kw in action.lower() for kw in self.CRITICAL_ACTIONS
-        ) or details.get("severity") in ["HIGH", "CRITICAL"]
+        is_critical = any(kw in action.lower() for kw in self.CRITICAL_ACTIONS) or details.get("severity") in [
+            "HIGH",
+            "CRITICAL",
+        ]
 
         if self.selective_logging and not is_critical:
             return "Event skipped (routine/success)."
@@ -135,14 +140,13 @@ class EternalAuditAgent(BaseAgent):
                 # Check previous hash chain
                 if entry.get("previous_hash") != expected_prev_hash:
                     errors.append(
-                        f"Line {count}: Chain broken. Expected {expected_prev_hash}, found {entry.get('previous_hash')}"
+                        f"Line {count}: Chain broken. Expected {expected_prev_hash}, "
+                        f"found {entry.get('previous_hash')}"
                     )
 
                 # Verify content hash
                 entry_str = json.dumps(entry, sort_keys=True)
-                recalculated_hash = hashlib.sha256(
-                    entry_str.encode("utf-8")
-                ).hexdigest()
+                recalculated_hash = hashlib.sha256(entry_str.encode("utf-8")).hexdigest()
                 if recalculated_hash != actual_hash:
                     errors.append(f"Line {count}: Hash mismatch.")
 

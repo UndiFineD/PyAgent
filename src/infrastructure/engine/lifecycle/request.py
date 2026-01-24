@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Request object implementation."""
@@ -5,7 +19,9 @@
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Union
-from .enums import RequestStatus, FinishReason, RequestEventType, is_valid_transition
+
+from .enums import (FinishReason, RequestEventType, RequestStatus,
+                    is_valid_transition)
 from .event import RequestEvent
 
 
@@ -28,6 +44,7 @@ class Request:
         stop_reason: Why the request stopped (if finished)
         finish_reason: High-level finish reason enum
     """
+
     request_id: str
     prompt: Union[str, List[int]]
     max_tokens: int = 100
@@ -78,9 +95,7 @@ class Request:
     def _transition_to(self, new_status: RequestStatus) -> None:
         """Transition to a new status with validation."""
         if not is_valid_transition(self.status, new_status):
-            raise ValueError(
-                f"Invalid status transition: {self.status} -> {new_status}"
-            )
+            raise ValueError(f"Invalid status transition: {self.status} -> {new_status}")
         self.status = new_status
 
     # -------------------------------------------------------------------------
@@ -163,9 +178,7 @@ class Request:
     def add_output_token(self, token_id: int) -> None:
         """Add a generated token to the output."""
         if not self.is_running():
-            raise RuntimeError(
-                f"Cannot add token to request in state {self.status}"
-            )
+            raise RuntimeError(f"Cannot add token to request in state {self.status}")
         was_empty = not self.output_token_ids
         self.output_token_ids.append(token_id)
         if was_empty:

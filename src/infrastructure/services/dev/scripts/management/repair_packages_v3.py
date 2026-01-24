@@ -11,12 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Repair packages v3.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -71,12 +77,8 @@ def fix_content(file_path: str | Path) -> bool:
         "agent_test_utils",
     ]
     for mod in root_modules:
-        content = re.sub(
-            rf"(\s*)import {mod}(\s|$)", rf"\1from src import {mod}\2", content
-        )
-        content = re.sub(
-            rf"(\s*)from {mod} import", rf"\1from src.{mod} import", content
-        )
+        content = re.sub(rf"(\s*)import {mod}(\s|$)", rf"\1from src import {mod}\2", content)
+        content = re.sub(rf"(\s*)from {mod} import", rf"\1from src.{mod} import", content)
 
     # 3. Fix test-specific imports that skip 'src' prefix (more aggressive)
 
@@ -94,12 +96,8 @@ def fix_content(file_path: str | Path) -> bool:
         ]
         for mod in to_check:
             # Matches from mod. or from mod import
-            content = re.sub(
-                rf"(?m)^(\s*)from {mod}(?=\.|\s+import)", rf"\1from src.{mod}", content
-            )
-            content = re.sub(
-                rf"(?m)^(\s*)import {mod}(?=\.)", rf"\1import src.{mod}", content
-            )
+            content = re.sub(rf"(?m)^(\s*)from {mod}(?=\.|\s+import)", rf"\1from src.{mod}", content)
+            content = re.sub(rf"(?m)^(\s*)import {mod}(?=\.)", rf"\1import src.{mod}", content)
 
     if content != original:
         with open(file_path, "w", encoding="utf-8") as f:
@@ -130,7 +128,7 @@ def main() -> None:
     print("Step 3: Applying specific class fixes...")
 
     # backend/CircuitBreaker.py
-    cb_path = Path("src\backend\CircuitBreaker.py")
+    cb_path = Path("src\backend\\CircuitBreaker.py")
     if cb_path.exists():
         with open(cb_path, encoding="utf-8") as f:
             c = f.read()

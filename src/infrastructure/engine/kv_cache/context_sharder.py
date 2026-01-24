@@ -19,26 +19,28 @@ Allows multiple experts to share access to the same sharded context.
 """
 
 import logging
-import uuid
 import time
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
+from typing import Dict, List, Optional
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class ContextShard:
     """Metadata for a sharded slice of a long context."""
+
     shard_id: str
     tenant_id: str  # Phase 71: Multi-tenant isolation
     start_token: int
     end_token: int
     rank_id: int  # The DP-rank (node) holding this shard
-    replica_ranks: List[int] = field(default_factory=list) # Phase 75: Fault tolerance mirroring
+    replica_ranks: List[int] = field(default_factory=list)  # Phase 75: Fault tolerance mirroring
     overlap_size: int = 0  # Phase 78: Context overlap for sliding windows
     is_cached: bool = True
     last_access: float = field(default_factory=time.time)
     precision: str = "float16"  # float16, fp8, int4, etc.
+
 
 class ContextShardManager:
     """
@@ -57,12 +59,14 @@ class ContextShardManager:
         self.dead_ranks.add(rank_id)
         logger.warning(f"Rank {rank_id} marked as DEAD. Triggering failover lookup.")
 
-    def shard_context(self,
-                      context_id: str,
-                      total_tokens: int,
-                      available_ranks: List[int],
-                      tenant_id: str = "default_tenant",
-                      overlap: int = 0) -> List[ContextShard]:
+    def shard_context(
+        self,
+        context_id: str,
+        total_tokens: int,
+        available_ranks: List[int],
+        tenant_id: str = "default_tenant",
+        overlap: int = 0,
+    ) -> List[ContextShard]:
         """
         Calculates how to split a long context across available ranks.
         Ensures shards are tagged with tenant_id for isolation.
@@ -97,15 +101,20 @@ class ContextShardManager:
                 end_token=end,
                 rank_id=rank,
                 replica_ranks=replicas,
-                overlap_size=overlap if i > 0 else 0
+                overlap_size=overlap if i > 0 else 0,
             )
             shards.append(shard)
 
         self.context_registry[context_id] = shards
-        logger.info(f"Context {context_id} ({total_tokens} tokens) sharded into {num_shards} pieces across {len(available_ranks)} ranks.")
+        logger.info(
+            f"Context {context_id} ({total_tokens} tokens) sharded into {num_shards} "
+            f"pieces across {len(available_ranks)} ranks."
+        )
         return shards
 
-    def get_rank_for_token(self, context_id: str, token_index: int, tenant_id: str = "default_tenant") -> Optional[int]:
+    def get_rank_for_token(
+        self, context_id: str, token_index: int, tenant_id: str = "default_tenant"
+    ) -> Optional[int]:
         """
         Returns which rank holds the shard containing the specific token.
         Enforces tenant isolation by only searching for shards owned by the tenant.

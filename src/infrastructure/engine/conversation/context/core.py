@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,23 +20,16 @@ Core conversation context classes.
 
 from __future__ import annotations
 
-import asyncio
 import json
 import time
 import uuid
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, List, Optional
 
-from .models import (
-    ContextConfig,
-    ContextState,
-    ContextSnapshot,
-    TokenMetrics,
-    TurnType,
-    ConversationTurn,
-)
-from .tracker import TurnTracker
+from .models import (ContextConfig, ContextSnapshot, ContextState,
+                     ConversationTurn, TokenMetrics, ToolExecution, TurnType)
 from .orchestrator import ToolOrchestrator
+from .tracker import TurnTracker
 
 
 class ConversationContext(ABC):
@@ -218,7 +225,6 @@ class AgenticContext(ConversationContext):
         tool_calls: List[Dict[str, Any]],
     ) -> List[ToolExecution]:
         """Queue tool calls from assistant response."""
-        from .models import ToolExecution
         executions = []
         for tc in tool_calls:
             func = tc.get("function", {})
@@ -241,9 +247,10 @@ class AgenticContext(ConversationContext):
         for execution in results:
             result_str = ""
             if execution.status == "completed":
-                result_str = json.dumps(execution.result) if not isinstance(
-                    execution.result, str
-                ) else execution.result
+                if not isinstance(execution.result, str):
+                    result_str = json.dumps(execution.result)
+                else:
+                    result_str = execution.result
             else:
                 result_str = f"Error: {execution.error}"
 

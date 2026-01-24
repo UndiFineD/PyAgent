@@ -40,7 +40,8 @@ class TestModelFallbackCore(unittest.TestCase):
         # Let's look at formula: `(1 - caps["cost"]) * 0.2`.
         # If cost is 0.8, (1-0.8) = 0.2. Low score.
         # If cost is 0.1, (1-0.1) = 0.9. High score.
-        # So "cost" here behaves like "Affordability Score" (Higher is cheaper??) or "Normalized Cost" (Higher is more expensive??)
+        # So "cost" here behaves like "Affordability Score" (Higher is cheaper??)
+        # or "Normalized Cost" (Higher is more expensive??)
         # `caps["cost"] <= max_cost`. If max_cost is 0.5.
         # 0.8 <= 0.5 is False.
         # So gpt-3.5-turbo (cost 0.8) is EXCLUDED if max_cost is 0.5.

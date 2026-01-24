@@ -16,16 +16,19 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import re
+
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.common.types.review_category import ReviewCategory
 from src.core.base.common.types.review_finding import ReviewFinding
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
-import re
+from src.core.base.lifecycle.version import VERSION
 
 # Rust acceleration imports
 try:
     from rust_core import scan_lines_multi_pattern_rust
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -33,7 +36,7 @@ except ImportError:
 __version__ = VERSION
 
 
-class CodeReviewerAgent(BaseAgent):
+class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Automated code review system.
 
     Provides automated code review with actionable suggestions
@@ -49,10 +52,22 @@ class CodeReviewerAgent(BaseAgent):
 
     # Pattern definitions for Rust acceleration
     REVIEW_PATTERNS = [
-        (r'password\s*=\s*[\'"][^\'"]+[\'"]', ReviewCategory.SECURITY, 5,
-         "Potential hardcoded password", "Use environment variables or secure vault", False),
-        (r"for\s+\w+\s+in\s+range\(len\(", ReviewCategory.PERFORMANCE, 2,
-         "Inefficient iteration pattern", "Use 'enumerate()' instead of 'range(len())'", True),
+        (
+            r'password\s*=\s*[\'"][^\'"]+[\'"]',
+            ReviewCategory.SECURITY,
+            5,
+            "Potential hardcoded password",
+            "Use environment variables or secure vault",
+            False,
+        ),
+        (
+            r"for\s+\w+\s+in\s+range\(len\(",
+            ReviewCategory.PERFORMANCE,
+            2,
+            "Inefficient iteration pattern",
+            "Use 'enumerate()' instead of 'range(len())'",
+            True,
+        ),
     ]
 
     def __init__(self, file_path: str | None = None) -> None:
@@ -104,7 +119,7 @@ class CodeReviewerAgent(BaseAgent):
                             auto_fixable=auto_fix,
                         )
                     )
-            except Exception:
+            except (RuntimeError, ValueError, TypeError):
                 self._python_pattern_scan(lines)
         else:
             self._python_pattern_scan(lines)
@@ -166,3 +181,29 @@ class CodeReviewerAgent(BaseAgent):
             cat = finding.category.value
             summary[cat] = summary.get(cat, 0) + 1
         return summary
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Review code based on prompt or target file."""
+        content = prompt
+        if target_file:
+            from pathlib import Path
+
+            path = Path(target_file)
+            if path.exists():
+                content = path.read_text(encoding="utf-8")
+
+        findings = self.review_code(content)
+        if not findings:
+            return "✅ No review findings. Code looks clean."
+
+        report = ["## 🔍 Code Review Findings\n"]
+        for f in findings:
+            report.append(f"- [{f.category.name}] Line {f.line_number}: {f.message}")
+            report.append(f"  * Suggestion: {f.suggestion}")
+
+        return "\n".join(report)
+
+
+if __name__ == "__main__":
+    main = create_main_function(CodeReviewerAgent, "Code Reviewer", "Content to review")
+    main()

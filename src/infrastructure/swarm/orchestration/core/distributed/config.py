@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -14,12 +28,12 @@ from enum import Enum, auto
 class EngineState(Enum):
     """State of a distributed engine instance."""
 
-    INITIALIZING = auto()   # Engine is starting up
-    READY = auto()          # Engine is ready to process
-    BUSY = auto()           # Engine is processing requests
-    DRAINING = auto()       # Engine is draining requests
-    STOPPED = auto()        # Engine has stopped
-    ERROR = auto()          # Engine encountered an error
+    INITIALIZING = auto()  # Engine is starting up
+    READY = auto()  # Engine is ready to process
+    BUSY = auto()  # Engine is processing requests
+    DRAINING = auto()  # Engine is draining requests
+    STOPPED = auto()  # Engine has stopped
+    ERROR = auto()  # Engine encountered an error
 
 
 class WorkerState(Enum):
@@ -68,11 +82,7 @@ class ParallelConfig:
     @property
     def world_size(self) -> int:
         """Total number of distributed ranks."""
-        return (
-            self.data_parallel_size
-            * self.tensor_parallel_size
-            * self.pipeline_parallel_size
-        )
+        return self.data_parallel_size * self.tensor_parallel_size * self.pipeline_parallel_size
 
     @property
     def is_distributed(self) -> bool:

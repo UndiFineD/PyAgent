@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 RingBuffer - Fixed-size circular buffer for efficient streaming data.
 
@@ -9,15 +23,17 @@ Goes beyond vLLM with lock-free ring buffer patterns:
 
 Phase 18: Beyond vLLM - Advanced Data Structures
 """
+
 from __future__ import annotations
+
+import statistics
 import threading
 import time
 from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Any, Callable
-import statistics
+from typing import Generic, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class RingBuffer(Generic[T]):
@@ -186,11 +202,11 @@ class RingBuffer(Generic[T]):
     def get_stats(self) -> dict:
         """Get buffer statistics."""
         return {
-            'capacity': self._capacity,
-            'size': self._size,
-            'is_full': self.is_full,
-            'total_items_added': self._total_items,
-            'overwrites': max(0, self._total_items - self._capacity),
+            "capacity": self._capacity,
+            "size": self._size,
+            "is_full": self.is_full,
+            "total_items_added": self._total_items,
+            "overwrites": max(0, self._total_items - self._capacity),
         }
 
 
@@ -256,11 +272,12 @@ class ThreadSafeRingBuffer(Generic[T]):
 @dataclass
 class TimestampedValue(Generic[T]):
     """Value with timestamp for time-series data."""
+
     value: T
     timestamp: float
 
     @classmethod
-    def now(cls, value: T) -> 'TimestampedValue[T]':
+    def now(cls, value: T) -> "TimestampedValue[T]":
         """Create with current timestamp."""
         return cls(value=value, timestamp=time.time())
 
@@ -327,27 +344,27 @@ class TimeSeriesBuffer(Generic[T]):
 
         if not values:
             return {
-                'count': 0,
-                'window_seconds': window_seconds,
+                "count": 0,
+                "window_seconds": window_seconds,
             }
 
         # Try to calculate numeric stats
         try:
             numeric_values = [float(v) for v in values]  # type: ignore
             return {
-                'count': len(numeric_values),
-                'window_seconds': window_seconds,
-                'min': min(numeric_values),
-                'max': max(numeric_values),
-                'sum': sum(numeric_values),
-                'mean': statistics.mean(numeric_values),
-                'median': statistics.median(numeric_values),
-                'stdev': statistics.stdev(numeric_values) if len(numeric_values) > 1 else 0.0,
+                "count": len(numeric_values),
+                "window_seconds": window_seconds,
+                "min": min(numeric_values),
+                "max": max(numeric_values),
+                "sum": sum(numeric_values),
+                "mean": statistics.mean(numeric_values),
+                "median": statistics.median(numeric_values),
+                "stdev": statistics.stdev(numeric_values) if len(numeric_values) > 1 else 0.0,
             }
         except (TypeError, ValueError):
             return {
-                'count': len(values),
-                'window_seconds': window_seconds,
+                "count": len(values),
+                "window_seconds": window_seconds,
             }
 
     @property
@@ -402,11 +419,11 @@ class SlidingWindowAggregator:
     def _empty_bucket() -> dict:
         """Create empty bucket."""
         return {
-            'sum': 0.0,
-            'count': 0,
-            'min': float('inf'),
-            'max': float('-inf'),
-            'values': [],
+            "sum": 0.0,
+            "count": 0,
+            "min": float("inf"),
+            "max": float("-inf"),
+            "values": [],
         }
 
     def _rotate_buckets(self) -> None:
@@ -432,11 +449,11 @@ class SlidingWindowAggregator:
             self._rotate_buckets()
 
             bucket = self._buckets[self._current_bucket_idx]
-            bucket['sum'] += value
-            bucket['count'] += 1
-            bucket['min'] = min(bucket['min'], value)
-            bucket['max'] = max(bucket['max'], value)
-            bucket['values'].append(value)
+            bucket["sum"] += value
+            bucket["count"] += 1
+            bucket["min"] = min(bucket["min"], value)
+            bucket["max"] = max(bucket["max"], value)
+            bucket["values"].append(value)
 
     def _get_all_values(self) -> list[float]:
         """Get all values from all buckets."""
@@ -445,41 +462,41 @@ class SlidingWindowAggregator:
 
             values = []
             for bucket in self._buckets:
-                values.extend(bucket['values'])
+                values.extend(bucket["values"])
             return values
 
     def count(self) -> int:
         """Get total count."""
         with self._lock:
             self._rotate_buckets()
-            return sum(b['count'] for b in self._buckets)
+            return sum(b["count"] for b in self._buckets)
 
     def sum(self) -> float:
         """Get sum of all values."""
         with self._lock:
             self._rotate_buckets()
-            return sum(b['sum'] for b in self._buckets)
+            return sum(b["sum"] for b in self._buckets)
 
     def mean(self) -> float:
         """Get mean of all values."""
         with self._lock:
             self._rotate_buckets()
-            total_sum = sum(b['sum'] for b in self._buckets)
-            total_count = sum(b['count'] for b in self._buckets)
+            total_sum = sum(b["sum"] for b in self._buckets)
+            total_count = sum(b["count"] for b in self._buckets)
             return total_sum / total_count if total_count > 0 else 0.0
 
     def min(self) -> float:
         """Get minimum value."""
         with self._lock:
             self._rotate_buckets()
-            mins = [b['min'] for b in self._buckets if b['count'] > 0]
+            mins = [b["min"] for b in self._buckets if b["count"] > 0]
             return min(mins) if mins else 0.0
 
     def max(self) -> float:
         """Get maximum value."""
         with self._lock:
             self._rotate_buckets()
-            maxs = [b['max'] for b in self._buckets if b['count'] > 0]
+            maxs = [b["max"] for b in self._buckets if b["count"] > 0]
             return max(maxs) if maxs else 0.0
 
     def percentile(self, p: float) -> float:
@@ -509,25 +526,25 @@ class SlidingWindowAggregator:
 
         if count == 0:
             return {
-                'count': 0,
-                'window_seconds': self._window_seconds,
+                "count": 0,
+                "window_seconds": self._window_seconds,
             }
 
         values.sort()
 
         return {
-            'count': count,
-            'window_seconds': self._window_seconds,
-            'sum': sum(values),
-            'mean': statistics.mean(values),
-            'min': values[0],
-            'max': values[-1],
-            'median': statistics.median(values),
-            'stdev': statistics.stdev(values) if count > 1 else 0.0,
-            'p50': values[int(count * 0.5)],
-            'p90': values[int(count * 0.9)],
-            'p95': values[int(count * 0.95)],
-            'p99': values[min(int(count * 0.99), count - 1)],
+            "count": count,
+            "window_seconds": self._window_seconds,
+            "sum": sum(values),
+            "mean": statistics.mean(values),
+            "min": values[0],
+            "max": values[-1],
+            "median": statistics.median(values),
+            "stdev": statistics.stdev(values) if count > 1 else 0.0,
+            "p50": values[int(count * 0.5)],
+            "p90": values[int(count * 0.9)],
+            "p95": values[int(count * 0.95)],
+            "p99": values[min(int(count * 0.99), count - 1)],
         }
 
     def reset(self) -> None:
@@ -538,9 +555,9 @@ class SlidingWindowAggregator:
 
 
 __all__ = [
-    'RingBuffer',
-    'ThreadSafeRingBuffer',
-    'TimestampedValue',
-    'TimeSeriesBuffer',
-    'SlidingWindowAggregator',
+    "RingBuffer",
+    "ThreadSafeRingBuffer",
+    "TimestampedValue",
+    "TimeSeriesBuffer",
+    "SlidingWindowAggregator",
 ]

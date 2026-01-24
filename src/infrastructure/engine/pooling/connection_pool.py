@@ -1,38 +1,42 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Generic Connection Pool for database and HTTP connections.
 
 Phase 19: Beyond vLLM - Performance Patterns
 Connection pooling to reduce connection overhead.
 """
+
 from __future__ import annotations
 
+import contextlib
 import threading
 import time
-import weakref
-import contextlib
-from abc import ABC, abstractmethod
 from collections import deque
 from contextlib import contextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Protocol,
-    Set,
-    TypeVar,
-    runtime_checkable,
-)
+from typing import (Any, Callable, Dict, Generic, List, Optional, Protocol,
+                    Set, TypeVar, runtime_checkable)
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class ConnectionState(Enum):
     """State of a pooled connection."""
+
     IDLE = auto()
     IN_USE = auto()
     STALE = auto()
@@ -60,6 +64,7 @@ class Pingable(Protocol):
 @dataclass
 class PoolStats:
     """Statistics for connection pool."""
+
     created: int = 0
     reused: int = 0
     closed: int = 0
@@ -92,24 +97,25 @@ class PoolStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            'created': self.created,
-            'reused': self.reused,
-            'closed': self.closed,
-            'failed_creates': self.failed_creates,
-            'failed_health_checks': self.failed_health_checks,
-            'timeouts': self.timeouts,
-            'current_idle': self.current_idle,
-            'current_in_use': self.current_in_use,
-            'peak_in_use': self.peak_in_use,
-            'total_connections': self.total_connections,
-            'reuse_ratio': self.reuse_ratio,
-            'avg_wait_time_ms': self.avg_wait_time_ms,
+            "created": self.created,
+            "reused": self.reused,
+            "closed": self.closed,
+            "failed_creates": self.failed_creates,
+            "failed_health_checks": self.failed_health_checks,
+            "timeouts": self.timeouts,
+            "current_idle": self.current_idle,
+            "current_in_use": self.current_in_use,
+            "peak_in_use": self.peak_in_use,
+            "total_connections": self.total_connections,
+            "reuse_ratio": self.reuse_ratio,
+            "avg_wait_time_ms": self.avg_wait_time_ms,
         }
 
 
 @dataclass(eq=False)
 class PooledConnection(Generic[T]):
     """Wrapper for a pooled connection."""
+
     connection: T
     created_at: float
     last_used_at: float
@@ -451,7 +457,7 @@ class ConnectionPool(Generic[T]):
         """Pool statistics."""
         return self._stats
 
-    def __enter__(self) -> 'ConnectionPool[T]':
+    def __enter__(self) -> "ConnectionPool[T]":
         """Enter context."""
         return self
 
@@ -503,7 +509,6 @@ class AsyncConnectionPool(Generic[T]):
                 return pooled.connection
 
             # Create new
-            now = time.monotonic()
             raw = self._factory()
             self._stats.created += 1
 
@@ -615,7 +620,4 @@ class MultiHostPool(Generic[T]):
 
     def get_stats(self) -> Dict[str, Dict[str, Any]]:
         """Get stats for all hosts."""
-        return {
-            host: pool.stats.to_dict()
-            for host, pool in self._pools.items()
-        }
+        return {host: pool.stats.to_dict() for host, pool in self._pools.items()}

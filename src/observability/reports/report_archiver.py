@@ -16,11 +16,14 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .archived_report import ArchivedReport
-from pathlib import Path
+
 import logging
 import time
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+
+from .archived_report import ArchivedReport
 
 __version__ = VERSION
 
@@ -51,9 +54,7 @@ class ReportArchiver:
         self.archives: dict[str, list[ArchivedReport]] = {}
         logging.debug(f"ReportArchiver initialized at {self.archive_dir}")
 
-    def archive(
-        self, file_path: str, content: str, retention_days: int = 90
-    ) -> ArchivedReport:
+    def archive(self, file_path: str, content: str, retention_days: int = 90) -> ArchivedReport:
         """Archive a report.
         Args:
             file_path: Source file path.

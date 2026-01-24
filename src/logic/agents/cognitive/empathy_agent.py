@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,17 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Empathy Agent for emotional intelligence and soft-skill synthesis.
+"""
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class EmpathyAgent(BaseAgent):
     """
     Phase 61: Emotional Intelligence & Soft-Skill Synthesis.
@@ -74,7 +79,7 @@ class EmpathyAgent(BaseAgent):
         """Determines the linguistic style to adopt based on sentiment."""
         if self.sentiment_state == "frustrated":
             return "concise_and_apologetic"
-        elif self.sentiment_state == "positive":
+        if self.sentiment_state == "positive":
             return "enthusiastic_and_detailed"
         return "professional_neutral"
 
@@ -84,4 +89,7 @@ class EmpathyAgent(BaseAgent):
         logging.info(f"EmpathyEngine: Mediating conflict between {agent_id} and User.")
 
         # Simulated response
-        return f"I understand your perspective regarding {agent_id}. You said: '{human_refusal}'. Let's find a solution that works for everyone."
+        return (
+            f"I understand your perspective regarding {agent_id}. "
+            f"You said: '{human_refusal}'. Let's find a solution that works for everyone."
+        )

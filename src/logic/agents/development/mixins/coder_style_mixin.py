@@ -16,11 +16,16 @@
 Style checking and auto-fixing logic for CoderCore.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-import re
+
 import logging
-from typing import Any, List, Dict, Tuple
+import re
+from typing import Any, Dict, List, Tuple
+
 from src.core.base.common.types.style_rule import StyleRule
+
 
 class CoderStyleMixin:
     """Mixin for style checking and auto-fixing."""
@@ -47,9 +52,7 @@ class CoderStyleMixin:
         """Internal helper for Rust-accelerated style checking."""
         patterns = []
         for rule in rules:
-            if rule.enabled and (
-                not rule.language or rule.language == self.language
-            ):
+            if rule.enabled and (not rule.language or rule.language == self.language):
                 patterns.append((rule.name, rule.pattern))
 
         try:
@@ -64,15 +67,13 @@ class CoderStyleMixin:
                         {
                             "rule": rule.name,
                             "message": rule.message,
-                            "severity": rule.severity.value
-                            if hasattr(rule.severity, "value")
-                            else str(rule.severity),
+                            "severity": rule.severity.value if hasattr(rule.severity, "value") else str(rule.severity),
                             "line": line,
                             "content": match_content,
                         }
                     )
             return violations
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.warning(f"Rust optimization failed for check_style: {e}")
             return []
 
@@ -85,9 +86,7 @@ class CoderStyleMixin:
                 {
                     "rule": rule.name,
                     "message": rule.message,
-                    "severity": rule.severity.value
-                    if hasattr(rule.severity, "value")
-                    else str(rule.severity),
+                    "severity": rule.severity.value if hasattr(rule.severity, "value") else str(rule.severity),
                     "line": line_no,
                     "content": match.group(0).split("\n")[0][:80],
                 }
@@ -103,9 +102,7 @@ class CoderStyleMixin:
                     {
                         "rule": rule.name,
                         "message": rule.message,
-                        "severity": rule.severity.value
-                        if hasattr(rule.severity, "value")
-                        else str(rule.severity),
+                        "severity": rule.severity.value if hasattr(rule.severity, "value") else str(rule.severity),
                         "line": i,
                         "content": line[:80],
                     }

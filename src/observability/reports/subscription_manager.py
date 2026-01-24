@@ -16,12 +16,15 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .report_subscription import ReportSubscription
-from .report_type import ReportType
-from typing import Any
+
 import logging
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_subscription import ReportSubscription
+from .report_type import ReportType
 
 __version__ = VERSION
 
@@ -76,9 +79,7 @@ class SubscriptionManager:
 
         return [s for s in self.subscriptions.values() if s.enabled]
 
-    def queue_delivery(
-        self, subscriber_id: str, report_content: str, report_type: ReportType
-    ) -> None:
+    def queue_delivery(self, subscriber_id: str, report_content: str, report_type: ReportType) -> None:
         """Queue a report delivery.
         Args:
             subscriber_id: Target subscriber.

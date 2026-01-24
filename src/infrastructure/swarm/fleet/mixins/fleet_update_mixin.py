@@ -1,16 +1,21 @@
+
+"""
+Fleet update mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 322: Fleet Autonomous Update Mixin
 
 from __future__ import annotations
+
+import subprocess
 import threading
 import time
-import subprocess
-import logging
-import os
 from pathlib import Path
+
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
+
 
 class FleetUpdateMixin:
     """
@@ -21,11 +26,7 @@ class FleetUpdateMixin:
     def init_update_service(self, interval_seconds: int = 900):
         """Initializes the periodic repository update cycle."""
         self._update_interval = interval_seconds
-        self._updater_thread = threading.Thread(
-            target=self._update_loop,
-            name="FleetAutoUpdater",
-            daemon=True
-        )
+        self._updater_thread = threading.Thread(target=self._update_loop, name="FleetAutoUpdater", daemon=True)
         self._updater_thread.start()
         logger.info(f"FleetUpdateMixin: Auto-update service started with {interval_seconds}s interval.")
 
@@ -65,7 +66,7 @@ class FleetUpdateMixin:
                 cwd=str(workspace_path),
                 capture_output=True,
                 text=True,
-                check=False
+                check=False,
             )
 
             if "Already up to date" in result.stdout:

@@ -17,6 +17,7 @@ Standardized validation logic for reports, improvements, and configs.
 """
 
 from __future__ import annotations
+
 import fnmatch
 import json
 import logging
@@ -29,9 +30,11 @@ except ImportError:
     rc = None
 
 from src.core.base.common.models import ValidationRule
+
 from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.validation")
+
 
 class ValidationCore(BaseCore):
     """
@@ -52,8 +55,9 @@ class ValidationCore(BaseCore):
         if rc and hasattr(rc, "validate_content_rust"):
             try:
                 # Passing rule patterns to Rust for bulk processing
-                return rc.validate_content_rust(str(file_path), content, list(self._rules.keys()))  # pylint: disable=no-member
-            except Exception: # pylint: disable=broad-exception-caught
+                resp = rc.validate_content_rust(str(file_path), content, list(self._rules.keys()))
+                return resp  # pylint: disable=no-member
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         results = []
@@ -61,19 +65,16 @@ class ValidationCore(BaseCore):
             if fnmatch.fnmatch(file_path.name, rule.file_pattern):
                 try:
                     passed = rule.validator(content, file_path)
-                    results.append({
-                        "rule": rule.name,
-                        "passed": passed,
-                        "severity": rule.severity,
-                        "message": None if passed else rule.error_message,
-                    })
+                    results.append(
+                        {
+                            "rule": rule.name,
+                            "passed": passed,
+                            "severity": rule.severity,
+                            "message": None if passed else rule.error_message,
+                        }
+                    )
                 except Exception as err:  # pylint: disable=broad-exception-caught
-                    results.append({
-                        "rule": rule.name,
-                        "passed": False,
-                        "severity": "error",
-                        "message": str(err)
-                    })
+                    results.append({"rule": rule.name, "passed": False, "severity": "error", "message": str(err)})
         return results
 
     def validate_json_schema(self, data: Any, schema: Dict[str, Any]) -> Tuple[bool, List[str]]:

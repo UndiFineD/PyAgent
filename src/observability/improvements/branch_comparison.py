@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+import time
+from dataclasses import dataclass, field
+
 from src.core.base.lifecycle.version import VERSION
+
 from .branch_comparison_status import BranchComparisonStatus
 from .improvement_diff import ImprovementDiff
-from dataclasses import dataclass, field
-import time
 
 __version__ = VERSION
 

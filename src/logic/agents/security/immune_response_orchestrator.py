@@ -11,11 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Immune response orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import time
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -30,9 +36,7 @@ class ImmuneResponseOrchestrator:
         self.active_shields: list[str] = []
         self.vulnerability_db: dict[str, Any] = {}
 
-    def deploy_rapid_patch(
-        self, vulnerability_id: str, patch_code: str
-    ) -> dict[str, Any]:
+    def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:
         """
         Simulates deploying a hot-patch to all running agent nodes.
         """
@@ -43,9 +47,8 @@ class ImmuneResponseOrchestrator:
         }
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.compute.backend.local_context_recorder import (
-                LocalContextRecorder,
-            )
+            from src.infrastructure.compute.backend.local_context_recorder import \
+                LocalContextRecorder
 
             recorder = LocalContextRecorder(user_context="ImmuneResponse")
             recorder.record_interaction(

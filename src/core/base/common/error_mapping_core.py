@@ -19,7 +19,9 @@
 """Unified Error Mapping core."""
 
 from typing import Dict, Optional
+
 from .base_core import BaseCore
+
 
 class ErrorMappingCore(BaseCore):
     """
@@ -71,9 +73,6 @@ class ErrorMappingCore(BaseCore):
         descriptions = {
             "PA-1001": "FileSystemError: The workspace could not be accessed.",
             "PA-2001": "ModelTimeout: The LLM backend did not respond in time.",
-            "PA-4002": (
-                "SafetyFilterTriggered: The generated content was "
-                "blocked by safety guardrails."
-            ),
+            "PA-4002": ("SafetyFilterTriggered: The generated content was blocked by safety guardrails."),
         }
         return descriptions.get(error_code, "Unknown System Error")

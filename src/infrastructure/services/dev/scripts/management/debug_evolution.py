@@ -16,14 +16,15 @@
 """Validation script for Phase 14: Autonomous Evolution & Self-Repair."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import os
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.logic.agents.infrastructure.infrastructure_repair_agent import (
-    InfrastructureRepairAgent,
-)
+from src.logic.agents.infrastructure.infrastructure_repair_agent import \
+    InfrastructureRepairAgent
 
 __version__ = VERSION
 
@@ -35,19 +36,13 @@ def test_evolution_and_repair() -> None:
     fleet = FleetManager(str(root))
 
     print("--- Phase 14: Agent Self-Generation ---")
-    generated_path = fleet.evolution.generate_agent(
-        "TestGenerated", "Perform complex math and string analysis"
-    )
+    generated_path = fleet.evolution.generate_agent("TestGenerated", "Perform complex math and string analysis")
     print(f"Generated Agent Path: {generated_path}")
     if os.path.exists(generated_path):
         print("Generated file exists.")
 
     print("\n--- Phase 14: Cross-Fleet Knowledge Transfer ---")
-    dummy_knowledge = {
-        "lessons": [
-            {"failure_context": "API timeout", "correction": "Increase retries"}
-        ]
-    }
+    dummy_knowledge = {"lessons": [{"failure_context": "API timeout", "correction": "Increase retries"}]}
     export_file = fleet.knowledge_transfer.export_knowledge("fleet_A", dummy_knowledge)
     print(f"Knowledge exported to: {export_file}")
 

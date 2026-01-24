@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .test_baseline import TestBaseline
+
+import json
 from pathlib import Path
 from typing import Any
-import json
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_baseline import TestBaseline
 
 __version__ = VERSION
 
@@ -132,9 +135,7 @@ class BaselineManager:
 
             baseline_val = baseline.values[key]
 
-            if isinstance(current_val, (int, float)) and isinstance(
-                baseline_val, (int, float)
-            ):
+            if isinstance(current_val, (int, float)) and isinstance(baseline_val, (int, float)):
                 if baseline_val == 0:
                     pct_change = float("inf") if current_val != 0 else 0
                 else:

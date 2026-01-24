@@ -18,14 +18,16 @@ Supports forwarding logs to central aggregators via syslog or HTTP.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import asyncio
 import logging
 import logging.handlers
 import time
-import asyncio
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -64,10 +66,10 @@ class LoggingAgent(BaseAgent):
 
             def init_syslog() -> str:
                 try:
-                    self.syslog_handler = logging.handlers.SysLogHandler(
-                        address=(syslog_host, syslog_port)
+                    self.syslog_handler = logging.handlers.SysLogHandler(address=(syslog_host, syslog_port))
+                    return (
+                        f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
                     )
-                    return f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
                 except Exception as e:
                     return f"LoggingAgent: Failed to configure SysLog: {e}"
 
@@ -122,9 +124,7 @@ class LoggingAgent(BaseAgent):
 
             # 2. Forward to HTTP Aggregator (Mocked/Future-proofed)
             if self.log_aggregator_url:
-                logging.debug(
-                    f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}"
-                )
+                logging.debug(f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}")
 
         await asyncio.to_thread(forward)
         return "Log broadcasted successfully."

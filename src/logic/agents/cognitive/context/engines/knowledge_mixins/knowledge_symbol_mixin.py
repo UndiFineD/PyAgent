@@ -1,6 +1,10 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+Knowledge symbol mixin for symbol extraction logic.
+"""
+
 import re
 from typing import Any
 
@@ -24,7 +28,7 @@ class KnowledgeSymbolMixin:
         if HAS_RUST:
             try:
                 return rust_core.extract_python_symbols(content)  # type: ignore[attr-defined]
-            except Exception:
+            except (RuntimeError, AttributeError):
                 pass
         return self.extract_symbols(
             content, r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)"
@@ -35,7 +39,7 @@ class KnowledgeSymbolMixin:
         if HAS_RUST:
             try:
                 return rust_core.extract_markdown_backlinks(content)  # type: ignore[attr-defined]
-            except Exception:
+            except (RuntimeError, AttributeError):
                 pass
         return self.extract_symbols(content, r"\[\[(.*?)\]\]")
 
@@ -52,6 +56,6 @@ class KnowledgeSymbolMixin:
                     symbols = self.extract_symbols(content, pattern)
                     if symbols:
                         symbol_map[file_path.name] = symbols
-                except Exception:
+                except (IOError, OSError, UnicodeDecodeError):
                     continue
         return symbol_map

@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+from datetime import datetime
+from pathlib import Path
+
 from src.core.base.lifecycle.version import VERSION
+
 from .improvement import Improvement
 from .improvement_status import ImprovementStatus
 from .progress_report import ProgressReport
-from datetime import datetime
-from pathlib import Path
 
 __version__ = VERSION
 
@@ -49,15 +52,9 @@ class ProgressDashboard:
         Returns:
             ProgressReport with current metrics.
         """
-        completed = len(
-            [i for i in improvements if i.status == ImprovementStatus.COMPLETED]
-        )
-        in_progress = len(
-            [i for i in improvements if i.status == ImprovementStatus.IN_PROGRESS]
-        )
-        blocked = len(
-            [i for i in improvements if i.status == ImprovementStatus.DEFERRED]
-        )
+        completed = len([i for i in improvements if i.status == ImprovementStatus.COMPLETED])
+        in_progress = len([i for i in improvements if i.status == ImprovementStatus.IN_PROGRESS])
+        blocked = len([i for i in improvements if i.status == ImprovementStatus.DEFERRED])
 
         # Calculate velocity (avg completions per week)
         velocity = self._calculate_velocity()
@@ -80,23 +77,13 @@ class ProgressDashboard:
         recent = self.reports[-4:]  # Last 4 reports
         if len(recent) < 2:
             return 0.0
-        completions = [
-            recent[i].completed_count - recent[i - 1].completed_count
-            for i in range(1, len(recent))
-        ]
+        completions = [recent[i].completed_count - recent[i - 1].completed_count for i in range(1, len(recent))]
         return sum(completions) / len(completions) if completions else 0.0
 
-    def generate_burndown(
-        self, improvements: list[Improvement]
-    ) -> list[tuple[str, int]]:
+    def generate_burndown(self, improvements: list[Improvement]) -> list[tuple[str, int]]:
         """Generate burndown chart data."""
         remaining = len(
-            [
-                i
-                for i in improvements
-                if i.status
-                not in [ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED]
-            ]
+            [i for i in improvements if i.status not in [ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED]]
         )
         return [(datetime.now().isoformat()[:10], remaining)]
 
@@ -105,9 +92,7 @@ class ProgressDashboard:
         total = len(improvements)
         if total == 0:
             return 0.0
-        completed = len(
-            [i for i in improvements if i.status == ImprovementStatus.COMPLETED]
-        )
+        completed = len([i for i in improvements if i.status == ImprovementStatus.COMPLETED])
         return (completed / total) * 100
 
     def generate_bmad_strategic_grid(self, root_path: Path) -> str:
@@ -116,9 +101,7 @@ class ProgressDashboard:
         Checks for project artifacts and quality indicators.
         """
         # Planning Indicators
-        has_prd = any(
-            (root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"]
-        )
+        has_prd = any((root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"])
         has_arch = any(
             (root_path / p).exists()
             for p in [
@@ -136,9 +119,7 @@ class ProgressDashboard:
         # Quality Indicators
         has_tests = (root_path / "tests").exists()
         has_results = (root_path / "test_results.txt").exists()
-        has_errors = (root_path / "errors.txt").exists() and (
-            root_path / "errors.txt"
-        ).stat().st_size > 0
+        has_errors = (root_path / "errors.txt").exists() and (root_path / "errors.txt").stat().st_size > 0
 
         # Mapping to Grid
         p_prd = "✅" if has_prd else "❌"

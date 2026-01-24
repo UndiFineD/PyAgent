@@ -35,49 +35,74 @@ from typing import Any, List
 
 from src.core.base.lifecycle.version import VERSION as VERSION
 from src.core.lazy_loader import ModuleLazyLoader
+from src.infrastructure.lazy import (get_arc_offload_manager,
+                                     get_eagle_proposer,
+                                     get_paged_attention_engine,
+                                     get_reasoning_engine,
+                                     get_tool_parser_registry)
 
 __version__ = VERSION
 
+__all__ = [
+    "EagleProposer",
+    "ARCOffloadManager",
+    "ToolParserRegistry",
+    "ReasoningEngine",
+    "PagedAttentionEngine",
+    "KVzapPruner",
+    "SynapticLink",
+    "STEMManager",
+    "TableCacheManager",
+    "get_eagle_proposer",
+    "get_arc_offload_manager",
+    "get_tool_parser_registry",
+    "get_reasoning_engine",
+    "get_paged_attention_engine",
+    "VERSION",
+]
+
 # Registry of expensive modules for lazy loading
 # Maps attribute name -> (module_path, attribute_name)
-_LAZY_MODULES = ModuleLazyLoader({
-    "EagleProposer": (
-        "src.infrastructure.engine.speculative.eagle_proposer",
-        "EagleProposer",
-    ),
-    "ARCOffloadManager": (
-        "src.infrastructure.storage.kv_transfer.arc_offload_manager",
-        "ARCOffloadManager",
-    ),
-    "ToolParserRegistry": (
-        "src.infrastructure.services.tools.tool_parser_framework",
-        "ToolParserRegistry",
-    ),
-    "ReasoningEngine": (
-        "src.infrastructure.engine.reasoning.reasoning_engine",
-        "ReasoningEngine",
-    ),
-    "PagedAttentionEngine": (
-        "src.infrastructure.engine.attention.paged_attention_engine",
-        "PagedAttentionEngine",
-    ),
-    "KVzapPruner": (
-        "src.infrastructure.storage.kv_transfer.k_vzap",
-        "KVzapPruner",
-    ),
-    "SynapticLink": (
-        "src.infrastructure.storage.kv_transfer.latent_link",
-        "SynapticLink",
-    ),
-    "STEMManager": (
-        "src.infrastructure.engine.stem_scaling",
-        "STEMManager",
-    ),
-    "TableCacheManager": (
-        "src.infrastructure.services.tools.table_cache",
-        "TableCacheManager",
-    ),
-})
+_LAZY_MODULES = ModuleLazyLoader(
+    {
+        "EagleProposer": (
+            "src.infrastructure.engine.speculative.eagle_proposer",
+            "EagleProposer",
+        ),
+        "ARCOffloadManager": (
+            "src.infrastructure.storage.kv_transfer.arc_offload_manager",
+            "ARCOffloadManager",
+        ),
+        "ToolParserRegistry": (
+            "src.infrastructure.services.tools.tool_parser_framework",
+            "ToolParserRegistry",
+        ),
+        "ReasoningEngine": (
+            "src.infrastructure.engine.reasoning.reasoning_engine",
+            "ReasoningEngine",
+        ),
+        "PagedAttentionEngine": (
+            "src.infrastructure.engine.attention.paged_attention_engine",
+            "PagedAttentionEngine",
+        ),
+        "KVzapPruner": (
+            "src.infrastructure.storage.kv_transfer.k_vzap",
+            "KVzapPruner",
+        ),
+        "SynapticLink": (
+            "src.infrastructure.storage.kv_transfer.latent_link",
+            "SynapticLink",
+        ),
+        "STEMManager": (
+            "src.infrastructure.engine.stem_scaling",
+            "STEMManager",
+        ),
+        "TableCacheManager": (
+            "src.infrastructure.services.tools.table_cache",
+            "TableCacheManager",
+        ),
+    }
+)
 
 
 def __getattr__(name: str) -> Any:
@@ -117,13 +142,3 @@ def __dir__() -> List[str]:
     # Combine and filter private names
     all_names = set(module_attrs) | set(lazy_names)
     return [name for name in all_names if not name.startswith("_")]
-
-
-# Expose lazy import functions for explicit lazy loading
-from src.infrastructure.lazy import (
-    get_eagle_proposer,
-    get_arc_offload_manager,
-    get_tool_parser_registry,
-    get_reasoning_engine,
-    get_paged_attention_engine,
-)

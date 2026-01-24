@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .usage_record import UsageRecord
-from typing import Any
+
 import threading
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .usage_record import UsageRecord
 
 __version__ = VERSION
 
@@ -128,9 +131,7 @@ class SystemAnalytics:
             "by_backend": self._group_by_backend(records),
         }
 
-    def _group_by_backend(
-        self, records: list[UsageRecord]
-    ) -> dict[str, dict[str, Any]]:
+    def _group_by_backend(self, records: list[UsageRecord]) -> dict[str, dict[str, Any]]:
         """Group records by backend."""
         by_backend: dict[str, list[UsageRecord]] = {}
         for r in records:
@@ -142,9 +143,7 @@ class SystemAnalytics:
             backend: {
                 "requests": len(recs),
                 "tokens": sum(r.tokens_used for r in recs),
-                "avg_latency_ms": sum(r.latency_ms for r in recs) / len(recs)
-                if recs
-                else 0,
+                "avg_latency_ms": sum(r.latency_ms for r in recs) / len(recs) if recs else 0,
             }
             for backend, recs in by_backend.items()
         }

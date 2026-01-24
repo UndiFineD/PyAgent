@@ -1,11 +1,17 @@
+
+"""
+Reward functions.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Reward Functions for Agent Reinforcement - Phase 319 Enhanced
 
 from __future__ import annotations
+
 import math
-from typing import Any, Callable, Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Callable, List
+
 
 class RewardType(Enum):
     SPARSE = "sparse"
@@ -13,13 +19,16 @@ class RewardType(Enum):
     SHAPED = "shaped"
     INTRINSIC = "intrinsic"
 
+
 @dataclass
 class RewardSignal:
     """Structured reward with metadata."""
+
     value: float
     reward_type: RewardType
     source: str
     explanation: str = ""
+
 
 class RewardFunctions:
     """Library of standard reward functions for agentic behavior."""
@@ -88,6 +97,7 @@ class RewardFunctions:
         efficiency = 1.0 - (resources_used / budget)
         return RewardSignal(efficiency * scale, RewardType.SHAPED, "resources", f"Efficiency: {efficiency:.2%}")
 
+
 class CompositeRewardFunction:
     """Combines multiple reward functions with weights."""
 
@@ -110,6 +120,7 @@ class CompositeRewardFunction:
                 total += result * weight
                 explanations.append(f"{name}: {result:.3f}")
         return RewardSignal(total, RewardType.SHAPED, "composite", " | ".join(explanations))
+
 
 class RewardShaper:
     """Applies potential-based reward shaping to avoid changing optimal policy."""

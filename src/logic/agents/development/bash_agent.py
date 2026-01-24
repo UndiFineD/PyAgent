@@ -15,10 +15,13 @@
 
 """Agent specializing in Bash and shell scripting."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
 from src.logic.agents.development.core.bash_core import BashCore
 
 __version__ = VERSION
@@ -29,9 +32,7 @@ class BashAgent(CoderAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.capabilities.extend(
-            ["bash", "shell-scripting", "posix-compliance"]
-        )  # Phase 241
+        self.capabilities.extend(["bash", "shell-scripting", "posix-compliance"])  # Phase 241
         self._language = "bash"
         self.core = BashCore()
         self._system_prompt = (
@@ -54,9 +55,7 @@ class BashAgent(CoderAgent):
         issues = results["issues"]
         report = [f"Found {len(issues)} issues:"]
         for issue in issues[:5]:  # Top 5
-            report.append(
-                f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})"
-            )
+            report.append(f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})")
 
         return "\n".join(report)
 

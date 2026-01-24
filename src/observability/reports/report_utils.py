@@ -12,15 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Report utils.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import ast
 import re
 from pathlib import Path
-from src.core.base.common.workspace_core import WorkspaceCore
+
 from src.core.base.common.analysis_core import AnalysisCore
 from src.core.base.common.file_system_core import FileSystemCore
+from src.core.base.common.workspace_core import WorkspaceCore
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -106,25 +112,17 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
         if isinstance(node, ast.FunctionDef):
             for default in node.args.defaults:
                 if isinstance(default, (ast.List, ast.Dict, ast.Set)):
-                    issues.append(
-                        f"Function `{node.name}` has a mutable default "
-                        f"argument (list / dict / set)."
-                    )
+                    issues.append(f"Function `{node.name}` has a mutable default argument (list / dict / set).")
                     break  # One per function is enough
     # 2. Bare excepts
     for node in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler) and node.type is None:
-            issues.append(
-                "Contains bare `except Exception:` clause (catches SystemExit / "
-                "KeyboardInterrupt)."
-            )
+            issues.append("Contains bare `except Exception:` clause (catches SystemExit / KeyboardInterrupt).")
     # 3. Missing type hints
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
             # Check args
-            missing_arg_type = any(
-                arg.annotation is None for arg in node.args.args if arg.arg != "self"
-            )
+            missing_arg_type = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
             # Check return
             missing_return_type = node.returns is None
             if missing_arg_type or missing_return_type:

@@ -11,11 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Apply basic types.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -45,12 +51,9 @@ def apply_basic_types(target_dir="src") -> bool:
                 # Avoid if already typed
                 if (
                     "def __init__(self" in new_content
-                    and "-> None"
-                    not in new_content.split("def __init__")[1].split(":")[0]
+                    and "-> None" not in new_content.split("def __init__")[1].split(":")[0]
                 ):
-                    new_content = re.sub(
-                        r"(def\s+__init__\s*\([^)]+\))\s*:", r"\1 -> None:", new_content
-                    )
+                    new_content = re.sub(r"(def\s+__init__\s*\([^)]+\))\s*:", r"\1 -> None:", new_content)
 
                     file_fixes += 1
 

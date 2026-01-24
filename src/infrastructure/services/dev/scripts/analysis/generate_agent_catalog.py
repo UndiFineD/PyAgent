@@ -12,8 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
+"""
+Generate agent catalog.py module.
+"""
+
 import ast
+import os
 from pathlib import Path
 
 
@@ -39,10 +43,7 @@ def generate_catalog() -> None:
                         # Version extraction
                         if isinstance(item, ast.Assign):
                             for target in item.targets:
-                                if (
-                                    isinstance(target, ast.Name)
-                                    and target.id == "__version__"
-                                ):
+                                if isinstance(target, ast.Name) and target.id == "__version__":
                                     if isinstance(item.value, ast.Constant):
                                         version = str(item.value.value)
                                     elif isinstance(item.value, ast.Name):
@@ -52,9 +53,7 @@ def generate_catalog() -> None:
                         # Class extraction
                         if isinstance(item, ast.ClassDef):
                             # Check if it looks like an Agent class (usually inherits from BaseAgent or CoderAgent)
-                            docstring = (
-                                ast.get_docstring(item) or "No description provided."
-                            )
+                            docstring = ast.get_docstring(item) or "No description provided."
                             # Just take the first line of docstring for the table
                             summary = docstring.strip().split("\n")[0]
                             classes.append({"name": item.name, "description": summary})

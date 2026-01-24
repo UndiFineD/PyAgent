@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Meta optimizer.py module.
+"""
+
 import logging
-from typing import Dict, Any, List
-from src.infrastructure.swarm.orchestration.swarm.telemetry import SwarmTelemetryService
+from typing import Any, Dict, List
+
+from src.infrastructure.swarm.orchestration.swarm.telemetry import \
+    SwarmTelemetryService
 
 logger = logging.getLogger(__name__)
+
 
 class FederatedMetaOptimizer:
     """
@@ -37,7 +44,6 @@ class FederatedMetaOptimizer:
         metrics = self.telemetry.get_grid_metrics()
 
         # 1. Check Latency vs. Throughput
-        p99_latency = metrics.get("p99_latency_ms", 500)
         avg_vram_util = metrics.get("avg_vram_util", 0.5)
 
         # Goal: Keep latency < 400ms while keeping VRAM < 80%
@@ -48,14 +54,18 @@ class FederatedMetaOptimizer:
         if avg_vram_util > 0.8:
             new_target = min(0.9, self.config.get("distillation_ratio", 0.5) + 0.05)
             updates["distillation_ratio"] = new_target
-            logger.info(f"[Phase 90] MetaOptimizer: High VRAM detected. Increasing distillation ratio to {new_target:.2f}")
+            logger.info(
+                f"[Phase 90] MetaOptimizer: High VRAM detected. Increasing distillation ratio to {new_target:.2f}"
+            )
 
         # Nudge speculative similarity: If acceptance rate is too low, increase threshold
         acc_rate = metrics.get("speculative_acceptance_rate", 0.75)
         if acc_rate < 0.6:
             new_thresh = min(0.95, self.config.get("similarity_threshold", 0.85) + 0.01)
             updates["similarity_threshold"] = new_thresh
-            logger.info(f"[Phase 90] MetaOptimizer: Low speculation acceptance. Increasing threshold to {new_thresh:.2f}")
+            logger.info(
+                f"[Phase 90] MetaOptimizer: Low speculation acceptance. Increasing threshold to {new_thresh:.2f}"
+            )
 
         # Apply updates
         self.config.update(updates)

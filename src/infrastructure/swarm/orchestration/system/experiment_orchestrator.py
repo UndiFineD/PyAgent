@@ -18,13 +18,15 @@ Automates multi-agent benchmarks, training simulations, and MLOps experimentatio
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
 import uuid
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -46,9 +48,7 @@ class ExperimentOrchestrator(BaseAgent):
         )
 
     @as_tool
-    def run_benchmark_experiment(
-        self, suite_name: str, agents_to_test: list[str]
-    ) -> dict[str, Any]:
+    def run_benchmark_experiment(self, suite_name: str, agents_to_test: list[str]) -> dict[str, Any]:
         """Runs a suite of benchmarks across specified agents."""
         experiment_id: str = str(uuid.uuid4())[:8]
         start_time: float = time.time()

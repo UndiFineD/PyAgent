@@ -18,15 +18,18 @@ Inspired by Stream-Omni (ICTNLP).
 """
 
 from __future__ import annotations
+
 import logging
 import math
 import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from src.infrastructure.engine.multimodal import Muxer, QuantizedMultimediaEngine
+from src.infrastructure.engine.multimodal import (Muxer,
+                                                  QuantizedMultimediaEngine)
+
 from .base_core import BaseCore
 
 try:
@@ -39,16 +42,20 @@ logger = logging.getLogger("pyagent.multimodal")
 # pylint: disable=no-member, too-few-public-methods, too-many-public-methods, too-many-instance-attributes
 # pylint: disable=too-many-arguments, too-many-locals, too-many-positional-arguments, line-too-long
 
+
 class StreamState:
     """State management for incomplete modality tags in a stream."""
+
     def __init__(self) -> None:
         self.buffer = ""
+
 
 class TemporalModalityBuffer:
     """
     Rolling buffer for multimodal sequences (Short-term memory).
     Stores recent frames/audio to allow temporal reasoning.
     """
+
     def __init__(self, max_size: int = 10):
         self.max_size = max_size
         self.frames: List[bytes] = []
@@ -68,12 +75,14 @@ class TemporalModalityBuffer:
             return rc.calculate_temporal_entropy_rust([list(f) for f in self.frames])
         return 0.0
 
+
 class StreamingVisionEncoder:
     """
     Handles efficient vision streaming using adaptive delta compression.
     Only sends changed pixels between frames to conserve bandwidth.
     Adjusts sensitivity based on scene dynamics (entropy).
     """
+
     def __init__(self, base_threshold: int = 15):
         self.prev_frame: Optional[bytes] = None
         self.threshold = base_threshold
@@ -94,7 +103,7 @@ class StreamingVisionEncoder:
 
         if self.prev_frame is None:
             self.prev_frame = frame
-            return frame # Keyframe
+            return frame  # Keyframe
 
         if rc and hasattr(rc, "calculate_visual_deltas_rust"):
             deltas = rc.calculate_visual_deltas_rust(list(self.prev_frame), list(frame), self.threshold)
@@ -110,11 +119,13 @@ class StreamingVisionEncoder:
             return bytes(rc.apply_visual_deltas_rust(list(base_frame), deltas))
         return base_frame
 
+
 class StreamingAudioProcessor:
     """
     Stateful processor for continuous audio streams.
     Handles rolling buffers, VAD, and feature extraction.
     """
+
     def __init__(self, sample_rate: int = 16000, frame_size: int = 512):
         self.sample_rate = sample_rate
         self.frame_size = frame_size
@@ -128,8 +139,8 @@ class StreamingAudioProcessor:
         frames = []
 
         while len(self.buffer) >= self.frame_size:
-            frame = self.buffer[:self.frame_size]
-            self.buffer = self.buffer[self.frame_size:]
+            frame = self.buffer[: self.frame_size]
+            self.buffer = self.buffer[self.frame_size :]
 
             # Check for voice activity
             is_active = True
@@ -146,6 +157,7 @@ class StreamingAudioProcessor:
 
         return frames
 
+
 class MultimodalCore(BaseCore):
     """
     Unified Multimodal Alignment and Streaming Core.
@@ -155,7 +167,7 @@ class MultimodalCore(BaseCore):
 
     def __init__(self, name: str = "MultimodalCore", root_path: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=root_path)
-        self.registry: Dict[str, str] = {} # Tag -> URI/Path
+        self.registry: Dict[str, str] = {}  # Tag -> URI/Path
         self._stream_states: Dict[str, StreamState] = {}
         self.muxer = Muxer()
         self.q_engine = QuantizedMultimediaEngine(mode="FP8")
@@ -203,7 +215,7 @@ class MultimodalCore(BaseCore):
             "Delta": "default",
             "Theta": "default",
             "Phi": "default",
-            "Psi": "default"
+            "Psi": "default",
         }
 
     def set_active_channel(self, modality: str, channel_id: str) -> None:
@@ -232,8 +244,8 @@ class MultimodalCore(BaseCore):
 
         # We need to ensure we don't cut a tag in half
         # If there's an open '<' without a '>', buffer it
-        last_open_angle = full_content.rfind('<')
-        last_close_angle = full_content.rfind('>')
+        last_open_angle = full_content.rfind("<")
+        last_close_angle = full_content.rfind(">")
 
         if last_open_angle > last_close_angle:
             # Tag is potentially split
@@ -276,9 +288,7 @@ class MultimodalCore(BaseCore):
         return [float(np.log10(np.mean(c**2) + 1e-10)) for c in chunks]
 
     def synchronize_streams(
-        self,
-        transcriptions: List[Tuple[float, str]],
-        responses: List[Tuple[float, str]]
+        self, transcriptions: List[Tuple[float, str]], responses: List[Tuple[float, str]]
     ) -> List[Tuple[float, str, str]]:
         """
         Synchronize multiple modality streams (e.g. ASR + LLM) for "see-while-hear".
@@ -295,10 +305,7 @@ class MultimodalCore(BaseCore):
         return synced
 
     def project_alignment(
-        self,
-        embedding: List[float],
-        weights: List[float],
-        bias: Optional[List[float]] = None
+        self, embedding: List[float], weights: List[float], bias: Optional[List[float]] = None
     ) -> List[float]:
         """
         Apply layer-dimension mapping (projection) for modality alignment.
@@ -371,7 +378,7 @@ class MultimodalCore(BaseCore):
                     "modality": f[1],
                     "channel": f[2],
                     "id": f[3] if f[0] == "media" else None,
-                    "content": f[3] if f[0] != "media" else None
+                    "content": f[3] if f[0] != "media" else None,
                 }
                 for f in fragments
             ]
@@ -382,50 +389,49 @@ class MultimodalCore(BaseCore):
         # Supports <Type:Channel_ID> or <Type_ID> (DVD-style) or <Thought>...</Thought>
         # Using DOTALL to allow thoughts to span lines
         # Expanded to support systemic tags like <Security:Isolation_DENY> or <Time_2026...>
-        pattern = re.compile(
-            r"<([A-Z][a-zA-Z0-9]+)(?::([^>_ ]+))?_([^>]+)>|<(Thought)>(.*?)</Thought>",
-            re.DOTALL
-        )
+        pattern = re.compile(r"<([A-Z][a-zA-Z0-9]+)(?::([^>_ ]+))?_([^>]+)>|<(Thought)>(.*?)</Thought>", re.DOTALL)
         for match in pattern.finditer(content):
             if match.start() > last_idx:
-                parts.append({
-                    "type": "text",
-                    "modality": "text",
-                    "channel": "default",
-                    "id": None,
-                    "content": content[last_idx:match.start()]
-                })
+                parts.append(
+                    {
+                        "type": "text",
+                        "modality": "text",
+                        "channel": "default",
+                        "id": None,
+                        "content": content[last_idx : match.start()],
+                    }
+                )
 
             if match.group(4) and match.group(4).lower() == "thought":
-                parts.append({
-                    "type": "modality",
-                    "modality": "Thought",
-                    "channel": "default",
-                    "id": None,
-                    "content": match.group(5)
-                })
+                parts.append(
+                    {
+                        "type": "modality",
+                        "modality": "Thought",
+                        "channel": "default",
+                        "id": None,
+                        "content": match.group(5),
+                    }
+                )
             else:
                 m_type = match.group(1)
                 channel = match.group(2) or "default"
                 m_id = match.group(3)
 
-                parts.append({
-                    "type": "media" if m_type in ["Audio", "Video", "Image"] else "modality",
-                    "modality": m_type,
-                    "channel": channel,
-                    "id": m_id,
-                    "content": None
-                })
+                parts.append(
+                    {
+                        "type": "media" if m_type in ["Audio", "Video", "Image"] else "modality",
+                        "modality": m_type,
+                        "channel": channel,
+                        "id": m_id,
+                        "content": None,
+                    }
+                )
             last_idx = match.end()
 
         if last_idx < len(content):
-            parts.append({
-                "type": "text",
-                "modality": "text",
-                "channel": "default",
-                "id": None,
-                "content": content[last_idx:]
-            })
+            parts.append(
+                {"type": "text", "modality": "text", "channel": "default", "id": None, "content": content[last_idx:]}
+            )
 
         return parts
 
@@ -435,10 +441,7 @@ class MultimodalCore(BaseCore):
         """
         if rc and hasattr(rc, "switch_modality_channel_rust"):
             # Convert dicts back to tuples for Rust processing
-            rust_frags = [
-                (f["type"], f["modality"], f["channel"], f["id"] or f["content"] or "")
-                for f in fragments
-            ]
+            rust_frags = [(f["type"], f["modality"], f["channel"], f["id"] or f["content"] or "") for f in fragments]
             result = rc.switch_modality_channel_rust(rust_frags, channels)
             return [
                 {
@@ -446,7 +449,7 @@ class MultimodalCore(BaseCore):
                     "modality": r[1],
                     "channel": r[2],
                     "id": r[3] if r[0] == "media" else None,
-                    "content": r[3] if r[0] == "text" else None
+                    "content": r[3] if r[0] == "text" else None,
                 }
                 for r in result
             ]
@@ -477,7 +480,7 @@ class MultimodalCore(BaseCore):
         feed_arrays = [np.frombuffer(f, dtype=np.uint8).reshape(height, width, 3) for f in feeds]
         row_images = []
         for r in range(rows):
-            row = np.hstack(feed_arrays[r*cols : (r+1)*cols])
+            row = np.hstack(feed_arrays[r * cols : (r + 1) * cols])
             row_images.append(row)
         mosaic = np.vstack(row_images)
         return mosaic.tobytes()
@@ -486,7 +489,7 @@ class MultimodalCore(BaseCore):
         """Check for significant visual changes."""
         if rc and hasattr(rc, "detect_motion_rust"):
             return rc.detect_motion_rust(list(prev), list(curr), threshold)
-        return False # Fallback to always process if Rust is missing
+        return False  # Fallback to always process if Rust is missing
 
     def mix_audio(self, tracks: List[List[float]], weights: Optional[List[float]] = None) -> List[float]:
         """Mix multiple audio streams (DVD-style)."""
@@ -508,7 +511,7 @@ class MultimodalCore(BaseCore):
         """Measure temporal alignment between audio and video frames."""
         if rc and hasattr(rc, "calculate_av_alignment_score_rust"):
             return rc.calculate_av_alignment_score_rust(audio_energy, visual_motion)
-        return 1.0 # Default to perfect sync if unable to measure
+        return 1.0  # Default to perfect sync if unable to measure
 
     def detect_scene_change(self, prev_hist: List[float], curr_hist: List[float], threshold: float = 0.5) -> bool:
         """Detect when a video stream switches camera angles."""
@@ -545,7 +548,7 @@ class MultimodalCore(BaseCore):
         """
         if rc and hasattr(rc, "calculate_audio_direction_rust"):
             return rc.calculate_audio_direction_rust(left, right, sample_rate)
-        return 0.0 # Fallback: straight ahead
+        return 0.0  # Fallback: straight ahead
 
     def overlay_vision(
         self,
@@ -554,19 +557,23 @@ class MultimodalCore(BaseCore):
         base_size: Tuple[int, int],
         overlay_size: Tuple[int, int],
         position: Tuple[int, int] = (0, 0),
-        alpha: float = 1.0
+        alpha: float = 1.0,
     ) -> bytes:
         """Overlay a camera feed (PiP) on a base video frame."""
         if rc and hasattr(rc, "overlay_vision_feeds_rust"):
             res = rc.overlay_vision_feeds_rust(
-                list(base), list(overlay),
-                base_size[0], base_size[1],
-                overlay_size[0], overlay_size[1],
-                position[0], position[1],
-                alpha
+                list(base),
+                list(overlay),
+                base_size[0],
+                base_size[1],
+                overlay_size[0],
+                overlay_size[1],
+                position[0],
+                position[1],
+                alpha,
             )
             return bytes(res)
-        return base # Fallback: return base if untransformable
+        return base  # Fallback: return base if untransformable
 
     def transform_vision(
         self,
@@ -574,14 +581,12 @@ class MultimodalCore(BaseCore):
         src_size: Tuple[int, int],
         dst_size: Tuple[int, int],
         keep_aspect: bool = True,
-        pad_color: Tuple[int, int, int] = (0, 0, 0)
+        pad_color: Tuple[int, int, int] = (0, 0, 0),
     ) -> bytes:
         """Resize or pad a camera feed to fit target dimensions."""
         if rc and hasattr(rc, "transform_vision_feed_rust"):
             res = rc.transform_vision_feed_rust(
-                list(pixels), src_size[0], src_size[1],
-                dst_size[0], dst_size[1],
-                keep_aspect, pad_color
+                list(pixels), src_size[0], src_size[1], dst_size[0], dst_size[1], keep_aspect, pad_color
             )
             return bytes(res)
         return pixels
@@ -600,19 +605,12 @@ class MultimodalCore(BaseCore):
         return pixels
 
     def apply_layout(
-        self,
-        feeds: List[bytes],
-        sizes: List[Tuple[int, int]],
-        target_size: Tuple[int, int],
-        template: str = "grid"
+        self, feeds: List[bytes], sizes: List[Tuple[int, int]], target_size: Tuple[int, int], template: str = "grid"
     ) -> bytes:
         """Apply a complex vision layout (e.g. sidebar, grid) to multiple feeds."""
         if rc and hasattr(rc, "layout_vision_feeds_rust"):
             res = rc.layout_vision_feeds_rust(
-                [list(f) for f in feeds],
-                sizes,
-                target_size[0], target_size[1],
-                template
+                [list(f) for f in feeds], sizes, target_size[0], target_size[1], template
             )
             return bytes(res)
 
@@ -621,12 +619,7 @@ class MultimodalCore(BaseCore):
             return self.create_mosaic(feeds, sizes[0][0], sizes[0][1], 2, 2)
         return feeds[0] if feeds else b""
 
-    def fuse_modalities(
-        self,
-        vision_emb: List[float],
-        audio_emb: List[float],
-        dim: int = 4096
-    ) -> List[float]:
+    def fuse_modalities(self, vision_emb: List[float], audio_emb: List[float], dim: int = 4096) -> List[float]:
         """Apply cross-modality gating (Logic: Audio weights Vision tokens)."""
         if rc and hasattr(rc, "calculate_multimodal_fusion_rust"):
             return rc.calculate_multimodal_fusion_rust(vision_emb, audio_emb, dim)
@@ -638,10 +631,7 @@ class MultimodalCore(BaseCore):
         return (v * gate).flatten().tolist()
 
     def align_modalities(
-        self,
-        text_embedding: List[float],
-        vision_embedding: List[float],
-        embedding_dim: int = 4096
+        self, text_embedding: List[float], vision_embedding: List[float], embedding_dim: int = 4096
     ) -> List[float]:
         """
         Perform sequence-dimension concatenation for vision-text alignment.
@@ -661,7 +651,7 @@ class MultimodalCore(BaseCore):
         processed = {
             "text": "",
             "media": [],
-            "aligned_embeddings": [] # List of (dim, sequence)
+            "aligned_embeddings": [],  # List of (dim, sequence)
         }
 
         for item in inputs:
@@ -695,13 +685,14 @@ class MultimodalStreamSession:
     High-level manager for a single multimodal interaction session.
     Orchestrates live input processing and compressed output generation.
     """
+
     def __init__(self, core: MultimodalCore):
         self.core = core
         self.audio_proc = StreamingAudioProcessor()
         self.vision_enc = StreamingVisionEncoder()
-        self.temporal_mem = TemporalModalityBuffer(max_size=15) # ~1 second of frames at 15fps
-        self.channels = dict(core.active_channels) # Clone defaults
-        self.channels["Thought"] = "hidden" # Default thought to hidden for session
+        self.temporal_mem = TemporalModalityBuffer(max_size=15)  # ~1 second of frames at 15fps
+        self.channels = dict(core.active_channels)  # Clone defaults
+        self.channels["Thought"] = "hidden"  # Default thought to hidden for session
         self.input_history: List[Dict[str, Any]] = []
         self.output_history: List[Dict[str, Any]] = []
         self.modificators: List[Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]] = []
@@ -719,11 +710,7 @@ class MultimodalStreamSession:
         return packet
 
     def process_input_frame(
-        self,
-        audio: List[float],
-        image: Optional[bytes] = None,
-        width: int = 640,
-        height: int = 480
+        self, audio: List[float], image: Optional[bytes] = None, width: int = 640, height: int = 480
     ) -> Dict[str, Any]:
         """
         Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
@@ -743,7 +730,7 @@ class MultimodalStreamSession:
             "vision_deltas": None,
             "spatial_angle": 0.0,
             "active_roi": None,
-            "dynamics": entropy
+            "dynamics": entropy,
         }
 
         if image:
@@ -807,7 +794,12 @@ class MultimodalStreamSession:
         """Scans for text fragments that might contain newly injected tags."""
         new_list = []
         for f in fragments:
-            if f["type"] == "text" and isinstance(f.get("content"), str) and "<" in f["content"] and ">" in f["content"]:
+            if (
+                f["type"] == "text"
+                and isinstance(f.get("content"), str)
+                and "<" in f["content"]
+                and ">" in f["content"]
+            ):
                 # Re-parse this text fragment as it may contain new modality tags
                 new_list.extend(self.core.parse_stream(f["content"]))
             else:
@@ -821,9 +813,9 @@ class MultimodalStreamSession:
             return stream
 
         base = frames[0]
-        stream.append(base) # Keyframe
+        stream.append(base)  # Keyframe
 
         for i in range(1, len(frames)):
             deltas = self.vision_enc.encode(frames[i])
-            stream.append(deltas) # P-frames
+            stream.append(deltas)  # P-frames
         return stream

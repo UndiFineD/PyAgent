@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """UvaBufferPool - Zero-copy GPU transfers via Unified Virtual Addressing.
 
 This module implements UVA (Unified Virtual Addressing) buffer management
@@ -21,14 +35,15 @@ from __future__ import annotations
 
 import threading
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Optional
-from collections import deque
+from typing import Any, Optional
 
 # Try to import torch for GPU operations
 try:
     import torch
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -37,8 +52,9 @@ except ImportError:
 # Try to import Rust accelerations
 try:
     from src.core.rust_bridge import get_bridge
+
     _bridge = get_bridge()
-    HAS_RUST = hasattr(_bridge, 'uva_copy_rust')
+    HAS_RUST = hasattr(_bridge, "uva_copy_rust")
 except Exception:
     HAS_RUST = False
     _bridge = None
@@ -46,22 +62,25 @@ except Exception:
 
 class BufferState(Enum):
     """State of a UVA buffer."""
-    FREE = auto()      # Available for allocation
+
+    FREE = auto()  # Available for allocation
     ACQUIRED = auto()  # In use by a consumer
-    COPYING = auto()   # Transfer in progress
-    PINNED = auto()    # Cannot be evicted
+    COPYING = auto()  # Transfer in progress
+    PINNED = auto()  # Cannot be evicted
 
 
 class AllocationStrategy(Enum):
     """Buffer allocation strategy."""
-    ROUND_ROBIN = auto()   # Rotate through buffers
+
+    ROUND_ROBIN = auto()  # Rotate through buffers
     LEAST_RECENT = auto()  # Use least recently used
-    PRIORITY = auto()      # Priority-aware allocation
+    PRIORITY = auto()  # Priority-aware allocation
 
 
 @dataclass
 class BufferStats:
     """Statistics for a single buffer."""
+
     allocations: int = 0
     total_bytes_transferred: int = 0
     total_transfer_time_ns: int = 0
@@ -100,6 +119,7 @@ class UvaBuffer:
         state: Current buffer state
         stats: Usage statistics
     """
+
     buffer_id: int
     size: int
     dtype: Any = None
@@ -133,15 +153,11 @@ class UvaBuffer:
         can_pin = torch.cuda.is_available()
         if not can_pin:
             # Check for other accelerator backends that support pinned memory
-            can_pin = getattr(torch, 'xpu', None) is not None and torch.xpu.is_available()
+            can_pin = getattr(torch, "xpu", None) is not None and torch.xpu.is_available()
         if not can_pin:
-            can_pin = getattr(torch.backends, 'mps', None) is not None and torch.backends.mps.is_available()
+            can_pin = getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available()
 
-        self._cpu_tensor = torch.empty(
-            num_elements,
-            dtype=dtype,
-            pin_memory=can_pin
-        )
+        self._cpu_tensor = torch.empty(num_elements, dtype=dtype, pin_memory=can_pin)
 
         # UVA tensor is the same as CPU tensor for pinned memory
         # GPU can access it directly via UVA
@@ -149,11 +165,11 @@ class UvaBuffer:
 
         # GPU tensor will be created on first copy
         if torch.cuda.is_available():
-            self._device = torch.device('cuda:0')
-        elif getattr(torch, 'xpu', None) is not None and torch.xpu.is_available():
-            self._device = torch.device('xpu:0')
-        elif getattr(torch.backends, 'mps', None) is not None and torch.backends.mps.is_available():
-            self._device = torch.device('mps')
+            self._device = torch.device("cuda:0")
+        elif getattr(torch, "xpu", None) is not None and torch.xpu.is_available():
+            self._device = torch.device("xpu:0")
+        elif getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            self._device = torch.device("mps")
 
     @property
     def cpu_tensor(self) -> Any:
@@ -188,18 +204,17 @@ class UvaBuffer:
 
             if HAS_TORCH and isinstance(data, torch.Tensor):
                 # Direct tensor copy
-                self._cpu_tensor[:data.numel()].copy_(data.view(-1))
-            elif hasattr(data, '__array__'):
+                self._cpu_tensor[: data.numel()].copy_(data.view(-1))
+            elif hasattr(data, "__array__"):
                 # Numpy array
                 import numpy as np
+
                 flat = np.asarray(data).ravel()
-                self._cpu_tensor[:len(flat)].copy_(
-                    torch.from_numpy(flat)
-                )
+                self._cpu_tensor[: len(flat)].copy_(torch.from_numpy(flat))
             else:
                 # List or other iterable
                 tensor = torch.tensor(data, dtype=self._cpu_tensor.dtype)
-                self._cpu_tensor[:tensor.numel()].copy_(tensor.view(-1))
+                self._cpu_tensor[: tensor.numel()].copy_(tensor.view(-1))
 
             elapsed = time.perf_counter_ns() - start
             self.stats.allocations += 1
@@ -207,11 +222,7 @@ class UvaBuffer:
             self.stats.total_transfer_time_ns += elapsed
             self.stats.last_used = time.time()
 
-    def copy_to_gpu(
-        self,
-        stream: Optional[Any] = None,
-        non_blocking: bool = True
-    ) -> Any:
+    def copy_to_gpu(self, stream: Optional[Any] = None, non_blocking: bool = True) -> Any:
         """Copy UVA buffer to GPU memory.
 
         This performs a DMA transfer from pinned host memory to GPU memory.
@@ -234,38 +245,24 @@ class UvaBuffer:
             start = time.perf_counter_ns()
 
             if self._gpu_tensor is None or self._gpu_tensor.shape != self._cpu_tensor.shape:
-                self._gpu_tensor = torch.empty_like(
-                    self._cpu_tensor,
-                    device=self._device
-                )
+                self._gpu_tensor = torch.empty_like(self._cpu_tensor, device=self._device)
 
             if stream is not None:
                 with torch.cuda.stream(stream):
-                    self._gpu_tensor.copy_(
-                        self._cpu_tensor,
-                        non_blocking=non_blocking
-                    )
+                    self._gpu_tensor.copy_(self._cpu_tensor, non_blocking=non_blocking)
             else:
-                self._gpu_tensor.copy_(
-                    self._cpu_tensor,
-                    non_blocking=non_blocking
-                )
+                self._gpu_tensor.copy_(self._cpu_tensor, non_blocking=non_blocking)
 
             elapsed = time.perf_counter_ns() - start
             self.stats.total_bytes_transferred += self._cpu_tensor.nbytes
             self.stats.total_transfer_time_ns += elapsed
             self.stats.peak_usage = max(
-                self.stats.peak_usage,
-                self._cpu_tensor.numel() * self._cpu_tensor.element_size()
+                self.stats.peak_usage, self._cpu_tensor.numel() * self._cpu_tensor.element_size()
             )
 
             return self._gpu_tensor
 
-    def copy_to_cpu(
-        self,
-        stream: Optional[Any] = None,
-        non_blocking: bool = True
-    ) -> Any:
+    def copy_to_cpu(self, stream: Optional[Any] = None, non_blocking: bool = True) -> Any:
         """Copy GPU tensor back to UVA buffer.
 
         Args:
@@ -281,15 +278,9 @@ class UvaBuffer:
         with self._lock:
             if stream is not None:
                 with torch.cuda.stream(stream):
-                    self._cpu_tensor.copy_(
-                        self._gpu_tensor,
-                        non_blocking=non_blocking
-                    )
+                    self._cpu_tensor.copy_(self._gpu_tensor, non_blocking=non_blocking)
             else:
-                self._cpu_tensor.copy_(
-                    self._gpu_tensor,
-                    non_blocking=non_blocking
-                )
+                self._cpu_tensor.copy_(self._gpu_tensor, non_blocking=non_blocking)
 
             return self._cpu_tensor
 
@@ -379,10 +370,7 @@ class UvaBufferPool:
             self._free_buffers.append(buffer)
 
     def acquire(
-        self,
-        priority: int = 0,
-        blocking: bool = True,
-        timeout: Optional[float] = None
+        self, priority: int = 0, blocking: bool = True, timeout: Optional[float] = None
     ) -> Optional[UvaBuffer]:
         """Acquire a buffer from the pool.
 
@@ -510,10 +498,7 @@ class UvaBufferPool:
     def _grow_pool(self) -> None:
         """Add more buffers to the pool."""
         current = len(self._buffers)
-        new_count = min(
-            int(current * self.grow_factor),
-            self.max_buffers
-        )
+        new_count = min(int(current * self.grow_factor), self.max_buffers)
 
         for i in range(current, new_count):
             buffer = UvaBuffer(
@@ -544,10 +529,7 @@ class UvaBufferPool:
 
     def _shrink_pool(self) -> None:
         """Remove excess buffers from the pool."""
-        target = max(
-            self.buffer_count,
-            int(len(self._buffers) / self.grow_factor)
-        )
+        target = max(self.buffer_count, int(len(self._buffers) / self.grow_factor))
 
         while len(self._buffers) > target and self._free_buffers:
             buffer = self._free_buffers.pop()
@@ -615,6 +597,7 @@ class UvaBackedTensor:
             element_size = 4  # Assume float32
 
         import math
+
         self.size = math.prod(shape) * element_size
 
         # Get or create pool
@@ -657,7 +640,7 @@ class UvaBackedTensor:
 
     def __del__(self) -> None:
         """Release buffer on deletion."""
-        if hasattr(self, '_buffer') and self._buffer is not None:
+        if hasattr(self, "_buffer") and self._buffer is not None:
             self._pool.release(self._buffer)
 
 

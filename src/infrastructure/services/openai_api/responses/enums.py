@@ -1,8 +1,28 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Enums.py module.
+"""
+
 # SPDX-License-Identifier: Apache-2.0
 from enum import Enum
 
+
 class ResponseStatus(Enum):
     """Response processing status."""
+
     QUEUED = "queued"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -10,14 +30,18 @@ class ResponseStatus(Enum):
     CANCELLED = "cancelled"
     INCOMPLETE = "incomplete"
 
+
 class ResponseType(Enum):
     """Response object types."""
+
     MESSAGE = "message"
     TOOL_CALL = "function_call"
     REASONING = "reasoning"
 
+
 class ContentPartType(Enum):
     """Content part types."""
+
     TEXT = "text"
     IMAGE_URL = "image_url"
     IMAGE_FILE = "image_file"
@@ -26,8 +50,10 @@ class ContentPartType(Enum):
     TOOL_CALL = "tool_call"
     TOOL_RESULT = "tool_result"
 
+
 class ToolType(Enum):
     """Tool types."""
+
     FUNCTION = "function"
     CODE_INTERPRETER = "code_interpreter"
     FILE_SEARCH = "file_search"
@@ -35,8 +61,10 @@ class ToolType(Enum):
     COMPUTER = "computer"
     MCP = "mcp"
 
+
 class RoleType(Enum):
     """Message role types."""
+
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"

@@ -18,11 +18,13 @@ Handles low-level host networking and high-level agent communication.
 """
 
 from __future__ import annotations
-import socket
+
 import contextlib
-import os
 import logging
+import os
+import socket
 from typing import Any, Dict, Optional
+
 from .base_core import BaseCore
 
 try:
@@ -31,6 +33,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.connectivity")
+
 
 class ConnectivityCore(BaseCore):
     """
@@ -49,11 +52,11 @@ class ConnectivityCore(BaseCore):
         Logic for establishing a connection.
         If rc is available, uses the Rust-accelerated binary pipeline.
         """
-        if rc and hasattr(rc, "establish_native_connection"): # pylint: disable=no-member
+        if rc and hasattr(rc, "establish_native_connection"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.establish_native_connection(target_agent, protocol) # type: ignore
-            except Exception as e: # pylint: disable=broad-exception-caught
+                return rc.establish_native_connection(target_agent, protocol)  # type: ignore
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning("Rust establishment failed: %s. Falling back.", e)
 
         logger.info("ConnectivityCore: Establishing %s connection to %s", protocol, target_agent)
@@ -62,11 +65,11 @@ class ConnectivityCore(BaseCore):
 
     def transfer_payload(self, target_agent: str, payload: bytes) -> bool:
         """High-speed binary payload transfer."""
-        if rc and hasattr(rc, "transfer_binary_payload"): # pylint: disable=no-member
+        if rc and hasattr(rc, "transfer_binary_payload"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.transfer_binary_payload(target_agent, payload) # type: ignore
-            except Exception as e: # pylint: disable=broad-exception-caught
+                return rc.transfer_binary_payload(target_agent, payload)  # type: ignore
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning("Rust payload transfer failed: %s. Falling back.", e)
 
         # Python fallback logic
@@ -74,17 +77,18 @@ class ConnectivityCore(BaseCore):
 
     def check_health(self, target_url: str) -> bool:
         """Rust-accelerated health check for remote agent endpoints."""
-        if rc and hasattr(rc, "check_health_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "check_health_rust"):  # pylint: disable=no-member
             # pylint: disable=no-member
-            return rc.check_health_rust(target_url) # type: ignore
+            return rc.check_health_rust(target_url)  # type: ignore
 
         # Simple Python fallback
         # pylint: disable=import-outside-toplevel
         import urllib.request
+
         try:
             with urllib.request.urlopen(target_url, timeout=2) as response:
                 return response.status == 200
-        except Exception: # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     # --- Network Utilities (formerly NetworkCore) ---
@@ -104,7 +108,7 @@ class ConnectivityCore(BaseCore):
             with socket.socket(af, socket.SOCK_DGRAM) as s:
                 s.connect(target)
                 return s.getsockname()[0]
-        except Exception: # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return "127.0.0.1"
 
     @staticmethod

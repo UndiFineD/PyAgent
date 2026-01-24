@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 UsageMessage - Structured telemetry for platform detection and async reporting.
 
@@ -12,8 +26,6 @@ from __future__ import annotations
 import contextlib
 import os
 import platform
-import sys
-import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
@@ -45,6 +57,7 @@ _GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
 
 class UsageContext(str, Enum):
     """Context in which PyAgent is being used."""
+
     UNKNOWN = "UNKNOWN"
     CLI = "CLI"
     API_SERVER = "API_SERVER"
@@ -56,6 +69,7 @@ class UsageContext(str, Enum):
 # ============================================================================
 # Global runtime data management
 # ============================================================================
+
 
 def set_runtime_usage_data(key: str, value: str | int | bool) -> None:
     """
@@ -82,6 +96,7 @@ def clear_runtime_usage_data() -> None:
 # Opt-out checking
 # ============================================================================
 
+
 def is_usage_stats_enabled() -> bool:
     """
     Check if usage statistics collection is enabled.
@@ -103,12 +118,14 @@ def is_usage_stats_enabled() -> bool:
         no_usage_stats = os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1"
         do_not_track_file = os.path.exists(_DO_NOT_TRACK_PATH)
 
-        _USAGE_STATS_ENABLED = not any([
-            do_not_track,
-            generic_do_not_track,
-            no_usage_stats,
-            do_not_track_file,
-        ])
+        _USAGE_STATS_ENABLED = not any(
+            [
+                do_not_track,
+                generic_do_not_track,
+                no_usage_stats,
+                do_not_track_file,
+            ]
+        )
 
     return _USAGE_STATS_ENABLED
 
@@ -128,6 +145,7 @@ def enable_usage_stats() -> None:
 # ============================================================================
 # Platform detection
 # ============================================================================
+
 
 def detect_cloud_provider() -> str:
     """
@@ -192,6 +210,7 @@ def get_cpu_info() -> dict[str, Any]:
     """
     try:
         import cpuinfo
+
         info = cpuinfo.get_cpu_info()
         return {
             "brand": info.get("brand_raw", "Unknown"),
@@ -217,6 +236,7 @@ def get_gpu_info() -> dict[str, Any]:
     """
     try:
         import torch
+
         if torch.cuda.is_available():
             return {
                 "count": torch.cuda.device_count(),
@@ -239,6 +259,7 @@ def get_memory_info() -> dict[str, int]:
     """
     try:
         import psutil
+
         mem = psutil.virtual_memory()
         return {
             "total": mem.total,
@@ -252,6 +273,7 @@ def get_memory_info() -> dict[str, int]:
 # ============================================================================
 # Usage message dataclass
 # ============================================================================
+
 
 @dataclass
 class UsageMessage:
@@ -317,11 +339,8 @@ class UsageMessage:
 
         # Environment variables
         import json
-        env_data = {
-            var: os.environ.get(var)
-            for var in _ENV_VARS_TO_COLLECT
-            if os.environ.get(var)
-        }
+
+        env_data = {var: os.environ.get(var) for var in _ENV_VARS_TO_COLLECT if os.environ.get(var)}
         if env_data:
             self.env_var_json = json.dumps(env_data)
 
@@ -385,7 +404,8 @@ class UsageMessage:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary, excluding None values."""
         return {
-            k: v for k, v in {
+            k: v
+            for k, v in {
                 "uuid": self.uuid,
                 "provider": self.provider,
                 "num_cpu": self.num_cpu,
@@ -403,13 +423,15 @@ class UsageMessage:
                 "log_time": self.log_time,
                 "source": self.source,
                 "env_var_json": self.env_var_json,
-            }.items() if v is not None
+            }.items()
+            if v is not None
         }
 
 
 # ============================================================================
 # Convenience functions
 # ============================================================================
+
 
 def report_usage(
     context: UsageContext = UsageContext.UNKNOWN,

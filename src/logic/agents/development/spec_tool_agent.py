@@ -15,13 +15,17 @@
 
 """Agent specializing in generating tools and code from specifications (OpenAPI, JSON Schema, MCP)."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import logging
 from pathlib import Path
+
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -33,10 +37,11 @@ class SpecToolAgent(BaseAgent):
         super().__init__(file_path)
         self._pending_spec: str | None = None
         self._system_prompt = (
-            "You are the Spec-Tool Agent. "
-            "Your role is to translate formal specifications into Python tools and manage OpenSpec workflows. "
-            "Follow Spec-Driven Development (SDD): maintain truth in openspec/specs/ and proposals in openspec/changes/. "
-            "IMPORTANT: Before any implementation, you MUST call generate_sdd_spec and wait for 'COMMAND: PROCEED'."
+            "You are the Spec-Tool Agent. Your role is to translate formal specifications "
+            "into Python tools and manage OpenSpec workflows. Follow Spec-Driven "
+            "Development (SDD): maintain truth in openspec/specs/ and proposals in "
+            "openspec/changes/. IMPORTANT: Before any implementation, you MUST call "
+            "generate_sdd_spec and wait for 'COMMAND: PROCEED'."
         )
 
     @as_tool
@@ -91,9 +96,7 @@ class SpecToolAgent(BaseAgent):
         change_dir = Path("openspec/changes") / name.replace(" ", "-").lower()
         change_dir.mkdir(parents=True, exist_ok=True)
 
-        (change_dir / "proposal.md").write_text(
-            f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8"
-        )
+        (change_dir / "proposal.md").write_text(f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8")
         (change_dir / "tasks.md").write_text(
             "## Tasks\n- [ ] 1.1 Implement core logic\n- [ ] 1.2 Add tests",
             encoding="utf-8",
@@ -174,12 +177,13 @@ class SpecToolAgent(BaseAgent):
 
             return f"Successfully generated tool: {output_path}. Methods: {len(paths)}"
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error(f"Spec generation failed: {e}")
             return f"Error parsing spec: {e}"
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Generate a tool from a prompt or path."""
+        _ = target_file
         if ".json" in prompt:
             return self.generate_tool_from_spec(prompt)
         return "Please provide a path to a JSON specification file."

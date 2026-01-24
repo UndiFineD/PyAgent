@@ -1,15 +1,31 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Utility functions for multimodal caching."""
 
-from typing import Any, Optional, Union
+from typing import Any, Union
+
 import numpy as np
-from .enums import MediaType, HashAlgorithm, CacheBackend
-from .data import MediaHash
-from .hasher import MultiModalHasher, HAS_PIL
+
 from .base import MultiModalCache
-from .memory import MemoryMultiModalCache
+from .data import MediaHash
+from .enums import CacheBackend, HashAlgorithm, MediaType
+from .hasher import HAS_PIL, MultiModalHasher
 from .ipc import IPCMultiModalCache
+from .memory import MemoryMultiModalCache
 
 
 def compute_media_hash(
@@ -39,7 +55,7 @@ def compute_media_hash(
             value=hash_value,
             algorithm=algorithm,
             media_type=media_type,
-            size_bytes=len(data) if isinstance(data, bytes) else 0
+            size_bytes=len(data) if isinstance(data, bytes) else 0,
         )
 
 
@@ -47,16 +63,14 @@ def create_cache(
     backend: CacheBackend = CacheBackend.MEMORY,
     max_size_bytes: int = 1024 * 1024 * 1024,
     max_entries: int = 10000,
-    **kwargs
+    **kwargs,
 ) -> MultiModalCache:
     """Factory function to create cache instance."""
     if backend == CacheBackend.MEMORY:
         return MemoryMultiModalCache(max_size_bytes, max_entries)
     elif backend == CacheBackend.SHARED:
         return IPCMultiModalCache(
-            name=kwargs.get("name", "pyagent_mm_cache"),
-            max_size_bytes=max_size_bytes,
-            max_entries=max_entries
+            name=kwargs.get("name", "pyagent_mm_cache"), max_size_bytes=max_size_bytes, max_entries=max_entries
         )
     else:
         return MemoryMultiModalCache(max_size_bytes, max_entries)

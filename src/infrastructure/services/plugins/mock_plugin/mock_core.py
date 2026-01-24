@@ -19,8 +19,10 @@ Demonstrates the 'Core/Shell' pattern for cross-language compatibility.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

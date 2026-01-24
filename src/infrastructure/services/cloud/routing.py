@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Intelligent routing for multi-cloud AI providers.
 
@@ -10,11 +24,11 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
-from .base import CloudProviderBase, InferenceRequest, InferenceResponse
+from .base import CloudProviderBase, InferenceRequest
 
 logger = logging.getLogger(__name__)
 
@@ -140,7 +154,7 @@ class IntelligentRouter:
         if name not in self._providers:
             return False
 
-        provider = self._providers.pop(name)
+        self._providers.pop(name)
         self._priorities.pop(name, None)
         self._metrics.pop(name, None)
 
@@ -182,10 +196,7 @@ class IntelligentRouter:
             return None
 
         # Filter by health
-        healthy_candidates = [
-            name for name in candidates
-            if self._is_provider_healthy(name)
-        ]
+        healthy_candidates = [name for name in candidates if self._is_provider_healthy(name)]
 
         if not healthy_candidates:
             logger.warning("No healthy providers available, trying all candidates")
@@ -222,23 +233,14 @@ class IntelligentRouter:
             candidates = self._model_mapping[model].copy()
         else:
             # Try all providers if model not in mapping
-            candidates = [
-                name for name, provider in self._providers.items()
-                if provider.supports_model(model)
-            ]
+            candidates = [name for name, provider in self._providers.items() if provider.supports_model(model)]
 
         # Apply exclusions
-        candidates = [
-            name for name in candidates
-            if name not in constraints.excluded_providers
-        ]
+        candidates = [name for name in candidates if name not in constraints.excluded_providers]
 
         # Apply preferences (move preferred to front)
         if constraints.preferred_providers:
-            preferred = [
-                name for name in constraints.preferred_providers
-                if name in candidates
-            ]
+            preferred = [name for name in constraints.preferred_providers if name in candidates]
             others = [name for name in candidates if name not in preferred]
             candidates = preferred + others
 
@@ -334,9 +336,7 @@ class IntelligentRouter:
             else:
                 # Exponential moving average
                 alpha = 0.1
-                metrics.avg_latency_ms = (
-                    alpha * latency_ms + (1 - alpha) * metrics.avg_latency_ms
-                )
+                metrics.avg_latency_ms = alpha * latency_ms + (1 - alpha) * metrics.avg_latency_ms
         else:
             metrics.failed_requests += 1
             metrics.last_failure = datetime.now()

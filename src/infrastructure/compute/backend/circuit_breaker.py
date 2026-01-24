@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 from collections.abc import Callable
-from src.core.base.logic.circuit_breaker import CircuitBreaker as CircuitBreakerImpl
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.logic.circuit_breaker import \
+    CircuitBreaker as CircuitBreakerImpl
 
 __version__ = VERSION
 

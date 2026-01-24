@@ -17,14 +17,17 @@ Cross-Model MoE Orchestrator (Phase 61).
 Manages task lifecycle across multiple specialized agents.
 """
 
-import logging
 import asyncio
-from typing import List, Dict, Any, Optional
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
-from src.infrastructure.swarm.orchestration.swarm.expert_fusion import WeightedExpertFusion
-from src.core.base.common.models.communication_models import MoERoutingDecision
+import logging
+from typing import Any, Dict, Optional
+
+from src.infrastructure.swarm.orchestration.swarm.expert_fusion import \
+    WeightedExpertFusion
+from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+    MoEGatekeeper
 
 logger = logging.getLogger(__name__)
+
 
 class CrossModelMoEOrchestrator:
     """
@@ -35,8 +38,8 @@ class CrossModelMoEOrchestrator:
     def __init__(self, gatekeeper: MoEGatekeeper, fusion_engine: Optional[WeightedExpertFusion] = None):
         self.gatekeeper = gatekeeper
         self.fusion_engine = fusion_engine or WeightedExpertFusion()
-        self.agent_registry: Dict[str, Any] = {} # Map of agent_id to actual agent instances/stubs
-        self.expert_health: Dict[str, bool] = {} # agent_id to is_healthy
+        self.agent_registry: Dict[str, Any] = {}  # Map of agent_id to actual agent instances/stubs
+        self.expert_health: Dict[str, bool] = {}  # agent_id to is_healthy
         self.timeout_sec = 10.0
 
     def register_agent_instance(self, agent_id: str, instance: Any):
@@ -74,7 +77,7 @@ class CrossModelMoEOrchestrator:
                     return await asyncio.wait_for(expert_agent.process_request(task), timeout=self.timeout_sec)
                 except (asyncio.TimeoutError, Exception) as e:
                     logger.warning(f"MoE Orchestrator: Expert {expert_id} failed: {e}. Re-routing...")
-                    self.expert_health[expert_id] = False # Mark as unhealthy
+                    self.expert_health[expert_id] = False  # Mark as unhealthy
                     # The loop will naturally try the next expert in 'selected_experts'
 
             raise RuntimeError("MoE Self-Healing: All selected experts failed or are unreachable.")
@@ -89,6 +92,7 @@ class CrossModelMoEOrchestrator:
                     continue
                 agent = self.agent_registry.get(expert_id)
                 if agent:
+
                     async def safe_exec(aid, a, w):
                         try:
                             res = await asyncio.wait_for(a.process_request(task), timeout=self.timeout_sec)
@@ -120,13 +124,12 @@ class CrossModelMoEOrchestrator:
 
             # 3. Fusion / Consensus
             fusion_res = await self.fusion_engine.fuse_outputs(
-                outputs=final_results,
-                weights=final_weights,
-                expert_ids=final_experts,
-                mode="weighted_plurality"
+                outputs=final_results, weights=final_weights, expert_ids=final_experts, mode="weighted_plurality"
             )
 
-            logger.info(f"MoE Orchestrator: Fused {len(final_results)} outputs with consensus {fusion_res.consensus_score}")
+            logger.info(
+                f"MoE Orchestrator: Fused {len(final_results)} outputs with consensus {fusion_res.consensus_score}"
+            )
             return fusion_res.merged_content
 
         return None

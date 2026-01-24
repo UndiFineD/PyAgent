@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Global command registry and registration utilities.
 """
@@ -6,11 +20,8 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from src.interface.slash_commands.core import (
-    CommandHandler,
-    CommandRegistry,
-    CommandDefinition,
-)
+from src.interface.slash_commands.core import (CommandDefinition,
+                                               CommandHandler, CommandRegistry)
 
 # ============================================================================
 # Global Registry
@@ -39,6 +50,7 @@ def reset_global_registry() -> None:
 # Registration Functions
 # ============================================================================
 
+
 def register(
     name: str,
     *,
@@ -57,6 +69,7 @@ def register(
         def cmd_greet(ctx: CommandContext) -> CommandResult:
             return CommandResult.ok(f"Hello, {ctx.first_arg or 'world'}!")
     """
+
     def decorator(handler: CommandHandler) -> CommandHandler:
         get_global_registry().register(
             name,
@@ -69,6 +82,7 @@ def register(
             category=category,
         )
         return handler
+
     return decorator
 
 

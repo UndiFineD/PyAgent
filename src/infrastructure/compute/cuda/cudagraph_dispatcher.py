@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 CudagraphDispatcher - Dispatch logic for CUDA graph execution.
 
@@ -21,7 +35,7 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Dict, Generic, List, Optional, Set, Tuple, TypeVar
+from typing import Any, Callable, List, Optional, Set, Tuple, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +44,11 @@ T = TypeVar("T")
 
 class DispatchMode(Enum):
     """Mode of execution dispatch."""
-    EAGER = auto()       # Direct execution
-    CUDAGRAPH = auto()   # Full CUDA graph
-    PIECEWISE = auto()   # Piecewise graphs
-    HYBRID = auto()      # Dynamic selection
+
+    EAGER = auto()  # Direct execution
+    CUDAGRAPH = auto()  # Full CUDA graph
+    PIECEWISE = auto()  # Piecewise graphs
+    HYBRID = auto()  # Dynamic selection
 
 
 @dataclass(frozen=True)
@@ -47,6 +62,7 @@ class DispatchKey:
         max_seq_len: Maximum sequence length
         is_prefill: Whether this is prefill phase
     """
+
     num_tokens: int
     num_reqs: int
     max_seq_len: int = 0
@@ -59,6 +75,7 @@ class DispatchKey:
 @dataclass
 class DispatchStats:
     """Statistics for dispatch decisions."""
+
     eager_count: int = 0
     graph_count: int = 0
     piecewise_count: int = 0
@@ -78,20 +95,12 @@ class DispatchPolicy(ABC):
     """Abstract dispatch policy."""
 
     @abstractmethod
-    def should_use_graph(
-        self,
-        key: DispatchKey,
-        graph_available: bool
-    ) -> bool:
+    def should_use_graph(self, key: DispatchKey, graph_available: bool) -> bool:
         """Determine if graph should be used."""
         pass
 
     @abstractmethod
-    def select_mode(
-        self,
-        key: DispatchKey,
-        available_modes: Set[DispatchMode]
-    ) -> DispatchMode:
+    def select_mode(self, key: DispatchKey, available_modes: Set[DispatchMode]) -> DispatchMode:
         """Select execution mode."""
         pass
 
@@ -109,11 +118,7 @@ class DefaultDispatchPolicy(DispatchPolicy):
         self.max_tokens = max_tokens_for_graph
         self.prefer_piecewise = prefer_piecewise
 
-    def should_use_graph(
-        self,
-        key: DispatchKey,
-        graph_available: bool
-    ) -> bool:
+    def should_use_graph(self, key: DispatchKey, graph_available: bool) -> bool:
         if not graph_available:
             return False
         # Check token range
@@ -123,11 +128,7 @@ class DefaultDispatchPolicy(DispatchPolicy):
             return False
         return True
 
-    def select_mode(
-        self,
-        key: DispatchKey,
-        available_modes: Set[DispatchMode]
-    ) -> DispatchMode:
+    def select_mode(self, key: DispatchKey, available_modes: Set[DispatchMode]) -> DispatchMode:
         if self.prefer_piecewise and DispatchMode.PIECEWISE in available_modes:
             return DispatchMode.PIECEWISE
         if DispatchMode.CUDAGRAPH in available_modes:
@@ -154,22 +155,15 @@ class AdaptiveDispatchPolicy(DispatchPolicy):
         with self._lock:
             self._history.append((key, mode, latency))
             if len(self._history) > self._history_size:
-                self._history = self._history[-self._history_size:]
+                self._history = self._history[-self._history_size :]
 
-    def should_use_graph(
-        self,
-        key: DispatchKey,
-        graph_available: bool
-    ) -> bool:
+    def should_use_graph(self, key: DispatchKey, graph_available: bool) -> bool:
         if not graph_available:
             return False
 
         with self._lock:
             # Find similar keys
-            similar = [
-                (m, lat) for k, m, lat in self._history
-                if abs(k.num_tokens - key.num_tokens) <= 8
-            ]
+            similar = [(m, lat) for k, m, lat in self._history if abs(k.num_tokens - key.num_tokens) <= 8]
 
         if not similar:
             return True  # Default to trying graph
@@ -186,11 +180,7 @@ class AdaptiveDispatchPolicy(DispatchPolicy):
 
         return avg_graph <= avg_eager * 1.1  # 10% tolerance
 
-    def select_mode(
-        self,
-        key: DispatchKey,
-        available_modes: Set[DispatchMode]
-    ) -> DispatchMode:
+    def select_mode(self, key: DispatchKey, available_modes: Set[DispatchMode]) -> DispatchMode:
         if DispatchMode.CUDAGRAPH in available_modes:
             if self.should_use_graph(key, True):
                 return DispatchMode.CUDAGRAPH
@@ -202,6 +192,7 @@ class AdaptiveDispatchPolicy(DispatchPolicy):
 @dataclass
 class GraphEntry:
     """Entry in the graph cache."""
+
     graph: Any  # CUDAGraph or compiled function
     input_ptrs: List[int] = field(default_factory=list)
     capture_time: float = 0.0
@@ -243,17 +234,9 @@ class CudagraphDispatcher:
         self._stats = DispatchStats()
 
         # Available modes
-        self._available_modes: Set[DispatchMode] = {
-            DispatchMode.EAGER,
-            DispatchMode.CUDAGRAPH
-        }
+        self._available_modes: Set[DispatchMode] = {DispatchMode.EAGER, DispatchMode.CUDAGRAPH}
 
-    def register_graph(
-        self,
-        key: DispatchKey,
-        graph: Any,
-        input_ptrs: Optional[List[int]] = None
-    ) -> None:
+    def register_graph(self, key: DispatchKey, graph: Any, input_ptrs: Optional[List[int]] = None) -> None:
         """
         Register a captured graph.
 
@@ -270,11 +253,7 @@ class CudagraphDispatcher:
                 oldest = next(iter(self._graphs))
                 del self._graphs[oldest]
 
-            self._graphs[key] = GraphEntry(
-                graph=graph,
-                input_ptrs=input_ptrs or [],
-                capture_time=time.time()
-            )
+            self._graphs[key] = GraphEntry(graph=graph, input_ptrs=input_ptrs or [], capture_time=time.time())
 
     def has_graph(self, key: DispatchKey) -> bool:
         """Check if graph exists for key."""
@@ -296,12 +275,7 @@ class CudagraphDispatcher:
             self._graphs[key] = entry
             return entry
 
-    def dispatch(
-        self,
-        key: DispatchKey,
-        *args: Any,
-        **kwargs: Any
-    ) -> Any:
+    def dispatch(self, key: DispatchKey, *args: Any, **kwargs: Any) -> Any:
         """
         Dispatch execution based on key.
 
@@ -343,29 +317,19 @@ class CudagraphDispatcher:
 
         return result
 
-    def _replay_graph(
-        self,
-        entry: GraphEntry,
-        *args: Any,
-        **kwargs: Any
-    ) -> Any:
+    def _replay_graph(self, entry: GraphEntry, *args: Any, **kwargs: Any) -> Any:
         """Replay a full CUDA graph."""
         graph = entry.graph
 
         # Copy inputs (simulated)
-        if hasattr(graph, 'replay'):
+        if hasattr(graph, "replay"):
             graph.replay()
             return None  # Output retrieved separately
         else:
             # Fallback for mock graphs
             return self.eager_runner(*args, **kwargs)
 
-    def _replay_piecewise(
-        self,
-        entry: GraphEntry,
-        *args: Any,
-        **kwargs: Any
-    ) -> Any:
+    def _replay_piecewise(self, entry: GraphEntry, *args: Any, **kwargs: Any) -> Any:
         """Replay piecewise graphs."""
         # Piecewise would iterate through graph segments
         return self._replay_graph(entry, *args, **kwargs)
@@ -403,23 +367,13 @@ class CompositeDispatcher:
         self._dispatchers: List[Tuple[int, str, CudagraphDispatcher]] = []
         self._lock = threading.Lock()
 
-    def add_dispatcher(
-        self,
-        name: str,
-        dispatcher: CudagraphDispatcher,
-        priority: int = 0
-    ) -> None:
+    def add_dispatcher(self, name: str, dispatcher: CudagraphDispatcher, priority: int = 0) -> None:
         """Add a dispatcher with priority."""
         with self._lock:
             self._dispatchers.append((priority, name, dispatcher))
             self._dispatchers.sort(key=lambda x: -x[0])  # Higher first
 
-    def dispatch(
-        self,
-        key: DispatchKey,
-        *args: Any,
-        **kwargs: Any
-    ) -> Any:
+    def dispatch(self, key: DispatchKey, *args: Any, **kwargs: Any) -> Any:
         """Dispatch through chain until success."""
         with self._lock:
             dispatchers = list(self._dispatchers)
@@ -447,17 +401,10 @@ class StreamDispatcher(CudagraphDispatcher):
     - Stream-local graph caching
     """
 
-    def __init__(
-        self,
-        eager_runner: Callable[..., Any],
-        num_streams: int = 2,
-        **kwargs: Any
-    ):
+    def __init__(self, eager_runner: Callable[..., Any], num_streams: int = 2, **kwargs: Any):
         super().__init__(eager_runner, **kwargs)
         self.num_streams = num_streams
-        self._stream_graphs: List[OrderedDict[DispatchKey, GraphEntry]] = [
-            OrderedDict() for _ in range(num_streams)
-        ]
+        self._stream_graphs: List[OrderedDict[DispatchKey, GraphEntry]] = [OrderedDict() for _ in range(num_streams)]
         self._current_stream = 0
 
     def _select_stream(self, key: DispatchKey) -> int:
@@ -466,12 +413,7 @@ class StreamDispatcher(CudagraphDispatcher):
         stream = hash(key) % self.num_streams
         return stream
 
-    def dispatch(
-        self,
-        key: DispatchKey,
-        *args: Any,
-        **kwargs: Any
-    ) -> Any:
+    def dispatch(self, key: DispatchKey, *args: Any, **kwargs: Any) -> Any:
         """Dispatch to selected stream."""
         stream = self._select_stream(key)
 
@@ -485,19 +427,9 @@ class StreamDispatcher(CudagraphDispatcher):
         return super().dispatch(key, *args, **kwargs)
 
 
-def create_dispatch_key(
-    num_tokens: int,
-    num_reqs: int,
-    max_seq_len: int = 0,
-    is_prefill: bool = False
-) -> DispatchKey:
+def create_dispatch_key(num_tokens: int, num_reqs: int, max_seq_len: int = 0, is_prefill: bool = False) -> DispatchKey:
     """Factory function for dispatch keys."""
-    return DispatchKey(
-        num_tokens=num_tokens,
-        num_reqs=num_reqs,
-        max_seq_len=max_seq_len,
-        is_prefill=is_prefill
-    )
+    return DispatchKey(num_tokens=num_tokens, num_reqs=num_reqs, max_seq_len=max_seq_len, is_prefill=is_prefill)
 
 
 def get_padded_key(key: DispatchKey, pad_to: int = 8) -> DispatchKey:
@@ -506,8 +438,5 @@ def get_padded_key(key: DispatchKey, pad_to: int = 8) -> DispatchKey:
     padded_reqs = ((key.num_reqs + pad_to - 1) // pad_to) * pad_to
 
     return DispatchKey(
-        num_tokens=padded_tokens,
-        num_reqs=padded_reqs,
-        max_seq_len=key.max_seq_len,
-        is_prefill=key.is_prefill
+        num_tokens=padded_tokens, num_reqs=padded_reqs, max_seq_len=key.max_seq_len, is_prefill=key.is_prefill
     )

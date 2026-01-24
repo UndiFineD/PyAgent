@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+from datetime import datetime
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
+
 from .archived_improvement import ArchivedImprovement
 from .improvement import Improvement
 from .improvement_category import ImprovementCategory
-from datetime import datetime
-from typing import Any
 
 __version__ = VERSION
 
@@ -39,9 +42,7 @@ class ImprovementArchive:
         """Initialize the archive."""
         self.archive: list[ArchivedImprovement] = []
 
-    def archive_improvement(
-        self, improvement: Improvement, reason: str, archived_by: str = ""
-    ) -> ArchivedImprovement:
+    def archive_improvement(self, improvement: Improvement, reason: str, archived_by: str = "") -> ArchivedImprovement:
         """Archive an improvement.
 
         Args:

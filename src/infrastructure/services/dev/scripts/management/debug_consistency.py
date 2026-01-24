@@ -18,8 +18,10 @@ Debug script to check for consistency in _record calls across the workspace.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

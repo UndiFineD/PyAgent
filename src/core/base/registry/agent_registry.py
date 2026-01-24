@@ -18,8 +18,10 @@ AgentRegistry: Central registry for all active agent instances.
 """
 
 from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING, Any
+
 from src.core.base.common.registry_core import RegistryCore
 from src.core.base.lifecycle.version import VERSION
 

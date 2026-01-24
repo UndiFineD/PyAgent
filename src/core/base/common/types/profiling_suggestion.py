@@ -16,9 +16,11 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types.profiling_category import ProfilingCategory
+
 from dataclasses import dataclass
+
+from src.core.base.common.types.profiling_category import ProfilingCategory
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

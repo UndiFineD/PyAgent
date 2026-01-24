@@ -16,65 +16,34 @@
 """Test agent functionality - extracted classes."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION as VERSION
-from .enums import (
-    TestPriority,
-    TestStatus,
-    CoverageType,
-    BrowserType,
-    TestSourceType,
-    MutationOperator,
-    ExecutionMode,
-)
-from .models import (
-    TestCase as TestCase,
-    TestRun as TestRun,
-    CoverageGap as CoverageGap,
-    TestFactory as TestFactory,
-    VisualRegressionConfig as VisualRegressionConfig,
-    ContractTest as ContractTest,
-    TestEnvironment as TestEnvironment,
-    ExecutionTrace as ExecutionTrace,
-    TestDependency as TestDependency,
-    CrossBrowserConfig as CrossBrowserConfig,
-    AggregatedResult as AggregatedResult,
-    Mutation as Mutation,
-    GeneratedTest as GeneratedTest,
-    TestProfile as TestProfile,
-    ScheduleSlot as ScheduleSlot,
-    Recording as Recording,
-    ReplayResult as ReplayResult,
-    ProvisionedEnvironment as ProvisionedEnvironment,
-    ValidationResult as ValidationResult,
-    _empty_str_list as _empty_str_list,
-    _empty_dict_any as _empty_dict_any,
-    _empty_action_list as _empty_action_list,
-)
-from .testing_utils import (
-    VisualRegressionTester,
-    ContractTestRunner,
-    ResultAggregator,
-    TestMetricsCollector,
-)
-from .optimization import TestSuiteOptimizer, CoverageGapAnalyzer
-from .mutation_testing import MutationTester, MutationRunner
-from .test_generation import TestGenerator, TestCaseMinimizer, TestDocGenerator
-from .debugging import ExecutionReplayer, TestProfiler, TestRecorder, TestReplayer
-from .environment import EnvironmentProvisioner, DataFactory
-from .dependency_injection import DependencyInjector as DependencyInjector
-from .scheduling import CrossBrowserRunner, TestScheduler
-from .parallelization import ParallelizationStrategy as ParallelizationStrategy
-from .test_management import (
-    BaselineComparisonResult,
-    BaselineManager,
-    DIContainer,
-    TestPrioritizer,
-    FlakinessDetector,
-    QuarantineManager,
-    ImpactAnalyzer,
-    ContractValidator,
-)
-from .agents import TestsAgent as TestsAgent
+
+from src.core.base.lifecycle.version import VERSION
+
+from .agents import TestsAgent  # noqa: F401
+from .debugging import (ExecutionReplayer, TestProfiler, TestRecorder,  # noqa: F401
+                        TestReplayer)
+from .dependency_injection import DependencyInjector  # noqa: F401
+from .enums import (BrowserType, CoverageType, ExecutionMode, MutationOperator,  # noqa: F401
+                    TestPriority, TestSourceType, TestStatus)
+from .environment import DataFactory, EnvironmentProvisioner  # noqa: F401
+from .models import (AggregatedResult, ContractTest, CoverageGap,  # noqa: F401
+                     CrossBrowserConfig, ExecutionTrace, GeneratedTest,
+                     Mutation, ProvisionedEnvironment, Recording, ReplayResult,
+                     ScheduleSlot, TestCase, TestDependency, TestEnvironment,
+                     TestFactory, TestProfile, TestRun, ValidationResult,
+                     VisualRegressionConfig, _empty_action_list,
+                     _empty_dict_any, _empty_str_list)
+from .mutation_testing import MutationRunner, MutationTester  # noqa: F401
+from .optimization import CoverageGapAnalyzer, TestSuiteOptimizer  # noqa: F401
+from .parallelization import ParallelizationStrategy  # noqa: F401
+from .scheduling import CrossBrowserRunner, TestScheduler  # noqa: F401
+from .test_generation import TestCaseMinimizer, TestDocGenerator, TestGenerator  # noqa: F401
+from .test_management import (BaselineComparisonResult, BaselineManager,  # noqa: F401
+                              ContractValidator, DIContainer,
+                              FlakinessDetector, ImpactAnalyzer,
+                              QuarantineManager, TestPrioritizer)
+from .testing_utils import (ContractTestRunner, ResultAggregator,  # noqa: F401
+                            TestMetricsCollector, VisualRegressionTester)
 
 # Enums
 
@@ -132,6 +101,9 @@ __all__ = [
     "ReplayResult",
     "ProvisionedEnvironment",
     "ValidationResult",
+    "_empty_str_list",
+    "_empty_dict_any",
+    "_empty_action_list",
     # Testing utilities
     "VisualRegressionTester",
     "ContractTestRunner",

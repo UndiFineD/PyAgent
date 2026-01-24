@@ -16,8 +16,11 @@
 """Mutation testing functionality."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
+
+from src.core.base.lifecycle.version import VERSION
+
 from .enums import MutationOperator
 from .models import Mutation
 
@@ -62,9 +65,7 @@ class MutationTester:
                     )
                 )
             if " and " in line:
-                mut_id = hashlib.md5(f"{file_path}:{i}:and->or".encode()).hexdigest()[
-                    :8
-                ]
+                mut_id = hashlib.md5(f"{file_path}:{i}:and->or".encode()).hexdigest()[:8]
                 mutations.append(
                     Mutation(
                         id=mut_id,

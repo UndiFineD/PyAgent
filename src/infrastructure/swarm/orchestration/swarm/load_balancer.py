@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Load balancer.py module.
+"""
+
 import asyncio
 import logging
-from typing import List, Dict, Any, Optional
-from src.infrastructure.swarm.orchestration.swarm.telemetry import SwarmTelemetryService
-from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
+from typing import List
+
+from src.infrastructure.engine.kv_cache.context_sharder import \
+    ContextShardManager
 from src.infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
+from src.infrastructure.swarm.orchestration.swarm.telemetry import \
+    SwarmTelemetryService
 
 logger = logging.getLogger(__name__)
+
 
 class SwarmLoadBalancer:
     """
@@ -33,7 +41,7 @@ class SwarmLoadBalancer:
         shard_manager: ContextShardManager,
         migration_engine: P2PMigrationEngine,
         hot_threshold: float = 0.85,
-        cool_threshold: float = 0.40
+        cool_threshold: float = 0.40,
     ):
         self.telemetry = telemetry
         self.shard_manager = shard_manager
@@ -85,8 +93,15 @@ class SwarmLoadBalancer:
             # Pick a shard to move (e.g., the first one)
             context_id, shard_idx = shards_on_hot_rank[0]
 
-            logger.info(f"[Phase 81] LoadBalancer: Hot spot detected on Rank {hot_rank} ({metrics[f'rank_{hot_rank}_util']:.2f}). "
-                        f"Migrating {context_id} shard {shard_idx} to Rank {target_rank}.")
+            logger.info(
+                "[Phase 81] LoadBalancer: Hot spot detected on Rank %s (%s). "
+                "Migrating %s shard %s to Rank %s.",
+                hot_rank,
+                f"{metrics[f'rank_{hot_rank}_util']:.2f}",
+                context_id,
+                shard_idx,
+                target_rank,
+            )
 
             try:
                 await self.migration_engine.migrate_shard(context_id, shard_idx, target_rank)

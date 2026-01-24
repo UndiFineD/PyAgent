@@ -1,19 +1,24 @@
+
+"""
+Lan discovery.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 320: LAN Discovery & Peer Synchronization
 
+import hashlib
+import hmac
+import json
 import socket
 import threading
-import json
 import time
-import logging
-import hmac
-import hashlib
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional
+
 from src.infrastructure.swarm.network.network_utils import get_ip
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
+
 
 @dataclass
 class PeerInfo:
@@ -28,21 +33,19 @@ class PeerInfo:
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
+
 class LANDiscovery:
     """
     Decentralized LAN Discovery for PyAgents.
     Follows an Announce -> Respond -> Register -> Sync cycle.
     """
+
     DISCOVERY_PORT = 31415
     BROADCAST_ADDR = "255.255.255.255"
     MAX_CLOCK_SKEW = 10.0  # Seconds
 
     def __init__(
-        self,
-        agent_id: str,
-        service_port: int,
-        secret_key: Optional[str] = None,
-        metadata: Optional[Dict] = None
+        self, agent_id: str, service_port: int, secret_key: Optional[str] = None, metadata: Optional[Dict] = None
     ):
         self.agent_id = agent_id
         self.service_port = service_port
@@ -52,7 +55,7 @@ class LANDiscovery:
         self._running = False
         self._lock = threading.Lock()
         self._nonces: Dict[str, float] = {}  # agent_id: last_timestamp
-        self._ping_times: Dict[str, float] = {} # agent_id: sent_time
+        self._ping_times: Dict[str, float] = {}  # agent_id: sent_time
 
         # Local IP detection (lazy)
         self._local_ip = None
@@ -66,11 +69,7 @@ class LANDiscovery:
     def _sign(self, data: str) -> str:
         if not self.secret_key:
             return "unsigned"
-        return hmac.new(
-            self.secret_key.encode(),
-            data.encode(),
-            hashlib.sha256
-        ).hexdigest()
+        return hmac.new(self.secret_key.encode(), data.encode(), hashlib.sha256).hexdigest()
 
     def _verify(self, data: str, signature: str) -> bool:
         if not self.secret_key:
@@ -85,16 +84,13 @@ class LANDiscovery:
             "ip": self.local_ip,
             "port": self.service_port,
             "timestamp": time.time(),
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
         if extra:
             payload.update(extra)
 
         data_str = json.dumps(payload, sort_keys=True)
-        envelope = {
-            "data": payload,
-            "sig": self._sign(data_str)
-        }
+        envelope = {"data": payload, "sig": self._sign(data_str)}
         return json.dumps(envelope).encode()
 
     def start(self):
@@ -136,15 +132,13 @@ class LANDiscovery:
             except Exception as e:
                 logger.debug(f"LANDiscovery: Background loop error: {e}")
 
-            time.sleep(30) # Announce every 30 seconds
+            time.sleep(30)  # Announce every 30 seconds
 
     def _sync_registry(self, sock: socket.socket):
         with self._lock:
             # Send top 10 most recent peers
             peers_list = sorted(
-                [p.to_dict() for p in self.registry.values()],
-                key=lambda x: x['last_seen'],
-                reverse=True
+                [p.to_dict() for p in self.registry.values()], key=lambda x: x["last_seen"], reverse=True
             )[:10]
 
         msg = self._create_message("SYNC", {"peers": peers_list})
@@ -185,18 +179,20 @@ class LANDiscovery:
 
             remote_agent_id = payload.get("agent_id")
             if remote_agent_id == self.agent_id:
-                return # Self ignore
+                return  # Self ignore
 
             msg_timestamp = payload.get("timestamp", 0)
             now = time.time()
 
             # Anti-Replay & Clock Skew Protection
             if abs(now - msg_timestamp) > self.MAX_CLOCK_SKEW:
-                logger.debug(f"LANDiscovery: Dropping message from {remote_agent_id} (Clock skew: {now - msg_timestamp:.2f}s)")
+                logger.debug(
+                    f"LANDiscovery: Dropping message from {remote_agent_id} (Clock skew: {now - msg_timestamp:.2f}s)"
+                )
                 return
 
             if self._nonces.get(remote_agent_id, 0) >= msg_timestamp:
-                return # Replay or old message
+                return  # Replay or old message
             self._nonces[remote_agent_id] = msg_timestamp
 
             msg_type = payload.get("type")
@@ -215,7 +211,7 @@ class LANDiscovery:
             elif msg_type == "ACK":
                 # Calculate latency if we sent the request
                 if remote_agent_id in self._ping_times:
-                    latency = (now - self._ping_times.pop(remote_agent_id)) * 1000 # ms
+                    latency = (now - self._ping_times.pop(remote_agent_id)) * 1000  # ms
                     with self._lock:
                         if remote_agent_id in self.registry:
                             self.registry[remote_agent_id].latency = latency
@@ -224,7 +220,7 @@ class LANDiscovery:
                 for peer_data in payload.get("peers", []):
                     self._update_peer(peer_data)
 
-        except Exception as e:
+        except Exception:
             logger.debug(f"LANDiscovery: Malformed packet from {addr}")
 
     def _update_peer(self, data: Dict[str, Any]):
@@ -244,7 +240,7 @@ class LANDiscovery:
                 last_seen=time.time(),
                 metadata=data.get("metadata", {}),
                 trust_score=data.get("trust_score", 1.0),
-                latency=latency
+                latency=latency,
             )
 
     def get_active_peers(self, max_age: int = 300) -> List[PeerInfo]:

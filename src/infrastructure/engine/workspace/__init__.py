@@ -12,10 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .workspace_manager import WorkspaceManager
-from .ubatching_utils import UBatchingUtils
-from .memory_profiler import MemoryProfiler
-from .buffer_recycler import BufferRecycler
+"""
+Workspace package.
+"""
+
+from .buffer_recycler import BufferRecycler  # noqa: F401
+from .memory_profiler import MemoryProfiler  # noqa: F401
+from .ubatching_utils import UBatchingUtils  # noqa: F401
+from .workspace_manager import WorkspaceManager  # noqa: F401
 
 __all__ = [
     "WorkspaceManager",

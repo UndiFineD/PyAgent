@@ -1,30 +1,35 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Object Pool for reducing GC pressure.
 
 Phase 19: Beyond vLLM - Performance Patterns
 Reusable object pooling to minimize allocations.
 """
+
 from __future__ import annotations
 
 import threading
 import time
-import weakref
 from collections import deque
-from dataclasses import dataclass, field
-from typing import (
-    Any,
-    Callable,
-    Generic,
-    TypeVar,
-    Optional,
-    Dict,
-    List,
-    Protocol,
-    runtime_checkable,
-)
 from contextlib import contextmanager
+from dataclasses import dataclass
+from typing import (Any, Callable, Dict, Generic, List, Optional, Protocol,
+                    TypeVar, runtime_checkable)
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 @runtime_checkable
@@ -39,6 +44,7 @@ class Resettable(Protocol):
 @dataclass
 class PoolStats:
     """Statistics for object pool."""
+
     created: int = 0
     reused: int = 0
     returned: int = 0
@@ -60,14 +66,14 @@ class PoolStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            'created': self.created,
-            'reused': self.reused,
-            'returned': self.returned,
-            'discarded': self.discarded,
-            'current_size': self.current_size,
-            'peak_size': self.peak_size,
-            'reuse_ratio': self.reuse_ratio,
-            'total_acquisitions': self.total_acquisitions,
+            "created": self.created,
+            "reused": self.reused,
+            "returned": self.returned,
+            "discarded": self.discarded,
+            "current_size": self.current_size,
+            "peak_size": self.peak_size,
+            "reuse_ratio": self.reuse_ratio,
+            "total_acquisitions": self.total_acquisitions,
         }
 
 
@@ -279,6 +285,7 @@ class TypedObjectPool(Generic[T]):
         max_size: int = 100,
     ):
         """Initialize typed pool."""
+
         def auto_reset(obj: T) -> None:
             if isinstance(obj, Resettable):
                 obj.reset()
@@ -385,10 +392,7 @@ class TieredBufferPool:
             max_buffers_per_tier: Max buffers per size tier
         """
         self._sizes = sorted(sizes or self.DEFAULT_SIZES)
-        self._pools: Dict[int, BufferPool] = {
-            size: BufferPool(size, max_buffers_per_tier)
-            for size in self._sizes
-        }
+        self._pools: Dict[int, BufferPool] = {size: BufferPool(size, max_buffers_per_tier) for size in self._sizes}
         self._lock = threading.Lock()
         self._oversized_allocations = 0
 
@@ -449,11 +453,8 @@ class TieredBufferPool:
     def get_stats(self) -> Dict[str, Any]:
         """Get statistics for all tiers."""
         return {
-            'tiers': {
-                size: pool.stats.to_dict()
-                for size, pool in self._pools.items()
-            },
-            'oversized_allocations': self._oversized_allocations,
+            "tiers": {size: pool.stats.to_dict() for size, pool in self._pools.items()},
+            "oversized_allocations": self._oversized_allocations,
         }
 
 

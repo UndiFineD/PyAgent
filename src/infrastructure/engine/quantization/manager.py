@@ -19,7 +19,7 @@ Enables dynamic quantization switching (FP8, BitNet, AWQ) for high-efficiency in
 
 import logging
 from enum import Enum
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 try:
     import rust_core as rc
@@ -28,6 +28,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class QuantizationMode(Enum):
     FP16 = "fp16"
     FP8 = "fp8"
@@ -35,6 +36,7 @@ class QuantizationMode(Enum):
     INT4 = "int4"
     BITNET_158 = "bitnet_158"  # 1.58-bit ternary quantization
     AWQ = "awq"  # Activation-aware Weight Quantization
+
 
 class QuantizationManager:
     """
@@ -65,7 +67,7 @@ class QuantizationManager:
             QuantizationMode.FP16: {"bits": 16, "type": "float", "accelerated": True},
             QuantizationMode.FP8: {"bits": 8, "type": "float", "accelerated": True, "e4m3_support": True},
             QuantizationMode.BITNET_158: {"bits": 1.58, "type": "ternary", "accelerated": False},
-            QuantizationMode.AWQ: {"bits": 4, "type": "int", "accelerated": True, "group_size": 128}
+            QuantizationMode.AWQ: {"bits": 4, "type": "int", "accelerated": True, "group_size": 128},
         }
 
         return configs.get(target_mode, configs[QuantizationMode.FP16])

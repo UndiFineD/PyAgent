@@ -11,18 +11,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Entropy guard agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
-import os
 import logging
+import os
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class EntropyGuardAgent(BaseAgent):
+class EntropyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Phase 60: Quantum-Resistant Cryptographic Layer.
     Manages simulated post-quantum cryptographic (PQC) keys and entropy pools.

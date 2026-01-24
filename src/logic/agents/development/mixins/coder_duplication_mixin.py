@@ -16,17 +16,19 @@
 Duplicate code detection logic for CoderCore.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 import hashlib
 import re
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 
 class CoderDuplicationMixin:
     """Mixin for identifying duplicate code."""
 
-    def find_duplicate_code(
-        self, content: str, min_lines: int = 4
-    ) -> List[Dict[str, Any]]:
+    def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
         """Find duplicate code blocks using hashing."""
         # Rust-accelerated sliding window hash
         try:
@@ -44,13 +46,11 @@ class CoderDuplicationMixin:
                             "hash": hash_val,
                             "occurrences": len(line_nums),
                             "lines": line_nums,
-                            "preview": "\n".join(
-                                lines[preview_start : preview_start + min_lines]
-                            )[:100],
+                            "preview": "\n".join(lines[preview_start : preview_start + min_lines])[:100],
                         }
                     )
             return duplicates
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         return self._find_duplicate_code_fallback(content, min_lines)
@@ -79,9 +79,7 @@ class CoderDuplicationMixin:
                         "hash": block_hash,
                         "occurrences": len(line_numbers),
                         "lines": line_numbers,
-                        "preview": "\n".join(
-                            lines[line_numbers[0] - 1 : line_numbers[0] - 1 + min_lines]
-                        )[:100],
+                        "preview": "\n".join(lines[line_numbers[0] - 1 : line_numbers[0] - 1 + min_lines])[:100],
                     }
                 )
         return duplicates

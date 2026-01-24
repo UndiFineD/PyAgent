@@ -15,9 +15,11 @@
 """Utility for moving specific standard library imports out of TYPE_CHECKING blocks to runtime."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -28,9 +30,7 @@ def fix_file(file_path: str) -> None:
         content = f.read()
 
     # regex to find if TYPE_CHECKING: block
-    pattern = re.compile(
-        r"if TYPE_CHECKING:\s+(?:\s*(?:pass|from|import).*)+", re.MULTILINE
-    )
+    pattern = re.compile(r"if TYPE_CHECKING:\s+(?:\s*(?:pass|from|import).*)+", re.MULTILINE)
 
     match = pattern.search(content)
     if not match:
@@ -100,9 +100,7 @@ def fix_file(file_path: str) -> None:
         return
 
     # Reconstruct
-    new_content = content.replace(
-        block, "\n".join(extracted_lines) + "\n" + "\n".join(new_block_lines)
-    )
+    new_content = content.replace(block, "\n".join(extracted_lines) + "\n" + "\n".join(new_block_lines))
 
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(new_content)

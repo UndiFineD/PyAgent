@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
+
+"""
+Prediction engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Forecasting and change detection engine.
 
 from __future__ import annotations
+
 import contextlib
 import logging
 import math
@@ -14,9 +19,7 @@ logger = logging.getLogger(__name__)
 class StatsChangeDetector:
     """Detects changes in metric values."""
 
-    def __init__(
-        self, threshold: float = 0.1, threshold_percent: float | None = None
-    ) -> None:
+    def __init__(self, threshold: float = 0.1, threshold_percent: float | None = None) -> None:
         if threshold_percent is not None:
             threshold = float(threshold_percent) / 100.0
         self.threshold = float(threshold)
@@ -44,9 +47,7 @@ class StatsChangeDetector:
             old_val = 0.0 if prev is None else float(prev)
             new_val = float(value)
             change_percent = (
-                abs((new_val - old_val) / old_val) * 100.0
-                if old_val != 0.0
-                else (100.0 if new_val != 0.0 else 0.0)
+                abs((new_val - old_val) / old_val) * 100.0 if old_val != 0.0 else (100.0 if new_val != 0.0 else 0.0)
             )
 
             change_info = {
@@ -81,9 +82,7 @@ class StatsForecaster:
     def predict_next(self) -> float:
         if not self.history:
             return 0.0
-        return sum(self.history[-self.window_size :]) / min(
-            len(self.history), self.window_size
-        )
+        return sum(self.history[-self.window_size :]) / min(len(self.history), self.window_size)
 
     def confidence_interval(self) -> tuple[float, float]:
         prediction = self.predict_next()
@@ -98,22 +97,16 @@ class StatsForecaster:
         last, prev = float(historical[-1]), float(historical[-2])
         delta = last - prev
         if delta == 0.0:
-            window = [
-                float(v) for v in historical[-min(len(historical), self.window_size) :]
-            ]
+            window = [float(v) for v in historical[-min(len(historical), self.window_size) :]]
             delta = (window[-1] - window[0]) / max(1, (len(window) - 1))
         return [last + delta * (i + 1) for i in range(periods)]
 
-    def predict_with_confidence(
-        self, historical: list[float], periods: int = 2
-    ) -> dict[str, list[float]]:
+    def predict_with_confidence(self, historical: list[float], periods: int = 2) -> dict[str, list[float]]:
         # Rust optimization
         with contextlib.suppress(ImportError, AttributeError, Exception):
             import rust_core as rc
 
-            preds, lower, upper = rc.predict_with_confidence_rust(
-                [float(v) for v in historical], periods
-            )
+            preds, lower, upper = rc.predict_with_confidence_rust([float(v) for v in historical], periods)
             return {
                 "predictions": preds,
                 "confidence_lower": lower,

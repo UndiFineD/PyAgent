@@ -16,13 +16,15 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from abc import ABC, abstractmethod
+
 import logging
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
+from src.core.base.common.models import (AgentHealthCheck, AgentPriority,
+                                         HealthStatus)
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.models import AgentHealthCheck, AgentPriority, HealthStatus
 
 __version__ = VERSION
 

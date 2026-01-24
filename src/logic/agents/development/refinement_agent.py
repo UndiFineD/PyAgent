@@ -17,13 +17,17 @@
 Optimizes system prompts, tool descriptions, and agent logic based on performance telemetry.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import os
 from pathlib import Path
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -46,6 +50,7 @@ class RefinementAgent(BaseAgent):
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
         """Analyzes failure patterns to identify prompt or tool weaknesses."""
+        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")
         # Simulated analysis
         analysis = (
@@ -57,9 +62,7 @@ class RefinementAgent(BaseAgent):
         return analysis
 
     @as_tool
-    def propose_prompt_update(
-        self, agent_class_name: str, performance_feedback: str
-    ) -> str:
+    def propose_prompt_update(self, agent_class_name: str, performance_feedback: str) -> str:
         """Generates a new optimized system prompt for an agent.
         Args:
             agent_class_name: The name of the agent class to refine.
@@ -90,19 +93,21 @@ class RefinementAgent(BaseAgent):
 
         # This implementation logs the proposal for human-governed or orchestrated application.
         ref_file = self.refinement_logs / f"refine_{os.path.basename(file_path)}.txt"
-        with open(ref_file, "w") as f:
+        with open(ref_file, "w", encoding="utf-8") as f:
             f.write(new_logic_snippet)
 
         return f"Refinement logic written to {ref_file}. Verification required before merge."
 
-    def improve_content(self, prompt: str) -> str:
-        return "Fleet self-refinement loops are active and monitoring for optimization opportunities."
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """
+        Specialized content improvement for Refinement.
+        """
+        _ = target_file
+        return f"Refinement result mapping for: {prompt[:50]}..."
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        RefinementAgent, "Refinement Agent", "Autonomous logic optimizer"
-    )
+    main = create_main_function(RefinementAgent, "Refinement Agent", "Autonomous logic optimizer")
     main()

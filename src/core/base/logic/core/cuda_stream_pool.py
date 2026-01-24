@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """CudaStreamPool - CUDA stream and event management with pooling.
 
 This module provides efficient stream and event pooling for GPU operations,
@@ -20,16 +34,16 @@ from __future__ import annotations
 
 import threading
 import time
-import weakref
+from collections import deque
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Optional, Iterator
-from contextlib import contextmanager
-from collections import deque
+from typing import Any, Optional
 
 # Try to import torch for GPU operations
 try:
     import torch
+
     HAS_TORCH = True
     HAS_CUDA = torch.cuda.is_available()
 except ImportError:
@@ -40,30 +54,34 @@ except ImportError:
 # Try to import Rust accelerations
 try:
     from src.core.rust_bridge import get_bridge
-    _bridge = get_bridge()
-    HAS_RUST = hasattr(_bridge, 'event_query_rust')
-except Exception:
+
+    _BRIDGE = get_bridge()
+    HAS_RUST = hasattr(_BRIDGE, "event_query_rust")
+except Exception:  # pylint: disable=broad-exception-caught
     HAS_RUST = False
-    _bridge = None
+    _BRIDGE = None
 
 
 class StreamPriority(Enum):
     """Priority level for CUDA streams."""
-    LOW = auto()       # Background operations
-    NORMAL = auto()    # Default priority
-    HIGH = auto()      # Latency-critical operations
+
+    LOW = auto()  # Background operations
+    NORMAL = auto()  # Default priority
+    HIGH = auto()  # Latency-critical operations
 
 
 class StreamState(Enum):
     """State of a pooled stream."""
-    FREE = auto()       # Available for use
-    ACQUIRED = auto()   # In use
-    BUSY = auto()       # Has pending operations
+
+    FREE = auto()  # Available for use
+    ACQUIRED = auto()  # In use
+    BUSY = auto()  # Has pending operations
 
 
 @dataclass
 class StreamStats:
     """Statistics for a stream."""
+
     acquisitions: int = 0
     total_active_time_ns: int = 0
     events_recorded: int = 0
@@ -88,6 +106,7 @@ class PooledStream:
         state: Current state
         stream: Underlying CUDA stream
     """
+
     stream_id: int
     priority: StreamPriority = StreamPriority.NORMAL
     state: StreamState = StreamState.FREE
@@ -95,7 +114,7 @@ class PooledStream:
     stats: StreamStats = field(default_factory=StreamStats)
     affinity_key: Optional[str] = None
 
-    _acquired_at: float = field(default=0.0, repr=False)
+    acquired_at: float = field(default=0.0, repr=False)
 
     def __post_init__(self) -> None:
         """Initialize stream if not provided."""
@@ -107,9 +126,9 @@ class PooledStream:
         """Convert priority enum to CUDA priority."""
         if self.priority == StreamPriority.HIGH:
             return -1  # High priority in CUDA
-        elif self.priority == StreamPriority.LOW:
-            return 1   # Low priority
-        return 0       # Normal
+        if self.priority == StreamPriority.LOW:
+            return 1  # Low priority
+        return 0  # Normal
 
     def synchronize(self) -> None:
         """Wait for all operations to complete."""
@@ -150,6 +169,7 @@ class PooledEvent:
         event_id: Unique identifier
         event: Underlying CUDA event
     """
+
     event_id: int
     event: Any = None
     in_use: bool = False
@@ -271,6 +291,7 @@ class CudaStreamPool:
         comm_streams: Number of communication streams
     """
 
+    # pylint: disable=too-many-positional-arguments
     def __init__(
         self,
         compute_streams: int = 4,
@@ -433,7 +454,7 @@ class CudaStreamPool:
     ) -> PooledStream:
         """Mark stream as acquired."""
         stream.state = StreamState.ACQUIRED
-        stream._acquired_at = time.perf_counter_ns()
+        stream.acquired_at = time.perf_counter_ns()
         stream.stats.acquisitions += 1
         stream.stats.last_used = time.time()
 
@@ -457,7 +478,7 @@ class CudaStreamPool:
         """
         with self._lock:
             # Record timing
-            elapsed = time.perf_counter_ns() - stream._acquired_at
+            elapsed = time.perf_counter_ns() - stream.acquired_at
             stream.stats.total_active_time_ns += elapsed
             stream.state = StreamState.FREE
 
@@ -527,11 +548,7 @@ class CudaStreamPool:
 
     def sync_all(self) -> None:
         """Synchronize all streams."""
-        all_streams = (
-            self._compute_streams +
-            self._comm_streams +
-            self._high_priority_streams
-        )
+        all_streams = self._compute_streams + self._comm_streams + self._high_priority_streams
         for stream in all_streams:
             stream.synchronize()
 
@@ -556,6 +573,7 @@ class CudaStreamPool:
     def stats(self) -> dict[str, Any]:
         """Get pool statistics."""
         with self._lock:
+
             def pool_stats(streams: list[PooledStream]) -> dict[str, Any]:
                 total_acq = sum(s.stats.acquisitions for s in streams)
                 total_time = sum(s.stats.total_active_time_ns for s in streams)
@@ -578,7 +596,7 @@ class CudaStreamPool:
 
 
 # Global pool instance
-_global_pool: Optional[CudaStreamPool] = None
+_GLOBAL_POOL: Optional[CudaStreamPool] = None
 _global_lock = threading.Lock()
 
 
@@ -595,25 +613,25 @@ def get_global_stream_pool(
     Returns:
         Global CudaStreamPool instance
     """
-    global _global_pool
+    global _GLOBAL_POOL  # pylint: disable=global-statement
 
     with _global_lock:
-        if _global_pool is None:
-            _global_pool = CudaStreamPool(
+        if _GLOBAL_POOL is None:
+            _GLOBAL_POOL = CudaStreamPool(
                 compute_streams=compute_streams,
                 comm_streams=comm_streams,
             )
-        return _global_pool
+        return _GLOBAL_POOL
 
 
 def reset_global_pool() -> None:
     """Reset the global stream pool."""
-    global _global_pool
+    global _GLOBAL_POOL  # pylint: disable=global-statement
 
     with _global_lock:
-        if _global_pool is not None:
-            _global_pool.sync_all()
-        _global_pool = None
+        if _GLOBAL_POOL is not None:
+            _GLOBAL_POOL.sync_all()
+        _GLOBAL_POOL = None
 
 
 # Convenience functions

@@ -13,16 +13,17 @@
 # limitations under the License.
 
 
-"""
-MetacognitiveCore logic for PyAgent.
-Pure logic for evaluating reasoning certainty and consistency.
-No I/O or side effects.
+"""MetacognitiveCore logic for PyAgent.
+
+Pure logic for evaluating reasoning certainty and consistency. Provides tools
+for confidence calibration and intent prediction using Rust acceleration.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
 import logging
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -53,8 +54,10 @@ class MetacognitiveCore:
         """
         if not actual_correct and reported_conf > 0.8:
             return max(0.1, current_weight * 0.8)  # Overconfidence penalty
-        elif actual_correct and reported_conf < 0.4:
+
+        if actual_correct and reported_conf < 0.4:
             return min(2.0, current_weight * 1.05)  # Underconfidence reward
+
         return current_weight
 
     def predict_next_intent(self, history: list[dict[str, Any]]) -> str:
@@ -87,10 +90,10 @@ class MetacognitiveCore:
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
 
         # Rust-accelerated hedge word counting
-        if RUST_AVAILABLE and hasattr(rc, 'count_hedge_words_rust'):
+        if RUST_AVAILABLE and hasattr(rc, "count_hedge_words_rust"):
             try:
                 count = rc.count_hedge_words_rust(reasoning_chain.lower(), hedge_words)
-            except Exception as e:
+            except (ValueError, RuntimeError, TypeError) as e:
                 logger.debug(f"Rust count_hedge_words failed: {e}, using Python fallback")
                 count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
         else:

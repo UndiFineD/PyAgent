@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Semantic search mesh agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import asyncio
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.intelligence.core.search_mesh_core import SearchMeshCore
-from src.logic.agents.intelligence.memo_rag_agent import MemoRAGAgent
+from src.logic.agents.intelligence.memo_rag_agent import MemoRagAgent
 
 try:
     import rust_core
@@ -40,12 +47,10 @@ class SemanticSearchMeshAgent:
         self.local_indices: list[dict[str, Any]] = []  # Simulated vector stores
         self.core = SearchMeshCore()
         # MemoRAG integration for session-based memory
-        self.memo_rag = MemoRAGAgent("intelligence\SemanticSearchMeshAgent.py")
+        self.memo_rag = MemoRagAgent(r"intelligence\SemanticSearchMeshAgent.py")
         self.remembered_urls: set[str] = set()
 
-    async def federated_external_search(
-        self, query: str, providers: list[str]
-    ) -> list[dict[str, Any]]:
+    async def federated_external_search(self, query: str, providers: list[str]) -> list[dict[str, Any]]:
         """
         Queries multiple external search providers in parallel and synthesize results.
         """
@@ -66,15 +71,11 @@ class SemanticSearchMeshAgent:
         # Update memory
         for item in filtered[:3]:  # Remember top 3 for this session
             self.remembered_urls.add(item["url"])
-            self.memo_rag.memorise_to_shard(
-                f"Visited: {item['url']} for query: {query}", "search_history"
-            )
+            self.memo_rag.memorise_to_shard(f"Visited: {item['url']} for query: {query}", "search_history")
 
         return filtered
 
-    async def _mock_provider_call(
-        self, provider: str, query: str
-    ) -> list[dict[str, Any]]:
+    async def _mock_provider_call(self, provider: str, query: str) -> list[dict[str, Any]]:
         """Mock search provider response."""
         await asyncio.sleep(0.1)  # Simulate network latency
         return [
@@ -99,9 +100,7 @@ class SemanticSearchMeshAgent:
         self.local_indices.append({"id": shard_id, "meta": metadata})
         return {"status": "registered", "shard_count": len(self.local_indices)}
 
-    def federated_search(
-        self, query_embedding: list[float], limit: int = 5
-    ) -> list[dict[str, Any]]:
+    def federated_search(self, query_embedding: list[float], limit: int = 5) -> list[dict[str, Any]]:
         """
         Simulates a search across all registered shards.
         Uses Rust acceleration for cosine similarity if available.

@@ -18,11 +18,12 @@ Provides high-performance aggregation, alerting, and cross-tier observability.
 """
 
 from __future__ import annotations
+
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 try:
     import rust_core as rc
@@ -33,16 +34,20 @@ from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.telemetry")
 
+
 class MetricType(Enum):
     """Enumeration of supported metric types."""
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
 
+
 @dataclass
 class Metric:
     """Representation of a single metric data point."""
+
     name: str
     value: float
     metric_type: MetricType = MetricType.GAUGE
@@ -57,22 +62,20 @@ class Metric:
     def __getitem__(self, index: int) -> Any:
         return (self.timestamp, self.value)[index]
 
+
 class TelemetryCore(BaseCore):
     """
     Authoritative engine for system metrics and event tracking.
     Standardizes how agents and infrastructure report health and performance.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self._metrics_buffer: List[Metric] = []
         self._alerts: List[Dict[str, Any]] = []
 
     def record_metric(
-        self,
-        name: str,
-        value: float,
-        mtype: MetricType = MetricType.GAUGE,
-        tags: Optional[Dict[str, str]] = None
+        self, name: str, value: float, mtype: MetricType = MetricType.GAUGE, tags: Optional[Dict[str, str]] = None
     ) -> None:
         """Records a single metric point."""
         metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
@@ -94,25 +97,20 @@ class TelemetryCore(BaseCore):
                     [(m.name, m.timestamp, m.value) for m in self._metrics_buffer],
                     metric_name,
                     window_seconds,
-                    time.time()
+                    time.time(),
                 )
             except Exception as err:  # pylint: disable=broad-exception-caught
                 logger.debug("Rust calculate_rollups failed, falling back: %s", err)
 
         now = time.time()
         relevant = [
-            m.value for m in self._metrics_buffer
-            if m.name == metric_name and (now - m.timestamp) < window_seconds
+            m.value for m in self._metrics_buffer if m.name == metric_name and (now - m.timestamp) < window_seconds
         ]
 
         if not relevant:
             return {"avg": 0.0, "max": 0.0, "count": 0}
 
-        return {
-            "avg": sum(relevant) / len(relevant),
-            "max": max(relevant),
-            "count": len(relevant)
-        }
+        return {"avg": sum(relevant) / len(relevant), "max": max(relevant), "count": len(relevant)}
 
     def clear(self) -> None:
         """Clears all buffered metrics and alerts."""

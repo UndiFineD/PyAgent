@@ -16,11 +16,13 @@
 """Gateway for managing multi-tenant SaaS access, API keys, and usage quotas."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
 import uuid
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.services.api.core.gateway_core import GatewayCore
 
 __version__ = VERSION
@@ -37,9 +39,7 @@ class SaaSGateway:
         self.rate_limits: dict[str, list[float]] = {}  # key -> [timestamps]
         self.core = GatewayCore()
 
-    def call_external_saas(
-        self, api_key: str, service: str, action: str, params: dict[str, Any]
-    ) -> dict[str, Any]:
+    def call_external_saas(self, api_key: str, service: str, action: str, params: dict[str, Any]) -> dict[str, Any]:
         """
         Proxies a request to an external SaaS service (Jira/Slack/Trello).
         """
@@ -80,26 +80,20 @@ class SaaSGateway:
 
         # Rate Limiting (Simple Token Bucket: max 5 requests per second)
         now = time.time()
-        self.rate_limits[api_key] = [
-            t for t in self.rate_limits[api_key] if now - t < 1.0
-        ]
+        self.rate_limits[api_key] = [t for t in self.rate_limits[api_key] if now - t < 1.0]
         if len(self.rate_limits[api_key]) >= 5:
             logging.warning(f"SAAS: Rate limit exceeded for key {api_key}")
             return False
 
         tenant_info = self.api_keys[api_key]
         if tenant_info["used_today"] + cost > tenant_info["daily_quota"]:
-            logging.warning(
-                f"SAAS: Quota exceeded for tenant {tenant_info['tenant_id']}"
-            )
+            logging.warning(f"SAAS: Quota exceeded for tenant {tenant_info['tenant_id']}")
             return False
 
         # Record successful request
         self.rate_limits[api_key].append(now)
         tenant_info["used_today"] += cost
-        self.usage_logs.append(
-            {"key": api_key, "timestamp": now, "tenant": tenant_info["tenant_id"]}
-        )
+        self.usage_logs.append({"key": api_key, "timestamp": now, "tenant": tenant_info["tenant_id"]})
         return True
 
     def get_quota_status(self, api_key: str) -> dict[str, Any]:

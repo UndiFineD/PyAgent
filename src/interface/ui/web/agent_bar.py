@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
+
+"""
+Agent bar.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # AgentBar: Real-time status and control component for Phase 51 Multimedia.
 
-from typing import Dict, List, Any
+from typing import Any, Dict
+
 
 class AgentBar:
     """
@@ -33,15 +38,15 @@ class AgentBar:
                 "metrics": {
                     "fps": round(self.throughput_fps, 1),
                     "latency": f"{round(self.latency_ms, 2)}ms",
-                    "sync": f"{round(self.sync_offset_ms, 2)}ms"
+                    "sync": f"{round(self.sync_offset_ms, 2)}ms",
                 },
                 "channels": [
                     {"name": "TEXT", "active": True, "type": "0x01"},
                     {"name": "AUDIO", "active": self.throughput_fps > 0, "type": "0x02"},
-                    {"name": "VIDEO", "active": self.throughput_fps > 50, "type": "0x03"}
+                    {"name": "VIDEO", "active": self.throughput_fps > 50, "type": "0x03"},
                 ],
-                "theme": "quantum-dark"
-            }
+                "theme": "quantum-dark",
+            },
         }
 
     def get_styles(self) -> str:

@@ -15,12 +15,14 @@
 """Unified Autonomy and Self-Model core."""
 
 from typing import List, Optional
+
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class AutonomyCore(BaseCore):
     """
@@ -35,17 +37,15 @@ class AutonomyCore(BaseCore):
 
     def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
         """Rust-accelerated autonomy evaluation."""
-        if rc and hasattr(rc, "evaluate_autonomy_score"): # pylint: disable=no-member
+        if rc and hasattr(rc, "evaluate_autonomy_score"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.evaluate_autonomy_score(agent_id, stats) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.evaluate_autonomy_score(agent_id, stats)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
-        return 0.5 # Default fallback
+        return 0.5  # Default fallback
 
-    def identify_blind_spots(
-        self, success_rate: float, task_diversity: float
-    ) -> List[str]:
+    def identify_blind_spots(self, success_rate: float, task_diversity: float) -> List[str]:
         """Analyzes performance stats to find 'Blind Spots'."""
         blind_spots = []
         if success_rate < 0.7:
@@ -68,7 +68,5 @@ class AutonomyCore(BaseCore):
         if not blind_spots:
             return f"{plan}Status: Optimal. No immediate changes required."
 
-        plan += "Action: Expand training data for identified blind spots: " + ", ".join(
-            blind_spots
-        )
+        plan += "Action: Expand training data for identified blind spots: " + ", ".join(blind_spots)
         return plan

@@ -16,9 +16,13 @@
 Code smell detection logic for CoderCore.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 import ast
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 from src.core.base.common.types.code_language import CodeLanguage
 from src.core.base.common.types.code_smell import CodeSmell
 
@@ -51,6 +55,7 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
     },
 }
 
+
 class CoderSmellMixin:
     """Mixin for detecting code smells."""
 
@@ -78,7 +83,9 @@ class CoderSmellMixin:
                 self._check_python_class_smells(node, smells)
         return smells
 
-    def _check_python_method_smells(self, node: ast.FunctionDef | ast.AsyncFunctionDef, smells: List[CodeSmell]) -> None:
+    def _check_python_method_smells(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef, smells: List[CodeSmell]
+    ) -> None:
         """Check for long methods and too many parameters."""
         # Long method detection
         if hasattr(node, "end_lineno") and node.end_lineno is not None:
@@ -113,11 +120,7 @@ class CoderSmellMixin:
 
     def _check_python_class_smells(self, node: ast.ClassDef, smells: List[CodeSmell]) -> None:
         """Check for god classes."""
-        method_count = sum(
-            1
-            for n in node.body
-            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
-        )
+        method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
         threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]
         if method_count > threshold:
             smells.append(

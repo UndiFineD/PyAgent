@@ -15,10 +15,13 @@
 
 """Agent specializing in SQL and database scripts."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
+from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
-from src.core.base.common.base_utilities import create_main_function
 
 __version__ = VERSION
 

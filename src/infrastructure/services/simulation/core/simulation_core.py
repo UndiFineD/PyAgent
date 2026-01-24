@@ -1,10 +1,24 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Core logic for Swarm Simulation and Stress-Testing (Phase 181).
 Handles stochastic failure modeling and visualization progress hooks.
 """
 
-import random
 import logging
+import random
 
 try:
     import rust_core as rc
@@ -18,9 +32,7 @@ class SimulationCore:
     """Core logic for stochastic simulation and stress testing."""
 
     @staticmethod
-    def calculate_stochastic_failures(
-        agent_count: int, failure_rate: float = 0.1
-    ) -> list[int]:
+    def calculate_stochastic_failures(agent_count: int, failure_rate: float = 0.1) -> list[int]:
         """
         Returns a list of agent indices that are designated to 'fail'.
         """
@@ -34,9 +46,7 @@ class SimulationCore:
         return random.sample(range(agent_count), num_failures)
 
     @staticmethod
-    def apply_latency_spike(
-        base_latency: float, spike_probability: float = 0.05
-    ) -> float:
+    def apply_latency_spike(base_latency: float, spike_probability: float = 0.05) -> float:
         """
         Simulates network/hardware jitter by adding a random spike.
         """

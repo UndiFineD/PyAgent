@@ -31,9 +31,7 @@ class EvolutionCore:
     def __init__(self, default_temp: float = 0.7) -> None:
         self.default_temp: float = default_temp
 
-    def generate_agent_template(
-        self, name: str, capabilities: str, base_type: str = "BaseAgent"
-    ) -> str:
+    def generate_agent_template(self, name: str, capabilities: str, base_type: str = "BaseAgent") -> str:
         """Constructs the code content for a new agent. Returns multi-line string."""
         return f'''#!/usr/bin/env python3
 
@@ -57,9 +55,7 @@ class {name}Agent(BaseAgent):
         return f"Result from generated agent {name} for task: {{capabilities}}"
 '''
 
-    def compute_mutations(
-        self, fleet_stats: dict[str, dict[str, float]]
-    ) -> dict[str, dict[str, float]]:
+    def compute_mutations(self, fleet_stats: dict[str, dict[str, float]]) -> dict[str, dict[str, float]]:
         """
         Pure logic for evolutionary mutations of hyperparameters.
         """

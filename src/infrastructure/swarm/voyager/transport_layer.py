@@ -1,19 +1,27 @@
+
+"""
+Transport layer.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (ZMQ Transport Layer)
 
+import asyncio
+from typing import Any, Awaitable, Callable, Dict, Optional
+
 import zmq
 import zmq.asyncio
-import asyncio
-from typing import Any, Dict, Optional, Callable, Awaitable
+
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
+
 
 class VoyagerTransport:
     """
     VoyagerTransport: High-performance P2P message bus using ZeroMQ.
     Uses DEALER/ROUTER pattern for asynchronous bi-directional communication.
     """
+
     def __init__(self, host: str = "0.0.0.0", port: int = 5555):
         self.host = host
         self.port = port
@@ -42,6 +50,7 @@ class VoyagerTransport:
 
                     identity, _, msg_bytes = result
                     import msgpack
+
                     message = msgpack.unpackb(msg_bytes, raw=False)
 
                     logger.debug(f"Voyager: Received message from {identity.hex()}")
@@ -62,9 +71,12 @@ class VoyagerTransport:
         finally:
             self.stop()
 
-    async def send_to_peer(self, peer_address: str, peer_port: int, message: Dict[str, Any], timeout: int = 5000) -> Optional[Dict[str, Any]]:
+    async def send_to_peer(
+        self, peer_address: str, peer_port: int, message: Dict[str, Any], timeout: int = 5000
+    ) -> Optional[Dict[str, Any]]:
         """Sends a message to a specific peer using a DEALER socket."""
         import msgpack
+
         dealer = self.ctx.socket(zmq.DEALER)
         dealer.setsockopt(zmq.LINGER, 0)
         target = f"tcp://{peer_address}:{peer_port}"

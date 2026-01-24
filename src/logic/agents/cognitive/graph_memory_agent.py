@@ -17,10 +17,10 @@
 Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 """
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from .mixins.graph_storage_mixin import GraphStorageMixin
 from .mixins.graph_mirix_mixin import GraphMIRIXMixin
@@ -30,6 +30,7 @@ from .mixins.graph_entity_mixin import GraphEntityMixin
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class GraphMemoryAgent(
     BaseAgent, GraphStorageMixin, GraphMIRIXMixin, GraphBeadsMixin, GraphEntityMixin
 ):
@@ -63,8 +64,10 @@ class GraphMemoryAgent(
             "You also maintain a persistent knowledge graph of entities and relationships."
         )
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Graph-based reasoning helper."""
+        _ = prompt
+        _ = target_file
         return f"GraphMemory state: {len(self.entities)} entities, {len(self.relationships)} relationships."
 
 

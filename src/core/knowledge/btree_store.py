@@ -11,15 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Btree store.py module.
+"""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
-from .storage_base import KnowledgeStore
-from typing import Any
-import json
+
 import hashlib
+import json
 import logging
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+from src.observability.structured_logger import StructuredLogger
+
+from .storage_base import KnowledgeStore
 
 __version__ = VERSION
 
@@ -61,15 +68,11 @@ class BTreeKnowledgeStore(KnowledgeStore):
         db_path = shard_dir / "shard.db"
 
         conn = sqlite3.connect(db_path)
-        conn.execute(
-            "CREATE TABLE IF NOT EXISTS data (key TEXT PRIMARY KEY, value TEXT, metadata TEXT)"
-        )
+        conn.execute("CREATE TABLE IF NOT EXISTS data (key TEXT PRIMARY KEY, value TEXT, metadata TEXT)")
         conn.commit()
         return conn
 
-    def store(
-        self, key: str, value: Any, metadata: dict[str, Any] | None = None
-    ) -> bool:
+    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
         start_time = time.time()
         conn = self._get_shard_connection(key)
         clean_metadata = self._apply_privacy_filter(metadata or {})
@@ -85,9 +88,7 @@ class BTreeKnowledgeStore(KnowledgeStore):
         conn.close()
 
         latency = (time.time() - start_time) * 1000
-        self.logger.log(
-            "INFO", f"Stored key {key}", latency_ms=latency, shard_bucket=key[:4]
-        )
+        self.logger.log("INFO", f"Stored key {key}", latency_ms=latency, shard_bucket=key[:4])
 
         self._sync_multimodal(key, value, clean_metadata)
         return True
@@ -107,9 +108,7 @@ class BTreeKnowledgeStore(KnowledgeStore):
         conn.close()
 
         latency = (time.time() - start_time) * 1000
-        self.logger.log(
-            "INFO", f"Retrieved key {query}", latency_ms=latency, found=bool(row)
-        )
+        self.logger.log("INFO", f"Retrieved key {query}", latency_ms=latency, found=bool(row))
 
         if row:
             return [json.loads(row[0])]

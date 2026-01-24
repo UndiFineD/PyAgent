@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -5,18 +19,20 @@ Metadata structures for speculative decoding.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
+
 import contextlib
+from dataclasses import dataclass, field
 
 with contextlib.suppress(ImportError):
     import rust_core
 
-HAS_RUST = 'rust_core' in globals()
+HAS_RUST = "rust_core" in globals()
 
 
 @dataclass(slots=True)
 class SpecDecodeMetadataV2:
     """Enhanced metadata for speculative decoding verification."""
+
     draft_token_ids: list[int]
     num_draft_tokens: list[int]
     max_spec_len: int = 0
@@ -38,8 +54,9 @@ class SpecDecodeMetadataV2:
 
     def _build_cumulative_indices(self) -> None:
         if HAS_RUST and hasattr(rust_core, "spec_decode_build_cu_indices_rust"):
-            self.cu_num_draft_tokens, self.cu_num_sampled_tokens = \
-                getattr(rust_core, "spec_decode_build_cu_indices_rust")(self.num_draft_tokens)
+            self.cu_num_draft_tokens, self.cu_num_sampled_tokens = getattr(
+                rust_core, "spec_decode_build_cu_indices_rust"
+            )(self.num_draft_tokens)
             return
         cu_draft = []
         cu_sampled = []
@@ -55,10 +72,9 @@ class SpecDecodeMetadataV2:
 
     def build_logits_indices(self) -> None:
         if HAS_RUST and hasattr(rust_core, "spec_decode_build_logits_indices_rust"):
-            self.target_logits_indices, self.bonus_logits_indices, self.logits_indices = \
-                getattr(rust_core, "spec_decode_build_logits_indices_rust")(
-                    self.num_draft_tokens, self.cu_num_draft_tokens
-                )
+            self.target_logits_indices, self.bonus_logits_indices, self.logits_indices = getattr(
+                rust_core, "spec_decode_build_logits_indices_rust"
+            )(self.num_draft_tokens, self.cu_num_draft_tokens)
             return
         batch_size = len(self.num_draft_tokens)
         num_tokens = sum(self.num_draft_tokens)
@@ -71,7 +87,8 @@ class SpecDecodeMetadataV2:
         self.acceptance_count = sum(accepted)
 
     def get_acceptance_rate(self) -> float:
-        if not self.accepted_mask: return 0.0
+        if not self.accepted_mask:
+            return 0.0
         return self.acceptance_count / len(self.accepted_mask)
 
     def get_verification_latency(self) -> float:
@@ -100,6 +117,7 @@ class SpecDecodeMetadataV2:
 @dataclass(slots=True)
 class TreeVerificationMetadata:
     """Metadata for tree-based verification."""
+
     tree_token_ids: list[int]
     tree_parent_indices: list[int]
     tree_depths: list[int]
@@ -110,10 +128,11 @@ class TreeVerificationMetadata:
     best_path_index: int = -1
 
     def get_path_tokens(self, path_index: int) -> list[int]:
-        if path_index < 0 or path_index >= self.num_paths: return []
+        if path_index < 0 or path_index >= self.num_paths:
+            return []
         start = self.path_start_indices[path_index]
         length = self.path_lengths[path_index]
-        return self.tree_token_ids[start:start + length]
+        return self.tree_token_ids[start : start + length]
 
     def get_best_path(self) -> list[int]:
         if self.best_path_index >= 0:
@@ -134,9 +153,12 @@ class TreeVerificationMetadata:
                 flat_depths.append(i)
             current_pos += len(path_tokens)
         return cls(
-            tree_token_ids=flat_tokens, tree_parent_indices=flat_parents,
-            tree_depths=flat_depths, num_paths=len(tree_tokens),
-            path_lengths=path_lengths, path_start_indices=path_starts
+            tree_token_ids=flat_tokens,
+            tree_parent_indices=flat_parents,
+            tree_depths=flat_depths,
+            num_paths=len(tree_tokens),
+            path_lengths=path_lengths,
+            path_start_indices=path_starts,
         )
 
 
@@ -148,7 +170,8 @@ class SpecDecodeMetadataFactory:
         tokens_per_request = len(draft_tokens) // max(1, num_requests)
         num_draft = [tokens_per_request] * num_requests
         remaining = len(draft_tokens) - tokens_per_request * num_requests
-        if remaining > 0 and num_requests > 0: num_draft[-1] += remaining
+        if remaining > 0 and num_requests > 0:
+            num_draft[-1] += remaining
         return SpecDecodeMetadataV2(draft_token_ids=draft_tokens, num_draft_tokens=num_draft)
 
     @staticmethod

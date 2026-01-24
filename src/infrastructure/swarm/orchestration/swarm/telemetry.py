@@ -8,11 +8,11 @@ Aggregates performance and health metrics from the fleet for Grafana/Prometheus 
 """
 
 import logging
-import json
-from typing import Dict, Any, List
 from collections import Counter
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
+
 
 class SwarmTelemetryService:
     """
@@ -31,7 +31,7 @@ class SwarmTelemetryService:
         # 1. Routing Metrics
         routing_stats = {
             "total_experts": len(self.gatekeeper.experts),
-            "cache_size": len(self.gatekeeper.routing_cache)
+            "cache_size": len(self.gatekeeper.routing_cache),
         }
 
         # 2. Topology Metrics
@@ -50,14 +50,14 @@ class SwarmTelemetryService:
             "total_shards": len(shards),
             "mirrored_shards": mirror_count,
             "dead_ranks": len(self.shard_manager.dead_ranks),
-            "shards_by_precision": dict(precision_counts)
+            "shards_by_precision": dict(precision_counts),
         }
 
         return {
             "routing": routing_stats,
             "topology": topology_stats,
             "context": context_stats,
-            "swarm_health": "degraded" if context_stats["dead_ranks"] > 0 else "optimal"
+            "swarm_health": "degraded" if context_stats["dead_ranks"] > 0 else "optimal",
         }
 
     def export_prometheus(self) -> str:
@@ -66,8 +66,8 @@ class SwarmTelemetryService:
         """
         metrics = self.get_grid_metrics()
         lines = [
-            f'swarm_total_experts {metrics["routing"]["total_experts"]}',
-            f'swarm_total_shards {metrics["context"]["total_shards"]}',
-            f'swarm_health_status {1 if metrics["swarm_health"] == "optimal" else 0}'
+            f"swarm_total_experts {metrics['routing']['total_experts']}",
+            f"swarm_total_shards {metrics['context']['total_shards']}",
+            f"swarm_health_status {1 if metrics['swarm_health'] == 'optimal' else 0}",
         ]
         return "\n".join(lines)

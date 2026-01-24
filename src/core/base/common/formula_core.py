@@ -19,10 +19,10 @@
 """Core logic for safe mathematical formula evaluation."""
 
 import ast
+import logging
 import math
 import operator
-import logging
-from typing import Dict, Callable, Sequence, Any
+from typing import Any, Callable, Dict, Sequence
 
 try:
     import rust_core as rc
@@ -30,6 +30,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.formula")
+
 
 class FormulaCore:
     """

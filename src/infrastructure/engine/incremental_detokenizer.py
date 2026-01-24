@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 IncrementalDetokenizer - Fast streaming token-to-text conversion.
 
@@ -7,10 +21,10 @@ for incremental detokenization with stop string detection.
 
 from __future__ import annotations
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-import logging
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +36,7 @@ INVALID_PREFIX_ERR_MSG = "Invalid prefix encountered"
 @dataclass
 class StopMatch:
     """Result of stop string matching."""
+
     stop_string: str
     truncate_to: int  # -1 means no truncation
 
@@ -77,6 +92,7 @@ def check_stop_strings_rust(
     """
     try:
         from rust_core import check_stop_strings_rust as _rust_impl
+
         return _rust_impl(output_text, new_char_count, stop, include_in_output)
     except ImportError:
         return check_stop_strings(output_text, new_char_count, stop, include_in_output)
@@ -140,6 +156,7 @@ class IncrementalDetokenizer(ABC):
         # Try fast path first
         try:
             from transformers import PreTrainedTokenizerFast
+
             if isinstance(tokenizer, PreTrainedTokenizerFast):
                 return FastIncrementalDetokenizer(tokenizer, request)
         except ImportError:
@@ -169,17 +186,17 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         super().__init__()
 
         # Extract sampling params
-        sampling_params = getattr(request, 'sampling_params', None) or {}
-        if hasattr(sampling_params, '__dict__'):
+        sampling_params = getattr(request, "sampling_params", None) or {}
+        if hasattr(sampling_params, "__dict__"):
             sampling_params = sampling_params.__dict__
         elif not isinstance(sampling_params, dict):
             sampling_params = {}
 
-        self.request_id = getattr(request, 'request_id', 'unknown')
-        self.stop: List[str] = sampling_params.get('stop', []) or []
-        self.include_stop_str_in_output: bool = sampling_params.get('include_stop_str_in_output', False)
-        self.skip_special_tokens: bool = sampling_params.get('skip_special_tokens', True)
-        self.min_tokens: int = sampling_params.get('min_tokens', 0)
+        self.request_id = getattr(request, "request_id", "unknown")
+        self.stop: List[str] = sampling_params.get("stop", []) or []
+        self.include_stop_str_in_output: bool = sampling_params.get("include_stop_str_in_output", False)
+        self.skip_special_tokens: bool = sampling_params.get("skip_special_tokens", True)
+        self.min_tokens: int = sampling_params.get("min_tokens", 0)
 
         # Stop buffer - keep last N chars to check for stop strings spanning tokens
         self.stop_buffer_length: int = max((len(s) for s in self.stop), default=0)
@@ -262,41 +279,40 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         self.tokenizer_wrapper = tokenizer
 
         # Get inner tokenizer
-        self.tokenizer = getattr(tokenizer, '_tokenizer', tokenizer)
+        self.tokenizer = getattr(tokenizer, "_tokenizer", tokenizer)
 
         # Initialize decode stream (mock for now since DecodeStream may not be available)
         self._decode_buffer: List[int] = []
         self._last_decoded: str = ""
 
         # Handle spaces between special tokens
-        sampling_params = getattr(request, 'sampling_params', None) or {}
-        if hasattr(sampling_params, '__dict__'):
+        sampling_params = getattr(request, "sampling_params", None) or {}
+        if hasattr(sampling_params, "__dict__"):
             sampling_params = sampling_params.__dict__
         elif not isinstance(sampling_params, dict):
             sampling_params = {}
 
-        self.spaces_between_special_tokens = (
-            self.skip_special_tokens or
-            sampling_params.get('spaces_between_special_tokens', True)
+        self.spaces_between_special_tokens = self.skip_special_tokens or sampling_params.get(
+            "spaces_between_special_tokens", True
         )
 
         # Track added tokens for special handling
         self.added_token_ids: Dict[int, str] = {}
         self.last_special: bool = False
 
-        if hasattr(tokenizer, 'get_added_tokens_decoder'):
+        if hasattr(tokenizer, "get_added_tokens_decoder"):
             try:
                 for tid, tok in tokenizer.get_added_tokens_decoder().items():
-                    content = getattr(tok, 'content', str(tok))
+                    content = getattr(tok, "content", str(tok))
                     self.added_token_ids[tid] = content
             except Exception:
                 pass
 
         # Prime with prompt tokens
-        prompt_token_ids = getattr(request, 'prompt_token_ids', None) or []
+        prompt_token_ids = getattr(request, "prompt_token_ids", None) or []
         if prompt_token_ids:
             # Take suffix for priming
-            prompt_suffix = prompt_token_ids[-min(24, len(prompt_token_ids)):]
+            prompt_suffix = prompt_token_ids[-min(24, len(prompt_token_ids)) :]
             for tid in prompt_suffix:
                 self._protected_step(tid)
 
@@ -306,12 +322,12 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
             self._decode_buffer.append(next_token_id)
 
             # Decode current buffer
-            if hasattr(self.tokenizer, 'decode'):
+            if hasattr(self.tokenizer, "decode"):
                 decoded = self.tokenizer.decode(
                     self._decode_buffer,
                     skip_special_tokens=self.skip_special_tokens,
                 )
-            elif hasattr(self.tokenizer_wrapper, 'decode'):
+            elif hasattr(self.tokenizer_wrapper, "decode"):
                 decoded = self.tokenizer_wrapper.decode(
                     self._decode_buffer,
                     skip_special_tokens=self.skip_special_tokens,
@@ -321,7 +337,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
 
             # Get new text
             if len(decoded) > len(self._last_decoded):
-                new_text = decoded[len(self._last_decoded):]
+                new_text = decoded[len(self._last_decoded) :]
                 self._last_decoded = decoded
                 return new_text
 
@@ -369,14 +385,14 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         self.tokenizer = tokenizer
 
         # Get prompt info
-        prompt_token_ids = getattr(request, 'prompt_token_ids', None) or []
+        prompt_token_ids = getattr(request, "prompt_token_ids", None) or []
         self.prompt_len = len(prompt_token_ids)
 
         # Initialize tokens list with prompt
         if prompt_token_ids:
             try:
                 self.tokens = tokenizer.convert_ids_to_tokens(
-                    prompt_token_ids[-INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET - 2:],
+                    prompt_token_ids[-INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET - 2 :],
                     skip_special_tokens=self.skip_special_tokens,
                 )
             except Exception:
@@ -391,18 +407,18 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         self.token_ids = list(prompt_token_ids)
 
         # Sampling params for spaces handling
-        sampling_params = getattr(request, 'sampling_params', None) or {}
-        if hasattr(sampling_params, '__dict__'):
+        sampling_params = getattr(request, "sampling_params", None) or {}
+        if hasattr(sampling_params, "__dict__"):
             sampling_params = sampling_params.__dict__
         elif not isinstance(sampling_params, dict):
             sampling_params = {}
 
-        self.spaces_between_special_tokens = sampling_params.get('spaces_between_special_tokens', True)
+        self.spaces_between_special_tokens = sampling_params.get("spaces_between_special_tokens", True)
 
     @property
     def output_token_ids(self) -> List[int]:
         """Get output token IDs (excluding prompt)."""
-        return self.token_ids[self.prompt_len:] if self.prompt_len else self.token_ids
+        return self.token_ids[self.prompt_len :] if self.prompt_len else self.token_ids
 
     def decode_next(self, next_token_id: int) -> str:
         """Decode next token using incremental approach."""
@@ -426,12 +442,8 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
 
         # Get prefix and new text
         try:
-            prefix_text = self.tokenizer.convert_tokens_to_string(
-                output_tokens[self.prefix_offset:self.read_offset]
-            )
-            new_text = self.tokenizer.convert_tokens_to_string(
-                output_tokens[self.prefix_offset:]
-            )
+            prefix_text = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset : self.read_offset])
+            new_text = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset :])
         except Exception:
             return ""
 
@@ -443,13 +455,13 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         self.prefix_offset = self.read_offset
         self.read_offset = len(output_tokens)
 
-        return new_text[len(prefix_text):]
+        return new_text[len(prefix_text) :]
 
 
 def validate_utf8(text: str) -> bool:
     """Validate that text is valid UTF-8."""
     try:
-        text.encode('utf-8').decode('utf-8')
+        text.encode("utf-8").decode("utf-8")
         return True
     except UnicodeError:
         return False
@@ -459,6 +471,7 @@ def validate_utf8_rust(text: str) -> bool:
     """Rust-accelerated UTF-8 validation."""
     try:
         from rust_core import validate_utf8_rust as _rust_impl
+
         return _rust_impl(text)
     except ImportError:
         return validate_utf8(text)

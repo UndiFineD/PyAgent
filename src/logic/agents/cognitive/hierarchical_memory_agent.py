@@ -17,16 +17,17 @@
 Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
 """
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
 from .mixins.memory_storage_mixin import MemoryStorageMixin
 from .mixins.memory_query_mixin import MemoryQueryMixin
-from src.core.base.lifecycle.base_agent import BaseAgent
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class HierarchicalMemoryAgent(BaseAgent, MemoryStorageMixin, MemoryQueryMixin):
     """Manages memory across multiple temporal and semantic resolutions.
     Phase 290: Integrated with 3-layer system (ShortTerm, Working, LongTerm).

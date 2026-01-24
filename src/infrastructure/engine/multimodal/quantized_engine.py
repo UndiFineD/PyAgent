@@ -18,9 +18,12 @@ Handles FP8/INT8/INT4 pipelines for video and audio data.
 """
 
 from __future__ import annotations
+
 import logging
-from typing import Tuple, List, Optional, Dict, Any
+from typing import Tuple
+
 import numpy as np
+
 from .tensorrt_loader import TensorRTLoader
 
 try:
@@ -29,6 +32,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.multimodal.quantized")
+
 
 class QuantizedMultimediaEngine:
     """
@@ -61,7 +65,7 @@ class QuantizedMultimediaEngine:
             scale = 1.0 / np.sqrt(q.shape[-1])
             output = rc.cross_modal_attention_rust(q.tolist(), k.tolist(), v.tolist(), float(scale))
             return np.array(output, dtype=np.float32)
-        return q # No-op fallback
+        return q  # No-op fallback
 
     def check_coherence(self, stream_a: np.ndarray, stream_b: np.ndarray) -> float:
         """
@@ -87,7 +91,9 @@ class QuantizedMultimediaEngine:
         quantized = ((data / scale) + zp).clip(0, qmax).astype(np.uint8)
         return quantized, scale, zp
 
-    def dequantize_media(self, quantized: np.ndarray, scale: float, zp: int, original_shape: Tuple[int, ...]) -> np.ndarray:
+    def dequantize_media(
+        self, quantized: np.ndarray, scale: float, zp: int, original_shape: Tuple[int, ...]
+    ) -> np.ndarray:
         """
         Restore media data from quantized format.
         """

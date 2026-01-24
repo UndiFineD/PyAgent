@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Interleaving orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -38,9 +44,7 @@ class InterleavingOrchestrator:
         """
         Executes a task by interleaving different agent capabilities based on dynamic complexity analysis.
         """
-        logging.info(
-            f"InterleavingOrchestrator: Beginning interleaved execution for: {task}"
-        )
+        logging.info(f"InterleavingOrchestrator: Beginning interleaved execution for: {task}")
 
         # 1. Complexity Assessment (Uses a lightweight reasoning step)
         complexity_score = self._assess_complexity(task)
@@ -59,9 +63,7 @@ class InterleavingOrchestrator:
 
             # Simulate routing to different 'tiers' in FleetManager
             # Tier 1: Small/Fast (Flash), Tier 2: Mid (Pro), Tier 3: Ultra/Deep Reasoning
-            coro = self.fleet.call_by_capability(
-                f"{phase}.process", task=task, tier=agent_tier
-            )
+            coro = self.fleet.call_by_capability(f"{phase}.process", task=task, tier=agent_tier)
             import asyncio
 
             try:
@@ -126,13 +128,9 @@ class InterleavingOrchestrator:
                 ],
             }
 
-    def record_tier_performance(
-        self, task_id: str, tier: str, latency: float, success: bool
-    ) -> None:
+    def record_tier_performance(self, task_id: str, tier: str, latency: float, success: bool) -> None:
         """
         Saves performance data to refine future interleaving decisions (Reinforcement Learning signal).
         """
-        self.step_history.append(
-            {"task_id": task_id, "tier": tier, "latency": latency, "success": success}
-        )
+        self.step_history.append({"task_id": task_id, "tier": tier, "latency": latency, "success": success})
         # In a real system, this would update RLSelector.py

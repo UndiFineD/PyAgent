@@ -16,9 +16,11 @@
 """Validation script for Phase 10: Human-Agent Teaming & Ecosystem."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
@@ -32,9 +34,7 @@ def test_ecosystem_features() -> None:
     fleet = FleetManager(str(root))
 
     print("--- Phase 10: Human-Agent Teaming ---")
-    approval_id = fleet.hitl.request_approval(
-        "KernelAgent", "Delete Root Directory", {"path": "/"}
-    )
+    approval_id = fleet.hitl.request_approval("KernelAgent", "Delete Root Directory", {"path": "/"})
     print(f"Requested HITL Approval: {approval_id}")
     status = fleet.hitl.check_approval_status(approval_id)
 
@@ -48,9 +48,7 @@ def test_ecosystem_features() -> None:
     spec = fleet.api_engine.generate_openapi_spec()
     print(f"OpenAPI Spec (Sample): {spec[:100]}...")
 
-    ext_msg = fleet.api_engine.register_external_tool(
-        {"name": "SlackNotifier", "url": "https://api.slack.com"}
-    )
+    ext_msg = fleet.api_engine.register_external_tool({"name": "SlackNotifier", "url": "https://api.slack.com"})
     print(ext_msg)
 
     print("\nEcosystem features validation COMPLETED.")

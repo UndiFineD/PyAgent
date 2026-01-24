@@ -22,15 +22,19 @@ Core logic for prompt template management and versioning.
 """
 
 from __future__ import annotations
+
 from datetime import datetime
 from typing import Any, Dict, Optional
+
 from .base_core import BaseCore
 from .models import PromptTemplate
+
 
 class PromptCore(BaseCore):
     """
     Authoritative engine for prompt templates and A/B testing.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self.templates: Dict[str, PromptTemplate] = {}
@@ -43,6 +47,12 @@ class PromptCore(BaseCore):
         """
         self.templates[template.name] = template
 
+    def register_version(self, version: PromptVersion) -> None:
+        """
+        Registers a new prompt version.
+        """
+        self.versions[version.version_id] = version
+
     def render_template(self, name: str, **kwargs: Any) -> str:
         """
         Renders a registered template with the provided arguments.
@@ -51,10 +61,12 @@ class PromptCore(BaseCore):
             raise KeyError(f"Template '{name}' not found")
         return self.templates[name].render(**kwargs)
 
+
 class PromptVersion:
     """
     Represents a specific version of a prompt for A/B testing and tracking.
     """
+
     def __init__(
         self,
         version_id: str,

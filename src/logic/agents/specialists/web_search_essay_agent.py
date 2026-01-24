@@ -1,20 +1,27 @@
+
+"""
+Web search essay agent.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
+
 import contextlib
-from src.core.base.lifecycle.version import VERSION
-import logging
 import json
+import logging
 import re
 import time
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from src.logic.agents.intelligence.search_agent import SearchAgent
+from typing import Any, Dict, List, Optional
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.intelligence.search_agent import SearchAgent
 
 __version__ = VERSION
+
 
 class EssayStyle(Enum):
     ACADEMIC = "academic"
@@ -24,28 +31,34 @@ class EssayStyle(Enum):
     PERSUASIVE = "persuasive"
     EXPOSITORY = "expository"
 
+
 class EssayLength(Enum):
     SHORT = "short"  # ~500 words
     MEDIUM = "medium"  # ~1000 words
     LONG = "long"  # ~2000 words
     COMPREHENSIVE = "comprehensive"  # ~3000+ words
 
+
 @dataclass
 class Source:
     """Represents a research source."""
+
     title: str
     url: str
     snippet: str
     relevance: float = 0.0
     date: Optional[str] = None
 
+
 @dataclass
 class EssayOutline:
     """Represents an essay outline."""
+
     title: str
     thesis: str
     sections: List[Dict[str, Any]]
     sources: List[Source]
+
 
 class WebSearchEssayAgent(SearchAgent):
     """
@@ -72,19 +85,19 @@ class WebSearchEssayAgent(SearchAgent):
         length: str = "medium",
         style: str = "academic",
         include_citations: bool = True,
-        target_audience: str = "general"
+        target_audience: str = "general",
     ) -> Dict[str, Any]:
         """Researches a subject and writes an essay."""
         logging.info(f"WebSearchEssayAgent: Researching subject: {subject}")
 
         essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
-        essay_length = EssayLength(length) if length in [l.value for l in EssayLength] else EssayLength.MEDIUM
+        essay_length = EssayLength(length) if length in [ell.value for ell in EssayLength] else EssayLength.MEDIUM
 
         word_targets = {
             EssayLength.SHORT: 500,
             EssayLength.MEDIUM: 1000,
             EssayLength.LONG: 2000,
-            EssayLength.COMPREHENSIVE: 3000
+            EssayLength.COMPREHENSIVE: 3000,
         }
         target_words = word_targets.get(essay_length, 1000)
 
@@ -126,14 +139,12 @@ class WebSearchEssayAgent(SearchAgent):
             "references": references if include_citations else None,
             "sources_used": len(sources),
             "target_words": target_words,
-            "estimated_words": len(essay.split())
+            "estimated_words": len(essay.split()),
         }
 
-        self._essay_history.append({
-            "subject": subject,
-            "timestamp": time.time(),
-            "word_count": result["estimated_words"]
-        })
+        self._essay_history.append(
+            {"subject": subject, "timestamp": time.time(), "word_count": result["estimated_words"]}
+        )
 
         return result
 
@@ -152,7 +163,8 @@ class WebSearchEssayAgent(SearchAgent):
             "3. Areas of consensus\n"
             "4. Controversies or debates\n"
             "5. Gaps in available information\n"
-            "Output JSON: {'key_facts': [...], 'perspectives': [...], 'consensus': [...], 'controversies': [...], 'gaps': [...]}"
+            "Output JSON: {'key_facts': [...], 'perspectives': [...], 'consensus': [...], "
+            "'controversies': [...], 'gaps': [...]}"
         )
 
         res = await self.improve_content(synthesis_prompt)
@@ -169,27 +181,18 @@ class WebSearchEssayAgent(SearchAgent):
         return {
             "subject": subject,
             "sources": [{"title": s.title, "url": s.url, "snippet": s.snippet} for s in sources],
-            "synthesis": synthesis
+            "synthesis": synthesis,
         }
 
     @as_tool
-    async def generate_outline(
-        self,
-        subject: str,
-        style: str = "academic",
-        num_sections: int = 4
-    ) -> Dict[str, Any]:
+    async def generate_outline(self, subject: str, style: str = "academic", num_sections: int = 4) -> Dict[str, Any]:
         """Generates an essay outline for a subject."""
         sources = await self._research_topic(subject, "light")
         essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
 
         outline = await self._generate_outline(subject, sources, essay_style, num_sections)
 
-        return {
-            "subject": subject,
-            "style": essay_style.value,
-            "outline": outline
-        }
+        return {"subject": subject, "style": essay_style.value, "outline": outline}
 
     @as_tool
     async def fact_check(self, claim: str) -> Dict[str, Any]:
@@ -259,15 +262,17 @@ class WebSearchEssayAgent(SearchAgent):
         queries = [
             f"comprehensive overview {subject}",
             f"{subject} latest research 2025 2026",
-            f"{subject} expert analysis"
+            f"{subject} expert analysis",
         ]
 
         if depth == "deep":
-            queries.extend([
-                f"{subject} statistics data",
-                f"{subject} criticism controversy",
-                f"{subject} future trends predictions"
-            ])
+            queries.extend(
+                [
+                    f"{subject} statistics data",
+                    f"{subject} criticism controversy",
+                    f"{subject} future trends predictions",
+                ]
+            )
 
         sources = []
         for query in queries:
@@ -275,10 +280,7 @@ class WebSearchEssayAgent(SearchAgent):
                 data = self._search_duckduckgo(query)
                 # Parse search results into sources
                 source = Source(
-                    title=f"Search: {query}",
-                    url="duckduckgo.com",
-                    snippet=data[:500] if data else "",
-                    relevance=0.8
+                    title=f"Search: {query}", url="duckduckgo.com", snippet=data[:500] if data else "", relevance=0.8
                 )
                 sources.append(source)
             except Exception as e:
@@ -288,11 +290,7 @@ class WebSearchEssayAgent(SearchAgent):
         return sources
 
     async def _generate_outline(
-        self,
-        subject: str,
-        sources: List[Source],
-        style: EssayStyle,
-        num_sections: int = 4
+        self, subject: str, sources: List[Source], style: EssayStyle, num_sections: int = 4
     ) -> Dict[str, Any]:
         """Generates an essay outline."""
         prompt = (
@@ -307,9 +305,9 @@ class WebSearchEssayAgent(SearchAgent):
             '  "sections": [\n'
             '    {"heading": "Introduction", "points": ["hook", "context", "thesis"]},\n'
             '    {"heading": "Body 1", "points": ["topic sentence", "evidence", "analysis"]},\n'
-            '    ...\n'
+            "    ...\n"
             '    {"heading": "Conclusion", "points": ["restate thesis", "synthesis", "call to action"]}\n'
-            '  ]\n'
+            "  ]\n"
             "}"
         )
 
@@ -333,7 +331,4 @@ class WebSearchEssayAgent(SearchAgent):
 
     def _format_sources(self, sources: List[Source]) -> str:
         """Formats sources for prompts."""
-        return "\n\n".join([
-            f"**{s.title}**\nURL: {s.url}\n{s.snippet}"
-            for s in sources
-        ])
+        return "\n\n".join([f"**{s.title}**\nURL: {s.url}\n{s.snippet}" for s in sources])

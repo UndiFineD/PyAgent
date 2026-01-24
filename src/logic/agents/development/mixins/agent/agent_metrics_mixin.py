@@ -14,15 +14,20 @@
 
 """Code metrics and quality logic for CoderAgent."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 import logging
 import re
 import shutil
 import subprocess
 import sys
+
 from src.core.base.common.types.code_metrics import CodeMetrics
-from src.core.base.common.types.quality_score import QualityScore
 from src.core.base.common.types.code_smell import CodeSmell
+from src.core.base.common.types.quality_score import QualityScore
+
 
 class AgentMetricsMixin:
     """Mixin for code metrics, quality scoring, and smell detection."""
@@ -43,9 +48,7 @@ class AgentMetricsMixin:
         test_file = self.file_path.parent / f"test_{self.file_path.name}"
         if not test_file.exists():
             # Try tests/test_filename.py
-            test_file = (
-                self.file_path.parent.parent / "tests" / f"test_{self.file_path.name}"
-            )
+            test_file = self.file_path.parent.parent / "tests" / f"test_{self.file_path.name}"
 
         if not test_file.exists():
             return 0.0
@@ -83,7 +86,7 @@ class AgentMetricsMixin:
 
                 if match:
                     return float(match.group(1))
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logging.debug(f"Coverage calculation failed: {e}")
 
         return 0.0
@@ -97,9 +100,7 @@ class AgentMetricsMixin:
         code_smells = self.detect_code_smells(content)
         coverage = self._get_test_coverage()
 
-        self._quality_score = self.core.calculate_quality_score(
-            metrics, style_violations, code_smells, coverage
-        )
+        self._quality_score = self.core.calculate_quality_score(metrics, style_violations, code_smells, coverage)
         return self._quality_score
 
     def detect_code_smells(self, content: str | None = None) -> list[CodeSmell]:

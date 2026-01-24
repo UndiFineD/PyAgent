@@ -11,15 +11,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Local context recorder.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
 from src.core.base.common.base_interfaces import ContextRecorderInterface
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -65,15 +71,15 @@ class LocalContextRecorder(ContextRecorderInterface):
         Includes unique context hashing for future deduplication and sharded storage.
         Optimized for high-throughput and low-latency disk writes.
         """
-        import hashlib
-        import zlib
         import gzip
+        import hashlib
 
         # Stability: generate a stable hash for the prompt to allow O(1) deduplication
         prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
 
         # Phase 318: Audited Rust MD5 Sharding
         from src.core.rust_bridge import RustBridge
+
         shard_id = RustBridge.calculate_shard_id(prompt_hash, self.shard_count)
 
         # Use .jsonl.gz if compression is enabled

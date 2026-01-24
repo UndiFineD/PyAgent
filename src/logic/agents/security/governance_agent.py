@@ -19,20 +19,22 @@ Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
-import uuid
+import logging
 import time
+import uuid
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class GovernanceAgent(BaseAgent):
+class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Manages proposals, voting cycles, and governance policies for the fleet."""
 
     def __init__(self, file_path: str) -> None:
@@ -91,9 +93,7 @@ class GovernanceAgent(BaseAgent):
         return proposal_id
 
     @as_tool
-    def cast_vote(
-        self, proposal_id: str, voter: str, choice: str, rationale: str = ""
-    ) -> str:
+    def cast_vote(self, proposal_id: str, voter: str, choice: str, rationale: str = "") -> str:
         """Casts a vote on an active proposal.
 
         Args:
@@ -121,9 +121,7 @@ class GovernanceAgent(BaseAgent):
                 if v["agent"] == voter:
                     return f"Error: Agent {voter} has already voted on this proposal."
 
-        proposal["votes"][choice].append(
-            {"agent": voter, "rationale": rationale, "timestamp": time.time()}
-        )
+        proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "timestamp": time.time()})
 
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
@@ -162,14 +160,13 @@ class GovernanceAgent(BaseAgent):
 
         return proposal
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        _ = (prompt, target_file)
         return "Decentralized governance ensures fleet resilience and alignment."
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        GovernanceAgent, "Governance Agent", "Swarm DAO Management"
-    )
+    main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")
     main()

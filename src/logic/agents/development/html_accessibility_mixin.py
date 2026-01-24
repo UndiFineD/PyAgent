@@ -1,12 +1,23 @@
 #!/usr/bin/env python3
+
+"""
+Html accessibility mixin.py module.
+"""
+
+# pylint: disable=too-many-ancestors
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
+
 import re
+
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
+from src.core.base.common.types.accessibility_issue_type import \
+    AccessibilityIssueType
+from src.core.base.common.types.accessibility_severity import \
+    AccessibilitySeverity
 from src.core.base.common.types.wcag_level import WCAGLevel
+
 
 class HtmlAccessibilityMixin:
     """Mixin for HTML accessibility analysis."""
@@ -26,10 +37,7 @@ class HtmlAccessibilityMixin:
                     description="Image missing alt attribute",
                     element=match.group()[:50],
                     line_number=line_num,
-                    suggested_fix=(
-                        'Add alt="" for decorative or alt="description" '
-                        "for meaningful images"
-                    ),
+                    suggested_fix=('Add alt="" for decorative or alt="description" for meaningful images'),
                     auto_fixable=False,
                 )
                 self.issues.append(issue)
@@ -43,10 +51,7 @@ class HtmlAccessibilityMixin:
                 input_id_match = re.search(r'id=["\']([^"\']+)["\']', input_tag)
                 if input_id_match:
                     input_id = input_id_match.group(1)
-                    if (
-                        f'for="{input_id}"' not in content
-                        and f"for='{input_id}'" not in content
-                    ):
+                    if f'for="{input_id}"' not in content and f"for='{input_id}'" not in content:
                         line_num = content[: match.start()].count("\n") + 1
                         self.issues.append(
                             AccessibilityIssue(
@@ -64,10 +69,7 @@ class HtmlAccessibilityMixin:
 
         # Check for missing ARIA landmarks
         landmarks = ["main", "nav", "header", "footer", "aside"]
-        has_landmark = any(
-            f"<{tag}" in content.lower() or f'role="{tag}"' in content.lower()
-            for tag in landmarks
-        )
+        has_landmark = any(f"<{tag}" in content.lower() or f'role="{tag}"' in content.lower() for tag in landmarks)
         if not has_landmark and "<body" in content.lower():
             self.issues.append(
                 AccessibilityIssue(
@@ -77,10 +79,7 @@ class HtmlAccessibilityMixin:
                     wcag_criterion="4.1.2",
                     description="Page missing landmark regions",
                     element="document",
-                    suggested_fix=(
-                        "Add semantic HTML5 elements (main, nav, header, "
-                        "footer) or ARIA landmarks"
-                    ),
+                    suggested_fix=("Add semantic HTML5 elements (main, nav, header, footer) or ARIA landmarks"),
                     auto_fixable=False,
                 )
             )
@@ -117,10 +116,7 @@ class HtmlAccessibilityMixin:
                             severity=AccessibilitySeverity.MODERATE,
                             wcag_level=WCAGLevel.AA,
                             wcag_criterion="2.4.6",
-                            description=(
-                                f"Heading level skipped: "
-                                f"h{heading_levels[i - 1]} to h{heading_levels[i]}"
-                            ),
+                            description=(f"Heading level skipped: h{heading_levels[i - 1]} to h{heading_levels[i]}"),
                             element=f"h{heading_levels[i]}",
                             suggested_fix="Use sequential heading levels without skipping",
                             auto_fixable=False,

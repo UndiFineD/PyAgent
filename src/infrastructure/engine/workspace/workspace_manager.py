@@ -19,9 +19,9 @@ Handles DBO (Distributed Byte Object) allocation and 120fps sync channels.
 
 import logging
 import threading
-from typing import Dict, Optional, Any, List
-import ctypes
 import time
+from typing import Any, Dict, List, Optional
+
 from .predictive_workspace import PredictiveWorkspace
 
 try:
@@ -31,13 +31,14 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class WorkspaceManager:
     """
     Manages Distributed Byte Objects (DBO) and synchronized memory workspaces.
     Part of Phase 52 Evolutionary Neuro-Optimization.
     """
 
-    _instance: Optional['WorkspaceManager'] = None
+    _instance: Optional["WorkspaceManager"] = None
     _lock = threading.Lock()
 
     def __new__(cls, *args, **kwargs):
@@ -117,11 +118,7 @@ class WorkspaceManager:
             name = f"dvd_ch_{channel_id:04d}"
             dbo = self.allocate_dbo(name, buffer_size)
             if dbo:
-                self._channels[channel_id] = {
-                    "buffer": dbo,
-                    "name": name,
-                    "last_beat": time.time()
-                }
+                self._channels[channel_id] = {"buffer": dbo, "name": name, "last_beat": time.time()}
                 logger.debug(f"Registered DVD-channel {channel_id} (DBO: {name})")
                 return True
             return False
@@ -132,7 +129,7 @@ class WorkspaceManager:
         Target jitter: < 1.0ms.
         """
         now = time.time()
-        jitter = (now - self.last_sync_time) - (1.0/120.0)
+        jitter = (now - self.last_sync_time) - (1.0 / 120.0)
         self.sync_jitters.append(jitter)
         if len(self.sync_jitters) > 120:
             self.sync_jitters.pop(0)

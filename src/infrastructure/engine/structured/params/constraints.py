@@ -1,13 +1,34 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Constraints.py module.
+"""
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 import json
 import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Pattern, Type
+
 from .enums import ConstraintType, SchemaFormat
+
 
 @dataclass
 class OutputConstraint:
     """Base output constraint."""
+
     constraint_type: ConstraintType = ConstraintType.INCLUDE
     priority: int = 0
 
@@ -21,9 +42,11 @@ class OutputConstraint:
             "priority": self.priority,
         }
 
+
 @dataclass
 class JsonSchemaConstraint(OutputConstraint):
     """JSON Schema constraint."""
+
     schema: Dict[str, Any] = field(default_factory=dict)
     schema_format: SchemaFormat = SchemaFormat.DRAFT_07
     strict: bool = True
@@ -150,9 +173,11 @@ class JsonSchemaConstraint(OutputConstraint):
             "strict": self.strict,
         }
 
+
 @dataclass
 class RegexConstraint(OutputConstraint):
     """Regex pattern constraint."""
+
     pattern: str = ""
     flags: int = 0
     _compiled: Optional[Pattern] = field(default=None, repr=False)
@@ -177,9 +202,11 @@ class RegexConstraint(OutputConstraint):
             "flags": self.flags,
         }
 
+
 @dataclass
 class ChoiceConstraint(OutputConstraint):
     """Fixed choice constraint."""
+
     choices: List[str] = field(default_factory=list)
     case_sensitive: bool = True
 
@@ -195,9 +222,11 @@ class ChoiceConstraint(OutputConstraint):
             "case_sensitive": self.case_sensitive,
         }
 
+
 @dataclass
 class GrammarConstraint(OutputConstraint):
     """Grammar constraint (EBNF/Lark)."""
+
     grammar: str = ""
     grammar_type: str = "ebnf"  # "ebnf", "lark", "gbnf"
     start_symbol: str = "start"
@@ -210,10 +239,12 @@ class GrammarConstraint(OutputConstraint):
             "start_symbol": self.start_symbol,
         }
 
+
 @dataclass
 class TypeConstraint(OutputConstraint):
     """Type annotation constraint."""
-    type_annotation: str = ""       # Python type annotation string
+
+    type_annotation: str = ""  # Python type annotation string
     python_type: Optional[Type] = None
 
     def validate(self, text: str) -> bool:

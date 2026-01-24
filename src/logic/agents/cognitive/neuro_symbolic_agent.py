@@ -13,17 +13,22 @@
 # limitations under the License.
 
 
+"""Agent for Neuro-Symbolic reasoning, verifying neural output against symbolic rules."""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import re
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class NeuroSymbolicAgent(BaseAgent):
     """
     Phase 36: Neuro-Symbolic Reasoning.
@@ -32,7 +37,7 @@ class NeuroSymbolicAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.capabilities.append("NeuroSymbolic")
+        self.capabilities.append("neuro_symbolic")
         self.symbolic_rules: list[dict[str, Any]] = [
             {"name": "No deletions", "regex": r"delete|rm -rf", "impact": "BLOCK"},
             {
@@ -53,7 +58,7 @@ class NeuroSymbolicAgent(BaseAgent):
         )
 
     @as_tool
-    def NeuroSymbolic(self, content: str) -> dict[str, Any]:
+    def neuro_symbolic(self, content: str) -> dict[str, Any]:
         """Alias for neurosymbolic verification used by fleet."""
         return self.perform_neurosymbolic_verification(content)
 
@@ -87,6 +92,6 @@ class NeuroSymbolicAgent(BaseAgent):
             else "# BLOCK: Symbolic Rule Violation Detected",
         }
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         res = self.perform_neurosymbolic_verification(prompt)
         return res["corrected_content"]

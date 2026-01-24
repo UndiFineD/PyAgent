@@ -16,10 +16,13 @@
 """Test generation and case minimization."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import ast
-from typing import Any
 from collections.abc import Callable
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .models import GeneratedTest
 
 __version__ = VERSION
@@ -76,9 +79,7 @@ class TestGenerator:
         self.generated.append(generated)
         return generated
 
-    def generate_parametrized(
-        self, function_name: str, test_cases: list[tuple[Any, Any]]
-    ) -> GeneratedTest:
+    def generate_parametrized(self, function_name: str, test_cases: list[tuple[Any, Any]]) -> GeneratedTest:
         """Generate parametrized test."""
         test_name = f"test_{function_name}_parametrized"
         params = ", ".join(str(tc) for tc in test_cases)
@@ -114,9 +115,7 @@ class TestGenerator:
         """Export all generated tests."""
         return "\n\n".join(t.generated_code for t in self.generated)
 
-    def generate_red_team_tests(
-        self, function_name: str, implementation_code: str
-    ) -> GeneratedTest:
+    def generate_red_team_tests(self, function_name: str, implementation_code: str) -> GeneratedTest:
         """SCA Pattern: Generate tests specifically designed to break the implementation."""
         test_name = f"test_{function_name}_red_team"
 
@@ -185,14 +184,10 @@ class TestCaseMinimizer:
                 break
 
         reduction = 1 - len(current) / len(input_str) if input_str else 0
-        self.history.append(
-            {"original": input_str, "minimized": current, "reduction": reduction}
-        )
+        self.history.append({"original": input_str, "minimized": current, "reduction": reduction})
         return current
 
-    def minimize_list(
-        self, input_list: list[Any], test_fn: Callable[[list[Any]], bool]
-    ) -> list[Any]:
+    def minimize_list(self, input_list: list[Any], test_fn: Callable[[list[Any]], bool]) -> list[Any]:
         """Minimize a list input by removing elements."""
         current = input_list.copy()
         i = 0
@@ -204,9 +199,7 @@ class TestCaseMinimizer:
             else:
                 i += 1
 
-        self.history.append(
-            {"original_length": len(input_list), "minimized_length": len(current)}
-        )
+        self.history.append({"original_length": len(input_list), "minimized_length": len(current)})
         return current
 
     def get_minimization_stats(self) -> dict[str, Any]:
@@ -233,13 +226,9 @@ class TestDocGenerator:
         """Initialize doc generator."""
         self.tests: list[dict[str, Any]] = []
 
-    def add_test(
-        self, name: str, module: str = "unknown", docstring: str = "", code: str = ""
-    ) -> None:
+    def add_test(self, name: str, module: str = "unknown", docstring: str = "", code: str = "") -> None:
         """Add test for documentation."""
-        self.tests.append(
-            {"name": name, "module": module, "docstring": docstring, "code": code}
-        )
+        self.tests.append({"name": name, "module": module, "docstring": docstring, "code": code})
 
     def generate(self) -> str:
         """Generate a human-readable documentation summary."""
@@ -259,9 +248,7 @@ class TestDocGenerator:
         """Extract examples from test code."""
         return [{"example": test_code}] if test_code else []
 
-    def group_by_module(
-        self, tests: list[dict[str, Any]]
-    ) -> dict[str, list[dict[str, Any]]]:
+    def group_by_module(self, tests: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
         """Group tests by module."""
         result: dict[str, list[dict[str, Any]]] = {}
         for test in tests:

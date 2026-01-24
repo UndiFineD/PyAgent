@@ -16,9 +16,11 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types.consistency_issue import ConsistencyIssue
+
 import re
+
+from src.core.base.common.types.consistency_issue import ConsistencyIssue
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -69,9 +71,7 @@ class ConsistencyAgent:
             for func in funcs:
                 if "_" in func and func[0].islower():
                     snake_case_files.append(f"{path}:{func}")
-                elif func[0].isupper() or (
-                    func[0].islower() and any(c.isupper() for c in func)
-                ):
+                elif func[0].isupper() or (func[0].islower() and any(c.isupper() for c in func)):
                     camel_case_files.append(f"{path}:{func}")
         if snake_case_files and camel_case_files:
             self.issues.append(

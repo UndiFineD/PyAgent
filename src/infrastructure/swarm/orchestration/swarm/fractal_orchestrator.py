@@ -18,14 +18,17 @@ Handles recursive task delegation to specialized fleet clusters.
 """
 
 from __future__ import annotations
+
 import logging
-from typing import Dict, Any, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List
+
 from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
+
 
 class FractalOrchestrator:
     """
@@ -84,4 +87,3 @@ class FractalOrchestrator:
         logging.info(f"FractalOrchestrator: Delegating task to sub-swarm {swarm_id}.")
         # (In a full implementation, this would use a SubSwarmExecutor)
         return {"status": "delegated", "swarm_id": swarm_id, "members": self.sub_swarms[swarm_id]}
-

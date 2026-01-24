@@ -1,13 +1,17 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+Core resolution mixin for conflict management.
+"""
+
 from typing import Any
 from datetime import datetime
 
 class CoreResolutionMixin:
     """Methods for conflict resolution and fact preparation."""
 
-    def prepare_fact(self, key: str, value: Any) -> dict[str, Any]:
+    def prepare_fact(self, _key: str, value: Any) -> dict[str, Any]:
         """Prepares a fact entry with timestamp."""
         return {"value": value, "updated_at": datetime.now().isoformat()}
 
@@ -33,26 +37,42 @@ class CoreResolutionMixin:
     ) -> Any:
         """Logic to resolve conflicts when multiple agents update the same key."""
         if strategy == "latest":
-            if isinstance(existing, dict) and isinstance(incoming, dict):
-                e_ts = existing.get("updated_at", "")
-                i_ts = incoming.get("updated_at", "")
-                return incoming if i_ts >= e_ts else existing
-            return incoming
+            return self._resolve_latest(existing, incoming)
 
         if strategy == "merge":
-            if isinstance(existing, dict) and isinstance(incoming, dict):
-                merged = existing.copy()
-                merged.update(incoming)
-                return merged
-            if isinstance(existing, list) and isinstance(incoming, list):
-                return list(set(existing + incoming))
-            return incoming
+            return self._resolve_merge(existing, incoming)
 
         if strategy == "accumulate":
-            if isinstance(existing, (int, float)) and isinstance(
-                incoming, (int, float)
-            ):
-                return existing + incoming
-            return incoming
+            return self._resolve_accumulate(existing, incoming)
 
+        return incoming
+
+    def _resolve_latest(self, existing: Any, incoming: Any) -> Any:
+        """Helper for latest strategy."""
+        if isinstance(existing, dict) and isinstance(incoming, dict):
+            e_ts = existing.get("updated_at", "")
+            i_ts = incoming.get("updated_at", "")
+            return incoming if i_ts >= e_ts else existing
+        return incoming
+
+    def _resolve_merge(self, existing: Any, incoming: Any) -> Any:
+        """Helper for merge strategy."""
+        if isinstance(existing, dict) and isinstance(incoming, dict):
+            merged = existing.copy()
+            merged.update(incoming)
+            return merged
+        if isinstance(existing, list) and isinstance(incoming, list):
+            # Convert to list(set()) only if all elements are hashable
+            try:
+                return list(set(existing + incoming))
+            except TypeError:
+                return existing + incoming
+        return incoming
+
+    def _resolve_accumulate(self, existing: Any, incoming: Any) -> Any:
+        """Helper for accumulate strategy."""
+        if isinstance(existing, (int, float)) and isinstance(
+            incoming, (int, float)
+        ):
+            return existing + incoming
         return incoming

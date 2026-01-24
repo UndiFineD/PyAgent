@@ -16,10 +16,13 @@
 """Notification tools for Slack and Discord webhooks."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import requests
-import logging
+
 import contextlib
+import logging
+
+import requests
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
 
 __version__ = VERSION
@@ -40,15 +43,12 @@ def send_slack_notification(webhook_url: str, message: str) -> bool:
 
         # Intelligence: Record outgoing notification (Phase 108)
         with contextlib.suppress(Exception):
-            from src.infrastructure.compute.backend.local_context_recorder import (
-                LocalContextRecorder,
-            )
+            from src.infrastructure.compute.backend.local_context_recorder import \
+                LocalContextRecorder
 
             recorder = LocalContextRecorder()
 
-            recorder.record_interaction(
-                "Slack", "Webhook", f"Notification to {webhook_url}", message
-            )
+            recorder.record_interaction("Slack", "Webhook", f"Notification to {webhook_url}", message)
 
         return True
 
@@ -73,14 +73,11 @@ def send_discord_notification(webhook_url: str, message: str) -> bool:
 
         # Intelligence: Record outgoing notification (Phase 108)
         with contextlib.suppress(Exception):
-            from src.infrastructure.compute.backend.local_context_recorder import (
-                LocalContextRecorder,
-            )
+            from src.infrastructure.compute.backend.local_context_recorder import \
+                LocalContextRecorder
 
             recorder = LocalContextRecorder()
-            recorder.record_interaction(
-                "Discord", "Webhook", f"Notification to {webhook_url}", message
-            )
+            recorder.record_interaction("Discord", "Webhook", f"Notification to {webhook_url}", message)
 
         return True
     except Exception as e:

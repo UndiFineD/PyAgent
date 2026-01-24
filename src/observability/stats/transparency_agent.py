@@ -16,10 +16,12 @@
 """Agent specializing in interpretability and deep tracing of agent reasoning steps."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
-from src.core.base.common.base_utilities import create_main_function, as_tool
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+    SignalRegistry
 
 __version__ = VERSION
 
@@ -45,10 +47,7 @@ class TransparencyAgent(BaseAgent):
         if workflow_id:
             # Filter by workflow_id if it's in the data
             history = [
-                e
-                for e in history
-                if e.get("data", {}).get("workflow_id") == workflow_id
-                or workflow_id in str(e)
+                e for e in history if e.get("data", {}).get("workflow_id") == workflow_id or workflow_id in str(e)
             ]
 
         report = ["# fleet Transparency Audit Trail"]
@@ -70,18 +69,17 @@ class TransparencyAgent(BaseAgent):
         for step in steps:
             data = step["data"]
             report.append(
-                f"- Agent `{data['agent']}` executed `{data['action']}` triggered by the previous objective."
+                f"- Agent `{data['agent']}` executed `{data['action']}` "
+                "triggered by the previous objective."
             )
 
         return "\n".join(report)
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Trigger an audit report."""
         return self.generate_audit_trail()
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        TransparencyAgent, "Transparency Agent", "Workflow ID (optional)"
-    )
+    main = create_main_function(TransparencyAgent, "Transparency Agent", "Workflow ID (optional)")
     main()

@@ -1,12 +1,34 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Linear.py module.
+"""
+
 from __future__ import annotations
-import numpy as np
+
 from typing import TYPE_CHECKING
-from .config import QuantStrategy
+
+import numpy as np
+
 from .base import Quantizer
+from .config import QuantStrategy
 from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+
 
 class LinearQuantizer(Quantizer):
     """Linear (uniform) quantization."""
@@ -16,6 +38,7 @@ class LinearQuantizer(Quantizer):
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
         from .utils import pack_int4
+
         original_shape = weight.shape
 
         if self.config.strategy == QuantStrategy.TENSOR:
@@ -163,11 +186,9 @@ class LinearQuantizer(Quantizer):
             end = min(start + self.config.group_size, in_features)
             group = flat[:, start:end]
 
-            scaled = group / scale[:, g:g+1]
+            scaled = group / scale[:, g : g + 1]
             if zp is not None:
-                scaled = scaled + zp[:, g:g+1]
-            qweight[:, start:end] = np.clip(
-                np.round(scaled), self.config.qmin, self.config.qmax
-            ).astype(np.int8)
+                scaled = scaled + zp[:, g : g + 1]
+            qweight[:, start:end] = np.clip(np.round(scaled), self.config.qmin, self.config.qmax).astype(np.int8)
 
         return qweight.reshape(original_shape).astype(np.int8)

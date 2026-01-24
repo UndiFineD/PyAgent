@@ -19,10 +19,11 @@ Pure logic for OpenAPI spec generation and tool contract validation.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 from typing import Any
-from src.core.base.lifecycle.version import SDK_VERSION
+
+from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 
 __version__ = VERSION
 
@@ -58,9 +59,7 @@ class APICore:
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "properties": tool.get(
-                                        "parameters", {"input": {"type": "string"}}
-                                    ),
+                                    "properties": tool.get("parameters", {"input": {"type": "string"}}),
                                 }
                             }
                         }

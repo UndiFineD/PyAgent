@@ -18,9 +18,12 @@ Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cl
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
+
+from src.core.base.lifecycle.version import VERSION
+
 from .prometheus_exporter import PrometheusExporter
 
 __version__ = VERSION
@@ -33,9 +36,7 @@ class MetricsExporter:
         self.prometheus = PrometheusExporter()
         self.last_export_time = time.time()
 
-    def record_agent_call(
-        self, agent_name: str, duration_ms: float, success: bool
-    ) -> str:
+    def record_agent_call(self, agent_name: str, duration_ms: float, success: bool) -> str:
         """Records a single agent execution event."""
         labels = {"agent": agent_name, "status": "success" if success else "failure"}
 
@@ -55,9 +56,7 @@ class MetricsExporter:
         """Simulates pushing metrics to a Grafana Cloud API."""
 
         payload = self.get_prometheus_payload()
-        logging.info(
-            f"MetricsExporter: Pushing batch to Grafana... ({len(payload)} bytes)"
-        )
+        logging.info(f"MetricsExporter: Pushing batch to Grafana... ({len(payload)} bytes)")
         self.last_export_time = time.time()
         return "Export successful."
 

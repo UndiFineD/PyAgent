@@ -12,15 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Report generator cli.py module.
+"""
+
 # Ensure project root and src are in path for modular imports
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import sys
 from pathlib import Path
-from src.observability.reports.report_generator import ReportGenerator
-from src.observability.reports.report_exporter import ReportExporter
+
+from src.core.base.lifecycle.version import VERSION
 from src.observability.reports.export_format import ExportFormat
+from src.observability.reports.report_exporter import ReportExporter
+from src.observability.reports.report_generator import ReportGenerator
 
 root = Path(__file__).resolve().parents[2]
 if str(root) not in sys.path:

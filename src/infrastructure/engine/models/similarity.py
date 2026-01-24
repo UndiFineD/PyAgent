@@ -18,8 +18,9 @@ Provides semantic similarity calculation between text snippets using local or re
 """
 
 import logging
+from typing import List
+
 import numpy as np
-from typing import List, Optional, Any
 
 try:
     import rust_core as rc
@@ -27,6 +28,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class EmbeddingSimilarityService:
     """

@@ -18,11 +18,14 @@ Detects runtime errors and orchestrates CoderAgents to apply fixes.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import traceback
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
 from .self_healing_engine_core import SelfHealingEngineCore
 
 __version__ = VERSION

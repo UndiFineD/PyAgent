@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,29 +20,29 @@ Regex-based grammar engine.
 
 from __future__ import annotations
 
+import contextlib
 import sys
 import warnings
-import contextlib
 from typing import Dict, Optional, Set
 
-from .models import FSMTransitionTable
 from .base import GrammarEngine
+from .models import FSMTransitionTable
 
 # Handle sre_parse deprecation in Python 3.11+
 if sys.version_info >= (3, 11):
     try:
-        import re._parser as _sre_parse
         import re._constants as _sre_constants
+        import re._parser as _sre_parse
     except ImportError:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=DeprecationWarning)
-            import sre_parse as _sre_parse  # type: ignore
             import sre_constants as _sre_constants  # type: ignore
+            import sre_parse as _sre_parse  # type: ignore
 else:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=DeprecationWarning)
-        import sre_parse as _sre_parse  # type: ignore
         import sre_constants as _sre_constants  # type: ignore
+        import sre_parse as _sre_parse  # type: ignore
 
 # Align constants across different Python versions
 _LITERAL = _sre_constants.LITERAL
@@ -136,7 +150,8 @@ class RegexGrammar(GrammarEngine):
                                 for end in loop_ends:
                                     for char, targets in nfa.get(s, {}).items():
                                         if char not in nfa.get(end, {}):
-                                            if end not in nfa: nfa[end] = {}
+                                            if end not in nfa:
+                                                nfa[end] = {}
                                             nfa[end][char] = targets.copy()
                         new_end_states.update(current_states)
                     else:
@@ -159,7 +174,8 @@ class RegexGrammar(GrammarEngine):
         initial_set = frozenset({initial})
         dfa_states[initial_set] = 0
         dfa_transitions[0] = {}
-        if initial in accepting: dfa_accepting.add(0)
+        if initial in accepting:
+            dfa_accepting.add(0)
         worklist = [initial_set]
         state_counter = 1
         while worklist:
@@ -167,18 +183,21 @@ class RegexGrammar(GrammarEngine):
             current_dfa = dfa_states[current_set]
             all_chars = set()
             for nfa_state in current_set:
-                if nfa_state in nfa: all_chars.update(nfa[nfa_state].keys())
+                if nfa_state in nfa:
+                    all_chars.update(nfa[nfa_state].keys())
             for char in all_chars:
                 next_set = set()
                 for nfa_state in current_set:
                     if nfa_state in nfa and char in nfa[nfa_state]:
                         next_set.update(nfa[nfa_state][char])
-                if not next_set: continue
+                if not next_set:
+                    continue
                 next_frozen = frozenset(next_set)
                 if next_frozen not in dfa_states:
                     dfa_states[next_frozen] = state_counter
                     dfa_transitions[state_counter] = {}
-                    if next_set & accepting: dfa_accepting.add(state_counter)
+                    if next_set & accepting:
+                        dfa_accepting.add(state_counter)
                     worklist.append(next_frozen)
                     state_counter += 1
                 dfa_transitions[current_dfa][char] = dfa_states[next_frozen]

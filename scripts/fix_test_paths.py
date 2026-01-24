@@ -23,7 +23,11 @@ def fix_path_string(match):
             new_path_str = '/'.join(folders + [filename_snake + '.py'])
 
             # Add 'src/' if it doesn't start with it and it's logic/observability/infrastructure/core
-            if not new_path_str.startswith('src/') and any(new_path_str.startswith(p) for p in ['logic', 'observability', 'infrastructure', 'core', 'tools', 'interface', 'maintenance']):
+            prefixes = [
+                'logic', 'observability', 'infrastructure', 'core',
+                'tools', 'interface', 'maintenance'
+            ]
+            if not new_path_str.startswith('src/') and any(new_path_str.startswith(p) for p in prefixes):
                 new_path_str = 'src/' + new_path_str
 
             return f'load_agent_module("{new_path_str}")'

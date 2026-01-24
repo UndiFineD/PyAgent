@@ -1,6 +1,25 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Model registry core.py module.
+"""
+
 from __future__ import annotations
-from pathlib import Path
+
 import logging
+from pathlib import Path
 
 
 class ModelRegistryCore:
@@ -31,17 +50,13 @@ class ModelRegistryCore:
         for name, path_str in current_adapters:
             path = Path(path_str)
             if not path.exists():
-                logging.warning(
-                    f"ModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing..."
-                )
+                logging.warning(f"ModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing...")
                 del self.adapter_registry[name]
                 self.unhealthy_entries.add(name)
                 healed_count += 1
 
         if healed_count > 0:
-            logging.info(
-                f"ModelRegistry: Self-healing complete. {healed_count} entries removed."
-            )
+            logging.info(f"ModelRegistry: Self-healing complete. {healed_count} entries removed.")
         return healed_count
 
     def get_adapter_for_task(self, task_type: str) -> str | None:
@@ -52,9 +67,7 @@ class ModelRegistryCore:
             return self.adapter_registry.get(task_type.lower())
         return adapter
 
-    def should_trigger_finetuning(
-        self, quality_history: list[float], threshold: float = 0.6
-    ) -> bool:
+    def should_trigger_finetuning(self, quality_history: list[float], threshold: float = 0.6) -> bool:
         """
         Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
         """

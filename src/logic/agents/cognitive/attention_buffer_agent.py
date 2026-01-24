@@ -12,12 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Attention Buffer Agent for managing focus and importance.
+"""
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 import time
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
@@ -31,6 +34,7 @@ except ImportError:
     RUST_AVAILABLE = False
 
 
+# pylint: disable=too-many-ancestors
 class AttentionBufferAgent(BaseAgent):
     """
     Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared
@@ -85,7 +89,7 @@ class AttentionBufferAgent(BaseAgent):
                 timestamps = [x["timestamp"] for x in self.buffer]
                 sorted_indices = rc.sort_buffer_by_priority_rust(priorities, timestamps)
                 sorted_buffer = [self.buffer[i] for i in sorted_indices]
-            except Exception:
+            except RuntimeError:
                 sorted_buffer = sorted(
                     self.buffer, key=lambda x: (x["priority"], x["timestamp"]), reverse=True
                 )
@@ -114,7 +118,7 @@ class AttentionBufferAgent(BaseAgent):
                 timestamps = [p["timestamp"] for p in self.buffer]
                 valid_indices = rc.filter_stale_entries_rust(timestamps, now, age_seconds)
                 self.buffer = [self.buffer[i] for i in valid_indices]
-            except Exception:
+            except RuntimeError:
                 self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
         else:
             self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]

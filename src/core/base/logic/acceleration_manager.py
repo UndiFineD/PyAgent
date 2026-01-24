@@ -23,15 +23,11 @@ from __future__ import annotations
 class NeuralPruningEngine:
     """Core engine for pruning neural connections in the swarm."""
 
-    def calculate_synaptic_weight_python(
-        self, inputs: list[float], weights: list[float]
-    ) -> float:
+    def calculate_synaptic_weight_python(self, inputs: list[float], weights: list[float]) -> float:
         """Native Python implementation of weight calculation."""
         return sum(i * w for i, w in zip(inputs, weights))
 
-    def calculate_synaptic_weight(
-        self, inputs: list[float], weights: list[float]
-    ) -> float:
+    def calculate_synaptic_weight(self, inputs: list[float], weights: list[float]) -> float:
         """
         Accelerated implementation using Rust core.
         Falls back to Python if Rust module is not compiled.

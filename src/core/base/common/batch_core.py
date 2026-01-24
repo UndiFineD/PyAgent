@@ -17,10 +17,13 @@ Core logic for batch request processing and queuing.
 """
 
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Any, List, Optional, Callable
+from typing import Any, Callable, List, Optional
+
 from .base_core import BaseCore
-from .models import FilePriority, BatchResult
+from .models import BatchResult, FilePriority
+
 
 class BatchRequest:
     """Request in a batch processing queue."""
@@ -55,10 +58,12 @@ class BatchRequest:
         """Process the items in the batch."""
         return processor(self.items)
 
+
 class BatchCore(BaseCore):
     """
     Authoritative engine for batch request management.
     """
+
     def __init__(self, batch_size: int = 10, max_concurrent: int = 4) -> None:
         super().__init__()
         self.batch_size = batch_size

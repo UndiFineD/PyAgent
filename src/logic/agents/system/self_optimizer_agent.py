@@ -16,11 +16,12 @@
 """Agent specializing in self-optimization and roadmap refinement."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import create_main_function
-from src.observability.stats.monitoring import ResourceMonitor
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.observability.stats.metrics_engine import ObservabilityEngine
+from src.observability.stats.monitoring import ResourceMonitor
 
 __version__ = VERSION
 
@@ -69,14 +70,9 @@ class SelfOptimizerAgent(BaseAgent):
                     continue
 
                 low_line = line.lower()
-                if any(
-                    k in low_line for k in ["fix", "bug", "error", "crash", "stable"]
-                ):
+                if any(k in low_line for k in ["fix", "bug", "error", "crash", "stable"]):
                     categories["High Priority (Stability)"].append(line)
-                elif any(
-                    k in low_line
-                    for k in ["add", "new", "feature", "capability", "expand"]
-                ):
+                elif any(k in low_line for k in ["add", "new", "feature", "capability", "expand"]):
                     categories["Medium Priority (Features)"].append(line)
                 else:
                     categories["Low Priority (Maintenance)"].append(line)
@@ -110,13 +106,9 @@ class SelfOptimizerAgent(BaseAgent):
             f"- **Success Rate**: {telemetry.get('success_rate', 'N/A')}%",
         ]
 
-        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(
-            system_report
-        )
+        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(system_report)
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize"
-    )
+    main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")
     main()

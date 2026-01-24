@@ -17,10 +17,11 @@
 import logging
 from pathlib import Path
 from typing import Any, List
+
+from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.common.models import AgentState, EventType
 from src.core.base.state.agent_history import AgentConversationHistory
 from src.core.base.state.agent_scratchpad import AgentScratchpad
-from src.core.base.common.file_system_core import FileSystemCore
 
 
 # pylint: disable=too-many-instance-attributes
@@ -56,18 +57,14 @@ class PersistenceMixin:
         for hook in hooks:
             try:
                 hook(data)
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
     def generate_diff(self) -> str:
         """Generate a unified diff between original and improved content."""
-        if (hasattr(self, "core") and
-                hasattr(self, "previous_content") and
-                hasattr(self, "current_content")):
+        if hasattr(self, "core") and hasattr(self, "previous_content") and hasattr(self, "current_content"):
             return getattr(self, "core").calculate_diff(
-                self.previous_content,
-                self.current_content,
-                filename=str(getattr(self, "file_path", "unknown"))
+                self.previous_content, self.current_content, filename=str(getattr(self, "file_path", "unknown"))
             )
         return ""
 
@@ -83,7 +80,7 @@ class PersistenceMixin:
 
         try:
             self.previous_content = getattr(self, "file_path").read_text(encoding="utf-8")
-        except Exception: # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             self.previous_content = ""
         return self.previous_content
 
@@ -99,8 +96,7 @@ class PersistenceMixin:
             if hasattr(self, "core"):
                 content_to_write = getattr(self, "core").fix_markdown(content_to_write)
 
-        if (hasattr(self, "core") and
-                not getattr(self, "core").validate_content_safety(content_to_write)):
+        if hasattr(self, "core") and not getattr(self, "core").validate_content_safety(content_to_write):
             logging.error("Security violation detected in %s", file_path.name)
             return False
 
@@ -109,7 +105,7 @@ class PersistenceMixin:
 
         try:
             return self._fs.atomic_write(file_path, content_to_write)
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error("File write failed: %s", e)
             return False
 

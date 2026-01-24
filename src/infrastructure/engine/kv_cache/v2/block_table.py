@@ -18,8 +18,9 @@ Supports hybrid block sizes, context parallel mapping, and PCP/DCP awareness.
 """
 
 import logging
-from typing import Dict, List, Optional, Set, Any
 from collections import deque
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
 try:
@@ -28,6 +29,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class BlockTableV2:
     """
@@ -117,5 +119,5 @@ class BlockTableV2:
             "total_blocks": self.num_blocks,
             "free_blocks": len(self.free_blocks),
             "utilized_pct": ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100,
-            "active_sequences": len(self.mapping)
+            "active_sequences": len(self.mapping),
         }

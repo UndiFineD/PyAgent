@@ -16,18 +16,20 @@
 """Agent specializing in Python type hint enforcement and 'Any' type elimination."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import ast
 import logging
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class TypeSafetyAgent(BaseAgent):
+class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Identifies missing type annotations and 'Any' usage to improve codebase robustness."""
 
     def __init__(self, file_path: str) -> None:
@@ -85,8 +87,8 @@ class TypeSafetyAgent(BaseAgent):
                         }
                     )
 
-        except Exception as e:
-            logging.error(f"Failed to analyze {target_path}: {e}")
+        except (SyntaxError, EnvironmentError) as e:
+            logging.error("Failed to analyze %s: %s", target_path, e)
 
         return issues
 
@@ -95,7 +97,15 @@ class TypeSafetyAgent(BaseAgent):
         root = Path(directory)
         all_issues = []
 
-        for py_file in root.rglob("*.py"):
+        if not root.exists():
+            return f"❌ Directory or file not found: {directory}"
+
+        if root.is_file():
+            files = [root]
+        else:
+            files = list(root.rglob("*.py"))
+
+        for py_file in files:
             if any(p in str(py_file) for p in ["__pycache__", "venv", ".git"]):
                 continue
 
@@ -111,20 +121,16 @@ class TypeSafetyAgent(BaseAgent):
             report.append(f"### {filename}")
             for issue in issues:
                 icon = "🚨" if issue["severity"] == "HIGH" else "⚠️"
-                report.append(
-                    f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})"
-                )
+                report.append(f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})")
 
         return "\n".join(report)
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform a type safety audit."""
-        path = prompt if prompt else "src/classes"
+        path = target_file if target_file else (prompt if prompt else "src")
         return self.run_audit(path)
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        TypeSafetyAgent, "TypeSafety Agent", "Path to audit (e.g. 'src/classes')"
-    )
+    main = create_main_function(TypeSafetyAgent, "TypeSafety Agent", "Path to audit (e.g. 'src/classes')")
     main()

@@ -1,15 +1,25 @@
+
+"""
+Accessibility core mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
-from src.core.base.common.types.color_contrast_result import ColorContrastResult
-from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
-from src.core.base.common.types.wcag_level import WCAGLevel
+
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
+from src.core.base.common.types.accessibility_severity import \
+    AccessibilitySeverity
+from src.core.base.common.types.color_contrast_result import \
+    ColorContrastResult
+from src.core.base.common.types.wcag_level import WCAGLevel
 
 if TYPE_CHECKING:
-    from src.logic.agents.specialists.accessibility_agent import AccessibilityAgent
+    from src.logic.agents.specialists.accessibility_agent import \
+        AccessibilityAgent
+
 
 class AccessibilityCoreMixin:
     """Mixin for core accessibility calculations and filtering in AccessibilityAgent."""
@@ -71,9 +81,7 @@ class AccessibilityCoreMixin:
 
         return 0.2126 * adjust(r) + 0.7152 * adjust(g) + 0.0722 * adjust(b)
 
-    def get_issues_by_severity(
-        self: AccessibilityAgent, severity: AccessibilitySeverity
-    ) -> list[AccessibilityIssue]:
+    def get_issues_by_severity(self: AccessibilityAgent, severity: AccessibilitySeverity) -> list[AccessibilityIssue]:
         """Get issues filtered by severity."""
         return [i for i in self.issues if i.severity == severity]
 

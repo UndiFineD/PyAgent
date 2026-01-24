@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 RequestMetrics - Comprehensive timing breakdown for request processing.
 
@@ -5,15 +19,18 @@ Inspired by vLLM's sequence.py RequestMetrics for production latency analysis.
 
 Phase 17: vLLM Pattern Integration
 """
+
 from __future__ import annotations
+
 import time
 from dataclasses import dataclass, field
-from typing import Optional
 from enum import Enum, auto
+from typing import Optional
 
 
 class RequestState(Enum):
     """States a request can be in."""
+
     CREATED = auto()
     QUEUED = auto()
     SCHEDULED = auto()
@@ -74,56 +91,56 @@ class RequestMetrics:
     # Timing phase breakdowns (computed)
     _phase_times: dict = field(default_factory=dict)
 
-    def mark_queued(self) -> 'RequestMetrics':
+    def mark_queued(self) -> "RequestMetrics":
         """Mark request as queued."""
         self.queued_time = time.time()
         self.state = RequestState.QUEUED
         return self
 
-    def mark_scheduled(self) -> 'RequestMetrics':
+    def mark_scheduled(self) -> "RequestMetrics":
         """Mark request as scheduled."""
         self.first_scheduled_time = time.time()
         self.state = RequestState.SCHEDULED
         return self
 
-    def mark_processing(self) -> 'RequestMetrics':
+    def mark_processing(self) -> "RequestMetrics":
         """Mark request as processing (model forward pass)."""
         self.processing_start_time = time.time()
         self.state = RequestState.PROCESSING
         return self
 
-    def mark_first_token(self) -> 'RequestMetrics':
+    def mark_first_token(self) -> "RequestMetrics":
         """Mark when first token is generated (for streaming)."""
         self.first_token_time = time.time()
         self.state = RequestState.STREAMING
         return self
 
-    def mark_token(self) -> 'RequestMetrics':
+    def mark_token(self) -> "RequestMetrics":
         """Mark a token generated."""
         self.last_token_time = time.time()
         self.tokens_generated += 1
         return self
 
-    def mark_completed(self) -> 'RequestMetrics':
+    def mark_completed(self) -> "RequestMetrics":
         """Mark request as completed."""
         self.finished_time = time.time()
         self.state = RequestState.COMPLETED
         return self
 
-    def mark_failed(self, error: str) -> 'RequestMetrics':
+    def mark_failed(self, error: str) -> "RequestMetrics":
         """Mark request as failed."""
         self.finished_time = time.time()
         self.state = RequestState.FAILED
         self.error = error
         return self
 
-    def mark_cancelled(self) -> 'RequestMetrics':
+    def mark_cancelled(self) -> "RequestMetrics":
         """Mark request as cancelled."""
         self.finished_time = time.time()
         self.state = RequestState.CANCELLED
         return self
 
-    def increment_retry(self) -> 'RequestMetrics':
+    def increment_retry(self) -> "RequestMetrics":
         """Increment retry count."""
         self.retry_count += 1
         return self
@@ -198,42 +215,42 @@ class RequestMetrics:
     def summary(self) -> dict:
         """Generate a timing summary."""
         return {
-            'request_id': self.request_id,
-            'state': self.state.name,
-            'total_time_ms': round(self.total_time_ms or 0, 2),
-            'time_in_queue_ms': round(self.time_in_queue_ms or 0, 2),
-            'schedule_time_ms': round(self.schedule_time_ms or 0, 2),
-            'time_to_first_token_ms': round(self.time_to_first_token_ms or 0, 2),
-            'generation_time_ms': round(self.generation_time_ms or 0, 2),
-            'model_time_ms': round(self.model_time_ms or 0, 2),
-            'tokens_generated': self.tokens_generated,
-            'tokens_input': self.tokens_input,
-            'tokens_per_second': round(self.tokens_per_second or 0, 2),
-            'retry_count': self.retry_count,
-            'error': self.error,
-            'custom_phases': {k: round(v, 2) for k, v in self._phase_times.items()},
+            "request_id": self.request_id,
+            "state": self.state.name,
+            "total_time_ms": round(self.total_time_ms or 0, 2),
+            "time_in_queue_ms": round(self.time_in_queue_ms or 0, 2),
+            "schedule_time_ms": round(self.schedule_time_ms or 0, 2),
+            "time_to_first_token_ms": round(self.time_to_first_token_ms or 0, 2),
+            "generation_time_ms": round(self.generation_time_ms or 0, 2),
+            "model_time_ms": round(self.model_time_ms or 0, 2),
+            "tokens_generated": self.tokens_generated,
+            "tokens_input": self.tokens_input,
+            "tokens_per_second": round(self.tokens_per_second or 0, 2),
+            "retry_count": self.retry_count,
+            "error": self.error,
+            "custom_phases": {k: round(v, 2) for k, v in self._phase_times.items()},
         }
 
     def to_dict(self) -> dict:
         """Convert to dictionary with all fields."""
         return {
-            'request_id': self.request_id,
-            'state': self.state.name,
-            'model_name': self.model_name,
-            'agent_name': self.agent_name,
-            'priority': self.priority,
-            'arrival_time': self.arrival_time,
-            'queued_time': self.queued_time,
-            'first_scheduled_time': self.first_scheduled_time,
-            'processing_start_time': self.processing_start_time,
-            'first_token_time': self.first_token_time,
-            'last_token_time': self.last_token_time,
-            'finished_time': self.finished_time,
-            'tokens_generated': self.tokens_generated,
-            'tokens_input': self.tokens_input,
-            'retry_count': self.retry_count,
-            'error': self.error,
-            'computed': self.summary(),
+            "request_id": self.request_id,
+            "state": self.state.name,
+            "model_name": self.model_name,
+            "agent_name": self.agent_name,
+            "priority": self.priority,
+            "arrival_time": self.arrival_time,
+            "queued_time": self.queued_time,
+            "first_scheduled_time": self.first_scheduled_time,
+            "processing_start_time": self.processing_start_time,
+            "first_token_time": self.first_token_time,
+            "last_token_time": self.last_token_time,
+            "finished_time": self.finished_time,
+            "tokens_generated": self.tokens_generated,
+            "tokens_input": self.tokens_input,
+            "retry_count": self.retry_count,
+            "error": self.error,
+            "computed": self.summary(),
         }
 
 
@@ -295,24 +312,24 @@ class RequestMetricsAggregator:
         ttft_times = [m.time_to_first_token_ms for m in self.metrics if m.time_to_first_token_ms]
 
         if not total_times:
-            return {'error': 'no_data'}
+            return {"error": "no_data"}
 
         return {
-            'total_time_ms': {
-                'mean': sum(total_times) / len(total_times),
-                'min': min(total_times),
-                'max': max(total_times),
-                'p50': self._percentile(total_times, 0.5),
-                'p95': self._percentile(total_times, 0.95),
-                'p99': self._percentile(total_times, 0.99),
+            "total_time_ms": {
+                "mean": sum(total_times) / len(total_times),
+                "min": min(total_times),
+                "max": max(total_times),
+                "p50": self._percentile(total_times, 0.5),
+                "p95": self._percentile(total_times, 0.95),
+                "p99": self._percentile(total_times, 0.99),
             },
-            'queue_time_ms': {
-                'mean': sum(queue_times) / len(queue_times) if queue_times else 0,
-                'max': max(queue_times) if queue_times else 0,
+            "queue_time_ms": {
+                "mean": sum(queue_times) / len(queue_times) if queue_times else 0,
+                "max": max(queue_times) if queue_times else 0,
             },
-            'time_to_first_token_ms': {
-                'mean': sum(ttft_times) / len(ttft_times) if ttft_times else 0,
-                'p95': self._percentile(ttft_times, 0.95) if ttft_times else 0,
+            "time_to_first_token_ms": {
+                "mean": sum(ttft_times) / len(ttft_times) if ttft_times else 0,
+                "p95": self._percentile(ttft_times, 0.95) if ttft_times else 0,
             },
         }
 
@@ -320,7 +337,7 @@ class RequestMetricsAggregator:
         """Calculate throughput statistics."""
         completed = [m for m in self.metrics if m.is_complete]
         if not completed:
-            return {'error': 'no_completed_requests'}
+            return {"error": "no_completed_requests"}
 
         total_tokens = sum(m.tokens_generated for m in completed)
         total_input_tokens = sum(m.tokens_input for m in completed)
@@ -333,31 +350,31 @@ class RequestMetricsAggregator:
         tps_list = [m.tokens_per_second for m in completed if m.tokens_per_second]
 
         return {
-            'total_requests': len(completed),
-            'total_tokens_generated': total_tokens,
-            'total_tokens_input': total_input_tokens,
-            'requests_per_second': len(completed) / duration_s,
-            'tokens_per_second': {
-                'mean': sum(tps_list) / len(tps_list) if tps_list else 0,
-                'max': max(tps_list) if tps_list else 0,
+            "total_requests": len(completed),
+            "total_tokens_generated": total_tokens,
+            "total_tokens_input": total_input_tokens,
+            "requests_per_second": len(completed) / duration_s,
+            "tokens_per_second": {
+                "mean": sum(tps_list) / len(tps_list) if tps_list else 0,
+                "max": max(tps_list) if tps_list else 0,
             },
-            'duration_seconds': duration_s,
+            "duration_seconds": duration_s,
         }
 
     def summary(self) -> dict:
         """Generate complete summary."""
         return {
-            'total_requests': self.total_requests,
-            'completed': self.completed_requests,
-            'failed': self.failed_requests,
-            'success_rate': round(self.success_rate, 4),
-            'latency': self.latency_stats(),
-            'throughput': self.throughput_stats(),
+            "total_requests": self.total_requests,
+            "completed": self.completed_requests,
+            "failed": self.failed_requests,
+            "success_rate": round(self.success_rate, 4),
+            "latency": self.latency_stats(),
+            "throughput": self.throughput_stats(),
         }
 
 
 __all__ = [
-    'RequestMetrics',
-    'RequestMetricsAggregator',
-    'RequestState',
+    "RequestMetrics",
+    "RequestMetricsAggregator",
+    "RequestState",
 ]

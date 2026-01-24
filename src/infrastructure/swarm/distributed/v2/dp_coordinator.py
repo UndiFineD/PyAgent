@@ -18,11 +18,12 @@ Handles ZMQ-based request coordination, wave tracking, and stats publishing.
 """
 
 import logging
-import json
 import time
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
 import zmq
 import zmq.asyncio
+
 from .locality_manager import LocalityManager
 
 try:
@@ -31,6 +32,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class DPCoordinatorV2:
     """
@@ -73,7 +75,7 @@ class DPCoordinatorV2:
             "type": "NEW_WAVE",
             "wave_id": self.current_wave,
             "request_ids": request_ids,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
         await self.socket.send_json(message)
         logger.debug(f"Published Wave {self.current_wave} with {len(request_ids)} requests")
@@ -91,7 +93,7 @@ class DPCoordinatorV2:
             "wave_id": self.current_wave,
             "request_ids": request_ids,
             "locality": locality_tag,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
         await self.socket.send_json(message)
         logger.info(f"Published Locality Wave {self.current_wave} to {locality_tag}")
@@ -125,7 +127,7 @@ class DPCoordinatorV2:
         return {
             "avg_latency": avg_latency,
             "total_throughput": sum(s.get("throughput", 0) for s in self.rank_stats.values()),
-            "wave_count": self.current_wave
+            "wave_count": self.current_wave,
         }
 
     async def close(self):

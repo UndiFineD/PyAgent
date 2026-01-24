@@ -19,15 +19,18 @@ Provides REST API and WebSocket interfaces for real-time telemetry and managemen
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-from typing import Any
+
 import json
 import logging
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+
 from src.core.base.common.base_managers import HealthChecker
+from src.core.base.lifecycle.version import VERSION
 
 # Internal Imports
 __version__ = VERSION
@@ -186,9 +189,7 @@ async def websocket_telemetry(websocket: WebSocket) -> None:
     await manager.connect(websocket)
     try:
         # Send initial connection success message
-        await websocket.send_json(
-            {"event": "connected", "msg": "PyAgent Telemetry Bridge Active"}
-        )
+        await websocket.send_json({"event": "connected", "msg": "PyAgent Telemetry Bridge Active"})
         while True:
             # Wait for any messages from client (keeping connection open)
             data = await websocket.receive_text()

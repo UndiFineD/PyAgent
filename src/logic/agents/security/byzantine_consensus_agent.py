@@ -19,17 +19,19 @@ Used for critical infrastructure or security logic changes.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.core.byzantine_core import ByzantineCore
 
 __version__ = VERSION
 
 
-class ByzantineConsensusAgent(BaseAgent):
+class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents."""
 
     def __init__(self, file_path: str) -> None:
@@ -40,6 +42,7 @@ class ByzantineConsensusAgent(BaseAgent):
 
     def select_committee(self, task: str, available_agents: list[str]) -> list[str]:
         """Selects a subset of agents best suited for a task based on reliability."""
+        _ = task
         # Ensure registry is populated
         for agent in available_agents:
             if agent not in self.reliability_scores:
@@ -52,9 +55,7 @@ class ByzantineConsensusAgent(BaseAgent):
         self, task: str, proposals: dict[str, str], change_type: str = "default"
     ) -> dict[str, Any]:
         """Evaluates a set of proposals and determines the winner via AI-powered scoring."""
-        logging.info(
-            f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}..."
-        )
+        logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
 
         self.core.get_required_quorum(change_type)
 
@@ -81,16 +82,14 @@ class ByzantineConsensusAgent(BaseAgent):
                             provider="ByzantineConsensus",
                             meta={"agent": agent_name},
                         )
-                    except Exception:
+                    except (IOError, AttributeError):
                         pass
 
                 import re
 
                 match = re.search(r"(\d+\.\d+)", score_response)
-                score = (
-                    float(match.group(1)) if match else 0.7
-                )  # Fallback to reasonable default
-            except Exception as e:
+                score = float(match.group(1)) if match else 0.7  # Fallback to reasonable default
+            except (ValueError, TypeError, RuntimeError) as e:
                 logging.error(f"ByzantineConsensus: Error scoring {agent_name}: {e}")
                 score = 0.5
 
@@ -125,7 +124,10 @@ class ByzantineConsensusAgent(BaseAgent):
             }
 
         logging.warning(
-            f"ByzantineConsensus: Decision reached. Primary output selected from '{best_agent}' (Score: {confidence:.2f})."
+            "ByzantineConsensus: Decision reached. "
+            "Primary output selected from '%s' (Score: %.2f).",
+            best_agent,
+            confidence,
         )
 
         return {
@@ -139,15 +141,14 @@ class ByzantineConsensusAgent(BaseAgent):
             },
         }
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Acts as a high-level evaluator for a single piece of content."""
+        _ = (prompt, target_file)
         return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log"
-    )
+    main = create_main_function(ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log")
     main()

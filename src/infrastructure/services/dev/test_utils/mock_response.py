@@ -16,9 +16,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .mock_response_type import MockResponseType
+
 from dataclasses import dataclass
+
+from src.core.base.lifecycle.version import VERSION
+
+from .mock_response_type import MockResponseType
 
 __version__ = VERSION
 

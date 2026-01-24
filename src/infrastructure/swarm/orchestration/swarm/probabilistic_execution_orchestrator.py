@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Probabilistic execution orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -37,9 +43,7 @@ class ProbabilisticExecutionOrchestrator:
         """
         Executes a task multiple times and collapses the results into a single high-confidence output.
         """
-        logging.info(
-            f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations."
-        )
+        logging.info(f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations.")
 
         results = []
         import asyncio

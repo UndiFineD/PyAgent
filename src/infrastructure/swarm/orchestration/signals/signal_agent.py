@@ -16,12 +16,15 @@
 """Agent that monitor inter-agent signals and coordinates responses."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from .signal_registry import SignalRegistry
-import logging
+
 import json
+import logging
 from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+from .signal_registry import SignalRegistry
 
 __version__ = VERSION
 
@@ -54,17 +57,13 @@ class SignalAgent(BaseAgent):
         data = event.get("data")
         logging.warning(f"SignalAgent handling failure from {sender}: {data}")
         # Append to log
-        self.append_to_file(
-            f"\n- [!] {event['timestamp']} Agent **{sender}** failed: {data}"
-        )
+        self.append_to_file(f"\n- [!] {event['timestamp']} Agent **{sender}** failed: {data}")
 
     def on_improvement_ready(self, event: dict[str, Any]) -> str:
         """Handle a new improvement signal."""
         data = event.get("data")
         logging.info(f"SignalAgent noticing new improvement: {data}")
-        self.append_to_file(
-            f"\n- [i] {event['timestamp']} New improvement proposed: {data}"
-        )
+        self.append_to_file(f"\n- [i] {event['timestamp']} New improvement proposed: {data}")
 
     def get_signal_summary(self) -> str:
         """Return a formatted summary of recent signals."""
@@ -74,9 +73,7 @@ class SignalAgent(BaseAgent):
 
         summary = ["## Recent System Signals"]
         for h in history:
-            summary.append(
-                f"- **{h['signal']}** from {h['sender']} at {h['timestamp']}"
-            )
+            summary.append(f"- **{h['signal']}** from {h['sender']} at {h['timestamp']}")
             if h["data"]:
                 summary.append(f"  - Data: `{json.dumps(h['data'])[:100]}`")
 

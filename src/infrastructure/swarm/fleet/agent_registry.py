@@ -16,19 +16,21 @@
 """Registry for mapping agent names to their implementations and initialization logic."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import importlib
+import json
 import logging
 import os
-import json
-from typing import Any, TYPE_CHECKING
 from collections.abc import Iterable
 from pathlib import Path
-from .resilient_stubs import ResilientStub
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 from src.logic.agents.system.mcp_agent import MCPAgent
+
 from .agent_registry_core import AgentRegistryCore
 from .bootstrap_configs import BOOTSTRAP_AGENTS
-from src.core.base.lifecycle.version import SDK_VERSION
+from .resilient_stubs import ResilientStub
 
 if TYPE_CHECKING:
     from .fleet_manager import FleetManager
@@ -60,12 +62,10 @@ class LazyAgentMap(dict):
         # 2. Dynamic Discovery (The most lazy/flexible)
         # Pre-scan ensures we know what's available without guessing inside __getitem__
         discovered_files = self._scan_workspace_for_agents()
-        self._discovered_configs: dict[str, tuple[str, str, str | None]] = (
-            self.core.process_discovered_files(discovered_files)
+        self._discovered_configs: dict[str, tuple[str, str, str | None]] = self.core.process_discovered_files(
+            discovered_files
         )
-        logging.info(
-            f"Registry: Discovered {len(self._discovered_configs)} agents dynamically."
-        )
+        logging.info(f"Registry: Discovered {len(self._discovered_configs)} agents dynamically.")
 
     def _scan_workspace_for_agents(self) -> list[str]:
         """Performs the I/O-bound scanning of the workspace."""
@@ -131,9 +131,7 @@ class LazyAgentMap(dict):
                 try:
                     with open(m_path) as f:
                         data = json.load(f)
-                        configs: dict[str, tuple[str, str, str | None]] = (
-                            self.core.parse_manifest(data)
-                        )
+                        configs: dict[str, tuple[str, str, str | None]] = self.core.parse_manifest(data)
                         manifest_configs.update(configs)
                 except Exception as e:
                     logging.error(f"Failed to load plugin manifest {m_path}: {e}")
@@ -178,21 +176,8 @@ class LazyAgentMap(dict):
         cycles = self.core.detect_circular_dependencies(dep_graph)
         if cycles:
             for cycle in cycles:
-                logging.error(
-                    f"REGISTRY CRITICAL: Circular dependency detected: {' -> '.join(cycle)}"
-                )
-            raise RecursionError(
-                f"Circular dependencies detected in Agent Registry: {cycles[0]}"
-            )
-
-    def __contains__(self, key: object) -> bool:
-        if super().__contains__(key):
-            return True
-        return (
-            key in self.registry_configs
-            or key in self._manifest_configs
-            or key in self._discovered_configs
-        )
+                logging.error(f"REGISTRY CRITICAL: Circular dependency detected: {' -> '.join(cycle)}")
+            raise RecursionError(f"Circular dependencies detected in Agent Registry: {cycles[0]}")
 
     def keys(self) -> list[str]:
         # Combine all potential keys
@@ -264,9 +249,7 @@ class LazyAgentMap(dict):
             if d_key.lower().replace("_", "") == k_norm:
                 return self._instantiate(key, d_cfg)
 
-        raise KeyError(
-            f"Agent '{key}' not found in registry (including dynamic scans)."
-        )
+        raise KeyError(f"Agent '{key}' not found in registry (including dynamic scans).")
 
     def _instantiate(self, key: str, config: tuple[str, str, str | None]) -> Any:
         """Standard instantiation logic with dependency injection and version checks."""
@@ -368,9 +351,7 @@ class AgentRegistry:
     """Registry for mapping agent names to their implementations via lazy loading."""
 
     @staticmethod
-    def get_agent_map(
-        workspace_root: Path, fleet_instance: FleetManager | None = None
-    ) -> LazyAgentMap:
+    def get_agent_map(workspace_root: Path, fleet_instance: FleetManager | None = None) -> LazyAgentMap:
         """
         Returns the initial map of agents.
         Most agents are now dynamically discovered via AgentRegistryCore.scan_directory_for_agents().

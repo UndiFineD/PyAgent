@@ -61,7 +61,9 @@ async def run_phase36():
         "NeuroSymbolic", content=invalid_password
     )
     print(
-        f"✅ Invalid Password Result (Passed={res_invalid_pwd.get('content_verified')}): {res_invalid_pwd.get('violations')}"
+        f"✅ Invalid Password Result "
+        f"(Passed={res_invalid_pwd.get('content_verified')}): "
+        f"{res_invalid_pwd.get('violations')}"
     )
 
     # Test violation (Deletions)
@@ -71,7 +73,9 @@ async def run_phase36():
         "NeuroSymbolic", content=invalid_del
     )
     print(
-        f"✅ Invalid Deletion Result (Passed={res_invalid_del.get('content_verified')}): {res_invalid_del.get('violations')}"
+        f"✅ Invalid Deletion Result "
+        f"(Passed={res_invalid_del.get('content_verified')}): "
+        f"{res_invalid_del.get('violations')}"
     )
 
     if (

@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .cleanup_strategy import CleanupStrategy
-from pathlib import Path
-from typing import Any
-from collections.abc import Callable
+
 import logging
 import shutil
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .cleanup_strategy import CleanupStrategy
 
 __version__ = VERSION
 

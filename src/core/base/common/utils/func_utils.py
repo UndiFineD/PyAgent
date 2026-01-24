@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Function Utilities Module - Phase 20: Production Infrastructure
 ================================================================
@@ -20,15 +34,14 @@ Author: PyAgent Phase 20
 
 from __future__ import annotations
 
-import functools
 import inspect
 import logging
 import threading
 import time
 import warnings
 from collections.abc import Callable, Mapping
-from functools import lru_cache, partial, wraps
-from typing import Any, Generic, ParamSpec, TypeVar, overload
+from functools import lru_cache, wraps
+from typing import Any, ParamSpec, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +55,7 @@ F = TypeVar("F", bound=Callable[..., Any])
 # ============================================================================
 
 
-def identity(value: T, **kwargs: Any) -> T:
+def identity(value: T, **_kwargs: Any) -> T:
     """Returns the first provided value unchanged."""
     return value
 
@@ -148,7 +161,7 @@ def deprecate_args(
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
             if check_deprecated():
-                deprecated_args = pos_kws[start_index:len(args)]
+                deprecated_args = pos_kws[start_index : len(args)]
                 if deprecated_args:
                     msg = (
                         f"The positional arguments {deprecated_args} are "
@@ -221,6 +234,7 @@ def deprecated(
         replacement: Suggested replacement function.
         version: Version when it will be removed.
     """
+
     def wrapper(fn: F) -> F:
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
@@ -233,7 +247,9 @@ def deprecated(
                 msg += f". Will be removed in version {version}"
             warnings.warn(msg, DeprecationWarning, stacklevel=2)
             return fn(*args, **kwargs)
+
         return inner  # type: ignore
+
     return wrapper
 
 
@@ -278,21 +294,16 @@ def supports_kw(
         inspect.Parameter.KEYWORD_ONLY,
     }
 
-    if param_val:
-        is_sig_param = param_val.kind in passable_kw_types
-
+    if param_val and param_val.kind in passable_kw_types:
         if requires_kw_only:
-            if is_sig_param and param_val.kind != inspect.Parameter.KEYWORD_ONLY:
-                return False
-            if param_val.kind == inspect.Parameter.KEYWORD_ONLY:
-                return True
-        elif is_sig_param:
-            return True
+            return param_val.kind == inspect.Parameter.KEYWORD_ONLY
+        return True
 
     # Check for **kwargs
     if allow_var_kwargs:
-        last_param = params.get(next(reversed(params)))
-        if last_param and last_param.kind == inspect.Parameter.VAR_KEYWORD:
+        # Use values() to avoid iteration over keys if we just want the last one
+        last_param = list(params.values())[-1]
+        if last_param.kind == inspect.Parameter.VAR_KEYWORD:
             return last_param.name != kw_name
 
     return False
@@ -333,9 +344,7 @@ def get_allowed_kwargs(
 
     dropped = overrides.keys() - filtered.keys()
     if dropped:
-        logger.warning(
-            f"The following kwargs are not supported and will be dropped: {dropped}"
-        )
+        logger.warning(f"The following kwargs are not supported and will be dropped: {dropped}")
 
     return filtered
 
@@ -370,7 +379,7 @@ def memoize(fn: Callable[P, T]) -> Callable[P, T]:
         return result
 
     wrapper.cache = cache  # type: ignore
-    wrapper.clear_cache = lambda: cache.clear()  # type: ignore
+    wrapper.clear_cache = cache.clear  # type: ignore
 
     return wrapper
 
@@ -381,6 +390,7 @@ def memoize_method(fn: Callable[..., T]) -> Callable[..., T]:
 
     Stores cache on the instance to avoid memory leaks.
     """
+
     @wraps(fn)
     def wrapper(self: Any, *args: Any, **kwargs: Any) -> T:
         cache_attr = f"_memoize_cache_{fn.__name__}"
@@ -416,6 +426,7 @@ def throttle(min_interval: float) -> Callable[[F], F]:
         ... def log_status():
         ...     print("Status logged")
     """
+
     def wrapper(fn: F) -> F:
         last_call = 0.0
         lock = threading.Lock()
@@ -444,6 +455,7 @@ def debounce(wait: float) -> Callable[[F], F]:
     Args:
         wait: Seconds to wait before executing.
     """
+
     def wrapper(fn: F) -> F:
         timer: threading.Timer | None = None
         lock = threading.Lock()
@@ -488,28 +500,25 @@ def retry_on_exception(
         backoff: Multiplier for delay after each retry.
         on_retry: Optional callback called on each retry.
     """
+
     def wrapper(fn: F) -> F:
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
             current_delay = delay
-            last_exception: Exception | None = None
 
             for attempt in range(max_retries + 1):
                 try:
                     return fn(*args, **kwargs)
                 except exceptions as e:
-                    last_exception = e
-                    if attempt < max_retries:
-                        if on_retry:
-                            on_retry(e, attempt + 1)
-                        time.sleep(current_delay)
-                        current_delay *= backoff
-                    else:
+                    if attempt >= max_retries:
                         raise
+                    if on_retry:
+                        on_retry(e, attempt + 1)
+                    time.sleep(current_delay)
+                    current_delay *= backoff
 
-            # Should not reach here, but just in case
-            if last_exception:
-                raise last_exception
+            # For static analysis - loop always returns or raises
+            return None
 
         return inner  # type: ignore
 
@@ -527,6 +536,7 @@ def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
 
     Raises RuntimeError if limit is exceeded.
     """
+
     def wrapper(fn: F) -> F:
         calls: list[float] = []
         lock = threading.Lock()
@@ -542,9 +552,7 @@ def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
                     calls.pop(0)
 
                 if len(calls) >= max_calls:
-                    raise RuntimeError(
-                        f"Call limit exceeded: {max_calls} calls per {period}s"
-                    )
+                    raise RuntimeError(f"Call limit exceeded: {max_calls} calls per {period}s")
 
                 calls.append(current_time)
 
@@ -564,6 +572,7 @@ def timed(fn: F) -> F:
     """
     Decorator that logs function execution time.
     """
+
     @wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         start = time.perf_counter()

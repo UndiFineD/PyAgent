@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
+
+"""
+Metrics.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Core data structures for metrics and telemetry.
 
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION

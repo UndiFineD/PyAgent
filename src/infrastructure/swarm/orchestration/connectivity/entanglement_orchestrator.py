@@ -13,20 +13,24 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from typing import Any, Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict
+
+from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
+
 class EntanglementOrchestrator:
     """
     EntanglementOrchestrator for managing cross-swarm state mirroring.
     Standardized implementation for Phase 125 validation.
     """
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.version = VERSION
@@ -54,4 +58,3 @@ class EntanglementOrchestrator:
         if isinstance(data, dict) and "key" in data and "value" in data:
             self._state[data["key"]] = data["value"]
             logging.debug(f"Entanglement: Synced {data['key']} via signal from {sender}")
-

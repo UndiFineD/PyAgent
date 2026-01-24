@@ -13,29 +13,34 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
+"""Cross-repository context analysis for Cognitive agents.
+
+This module provides data structures to store and manage context information
+derived from multiple repositories.
+"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 @dataclass
 class CrossRepoContext:
-    """Context from cross-repository analysis.
+    """Context information from cross-repository analysis.
 
     Attributes:
-        repo_name: Name of the repository.
+        repo_name: Name of the repository being analyzed.
         repo_url: URL to the repository.
-        related_files: List of related file paths.
-        similarity_score: Overall similarity score.
-        common_patterns: Patterns shared between repos.
+        related_files: List of file paths within the repository related to the query.
+        similarity_score: Quantitative measure of repository relevance.
+        common_patterns: Architectural or code patterns shared with the source repository.
     """
 
     repo_name: str
     repo_url: str
-    related_files: list[str] = field(default_factory=lambda: [])
+    related_files: list[str] = field(default_factory=list)
     similarity_score: float = 0.0
-    common_patterns: list[str] = field(default_factory=lambda: [])
+    common_patterns: list[str] = field(default_factory=list)

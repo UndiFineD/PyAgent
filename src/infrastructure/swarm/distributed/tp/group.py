@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -5,8 +19,8 @@ Tensor parallel group operations.
 """
 
 import logging
-from typing import Any
 from contextlib import contextmanager
+from typing import Any
 
 from .coordinator import GroupCoordinator
 
@@ -16,6 +30,7 @@ logger = logging.getLogger(__name__)
 try:
     import torch
     import torch.distributed as dist
+
     HAS_TORCH = True
     HAS_DIST = dist.is_available()
 except ImportError:
@@ -51,8 +66,7 @@ class TensorParallelGroup:
 
         if HAS_TORCH:
             self.device = device or torch.device(
-                f"cuda:{coordinator.rank_info.local_rank}"
-                if torch.cuda.is_available() else "cpu"
+                f"cuda:{coordinator.rank_info.local_rank}" if torch.cuda.is_available() else "cpu"
             )
         else:
             self.device = device or "cpu"
@@ -170,7 +184,6 @@ class TensorParallelGroup:
         if not HAS_DIST or not dist.is_initialized():
             chunk_size = tensor.shape[dim] // self.tp_size
             start = self.tp_rank * chunk_size
-            end = start + chunk_size
             return tensor.narrow(dim, start, chunk_size)
 
         # Split input tensor
@@ -285,10 +298,10 @@ class TensorParallelGroup:
             return tensor
 
         if not HAS_TORCH:
-            size = len(tensor) if hasattr(tensor, '__len__') else tensor.shape[dim]
+            size = len(tensor) if hasattr(tensor, "__len__") else tensor.shape[dim]
             chunk_size = size // self.tp_size
             start = self.tp_rank * chunk_size
-            return tensor[start:start + chunk_size]
+            return tensor[start : start + chunk_size]
 
         chunks = tensor.chunk(self.tp_size, dim=dim)
         return chunks[self.tp_rank].contiguous()

@@ -18,12 +18,14 @@ Manages credits, bidding, and automated payments between agents.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
-import time
+
 import hashlib
 import json
+import logging
+import time
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.core.economy_core import EconomyCore
 
 
@@ -76,9 +78,7 @@ class AgentEconomy:
             "timestamp": time.time(),
             "transactions": [],
             "previous_hash": "0",
-            "hash": self._hash_block(
-                {"index": 0, "transactions": [], "previous_hash": "0"}
-            ),
+            "hash": self._hash_block({"index": 0, "transactions": [], "previous_hash": "0"}),
         }
         self.blockchain.append(genesis)
 
@@ -89,15 +89,11 @@ class AgentEconomy:
     def get_balance(self, agent_id: str) -> float:
         return self.balances.get(agent_id, 1000.0)  # Default starting credits
 
-    def transfer_credits(
-        self, sender: str, receiver: str, amount: float, reason: str
-    ) -> bool:
+    def transfer_credits(self, sender: str, receiver: str, amount: float, reason: str) -> bool:
         """Executes a secure transfer of credits between agents."""
         s_bal: float = self.get_balance(sender)
         if s_bal < amount:
-            logging.warning(
-                f"Transfer failed: {sender} has insufficient funds ({s_bal} < {amount})"
-            )
+            logging.warning(f"Transfer failed: {sender} has insufficient funds ({s_bal} < {amount})")
             return False
 
         self.balances[sender] = s_bal - amount
@@ -107,30 +103,22 @@ class AgentEconomy:
         self._record_transaction(sender, receiver, amount, reason)
         return True
 
-    def request_gpu_priority(
-        self, agent_id: str, bid_amount: float, importance: float
-    ) -> bool:
+    def request_gpu_priority(self, agent_id: str, bid_amount: float, importance: float) -> bool:
         """Process a bid for high-priority GPU access (Phase 179)."""
         balance = self.get_balance(agent_id)
         if bid_amount > balance:
             return False
 
         priority = EconomyCore.calculate_bid_priority(bid_amount, importance, 0.5)
-        logging.info(
-            f"AgentEconomy: Agent {agent_id} bidding {bid_amount} credits. Priority: {priority:.2f}"
-        )
+        logging.info(f"AgentEconomy: Agent {agent_id} bidding {bid_amount} credits. Priority: {priority:.2f}")
 
         # Threshold for high priority
         if priority > 100.0:
-            self.transfer_credits(
-                agent_id, "SYSTEM_GPU_POOL", bid_amount, "GPU_PRIORITY_BID"
-            )
+            self.transfer_credits(agent_id, "SYSTEM_GPU_POOL", bid_amount, "GPU_PRIORITY_BID")
             return True
         return False
 
-    def _record_transaction(
-        self, sender: str, receiver: str, amount: float, reason: str
-    ) -> None:
+    def _record_transaction(self, sender: str, receiver: str, amount: float, reason: str) -> None:
         transaction = {
             "sender": sender,
             "receiver": receiver,
@@ -150,9 +138,7 @@ class AgentEconomy:
         self.blockchain.append(new_block)
         logging.info(f"Transaction recorded: {sender} -> {receiver} ({amount} credits)")
 
-    def place_bid(
-        self, agent_id: str, task_id: str, bid_amount: float
-    ) -> dict[str, Any]:
+    def place_bid(self, agent_id: str, task_id: str, bid_amount: float) -> dict[str, Any]:
         """Submits a bid for a task."""
         return {
             "agent_id": agent_id,
@@ -208,10 +194,7 @@ class AuctionOrchestrator:
         capability_score: float = 1.0,
     ) -> bool:
         """Submits a bid to an active auction."""
-        if (
-            task_id not in self.active_auctions
-            or self.active_auctions[task_id]["status"] != "active"
-        ):
+        if task_id not in self.active_auctions or self.active_auctions[task_id]["status"] != "active":
             return False
 
         auction = self.active_auctions[task_id]
@@ -247,9 +230,7 @@ class AuctionOrchestrator:
         )
         return True
 
-    def start_bundle_auction(
-        self, items: list[str], requirements: dict[str, Any]
-    ) -> str:
+    def start_bundle_auction(self, items: list[str], requirements: dict[str, Any]) -> str:
         """Starts a combinatorial auction for a bundle of items/tasks."""
         bundle_id = f"bundle_{int(time.time())}"
         self.active_auctions[bundle_id] = {
@@ -272,18 +253,12 @@ class AuctionOrchestrator:
             return None
 
         # Sort by effective bid
-        sorted_bids = sorted(
-            auction["bids"], key=lambda x: x["effective_bid"], reverse=True
-        )
+        sorted_bids = sorted(auction["bids"], key=lambda x: x["effective_bid"], reverse=True)
 
         winner = sorted_bids[0]
 
         # In a Vickrey auction, winner pays the second-highest bid price
-        payment_price = (
-            sorted_bids[1]["amount"]
-            if len(sorted_bids) > 1
-            else auction["reserve_price"]
-        )
+        payment_price = sorted_bids[1]["amount"] if len(sorted_bids) > 1 else auction["reserve_price"]
 
         auction["status"] = "closed"
         auction["winner"] = winner["agent_id"]

@@ -11,11 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Plugin synthesis core.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import ast
+
 from pydantic import BaseModel
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -36,9 +43,7 @@ class PluginSynthesisCore:
     """
 
     @staticmethod
-    def generate_plugin_source(
-        task_description: str, inputs: list[str], logic_template: str
-    ) -> SynthesisResult:
+    def generate_plugin_source(task_description: str, inputs: list[str], logic_template: str) -> SynthesisResult:
         """
         Synthesizes Python source code for a temporary plugin.
 
@@ -51,11 +56,7 @@ class PluginSynthesisCore:
             SynthesisResult containing the safe, formatted code.
         """
         # Sanitize task name for entry point
-        safe_name = (
-            "".join([c if c.isalnum() else "_" for c in task_description[:30]])
-            .strip("_")
-            .lower()
-        )
+        safe_name = "".join([c if c.isalnum() else "_" for c in task_description[:30]]).strip("_").lower()
         entry_point = f"plugin_{safe_name}"
 
         # Construct the full function source
@@ -64,9 +65,7 @@ class PluginSynthesisCore:
         source += f'    """{task_description}"""\n'
 
         # Indent the logic template
-        indented_logic = "\n".join(
-            [f"    {line}" for line in logic_template.strip().split("\n")]
-        )
+        indented_logic = "\n".join([f"    {line}" for line in logic_template.strip().split("\n")])
         source += indented_logic
 
         return SynthesisResult(

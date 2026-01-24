@@ -16,11 +16,12 @@
 """Agent specializing in self-healing through telemetry analysis and error correction."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
+
 from typing import Any
+
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
+from src.core.base.lifecycle.version import VERSION
 from src.observability.stats.metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
@@ -35,7 +36,9 @@ class SelfHealingAgent(BaseAgent):
         self.telemetry = ObservabilityEngine(str(self.workspace_root))
 
         # Phase 317: Dynamic prompt loading and coordinator integration
-        from src.maintenance.self_improvement_coordinator import SelfImprovementCoordinator
+        from src.maintenance.self_improvement_coordinator import \
+            SelfImprovementCoordinator
+
         self.coordinator = SelfImprovementCoordinator(str(self.workspace_root))
         self._load_dynamic_prompt()
 
@@ -61,7 +64,9 @@ class SelfHealingAgent(BaseAgent):
             except Exception as e:
                 # Log but don't fail - dynamic prompt is optional enhancement
                 import logging
+
                 logging.getLogger(__name__).debug("Failed to load dynamic prompt: %s", e)
+
     @as_tool
     async def discover_peers_and_budget(self) -> str:
         """Discovers available peers and current cloud budget status."""
@@ -69,6 +74,7 @@ class SelfHealingAgent(BaseAgent):
             return "❌ Error: Self-healing coordinator is not initialized."
 
         import logging
+
         logger = logging.getLogger(__name__)
 
         peers = []
@@ -93,16 +99,19 @@ class SelfHealingAgent(BaseAgent):
         report = ["## 🌐 Network & Budget Report\n"]
 
         if budget_info["known"]:
-            report.append(f"**Budget**: ${budget_info['today_spend']:.2f} / ${budget_info['daily_limit']:.2f} (Remaining: ${budget_info['remaining']:.2f})")
+            report.append(
+                f"**Budget**: ${budget_info['today_spend']:.2f} / ${budget_info['daily_limit']:.2f} "
+                f"(Remaining: ${budget_info['remaining']:.2f})"
+            )
         else:
             report.append("**Budget**: [Unknown/Unavailable]")
 
         if peers:
             report.append("\n**Available Peers**:")
             for p in peers:
-                p_id = p.get('id', 'unknown')
-                p_type = p.get('type', 'generic')
-                p_status = p.get('status', 'online')
+                p_id = p.get("id", "unknown")
+                p_type = p.get("type", "generic")
+                p_status = p.get("status", "online")
                 report.append(f"- {p_id} ({p_type}): {p_status}")
         else:
             report.append("\n❌ No external peers or servers discovered.")
@@ -118,7 +127,7 @@ class SelfHealingAgent(BaseAgent):
         task = {
             "title": f"Heal {agent_name}",
             "description": f"Perform deep analysis on: {error_msg}",
-            "agent_type": "SelfHealing"
+            "agent_type": "SelfHealing",
         }
 
         try:
@@ -132,7 +141,7 @@ class SelfHealingAgent(BaseAgent):
         if res.get("status") == "success":
             return f"✅ Remote healing task dispatched to {target_peer}. Task ID: {res.get('task_id', 'unknown')}"
         else:
-            error_msg = res.get('error', 'Unknown error')
+            error_msg = res.get("error", "Unknown error")
             return f"❌ Failed to dispatch to {target_peer}: {error_msg}"
 
     def _get_default_content(self) -> str:
@@ -170,21 +179,13 @@ class SelfHealingAgent(BaseAgent):
                 report.append(f"- **[{ts}] {op}**: `{msg}`")
 
             report.append(f"\n> [!TIP] Suggested Fix for {agent}")
-            if "missing 1 required positional argument" in str(
-                agent_errors[0].metadata
-            ):
-                report.append(
-                    "> - Check `improve_content` signature in the source file."
-                )
+            if "missing 1 required positional argument" in str(agent_errors[0].metadata):
+                report.append("> - Check `improve_content` signature in the source file.")
             elif "ImportError" in str(agent_errors[0].metadata):
-                report.append(
-                    "> - Verify `__init__.py` exports or virtual environment packages."
-                )
+                report.append("> - Verify `__init__.py` exports or virtual environment packages.")
 
             else:
-                report.append(
-                    "> - Increase timeout or check for circular dependencies."
-                )
+                report.append("> - Increase timeout or check for circular dependencies.")
             report.append("")
 
         return "\n".join(report)

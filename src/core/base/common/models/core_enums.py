@@ -15,6 +15,7 @@
 """Enum definitions for PyAgent models."""
 
 from __future__ import annotations
+
 from enum import Enum, auto
 
 

@@ -1,14 +1,33 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Factory.py module.
+"""
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 from typing import Any
-from .enums import SchedulingPolicy
+
 from .base import RequestQueue
-from .models import QueuedRequest
-from .queues.fcfs import FCFSQueue
-from .queues.priority import PriorityQueue, DeadlineQueue
+from .enums import SchedulingPolicy
 from .queues.fair import FairQueue
+from .queues.fcfs import FCFSQueue
 from .queues.mlfq import MLFQueue
+from .queues.priority import DeadlineQueue, PriorityQueue
+
 
 def create_request_queue(
     policy: SchedulingPolicy,
@@ -31,14 +50,12 @@ def create_request_queue(
     elif policy == SchedulingPolicy.DEADLINE:
         return DeadlineQueue()
     elif policy == SchedulingPolicy.FAIR:
-        return FairQueue(
-            default_weight=kwargs.get('default_weight', 1.0)
-        )
+        return FairQueue(default_weight=kwargs.get("default_weight", 1.0))
     elif policy == SchedulingPolicy.MLFQ:
         return MLFQueue(
-            num_levels=kwargs.get('num_levels', 4),
-            quantum_ms=kwargs.get('quantum_ms', 100.0),
-            aging_interval_ms=kwargs.get('aging_interval_ms', 1000.0),
+            num_levels=kwargs.get("num_levels", 4),
+            quantum_ms=kwargs.get("quantum_ms", 100.0),
+            aging_interval_ms=kwargs.get("aging_interval_ms", 1000.0),
         )
     else:
         return FCFSQueue()

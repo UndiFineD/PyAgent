@@ -11,16 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Identity agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
-import time
 import json
-import uuid
 import os
+import time
+import uuid
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -39,9 +45,7 @@ class IdentityAgent(BaseAgent):
         from src.infrastructure.swarm.fleet.secret_manager import SecretManager
 
         self.secret_manager = SecretManager(
-            vault_path=os.path.join(
-                self._workspace_root, "data/memory/agent_store/vault.json"
-            )
+            vault_path=os.path.join(self._workspace_root, "data/memory/agent_store/vault.json")
         )
 
     def create_agent_did(self, agent_name: str, fleet_id: str = "fleet-01") -> str:
@@ -105,9 +109,7 @@ class IdentityAgent(BaseAgent):
         vc_to_verify = json.loads(json.dumps(vc))
         signature = vc_to_verify.pop("proof")["jws"]
 
-        expected_signature = hashlib.sha256(
-            json.dumps(vc_to_verify, sort_keys=True).encode()
-        ).hexdigest()
+        expected_signature = hashlib.sha256(json.dumps(vc_to_verify, sort_keys=True).encode()).hexdigest()
 
         if signature == expected_signature:
             return {"status": "verified", "issuer": vc.get("issuer")}

@@ -18,18 +18,18 @@ Test Utils: Common utilities for agent and backend unit tests.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import sys
-from pathlib import Path
-from contextlib import contextmanager
 from collections.abc import Iterator
-from src.infrastructure.services.dev.test_utils import (
-    FileSystemIsolator,
-    LogCapturer,
-    MockAIBackend,
-    ModuleLoader,
-    SnapshotManager,
-)
+from contextlib import contextmanager
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.dev.test_utils import (FileSystemIsolator,
+                                                        LogCapturer,
+                                                        MockAIBackend,
+                                                        ModuleLoader,
+                                                        SnapshotManager)
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[3]

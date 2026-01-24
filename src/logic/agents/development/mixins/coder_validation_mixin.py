@@ -16,14 +16,19 @@
 Syntax validation and linting logic for CoderCore.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 import ast
 import logging
 import os
 import shutil
 import subprocess
 import tempfile
+
 from src.core.base.common.types.code_language import CodeLanguage
+
 
 class CoderValidationMixin:
     """Mixin for validating syntax and linting code."""
@@ -58,7 +63,7 @@ class CoderValidationMixin:
                 check=False,
             )
             return result.returncode == 0
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error(f"flake8 validation failed: {e}")
             return True
         finally:

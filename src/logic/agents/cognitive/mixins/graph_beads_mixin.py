@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Beads task logic for GraphMemoryAgent."""
+"""Beads task logic for GraphMemoryAgent.
+
+Provides hierarchical task management and dependency tracking using the 'Beads' pattern.
+"""
 
 from __future__ import annotations
 import logging
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.base_utilities import as_tool
+
+__version__ = VERSION
+
 
 class GraphBeadsMixin:
     """Mixin for Beads task graph logic."""
@@ -25,7 +32,16 @@ class GraphBeadsMixin:
     def create_task(
         self, title: str, parent_id: str | None = None, priority: int = 2
     ) -> str:
-        """Creates a new task with optional parent for hierarchy (Beads pattern)."""
+        """Creates a new task with optional parent for hierarchy (Beads pattern).
+
+        Args:
+            title: The title of the task.
+            parent_id: Optional ID of the parent task.
+            priority: Task priority level (1-5).
+
+        Returns:
+            Success message with the new task ID.
+        """
         if not hasattr(self, "tasks"):
             return "Error: Tasks not initialized."
 
@@ -60,7 +76,15 @@ class GraphBeadsMixin:
 
     @as_tool
     def add_dependency(self, blocker_id: str, blocked_id: str) -> str:
-        """Links tasks where one blocks another."""
+        """Links tasks where one blocks another.
+
+        Args:
+            blocker_id: ID of the blocking task.
+            blocked_id: ID of the task being blocked.
+
+        Returns:
+            Success or error message.
+        """
         if not hasattr(self, "tasks"):
             return "Error: Tasks not initialized."
 
@@ -74,7 +98,15 @@ class GraphBeadsMixin:
 
     @as_tool
     def compact_memory(self, threshold_days: int = 30) -> str:
-        """Summarizes and prunes old closed tasks to save context (Memory Decay)."""
+        """Summarizes and prunes old closed tasks to save context (Memory Decay).
+
+        Args:
+            threshold_days: Number of days before a closed task is eligible for pruning.
+
+        Returns:
+            Summary of the compaction process.
+        """
+        _ = threshold_days  # Logic to be implemented in Phase 15
         if not hasattr(self, "tasks"):
             return "Error: Tasks not initialized."
 

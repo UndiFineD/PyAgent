@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 40: Advanced Sampling Parameters
 # Inspired by vLLM's sampling_params.py
@@ -17,44 +31,49 @@ Provides:
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
-import numpy as np
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
+import numpy as np
 
 # =============================================================================
 # Enums
 # =============================================================================
 
+
 class OutputKind(Enum):
     """How to return generation output."""
-    CUMULATIVE = auto()        # Return all tokens so far
-    DELTA = auto()             # Return only new tokens
-    FINAL_ONLY = auto()        # Return only at completion
+
+    CUMULATIVE = auto()  # Return all tokens so far
+    DELTA = auto()  # Return only new tokens
+    FINAL_ONLY = auto()  # Return only at completion
 
 
 class StopCondition(Enum):
     """Stop generation conditions."""
-    EOS = auto()               # End of sequence token
-    MAX_TOKENS = auto()        # Maximum tokens reached
-    STOP_STRING = auto()       # Stop string encountered
-    STOP_TOKEN = auto()        # Stop token encountered
-    LENGTH = auto()            # Length limit
+
+    EOS = auto()  # End of sequence token
+    MAX_TOKENS = auto()  # Maximum tokens reached
+    STOP_STRING = auto()  # Stop string encountered
+    STOP_TOKEN = auto()  # Stop token encountered
+    LENGTH = auto()  # Length limit
 
 
 class TemperatureSchedule(Enum):
     """Temperature scheduling strategies."""
-    CONSTANT = auto()          # Fixed temperature
-    LINEAR_DECAY = auto()      # Linear decay to target
-    COSINE_DECAY = auto()      # Cosine annealing
-    WARMUP_DECAY = auto()      # Warmup then decay
-    ADAPTIVE = auto()          # Entropy-based adjustment
+
+    CONSTANT = auto()  # Fixed temperature
+    LINEAR_DECAY = auto()  # Linear decay to target
+    COSINE_DECAY = auto()  # Cosine annealing
+    WARMUP_DECAY = auto()  # Warmup then decay
+    ADAPTIVE = auto()  # Entropy-based adjustment
 
 
 # =============================================================================
 # Sampling Parameters
 # =============================================================================
+
 
 @dataclass
 class SamplingParams:
@@ -63,10 +82,11 @@ class SamplingParams:
 
     Matches vLLM's sampling_params.py for compatibility.
     """
+
     # Basic sampling
     temperature: float = 1.0
     top_p: float = 1.0
-    top_k: int = -1                              # -1 means disabled
+    top_k: int = -1  # -1 means disabled
     min_p: float = 0.0
 
     # Token limits
@@ -74,8 +94,8 @@ class SamplingParams:
     min_tokens: int = 0
 
     # Stop conditions
-    stop: Optional[List[str]] = None             # Stop strings
-    stop_token_ids: Optional[List[int]] = None   # Stop token IDs
+    stop: Optional[List[str]] = None  # Stop strings
+    stop_token_ids: Optional[List[int]] = None  # Stop token IDs
     include_stop_str_in_output: bool = False
 
     # Repetition control
@@ -85,12 +105,12 @@ class SamplingParams:
     no_repeat_ngram_size: int = 0
 
     # Logprobs
-    logprobs: Optional[int] = None               # Number of logprobs to return
-    prompt_logprobs: Optional[int] = None        # Logprobs for prompt tokens
+    logprobs: Optional[int] = None  # Number of logprobs to return
+    prompt_logprobs: Optional[int] = None  # Logprobs for prompt tokens
 
     # Beam search
     best_of: int = 1
-    n: int = 1                                   # Number of outputs
+    n: int = 1  # Number of outputs
     use_beam_search: bool = False
 
     # Advanced
@@ -125,9 +145,9 @@ class AdvancedSamplingParams(SamplingParams):
     """
 
     # vLLM parity features
-    bad_words: Optional[List[str]] = None        # Word sequences to block
+    bad_words: Optional[List[str]] = None  # Word sequences to block
     bad_words_ids: Optional[List[List[int]]] = None  # Token ID sequences to block
-    flat_logprobs: bool = False                  # GC-optimized logprobs format
+    flat_logprobs: bool = False  # GC-optimized logprobs format
     allowed_token_ids: Optional[List[int]] = None  # Token whitelist
     logit_bias: Optional[Dict[int, float]] = None  # Per-token bias
     skip_reading_prefix_cache: Optional[bool] = None  # Cache bypass
@@ -135,30 +155,30 @@ class AdvancedSamplingParams(SamplingParams):
 
     # Beyond vLLM - Temperature scheduling
     temperature_schedule: TemperatureSchedule = TemperatureSchedule.CONSTANT
-    temperature_decay_target: float = 0.1        # Target for decay
-    temperature_decay_steps: int = 100           # Steps for decay
-    temperature_warmup_steps: int = 0            # Warmup steps
+    temperature_decay_target: float = 0.1  # Target for decay
+    temperature_decay_steps: int = 100  # Steps for decay
+    temperature_warmup_steps: int = 0  # Warmup steps
 
     # Beyond vLLM - Adaptive sampling
-    entropy_threshold: float = 2.0               # Entropy threshold for adaptation
-    adaptive_top_k: bool = False                 # Adapt top_k based on entropy
-    adaptive_temperature: bool = False           # Adapt temperature based on entropy
-    min_adaptive_k: int = 5                      # Minimum k for adaptive
-    max_adaptive_k: int = 100                    # Maximum k for adaptive
+    entropy_threshold: float = 2.0  # Entropy threshold for adaptation
+    adaptive_top_k: bool = False  # Adapt top_k based on entropy
+    adaptive_temperature: bool = False  # Adapt temperature based on entropy
+    min_adaptive_k: int = 5  # Minimum k for adaptive
+    max_adaptive_k: int = 100  # Maximum k for adaptive
 
     # Beyond vLLM - Contextual repetition
-    repetition_penalty_range: int = 1024         # Range for penalty application
-    repetition_penalty_decay: float = 1.0        # Decay factor by distance
-    repetition_penalty_slope: float = 0.0        # Slope for linear decay
+    repetition_penalty_range: int = 1024  # Range for penalty application
+    repetition_penalty_decay: float = 1.0  # Decay factor by distance
+    repetition_penalty_slope: float = 0.0  # Slope for linear decay
 
     # Beyond vLLM - Quality control
-    confidence_threshold: float = 0.0            # Minimum token confidence
-    entropy_sampling: bool = False               # Use entropy for sampling decisions
+    confidence_threshold: float = 0.0  # Minimum token confidence
+    entropy_sampling: bool = False  # Use entropy for sampling decisions
 
     # Mirostat sampling
-    mirostat_mode: int = 0                       # 0=disabled, 1=mirostat, 2=mirostat2
-    mirostat_tau: float = 5.0                    # Target entropy
-    mirostat_eta: float = 0.1                    # Learning rate
+    mirostat_mode: int = 0  # 0=disabled, 1=mirostat, 2=mirostat2
+    mirostat_tau: float = 5.0  # Target entropy
+    mirostat_eta: float = 0.1  # Learning rate
 
     def get_temperature(self, step: int) -> float:
         """Get temperature for current step with scheduling."""
@@ -205,7 +225,7 @@ class AdvancedSamplingParams(SamplingParams):
             return 1.0  # No penalty beyond range
 
         # Apply decay
-        decay = self.repetition_penalty_decay ** distance
+        decay = self.repetition_penalty_decay**distance
         if self.repetition_penalty_slope > 0:
             decay *= max(0, 1 - self.repetition_penalty_slope * distance)
 
@@ -217,28 +237,29 @@ class AdvancedSamplingParams(SamplingParams):
 # Logit Bias Builder
 # =============================================================================
 
+
 class LogitBiasBuilder:
     """Builder for complex logit bias configurations."""
 
     def __init__(self):
         self._biases: Dict[int, float] = {}
 
-    def add_bias(self, token_id: int, bias: float) -> 'LogitBiasBuilder':
+    def add_bias(self, token_id: int, bias: float) -> "LogitBiasBuilder":
         """Add bias for a single token."""
         self._biases[token_id] = self._biases.get(token_id, 0.0) + bias
         return self
 
-    def ban_token(self, token_id: int) -> 'LogitBiasBuilder':
+    def ban_token(self, token_id: int) -> "LogitBiasBuilder":
         """Ban a token (set very negative bias)."""
         self._biases[token_id] = -100.0
         return self
 
-    def prefer_token(self, token_id: int, strength: float = 5.0) -> 'LogitBiasBuilder':
+    def prefer_token(self, token_id: int, strength: float = 5.0) -> "LogitBiasBuilder":
         """Prefer a token."""
         self._biases[token_id] = self._biases.get(token_id, 0.0) + strength
         return self
 
-    def from_dict(self, biases: Dict[int, float]) -> 'LogitBiasBuilder':
+    def from_dict(self, biases: Dict[int, float]) -> "LogitBiasBuilder":
         """Add biases from dictionary."""
         for tid, bias in biases.items():
             self.add_bias(tid, bias)
@@ -252,6 +273,7 @@ class LogitBiasBuilder:
 # =============================================================================
 # Bad Words Processor
 # =============================================================================
+
 
 class BadWordsProcessor:
     """
@@ -292,27 +314,24 @@ class BadWordsProcessor:
                 # Multi-token - check if context matches prefix
                 seq_len = len(bad_seq)
                 if len(context_ids) >= seq_len - 1:
-                    context_suffix = context_ids[-(seq_len - 1):]
+                    context_suffix = context_ids[-(seq_len - 1) :]
                     if context_suffix == bad_seq[:-1]:
                         banned.add(bad_seq[-1])
 
         return banned
 
-    def apply_to_logits(
-        self,
-        logits: np.ndarray,
-        context_ids: List[int]
-    ) -> np.ndarray:
+    def apply_to_logits(self, logits: np.ndarray, context_ids: List[int]) -> np.ndarray:
         """Apply bad words masking to logits."""
         banned = self.get_banned_tokens(context_ids)
         if banned:
-            logits[list(banned)] = -float('inf')
+            logits[list(banned)] = -float("inf")
         return logits
 
 
 # =============================================================================
 # Token Whitelist Processor
 # =============================================================================
+
 
 class TokenWhitelistProcessor:
     """
@@ -334,20 +353,17 @@ class TokenWhitelistProcessor:
                     self.mask[tid] = True
         return self.mask
 
-    def apply_to_logits(
-        self,
-        logits: np.ndarray,
-        vocab_size: Optional[int] = None
-    ) -> np.ndarray:
+    def apply_to_logits(self, logits: np.ndarray, vocab_size: Optional[int] = None) -> np.ndarray:
         """Apply whitelist masking to logits."""
         mask = self.build_mask(vocab_size or len(logits))
-        logits[~mask] = -float('inf')
+        logits[~mask] = -float("inf")
         return logits
 
 
 # =============================================================================
 # Mirostat Sampler
 # =============================================================================
+
 
 class MirostatSampler:
     """
@@ -358,14 +374,14 @@ class MirostatSampler:
 
     def __init__(
         self,
-        tau: float = 5.0,          # Target surprise
-        eta: float = 0.1,          # Learning rate
-        mode: int = 2,             # 1 or 2
+        tau: float = 5.0,  # Target surprise
+        eta: float = 0.1,  # Learning rate
+        mode: int = 2,  # 1 or 2
     ):
         self.tau = tau
         self.eta = eta
         self.mode = mode
-        self.mu = 2 * tau          # Initial estimate
+        self.mu = 2 * tau  # Initial estimate
 
     def sample(self, logits: np.ndarray) -> Tuple[int, float]:
         """Sample using mirostat algorithm."""
@@ -423,6 +439,7 @@ class MirostatSampler:
 # Sampling Engine
 # =============================================================================
 
+
 class SamplingEngine:
     """
     Unified sampling engine with all advanced features.
@@ -450,16 +467,10 @@ class SamplingEngine:
                 self._whitelist = TokenWhitelistProcessor(params.allowed_token_ids)
             if params.mirostat_mode > 0:
                 self._mirostat = MirostatSampler(
-                    tau=params.mirostat_tau,
-                    eta=params.mirostat_eta,
-                    mode=params.mirostat_mode
+                    tau=params.mirostat_tau, eta=params.mirostat_eta, mode=params.mirostat_mode
                 )
 
-    def sample(
-        self,
-        logits: np.ndarray,
-        context_ids: Optional[List[int]] = None
-    ) -> Tuple[int, float]:
+    def sample(self, logits: np.ndarray, context_ids: Optional[List[int]] = None) -> Tuple[int, float]:
         """Sample next token from logits."""
         logits = logits.copy()
 
@@ -506,7 +517,7 @@ class SamplingEngine:
             indices = np.argsort(logits)[-top_k:]
             mask = np.ones_like(logits, dtype=bool)
             mask[indices] = False
-            logits[mask] = -float('inf')
+            logits[mask] = -float("inf")
 
         # Apply top-p
         if self.params.top_p < 1.0:
@@ -518,7 +529,7 @@ class SamplingEngine:
             kept = sorted_indices[:cutoff]
             mask = np.ones_like(logits, dtype=bool)
             mask[kept] = False
-            logits[mask] = -float('inf')
+            logits[mask] = -float("inf")
 
         # Apply min-p
         if self.params.min_p > 0:
@@ -526,7 +537,7 @@ class SamplingEngine:
             probs = probs / probs.sum()
             max_prob = probs.max()
             threshold = max_prob * self.params.min_p
-            logits[probs < threshold] = -float('inf')
+            logits[probs < threshold] = -float("inf")
 
         # Final probabilities and sampling
         probs = np.exp(logits - logits.max())
@@ -556,21 +567,12 @@ class SamplingEngine:
 # Factory Functions
 # =============================================================================
 
+
 def create_sampling_params(
-    temperature: float = 1.0,
-    top_p: float = 1.0,
-    top_k: int = -1,
-    max_tokens: Optional[int] = None,
-    **kwargs
+    temperature: float = 1.0, top_p: float = 1.0, top_k: int = -1, max_tokens: Optional[int] = None, **kwargs
 ) -> SamplingParams:
     """Create basic sampling parameters."""
-    return SamplingParams(
-        temperature=temperature,
-        top_p=top_p,
-        top_k=top_k,
-        max_tokens=max_tokens,
-        **kwargs
-    )
+    return SamplingParams(temperature=temperature, top_p=top_p, top_k=top_k, max_tokens=max_tokens, **kwargs)
 
 
 def create_advanced_sampling_params(
@@ -579,7 +581,7 @@ def create_advanced_sampling_params(
     top_k: int = -1,
     max_tokens: Optional[int] = None,
     adaptive: bool = False,
-    **kwargs
+    **kwargs,
 ) -> AdvancedSamplingParams:
     """Create advanced sampling parameters."""
     return AdvancedSamplingParams(
@@ -589,5 +591,5 @@ def create_advanced_sampling_params(
         max_tokens=max_tokens,
         adaptive_top_k=adaptive,
         adaptive_temperature=adaptive,
-        **kwargs
+        **kwargs,
     )

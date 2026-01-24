@@ -1,8 +1,13 @@
+
+"""
+Self improvement fixer.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Specialized assistant for applying autonomous fixes to the codebase.
 
 import logging
-from typing import Any, List, Dict
+from typing import Any, Dict, List
+
 
 class SelfImprovementFixer:
     """Handles the application of patches and fixes identified during analysis."""
@@ -21,7 +26,10 @@ class SelfImprovementFixer:
                 continue
 
             # Skip if no specific fix logic yet for this type
-            if finding["type"] not in ["Security Risk", "Complexity Issue", "Missing Docstring", "Rust Readiness Task"]:
+            fixable_types = [
+                "Security Risk", "Complexity Issue", "Missing Docstring", "Rust Readiness Task"
+            ]
+            if finding["type"] not in fixable_types:
                 continue
 
             # In a production scenario, this would call LLM to generate a patch

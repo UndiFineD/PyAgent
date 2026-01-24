@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # PyAgent Phase 44: KV Cache Metrics Collector
 # Implements vLLM's KVCacheMetricsCollector with sampling
@@ -25,16 +39,15 @@ import time
 from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, Callable
-
-import numpy as np
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
+    pass
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -42,15 +55,17 @@ except ImportError:
 
 class MetricType(Enum):
     """Types of metrics collected."""
-    LIFETIME = auto()        # Block lifetime in cache
-    IDLE_TIME = auto()       # Time since last access
-    ACCESS_COUNT = auto()    # Number of accesses
-    REUSE_GAP = auto()       # Time between accesses
-    EVICTION = auto()        # Eviction events
+
+    LIFETIME = auto()  # Block lifetime in cache
+    IDLE_TIME = auto()  # Time since last access
+    ACCESS_COUNT = auto()  # Number of accesses
+    REUSE_GAP = auto()  # Time between accesses
+    EVICTION = auto()  # Eviction events
 
 
 class AlertLevel(Enum):
     """Alert severity levels."""
+
     INFO = auto()
     WARNING = auto()
     CRITICAL = auto()
@@ -59,12 +74,13 @@ class AlertLevel(Enum):
 @dataclass
 class MetricsConfig:
     """Configuration for metrics collection."""
-    sample_rate: float = 0.01          # Fraction of blocks to sample
-    history_size: int = 1000           # Number of events to retain
-    trend_window: int = 100            # Window for trend detection
-    anomaly_threshold: float = 3.0     # Standard deviations for anomaly
-    enable_detailed: bool = True       # Collect detailed metrics
-    export_interval: float = 60.0      # Seconds between exports
+
+    sample_rate: float = 0.01  # Fraction of blocks to sample
+    history_size: int = 1000  # Number of events to retain
+    trend_window: int = 100  # Window for trend detection
+    anomaly_threshold: float = 3.0  # Standard deviations for anomaly
+    enable_detailed: bool = True  # Collect detailed metrics
+    export_interval: float = 60.0  # Seconds between exports
 
     def __post_init__(self) -> None:
         if not 0 < self.sample_rate <= 1.0:
@@ -74,6 +90,7 @@ class MetricsConfig:
 @dataclass
 class BlockMetricsState:
     """Tracks lifecycle metrics for a single KV cache block."""
+
     block_id: int
     birth_time_ns: int = field(default_factory=time.monotonic_ns)
     last_access_ns: int = field(default_factory=time.monotonic_ns)
@@ -102,10 +119,7 @@ class BlockMetricsState:
         if len(self.access_history) < 2:
             return []
         history = list(self.access_history)
-        return [
-            (history[i] - history[i - 1]) / 1e9
-            for i in range(1, len(history))
-        ]
+        return [(history[i] - history[i - 1]) / 1e9 for i in range(1, len(history))]
 
     def get_access_frequency(self) -> float:
         """Get access frequency (accesses per second)."""
@@ -118,6 +132,7 @@ class BlockMetricsState:
 @dataclass
 class KVCacheEvictionEvent:
     """Event for block eviction."""
+
     block_id: int
     lifetime_seconds: float
     idle_seconds: float
@@ -142,6 +157,7 @@ class KVCacheEvictionEvent:
 @dataclass
 class CacheAlert:
     """Alert for cache anomalies."""
+
     level: AlertLevel
     message: str
     metric: MetricType
@@ -153,6 +169,7 @@ class CacheAlert:
 @dataclass
 class CacheMetricsSummary:
     """Summary of cache metrics."""
+
     total_blocks_sampled: int = 0
     total_evictions: int = 0
     avg_lifetime_seconds: float = 0.0
@@ -200,9 +217,7 @@ class KVCacheMetricsCollector:
         self._block_metrics: dict[int, BlockMetricsState] = {}
 
         # Event history
-        self._eviction_events: deque[KVCacheEvictionEvent] = deque(
-            maxlen=self.config.history_size
-        )
+        self._eviction_events: deque[KVCacheEvictionEvent] = deque(maxlen=self.config.history_size)
 
         # Aggregated metrics
         self._lifetime_history: deque[float] = deque(maxlen=self.config.history_size)
@@ -275,7 +290,7 @@ class KVCacheMetricsCollector:
         if len(self._lifetime_history) < self.config.trend_window:
             return
 
-        recent_lifetimes = list(self._lifetime_history)[-self.config.trend_window:]
+        recent_lifetimes = list(self._lifetime_history)[-self.config.trend_window :]
 
         if len(recent_lifetimes) < 2:
             return
@@ -288,23 +303,27 @@ class KVCacheMetricsCollector:
 
             if abs(z_score) > self.config.anomaly_threshold:
                 level = AlertLevel.WARNING if abs(z_score) < 4 else AlertLevel.CRITICAL
-                self._alerts.append(CacheAlert(
-                    level=level,
-                    message=f"Anomalous block lifetime: {event.lifetime_seconds:.2f}s (z={z_score:.2f})",
-                    metric=MetricType.LIFETIME,
-                    value=event.lifetime_seconds,
-                    threshold=mean + self.config.anomaly_threshold * stdev,
-                ))
+                self._alerts.append(
+                    CacheAlert(
+                        level=level,
+                        message=f"Anomalous block lifetime: {event.lifetime_seconds:.2f}s (z={z_score:.2f})",
+                        metric=MetricType.LIFETIME,
+                        value=event.lifetime_seconds,
+                        threshold=mean + self.config.anomaly_threshold * stdev,
+                    )
+                )
 
         # Check for very low access counts
         if event.access_count == 0:
-            self._alerts.append(CacheAlert(
-                level=AlertLevel.INFO,
-                message=f"Block evicted with zero accesses after {event.lifetime_seconds:.2f}s",
-                metric=MetricType.ACCESS_COUNT,
-                value=0,
-                threshold=1,
-            ))
+            self._alerts.append(
+                CacheAlert(
+                    level=AlertLevel.INFO,
+                    message=f"Block evicted with zero accesses after {event.lifetime_seconds:.2f}s",
+                    metric=MetricType.ACCESS_COUNT,
+                    value=0,
+                    threshold=1,
+                )
+            )
 
     def get_summary(self) -> CacheMetricsSummary:
         """Get summary of collected metrics."""
@@ -316,10 +335,7 @@ class KVCacheMetricsCollector:
         lifetimes = [e.lifetime_seconds for e in self._eviction_events]
         idle_times = [e.idle_seconds for e in self._eviction_events]
         access_counts = [e.access_count for e in self._eviction_events]
-        reuse_gaps = [
-            gap for e in self._eviction_events
-            for gap in e.reuse_gaps_seconds
-        ]
+        reuse_gaps = [gap for e in self._eviction_events for gap in e.reuse_gaps_seconds]
 
         # Compute percentiles
         if lifetimes:
@@ -333,7 +349,6 @@ class KVCacheMetricsCollector:
 
         # Estimate hit rate from access patterns
         if access_counts:
-            avg_accesses = statistics.mean(access_counts)
             # Rough estimate: blocks with >1 access indicate reuse
             reuse_rate = sum(1 for c in access_counts if c > 1) / len(access_counts)
             hit_rate_estimate = reuse_rate
@@ -384,10 +399,7 @@ class KVCacheMetricsCollector:
             return {"status": "no_data"}
 
         access_counts = [e.access_count for e in self._eviction_events]
-        all_gaps = [
-            gap for e in self._eviction_events
-            for gap in e.reuse_gaps_seconds
-        ]
+        all_gaps = [gap for e in self._eviction_events for gap in e.reuse_gaps_seconds]
 
         analysis = {
             "zero_access_rate": sum(1 for c in access_counts if c == 0) / len(access_counts),
@@ -398,11 +410,13 @@ class KVCacheMetricsCollector:
         }
 
         if all_gaps:
-            analysis.update({
-                "avg_reuse_gap": statistics.mean(all_gaps),
-                "min_reuse_gap": min(all_gaps),
-                "max_reuse_gap": max(all_gaps),
-            })
+            analysis.update(
+                {
+                    "avg_reuse_gap": statistics.mean(all_gaps),
+                    "min_reuse_gap": min(all_gaps),
+                    "max_reuse_gap": max(all_gaps),
+                }
+            )
 
         return analysis
 
@@ -412,13 +426,13 @@ class KVCacheMetricsCollector:
             return {"status": "insufficient_data"}
 
         # Use Rust if available
-        if HAS_RUST and hasattr(rust_core, 'analyze_trend_rust'):
+        if HAS_RUST and hasattr(rust_core, "analyze_trend_rust"):
             lifetimes = list(self._lifetime_history)
             trend = rust_core.analyze_trend_rust(lifetimes)
             return {"lifetime_trend": trend}
 
         # Simple linear trend detection
-        recent = list(self._lifetime_history)[-self.config.trend_window:]
+        recent = list(self._lifetime_history)[-self.config.trend_window :]
         n = len(recent)
 
         if n < 2:
@@ -451,7 +465,7 @@ class KVCacheMetricsCollector:
                 "direction": direction,
                 "slope": slope,
                 "recent_mean": y_mean,
-            }
+            },
         }
 
     def drain_events(self) -> list[KVCacheEvictionEvent]:
@@ -507,9 +521,7 @@ class BatchMetricsCollector:
         self._pending_allocations: list[int] = []
         self._pending_accesses: list[int] = []
         self._pending_evictions: list[tuple[int, str]] = []
-        self._collector = KVCacheMetricsCollector(
-            MetricsConfig(sample_rate=sample_rate)
-        )
+        self._collector = KVCacheMetricsCollector(MetricsConfig(sample_rate=sample_rate))
 
     def batch_allocate(self, block_ids: list[int]) -> None:
         """Record batch of allocations."""

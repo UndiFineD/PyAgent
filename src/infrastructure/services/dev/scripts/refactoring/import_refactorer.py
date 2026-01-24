@@ -18,15 +18,18 @@ Supports absolute path remapping, relative scoped replacement, and dry-run modes
 """
 
 from __future__ import annotations
+
+import argparse
+import json
 import os
 import re
-import json
-import argparse
-from typing import Dict, List, Optional
 from pathlib import Path
+from typing import Dict, List, Optional
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class ImportRefactorer:
     """Handles migration of imports across Python files in a workspace."""
@@ -78,8 +81,8 @@ class ImportRefactorer:
             # Match imports: 'from src.mod import', 'import src.mod'
             # Escape dots for regex
             old_pattern = old.replace(".", r"\.")
-            content = re.sub(fr"(?<=from\s){old_pattern}(?=\s|import)", new, content)
-            content = re.sub(fr"(?<=import\s){old_pattern}(?=\s|$|\n)", new, content)
+            content = re.sub(rf"(?<=from\s){old_pattern}(?=\s|import)", new, content)
+            content = re.sub(rf"(?<=import\s){old_pattern}(?=\s|$|\n)", new, content)
 
         # Apply scoped relative mappings
         parent_dir = str(file_path.parent.resolve())
@@ -88,16 +91,16 @@ class ImportRefactorer:
                 old_fixed = old.replace(".", r"\.")
 
                 # Case 1: from .old import ...
-                content = re.sub(fr"(?<=from\s){old_fixed}(?=\s|import)", new, content)
+                content = re.sub(rf"(?<=from\s){old_fixed}(?=\s|import)", new, content)
 
                 # Case 2: import .old (invalid python but we support dots in mappings)
-                content = re.sub(fr"(?<=import\s){old_fixed}(?=\s|$|\n)", new, content)
+                content = re.sub(rf"(?<=import\s){old_fixed}(?=\s|$|\n)", new, content)
 
                 # Case 3: from . import old -> from . import New
                 if old.startswith("."):
                     name_only = old[1:]
                     new_name_only = new[1:] if new.startswith(".") else new
-                    content = re.sub(fr"(?<=from\s\.\simport\s){name_only}(?=\s|$|\n|,)", new_name_only, content)
+                    content = re.sub(rf"(?<=from\s\.\simport\s){name_only}(?=\s|$|\n|,)", new_name_only, content)
 
         if content != original_content:
             if not self.dry_run:
@@ -131,6 +134,7 @@ class ImportRefactorer:
 
         print(f"Finished. Processed {files_processed} files, updated {files_updated}.")
 
+
 def main():
     parser = argparse.ArgumentParser(description="PyAgent Import Refactorer Utility")
     parser.add_argument("--root", default=".", help="Workspace root directory")
@@ -145,6 +149,7 @@ def main():
         refactorer.load_mappings(args.config)
 
     refactorer.run(args.paths)
+
 
 if __name__ == "__main__":
     main()

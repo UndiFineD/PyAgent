@@ -17,18 +17,20 @@
 Monitors task patterns and generates new executable tools to automate repetitive workflows.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 import time
 from pathlib import Path
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.core.tool_drafting_core import (
-    ToolDraftingCore,
-    ToolDefinition,
-)
+    ToolDefinition, ToolDraftingCore)
 
 __version__ = VERSION
 
@@ -62,7 +64,7 @@ class ToolEvolutionAgent(BaseAgent):
         if not path.exists():
             return f"Error: Recording at {recording_path} not found."
 
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             events = json.load(f)
 
         if not events:
@@ -91,12 +93,16 @@ class ToolEvolutionAgent(BaseAgent):
 
         implementation = "\n".join(code_lines)
 
-        return f"### Automation Analysis Complete\n\n{explanation}\n\nGenerated Implementation:\n\n```python\n{implementation}\n```\n\nRun `implement_and_save_tool` with this code to activate it."
+        return (
+            "### Automation Analysis Complete\n\n"
+            f"{explanation}\n\n"
+            "Generated Implementation:\n\n"
+            f"```python\n{implementation}\n```\n\n"
+            "Run `implement_and_save_tool` with this code to activate it."
+        )
 
     @as_tool
-    def implement_and_save_tool(
-        self, tool_name: str, code_content: str, description: str
-    ) -> str:
+    def implement_and_save_tool(self, tool_name: str, code_content: str, description: str) -> str:
         """Writes a new Python tool to the evolved tool directory.
         Args:
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
@@ -107,12 +113,12 @@ class ToolEvolutionAgent(BaseAgent):
         filepath = self.evolved_tools_dir / filename
 
         try:
-            with open(filepath, "w") as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(f'"""{description}"""\n\n')
                 f.write(code_content)
 
             return f"SUCCESS: Evolved tool '{tool_name}' saved to {filepath}. It is now available for import."
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return f"ERROR: Failed to save evolved tool: {e}"
 
     @as_tool
@@ -138,16 +144,14 @@ class ToolEvolutionAgent(BaseAgent):
         logging.info(f"ToolEvolution: Generated contract for {name}")
         return f"### OpenAPI Contract for '{name}'\n\n```json\n{spec}\n```"
 
-    @as_tool
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """General evolution logic."""
+        _ = target_file
         return "I am scanning for ways to improve my own capabilities."
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator"
-    )
+    main = create_main_function(ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator")
     main()

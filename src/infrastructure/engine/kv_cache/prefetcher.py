@@ -18,12 +18,16 @@ Warms up upcoming KV shards before they are requested by experts.
 """
 
 import logging
-from typing import List, Dict, Deque
 from collections import deque
-from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
-from src.infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
+from typing import Deque, Dict
+
+from src.infrastructure.engine.kv_cache.compression import \
+    AdaptiveSwarmCompressor
+from src.infrastructure.engine.kv_cache.context_sharder import \
+    ContextShardManager
 
 logger = logging.getLogger(__name__)
+
 
 class ContextPrefetcher:
     """
@@ -32,10 +36,7 @@ class ContextPrefetcher:
     """
 
     def __init__(
-        self,
-        shard_manager: ContextShardManager,
-        compressor: AdaptiveSwarmCompressor,
-        lookahead_shards: int = 2
+        self, shard_manager: ContextShardManager, compressor: AdaptiveSwarmCompressor, lookahead_shards: int = 2
     ):
         self.shard_manager = shard_manager
         self.compressor = compressor

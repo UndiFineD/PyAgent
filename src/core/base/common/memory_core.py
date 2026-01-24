@@ -22,8 +22,9 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from .storage_core import StorageCore
+
 from .file_system_core import FileSystemCore
+from .storage_core import StorageCore
 
 try:
     import rust_core as rc
@@ -32,12 +33,14 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.memory")
 
+
 class MemoryCore:
     """
     Centralized handler for Episodic, Long-term, and Sharded Knowledge.
     Standardizes utility scoring, filtering, and cross-agent indexing.
     """
-    _instance: Optional['MemoryCore'] = None
+
+    _instance: Optional["MemoryCore"] = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -67,7 +70,7 @@ class MemoryCore:
         content: str,
         success: bool,
         metadata: Optional[Dict[str, Any]] = None,
-        base_utility: float = 0.5
+        base_utility: float = 0.5,
     ) -> Dict[str, Any]:
         """
         Create a standardized episodic memory record.
@@ -97,10 +100,7 @@ class MemoryCore:
         }
 
     def rank_memories(
-        self,
-        memories: List[Dict[str, Any]],
-        limit: int = 5,
-        min_utility: float = 0.0
+        self, memories: List[Dict[str, Any]], limit: int = 5, min_utility: float = 0.0
     ) -> List[Dict[str, Any]]:
         """
         Rank memories by utility score and recency.
@@ -116,11 +116,7 @@ class MemoryCore:
         # Python Fallback
         filtered = [m for m in memories if m.get("utility_score", 0.0) >= min_utility]
         # Sort by utility (desc) then timestamp (desc)
-        sorted_m = sorted(
-            filtered,
-            key=lambda x: (x.get("utility_score", 0.0), x.get("timestamp", "")),
-            reverse=True
-        )
+        sorted_m = sorted(filtered, key=lambda x: (x.get("utility_score", 0.0), x.get("timestamp", "")), reverse=True)
         return sorted_m[:limit]
 
     def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> List[Dict[str, str]]:
@@ -161,34 +157,21 @@ class MemoryCore:
             logger.error("Failed to store %s knowledge for %s: %s", mode, agent_id, e)
             return False
 
-    def _store_semantic(
-        self,
-        agent_id: str,
-        key: str,
-        content: Any,
-        metadata: Optional[Dict[str, Any]]
-    ) -> bool:
+    def _store_semantic(self, agent_id: str, key: str, content: Any, metadata: Optional[Dict[str, Any]]) -> bool:
         """Internal helper for semantic (vector) storage."""
         try:
             import chromadb  # pylint: disable=import-outside-toplevel
+
             client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))
             collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
-            collection.add(
-                documents=[str(content)],
-                metadatas=[metadata] if metadata else [{}],
-                ids=[key]
-            )
+            collection.add(documents=[str(content)], metadatas=[metadata] if metadata else [{}], ids=[key])
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught
             logger.warning("ChromaDB storage failed for %s: %s", agent_id, e)
             return False
 
     def retrieve_knowledge(
-        self,
-        agent_id: str,
-        query: str,
-        mode: str = "structured",
-        limit: int = 5
+        self, agent_id: str, query: str, mode: str = "structured", limit: int = 5
     ) -> List[Dict[str, Any]]:
         """
         Retrieve knowledge based on mode and query.
@@ -221,6 +204,7 @@ class MemoryCore:
 
         try:
             import chromadb  # pylint: disable=import-outside-toplevel
+
             client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))
             collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
             results = collection.query(query_texts=[query], n_results=limit)
@@ -231,11 +215,7 @@ class MemoryCore:
             ids = results.get("ids", [[]])[0]
 
             for i, doc in enumerate(docs):
-                output.append({
-                    "id": ids[i],
-                    "content": doc,
-                    "metadata": metas[i]
-                })
+                output.append({"id": ids[i], "content": doc, "metadata": metas[i]})
             return output
         except Exception as e:  # pylint: disable=broad-exception-caught
             logger.warning("ChromaDB retrieval failed for %s: %s", agent_id, e)
@@ -246,6 +226,7 @@ class MemoryCore:
         if mode == "semantic":
             try:
                 import chromadb  # pylint: disable=import-outside-toplevel
+
                 client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))
                 collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
                 collection.delete(ids=[key])
@@ -275,8 +256,5 @@ class MemoryCore:
         This file can be very large (>50MB), so we use atomic write.
         """
         index = self._storage.load_json(self.index_path, default={})
-        index[agent_id] = {
-            "tags": tags,
-            "last_updated": datetime.now().isoformat()
-        }
+        index[agent_id] = {"tags": tags, "last_updated": datetime.now().isoformat()}
         return self._fs.atomic_write(self.index_path, self._storage.to_json(index))

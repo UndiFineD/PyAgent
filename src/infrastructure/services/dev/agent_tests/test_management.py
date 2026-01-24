@@ -16,12 +16,15 @@
 """Test management and baseline utilities."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-import json
 from typing import Any, cast
-from collections.abc import Callable
+
+from src.core.base.lifecycle.version import VERSION
+
 from .models import TestCase
 
 __version__ = VERSION
@@ -75,9 +78,7 @@ class BaselineManager:
             elif key not in current:
                 differences.append(f"Key '{key}' removed")
             elif baseline[key] != current[key]:
-                differences.append(
-                    f"Value mismatch for key '{key}': {baseline[key]} != {current[key]}"
-                )
+                differences.append(f"Value mismatch for key '{key}': {baseline[key]} != {current[key]}")
 
         return BaselineComparisonResult(matches=False, differences=differences)
 
@@ -173,9 +174,7 @@ class TestPrioritizer:
 
     def prioritize_by_failure_history(self) -> list[str]:
         """Prioritize by failure history."""
-        return sorted(
-            self.tests.keys(), key=lambda t: self.tests[t]["failure_rate"], reverse=True
-        )
+        return sorted(self.tests.keys(), key=lambda t: self.tests[t]["failure_rate"], reverse=True)
 
     def prioritize_by_failure_rate(self) -> list[str]:
         """Prioritize by failure rate (compat alias)."""
@@ -282,15 +281,9 @@ class ImpactAnalyzer:
                     stack.append(dep)
         return expanded
 
-    def get_affected_tests(
-        self, changed_files: list[str], include_dependencies: bool = False
-    ) -> set[str]:
+    def get_affected_tests(self, changed_files: list[str], include_dependencies: bool = False) -> set[str]:
         """Get tests affected by changes in one or more files."""
-        files = (
-            self._expand_changed_files(changed_files)
-            if include_dependencies
-            else set(changed_files)
-        )
+        files = self._expand_changed_files(changed_files) if include_dependencies else set(changed_files)
         affected: set[str] = set()
         for test, mapped in self._test_to_files.items():
             if mapped & files:
@@ -303,9 +296,7 @@ class ImpactAnalyzer:
 
     def get_impacted_tests(self, changed_files: list[str]) -> set[str]:
         """Get impacted tests (compat alias)."""
-        return self.get_affected_tests(
-            changed_files=changed_files, include_dependencies=False
-        )
+        return self.get_affected_tests(changed_files=changed_files, include_dependencies=False)
 
 
 class ContractValidator:
@@ -328,9 +319,7 @@ class ContractValidator:
 
         expected_resp_raw = contract.get("response")
         expected_resp: dict[str, Any] = (
-            cast(dict[str, Any], expected_resp_raw)
-            if isinstance(expected_resp_raw, dict)
-            else {}
+            cast(dict[str, Any], expected_resp_raw) if isinstance(expected_resp_raw, dict) else {}
         )
         expected_status = expected_resp.get("status")
         if expected_status is None:
@@ -345,18 +334,14 @@ class ContractValidator:
 
         expected_body_raw = expected_resp.get("body")
         expected_body: dict[str, Any] = (
-            cast(dict[str, Any], expected_body_raw)
-            if isinstance(expected_body_raw, dict)
-            else {}
+            cast(dict[str, Any], expected_body_raw) if isinstance(expected_body_raw, dict) else {}
         )
         expected_type = expected_body.get("type")
         if expected_type == "array":
             if not isinstance(actual_response.get("body"), list):
                 errors.append("body_type_mismatch")
 
-        return ContractValidator.ValidationResult(
-            valid=not errors, errors=errors
-        )
+        return ContractValidator.ValidationResult(valid=not errors, errors=errors)
 
 
 class TestDocGenerator:
@@ -368,13 +353,9 @@ class TestDocGenerator:
         """Initialize doc generator."""
         self.tests: list[dict[str, Any]] = []
 
-    def add_test(
-        self, name: str, module: str = "unknown", docstring: str = "", code: str = ""
-    ) -> None:
+    def add_test(self, name: str, module: str = "unknown", docstring: str = "", code: str = "") -> None:
         """Add test for documentation."""
-        self.tests.append(
-            {"name": name, "module": module, "docstring": docstring, "code": code}
-        )
+        self.tests.append({"name": name, "module": module, "docstring": docstring, "code": code})
 
     def generate(self) -> str:
         """Generate a human-readable documentation summary."""
@@ -394,9 +375,7 @@ class TestDocGenerator:
         """Extract examples from test code."""
         return [{"example": test_code}] if test_code else []
 
-    def group_by_module(
-        self, tests: list[dict[str, Any]]
-    ) -> dict[str, list[dict[str, Any]]]:
+    def group_by_module(self, tests: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
         """Group tests by module."""
         result: dict[str, list[dict[str, Any]]] = {}
         for test in tests:

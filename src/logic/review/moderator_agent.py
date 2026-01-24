@@ -16,9 +16,10 @@
 """Agent specializing in moderation, review, and policy compliance."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -41,7 +42,5 @@ class ModeratorAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        ModeratorAgent, "Moderator Agent", "File to review for moderation"
-    )
+    main = create_main_function(ModeratorAgent, "Moderator Agent", "File to review for moderation")
     main()

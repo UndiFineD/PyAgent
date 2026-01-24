@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,19 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Fleet economy agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from pathlib import Path
-import sqlite3
+
 import logging
-from typing import Any
+import sqlite3
+from pathlib import Path
+from typing import Any, Dict
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class FleetEconomyAgent(BaseAgent):
+class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
     credits, and resource bidding mechanisms using a persistent SQLite backend.
@@ -44,16 +51,16 @@ class FleetEconomyAgent(BaseAgent):
                     "CREATE TABLE IF NOT EXISTS wallets (agent_id TEXT PRIMARY KEY, balance REAL)"
                 )
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL, priority INTEGER, status TEXT)"
+                    "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL, "
+                    "priority INTEGER, status TEXT)"
                 )
                 conn.execute(
-                    "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)"
+                    "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT "
+                    "CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)"
                 )
                 conn.commit()
-            logging.info(
-                f"FleetEconomyAgent: Persistent ledger initialized at {self.db_path}"
-            )
-        except Exception as e:
+            logging.info(f"FleetEconomyAgent: Persistent ledger initialized at {self.db_path}")
+        except (sqlite3.Error, OSError) as e:
             logging.error(f"FleetEconomyAgent: DB initialization failed: {e}")
 
     def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
@@ -64,21 +71,15 @@ class FleetEconomyAgent(BaseAgent):
                 "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?",
                 (agent_id, amount, amount),
             )
-            cursor = conn.execute(
-                "SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,)
-            )
+            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
             balance = cursor.fetchone()[0]
             conn.commit()
         return {"agent": agent_id, "balance": balance}
 
-    def place_bid(
-        self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1
-    ) -> dict[str, Any]:
+    def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
         """Places a bid for compute resources (Phase 284)."""
         with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.execute(
-                "SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,)
-            )
+            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
             row = cursor.fetchone()
             balance = row[0] if row else 0.0
 
@@ -126,9 +127,7 @@ class FleetEconomyAgent(BaseAgent):
             )
 
             # Close all bids for this task
-            conn.execute(
-                "UPDATE bids SET status = 'closed' WHERE task_id = ?", (task_id,)
-            )
+            conn.execute("UPDATE bids SET status = 'closed' WHERE task_id = ?", (task_id,))
             conn.commit()
 
         return {
@@ -142,9 +141,7 @@ class FleetEconomyAgent(BaseAgent):
         """Resolves all pending auctions (Phase 77)."""
         allocated = []
         with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.execute(
-                "SELECT DISTINCT task_id FROM bids WHERE status = 'active'"
-            )
+            cursor = conn.execute("SELECT DISTINCT task_id FROM bids WHERE status = 'active'")
             tasks = [row[0] for row in cursor.fetchall()]
 
         for task_id in tasks:
@@ -154,12 +151,16 @@ class FleetEconomyAgent(BaseAgent):
 
         return {"allocated_tasks": allocated}
 
-    def get_wallet_summary(self) -> dict[str, float]:
-        return self.wallets
+    def get_wallet_summary(self) -> Dict[str, float]:
+        """Returns a mapping of agent_id to current balance."""
+        summary = {}
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute("SELECT agent_id, balance FROM wallets")
+            for agent_id, balance in cursor.fetchall():
+                summary[agent_id] = balance
+        return summary
 
-    def log_hardware_savings(
-        self, agent_id: str, tokens: int, tps: float, savings_usd: float
-    ) -> None:
+    def log_hardware_savings(self, agent_id: str, tokens: int, tps: float, savings_usd: float) -> None:
         """Logs the efficiency and economic data for oxidized operations."""
         try:
             with sqlite3.connect(self.db_path) as conn:
@@ -168,10 +169,8 @@ class FleetEconomyAgent(BaseAgent):
                     (agent_id, tokens, tps, savings_usd),
                 )
                 conn.commit()
-            logging.info(
-                f"FleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}"
-            )
-        except Exception as e:
+            logging.info(f"FleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}")
+        except (sqlite3.Error, RuntimeError) as e:
             logging.debug(f"FleetEconomyAgent: Failed to log savings: {e}")
 
     def get_total_savings(self) -> float:
@@ -181,5 +180,5 @@ class FleetEconomyAgent(BaseAgent):
                 cursor = conn.execute("SELECT SUM(savings_usd) FROM hardware_savings")
                 res = cursor.fetchone()[0]
                 return float(res) if res else 0.0
-        except Exception:
+        except sqlite3.Error:
             return 0.0

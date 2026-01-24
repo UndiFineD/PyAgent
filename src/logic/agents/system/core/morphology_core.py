@@ -1,8 +1,28 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Morphology core.py module.
+"""
+
 from __future__ import annotations
+
 import json
 
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -32,9 +52,7 @@ class MorphologyCore:
         union = len(set_a.union(set_b))
         return intersection / union
 
-    def encode_agent_dna(
-        self, name: str, tools: list[str], prompt: str, model: str
-    ) -> str:
+    def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
         """
         Encodes the agent's DNA into a JSON string.
         """

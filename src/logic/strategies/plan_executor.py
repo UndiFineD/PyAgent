@@ -18,10 +18,12 @@ Strategies Module: Unified interface for agent decision-making strategies.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import sys
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from collections.abc import Callable, Awaitable
+
+from src.core.base.lifecycle.version import VERSION
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent
@@ -34,6 +36,4 @@ if str(root / "src") not in sys.path:
 __version__ = VERSION
 
 # Type alias for functional compatibility
-BackendFunction = Callable[
-    [str, str | None, list[dict[str, str]] | None], Awaitable[str]
-]
+BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], Awaitable[str]]

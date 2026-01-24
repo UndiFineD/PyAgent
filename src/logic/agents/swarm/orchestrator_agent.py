@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
+
+"""
+Orchestrator agent.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Standardized OrchestratorAgent for Swarm Intelligence
 
 from __future__ import annotations
+
 import logging
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.execution.agent_command_handler import AgentCommandHandler
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
 from .orchestrator_features import OrchestratorFeatures
 
 __version__ = VERSION
 
-class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
+
+class OrchestratorAgent(BaseAgent, OrchestratorFeatures):  # pylint: disable=too-many-ancestors
     """
     Primary orchestrator for swarm agentic workflows.
     Combines core BaseAgent capabilities with specialized orchestrator features.
@@ -33,6 +41,9 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
 
         # Initialize legacy components expected by some integration tests
         self.command_handler = AgentCommandHandler(str(self._workspace_root))
+
+        # Initialize plugins container
+        self.plugins: dict[str, Any] = {}
 
         # Legacy attribute support
         self.enable_async = kwargs.get("enable_async", False)
@@ -64,7 +75,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         """Sets agent metrics."""
         self._metrics = value
 
-    def register_plugin(self, plugin: Any) -> None:
+    def register_plugin(self, name_or_plugin: Any, plugin: Any | None = None) -> None:  # pylint: disable=arguments-renamed
         """
         Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.
@@ -74,8 +85,13 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
             self.plugins = {}
 
         # Use the mixin implementation
-        from src.logic.agents.swarm.orchestrator_plugin_mixin import OrchestratorPluginMixin
-        OrchestratorPluginMixin.register_plugin(self, plugin)
+        from src.logic.agents.swarm.orchestrator_plugin_mixin import \
+            OrchestratorPluginMixin
+
+        if plugin:
+            OrchestratorPluginMixin.register_plugin(self, plugin)
+        else:
+            OrchestratorPluginMixin.register_plugin(self, name_or_plugin)
 
     @property
     def repo_root(self) -> str:
@@ -94,11 +110,12 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         Legacy support for config-driven initialization.
         """
         import json
+
         config_path = Path(config_path)
         if not config_path.exists():
             raise FileNotFoundError(f"Config file not found: {config_path}")
 
-        with open(config_path, "r") as f:
+        with open(config_path, "r", encoding="utf-8") as f:
             config = json.load(f)
 
         repo_root = config.get("repo_root", ".")
@@ -114,11 +131,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         rate = (modified / processed * 100.0) if processed > 0 else 0.0
 
         return {
-            "summary": {
-                "files_processed": processed,
-                "files_modified": modified,
-                "modification_rate": rate
-            },
+            "summary": {"files_processed": processed, "files_modified": modified, "modification_rate": rate},
             "agents": self._metrics.get("agents_applied", {}),
             "mode": {
                 "dry_run": getattr(self, "dry_run", False),
@@ -131,13 +144,9 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         Legacy support for Phase 5 benchmarking.
         """
         total_files = len(files)
-        elapsed = time.time() - self._metrics.get("start_time", time.time())
+        elapsed = time.time() - float(self._metrics.get("start_time", time.time()))
         avg = (elapsed / total_files) if total_files > 0 else 0.0
-        return {
-            "average_per_file": avg,
-            "total_time": elapsed,
-            "file_count": total_files
-        }
+        return {"average_per_file": avg, "total_time": elapsed, "file_count": total_files}
 
     def cost_analysis(self, cost_per_request: float = 0.0) -> dict[str, Any]:
         """
@@ -149,7 +158,7 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
             "total_estimated_cost": agent_runs * cost_per_request,
             "total_agent_runs": agent_runs,
             "cost_per_request": cost_per_request,
-            "currency": "USD"
+            "currency": "USD",
         }
 
     def update_code(self, target: Path) -> str:
@@ -176,16 +185,18 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
         Synchronous wrapper for agent execution.
         If no prompt is provided, runs the main processing loop.
         """
+        _ = kwargs
         if prompt is None:
             # Legacy loop-based mode (Phase 5/6)
             logging.info("Orchestrator: Starting processing loop (legacy mode)")
             if hasattr(self, "run_with_parallel_execution"):
-                self.run_with_parallel_execution()
+                getattr(self, "run_with_parallel_execution")()
                 return "Success"
             return "Orchestrator: No loop implementation found."
 
         # Call modern async run via runner
         import asyncio
+
         try:
             # Check if there is an existing event loop
             try:
@@ -197,10 +208,9 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):
                 # We are in an async context already (unlikely for these tests)
                 # This is a bit tricky, but for tests we'll just return a placeholder
                 return "Async execution required"
-            else:
-                # Use the new run_async method in BaseAgent
-                return asyncio.run(self.run_async(prompt))
-        except Exception as e:
+
+            # Use the new run_async method in BaseAgent
+            return asyncio.run(self.run_async(prompt))
+        except (RuntimeError, ValueError) as e:
             logging.error(f"Error in OrchestratorAgent.run: {e}")
             return f"Error: {e}"
-

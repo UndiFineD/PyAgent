@@ -17,9 +17,9 @@ Buffer recycling and pool management for Phase 52.
 Reduces allocation overhead by reusing fixed-size memory blocks (size-classes).
 """
 
-import logging
-from typing import Dict, List, Any, Optional
 import collections
+import logging
+from typing import Dict, List, Optional
 
 try:
     import rust_core as rc
@@ -27,6 +27,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class BufferRecycler:
     """
@@ -53,7 +54,8 @@ class BufferRecycler:
         if rc and hasattr(rc, "buffer_recycle_acquire_rust"):
             try:
                 buf = rc.buffer_recycle_acquire_rust(target_size)
-                if buf: return buf
+                if buf:
+                    return buf
             except Exception:
                 pass
 
@@ -69,7 +71,7 @@ class BufferRecycler:
         """
         size = len(buffer)
         if size in self._pools:
-            if len(self._pools[size]) < 100: # Cap pool size
+            if len(self._pools[size]) < 100:  # Cap pool size
                 self._pools[size].append(buffer)
             else:
                 del buffer

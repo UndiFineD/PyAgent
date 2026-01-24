@@ -1,22 +1,46 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Events.py module.
+"""
+
 import logging
-from typing import Any, Dict, List, Optional, Callable
-from src.core.base.common.models import EventType, ConversationMessage
+from typing import Any, Callable, Dict, List, Optional
+
+from src.core.base.common.models import ConversationMessage, EventType
 
 logger = logging.getLogger(__name__)
 
+
 class EventCore:
-    def trigger_event(self, event: EventType, data: dict[str, Any], hooks: list[Callable[[dict[str, Any]], None]]) -> None:
+    """Core logic for event handling and history formatting."""
+
+    def trigger_event(
+        self, event: EventType, data: dict[str, Any], hooks: list[Callable[[dict[str, Any]], None]]
+    ) -> None:
         """Trigger an event and invoke provided hooks."""
         for callback in hooks:
             try:
                 callback(data)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning(f"Hook error for {event.value}: {e}")
 
     def filter_events(self, events: List[Dict[str, Any]], event_type: Optional[str] = None) -> List[Dict[str, Any]]:
         """Filter events based on type."""
-        if not event_type: return events
+        if not event_type:
+            return events
         return [e for e in events if e.get("type") == event_type]
 
     def format_history_for_prompt(self, history: list[ConversationMessage]) -> list[dict[str, str]]:

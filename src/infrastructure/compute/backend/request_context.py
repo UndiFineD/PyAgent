@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .request_priority import RequestPriority
-from dataclasses import dataclass, field
-from typing import Any
+
 import time
 import uuid
+from dataclasses import dataclass, field
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .request_priority import RequestPriority
 
 __version__ = VERSION
 

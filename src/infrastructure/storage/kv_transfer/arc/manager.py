@@ -1,23 +1,40 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: ARC Offload Manager
 Implementation of Adaptive Replacement Cache (ARC) and variants.
 """
 
 from __future__ import annotations
-import time
+
 import threading
+import time
 from collections import OrderedDict
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional
+
 from src.infrastructure.storage.kv_transfer.arc.base import OffloadingManager
 from src.infrastructure.storage.kv_transfer.arc.types import (
-    BlockHash, BlockStatus, BlockState, OffloadingEvent, PrepareStoreOutput
-)
+    BlockHash, BlockState, BlockStatus, OffloadingEvent, PrepareStoreOutput)
+from src.infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
+                                                           KVzapPruner)
 
 if TYPE_CHECKING:
     import torch
+
     from src.infrastructure.storage.kv_transfer.arc.backend import Backend
     from src.infrastructure.storage.kv_transfer.arc.types import LoadStoreSpec
-    from src.infrastructure.storage.kv_transfer.k_vzap import KVzapPruner, KVzapConfig
 
 
 class ARCOffloadManager(OffloadingManager):
@@ -33,10 +50,8 @@ class ARCOffloadManager(OffloadingManager):
         backend: Backend,
         enable_events: bool = False,
         adaptation_speed: float = 1.0,
-        kvzap_config: Optional['KVzapConfig'] = None
+        kvzap_config: Optional[KVzapConfig] = None,
     ):
-        from src.infrastructure.storage.kv_transfer.k_vzap import KVzapPruner
-
         self.backend = backend
         self.adaptation_speed = adaptation_speed
 
@@ -130,10 +145,7 @@ class ARCOffloadManager(OffloadingManager):
                 assert block.ref_cnt > 0, f"Block {block_hash!r} ref_cnt already 0"
                 block.ref_cnt -= 1
 
-    def prepare_store(
-        self,
-        block_hashes: list[BlockHash]
-    ) -> PrepareStoreOutput | None:
+    def prepare_store(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
         """Prepare to store blocks with ARC eviction."""
         with self._lock:
             to_store = [h for h in block_hashes if h not in self.t1 and h not in self.t2]
@@ -142,7 +154,7 @@ class ARCOffloadManager(OffloadingManager):
                 return PrepareStoreOutput(
                     block_hashes_to_store=[],
                     store_spec=self.backend.get_load_store_spec([], []),
-                    block_hashes_evicted=[]
+                    block_hashes_evicted=[],
                 )
 
             num_to_evict = len(to_store) - self.backend.get_num_free_blocks()
@@ -177,17 +189,19 @@ class ARCOffloadManager(OffloadingManager):
                 self.b2.pop(block_hash, None)
 
             if self.events is not None and evicted:
-                self.events.append(OffloadingEvent(
-                    block_hashes=evicted,
-                    block_size=self.backend.block_size,
-                    medium=self.backend.medium,
-                    removed=True
-                ))
+                self.events.append(
+                    OffloadingEvent(
+                        block_hashes=evicted,
+                        block_size=self.backend.block_size,
+                        medium=self.backend.medium,
+                        removed=True,
+                    )
+                )
 
             return PrepareStoreOutput(
                 block_hashes_to_store=to_store,
                 store_spec=self.backend.get_load_store_spec(to_store, new_blocks),
-                block_hashes_evicted=evicted
+                block_hashes_evicted=evicted,
             )
 
     def _select_victim(self) -> tuple[BlockHash, BlockStatus, bool] | None:
@@ -287,7 +301,7 @@ class AdaptiveARCManager(ARCOffloadManager):
         backend: Backend,
         enable_events: bool = False,
         min_adaptation_speed: float = 0.5,
-        max_adaptation_speed: float = 2.0
+        max_adaptation_speed: float = 2.0,
     ):
         super().__init__(backend, enable_events, adaptation_speed=1.0)
         self.min_adaptation_speed = min_adaptation_speed
@@ -299,11 +313,7 @@ class AdaptiveARCManager(ARCOffloadManager):
         self._adaptation_history: list[float] = []
         self._window_size = 100
 
-    def touch_for_request(
-        self,
-        block_hashes: list[BlockHash],
-        request_id: str
-    ) -> None:
+    def touch_for_request(self, block_hashes: list[BlockHash], request_id: str) -> None:
         """Touch blocks with request affinity tracking."""
         with self._lock:
             if request_id not in self._request_blocks:
@@ -358,15 +368,9 @@ class AdaptiveARCManager(ARCOffloadManager):
             overall_avg = sum(self._adaptation_history) / len(self._adaptation_history)
 
             if recent_avg < overall_avg * 0.9:
-                self.adaptation_speed = min(
-                    self.adaptation_speed * 1.1,
-                    self.max_adaptation_speed
-                )
+                self.adaptation_speed = min(self.adaptation_speed * 1.1, self.max_adaptation_speed)
             elif recent_avg > overall_avg * 1.1:
-                self.adaptation_speed = max(
-                    self.adaptation_speed * 0.9,
-                    self.min_adaptation_speed
-                )
+                self.adaptation_speed = max(self.adaptation_speed * 0.9, self.min_adaptation_speed)
 
 
 class AsyncARCManager:
@@ -378,20 +382,20 @@ class AsyncARCManager:
     async def lookup_async(self, block_hashes: list[BlockHash]) -> int:
         """Async lookup."""
         import asyncio
+
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.lookup, block_hashes)
 
     async def prepare_load_async(self, block_hashes: list[BlockHash]) -> LoadStoreSpec:
         """Async prepare load."""
         import asyncio
+
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.prepare_load, block_hashes)
 
-    async def prepare_store_async(
-        self,
-        block_hashes: list[BlockHash]
-    ) -> PrepareStoreOutput | None:
+    async def prepare_store_async(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
         """Async prepare store."""
         import asyncio
+
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.prepare_store, block_hashes)

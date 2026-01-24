@@ -12,17 +12,21 @@ For more information, visit:
 No commands will be executed.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from src.core.base.lifecycle.base_agent import BaseAgent
-import logging
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class MarkdownAgent(BaseAgent):
     """
     MarkdownAgent specializing in technical documentation and markdown optimization.
     """
+
     def __init__(self, file_path: str, **kwargs) -> None:
         super().__init__(file_path, **kwargs)
         self._system_prompt = (
@@ -32,4 +36,3 @@ class MarkdownAgent(BaseAgent):
 
     def _get_default_content(self) -> str:
         return "# New Documentation\n\nContent pending..."
-

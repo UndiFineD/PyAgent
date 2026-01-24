@@ -12,12 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Tool registry.py module.
+"""
+
 from __future__ import annotations
-import logging
+
 import asyncio
 import inspect
-from typing import Any, TYPE_CHECKING
+import logging
 from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
+
 from .tool_core import ToolCore
 
 if TYPE_CHECKING:
@@ -60,17 +66,13 @@ class ToolRegistry:
         )
         # Sort by priority desc
         self.tools[name].sort(key=lambda x: x["priority"], reverse=True)
-        logging.debug(
-            f"Registered tool: {name} from {owner_name} (Priority: {priority})"
-        )
+        logging.debug(f"Registered tool: {name} from {owner_name} (Priority: {priority})")
 
     def list_tools(self) -> list[Any]:
         """Returns metadata for all registered tools."""
         from collections import namedtuple
 
-        ToolMeta = namedtuple(
-            "ToolMeta", ["name", "owner", "category", "priority", "sync"]
-        )
+        ToolMeta = namedtuple("ToolMeta", ["name", "owner", "category", "priority", "sync"])
 
         meta = []
         for name, variations in self.tools.items():

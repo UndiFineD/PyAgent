@@ -17,14 +17,18 @@
 Converts images and PDFs into structured Markdown/JSON/HTML while preserving forms and tables.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool, create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -69,13 +73,11 @@ class DocInferenceAgent(BaseAgent):
             for page in reader.pages:
                 text += page.extract_text() + "\n"
             return text
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return f"Error parsing PDF: {str(e)}"
 
     @as_tool
-    def ingest_document_to_knowledge(
-        self, doc_path: str, tags: list[str] | None = None
-    ) -> dict[str, Any]:
+    def ingest_document_to_knowledge(self, doc_path: str, tags: list[str] | None = None) -> dict[str, Any]:
         """Converts a document into context-aware Knowledge for the Fleet.
 
         Args:
@@ -84,9 +86,7 @@ class DocInferenceAgent(BaseAgent):
         """
         logging.info(f"DocInference: Ingesting {doc_path} into Knowledge.")
         content = (
-            self.parse_pdf_text(doc_path)
-            if doc_path.lower().endswith(".pdf")
-            else "Non-PDF content raw placeholder."
+            self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."
         )
 
         # Here we would typically interface with KnowledgeAgent or save to a known export path
@@ -111,15 +111,16 @@ class DocInferenceAgent(BaseAgent):
         }
 
     @as_tool
-    def process_document(self, doc_path: str, format: str = "markdown") -> str:
+    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:
         """Converts a document (PDF/Image) into a structured format (markdown, html, json)."""
         path = Path(doc_path)
         if not path.exists():
             return f"Error: Document {doc_path} not found."
 
-        logging.info(f"DocInference: Processing {doc_path} into {format}")
+        logging.info(f"DocInference: Processing {doc_path} into {output_format}")
         # Mocking the layout conversion logic
-        return f"Successfully reconstructed {doc_path} as {format}. Tables extracted: 2, Handwriting detected: Yes."
+        return (f"Successfully reconstructed {doc_path} as {output_format}. "
+                "Tables extracted: 2, Handwriting detected: Yes.")
 
     @as_tool
     def extract_form_data(self, image_path: str) -> dict[str, Any]:
@@ -135,15 +136,20 @@ class DocInferenceAgent(BaseAgent):
     @as_tool
     def transcribe_handwriting(self, image_path: str) -> str:
         """Uses advanced vision-language models to transcribe handwritten notes."""
+        _ = image_path
         return "Transcribed Note: 'Meeting at 5pm to discuss the new agent architecture. Don't forget the coffee.'"
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Generic processing helper."""
-        return f"DocInference status: Layout engine active. Ready for {prompt} (Target: {target_file})."
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """
+        Specialized content improvement for Documentation Inference.
+        """
+        _ = target_file
+        # Perform inference
+        result = await self.think(prompt)
+        self._record(prompt, result, provider="DocInference", model=self.get_model())
+        return result
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        DocInferenceAgent, "Document Inference Agent", "Path to document"
-    )
+    main = create_main_function(DocInferenceAgent, "Document Inference Agent", "Path to document")
     main()

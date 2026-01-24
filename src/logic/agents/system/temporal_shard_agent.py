@@ -12,12 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Temporal shard agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -38,15 +44,11 @@ class TemporalShardAgent(BaseAgent):
         )
 
     @as_tool
-    def retrieve_temporal_context(
-        self, current_task: str, time_window: str = "last_24h"
-    ) -> str:
+    def retrieve_temporal_context(self, current_task: str, time_window: str = "last_24h") -> str:
         """
         Retrieves relevant context from a specific temporal shard.
         """
-        logging.info(
-            f"TemporalShardAgent: Retrieving context for {current_task} from {time_window}"
-        )
+        logging.info(f"TemporalShardAgent: Retrieving context for {current_task} from {time_window}")
 
         # Simulated retrieval
         return f"FLASHBACK [{time_window}]: Similar task performed. Key findings: used 'as_tool' decorator."
@@ -56,8 +58,6 @@ class TemporalShardAgent(BaseAgent):
         """
         Creates a high-resolution temporal anchor for future retrieval.
         """
-        logging.info(
-            f"TemporalShardAgent: Creating anchor for {event_description[:30]}..."
-        )
+        logging.info(f"TemporalShardAgent: Creating anchor for {event_description[:30]}...")
         # Persistence logic would go here
         return True

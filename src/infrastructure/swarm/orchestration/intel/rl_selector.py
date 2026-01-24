@@ -18,10 +18,12 @@ Optimizes tool selection by weighting success rates and historical performance.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import random
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
@@ -51,9 +53,7 @@ class RLSelector:
             stats["beta"] += 1.0
 
         weight = stats["alpha"] / (stats["alpha"] + stats["beta"])
-        logging.info(
-            f"RL-SELECTOR: Updated Bayesian posterior for {tool_name} (Expected Success: {weight:.2f})"
-        )
+        logging.info(f"RL-SELECTOR: Updated Bayesian posterior for {tool_name} (Expected Success: {weight:.2f})")
 
     def select_best_tool(self, candidate_tools: list[str]) -> str:
         """
@@ -78,9 +78,7 @@ class RLSelector:
                 max_sample = sample
                 best_tool = tool
 
-        logging.info(
-            f"RL-SELECTOR: Thompson Sampling selected '{best_tool}' (Sample value: {max_sample:.2f})"
-        )
+        logging.info(f"RL-SELECTOR: Thompson Sampling selected '{best_tool}' (Sample value: {max_sample:.2f})")
 
         return best_tool
 
@@ -90,9 +88,7 @@ class RLSelector:
 
         for tool, stats in self.tool_stats.items():
             expected = stats["alpha"] / (stats["alpha"] + stats["beta"])
-            summary.append(
-                f"- **{tool}**: Expected Success Rate {expected * 100:.1f}% ({stats['total_calls']} calls)"
-            )
+            summary.append(f"- **{tool}**: Expected Success Rate {expected * 100:.1f}% ({stats['total_calls']} calls)")
         return "\n".join(summary) if len(summary) > 1 else "No policy data yet."
 
 

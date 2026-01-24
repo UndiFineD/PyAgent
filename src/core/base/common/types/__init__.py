@@ -15,51 +15,100 @@
 """Domain types for the PyAgent core architecture."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION as VERSION
-from .accessibility_issue import AccessibilityIssue as AccessibilityIssue
-from .accessibility_issue_type import AccessibilityIssueType as AccessibilityIssueType
-from .accessibility_report import AccessibilityReport as AccessibilityReport
-from .accessibility_severity import AccessibilitySeverity as AccessibilitySeverity
-from .aria_attribute import ARIAAttribute as ARIAAttribute
-from .changelog_entry import ChangelogEntry as ChangelogEntry
-from .code_language import CodeLanguage as CodeLanguage
-from .code_metrics import CodeMetrics as CodeMetrics
-from .code_smell import CodeSmell as CodeSmell
-from .color_contrast_result import ColorContrastResult as ColorContrastResult
-from .compliance_category import ComplianceCategory as ComplianceCategory
-from .compliance_result import ComplianceResult as ComplianceResult
-from .consistency_issue import ConsistencyIssue as ConsistencyIssue
-from .dependency_node import DependencyNode as DependencyNode
-from .dependency_type import DependencyType as DependencyType
-from .diff_result import DiffResult as DiffResult
-from .diff_view_mode import DiffViewMode as DiffViewMode
-from .entry_template import EntryTemplate as EntryTemplate
-from .feed_format import FeedFormat as FeedFormat
-from .grouping_strategy import GroupingStrategy as GroupingStrategy
-from .linked_reference import LinkedReference as LinkedReference
-from .localization_language import LocalizationLanguage as LocalizationLanguage
-from .localized_entry import LocalizedEntry as LocalizedEntry
-from .migration_rule import MigrationRule as MigrationRule
-from .migration_status import MigrationStatus as MigrationStatus
-from .modernization_suggestion import ModernizationSuggestion as ModernizationSuggestion
-from .monorepo_entry import MonorepoEntry as MonorepoEntry
-from .optimization_suggestion import OptimizationSuggestion as OptimizationSuggestion
-from .optimization_type import OptimizationType as OptimizationType
-from .profiling_category import ProfilingCategory as ProfilingCategory
-from .profiling_suggestion import ProfilingSuggestion as ProfilingSuggestion
-from .quality_score import QualityScore as QualityScore
-from .refactoring_pattern import RefactoringPattern as RefactoringPattern
-from .release_note import ReleaseNote as ReleaseNote
-from .review_category import ReviewCategory as ReviewCategory
-from .review_finding import ReviewFinding as ReviewFinding
-from .search_result import SearchResult as SearchResult
-from .security_issue_type import SecurityIssueType as SecurityIssueType
-from .security_vulnerability import SecurityVulnerability as SecurityVulnerability
-from .style_rule import StyleRule as StyleRule
-from .style_rule_severity import StyleRuleSeverity as StyleRuleSeverity
-from .template_manager import TemplateManager as TemplateManager
-from .test_gap import TestGap as TestGap
-from .versioning_strategy import VersioningStrategy as VersioningStrategy
-from .wcag_level import WCAGLevel as WCAGLevel
+
+from src.core.base.lifecycle.version import VERSION
+
+from .accessibility_issue import AccessibilityIssue  # noqa: F401
+from .accessibility_issue_type import AccessibilityIssueType  # noqa: F401
+from .accessibility_report import AccessibilityReport  # noqa: F401
+from .accessibility_severity import AccessibilitySeverity  # noqa: F401
+from .aria_attribute import ARIAAttribute  # noqa: F401
+from .changelog_entry import ChangelogEntry  # noqa: F401
+from .code_language import CodeLanguage  # noqa: F401
+from .code_metrics import CodeMetrics  # noqa: F401
+from .code_smell import CodeSmell  # noqa: F401
+from .color_contrast_result import ColorContrastResult  # noqa: F401
+from .compliance_category import ComplianceCategory  # noqa: F401
+from .compliance_result import ComplianceResult  # noqa: F401
+from .consistency_issue import ConsistencyIssue  # noqa: F401
+from .dependency_node import DependencyNode  # noqa: F401
+from .dependency_type import DependencyType  # noqa: F401
+from .diff_result import DiffResult  # noqa: F401
+from .diff_view_mode import DiffViewMode  # noqa: F401
+from .entry_template import EntryTemplate  # noqa: F401
+from .feed_format import FeedFormat  # noqa: F401
+from .grouping_strategy import GroupingStrategy  # noqa: F401
+from .linked_reference import LinkedReference  # noqa: F401
+from .localization_language import LocalizationLanguage  # noqa: F401
+from .localized_entry import LocalizedEntry  # noqa: F401
+from .migration_rule import MigrationRule  # noqa: F401
+from .migration_status import MigrationStatus  # noqa: F401
+from .modernization_suggestion import ModernizationSuggestion  # noqa: F401
+from .monorepo_entry import MonorepoEntry  # noqa: F401
+from .optimization_suggestion import OptimizationSuggestion  # noqa: F401
+from .optimization_type import OptimizationType  # noqa: F401
+from .profiling_category import ProfilingCategory  # noqa: F401
+from .profiling_suggestion import ProfilingSuggestion  # noqa: F401
+from .quality_score import QualityScore  # noqa: F401
+from .refactoring_pattern import RefactoringPattern  # noqa: F401
+from .release_note import ReleaseNote  # noqa: F401
+from .review_category import ReviewCategory  # noqa: F401
+from .review_finding import ReviewFinding  # noqa: F401
+from .search_result import SearchResult  # noqa: F401
+from .security_issue_type import SecurityIssueType  # noqa: F401
+from .security_vulnerability import SecurityVulnerability  # noqa: F401
+from .style_rule import StyleRule  # noqa: F401
+from .style_rule_severity import StyleRuleSeverity  # noqa: F401
+from .template_manager import TemplateManager  # noqa: F401
+from .test_gap import TestGap  # noqa: F401
+from .versioning_strategy import VersioningStrategy  # noqa: F401
+from .wcag_level import WCAGLevel  # noqa: F401
 
 __version__ = VERSION
+__all__ = [
+    "AccessibilityIssue",
+    "AccessibilityIssueType",
+    "AccessibilityReport",
+    "AccessibilitySeverity",
+    "ARIAAttribute",
+    "ChangelogEntry",
+    "CodeLanguage",
+    "CodeMetrics",
+    "CodeSmell",
+    "ColorContrastResult",
+    "ComplianceCategory",
+    "ComplianceResult",
+    "ConsistencyIssue",
+    "DependencyNode",
+    "DependencyType",
+    "DiffResult",
+    "DiffViewMode",
+    "EntryTemplate",
+    "FeedFormat",
+    "GroupingStrategy",
+    "LinkedReference",
+    "LocalizationLanguage",
+    "LocalizedEntry",
+    "MigrationRule",
+    "MigrationStatus",
+    "ModernizationSuggestion",
+    "MonorepoEntry",
+    "OptimizationSuggestion",
+    "OptimizationType",
+    "ProfilingCategory",
+    "ProfilingSuggestion",
+    "QualityScore",
+    "RefactoringPattern",
+    "ReleaseNote",
+    "ReviewCategory",
+    "ReviewFinding",
+    "SearchResult",
+    "SecurityIssueType",
+    "SecurityVulnerability",
+    "StyleRule",
+    "StyleRuleSeverity",
+    "TemplateManager",
+    "TestGap",
+    "VersioningStrategy",
+    "WCAGLevel",
+]

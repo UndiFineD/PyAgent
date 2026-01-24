@@ -16,6 +16,7 @@
 """Centralized connectivity management with TTL-based status caching."""
 
 from __future__ import annotations
+
 import json
 import logging
 import os
@@ -45,9 +46,7 @@ class ConnectivityManager:
             return
         self.workspace_root = Path(workspace_root) if workspace_root else None
         self._conn_status_file = (
-            self.workspace_root / "data" / "logs" / "connectivity_status.json"
-            if self.workspace_root
-            else None
+            self.workspace_root / "data" / "logs" / "connectivity_status.json" if self.workspace_root else None
         )
         self._ttl_success = 900  # 15 minutes for working endpoints
         self._ttl_failure = 120  # 2 minutes for failed endpoints (Phase 141 robustness)
@@ -104,8 +103,7 @@ class ConnectivityManager:
                 if not is_working:
                     retry_in = int(target_ttl - elapsed)
                     logging.debug(
-                        "ConnectivityManager: Skipping '%s' (cached offline, retrying in %ds)",
-                        endpoint_id, retry_in
+                        "ConnectivityManager: Skipping '%s' (cached offline, retrying in %ds)", endpoint_id, retry_in
                     )
                 return is_working
         return True  # Default to True or if TTL expired
@@ -136,7 +134,9 @@ class ConnectivityManager:
         self._cache[endpoint_id] = status
         logging.debug(
             "ConnectivityManager: Endpoint '%s' TPS tracked: %s (avg: %s)",
-            endpoint_id, status["last_tps"], status["avg_tps"]
+            endpoint_id,
+            status["last_tps"],
+            status["avg_tps"],
         )
         self._save_status()
 
@@ -157,9 +157,7 @@ class ConnectivityManager:
         """Compatibility alias for update_status."""
         self.update_status(endpoint, online)
 
-    def check_and_execute(
-        self, endpoint_id: str, func: Callable[..., Any], *args: Any, **kwargs: Any
-    ) -> Any:
+    def check_and_execute(self, endpoint_id: str, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Executes a function only if endpoint is available, updating status on failure."""
         if not self.is_endpoint_available(endpoint_id):
             return None
@@ -169,9 +167,6 @@ class ConnectivityManager:
             self.update_status(endpoint_id, True)
             return result
         except Exception as e:
-            logging.warning(
-                "ConnectivityManager: Endpoint '%s' failed: %s",
-                endpoint_id, e
-            )
+            logging.warning("ConnectivityManager: Endpoint '%s' failed: %s", endpoint_id, e)
             self.update_status(endpoint_id, False)
             raise e

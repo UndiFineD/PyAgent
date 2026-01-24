@@ -1,14 +1,33 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Engine.py module.
+"""
+
 import json
 import time
-from typing import Dict, Iterator, List, Optional, Tuple, Generator
 from collections import deque
-from .enums import ReasoningFormat, ToolCallFormat, ParseState
-from .data_classes import ThinkingBlock, ToolCall, ParseResult
+from typing import Dict, Generator, Iterator, Optional, Tuple
+
+from .data_classes import ParseResult, ThinkingBlock, ToolCall
+from .enums import ParseState, ReasoningFormat, ToolCallFormat
+from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
+                              HermesToolParser, OpenAIToolParser,
+                              QwenReasoningParser)
 from .parsers import ReasoningParser, ToolParser
-from .implementations import (
-    DeepSeekReasoningParser, QwenReasoningParser, GenericReasoningParser,
-    OpenAIToolParser, HermesToolParser
-)
+
 
 class ReasoningEngine:
     """
@@ -88,12 +107,11 @@ class ReasoningEngine:
             tool_calls=tool_calls,
             raw_text=text,
             parse_time_ms=(time.time() - start_time) * 1000,
-            tokens_processed=len(text)
+            tokens_processed=len(text),
         )
 
     def parse_streaming(
-        self,
-        token_stream: Iterator[str]
+        self, token_stream: Iterator[str]
     ) -> Generator[Tuple[str, bool, Optional[ToolCall]], None, ParseResult]:
         buffer = ""
         for token in token_stream:
@@ -110,33 +128,45 @@ class ReasoningEngine:
         return self.parse(buffer)
 
     def detect_format(self, text: str) -> ReasoningFormat:
-        if "<think>" in text and "</think>" in text: return ReasoningFormat.DEEPSEEK_R1
-        elif "<thinking>" in text: return ReasoningFormat.CLAUDE
-        elif "[THINK]" in text: return ReasoningFormat.MISTRAL
-        elif "<|start_think|>" in text: return ReasoningFormat.LLAMA_COT
+        if "<think>" in text and "</think>" in text:
+            return ReasoningFormat.DEEPSEEK_R1
+        if "<thinking>" in text:
+            return ReasoningFormat.CLAUDE
+        if "[THINK]" in text:
+            return ReasoningFormat.MISTRAL
+        if "<|start_think|>" in text:
+            return ReasoningFormat.LLAMA_COT
         return ReasoningFormat.NONE
 
     def score_reasoning(self, block: ThinkingBlock) -> float:
         score = 0.0
         content = block.content
-        if len(content) > 100: score += 0.2
-        if len(content) > 500: score += 0.1
+        if len(content) > 100:
+            score += 0.2
+        if len(content) > 500:
+            score += 0.1
         steps = block.get_steps()
-        if len(steps) >= 3: score += 0.2
-        if len(steps) >= 5: score += 0.1
-        logical_markers = ["therefore", "because", "thus", "hence", "so", "first", "second", "finally", "step", "let's"]
+        if len(steps) >= 3:
+            score += 0.2
+        if len(steps) >= 5:
+            score += 0.1
+        logical_markers = [
+            "therefore", "because", "thus", "hence", "so",
+            "first", "second", "finally", "step", "let's"
+        ]
         for marker in logical_markers:
-            if marker.lower() in content.lower(): score += 0.05
+            if marker.lower() in content.lower():
+                score += 0.05
         return min(score, 1.0)
 
     def visualize_reasoning(self, result: ParseResult) -> str:
         lines = ["=" * 60, "REASONING CHAIN VISUALIZATION", "=" * 60]
         for i, block in enumerate(result.thinking_blocks):
-            lines.append(f"\n📝 Thinking Block {i+1}")
+            lines.append(f"\n📝 Thinking Block {i + 1}")
             lines.append("-" * 40)
             steps = block.get_steps()
             for j, step in enumerate(steps):
-                lines.append(f"  {j+1}. {step[:80]}{'...' if len(step) > 80 else ''}")
+                lines.append(f"  {j + 1}. {step[:80]}{'...' if len(step) > 80 else ''}")
             score = self.score_reasoning(block)
             lines.append(f"\n  Quality Score: {score:.2f}")
         lines.append("\n" + "=" * 60)
@@ -147,22 +177,34 @@ class ReasoningEngine:
                 lines.append(f"  - {tc.name}({json.dumps(tc.arguments)[:50]}...)")
         return "\n".join(lines)
 
-    def get_stats(self) -> Dict[str, int]: return self._stats.copy()
+    def get_stats(self) -> Dict[str, int]:
+        return self._stats.copy()
 
     def reset(self) -> None:
-        if self._reasoning_parser: self._reasoning_parser.reset()
-        if self._tool_parser: self._tool_parser.reset()
+        if self._reasoning_parser:
+            self._reasoning_parser.reset()
+        if self._tool_parser:
+            self._tool_parser.reset()
         self._thought_cache.clear()
         self._thought_lru.clear()
 
-def create_reasoning_engine(model_name: str = "", enable_thinking: bool = True, tool_format: ToolCallFormat = ToolCallFormat.NONE) -> ReasoningEngine:
+
+def create_reasoning_engine(
+    model_name: str = "", enable_thinking: bool = True, tool_format: ToolCallFormat = ToolCallFormat.NONE
+) -> ReasoningEngine:
     reasoning_format = ReasoningFormat.GENERIC
     model_lower = model_name.lower()
-    if "deepseek" in model_lower or "r1" in model_lower: reasoning_format = ReasoningFormat.DEEPSEEK_R1
-    elif "qwen" in model_lower: reasoning_format = ReasoningFormat.QWEN3
-    elif "claude" in model_lower: reasoning_format = ReasoningFormat.CLAUDE
-    elif "mistral" in model_lower: reasoning_format = ReasoningFormat.MISTRAL
+    if "deepseek" in model_lower or "r1" in model_lower:
+        reasoning_format = ReasoningFormat.DEEPSEEK_R1
+    elif "qwen" in model_lower:
+        reasoning_format = ReasoningFormat.QWEN3
+    elif "claude" in model_lower:
+        reasoning_format = ReasoningFormat.CLAUDE
+    elif "mistral" in model_lower:
+        reasoning_format = ReasoningFormat.MISTRAL
+
     return ReasoningEngine(reasoning_format=reasoning_format, tool_format=tool_format, enable_thinking=enable_thinking)
+
 
 def create_tool_parser(format_type: ToolCallFormat = ToolCallFormat.OPENAI, strict: bool = False) -> ToolParser:
     parsers = {ToolCallFormat.OPENAI: OpenAIToolParser, ToolCallFormat.HERMES: HermesToolParser}

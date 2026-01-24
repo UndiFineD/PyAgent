@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 TorchCompileIntegration - Integration with torch.compile for model optimization.
 
@@ -23,7 +37,7 @@ import time
 import weakref
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from enum import Enum, auto
+from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar
 
 logger = logging.getLogger(__name__)
@@ -33,29 +47,32 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 class CompileMode(Enum):
     """Compilation mode selection."""
-    DEFAULT = "default"                    # Standard optimization
-    REDUCE_OVERHEAD = "reduce-overhead"    # Minimize CPU overhead
-    MAX_AUTOTUNE = "max-autotune"          # Maximum tuning
+
+    DEFAULT = "default"  # Standard optimization
+    REDUCE_OVERHEAD = "reduce-overhead"  # Minimize CPU overhead
+    MAX_AUTOTUNE = "max-autotune"  # Maximum tuning
     MAX_AUTOTUNE_NO_CUDAGRAPH = "max-autotune-no-cudagraphs"
 
 
 class CompileBackend(Enum):
     """Compilation backend selection."""
-    INDUCTOR = "inductor"      # Default PyTorch inductor
+
+    INDUCTOR = "inductor"  # Default PyTorch inductor
     CUDAGRAPHS = "cudagraphs"  # CUDA graph backend
-    ONNXRT = "onnxrt"          # ONNX Runtime
-    EAGER = "eager"            # No compilation (debug)
-    AOT_EAGER = "aot_eager"    # AOT without optimization
+    ONNXRT = "onnxrt"  # ONNX Runtime
+    EAGER = "eager"  # No compilation (debug)
+    AOT_EAGER = "aot_eager"  # AOT without optimization
 
 
 @dataclass
 class CompileConfig:
     """Configuration for torch.compile integration."""
+
     mode: CompileMode = CompileMode.DEFAULT
     backend: CompileBackend = CompileBackend.INDUCTOR
-    fullgraph: bool = False       # Require full graph compilation
-    dynamic: bool = True          # Enable dynamic shapes
-    disable: bool = False         # Disable compilation entirely
+    fullgraph: bool = False  # Require full graph compilation
+    dynamic: bool = True  # Enable dynamic shapes
+    disable: bool = False  # Disable compilation entirely
     options: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
@@ -73,6 +90,7 @@ class CompileConfig:
 @dataclass
 class CompileStats:
     """Statistics for compilation."""
+
     compile_count: int = 0
     recompile_count: int = 0
     cache_hits: int = 0
@@ -97,11 +115,7 @@ class CompilerInterface(ABC):
     """
 
     @abstractmethod
-    def compile(
-        self,
-        fn: Callable[..., Any],
-        example_inputs: Optional[Tuple[Any, ...]] = None
-    ) -> Callable[..., Any]:
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
         """Compile a function."""
         pass
 
@@ -127,11 +141,7 @@ class TorchCompiler(CompilerInterface):
         self._stats = CompileStats()
         self._lock = threading.Lock()
 
-    def compile(
-        self,
-        fn: Callable[..., Any],
-        example_inputs: Optional[Tuple[Any, ...]] = None
-    ) -> Callable[..., Any]:
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
         """
         Compile a function using torch.compile.
 
@@ -167,14 +177,13 @@ class TorchCompiler(CompilerInterface):
                 backend=self.config.backend.value,
                 fullgraph=self.config.fullgraph,
                 dynamic=self.config.dynamic,
-                options=self.config.options
+                options=self.config.options,
             )
 
         except (ImportError, RuntimeError) as e:
             logger.warning(f"torch.compile unavailable: {e}, using eager mode")
             compiled = fn
-            self._stats.backend_failures[str(e)] = \
-                self._stats.backend_failures.get(str(e), 0) + 1
+            self._stats.backend_failures[str(e)] = self._stats.backend_failures.get(str(e), 0) + 1
 
         elapsed = time.perf_counter() - start
 
@@ -210,11 +219,7 @@ class CompilationCounter:
     Based on vLLM's counter pattern for limiting recompiles.
     """
 
-    def __init__(
-        self,
-        max_recompiles: int = 8,
-        warmup_iters: int = 10
-    ):
+    def __init__(self, max_recompiles: int = 8, warmup_iters: int = 10):
         """
         Initialize counter.
 
@@ -279,21 +284,13 @@ class IncrementalCompiler(CompilerInterface):
     - Prioritizes frequently used code
     """
 
-    def __init__(
-        self,
-        base_compiler: Optional[TorchCompiler] = None,
-        threshold: int = 5
-    ):
+    def __init__(self, base_compiler: Optional[TorchCompiler] = None, threshold: int = 5):
         self._base = base_compiler or TorchCompiler()
         self._threshold = threshold
         self._call_counts: Dict[int, int] = {}
         self._lock = threading.Lock()
 
-    def compile(
-        self,
-        fn: Callable[..., Any],
-        example_inputs: Optional[Tuple[Any, ...]] = None
-    ) -> Callable[..., Any]:
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
         """Compile after threshold calls."""
         fn_id = id(fn)
 
@@ -336,15 +333,10 @@ class ProfileGuidedCompiler(CompilerInterface):
         self._compiled: Dict[int, Callable] = {}
         self._lock = threading.Lock()
 
-    def profile_execution(
-        self,
-        fn: Callable[..., Any],
-        args: Tuple[Any, ...],
-        kwargs: Dict[str, Any]
-    ) -> float:
+    def profile_execution(self, fn: Callable[..., Any], args: Tuple[Any, ...], kwargs: Dict[str, Any]) -> float:
         """Profile a function execution."""
         start = time.perf_counter()
-        result = fn(*args, **kwargs)
+        fn(*args, **kwargs)
         elapsed = time.perf_counter() - start
 
         fn_id = id(fn)
@@ -355,11 +347,7 @@ class ProfileGuidedCompiler(CompilerInterface):
 
         return elapsed
 
-    def compile(
-        self,
-        fn: Callable[..., Any],
-        example_inputs: Optional[Tuple[Any, ...]] = None
-    ) -> Callable[..., Any]:
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
         """Compile with best backend based on profile."""
         fn_id = id(fn)
 
@@ -406,7 +394,7 @@ def compile_fn(
     mode: CompileMode = CompileMode.DEFAULT,
     backend: CompileBackend = CompileBackend.INDUCTOR,
     fullgraph: bool = False,
-    dynamic: bool = True
+    dynamic: bool = True,
 ) -> Callable[[F], F]:
     """
     Decorator for torch.compile with configuration.
@@ -421,13 +409,9 @@ def compile_fn(
     Returns:
         Compiled function
     """
+
     def decorator(func: F) -> F:
-        config = CompileConfig(
-            mode=mode,
-            backend=backend,
-            fullgraph=fullgraph,
-            dynamic=dynamic
-        )
+        config = CompileConfig(mode=mode, backend=backend, fullgraph=fullgraph, dynamic=dynamic)
         compiler = TorchCompiler(config)
         compiled = compiler.compile(func)
 
@@ -452,15 +436,14 @@ def get_compile_config() -> CompileConfig:
     return CompileConfig.from_env()
 
 
-def with_compiler_context(
-    mode: CompileMode = CompileMode.DEFAULT
-) -> Callable[[F], F]:
+def with_compiler_context(mode: CompileMode = CompileMode.DEFAULT) -> Callable[[F], F]:
     """
     Context manager decorator for compilation mode.
 
     Args:
         mode: Compilation mode for this context
     """
+
     def decorator(fn: F) -> F:
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -470,5 +453,7 @@ def with_compiler_context(
                 return fn(*args, **kwargs)
             finally:
                 os.environ["VLLM_TORCH_COMPILE_MODE"] = old_mode
+
         return wrapper  # type: ignore
+
     return decorator
