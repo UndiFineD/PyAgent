@@ -18,13 +18,16 @@ Supports weighted voting and tie-breaking algorithms.
 """
 
 from __future__ import annotations
-from typing import List, Optional, Dict
+
+from typing import Dict, List, Optional
+
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class ConsensusCore(BaseCore):
     """
@@ -37,11 +40,11 @@ class ConsensusCore(BaseCore):
 
     def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
         """Determines the winning proposal based on voting rules."""
-        if rc and hasattr(rc, "calculate_consensus_winner"): # pylint: disable=no-member
+        if rc and hasattr(rc, "calculate_consensus_winner"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.calculate_consensus_winner(proposals, weights) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.calculate_consensus_winner(proposals, weights)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if not proposals:

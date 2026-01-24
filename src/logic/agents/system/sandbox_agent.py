@@ -18,10 +18,12 @@ Prevents side effects on the host system by using containerized or WASM environm
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -70,7 +72,13 @@ class SandboxAgent(BaseAgent):
         # simulated sandbox execution
         # process = subprocess.Popen(["docker", "run", "--rm", "python:3.10-slim", "python", "-c", code], ...)
 
-        return f"### Sandboxed Execution Results\n\n- Environment: Docker (python:3.10-slim)\n- Code Length: {len(code)} characters\n- Output: Hello from the sandbox!\n- Status: Success"
+        return (
+            "### Sandboxed Execution Results\n\n"
+            "- Environment: Docker (python:3.10-slim)\n"
+            f"- Code Length: {len(code)} characters\n"
+            "- Output: Hello from the sandbox!\n"
+            "- Status: Success"
+        )
 
     def improve_content(self, prompt: str) -> str:
         """Sandboxing helper."""
@@ -80,7 +88,5 @@ class SandboxAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        SandboxAgent, "Sandbox Agent", "Sandboxed execution tool"
-    )
+    main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")
     main()

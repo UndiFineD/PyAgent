@@ -7,12 +7,13 @@ Formula processing and calculation engine.
 """
 
 from __future__ import annotations
+
 import ast
-import re
-import logging
 import contextlib
-from typing import Any, Dict, Optional
+import logging
+import re
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 from src.core.base.common.formula_core import FormulaCore
 
@@ -21,11 +22,14 @@ try:
 except ImportError:
     rc = None
 
+
 @dataclass
 class FormulaValidation:
     """Result of a formula validation check."""
+
     is_valid: bool
     error: Optional[str] = None
+
 
 class FormulaEngineCore(FormulaCore):
     """Extended formula core for observability specific needs (e.g. AVG)."""
@@ -35,11 +39,7 @@ class FormulaEngineCore(FormulaCore):
         # Check Rust acceleration first
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
-                float_vars = {
-                    k: float(v)
-                    for k, v in variables.items()
-                    if isinstance(v, (int, float))
-                }
+                float_vars = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
                 # Support both naming conventions
                 if hasattr(rc, "evaluate_formula"):
                     return rc.evaluate_formula(formula, float_vars)
@@ -87,6 +87,7 @@ class FormulaEngineCore(FormulaCore):
         except Exception as e:
             return {"is_valid": False, "error": str(e)}
 
+
 class FormulaEngine:
     """Processes metric formulas and calculations using safe AST evaluation."""
 
@@ -100,9 +101,7 @@ class FormulaEngine:
     def define_formula(self, name: str, formula: str) -> None:
         self.define(name, formula)
 
-    def calculate(
-        self, formula_or_name: str, variables: Dict[str, Any] | None = None
-    ) -> float:
+    def calculate(self, formula_or_name: str, variables: Dict[str, Any] | None = None) -> float:
         variables = variables or {}
         formula = self.formulas.get(formula_or_name, formula_or_name)
         try:

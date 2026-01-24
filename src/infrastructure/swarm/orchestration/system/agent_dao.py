@@ -19,11 +19,13 @@ Manages resource allocation and task prioritization through agent deliberation.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -61,9 +63,7 @@ class AgentDAO(BaseAgent):
         # Simulated prioritization logic
         logging.info(f"AgentDAO: Prioritizing {len(task_queue)} tasks.")
 
-        return sorted(
-            task_queue
-        )  # Default to alpha for mock, in real it would use consensus weight
+        return sorted(task_queue)  # Default to alpha for mock, in real it would use consensus weight
 
     def improve_content(self, input_text: str) -> str:
         return "The DAO maintains the equilibrium of agent resource consumption."

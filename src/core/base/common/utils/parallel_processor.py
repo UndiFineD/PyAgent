@@ -23,14 +23,16 @@ Manager for parallel execution.
 """
 
 from __future__ import annotations
+
 import logging
 from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 from pathlib import Path
 from typing import Any, Callable
-from functools import partial
 
 try:
     from tqdm import tqdm
+
     HAS_TQDM = True
 except ImportError:
     HAS_TQDM = False
@@ -54,9 +56,7 @@ class ParallelProcessor:
         self.max_workers = max_workers
         self._execution_core = ExecutionCore(max_workers=max_workers)
 
-    def process_files_threaded(
-        self, files: list[Path], worker_func: Callable[[Path], Any]
-    ) -> list[Any]:
+    def process_files_threaded(self, files: list[Path], worker_func: Callable[[Path], Any]) -> list[Any]:
         """
         Process files using worker threads.
 
@@ -81,9 +81,7 @@ class ParallelProcessor:
                 results = list(executor.map(worker_func, files))
         return [r for r in results if r is not None]
 
-    async def async_process_files(
-        self, files: list[Path], worker_func: Callable[[Path], Any]
-    ) -> list[Any]:
+    async def async_process_files(self, files: list[Path], worker_func: Callable[[Path], Any]) -> list[Any]:
         """
         Process multiple files concurrently using async/await.
 
@@ -94,16 +92,13 @@ class ParallelProcessor:
         Returns:
             List of results from worker_func.
         """
+
         def _wrapped_task(file_path: Path) -> Any:
             """Inner wrapper to handle single file execution and errors."""
             try:
                 return worker_func(file_path)
             except Exception as exc:  # pylint: disable=broad-exception-caught
-                logging.error(
-                    "[ParallelProcessor] Failed to process %s: %s",
-                    file_path.name,
-                    str(exc)
-                )
+                logging.error("[ParallelProcessor] Failed to process %s: %s", file_path.name, str(exc))
                 return None
 
         # Prepare tasks for ExecutionCore

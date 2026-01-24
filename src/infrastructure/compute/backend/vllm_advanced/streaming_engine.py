@@ -22,24 +22,19 @@ Supports both callback-based and iterator-based streaming.
 from __future__ import annotations
 
 import asyncio
-import logging
-import time
-import os
 import gc
+import logging
+import os
+import time
 from dataclasses import dataclass, field
-from typing import (
-    AsyncIterator,
-    Iterator,
-    List,
-    Optional,
-    Protocol,
-)
+from typing import AsyncIterator, Iterator, List, Optional, Protocol
 
 logger = logging.getLogger(__name__)
 
 # Check torch availability
 try:
     import torch
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -47,8 +42,7 @@ except ImportError:
 
 # Check vLLM availability
 try:
-    from vllm import SamplingParams
-    from vllm import LLM
+    from vllm import LLM, SamplingParams
 
     HAS_VLLM = True
 except ImportError:
@@ -484,7 +478,7 @@ class StreamingVllmEngine:
 
             # Yield in chunks
             for i in range(0, len(full_text), buffer_tokens):
-                yield full_text[i:i + buffer_tokens]
+                yield full_text[i : i + buffer_tokens]
 
         except (RuntimeError, ValueError) as e:
             logger.error("Buffered generation failed: %s", e)

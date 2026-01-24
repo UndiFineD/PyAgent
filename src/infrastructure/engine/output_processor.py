@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 OutputProcessor - Request output management and state tracking.
 
@@ -8,20 +22,20 @@ detokenization, and output batching.
 from __future__ import annotations
 
 import asyncio
-import time
 import contextlib
-from abc import ABC
+import logging
+import time
+from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple
-from collections import defaultdict
-import logging
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
 
 class EventType(Enum):
     """Types of request events."""
+
     QUEUED = auto()
     STARTED = auto()
     PREEMPTED = auto()
@@ -33,6 +47,7 @@ class EventType(Enum):
 @dataclass
 class RequestEvent:
     """An event in request lifecycle."""
+
     event_type: EventType
     timestamp: float = field(default_factory=time.time)
     details: Optional[Dict[str, Any]] = None
@@ -41,6 +56,7 @@ class RequestEvent:
 @dataclass
 class LoRARequest:
     """LoRA adapter request information."""
+
     lora_id: int
     lora_name: str
     lora_path: Optional[str] = None
@@ -49,6 +65,7 @@ class LoRARequest:
 @dataclass
 class ParentRequest:
     """Parent request for multi-turn conversations."""
+
     request_id: str
     child_request_ids: List[str] = field(default_factory=list)
 
@@ -56,6 +73,7 @@ class ParentRequest:
 @dataclass
 class SamplingParams:
     """Parameters for token sampling."""
+
     max_tokens: int = 256
     temperature: float = 1.0
     top_p: float = 1.0
@@ -69,6 +87,7 @@ class SamplingParams:
 @dataclass
 class EngineCoreRequest:
     """Request to be processed by engine core."""
+
     request_id: str
     external_req_id: Optional[str] = None
     prompt_token_ids: Optional[List[int]] = None
@@ -86,6 +105,7 @@ class EngineCoreRequest:
 @dataclass
 class EngineCoreOutput:
     """Output from engine core for a single request."""
+
     request_id: str
     new_token_ids: List[int] = field(default_factory=list)
     finish_reason: Optional[str] = None
@@ -99,6 +119,7 @@ class EngineCoreOutput:
 @dataclass
 class EngineCoreOutputs:
     """Batch of outputs from engine core."""
+
     outputs: List[EngineCoreOutput] = field(default_factory=list)
     scheduler_stats: Optional[Any] = None
     timestamp: float = field(default_factory=time.time)
@@ -107,6 +128,7 @@ class EngineCoreOutputs:
 @dataclass
 class RequestOutput:
     """Final output for a request (to be returned to client)."""
+
     request_id: str
     prompt: Optional[str] = None
     prompt_token_ids: Optional[List[int]] = None
@@ -118,6 +140,7 @@ class RequestOutput:
 @dataclass
 class OutputProcessorOutput:
     """Output from OutputProcessor.process_outputs()."""
+
     request_outputs: List[RequestOutput] = field(default_factory=list)
     finished_request_ids: Set[str] = field(default_factory=set)
 
@@ -252,7 +275,7 @@ class RequestState:
         """Get current output."""
         if delta:
             # Return only new tokens since last output
-            token_ids = self.output_token_ids[self._last_output_index:]
+            token_ids = self.output_token_ids[self._last_output_index :]
             self._last_output_index = len(self.output_token_ids)
         else:
             token_ids = self.output_token_ids.copy()
@@ -261,11 +284,13 @@ class RequestState:
             request_id=self.request_id,
             prompt=self.prompt,
             prompt_token_ids=self.prompt_token_ids,
-            outputs=[{
-                "token_ids": token_ids,
-                "text": self.output_text,
-                "finish_reason": self.finish_reason,
-            }],
+            outputs=[
+                {
+                    "token_ids": token_ids,
+                    "text": self.output_text,
+                    "finish_reason": self.finish_reason,
+                }
+            ],
             finished=self.finished,
             metrics=self._get_metrics() if self.log_stats else None,
         )

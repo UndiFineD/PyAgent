@@ -16,11 +16,14 @@
 """Core execution logic for SubagentRunner."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import os
 import time
 from typing import TYPE_CHECKING
+
+from src.core.base.lifecycle.version import VERSION
+
 from .runner_backends import BackendHandlers
 
 __version__ = VERSION
@@ -35,17 +38,13 @@ class SubagentCore:
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
-    def run_subagent(
-        self, description: str, prompt: str, original_content: str = ""
-    ) -> str | None:
+    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:
         """Run a subagent using available backends."""
         backend_env = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true"
 
         cache_model = backend_env if backend_env != "auto" else "subagent_auto"
-        cache_key = self.runner._get_cache_key(
-            f"{description}:{prompt}:{original_content}", cache_model
-        )
+        cache_key = self.runner._get_cache_key(f"{description}:{prompt}:{original_content}", cache_model)
 
         if use_cache:
             if cache_key in self.runner._response_cache:
@@ -57,9 +56,7 @@ class SubagentCore:
                 self.runner._response_cache[cache_key] = cached_val
                 return cached_val
 
-        full_prompt = BackendHandlers.build_full_prompt(
-            description, prompt, original_content
-        )
+        full_prompt = BackendHandlers.build_full_prompt(description, prompt, original_content)
         repo_root = self.runner._resolve_repo_root()
 
         def _try_codex_cli() -> str | None:
@@ -77,9 +74,7 @@ class SubagentCore:
                 return None
             if not allow_non_command and not self.runner._looks_like_command(prompt):
                 return None
-            return BackendHandlers.try_gh_copilot(
-                full_prompt, repo_root, allow_non_command
-            )
+            return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
 
         def _try_github_models() -> str | None:
             return BackendHandlers.try_github_models(full_prompt, self.runner.requests)
@@ -88,9 +83,7 @@ class SubagentCore:
             return self.runner.llm_client.llm_chat_via_vllm(full_prompt, model="llama3")
 
         def _try_ollama() -> str | None:
-            return self.runner.llm_client.llm_chat_via_ollama(
-                full_prompt, model="llama3"
-            )
+            return self.runner.llm_client.llm_chat_via_ollama(full_prompt, model="llama3")
 
         def _try_openai_api() -> str | None:
             return BackendHandlers.try_openai_api(full_prompt, self.runner.requests)
@@ -191,9 +184,7 @@ class SubagentCore:
             )
 
             if result:
-                if validate_content and not self.runner.validate_response_content(
-                    result
-                ):
+                if validate_content and not self.runner.validate_response_content(result):
                     logging.warning("Response validation failed")
                 if use_cache:
                     self.runner._response_cache[cache_key] = result

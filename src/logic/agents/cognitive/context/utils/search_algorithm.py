@@ -13,11 +13,16 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
+"""Search algorithms for Cognitive agents.
+
+This module defines the available algorithms for semantic and keyword-based
+search within the agent's context and memory.
+"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 from enum import Enum
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

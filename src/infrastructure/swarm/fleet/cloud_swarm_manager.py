@@ -18,10 +18,12 @@ Handles resource provisioning and agent deployment across AWS, Azure, and GCP.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from typing import Any
 from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -35,9 +37,7 @@ class CloudSwarmManager:
         self.active_deployments: dict[str, Any] = {}
         self.logger = logging.getLogger(__name__)
 
-    def provision_resource(
-        self, provider: str, resource_type: str, specs: dict[str, Any]
-    ) -> str:
+    def provision_resource(self, provider: str, resource_type: str, specs: dict[str, Any]) -> str:
         """Provisions a resource on the specified cloud provider.
 
         Args:
@@ -49,9 +49,7 @@ class CloudSwarmManager:
         if provider not in self.providers:
             return f"Error: Unsupported provider '{provider}'."
 
-        self.logger.info(
-            f"CloudSwarm: Provisioning {resource_type} on {provider} with specs {specs}..."
-        )
+        self.logger.info(f"CloudSwarm: Provisioning {resource_type} on {provider} with specs {specs}...")
 
         # Simulating cloud API calls
         resource_id = f"{provider}-{resource_type}-{len(self.active_deployments) + 1}"
@@ -73,9 +71,7 @@ class CloudSwarmManager:
         if deployment["status"] != "provisioned":
             return f"Error: Resource {resource_id} is not in a provisioned state."
 
-        self.logger.info(
-            f"CloudSwarm: Deploying agent '{agent_name}' to {resource_id}..."
-        )
+        self.logger.info(f"CloudSwarm: Deploying agent '{agent_name}' to {resource_id}...")
         deployment["agent"] = agent_name
 
         deployment["status"] = "active"

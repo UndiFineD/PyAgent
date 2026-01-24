@@ -1,14 +1,21 @@
+
+"""
+Research analysis mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
+import contextlib
 import os
 import time
-import contextlib
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import \
+        SelfImprovementAnalysis
+
 
 class ResearchAnalysisMixin:
     """Mixin for research report updates and lesson harvesting in SelfImprovementAnalysis."""
@@ -57,7 +64,7 @@ class ResearchAnalysisMixin:
 
         # If no shards found, simulate ingestion of Shard 220 manually for Phase 317 parity
         if not lessons:
-             lessons.append("Ingested Shard 220 patterns: GitHub Copilot CLI extension is deprecated.")
-             lessons.append("Action: Standardized connectivity orchestrators to replace legacy extension logic.")
+            lessons.append("Ingested Shard 220 patterns: GitHub Copilot CLI extension is deprecated.")
+            lessons.append("Action: Standardized connectivity orchestrators to replace legacy extension logic.")
 
         return list(set(lessons))

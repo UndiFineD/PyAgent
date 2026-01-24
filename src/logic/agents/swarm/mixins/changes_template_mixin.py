@@ -17,9 +17,12 @@ Template management logic for ChangesAgent.
 """
 
 from __future__ import annotations
+
 import logging
 from typing import List
+
 from ..changelog_template import ChangelogTemplate
+
 
 class ChangesTemplateMixin:
     """Mixin for managing changelog templates."""

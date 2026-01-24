@@ -2,6 +2,9 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+
+"""Mixin for context tagging capabilities."""
+
 from __future__ import annotations
 from src.logic.agents.cognitive.context.models.context_tag import ContextTag
 

@@ -16,11 +16,14 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .code_issue import CodeIssue
+
+import time
 from dataclasses import dataclass, field
 from typing import Any
-import time
+
+from src.core.base.lifecycle.version import VERSION
+
+from .code_issue import CodeIssue
 
 __version__ = VERSION
 

@@ -16,11 +16,12 @@
 """Core engine for managing code relationships as a graph."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.engines.graph_core import GraphCore
 
 __version__ = VERSION
@@ -73,7 +74,7 @@ class GraphContextEngine:
                 for source, target, rel in edges:
                     self.add_edge(source, target, rel)
 
-            except Exception as e:
+            except (SyntaxError, ValueError, AttributeError, IOError) as e:
                 logging.error(f"GraphContextEngine: Failed to scan {rel_path}: {e}")
 
         self.save()
@@ -111,17 +112,17 @@ class GraphContextEngine:
             "metadata": self.metadata,
             "symbols": self.symbols,
         }
-        with open(self.persist_file, "w") as f:
+        with open(self.persist_file, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
     def load(self) -> None:
         """Load graph from disk."""
         if self.persist_file.exists():
             try:
-                with open(self.persist_file) as f:
+                with open(self.persist_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 self.graph = {k: set(v) for k, v in data.get("graph", {}).items()}
                 self.metadata = data.get("metadata", {})
                 self.symbols = data.get("symbols", {})
-            except Exception as e:
+            except (json.JSONDecodeError, IOError, OSError) as e:
                 logging.error(f"Error loading graph: {e}")

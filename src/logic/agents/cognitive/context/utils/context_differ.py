@@ -16,9 +16,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
+import re
+
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.context_diff import ContextDiff
-import re
 
 __version__ = VERSION
 

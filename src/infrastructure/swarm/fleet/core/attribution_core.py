@@ -3,8 +3,8 @@ Core logic for Code Attribution and Licensing (Phase 185).
 Handles SPDX header generation and contribution tagging.
 """
 
-from typing import Any
 import time
+from typing import Any
 
 
 class AttributionCore:
@@ -41,9 +41,6 @@ class AttributionCore:
         """
         Appends the SPDX header if not already present.
         """
-        if (
-            "SPDX-License-Identifier" in content
-            or "Copyright 2026 PyAgent Authors" in content
-        ):
+        if "SPDX-License-Identifier" in content or "Copyright 2026 PyAgent Authors" in content:
             return content
         return AttributionCore.SPDX_TEMPLATE + "\n" + content

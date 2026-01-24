@@ -1,11 +1,27 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 SynthesisCore handles synthetic data generation for fine-tuning.
 It also implements the Feature Store logic for vectorized insights.
 """
 
 from __future__ import annotations
-import random
+
 import logging
+import random
+from typing import Any
 
 try:
     import rust_core
@@ -49,7 +65,7 @@ class SynthesisCore:
                 # Caching it here ensures we only pay the initialization cost once.
 
                 SynthesisCore._transformer_cache = rust_core.NeuralTransformer(config)
-                logging.info(f"SynthesisCore: Initialized Rust transformer.")
+                logging.info("SynthesisCore: Initialized Rust transformer.")
             except Exception as e:
                 logging.warning(f"SynthesisCore: Failed to initialize Rust transformer: {e}")
                 SynthesisCore._rust_failed = True
@@ -61,14 +77,24 @@ class SynthesisCore:
         if HAS_RUST:
             try:
                 res, stats = rust_core.generate_synthetic_snippets_with_stats(count)
-                print(f"[SynthesisCore] Generated {stats.token_count} tokens in {stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)")
+                print(
+                    f"[SynthesisCore] Generated {stats.token_count} tokens in "
+                    f"{stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)"
+                )
                 print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f} (@ 0.0005 cent/token)")
 
                 # Optional: persistent tracking via FleetEconomy
                 try:
-                    from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
+                    from src.logic.agents.swarm.fleet_economy_agent import \
+                        FleetEconomyAgent
+
                     fea = FleetEconomyAgent()
-                    fea.log_hardware_savings("SynthesisCore/Generation", stats.token_count, stats.tps, stats.cost_usd)
+                    fea.log_hardware_savings(
+                        "SynthesisCore/Generation",
+                        stats.token_count,
+                        stats.tps,
+                        stats.cost_usd,
+                    )
                 except ImportError:
                     pass
 
@@ -97,9 +123,13 @@ class SynthesisCore:
                     print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f}")
 
                     try:
-                        from src.logic.agents.swarm.fleet_economy_agent import FleetEconomyAgent
+                        from src.logic.agents.swarm.fleet_economy_agent import \
+                            FleetEconomyAgent
+
                         fea = FleetEconomyAgent()
-                        fea.log_hardware_savings("SynthesisCore/Vectorization", stats.token_count, stats.tps, stats.cost_usd)
+                        fea.log_hardware_savings(
+                            "SynthesisCore/Vectorization", stats.token_count, stats.tps, stats.cost_usd
+                        )
                     except ImportError:
                         pass
 

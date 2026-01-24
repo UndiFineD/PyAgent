@@ -16,11 +16,16 @@
 Quality scoring and refactoring suggestion logic for CoderCore.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from typing import List, Dict, Any
+
+from typing import Any, Dict, List
+
 from src.core.base.common.types.code_metrics import CodeMetrics
 from src.core.base.common.types.code_smell import CodeSmell
 from src.core.base.common.types.quality_score import QualityScore
+
 
 class CoderQualityMixin:
     """Mixin for computing quality scores and refactoring suggestions."""
@@ -65,9 +70,7 @@ class CoderQualityMixin:
 
         # Add primary issues
         for violation in violations[:5]:
-            score.issues.append(
-                f"Style: {violation['message']} (line {violation['line']})"
-            )
+            score.issues.append(f"Style: {violation['message']} (line {violation['line']})")
         for smell in smells[:5]:
             score.issues.append(f"Smell: {smell.description}")
 
@@ -91,10 +94,7 @@ class CoderQualityMixin:
                 suggestions.append(
                     {
                         "type": "introduce_parameter_object",
-                        "description": (
-                            f"Create a data class for parameters at "
-                            f"line {smell.line_number}"
-                        ),
+                        "description": (f"Create a data class for parameters at line {smell.line_number}"),
                         "reason": smell.description,
                     }
                 )
@@ -112,10 +112,7 @@ class CoderQualityMixin:
             suggestions.append(
                 {
                     "type": "extract_method",
-                    "description": (
-                        f"Extract {len(duplicates)} duplicate code blocks "
-                        f"into shared methods"
-                    ),
+                    "description": (f"Extract {len(duplicates)} duplicate code blocks into shared methods"),
                     "reason": f"Found {len(duplicates)} duplicate code patterns",
                 }
             )

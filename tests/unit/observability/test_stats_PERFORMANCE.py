@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any
+from typing import Any, Self
 import time
 from pathlib import Path
 import sys

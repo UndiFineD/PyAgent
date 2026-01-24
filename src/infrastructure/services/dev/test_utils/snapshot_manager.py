@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .snapshot_comparison_result import SnapshotComparisonResult
-from .test_snapshot import TestSnapshot
+
+import json
 from pathlib import Path
 from typing import Any
-import json
+
+from src.core.base.lifecycle.version import VERSION
+
+from .snapshot_comparison_result import SnapshotComparisonResult
+from .test_snapshot import TestSnapshot
 
 __version__ = VERSION
 
@@ -110,9 +113,7 @@ class SnapshotManager:
         expected_snapshot = self.load_snapshot(name)
 
         if expected_snapshot is None:
-            return SnapshotComparisonResult(
-                matches=False, expected=None, actual=actual, snapshot_name=name
-            )
+            return SnapshotComparisonResult(matches=False, expected=None, actual=actual, snapshot_name=name)
 
         # Compare the content
         matches = expected_snapshot.content == actual

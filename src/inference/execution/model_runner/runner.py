@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Core async model runner implementation."""
@@ -7,11 +21,11 @@ import logging
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Optional
 
-from .config import RunnerState, ModelInput, ModelOutput, SchedulerOutput
-from .pooling import AsyncGPUPoolingModelRunnerOutput
+from .config import ModelInput, ModelOutput, RunnerState, SchedulerOutput
 from .pipeline import ExecutionPipeline
+from .pooling import AsyncGPUPoolingModelRunnerOutput
 
 logger = logging.getLogger(__name__)
 
@@ -32,14 +46,15 @@ class AsyncModelRunner:
         self,
         model_forward_fn: Optional[Callable[[ModelInput], ModelOutput]] = None,
         num_workers: int = 1,
-        enable_pipeline: bool = True
+        enable_pipeline: bool = True,
     ):
         self._model_forward_fn = model_forward_fn
         self._state = RunnerState.IDLE
 
         # Output pool
-        self._output_pool: AsyncGPUPoolingModelRunnerOutput[ModelOutput] = \
-            AsyncGPUPoolingModelRunnerOutput(pool_size=100)
+        self._output_pool: AsyncGPUPoolingModelRunnerOutput[ModelOutput] = AsyncGPUPoolingModelRunnerOutput(
+            pool_size=100
+        )
         self._output_pool.set_factory(lambda: ModelOutput(request_id=""))
 
         # Execution pipeline
@@ -67,10 +82,7 @@ class AsyncModelRunner:
         """Set the model forward function."""
         self._model_forward_fn = fn
 
-    async def execute_model_async(
-        self,
-        scheduler_output: SchedulerOutput
-    ) -> list[ModelOutput]:
+    async def execute_model_async(self, scheduler_output: SchedulerOutput) -> list[ModelOutput]:
         """
         Execute model on scheduled batch (async).
 
@@ -110,11 +122,7 @@ class AsyncModelRunner:
 
         try:
             # Run in thread pool
-            output = await loop.run_in_executor(
-                self._executor,
-                self._model_forward,
-                model_input
-            )
+            output = await loop.run_in_executor(self._executor, self._model_forward, model_input)
 
             if not future.done():
                 future.set_result(output)
@@ -167,10 +175,7 @@ class AsyncModelRunner:
 
         return output
 
-    def execute_model_sync(
-        self,
-        scheduler_output: SchedulerOutput
-    ) -> list[ModelOutput]:
+    def execute_model_sync(self, scheduler_output: SchedulerOutput) -> list[ModelOutput]:
         """Execute model synchronously."""
         outputs = []
 
@@ -184,11 +189,7 @@ class AsyncModelRunner:
 
         return outputs
 
-    async def get_output_async(
-        self,
-        request_id: str,
-        timeout_ms: Optional[int] = None
-    ) -> Optional[ModelOutput]:
+    async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[ModelOutput]:
         """Get output for request (async)."""
         if request_id not in self._pending_futures:
             return None
@@ -196,10 +197,7 @@ class AsyncModelRunner:
         timeout = (timeout_ms or 30000) / 1000.0
 
         try:
-            return await asyncio.wait_for(
-                self._pending_futures[request_id],
-                timeout=timeout
-            )
+            return await asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
         except asyncio.TimeoutError:
             return None
 
@@ -250,10 +248,7 @@ class AsyncModelRunner:
     def get_metrics(self) -> dict[str, Any]:
         """Get runner metrics."""
         with self._lock:
-            avg_latency = (
-                self._total_latency_ms / self._total_executions
-                if self._total_executions else 0.0
-            )
+            avg_latency = self._total_latency_ms / self._total_executions if self._total_executions else 0.0
 
             return {
                 "state": self._state.name,

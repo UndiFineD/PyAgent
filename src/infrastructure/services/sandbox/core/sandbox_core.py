@@ -1,4 +1,23 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Sandbox core.py module.
+"""
+
 from __future__ import annotations
+
 import typing
 from dataclasses import dataclass, field
 
@@ -20,9 +39,7 @@ class SandboxCore:
     Handles enforcement logic, quota calculations, and security constraints.
     """
 
-    def validate_code_execution(
-        self, code: str, config: SandboxConfig
-    ) -> dict[str, typing.Any]:
+    def validate_code_execution(self, code: str, config: SandboxConfig) -> dict[str, typing.Any]:
         """Validates if code execution fits within sandbox constraints."""
         issues = []
         if "os.system" in code or "subprocess" in code:
@@ -40,9 +57,7 @@ class SandboxCore:
             },
         }
 
-    def calculate_resource_usage(
-        self, start_cpu: float, end_cpu: float, duration: float
-    ) -> float:
+    def calculate_resource_usage(self, start_cpu: float, end_cpu: float, duration: float) -> float:
         """Calculates normalized resource usage score."""
         if duration <= 0:
             return 0.0

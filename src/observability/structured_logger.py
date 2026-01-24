@@ -19,22 +19,25 @@ Ensures machine-readable logs with mandatory AgentID and TraceID fields.
 """
 
 from __future__ import annotations
+
 import contextlib
-from typing import Any
-from src.core.base.lifecycle.version import VERSION
+import gzip
 import json
 import logging
 import re
-import time
-import gzip
 import shutil
+import time
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
+
 from src.core.base.common.file_system_core import FileSystemCore
+from src.core.base.lifecycle.version import VERSION
 
 # Rust acceleration for hot-path logging
 try:
     import rust_core as rc
+
     _RUST_ACCEL = True
 except ImportError:
     rc = None  # type: ignore[assignment]
@@ -76,12 +79,8 @@ class StructuredLogger:
     def _compress_logs(self) -> None:
         """Compresses current log file to .json.gz (Phase 277)."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        compressed_file = self.log_file.with_name(
-            f"{self.log_file.stem}_{timestamp}.json.gz"
-        )
-        logging.info(
-            f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}"
-        )
+        compressed_file = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
+        logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
 
         try:
             with open(self.log_file, "rb") as f_in:
@@ -134,10 +133,7 @@ class StructuredLogger:
 
         # Python fallback path
         clean_message = self._mask_sensitive(message)
-        clean_kwargs = {
-            k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v)
-            for k, v in kwargs.items()
-        }
+        clean_kwargs = {k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v) for k, v in kwargs.items()}
 
         entry = {
             "timestamp": timestamp,
@@ -151,9 +147,7 @@ class StructuredLogger:
         # Also log to standard logging for console visibility
         std_logger = logging.getLogger(f"PyAgent.{self.agent_id}")
         log_func = getattr(std_logger, level.lower(), std_logger.info)
-        log_func(
-            f"[{self.agent_id}] {clean_message} {json.dumps(clean_kwargs) if clean_kwargs else ''}"
-        )
+        log_func(f"[{self.agent_id}] {clean_message} {json.dumps(clean_kwargs) if clean_kwargs else ''}")
 
         try:
             with open(self.log_file, "a", encoding="utf-8") as f:

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -6,15 +20,15 @@ Fallback incremental detokenization for non-fast tokenizers.
 
 from __future__ import annotations
 
-from typing import (
-    List,
-    Optional,
-    Tuple,
-)
+from typing import List, Optional, Tuple
 
-from src.infrastructure.engine.tokenization.detokenizer.types import TokenizerLike
-from src.infrastructure.engine.tokenization.detokenizer.stop_checker import StopChecker
-from src.infrastructure.engine.tokenization.detokenizer.base import IncrementalDetokenizer
+from src.infrastructure.engine.tokenization.detokenizer.base import \
+    IncrementalDetokenizer
+from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
+    StopChecker
+from src.infrastructure.engine.tokenization.detokenizer.types import \
+    TokenizerLike
+
 
 class SlowIncrementalDetokenizer(IncrementalDetokenizer):
     """
@@ -59,7 +73,7 @@ class SlowIncrementalDetokenizer(IncrementalDetokenizer):
         new_text = ""
         if len(full_text) > len(self._prev_text):
             if full_text.startswith(self._prev_text):
-                new_text = full_text[len(self._prev_text):]
+                new_text = full_text[len(self._prev_text) :]
             else:
                 common_len = 0
                 for i in range(min(len(full_text), len(self._prev_text))):

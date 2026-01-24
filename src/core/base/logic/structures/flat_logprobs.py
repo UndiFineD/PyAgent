@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 FlatLogprobs - Memory-efficient flat storage for token log probabilities.
 
@@ -24,6 +38,7 @@ class Logprob:
         rank: The vocab rank of the token (1-based, or None)
         decoded_token: The decoded string representation
     """
+
     logprob: float
     rank: int | None = None
     decoded_token: str | None = None
@@ -102,19 +117,14 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
             decoded_tokens: Iterable of decoded token strings
         """
         self.start_indices.append(len(self.logprobs))
-        for token_id, logprob, rank, decoded_token in zip(
-            token_ids, logprobs, ranks, decoded_tokens
-        ):
+        for token_id, logprob, rank, decoded_token in zip(token_ids, logprobs, ranks, decoded_tokens):
             self.token_ids.append(token_id)
             self.logprobs.append(logprob)
             self.ranks.append(rank)
             self.decoded_tokens.append(decoded_token)
         self.end_indices.append(len(self.logprobs))
 
-    def extend(
-        self,
-        logprobs_multi_positions: Iterable[LogprobsOnePosition | None]
-    ) -> None:
+    def extend(self, logprobs_multi_positions: Iterable[LogprobsOnePosition | None]) -> None:
         """Extend with logprobs for multiple positions."""
         for logprobs_one_position in logprobs_multi_positions:
             self.append(logprobs_one_position)
@@ -268,6 +278,7 @@ class LogprobsAccumulator:
     Provides a builder pattern for constructing logprobs
     with validation and statistics.
     """
+
     _logprobs: FlatLogprobs = field(default_factory=FlatLogprobs)
     _min_logprob: float = field(default=float("inf"))
     _max_logprob: float = field(default=float("-inf"))

@@ -1,17 +1,35 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: Synchronous Multi-process Engine Client
 ZMQ-based synchronous client.
 """
 
 from __future__ import annotations
+
 import logging
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.types import EngineOutput
 
 if TYPE_CHECKING:
     import zmq
-    from src.infrastructure.engine.engine_client.types import EngineClientConfig, SchedulerOutput
+
+    from src.infrastructure.engine.engine_client.types import (
+        EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +51,7 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         """Initialize ZMQ socket."""
         try:
             import zmq
+
             self._context = zmq.Context()
             self._socket = self._context.socket(zmq.REQ)
             self._socket.setsockopt(zmq.RCVTIMEO, self.config.request_timeout_ms)
@@ -47,22 +66,21 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
         if self._socket is None:
             # Mock mode
-            self._pending[request_id] = EngineOutput(
-                request_id=request_id,
-                outputs=[{"mock": True}],
-                finished=True
-            )
+            self._pending[request_id] = EngineOutput(request_id=request_id, outputs=[{"mock": True}], finished=True)
             return request_id
 
         try:
             import msgpack
-            payload = msgpack.packb({
-                "request_id": request_id,
-                "request_ids": request.request_ids,
-                "scheduled_tokens": request.scheduled_tokens,
-                "num_prefill": request.num_prefill,
-                "num_decode": request.num_decode,
-            })
+
+            payload = msgpack.packb(
+                {
+                    "request_id": request_id,
+                    "request_ids": request.request_ids,
+                    "scheduled_tokens": request.scheduled_tokens,
+                    "num_prefill": request.num_prefill,
+                    "num_decode": request.num_decode,
+                }
+            )
             self._socket.send(payload)
 
             # Blocking receive
@@ -73,14 +91,11 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 request_id=request_id,
                 outputs=data.get("outputs", []),
                 finished=data.get("finished", True),
-                metrics=data.get("metrics", {})
+                metrics=data.get("metrics", {}),
             )
         except Exception as e:
             logger.error(f"ZMQ error: {e}")
-            self._pending[request_id] = EngineOutput(
-                request_id=request_id,
-                error=str(e)
-            )
+            self._pending[request_id] = EngineOutput(request_id=request_id, error=str(e))
 
         return request_id
 

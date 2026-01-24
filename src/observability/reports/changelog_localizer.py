@@ -16,9 +16,11 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
+
+from src.core.base.common.types.localization_language import \
+    LocalizationLanguage
+from src.core.base.common.types.localized_entry import LocalizedEntry
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types import localization_language
-from src.core.base.common.types import localized_entry
 
 __version__ = VERSION
 
@@ -39,9 +41,7 @@ class ChangelogLocalizer:
         >>> localizer.add_translation(entry, LocalizationLanguage.SPANISH, "Nueva característica")
     """
 
-    def __init__(
-        self, default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH
-    ) -> None:
+    def __init__(self, default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH) -> None:
         """Initialize the changelog localizer.
 
         Args:
@@ -63,9 +63,7 @@ class ChangelogLocalizer:
         self.entries.append(entry)
         return entry
 
-    def add_translation(
-        self, entry: LocalizedEntry, language: LocalizationLanguage, translation: str
-    ) -> None:
+    def add_translation(self, entry: LocalizedEntry, language: LocalizationLanguage, translation: str) -> None:
         """Add a translation to an entry.
 
         Args:

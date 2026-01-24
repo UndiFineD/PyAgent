@@ -1,15 +1,22 @@
+
+"""
+Orchestrator scan mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+import logging
 import os
 import time
-import logging
 from typing import Any
+
 
 class OrchestratorScanMixin:
     """Methods for scanning files and analyzing contents."""
 
-    def _scan_and_repair_files(self, target_dir: str, results: dict[str, Any]) -> list[tuple[str, str, str, int, float]]:
+    def _scan_and_repair_files(
+        self, target_dir: str, results: dict[str, Any]
+    ) -> list[tuple[str, str, str, int, float]]:
         """Iterates through files, analyzes them, and applies fixes."""
         debt_records: list[tuple[str, str, str, int, float]] = []
         current_time = time.time()
@@ -35,13 +42,15 @@ class OrchestratorScanMixin:
                         for issue in file_issues:
                             if issue.get("fixed"):
                                 results["fixes_applied"] += 1
-                            debt_records.append((
-                                rel_path,
-                                issue.get("type", "General"),
-                                issue.get("message", ""),
-                                1 if issue.get("fixed", False) else 0,
-                                current_time,
-                            ))
+                            debt_records.append(
+                                (
+                                    rel_path,
+                                    issue.get("type", "General"),
+                                    issue.get("message", ""),
+                                    1 if issue.get("fixed", False) else 0,
+                                    current_time,
+                                )
+                            )
                         results["details"].append({"file": rel_path, "issues": file_issues})
         return debt_records
 

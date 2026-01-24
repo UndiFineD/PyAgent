@@ -12,15 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Meta orchestrator agent.py module.
+"""
+
 from __future__ import annotations
-import logging
+
 import json
-from typing import Any, TYPE_CHECKING
+import logging
+from typing import TYPE_CHECKING, Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
     from src.core.knowledge.GlobalContext import GlobalContext
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class MetaOrchestratorAgent(BaseAgent):
@@ -43,9 +49,7 @@ class MetaOrchestratorAgent(BaseAgent):
         if depth > self.max_depth:
             return f"Error: Maximum recursion depth ({self.max_depth}) exceeded for objective: {objective}"
 
-        logging.info(
-            f"MetaOrchestrator: Decomposing objective (Depth {depth}): {objective[:50]}..."
-        )
+        logging.info(f"MetaOrchestrator: Decomposing objective (Depth {depth}): {objective[:50]}...")
 
         # Phase 1: Decomposition
         plan = await self._decompose_objective(objective)
@@ -63,9 +67,7 @@ class MetaOrchestratorAgent(BaseAgent):
             args = step.get("args", [])
 
             # Execute via FleetManager (Phase 152: await)
-            res = await self.fleet.execute_workflow(
-                objective, [{"agent": agent_name, "action": action, "args": args}]
-            )
+            res = await self.fleet.execute_workflow(objective, [{"agent": agent_name, "action": action, "args": args}])
             results.append(res)
 
         return f"# Objective Resolution Report (Depth {depth})\n\n" + "\n".join(results)
@@ -87,9 +89,7 @@ class MetaOrchestratorAgent(BaseAgent):
         """
 
         # Use an available agent for decomposition or internal logic
-        res = await self.fleet.call_by_capability(
-            "Security.improve_content", prompt=prompt
-        )
+        res = await self.fleet.call_by_capability("Security.improve_content", prompt=prompt)
 
         try:
             # Simple extractor for markdown

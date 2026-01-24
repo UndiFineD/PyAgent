@@ -17,9 +17,9 @@ Phase 309: Ecosystem Diagnostics Agent.
 Consolidates various dev scripts into a single diagnostic engine.
 """
 
-from typing import Any
 import ast
 from pathlib import Path
+from typing import Any
 
 
 class EcosystemDiagnosticsAgent:

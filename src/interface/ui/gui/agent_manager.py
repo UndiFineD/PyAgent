@@ -20,8 +20,11 @@
 """Agent management logic for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .agent_column import AgentColumn
 
 __version__ = VERSION
@@ -46,12 +49,8 @@ class AgentManager:
             "diff": self.main_app.show_diff,
             "show_memory": self.main_app.show_memory_manager,
             "delegate": self.main_app.delegate_task,
-            "duplicate": lambda data: self.add_agent(
-                data.get("name", "Agent"), preset_data=data
-            ),
-            "show_settings": lambda: self.main_app.dialogs.show_settings_dialog(
-                self.config_manager
-            ),
+            "duplicate": lambda data: self.add_agent(data.get("name", "Agent"), preset_data=data),
+            "show_settings": lambda: self.main_app.dialogs.show_settings_dialog(self.config_manager),
         }
         col = AgentColumn(self.container, name, callbacks)
         self.agent_columns.append(col)

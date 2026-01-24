@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Base types and models for slash commands.
 """
@@ -6,7 +20,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any, Callable, TypeAlias
-
 
 CommandHandler: TypeAlias = Callable[["CommandContext"], "CommandResult"]
 AsyncCommandHandler: TypeAlias = Callable[["CommandContext"], "CommandResult"]
@@ -68,9 +81,7 @@ class CommandResult:
     """Whether output should be inserted inline."""
 
     @classmethod
-    def ok(
-        cls, output: str, data: dict[str, Any] | None = None, inline: bool = True
-    ) -> CommandResult:
+    def ok(cls, output: str, data: dict[str, Any] | None = None, inline: bool = True) -> CommandResult:
         """Create a successful result."""
         return cls(success=True, output=output, data=data or {}, inline=inline)
 
@@ -104,7 +115,6 @@ class CommandDefinition:
 
     requires_args: bool = False
     """Whether arguments are required."""
-
 
 
 @dataclass

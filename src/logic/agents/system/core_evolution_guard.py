@@ -11,13 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core evolution guard.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
+
 import hashlib
+import os
 import time
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -74,11 +80,7 @@ class CoreEvolutionGuard:
         if rel_path not in self.code_fingerprints:
             return {"status": "untracked", "risk": "medium", "file": rel_path}
 
-        full_path = (
-            os.path.join(self.workspace_path, rel_path)
-            if not os.path.isabs(rel_path)
-            else rel_path
-        )
+        full_path = os.path.join(self.workspace_path, rel_path) if not os.path.isabs(rel_path) else rel_path
         new_hash = self.hash_file(full_path)
         old_hash = self.code_fingerprints[rel_path]
 
@@ -87,11 +89,7 @@ class CoreEvolutionGuard:
 
         # Simulated heuristic check
         # In a real scenario, this would analyze AST changes or use LLM classification
-        risk = (
-            "high"
-            if "src/classes" in rel_path or "agent" in rel_path.lower()
-            else "low"
-        )
+        risk = "high" if "src/classes" in rel_path or "agent" in rel_path.lower() else "low"
 
         return {
             "status": "modified",

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 LMFormatEnforcerBackend - LM Format Enforcer integration.
 
@@ -14,38 +28,26 @@ Beyond vLLM innovations:
 - Pattern composition
 """
 
-import contextlib
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    FrozenSet,
-    Generator,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    Type,
-    Union,
-)
 import asyncio
+import contextlib
 import hashlib
 import json
 import re
 import threading
-import time
+from dataclasses import dataclass
+from enum import Enum, auto
+from typing import Any, Dict, List, Optional, Set
 
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core
+    import rust_core  # noqa: F401
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -53,6 +55,7 @@ except ImportError:
 
 class DFAStateType(Enum):
     """Types of DFA states."""
+
     INITIAL = auto()
     ACCEPTING = auto()
     REJECTING = auto()
@@ -67,6 +70,7 @@ class DFAState:
     Represents a state in the deterministic finite automaton
     used for regex matching.
     """
+
     state_id: int
     state_type: DFAStateType
     is_final: bool = False
@@ -82,13 +86,14 @@ class DFATransition:
 
     Maps a character/token to the next state.
     """
+
     from_state: int
     char_class: str  # Character class or literal
     to_state: int
 
     def matches(self, char: str) -> bool:
         """Check if character matches this transition."""
-        if self.char_class.startswith('[') and self.char_class.endswith(']'):
+        if self.char_class.startswith("[") and self.char_class.endswith("]"):
             # Character class
             pattern = self.char_class
             return bool(re.match(f"^{pattern}$", char))
@@ -179,12 +184,12 @@ class TokenVocabulary:
 
     def _build_vocab(self) -> None:
         """Build vocabulary mappings."""
-        if hasattr(self.tokenizer, 'get_vocab'):
+        if hasattr(self.tokenizer, "get_vocab"):
             vocab = self.tokenizer.get_vocab()
             self._token_to_id = dict(vocab)
             self._id_to_token = {v: k for k, v in vocab.items()}
             self._vocab_size = len(vocab)
-        elif hasattr(self.tokenizer, 'vocab_size'):
+        elif hasattr(self.tokenizer, "vocab_size"):
             self._vocab_size = self.tokenizer.vocab_size
             # Build from IDs
             for i in range(min(1000, self._vocab_size)):
@@ -214,6 +219,7 @@ class RegexMatchState:
 
     Tracks current match position and partial matches.
     """
+
     pattern: str
     matched_text: str = ""
     dfa_state: int = 0
@@ -337,9 +343,9 @@ class LMFormatEnforcerBackend:
 
         # Statistics
         self._stats = {
-            'compilations': 0,
-            'cache_hits': 0,
-            'cache_misses': 0,
+            "compilations": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
         }
 
     def compile_regex(self, pattern: str) -> CompiledEnforcer:
@@ -348,7 +354,7 @@ class LMFormatEnforcerBackend:
 
         with self._cache_lock:
             if cache_key in self._cache:
-                self._stats['cache_hits'] += 1
+                self._stats["cache_hits"] += 1
                 return self._cache[cache_key]
 
         # Compile
@@ -358,8 +364,8 @@ class LMFormatEnforcerBackend:
         )
 
         with self._cache_lock:
-            self._stats['cache_misses'] += 1
-            self._stats['compilations'] += 1
+            self._stats["cache_misses"] += 1
+            self._stats["compilations"] += 1
 
             # Evict if needed
             if len(self._cache) >= self.max_cache_size:
@@ -381,7 +387,7 @@ class LMFormatEnforcerBackend:
         try:
             schema_obj = json.loads(schema)
         except json.JSONDecodeError:
-            return r'.*'
+            return r".*"
 
         return self._schema_obj_to_regex(schema_obj)
 
@@ -391,46 +397,43 @@ class LMFormatEnforcerBackend:
 
         if schema_type == "object":
             props = schema.get("properties", {})
-            required = set(schema.get("required", []))
 
-            parts = [r'\{']
+            parts = [r"\{"]
             for i, (key, prop_schema) in enumerate(props.items()):
                 if i > 0:
-                    parts.append(r',\s*')
+                    parts.append(r",\s*")
                 parts.append(rf'"{re.escape(key)}"\s*:\s*')
                 parts.append(self._schema_obj_to_regex(prop_schema))
-            parts.append(r'\}')
+            parts.append(r"\}")
 
             return "".join(parts)
 
         elif schema_type == "array":
             items_schema = schema.get("items", {"type": "string"})
             item_pattern = self._schema_obj_to_regex(items_schema)
-            return rf'\[(?:{item_pattern}(?:,\s*{item_pattern})*)?\]'
+            return rf"\[(?:{item_pattern}(?:,\s*{item_pattern})*)?\]"
 
         elif schema_type == "string":
             if "enum" in schema:
-                options = "|".join(
-                    rf'"{re.escape(opt)}"' for opt in schema["enum"]
-                )
-                return rf'(?:{options})'
+                options = "|".join(rf'"{re.escape(opt)}"' for opt in schema["enum"])
+                return rf"(?:{options})"
             if "pattern" in schema:
                 return rf'"{schema["pattern"]}"'
             return r'"[^"]*"'
 
         elif schema_type == "integer":
-            return r'-?\d+'
+            return r"-?\d+"
 
         elif schema_type == "number":
-            return r'-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?'
+            return r"-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?"
 
         elif schema_type == "boolean":
-            return r'(?:true|false)'
+            return r"(?:true|false)"
 
         elif schema_type == "null":
-            return r'null'
+            return r"null"
 
-        return r'.*'
+        return r".*"
 
     def allocate_bitmask(self, batch_size: int) -> "np.ndarray":
         """Allocate token bitmask."""
@@ -447,8 +450,8 @@ class LMFormatEnforcerBackend:
         """Clear pattern cache."""
         with self._cache_lock:
             self._cache.clear()
-            self._stats['cache_hits'] = 0
-            self._stats['cache_misses'] = 0
+            self._stats["cache_hits"] = 0
+            self._stats["cache_misses"] = 0
 
 
 class AsyncLMFormatEnforcerBackend(LMFormatEnforcerBackend):
@@ -548,15 +551,15 @@ class CompositeEnforcer:
 
 
 __all__ = [
-    'DFAStateType',
-    'DFAState',
-    'DFATransition',
-    'CompiledDFA',
-    'TokenVocabulary',
-    'RegexMatchState',
-    'CompiledEnforcer',
-    'LMFormatEnforcerBackend',
-    'AsyncLMFormatEnforcerBackend',
-    'FormatEnforcerGrammar',
-    'CompositeEnforcer',
+    "DFAStateType",
+    "DFAState",
+    "DFATransition",
+    "CompiledDFA",
+    "TokenVocabulary",
+    "RegexMatchState",
+    "CompiledEnforcer",
+    "LMFormatEnforcerBackend",
+    "AsyncLMFormatEnforcerBackend",
+    "FormatEnforcerGrammar",
+    "CompositeEnforcer",
 ]

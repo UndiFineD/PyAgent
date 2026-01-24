@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -5,24 +19,24 @@ Core sampling kernels and strategies.
 """
 
 from __future__ import annotations
+
 from typing import Optional
+
 import numpy as np
+
+from .base import HAS_RUST, Sampler, _softmax
 from .params import SamplingParams, SamplingState
-from .base import Sampler, HAS_RUST, _softmax
 
 try:
-    from rust_core import (
-        top_k_mask_rust,
-        top_p_mask_rust,
-        gumbel_sample_rust,
-        compute_penalties_rust,
-    )
+    from rust_core import (compute_penalties_rust, gumbel_sample_rust,
+                           top_k_mask_rust, top_p_mask_rust)
 except ImportError:
     pass
 
 
 class TemperatureSampler(Sampler):
     """Temperature scaling sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -41,6 +55,7 @@ class TemperatureSampler(Sampler):
 
 class TopKSampler(Sampler):
     """Top-K filtering sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -61,6 +76,7 @@ class TopKSampler(Sampler):
 
 class TopPSampler(Sampler):
     """Top-P (nucleus) sampling."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -93,6 +109,7 @@ class TopPSampler(Sampler):
 
 class TopKTopPSampler(Sampler):
     """Combined top-k and top-p filtering."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -115,7 +132,8 @@ class TopKTopPSampler(Sampler):
             batch_size = result.shape[0]
             for i in range(batch_size):
                 valid_mask = result[i] > -float("inf")
-                if not np.any(valid_mask): continue
+                if not np.any(valid_mask):
+                    continue
                 valid_logits = result[i][valid_mask]
                 valid_indices = np.where(valid_mask)[0]
                 sorted_order = np.argsort(valid_logits)[::-1]
@@ -139,6 +157,7 @@ class TopKTopPSampler(Sampler):
 
 class GumbelSampler(Sampler):
     """Gumbel-max trick sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -170,6 +189,7 @@ class GumbelSampler(Sampler):
 
 class RepetitionPenaltySampler(Sampler):
     """Repetition penalty sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -180,10 +200,12 @@ class RepetitionPenaltySampler(Sampler):
             return logits
         result = logits.copy()
         all_tokens = state.get_all_token_ids()
-        if not all_tokens: return result
+        if not all_tokens:
+            return result
         unique_tokens = set(all_tokens)
         for token_id in unique_tokens:
-            if token_id >= result.shape[-1]: continue
+            if token_id >= result.shape[-1]:
+                continue
             if result[0, token_id] > 0:
                 result[0, token_id] /= params.repetition_penalty
             else:
@@ -193,6 +215,7 @@ class RepetitionPenaltySampler(Sampler):
 
 class PenaltySampler(Sampler):
     """Presence and frequency penalty sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -210,7 +233,8 @@ class PenaltySampler(Sampler):
             )
         result = logits.copy()
         for token_id, count in state.token_counts.items():
-            if token_id >= result.shape[-1]: continue
+            if token_id >= result.shape[-1]:
+                continue
             result[0, token_id] -= params.presence_penalty
             result[0, token_id] -= params.frequency_penalty * count
         return result

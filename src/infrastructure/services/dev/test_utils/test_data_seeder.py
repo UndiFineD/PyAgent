@@ -16,10 +16,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 import random
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -64,9 +66,7 @@ class TestDataSeeder:
             for i in range(count)
         ]
 
-    def generate_test_results(
-        self, count: int = 10, pass_rate: float = 0.8
-    ) -> list[dict[str, Any]]:
+    def generate_test_results(self, count: int = 10, pass_rate: float = 0.8) -> list[dict[str, Any]]:
         """Generate test results for testing.
 
         Args:
@@ -112,9 +112,7 @@ class TestDataSeeder:
         """
         return f"id_{int(time.time() * 1000000)}_{random.randint(1000, 9999)}"
 
-    def generate_bulk_data(
-        self, count: int = 10, data_type: str = "python_code"
-    ) -> list[str]:
+    def generate_bulk_data(self, count: int = 10, data_type: str = "python_code") -> list[str]:
         """Generate bulk data.
 
         Args:

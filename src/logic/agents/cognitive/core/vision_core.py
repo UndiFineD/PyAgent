@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,8 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""VisionCore logic for PyAgent visual processing.
+
+Provides logic for image hashing, glitch detection, and visual signature extraction
+from GUI screenshots and other visual data sources.
+"""
+
 from __future__ import annotations
 import hashlib
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
 
 
 class VisionCore:
@@ -22,13 +38,27 @@ class VisionCore:
     """
 
     def calculate_image_hash(self, image_bytes: bytes) -> str:
-        """Deterministic hash of image data."""
+        """Deterministic hash of image data.
+
+        Args:
+            image_bytes: The raw image bytes.
+
+        Returns:
+            The MD5 hexadecimal hash.
+        """
         return hashlib.md5(image_bytes).hexdigest()
 
     def detect_glitch_patterns(self, pixel_data: list[int]) -> bool:
         """
         Heuristic-based glitch detection.
-        Returns True if the image data appears corrupted, blank, or extremely noisy.
+
+        Checks for uniformity and low entropy which may indicate rendering failures.
+
+        Args:
+            pixel_data: List of integer pixel values.
+
+        Returns:
+            True if a glitch or corrupted state is detected.
         """
         if not pixel_data:
             return True

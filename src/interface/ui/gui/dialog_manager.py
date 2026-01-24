@@ -20,11 +20,13 @@
 """Dialog and interaction management for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
-from typing import Any
 from collections.abc import Callable
+from tkinter import filedialog, messagebox, ttk
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -63,12 +65,8 @@ class DialogManager:
                 callback(name)
                 dialog.destroy()
 
-        ttk.Button(dialog, text="OK", command=on_ok).pack(
-            side=tk.LEFT, padx=30, pady=10
-        )
-        ttk.Button(dialog, text="Cancel", command=dialog.destroy).pack(
-            side=tk.RIGHT, padx=30, pady=10
-        )
+        ttk.Button(dialog, text="OK", command=on_ok).pack(side=tk.LEFT, padx=30, pady=10)
+        ttk.Button(dialog, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT, padx=30, pady=10)
 
     def browse_file(self, initial_dir: str | None = None) -> str:
         """Standard file browser dialog."""
@@ -90,38 +88,28 @@ class DialogManager:
         dialog.transient(self.root)
         dialog.grab_set()
 
-        ttk.Label(dialog, text="⚙️ Configuration", font=("Segoe UI", 12, "bold")).pack(
-            pady=10
-        )
+        ttk.Label(dialog, text="⚙️ Configuration", font=("Segoe UI", 12, "bold")).pack(pady=10)
 
         # Token File
         token_frame = ttk.Frame(dialog, padding=5)
         token_frame.pack(fill=tk.X)
         ttk.Label(token_frame, text="GitHub Token File:").pack(side=tk.LEFT)
         token_var = tk.StringVar(value=config_manager.get("github_token_file"))
-        ttk.Entry(token_frame, textvariable=token_var).pack(
-            side=tk.LEFT, fill=tk.X, expand=True, padx=5
-        )
+        ttk.Entry(token_frame, textvariable=token_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
 
         def browse_token() -> None:
             f: str = filedialog.askopenfilename()
             if f:
                 token_var.set(f)
 
-        ttk.Button(token_frame, text="...", width=3, command=browse_token).pack(
-            side=tk.RIGHT
-        )
+        ttk.Button(token_frame, text="...", width=3, command=browse_token).pack(side=tk.RIGHT)
 
         # Other settings
-        options_frame: ttk.Labelframe = ttk.LabelFrame(
-            dialog, text="Preferences", padding=10
-        )
+        options_frame: ttk.Labelframe = ttk.LabelFrame(dialog, text="Preferences", padding=10)
         options_frame.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
 
         cache_var = tk.BooleanVar(value=config_manager.get("cache_enabled"))
-        ttk.Checkbutton(
-            options_frame, text="Enable Data Caching (Disk/Memory)", variable=cache_var
-        ).pack(anchor=tk.W)
+        ttk.Checkbutton(options_frame, text="Enable Data Caching (Disk/Memory)", variable=cache_var).pack(anchor=tk.W)
 
         model_label_frame = ttk.Frame(options_frame)
         model_label_frame.pack(fill=tk.X, pady=5)
@@ -140,9 +128,7 @@ class DialogManager:
             messagebox.showinfo("Success", "Settings saved and applied.")
             dialog.destroy()
 
-        ttk.Button(
-            dialog, text="SAVE SETTINGS", style="Accent.TButton", command=on_save
-        ).pack(pady=10)
+        ttk.Button(dialog, text="SAVE SETTINGS", style="Accent.TButton", command=on_save).pack(pady=10)
 
     def show_bmad_wizard(self, setup_callback: Callable[[dict[str, Any]], Any]) -> None:
         """Displays a wizard to initialize a project using BMAD tracks."""
@@ -152,16 +138,12 @@ class DialogManager:
         wizard.transient(self.root)
         wizard.grab_set()
 
-        ttk.Label(
-            wizard, text="🚀 Initialize BMAD Methodology", font=("Segoe UI", 12, "bold")
-        ).pack(pady=10)
+        ttk.Label(wizard, text="🚀 Initialize BMAD Methodology", font=("Segoe UI", 12, "bold")).pack(pady=10)
 
         info_frame = ttk.Frame(wizard, padding=10)
         info_frame.pack(fill=tk.BOTH, expand=True)
 
-        ttk.Label(info_frame, text="Select Track:", font=("Segoe UI", 10, "bold")).pack(
-            anchor=tk.W
-        )
+        ttk.Label(info_frame, text="Select Track:", font=("Segoe UI", 10, "bold")).pack(anchor=tk.W)
         track_var = tk.StringVar(value="BMad Method")
         from .constants import BMAD_TRACKS
 
@@ -173,9 +155,7 @@ class DialogManager:
         )
         track_cb.pack(fill=tk.X, pady=5)
 
-        desc_lbl = ttk.Label(
-            info_frame, text=BMAD_TRACKS["BMad Method"]["desc"], wraplength=450
-        )
+        desc_lbl = ttk.Label(info_frame, text=BMAD_TRACKS["BMad Method"]["desc"], wraplength=450)
         desc_lbl.pack(fill=tk.X, pady=5)
 
         def update_desc(event: Any) -> None:
@@ -187,17 +167,11 @@ class DialogManager:
         options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
 
         prd_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(
-            options_frame, text="Create PRD template", variable=prd_var
-        ).pack(anchor=tk.W, padx=5)
+        ttk.Checkbutton(options_frame, text="Create PRD template", variable=prd_var).pack(anchor=tk.W, padx=5)
         spec_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(
-            options_frame, text="Create Tech Spec template", variable=spec_var
-        ).pack(anchor=tk.W, padx=5)
+        ttk.Checkbutton(options_frame, text="Create Tech Spec template", variable=spec_var).pack(anchor=tk.W, padx=5)
         tests_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(
-            options_frame, text="Initialize tests/ folder", variable=tests_var
-        ).pack(anchor=tk.W, padx=5)
+        ttk.Checkbutton(options_frame, text="Initialize tests/ folder", variable=tests_var).pack(anchor=tk.W, padx=5)
 
         def on_finish() -> None:
             config = {
@@ -209,9 +183,7 @@ class DialogManager:
             setup_callback(config)
             wizard.destroy()
 
-        ttk.Button(
-            wizard, text="FINISH & SETUP", style="Accent.TButton", command=on_finish
-        ).pack(pady=10)
+        ttk.Button(wizard, text="FINISH & SETUP", style="Accent.TButton", command=on_finish).pack(pady=10)
 
     def show_memory_dialog(
         self,
@@ -239,9 +211,7 @@ class DialogManager:
         scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
         scrollable_frame = ttk.Frame(canvas)
 
-        scrollable_frame.bind(
-            "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
+        scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", width=550)
         canvas.configure(yscrollcommand=scrollbar.set)
 
@@ -267,9 +237,7 @@ class DialogManager:
 
             for i, msg in enumerate(temp_history):
                 role = msg["role"]
-                f: ttk.Labelframe = ttk.LabelFrame(
-                    scrollable_frame, text=role.capitalize()
-                )
+                f: ttk.Labelframe = ttk.LabelFrame(scrollable_frame, text=role.capitalize())
                 f.pack(fill=tk.X, pady=5, padx=5)
 
                 txt = tk.Text(f, height=3, font=("Consolas", 9), wrap=tk.WORD)
@@ -304,7 +272,5 @@ class DialogManager:
             save_callback(temp_history)
             dialog.destroy()
 
-        ttk.Button(
-            footer, text="SAVE & APPLY", style="Accent.TButton", command=on_save
-        ).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(footer, text="SAVE & APPLY", style="Accent.TButton", command=on_save).pack(side=tk.RIGHT, padx=5)
         ttk.Button(footer, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT)

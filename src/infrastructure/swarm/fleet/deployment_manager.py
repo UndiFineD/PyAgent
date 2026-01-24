@@ -16,8 +16,10 @@
 """Manager for automated deployment, containerization, and fleet-as-a-service scaling."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

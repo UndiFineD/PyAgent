@@ -15,11 +15,14 @@
 """Base model classes and utility functions."""
 
 from __future__ import annotations
+
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
-from .core_enums import AuthMethod, SerializationFormat, FilePriority, AgentEvent
+
+from .core_enums import (AgentEvent, AuthMethod, FilePriority,
+                         SerializationFormat)
 
 # ========== Utility Functions ==========
 
@@ -64,9 +67,7 @@ def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
     return {}
 
 
-def _empty_dict_str_quality_criteria() -> dict[
-    str, tuple[Callable[[str], float], float]
-]:
+def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
     return {}
 
 
@@ -133,12 +134,8 @@ class SerializationConfig:
 class FilePriorityConfig:
     """Configuration for file priority."""
 
-    path_patterns: dict[str, FilePriority] = field(
-        default_factory=_empty_dict_str_filepriority
-    )
-    extension_priorities: dict[str, FilePriority] = field(
-        default_factory=_empty_dict_str_filepriority
-    )
+    path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
+    extension_priorities: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     default_priority: FilePriority = FilePriority.NORMAL
 
 

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -7,7 +21,7 @@ LoRA adapter registry.
 import logging
 from typing import Dict, List, Optional
 
-from .models import LoraAdapter, AdapterState
+from .models import AdapterState, LoraAdapter
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +85,7 @@ class LoraRegistry:
         if name not in self._adapters:
             return False
 
-        adapter = self._adapters.pop(name)
+        self._adapters.pop(name)
         self._name_to_id.pop(name, None)
 
         logger.info(f"Unregistered LoRA adapter: {name}")
@@ -94,14 +108,8 @@ class LoraRegistry:
 
     def list_loaded(self) -> List[LoraAdapter]:
         """List adapters that are currently loaded."""
-        return [
-            a for a in self._adapters.values()
-            if a.state in (AdapterState.LOADED, AdapterState.ACTIVE)
-        ]
+        return [a for a in self._adapters.values() if a.state in (AdapterState.LOADED, AdapterState.ACTIVE)]
 
     def find_by_base_model(self, base_model: str) -> List[LoraAdapter]:
         """Find adapters compatible with a base model."""
-        return [
-            a for a in self._adapters.values()
-            if a.base_model == base_model
-        ]
+        return [a for a in self._adapters.values() if a.base_model == base_model]

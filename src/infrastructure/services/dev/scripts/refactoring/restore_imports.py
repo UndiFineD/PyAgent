@@ -15,9 +15,11 @@
 """Script for restoring imports that were incorrectly commented out as unused."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -65,31 +67,21 @@ for root, _, files in os.walk(src_path):
                                         restored = inner_match.group(1)
                                     else:
                                         # If it has the suffix but not the leading hash, just strip suffix
-                                        restored = re.sub(
-                                            r"\s*# Auto-removed unused.*$", "", restored
-                                        )
+                                        restored = re.sub(r"\s*# Auto-removed unused.*$", "", restored)
 
-                                print(
-                                    f"    Restoring line {i + 1}: {indent}{restored.strip()}"
-                                )
+                                print(f"    Restoring line {i + 1}: {indent}{restored.strip()}")
                                 lines[i] = f"{indent}{restored}"
                                 changes_in_file += 1
                             else:
                                 # If it doesn't have the leading hash but has the suffix
                                 if "# Auto-removed unused" in line:
-                                    restored = re.sub(
-                                        r"\s*# Auto-removed unused.*$", "", line
-                                    )
-                                    print(
-                                        f"    Restoring line {i + 1} (suffix only): {restored.strip()}"
-                                    )
+                                    restored = re.sub(r"\s*# Auto-removed unused.*$", "", line)
+                                    print(f"    Restoring line {i + 1} (suffix only): {restored.strip()}")
                                     lines[i] = restored
                                     changes_in_file += 1
 
                     if changes_in_file > 0:
-                        new_content = "\n".join(lines) + (
-                            "\n" if content.endswith("\n") else ""
-                        )
+                        new_content = "\n".join(lines) + ("\n" if content.endswith("\n") else "")
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(new_content)
                         print(f"  Modified: {path} ({changes_in_file} lines restored)")
@@ -97,6 +89,4 @@ for root, _, files in os.walk(src_path):
             except Exception as e:
                 print(f"  Error processing {path}: {e}")
 
-print(
-    f"\nFinished. Processed {files_processed} files, modified {files_modified} files."
-)
+print(f"\nFinished. Processed {files_processed} files, modified {files_modified} files.")

@@ -12,16 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Dream state orchestrator.py module.
+"""
+
 from __future__ import annotations
+
 import asyncio
-import logging
 import json
+import logging
 import os
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.async_fleet_manager import AsyncFleetManager
+    from src.infrastructure.swarm.fleet.async_fleet_manager import \
+        AsyncFleetManager
 
 __version__ = VERSION
 
@@ -42,14 +49,10 @@ class DreamStateOrchestrator:
         """
         Starts an async simulation cycle to evolve skills in a specific area.
         """
-        logging.info(
-            f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}"
-        )
+        logging.info(f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}")
 
         # 1. Generate Synthetic Scenarios
-        scenarios = await self.fleet.call_by_capability(
-            "generate_training_data", context=focus_area
-        )
+        scenarios = await self.fleet.call_by_capability("generate_training_data", context=focus_area)
 
         # 2. Simulate outcomes across variations
         tasks = [

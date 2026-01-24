@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
+
+"""
+Changelog analytics mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
+
 import re
 from typing import Any
+
 
 class ChangelogAnalyticsMixin:
     """Mixin for calculating statistics and analytics for changelogs."""

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Reader for tensorizer file format."""
@@ -9,19 +23,21 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple, Union
+from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple,
+                    Union)
+
 import numpy as np
-from .config import (
-    TensorizerConfig, CompressionType, DTYPE_MAP,
-    TENSORIZER_MAGIC, TENSORIZER_VERSION
-)
-from .metadata import TensorMetadata
+
 from .compression import decompress_data
+from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
+                     CompressionType, TensorizerConfig)
+from .metadata import TensorMetadata
 
 
 @dataclass
 class LoadProgress:
     """Progress information for loading."""
+
     total_tensors: int = 0
     loaded_tensors: int = 0
     total_bytes: int = 0
@@ -160,7 +176,7 @@ class TensorizerReader:
         """Load tensor data."""
         with self._lock:
             if self._mmap:
-                data = self._mmap[meta.offset:meta.offset + meta.compressed_size]
+                data = self._mmap[meta.offset : meta.offset + meta.compressed_size]
             else:
                 if self._file is None:
                     raise RuntimeError("Reader not opened")
@@ -175,10 +191,7 @@ class TensorizerReader:
         if self.config.verify_checksums:
             actual_checksum = hashlib.sha256(data).hexdigest()[:16]
             if actual_checksum != meta.checksum:
-                raise ValueError(
-                    f"Checksum mismatch for {meta.name}: "
-                    f"expected {meta.checksum}, got {actual_checksum}"
-                )
+                raise ValueError(f"Checksum mismatch for {meta.name}: expected {meta.checksum}, got {actual_checksum}")
 
         # Convert to numpy
         np_dtype, _ = DTYPE_MAP.get(meta.dtype, (np.float32, 4))
@@ -221,11 +234,7 @@ class TensorizerReader:
 
         progress = LoadProgress(
             total_tensors=len(names),
-            total_bytes=sum(
-                self._metadata[n].size_bytes
-                for n in names
-                if n in self._metadata
-            ),
+            total_bytes=sum(self._metadata[n].size_bytes for n in names if n in self._metadata),
         )
 
         result: Dict[str, np.ndarray] = {}

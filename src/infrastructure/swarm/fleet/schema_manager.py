@@ -16,9 +16,11 @@
 """Fleet-wide manager for database schema discovery and metadata storage."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -32,9 +34,7 @@ class SchemaManager:
     def register_schema(self, db_id: str, tables: dict[str, list[str]]) -> str:
         """Registers a database schema (tables and columns)."""
         self.schemas[db_id] = tables
-        logging.info(
-            f"SchemaManager: Registered schema for {db_id} with {len(tables)} tables."
-        )
+        logging.info(f"SchemaManager: Registered schema for {db_id} with {len(tables)} tables.")
 
     def get_context_for_agent(self, db_id: str) -> str:
         """Generates a schema summary for an agent's system prompt."""

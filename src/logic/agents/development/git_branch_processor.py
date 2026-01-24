@@ -15,13 +15,17 @@
 
 """Auto-extracted class from agent.py"""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from pathlib import Path
-from typing import Any
+
 import fnmatch
 import logging
 import subprocess
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -49,9 +53,7 @@ class GitBranchProcessor:
     def _record(self, action: str, result: str) -> None:
         """Record git operations if recorder is available."""
         if self.recorder:
-            self.recorder.record_interaction(
-                provider="Git", model="cli", prompt=action, result=result
-            )
+            self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)
 
     def get_changed_files(
         self,
@@ -76,13 +78,12 @@ class GitBranchProcessor:
                 capture_output=True,
                 text=True,
                 timeout=30,
+                check=False,
             )
 
             if result.returncode != 0:
                 logging.warning(f"Git diff failed: {result.stderr}")
-                self._record(
-                    f"git diff {base_branch}...{branch}", f"Failed: {result.stderr}"
-                )
+                self._record(f"git diff {base_branch}...{branch}", f"Failed: {result.stderr}")
                 return []
 
             self._record(
@@ -102,7 +103,7 @@ class GitBranchProcessor:
 
             return files
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error(f"Error getting branch changes: {e}")
             return []
 
@@ -115,9 +116,10 @@ class GitBranchProcessor:
                 capture_output=True,
                 text=True,
                 timeout=10,
+                check=False,
             )
             return result.stdout.strip() if result.returncode == 0 else None
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return None
 
     def list_branches(self, pattern: str | None = None) -> list[str]:
@@ -136,6 +138,7 @@ class GitBranchProcessor:
                 capture_output=True,
                 text=True,
                 timeout=10,
+                check=False,
             )
 
             if result.returncode != 0:
@@ -147,5 +150,5 @@ class GitBranchProcessor:
 
             return branches
 
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return []

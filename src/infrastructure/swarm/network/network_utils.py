@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Network Utilities Module - Phase 20: Production Infrastructure
 ===============================================================
@@ -29,7 +43,7 @@ import socket
 import sys
 import warnings
 from collections.abc import Iterator, Sequence
-from typing import Any, Literal
+from typing import Any
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -39,6 +53,7 @@ logger = logging.getLogger(__name__)
 try:
     import zmq
     import zmq.asyncio
+
     HAS_ZMQ = True
 except ImportError:
     HAS_ZMQ = False
@@ -47,6 +62,7 @@ except ImportError:
 # Optional psutil import
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     HAS_PSUTIL = False
@@ -58,10 +74,7 @@ except ImportError:
 # ============================================================================
 
 
-def get_ip(
-    prefer_ipv4: bool = True,
-    host_env_var: str | None = None
-) -> str:
+def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
     """
     Get the machine's IP address.
 
@@ -135,9 +148,7 @@ def get_loopback_ip(loopback_env_var: str | None = None) -> str:
     if test_bind("::1", socket.AF_INET6):
         return "::1"
 
-    raise RuntimeError(
-        "Neither 127.0.0.1 nor ::1 are bound to a local interface."
-    )
+    raise RuntimeError("Neither 127.0.0.1 nor ::1 are bound to a local interface.")
 
 
 def test_bind(address: str, family: int) -> bool:
@@ -272,11 +283,7 @@ def join_host_port(host: str, port: int) -> str:
 # ============================================================================
 
 
-def get_open_port(
-    start_port: int | None = None,
-    max_attempts: int = 100,
-    prefer_ipv4: bool = True
-) -> int:
+def get_open_port(start_port: int | None = None, max_attempts: int = 100, prefer_ipv4: bool = True) -> int:
     """
     Find an available port.
 
@@ -353,12 +360,7 @@ def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
         return False
 
 
-def wait_for_port(
-    host: str,
-    port: int,
-    timeout: float = 30.0,
-    poll_interval: float = 0.5
-) -> bool:
+def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: float = 0.5) -> bool:
     """
     Wait for a port to become available.
 
@@ -372,6 +374,7 @@ def wait_for_port(
         True if port became available, False if timeout.
     """
     import time
+
     deadline = time.monotonic() + timeout
 
     while time.monotonic() < deadline:
@@ -469,6 +472,7 @@ def get_zmq_ipc_path(base_path: str | None = None) -> str:
         IPC URI string.
     """
     import tempfile
+
     if base_path is None:
         base_path = tempfile.gettempdir()
     return f"ipc://{base_path}/{uuid4()}"
@@ -496,12 +500,7 @@ def close_zmq_sockets(sockets: Sequence[Any]) -> None:
 
 
 @contextlib.contextmanager
-def zmq_socket_context(
-    context: Any,
-    socket_type: int,
-    *,
-    linger: int = 0
-) -> Iterator[Any]:
+def zmq_socket_context(context: Any, socket_type: int, *, linger: int = 0) -> Iterator[Any]:
     """
     Context manager for ZMQ sockets with automatic cleanup.
 
@@ -593,6 +592,7 @@ def get_primary_interface() -> str | None:
     # Get the interface used for default route
     with contextlib.suppress(Exception):
         import subprocess
+
         if sys.platform != "win32":
             result = subprocess.run(
                 ["ip", "route", "get", "8.8.8.8"],

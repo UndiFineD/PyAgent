@@ -1,11 +1,18 @@
+
+"""
+Fleet lifecycle mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
     from src.core.base.lifecycle.base_agent import BaseAgent
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
 
 class FleetLifecycleMixin:
     """Mixin for agent lifecycle and biological swarm patterns in FleetManager."""

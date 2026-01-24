@@ -18,10 +18,12 @@ GUI Agent: Provides a graphical user interface for PyAgent.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import sys
 import tkinter as tk
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.interface.ui.gui.main_app import PyAgentGUI
 
 # Ensure project root is in path for modular imports

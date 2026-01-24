@@ -1,22 +1,35 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Base.py module.
+"""
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 import heapq
 import threading
 import time
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    Optional,
-    TypeVar,
-)
 from concurrent.futures import Future, ThreadPoolExecutor
-from .enums import TaskPriority, TaskState
-from .models import TaskStats, ScheduledTask
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
-R = TypeVar('R')
+from .enums import TaskPriority, TaskState
+from .models import ScheduledTask, TaskStats
+
+R = TypeVar("R")
+
 
 class PriorityScheduler:
     """
@@ -49,9 +62,7 @@ class PriorityScheduler:
         self._enable_work_stealing = enable_work_stealing
 
         # Priority queues (one per priority level)
-        self._queues: Dict[TaskPriority, List[ScheduledTask]] = {
-            p: [] for p in TaskPriority
-        }
+        self._queues: Dict[TaskPriority, List[ScheduledTask]] = {p: [] for p in TaskPriority}
 
         self._lock = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
@@ -86,7 +97,7 @@ class PriorityScheduler:
         """
         now = time.monotonic()
 
-        deadline = float('inf')
+        deadline = float("inf")
         if deadline_ms is not None:
             deadline = now + deadline_ms / 1000.0
 

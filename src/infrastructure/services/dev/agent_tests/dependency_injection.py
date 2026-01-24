@@ -16,8 +16,11 @@
 """Dependency injection for tests."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .models import TestDependency
 
 __version__ = VERSION

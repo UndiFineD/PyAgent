@@ -16,9 +16,11 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 import logging
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -102,9 +104,7 @@ class AgentPriorityQueue:
             if not available:
                 # Cycle detected or error
                 remaining = [n for n in self._agents if n not in executed]
-                logging.warning(
-                    f"Dependency cycle detected, adding remaining: {remaining}"
-                )
+                logging.warning(f"Dependency cycle detected, adding remaining: {remaining}")
                 order.extend(sorted(remaining))
                 break
 

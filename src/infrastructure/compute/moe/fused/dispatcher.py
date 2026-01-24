@@ -1,6 +1,27 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Dispatcher.py module.
+"""
+
 from __future__ import annotations
+
+from typing import Callable
+
 import numpy as np
-from typing import Any, Callable, List, Tuple
+
 
 class SparseDispatcher:
     """Sparse dispatcher for token-to-expert assignment."""
@@ -72,6 +93,7 @@ class SparseDispatcher:
 
         return output
 
+
 class DenseDispatcher:
     """Dense dispatcher using matrix operations."""
 
@@ -94,6 +116,6 @@ class DenseDispatcher:
                 if mask.any():
                     expert_input = x[mask]
                     expert_output = expert_fn(expert_idx, expert_input)
-                    output[mask] += expert_weights[mask, k:k+1] * expert_output
+                    output[mask] += expert_weights[mask, k : k + 1] * expert_output
 
         return output

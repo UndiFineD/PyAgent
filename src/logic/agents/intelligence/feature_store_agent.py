@@ -20,19 +20,21 @@ Inspired by MLOps best practices.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
 
 __version__ = VERSION
 
 
-class FeatureStoreAgent(BaseAgent):
+class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Manages the lifecycle of high-utility context features for the fleet.
     Integrated with SynthesisCore for feature vectorization and insight merging.
     """
@@ -50,9 +52,7 @@ class FeatureStoreAgent(BaseAgent):
         """
         vector = self.core.vectorize_insight(insight_text)
         feature_name = f"insight_{hash(insight_text)}"
-        return self.register_feature(
-            feature_name, vector, {"original_text": insight_text, "tags": tags}
-        )
+        return self.register_feature(feature_name, vector, {"original_text": insight_text, "tags": tags})
 
     @as_tool
     def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
@@ -68,9 +68,7 @@ class FeatureStoreAgent(BaseAgent):
         return self.core.merge_feature_vectors(vectors)
 
     @as_tool
-    def register_feature(
-        self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None
-    ) -> str:
+    def register_feature(self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None) -> str:
         """Registers a new feature in the store.
 
         Args:
@@ -83,7 +81,7 @@ class FeatureStoreAgent(BaseAgent):
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump({"value": value, "metadata": metadata or {}}, f, indent=4)
             return f"Feature '{feature_name}' successfully registered in store."
-        except Exception as e:
+        except (IOError, ValueError, TypeError) as e:
             return f"Failed to register feature: {e}"
 
     @as_tool
@@ -97,7 +95,7 @@ class FeatureStoreAgent(BaseAgent):
             with open(path, encoding="utf-8") as f:
                 data = json.load(f)
                 return data.get("value")
-        except Exception as e:
+        except (IOError, ValueError, json.JSONDecodeError) as e:
             logging.error(f"Error reading feature {feature_name}: {e}")
             return None
 
@@ -106,17 +104,14 @@ class FeatureStoreAgent(BaseAgent):
         """Lists all available features in the store."""
         return [f.stem for f in self.feature_dir.glob("*.json")]
 
-    def improve_content(self, input_text: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Advisory on feature engineering for agents."""
-        return (
-            "I am serving current agentic features. Recommend a feature for extraction?"
-        )
+        _ = (prompt, target_file)
+        return "I am serving current agentic features. Recommend a feature for extraction?"
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management"
-    )
+    main = create_main_function(FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management")
     main()

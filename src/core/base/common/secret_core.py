@@ -18,12 +18,14 @@ Handles credential masking, policy validation, and naming standards.
 """
 
 from __future__ import annotations
+
 import re
 from typing import List
+
 from src.core.base.common.base_core import BaseCore
 
 try:
-    import rust_core as rc # pylint: disable=import-error
+    import rust_core as rc  # pylint: disable=import-error
 except ImportError:
     rc = None
 
@@ -43,8 +45,8 @@ class SecretCore(BaseCore):
 
     def mask_secret(self, text: str) -> str:
         """Masks sensitive information in strings (Rust accelerated)."""
-        if rc and hasattr(rc, "mask_sensitive_data_rust"): # pylint: disable=no-member
-            return rc.mask_sensitive_data_rust(text) # pylint: disable=no-member
+        if rc and hasattr(rc, "mask_sensitive_data_rust"):  # pylint: disable=no-member
+            return rc.mask_sensitive_data_rust(text)  # pylint: disable=no-member
 
         masked_text = text
         for pattern in self.mask_patterns:

@@ -13,19 +13,20 @@
 # limitations under the License.
 
 
-"""Agent specializing in voice-to-text and multimedia processing.
-Integrates with fleet for voice-driven commands.
-"""
+"""Agent specializing in voice-to-text and multimedia processing."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class VoiceAgent(BaseAgent):
     """Handles voice interactions and audio processing with paralinguistic support."""
 
@@ -49,6 +50,7 @@ class VoiceAgent(BaseAgent):
         Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
         Supports expressive markers: [laugh], [chuckle], [sigh], [breath].
         """
+        _ = reference_voice_path
         logging.info(
             f"VoiceAgent: Synthesizing speech in {language_code} with tags. Text: {text}"
         )
@@ -98,7 +100,10 @@ class VoiceAgent(BaseAgent):
 
         return f"Audio saved to {output_path} (Simulated)"
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Optimizes fleet content based on cognitive reasoning."""
+        _ = prompt
+        _ = target_file
         return "VoiceAgent active and ready for multimedia tasks."
 
 

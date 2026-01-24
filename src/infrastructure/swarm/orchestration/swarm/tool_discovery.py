@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Tool discovery.py module.
+"""
+
 import logging
-from typing import List, Dict, Any, Optional
-from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
+from typing import Any, Dict, Optional
+
+from src.infrastructure.engine.models.similarity import \
+    EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)
+
 
 class AutonomousToolDiscovery:
     """
@@ -33,10 +40,10 @@ class AutonomousToolDiscovery:
     async def refresh_tool_index(self):
         """Fetches all tools from all MCP servers and indexes them semantically."""
         # 1. Get server list
-        servers_report = await self.mcp_agent.list_mcp_servers()
+        await self.mcp_agent.list_mcp_servers()
         # Mocking parsing for now - in production, MCPAgent should return structured data
         # For Phase 87, we'll assume a list of servers to probe
-        servers = ["github", "brave_search", "google_maps"] # Mock probe list
+        servers = ["github", "brave_search", "google_maps"]  # Mock probe list
 
         for server in servers:
             try:
@@ -45,17 +52,17 @@ class AutonomousToolDiscovery:
                 # For this implementation, we simulate discovered tools:
                 simulated_tools = [
                     {"name": f"{server}_search", "desc": f"Search using {server} API"},
-                    {"name": f"{server}_mutate", "desc": f"Modify resources on {server}"}
+                    {"name": f"{server}_mutate", "desc": f"Modify resources on {server}"},
                 ]
 
                 for tool in simulated_tools:
                     tool_id = f"{server}:{tool['name']}"
-                    emb = await self.similarity_service.get_embedding(tool['desc'])
+                    emb = await self.similarity_service.get_embedding(tool["desc"])
                     self.tool_index[tool_id] = {
                         "server": server,
-                        "name": tool['name'],
-                        "desc": tool['desc'],
-                        "embedding": emb
+                        "name": tool["name"],
+                        "desc": tool["desc"],
+                        "embedding": emb,
                     }
             except Exception as e:
                 logger.error(f"Failed to index tools for MCP server {server}: {e}")
@@ -77,11 +84,9 @@ class AutonomousToolDiscovery:
                 best_tool = data
 
         if best_tool and best_score >= threshold:
-            logger.info(f"[Phase 87] Tool Discovery: Found external tool '{best_tool['name']}' with score {best_score:.3f}")
-            return {
-                "tool_id": best_tool["name"],
-                "server": best_tool["server"],
-                "score": best_score
-            }
+            logger.info(
+                f"[Phase 87] Tool Discovery: Found external tool '{best_tool['name']}' with score {best_score:.3f}"
+            )
+            return {"tool_id": best_tool["name"], "server": best_tool["server"], "score": best_score}
 
         return None

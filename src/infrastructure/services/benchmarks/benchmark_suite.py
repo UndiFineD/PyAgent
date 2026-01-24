@@ -17,14 +17,11 @@ Consolidates various benchmarking scripts into a single infrastructure.
 """
 
 from __future__ import annotations
-import time
-import logging
-import sys
-import asyncio
+
 import inspect
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Callable
-from pathlib import Path
+import logging
+import time
+from typing import Any, Callable, Dict, List, Optional
 
 # Try to import rust_core if available
 try:
@@ -32,7 +29,8 @@ try:
 except ImportError:
     rc = None
 
-from src.infrastructure.engine.tokenization.tokenizer_registry import estimate_token_count
+from src.infrastructure.engine.tokenization.tokenizer_registry import \
+    estimate_token_count
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 
@@ -44,10 +42,7 @@ class BenchmarkSuite:
         self.results: List[BenchmarkResult] = []
 
     def benchmark_tokenization(
-        self,
-        test_texts: Dict[str, str],
-        iterations: int = 1000,
-        compare_rust: bool = True
+        self, test_texts: Dict[str, str], iterations: int = 1000, compare_rust: bool = True
     ) -> List[BenchmarkResult]:
         """Benchmarks token estimation speed across different text samples."""
         self.logger.info(f"Starting tokenization benchmark ({iterations} iterations)")
@@ -71,8 +66,8 @@ class BenchmarkSuite:
                 metrics={
                     "avg_time_us": (duration / iterations) * 1_000_000,
                     "chars_per_token": len(text) / tokens if tokens > 0 else 0,
-                    "tokens_per_call": tokens
-                }
+                    "tokens_per_call": tokens,
+                },
             )
             results.append(res)
             self.results.append(res)
@@ -95,8 +90,8 @@ class BenchmarkSuite:
                     metrics={
                         "avg_time_us": (duration_rust / iterations) * 1_000_000,
                         "tokens_per_call": rust_tokens,
-                        "speedup": duration / duration_rust if duration_rust > 0 else 1.0
-                    }
+                        "speedup": duration / duration_rust if duration_rust > 0 else 1.0,
+                    },
                 )
                 results.append(res_rust)
                 self.results.append(res_rust)
@@ -104,11 +99,7 @@ class BenchmarkSuite:
         return results
 
     async def benchmark_agent_performance(
-        self,
-        agent: Any,
-        prompt: str,
-        label: str = "Agent Performance",
-        method_name: str = "chat"
+        self, agent: Any, prompt: str, label: str = "Agent Performance", method_name: str = "chat"
     ) -> BenchmarkResult:
         """Benchmarks an agent's generation performance."""
         self.logger.info(f"Benchmarking agent {label} using method {method_name}")
@@ -141,16 +132,11 @@ class BenchmarkSuite:
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
                 total_tokens=total_tokens,
-                metrics={"output_length": len(str(output))}
+                metrics={"output_length": len(str(output))},
             )
         except Exception as e:
             duration = time.perf_counter() - start
-            res = BenchmarkResult(
-                name=label,
-                duration=duration,
-                success=False,
-                error=str(e)
-            )
+            res = BenchmarkResult(name=label, duration=duration, success=False, error=str(e))
             self.logger.error(f"Agent benchmark failed: {e}")
 
         self.results.append(res)
@@ -160,7 +146,7 @@ class BenchmarkSuite:
         self,
         test_texts: List[str],
         duration_seconds: int = 60,
-        progress_callback: Optional[Callable[[float, int, int], None]] = None
+        progress_callback: Optional[Callable[[float, int, int], None]] = None,
     ) -> BenchmarkResult:
         """Runs a sustained throughput test for token estimation."""
         self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")
@@ -189,7 +175,7 @@ class BenchmarkSuite:
             duration=actual_duration,
             iterations=iterations,
             total_tokens=total_tokens,
-            metrics={"texts_type": "mixed"}
+            metrics={"texts_type": "mixed"},
         )
         self.results.append(res)
         return res

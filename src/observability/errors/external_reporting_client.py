@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
+
+import logging
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
+
 from .error_entry import ErrorEntry
 from .external_reporter import ExternalReporter
-from typing import Any
-import logging
 
 __version__ = VERSION
 

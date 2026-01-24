@@ -13,16 +13,20 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class FleetTelemetryVisualizer:
     """
     FleetTelemetryVisualizer recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("FleetTelemetryVisualizer initialized (Placeholder).")
@@ -38,4 +42,3 @@ class FleetTelemetryVisualizer:
     def identify_bottlenecks(self) -> list:
         """Identifies performance bottlenecks in the swarm (Phase 37)."""
         return ["No bottlenecks detected currently."]
-

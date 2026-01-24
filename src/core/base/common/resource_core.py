@@ -17,15 +17,18 @@ Core logic for Resource Quotas and budget enforcement.
 """
 
 from __future__ import annotations
+
 import time
-from typing import Any, Tuple, Optional, Dict
 from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, Tuple
+
 from .base_core import BaseCore
 
 
 @dataclass
 class QuotaConfig:
     """Configuration for agent resource quotas."""
+
     max_tokens: Optional[int] = None
     max_time_seconds: Optional[int] = None
     max_cycles: Optional[int] = None
@@ -34,6 +37,7 @@ class QuotaConfig:
 @dataclass
 class ResourceUsage:
     """Current resource usage for an agent session."""
+
     tokens_input: int = 0
     tokens_output: int = 0
     start_time: float = field(default_factory=time.time)
@@ -62,9 +66,7 @@ class ResourceCore(BaseCore):
         self._is_interrupted = False
         self._interrupt_reason: Optional[str] = None
 
-    def update_usage(
-        self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0
-    ) -> bool:
+    def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0) -> bool:
         """Update current usage metrics."""
         self.usage.tokens_input += tokens_input
         self.usage.tokens_output += tokens_output
@@ -78,14 +80,10 @@ class ResourceCore(BaseCore):
             self._interrupt_reason = f"Token quota exceeded ({self.usage.total_tokens} >= {self.config.max_tokens})"
             return True, self._interrupt_reason
 
-        if (
-            self.config.max_time_seconds
-            and self.usage.elapsed_time >= self.config.max_time_seconds
-        ):
+        if self.config.max_time_seconds and self.usage.elapsed_time >= self.config.max_time_seconds:
             self._is_interrupted = True
             self._interrupt_reason = (
-                f"Time quota exceeded ({self.usage.elapsed_time:.2f}s >= "
-                f"{self.config.max_time_seconds}s)"
+                f"Time quota exceeded ({self.usage.elapsed_time:.2f}s >= {self.config.max_time_seconds}s)"
             )
             return True, self._interrupt_reason
 

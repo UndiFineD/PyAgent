@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Cognitive Super-Agent: A fused agent combining Reasoning and Reflection.
+"""
 
-from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
@@ -20,6 +23,7 @@ from src.core.base.common.base_utilities import as_tool
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class CognitiveSuperAgent(BaseAgent):
     """
     Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
@@ -38,6 +42,7 @@ class CognitiveSuperAgent(BaseAgent):
         reflection = f"Reflecting on reasoning: {reasoning}"
         return f"Final cognitive output: {reflection}"
 
-    def improve_content(self, content: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Override to use cognitive acceleration."""
-        return self.accelerated_think(content)
+        _ = target_file
+        return self.accelerated_think(prompt)

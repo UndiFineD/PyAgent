@@ -17,8 +17,10 @@ OrchestratorCore: Pure logic for swarm coordination.
 """
 
 from __future__ import annotations
+
 from pathlib import Path
 from typing import Any, Dict, Set
+
 from src.core.base.lifecycle.agent_core import AgentCore
 
 try:
@@ -43,9 +45,7 @@ class OrchestratorCore(AgentCore):
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
-    def get_timeout_for_agent(
-        self, agent_name: str, timeout_map: Dict[str, int], default: int = 120
-    ) -> int:
+    def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
         """Calculates timeout for a specific agent."""
         return timeout_map.get(agent_name.lower(), default)
 
@@ -69,9 +69,7 @@ class OrchestratorCore(AgentCore):
                 return False
         return True
 
-    def calculate_improvement_score(
-        self, files_processed: int, files_modified: int
-    ) -> float:
+    def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float:
         """
         Calculates a global improvement score.
         Rust hook candidate for phase 132.
@@ -87,15 +85,12 @@ class OrchestratorCore(AgentCore):
             return 0.0
         return (files_modified / files_processed) * 100.0
 
-    async def validate_with_consensus(
-        self, task: str, proposals: Dict[str, str], log_path: Path
-    ) -> Dict[str, Any]:
+    async def validate_with_consensus(self, task: str, proposals: Dict[str, str], log_path: Path) -> Dict[str, Any]:
         """
         Validates proposals using the ByzantineConsensusAgent via logical delegation.
         """
-        from src.logic.agents.security.byzantine_consensus_agent import (
-            ByzantineConsensusAgent,
-        )
+        from src.logic.agents.security.byzantine_consensus_agent import \
+            ByzantineConsensusAgent
 
         consensus_agent = ByzantineConsensusAgent(str(log_path))
         return await consensus_agent.run_committee_vote(task, proposals)

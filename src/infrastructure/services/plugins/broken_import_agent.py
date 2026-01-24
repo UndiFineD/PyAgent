@@ -15,12 +15,15 @@
 """Plugin demonstrating handling of broken imports during agent initialization."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.services.plugins.core.import_healer_core import ImportHealerCore
-from src.observability.structured_logger import StructuredLogger
+
 import json
 import os
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.plugins.core.import_healer_core import \
+    ImportHealerCore
+from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 
@@ -45,9 +48,7 @@ class BrokenImportAgent(BaseAgent):
 
     def update_global_import_map(self) -> None:
         logger.info("[HEALER] Updating global import map...")
-        imap = self.core.build_internal_import_map(
-            os.path.join(self._workspace_root, "src")
-        )
+        imap = self.core.build_internal_import_map(os.path.join(self._workspace_root, "src"))
         with open(self.import_map_file, "w") as f:
             json.dump(imap, f, indent=2)
         logger.info(f"[HEALER] Map saved to {self.import_map_file}")

@@ -14,9 +14,9 @@
 
 """Agent specializing in consolidating episodic memories into global project context."""
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.logic.agents.cognitive.long_term_memory import LongTermMemory
 from src.logic.agents.cognitive.context.engines.global_context_engine import (
@@ -27,6 +27,7 @@ from src.core.base.common.base_utilities import create_main_function, as_tool
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class MemoryConsolidationAgent(BaseAgent):
     """Refines project knowledge by analyzing past interactions and outcomes from federated shards."""
 
@@ -97,11 +98,15 @@ class MemoryConsolidationAgent(BaseAgent):
                     new_insights += 1
 
         self.context_engine.save()
-        report = f"✅ Consolidation complete. Shards scanned. Extracted {new_facts} facts, {new_insights} insights. Deduplicated {deduplicated} items."
+        report = (
+            f"✅ Consolidation complete. Shards scanned. "
+            f"Extracted {new_facts} facts, {new_insights} insights. "
+            f"Deduplicated {deduplicated} items."
+        )
         logging.info(report)
         return report
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Trigger consolidation cycle."""
         return self.consolidate_all()
 

@@ -13,17 +13,17 @@
 # limitations under the License.
 
 
-"""Agent specializing in mapping and visualizing the internal dependencies of the Agent OS.
-Inspired by system-design-visualizer and FalkorDB.
-"""
+"""Agent for mapping and visualizing internal dependencies of the Agent OS."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import json
 import logging
 import time
 from pathlib import Path
 from typing import Any
-import json
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 from src.logic.agents.cognitive.context.engines.graph_context_engine import (
@@ -34,8 +34,9 @@ from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class VisualizerAgent(BaseAgent):
-    """Maps relationships and handles Visual Workflow Export/Import (cc-wf-studio pattern)."""
+    """Maps relationships and handles Visual Workflow Export/Import."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -155,7 +156,7 @@ class VisualizerAgent(BaseAgent):
         if not input_path.exists():
             return {"error": f"File {file_name} not found in config/"}
 
-        with open(input_path) as f:
+        with open(input_path, encoding="utf-8") as f:
             data = json.load(f)
 
         # Convert canvas nodes to fleet tasks
@@ -266,6 +267,6 @@ class VisualizerAgent(BaseAgent):
             "metadata": {"generated_at": time.time(), "node_count": len(nodes)},
         }
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Visualizes the workspace by default."""
         return self.generate_call_graph()

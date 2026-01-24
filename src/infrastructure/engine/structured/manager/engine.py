@@ -1,11 +1,33 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Engine.py module.
+"""
+
 from __future__ import annotations
+
 import threading
 from concurrent.futures import Future, ThreadPoolExecutor
 from typing import Any, Callable, Dict, List, Optional, Sequence, Union
+
 import numpy as np
-from .config import GrammarType, GrammarSpec, ValidationResult
-from .base import StructuredOutputGrammar, StructuredOutputBackend
-from .impl import SimpleRegexGrammar, ChoiceGrammar
+
+from .base import StructuredOutputBackend, StructuredOutputGrammar
+from .config import GrammarSpec, GrammarType, ValidationResult
+from .impl import ChoiceGrammar, SimpleRegexGrammar
+
 
 class StructuredOutputManager:
     """
@@ -32,15 +54,17 @@ class StructuredOutputManager:
         self._cache_order: List[str] = []
         self._cache_lock = threading.Lock()
 
-        self._executor = ThreadPoolExecutor(
-            max_workers=num_compile_workers,
-            thread_name_prefix="grammar_compile",
-        ) if enable_async else None
+        self._executor = (
+            ThreadPoolExecutor(
+                max_workers=num_compile_workers,
+                thread_name_prefix="grammar_compile",
+            )
+            if enable_async
+            else None
+        )
         self._pending_compilations: Dict[str, Future] = {}
 
-        self._bitmask_buffer = np.zeros(
-            (max_batch_size, vocab_size), dtype=np.bool_
-        )
+        self._bitmask_buffer = np.zeros((max_batch_size, vocab_size), dtype=np.bool_)
 
         self._total_requests = 0
         self._cache_hits = 0
@@ -82,17 +106,13 @@ class StructuredOutputManager:
 
         backend = self.get_backend(grammar_spec.grammar_type)
         if backend is None:
-            raise ValueError(
-                f"No backend registered for grammar type: {grammar_spec.grammar_type}"
-            )
+            raise ValueError(f"No backend registered for grammar type: {grammar_spec.grammar_type}")
 
         if async_compile and self._executor is not None:
             if cache_key in self._pending_compilations:
                 return self._pending_compilations[cache_key]
 
-            future = self._executor.submit(
-                self._do_compile, backend, grammar_spec, request_id, cache_key
-            )
+            future = self._executor.submit(self._do_compile, backend, grammar_spec, request_id, cache_key)
             self._pending_compilations[cache_key] = future
             return future
 
@@ -106,6 +126,7 @@ class StructuredOutputManager:
         cache_key: str,
     ) -> StructuredOutputGrammar:
         import time
+
         start = time.perf_counter()
 
         try:
@@ -201,10 +222,7 @@ class StructuredOutputManager:
         stats = {
             "total_requests": self._total_requests,
             "cache_hits": self._cache_hits,
-            "cache_hit_rate": (
-                self._cache_hits / self._total_requests
-                if self._total_requests > 0 else 0.0
-            ),
+            "cache_hit_rate": (self._cache_hits / self._total_requests if self._total_requests > 0 else 0.0),
             "cache_size": len(self._grammar_cache),
             "pending_compilations": len(self._pending_compilations),
             "backends": {},
@@ -215,7 +233,8 @@ class StructuredOutputManager:
                 "grammars_compiled": backend.stats.grammars_compiled,
                 "avg_compile_time_ms": (
                     backend.stats.total_compile_time_ms / backend.stats.grammars_compiled
-                    if backend.stats.grammars_compiled > 0 else 0.0
+                    if backend.stats.grammars_compiled > 0
+                    else 0.0
                 ),
             }
         return stats
@@ -224,6 +243,7 @@ class StructuredOutputManager:
         if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
+
 
 class SimpleBackend(StructuredOutputBackend):
     """

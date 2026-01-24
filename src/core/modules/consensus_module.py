@@ -11,8 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Consensus module.py module.
+"""
+
 from __future__ import annotations
+
 from typing import Any
+
 from src.core.base.common.base_modules import BaseModule
 
 
@@ -27,9 +33,7 @@ class ConsensusModule(BaseModule):
         self.mode = self.config.get("mode", "plurality")
         return super().initialize()
 
-    def execute(
-        self, proposals: list[str], weights: list[float] | None = None
-    ) -> dict[str, Any]:
+    def execute(self, proposals: list[str], weights: list[float] | None = None) -> dict[str, Any]:
         """
         Executes the consensus protocol to find a winner.
         """
@@ -45,9 +49,7 @@ class ConsensusModule(BaseModule):
             "quorum_reached": score >= 0.667,  # BFT 2/3 requirement
         }
 
-    def calculate_winner(
-        self, proposals: list[str], weights: list[float] | None = None
-    ) -> str:
+    def calculate_winner(self, proposals: list[str], weights: list[float] | None = None) -> str:
         """Determines the winning proposal based on voting rules."""
         if not proposals:
             return ""
@@ -60,9 +62,7 @@ class ConsensusModule(BaseModule):
             weight = weights[idx] if weights else 1.0
             counts[p] = counts.get(p, 0) + weight
 
-        winner = sorted(counts.keys(), key=lambda x: (counts[x], len(x)), reverse=True)[
-            0
-        ]
+        winner = sorted(counts.keys(), key=lambda x: (counts[x], len(x)), reverse=True)[0]
 
         return winner
 

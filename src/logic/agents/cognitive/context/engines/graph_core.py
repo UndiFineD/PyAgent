@@ -18,15 +18,17 @@ GraphCore logic for PyAgent.
 Pure logic for AST-based code relationship analysis and graph management.
 """
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import ast
 from typing import Any
 
+from src.core.base.lifecycle.version import VERSION
+
 try:
     import rust_core
+
     _RUST_ACCEL = True
 except ImportError:
+    import rust_core  # type: ignore[no-redef]
     _RUST_ACCEL = False
 
 __version__ = VERSION
@@ -42,17 +44,20 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.calls: set[str] = set()
         self.bases: dict[str, list[str]] = {}
 
-    def visit_Import(self, node: ast.Import) -> None:
+    def visit_Import(self, node: ast.Import) -> None:  # pylint: disable=invalid-name
+        """Visit standard import."""
         for alias in node.names:
             self.imports.add(alias.name)
         self.generic_visit(node)
 
-    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:  # pylint: disable=invalid-name
+        """Visit from-import."""
         if node.module:
             self.imports.add(node.module)
         self.generic_visit(node)
 
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:  # pylint: disable=invalid-name
+        """Visit class definition."""
         self.classes.append(node.name)
         bases = []
 
@@ -65,7 +70,8 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.bases[node.name] = bases
         self.generic_visit(node)
 
-    def visit_Call(self, node: ast.Call) -> None:
+    def visit_Call(self, node: ast.Call) -> None:  # pylint: disable=invalid-name
+        """Visit function/method call."""
         if isinstance(node.func, ast.Name):
             self.calls.add(node.func.id)
         elif isinstance(node.func, ast.Attribute):
@@ -79,33 +85,32 @@ class GraphCore:
     @staticmethod
     def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
         """Parses Python code and returns extracted symbols and relationships."""
-        try:
-            import rust_core
+        if _RUST_ACCEL:
+            try:
+                # Rust returns {imports: [], classes: [(name, bases)], calls: []}
+                data = rust_core.extract_graph_entities_regex(content)  # type: ignore[attr-defined]
 
-            # Rust returns {imports: [], classes: [(name, bases)], calls: []}
-            data = rust_core.extract_graph_entities_regex(content)  # type: ignore[attr-defined]
+                # Map Rust output to expected format
+                inherits = {}
+                classes_list = []
+                for name, bases_str in data.get("classes", []):
+                    classes_list.append(name)
+                    # Parse bases string simply by split ','
+                    if bases_str:
+                        bases = [b.strip() for b in bases_str.split(",") if b.strip()]
+                        inherits[name] = bases
+                    else:
+                        inherits[name] = []
 
-            # Map Rust output to expected format
-            inherits = {}
-            classes_list = []
-            for name, bases_str in data.get("classes", []):
-                classes_list.append(name)
-                # Parse bases string simply by split ','
-                if bases_str:
-                    bases = [b.strip() for b in bases_str.split(",") if b.strip()]
-                    inherits[name] = bases
-                else:
-                    inherits[name] = []
-
-            return {
-                "rel_path": rel_path,
-                "imports": data.get("imports", []),
-                "classes": classes_list,
-                "inherits": inherits,
-                "calls": data.get("calls", []),
-            }
-        except (ImportError, AttributeError):
-            pass
+                return {
+                    "rel_path": rel_path,
+                    "imports": data.get("imports", []),
+                    "classes": classes_list,
+                    "inherits": inherits,
+                    "calls": data.get("calls", []),
+                }
+            except (RuntimeError, AttributeError):
+                pass
 
         try:
             tree = ast.parse(content)
@@ -118,7 +123,7 @@ class GraphCore:
                 "inherits": visitor.bases,
                 "calls": list(visitor.calls),
             }
-        except Exception:
+        except (SyntaxError, ValueError, AttributeError):
             return {
                 "rel_path": rel_path,
                 "imports": [],
@@ -135,13 +140,13 @@ class GraphCore:
         """
         if _RUST_ACCEL:
             try:
-                inherits_list = [(k, v) for k, v in analysis.get("inherits", {}).items()]
-                return rust_core.build_graph_edges_rust(
+                inherits_list = list(analysis.get("inherits", {}).items())
+                return rust_core.build_graph_edges_rust(  # type: ignore
                     analysis["rel_path"],
                     analysis.get("imports", []),
                     inherits_list
                 )
-            except Exception:
+            except (RuntimeError, AttributeError):
                 pass
         # Python fallback
         edges = []

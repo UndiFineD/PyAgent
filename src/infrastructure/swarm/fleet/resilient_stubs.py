@@ -19,11 +19,13 @@ Provides stub objects when plugins fail to load due to missing dependencies.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import importlib
-from typing import Any
+import logging
 from collections.abc import Callable
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -42,9 +44,7 @@ def resilient_import(module_name: str, class_name: str | None = None) -> Any:
 
         return module
     except (ImportError, SyntaxError) as e:
-        logging.warning(
-            f"ResilientImport: Failed to load '{module_name}'. Returning stub. Error: {e}"
-        )
+        logging.warning(f"ResilientImport: Failed to load '{module_name}'. Returning stub. Error: {e}")
         return ResilientStub(class_name or module_name, str(e))
 
 
@@ -54,9 +54,7 @@ class ResilientStub:
     def __init__(self, name: str, error: str) -> None:
         self._name = name
         self._error = error
-        logging.error(
-            f"STUB ACTIVE: Component '{name}' failed to load. Reason: {error}"
-        )
+        logging.error(f"STUB ACTIVE: Component '{name}' failed to load. Reason: {error}")
 
     def __getattr__(self, name: str) -> Callable:
         def _stub_method(*args: Any, **kwargs: Any) -> str:

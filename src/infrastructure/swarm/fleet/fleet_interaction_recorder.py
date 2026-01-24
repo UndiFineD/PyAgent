@@ -15,9 +15,10 @@
 """Logic for recording fleet interactions and justifying actions."""
 
 from __future__ import annotations
-import time
+
 import contextlib
-from typing import Any, TYPE_CHECKING
+import time
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .fleet_manager import FleetManager
@@ -29,9 +30,7 @@ class FleetInteractionRecorder:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    async def record_success(
-        self, res_or_prompt: Any, *args: Any, **kwargs: Any
-    ) -> None:
+    async def record_success(self, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
         """Records the success of a workflow step including Explainability and Telemetry."""
         # Detect calling convention (New: 8 parameters total, Legacy: 3)
         if len(args) == 7:
@@ -77,9 +76,7 @@ class FleetInteractionRecorder:
         with contextlib.suppress(Exception):
             explainability = getattr(self.fleet, "explainability", None)
             if explainability:
-                justification = explainability.justify_action(
-                    agent_name, action_name, res
-                )
+                justification = explainability.justify_action(agent_name, action_name, res)
                 explainability.log_reasoning_step(
                     workflow_id=workflow_id,
                     agent_name=agent_name,

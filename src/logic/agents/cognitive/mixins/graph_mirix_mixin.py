@@ -12,20 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""MIRIX memory logic for GraphMemoryAgent."""
+"""MIRIX memory logic for GraphMemoryAgent.
+
+Implements the 6-component MIRIX memory architecture for graph-based agents,
+including storage, retrieval, and temporal decay mechanisms.
+"""
 
 from __future__ import annotations
 import logging
 import time
 from typing import Any
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.base_utilities import as_tool
+
+__version__ = VERSION
+
 
 class GraphMIRIXMixin:
     """Mixin for MIRIX 6-component memory logic."""
 
     @as_tool
     def store_mirix_memory(self, category: str, name: str, data: Any) -> str:
-        """Stores a memory into one of the 6 MIRIX components."""
+        """Stores a memory into one of the 6 MIRIX components.
+
+        Args:
+            category: The MIRIX component category (e.g., 'Episodic', 'Semantic').
+            name: Human-readable name for the memory fragment.
+            data: The actual data or content to store.
+
+        Returns:
+            Success or error message.
+        """
         if not hasattr(self, "memory_store"):
             return "Error: Memory store not initialized."
 
@@ -48,7 +65,14 @@ class GraphMIRIXMixin:
 
     @as_tool
     def decay_memories(self, threshold_score: float = 0.5) -> str:
-        """Applies decay logic to all memories based on recency and utility."""
+        """Applies decay logic to all memories based on recency and utility.
+
+        Args:
+            threshold_score: Minimum utility score to maintain a memory.
+
+        Returns:
+            Summary of the pruned memories.
+        """
         if not hasattr(self, "memory_store"):
             return "Error: Memory store not initialized."
 
@@ -62,16 +86,16 @@ class GraphMIRIXMixin:
                 self.memory_store[category] = [
                     m
                     for m in store
-                    if (now - m["timestamp"]) < (86400 * 30)
+                    if (now - m["timestamp"]) < (86400 * 30 * threshold_score * 2)
                     or m.get("access_count", 0) > 5
                 ]
                 count += original_len - len(self.memory_store[category])
             elif isinstance(store, dict):
                 to_delete = []
                 for name, m in store.items():
-                    if (now - m["timestamp"]) > (86400 * 30) and m.get(
-                        "access_count", 0
-                    ) < 3:
+                    if (now - m["timestamp"]) > (
+                        86400 * 30 * threshold_score * 2
+                    ) and m.get("access_count", 0) < 3:
                         to_delete.append(name)
                 for name in to_delete:
                     del store[name]

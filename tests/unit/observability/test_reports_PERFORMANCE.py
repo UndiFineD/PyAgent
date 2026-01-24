@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 import unittest
-from typing import Dict
+from typing import Dict, Self
 from pathlib import Path
 import sys
 

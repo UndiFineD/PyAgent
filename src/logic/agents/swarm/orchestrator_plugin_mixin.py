@@ -1,15 +1,32 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Orchestrator plugin mixin module.
+"""
 
 from __future__ import annotations
-import logging
+
 import importlib.util
+import logging
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 from pathlib import Path
 from typing import Any
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
-from src.core.base.logic.agent_plugin_base import AgentPluginBase
+
 from src.core.base.common.models import AgentPluginConfig
+from src.core.base.logic.agent_plugin_base import AgentPluginBase
 
 
 class OrchestratorPluginMixin:
@@ -22,9 +39,7 @@ class OrchestratorPluginMixin:
 
         plugin.setup()
         self.plugins[plugin.name] = plugin
-        logging.info(
-            f"Registered plugin: {plugin.name} (priority: {plugin.priority.name})"
-        )
+        logging.info(f"Registered plugin: {plugin.name} (priority: {plugin.priority.name})")
 
     def unregister_plugin(self, plugin_name: str) -> bool:
         """Unregister a plugin by name."""
@@ -65,25 +80,25 @@ class OrchestratorPluginMixin:
 
             try:
                 if hasattr(self, "rate_limiter"):
-                    self.rate_limiter.acquire(timeout=30.0)
+                    getattr(self, "rate_limiter").acquire(timeout=30.0)
 
                 with ThreadPoolExecutor(max_workers=1) as executor:
                     future = executor.submit(plugin.run, file_path, context)
                     try:
                         result = future.result(timeout=5.0)
-                    except TimeoutError:
+                    except FuturesTimeoutError:
                         logging.warning(f"Plugin {plugin.name} timed out. Skipping.")
                         result = False
 
                 results[plugin.name] = result
                 if result and hasattr(self, "metrics"):
-                    if "agents_applied" not in self.metrics:
-                        self.metrics["agents_applied"] = {}
-                    self.metrics["agents_applied"][plugin.name] = (
-                        self.metrics["agents_applied"].get(plugin.name, 0) + 1
-                    )
+                    metrics = getattr(self, "metrics")
+                    if "agents_applied" not in metrics:
+                        metrics["agents_applied"] = {}
+                    applied = metrics["agents_applied"]
+                    applied[plugin.name] = applied.get(plugin.name, 0) + 1
 
-            except Exception as e:
+            except (IOError, RuntimeError) as e:
                 logging.error(f"Plugin {plugin.name} failed: {e}")
                 results[plugin.name] = False
 
@@ -96,17 +111,13 @@ class OrchestratorPluginMixin:
                 continue
 
             try:
-                spec = importlib.util.spec_from_file_location(
-                    config.name, config.module_path
-                )
+                spec = importlib.util.spec_from_file_location(config.name, config.module_path)
                 if spec and spec.loader:
                     module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(module)
                     plugin_class = getattr(module, config.entry_point, None)
                     if plugin_class and issubclass(plugin_class, AgentPluginBase):
-                        plugin = plugin_class(
-                            config.name, config.priority, config.config
-                        )
+                        plugin = plugin_class(config.name, config.priority, config.config)
                         self.register_plugin(plugin)
-            except Exception as e:
+            except (ImportError, AttributeError, SyntaxError) as e:
                 logging.error(f"Failed to load plugin {config.name}: {e}")

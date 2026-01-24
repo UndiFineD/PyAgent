@@ -14,13 +14,15 @@
 
 """Unified Fleet Convergence and Health core."""
 
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
+
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class ConvergenceCore(BaseCore):
     """
@@ -33,12 +35,12 @@ class ConvergenceCore(BaseCore):
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:
         """Verifies if all registered agents are healthy."""
-        if rc and hasattr(rc, "verify_fleet_health"): # pylint: disable=no-member
+        if rc and hasattr(rc, "verify_fleet_health"):  # pylint: disable=no-member
             try:
                 # Use Rust for high-throughput health checking
                 # pylint: disable=no-member
-                return rc.verify_fleet_health(agent_reports) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.verify_fleet_health(agent_reports)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         healthy_count = sum(1 for status in agent_reports.values() if status)
@@ -49,9 +51,7 @@ class ConvergenceCore(BaseCore):
             "all_passed": all_passed,
             "healthy_count": healthy_count,
             "total_count": total_count,
-            "failed_agents": [
-                name for name, status in agent_reports.items() if not status
-            ],
+            "failed_agents": [name for name, status in agent_reports.items() if not status],
         }
 
     def generate_strategic_summary(self, _phase_history: List[Dict[str, Any]]) -> str:

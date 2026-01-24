@@ -1,6 +1,10 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+Memory search mixin for retrieving historical agent experiences.
+"""
+
 import logging
 from typing import Any
 
@@ -46,7 +50,7 @@ class MemorySearchMixin:
                         }
                     )
                 return semantic_results
-            except Exception as e:
+            except (RuntimeError, ValueError, AttributeError) as e:
                 logging.error(f"Memory search error: {e}")
 
         # Fallback to simple keyword matching
@@ -94,6 +98,6 @@ class MemorySearchMixin:
                     }
                 )
             return matches
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError) as e:
             logging.error(f"search_memories error: {e}")
             return []

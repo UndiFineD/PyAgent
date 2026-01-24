@@ -16,10 +16,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import json
 from pathlib import Path
 from typing import Any
-import json
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -34,9 +36,7 @@ class TestConfigLoader:
         self.config_path = config_path or Path("test_config.json")
         self.config: dict[str, Any] = {}
 
-    def load(
-        self, path: Path | None = None, defaults: dict[str, Any] | None = None
-    ) -> dict[str, Any]:
+    def load(self, path: Path | None = None, defaults: dict[str, Any] | None = None) -> dict[str, Any]:
         """Load configuration.
 
         Compatibility:

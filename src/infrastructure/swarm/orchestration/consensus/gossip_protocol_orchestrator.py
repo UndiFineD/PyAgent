@@ -12,16 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Gossip protocol orchestrator.py module.
+"""
+
 from __future__ import annotations
+
 import asyncio
 import logging
 import random
 import time
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.async_fleet_manager import AsyncFleetManager
+    from src.infrastructure.swarm.fleet.async_fleet_manager import \
+        AsyncFleetManager
 
 __version__ = VERSION
 
@@ -48,9 +55,7 @@ class GossipProtocolOrchestrator:
             return
         self._running = True
         self._task = asyncio.create_task(self._gossip_loop())
-        logging.info(
-            "GossipProtocolOrchestrator: Started epidemic synchronization loop."
-        )
+        logging.info("GossipProtocolOrchestrator: Started epidemic synchronization loop.")
 
     async def stop(self) -> None:
         """Stops the gossip loop."""
@@ -68,9 +73,7 @@ class GossipProtocolOrchestrator:
         async with self._lock:
             self.state[key] = value
             self.versions[key] = self.versions.get(key, 0) + 1
-            logging.debug(
-                f"Gossip: Local state update [{key}] -> v{self.versions[key]}"
-            )
+            logging.debug(f"Gossip: Local state update [{key}] -> v{self.versions[key]}")
 
     async def register_peer(self, peer_name: str) -> None:
         """Registers a new peer for gossiping."""
@@ -109,9 +112,7 @@ class GossipProtocolOrchestrator:
                 new_ver = self.versions.get(mock_key, 0) + 1
                 self.state[mock_key] = f"Intel from {peer_name} at {time.time()}"
                 self.versions[mock_key] = new_ver
-                logging.info(
-                    f"Gossip: [CONVERGENCE] Merged state for {mock_key} v{new_ver}"
-                )
+                logging.info(f"Gossip: [CONVERGENCE] Merged state for {mock_key} v{new_ver}")
 
     async def get_synced_state(self, key: str) -> Any | None:
         """Returns the current state for a key."""

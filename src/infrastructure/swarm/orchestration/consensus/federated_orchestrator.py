@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Federated orchestrator.py module.
+"""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import uuid
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -39,23 +45,17 @@ class FederatedOrchestrator:
 
     def register_peer_swarm(self, swarm_id: str, endpoint: str) -> bool:
         """Registers an external swarm as a negotiation peer."""
-        logging.info(
-            f"FederatedOrchestrator: Registering peer swarm {swarm_id} at {endpoint}"
-        )
+        logging.info(f"FederatedOrchestrator: Registering peer swarm {swarm_id} at {endpoint}")
         self.peers[swarm_id] = endpoint
         self.trust_scores[swarm_id] = 1.0  # Initial trust score
         return True
 
-    def propose_federated_task(
-        self, task_description: str, target_swarm_ids: list[str]
-    ) -> str:
+    def propose_federated_task(self, task_description: str, target_swarm_ids: list[str]) -> str:
         """
         Proposes a task to be shared across swarms.
         """
         proposal_id = str(uuid.uuid4())
-        logging.info(
-            f"FederatedOrchestrator: Proposing task {proposal_id} to {target_swarm_ids}"
-        )
+        logging.info(f"FederatedOrchestrator: Proposing task {proposal_id} to {target_swarm_ids}")
 
         proposal = {
             "proposal_id": proposal_id,
@@ -67,15 +67,11 @@ class FederatedOrchestrator:
         self.negotiation_history.append(proposal)
         return proposal_id
 
-    def negotiate_privacy_boundaries(
-        self, proposal_id: str, swarm_id: str, constraints: list[str]
-    ) -> bool:
+    def negotiate_privacy_boundaries(self, proposal_id: str, swarm_id: str, constraints: list[str]) -> bool:
         """
         Negotiates what data can be shared for a specific proposal.
         """
-        logging.info(
-            f"FederatedOrchestrator: Negotiating constraints for {proposal_id} with {swarm_id}"
-        )
+        logging.info(f"FederatedOrchestrator: Negotiating constraints for {proposal_id} with {swarm_id}")
         for p in self.negotiation_history:
             if p["proposal_id"] == proposal_id:
                 p["constraints"] = p.get("constraints", {})

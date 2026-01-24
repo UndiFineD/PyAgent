@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Reporting agent.py module.
+"""
+
 from __future__ import annotations
+
+import logging
 import os
 import time
-import logging
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+from .transparency_agent import TransparencyAgent
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -41,82 +49,73 @@ class ReportingAgent(BaseAgent):
         logging.info("ReportingAgent: Initiating dashboard generation workflow...")
 
         # Load required agents if not present
-        from src.logic.agents.cognitive.memory_consolidation_agent import (
-            MemoryConsolidationAgent,
-        )
-        from src.observability.stats.transparency_agent import transparency_agent
-        from src.logic.agents.development.spec_tool_agent import SpecToolAgent
-        from src.logic.agents.system.kernel_agent import KernelAgent
-        from src.logic.agents.development.pull_request_agent import PRAgent
-        from src.logic.agents.system.config_agent import ConfigAgent
         from src.logic.agents.analysis.test_agent import TestAgent
-        from src.logic.agents.intelligence.browsing_agent import BrowsingAgent
-        from src.logic.agents.system.mcp_agent import MCPAgent
-        from src.logic.agents.development.tool_evolution_agent import ToolEvolutionAgent
+        from src.logic.agents.cognitive.memory_consolidation_agent import \
+            MemoryConsolidationAgent
         from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
+        from src.logic.agents.development.pull_request_agent import PRAgent
+        from src.logic.agents.development.spec_tool_agent import SpecToolAgent
+        from src.logic.agents.development.tool_evolution_agent import \
+            ToolEvolutionAgent
+        from src.logic.agents.intelligence.browsing_agent import BrowsingAgent
+        from src.logic.agents.system.config_agent import ConfigAgent
+        from src.logic.agents.system.kernel_agent import KernelAgent
+        from src.logic.agents.system.mcp_agent import MCPAgent
 
         self.fleet.register_agent(
             "Consolidator",
             MemoryConsolidationAgent,
-            str(
-                self.workspace_root
-                / "src\logic\agents\cognitive\memory_consolidation_agent.py"
-            ),
+            str(self.workspace_root / "src/logic/agents/cognitive/memory_consolidation_agent.py"),
         )
         self.fleet.register_agent(
             "Transparency",
             TransparencyAgent,
-            str(self.workspace_root / "src\observability\stats\transparency_agent.py"),
+            str(self.workspace_root / "src/observability/stats/transparency_agent.py"),
         )
         self.fleet.register_agent(
             "SpecAgent",
             SpecToolAgent,
-            str(self.workspace_root / "src\logic\agents\development\spec_tool_agent.py"),
+            str(self.workspace_root / "src/logic/agents/development/spec_tool_agent.py"),
         )
         self.fleet.register_agent(
             "Kernel",
             KernelAgent,
-            str(self.workspace_root / "src\logic\agents\system\kernel_agent.py"),
+            str(self.workspace_root / "src/logic/agents/system/kernel_agent.py"),
         )
         self.fleet.register_agent(
             "PR",
             PRAgent,
-            str(
-                self.workspace_root / "src\logic\agents\development\pull_request_agent.py"
-            ),
+            str(self.workspace_root / "src/logic/agents/development/pull_request_agent.py"),
         )
         self.fleet.register_agent(
             "Config",
             ConfigAgent,
-            str(self.workspace_root / "src\logic\agents\system\config_agent.py"),
+            str(self.workspace_root / "src/logic/agents/system/config_agent.py"),
         )
         self.fleet.register_agent(
             "Test",
             TestAgent,
-            str(self.workspace_root / "src.logic.agents.analysis.test_agent.py"),
+            str(self.workspace_root / "src/logic/agents/analysis/test_agent.py"),
         )
         self.fleet.register_agent(
             "Browser",
             BrowsingAgent,
-            str(self.workspace_root / "src\logic\agents\intelligence\browsing_agent.py"),
+            str(self.workspace_root / "src/logic/agents/intelligence/browsing_agent.py"),
         )
         self.fleet.register_agent(
             "MCP",
             MCPAgent,
-            str(self.workspace_root / "src\logic\agents\system\mcp_agent.py"),
+            str(self.workspace_root / "src/logic/agents/system/mcp_agent.py"),
         )
         self.fleet.register_agent(
             "Evolution",
             ToolEvolutionAgent,
-            str(
-                self.workspace_root
-                / "src\logic\agents\development\tool_evolution_agent.py"
-            ),
+            str(self.workspace_root / "src/logic/agents/development/tool_evolution_agent.py"),
         )
         self.fleet.register_agent(
             "Visualizer",
             VisualizerAgent,
-            str(self.workspace_root / "src\logic\agents\cognitive\visualizer_agent.py"),
+            str(self.workspace_root / "src/logic/agents/cognitive/visualizer_agent.py"),
         )
 
         metrics = self.fleet.telemetry.get_metrics()
@@ -128,9 +127,7 @@ class ReportingAgent(BaseAgent):
         ]
 
         for m in metrics[-10:]:  # Last 10
-            start_time = datetime.fromtimestamp(
-                m.get("timestamp", time.time())
-            ).strftime("%H:%M:%S")
+            start_time = datetime.fromtimestamp(m.get("timestamp", time.time())).strftime("%H:%M:%S")
             duration_sec = m.get("duration", 0)
             gantt_lines.append(
                 f"    {m.get('agent', 'unknown')} : {m.get('action', 'none')}, {start_time}, {duration_sec}s"
@@ -178,8 +175,10 @@ class ReportingAgent(BaseAgent):
 if __name__ == "__main__":
     # Local test
     import asyncio
+
+    from src.infrastructure.swarm.fleet.fleet_manager import \
+        FleetManager  # noqa: F811
     from src.observability.structured_logger import StructuredLogger
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
     logger = StructuredLogger(__name__)
     f = FleetManager()

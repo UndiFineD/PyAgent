@@ -1,22 +1,41 @@
-import os
-import math
-from typing import Tuple, Optional, Any, List, Set, Dict, Union
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Base.py module.
+"""
+
 from abc import ABC, abstractmethod
+from typing import Any, Optional, Tuple
 
 try:
-    import torch
-    import torch.nn as torch_nn
+    import torch  # noqa: F401
+    import torch.nn as torch_nn  # noqa: F401
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
 
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
-from .config import RoPEConfig, RoPEVariant
+from .config import RoPEConfig
+
 
 class RotaryEmbeddingBase(ABC):
     """Base class for all RoPE implementations."""
@@ -56,9 +75,7 @@ class RotaryEmbeddingBase(ABC):
     def _ensure_cache(self, seq_len: int) -> None:
         """Ensure the cos/sin cache is large enough."""
         if self._cache_seq_len < seq_len:
-            self._cos_cache, self._sin_cache = self._compute_cos_sin_cache(
-                max(seq_len, 2048)
-            )
+            self._cos_cache, self._sin_cache = self._compute_cos_sin_cache(max(seq_len, 2048))
             self._cache_seq_len = max(seq_len, 2048)
 
     @abstractmethod

@@ -30,18 +30,18 @@ class OrchestrationMixin:
 
         try:
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import (
-                SignalRegistry,
-            )
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+                SignalRegistry
+
             self.registry = SignalRegistry()
         except (ImportError, ValueError):
             self.registry = None
 
         try:
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.swarm.orchestration.system.tool_registry import (
-                ToolRegistry,
-            )
+            from src.infrastructure.swarm.orchestration.system.tool_registry import \
+                ToolRegistry
+
             self.tool_registry = ToolRegistry()
         except (ImportError, ValueError):
             self.tool_registry = None
@@ -53,6 +53,7 @@ class OrchestrationMixin:
             try:
                 # pylint: disable=import-outside-toplevel
                 from src.logic.strategies.direct_strategy import DirectStrategy
+
                 self._strategy = DirectStrategy()
             except (ImportError, ModuleNotFoundError):
                 self._strategy = None
@@ -83,40 +84,31 @@ class OrchestrationMixin:
             if logging_agent:
                 try:
                     loop = asyncio.get_running_loop()
-                    loop.create_task(
-                        logging_agent.broadcast_log(
-                            level, self.__class__.__name__, message, kwargs
-                        )
-                    )
+                    loop.create_task(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
                 except RuntimeError:
-                    asyncio.run(
-                        logging_agent.broadcast_log(
-                            level, self.__class__.__name__, message, kwargs
-                        )
-                    )
+                    asyncio.run(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
 
-    async def run_subagent(
-        self, description: str, prompt: str, original_content: str = ""
-    ) -> str:
+    async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
         """Run a subagent to handle a task."""
         if hasattr(self, "quotas"):
             exceeded, reason = getattr(self, "quotas").check_quotas()
             if exceeded:
                 # pylint: disable=import-outside-toplevel
                 from src.core.base.common.base_exceptions import CycleInterrupt
+
                 raise CycleInterrupt(reason)
 
         try:
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.compute.backend import execution_engine as ab
+            from src.infrastructure.compute.backend import \
+                execution_engine as ab
         except ImportError:
             sys.path.append(str(Path(__file__).parent.parent.parent.parent))
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.compute.backend import execution_engine as ab
+            from src.infrastructure.compute.backend import \
+                execution_engine as ab
 
-        result: str | None = await asyncio.to_thread(
-            ab.run_subagent, description, prompt, original_content
-        )
+        result: str | None = await asyncio.to_thread(ab.run_subagent, description, prompt, original_content)
 
         if hasattr(self, "quotas") and result:
             getattr(self, "quotas").update_usage(len(prompt) // 4, len(result) // 4)
@@ -137,11 +129,7 @@ class OrchestrationMixin:
         elif hasattr(self, "file_path"):
             actual_path = getattr(self, "file_path")
 
-        description = (
-            f"Improve {actual_path.name}"
-            if actual_path
-            else "Improve content"
-        )
+        description = f"Improve {actual_path.name}" if actual_path else "Improve content"
         original = getattr(self, "previous_content", "")
 
         curr_strategy = self.strategy
@@ -190,8 +178,7 @@ class OrchestrationMixin:
         Synaptic Delegation: Hands off a sub-task to a specialized agent.
         Supports both fleet-managed agents and dynamic on-demand instantiation.
         """
-        logging.info("[%s] Delegating task to %s (Target: %s)",
-                     self.__class__.__name__, agent_type, target_file)
+        logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__, agent_type, target_file)
 
         # 1. Attempt delegation via Fleet Manager (if attached)
         if hasattr(self, "fleet") and getattr(self, "fleet"):
@@ -214,12 +201,12 @@ class OrchestrationMixin:
         # 2. Dynamic Import Fallback (via AgentRegistry)
         try:
             # pylint: disable=import-outside-toplevel
-            from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
             # pylint: disable=import-outside-toplevel
             from src.core.base.lifecycle.agent_core import BaseCore
+            from src.infrastructure.swarm.fleet.agent_registry import \
+                AgentRegistry
 
-            ws_root = (getattr(self, "_workspace_root", None) or
-                       Path(BaseCore.detect_workspace_root(Path.cwd())))
+            ws_root = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
 
             # Use the registry to get the agent map
             agent_map = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))

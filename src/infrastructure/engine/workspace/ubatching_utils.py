@@ -18,8 +18,8 @@ Optimizes execution by slicing larger batches into hardware-aligned segments.
 """
 
 import logging
-from typing import List, Any, Optional, Dict
 import time
+from typing import Any, Dict, List
 
 try:
     import rust_core as rc
@@ -28,6 +28,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class UBatchingUtils:
     """
     Low-level utilities for micro-batch (UBatch) decomposition and coordination.
@@ -35,18 +36,14 @@ class UBatchingUtils:
     """
 
     def __init__(self):
-        self._stats: Dict[str, Any] = {
-            "total_slices": 0,
-            "avg_slice_size": 0.0,
-            "sync_count": 0
-        }
+        self._stats: Dict[str, Any] = {"total_slices": 0, "avg_slice_size": 0.0, "sync_count": 0}
 
     @staticmethod
     def slice_batch(batch: List[Any], min_slice: int = 4) -> List[List[Any]]:
         """
         Slices a batch into micro-batches for concurrent processing.
         """
-        return [batch[i:i + min_slice] for i in range(0, len(batch), min_slice)]
+        return [batch[i : i + min_slice] for i in range(0, len(batch), min_slice)]
 
     @staticmethod
     def compute_optimal_slices(total_tokens: int, num_sms: int = 80) -> List[int]:

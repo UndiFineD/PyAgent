@@ -1,6 +1,10 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+Knowledge search mixin for workspace-wide queries.
+"""
+
 from pathlib import Path
 
 class KnowledgeSearchMixin:
@@ -26,7 +30,7 @@ class KnowledgeSearchMixin:
                             + "\n> ```\n"
                         )
                         break
-            except Exception:
+            except (IOError, OSError):
                 pass
             if len(snippets) > 5:
                 break
@@ -53,7 +57,7 @@ class KnowledgeSearchMixin:
                                 + "\n> ```\n"
                             )
                             break
-            except Exception:
+            except (IOError, OSError):
                 pass
             if len(snippets) > 5:
                 break

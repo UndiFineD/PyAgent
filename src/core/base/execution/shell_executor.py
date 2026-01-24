@@ -18,14 +18,15 @@ Handles subprocess spawning, environment propagation, and interaction recording.
 """
 
 from __future__ import annotations
+
 import json
 import logging
 import os
 import subprocess
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.shell_core import ShellCore
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -35,6 +36,7 @@ class ShellExecutor:
     Safely executes shell commands and records outcomes.
     Standardized Facade over ShellCore (Phase 317).
     """
+
     _core: ShellCore | None = None
 
     @classmethod
@@ -61,13 +63,7 @@ class ShellExecutor:
             env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
 
         # Use common core for execution
-        result = await core.execute_async(
-            cmd=cmd,
-            timeout=timeout,
-            env=env,
-            cwd=workspace_root,
-            sanitize=True
-        )
+        result = await core.execute_async(cmd=cmd, timeout=timeout, env=env, cwd=workspace_root, sanitize=True)
 
         if recorder:
             recorder.record_interaction(
@@ -79,10 +75,7 @@ class ShellExecutor:
             )
 
         return subprocess.CompletedProcess(
-            args=cmd,
-            returncode=result.returncode,
-            stdout=result.stdout,
-            stderr=result.stderr
+            args=cmd, returncode=result.returncode, stdout=result.stdout, stderr=result.stderr
         )
 
     @staticmethod
@@ -140,6 +133,4 @@ class ShellExecutor:
         if isinstance(last_error, subprocess.TimeoutExpired):
             raise last_error
 
-        return subprocess.CompletedProcess(
-            args=cmd, returncode=1, stdout="", stderr=str(last_error)
-        )
+        return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr=str(last_error))

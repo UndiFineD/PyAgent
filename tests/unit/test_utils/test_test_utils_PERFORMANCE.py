@@ -2,7 +2,7 @@
 """Test classes from test_agent_test_utils.py - performance module."""
 
 from __future__ import annotations
-from typing import Any, Dict
+from typing import Any, Dict, Self
 import time
 from pathlib import Path
 import sys

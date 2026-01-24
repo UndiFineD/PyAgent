@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Expert Load Balancer for PyAgent
 
@@ -26,26 +40,14 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    TypeVar,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 if TYPE_CHECKING:
-    import torch
-    import numpy as np
+    pass
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -53,6 +55,7 @@ except ImportError:
 
 class ExpertType(Enum):
     """Types of experts in MoE models."""
+
     LOGICAL = auto()  # Original model expert
     PHYSICAL = auto()  # Instantiated replica
     REDUNDANT = auto()  # Added for load balancing
@@ -65,6 +68,7 @@ class EplbMetrics:
 
     vLLM Pattern: EplbModelState from eplb_state.py
     """
+
     # Maps physical to logical expert indices
     physical_to_logical: List[List[int]] = field(default_factory=list)
     # Maps logical to physical (sparse, -1 = no mapping)
@@ -100,6 +104,7 @@ class ExpertMapping:
 
     vLLM Pattern: Result of rebalance_experts
     """
+
     phy_to_log: List[List[int]]  # [layers, num_physical]
     log_to_phy: List[List[List[int]]]  # [layers, num_logical, max_replicas]
     replica_count: List[List[int]]  # [layers, num_logical]
@@ -179,7 +184,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
             raise ImportError("numpy required for DefaultEplbPolicy")
 
         # Handle torch tensors
-        if hasattr(weight, 'cpu'):
+        if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
         else:
             weight_np = np.asarray(weight)
@@ -207,7 +212,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
             for group in indices[layer]:
                 # Find pack with lowest weight that has capacity
                 best_pack = -1
-                best_weight = float('inf')
+                best_weight = float("inf")
 
                 for p in range(num_packs):
                     if pack_items[p] < groups_per_pack:
@@ -239,7 +244,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         except ImportError:
             raise ImportError("numpy required for DefaultEplbPolicy")
 
-        if hasattr(weight, 'cpu'):
+        if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
         else:
             weight_np = np.asarray(weight)
@@ -249,8 +254,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         assert num_redundant >= 0
 
         # Initialize mappings
-        phy_to_log = [[i if i < num_logical else -1 for i in range(num_physical)]
-                      for _ in range(num_layers)]
+        phy_to_log = [[i if i < num_logical else -1 for i in range(num_physical)] for _ in range(num_layers)]
         rank = [[0] * num_physical for _ in range(num_layers)]
         log_count = [[1] * num_logical for _ in range(num_layers)]
 
@@ -282,7 +286,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         except ImportError:
             raise ImportError("numpy required for DefaultEplbPolicy")
 
-        if hasattr(weight, 'cpu'):
+        if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
         else:
             weight_np = np.asarray(weight)
@@ -294,10 +298,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
 
         # Build log_to_phy from phy_to_log
         max_replicas = max(max(row) for row in log_count)
-        log_to_phy = [
-            [[-1] * max_replicas for _ in range(num_logical)]
-            for _ in range(num_layers)
-        ]
+        log_to_phy = [[[-1] * max_replicas for _ in range(num_logical)] for _ in range(num_layers)]
 
         replica_idx = [[0] * num_logical for _ in range(num_layers)]
         for layer in range(num_layers):
@@ -337,29 +338,22 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
         except ImportError:
             raise ImportError("numpy required for LocalityAwarePolicy")
 
-        if hasattr(weight, 'cpu'):
+        if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
         else:
             weight_np = np.asarray(weight)
 
         num_layers, num_logical = weight_np.shape
-        ranks_per_node = num_ranks // num_nodes
-        experts_per_rank = num_replicas // num_ranks
 
         # Group experts by load for node assignment
         pack_index, _ = DefaultEplbPolicy.balanced_packing(weight, num_nodes)
 
         # Assign experts to nodes, then within-node balancing
-        phy_to_log, _, log_count = DefaultEplbPolicy.replicate_experts(
-            weight, num_replicas
-        )
+        phy_to_log, _, log_count = DefaultEplbPolicy.replicate_experts(weight, num_replicas)
 
         # Build log_to_phy
         max_replicas = max(max(row) for row in log_count)
-        log_to_phy = [
-            [[-1] * max_replicas for _ in range(num_logical)]
-            for _ in range(num_layers)
-        ]
+        log_to_phy = [[[-1] * max_replicas for _ in range(num_logical)] for _ in range(num_layers)]
 
         replica_idx = [[0] * num_logical for _ in range(num_layers)]
         for layer in range(num_layers):
@@ -403,10 +397,7 @@ class ExpertLoadBalancer:
 
         # Initialize metrics
         self.metrics = EplbMetrics(
-            expert_load_window=[
-                [[0.0] * num_physical_experts for _ in range(num_layers)]
-                for _ in range(window_size)
-            ]
+            expert_load_window=[[[0.0] * num_physical_experts for _ in range(num_layers)] for _ in range(window_size)]
         )
 
         # Current mapping
@@ -423,10 +414,7 @@ class ExpertLoadBalancer:
         with self._lock:
             # Update current pass
             if not self.metrics.expert_load_pass:
-                self.metrics.expert_load_pass = [
-                    [0.0] * self.num_physical
-                    for _ in range(self.num_layers)
-                ]
+                self.metrics.expert_load_pass = [[0.0] * self.num_physical for _ in range(self.num_layers)]
 
             for i, load in enumerate(expert_loads):
                 if i < self.num_physical:
@@ -452,7 +440,7 @@ class ExpertLoadBalancer:
                         for e in range(self.num_physical):
                             layer_loads[e] += self.metrics.expert_load_window[w][layer][e]
 
-                layer_loads = [l / self.window_size for l in layer_loads]
+                layer_loads = [load / self.window_size for load in layer_loads]
                 result.append(layer_loads)
 
             return result
@@ -563,7 +551,9 @@ class AsyncExpertRebalancer:
         for layer_loads in avg_load:
             if layer_loads:
                 max_load = max(layer_loads)
-                min_load = min(l for l in layer_loads if l > 0) if any(l > 0 for l in layer_loads) else 1.0
+                min_load = (
+                    min(load for load in layer_loads if load > 0) if any(load > 0 for load in layer_loads) else 1.0
+                )
                 if max_load / max(min_load, 1e-6) > self.load_threshold:
                     return True
 
@@ -630,7 +620,7 @@ def compute_load_imbalance_rust(
 
     # Python fallback
     max_load = 0.0
-    min_load = float('inf')
+    min_load = float("inf")
 
     for layer_loads in loads:
         for load in layer_loads:
@@ -638,6 +628,6 @@ def compute_load_imbalance_rust(
                 max_load = max(max_load, load)
                 min_load = min(min_load, load)
 
-    if min_load == float('inf') or min_load == 0:
+    if min_load == float("inf") or min_load == 0:
         return 1.0
     return max_load / min_load

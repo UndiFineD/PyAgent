@@ -15,8 +15,10 @@
 """Script for standardizing the position of __future__ imports at the top of files."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -44,15 +46,12 @@ for root, _, files in os.walk(src_path):
                     if other_lines and other_lines[0].startswith("#!"):
                         insert_idx = 1
                     if len(other_lines) > insert_idx and (
-                        "coding:" in other_lines[insert_idx]
-                        or "-*-" in other_lines[insert_idx]
+                        "coding:" in other_lines[insert_idx] or "-*-" in other_lines[insert_idx]
                     ):
                         insert_idx += 1
 
                     other_lines.insert(insert_idx, "from __future__ import annotations")
-                    new_content = "\n".join(other_lines) + (
-                        "\n" if content.endswith("\n") else ""
-                    )
+                    new_content = "\n".join(other_lines) + ("\n" if content.endswith("\n") else "")
 
                     if new_content != content:
                         with open(path, "w", encoding="utf-8") as f:

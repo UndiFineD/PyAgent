@@ -12,19 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Orchestrator registry.py module.
+"""
+
 # Import local version for gatekeeping
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 import os
-from typing import Any, TYPE_CHECKING
 from pathlib import Path
-from .resilient_stubs import ResilientStub
-from .orchestrator_registry_core import OrchestratorRegistryCore
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+
 from .bootstrap_configs import BOOTSTRAP_ORCHESTRATORS
-from src.core.base.lifecycle.version import SDK_VERSION
+from .orchestrator_registry_core import OrchestratorRegistryCore
+from .resilient_stubs import ResilientStub
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -46,18 +52,12 @@ class LazyOrchestratorMap:
 
         # 2. Dynamic Discovery
         discovered_files = self._scan_workspace_for_orchestrators()
-        self._discovered_configs = self._registry_core.process_discovered_files(
-            discovered_files
-        )
-        logging.info(
-            f"Registry: Discovered {len(self._discovered_configs)} orchestrators."
-        )
+        self._discovered_configs = self._registry_core.process_discovered_files(discovered_files)
+        logging.info(f"Registry: Discovered {len(self._discovered_configs)} orchestrators.")
 
         # Combined map: Bootstrap > Manifest > Discovery
         # Convert BOOTSTRAP_ORCHESTRATORS to the 4-tuple format (module, class, needs_fleet, arg)
-        boot_configs = {
-            k: (v[0], v[1], True, None) for k, v in BOOTSTRAP_ORCHESTRATORS.items()
-        }
+        boot_configs = {k: (v[0], v[1], True, None) for k, v in BOOTSTRAP_ORCHESTRATORS.items()}
         self._configs = {
             **self._discovered_configs,
             **self._manifest_configs,
@@ -146,9 +146,7 @@ class LazyOrchestratorMap:
             module = importlib.import_module(module_path)
 
             # Version Gatekeeping
-            min_sdk = getattr(
-                module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0")
-            )
+            min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
             if not self._registry_core.is_compatible(min_sdk):
                 error_msg = f"Orchestrator '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
                 logging.warning(error_msg)
@@ -195,9 +193,7 @@ class LazyOrchestratorMap:
                                     instance.fleet = self.fleet
                             except TypeError:
                                 try:
-                                    instance = orchestrator_class(
-                                        fleet_manager=self.fleet
-                                    )
+                                    instance = orchestrator_class(fleet_manager=self.fleet)
                                 except TypeError:
                                     instance = orchestrator_class()
                 elif arg_path_suffix is not None:
@@ -213,16 +209,12 @@ class LazyOrchestratorMap:
             self._instances[key] = instance
             return instance
         except (ImportError, SyntaxError) as e:
-            logging.error(
-                f"Critical load error for orchestrator {key} from {module_path}: {e}"
-            )
+            logging.error(f"Critical load error for orchestrator {key} from {module_path}: {e}")
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
             return stub
         except Exception as e:
-            logging.error(
-                f"Failed to lazy-load orchestrator {key} from {module_path}: {e}"
-            )
+            logging.error(f"Failed to lazy-load orchestrator {key} from {module_path}: {e}")
             return None
 
     def keys(self) -> list[str]:

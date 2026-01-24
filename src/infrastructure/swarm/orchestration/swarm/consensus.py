@@ -8,19 +8,20 @@ Implements a lightweight async-Raft simplified state machine for swarm-wide cons
 Ensures every node agrees on the routing table and topology state.
 """
 
-import logging
 import asyncio
-import time
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass, field
+import logging
+from dataclasses import dataclass
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class LogEntry:
     index: int
     term: int
     command: Dict[str, Any]
+
 
 class SwarmConsensus:
     """
@@ -44,11 +45,7 @@ class SwarmConsensus:
             logger.debug(f"Node {self.node_id} proposing change as candidate leader.")
             self.is_leader = True
 
-        new_entry = LogEntry(
-            index=len(self.log),
-            term=self.term,
-            command={"key": key, "val": value}
-        )
+        new_entry = LogEntry(index=len(self.log), term=self.term, command={"key": key, "val": value})
         self.log.append(new_entry)
 
         # Simulate replication to peers
@@ -64,7 +61,7 @@ class SwarmConsensus:
 
     async def _replicate_to_peer(self, peer: str, entry: LogEntry) -> bool:
         """Simulates RPC call to peer node."""
-        await asyncio.sleep(0.01) # Network latency
+        await asyncio.sleep(0.01)  # Network latency
         return True
 
     def _commit_entry(self, entry: LogEntry):

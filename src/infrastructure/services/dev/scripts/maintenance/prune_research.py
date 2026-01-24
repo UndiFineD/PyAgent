@@ -15,8 +15,10 @@
 """Script for pruning large research research files to keep only recent relevant findings."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -58,9 +60,7 @@ if os.path.exists(file_path):
         new_lines.extend(latest_findings)
 
         # Now find lessons
-        new_lines.append(
-            "\n\n### 🧠 AI Lessons Derived from Deep Shard Analysis (Phase 108)\n"
-        )
+        new_lines.append("\n\n### 🧠 AI Lessons Derived from Deep Shard Analysis (Phase 108)\n")
         unique_lessons = set()
         for line in lines:
             if line.strip().startswith("- Intelligence Shard"):

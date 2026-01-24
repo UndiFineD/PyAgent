@@ -18,14 +18,17 @@ Allows FleetManager to transparently call tools on other machines.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import requests
+
 import logging
 import os
 from typing import Any
+
+import requests
+
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_core import BinaryTransport
+from src.core.base.logic.connectivity_manager import ConnectivityManager
 
 __version__ = VERSION
 
@@ -80,9 +83,7 @@ class RemoteAgentProxy(BaseAgent):
             self._update_node_status(False)
             return f"Error calling remote agent: {e}"
 
-    def call_remote_tool_binary(
-        self, tool_name: str, compress: bool = True, **kwargs
-    ) -> Any:
+    def call_remote_tool_binary(self, tool_name: str, compress: bool = True, **kwargs) -> Any:
         """
         Calls a tool on the remote node using high-performance binary transport (Phase 255).
         """
@@ -94,17 +95,13 @@ class RemoteAgentProxy(BaseAgent):
 
         try:
             packed_payload = BinaryTransport.pack(payload_data, compress=compress)
-            logging.info(
-                f"Calling remote binary tool {tool_name} on {self.node_url} (Compressed: {compress})"
-            )
+            logging.info(f"Calling remote binary tool {tool_name} on {self.node_url} (Compressed: {compress})")
 
             headers = {"Content-Type": "application/octet-stream"}
             if compress:
                 headers["Content-Encoding"] = "zstd"
 
-            response = requests.post(
-                endpoint, data=packed_payload, headers=headers, timeout=60
-            )
+            response = requests.post(endpoint, data=packed_payload, headers=headers, timeout=60)
             response.raise_for_status()
 
             result = BinaryTransport.unpack(response.content, compressed=compress)
@@ -115,14 +112,11 @@ class RemoteAgentProxy(BaseAgent):
             self._update_node_status(False)
             return None
 
-    def _record_interaction(
-        self, tool_name: str, payload: dict[str, Any], response: str
-    ) -> None:
+    def _record_interaction(self, tool_name: str, payload: dict[str, Any], response: str) -> None:
         """Records the interaction to a local shard for later intelligence harvesting (Phase 108)."""
         try:
-            from src.infrastructure.compute.backend.local_context_recorder import (
-                LocalContextRecorder,
-            )
+            from src.infrastructure.compute.backend.local_context_recorder import \
+                LocalContextRecorder
 
             recorder = LocalContextRecorder()
             recorder.record_interaction(

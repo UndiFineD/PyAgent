@@ -16,9 +16,10 @@
 """Agent specializing in 2D SVG image generation and optimization."""
 
 from __future__ import annotations
+
+from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
-from src.core.base.common.base_utilities import create_main_function
 
 __version__ = VERSION
 
@@ -38,7 +39,11 @@ class SvgAgent(CoderAgent):
         )
 
     def _get_default_content(self) -> str:
-        return '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">\n  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />\n</svg>\n'
+        return (
+            '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">\n'
+            '  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />\n'
+            '</svg>\n'
+        )
 
 
 if __name__ == "__main__":

@@ -11,16 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Knowledge engine.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 from pathlib import Path
+from typing import Any
+
 from src.core.base.common.memory_core import MemoryCore
+from src.core.base.lifecycle.version import VERSION
+
 from .btree_store import BTreeKnowledgeStore
-from .vector_store import VectorKnowledgeStore
 from .graph_store import GraphKnowledgeStore
 from .knowledge_pruning_engine import KnowledgePruningEngine
+from .vector_store import VectorKnowledgeStore
 
 __version__ = VERSION
 
@@ -49,11 +56,10 @@ class KnowledgeEngine:
         """Lazy loading of CompressionAgent to avoid circular imports."""
         if self._compressor is None:
             try:
-                from src.logic.agents.system.compression_agent import CompressionAgent
+                from src.logic.agents.system.compression_agent import \
+                    CompressionAgent
 
-                self._compressor = CompressionAgent(
-                    str(self.base_path / "compression_config.json")
-                )
+                self._compressor = CompressionAgent(str(self.base_path / "compression_config.json"))
             except ImportError as e:
                 import logging
 
@@ -99,9 +105,7 @@ class KnowledgeEngine:
         elif mode == "btree":
             return self.btree.store(key, content, kwargs.get("metadata"))
         elif mode == "graph":
-            return self.graph.store(
-                content, kwargs.get("target"), kwargs.get("relationship", "related_to")
-            )
+            return self.graph.store(content, kwargs.get("target"), kwargs.get("relationship", "related_to"))
 
         # General store via MemoryCore if mode is generic
         return self._memory_core.store_knowledge(self.agent_id, key, content, mode)

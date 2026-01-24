@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .blame_info import BlameInfo
-from .error_entry import ErrorEntry
+
+import subprocess
 from datetime import datetime
 from typing import Any
-import subprocess
+
+from src.core.base.lifecycle.version import VERSION
+
+from .blame_info import BlameInfo
+from .error_entry import ErrorEntry
 
 __version__ = VERSION
 
@@ -104,9 +107,7 @@ class BlameTracker:
 
         return info
 
-    def get_top_contributors(
-        self, errors: list[ErrorEntry], limit: int = 5
-    ) -> list[tuple[str, int]]:
+    def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
         """Get top contributors to errors.
 
         Args:

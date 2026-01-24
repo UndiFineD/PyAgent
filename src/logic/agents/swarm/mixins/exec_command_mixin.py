@@ -15,11 +15,13 @@
 """Command and git execution logic for OrchestratorAgent."""
 
 from __future__ import annotations
+
 import logging
 import subprocess
 import sys
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
+
 
 class ExecCommandMixin:
     """Mixin for fundamental command execution and git operations."""

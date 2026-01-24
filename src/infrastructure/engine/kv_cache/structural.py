@@ -1,15 +1,33 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Structural components for KV cache management: queues, caches, and pools."""
+
 # SPDX-License-Identifier: Apache-2.0
 import time
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
+from .data_classes import BlockHashWithGroupId, KVCacheBlock
 from .enums import EvictionPolicy
-from .data_classes import KVCacheBlock, BlockHashWithGroupId
+
 
 class FreeBlockQueue:
     """
     Doubly-linked list queue for free blocks with O(1) operations.
     Maintains LRU order for eviction decisions.
     """
+
     def __init__(self, blocks: List[KVCacheBlock]) -> None:
         self.num_free_blocks = len(blocks)
         for i, block in enumerate(blocks):
@@ -72,6 +90,7 @@ class FreeBlockQueue:
 
 class BlockHashCache:
     """Cache mapping block hashes to blocks for prefix caching."""
+
     def __init__(self) -> None:
         self._cache: Dict[BlockHashWithGroupId, KVCacheBlock | Dict[int, KVCacheBlock]] = {}
 
@@ -115,9 +134,9 @@ class BlockHashCache:
 
 class BlockPool:
     """Manages allocation, caching, and eviction of KV cache blocks."""
+
     def __init__(
-        self, num_blocks: int, enable_caching: bool = True,
-        eviction_policy: EvictionPolicy = EvictionPolicy.LRU
+        self, num_blocks: int, enable_caching: bool = True, eviction_policy: EvictionPolicy = EvictionPolicy.LRU
     ) -> None:
         self.num_blocks = num_blocks
         self.enable_caching = enable_caching
@@ -202,12 +221,14 @@ class BlockPool:
         """Record an eviction event for analytics."""
         self.total_evictions += 1
         lifetime = time.time() - block.last_access_time
-        self._eviction_events.append({
-            'block_id': block.block_id,
-            'lifetime_seconds': lifetime,
-            'access_count': block.access_count,
-            'timestamp': time.time()
-        })
+        self._eviction_events.append(
+            {
+                "block_id": block.block_id,
+                "lifetime_seconds": lifetime,
+                "access_count": block.access_count,
+                "timestamp": time.time(),
+            }
+        )
         if len(self._eviction_events) > 10000:
             self._eviction_events = self._eviction_events[-5000:]
 

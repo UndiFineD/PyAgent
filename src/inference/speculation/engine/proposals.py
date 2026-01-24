@@ -1,15 +1,31 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Data structures for speculative decoding proposals and results."""
 
 from dataclasses import dataclass, field
 from typing import Any, List, Optional
+
 from .config import SpecMethod
 
 
 @dataclass
 class DraftProposal:
     """Represents a batch of draft token proposals."""
+
     # [batch_size, num_speculative_tokens]
     draft_token_ids: List[List[int]] = field(default_factory=list)
 
@@ -27,6 +43,7 @@ class DraftProposal:
 @dataclass
 class VerificationResult:
     """Result of draft token verification."""
+
     # [batch_size] - number of accepted tokens per request
     num_accepted: List[int] = field(default_factory=list)
 
@@ -52,6 +69,7 @@ class VerificationResult:
 @dataclass
 class SpecDecodingMetrics:
     """Metrics for speculative decoding performance."""
+
     num_draft_tokens: int = 0
     num_accepted_tokens: int = 0
     num_emitted_tokens: int = 0

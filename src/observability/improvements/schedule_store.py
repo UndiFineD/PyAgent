@@ -16,7 +16,9 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
 from src.core.base.lifecycle.version import VERSION
+
 from .scheduled_improvement import ScheduledImprovement
 
 __version__ = VERSION
@@ -44,9 +46,7 @@ class _ScheduleStore:
     def __setitem__(self, key: str, value: ScheduledImprovement) -> None:
         self._data[key] = value
 
-    def get(
-        self, key: str, default: ScheduledImprovement | None = None
-    ) -> ScheduledImprovement | None:
+    def get(self, key: str, default: ScheduledImprovement | None = None) -> ScheduledImprovement | None:
         return self._data.get(key, default)
 
     def values(self) -> list[ScheduledImprovement]:

@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
+
+"""
+Agents.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Observability agents for monitoring, reporting, and transparency.
 
 from __future__ import annotations
+
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+
 from .engine import StatsCore
-from .observability_core import Alert, Metric, MetricSnapshot, MetricType, Threshold
+from .observability_core import (Alert, Metric, MetricSnapshot, MetricType,
+                                 Threshold)
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +34,7 @@ class StatsAgent:
         self._alerts: list[Alert] = []
         self._snapshots: list[MetricSnapshot] = []
 
-    def add_metric(
-        self, name: str, value: float, type: MetricType = MetricType.GAUGE
-    ) -> Metric:
+    def add_metric(self, name: str, value: float, type: MetricType = MetricType.GAUGE) -> Metric:
         m = Metric(
             name=name,
             value=value,
@@ -51,9 +57,7 @@ class StatsAgent:
 
         for f in self.files:
             # Check for test file
-            if (f.parent / f"test_{f.stem}.py").exists() or (
-                f.parent / f"test_{f.name}"
-            ).exists():
+            if (f.parent / f"test_{f.stem}.py").exists() or (f.parent / f"test_{f.name}").exists():
                 with_tests += 1
 
             # Check for context files (assumed collocated for this agent version)
@@ -98,9 +102,7 @@ class TransparencyAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._system_prompt = (
-            "You are the Transparency Agent. Explain WHY decisions were made."
-        )
+        self._system_prompt = "You are the Transparency Agent. Explain WHY decisions were made."
 
     def generate_audit_trail(self) -> str:
         return "# fleet Transparency Audit Trail\n\n### 📡 Signal Event Log\n- Audit trail active."

@@ -12,16 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Android agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 from src.logic.agents.multimodal.core.android_core import AndroidCore
 
 __version__ = VERSION
@@ -56,9 +63,7 @@ class AndroidAgent(BaseAgent):
                     "type": "mobile_automation",
                     "timestamp": time.time(),
                 }
-                self.recorder.record_interaction(
-                    "android", "local_device", action, details, meta=meta
-                )
+                self.recorder.record_interaction("android", "local_device", action, details, meta=meta)
             except Exception as e:
                 logging.error(f"AndroidAgent: Recording error: {e}")
 

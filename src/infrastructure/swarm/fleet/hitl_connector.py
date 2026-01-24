@@ -18,14 +18,17 @@ Supports Slack and Discord notification patterns for critical agent decisions.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
-from typing import Any
-from pathlib import Path
 import urllib.parse
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 
 # Infrastructure
 __version__ = VERSION
@@ -34,14 +37,10 @@ __version__ = VERSION
 class HITLConnector:
     """Manages external communication with humans for high-stakes approvals."""
 
-    def __init__(
-        self, webhook_url: str | None = None, workspace_root: str | None = None
-    ) -> None:
+    def __init__(self, webhook_url: str | None = None, workspace_root: str | None = None) -> None:
         self.webhook_url = webhook_url
         self.workspace_root = workspace_root
-        self.recorder = (
-            LocalContextRecorder(Path(workspace_root)) if workspace_root else None
-        )
+        self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
         self.connectivity = ConnectivityManager(workspace_root)
         self.pending_approvals: dict[str, dict[str, Any]] = {}
 
@@ -53,9 +52,7 @@ class HITLConnector:
         if self.webhook_url:
             domain = urllib.parse.urlparse(self.webhook_url).netloc
             if not self.connectivity.is_endpoint_available(domain):
-                logging.warning(
-                    f"HITL: Skipping notification to {domain} due to connection cache."
-                )
+                logging.warning(f"HITL: Skipping notification to {domain} due to connection cache.")
             else:
                 # Simulate sending (in real use, this would be requests.post)
                 logging.info(f"Notification sent to {self.webhook_url}")
@@ -108,6 +105,4 @@ class HITLConnector:
 
     def get_pending_summary(self) -> dict[str, Any]:
         """Returns all pending requests."""
-        return {
-            k: v for k, v in self.pending_approvals.items() if v["status"] == "pending"
-        }
+        return {k: v for k, v in self.pending_approvals.items() if v["status"] == "pending"}

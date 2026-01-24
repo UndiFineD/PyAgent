@@ -18,11 +18,13 @@ Provides a unified interface for external communications.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -39,9 +41,7 @@ class MessagingAgent(BaseAgent):
         )
 
     @as_tool
-    async def send_notification(
-        self, platform: str, recipient: str, message: str
-    ) -> str:
+    async def send_notification(self, platform: str, recipient: str, message: str) -> str:
         """Sends a message to a specific platform/recipient. (SKELETON)"""
         logging.info(f"Sending {platform} message to {recipient}: {message}")
 
@@ -72,7 +72,5 @@ class MessagingAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        MessagingAgent, "Messaging Agent", "Messaging history path"
-    )
+    main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
     main()

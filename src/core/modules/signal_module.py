@@ -11,9 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Signal module.py module.
+"""
+
 from __future__ import annotations
+
 from datetime import datetime
 from typing import Any
+
 from src.core.base.common.base_modules import BaseModule
 
 
@@ -42,9 +48,7 @@ class SignalModule(BaseModule):
                 kwargs.get("sender", "unknown"),
             )
         elif action == "prune_history":
-            return self.prune_history(
-                kwargs.get("history", []), kwargs.get("limit", 100)
-            )
+            return self.prune_history(kwargs.get("history", []), kwargs.get("limit", 100))
         return None
 
     def create_event(self, signal_name: str, data: Any, sender: str) -> dict[str, Any]:
@@ -56,9 +60,7 @@ class SignalModule(BaseModule):
             "timestamp": datetime.now().isoformat(),
         }
 
-    def prune_history(
-        self, history: list[dict[str, Any]], limit: int
-    ) -> list[dict[str, Any]]:
+    def prune_history(self, history: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
         """Returns the last N events from the signal history."""
         return history[-limit:]
 

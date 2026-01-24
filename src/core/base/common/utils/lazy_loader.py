@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 LazyLoader - Lazy module loading utilities.
 
@@ -6,12 +20,13 @@ Only loads modules when they are actually accessed.
 
 Phase 17: vLLM Pattern Integration (P2)
 """
-from __future__ import annotations
-import importlib
-import sys
-from typing import Any, Callable, TypeVar, TYPE_CHECKING
 
-T = TypeVar('T')
+from __future__ import annotations
+
+import importlib
+from typing import Any, Callable, TypeVar
+
+T = TypeVar("T")
 
 
 class LazyModule:
@@ -25,30 +40,30 @@ class LazyModule:
         >>> print(result)  # 4.0
     """
 
-    __slots__ = ('_module_name', '_module', '_import_error')
+    __slots__ = ("_module_name", "_module", "_import_error")
 
     def __init__(self, module_name: str) -> None:
-        object.__setattr__(self, '_module_name', module_name)
-        object.__setattr__(self, '_module', None)
-        object.__setattr__(self, '_import_error', None)
+        object.__setattr__(self, "_module_name", module_name)
+        object.__setattr__(self, "_module", None)
+        object.__setattr__(self, "_import_error", None)
 
     def _load(self) -> Any:
         """Load the module if not already loaded."""
-        module = object.__getattribute__(self, '_module')
+        module = object.__getattribute__(self, "_module")
         if module is not None:
             return module
 
-        error = object.__getattribute__(self, '_import_error')
+        error = object.__getattribute__(self, "_import_error")
         if error is not None:
             raise error
 
-        module_name = object.__getattribute__(self, '_module_name')
+        module_name = object.__getattribute__(self, "_module_name")
         try:
             module = importlib.import_module(module_name)
-            object.__setattr__(self, '_module', module)
+            object.__setattr__(self, "_module", module)
             return module
         except ImportError as e:
-            object.__setattr__(self, '_import_error', e)
+            object.__setattr__(self, "_import_error", e)
             raise
 
     def __getattr__(self, name: str) -> Any:
@@ -56,15 +71,15 @@ class LazyModule:
         return getattr(module, name)
 
     def __setattr__(self, name: str, value: Any) -> None:
-        if name in ('_module_name', '_module', '_import_error'):
+        if name in ("_module_name", "_module", "_import_error"):
             object.__setattr__(self, name, value)
         else:
             module = self._load()
             setattr(module, name, value)
 
     def __repr__(self) -> str:
-        module_name = object.__getattribute__(self, '_module_name')
-        module = object.__getattribute__(self, '_module')
+        module_name = object.__getattribute__(self, "_module_name")
+        module = object.__getattribute__(self, "_module")
         if module is None:
             return f"<LazyModule '{module_name}' (not loaded)>"
         return f"<LazyModule '{module_name}' (loaded)>"
@@ -100,12 +115,12 @@ class LazyImport:
         Returns:
             The imported attribute or module.
         """
-        if ':' in spec:
-            module_path, attr_name = spec.rsplit(':', 1)
+        if ":" in spec:
+            module_path, attr_name = spec.rsplit(":", 1)
             module = importlib.import_module(module_path)
             return getattr(module, attr_name)
-        else:
-            return importlib.import_module(spec)
+
+        return importlib.import_module(spec)
 
     @staticmethod
     def create_getattr(module_attrs: dict[str, str]) -> Callable[[str], Any]:
@@ -160,14 +175,14 @@ class DeferredImport:
         ...         print("PyTorch not available")
     """
 
-    __slots__ = ('_module_name', '_module', '_available')
+    __slots__ = ("_module_name", "_module", "_available")
 
     def __init__(self, module_name: str) -> None:
         self._module_name = module_name
         self._module = None
         self._available = False
 
-    def __enter__(self) -> 'DeferredImport':
+    def __enter__(self) -> "DeferredImport":
         try:
             self._module = importlib.import_module(self._module_name)
             self._available = True
@@ -246,12 +261,11 @@ def require_import(module_name: str, package_name: str | None = None) -> Any:
     """
     try:
         return importlib.import_module(module_name)
-    except ImportError:
-        pkg = package_name or module_name.split('.')[0]
+    except ImportError as exc:
+        pkg = package_name or module_name.split(".")[0]
         raise ImportError(
-            f"Required module '{module_name}' not found. "
-            f"Install with: pip install {pkg}"
-        )
+            f"Required module '{module_name}' not found. Install with: pip install {pkg}"
+        ) from exc
 
 
 # Type checking imports pattern
@@ -264,10 +278,10 @@ def require_import(module_name: str, package_name: str | None = None) -> Any:
 
 
 __all__ = [
-    'LazyModule',
-    'LazyImport',
-    'DeferredImport',
-    'lazy_import',
-    'optional_import',
-    'require_import',
+    "LazyModule",
+    "LazyImport",
+    "DeferredImport",
+    "lazy_import",
+    "optional_import",
+    "require_import",
 ]

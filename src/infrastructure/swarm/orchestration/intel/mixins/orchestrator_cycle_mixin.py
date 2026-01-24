@@ -1,9 +1,15 @@
+
+"""
+Orchestrator cycle mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import logging
 from typing import Any
+
 from src.core.base.lifecycle.version import is_gate_open
+
 
 class OrchestratorCycleMixin:
     """Methods for managing the improvement cycle and gates."""
@@ -11,9 +17,7 @@ class OrchestratorCycleMixin:
     def run_improvement_cycle(self, target_dir: str = "src") -> dict[str, Any]:
         """Runs a full scan and fix cycle across the specified directory."""
         if not self._check_gate_stability():
-            return {
-                "error": "Stability gate closed - system requires manual stabilization"
-            }
+            return {"error": "Stability gate closed - system requires manual stabilization"}
 
         logging.info(f"Self-Improvement: Starting cycle for {target_dir}...")
         self._ingest_hive_tasks()
@@ -40,6 +44,7 @@ class OrchestratorCycleMixin:
     def _check_gate_stability(self) -> bool:
         """Verifies if the system is stable enough for autonomous changes."""
         from src.core.base.lifecycle.version import STABILITY_SCORE
+
         if not is_gate_open(100) or STABILITY_SCORE < 0.8:
             logging.error(
                 f"Self-Improvement: System stability too low ({STABILITY_SCORE}) for autonomous code modification."
@@ -52,12 +57,8 @@ class OrchestratorCycleMixin:
         self.active_tasks = []
         if self.fleet and hasattr(self.fleet, "intelligence"):
             try:
-                self.active_tasks = (
-                    self.fleet.intelligence.get_actionable_improvement_tasks()
-                )
+                self.active_tasks = self.fleet.intelligence.get_actionable_improvement_tasks()
                 if self.active_tasks:
-                    logging.info(
-                        f"Self-Improvement: Hive mind provided {len(self.active_tasks)} actionable tasks."
-                    )
+                    logging.info(f"Self-Improvement: Hive mind provided {len(self.active_tasks)} actionable tasks.")
             except Exception as e:
                 logging.debug(f"Hive task ingestion failed: {e}")

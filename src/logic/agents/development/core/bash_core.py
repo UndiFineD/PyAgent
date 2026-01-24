@@ -1,15 +1,31 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Core logic for Bash script analysis (Phase 175).
 Integrates shellcheck for linting generated scripts.
 Optimized for eventual Rust migration (Phase 3).
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
 
 import json
 import os
 import subprocess
-from typing import TypedDict, Optional, Any
+from typing import Any, Optional, TypedDict
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 
@@ -42,9 +58,7 @@ class BashCore:
     """Core logic for Bash script analysis and linting."""
 
     @staticmethod
-    def lint_script(
-        script_path: str, recorder: ContextRecorderInterface | None = None
-    ) -> BashLintResult:
+    def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
         """
         Runs shellcheck on a bash script.
         """
@@ -55,9 +69,7 @@ class BashCore:
                 "error": "File not found",
             }
             if recorder:
-                recorder.record_interaction(
-                    "bash", "shellcheck", script_path, "file-not-found"
-                )
+                recorder.record_interaction("bash", "shellcheck", script_path, "file-not-found")
             return result
 
         try:
@@ -99,7 +111,7 @@ class BashCore:
                 "issues": [],
                 "error": "shellcheck not found. Please install it.",
             }
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             error_msg = str(e)
             if recorder:
                 recorder.record_interaction(

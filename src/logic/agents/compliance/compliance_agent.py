@@ -1,14 +1,31 @@
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Compliance agent.py module.
+"""
+
 import logging
 from typing import Any
 
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
 # Ensure relative or absolute import matches structure
 try:
-    from src.logic.agents.compliance.core.compliance_core import (
-        ComplianceCore,
-    )
+    from src.logic.agents.compliance.core.compliance_core import ComplianceCore
 except ImportError:
     # If core doesn't exist yet, we might need to mock or it is in a different place
     pass
@@ -32,6 +49,7 @@ class ComplianceAgent(BaseAgent):
     def scan_shard(self, content: str) -> dict:
         """Scans a memory shard for compliance issues (Phase 57)."""
         import re
+
         patterns = {
             "email": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
             "ssn": r"\b\d{3}-\d{2}-\d{4}\b",
@@ -40,11 +58,7 @@ class ComplianceAgent(BaseAgent):
         for name, pattern in patterns.items():
             if re.search(pattern, content):
                 findings.append(name)
-        return {
-            "compliant": len(findings) == 0,
-            "findings": findings,
-            "pii_detected": len(findings) > 0
-        }
+        return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}
 
     @as_tool
     def perform_audit(self, file_map: dict[str, str]) -> dict[str, Any]:
@@ -62,9 +76,7 @@ class ComplianceAgent(BaseAgent):
         report = {
             "score": score,
             "issue_count": len(all_issues),
-            "critical_violations": [
-                i.message for i in all_issues if i.severity == "CRITICAL"
-            ],
+            "critical_violations": [i.message for i in all_issues if i.severity == "CRITICAL"],
             "status": "PASS" if score > 0.8 else "FAIL",
         }
 

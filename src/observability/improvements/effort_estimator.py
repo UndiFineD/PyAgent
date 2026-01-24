@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
+
 from .effort_estimate import EffortEstimate
 from .effort_estimate_result import EffortEstimateResult
 from .improvement import Improvement
 from .improvement_category import ImprovementCategory
-from typing import Any
 
 __version__ = VERSION
 
@@ -48,14 +51,8 @@ class EffortEstimator:
         else:
             category_key = str(category) if category is not None else ""
 
-        if (
-            category_key
-            and category_key in self.historical_data
-            and self.historical_data[category_key]
-        ):
-            base = sum(self.historical_data[category_key]) / len(
-                self.historical_data[category_key]
-            )
+        if category_key and category_key in self.historical_data and self.historical_data[category_key]:
+            base = sum(self.historical_data[category_key]) / len(self.historical_data[category_key])
         else:
             base = float(self.base_rates.get(complexity, self.base_rates["medium"]))
 

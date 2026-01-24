@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Grafana generator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -44,9 +50,7 @@ class GrafanaDashboardGenerator:
                 {
                     "title": "Fleet Latency",
                     "type": "timeseries",
-                    "targets": [
-                        {"expr": "rate(fleet_request_duration_seconds_sum[5m])"}
-                    ],
+                    "targets": [{"expr": "rate(fleet_request_duration_seconds_sum[5m])"}],
                 },
             ],
             "schemaVersion": 36,

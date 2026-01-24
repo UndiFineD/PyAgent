@@ -11,15 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Orchestrator registry core.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 # Rust acceleration
 try:
     from rust_core import to_snake_case_rust
+
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -36,9 +43,7 @@ class OrchestratorRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def process_discovered_files(
-        self, file_paths: list[str]
-    ) -> dict[str, tuple[str, str, bool, str | None]]:
+    def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Processes a list of file paths and extracts orchestrator configurations.
         Expects relative paths from workspace root.
@@ -99,9 +104,7 @@ class OrchestratorRegistryCore:
                     if short_key:
                         discovered[short_key] = cfg
                     discovered[full_key] = cfg
-                    discovered[class_name] = (
-                        cfg  # Also keep original class name for direct access
-                    )
+                    discovered[class_name] = cfg  # Also keep original class name for direct access
 
         return discovered
 
@@ -114,12 +117,11 @@ class OrchestratorRegistryCore:
                 pass
         # Python fallback
         import re
+
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
         return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
 
-    def parse_manifest(
-        self, raw_manifest: dict[str, Any]
-    ) -> dict[str, tuple[str, str, bool, str | None]]:
+    def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.

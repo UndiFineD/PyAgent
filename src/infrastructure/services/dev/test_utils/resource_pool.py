@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .resource_handle import ResourceHandle
+
 import threading
 import time
+
+from src.core.base.lifecycle.version import VERSION
+
+from .resource_handle import ResourceHandle
 
 __version__ = VERSION
 
@@ -34,9 +37,7 @@ class ResourcePool:
         self.lock = threading.Lock()
         self._allocations: dict[str, int] = {}
 
-    def acquire(
-        self, count: int | str = 1, timeout: float = 10.0
-    ) -> ResourceHandle | None:
+    def acquire(self, count: int | str = 1, timeout: float = 10.0) -> ResourceHandle | None:
         """Acquire a resource.
 
         Compatibility:
@@ -66,9 +67,7 @@ class ResourcePool:
         with self.lock:
             if isinstance(handle, ResourceHandle):
                 self.available = min(self.available + 1, self.max_resources)
-                self._allocations[handle.name] = max(
-                    0, self._allocations.get(handle.name, 0) - 1
-                )
+                self._allocations[handle.name] = max(0, self._allocations.get(handle.name, 0) - 1)
                 return
             self.available = min(self.available + int(handle), self.max_resources)
 

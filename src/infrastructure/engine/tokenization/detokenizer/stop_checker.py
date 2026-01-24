@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -6,20 +20,16 @@ Stop condition checker for detokenization.
 
 from __future__ import annotations
 
-from typing import (
-    List,
-    Optional,
-    Set,
-    Tuple,
-    Union,
-)
+from typing import List, Optional, Set, Tuple
 
 # Try to import Rust accelerations
 try:
     from rust_core import check_stop_tokens_rust
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
 
 class StopChecker:
     """
@@ -61,7 +71,7 @@ class StopChecker:
             idx = text.find(stop_string)
             if idx != -1:
                 if self.include_stop_string_in_output:
-                    return stop_string, text[:idx + len(stop_string)]
+                    return stop_string, text[: idx + len(stop_string)]
                 return stop_string, text[:idx]
         return None, text
 

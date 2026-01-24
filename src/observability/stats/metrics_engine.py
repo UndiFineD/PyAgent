@@ -1,40 +1,33 @@
 #!/usr/bin/env python3
+
+"""
+Metrics engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
 
 from __future__ import annotations
+
 import json
 import logging
 import time
 from dataclasses import asdict
-from typing import Any
 from pathlib import Path
-from .observability_core import (
-    AgentMetric,
-    ObservabilityCore,
-)
+from typing import Any
 
 # Import pure calculation cores
-from .metrics_core import (
-    TokenCostCore,
-    ModelFallbackCore,
-)
+from .metrics_core import ModelFallbackCore, TokenCostCore
+from .observability_core import AgentMetric, ObservabilityCore
 
 try:
     import psutil
 except ImportError:
-
     psutil = None
-from .exporters import (
-    PrometheusExporter,
-    OTelManager,
-    MetricsExporter,
-)
+from .exporters import MetricsExporter, OTelManager, PrometheusExporter
 
 try:
-    from src.observability.reports.grafana_generator import (
-        GrafanaDashboardGenerator as GrafanaGenerator,
-    )
+    from src.observability.reports.grafana_generator import \
+        GrafanaDashboardGenerator as GrafanaGenerator
 except ImportError:
     GrafanaGenerator = None
 from src.core.base.lifecycle.version import VERSION
@@ -67,9 +60,7 @@ class ObservabilityEngine:
         self.log_buffer: list[dict[str, Any]] = []
         self.load()
 
-    def log_event(
-        self, agent_id: str, event_type: str, data: Any, level: str = "INFO"
-    ) -> None:
+    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
         """Logs a system event in a structured format for ELK.
 
         Args:
@@ -101,9 +92,7 @@ class ObservabilityEngine:
             self.log_buffer.append(event)
 
         # Always record metrics regardless of log storage
-        self.prometheus.record_metric(
-            "agent_events_total", 1.0, {"agent": agent_id, "type": event_type}
-        )
+        self.prometheus.record_metric("agent_events_total", 1.0, {"agent": agent_id, "type": event_type})
         self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
 
     def export_to_elk(self) -> str:
@@ -180,12 +169,8 @@ class ObservabilityEngine:
         self.metrics.append(metric)  # Redundant but kept for display
 
         # External exporters
-        self.prometheus.record_metric(
-            "agent_duration_ms", duration, {"agent": agent_name, "op": operation}
-        )
-        self.metrics_exporter.record_agent_call(
-            agent_name, duration, status == "success"
-        )
+        self.prometheus.record_metric("agent_duration_ms", duration, {"agent": agent_name, "op": operation})
+        self.metrics_exporter.record_agent_call(agent_name, duration, status == "success")
 
         if len(self.metrics) > 1000:
             self.save()
@@ -197,9 +182,7 @@ class ObservabilityEngine:
 
     def trace_workflow(self, workflow_name: str, duration: float) -> None:
         """Records a workflow trace for OpenTelemetry visualization."""
-        self.prometheus.record_metric(
-            "workflow_duration_seconds", duration, {"workflow": workflow_name}
-        )
+        self.prometheus.record_metric("workflow_duration_seconds", duration, {"workflow": workflow_name})
         self.log_event(
             "system",
             "workflow_trace",
@@ -242,7 +225,7 @@ class ObservabilityEngine:
             summary["agents"][name] = {
                 "calls": data["calls"],
                 "avg_latency": round(data["latency"] / data["calls"], 2),
-                "total_cost": round(data["cost"], 6)
+                "total_cost": round(data["cost"], 6),
             }
 
         return summary
@@ -267,18 +250,19 @@ class ObservabilityEngine:
                 self.metrics = []
 
 
-
-
 class TokenCostEngine:
     def __init__(self):
         self.core = TokenCostCore()
+
     def calculate_cost(self, model, input_tokens=0, output_tokens=0):
         res = self.core.calculate_cost(input_tokens, output_tokens, model)
         return res.total_cost
+
 
 class ModelFallbackEngine:
     def __init__(self, cost_engine=None):
         self.cost_engine = cost_engine
         self.core = ModelFallbackCore()
+
     def get_fallback_model(self, current_model):
         return self.core.determine_next_model(current_model)

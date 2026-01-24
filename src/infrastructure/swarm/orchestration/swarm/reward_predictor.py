@@ -12,10 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Reward predictor.py module.
+"""
+
 import logging
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
+
 
 class ExpertRewardPredictor:
     """

@@ -11,10 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Simple math agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.orchestration.system.tool_registry import as_tool
 
 __version__ = VERSION

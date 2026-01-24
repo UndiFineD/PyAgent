@@ -25,6 +25,7 @@ project_root = Path(__file__).resolve().parents[5]
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
+
 def test_imports():
     """Attempts to instantiate major agents to verify import health."""
     try:
@@ -33,18 +34,20 @@ def test_imports():
 
         print(f"Detecting workspace root at: {project_root}")
 
-        fleet = FleetManager(workspace_root=str(project_root))
+        _ = FleetManager(workspace_root=str(project_root))
         print("SUCCESS: FleetManager instantiated.")
 
-        handy = HandyAgent(file_path="dummy.py")
+        _ = HandyAgent(file_path="dummy.py")
         print("SUCCESS: HandyAgent instantiated.")
 
         return True
     except Exception as e:
         print(f"FAILURE: Error during instantiation: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 if __name__ == "__main__":
     print("=== PyAgent Readiness Test ===")

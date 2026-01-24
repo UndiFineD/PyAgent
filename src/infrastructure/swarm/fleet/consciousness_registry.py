@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Consciousness registry.py module.
+"""
+
 from __future__ import annotations
+
 import logging
-from typing import Any
 from datetime import datetime
-from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+from typing import Any
+
+from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+    SignalRegistry
 
 
 class ConsciousnessRegistry:
@@ -30,12 +37,8 @@ class ConsciousnessRegistry:
     def __new__(cls, *args, **kwargs) -> ConsciousnessRegistry:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance.thought_index: dict[
-                str, list[dict[str, Any]]
-            ] = {}  # Agent -> Thoughts
-            cls._instance.global_summary: str = (
-                "Fleet consciousness active. No thoughts yet."
-            )
+            cls._instance.thought_index: dict[str, list[dict[str, Any]]] = {}  # Agent -> Thoughts
+            cls._instance.global_summary: str = "Fleet consciousness active. No thoughts yet."
 
             # Subscribe to signals
             try:
@@ -43,9 +46,7 @@ class ConsciousnessRegistry:
                 registry.subscribe("thought_stream", cls._instance._on_thought)
                 logging.debug("ConsciousnessRegistry: Subscribed to thought_stream.")
             except Exception as e:
-                logging.debug(
-                    f"ConsciousnessRegistry: Failed to subscribe to signals: {e}"
-                )
+                logging.debug(f"ConsciousnessRegistry: Failed to subscribe to signals: {e}")
         return cls._instance
 
     def __init__(self, fleet: Any | None = None) -> None:

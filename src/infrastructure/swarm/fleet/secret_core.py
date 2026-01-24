@@ -19,6 +19,7 @@ Pure logic for secret masking, validation, and naming policy.
 """
 
 from __future__ import annotations
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION

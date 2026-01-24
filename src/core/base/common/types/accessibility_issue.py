@@ -16,11 +16,15 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
-from src.core.base.common.types.wcag_level import WCAGLevel
+
 from dataclasses import dataclass
+
+from src.core.base.common.types.accessibility_issue_type import \
+    AccessibilityIssueType
+from src.core.base.common.types.accessibility_severity import \
+    AccessibilitySeverity
+from src.core.base.common.types.wcag_level import WCAGLevel
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

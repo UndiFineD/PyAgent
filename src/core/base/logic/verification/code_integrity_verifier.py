@@ -1,8 +1,13 @@
+
+"""
+Code integrity verifier.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import ast
 from pathlib import Path
+
 
 class CodeIntegrityVerifier:
     """Phase 316: Scans codebase for structural integrity issues, specifically import paths."""
@@ -27,7 +32,7 @@ class CodeIntegrityVerifier:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     tree = ast.parse(f.read())
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 report["syntax_errors"].append(f"{file_path}: {e}")
                 continue
 
@@ -54,9 +59,7 @@ class CodeIntegrityVerifier:
                         )
 
                         if not exists:
-                            report["broken_imports"].append(
-                                f"{file_path}: Broken import '{target}'"
-                            )
+                            report["broken_imports"].append(f"{file_path}: Broken import '{target}'")
 
         return report
 
@@ -68,14 +71,10 @@ class CodeIntegrityVerifier:
         for py_file in root_dir.rglob("*.py"):
             try:
                 tree = ast.parse(py_file.read_text(encoding="utf-8"))
-                classes = [
-                    node.name
-                    for node in ast.walk(tree)
-                    if isinstance(node, ast.ClassDef)
-                ]
+                classes = [node.name for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
                 rel_path = str(py_file.relative_to(root_dir.parent)).replace("\\", "/")
                 for cls in classes:
                     mapping[cls] = rel_path
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 continue
         return mapping

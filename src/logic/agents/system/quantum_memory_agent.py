@@ -18,16 +18,19 @@ Uses hierarchical summarization and selective hydration to handle massive local 
 """
 
 from __future__ import annotations
-from typing import Any
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 from pathlib import Path
-from src.core.base.lifecycle.base_agent import BaseAgent
+from typing import Any
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from rust_core import search_blocks_rust
+
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -66,9 +69,7 @@ class QuantumMemoryAgent(BaseAgent):
         summary = f"[Compressed Context]: Dense summary of {len(context_text)} characters. Main themes preserved."
 
         block_id = f"block_{len(self.active_context_blocks)}"
-        self.active_context_blocks.append(
-            {"id": block_id, "original_len": len(context_text), "summary": summary}
-        )
+        self.active_context_blocks.append({"id": block_id, "original_len": len(context_text), "summary": summary})
 
         return f"SUCCESS: Compressed block {block_id}. Current context pool: {len(self.active_context_blocks)} blocks."
 
@@ -94,7 +95,10 @@ class QuantumMemoryAgent(BaseAgent):
             # Fallback to general search across the last 3 blocks
             relevant_blocks = [b["id"] for b in self.active_context_blocks[-3:]]
 
-        return f"### Results for '{query}'\n\nFound relevant data in blocks: {', '.join(relevant_blocks)}. \n[Hydrated Context]: Re-assembling memory nodes for reasoning..."
+        return (
+            f"### Results for '{query}'\n\nFound relevant data in blocks: {', '.join(relevant_blocks)}. \n"
+            "[Hydrated Context]: Re-assembling memory nodes for reasoning..."
+        )
 
     @as_tool
     def export_context_knowledge_graph(self) -> str:
@@ -114,7 +118,5 @@ class QuantumMemoryAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool"
-    )
+    main = create_main_function(QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool")
     main()

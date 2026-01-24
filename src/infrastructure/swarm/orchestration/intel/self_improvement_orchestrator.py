@@ -11,36 +11,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Self improvement orchestrator.py module.
+"""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.swarm.orchestration.core.self_improvement_core import (
-    SelfImprovementCore,
-)
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.orchestration.core.self_improvement_core import \
+    SelfImprovementCore
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
-        SelfImprovementAnalysis,
-    )
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_fixer import (
-        SelfImprovementFixer,
-    )
 
 from src.infrastructure.compute.backend.llm_client import LLMClient
+
 from .mixins.orchestrator_cycle_mixin import OrchestratorCycleMixin
-from .mixins.orchestrator_scan_mixin import OrchestratorScanMixin
 from .mixins.orchestrator_results_mixin import OrchestratorResultsMixin
+from .mixins.orchestrator_scan_mixin import OrchestratorScanMixin
+from .self_improvement_analysis import SelfImprovementAnalysis
+from .self_improvement_fixer import SelfImprovementFixer
 
 __version__ = VERSION
 
 
-class SelfImprovementOrchestrator(
-    BaseAgent, OrchestratorCycleMixin, OrchestratorScanMixin, OrchestratorResultsMixin
-):
+class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, OrchestratorScanMixin, OrchestratorResultsMixin):
     """
     Orchestrates the fleet's self-improvement cycle: scanning for tech debt,
     security leaks, and quality issues, and applying autonomous fixes.
@@ -64,19 +64,12 @@ class SelfImprovementOrchestrator(
         # We pass workspace_root as the file_path for BaseAgent context
         super().__init__(self.workspace_root)
         self.active_tasks: list[dict[str, Any]] = []
-        self.improvement_log: str = os.path.join(
-            self.workspace_root, "data/logs", "self_improvement_audit.jsonl"
-        )
-        self.research_doc: str = os.path.join(
-            self.workspace_root, "docs", "IMPROVEMENT_RESEARCH.md"
-        )
+        self.improvement_log: str = os.path.join(self.workspace_root, "data/logs", "self_improvement_audit.jsonl")
+        self.research_doc: str = os.path.join(self.workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")
         os.makedirs(os.path.dirname(self.improvement_log), exist_ok=True)
 
         # Phase 107: AI-assisted refactoring
         import requests
-
-        from .self_improvement_analysis import SelfImprovementAnalysis
-        from .self_improvement_fixer import SelfImprovementFixer
 
         self.ai: LLMClient = LLMClient(requests, workspace_root=self.workspace_root)
         self.core: SelfImprovementCore = SelfImprovementCore(workspace_root=self.workspace_root)

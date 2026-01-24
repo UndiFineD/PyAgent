@@ -18,7 +18,8 @@ Core logic for Synaptic Pruning and Knowledge Decay.
 (Facade for src.core.base.common.pruning_core)
 """
 
-from src.core.base.common.pruning_core import PruningCore as StandardPruningCore
+from src.core.base.common.pruning_core import \
+    PruningCore as StandardPruningCore
 
 
 class PruningCore(StandardPruningCore):

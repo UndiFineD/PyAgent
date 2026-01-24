@@ -11,12 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Legal audit agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import re
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -40,18 +46,14 @@ class LegalAuditAgent(BaseAgent):
             "AGPL",
         ]  # Blacklist for non-copyleft projects (Phase 238)
 
-    def check_license_compliance(
-        self, content: str, project_license: str = "MIT"
-    ) -> dict[str, Any]:
+    def check_license_compliance(self, content: str, project_license: str = "MIT") -> dict[str, Any]:
         """
         Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
         """
         scan = self.scan_licensing(content)
         violations = [
-            license_name
-            for license_name in scan["detected_licenses"]
-            if license_name in self.license_blacklist
+            license_name for license_name in scan["detected_licenses"] if license_name in self.license_blacklist
         ]
 
         is_compliant = not violations
@@ -71,15 +73,11 @@ class LegalAuditAgent(BaseAgent):
 
         res = {
             "detected_licenses": detected,
-            "risk_level": "high"
-            if any(license_name in ["GPL", "AGPL"] for license_name in detected)
-            else "low",
+            "risk_level": "high" if any(license_name in ["GPL", "AGPL"] for license_name in detected) else "low",
             "summary": f"Detected: {', '.join(detected) if detected else 'None'}",
         }
         # Phase 108: Intelligence Recording
-        self._record(
-            content[:1000], str(res), provider="LegalAudit", model="LicenseScanner"
-        )
+        self._record(content[:1000], str(res), provider="LegalAudit", model="LicenseScanner")
         return res
 
     def verify_smart_contract(self, logic: str) -> dict[str, Any]:
@@ -104,5 +102,8 @@ class LegalAuditAgent(BaseAgent):
         flags = [w for w in liability_keywords if w in task_output.lower()]
 
         if flags:
-            return f"WARNING: Potential liability flags detected in output: {', '.join(flags)}. Recommend adding disclaimers."
+            return (
+                f"WARNING: Potential liability flags detected in output: {', '.join(flags)}. "
+                "Recommend adding disclaimers."
+            )
         return "No significant liability language detected."

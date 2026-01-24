@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -8,21 +22,16 @@ from __future__ import annotations
 
 import logging
 import threading
-from typing import Dict, Optional, Type, List
+from typing import Dict, Optional, Type
 
-from .models import (
-    PlatformType,
-    DeviceCapability,
-    MemoryInfo,
-    AttentionBackend,
-    QuantizationType,
-)
 from .base import Platform
+from .cpu import CpuPlatform
 from .cuda import CudaPlatform
+from .models import (AttentionBackend, DeviceCapability, MemoryInfo,
+                     PlatformType, QuantizationType)
 from .rocm import RocmPlatform
 from .tpu import TpuPlatform
 from .xpu import XpuPlatform
-from .cpu import CpuPlatform
 
 logger = logging.getLogger(__name__)
 

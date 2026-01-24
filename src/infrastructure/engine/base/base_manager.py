@@ -12,9 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Base manager.py module.
+"""
+
 from __future__ import annotations
+
 import logging
 from abc import ABC
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION

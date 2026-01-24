@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 EnhancedLogger - Extended logging with deduplication and scope control.
 
@@ -22,6 +36,7 @@ LogScope = Literal["process", "global", "local"]
 
 class LogScopeEnum(Enum):
     """Enum for log scope types."""
+
     PROCESS = "process"
     GLOBAL = "global"
     LOCAL = "local"
@@ -30,6 +45,7 @@ class LogScopeEnum(Enum):
 # ============================================================================
 # Core deduplication functions
 # ============================================================================
+
 
 @lru_cache(maxsize=10000)
 def _dedupe_debug(logger: logging.Logger, msg: str, *args: Hashable) -> None:
@@ -59,6 +75,7 @@ def _dedupe_error(logger: logging.Logger, msg: str, *args: Hashable) -> None:
 # Scope checking (for distributed systems)
 # ============================================================================
 
+
 def _should_log_with_scope(scope: LogScope) -> bool:
     """
     Determine whether to log based on scope.
@@ -79,10 +96,14 @@ def _should_log_with_scope(scope: LogScope) -> bool:
     # These functions should be provided by the distributed module
     try:
         if scope == "global":
-            from src.infrastructure.swarm.distributed import is_global_first_rank
+            from src.infrastructure.swarm.distributed import \
+                is_global_first_rank
+
             return is_global_first_rank()
         elif scope == "local":
-            from src.infrastructure.swarm.distributed import is_local_first_rank
+            from src.infrastructure.swarm.distributed import \
+                is_local_first_rank
+
             return is_local_first_rank()
     except ImportError:
         # Not in distributed mode, always log
@@ -94,6 +115,7 @@ def _should_log_with_scope(scope: LogScope) -> bool:
 # ============================================================================
 # Logger extension methods
 # ============================================================================
+
 
 def debug_once(
     self: logging.Logger,
@@ -175,6 +197,7 @@ def error_once(
 # Logger patching
 # ============================================================================
 
+
 def patch_logger(logger: logging.Logger) -> logging.Logger:
     """
     Patch a logger instance with _once methods.
@@ -212,6 +235,7 @@ def init_logger(name: str) -> logging.Logger:
 # ============================================================================
 # Logger adapter for clean API
 # ============================================================================
+
 
 class EnhancedLoggerAdapter(logging.LoggerAdapter):
     """
@@ -315,6 +339,7 @@ def create_enhanced_logger(
 # Global deduplication cache management
 # ============================================================================
 
+
 def clear_dedup_cache() -> None:
     """Clear the global deduplication caches."""
     _dedupe_debug.cache_clear()
@@ -336,6 +361,7 @@ def get_dedup_cache_info() -> dict[str, Any]:
 # ============================================================================
 # Convenience class for type hints
 # ============================================================================
+
 
 class EnhancedLogger(logging.Logger):
     """

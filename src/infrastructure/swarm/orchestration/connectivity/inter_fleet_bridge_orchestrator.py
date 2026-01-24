@@ -1,25 +1,32 @@
 #!/usr/bin/env python3
+
+"""
+Inter fleet bridge orchestrator.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Inter-Fleet Bridge)
 
 from __future__ import annotations
-import logging
+
 import asyncio
 from typing import Any, Dict, List, Optional
 
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.voyager.discovery_node import DiscoveryNode
-from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
+from src.infrastructure.swarm.voyager.remote_neural_synapse import \
+    RemoteNeuralSynapse
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 logger = StructuredLogger(__name__)
+
 
 class InterFleetBridgeOrchestrator:
     """
     InterFleetBridgeOrchestrator: Manages peer connectivity and
     cross-machine discovery for the Voyager Constellation.
     """
+
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet_manager = fleet_manager
         self.version = VERSION
@@ -30,7 +37,9 @@ class InterFleetBridgeOrchestrator:
         self.shared_state_cache: List[str] = []
 
         self.discovery_node = DiscoveryNode(port=self.mDNS_port, transport_port=self.zmq_port)
-        self.synapse = RemoteNeuralSynapse(fleet_manager, transport_port=self.zmq_port, discovery_node=self.discovery_node)
+        self.synapse = RemoteNeuralSynapse(
+            fleet_manager, transport_port=self.zmq_port, discovery_node=self.discovery_node
+        )
         self.is_active = False
         logger.info("InterFleetBridgeOrchestrator (Voyager) initialized.")
 
@@ -111,11 +120,7 @@ class InterFleetBridgeOrchestrator:
             return {"status": "error", "message": "Peer not found"}
 
         peer_ip, peer_port = target
-        payload = {
-            "type": signal_type,
-            "data": data,
-            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")
-        }
+        payload = {"type": signal_type, "data": data, "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")}
         return await self.synapse.transport.send_to_peer(peer_ip, peer_port, payload)
 
     async def broadcast_task(self, task_description: str, metadata: Optional[Dict[str, Any]] = None):
@@ -127,19 +132,20 @@ class InterFleetBridgeOrchestrator:
             "type": "task_broadcast",
             "task": task_description,
             "metadata": metadata or {},
-            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")
+            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
         }
 
         tasks = []
         for peer in peers:
-            addrs = peer.get('addresses', [])
+            addrs = peer.get("addresses", [])
             if not addrs:
                 continue
             addr = addrs[0]
-            port = int(peer['properties'].get('transport_port', 5555))
+            port = int(peer["properties"].get("transport_port", 5555))
             tasks.append(self.synapse.transport.send_to_peer(addr, port, payload))
 
         if tasks:
             results = await asyncio.gather(*tasks, return_exceptions=True)
-            logger.info(f"Voyager: Broadcast results: {len([r for r in results if not isinstance(r, Exception)])} successful.")
-
+            logger.info(
+                f"Voyager: Broadcast results: {len([r for r in results if not isinstance(r, Exception)])} successful."
+            )

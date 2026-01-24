@@ -27,21 +27,15 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import (
-    Any,
-    AsyncIterator,
-    Dict,
-    List,
-    Optional,
-)
+from typing import Any, AsyncIterator, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 # Check vLLM availability
 try:
     from vllm import SamplingParams
-    from vllm.engine.async_llm_engine import AsyncLLMEngine
     from vllm.engine.arg_utils import AsyncEngineArgs
+    from vllm.engine.async_llm_engine import AsyncLLMEngine
 
     HAS_ASYNC_VLLM = True
 except ImportError:
@@ -53,6 +47,7 @@ except ImportError:
 
 class RequestState(Enum):
     """State of an async request."""
+
     PENDING = auto()
     RUNNING = auto()
     STREAMING = auto()
@@ -318,14 +313,11 @@ class AsyncVllmEngine:
             if final_output and final_output.outputs:
                 output = final_output.outputs[0]
                 handle.output_text = output.text
-                handle.output_tokens = (
-                    list(output.token_ids) if hasattr(output, 'token_ids') else []
-                )
+                handle.output_tokens = list(output.token_ids) if hasattr(output, "token_ids") else []
                 handle.finish_reason = output.finish_reason
                 handle.generated_tokens = len(handle.output_tokens)
                 handle.prompt_tokens = (
-                    len(final_output.prompt_token_ids)
-                    if hasattr(final_output, 'prompt_token_ids') else 0
+                    len(final_output.prompt_token_ids) if hasattr(final_output, "prompt_token_ids") else 0
                 )
 
             handle.state = RequestState.COMPLETED
@@ -353,10 +345,7 @@ class AsyncVllmEngine:
             async with self._lock:
                 if len(self._requests) > 1000:
                     # Remove oldest completed requests
-                    completed = [
-                        (k, v) for k, v in self._requests.items()
-                        if v.is_finished
-                    ]
+                    completed = [(k, v) for k, v in self._requests.items() if v.is_finished]
                     completed.sort(key=lambda x: x[1].completed_at or 0)
                     for k, _ in completed[:500]:
                         del self._requests[k]
@@ -486,10 +475,7 @@ class AsyncVllmEngine:
         """Get engine statistics."""
         return {
             **self._stats,
-            "active_requests": len([
-                r for r in self._requests.values()
-                if not r.is_finished
-            ]),
+            "active_requests": len([r for r in self._requests.values() if not r.is_finished]),
             "is_running": self.is_running,
         }
 

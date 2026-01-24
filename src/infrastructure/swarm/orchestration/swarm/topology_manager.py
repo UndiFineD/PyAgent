@@ -7,12 +7,14 @@ Swarm Topology Manager (Phase 70).
 Handles dynamic expert cloning and load-based re-assignment.
 """
 
-import logging
 import asyncio
-from typing import List, Dict, Any, Optional
+import logging
+from typing import Any, Dict, List
+
 from src.core.base.common.models.communication_models import ExpertProfile
 
 logger = logging.getLogger(__name__)
+
 
 class TopologyManager:
     """
@@ -23,7 +25,7 @@ class TopologyManager:
         self.gatekeeper = gatekeeper
         self.clone_threshold = clone_threshold
         self.request_counts: Dict[str, int] = {}
-        self.replicas: Dict[str, List[str]] = {} # master_id -> [replica_id1, ...]
+        self.replicas: Dict[str, List[str]] = {}  # master_id -> [replica_id1, ...]
 
     def record_usage(self, agent_id: str):
         """Increments usage counter and triggers cloning if threshold met."""
@@ -31,7 +33,7 @@ class TopologyManager:
 
         if self.request_counts[agent_id] >= self.clone_threshold:
             asyncio.create_task(self.clone_expert(agent_id))
-            self.request_counts[agent_id] = 0 # Reset counter after cloning
+            self.request_counts[agent_id] = 0  # Reset counter after cloning
 
     async def clone_expert(self, agent_id: str):
         """
@@ -54,7 +56,7 @@ class TopologyManager:
             performance_score=master_profile.performance_score,
             specialization_vector=master_profile.specialization_vector,
             is_replica=True,
-            parent_id=agent_id
+            parent_id=agent_id,
         )
 
         self.gatekeeper.register_expert(replica_profile)
@@ -68,5 +70,5 @@ class TopologyManager:
         return {
             "active_masters": len(self.replicas),
             "total_replicas": sum(len(v) for v in self.replicas.values()),
-            "clones": self.replicas
+            "clones": self.replicas,
         }

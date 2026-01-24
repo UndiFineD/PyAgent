@@ -18,10 +18,12 @@ code statistics across the project.
 """
 
 from __future__ import annotations
-from pathlib import Path
-from src.core.base.lifecycle.version import VERSION
-import os
+
 import ast
+import os
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

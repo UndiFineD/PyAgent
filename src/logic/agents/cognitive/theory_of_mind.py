@@ -13,12 +13,14 @@
 # limitations under the License.
 
 
-"""Shell for TheoryOfMind, managing agent profiles and state."""
+"""Models the mental states and knowledge domains of other agents."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
-from src.logic.agents.cognitive.TheoryOfMindCore import TheoryOfMindCore
+
+from src.core.base.lifecycle.version import VERSION
+from .core.theory_of_mind_core import TheoryOfMindCore
 
 __version__ = VERSION
 

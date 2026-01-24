@@ -13,21 +13,21 @@
 # limitations under the License.
 
 
-"""
-Agent specializing in voice-based interaction and thought-to-speech conversion.
-Part of Phase 127 Swarm UX.
-"""
+"""Agent for voice-based interaction and thought-to-speech conversion."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class VoiceInteractionAgent(BaseAgent):
     """Voice interface for the swarm, supporting STT and TTS."""
 
@@ -71,7 +71,7 @@ class VoiceInteractionAgent(BaseAgent):
                 audio = r.record(source)
             text = r.recognize_google(audio)
             return text
-        except (ImportError, Exception) as e:
+        except (ImportError, RuntimeError, OSError) as e:
             logging.error(f"Transcription failed: {str(e)}")
             return "### Transcription Unavailable (Check dependencies)"
 

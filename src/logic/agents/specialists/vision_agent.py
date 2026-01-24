@@ -1,17 +1,24 @@
+
+"""
+Vision agent.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import base64
+import logging
 import re
-from typing import Any, Dict, List, Optional, Tuple
 from pathlib import Path
-from src.core.base.lifecycle.base_agent import BaseAgent
+from typing import Any, Dict, List, Optional
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class VisionAgent(BaseAgent):
     """
@@ -49,11 +56,7 @@ class VisionAgent(BaseAgent):
 
         result = await self.improve_content(prompt)
 
-        response = {
-            "query": query,
-            "description": result,
-            "status": "success"
-        }
+        response = {"query": query, "description": result, "status": "success"}
         self._analysis_cache[cache_key] = response
         return response
 
@@ -73,11 +76,7 @@ class VisionAgent(BaseAgent):
 
         result = await self.improve_content(prompt)
 
-        return {
-            "extracted_text": result,
-            "word_count": len(result.split()),
-            "status": "success"
-        }
+        return {"extracted_text": result, "word_count": len(result.split()), "status": "success"}
 
     @as_tool
     async def analyze_code_screenshot(self, image_source: str) -> Dict[str, Any]:
@@ -93,16 +92,22 @@ class VisionAgent(BaseAgent):
         )
         extracted_code = await self.improve_content(extract_prompt)
 
-        analyze_prompt = f"Analyze this code and identify:\n1. Programming language\n2. Purpose/functionality\n3. Any visible issues\n\nCode:\n{extracted_code}"
+        analyze_prompt = (
+            "Analyze this code and identify:\n"
+            "1. Programming language\n"
+            "2. Purpose/functionality\n"
+            "3. Any visible issues\n\n"
+            f"Code:\n{extracted_code}"
+        )
         analysis = await self.improve_content(analyze_prompt)
 
         # Detect language
         language = "unknown"
         lang_patterns = {
-            "python": r'\b(def |import |class |print\()',
-            "javascript": r'\b(function |const |let |var |=>)',
-            "rust": r'\b(fn |let |mut |impl |struct )',
-            "java": r'\b(public |private |class |void |static )'
+            "python": r"\b(def |import |class |print\()",
+            "javascript": r"\b(function |const |let |var |=>)",
+            "rust": r"\b(fn |let |mut |impl |struct )",
+            "java": r"\b(public |private |class |void |static )",
         }
         for lang, pattern in lang_patterns.items():
             if re.search(pattern, extracted_code):
@@ -113,7 +118,7 @@ class VisionAgent(BaseAgent):
             "extracted_code": extracted_code,
             "detected_language": language,
             "analysis": analysis,
-            "status": "success"
+            "status": "success",
         }
 
     @as_tool
@@ -132,11 +137,7 @@ class VisionAgent(BaseAgent):
 
         result = await self.improve_content(prompt)
 
-        return {
-            "diagram_type": diagram_type,
-            "analysis": result,
-            "status": "success"
-        }
+        return {"diagram_type": diagram_type, "analysis": result, "status": "success"}
 
     @as_tool
     async def compare_images(self, image1_source: str, image2_source: str) -> Dict[str, Any]:
@@ -156,10 +157,7 @@ class VisionAgent(BaseAgent):
 
         result = await self.improve_content(prompt)
 
-        return {
-            "comparison": result,
-            "status": "success"
-        }
+        return {"comparison": result, "status": "success"}
 
     @as_tool
     async def detect_objects(self, image_source: str, target_objects: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -182,11 +180,7 @@ class VisionAgent(BaseAgent):
 
         result = await self.improve_content(prompt)
 
-        return {
-            "target_objects": target_objects,
-            "detections": result,
-            "status": "success"
-        }
+        return {"target_objects": target_objects, "detections": result, "status": "success"}
 
     async def _resolve_image_source(self, source: str) -> Optional[str]:
         """Resolves various image sources to base64."""
@@ -211,6 +205,7 @@ class VisionAgent(BaseAgent):
         if source.startswith(("http://", "https://")):
             try:
                 import requests
+
                 response = requests.get(source, timeout=10)
                 if response.status_code == 200:
                     return base64.b64encode(response.content).decode("utf-8")

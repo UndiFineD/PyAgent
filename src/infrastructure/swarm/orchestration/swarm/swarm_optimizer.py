@@ -18,8 +18,10 @@ Monitors fleet performance and suggests structural or configuration changes.
 """
 
 from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from src.core.base.lifecycle.version import VERSION
-from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -73,8 +75,4 @@ class SwarmOptimizer:
                 # Mock config update
                 results.append(f"Applied model tuning: {sug['action']}")
 
-        return (
-            "\n".join(results)
-            if results
-            else "Fleet already operating at peak efficiency."
-        )
+        return "\n".join(results) if results else "Fleet already operating at peak efficiency."

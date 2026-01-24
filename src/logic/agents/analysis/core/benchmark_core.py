@@ -1,5 +1,25 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Benchmark core.py module.
+"""
+
 from __future__ import annotations
+
 from typing import Any
+
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 try:
@@ -28,20 +48,18 @@ class BenchmarkCore:
                     for r in results
                 ]
                 return rc.calculate_baseline(results_list)  # type: ignore[attr-defined]
-            except Exception:
+            except (RuntimeError, ValueError, TypeError):
                 pass
         if not results:
             return 0.0
         return sum(r.duration for r in results) / len(results)
 
-    def check_regression(
-        self, current_duration: float, baseline: float, threshold: float = 0.1
-    ) -> dict[str, Any]:
+    def check_regression(self, current_duration: float, baseline: float, threshold: float = 0.1) -> dict[str, Any]:
         """Checks if current duration exceeds the baseline by the given threshold."""
         if rc:
             try:
                 return rc.check_regression(current_duration, baseline, threshold)  # type: ignore[attr-defined]
-            except Exception:
+            except (RuntimeError, ValueError, TypeError):
                 pass
         if baseline <= 0:
             return {"regression": False, "delta": 0.0}
@@ -64,7 +82,7 @@ class BenchmarkCore:
                     "success": result.success,
                 }
                 return rc.score_efficiency(r_dict)  # type: ignore[attr-defined]
-            except Exception:
+            except (RuntimeError, ValueError, TypeError):
                 pass
         if result.total_tokens <= 0:
             return 0.0

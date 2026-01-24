@@ -12,19 +12,25 @@ For more information, visit:
 No commands will be executed.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 class ToolSynthesisAgent(BaseAgent):
     """
     ToolSynthesisAgent recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.version = VERSION
@@ -41,5 +47,5 @@ class ToolSynthesisAgent(BaseAgent):
 
     def analyze_feedback(self, tool_name: str, feedback: str) -> dict:
         """Analyzes feedback for a synthesized tool (Phase 74)."""
+        _ = tool_name
         return {"status": "feedback_logged", "feedback": feedback}
-

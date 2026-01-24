@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Arxiv core.py module.
+"""
+
+import logging
+import os
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import arxiv
 import fitz  # PyMuPDF
-import os
 import requests
-import logging
-from typing import List, Dict, Any, Optional
-from pathlib import Path
+
 
 class ArxivCore:
     """Core logic for interacting with Arxiv research papers."""
@@ -31,25 +37,23 @@ class ArxivCore:
 
     def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
         """Search Arxiv for papers matching the query."""
-        search = arxiv.Search(
-            query=query,
-            max_results=max_results,
-            sort_by=arxiv.SortCriterion.Relevance
-        )
+        search = arxiv.Search(query=query, max_results=max_results, sort_by=arxiv.SortCriterion.Relevance)
 
         results = []
         try:
             for result in self.client.results(search):
-                results.append({
-                    "id": result.entry_id,
-                    "title": result.title,
-                    "summary": result.summary,
-                    "authors": [a.name for a in result.authors],
-                    "pdf_url": result.pdf_url,
-                    "published": result.published.isoformat(),
-                    "comment": result.comment
-                })
-        except Exception as e:
+                results.append(
+                    {
+                        "id": result.entry_id,
+                        "title": result.title,
+                        "summary": result.summary,
+                        "authors": [a.name for a in result.authors],
+                        "pdf_url": result.pdf_url,
+                        "published": result.published.isoformat(),
+                        "comment": result.comment,
+                    }
+                )
+        except (RuntimeError, ValueError) as e:
             logging.error(f"Arxiv search error: {e}")
 
         return results
@@ -66,7 +70,7 @@ class ArxivCore:
 
             target_path.write_bytes(response.content)
             return target_path
-        except Exception as e:
+        except (requests.RequestException, IOError) as e:
             logging.error(f"Failed to download Arxiv paper: {e}")
             return None
 
@@ -82,7 +86,7 @@ class ArxivCore:
                 text += page.get_text()
             doc.close()
             return text
-        except Exception as e:
+        except (RuntimeError, IOError) as e:
             logging.error(f"Text extraction failed: {e}")
             return f"Extraction failed: {e}"
 

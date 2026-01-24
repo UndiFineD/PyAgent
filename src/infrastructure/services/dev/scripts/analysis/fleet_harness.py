@@ -15,13 +15,15 @@
 """Unified Fleet Harness for repository management and repair."""
 
 from __future__ import annotations
+
 import argparse
 import subprocess
 import sys
 from pathlib import Path
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 
 SCRIPTS_DIR = Path(__file__).parent
 MGMT_DIR = SCRIPTS_DIR / "management"
@@ -70,9 +72,7 @@ def main() -> None:
 
     improve_parser = subparsers.add_parser("improve", help="Run self-improvement cycle")
     improve_parser.add_argument("-c", "--cycles", type=int, default=1)
-    improve_parser.add_argument(
-        "-p", "--prompt", type=str, default="docs/notes/prompt.txt"
-    )
+    improve_parser.add_argument("-p", "--prompt", type=str, default="docs/notes/prompt.txt")
 
     args, unknown = parser.parse_known_args()
     recorder: ContextRecorderInterface | None = LocalContextRecorder(Path.cwd())

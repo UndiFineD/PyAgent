@@ -19,9 +19,11 @@ Part of the Fleet Healer autonomous recovery pattern.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -29,11 +31,14 @@ __version__ = VERSION
 def uncomment_lines(root_dir: str) -> None:
     # Regex to catch commented-out essential imports
     p_from = re.compile(
-        r"^\s*#\s*(from\s+(?:typing|dataclasses|__future__|pathlib|datetime|abc|functools|enum|typing_extensions)\s+import\s+)",
+        r"^\s*#\s*(from\s+(?:typing|dataclasses|__future__|pathlib|datetime|"
+        r"abc|functools|enum|typing_extensions)\s+import\s+)",
         re.M,
     )
     p_import = re.compile(
-        r"^\s*#\s*(import\s+(?:os|json|logging|re|sys|time|math|hashlib|shutil|subprocess|tempfile|glob|uuid|collections|random|inspect|threading|queue|socket|urllib|traceback|ast|argparse|pathlib))\b",
+        r"^\s*#\s*(import\s+(?:os|json|logging|re|sys|time|math|hashlib|shutil|"
+        r"subprocess|tempfile|glob|uuid|collections|random|inspect|threading|"
+        r"queue|socket|urllib|traceback|ast|argparse|pathlib))\b",
         re.M,
     )
 

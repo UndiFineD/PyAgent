@@ -19,7 +19,7 @@ Tracks DBO allocation patterns and fragmentation in the synchronized workspace.
 
 import logging
 import time
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List
 
 try:
     import rust_core as rc
@@ -27,6 +27,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class MemoryProfiler:
     """
@@ -59,7 +60,7 @@ class MemoryProfiler:
             "timestamp": time.time() - self.start_time,
             "label": label,
             "usage_bytes": usage,
-            "fragmentation": frag
+            "fragmentation": frag,
         }
         self.snapshots.append(snapshot)
         return snapshot
@@ -73,7 +74,7 @@ class MemoryProfiler:
             "duration": time.time() - self.start_time,
             "peak_mb": self.peak_memory / (1024 * 1024),
             "avg_fragmentation": sum(s["fragmentation"] for s in self.snapshots) / len(self.snapshots),
-            "snapshot_count": len(self.snapshots)
+            "snapshot_count": len(self.snapshots),
         }
 
     def reset(self):

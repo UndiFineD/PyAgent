@@ -17,9 +17,11 @@ Quality and robustness analysis logic for SelfImprovementCore.
 """
 
 from __future__ import annotations
-import re
+
 import ast
-from typing import List, Dict, Any
+import re
+from typing import Any, Dict, List
+
 
 class SelfImprovementQualityMixin:
     """Mixin for quality, complexity, and robustness analysis."""
@@ -36,7 +38,10 @@ class SelfImprovementQualityMixin:
                     return [
                         {
                             "type": "Complexity Issue",
-                            "message": f"Cyclomatic complexity is high ({complexity}). Consider breaking down functions.",
+                            "message": (
+                                f"Cyclomatic complexity is high ({complexity}). "
+                                "Consider breaking down functions."
+                            ),
                             "file": file_path_rel,
                         }
                     ]
@@ -66,20 +71,16 @@ class SelfImprovementQualityMixin:
                 n
                 for n in ast.walk(tree)
                 if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
-                and (
-                    n.returns is None
-                    or any(
-                        arg.annotation is None
-                        for arg in n.args.args
-                        if arg.arg != "self"
-                    )
-                )
+                and (n.returns is None or any(arg.annotation is None for arg in n.args.args if arg.arg != "self"))
             ]
             if untyped_nodes:
                 findings.append(
                     {
                         "type": "Rust Readiness Task",
-                        "message": f"Found {len(untyped_nodes)} functions without complete type hints. Strong typing required for Rust port.",
+                        "message": (
+                            f"Found {len(untyped_nodes)} functions without complete type hints. "
+                            "Strong typing required for Rust port."
+                        ),
                         "file": file_path_rel,
                         "details": [n.name for n in untyped_nodes],
                     }
@@ -111,10 +112,7 @@ class SelfImprovementQualityMixin:
             )
 
         # Performance: time.sleep in non-test code
-        if (
-            re.search(r"^[^\#]*time" + r"\.sleep\(", content, re.MULTILINE)
-            and "test" not in file_path_rel.lower()
-        ):
+        if re.search(r"^[^\#]*time" + r"\.sleep\(", content, re.MULTILINE) and "test" not in file_path_rel.lower():
             if "SelfImprovementCore.py" not in file_path_rel:
                 findings.append(
                     {
@@ -126,8 +124,10 @@ class SelfImprovementQualityMixin:
 
         # Intelligence Gap
         io_pattern = getattr(self, "io_pattern", "")
-        if io_pattern and re.search(io_pattern, content) and not any(
-            x in content for x in ["_record", "record_lesson", "record_interaction"]
+        if (
+            io_pattern
+            and re.search(io_pattern, content)
+            and not any(x in content for x in ["_record", "record_lesson", "record_interaction"])
         ):
             findings.append(
                 {

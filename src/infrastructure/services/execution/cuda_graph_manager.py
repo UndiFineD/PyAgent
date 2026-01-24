@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -16,18 +30,17 @@ from __future__ import annotations
 import hashlib
 import logging
 import time
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Callable, NamedTuple
-from collections import OrderedDict
-
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
 # Try to import torch
 try:
     import torch
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -36,6 +49,7 @@ except ImportError:
 
 class CUDAGraphMode(Enum):
     """CUDA graph execution modes."""
+
     NONE = auto()  # No CUDA graph, eager execution
     PIECEWISE = auto()  # Piecewise capture (attention separate)
     FULL = auto()  # Full model capture
@@ -43,6 +57,7 @@ class CUDAGraphMode(Enum):
 
 class BatchDescriptor(NamedTuple):
     """Describes a batch for CUDA graph keying."""
+
     num_tokens: int
     num_reqs: int
     uniform: bool  # All requests have same token count
@@ -55,6 +70,7 @@ class CUDAGraphEntry:
     """
     A captured CUDA graph with associated metadata.
     """
+
     key: str  # Hash key for lookup
     graph: Any  # torch.cuda.CUDAGraph
     input_buffers: dict[str, Any]  # Input placeholder tensors
@@ -110,10 +126,7 @@ class CUDAGraphRegistry:
         if self.max_memory_bytes > 0:
             while self._total_memory + entry.memory_bytes > self.max_memory_bytes:
                 if not self._evict_lru():
-                    logger.warning(
-                        f"Cannot cache graph: memory limit exceeded "
-                        f"({entry.memory_bytes} bytes)"
-                    )
+                    logger.warning(f"Cannot cache graph: memory limit exceeded ({entry.memory_bytes} bytes)")
                     return
 
         self._graphs[entry.key] = entry
@@ -163,11 +176,7 @@ def compute_graph_key(desc: BatchDescriptor) -> str:
     return hashlib.md5(key_str.encode()).hexdigest()[:16]
 
 
-def generate_warmup_sizes(
-    max_tokens: int,
-    max_reqs: int,
-    granularity: int = 8
-) -> list[tuple[int, int]]:
+def generate_warmup_sizes(max_tokens: int, max_reqs: int, granularity: int = 8) -> list[tuple[int, int]]:
     """
     Generate batch sizes for CUDA graph warmup.
 
@@ -371,8 +380,7 @@ class CUDAGraphManager:
             self._capture_count += 1
 
             logger.debug(
-                f"Captured CUDA graph: tokens={num_tokens}, reqs={num_reqs}, "
-                f"memory={memory_bytes / 1024:.1f}KB"
+                f"Captured CUDA graph: tokens={num_tokens}, reqs={num_reqs}, memory={memory_bytes / 1024:.1f}KB"
             )
             return entry
 
@@ -380,11 +388,7 @@ class CUDAGraphManager:
             logger.error(f"Failed to capture CUDA graph: {e}")
             return None
 
-    def _estimate_graph_memory(
-        self,
-        input_buffers: dict[str, Any],
-        output_buffers: Any
-    ) -> int:
+    def _estimate_graph_memory(self, input_buffers: dict[str, Any], output_buffers: Any) -> int:
         """Estimate memory usage of a graph."""
         total = 0
 
@@ -517,11 +521,7 @@ class CUDAGraphManager:
         """
         return ((size + granularity - 1) // granularity) * granularity
 
-    def find_closest_size(
-        self,
-        num_tokens: int,
-        num_reqs: int
-    ) -> tuple[int, int] | None:
+    def find_closest_size(self, num_tokens: int, num_reqs: int) -> tuple[int, int] | None:
         """
         Find the closest cached graph size >= requested size.
 

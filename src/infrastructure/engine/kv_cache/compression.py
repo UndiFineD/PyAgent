@@ -19,10 +19,13 @@ Dynamically manages KV-cache precision and eviction based on shard activity.
 
 import logging
 import time
-from typing import List, Dict, Any
-from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager, ContextShard
+from typing import Any, Dict
+
+from src.infrastructure.engine.kv_cache.context_sharder import \
+    ContextShardManager
 
 logger = logging.getLogger(__name__)
+
 
 class AdaptiveSwarmCompressor:
     """
@@ -33,12 +36,7 @@ class AdaptiveSwarmCompressor:
     def __init__(self, shard_manager: ContextShardManager, idle_threshold_sec: float = 60.0):
         self.shard_manager = shard_manager
         self.idle_threshold_sec = idle_threshold_sec
-        self.bit_depth_map = {
-            "float16": 16,
-            "fp8": 8,
-            "int4": 4,
-            "int2": 2
-        }
+        self.bit_depth_map = {"float16": 16, "fp8": 8, "int4": 4, "int2": 2}
 
     async def apply_pressure_quantization(self, vram_pressure: float):
         """
@@ -46,7 +44,7 @@ class AdaptiveSwarmCompressor:
         Aggressively reduces bit-depth as pressure increases.
         """
         if vram_pressure < 0.5:
-            return # Normal operation
+            return  # Normal operation
 
         stats = {"scaled_down": 0}
 
@@ -71,7 +69,12 @@ class AdaptiveSwarmCompressor:
                     stats["scaled_down"] += 1
 
         if stats["scaled_down"] > 0:
-            logger.warning(f"MemPressure: Dynamically scaled {stats['scaled_down']} shards due to {vram_pressure*100:.1f}% load.")
+            load_pct = vram_pressure * 100
+            msg = (
+                f"MemPressure: Dynamically scaled {stats['scaled_down']} "
+                f"shards due to {load_pct:.1f}% load."
+            )
+            logger.warning(msg)
 
         return stats
 
@@ -117,5 +120,5 @@ class AdaptiveSwarmCompressor:
                     logger.info(f"Compressor: Reloading evicted shard {shard.shard_id}")
                     shard.is_cached = True
                 if shard.precision != "float16":
-                    shard.precision = "float16" # Decompress on access
+                    shard.precision = "float16"  # Decompress on access
                 break

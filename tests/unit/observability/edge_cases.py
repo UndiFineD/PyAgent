@@ -2,7 +2,7 @@
 """Test classes from test_agent_stats.py - edge_cases module."""
 
 from __future__ import annotations
-from typing import Any
+from typing import Any, Self
 import unittest
 from typing import Dict
 import json

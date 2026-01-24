@@ -13,14 +13,19 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
+"""Context export functionality for Cognitive agents.
+
+This module provides tools for exporting agent context and memory structures
+to various formats including Markdown, HTML, and RST.
+"""
 
 from __future__ import annotations
+import re
+from datetime import datetime
+
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.export_format import ExportFormat
 from src.logic.agents.cognitive.context.models.exported_context import ExportedContext
-from datetime import datetime
-import re
 
 __version__ = VERSION
 
@@ -31,34 +36,38 @@ class ContextExporter:
     Provides functionality to export context to various formats.
 
     Example:
-        >>> exporter=ContextExporter()
-        >>> exported=exporter.export(content, ExportFormat.HTML)
+        >>> exporter = ContextExporter()
+        >>> exported = exporter.export("content", ExportFormat.HTML)
     """
 
     def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
         self.default_format: ExportFormat = default_format
 
-    def set_format(self, format: ExportFormat) -> None:
-        """Set the default export format."""
-        self.default_format = format
+    def set_format(self, export_format: ExportFormat) -> None:
+        """Set the default export format.
+
+        Args:
+            export_format: The format to set as default.
+        """
+        self.default_format = export_format
 
     def get_supported_formats(self) -> list[ExportFormat]:
         """Return all supported export formats."""
         return list(ExportFormat)
 
     def export(
-        self, content: str, format: ExportFormat | None = None
+        self, content: str, export_format: ExportFormat | None = None
     ) -> ExportedContext:
         """Export context to specified format.
 
         Args:
             content: Context content to export.
-            format: Target export format. If omitted, uses default_format.
+            export_format: Target export format. If omitted, uses default_format.
 
         Returns:
             ExportedContext with exported content.
         """
-        fmt = format if format is not None else self.default_format
+        fmt = export_format if export_format is not None else self.default_format
 
         exported_content = content
         if fmt == ExportFormat.HTML:

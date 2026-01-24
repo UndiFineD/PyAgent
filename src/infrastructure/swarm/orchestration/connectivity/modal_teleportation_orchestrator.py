@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Modal teleportation orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -33,15 +39,11 @@ class ModalTeleportationOrchestrator:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    def teleport_state(
-        self, source_modality: str, target_modality: str, source_data: Any
-    ) -> Any:
+    def teleport_state(self, source_modality: str, target_modality: str, source_data: Any) -> Any:
         """
         Converts data from one modality to another.
         """
-        logging.info(
-            f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}"
-        )
+        logging.info(f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}")
 
         # In a real system, this would use specialized agents (Linguistic, SQL, Android) to bridge the gap.
         # Example: GUI Actions -> Python Script

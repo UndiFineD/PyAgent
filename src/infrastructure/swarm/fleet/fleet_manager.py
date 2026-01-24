@@ -16,27 +16,41 @@
 """Coordinator for deploying and aggregating results from multiple agents."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import contextlib
+import logging
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
-from src.observability.structured_logger import StructuredLogger
-from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
-from src.infrastructure.swarm.fleet.orchestrator_registry import OrchestratorRegistry
-from src.infrastructure.swarm.fleet.fleet_execution_core import FleetExecutionCore
-from src.infrastructure.swarm.fleet.fleet_lifecycle_manager import FleetLifecycleManager
-from src.infrastructure.swarm.fleet.fleet_interaction_recorder import FleetInteractionRecorder
+from src.infrastructure.swarm.fleet.fleet_consensus_manager import \
+    FleetConsensusManager
+from src.infrastructure.swarm.fleet.fleet_execution_core import \
+    FleetExecutionCore
+from src.infrastructure.swarm.fleet.fleet_interaction_recorder import \
+    FleetInteractionRecorder
+from src.infrastructure.swarm.fleet.fleet_lifecycle_manager import \
+    FleetLifecycleManager
 from src.infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
-from src.infrastructure.swarm.fleet.fleet_consensus_manager import FleetConsensusManager
-from src.infrastructure.swarm.fleet.mixins.fleet_task_mixin import FleetTaskMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_routing_mixin import FleetRoutingMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_lifecycle_mixin import FleetLifecycleMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_lookup_mixin import FleetLookupMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin import FleetDiscoveryMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_delegation_mixin import FleetDelegationMixin
-from src.infrastructure.swarm.fleet.mixins.fleet_update_mixin import FleetUpdateMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_delegation_mixin import \
+    FleetDelegationMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_discovery_mixin import \
+    FleetDiscoveryMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_lifecycle_mixin import \
+    FleetLifecycleMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_lookup_mixin import \
+    FleetLookupMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_routing_mixin import \
+    FleetRoutingMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_task_mixin import \
+    FleetTaskMixin
+from src.infrastructure.swarm.fleet.mixins.fleet_update_mixin import \
+    FleetUpdateMixin
+from src.infrastructure.swarm.fleet.orchestrator_registry import \
+    OrchestratorRegistry
+from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
+from src.observability.structured_logger import StructuredLogger
 
 # Type Hinting Imports (Phase 106)
 if TYPE_CHECKING:
@@ -73,9 +87,7 @@ class FleetManager(
 
         # Load agents from registry (also lazy)
         # Pass self so agents can register utils/tools upon lazy instantiation
-        self.agents = AgentRegistry.get_agent_map(
-            self.workspace_root, fleet_instance=self
-        )
+        self.agents = AgentRegistry.get_agent_map(self.workspace_root, fleet_instance=self)
 
         # Phase 320: LAN Discovery
         self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")
@@ -94,7 +106,6 @@ class FleetManager(
             "byzantine_judge": "ByzantineConsensusAgent",
             "governance": "GovernanceAgent",
             "immune_system": "ImmuneSystemAgent",
-            "neurosymbolic": "NeuroSymbolic",
             "morphologicalevolution": "MorphologicalEvolution",
             "signal_bus": "SignalBusOrchestrator",
             "world_model": "WorldModelAgent",
@@ -180,6 +191,7 @@ class FleetManager(
 
     # Logic delegated to mixins
 
+
 if __name__ == "__main__":
     # Test script for FleetManager
     logging.basicConfig(level=logging.INFO)
@@ -188,12 +200,13 @@ if __name__ == "__main__":
 
     # These agents are used for the demo below
     from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
-    from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
+    from src.logic.agents.security.security_guard_agent import \
+        SecurityGuardAgent
 
     fleet.register_agent(
         "Knowledge",
         KnowledgeAgent,
-        str(root / "src\logic\agents\cognitive\knowledge_agent.py"),
+        str(root / "src/logic/agents/cognitive/knowledge_agent.py"),
     )
     fleet.register_agent(
         "Security",

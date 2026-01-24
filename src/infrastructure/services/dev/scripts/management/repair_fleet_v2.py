@@ -15,9 +15,11 @@
 """Script for repairing specific import corruption patterns in the fleet."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

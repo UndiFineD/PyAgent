@@ -11,16 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Telemetry agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import time
-from typing import Any
 from pathlib import Path
+from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
@@ -32,18 +39,14 @@ class TelemetryAgent(BaseAgent):
     telemetry and archiving interactions for swarm intelligence harvesting.
     """
 
-    def __init__(
-        self, api_url: str = "http://localhost:8000", workspace_root: str | None = None
-    ) -> None:
+    def __init__(self, api_url: str = "http://localhost:8000", workspace_root: str | None = None) -> None:
         super().__init__(workspace_root or ".")
         self.api_url = api_url
         self.log_buffer: list[Any] = []
 
         # Phase 108: Robustness and Intelligence Harvesting
         self.connectivity = ConnectivityManager(workspace_root)
-        self.recorder = (
-            LocalContextRecorder(Path(workspace_root)) if workspace_root else None
-        )
+        self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
         self.logger = StructuredLogger(agent_id="TelemetryAgent")
 
     def _record(self, event_type: str, data: dict[str, Any]) -> None:
@@ -51,9 +54,7 @@ class TelemetryAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "telemetry", "timestamp": time.time()}
-                self.recorder.record_interaction(
-                    "telemetry", "broadcast", event_type, json.dumps(data), meta=meta
-                )
+                self.recorder.record_interaction("telemetry", "broadcast", event_type, json.dumps(data), meta=meta)
             except Exception:
                 pass
 
@@ -64,9 +65,7 @@ class TelemetryAgent(BaseAgent):
             "data": data,
             "timestamp": time.time(),
         }
-        self.logger.info(
-            f"Telemetry event: {event_type}", source=source, type=event_type
-        )
+        self.logger.info(f"Telemetry event: {event_type}", source=source, type=event_type)
 
         # Phase 108: TTL-based connectivity check
         if self.connectivity.is_endpoint_available("telemetry_server"):

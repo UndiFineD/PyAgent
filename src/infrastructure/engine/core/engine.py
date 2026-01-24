@@ -1,21 +1,31 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Main engine core implementation."""
 
-import time
-import queue
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+import queue
+import time
 from contextlib import contextmanager
+from typing import Any, Dict, List, Optional, Tuple
 
-from .config import (
-    Request,
-    SchedulerOutput,
-    EngineCoreOutputs,
-)
-from .base import Scheduler, Executor
-from .scheduler import SimpleScheduler
+from .base import Executor, Scheduler
+from .config import EngineCoreOutputs, Request, SchedulerOutput
 from .executor import MockExecutor
+from .scheduler import SimpleScheduler
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +105,7 @@ class EngineCore:
                 f"Step {self._total_steps}: "
                 f"{len(scheduler_output.scheduled_requests)} requests, "
                 f"{scheduler_output.total_num_scheduled_tokens} tokens, "
-                f"{elapsed*1000:.2f}ms"
+                f"{elapsed * 1000:.2f}ms"
             )
 
     def step(self) -> Tuple[Dict[int, EngineCoreOutputs], bool]:

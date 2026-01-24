@@ -16,23 +16,40 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
-from src.core.base.common.types.wcag_level import WCAGLevel
-from src.logic.agents.development.html_accessibility_mixin import HtmlAccessibilityMixin
-from src.logic.agents.development.python_accessibility_mixin import PythonAccessibilityMixin
-from src.logic.agents.development.javascript_accessibility_mixin import JavascriptAccessibilityMixin
-from src.logic.agents.development.accessibility_report_mixin import AccessibilityReportMixin
-from src.logic.agents.specialists.mixins.accessibility_core_mixin import AccessibilityCoreMixin
-from src.logic.agents.specialists.mixins.accessibility_logic_mixin import AccessibilityLogicMixin
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 import logging
+
+from src.core.base.common.types.accessibility_issue import AccessibilityIssue
+from src.core.base.common.types.accessibility_issue_type import \
+    AccessibilityIssueType
+from src.core.base.common.types.wcag_level import WCAGLevel
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.development.accessibility_report_mixin import \
+    AccessibilityReportMixin
+from src.logic.agents.development.html_accessibility_mixin import \
+    HtmlAccessibilityMixin
+from src.logic.agents.development.javascript_accessibility_mixin import \
+    JavascriptAccessibilityMixin
+from src.logic.agents.development.python_accessibility_mixin import \
+    PythonAccessibilityMixin
+from src.logic.agents.specialists.mixins.accessibility_core_mixin import \
+    AccessibilityCoreMixin
+from src.logic.agents.specialists.mixins.accessibility_logic_mixin import \
+    AccessibilityLogicMixin
 
 __version__ = VERSION
 
 
-class AccessibilityAgent(BaseAgent, HtmlAccessibilityMixin, PythonAccessibilityMixin, JavascriptAccessibilityMixin, AccessibilityReportMixin, AccessibilityCoreMixin, AccessibilityLogicMixin):
+class AccessibilityAgent(
+    BaseAgent,
+    HtmlAccessibilityMixin,
+    PythonAccessibilityMixin,
+    JavascriptAccessibilityMixin,
+    AccessibilityReportMixin,
+    AccessibilityCoreMixin,
+    AccessibilityLogicMixin,
+):
     """Analyzer for accessibility issues in UI code.
 
     Detects accessibility problems and suggests improvements
@@ -64,9 +81,7 @@ class AccessibilityAgent(BaseAgent, HtmlAccessibilityMixin, PythonAccessibilityM
         "4.1.2": (AccessibilityIssueType.ARIA_MISSING, "Name, Role, Value"),
     }
 
-    def __init__(
-        self, target_level: WCAGLevel | str = WCAGLevel.AA, file_path: str | None = None
-    ) -> None:
+    def __init__(self, target_level: WCAGLevel | str = WCAGLevel.AA, file_path: str | None = None) -> None:
         """Initialize accessibility analyzer.
 
         Args:
@@ -88,8 +103,6 @@ class AccessibilityAgent(BaseAgent, HtmlAccessibilityMixin, PythonAccessibilityM
 
         self.issues: list[AccessibilityIssue] = []
         self.rules: dict[str, bool] = {rule: True for rule in self.WCAG_CRITERIA}
-        logging.debug(
-            f"AccessibilityAgent initialized with level {self.target_level.value}"
-        )
+        logging.debug(f"AccessibilityAgent initialized with level {self.target_level.value}")
 
     # Methods delegated to mixins

@@ -19,11 +19,13 @@ Used in Phase 42 for model distillation and fine-tuning loops.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -40,9 +42,7 @@ class RewardModelAgent(BaseAgent):
         )
 
     @as_tool
-    async def rank_proposals(
-        self, task: str, proposals: dict[str, str]
-    ) -> dict[str, Any]:
+    async def rank_proposals(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
         """Ranks a set of proposals from best to worst and provides reward scores.
 
         Args:
@@ -55,9 +55,7 @@ class RewardModelAgent(BaseAgent):
                 {"task": task[:100], "agent_count": len(proposals)},
             )
 
-        logging.info(
-            f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}..."
-        )
+        logging.info(f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
 
         # In a real system, we'd use a dedicated Reward Model or a strong LLM to judge.
         # Here we use the base agent's reasoning to produce a ranking.
@@ -69,7 +67,9 @@ class RewardModelAgent(BaseAgent):
         for name, content in proposals.items():
             ranking_prompt += f"--- Agent: {name} ---\n{content}\n\n"
 
-        ranking_prompt += "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }"
+        ranking_prompt += (
+            "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }"
+        )
 
         try:
             res = await self.improve_content(ranking_prompt)
@@ -106,7 +106,5 @@ class RewardModelAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals"
-    )
+    main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")
     main()

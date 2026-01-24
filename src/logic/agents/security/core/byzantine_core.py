@@ -11,7 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Byzantine core.py module.
+"""
+
 from __future__ import annotations
+
 from typing import Any
 
 try:
@@ -52,9 +57,7 @@ class ByzantineCore:
         max_agreement = max(hash_weights.values())
         return max_agreement / total_weight
 
-    def select_committee(
-        self, agents_reliability: dict[str, float], min_size: int = 3
-    ) -> list[str]:
+    def select_committee(self, agents_reliability: dict[str, float], min_size: int = 3) -> list[str]:
         """
         Scales the committee based on historic reliability scores.
         Only recruits agents with reliability > 0.7.
@@ -64,9 +67,7 @@ class ByzantineCore:
                 return rc.select_committee(agents_reliability, min_size)  # type: ignore[attr-defined]
             except Exception:
                 pass
-        eligible = [
-            (name, score) for name, score in agents_reliability.items() if score > 0.7
-        ]
+        eligible = [(name, score) for name, score in agents_reliability.items() if score > 0.7]
         # Sort by reliability descending
         eligible.sort(key=lambda x: x[1], reverse=True)
 
@@ -99,8 +100,6 @@ class ByzantineCore:
             return 0.5
         return 0.67
 
-    def detect_deviating_hashes(
-        self, votes: list[dict[str, Any]], consensus_hash: str
-    ) -> list[str]:
+    def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:
         """Returns IDs of agents whose votes deviated from consensus."""
         return [v["id"] for v in votes if v["hash"] != consensus_hash]

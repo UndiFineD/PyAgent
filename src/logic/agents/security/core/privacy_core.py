@@ -13,18 +13,22 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import re
 from typing import Any
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class PrivacyCore:
     """
     PrivacyCore recovered after Copilot CLI deprecation event.
     Provides high-speed text redaction and log scanning for PII.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("PrivacyCore initialized.")
@@ -38,7 +42,7 @@ class PrivacyCore:
         patterns = {
             r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+": "[EMAIL_REDACTED]",
             r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b": "[IP_REDACTED]",
-            r"(api_key|secret_key|secret|token)\s*[:=]\s*[']?[a-zA-Z0-9_.~-]{16,}[']?": r"\1=[REDACTED]"
+            r"(api_key|secret_key|secret|token)\s*[:=]\s*[']?[a-zA-Z0-9_.~-]{16,}[']?": r"\1=[REDACTED]",
         }
 
         result = text
@@ -56,4 +60,3 @@ class PrivacyCore:
         elif isinstance(data, dict):
             return {k: PrivacyCore.scan_log_entry(v) for k, v in data.items()}
         return data
-

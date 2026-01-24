@@ -18,12 +18,13 @@ Enables agents to launch sub-tasks by spawning other specialized agents.
 """
 
 from __future__ import annotations
+
 import logging
 from pathlib import Path
 
+from src.core.base.common.models import AgentPriority, CascadeContext
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.registry.module_loader import ModuleLoader
-from src.core.base.common.models import CascadeContext, AgentPriority
 
 __version__ = VERSION
 
@@ -32,19 +33,19 @@ __version__ = VERSION
 class AgentDelegator:
     """Handles cascading sub-tasks to other agents."""
 
-    @staticmethod
-    def delegate(  # pylint: disable=too-many-arguments, too-many-positional-arguments
+    def __init__(self, parent_agent: BaseAgent) -> None:
+        """Initialize with parent agent for context."""
+        self.parent_agent = parent_agent
+
+    async def delegate(  # pylint: disable=too-many-arguments, too-many-positional-arguments
+        self,
         agent_type: str,
         prompt: str,
-        current_agent_name: str,
-        current_file_path: Path,
-        current_model: str | None = None,
         target_file: str | None = None,
         context: CascadeContext | None = None,
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
         """Launches another agent to perform a sub-task."""
-        _ = current_agent_name
 
         # Initialize or update context
         if context is None:
@@ -54,26 +55,24 @@ class AgentDelegator:
             context.parent_id = context.task_id
 
         if context.cascade_depth > 5:
-            logging.warning(
-                "Delegation to %s blocked: depth limit (%s).",
-                agent_type, context.cascade_depth
-            )
+            logging.warning("Delegation to %s blocked: depth limit (%s).", agent_type, context.cascade_depth)
             return "Error: Delegation depth limit reached."
 
-        logging.info(
-            "Delegating task to %s [Priority: %s] for %s",
-            agent_type, priority.name, target_file or current_file_path
-        )
-
+        current_file_path = Path(self.parent_agent.file_path)
         target_path: Path = Path(target_file) if target_file else current_file_path
+
+        logging.info(
+            "Delegating task to %s [Priority: %s] for %s", agent_type, priority.name, target_path
+        )
 
         try:
             # Discovery delegated to centralized ModuleLoader
             agent_class = ModuleLoader.load_agent_class(agent_type)
 
             with agent_class(str(target_path)) as sub_agent:
-                if current_model:
-                    sub_agent.set_model(current_model)
+                # Inherit model from parent
+                if hasattr(self.parent_agent, "active_model"):
+                    sub_agent.set_model(self.parent_agent.active_model)
 
                 # Store context and priority in agent if supported
                 if hasattr(sub_agent, "context"):
@@ -81,13 +80,11 @@ class AgentDelegator:
                 if hasattr(sub_agent, "priority"):
                     sub_agent.priority = priority
 
-                result = sub_agent.improve_content(prompt)
+                # Cascade the call (Phase 284: Ensure async)
+                result = await sub_agent.improve_content(prompt)
                 sub_agent.update_file()
 
-                logging.info(
-                    "Delegation to %s completed (Task: %s).",
-                    agent_type, context.task_id
-                )
+                logging.info("Delegation to %s completed (Task: %s).", agent_type, context.task_id)
                 return result
 
         except Exception as e:  # pylint: disable=broad-exception-caught

@@ -18,9 +18,12 @@ Generates OpenAPI/Swagger specs and handles external tool integration.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .api_core import APICore
 
 __version__ = VERSION
@@ -44,9 +47,7 @@ class PublicAPIEngine:
             # This depends on how tools are stored, assuming a list of objects with .name
             tools = self.fleet.registry.list_tools()
             for t in tools:
-                raw_tools.append(
-                    {"name": t.name, "parameters": getattr(t, "parameters", None)}
-                )
+                raw_tools.append({"name": t.name, "parameters": getattr(t, "parameters", None)})
 
         return self.core.build_openapi_json(raw_tools)
 

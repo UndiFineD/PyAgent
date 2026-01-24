@@ -17,8 +17,10 @@ Extracted from BaseAgent for decomposition.
 """
 
 from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING
+
 from src.core.base.common.models import ConversationMessage, MessageRole
 
 if TYPE_CHECKING:
@@ -50,9 +52,7 @@ class AgentConversationHistory:
         """Get conversation history."""
         return self._history.copy()
 
-    def build_prompt(
-        self, prompt: str, agent_logic_core: BaseAgentCore, core: BaseCore
-    ) -> str:
+    def build_prompt(self, prompt: str, agent_logic_core: BaseAgentCore, core: BaseCore) -> str:
         """Build prompt with conversation history context."""
         if not self._history:
             return prompt

@@ -16,8 +16,10 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
+
+from src.core.base.common.types.changelog_entry import ChangelogEntry
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types import changelog_entry
+
 from .GroupingStrategy import GroupingStrategy
 
 __version__ = VERSION
@@ -33,9 +35,7 @@ class EntryReorderer:
         >>> sorted_entries=reorderer.reorder(entries, GroupingStrategy.BY_PRIORITY)
     """
 
-    def reorder(
-        self, entries: list[ChangelogEntry], strategy: GroupingStrategy
-    ) -> list[ChangelogEntry]:
+    def reorder(self, entries: list[ChangelogEntry], strategy: GroupingStrategy) -> list[ChangelogEntry]:
         """Reorder entries based on strategy.
 
         Args:
@@ -55,9 +55,7 @@ class EntryReorderer:
             return entries  # Would need author field
         return entries
 
-    def group_by_category(
-        self, entries: list[ChangelogEntry]
-    ) -> dict[str, list[ChangelogEntry]]:
+    def group_by_category(self, entries: list[ChangelogEntry]) -> dict[str, list[ChangelogEntry]]:
         """Group entries by category.
 
         Args:

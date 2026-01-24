@@ -21,19 +21,20 @@ plus custom rust_core wrapper for Rust function tracking.
 """
 
 from __future__ import annotations
+
+import atexit
+import cProfile
+import functools
+import io
+import json
 import os
+import pstats
 import sys
 import time
-import json
-import atexit
-import functools
-import cProfile
-import pstats
-import io
-from pathlib import Path
-from datetime import datetime
-from dataclasses import dataclass
 from collections import defaultdict
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 
 # Ensure project root is in path FIRST
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".."))
@@ -47,9 +48,11 @@ src_path = os.path.join(project_root, "src")
 # RUST PROFILER (Custom wrapper)
 # =============================================================================
 
+
 @dataclass
 class RustFunctionStats:
     """Statistics for a Rust function."""
+
     name: str
     call_count: int = 0
     total_time_ns: int = 0
@@ -97,6 +100,7 @@ try:
             original = getattr(_original_rc, name)
 
             if callable(original):
+
                 @functools.wraps(original)
                 def profiled_func(*args, **kwargs):
                     start = time.perf_counter_ns()
@@ -105,6 +109,7 @@ try:
                     finally:
                         elapsed = time.perf_counter_ns() - start
                         rust_profiler.record_call(name, elapsed)
+
                 return profiled_func
             return original
 
@@ -117,6 +122,7 @@ except ImportError:
 # =============================================================================
 # COMPREHENSIVE PROFILE ANALYZER
 # =============================================================================
+
 
 class ComprehensiveProfileAnalyzer:
     """Analyzes cProfile results and filters for src/ code."""
@@ -174,16 +180,18 @@ class ComprehensiveProfileAnalyzer:
                 module = self._clean_filename(filename)
                 qualified_name = f"{module}.{func_name}"
 
-                src_functions.append({
-                    "function": qualified_name,
-                    "ncalls": ncalls,
-                    "totcalls": totcalls,
-                    "tottime_s": tottime,
-                    "cumtime_s": cumtime,
-                    "tottime_ms": tottime * 1000,
-                    "cumtime_ms": cumtime * 1000,
-                    "avg_us": (tottime / ncalls * 1_000_000) if ncalls > 0 else 0,
-                })
+                src_functions.append(
+                    {
+                        "function": qualified_name,
+                        "ncalls": ncalls,
+                        "totcalls": totcalls,
+                        "tottime_s": tottime,
+                        "cumtime_s": cumtime,
+                        "tottime_ms": tottime * 1000,
+                        "cumtime_ms": cumtime * 1000,
+                        "avg_us": (tottime / ncalls * 1_000_000) if ncalls > 0 else 0,
+                    }
+                )
 
                 module_stats[module]["call_count"] += ncalls
                 module_stats[module]["total_time_s"] += tottime
@@ -196,20 +204,28 @@ class ComprehensiveProfileAnalyzer:
 
         # Module summary
         module_summary = sorted(
-            [{"module": k, "call_count": v["call_count"], "total_time_ms": v["total_time_s"] * 1000,
-              "function_count": len(v["functions"])}
-             for k, v in module_stats.items()],
+            [
+                {
+                    "module": k,
+                    "call_count": v["call_count"],
+                    "total_time_ms": v["total_time_s"] * 1000,
+                    "function_count": len(v["functions"]),
+                }
+                for k, v in module_stats.items()
+            ],
             key=lambda x: x["total_time_ms"],
-            reverse=True
+            reverse=True,
         )
 
         # Get Rust stats
         rust_stats = rust_profiler.get_stats()
         rust_by_time = sorted(
-            [{"function": k, "calls": v.call_count, "total_ms": v.total_time_ms, "avg_us": v.avg_time_us}
-             for k, v in rust_stats.items()],
+            [
+                {"function": k, "calls": v.call_count, "total_ms": v.total_time_ms, "avg_us": v.avg_time_us}
+                for k, v in rust_stats.items()
+            ],
             key=lambda x: x["total_ms"],
-            reverse=True
+            reverse=True,
         )
 
         return {
@@ -238,9 +254,9 @@ class ComprehensiveProfileAnalyzer:
         print("📊 COMPREHENSIVE PROFILING REPORT")
         print("=" * 80)
 
-        print(f"\n{'─'*40}")
+        print(f"\n{'─' * 40}")
         print("📈 SUMMARY")
-        print(f"{'─'*40}")
+        print(f"{'─' * 40}")
         print(f"  Python Functions Profiled: {summary['python_functions_profiled']:,}")
         print(f"  Python Total Calls:        {summary['python_total_calls']:,}")
         print(f"  Python Total Time:         {summary['python_total_time_ms']:.2f} ms")
@@ -251,11 +267,11 @@ class ComprehensiveProfileAnalyzer:
 
         # Top by cumulative time (including child calls)
         if report["python_by_cumtime"]:
-            print(f"\n{'─'*40}")
+            print(f"\n{'─' * 40}")
             print("🐍 TOP PYTHON BY CUMULATIVE TIME (incl. child calls)")
-            print(f"{'─'*40}")
+            print(f"{'─' * 40}")
             print(f"  {'Function':<50} {'Calls':>8} {'Cum(ms)':>10} {'Own(ms)':>10}")
-            print(f"  {'-'*50} {'-'*8} {'-'*10} {'-'*10}")
+            print(f"  {'-' * 50} {'-' * 8} {'-' * 10} {'-' * 10}")
             for item in report["python_by_cumtime"][:20]:
                 name = item["function"]
                 if len(name) > 50:
@@ -264,11 +280,11 @@ class ComprehensiveProfileAnalyzer:
 
         # Top by own time (excluding child calls)
         if report["python_by_tottime"]:
-            print(f"\n{'─'*40}")
+            print(f"\n{'─' * 40}")
             print("⏱️ TOP PYTHON BY OWN TIME (excl. child calls)")
-            print(f"{'─'*40}")
+            print(f"{'─' * 40}")
             print(f"  {'Function':<50} {'Calls':>8} {'Own(ms)':>10} {'Avg(μs)':>10}")
-            print(f"  {'-'*50} {'-'*8} {'-'*10} {'-'*10}")
+            print(f"  {'-' * 50} {'-' * 8} {'-' * 10} {'-' * 10}")
             for item in report["python_by_tottime"][:15]:
                 name = item["function"]
                 if len(name) > 50:
@@ -277,11 +293,11 @@ class ComprehensiveProfileAnalyzer:
 
         # Top by call count
         if report["python_by_calls"]:
-            print(f"\n{'─'*40}")
+            print(f"\n{'─' * 40}")
             print("📞 TOP PYTHON BY CALL COUNT")
-            print(f"{'─'*40}")
+            print(f"{'─' * 40}")
             print(f"  {'Function':<50} {'Calls':>10} {'Own(ms)':>10}")
-            print(f"  {'-'*50} {'-'*10} {'-'*10}")
+            print(f"  {'-' * 50} {'-' * 10} {'-' * 10}")
             for item in report["python_by_calls"][:15]:
                 name = item["function"]
                 if len(name) > 50:
@@ -290,26 +306,31 @@ class ComprehensiveProfileAnalyzer:
 
         # Rust functions
         if report["rust_by_time"]:
-            print(f"\n{'─'*40}")
+            print(f"\n{'─' * 40}")
             print("🦀 RUST FUNCTIONS BY TIME")
-            print(f"{'─'*40}")
+            print(f"{'─' * 40}")
             print(f"  {'Function':<45} {'Calls':>8} {'Total(ms)':>10} {'Avg(μs)':>10}")
-            print(f"  {'-'*45} {'-'*8} {'-'*10} {'-'*10}")
+            print(f"  {'-' * 45} {'-' * 8} {'-' * 10} {'-' * 10}")
             for item in report["rust_by_time"][:15]:
-                print(f"  {item['function']:<45} {item['calls']:>8,} {item['total_ms']:>10.3f} {item['avg_us']:>10.2f}")
+                print(
+                    f"  {item['function']:<45} {item['calls']:>8,} "
+                    f"{item['total_ms']:>10.3f} {item['avg_us']:>10.2f}"
+                )
 
         # Modules
         if report["modules"]:
-            print(f"\n{'─'*40}")
+            print(f"\n{'─' * 40}")
             print("📦 TOP MODULES BY TIME")
-            print(f"{'─'*40}")
+            print(f"{'─' * 40}")
             print(f"  {'Module':<45} {'Calls':>10} {'Time(ms)':>10} {'Funcs':>6}")
-            print(f"  {'-'*45} {'-'*10} {'-'*10} {'-'*6}")
+            print(f"  {'-' * 45} {'-' * 10} {'-' * 10} {'-' * 6}")
             for item in report["modules"][:15]:
                 mod = item["module"]
                 if len(mod) > 45:
                     mod = "..." + mod[-42:]
-                print(f"  {mod:<45} {item['call_count']:>10,} {item['total_time_ms']:>10.2f} {item['function_count']:>6}")
+                print(
+                    f"  {mod:<45} {item['call_count']:>10,} {item['total_time_ms']:>10.2f} {item['function_count']:>6}"
+                )
 
         print("\n" + "=" * 80)
 
@@ -324,7 +345,8 @@ print("🐍 Python profiling enabled - using cProfile for src/ code")
 analyzer = ComprehensiveProfileAnalyzer(src_path, project_root)
 
 # Import the self-improvement script AFTER setting up profiling
-from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import main as run_self_improvement_main  # noqa: E402
+from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import \
+    main as run_self_improvement_main  # noqa: E402
 
 
 def save_profile_report():

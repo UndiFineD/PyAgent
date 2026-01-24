@@ -16,10 +16,11 @@
 """Shell for ContextCompressorCore, handling File I/O and orchestration."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.engines.context_compressor_core import (
     ContextCompressorCore,
 )
@@ -55,14 +56,14 @@ class ContextCompressor:
             if mode == "python":
                 return header + self.core.compress_python(content)
 
-            elif mode == "markdown":
+            if mode == "markdown":
                 return header + self.core.summarize_markdown(content)
-            else:
-                # For other files, just return the first 20 lines
-                lines = content.splitlines()[:20]
 
-                return header + "\n".join(lines)
-        except Exception as e:
+            # For other files, just return the first 20 lines
+            lines = content.splitlines()[:20]
+
+            return header + "\n".join(lines)
+        except (IOError, OSError) as e:
             logging.error(f"Failed to compress {file_path}: {e}")
             return f"Error compressing {file_path.name}: {str(e)}"
 

@@ -1,33 +1,44 @@
 #!/usr/bin/env python3
+
+"""
+Workspace maintenance.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Consolidated Maintenance and Audit utilities for the PyAgent workspace.
 
 from __future__ import annotations
+
+import logging
 import os
 import re
-import logging
 from pathlib import Path
-from typing import Any, List, Tuple, Dict, Set, Optional
+from typing import List, Tuple
 
 logger = logging.getLogger(__name__)
+
 
 class WorkspaceMaintenance:
     """Consolidates file system auditing, naming convention enforcement, and cleanup."""
 
     DEFAULT_EXCLUSIONS = {
-        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache",
-        ".ruff_cache", ".agent_cache", "target", "node_modules",
-        ".hypothesis", "__pycache__"
+        ".git",
+        ".venv",
+        ".vscode",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".agent_cache",
+        "target",
+        "node_modules",
+        ".hypothesis",
+        "__pycache__",
     }
 
     def __init__(self, workspace_root: str | Path = ".") -> None:
         self.workspace_root = Path(workspace_root).resolve()
 
     def find_large_files(
-        self,
-        search_roots: List[str] = ["src"],
-        threshold: int = 500,
-        top_n: int = 10
+        self, search_roots: List[str] = ["src"], threshold: int = 500, top_n: int = 10
     ) -> List[Tuple[int, Path]]:
         """
         Scans specified directories for Python files exceeding the line count threshold.
@@ -81,7 +92,16 @@ class WorkspaceMaintenance:
                 continue
 
             # Skip standard exceptions
-            if path.name in ["README.md", "Cargo.toml", "Cargo.lock", "LICENSE", "pytest.ini", "requirements.txt", "QUICKSTART_TOKEN_BENCHMARKS.md", "package.json"]:
+            if path.name in [
+                "README.md",
+                "Cargo.toml",
+                "Cargo.lock",
+                "LICENSE",
+                "pytest.ini",
+                "requirements.txt",
+                "QUICKSTART_TOKEN_BENCHMARKS.md",
+                "package.json",
+            ]:
                 continue
 
             stem = path.stem
@@ -169,6 +189,7 @@ class WorkspaceMaintenance:
             logger.info(f"Renamed: {old_path} -> {new_path}")
         except Exception as e:
             logger.error(f"Error renaming {old_path}: {e}")
+
 
 if __name__ == "__main__":
     # Example usage if run directly

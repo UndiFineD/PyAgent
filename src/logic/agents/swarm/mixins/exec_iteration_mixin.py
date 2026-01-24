@@ -15,8 +15,10 @@
 """File iteration logic for OrchestratorAgent."""
 
 from __future__ import annotations
+
 import logging
 from pathlib import Path
+
 
 class ExecIterationMixin:
     """Mixin for processing individual files and iterations."""
@@ -41,19 +43,14 @@ class ExecIterationMixin:
 
     def process_file(self, code_file: Path) -> None:
         """Process a single code file through the improvement loop."""
-        if (
-            hasattr(self, "shutdown_handler")
-            and not self.shutdown_handler.should_continue()
-        ):
+        if hasattr(self, "shutdown_handler") and not self.shutdown_handler.should_continue():
             logging.info(f"Skipping {code_file.name} due to shutdown request")
             return
 
         if hasattr(self, "lock_manager"):
             lock = self.lock_manager.acquire_lock(code_file)
             if not lock:
-                logging.warning(
-                    f"Could not acquire lock for {code_file.name}, skipping"
-                )
+                logging.warning(f"Could not acquire lock for {code_file.name}, skipping")
                 return
 
         try:
@@ -96,18 +93,12 @@ class ExecIterationMixin:
 
                 if not changes_made:
                     all_fixed = True
-                    logging.info(
-                        f"No changes made in iteration {iteration}, marking as fixed"
-                    )
+                    logging.info(f"No changes made in iteration {iteration}, marking as fixed")
                 else:
-                    logging.info(
-                        f"Changes made in iteration {iteration}, continuing..."
-                    )
+                    logging.info(f"Changes made in iteration {iteration}, continuing...")
 
             if iteration >= max_iterations:
-                logging.info(
-                    f"Reached maximum iterations ({max_iterations}) for {code_file.name}"
-                )
+                logging.info(f"Reached maximum iterations ({max_iterations}) for {code_file.name}")
 
             if hasattr(self, "_commit_and_push"):
                 self._commit_and_push(code_file)
@@ -119,9 +110,7 @@ class ExecIterationMixin:
                 self.shutdown_handler.mark_completed(code_file)
 
         except Exception as global_e:
-            logging.critical(
-                f"Global failure processing {code_file}: {global_e}", exc_info=True
-            )
+            logging.critical(f"Global failure processing {code_file}: {global_e}", exc_info=True)
         finally:
             if hasattr(self, "lock_manager"):
                 self.lock_manager.release_lock(code_file)

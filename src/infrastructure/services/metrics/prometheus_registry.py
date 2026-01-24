@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: Prometheus Metrics Registry
 vLLM-inspired prometheus integration with multiprocessing support.
@@ -12,20 +26,20 @@ Beyond vLLM:
 
 from __future__ import annotations
 
+import contextlib
 import os
 import tempfile
 import threading
 import time
-import contextlib
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-from weakref import WeakValueDictionary
+from typing import Any, Dict, List, Optional, Tuple
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -34,6 +48,7 @@ except ImportError:
 
 class MetricType(Enum):
     """Types of metrics."""
+
     COUNTER = auto()
     GAUGE = auto()
     HISTOGRAM = auto()
@@ -42,6 +57,7 @@ class MetricType(Enum):
 
 class MetricsBackend(Enum):
     """Metrics backend types."""
+
     PROMETHEUS = auto()
     STATSD = auto()
     OPENTELEMETRY = auto()
@@ -51,6 +67,7 @@ class MetricsBackend(Enum):
 @dataclass(frozen=True)
 class MetricSpec:
     """Specification for a metric."""
+
     name: str
     description: str
     metric_type: MetricType
@@ -72,6 +89,7 @@ class MetricSpec:
 @dataclass
 class MetricValue:
     """Container for metric value with labels."""
+
     value: float
     labels: Dict[str, str] = field(default_factory=dict)
     timestamp: float = field(default_factory=time.time)
@@ -181,6 +199,7 @@ class Gauge(MetricCollector):
 @dataclass
 class HistogramBucket:
     """Single histogram bucket."""
+
     upper_bound: float
     count: int = 0
 
@@ -188,7 +207,7 @@ class HistogramBucket:
 class Histogram(MetricCollector):
     """Thread-safe histogram metric with configurable buckets."""
 
-    DEFAULT_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, float('inf'))
+    DEFAULT_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, float("inf"))
 
     def __init__(self, spec: MetricSpec):
         self.spec = spec
@@ -204,9 +223,9 @@ class Histogram(MetricCollector):
     def _get_or_create(self, key: Tuple[Tuple[str, str], ...]) -> Dict[str, Any]:
         if key not in self._data:
             self._data[key] = {
-                'buckets': {b: 0 for b in self._buckets},
-                'sum': 0.0,
-                'count': 0,
+                "buckets": {b: 0 for b in self._buckets},
+                "sum": 0.0,
+                "count": 0,
             }
         return self._data[key]
 
@@ -220,32 +239,32 @@ class Histogram(MetricCollector):
         key = self._label_key(labels)
         with self._lock:
             data = self._get_or_create(key)
-            data['sum'] += value
-            data['count'] += 1
+            data["sum"] += value
+            data["count"] += 1
             for bucket in self._buckets:
                 if value <= bucket:
-                    data['buckets'][bucket] += 1
+                    data["buckets"][bucket] += 1
 
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
         """Get the count."""
         key = self._label_key(labels)
         with self._lock:
             if key in self._data:
-                return self._data[key]['count']
+                return self._data[key]["count"]
             return 0.0
 
     def get_sum(self, labels: Optional[Dict[str, str]] = None) -> float:
         key = self._label_key(labels)
         with self._lock:
             if key in self._data:
-                return self._data[key]['sum']
+                return self._data[key]["sum"]
             return 0.0
 
     def get_buckets(self, labels: Optional[Dict[str, str]] = None) -> Dict[float, int]:
         key = self._label_key(labels)
         with self._lock:
             if key in self._data:
-                return dict(self._data[key]['buckets'])
+                return dict(self._data[key]["buckets"])
             return {b: 0 for b in self._buckets}
 
 
@@ -270,7 +289,7 @@ class Summary(MetricCollector):
         cutoff = now - self._max_age
         pruned = [(t, v) for t, v in samples if t > cutoff]
         if len(pruned) > self._max_samples:
-            pruned = pruned[-self._max_samples:]
+            pruned = pruned[-self._max_samples :]
         return pruned
 
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
@@ -326,7 +345,7 @@ class MetricsRegistry:
     - Automatic cleanup
     """
 
-    _instance: Optional['MetricsRegistry'] = None
+    _instance: Optional["MetricsRegistry"] = None
     _lock = threading.Lock()
 
     def __init__(self, backend: MetricsBackend = MetricsBackend.PROMETHEUS):
@@ -337,7 +356,7 @@ class MetricsRegistry:
         self._initialized = False
 
     @classmethod
-    def get_instance(cls, backend: MetricsBackend = MetricsBackend.PROMETHEUS) -> 'MetricsRegistry':
+    def get_instance(cls, backend: MetricsBackend = MetricsBackend.PROMETHEUS) -> "MetricsRegistry":
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
@@ -466,29 +485,26 @@ class MetricsRegistry:
             for name, collector in self._metrics.items():
                 if isinstance(collector, Counter):
                     result[name] = {
-                        'type': 'counter',
-                        'values': collector.get_all(),
+                        "type": "counter",
+                        "values": collector.get_all(),
                     }
                 elif isinstance(collector, Gauge):
                     result[name] = {
-                        'type': 'gauge',
-                        'values': collector.get_all(),
+                        "type": "gauge",
+                        "values": collector.get_all(),
                     }
                 elif isinstance(collector, Histogram):
                     result[name] = {
-                        'type': 'histogram',
-                        'sum': collector.get_sum(),
-                        'count': collector.get(),
-                        'buckets': collector.get_buckets(),
+                        "type": "histogram",
+                        "sum": collector.get_sum(),
+                        "count": collector.get(),
+                        "buckets": collector.get_buckets(),
                     }
                 elif isinstance(collector, Summary):
                     result[name] = {
-                        'type': 'summary',
-                        'count': collector.get(),
-                        'quantiles': {
-                            q: collector.get_quantile(q)
-                            for q in Summary.DEFAULT_QUANTILES
-                        },
+                        "type": "summary",
+                        "count": collector.get(),
+                        "quantiles": {q: collector.get_quantile(q) for q in Summary.DEFAULT_QUANTILES},
                     }
         return result
 
@@ -586,19 +602,19 @@ class VLLMMetrics:
             "request_latency_seconds",
             "Request end-to-end latency",
             subsystem="engine",
-            buckets=(0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0, 30.0, 60.0, float('inf')),
+            buckets=(0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0, 30.0, 60.0, float("inf")),
         )
         self.time_to_first_token = self.registry.histogram(
             "time_to_first_token_seconds",
             "Time to first token latency",
             subsystem="engine",
-            buckets=(0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, float('inf')),
+            buckets=(0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, float("inf")),
         )
         self.inter_token_latency = self.registry.histogram(
             "inter_token_latency_seconds",
             "Inter-token latency",
             subsystem="engine",
-            buckets=(0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, float('inf')),
+            buckets=(0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, float("inf")),
         )
 
         # Cache metrics
@@ -652,18 +668,18 @@ def get_metrics() -> VLLMMetrics:
 
 
 __all__ = [
-    'MetricType',
-    'MetricsBackend',
-    'MetricSpec',
-    'MetricValue',
-    'MetricCollector',
-    'Counter',
-    'Gauge',
-    'Histogram',
-    'Summary',
-    'MetricsRegistry',
-    'SampledCounter',
-    'RateLimitedGauge',
-    'VLLMMetrics',
-    'get_metrics',
+    "MetricType",
+    "MetricsBackend",
+    "MetricSpec",
+    "MetricValue",
+    "MetricCollector",
+    "Counter",
+    "Gauge",
+    "Histogram",
+    "Summary",
+    "MetricsRegistry",
+    "SampledCounter",
+    "RateLimitedGauge",
+    "VLLMMetrics",
+    "get_metrics",
 ]

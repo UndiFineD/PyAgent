@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .test_fixture import TestFixture
-from pathlib import Path
+
 import logging
 import shutil
 import tempfile
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_fixture import TestFixture
 
 __version__ = VERSION
 

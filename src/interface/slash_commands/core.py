@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Core classes for SlashCommands system.
 
@@ -8,7 +22,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Any, Callable, ClassVar, TypeAlias
+from typing import Any, Callable, TypeAlias
 
 # ============================================================================
 # Types
@@ -123,6 +137,7 @@ class CommandDefinition:
 # ============================================================================
 # Command Registry
 # ============================================================================
+
 
 class CommandRegistry:
     """Registry for slash commands."""
@@ -248,6 +263,7 @@ class CommandRegistry:
         category: str = "general",
     ) -> Callable[[CommandHandler], CommandHandler]:
         """Decorator to register a command."""
+
         def decorator(handler: CommandHandler) -> CommandHandler:
             self.register(
                 name,
@@ -260,6 +276,7 @@ class CommandRegistry:
                 category=category,
             )
             return handler
+
         return decorator
 
     def clear(self) -> None:
@@ -274,10 +291,7 @@ class CommandRegistry:
 # ============================================================================
 
 # Pattern: /command or /command arg1 arg2 (up to newline or next command)
-COMMAND_PATTERN = re.compile(
-    r'/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)',
-    re.MULTILINE
-)
+COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)", re.MULTILINE)
 
 
 @dataclass
@@ -317,13 +331,15 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
         args_str = match.group(2) or ""
         args = args_str.strip().split() if args_str.strip() else []
 
-        commands.append(ParsedCommand(
-            command=cmd_name,
-            args=args,
-            start=match.start(),
-            end=match.end(),
-            raw=match.group(0),
-        ))
+        commands.append(
+            ParsedCommand(
+                command=cmd_name,
+                args=args,
+                start=match.start(),
+                end=match.end(),
+                raw=match.group(0),
+            )
+        )
 
     return commands
 
@@ -331,6 +347,7 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
 # ============================================================================
 # SlashCommands Class
 # ============================================================================
+
 
 @dataclass
 class ProcessedPrompt:
@@ -402,6 +419,7 @@ class SlashCommands:
 
         if auto_load:
             from src.interface.slash_commands.loader import load_commands
+
             load_commands(self.registry)
 
     def parse(self, prompt: str) -> list[ParsedCommand]:
@@ -488,14 +506,14 @@ class SlashCommands:
             # Remove all command text
             processed = prompt
             for cmd, _ in reversed(results):  # Reverse to preserve positions
-                processed = processed[:cmd.start] + processed[cmd.end:]
-            processed = re.sub(r'\s+', ' ', processed).strip()
+                processed = processed[: cmd.start] + processed[cmd.end :]
+            processed = re.sub(r"\s+", " ", processed).strip()
         elif inline_results:
             # Replace commands with their output
             processed = prompt
             for cmd, result in reversed(results):
                 replacement = result.output if result.inline else ""
-                processed = processed[:cmd.start] + replacement + processed[cmd.end:]
+                processed = processed[: cmd.start] + replacement + processed[cmd.end :]
         else:
             processed = prompt
 

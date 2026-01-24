@@ -1,21 +1,37 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Unified Data Intelligence Agent for PyAgent.
-# Consolidates SQL, CSV, Excel, and Data Science capabilities.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Unified Data Intelligence Agent for PyAgent.
+Consolidates SQL, CSV, Excel, and Data Science capabilities.
+"""
 
 from __future__ import annotations
-import os
-import sqlite3
+
 import logging
+import sqlite3
 from pathlib import Path
-from typing import Any, List, Dict, Optional
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+from typing import Any, List
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-class DataIntelligenceAgent(BaseAgent):
+
+class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Unified agent for database interaction, spreadsheet parsing, and statistical analysis.
     Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, and DataScienceAgent.
@@ -39,11 +55,11 @@ class DataIntelligenceAgent(BaseAgent):
         try:
             self.connection = sqlite3.connect(db_path)
             return f"Successfully connected to database: {db_path}"
-        except Exception as e:
+        except (sqlite3.Error, OSError) as e:
             return f"Error connecting to database: {e}"
 
     @as_tool
-    def execute_query(self, sql: str, read_only: bool = True) -> str:
+    def execute_query(self, sql: str, read_only: bool = True) -> str:  # pylint: disable=too-many-return-statements
         """Executes a SQL query and returns results.
 
         Args:
@@ -60,17 +76,17 @@ class DataIntelligenceAgent(BaseAgent):
 
         try:
             import pandas as pd
+
             # If pandas is available, use it for better formatting
             if sql.strip().upper().startswith("SELECT"):
                 df = pd.read_sql_query(sql, self.connection)
                 if df.empty:
                     return "Query returned no results."
                 return df.to_string(index=False)
-            else:
-                cursor = self.connection.cursor()
-                cursor.execute(sql)
-                self.connection.commit()
-                return "Command executed successfully."
+            cursor = self.connection.cursor()
+            cursor.execute(sql)
+            self.connection.commit()
+            return "Command executed successfully."
         except ImportError:
             # Fallback to standard sqlite3
             cursor = self.connection.cursor()
@@ -80,7 +96,7 @@ class DataIntelligenceAgent(BaseAgent):
                 return str(rows)
             self.connection.commit()
             return "Command executed successfully."
-        except Exception as e:
+        except (sqlite3.Error, RuntimeError) as e:
             return f"SQL Error: {e}"
 
     @as_tool
@@ -100,7 +116,7 @@ class DataIntelligenceAgent(BaseAgent):
                 cols_str = ", ".join([f"{c[1]} ({c[2]})" for c in cols])
                 schema_info.append(f"Table: {t_name} | Columns: {cols_str}")
             return "\n".join(schema_info) if schema_info else "Database holds no tables."
-        except Exception as e:
+        except (sqlite3.Error, RuntimeError) as e:
             return f"Error retrieving schema: {e}"
 
     # --- SPREADSHEET TOOLS (Consolidated from ExcelAgent, CsvAgent) ---
@@ -114,21 +130,22 @@ class DataIntelligenceAgent(BaseAgent):
 
         if file_path.suffix.lower() == ".csv":
             return self._parse_csv(file_path)
-        elif file_path.suffix.lower() == ".xlsx":
+        if file_path.suffix.lower() == ".xlsx":
             return self._parse_excel(file_path, mode)
         return {"error": f"Unsupported file type: {file_path.suffix}"}
 
     def _parse_csv(self, path: Path) -> dict[str, Any]:
         try:
             import pandas as pd
+
             df = pd.read_csv(path)
             return {
                 "type": "csv",
                 "rows": len(df),
                 "columns": list(df.columns),
-                "head": df.head(3).to_dict(orient="records")
+                "head": df.head(3).to_dict(orient="records"),
             }
-        except Exception:
+        except (ImportError, ValueError, RuntimeError):
             # Basic fallback
             with open(path, "r", encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
@@ -136,8 +153,10 @@ class DataIntelligenceAgent(BaseAgent):
                 return {"type": "csv", "rows": len(lines), "header": header, "note": "Basic parse"}
 
     def _parse_excel(self, path: Path, mode: str) -> dict[str, Any]:
+        _ = mode  # pylint: disable=unused-argument
         try:
             import openpyxl
+
             wb = openpyxl.load_workbook(path, data_only=True)
             results = {"book_name": path.name, "sheets": {}}
             for sheet in wb.worksheets:
@@ -149,7 +168,7 @@ class DataIntelligenceAgent(BaseAgent):
             return results
         except ImportError:
             return {"error": "openpyxl not found for Excel parsing."}
-        except Exception as e:
+        except (ValueError, RuntimeError) as e:
             return {"error": str(e)}
 
     # --- DATA SCIENCE TOOLS (Consolidated from DataScienceAgent) ---
@@ -166,23 +185,27 @@ class DataIntelligenceAgent(BaseAgent):
                 "missing_values": {"target": 0, "features": 12},
                 "correlations": {"feature_a_vs_b": 0.85},
             },
-            "insights": ["High correlation detected between features A and B.", "Target variable is balanced."]
+            "insights": ["High correlation detected between features A and B.", "Target variable is balanced."],
         }
 
     @as_tool
-    def statistical_test(self, group_a: List[float], group_b: List[float], test_type: str = "t-test") -> dict[str, Any]:
+    def statistical_test(
+        self, group_a: List[float], group_b: List[float], test_type: str = "t-test"
+    ) -> dict[str, Any]:
         """Runs a statistical test (t-test, anova, chi-square) between groups."""
+        _ = (group_a, group_b)
         return {
             "test": test_type,
             "p_value": 0.05,
             "significant": False,
-            "note": "Baseline statistical result from DataIntelligence core."
+            "note": "Baseline statistical result from DataIntelligence core.",
         }
 
-    def improve_content(self, task: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Generalized handler for all data-related requests."""
-        if "sql" in task.lower():
+        _ = target_file
+        if "sql" in prompt.lower():
             return "DataIntelligenceAgent: Ready for SQL query operations."
-        if ".xlsx" in task.lower() or ".csv" in task.lower():
-            return f"DataIntelligenceAgent: Ready to parse {task}."
+        if ".xlsx" in prompt.lower() or ".csv" in prompt.lower():
+            return f"DataIntelligenceAgent: Ready to parse {prompt}."
         return "DataIntelligenceAgent: Unified data/science core active."

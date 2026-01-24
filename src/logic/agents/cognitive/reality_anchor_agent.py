@@ -13,17 +13,22 @@
 # limitations under the License.
 
 
+"""Agent specializing in zero-hallucination execution by cross-referencing factual claims."""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class RealityAnchorAgent(BaseAgent):
     """
     Tier 2 (Cognitive Logic) - Reality Anchor Agent: Specializes in
@@ -52,13 +57,14 @@ class RealityAnchorAgent(BaseAgent):
         prompt = (
             f"Official Documentation: [Simulated content from {doc_url}]\n"
             f"Claim: {claim}\n"
-            "Does the documentation support this claim? Respond with JSON: 'grounded' (bool), 'snippet', 'mismatch_detail'."
+            "Does the documentation support this claim? "
+            "Respond with JSON: 'grounded' (bool), 'snippet', 'mismatch_detail'."
         )
 
         response = await self.think(prompt)
         try:
             return json.loads(response)
-        except Exception:
+        except json.JSONDecodeError:
             return {
                 "grounded": False,
                 "mismatch_detail": "Documentation source unreachable or unreadable.",
@@ -88,14 +94,16 @@ class RealityAnchorAgent(BaseAgent):
         response = await self.think(prompt)
         try:
             return json.loads(response)
-        except Exception:
+        except json.JSONDecodeError:
             return {
                 "feasible": False,
                 "reasoning": "Could not parse physics evaluation.",
             }
 
     @as_tool
-    async def verify_claim(self, claim: str, evidence_sources: list[str]) -> dict[str, Any]:
+    async def verify_claim(
+        self, claim: str, evidence_sources: list[str]
+    ) -> dict[str, Any]:
         """
         Verifies a claim against a list of evidence sources (files, logs, etc.).
         Returns a verdict and supporting/contradicting evidence.
@@ -116,7 +124,7 @@ class RealityAnchorAgent(BaseAgent):
         response = await self.think(prompt)
         try:
             return json.loads(response)
-        except Exception:
+        except json.JSONDecodeError:
             return {
                 "verdict": "Unknown",
                 "confidence": 0.5,

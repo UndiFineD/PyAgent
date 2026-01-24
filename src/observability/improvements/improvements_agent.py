@@ -16,19 +16,23 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+import json
+import logging
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+
 from .effort_estimate import EffortEstimate
 from .improvement import Improvement
 from .improvement_category import ImprovementCategory
+from .improvement_manager import ImprovementManager
 from .improvement_priority import ImprovementPriority
 from .improvement_status import ImprovementStatus
 from .improvement_template import ImprovementTemplate
-from .improvement_manager import ImprovementManager
-from src.core.base.lifecycle.base_agent import BaseAgent
-from datetime import datetime
-from typing import Any
-import json
-import logging
 
 __version__ = VERSION
 
@@ -60,9 +64,7 @@ class ImprovementsAgent(BaseAgent):
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
         if not self.file_path.name.endswith(".improvements.md"):
-            logging.warning(
-                f"File {self.file_path.name} does not end with .improvements.md"
-            )
+            logging.warning(f"File {self.file_path.name} does not end with .improvements.md")
 
     def _check_associated_file(self) -> None:
         """Check if the associated code file exists.
@@ -123,19 +125,13 @@ class ImprovementsAgent(BaseAgent):
             for ext in extensions:
                 candidate = directory / (base_name + ext)
                 try:
-                    if (
-                        candidate.exists()
-                        and candidate.is_file()
-                        and candidate.resolve() != self.file_path.resolve()
-                    ):
+                    if candidate.exists() and candidate.is_file() and candidate.resolve() != self.file_path.resolve():
                         logging.debug(f"Found associated file: {candidate}")
                         return
                 except (OSError, PermissionError):
                     continue
 
-        logging.warning(
-            f"Could not find associated code file for {self.file_path.name}"
-        )
+        logging.warning(f"Could not find associated code file for {self.file_path.name}")
 
     # ========== Improvement Management ==========
 
@@ -190,9 +186,7 @@ class ImprovementsAgent(BaseAgent):
 
     def get_improvement_by_id(self, improvement_id: str) -> Improvement | None:
         """Get an improvement by ID."""
-        return next(
-            (i for i in self.manager._improvements if i.id == improvement_id), None
-        )
+        return next((i for i in self.manager._improvements if i.id == improvement_id), None)
 
     def update_status(self, improvement_id: str, status: ImprovementStatus) -> bool:
         """Update the status of an improvement."""
@@ -203,21 +197,15 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_improvements_by_status(
-        self, status: ImprovementStatus
-    ) -> list[Improvement]:
+    def get_improvements_by_status(self, status: ImprovementStatus) -> list[Improvement]:
         """Get improvements filtered by status."""
         return [i for i in self.manager._improvements if i.status == status]
 
-    def get_improvements_by_category(
-        self, category: ImprovementCategory
-    ) -> list[Improvement]:
+    def get_improvements_by_category(self, category: ImprovementCategory) -> list[Improvement]:
         """Get improvements filtered by category."""
         return [i for i in self.manager._improvements if i.category == category]
 
-    def get_improvements_by_priority(
-        self, priority: ImprovementPriority
-    ) -> list[Improvement]:
+    def get_improvements_by_priority(self, priority: ImprovementPriority) -> list[Improvement]:
         """Get improvements filtered by priority."""
         return [i for i in self.manager._improvements if i.priority == priority]
 
@@ -245,9 +233,7 @@ class ImprovementsAgent(BaseAgent):
         for imp in self._improvements:
             if imp.status in (ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED):
                 continue
-            by_category[imp.category.name] = by_category.get(
-                imp.category.name, 0
-            ) + int(imp.effort.value)
+            by_category[imp.category.name] = by_category.get(imp.category.name, 0) + int(imp.effort.value)
         return {
             "total_hours": total,
             "by_category": by_category,
@@ -396,15 +382,11 @@ class ImprovementsAgent(BaseAgent):
 
         by_category: dict[str, int] = {}
         for category in ImprovementCategory:
-            by_category[category.name] = len(
-                self.get_improvements_by_category(category)
-            )
+            by_category[category.name] = len(self.get_improvements_by_category(category))
 
         by_priority: dict[str, int] = {}
         for priority in ImprovementPriority:
-            by_priority[priority.name] = len(
-                self.get_improvements_by_priority(priority)
-            )
+            by_priority[priority.name] = len(self.get_improvements_by_priority(priority))
 
         completed = by_status.get("COMPLETED", 0)
         completion_rate = (completed / total * 100) if total > 0 else 0
@@ -447,9 +429,7 @@ class ImprovementsAgent(BaseAgent):
             return json.dumps(data, indent=2)
         elif format == "markdown":
             lines = ["# Improvements\n"]
-            for priority in sorted(
-                ImprovementPriority, key=lambda p: p.value, reverse=True
-            ):
+            for priority in sorted(ImprovementPriority, key=lambda p: p.value, reverse=True):
                 imps = self.get_improvements_by_priority(priority)
                 if imps:
                     lines.append(f"\n## {priority.name}\n")
@@ -462,9 +442,7 @@ class ImprovementsAgent(BaseAgent):
                         elif i.status == ImprovementStatus.DEFERRED:
                             status_icon = "-"
 
-                        lines.append(
-                            f"- [{status_icon}] **{i.title}** ({i.category.value}) <!-- id: {i.id} -->"
-                        )
+                        lines.append(f"- [{status_icon}] **{i.title}** ({i.category.value}) <!-- id: {i.id} -->")
                         if i.description:
                             # Handle multi-line descriptions
                             for desc_line in i.description.split("\n"):
@@ -498,18 +476,14 @@ class ImprovementsAgent(BaseAgent):
         docs.append("## Summary\n")
         docs.append(f"- Total Improvements: {analytics['total']}")
         docs.append(f"- Completion Rate: {analytics['completion_rate']:.1f}%")
-        docs.append(
-            f"- Total Effort: {analytics['effort_estimation']['estimated_days']:.1f} days\n"
-        )
+        docs.append(f"- Total Effort: {analytics['effort_estimation']['estimated_days']:.1f} days\n")
         docs.append("## By Status\n")
         for status, count in analytics["by_status"].items():
             if count > 0:
                 docs.append(f"- {status}: {count}")
         docs.append("\n## Prioritized List\n")
         for imp in self.prioritize_improvements()[:10]:
-            docs.append(
-                f"- [{imp.priority.name}] {imp.title} (Score: {imp.impact_score:.1f})"
-            )
+            docs.append(f"- [{imp.priority.name}] {imp.title} (Score: {imp.impact_score:.1f})")
         return "\n".join(docs)
 
     # ========== Core Methods ==========
@@ -525,7 +499,7 @@ class ImprovementsAgent(BaseAgent):
             "# Original suggestions preserved below:\n\n"
         )
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the improvement suggestions.
 
         When Copilot CLI is unavailable, BaseAgent keeps the existing content
@@ -542,7 +516,7 @@ class ImprovementsAgent(BaseAgent):
             "- [ ] Actionable item 2\n\n"
             "Group improvements by priority (High, Medium, Low) if applicable."
         )
-        return super().improve_content(enhanced_prompt, target_file=target_file)
+        return await super().improve_content(enhanced_prompt, target_file=target_file)
 
     def validate_improved_content(self, content: str) -> bool:
         """Validate that the improved content follows the required format.
@@ -556,21 +530,14 @@ class ImprovementsAgent(BaseAgent):
 
         # Check for at least one priority header (case insensitive)
         content_upper = content.upper()
-        has_priority = any(
-            p in content_upper
-            for p in ["## HIGH", "## MEDIUM", "## LOW", "## URGENT", "## BACKLOG"]
-        )
+        has_priority = any(p in content_upper for p in ["## HIGH", "## MEDIUM", "## LOW", "## URGENT", "## BACKLOG"])
 
         # Check for standard markdown checkboxes
-        has_checkboxes = (
-            "- [ ] " in content or "- [x] " in content or "- [X] " in content
-        )
+        has_checkboxes = "- [ ] " in content or "- [x] " in content or "- [X] " in content
 
         if not has_priority:
             logging.warning("Improved content missing priority headers (e.g. ## HIGH)")
         if not has_checkboxes:
-            logging.warning(
-                "Improved content missing markdown checkboxes (e.g. - [ ] )"
-            )
+            logging.warning("Improved content missing markdown checkboxes (e.g. - [ ] )")
 
         return has_priority and has_checkboxes

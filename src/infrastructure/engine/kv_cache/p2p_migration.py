@@ -8,13 +8,15 @@ Enables zero-copy (simulated RDMA) migration of context shards between DP-ranks.
 Reduces CPU overhead during swarm rebalancing.
 """
 
-import logging
 import asyncio
+import logging
 import time
-from typing import List, Dict, Any, Optional
-from .context_sharder import ContextShardManager, ContextShard
+from typing import Any, Dict, List
+
+from .context_sharder import ContextShardManager
 
 logger = logging.getLogger(__name__)
+
 
 class P2PMigrationEngine:
     """
@@ -39,7 +41,7 @@ class P2PMigrationEngine:
         source_rank = shard.rank_id
 
         if source_rank == target_rank:
-            return # Already there
+            return  # Already there
 
         start_time = time.time()
         logger.info(f"P2P Migration: Moving {shard.shard_id} from Rank {source_rank} to Rank {target_rank}...")
@@ -51,18 +53,14 @@ class P2PMigrationEngine:
         shard.rank_id = target_rank
         duration = (time.time() - start_time) * 1000
 
-        self.migration_history.append({
-            "shard_id": shard.shard_id,
-            "from": source_rank,
-            "to": target_rank,
-            "duration_ms": duration
-        })
+        self.migration_history.append(
+            {"shard_id": shard.shard_id, "from": source_rank, "to": target_rank, "duration_ms": duration}
+        )
 
         logger.info(f"P2P Migration: {shard.shard_id} successfully moved in {duration:.2f}ms.")
 
     def get_migration_stats(self) -> Dict[str, Any]:
         """Returns cumulative migration metrics."""
-        return {
-            "total_migrations": len(self.migration_history),
-            "avg_duration_ms": sum(m["duration_ms"] for m in self.migration_history) / max(1, len(self.migration_history))
-        }
+        history = self.migration_history
+        count = max(1, len(history))
+        return {"total_migrations": len(history), "avg_duration_ms": sum(m["duration_ms"] for m in history) / count}

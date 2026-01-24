@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,14 +20,14 @@ Models for Prompt Rendering.
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class TruncationStrategy(Enum):
     """Prompt truncation strategies."""
+
     NONE = "none"
     AUTO = "auto"
     LEFT = "left"
@@ -24,6 +38,7 @@ class TruncationStrategy(Enum):
 
 class InputType(Enum):
     """Input types for prompt rendering."""
+
     TEXT = "text"
     TOKENS = "tokens"
     EMBEDDING = "embedding"
@@ -32,6 +47,7 @@ class InputType(Enum):
 
 class RenderMode(Enum):
     """Rendering modes."""
+
     COMPLETION = "completion"
     CHAT = "chat"
     EMBEDDING = "embedding"
@@ -41,6 +57,7 @@ class RenderMode(Enum):
 @dataclass
 class PromptConfig:
     """Configuration for prompt rendering."""
+
     prompt: Optional[str] = None
     messages: Optional[List[Dict[str, Any]]] = None
     token_ids: Optional[List[int]] = None
@@ -71,6 +88,7 @@ class PromptConfig:
 @dataclass
 class TruncationResult:
     """Result of prompt truncation."""
+
     original_tokens: int
     truncated_tokens: int
     removed_tokens: int
@@ -88,6 +106,7 @@ class TruncationResult:
 @dataclass
 class RenderResult:
     """Result of prompt rendering."""
+
     text: Optional[str] = None
     token_ids: Optional[List[int]] = None
     embeddings: Optional[List[List[float]]] = None
@@ -108,6 +127,7 @@ class RenderResult:
 @dataclass
 class EmbeddingInput:
     """Embedding input for direct embedding injection."""
+
     embeddings: List[List[float]]
     positions: Optional[List[int]] = None
     encoding: str = "float32"
@@ -116,6 +136,7 @@ class EmbeddingInput:
 @dataclass
 class MultimodalInput:
     """Multimodal input container."""
+
     images: List[Dict[str, Any]] = field(default_factory=list)
     audio: List[Dict[str, Any]] = field(default_factory=list)
     video: List[Dict[str, Any]] = field(default_factory=list)

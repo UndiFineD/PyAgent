@@ -24,13 +24,16 @@ Inspired by vLLM's math_utils.py patterns for high-performance operations.
 
 Phase 17: vLLM Pattern Integration
 """
+
 from __future__ import annotations
+
 import functools
 from typing import Union
 
 # Rust acceleration imports
 try:
     from rust_core import rust_core as rc
+
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
@@ -58,7 +61,7 @@ def cdiv(a: int, b: int) -> int:
         >>> cdiv(1, 3)
         1
     """
-    if RUST_AVAILABLE and hasattr(rc, 'cdiv_rust'):
+    if RUST_AVAILABLE and hasattr(rc, "cdiv_rust"):
         return rc.cdiv_rust(a, b)
     return -(a // -b)
 
@@ -83,7 +86,7 @@ def next_power_of_2(n: int) -> int:
         >>> next_power_of_2(1)
         1
     """
-    if RUST_AVAILABLE and hasattr(rc, 'next_power_of_2_rust'):
+    if RUST_AVAILABLE and hasattr(rc, "next_power_of_2_rust"):
         return rc.next_power_of_2_rust(n)
     if n <= 0:
         return 1
@@ -110,7 +113,7 @@ def prev_power_of_2(n: int) -> int:
         >>> prev_power_of_2(1)
         1
     """
-    if RUST_AVAILABLE and hasattr(rc, 'prev_power_of_2_rust'):
+    if RUST_AVAILABLE and hasattr(rc, "prev_power_of_2_rust"):
         return rc.prev_power_of_2_rust(n)
     if n <= 0:
         return 1
@@ -149,7 +152,7 @@ def round_up(n: int, multiple: int) -> int:
         >>> round_up(8, 4)
         8
     """
-    if RUST_AVAILABLE and hasattr(rc, 'round_up_rust'):
+    if RUST_AVAILABLE and hasattr(rc, "round_up_rust"):
         return rc.round_up_rust(n, multiple)
     return cdiv(n, multiple) * multiple
 
@@ -171,16 +174,12 @@ def round_down(n: int, multiple: int) -> int:
         >>> round_down(8, 4)
         8
     """
-    if RUST_AVAILABLE and hasattr(rc, 'round_down_rust'):
+    if RUST_AVAILABLE and hasattr(rc, "round_down_rust"):
         return rc.round_down_rust(n, multiple)
     return (n // multiple) * multiple
 
 
-def clamp(
-    value: Union[int, float],
-    min_val: Union[int, float],
-    max_val: Union[int, float]
-) -> Union[int, float]:
+def clamp(value: Union[int, float], min_val: Union[int, float], max_val: Union[int, float]) -> Union[int, float]:
     """
     Clamp a value between min and max bounds.
 
@@ -224,7 +223,7 @@ def bit_count(n: int) -> int:
     Returns:
         Number of 1 bits
     """
-    return bin(n).count('1')
+    return bin(n).count("1")
 
 
 def gcd(a: int, b: int) -> int:
@@ -276,19 +275,19 @@ def batch_round_up(values: list[int], multiple: int) -> list[int]:
 
 
 __all__ = [
-    'cdiv',
-    'next_power_of_2',
-    'prev_power_of_2',
-    'is_power_of_2',
-    'round_up',
-    'round_down',
-    'clamp',
-    'align_to',
-    'bit_count',
-    'gcd',
-    'lcm',
-    'batch_cdiv',
-    'batch_next_power_of_2',
-    'batch_round_up',
-    'RUST_AVAILABLE',
+    "cdiv",
+    "next_power_of_2",
+    "prev_power_of_2",
+    "is_power_of_2",
+    "round_up",
+    "round_down",
+    "clamp",
+    "align_to",
+    "bit_count",
+    "gcd",
+    "lcm",
+    "batch_cdiv",
+    "batch_next_power_of_2",
+    "batch_round_up",
+    "RUST_AVAILABLE",
 ]

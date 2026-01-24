@@ -18,21 +18,31 @@ Computational core for code analysis, metrics, and quality assessment.
 Designed for high-performance rule checking with future Rust integration.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import ast
+
 from src.core.base.common.types.code_language import CodeLanguage
 from src.core.base.common.types.code_metrics import CodeMetrics
 from src.core.base.common.types.style_rule import StyleRule
 from src.core.base.common.types.style_rule_severity import StyleRuleSeverity
 from src.core.base.lifecycle.agent_core import LogicCore
-from src.logic.agents.development.mixins.coder_metrics_mixin import CoderMetricsMixin
-from src.logic.agents.development.mixins.coder_style_mixin import CoderStyleMixin
-from src.logic.agents.development.mixins.coder_smell_mixin import CoderSmellMixin
-from src.logic.agents.development.mixins.coder_duplication_mixin import CoderDuplicationMixin
-from src.logic.agents.development.mixins.coder_quality_mixin import CoderQualityMixin
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.mixins.coder_doc_mixin import CoderDocMixin
-from src.logic.agents.development.mixins.coder_validation_mixin import CoderValidationMixin
-import ast
+from src.logic.agents.development.mixins.coder_duplication_mixin import \
+    CoderDuplicationMixin
+from src.logic.agents.development.mixins.coder_metrics_mixin import \
+    CoderMetricsMixin
+from src.logic.agents.development.mixins.coder_quality_mixin import \
+    CoderQualityMixin
+from src.logic.agents.development.mixins.coder_smell_mixin import \
+    CoderSmellMixin
+from src.logic.agents.development.mixins.coder_style_mixin import \
+    CoderStyleMixin
+from src.logic.agents.development.mixins.coder_validation_mixin import \
+    CoderValidationMixin
 
 __version__ = VERSION
 
@@ -71,6 +81,7 @@ DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
     ),
 ]
 
+
 class CoderCore(
     LogicCore,
     CoderMetricsMixin,
@@ -83,9 +94,7 @@ class CoderCore(
 ):
     """Core logic for CoderAgent, target for Rust conversion."""
 
-    def __init__(
-        self, language: CodeLanguage, workspace_root: str | None = None
-    ) -> None:
+    def __init__(self, language: CodeLanguage, workspace_root: str | None = None) -> None:
         LogicCore.__init__(self)  # Ensure proper base init
         self.language = language
         self.workspace_root = workspace_root
@@ -99,21 +108,18 @@ class CoderCore(
     def calculate_metrics(self, content: str) -> CodeMetrics:
         """Analyze code structure and compute metrics."""
         from src.core.rust_bridge import RustBridge
+
         raw_metrics = RustBridge.calculate_metrics(content)
         if raw_metrics:
             metrics = CodeMetrics()
             metrics.lines_of_code = int(raw_metrics.get("lines_of_code", 0.0))
             metrics.lines_of_comments = int(raw_metrics.get("lines_of_comments", 0.0))
             metrics.blank_lines = int(raw_metrics.get("blank_lines", 0.0))
-            metrics.cyclomatic_complexity = int(
-                raw_metrics.get("cyclomatic_complexity", 1.0)
-            )
+            metrics.cyclomatic_complexity = int(raw_metrics.get("cyclomatic_complexity", 1.0))
             metrics.function_count = int(raw_metrics.get("function_count", 0.0))
             metrics.class_count = int(raw_metrics.get("class_count", 0.0))
             metrics.import_count = int(raw_metrics.get("import_count", 0.0))
-            metrics.maintainability_index = raw_metrics.get(
-                "maintainability_index", 100.0
-            )
+            metrics.maintainability_index = raw_metrics.get("maintainability_index", 100.0)
             return metrics
 
         lines = content.split("\n")
@@ -146,9 +152,7 @@ class CoderCore(
         """Calculate cyclomatic complexity for a function node."""
         cc = 1
         for child in ast.walk(node):
-            if isinstance(
-                child, (ast.If, ast.While, ast.For, ast.ExceptHandler)
-            ):
+            if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
                 cc += 1
             elif isinstance(child, ast.BoolOp):
                 cc += len(child.values) - 1

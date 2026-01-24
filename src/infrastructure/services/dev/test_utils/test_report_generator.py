@@ -16,10 +16,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import json
 from pathlib import Path
 from typing import Any
-import json
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -46,9 +48,7 @@ class TestReportGenerator:
             }
         )
 
-    def add_test_result(
-        self, test_name: str, status: str, duration_ms: float, error: str = ""
-    ) -> None:
+    def add_test_result(self, test_name: str, status: str, duration_ms: float, error: str = "") -> None:
         """Add test result (test compatibility API)."""
         self.results.append(
             {
@@ -66,8 +66,7 @@ class TestReportGenerator:
             duration = float(r.get("duration_ms", 0.0))
             error = str(r.get("error", ""))
             rows += (
-                f"<tr><td>{r.get('test_name', '')}</td><td>{status}</td><td>{duration:.2f}ms</td>"
-                f"<td>{error}</td></tr>"
+                f"<tr><td>{r.get('test_name', '')}</td><td>{status}</td><td>{duration:.2f}ms</td><td>{error}</td></tr>"
             )
         return (
             "<html><head><title>Test Report</title></head><body>"

@@ -19,6 +19,7 @@ Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verif
 """
 
 from __future__ import annotations
+
 from src.core.base.lifecycle.version import VERSION
 
 # Phase 317: Modularized Verification Classes

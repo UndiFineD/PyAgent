@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 HashRegistry - Unified hashing utilities with multiple backends.
 
@@ -12,16 +26,20 @@ Supports:
 
 Phase 17: vLLM Pattern Integration (P2)
 """
+
 from __future__ import annotations
+
 import hashlib
+import json
 import os
 from enum import Enum, auto
 from functools import lru_cache
-from typing import Union, Callable, Any
+from typing import Callable, Union
 
 # Rust acceleration
 try:
     import rust_core as rc
+
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
@@ -29,6 +47,7 @@ except ImportError:
 # Optional xxhash
 try:
     import xxhash
+
     XXHASH_AVAILABLE = True
 except ImportError:
     XXHASH_AVAILABLE = False
@@ -36,6 +55,7 @@ except ImportError:
 
 class HashAlgorithm(Enum):
     """Available hash algorithms."""
+
     SHA256 = auto()
     SHA1 = auto()
     MD5 = auto()
@@ -48,13 +68,13 @@ class HashAlgorithm(Enum):
 def _is_fips_mode() -> bool:
     """Check if running in FIPS-compliant mode."""
     # Check environment variable
-    if os.environ.get('FIPS_MODE', '').lower() in ('1', 'true', 'yes'):
+    if os.environ.get("FIPS_MODE", "").lower() in ("1", "true", "yes"):
         return True
 
     # Try to detect from OpenSSL
     try:
         # In FIPS mode, MD5 may raise an error
-        hashlib.md5(b'test', usedforsecurity=True)
+        hashlib.md5(b"test", usedforsecurity=True)
         return False
     except (ValueError, TypeError):
         return True
@@ -73,7 +93,7 @@ def hash_sha256(data: Union[str, bytes]) -> str:
     Cryptographically secure, FIPS-compliant.
     """
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
     return hashlib.sha256(data).hexdigest()
 
 
@@ -84,7 +104,7 @@ def hash_sha1(data: Union[str, bytes]) -> str:
     Not recommended for security, but faster than SHA-256.
     """
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
     return hashlib.sha1(data).hexdigest()
 
 
@@ -96,7 +116,7 @@ def hash_md5(data: Union[str, bytes]) -> str:
     May not work in FIPS mode.
     """
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
     return hashlib.md5(data, usedforsecurity=False).hexdigest()
 
 
@@ -108,14 +128,14 @@ def hash_xxhash64(data: Union[str, bytes]) -> str:
     Falls back to FNV-1a if xxhash not installed.
     """
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
 
     if XXHASH_AVAILABLE:
         return xxhash.xxh64(data).hexdigest()
 
     # Fallback to Rust FNV-1a
-    if RUST_AVAILABLE and hasattr(rc, 'xxhash_rust'):
-        return rc.xxhash_rust(data.decode('utf-8') if isinstance(data, bytes) else data)
+    if RUST_AVAILABLE and hasattr(rc, "xxhash_rust"):
+        return rc.xxhash_rust(data.decode("utf-8") if isinstance(data, bytes) else data)
 
     # Python fallback: FNV-1a
     return _fnv1a_hash(data)
@@ -129,7 +149,7 @@ def hash_xxhash128(data: Union[str, bytes]) -> str:
     Falls back to SHA-1 if xxhash not installed.
     """
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
 
     if XXHASH_AVAILABLE:
         return xxhash.xxh128(data).hexdigest()
@@ -140,10 +160,10 @@ def hash_xxhash128(data: Union[str, bytes]) -> str:
 
 def _fnv1a_hash(data: bytes) -> str:
     """FNV-1a 64-bit hash implementation."""
-    hash_val = 0xcbf29ce484222325
+    hash_val = 0xCBF29CE484222325
     for byte in data:
         hash_val ^= byte
-        hash_val = (hash_val * 0x100000001b3) & 0xFFFFFFFFFFFFFFFF
+        hash_val = (hash_val * 0x100000001B3) & 0xFFFFFFFFFFFFFFFF
     return f"{hash_val:016x}"
 
 
@@ -154,11 +174,11 @@ def hash_fnv1a(data: Union[str, bytes]) -> str:
     Fast, non-cryptographic, pure Python/Rust.
     """
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
 
     # Try Rust first
-    if RUST_AVAILABLE and hasattr(rc, 'xxhash_rust'):
-        return rc.xxhash_rust(data.decode('utf-8'))
+    if RUST_AVAILABLE and hasattr(rc, "xxhash_rust"):
+        return rc.xxhash_rust(data.decode("utf-8"))
 
     return _fnv1a_hash(data)
 
@@ -211,26 +231,25 @@ def get_hash_fn_by_name(name: str) -> Callable[[Union[str, bytes]], str]:
         Hash function
     """
     name_map = {
-        'sha256': HashAlgorithm.SHA256,
-        'sha1': HashAlgorithm.SHA1,
-        'md5': HashAlgorithm.MD5,
-        'xxhash64': HashAlgorithm.XXHASH64,
-        'xxhash': HashAlgorithm.XXHASH64,
-        'xxhash128': HashAlgorithm.XXHASH128,
-        'fnv1a': HashAlgorithm.FNV1A,
-        'fnv': HashAlgorithm.FNV1A,
-        'safe': HashAlgorithm.SAFE,
+        "sha256": HashAlgorithm.SHA256,
+        "sha1": HashAlgorithm.SHA1,
+        "md5": HashAlgorithm.MD5,
+        "xxhash64": HashAlgorithm.XXHASH64,
+        "xxhash": HashAlgorithm.XXHASH64,
+        "xxhash128": HashAlgorithm.XXHASH128,
+        "fnv1a": HashAlgorithm.FNV1A,
+        "fnv": HashAlgorithm.FNV1A,
+        "safe": HashAlgorithm.SAFE,
     }
 
     algorithm = name_map.get(name.lower())
     if algorithm is None:
-        raise ValueError(f"Unknown hash algorithm: {name}. "
-                        f"Available: {list(name_map.keys())}")
+        raise ValueError(f"Unknown hash algorithm: {name}. Available: {list(name_map.keys())}")
 
     return get_hash_fn(algorithm)
 
 
-def hash_with(data: Union[str, bytes], algorithm: str = 'safe') -> str:
+def hash_with(data: Union[str, bytes], algorithm: str = "safe") -> str:
     """
     Hash data with a specified algorithm.
 
@@ -256,7 +275,7 @@ class ContentHasher:
 
     def __init__(
         self,
-        algorithm: str = 'safe',
+        algorithm: str = "safe",
         prefix: str | None = None,
         truncate: int | None = None,
     ) -> None:
@@ -277,7 +296,7 @@ class ContentHasher:
         result = self._hash_fn(data)
 
         if self._truncate:
-            result = result[:self._truncate]
+            result = result[: self._truncate]
 
         if self._prefix:
             result = f"{self._prefix}:{result}"
@@ -286,49 +305,47 @@ class ContentHasher:
 
     def hash_dict(self, data: dict) -> str:
         """Hash a dictionary (sorted keys for consistency)."""
-        import json
-        serialized = json.dumps(data, sort_keys=True, separators=(',', ':'))
+        serialized = json.dumps(data, sort_keys=True, separators=(",", ":"))
         return self.hash(serialized)
 
     def hash_file(self, filepath: str, chunk_size: int = 8192) -> str:
         """Hash a file's contents."""
-        import hashlib
         h = hashlib.sha256()  # Use SHA-256 for file hashing
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             while chunk := f.read(chunk_size):
                 h.update(chunk)
         result = h.hexdigest()
 
         if self._truncate:
-            result = result[:self._truncate]
+            result = result[: self._truncate]
         if self._prefix:
             result = f"{self._prefix}:{result}"
         return result
 
 
 # Convenience instances
-default_hasher = ContentHasher(algorithm='safe')
-fast_hasher = ContentHasher(algorithm='fnv1a')
-cache_hasher = ContentHasher(algorithm='xxhash64', prefix='cache', truncate=16)
+default_hasher = ContentHasher(algorithm="safe")
+fast_hasher = ContentHasher(algorithm="fnv1a")
+cache_hasher = ContentHasher(algorithm="xxhash64", prefix="cache", truncate=16)
 
 
 __all__ = [
-    'HashAlgorithm',
-    'hash_sha256',
-    'hash_sha1',
-    'hash_md5',
-    'hash_xxhash64',
-    'hash_xxhash128',
-    'hash_fnv1a',
-    'safe_hash',
-    'get_hash_fn',
-    'get_hash_fn_by_name',
-    'hash_with',
-    'is_fips_mode',
-    'ContentHasher',
-    'default_hasher',
-    'fast_hasher',
-    'cache_hasher',
-    'XXHASH_AVAILABLE',
-    'RUST_AVAILABLE',
+    "HashAlgorithm",
+    "hash_sha256",
+    "hash_sha1",
+    "hash_md5",
+    "hash_xxhash64",
+    "hash_xxhash128",
+    "hash_fnv1a",
+    "safe_hash",
+    "get_hash_fn",
+    "get_hash_fn_by_name",
+    "hash_with",
+    "is_fips_mode",
+    "ContentHasher",
+    "default_hasher",
+    "fast_hasher",
+    "cache_hasher",
+    "XXHASH_AVAILABLE",
+    "RUST_AVAILABLE",
 ]

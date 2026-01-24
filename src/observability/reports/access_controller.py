@@ -16,12 +16,15 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .permission_level import PermissionLevel
-from .report_permission import ReportPermission
+
 import logging
 import re
 import time
+
+from src.core.base.lifecycle.version import VERSION
+
+from .permission_level import PermissionLevel
+from .report_permission import ReportPermission
 
 __version__ = VERSION
 
@@ -84,9 +87,7 @@ class AccessController:
                 return True
         return False
 
-    def check(
-        self, user_id: str, report_path: str, required_level: PermissionLevel
-    ) -> bool:
+    def check(self, user_id: str, report_path: str, required_level: PermissionLevel) -> bool:
         """Check if user has permission.
         Args:
             user_id: User to check.

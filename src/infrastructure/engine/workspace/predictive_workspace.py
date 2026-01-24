@@ -19,11 +19,13 @@ Predicts upcoming batch memory requirements and pre-allocates resources.
 
 import logging
 import time
-from typing import Dict, List, Optional, Any, Tuple
 from collections import deque
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
+
 
 class PredictiveWorkspace:
     """
@@ -96,5 +98,7 @@ class PredictiveWorkspace:
 
         return {
             "top_patterns": patterns[:3],
-            "hit_rate": self.cache_hits / (self.cache_hits + self.cache_misses) if (self.cache_hits + self.cache_misses) > 0 else 0
+            "hit_rate": self.cache_hits / (self.cache_hits + self.cache_misses)
+            if (self.cache_hits + self.cache_misses) > 0
+            else 0,
         }

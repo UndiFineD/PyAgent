@@ -18,11 +18,13 @@ Detects and fixes environment issues like missing dependencies or broken paths.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import subprocess
+
 import logging
+import subprocess
 import sys
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -60,9 +62,7 @@ class InfrastructureRepairAgent(BaseAgent):
                 self._record(cmd_str, "Success", provider="Shell", model="pip")
                 return f"Successfully installed {package}."
             except Exception as e:
-                self._record(
-                    cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip"
-                )
+                self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
                 return f"Failed to install {package}: {e}"
 
         return "Unknown issue type."

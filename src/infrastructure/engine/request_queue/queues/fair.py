@@ -1,12 +1,32 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Fair.py module.
+"""
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 from collections import deque
 from typing import Dict, Iterator, TypeVar
+
 from ..base import RequestQueue
 from ..models import QueuedRequest
 
-T = TypeVar('T', bound=QueuedRequest)
+T = TypeVar("T", bound=QueuedRequest)
+
 
 class FairQueue(RequestQueue):
     """
@@ -38,7 +58,7 @@ class FairQueue(RequestQueue):
             raise IndexError("pop from empty fair queue")
 
         best_client = None
-        best_ratio = float('inf')
+        best_ratio = float("inf")
 
         for client_id, queue in self._client_queues.items():
             if not queue:
@@ -46,7 +66,7 @@ class FairQueue(RequestQueue):
 
             weight = self._client_weights.get(client_id, self._default_weight)
             served = self._client_served.get(client_id, 0)
-            ratio = served / weight if weight > 0 else float('inf')
+            ratio = served / weight if weight > 0 else float("inf")
 
             if ratio < best_ratio:
                 best_ratio = ratio
@@ -64,8 +84,7 @@ class FairQueue(RequestQueue):
     def peek(self) -> T:
         """Peek at next fair request."""
         for client_id in sorted(
-            self._client_queues.keys(),
-            key=lambda c: self._client_served.get(c, 0) / self._client_weights.get(c, 1.0)
+            self._client_queues.keys(), key=lambda c: self._client_served.get(c, 0) / self._client_weights.get(c, 1.0)
         ):
             if self._client_queues[client_id]:
                 return self._client_queues[client_id][0]

@@ -13,13 +13,18 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
+"""Context inheritance manager for Cognitive agents.
+
+This module provides functionality for child contexts to inherit and resolve
+content from parent contexts using various merge strategies.
+"""
 
 from __future__ import annotations
+import re
+
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.inheritance_mode import InheritanceMode
 from src.logic.agents.cognitive.context.models.inherited_context import InheritedContext
-import re
 
 __version__ = VERSION
 
@@ -31,8 +36,8 @@ class ContextInheritance:
     from parent contexts.
 
     Example:
-        >>> inheritance=ContextInheritance()
-        >>> inherited=inheritance.inherit_from("parent.description.md", "child.description.md")
+        >>> inheritance = ContextInheritance()
+        >>> inherited = inheritance.inherit_from("parent.md", "child.md")
     """
 
     def __init__(self) -> None:
@@ -92,19 +97,19 @@ class ContextInheritance:
         """
         if mode == InheritanceMode.OVERRIDE:
             return child_content
-        elif mode == InheritanceMode.APPEND:
-            return parent_content + "\n\n" + child_content
-        else:
-            # MERGE
-            # Simple merge: keep child sections, add missing from parent
-            child_sections = set(re.findall(r"##\s+(\w+)", child_content))
-            parent_sections = re.findall(
-                r"(##\s+\w+.*?)(?=##|\Z)", parent_content, re.DOTALL
-            )
 
-            result = child_content
-            for section in parent_sections:
-                section_name = re.search(r"##\s+(\w+)", section)
-                if section_name and section_name.group(1) not in child_sections:
-                    result += "\n" + section.strip()
-            return result
+        if mode == InheritanceMode.APPEND:
+            return f"{parent_content}\n\n{child_content}"
+
+        # MERGE - Simple merge: keep child sections, add missing from parent
+        child_sections = set(re.findall(r"##\s+(\w+)", child_content))
+        parent_sections = re.findall(
+            r"(##\s+\w+.*?)(?=##|\Z)", parent_content, re.DOTALL
+        )
+
+        result = child_content
+        for section in parent_sections:
+            section_name = re.search(r"##\s+(\w+)", section)
+            if section_name and section_name.group(1) not in child_sections:
+                result += "\n" + section.strip()
+        return result

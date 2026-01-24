@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Mamba Utilities.
 
@@ -9,13 +23,13 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Any, TYPE_CHECKING
 
 import numpy as np
 
 # Try to import Rust accelerators
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -24,6 +38,7 @@ except ImportError:
 # =============================================================================
 # Shape Calculators
 # =============================================================================
+
 
 def compute_ssm_state_shape(
     batch_size: int,
@@ -74,6 +89,7 @@ def compute_state_dtype(
 # SSM Operations
 # =============================================================================
 
+
 def discretize_ssm(
     A: np.ndarray,
     B: np.ndarray,
@@ -95,7 +111,7 @@ def discretize_ssm(
         dA: Discretized state transition
         dB: Discretized input projection
     """
-    if HAS_RUST and hasattr(rust_core, 'discretize_ssm_rust'):
+    if HAS_RUST and hasattr(rust_core, "discretize_ssm_rust"):
         return rust_core.discretize_ssm_rust(A, B, dt)
 
     # Expand dimensions for broadcasting
@@ -151,7 +167,7 @@ def apply_ssm_recurrence(
     # Sequential recurrence (can be parallelized with scan)
     for t in range(seq_len):
         # State update
-        state = dA[:, t] * state + dB[:, t] * x[:, t:t+1, :].transpose(0, 2, 1)
+        state = dA[:, t] * state + dB[:, t] * x[:, t : t + 1, :].transpose(0, 2, 1)
         state = state.squeeze(-1) if state.ndim == 4 else state
 
         # Handle shape mismatch
@@ -159,7 +175,7 @@ def apply_ssm_recurrence(
             state = state.reshape(batch_size, d_inner, ssm_state_size)
 
         # Output
-        y_t = (state * C[:, t:t+1, :].transpose(0, 2, 1)).sum(axis=-1) + D * x[:, t]
+        y_t = (state * C[:, t : t + 1, :].transpose(0, 2, 1)).sum(axis=-1) + D * x[:, t]
         output[:, t] = y_t
 
     return output, state
@@ -169,13 +185,14 @@ def apply_ssm_recurrence(
 # Activation Functions
 # =============================================================================
 
+
 def silu_activation(x: np.ndarray) -> np.ndarray:
     """
     SiLU (Swish) activation: x * sigmoid(x).
 
     More numerically stable than naive implementation.
     """
-    if HAS_RUST and hasattr(rust_core, 'silu_activation_rust'):
+    if HAS_RUST and hasattr(rust_core, "silu_activation_rust"):
         return rust_core.silu_activation_rust(x)
 
     # Stable implementation avoiding overflow
@@ -197,20 +214,18 @@ def softplus(x: np.ndarray, beta: float = 1.0, threshold: float = 20.0) -> np.nd
     Reverts to linear for large values.
     """
     scaled = beta * x
-    return np.where(
-        scaled > threshold,
-        x,
-        (1.0 / beta) * np.log1p(np.exp(scaled))
-    )
+    return np.where(scaled > threshold, x, (1.0 / beta) * np.log1p(np.exp(scaled)))
 
 
 # =============================================================================
 # State Management
 # =============================================================================
 
+
 @dataclass
 class MambaBlockState:
     """State for a block of Mamba layers."""
+
     layer_states: list[tuple[np.ndarray, np.ndarray]]  # List of (conv_state, ssm_state)
 
     @classmethod
@@ -253,17 +268,13 @@ class MambaBlockState:
 
     def clone(self) -> "MambaBlockState":
         """Deep clone the state."""
-        return MambaBlockState(
-            layer_states=[
-                (conv.copy(), ssm.copy())
-                for conv, ssm in self.layer_states
-            ]
-        )
+        return MambaBlockState(layer_states=[(conv.copy(), ssm.copy()) for conv, ssm in self.layer_states])
 
 
 # =============================================================================
 # Chunked Processing
 # =============================================================================
+
 
 def chunk_sequence(
     x: np.ndarray,
@@ -298,6 +309,7 @@ def merge_chunks(chunks: list[np.ndarray]) -> np.ndarray:
 # Parallel Scan (Associative Scan)
 # =============================================================================
 
+
 def parallel_scan(
     gates: np.ndarray,
     values: np.ndarray,
@@ -323,7 +335,7 @@ def parallel_scan(
         return values.copy()
 
     # Use Rust implementation if available
-    if HAS_RUST and hasattr(rust_core, 'parallel_scan_rust'):
+    if HAS_RUST and hasattr(rust_core, "parallel_scan_rust"):
         return rust_core.parallel_scan_rust(gates, values)
 
     # Python implementation (sequential for correctness)
@@ -339,6 +351,7 @@ def parallel_scan(
 # =============================================================================
 # Initialization Helpers
 # =============================================================================
+
 
 def init_A_log(
     d_inner: int,

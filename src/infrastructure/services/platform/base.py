@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -9,17 +23,10 @@ from __future__ import annotations
 import logging
 import threading
 from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Set
+from typing import Any, Dict, List, Set
 
-from .models import (
-    PlatformType,
-    DeviceCapability,
-    MemoryInfo,
-    DeviceInfo,
-    DeviceFeature,
-    AttentionBackend,
-    QuantizationType,
-)
+from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
+                     DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
 
 logger = logging.getLogger(__name__)
 
@@ -43,29 +50,23 @@ class Platform(ABC):
 
     @classmethod
     @abstractmethod
-    def get_platform_type(cls) -> PlatformType:
-        ...
+    def get_platform_type(cls) -> PlatformType: ...
 
     @classmethod
     @abstractmethod
-    def is_available(cls) -> bool:
-        ...
+    def is_available(cls) -> bool: ...
 
     @abstractmethod
-    def get_device_count(self) -> int:
-        ...
+    def get_device_count(self) -> int: ...
 
     @abstractmethod
-    def get_device_name(self, device_id: int = 0) -> str:
-        ...
+    def get_device_name(self, device_id: int = 0) -> str: ...
 
     @abstractmethod
-    def get_device_capability(self, device_id: int = 0) -> DeviceCapability:
-        ...
+    def get_device_capability(self, device_id: int = 0) -> DeviceCapability: ...
 
     @abstractmethod
-    def get_memory_info(self, device_id: int = 0) -> MemoryInfo:
-        ...
+    def get_memory_info(self, device_id: int = 0) -> MemoryInfo: ...
 
     def get_device_info(self, device_id: int = 0) -> DeviceInfo:
         """Get summarized device information."""
@@ -90,9 +91,7 @@ class Platform(ABC):
         """Get available attention backends on this platform."""
         return [AttentionBackend.DEFAULT]
 
-    def select_attention_backend(
-        self, _capability: DeviceCapability
-    ) -> AttentionBackend:
+    def select_attention_backend(self, _capability: DeviceCapability) -> AttentionBackend:
         """Select the best attention backend for the given capability."""
         backends = self.get_attention_backends()
         return backends[0] if backends else AttentionBackend.DEFAULT

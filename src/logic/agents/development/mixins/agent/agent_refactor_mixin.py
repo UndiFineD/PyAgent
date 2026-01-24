@@ -14,17 +14,20 @@
 
 """Refactoring pattern and duplication logic for CoderAgent."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 import re
 from typing import Any
+
 from src.core.base.common.types.refactoring_pattern import RefactoringPattern
+
 
 class AgentRefactorMixin:
     """Mixin for code deduplication and refactoring patterns."""
 
-    def find_duplicate_code(
-        self, content: str | None = None, min_lines: int = 4
-    ) -> list[dict[str, Any]]:
+    def find_duplicate_code(self, content: str | None = None, min_lines: int = 4) -> list[dict[str, Any]]:
         """Find duplicate code blocks."""
         if content is None:
             content = getattr(self, "current_content", "") or getattr(self, "previous_content", "") or ""

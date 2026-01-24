@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
+
+"""
+Accessibility report mixin.py module.
+"""
+
+# pylint: disable=too-many-ancestors
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
+
 from src.core.base.common.types.accessibility_report import AccessibilityReport
-from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
+from src.core.base.common.types.accessibility_severity import \
+    AccessibilitySeverity
+
 
 class AccessibilityReportMixin:
     """Mixin for generating accessibility reports."""
 
     def _generate_report(self, file_path: str) -> AccessibilityReport:
         """Generate accessibility report."""
-        critical_count = sum(
-            1 for i in self.issues if i.severity == AccessibilitySeverity.CRITICAL
-        )
-        serious_count = sum(
-            1 for i in self.issues if i.severity == AccessibilitySeverity.SERIOUS
-        )
+        critical_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.CRITICAL)
+        serious_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.SERIOUS)
         # Calculate compliance score (100 - weighted issues)
         score = 100.0
         for issue in self.issues:
@@ -51,7 +56,5 @@ class AccessibilityReportMixin:
         if serious_count > 0:
             recommendations.append("Fix serious issues to improve basic accessibility")
         if not hasattr(self, "issues") or not self.issues:
-            recommendations.append(
-                "Continue to test with screen readers and keyboard navigation"
-            )
+            recommendations.append("Continue to test with screen readers and keyboard navigation")
         return recommendations

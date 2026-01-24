@@ -18,21 +18,12 @@ Search Agent: Perform deep research and search operations across the workspace.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from src.core.base.common.base_utilities import create_main_function
-import sys
-from pathlib import Path
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.intelligence.search_agent import SearchAgent
 
 __version__ = VERSION
-
-# Ensure project root and src are in path for modular imports
-root = Path(__file__).parent.parent
-if str(root) not in sys.path:
-    sys.path.append(str(root))
-if str(root / "src") not in sys.path:
-    sys.path.append(str(root / "src"))
-
-    from src.logic.agents.intelligence.search_agent import SearchAgent
 
 if __name__ == "__main__":
     main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")

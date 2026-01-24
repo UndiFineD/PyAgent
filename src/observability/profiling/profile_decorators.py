@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 ProfileDecorators - cProfile-based profiling utilities.
 
@@ -8,24 +22,27 @@ with cProfile, integrated with RustProfiler for unified reporting.
 
 Phase 17: vLLM Pattern Integration (P2)
 """
+
 from __future__ import annotations
+
 import cProfile
-import pstats
-import io
-import time
 import functools
+import io
+import pstats
+import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, TypeVar, ParamSpec, Iterator, Any
+from typing import Callable, Iterator, ParamSpec, TypeVar
 
-P = ParamSpec('P')
-R = TypeVar('R')
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
 @dataclass
 class ProfileResult:
     """Result from a profiling session."""
+
     name: str
     elapsed_seconds: float
     stats: pstats.Stats | None = None
@@ -35,18 +52,18 @@ class ProfileResult:
     def summary(self) -> dict:
         """Generate a summary dict."""
         return {
-            'name': self.name,
-            'elapsed_seconds': round(self.elapsed_seconds, 4),
-            'elapsed_ms': round(self.elapsed_seconds * 1000, 2),
-            'call_count': self.call_count,
-            'top_functions': self.top_functions[:10],
+            "name": self.name,
+            "elapsed_seconds": round(self.elapsed_seconds, 4),
+            "elapsed_ms": round(self.elapsed_seconds * 1000, 2),
+            "call_count": self.call_count,
+            "top_functions": self.top_functions[:10],
         }
 
     def print_stats(self, limit: int = 20) -> None:
         """Print profiling statistics."""
         if self.stats:
-            print(f"\n=== Profile: {self.name} ({self.elapsed_seconds*1000:.2f}ms) ===")
-            self.stats.sort_stats('cumulative')
+            print(f"\n=== Profile: {self.name} ({self.elapsed_seconds * 1000:.2f}ms) ===")
+            self.stats.sort_stats("cumulative")
             self.stats.print_stats(limit)
 
 
@@ -74,7 +91,7 @@ def cprofile_context(
         ...     expensive_operation()
         >>> print(f"Took {result.elapsed_ms}ms")
     """
-    result = ProfileResult(name='profile', elapsed_seconds=0.0)
+    result = ProfileResult(name="profile", elapsed_seconds=0.0)
 
     if not enabled:
         start = time.perf_counter()
@@ -104,7 +121,7 @@ def cprofile_context(
             result.call_count += nc
 
         # Extract top functions by cumulative time
-        stats.sort_stats('cumulative')
+        stats.sort_stats("cumulative")
         for (filename, line, name), (cc, nc, tt, ct, callers) in list(stats.stats.items())[:limit]:
             func_name = f"{name} ({Path(filename).name}:{line})"
             result.top_functions.append((func_name, ct))
@@ -140,6 +157,7 @@ def cprofile(
         ...     time.sleep(0.1)
         >>> slow_function()
     """
+
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
@@ -153,6 +171,7 @@ def cprofile(
                 return func(*args, **kwargs)
 
         return wrapper
+
     return decorator
 
 
@@ -172,14 +191,14 @@ def timer_context(name: str = "operation") -> Iterator[dict]:
         ...     data = load_data()
         >>> print(f"Took {timing['elapsed_ms']:.2f}ms")
     """
-    timing = {'name': name, 'start': 0.0, 'end': 0.0, 'elapsed_seconds': 0.0, 'elapsed_ms': 0.0}
-    timing['start'] = time.perf_counter()
+    timing = {"name": name, "start": 0.0, "end": 0.0, "elapsed_seconds": 0.0, "elapsed_ms": 0.0}
+    timing["start"] = time.perf_counter()
     try:
         yield timing
     finally:
-        timing['end'] = time.perf_counter()
-        timing['elapsed_seconds'] = timing['end'] - timing['start']
-        timing['elapsed_ms'] = timing['elapsed_seconds'] * 1000
+        timing["end"] = time.perf_counter()
+        timing["elapsed_seconds"] = timing["end"] - timing["start"]
+        timing["elapsed_ms"] = timing["elapsed_seconds"] * 1000
 
 
 def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]:
@@ -197,6 +216,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
         ... def slow_function():
         ...     time.sleep(0.1)
     """
+
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
         operation_name = name or func.__name__
 
@@ -208,6 +228,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
             return result
 
         return wrapper
+
     return decorator
 
 
@@ -241,6 +262,7 @@ class ProfileAccumulator:
 
     def track(self, func: Callable[P, R]) -> Callable[P, R]:
         """Decorator to track a function's timing."""
+
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             start = time.perf_counter()
@@ -258,11 +280,11 @@ class ProfileAccumulator:
         for name, times in self._data.items():
             if times:
                 report[name] = {
-                    'count': len(times),
-                    'total_ms': sum(times) * 1000,
-                    'avg_ms': (sum(times) / len(times)) * 1000,
-                    'min_ms': min(times) * 1000,
-                    'max_ms': max(times) * 1000,
+                    "count": len(times),
+                    "total_ms": sum(times) * 1000,
+                    "avg_ms": (sum(times) / len(times)) * 1000,
+                    "min_ms": min(times) * 1000,
+                    "max_ms": max(times) * 1000,
                 }
         return report
 
@@ -302,13 +324,13 @@ def reset_profile_data() -> None:
 
 
 __all__ = [
-    'ProfileResult',
-    'cprofile_context',
-    'cprofile',
-    'timer_context',
-    'timer',
-    'ProfileAccumulator',
-    'track',
-    'get_profile_report',
-    'reset_profile_data',
+    "ProfileResult",
+    "cprofile_context",
+    "cprofile",
+    "timer_context",
+    "timer",
+    "ProfileAccumulator",
+    "track",
+    "get_profile_report",
+    "reset_profile_data",
 ]

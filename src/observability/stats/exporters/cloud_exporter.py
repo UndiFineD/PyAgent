@@ -16,13 +16,15 @@
 """Auto-extracted class from agent_stats.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from ..observability_core import ExportDestination
-from ..observability_core import Metric
-from datetime import datetime
-from typing import Any
+
 import json
 import logging
+from datetime import datetime
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from ..observability_core import ExportDestination, Metric
 
 __version__ = VERSION
 
@@ -39,9 +41,7 @@ class CloudExporter:
         export_queue: Queued metrics for export.
     """
 
-    def __init__(
-        self, destination: ExportDestination, api_key: str = "", endpoint: str = ""
-    ) -> None:
+    def __init__(self, destination: ExportDestination, api_key: str = "", endpoint: str = "") -> None:
         """Initialize cloud exporter.
 
         Args:
@@ -137,17 +137,14 @@ class CloudExporter:
             with open(metrics_file, "a") as f:
                 f.write("\n".join(lines) + "\n")
 
-            logging.info(
-                f"Prometheus export: Appended {len(lines)} metrics to {metrics_file}"
-            )
+            logging.info(f"Prometheus export: Appended {len(lines)} metrics to {metrics_file}")
         except Exception as e:
             logging.error(f"Prometheus export failed: {e}")
 
     def _export_generic(self) -> None:
         """Generic export format."""
         data: list[dict[str, Any]] = [
-            {"name": m.name, "value": m.value, "timestamp": m.timestamp, "tags": m.tags}
-            for m in self.export_queue
+            {"name": m.name, "value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in self.export_queue
         ]
         logging.debug(f"Generic export: {json.dumps(data)}")
 

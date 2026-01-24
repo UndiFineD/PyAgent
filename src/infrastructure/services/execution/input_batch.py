@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 InputBatch.py - Structured batch management for model execution.
 
@@ -10,14 +24,14 @@ Phase 29: Execution Context, Batching & Async Streaming
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional, List, Dict, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 import numpy as np
-
 
 # ============================================================================
 # Sampling Metadata
 # ============================================================================
+
 
 @dataclass
 class SamplingMetadata:
@@ -26,6 +40,7 @@ class SamplingMetadata:
 
     Based on vLLM's SamplingMetadata pattern.
     """
+
     # Per-request parameters (arrays of length num_reqs)
     temperature: np.ndarray  # [num_reqs]
     top_k: np.ndarray  # [num_reqs]
@@ -85,9 +100,15 @@ class SamplingMetadata:
             top_k=np.array(top_ks, dtype=np.int32),
             top_p=np.array(top_ps, dtype=np.float32),
             min_p=np.array(min_ps, dtype=np.float32) if min_ps else np.zeros(num_reqs, dtype=np.float32),
-            repetition_penalty=np.array(repetition_penalties, dtype=np.float32) if repetition_penalties else np.ones(num_reqs, dtype=np.float32),
-            presence_penalty=np.array(presence_penalties, dtype=np.float32) if presence_penalties else np.zeros(num_reqs, dtype=np.float32),
-            frequency_penalty=np.array(frequency_penalties, dtype=np.float32) if frequency_penalties else np.zeros(num_reqs, dtype=np.float32),
+            repetition_penalty=np.array(repetition_penalties, dtype=np.float32)
+            if repetition_penalties
+            else np.ones(num_reqs, dtype=np.float32),
+            presence_penalty=np.array(presence_penalties, dtype=np.float32)
+            if presence_penalties
+            else np.zeros(num_reqs, dtype=np.float32),
+            frequency_penalty=np.array(frequency_penalties, dtype=np.float32)
+            if frequency_penalties
+            else np.zeros(num_reqs, dtype=np.float32),
             output_token_ids=[[] for _ in range(num_reqs)],
             all_greedy=all(t == 0.0 for t in temperatures),
             all_random=all(t > 0.0 for t in temperatures),
@@ -118,6 +139,7 @@ class SamplingMetadata:
 # Input Buffers
 # ============================================================================
 
+
 @dataclass
 class InputBuffers:
     """
@@ -126,6 +148,7 @@ class InputBuffers:
     Avoids runtime allocation during model execution.
     Based on vLLM's InputBuffers pattern.
     """
+
     max_num_reqs: int
     max_num_tokens: int
 
@@ -194,6 +217,7 @@ class InputBuffers:
 # Input Batch
 # ============================================================================
 
+
 @dataclass
 class InputBatch:
     """
@@ -202,6 +226,7 @@ class InputBatch:
     Contains all inputs and metadata needed for a forward pass.
     Based on vLLM's InputBatch pattern.
     """
+
     # Request identifiers
     req_ids: List[str]
 
@@ -278,7 +303,7 @@ class InputBatch:
             input_ids=buffers.input_ids[:num_tokens],
             positions=buffers.positions[:num_tokens],
             seq_lens=buffers.seq_lens[:num_reqs],
-            query_start_loc=buffers.query_start_loc[:num_reqs + 1],
+            query_start_loc=buffers.query_start_loc[: num_reqs + 1],
             idx_mapping=buffers.idx_mapping[:num_reqs],
             num_tokens_after_padding=num_tokens,
             max_query_len=tokens_per_req,
@@ -319,7 +344,7 @@ class InputBatch:
         buffers.input_ids[:total_tokens] = all_input_ids
         buffers.positions[:total_tokens] = all_positions
         buffers.seq_lens[:num_reqs] = seq_lens
-        buffers.query_start_loc[:num_reqs + 1] = query_start_loc
+        buffers.query_start_loc[: num_reqs + 1] = query_start_loc
         buffers.idx_mapping[:num_reqs] = np.arange(num_reqs)
 
         return cls(
@@ -327,7 +352,7 @@ class InputBatch:
             input_ids=buffers.input_ids[:total_tokens],
             positions=buffers.positions[:total_tokens],
             seq_lens=buffers.seq_lens[:num_reqs],
-            query_start_loc=buffers.query_start_loc[:num_reqs + 1],
+            query_start_loc=buffers.query_start_loc[: num_reqs + 1],
             idx_mapping=buffers.idx_mapping[:num_reqs],
             num_tokens_after_padding=total_tokens,
             max_query_len=int(np.max(seq_lens)) if num_reqs > 0 else 0,
@@ -361,16 +386,17 @@ class InputBatch:
         """Get inputs for a single request."""
         start, end = self.get_token_range(req_idx)
         return {
-            'req_id': self.req_ids[req_idx],
-            'input_ids': self.input_ids[start:end],
-            'positions': self.positions[start:end],
-            'seq_len': int(self.seq_lens[req_idx]),
+            "req_id": self.req_ids[req_idx],
+            "input_ids": self.input_ids[start:end],
+            "positions": self.positions[start:end],
+            "seq_len": int(self.seq_lens[req_idx]),
         }
 
 
 # ============================================================================
 # Batch Builder
 # ============================================================================
+
 
 class BatchBuilder:
     """

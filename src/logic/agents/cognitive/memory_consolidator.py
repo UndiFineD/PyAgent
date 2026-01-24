@@ -16,20 +16,22 @@
 """Shell for MemoryConsolidator, handling storage and orchestration."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 # Fixed import path assuming Core is in the same directory
-from src.logic.agents.cognitive.MemoryConsolidatorCore import MemoryConsolidatorCore
+from .core.memory_consolidator_core import MemoryConsolidatorCore
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class MemoryConsolidator(BaseAgent):
     """Manages the 'Sleep & Consolidate' phase for agents.
 
@@ -79,7 +81,7 @@ class MemoryConsolidator(BaseAgent):
             try:
                 with open(self.long_term_memory_file, encoding="utf-8") as f:
                     return json.load(f)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logging.error(f"Failed to load memory: {e}")
         return []
 
@@ -90,11 +92,11 @@ class MemoryConsolidator(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(memory, f, indent=2)
             temp_path.replace(self.long_term_memory_file)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception:
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"Failed to save memory atomically: {e}")
             raise

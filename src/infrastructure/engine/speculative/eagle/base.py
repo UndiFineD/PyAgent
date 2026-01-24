@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -5,12 +19,14 @@ Base utilities and metadata for EAGLE.
 """
 
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
 
 class InputBuffer(Protocol):
     """Protocol for input buffer."""
+
     def get_token_ids(self) -> list[int]: ...
     def get_positions(self) -> list[int]: ...
     def get_hidden_states(self) -> list[list[float]] | None: ...
@@ -19,6 +35,7 @@ class InputBuffer(Protocol):
 @dataclass(slots=True)
 class CpuGpuBuffer:
     """Buffer that syncs between CPU and GPU."""
+
     cpu_data: list[Any]
     gpu_data: list[Any] | None = None
     dirty: bool = False
@@ -43,6 +60,7 @@ class CpuGpuBuffer:
 @dataclass(slots=True)
 class AttentionMetadata:
     """Metadata for attention computation."""
+
     query_start_loc: list[int]
     seq_lens: list[int]
     block_tables: list[list[int]]
@@ -55,6 +73,7 @@ class AttentionMetadata:
 @dataclass(slots=True)
 class TreeAttentionMetadata(AttentionMetadata):
     """Metadata for tree attention."""
+
     tree_mask: list[list[bool]] = field(default_factory=list)
     tree_positions: list[int] = field(default_factory=list)
     parent_indices: list[int] = field(default_factory=list)

@@ -11,18 +11,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Predictive scheduler agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import time
+
 import logging
+import time
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class PredictiveSchedulerAgent(BaseAgent):
+class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Phase 53: Predictive Resource Forecasting.
     Uses historical telemetry to forecast future token usage and compute needs.
@@ -39,9 +45,7 @@ class PredictiveSchedulerAgent(BaseAgent):
         }  # Initial neural weights
         self.learning_rate = 0.05
 
-    def ingest_metrics(
-        self, metrics: list[Any], actual_outcome: float | None = None
-    ) -> None:
+    def ingest_metrics(self, metrics: list[Any], actual_outcome: float | None = None) -> None:
         """
         Ingests recent agent metrics for analysis.
         Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided.
@@ -61,9 +65,7 @@ class PredictiveSchedulerAgent(BaseAgent):
             logging.info(f"Neural Feedback: Adjusting weights (error: {error:.2f})")
 
             # Simple gradient descent on weights
-            self.weights["trend"] += self.learning_rate * (
-                error / 1000.0
-            )  # Normalized update
+            self.weights["trend"] += self.learning_rate * (error / 1000.0)  # Normalized update
             self.weights["avg"] = 1.0 - self.weights["trend"]
 
             # Clamp weights
@@ -93,9 +95,7 @@ class PredictiveSchedulerAgent(BaseAgent):
         trend_val = recent_usage[-1] - recent_usage[0]
 
         # Weighted forecast
-        forecast = (avg_usage * self.weights["avg"]) + (
-            max(0, avg_usage + trend_val) * self.weights["trend"]
-        )
+        forecast = (avg_usage * self.weights["avg"]) + (max(0, avg_usage + trend_val) * self.weights["trend"])
 
         return {
             "forecasted_tokens": forecast,

@@ -1,19 +1,45 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Config.py module.
+"""
+
 from __future__ import annotations
+
 import math
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Iterator, List, Optional, Sequence, Tuple
+from typing import TYPE_CHECKING, Iterator, List, Optional, Sequence, Tuple
+
+if TYPE_CHECKING:
+    from src.core.base.logic.structures.flat_logprobs import FlatLogprobs
+
 
 class LogprobFormat(Enum):
     """Logprobs output format."""
-    DICT = auto()           # Dict[token_id, logprob]
-    TUPLE = auto()          # List[(token, logprob)]
-    FLAT = auto()           # FlatLogprobs (GC-optimized)
-    STRUCTURED = auto()     # LogprobEntry objects
+
+    DICT = auto()  # Dict[token_id, logprob]
+    TUPLE = auto()  # List[(token, logprob)]
+    FLAT = auto()  # FlatLogprobs (GC-optimized)
+    STRUCTURED = auto()  # LogprobEntry objects
+
 
 @dataclass(frozen=True, slots=True)
 class TopLogprob:
     """Top-k logprob entry for a single token."""
+
     token_id: int
     token: str
     logprob: float
@@ -25,9 +51,11 @@ class TopLogprob:
     def __lt__(self, other: "TopLogprob") -> bool:
         return self.logprob < other.logprob
 
+
 @dataclass(frozen=True, slots=True)
 class LogprobEntry:
     """Logprob entry for a generated token."""
+
     token_id: int
     token: str
     logprob: float
@@ -49,14 +77,17 @@ class LogprobEntry:
         normalized = [p / total for p in probs]
         return -sum(p * math.log(p) for p in normalized if p > 0)
 
+
 def compute_perplexity(logprobs: Sequence[float]) -> float:
     if not logprobs:
         return 0.0
     mean_logprob = sum(logprobs) / len(logprobs)
     return math.exp(-mean_logprob)
 
+
 class PromptLogprobs:
     """Logprobs for prompt tokens."""
+
     def __init__(self, token_ids: List[int], tokens: List[str], logprobs: List[float]):
         self.token_ids = token_ids
         self.tokens = tokens
@@ -78,9 +109,11 @@ class PromptLogprobs:
     def perplexity(self) -> float:
         return compute_perplexity(self.logprobs)
 
+
 @dataclass
 class SampleLogprobs:
     """Logprobs for sampled tokens."""
+
     entries: List[LogprobEntry] = field(default_factory=list)
 
     def __len__(self) -> int:
@@ -117,9 +150,11 @@ class SampleLogprobs:
     def perplexity(self) -> float:
         return compute_perplexity(self.logprobs)
 
+
 @dataclass
 class LogprobsResult:
     """Complete logprobs result."""
+
     prompt_logprobs: Optional[PromptLogprobs] = None
     sample_logprobs: Optional[SampleLogprobs] = None
     flat_logprobs: Optional["FlatLogprobs"] = None

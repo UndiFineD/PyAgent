@@ -15,8 +15,10 @@
 """Execution loop logic for OrchestratorAgent."""
 
 from __future__ import annotations
-import logging
+
 import asyncio
+import logging
+
 
 class ExecLoopMixin:
     """Mixin for parallel execution strategies and main run loops."""
@@ -31,9 +33,7 @@ class ExecLoopMixin:
 
         loop_count = getattr(self, "loop", 1)
         for loop_iteration in range(1, loop_count + 1):
-            logging.info(
-                f"Starting loop iteration {loop_iteration}/{loop_count}"
-            )
+            logging.info(f"Starting loop iteration {loop_iteration}/{loop_count}")
 
             if getattr(self, "enable_multiprocessing", False):
                 logging.info("Using multiprocessing for parallel execution")
@@ -48,9 +48,7 @@ class ExecLoopMixin:
                 if hasattr(self, "process_files_threaded"):
                     self.process_files_threaded(code_files)
 
-            logging.info(
-                f"Completed loop iteration {loop_iteration}/{loop_count}"
-            )
+            logging.info(f"Completed loop iteration {loop_iteration}/{loop_count}")
 
         if hasattr(self, "run_stats_update"):
             self.run_stats_update(code_files)
@@ -64,6 +62,7 @@ class ExecLoopMixin:
         """Run the main agent loop."""
         if not hasattr(self, "logger"):
             from src.observability.structured_logger import StructuredLogger
+
             self.logger = StructuredLogger(agent_id=self.__class__.__name__)
 
         self.logger.info("Entering agent.run()")
@@ -73,20 +72,14 @@ class ExecLoopMixin:
             if not hasattr(self, "find_code_files"):
                 return
             code_files = self.find_code_files()
-            self.logger.info(
-                f"Found {len(code_files)} code files to process", count=len(code_files)
-            )
+            self.logger.info(f"Found {len(code_files)} code files to process", count=len(code_files))
             loop_count = getattr(self, "loop", 1)
             for loop_iteration in range(1, loop_count + 1):
-                logging.info(
-                    f"Starting loop iteration {loop_iteration}/{loop_count}"
-                )
+                logging.info(f"Starting loop iteration {loop_iteration}/{loop_count}")
                 for code_file in code_files:
                     if hasattr(self, "process_file"):
                         self.process_file(code_file)
-                logging.info(
-                    f"Completed loop iteration {loop_iteration}/{loop_count}"
-                )
+                logging.info(f"Completed loop iteration {loop_iteration}/{loop_count}")
             logging.info("Final stats:")
             if hasattr(self, "run_stats_update"):
                 self.run_stats_update(code_files)

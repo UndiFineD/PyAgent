@@ -18,15 +18,18 @@ Tracks the lineage and provenance of every generated piece of content or code.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
-import time
 import json
-import os
 import logging
+import os
+import time
 from pathlib import Path
 from typing import Any
-from src.infrastructure.swarm.fleet.core.attribution_core import AttributionCore
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.fleet.core.attribution_core import \
+    AttributionCore
 
 __version__ = VERSION
 
@@ -63,9 +66,7 @@ class AttributionEngine:
                 f.write(new_content)
             logging.info(f"AttributionEngine: Applied license header to {file_path}")
 
-    def record_attribution(
-        self, agent_id: str, content: str, task_context: str
-    ) -> None:
+    def record_attribution(self, agent_id: str, content: str, task_context: str) -> None:
         """Creates a record of content generation."""
         content_hash = hashlib.sha256(content.encode()).hexdigest()
         record = {

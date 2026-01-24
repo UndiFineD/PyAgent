@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+import re
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
+
 from .analysis_tool_type import AnalysisToolType
 from .improvement_category import ImprovementCategory
 from .tool_suggestion import ToolSuggestion
-from typing import Any
-import re
 
 __version__ = VERSION
 
@@ -41,9 +44,7 @@ class ToolIntegration:
         self.tool_configs: dict[str, dict[str, Any]] = {}
         self.suggestions: list[ToolSuggestion] = []
 
-    def configure_tool(
-        self, tool_name: str, tool_type: AnalysisToolType, command: str = ""
-    ) -> None:
+    def configure_tool(self, tool_name: str, tool_type: AnalysisToolType, command: str = "") -> None:
         """Configure a tool.
 
         Args:
@@ -89,17 +90,13 @@ class ToolIntegration:
         self.suggestions.extend(suggestions)
         return suggestions
 
-    def get_suggestions(
-        self, tool_type: AnalysisToolType | None = None
-    ) -> list[ToolSuggestion]:
+    def get_suggestions(self, tool_type: AnalysisToolType | None = None) -> list[ToolSuggestion]:
         """Get all tool suggestions."""
         if tool_type:
             return [s for s in self.suggestions if s.tool_type == tool_type]
         return self.suggestions
 
-    def convert_to_improvements(
-        self, suggestions: list[ToolSuggestion]
-    ) -> list[dict[str, Any]]:
+    def convert_to_improvements(self, suggestions: list[ToolSuggestion]) -> list[dict[str, Any]]:
         """Convert tool suggestions to improvement data."""
         return [
             {

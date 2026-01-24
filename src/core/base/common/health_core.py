@@ -17,11 +17,13 @@ Core logic for system health monitoring and diagnostics.
 """
 
 from __future__ import annotations
+
 import subprocess
 import sys
 import time
 from pathlib import Path
 from typing import Dict, List, Optional
+
 from .base_core import BaseCore
 from .models import AgentHealthCheck, HealthStatus
 
@@ -29,6 +31,7 @@ try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class HealthCore(BaseCore):
     """
@@ -44,27 +47,17 @@ class HealthCore(BaseCore):
         """Check if git is installed and responsive."""
         start_time = time.time()
         try:
-            result = subprocess.run(
-                ["git", "--version"],
-                capture_output=True,
-                text=True,
-                timeout=5,
-                check=False
-            )
+            result = subprocess.run(["git", "--version"], capture_output=True, text=True, timeout=5, check=False)
             ms = (time.time() - start_time) * 1000
             if result.returncode == 0:
                 return AgentHealthCheck(
                     agent_name="git",
                     status=HealthStatus.HEALTHY,
                     response_time_ms=ms,
-                    details={"version": result.stdout.strip()}
+                    details={"version": result.stdout.strip()},
                 )
         except (subprocess.SubprocessError, OSError) as e:
-            return AgentHealthCheck(
-                agent_name="git",
-                status=HealthStatus.UNHEALTHY,
-                error_message=str(e)
-            )
+            return AgentHealthCheck(agent_name="git", status=HealthStatus.UNHEALTHY, error_message=str(e))
         return AgentHealthCheck(agent_name="git", status=HealthStatus.UNHEALTHY)
 
     def check_python(self) -> AgentHealthCheck:
@@ -73,7 +66,7 @@ class HealthCore(BaseCore):
             agent_name="python",
             status=HealthStatus.HEALTHY,
             response_time_ms=0,
-            details={"version": sys.version, "executable": sys.executable}
+            details={"version": sys.version, "executable": sys.executable},
         )
 
     def check_fleet_health(self, agent_heartbeats: Dict[str, float]) -> List[str]:

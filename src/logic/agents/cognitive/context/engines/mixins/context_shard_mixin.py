@@ -24,10 +24,10 @@ class ContextShardMixin:
     def _ensure_shard_loaded(self, category: str) -> None:
         """Lazy load a specific shard or sub-shards if they exist."""
         if not hasattr(self, "_loaded_shards") or category in self._loaded_shards:
-            return None
+            return
 
         if not hasattr(self, "shard_dir") or not hasattr(self, "memory"):
-            return None
+            return
 
         # Check for sub-shards (Phase 104)
         shard_files = list(self.shard_dir.glob(f"{category}_*.json"))
@@ -38,7 +38,7 @@ class ContextShardMixin:
                 try:
                     shard_data = json.loads(s_file.read_text(encoding="utf-8"))
                     self.memory[category].update(shard_data)
-                except Exception as e:
+                except (json.JSONDecodeError, IOError, OSError) as e:
                     logging.warning(f"Failed to load sub-shard {s_file.name}: {e}")
             logging.info(
                 f"Context: Loaded {len(shard_files)} sub-shards for '{category}'."
@@ -50,7 +50,7 @@ class ContextShardMixin:
                     shard_data = json.loads(shard_file.read_text(encoding="utf-8"))
                     self.memory[category] = shard_data
                     logging.info(f"Context: Lazy-loaded shard '{category}' from disk.")
-                except Exception as e:
+                except (json.JSONDecodeError, IOError, OSError) as e:
                     logging.warning(f"Failed to load shard {category}: {e}")
 
         self._loaded_shards.add(category)
@@ -66,12 +66,13 @@ class ContextShardMixin:
                 # Filter out what's in the default file
                 self.memory.update(data)
                 self._loaded_shards.add("default")
-            except Exception as e:
+            except (json.JSONDecodeError, IOError, OSError) as e:
                 logging.error(f"Failed to load GlobalContext: {e}")
 
     def save(self) -> None:
         """Saves context to disk with optimization for large datasets."""
-        if not hasattr(self, "core") or not hasattr(self, "memory") or not hasattr(self, "context_file") or not hasattr(self, "shard_dir"):
+        if not hasattr(self, "core") or not hasattr(self, "memory") or \
+           not hasattr(self, "context_file") or not hasattr(self, "shard_dir"):
             return
 
         try:
@@ -102,7 +103,7 @@ class ContextShardMixin:
                         json.dumps(shard_data, indent=2), encoding="utf-8"
                     )
 
-        except Exception as e:
+        except (IOError, OSError, RuntimeError, ValueError) as e:
             logging.error(f"Failed to save GlobalContext: {e}")
 
     def trigger_rebalance(self) -> None:

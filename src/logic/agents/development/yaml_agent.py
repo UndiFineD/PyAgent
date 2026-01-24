@@ -15,10 +15,13 @@
 
 """Agent specializing in YAML configuration files."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
+from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
-from src.core.base.common.base_utilities import create_main_function
 
 __version__ = VERSION
 
@@ -42,7 +45,5 @@ class YamlAgent(CoderAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        YamlAgent, "YAML Agent", "Path to YAML file (.yaml, .yml)"
-    )
+    main = create_main_function(YamlAgent, "YAML Agent", "Path to YAML file (.yaml, .yml)")
     main()

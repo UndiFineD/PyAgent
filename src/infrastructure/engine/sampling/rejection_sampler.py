@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # PyAgent Phase 44: Rejection Sampler for Speculative Decoding
 # Implements vLLM's rejection sampling with acceptance/recovery mechanisms
@@ -31,6 +45,7 @@ if TYPE_CHECKING:
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -38,22 +53,25 @@ except ImportError:
 
 class RejectionStrategy(Enum):
     """Rejection strategy determines how strict the acceptance criteria is."""
-    STANDARD = auto()    # Standard rejection sampling (paper algorithm)
-    STRICT = auto()      # Stricter acceptance, higher quality
-    LENIENT = auto()     # More lenient, higher acceptance rate
-    ADAPTIVE = auto()    # Adapts based on running statistics
+
+    STANDARD = auto()  # Standard rejection sampling (paper algorithm)
+    STRICT = auto()  # Stricter acceptance, higher quality
+    LENIENT = auto()  # More lenient, higher acceptance rate
+    ADAPTIVE = auto()  # Adapts based on running statistics
 
 
 class RecoveryMode(Enum):
     """How to recover when draft tokens are rejected."""
-    RESAMPLE = auto()    # Resample from adjusted distribution
-    TRUNCATE = auto()    # Simply truncate at first rejection
-    FALLBACK = auto()    # Fall back to greedy from target
+
+    RESAMPLE = auto()  # Resample from adjusted distribution
+    TRUNCATE = auto()  # Simply truncate at first rejection
+    FALLBACK = auto()  # Fall back to greedy from target
 
 
 @dataclass(frozen=True)
 class RejectionConfig:
     """Configuration for rejection sampler."""
+
     strategy: RejectionStrategy = RejectionStrategy.STANDARD
     recovery_mode: RecoveryMode = RecoveryMode.RESAMPLE
     temperature: float = 1.0
@@ -72,6 +90,7 @@ class RejectionConfig:
 @dataclass
 class AcceptanceStats:
     """Statistics for rejection sampling."""
+
     total_proposals: int = 0
     total_accepted: int = 0
     total_recovered: int = 0
@@ -89,10 +108,7 @@ class AcceptanceStats:
     @property
     def position_rates(self) -> list[float]:
         """Acceptance rate per position."""
-        return [
-            a / p if p > 0 else 0.0
-            for a, p in zip(self.position_acceptance, self.position_proposals)
-        ]
+        return [a / p if p > 0 else 0.0 for a, p in zip(self.position_acceptance, self.position_proposals)]
 
     def update(self, accepted: int, proposed: int, recovered: int = 0, bonus: int = 0) -> None:
         """Update statistics with new batch."""
@@ -123,12 +139,13 @@ class AcceptanceStats:
 @dataclass
 class RejectionOutput:
     """Output from rejection sampling."""
-    accepted_tokens: list[int]      # Tokens that were accepted
-    recovered_tokens: list[int]     # Tokens recovered from adjusted distribution
-    bonus_token: int | None         # Bonus token from target (if all accepted)
+
+    accepted_tokens: list[int]  # Tokens that were accepted
+    recovered_tokens: list[int]  # Tokens recovered from adjusted distribution
+    bonus_token: int | None  # Bonus token from target (if all accepted)
     num_accepted: int
     num_recovered: int
-    acceptance_mask: list[bool]     # Per-position acceptance mask
+    acceptance_mask: list[bool]  # Per-position acceptance mask
 
     @property
     def all_tokens(self) -> list[int]:
@@ -213,16 +230,10 @@ class RejectionSampler:
             random_numbers = np.random.random(num_drafts + 1).astype(np.float32)
 
         # Use Rust acceleration if available
-        if HAS_RUST and hasattr(rust_core, 'rejection_sample_verify_rust'):
-            return self._verify_rust(
-                draft_tokens, draft_probs, target_probs,
-                bonus_probs, random_numbers
-            )
+        if HAS_RUST and hasattr(rust_core, "rejection_sample_verify_rust"):
+            return self._verify_rust(draft_tokens, draft_probs, target_probs, bonus_probs, random_numbers)
 
-        return self._verify_python(
-            draft_tokens, draft_probs, target_probs,
-            bonus_probs, random_numbers
-        )
+        return self._verify_python(draft_tokens, draft_probs, target_probs, bonus_probs, random_numbers)
 
     def _verify_python(
         self,
@@ -354,10 +365,7 @@ class RejectionSampler:
     ) -> RejectionOutput:
         """Rust-accelerated verification (placeholder for Phase 44 Rust implementation)."""
         # Fall back to Python until Rust implementation is added
-        return self._verify_python(
-            draft_tokens, draft_probs, target_probs,
-            bonus_probs, random_numbers
-        )
+        return self._verify_python(draft_tokens, draft_probs, target_probs, bonus_probs, random_numbers)
 
     def batch_verify(
         self,
@@ -378,12 +386,14 @@ class RejectionSampler:
         for drafts, d_probs, t_probs, b_probs in zip(
             batch_draft_tokens, batch_draft_probs, batch_target_probs, batch_bonus_probs
         ):
-            results.append(self.verify_and_sample(
-                draft_tokens=drafts,
-                draft_probs=d_probs,
-                target_probs=t_probs,
-                bonus_probs=b_probs,
-            ))
+            results.append(
+                self.verify_and_sample(
+                    draft_tokens=drafts,
+                    draft_probs=d_probs,
+                    target_probs=t_probs,
+                    bonus_probs=b_probs,
+                )
+            )
 
         return results
 
@@ -465,16 +475,17 @@ class StreamingRejectionSampler(RejectionSampler):
             target_probs: Full target probs if recovery needed
             bonus_probs: Bonus token probs if all accepted
         """
-        accepted_tokens = [
-            t for t, a in zip(self._pending_tokens, self._pending_acceptance) if a
-        ]
+        accepted_tokens = [t for t, a in zip(self._pending_tokens, self._pending_acceptance) if a]
         recovered_tokens: list[int] = []
         bonus_token = None
 
         # Handle recovery
         if self._first_rejection_idx is not None:
-            if (self.config.recovery_mode == RecoveryMode.RESAMPLE and
-                draft_probs is not None and target_probs is not None):
+            if (
+                self.config.recovery_mode == RecoveryMode.RESAMPLE
+                and draft_probs is not None
+                and target_probs is not None
+            ):
                 recovered = self._resample_from_adjusted(
                     target_probs[self._first_rejection_idx],
                     draft_probs[self._first_rejection_idx],
@@ -533,10 +544,10 @@ class BatchRejectionSampler:
 
     def batch_verify_vectorized(
         self,
-        draft_tokens: NDArray[np.int32],      # [batch, max_spec_len]
-        draft_probs: NDArray[np.float32],     # [batch, max_spec_len, vocab]
-        target_probs: NDArray[np.float32],    # [batch, max_spec_len, vocab]
-        seq_lens: NDArray[np.int32],          # [batch]
+        draft_tokens: NDArray[np.int32],  # [batch, max_spec_len]
+        draft_probs: NDArray[np.float32],  # [batch, max_spec_len, vocab]
+        target_probs: NDArray[np.float32],  # [batch, max_spec_len, vocab]
+        seq_lens: NDArray[np.int32],  # [batch]
         bonus_probs: NDArray[np.float32] | None = None,  # [batch, vocab]
     ) -> tuple[NDArray[np.int32], NDArray[np.bool_], NDArray[np.int32]]:
         """
@@ -549,9 +560,12 @@ class BatchRejectionSampler:
         vocab_size = draft_probs.shape[-1]
 
         # Use Rust if available
-        if HAS_RUST and hasattr(rust_core, 'batch_rejection_verify_rust'):
+        if HAS_RUST and hasattr(rust_core, "batch_rejection_verify_rust"):
             return rust_core.batch_rejection_verify_rust(
-                draft_tokens, draft_probs, target_probs, seq_lens,
+                draft_tokens,
+                draft_probs,
+                target_probs,
+                seq_lens,
                 bonus_probs if bonus_probs is not None else np.zeros((batch_size, vocab_size), dtype=np.float32),
             )
 
