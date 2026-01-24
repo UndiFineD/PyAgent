@@ -17,20 +17,22 @@
 """Utility classes for BaseAgent framework."""
 
 from __future__ import annotations
-import json
-import logging
+
 import argparse
 import inspect
+import json
+import logging
 import os
-import sys
 import re
-from pathlib import Path
-from typing import Any, TYPE_CHECKING
+import sys
 from collections.abc import Callable
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
 from ..lifecycle.version import VERSION
+from .file_system_core import FileSystemCore
 from .shell_core import ShellCore
 from .workspace_core import WorkspaceCore
-from .file_system_core import FileSystemCore
 
 if TYPE_CHECKING:
     from .agent import BaseAgent
@@ -102,7 +104,7 @@ def bulk_replace(
                 results[str(path)] = True
             else:
                 results[str(path)] = False
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error("BulkReplace: Failed to process %s: %s", path, e)
 
     return results
@@ -129,8 +131,8 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     Can be used as @as_tool or @as_tool(priority=10).
     """
     # pylint: disable=import-outside-toplevel
-    from functools import wraps
     import time
+    from functools import wraps
 
     def decorator(func: Callable) -> Callable:
         if inspect.iscoroutinefunction(func):
@@ -138,27 +140,18 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
             @wraps(func)
             async def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
                 # Phase 108: Enhanced Traceability
-                logging.debug(
-                    "Executing async tool %s on %s", func.__name__, self.__class__.__name__
-                )
+                logging.debug("Executing async tool %s on %s", func.__name__, self.__class__.__name__)
 
                 result = await func(self, *args, **kwargs)
 
                 # Autonomous Logic Harvesting:
-                if (
-                    hasattr(self, "fleet")
-                    and self.fleet
-                    and hasattr(self.fleet, "recorder")
-                ):
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
                     try:
                         shard_result = str(result)
                         if len(shard_result) > 2000:
                             shard_result = shard_result[:2000] + "... [TRUNCATED]"
 
-                        prompt_trace = (
-                            f"TOOL_EXECUTION: {func.__name__}\n"
-                            f"Args: {args}\nKwargs: {kwargs}"
-                        )
+                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
 
                         self.fleet.recorder.record_interaction(
                             provider="agent_tool",
@@ -171,7 +164,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                                 "timestamp_ms": int(time.time() * 1000),
                             },
                         )
-                    except Exception as e: # pylint: disable=broad-exception-caught
+                    except Exception as e:  # pylint: disable=broad-exception-caught
                         logging.debug("Failed to record tool interaction: %s", e)
 
                 return result
@@ -181,27 +174,18 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
             def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
                 # Phase 108: Enhanced Traceability
 
-                logging.debug(
-                    "Executing tool %s on %s", func.__name__, self.__class__.__name__
-                )
+                logging.debug("Executing tool %s on %s", func.__name__, self.__class__.__name__)
 
                 result = func(self, *args, **kwargs)
 
                 # Autonomous Logic Harvesting:
-                if (
-                    hasattr(self, "fleet")
-                    and self.fleet
-                    and hasattr(self.fleet, "recorder")
-                ):
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
                     try:
                         shard_result = str(result)
                         if len(shard_result) > 2000:
                             shard_result = shard_result[:2000] + "... [TRUNCATED]"
 
-                        prompt_trace = (
-                            f"TOOL_EXECUTION: {func.__name__}\n"
-                            f"Args: {args}\nKwargs: {kwargs}"
-                        )
+                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
 
                         self.fleet.recorder.record_interaction(
                             provider="agent_tool",
@@ -214,7 +198,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                                 "timestamp_ms": int(time.time() * 1000),
                             },
                         )
-                    except Exception as e: # pylint: disable=broad-exception-caught
+                    except Exception as e:  # pylint: disable=broad-exception-caught
                         logging.debug("Failed to record tool interaction: %s", e)
 
                 return result
@@ -236,9 +220,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     return decorator
 
 
-def create_main_function(
-    agent_class: type[BaseAgent], description: str, context_help: str
-) -> Callable[[], None]:
+def create_main_function(agent_class: type[BaseAgent], description: str, context_help: str) -> Callable[[], None]:
     """Create a main function for an agent class."""
 
     def main() -> None:
@@ -278,9 +260,7 @@ def create_main_function(
             help="Output result as JSON (useful for n8n/automation integration)",
         )
         parser.add_argument("--context", required=True, help=context_help)
-        parser.add_argument(
-            "--prompt", required=True, help="Prompt for improving the content"
-        )
+        parser.add_argument("--prompt", required=True, help="Prompt for improving the content")
         parser.add_argument(
             "--delegate",
             help="Agent type to delegate a sub-task to (e.g., SearchAgent)",
@@ -308,9 +288,7 @@ def create_main_function(
         if getattr(args, "no_cascade", False) or os.environ.get("DV_AGENT_PARENT"):
             # pylint: disable=protected-access
             agent._no_cascade = True
-            logging.info(
-                "No-cascade mode enabled for this agent (prevents spawning other agents)"
-            )
+            logging.info("No-cascade mode enabled for this agent (prevents spawning other agents)")
 
         # Set strategy based on argument
         if args.strategy == "cot":
@@ -336,13 +314,9 @@ def create_main_function(
             sys.stdout.write(json.dumps(result, indent=2) + "\n")
         else:
             if diff:
-                logging.info(
-                    "%s updated:", agent_class.__name__.replace('Agent', '').lower()
-                )
+                logging.info("%s updated:", agent_class.__name__.replace("Agent", "").lower())
                 logging.info(diff)
             else:
-                logging.info(
-                    "No changes made to %s.", agent_class.__name__.replace('Agent', '').lower()
-                )
+                logging.info("No changes made to %s.", agent_class.__name__.replace("Agent", "").lower())
 
     return main

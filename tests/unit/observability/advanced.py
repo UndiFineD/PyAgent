@@ -2,41 +2,37 @@
 """Test classes from test_agent_stats.py - advanced module."""
 
 from __future__ import annotations
+from typing import Any, Self
 from sqlite3 import Connection
 from sqlite3 import Cursor
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import List, Dict
 import time
 import json
-from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
-    class agent_sys_path:
-        def __enter__(self) -> Self: 
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
+    class agent_sys_path:
+        def __enter__(self) -> Self:
             return self
-        def __exit__(self, *args) -> None: 
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestTrendAnalysisAdvanced(unittest.TestCase):
     """Tests for trend analysis and change tracking."""
@@ -70,7 +66,11 @@ class TestTrendAnalysisAdvanced(unittest.TestCase):
             {"date": "2025-12-16", "errors": 5},
         ]
 
-        trend: str = "decreasing" if history[-1]["errors"] < history[0]["errors"] else "increasing"
+        trend: str = (
+            "decreasing"
+            if history[-1]["errors"] < history[0]["errors"]
+            else "increasing"
+        )
         assert trend == "decreasing"
 
     def test_generate_trend_report(self) -> None:
@@ -87,14 +87,13 @@ class TestTrendAnalysisAdvanced(unittest.TestCase):
             "change": {
                 "files": stats_history[-1]["files"] - stats_history[-2]["files"],
                 "improvements": (
-                    stats_history[-1]["improvements"] -
-                    stats_history[-2]["improvements"]
+                    stats_history[-1]["improvements"]
+                    - stats_history[-2]["improvements"]
                 ),
-            }
+            },
         }
 
         assert report["change"]["files"] == 25
-
 
 
 class TestVisualizationAdvanced(unittest.TestCase):
@@ -105,10 +104,7 @@ class TestVisualizationAdvanced(unittest.TestCase):
         data: Dict[str, int] = {"python": 50, "javascript": 30, "bash": 20}
         max_val: int = max(data.values())
 
-        bars: Dict[str, str] = {
-            k: "█" * (v * 20 // max_val)
-            for k, v in data.items()
-        }
+        bars: Dict[str, str] = {k: "█" * (v * 20 // max_val) for k, v in data.items()}
 
         assert len(bars["python"]) > len(bars["javascript"])
 
@@ -147,12 +143,13 @@ class TestVisualizationAdvanced(unittest.TestCase):
         for key in current:
             current_val: int = current[key]
             prev_val: int = previous[key]
-            percent: float | int = ((current_val - prev_val) / prev_val) * 100 if prev_val else 0
+            percent: float | int = (
+                ((current_val - prev_val) / prev_val) * 100 if prev_val else 0
+            )
             comparison[key] = f"{percent:+.1f}%"
 
         assert "+" in comparison["metric_a"]
         assert "-" in comparison["metric_b"]
-
 
 
 class TestExportFormatsAdvanced(unittest.TestCase):
@@ -226,14 +223,15 @@ class TestExportFormatsAdvanced(unittest.TestCase):
         cursor.execute("CREATE TABLE stats (file TEXT, errors INTEGER)")
 
         for stat in stats:
-            cursor.execute("INSERT INTO stats VALUES (?, ?)", (stat["file"], stat["errors"]))
+            cursor.execute(
+                "INSERT INTO stats VALUES (?, ?)", (stat["file"], stat["errors"])
+            )
 
         cursor.execute("SELECT COUNT(*) FROM stats")
         count = cursor.fetchone()[0]
 
         assert count == 2
         conn.close()
-
 
 
 class TestAggregationAdvanced(unittest.TestCase):
@@ -264,9 +262,11 @@ class TestAggregationAdvanced(unittest.TestCase):
             {"agent": "tester", "improvements": 8},
         ]
 
-        by_agent = {}
+        by_agent: dict[Any, Any] = {}
         for entry in entries:
-            by_agent[entry["agent"]] = by_agent.get(entry["agent"], 0) + entry["improvements"]
+            by_agent[entry["agent"]] = (
+                by_agent.get(entry["agent"], 0) + entry["improvements"]
+            )
 
         assert by_agent["coder"] == 15
 
@@ -278,12 +278,11 @@ class TestAggregationAdvanced(unittest.TestCase):
             {"date": "2025-12-15", "issues": 2},
         ]
 
-        by_date = {}
+        by_date: dict[Any, Any] = {}
         for entry in entries:
             by_date[entry["date"]] = by_date.get(entry["date"], 0) + entry["issues"]
 
         assert by_date["2025-12-16"] == 8
-
 
 
 class TestStatisticalSummariesAdvanced(unittest.TestCase):
@@ -321,7 +320,6 @@ class TestStatisticalSummariesAdvanced(unittest.TestCase):
 
         assert p50 == 50
         assert p95 > 90  # Allow for rounding differences
-
 
 
 class TestBenchmarkingAdvanced(unittest.TestCase):
@@ -365,13 +363,12 @@ class TestBenchmarkingAdvanced(unittest.TestCase):
         assert stats["coder"]["avg"] > stats["tester"]["avg"]
 
 
-
 class TestCachingAdvanced(unittest.TestCase):
     """Tests for caching performance optimizations."""
 
     def test_cache_computed_stats(self) -> None:
         """Test caching computed statistics."""
-        cache = {}
+        cache: dict[Any, Any] = {}
 
         def get_stats(file_id: str) -> Dict[str, int]:
             if file_id in cache:
@@ -399,7 +396,6 @@ class TestCachingAdvanced(unittest.TestCase):
 
     def test_cache_expiration(self) -> None:
         """Test cache expiration."""
-        import time
 
         cache_items = {
             "file1": {"data": "stats", "timestamp": time.time()},
@@ -410,11 +406,9 @@ class TestCachingAdvanced(unittest.TestCase):
         current_time: float = time.time()
 
         expired = {
-            k: v for k, v in cache_items.items()
+            k: v
+            for k, v in cache_items.items()
             if current_time - v["timestamp"] > max_age
         }
 
         assert len(expired) == 0
-
-
-

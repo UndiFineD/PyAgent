@@ -48,7 +48,7 @@ class SpeculativeVerifier:
 
     def __init__(
         self, vocab_size: int, method: AcceptanceMethod = AcceptanceMethod.SPECULATIVE, temperature: float = 1.0
-    ) -> None:
+    ):
         self.vocab_size = vocab_size
         self.method = method
         self.temperature = temperature
@@ -90,8 +90,8 @@ class SpeculativeVerifier:
     ) -> VerificationResult:
         """Standard speculative sampling verification."""
         target_probs = []
-        for logits_raw in target_logits:
-            logits = logits_raw / self.temperature
+        for i in range(len(target_logits)):
+            logits = target_logits[i] / self.temperature
             probs = np.exp(logits - np.max(logits))
             target_probs.append(probs / np.sum(probs))
 

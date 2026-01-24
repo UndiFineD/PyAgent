@@ -22,11 +22,14 @@ Core logic for file priority and task ordering.
 """
 
 from __future__ import annotations
+
 import fnmatch
 from pathlib import Path
 from typing import List, Optional
+
 from .base_core import BaseCore
 from .models import FilePriority, FilePriorityConfig
+
 
 class PriorityCore(BaseCore):
     """

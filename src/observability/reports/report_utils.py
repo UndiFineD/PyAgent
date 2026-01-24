@@ -22,16 +22,13 @@ from __future__ import annotations
 import ast
 import re
 from pathlib import Path
-from src.core.base.common.workspace_core import WorkspaceCore
-from src.core.base.common.analysis_core import AnalysisCore
-from src.core.base.common.file_system_core import FileSystemCore
 
 from src.core.base.common.analysis_core import AnalysisCore
 from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.common.workspace_core import WorkspaceCore
 from src.core.base.lifecycle.version import VERSION
 
-__version__: str = VERSION
+__version__ = VERSION
 
 # Constants used by helpers
 _workspace = WorkspaceCore()
@@ -51,7 +48,7 @@ def _is_pytest_test_file(path: Path) -> bool:
 
 def _looks_like_pytest_import_problem(path: Path) -> str | None:
     """Check if filename has characters that cause pytest import issues."""
-    name: str = path.name
+    name = path.name
 
     if not _is_pytest_test_file(path):
         return None
@@ -70,18 +67,18 @@ def _find_imports(tree: ast.AST) -> list[str]:
     # We keep this for compatibility if it's used elsewhere with a pre-parsed tree.
     imports: list[str] = []
 
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.Import):
-            for alias: ast.alias in node.names:
+            for alias in node.names:
                 imports.append(alias.name)
         elif isinstance(node, ast.ImportFrom):
-            mod: str = node.module or ""
+            mod = node.module or ""
             imports.append(mod)
     # De-dupe while preserving order
 
     seen: set[str] = set()
     out: list[str] = []
-    for item: str in imports:
+    for item in imports:
         if item not in seen:
             seen.add(item)
             out.append(item)
@@ -102,38 +99,6 @@ def _placeholder_test_note(path: Path, source: str) -> str | None:
     return None
 
 
-def export_to_html(content: str, title: str = "PyAgent Report") -> str:
-    """Convert markdown content to a full HTML document."""
-    try:
-        import markdown
-    except ImportError:
-        return f"<pre>{content}</pre>"
-
-    html_body: str = markdown.markdown(content, extensions=["extra", "codehilite"])
-
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title}</title>
-    <style>
-        body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 2rem; color: #333; }}
-        pre {{ background: #f4f4f4; padding: 1rem; border-radius: 4px; overflow-x: auto; }}
-        code {{ font-family: 'Consolas', 'Monaco', monospace; background: #f4f4f4; padding: 0.2rem 0.4rem; border-radius: 3px; }}
-        h1, h2, h3 {{ color: #2c3e50; }}
-        table {{ border-collapse: collapse; width: 100%; margin: 1rem 0; }}
-        th, td {{ border: 1px solid #ddd; padding: 0.5rem; text-align: left; }}
-        th {{ background-color: #f8f9fa; }}
-        blockquote {{ border-left: 4px solid #ddd; padding-left: 1rem; margin-left: 0; color: #666; }}
-    </style>
-</head>
-<body>
-{html_body}
-</body>
-</html>"""
-
-
 def _rel(path: Path) -> str:
     """Get relative path string for display."""
     return _workspace.get_relative_path(path)
@@ -143,23 +108,23 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
     """Find potential issues via lightweight static analysis."""
     issues: list[str] = []
     # 1. Mutable defaults
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            for default: ast.expr in node.args.defaults:
+            for default in node.args.defaults:
                 if isinstance(default, (ast.List, ast.Dict, ast.Set)):
                     issues.append(f"Function `{node.name}` has a mutable default argument (list / dict / set).")
                     break  # One per function is enough
     # 2. Bare excepts
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler) and node.type is None:
-            issues.append("Contains bare `except` clause.")
+            issues.append("Contains bare `except Exception:` clause (catches SystemExit / KeyboardInterrupt).")
     # 3. Missing type hints
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
             # Check args
-            missing_arg_type: bool = any(arg.annotation is None for arg: ast.arg in node.args.args if arg.arg != "self")
+            missing_arg_type = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
             # Check return
-            missing_return_type: bool = node.returns is None
+            missing_return_type = node.returns is None
             if missing_arg_type or missing_return_type:
                 issues.append(f"Function `{node.name}` is missing type annotations.")
     # 4. TODOs

@@ -16,16 +16,19 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from datetime import datetime, timezone, UTC
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+
 import json
 import logging
 import threading
 import uuid
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class AuditLogger:
     """Logs backend requests for audit and compliance.

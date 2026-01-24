@@ -29,8 +29,7 @@ class PrivacyCore:
     Provides high-speed text redaction and log scanning for PII.
     """
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        _ = (args, kwargs)
+    def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("PrivacyCore initialized.")
 
@@ -56,8 +55,8 @@ class PrivacyCore:
         """Recursively scan and redact data structures."""
         if isinstance(data, str):
             return PrivacyCore.redact_text(data)
-        if isinstance(data, list):
+        elif isinstance(data, list):
             return [PrivacyCore.scan_log_entry(item) for item in data]
-        if isinstance(data, dict):
+        elif isinstance(data, dict):
             return {k: PrivacyCore.scan_log_entry(v) for k, v in data.items()}
         return data

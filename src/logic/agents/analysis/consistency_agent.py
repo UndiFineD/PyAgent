@@ -16,12 +16,14 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.ConsistencyIssue import ConsistencyIssue
-from typing import Dict, List
+
 import re
 
+from src.core.base.common.types.consistency_issue import ConsistencyIssue
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class ConsistencyAgent:
     """Checks code consistency across the codebase.
@@ -67,17 +69,19 @@ class ConsistencyAgent:
         for path, content in file_contents.items():
             funcs = re.findall(r"def\s+([a-zA-Z_]\w*)", content)
             for func in funcs:
-                if '_' in func and func[0].islower():
+                if "_" in func and func[0].islower():
                     snake_case_files.append(f"{path}:{func}")
                 elif func[0].isupper() or (func[0].islower() and any(c.isupper() for c in func)):
                     camel_case_files.append(f"{path}:{func}")
         if snake_case_files and camel_case_files:
-            self.issues.append(ConsistencyIssue(
-                issue_type="naming_convention",
-                description="Mixed naming conventions detected",
-                occurrences=snake_case_files[:3] + camel_case_files[:3],
-                recommended_style="snake_case for functions (PEP 8)"
-            ))
+            self.issues.append(
+                ConsistencyIssue(
+                    issue_type="naming_convention",
+                    description="Mixed naming conventions detected",
+                    occurrences=snake_case_files[:3] + camel_case_files[:3],
+                    recommended_style="snake_case for functions (PEP 8)",
+                )
+            )
 
     def _check_import_consistency(self, file_contents: dict[str, str]) -> None:
         """Check import statement consistency.
@@ -93,9 +97,11 @@ class ConsistencyAgent:
             if re.search(r"^from\s+[a-zA-Z]", content, re.M):
                 absolute_imports.append(path)
         if absolute_imports and relative_imports:
-            self.issues.append(ConsistencyIssue(
-                issue_type="import_style",
-                description="Mixed import styles (absolute and relative)",
-                occurrences=absolute_imports[:3] + relative_imports[:3],
-                recommended_style="Prefer absolute imports (PEP 8)"
-            ))
+            self.issues.append(
+                ConsistencyIssue(
+                    issue_type="import_style",
+                    description="Mixed import styles (absolute and relative)",
+                    occurrences=absolute_imports[:3] + relative_imports[:3],
+                    recommended_style="Prefer absolute imports (PEP 8)",
+                )
+            )

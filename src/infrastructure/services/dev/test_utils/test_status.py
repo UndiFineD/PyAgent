@@ -16,12 +16,17 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from enum import Enum
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class TestStatus(Enum):
+    """Enumeration for test execution status."""
+
     __test__ = False
     """Status of a test execution."""
 

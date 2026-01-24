@@ -19,15 +19,18 @@ Provides REST API and WebSocket interfaces for real-time telemetry and managemen
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Dict, Any
+
 import json
 import logging
-from pathlib import Path
 from datetime import datetime
-from src.core.base.managers import HealthChecker
+from pathlib import Path
+from typing import Any
+
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+
+from src.core.base.common.base_managers import HealthChecker
+from src.core.base.lifecycle.version import VERSION
 
 # Internal Imports
 __version__ = VERSION
@@ -43,7 +46,7 @@ GENERATED_DIR = WORKSPACE_ROOT / "src" / "generated"
 app = FastAPI(
     title="PyAgent Unified Desktop API",
     description="Bridge for PyAgent React/Web frontend",
-    version=VERSION
+    version=VERSION,
 )
 
 # Global Manager Instances
@@ -58,8 +61,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class ConnectionManager:
     """Manages active WebSocket connections for real-time telemetry."""
+
     def __init__(self) -> None:
         self.active_connections: list[WebSocket] = []
 
@@ -73,7 +78,8 @@ class ConnectionManager:
 
     async def broadcast(self, message: dict[str, Any]) -> None:
         """Send a JSON broadcast to all connected clients."""
-        payload = message # message is already a dict, send_json will handle it
+
+        payload = message  # message is already a dict, send_json will handle it
         for connection in self.active_connections:
             try:
                 await connection.send_json(payload)
@@ -81,20 +87,25 @@ class ConnectionManager:
                 # Connection might be dead
                 pass
 
+
 manager = ConnectionManager()
+
 
 @app.get("/api/version")
 async def get_version() -> dict[str, str]:
     """Returns the current PyAgent version."""
     return {"version": VERSION}
 
+
 @app.get("/api/health")
 async def get_health() -> dict[str, Any]:
     """Returns the system health status from the HealthChecker manager."""
+
     try:
         return health_checker.check()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
+
 
 @app.get("/api/status")
 async def get_status() -> dict[str, Any]:
@@ -104,8 +115,9 @@ async def get_status() -> dict[str, Any]:
         "agent": "PyAgent",
         "version": VERSION,
         "timestamp": datetime.now().isoformat(),
-        "workspace": str(WORKSPACE_ROOT)
+        "workspace": str(WORKSPACE_ROOT),
     }
+
 
 @app.get("/api/logs")
 async def get_logs(limit: int = 100) -> list[str]:
@@ -115,7 +127,7 @@ async def get_logs(limit: int = 100) -> list[str]:
         if not EPISODIC_LOG_FILE.exists():
             return ["No log files found."]
         return [f"Log file not found at {AGENT_LOG_FILE}."]
-    
+
     try:
         with open(AGENT_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
@@ -123,13 +135,15 @@ async def get_logs(limit: int = 100) -> list[str]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
 
+
 @app.get("/api/thoughts")
 async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
     """Retrieve the latest episodic memories (agent thoughts/actions)."""
     if not EPISODIC_LOG_FILE.exists():
         return []
-    
+
     thoughts = []
+
     try:
         with open(EPISODIC_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
@@ -138,8 +152,9 @@ async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
                     thoughts.append(json.loads(line))
     except (json.JSONDecodeError, Exception) as e:
         raise HTTPException(status_code=500, detail=f"Error parsing thoughts: {str(e)}")
-    
-    return thoughts[::-1] # Newest first
+
+    return thoughts[::-1]  # Newest first
+
 
 @app.get("/api/artifacts")
 async def list_artifacts() -> list[dict[str, Any]]:
@@ -147,23 +162,26 @@ async def list_artifacts() -> list[dict[str, Any]]:
     artifacts = []
     monitored_paths = [
         {"type": "generated", "path": GENERATED_DIR},
-        {"type": "screenshot", "path": SCREENSHOTS_DIR}
+        {"type": "screenshot", "path": SCREENSHOTS_DIR},
     ]
-    
+
     for item in monitored_paths:
         p = item["path"]
         if p.exists() and p.is_dir():
             for entry in p.iterdir():
                 if entry.is_file():
                     stat = entry.stat()
-                    artifacts.append({
-                        "name": entry.name,
-                        "type": item["type"],
-                        "path": str(entry),
-                        "size": stat.st_size,
-                        "modified": stat.st_mtime
-                    })
+                    artifacts.append(
+                        {
+                            "name": entry.name,
+                            "type": item["type"],
+                            "path": str(entry),
+                            "size": stat.st_size,
+                            "modified": stat.st_mtime,
+                        }
+                    )
     return artifacts
+
 
 @app.websocket("/ws/telemetry")
 async def websocket_telemetry(websocket: WebSocket) -> None:
@@ -183,7 +201,9 @@ async def websocket_telemetry(websocket: WebSocket) -> None:
         manager.disconnect(websocket)
         logging.error(f"WebSocket error: {e}")
 
+
 if __name__ == "__main__":
     import uvicorn
+
     # Start the server on port 8000
     uvicorn.run(app, host="0.0.0.0", port=8000)

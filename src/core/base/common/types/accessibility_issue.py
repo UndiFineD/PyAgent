@@ -16,14 +16,18 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
-from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
-from src.core.base.types.WCAGLevel import WCAGLevel
+
 from dataclasses import dataclass
-from typing import Optional
+
+from src.core.base.common.types.accessibility_issue_type import \
+    AccessibilityIssueType
+from src.core.base.common.types.accessibility_severity import \
+    AccessibilitySeverity
+from src.core.base.common.types.wcag_level import WCAGLevel
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class AccessibilityIssue:
@@ -40,6 +44,7 @@ class AccessibilityIssue:
         suggested_fix: Suggested fix for the issue.
         auto_fixable: Whether the issue can be auto - fixed.
     """
+
     issue_type: AccessibilityIssueType
     severity: AccessibilitySeverity
     wcag_level: WCAGLevel

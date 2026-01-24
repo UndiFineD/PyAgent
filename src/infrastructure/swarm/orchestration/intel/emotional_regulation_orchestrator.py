@@ -13,17 +13,32 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import logging
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class EmotionalRegulationOrchestrator:
     """
     EmotionalRegulationOrchestrator recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
+        self.urgency = 0.5
         logging.info("EmotionalRegulationOrchestrator initialized (Placeholder).")
 
+    def set_vibe(self, urgency: float = 0.5, patience: float = 0.5) -> None:
+        """Sets the system-wide emotional vibe (Phase 36)."""
+        self.urgency = urgency
+        logging.info(f"Fleet Vibe Set: Urgency={urgency}, Patience={patience}")
+
+    def determine_execution_path(self, task_description: str) -> str:
+        """Determines execution path based on emotional context and task (Phase 36)."""
+        if self.urgency > 0.7:
+            return "FAST_PATH"
+        return "DEEP_REASONING_PATH"

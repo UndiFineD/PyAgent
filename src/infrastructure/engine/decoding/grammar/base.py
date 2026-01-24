@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -10,14 +24,7 @@ import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import (
-    Any,
-    Dict,
-    List,
-    Optional,
-    Set,
-    Union,
-)
+from typing import Any, Dict, List, Optional, Set, Union
 
 import numpy as np
 
@@ -28,12 +35,12 @@ class StructuredOutputOptions(Enum):
     Inspired by vLLM's StructuredOutputOptions.
     """
 
-    JSON = auto()           # JSON schema constraint
-    JSON_OBJECT = auto()    # Any valid JSON object
-    REGEX = auto()          # Regular expression pattern
-    CHOICE = auto()         # Multi-choice selection
-    GRAMMAR = auto()        # EBNF context-free grammar
-    STRUCTURAL_TAG = auto() # Tagged sections with schemas
+    JSON = auto()  # JSON schema constraint
+    JSON_OBJECT = auto()  # Any valid JSON object
+    REGEX = auto()  # Regular expression pattern
+    CHOICE = auto()  # Multi-choice selection
+    GRAMMAR = auto()  # EBNF context-free grammar
+    STRUCTURAL_TAG = auto()  # Tagged sections with schemas
 
 
 @dataclass

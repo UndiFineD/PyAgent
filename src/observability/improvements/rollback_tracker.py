@@ -16,14 +16,17 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .Improvement import Improvement
-from .RollbackRecord import RollbackRecord
-from datetime import datetime
-from typing import Dict, List, Optional
+
 import json
+from datetime import datetime
+
+from src.core.base.lifecycle.version import VERSION
+
+from .improvement import Improvement
+from .rollback_record import RollbackRecord
 
 __version__ = VERSION
+
 
 class RollbackTracker:
     """Tracks improvement rollbacks.
@@ -45,18 +48,15 @@ class RollbackTracker:
         Args:
             improvement: The improvement being applied.
         """
-        self.states[improvement.id] = json.dumps({
-            "status": improvement.status.value,
-            "updated_at": improvement.updated_at,
-            "votes": improvement.votes
-        })
+        self.states[improvement.id] = json.dumps(
+            {
+                "status": improvement.status.value,
+                "updated_at": improvement.updated_at,
+                "votes": improvement.votes,
+            }
+        )
 
-    def record_rollback(
-        self,
-        improvement: Improvement,
-        reason: str,
-        commit_hash: str = ""
-    ) -> RollbackRecord:
+    def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:
         """Record a rollback.
 
         Args:
@@ -72,18 +72,15 @@ class RollbackTracker:
             rollback_date=datetime.now().isoformat(),
             reason=reason,
             previous_state=self.states.get(improvement.id, ""),
-            rollback_commit=commit_hash
+            rollback_commit=commit_hash,
         )
         self.rollbacks.append(record)
         return record
 
-    def get_rollbacks(
-        self, improvement_id: str | None = None
-    ) -> list[RollbackRecord]:
+    def get_rollbacks(self, improvement_id: str | None = None) -> list[RollbackRecord]:
         """Get rollback records."""
         if improvement_id:
-            return [r for r in self.rollbacks
-                    if r.improvement_id == improvement_id]
+            return [r for r in self.rollbacks if r.improvement_id == improvement_id]
         return self.rollbacks
 
     def get_rollback_rate(self, total_completed: int) -> float:

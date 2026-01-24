@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class BranchComparison:
@@ -33,6 +35,7 @@ class BranchComparison:
         errors_only_in_b: Error IDs only in branch B.
         common_errors: Error IDs in both branches.
     """
+
     branch_a: str
     branch_b: str
     errors_only_in_a: list[str] = field(default_factory=lambda: [])

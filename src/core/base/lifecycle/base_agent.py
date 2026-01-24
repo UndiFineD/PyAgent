@@ -15,51 +15,44 @@
 """BaseAgent main class and core agent logic."""
 
 from __future__ import annotations
+
 import collections.abc
 import logging
-from pathlib import Path
 import subprocess
 import types
+from pathlib import Path
 from typing import Any
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     requests = None
     HAS_REQUESTS = False
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.models import (
-    CacheEntry,
-    EventType,
-    PromptTemplate,
-)
+from src.core.base.common.models import CacheEntry, EventType, PromptTemplate
+from src.core.base.execution.shell_executor import ShellExecutor
 from src.core.base.lifecycle.agent_core import BaseCore
 from src.core.base.lifecycle.base_agent_core import BaseAgentCore
-from src.core.base.execution.shell_executor import ShellExecutor
-
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.mixins.governance_mixin import GovernanceMixin
 # Import Mixins for Synaptic Modularization (Phase 317)
 from src.core.base.mixins.identity_mixin import IdentityMixin
-from src.core.base.mixins.persistence_mixin import PersistenceMixin
 from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
-from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
-from src.core.base.mixins.governance_mixin import GovernanceMixin
-from src.core.base.mixins.reflection_mixin import ReflectionMixin
 from src.core.base.mixins.multimodal_mixin import MultimodalMixin
+from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
+from src.core.base.mixins.persistence_mixin import PersistenceMixin
+from src.core.base.mixins.reflection_mixin import ReflectionMixin
 
 # Advanced components (Lazy loaded or optional)
 try:
     # pylint: disable=unused-import
-    from src.logic.agents.cognitive.long_term_memory import (
-        LongTermMemory,
-    )
-    from src.infrastructure.swarm.orchestration.signals.signal_registry import (
-        SignalRegistry,
-    )
-    from src.infrastructure.swarm.orchestration.system.tool_registry import (
-        ToolRegistry,
-    )
+    from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+        SignalRegistry
+    from src.infrastructure.swarm.orchestration.system.tool_registry import \
+        ToolRegistry
+    from src.logic.agents.cognitive.long_term_memory import LongTermMemory
 except (ImportError, ValueError):
     LongTermMemory = None
     SignalRegistry = None
@@ -118,8 +111,7 @@ class BaseAgent(
     def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
         """Initialize the BaseAgent with decentralized initialization."""
         self.file_path = Path(file_path)
-        self._workspace_root = kwargs.get("repo_root") or \
-            BaseCore.detect_workspace_root(self.file_path)
+        self._workspace_root = kwargs.get("repo_root") or BaseCore.detect_workspace_root(self.file_path)
         self.agent_logic_core = BaseAgentCore()
         self.core = BaseCore(workspace_root=self._workspace_root)
 
@@ -152,9 +144,7 @@ class BaseAgent(
         self.logger = logging.getLogger(self.__class__.__name__)
         self._system_prompt: str = "You are a helpful AI assistant."
 
-    def _run_command(
-        self, cmd: list[str], timeout: int = 120
-    ) -> subprocess.CompletedProcess[str]:
+    def _run_command(self, cmd: list[str], timeout: int = 120) -> subprocess.CompletedProcess[str]:
         """Run a shell command."""
         return ShellExecutor.run_command(
             cmd,
@@ -175,6 +165,7 @@ class BaseAgent(
             return "No prompt provided."
 
         import asyncio  # pylint: disable=import-outside-toplevel
+
         try:
             # Check if there is an existing event loop
             try:
@@ -229,10 +220,7 @@ class BaseAgent(
         The core synaptic processing method.
         Decomposes the prompt, consults knowledge, and produces a reasoning-based response.
         """
-        logging.info(
-            "[%s] Reasoning on prompt: %s...",
-            self.__class__.__name__, prompt[:50]
-        )
+        logging.info("[%s] Reasoning on prompt: %s...", self.__class__.__name__, prompt[:50])
 
         # 1. Governance & Quota Checks
         if hasattr(self, "_check_preemption"):
@@ -262,6 +250,7 @@ class BaseAgent(
 
         # 3. Execution via Backend
         import asyncio  # pylint: disable=import-outside-toplevel
+
         try:
             # pylint: disable=import-outside-toplevel
             from src.infrastructure.compute import backend as ab
@@ -271,7 +260,7 @@ class BaseAgent(
                 ab.run_subagent,
                 description=f"{self.__class__.__name__} core reasoning",
                 prompt=full_prompt,
-                original_content=self.current_content
+                original_content=self.current_content,
             )
 
             if result:
@@ -304,9 +293,7 @@ class BaseAgent(
 
     def calculate_anchoring_strength(self, result: str) -> float:
         """Calculate thematic anchoring for the result."""
-        return self.agent_logic_core.calculate_anchoring_strength(
-            result, getattr(self, "context_pool", {})
-        )
+        return self.agent_logic_core.calculate_anchoring_strength(result, getattr(self, "context_pool", {}))
 
     # pylint: disable=too-many-arguments, too-many-positional-arguments
     def _record(
@@ -323,16 +310,13 @@ class BaseAgent(
                 res_str = result
                 if isinstance(result, (dict, list)):
                     import json  # pylint: disable=import-outside-toplevel
+
                     res_str = json.dumps(result)
 
                 # Check for record_interaction or record
                 if hasattr(self.recorder, "record_interaction"):
                     self.recorder.record_interaction(
-                        provider=provider,
-                        model=model,
-                        prompt=prompt,
-                        result=res_str,
-                        meta=meta
+                        provider=provider, model=model, prompt=prompt, result=res_str, meta=meta
                     )
                 elif hasattr(self.recorder, "record"):
                     self.recorder.record(prompt, result)

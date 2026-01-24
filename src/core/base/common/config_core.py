@@ -18,10 +18,12 @@ Combines loading, merging, and dot-notation access logic.
 """
 
 from __future__ import annotations
+
 import json
 import logging
 from pathlib import Path
 from typing import Any, Dict
+
 from .base_core import BaseCore
 from .models import ConfigFormat
 
@@ -30,8 +32,10 @@ try:
 except ImportError:
     rc = None
 
-class ConfigObject: # pylint: disable=too-few-public-methods
+
+class ConfigObject:  # pylint: disable=too-few-public-methods
     """A dictionary wrapper that allows dot-notation access."""
+
     def __init__(self, data: Dict[str, Any]):
         for key, value in data.items():
             if isinstance(value, dict):
@@ -50,6 +54,7 @@ class ConfigObject: # pylint: disable=too-few-public-methods
             return val
         except (AttributeError, TypeError):
             return default
+
 
 class ConfigCore(BaseCore):
     """
@@ -76,12 +81,12 @@ class ConfigCore(BaseCore):
             return ConfigObject({})
 
         # Try Rust-accelerated fast loading for flat configs
-        if rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]: # pylint: disable=no-member
+        if rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]:  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                data = rc.load_config_rust(str(path)) # type: ignore
+                data = rc.load_config_rust(str(path))  # type: ignore
                 return ConfigObject(data)
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         ext = path.suffix.lower()
@@ -93,17 +98,17 @@ class ConfigCore(BaseCore):
             cfg = ConfigObject(data)
             self.configs[path.name] = cfg
             return cfg
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error("ConfigCore: Failed to load %s: %s", path, e)
             return ConfigObject({})
 
     def merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
         """Deep merge two config dicts. Rust-accelerated for large trees."""
-        if rc and hasattr(rc, "merge_configs_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "merge_configs_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.merge_configs_rust(base, override) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.merge_configs_rust(base, override)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         # Python fallback

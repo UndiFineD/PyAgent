@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
+
+"""
+Namespaces.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Metric namespace management engine.
 
 from __future__ import annotations
+
 from typing import Any
-from .Metrics import MetricNamespace
+
+from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:
@@ -23,9 +29,7 @@ class MetricNamespaceManager:
     ) -> MetricNamespace:
         if parent and parent not in self.namespaces:
             raise ValueError("Parent missing")
-        ns = MetricNamespace(
-            name=name, description=description, parent=parent, tags=tags or {}
-        )
+        ns = MetricNamespace(name=name, description=description, parent=parent, tags=tags or {})
         self.namespaces[name] = ns
         self.metrics_by_namespace[name] = []
         return ns

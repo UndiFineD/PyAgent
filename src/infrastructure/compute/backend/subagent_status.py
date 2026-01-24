@@ -16,19 +16,22 @@
 """Diagnostic and status logic for SubagentRunner."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import os
 from pathlib import Path
-from typing import Any, Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from .SubagentRunner import SubagentRunner
+    from .subagent_runner import SubagentRunner
+
 
 class SubagentStatus:
     """Delegated status/diagnostic manager for SubagentRunner."""
-    
+
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
@@ -42,7 +45,7 @@ class SubagentStatus:
             max_context_chars = 12_000
         models_base_url = (os.environ.get("GITHUB_MODELS_BASE_URL") or "").strip()
         models_model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "").strip()
-        
+
         token_set = bool(os.environ.get("GITHUB_TOKEN"))
         if not token_set:
             token_file = os.environ.get("DV_GITHUB_TOKEN_FILE", r"C:\DEV\github-gat.txt")
@@ -50,9 +53,12 @@ class SubagentStatus:
 
         warnings = []
         if os.environ.get("TERM_PROGRAM") == "vscode":
-            warnings.append("VS Code Environment: Pylance or Git extensions may lock files or cause rewrite conflicts.")
-        if os.name == 'nt':
-            warnings.append("Windows Platform: Sensitive to file locks. Consider closing open editors for target files.")
+            msg = "VS Code Environment: Pylance or Git extensions may lock files or cause rewrite conflicts."
+            warnings.append(msg)
+        if os.name == "nt":
+            warnings.append(
+                "Windows Platform: Sensitive to file locks. Consider closing open editors for target files."
+            )
 
         return {
             "selected_backend": backend,
@@ -69,7 +75,12 @@ class SubagentStatus:
                 "base_url_set": bool(models_base_url),
                 "model_set": bool(models_model),
                 "token_set": token_set,
-                "configured": bool(models_base_url and models_model and token_set and self.runner.requests is not None),
+                "configured": bool(
+                    models_base_url and
+                    models_model and
+                    token_set and
+                    self.runner.requests is not None
+                ),
             },
         }
 
@@ -78,8 +89,10 @@ class SubagentStatus:
         status = self.get_backend_status()
         cmd = status["commands"]
         models = status["github_models"]
-        def yn(v: bool) -> str: return "yes" if v else "no"
-        
+
+        def yn(v: bool) -> str:
+            return "yes" if v else "no"
+
         lines = [
             "Backend diagnostics:",
             f"- selected: {status['selected_backend']}",
@@ -94,10 +107,10 @@ class SubagentStatus:
             f"  - model set: {yn(bool(models.get('model_set')))}",
             f"  - token set: {yn(bool(models.get('token_set')))}",
         ]
-        
+
         if status.get("warnings"):
             lines.append("- POTENTIAL CONFLICTS:")
             for w in status["warnings"]:
                 lines.append(f"  ! {w}")
-                
+
         return "\n".join(lines)

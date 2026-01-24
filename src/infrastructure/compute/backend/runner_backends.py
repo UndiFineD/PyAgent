@@ -20,14 +20,13 @@ from __future__ import annotations
 import json
 import logging
 import os
-
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-__version__: str = VERSION
+__version__ = VERSION
 
 
 class BackendHandlers:
@@ -45,18 +44,18 @@ class BackendHandlers:
         pattern = r"\[IMAGE_DATA:([^\]\s]+)\]"
         last_idx = 0
         for match in re.finditer(pattern, text):
-            pre_text: str = text[last_idx : match.start()].strip()
+            pre_text = text[last_idx : match.start()].strip()
             if pre_text:
                 parts.append({"type": "text", "text": pre_text})
 
-            image_data: str | Any = match.group(1)
+            image_data = match.group(1)
             if not image_data.startswith("data:image"):
-                image_data: str = f"data:image/png;base64,{image_data}"
+                image_data = f"data:image/png;base64,{image_data}"
 
             parts.append({"type": "image_url", "image_url": {"url": image_data}})
-            last_idx: int = match.end()
+            last_idx = match.end()
 
-        remaining: str = text[last_idx:].strip()
+        remaining = text[last_idx:].strip()
         if remaining:
             parts.append({"type": "text", "text": remaining})
 
@@ -68,16 +67,16 @@ class BackendHandlers:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
         except ValueError:
             max_context_chars = 12_000
-        trimmed_original: str = (original_content or "")[:max_context_chars]
+        trimmed_original = (original_content or "")[:max_context_chars]
         return (
             f"Task: {description}\\n\\nPrompt:\\n{prompt}\\n\\nContext (existing file content):\\n{trimmed_original}"
         ).strip()
 
     @staticmethod
-    def try_codex_cli(full_prompt: str, repo_root: Path, recorder: Any | None = None) -> str | None:
+    def try_codex_cli(full_prompt: str, repo_root: Path, recorder=None) -> str | None:
         try:
             logging.debug("Attempting to use Codex CLI backend")
-            result: subprocess.CompletedProcess[str] = subprocess.run(
+            result = subprocess.run(
                 [
                     "codex",
                     "--prompt",
@@ -105,7 +104,7 @@ class BackendHandlers:
                 cwd=str(repo_root),
                 check=False,
             )
-            stdout: str = (result.stdout or "").strip()
+            stdout = (result.stdout or "").strip()
 
             # Phase 108: Recording
             if recorder:
@@ -123,7 +122,7 @@ class BackendHandlers:
                 logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")
         except subprocess.TimeoutExpired:
             logging.warning("Codex CLI timed out")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.warning(f"Codex CLI error: {e}")
         return None
 
@@ -131,7 +130,7 @@ class BackendHandlers:
     def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
         try:
             logging.debug("Attempting to use local Copilot CLI backend")
-            result: subprocess.CompletedProcess[str] = subprocess.run(
+            result = subprocess.run(
                 ["copilot", "explain", full_prompt],
                 capture_output=True,
                 text=True,
@@ -141,11 +140,11 @@ class BackendHandlers:
                 cwd=str(repo_root),
                 check=False,
             )
-            stdout: str = (result.stdout or "").strip()
+            stdout = (result.stdout or "").strip()
             if result.returncode == 0 and stdout:
                 logging.info("Copilot CLI backend succeeded")
                 return stdout
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.warning(f"Copilot CLI error: {e}")
         return None
 
@@ -161,7 +160,7 @@ class BackendHandlers:
             logging.debug("Attempting to use gh copilot alias backend")
             # Note: gh copilot requires interactive session or specific config for shell completion
             # We attempt it as a subprocess call
-            result: subprocess.CompletedProcess[str] = subprocess.run(
+            result = subprocess.run(
                 ["gh", "copilot", "explain", full_prompt],
                 capture_output=True,
                 text=True,
@@ -173,85 +172,68 @@ class BackendHandlers:
             )
             if result.returncode == 0 and result.stdout:
                 return result.stdout.strip()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.debug(f"gh copilot failed: {e}")
         return None
-
-    @staticmethod
-    def _get_github_token() -> str | None:
-        """Get GitHub token from environment or file."""
-        # Try environment variable first
-        token: str | None = os.environ.get("GITHUB_TOKEN")
-        if token:
-            return token
-
-        # Try various file paths
-        search_paths = [
-            os.environ.get("DV_GITHUB_TOKEN_FILE"),
-            r"C:\DEV\github-gat.txt",
-            "github-token.txt",
-        ]
-
-        for path_str in search_paths:
-            if not path_str:
-                continue
-            path = Path(path_str)
-            if path.exists():
-                try:
-                    token: str = path.read_text(encoding="utf-8").strip()
-                    if token:
-                        return token
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    continue
-
-        return None
-
-    @staticmethod
-    def _prepare_github_request(full_prompt: str, model: str, base_url: str) -> tuple[dict[str, str], dict[str, Any]]:
-        """Prepare headers and payload for GitHub Models API request."""
-        content = BackendHandlers._parse_content(full_prompt)
-        headers: dict[str, str] = {
-            "Authorization": f"Bearer {BackendHandlers._get_github_token()}",
-            "Content-Type": "application/json",
-        }
-        payload = {
-            "messages": [
-                {
-                    "role": "system",
-                    "content": "You are a helpful coding assistant.",
-                },
-                {"role": "user", "content": content},
-            ],
-            "model": model,
-            "temperature": 0.1,
-            "max_tokens": 4096,
-        }
-        return headers, payload
 
     @staticmethod
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
         if not requests_lib:
             return None
 
-        base_url: str = (
+        base_url = (
             (os.environ.get("GITHUB_MODELS_BASE_URL") or "https://models.inference.ai.azure.com").strip().rstrip("/")
         )
-        model: str = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini").strip()
+        model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini").strip()
 
-        token = BackendHandlers._get_github_token()
+        token = os.environ.get("GITHUB_TOKEN")
+        if not token:
+            search_paths = [
+                os.environ.get("DV_GITHUB_TOKEN_FILE"),
+                r"C:\DEV\github-gat.txt",
+                "github-token.txt",
+            ]
+            for path_str in search_paths:
+                if not path_str:
+                    continue
+                path = Path(path_str)
+                if path.exists():
+                    try:
+                        token = path.read_text(encoding="utf-8").strip()
+                        if token:
+                            break
+                    except Exception:
+                        continue
+
         if not token:
             logging.debug("GitHub Models skipped: No token found")
             return None
 
         logging.debug(f"Attempting GitHub Models (model: {model})")
         try:
-            headers, payload = BackendHandlers._prepare_github_request(full_prompt, model, base_url)
-            url: str = f"{base_url}/v1/chat/completions"
+            content = BackendHandlers._parse_content(full_prompt)
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            }
+            payload = {
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are a helpful coding assistant.",
+                    },
+                    {"role": "user", "content": content},
+                ],
+                "model": model,
+                "temperature": 0.1,
+                "max_tokens": 4096,
+            }
+            url = f"{base_url}/v1/chat/completions"
             response = requests_lib.post(url, headers=headers, data=json.dumps(payload), timeout=120)
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             # Lowered logging level for fallback-friendly behavior (Phase 123)
             logging.debug(f"GitHub Models error: {e}")
             return None
@@ -261,9 +243,9 @@ class BackendHandlers:
         if not requests_lib:
             return None
 
-        api_key: str | None = os.environ.get("OPENAI_API_KEY")
-        base_url: str = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
-        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4o-mini"
+        api_key = os.environ.get("OPENAI_API_KEY")
+        base_url = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
+        model = os.environ.get("OPENAI_MODEL") or "gpt-4o-mini"
 
         if not api_key:
             logging.debug("OpenAI API skipped: No API key")
@@ -271,7 +253,7 @@ class BackendHandlers:
 
         try:
             content = BackendHandlers._parse_content(full_prompt)
-            headers: dict[str, str] = {
+            headers = {
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
             }
@@ -292,6 +274,6 @@ class BackendHandlers:
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.warning(f"OpenAI API error: {e}")
             return None

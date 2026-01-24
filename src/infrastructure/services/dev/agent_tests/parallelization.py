@@ -16,10 +16,11 @@
 """ParallelizationStrategy for test distribution."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Dict, List, Optional
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class ParallelizationStrategy:
     """Strategy for parallel test execution."""

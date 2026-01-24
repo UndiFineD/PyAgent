@@ -1,21 +1,28 @@
+
+"""
+Discovery node.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Discovery Node)
 
-import socket
-import uuid
 import asyncio
 import contextlib
-from typing import Dict, List, Optional, Any
-from zeroconf import IPVersion, ServiceInfo, ServiceBrowser, ServiceListener
+import socket
+import uuid
+from typing import Any, Dict, List, Optional
+
+from zeroconf import IPVersion, ServiceBrowser, ServiceInfo, ServiceListener
 from zeroconf.asyncio import AsyncZeroconf
 
-from src.observability.structured_logger import StructuredLogger
 from src.core.base.lifecycle.version import VERSION
+from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
 
+
 class VoyagerPeerListener(ServiceListener):
     """Listens for other PyAgent Voyager peers on the local network."""
+
     def __init__(self, callback: Any, loop: asyncio.AbstractEventLoop):
         self.callback = callback
         self.loop = loop
@@ -35,11 +42,13 @@ class VoyagerPeerListener(ServiceListener):
     def remove_service(self, zc: Any, type_: str, name: str) -> None:
         logger.info(f"Voyager: Peer {name} removed from network.")
 
+
 class DiscoveryNode:
     """
     DiscoveryNode handles decentralized peer advertisement and lookup.
     Uses mDNS (zeroconf) for Phase 1.0 of Project Voyager.
     """
+
     SERVICE_TYPE = "_pyagentv._tcp.local."
 
     def __init__(self, node_name: Optional[str] = None, port: int = 8000, transport_port: int = 5555):
@@ -56,11 +65,11 @@ class DiscoveryNode:
         self.local_ip = self._get_local_ip()
 
     def _get_local_ip(self) -> str:
-        IP = '127.0.0.1'
+        IP = "127.0.0.1"
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         with contextlib.suppress(Exception):
             # doesn't even have to be reachable
-            s.connect(('10.255.255.255', 1))
+            s.connect(("10.255.255.255", 1))
             IP = s.getsockname()[0]
         s.close()
         return IP
@@ -71,10 +80,10 @@ class DiscoveryNode:
             self.aiozc = AsyncZeroconf(ip_version=IPVersion.V4Only)
 
         desc = {
-            'version': VERSION,
-            'node_id': self.node_id,
-            'transport_port': str(self.transport_port),
-            'status': 'Online'
+            "version": VERSION,
+            "node_id": self.node_id,
+            "transport_port": str(self.transport_port),
+            "status": "Online",
         }
 
         self.info = ServiceInfo(
@@ -97,9 +106,7 @@ class DiscoveryNode:
         logger.info("Voyager: Starting peer discovery browser...")
         loop = asyncio.get_running_loop()
         self.browser = ServiceBrowser(
-            self.aiozc.zeroconf,
-            self.SERVICE_TYPE,
-            VoyagerPeerListener(self._peer_discovered, loop)
+            self.aiozc.zeroconf, self.SERVICE_TYPE, VoyagerPeerListener(self._peer_discovered, loop)
         )
 
     def _peer_discovered(self, info: ServiceInfo):
@@ -120,13 +127,17 @@ class DiscoveryNode:
         """Returns a list of active peers found on the network."""
         results = []
         for name, info in self.peers.items():
-            results.append({
-                "name": name,
-                "addresses": info.parsed_addresses(),
-                "port": info.port,
-                "properties": {k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
-                               for k, v in info.properties.items()}
-            })
+            results.append(
+                {
+                    "name": name,
+                    "addresses": info.parsed_addresses(),
+                    "port": info.port,
+                    "properties": {
+                        k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
+                        for k, v in info.properties.items()
+                    },
+                }
+            )
         return results
 
     def resolve_synapse_address(self, peer_name: str) -> Optional[tuple[str, int]]:
@@ -135,14 +146,13 @@ class DiscoveryNode:
         This enables decentralized routing without hardcoded IPs.
         """
         for name, info in self.peers.items():
-            props = {k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
-                    for k, v in info.properties.items()}
+            props = {
+                k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
+                for k, v in info.properties.items()
+            }
 
             # Match by node_name, node_id, or mDNS service name
-            if (peer_name == props.get("node_id") or
-                peer_name == name.split('.')[0] or
-                peer_name in name):
-
+            if peer_name == props.get("node_id") or peer_name == name.split(".")[0] or peer_name in name:
                 addrs = info.parsed_addresses()
                 t_port = props.get("transport_port")
                 if addrs and t_port:
@@ -150,10 +160,11 @@ class DiscoveryNode:
 
         return None
 
+
 if __name__ == "__main__":
     import sys
 
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
     async def run_test():

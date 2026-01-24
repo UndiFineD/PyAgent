@@ -20,15 +20,19 @@
 """Custom logging handler for redirecing output to Tkinter widgets."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any
+
 import logging
 import tkinter as tk
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class WidgetLogger(logging.Handler):
     """Logging handler that redirects formatted log records to a Tkinter Text widget."""
+
     def __init__(self, widget, thread_id=None) -> None:
         super().__init__()
         self.widget: Any = widget
@@ -38,8 +42,9 @@ class WidgetLogger(logging.Handler):
         # Filter by thread if ID is provided
         if self.thread_id and record.thread != self.thread_id:
             return
-            
+
         msg: str = self.format(record)
+
         def append() -> None:
             try:
                 self.widget.insert(tk.END, msg + "\n")
@@ -47,4 +52,5 @@ class WidgetLogger(logging.Handler):
             except tk.TclError:
                 # Widget might have been destroyed
                 pass
+
         self.widget.after(0, append)

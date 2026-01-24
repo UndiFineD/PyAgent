@@ -16,12 +16,15 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.logic.orchestration.AgentChainStep import AgentChainStep
-from typing import List, Optional, Dict, Any
+
 from collections.abc import Callable
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+from src.logic.orchestration.agent_chain_step import AgentChainStep
 
 __version__ = VERSION
+
 
 class AgentChain:
     """Chain multiple agents for sequential execution.
@@ -72,8 +75,7 @@ class AgentChain:
         self._steps.append(step)
         return self
 
-    def execute(self, initial_input: Any, agent_executor: Callable[[
-                str, Any], Any]) -> list[dict[str, Any]]:
+    def execute(self, initial_input: Any, agent_executor: Callable[[str, Any], Any]) -> list[dict[str, Any]]:
         """Execute the chain.
 
         Args:
@@ -92,11 +94,13 @@ class AgentChain:
 
             # Check condition
             if step.condition and not step.condition(current_input):
-                self._results.append({
-                    "agent": step.agent_name,
-                    "skipped": True,
-                    "reason": "condition not met",
-                })
+                self._results.append(
+                    {
+                        "agent": step.agent_name,
+                        "skipped": True,
+                        "reason": "condition not met",
+                    }
+                )
                 continue
 
             # Transform input
@@ -111,20 +115,24 @@ class AgentChain:
                 if step.output_transform:
                     output = step.output_transform(output)
 
-                self._results.append({
-                    "agent": step.agent_name,
-                    "success": True,
-                    "output": output,
-                })
+                self._results.append(
+                    {
+                        "agent": step.agent_name,
+                        "success": True,
+                        "output": output,
+                    }
+                )
 
                 current_input = output
 
             except Exception as e:
-                self._results.append({
-                    "agent": step.agent_name,
-                    "success": False,
-                    "error": str(e),
-                })
+                self._results.append(
+                    {
+                        "agent": step.agent_name,
+                        "success": False,
+                        "error": str(e),
+                    }
+                )
                 break
 
         return self._results

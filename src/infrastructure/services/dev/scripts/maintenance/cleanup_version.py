@@ -15,6 +15,7 @@
 """Script to remove hardcoded VERSION strings from files, preparing for dynamic versioning."""
 
 from __future__ import annotations
+
 import os
 import re
 

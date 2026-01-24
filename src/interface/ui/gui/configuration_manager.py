@@ -20,21 +20,25 @@
 """Configuration management for PyAgent GUI settings."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any
+
+import os
+
 from src.core.base.common.storage_core import StorageCore
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class ConfigurationManager:
     """Handles loading and saving global configuration settings."""
+
     def __init__(self, config_file="config/gui_settings.json") -> None:
         self.config_file: str = config_file
         self.settings = {
             "github_token_file": r"C:\DEV\github-gat.txt",
             "default_model": "gpt-4o",
             "cache_enabled": True,
-            "monitor_scaling": 1.0
+            "monitor_scaling": 1.0,
         }
         self.load()
 
@@ -44,30 +48,7 @@ class ConfigurationManager:
             self.settings.update(disk_settings)
 
     def save(self) -> None:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        os.makedirs(os.path.dirname(self.config_file), exist_ok=True)
-        with open(self.config_file, 'w') as f:
-            json.dump(self.settings, f, indent=4)
-
-    def get(self, key: str, default: Any = None) -> Any:
-        return self.settings.get(key, default)
-
-    def set(self, key: str, value: Any) -> None:
-        self.settings[key] = value
-        self.save()
-        # Also update environment variable for backend compatibility
-        if key == "github_token_file":
-            os.environ["DV_GITHUB_TOKEN_FILE"] = value
-=======
         StorageCore.save_json(self.config_file, self.settings)
         # Also update environment variable for backend compatibility
         if "github_token_file" in self.settings:
             os.environ["DV_GITHUB_TOKEN_FILE"] = self.settings["github_token_file"]
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-        StorageCore.save_json(self.config_file, self.settings)
-        # Also update environment variable for backend compatibility
-        if "github_token_file" in self.settings:
-            os.environ["DV_GITHUB_TOKEN_FILE"] = self.settings["github_token_file"]
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

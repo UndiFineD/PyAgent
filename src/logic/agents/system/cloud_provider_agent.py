@@ -11,20 +11,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Cloud provider agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Dict
-from src.core.base.BaseAgent import BaseAgent
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class CloudProviderAgent(BaseAgent):
     """
     Phase 56: Multi-Cloud Infrastructure as Code.
     Manages cloud credentials, region selection, and generates IaC templates.
     """
-    
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.supported_providers = ["aws", "azure", "gcp"]
@@ -34,7 +39,7 @@ class CloudProviderAgent(BaseAgent):
         """Mocks the configuration of a cloud provider."""
         if self.recorder:
             self.recorder.record_lesson("cloud_provider_config", {"provider": provider})
-            
+
         if provider.lower() in self.supported_providers:
             self.credentials[provider.lower()] = True
             return f"Provider {provider} configured successfully."
@@ -44,10 +49,10 @@ class CloudProviderAgent(BaseAgent):
         """Generates a basic Terraform template for fleet expansion."""
         if self.recorder:
             self.recorder.record_lesson("cloud_iac_generation", {"provider": provider, "nodes": node_count})
-            
+
         if not self.credentials.get(provider.lower()):
             return f"Error: Provider {provider} not configured."
-            
+
         template = f"""
 provider "{provider}" {{
   region = "{region}"
@@ -67,5 +72,5 @@ resource "{provider}_instance" "pyagent_node" {{
     def select_optimal_region(self, latency_data: dict[str, float]) -> str:
         """Selects the region with the lowest latency from a provided map."""
         if not latency_data:
-            return "us-east-1" # Default
+            return "us-east-1"  # Default
         return min(latency_data, key=latency_data.get)

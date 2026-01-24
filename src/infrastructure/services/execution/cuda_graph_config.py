@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 CUDAGraphConfig.py - CUDA graph mode management and configuration.
 
@@ -9,15 +23,14 @@ Phase 29: Execution Context, Batching & Async Streaming
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List, Tuple, Set, Callable
-from enum import Enum
+import logging
 import threading
 import time
-import logging
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
-
 
 logger = logging.getLogger(__name__)
 
@@ -26,21 +39,24 @@ logger = logging.getLogger(__name__)
 # CUDA Graph Mode
 # ============================================================================
 
+
 class CUDAGraphMode(Enum):
     """
     CUDA graph execution modes.
 
     Based on vLLM's CUDAGraphMode enum.
     """
-    NONE = 0       # No CUDA graphs, eager execution
-    CAPTURE = 1    # Currently capturing a graph
-    REPLAY = 2     # Replaying a captured graph
-    DISABLED = 3   # Graphs explicitly disabled
+
+    NONE = 0  # No CUDA graphs, eager execution
+    CAPTURE = 1  # Currently capturing a graph
+    REPLAY = 2  # Replaying a captured graph
+    DISABLED = 3  # Graphs explicitly disabled
 
 
 # ============================================================================
 # CUDA Graph Config
 # ============================================================================
+
 
 @dataclass
 class CUDAGraphConfig:
@@ -49,6 +65,7 @@ class CUDAGraphConfig:
 
     Based on vLLM's compilation config patterns.
     """
+
     # Enable/disable graphs
     enabled: bool = True
 
@@ -128,6 +145,7 @@ class CUDAGraphConfig:
 # CUDA Graph Entry
 # ============================================================================
 
+
 @dataclass
 class CUDAGraphEntry:
     """
@@ -135,6 +153,7 @@ class CUDAGraphEntry:
 
     Stores the graph and associated metadata.
     """
+
     # Key for lookup
     batch_size: int
     seq_len: int
@@ -191,6 +210,7 @@ class CUDAGraphEntry:
 # CUDA Graph Registry
 # ============================================================================
 
+
 class CUDAGraphRegistry:
     """
     Registry for captured CUDA graphs.
@@ -229,14 +249,8 @@ class CUDAGraphRegistry:
         start = time.perf_counter()
 
         # Allocate input/output buffers
-        input_buffers = {
-            name: np.zeros(shape, dtype=np.float32)
-            for name, shape in input_shapes.items()
-        }
-        output_buffers = {
-            name: np.zeros(shape, dtype=np.float32)
-            for name, shape in output_shapes.items()
-        }
+        input_buffers = {name: np.zeros(shape, dtype=np.float32) for name, shape in input_shapes.items()}
+        output_buffers = {name: np.zeros(shape, dtype=np.float32) for name, shape in output_shapes.items()}
 
         # Warmup
         for _ in range(self.config.warmup_iterations):
@@ -266,8 +280,7 @@ class CUDAGraphRegistry:
             self._capture_count += 1
 
         logger.debug(
-            f"Captured CUDA graph {graph_id} for batch_size={batch_size}, "
-            f"seq_len={seq_len} in {elapsed_ms:.2f}ms"
+            f"Captured CUDA graph {graph_id} for batch_size={batch_size}, seq_len={seq_len} in {elapsed_ms:.2f}ms"
         )
 
         return entry
@@ -340,6 +353,7 @@ class CUDAGraphRegistry:
 # ============================================================================
 # CUDA Graph Manager
 # ============================================================================
+
 
 class CUDAGraphManager:
     """

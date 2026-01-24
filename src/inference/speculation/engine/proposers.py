@@ -1,31 +1,45 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Implementations of various speculative decoding proposers."""
 
 import logging
 import time
+from contextlib import suppress
 from typing import Any, Dict, List, Optional, Tuple
+
+from .base import DrafterBase
 from .config import SpecMethod, SpeculativeConfig
 from .proposals import DraftProposal
-from .base import DrafterBase
 
 logger = logging.getLogger(__name__)
 
 # Try to import numpy for efficient array operations
-try:
+NUMPY_AVAILABLE = False
+np = None
+with suppress(ImportError):
     import numpy as np
+
     NUMPY_AVAILABLE = True
-except ImportError:
-    NUMPY_AVAILABLE = False
-    np = None
 
 # Try to import numba for JIT acceleration
-try:
-    from numba import jit, njit, prange
+NUMBA_AVAILABLE = False
+jit = njit = prange = None
+with suppress(ImportError):
     NUMBA_AVAILABLE = True
-except ImportError:
-    NUMBA_AVAILABLE = False
-    jit = njit = prange = None
 
 
 class NgramProposer(DrafterBase):
@@ -61,7 +75,6 @@ class NgramProposer(DrafterBase):
         """Propose draft tokens using n-gram matching."""
         start_time = time.perf_counter()
 
-        batch_size = len(input_ids)
         draft_token_ids: List[List[int]] = []
         num_proposed: List[int] = []
 
@@ -73,13 +86,9 @@ class NgramProposer(DrafterBase):
 
             if NUMPY_AVAILABLE:
                 token_array = np.array(tokens, dtype=np.int32)
-                drafts = self._find_ngram_match_single(
-                    token_array, self.min_n, self.max_n, self.k
-                )
+                drafts = self._find_ngram_match_single(token_array, self.min_n, self.max_n, self.k)
             else:
-                drafts = self._find_ngram_match_python(
-                    tokens, self.min_n, self.max_n, self.k
-                )
+                drafts = self._find_ngram_match_python(tokens, self.min_n, self.max_n, self.k)
 
             draft_token_ids.append(list(drafts))
             num_proposed.append(len(drafts))
@@ -115,7 +124,7 @@ class NgramProposer(DrafterBase):
             pattern = suffix[-n:]
             search_end = num_tokens - n
             for pos in range(search_end - 1, -1, -1):
-                if np.array_equal(tokens[pos:pos+n], pattern):
+                if np.array_equal(tokens[pos : pos + n], pattern):
                     match_end = pos + n
                     draft_end = min(match_end + k, num_tokens)
                     return tokens[match_end:draft_end].copy()
@@ -141,7 +150,7 @@ class NgramProposer(DrafterBase):
             pattern = suffix[-n:]
             search_end = num_tokens - n
             for pos in range(search_end - 1, -1, -1):
-                if tokens[pos:pos+n] == pattern:
+                if tokens[pos : pos + n] == pattern:
                     match_end = pos + n
                     draft_end = min(match_end + k, num_tokens)
                     return tokens[match_end:draft_end]
@@ -192,16 +201,16 @@ class SuffixProposer(DrafterBase):
             suffix = tuple(tokens[-suffix_len:])
             if suffix in self._suffix_table:
                 following = self._suffix_table[suffix]
-                return following[:self.num_speculative_tokens]
+                return following[: self.num_speculative_tokens]
 
         return []
 
     def add_pattern(self, tokens: List[int]) -> None:
         """Add a token pattern to the suffix table."""
         for i in range(1, len(tokens)):
-            for suffix_len in range(1, min(11, i+1)):
-                suffix = tuple(tokens[i-suffix_len:i])
-                following = tokens[i:i + self.num_speculative_tokens]
+            for suffix_len in range(1, min(11, i + 1)):
+                suffix = tuple(tokens[i - suffix_len : i])
+                following = tokens[i : i + self.num_speculative_tokens]
                 if suffix not in self._suffix_table:
                     self._suffix_table[suffix] = following
                     self._frequency[suffix] = 1
@@ -225,6 +234,7 @@ class EagleProposer(DrafterBase):
         if tree_str:
             try:
                 import ast
+
                 self.tree_choices = ast.literal_eval(tree_str)
             except Exception as e:
                 logger.warning(f"Failed to parse tree structure: {e}")

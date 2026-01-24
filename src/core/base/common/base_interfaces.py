@@ -19,8 +19,10 @@ Provides structural typing (Protocols) for agents, orchestrators, and components
 """
 
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Protocol, runtime_checkable, Any
+from typing import Any, Protocol, runtime_checkable
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -97,10 +99,10 @@ class CoreInterface(Protocol):
 
 
 @runtime_checkable
-class ContextRecorderInterface(Protocol): # pylint: disable=too-few-public-methods
+class ContextRecorderInterface(Protocol):  # pylint: disable=too-few-public-methods
     """Interface for cognitive recording and context harvesting."""
 
-    def record_interaction( # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def record_interaction(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         provider: str,
         model: str,
@@ -113,21 +115,24 @@ class ContextRecorderInterface(Protocol): # pylint: disable=too-few-public-metho
 
 
 @runtime_checkable
-class Loadable(Protocol): # pylint: disable=too-few-public-methods
+class Loadable(Protocol):  # pylint: disable=too-few-public-methods
     """Protocol for objects that can load their state from disk."""
+
     def load(self, path: Path | None = None) -> bool:
         """Loads state from file."""
 
 
 @runtime_checkable
-class Saveable(Protocol): # pylint: disable=too-few-public-methods
+class Saveable(Protocol):  # pylint: disable=too-few-public-methods
     """Protocol for objects that can save their state to disk."""
+
     def save(self, path: Path | None = None) -> bool:
         """Saves state to file."""
 
 
 @runtime_checkable
-class Component(Protocol): # pylint: disable=too-few-public-methods
+class Component(Protocol):  # pylint: disable=too-few-public-methods
     """Base interface for all PyAgent components with a name and version."""
+
     name: str
     version: str

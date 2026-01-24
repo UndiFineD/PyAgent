@@ -11,17 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Compliance audit agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 from typing import Any
-from src.core.base.BaseAgent import BaseAgent
-from src.observability.StructuredLogger import StructuredLogger
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 
 
-class ComplianceAuditAgent(BaseAgent):
+class ComplianceAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Compliance Audit Agent: Verifies fleet operations against simulated
     industry standards (e.g., SOC2, GDPR, HIPAA patterns).

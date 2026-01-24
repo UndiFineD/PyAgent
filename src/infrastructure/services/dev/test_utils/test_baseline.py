@@ -16,16 +16,18 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from dataclasses import dataclass, field
-from typing import Any, Dict
+
 import time
+from dataclasses import dataclass, field
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 @dataclass
 class TestBaseline:
-    __test__ = False
     """A test baseline for comparison.
 
     Attributes:
@@ -34,6 +36,8 @@ class TestBaseline:
         created_at: Creation timestamp.
         version: Baseline version.
     """
+
+    __test__ = False
 
     name: str
     values: dict[str, Any]

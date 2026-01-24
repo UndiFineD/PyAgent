@@ -16,18 +16,21 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .RecordedInteraction import RecordedInteraction
+
+import json
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-from collections.abc import Iterator
-import json
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .recorded_interaction import RecordedInteraction
 
 __version__ = VERSION
 
+
 class TestRecorder:
-    __test__ = False
     """Records and replays test interactions.
 
     Useful for recording external calls and replaying in tests.
@@ -45,6 +48,8 @@ class TestRecorder:
         with recorder.replay():
             result=api_call("data")  # Returns recorded result
     """
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize recorder."""
@@ -128,14 +133,16 @@ class TestRecorder:
         """Save recordings to file."""
         data: list[dict[str, Any]] = []
         for r in self._recordings:
-            data.append({
-                "call_type": r.call_type,
-                "call_name": r.call_name,
-                "args": list(r.args),
-                "kwargs": r.kwargs,
-                "result": r.result,
-                "timestamp": r.timestamp,
-            })
+            data.append(
+                {
+                    "call_type": r.call_type,
+                    "call_name": r.call_name,
+                    "args": list(r.args),
+                    "kwargs": r.kwargs,
+                    "result": r.result,
+                    "timestamp": r.timestamp,
+                }
+            )
         with open(path, "w") as f:
             json.dump(data, f, indent=2, default=str)
 

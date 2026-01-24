@@ -22,14 +22,18 @@ Core logic for multimodal processing and response post-processing.
 """
 
 from __future__ import annotations
-from typing import List, Callable
+
+from typing import Callable, List
+
 from .base_core import BaseCore
 from .models import InputType, MultimodalInput
+
 
 class ProcessorCore(BaseCore):
     """
     Authoritative engine for multimodal inputs and hook-based processing.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self.post_hooks: List[tuple[Callable[[str], str], int]] = []

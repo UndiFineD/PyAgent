@@ -16,12 +16,15 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.utils.ScheduledExecution import ScheduledExecution
-from typing import Optional, Dict, Any
+
 import time
+from typing import Any
+
+from src.core.base.common.utils.scheduled_execution import ScheduledExecution
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class ExecutionScheduler:
     """Schedule agent executions.
@@ -70,27 +73,25 @@ class ExecutionScheduler:
 
         if cron == "hourly":
             return now + 3600
-        elif cron == "daily":
+        if cron == "daily":
             return now + 86400
-        elif cron == "weekly":
+        if cron == "weekly":
             return now + 604800
-        elif ":" in cron:
+        if ":" in cron:
             # HH:MM format
             try:
                 hour, minute = map(int, cron.split(":"))
                 import datetime
+
                 today = datetime.date.today()
-                target = datetime.datetime.combine(
-                    today,
-                    datetime.time(hour, minute)
-                )
+                target = datetime.datetime.combine(today, datetime.time(hour, minute))
                 if target.timestamp() <= now:
                     target += datetime.timedelta(days=1)
                 return target.timestamp()
-            except Exception:
+            except (ValueError, TypeError, AttributeError):
                 return now + 86400
-        else:
-            return now + 86400  # Default to daily
+
+        return now + 86400  # Default to daily
 
     def is_due(self, name: str) -> bool:
         """Check if schedule is due.

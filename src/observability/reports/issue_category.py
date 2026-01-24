@@ -16,10 +16,13 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from enum import Enum
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class IssueCategory(Enum):
     """Category of code issue."""

@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
-from typing import Optional
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class ModernizationSuggestion:
@@ -33,6 +35,7 @@ class ModernizationSuggestion:
         removal_version: Version where it will be removed.
         migration_guide: URL or text explaining migration.
     """
+
     old_api: str
     new_api: str
     deprecation_version: str

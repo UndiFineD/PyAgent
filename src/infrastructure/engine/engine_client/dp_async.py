@@ -1,16 +1,35 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: Data Parallel Async Engine Client
 Data parallel implementation with P2C load balancing.
 """
 
 from __future__ import annotations
+
 import logging
 import time
-from typing import Optional, TYPE_CHECKING
-from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
-from src.infrastructure.engine.engine_client.types import EngineClientConfig, ClientMode, WorkerInfo, EngineOutput
+from typing import TYPE_CHECKING, Optional
+
 from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
+from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
+from src.infrastructure.engine.engine_client.types import (ClientMode,
+                                                           EngineClientConfig,
+                                                           EngineOutput,
+                                                           WorkerInfo)
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import SchedulerOutput
@@ -42,17 +61,14 @@ class DPAsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     def _init_workers(self) -> None:
         """Initialize worker pool."""
         for i in range(self.config.num_workers):
-            worker = WorkerInfo(
-                worker_id=i,
-                endpoint=f"{self.config.zmq_endpoint}_{i}"
-            )
+            worker = WorkerInfo(worker_id=i, endpoint=f"{self.config.zmq_endpoint}_{i}")
             self._workers.append(worker)
 
             # Create per-worker client
             worker_config = EngineClientConfig(
                 mode=ClientMode.ASYNC_MP,
                 zmq_endpoint=worker.endpoint,
-                request_timeout_ms=self.config.request_timeout_ms
+                request_timeout_ms=self.config.request_timeout_ms,
             )
             self._worker_clients[i] = AsyncMPClient(worker_config)
 
@@ -75,9 +91,7 @@ class DPAsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         # Forward to worker
         client = self._worker_clients.get(worker.worker_id)
         if client:
-            worker_request_id = client.send_request(request)
-            # Map worker request ID to our request ID
-            self._pending_worker_map[request_id] = worker.worker_id
+            client.send_request(request)
 
         self._step_counter += 1
 

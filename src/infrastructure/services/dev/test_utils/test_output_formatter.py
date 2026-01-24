@@ -16,14 +16,18 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any, Dict, List, Tuple
+
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class TestOutputFormatter:
-    __test__ = False
     """Formats test output and results for display."""
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize formatter."""
@@ -82,7 +86,7 @@ class TestOutputFormatter:
             Formatted result string.
         """
         # Handle TestStatus enum
-        status_str = status.value if hasattr(status, 'value') else str(status)
+        status_str = status.value if hasattr(status, "value") else str(status)
         status_str = status_str.lower()
 
         if "pass" in status_str:
@@ -99,7 +103,7 @@ class TestOutputFormatter:
             status: Status of the test.
             duration_ms: Duration in milliseconds.
         """
-        status_str = status.value if hasattr(status, 'value') else str(status)
+        status_str = status.value if hasattr(status, "value") else str(status)
         self.results.append((test_name, status_str, duration_ms))
 
     def get_summary(self) -> dict[str, int]:
@@ -111,8 +115,4 @@ class TestOutputFormatter:
         passed = sum(1 for _, status, _ in self.results if "pass" in status.lower())
         failed = sum(1 for _, status, _ in self.results if "fail" in status.lower())
         total = len(self.results)
-        return {
-            "passed": passed,
-            "failed": failed,
-            "total": total
-        }
+        return {"passed": passed, "failed": failed, "total": total}

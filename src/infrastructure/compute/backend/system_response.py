@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
-from typing import Optional
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class SystemResponse:

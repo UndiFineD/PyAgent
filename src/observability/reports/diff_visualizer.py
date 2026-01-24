@@ -16,12 +16,13 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .DiffResult import DiffResult
-from .DiffViewMode import DiffViewMode
-from typing import List
+
+from src.core.base.common.types.diff_result import DiffResult
+from src.core.base.common.types.diff_view_mode import DiffViewMode
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class DiffVisualizer:
     """Visualizes changelog differences with multiple view modes.
@@ -45,8 +46,8 @@ class DiffVisualizer:
         Returns:
             DiffResult with comparison details.
         """
-        old_lines = set(old_content.split('\n'))
-        new_lines = set(new_content.split('\n'))
+        old_lines = set(old_content.split("\n"))
+        new_lines = set(new_content.split("\n"))
 
         additions = list(new_lines - old_lines)
         deletions = list(old_lines - new_lines)
@@ -59,7 +60,7 @@ class DiffVisualizer:
             additions=additions,
             deletions=deletions,
             unchanged=unchanged,
-            similarity_score=similarity
+            similarity_score=similarity,
         )
 
     def render_html(self, result: DiffResult, mode: DiffViewMode) -> str:
@@ -87,7 +88,7 @@ class DiffVisualizer:
         for line in result.additions:
             lines.append(f"<span class='addition'>+ {line}</span>")
         lines.append("</div>")
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def _render_side_by_side(self, result: DiffResult) -> str:
         """Render side-by-side diff view."""

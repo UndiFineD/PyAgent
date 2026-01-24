@@ -1,25 +1,6 @@
-
-from __future__ import annotations
-#!/usr/bin/env python3
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Autonomous agent for extracting docstrings and generating Markdown documentation from Python modules.
-Generates Sphinx/Jekyll-compatible docs for the PyAgent codebase.
-"""
-
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
@@ -35,6 +16,9 @@ Doc gen agent.py module.
 """
 
 # pylint: disable=too-many-ancestors
+
+
+from __future__ import annotations
 
 import ast
 import os
@@ -82,7 +66,7 @@ class DocGenAgent(BaseAgent):
             self.doc_registry[file_path] = md_content
             return md_content
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return f"Error extracting docs: {str(e)}"
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
@@ -116,7 +100,7 @@ class DocGenAgent(BaseAgent):
         for file_path, content in self.doc_registry.items():
             rel_path = os.path.relpath(file_path, self.workspace_path)
             doc_filename = rel_path.replace(os.sep, "_").replace(".py", ".md")
-            with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:
+            with open(os.path.join(output_dir, doc_filename, encoding="utf-8"), "w", encoding="utf-8") as f:
                 f.write(content)
 
         return len(self.doc_registry)

@@ -16,20 +16,24 @@
 """Persistent audit log for safety violations and adversarial attempts."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import json
 import logging
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class SafetyAuditTrail:
     """Logs security violations for later forensic analysis and training."""
-    
+
     def __init__(self, log_path: str) -> None:
         self.log_path = Path(log_path)
-        self.violations = []
+        self.violations: list[Any] = []
         self._load_log()
 
     def _load_log(self) -> str:
@@ -47,7 +51,7 @@ class SafetyAuditTrail:
             "agent": agent_name,
             "level": level,
             "violations": violations,
-            "context": task[:500]
+            "context": task[:500],
         }
         self.violations.append(entry)
         self._save_log()
@@ -55,7 +59,7 @@ class SafetyAuditTrail:
 
     def _save_log(self) -> str:
         try:
-            with open(self.log_path, 'w') as f:
+            with open(self.log_path, "w") as f:
                 json.dump(self.violations, f, indent=2)
         except Exception as e:
             logging.error(f"SafetyAuditTrail: Error saving log: {e}")
@@ -64,4 +68,9 @@ class SafetyAuditTrail:
         """Returns a human-readable summary of recently logged threats."""
         if not self.violations:
             return "No safety violations recorded."
-        return f"Safety Audit: {len(self.violations)} threats recorded. Latest: {self.violations[-1]['level']} at {self.violations[-1]['timestamp']}"
+        latest = self.violations[-1]
+        msg = (
+            f"Safety Audit: {len(self.violations)} threats recorded. "
+            f"Latest: {latest['level']} at {latest['timestamp']}"
+        )
+        return msg

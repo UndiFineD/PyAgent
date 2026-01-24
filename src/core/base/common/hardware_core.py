@@ -17,8 +17,10 @@ Core logic for Hardware Acceleration and NPU interaction.
 """
 
 from __future__ import annotations
+
 import logging
 from typing import Optional
+
 from .base_core import BaseCore
 
 try:
@@ -27,6 +29,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.hardware")
+
 
 class HardwareCore(BaseCore):
     """

@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class ErrorImpact:
@@ -33,6 +35,7 @@ class ErrorImpact:
         downstream_effects: Downstream components affected.
         impact_score: Overall impact score (0 - 100).
     """
+
     error_id: str
     affected_files: list[str] = field(default_factory=lambda: [])
     affected_functions: list[str] = field(default_factory=lambda: [])

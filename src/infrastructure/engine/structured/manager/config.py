@@ -53,9 +53,7 @@ class CompilationStatus(Enum):
 
 @dataclass(frozen=True)
 class GrammarSpec:
-    """
-    Specification for a grammar constraint.
-    """
+    """Specification for a grammar constraint."""
 
     grammar_type: GrammarType
     spec: str  # JSON schema string, regex pattern, EBNF, or choice list
@@ -63,21 +61,14 @@ class GrammarSpec:
     max_tokens: Optional[int] = None  # Maximum tokens to generate
 
     def to_cache_key(self) -> str:
-        """
-        Generate cache key for this spec.
-
-        Returns:
-            A unique SHA256-based string for the specification.
-        """
+        """Generate cache key for this spec."""
         content = f"{self.grammar_type.name}:{self.spec}:{self.strict}"
         return hashlib.sha256(content.encode()).hexdigest()[:16]
 
 
 @dataclass
 class CompilationResult:
-    """
-    Result of grammar compilation.
-    """
+    """Result of grammar compilation."""
 
     status: CompilationStatus
     grammar: Optional["StructuredOutputGrammar"] = None
@@ -86,26 +77,21 @@ class CompilationResult:
 
     @property
     def is_ready(self) -> bool:
-        """Check if compilation finished successfully."""
         return self.status == CompilationStatus.READY
 
     @property
     def is_failed(self) -> bool:
-        """Check if compilation failed."""
         return self.status == CompilationStatus.FAILED
 
 
 @dataclass
 class ValidationResult:
-    """
-    Result of token validation.
-    """
+    """Result of token validation."""
 
     is_valid: bool
     accepted_prefix_length: int = 0
     error_message: Optional[str] = None
     suggestion: Optional[str] = None
-
 
 
 @dataclass

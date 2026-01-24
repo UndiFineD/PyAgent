@@ -118,7 +118,7 @@ class ToolEvolutionAgent(BaseAgent):
                 f.write(code_content)
 
             return f"SUCCESS: Evolved tool '{tool_name}' saved to {filepath}. It is now available for import."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return f"ERROR: Failed to save evolved tool: {e}"
 
     @as_tool

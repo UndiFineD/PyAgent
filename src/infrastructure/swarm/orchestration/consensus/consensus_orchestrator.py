@@ -12,16 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Consensus orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import logging
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class ConsensusOrchestrator:
@@ -32,17 +38,13 @@ class ConsensusOrchestrator:
 
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.reputation_scores: dict[
-            str, float
-        ] = {}  # Agent name -> score (0.0 to 1.0)
+        self.reputation_scores: dict[str, float] = {}  # Agent name -> score (0.0 to 1.0)
 
     def resolve_conflict(self, task: str, agents: list[str]) -> str:
         """
         Orchestrates a debate and weighted vote to reach consensus on a task.
         """
-        logging.info(
-            f"ConsensusOrchestrator: Resolving conflict for task: {task} using {agents}"
-        )
+        logging.info(f"ConsensusOrchestrator: Resolving conflict for task: {task} using {agents}")
 
         # 1. Gather initial proposals
         proposals = self._collect_proposals(task, agents)
@@ -75,7 +77,7 @@ class ConsensusOrchestrator:
         # Broadcast to Inter-Fleet Bridge for cross-fleet sync
         if hasattr(self.fleet, "inter_fleet_bridge"):
             self.fleet.inter_fleet_bridge.broadcast_signal(
-                "CONSENSUS_CRYPTO_VERIFIED", {"task": task, "hash": block_hash}
+                "SIGNAL_CONSENSUS_CRYPTO_VERIFIED", {"task": task, "hash": block_hash}
             )
 
     def _collect_proposals(self, task: str, agents: list[str]) -> list[dict[str, Any]]:
@@ -110,9 +112,7 @@ class ConsensusOrchestrator:
                 logging.error(f"Agent {agent_name} failed to propose: {e}")
         return proposals
 
-    def _conduct_debate(
-        self, task: str, proposals: list[dict[str, Any]], rounds: int = 2
-    ) -> list[dict[str, Any]]:
+    def _conduct_debate(self, task: str, proposals: list[dict[str, Any]], rounds: int = 2) -> list[dict[str, Any]]:
         """
         Agents review each other's proposals and refine their own.
         """
@@ -131,22 +131,22 @@ class ConsensusOrchestrator:
             new_proposals = []
             for i, p in enumerate(current_proposals):
                 competitors = [cp for j, cp in enumerate(current_proposals) if i != j]
-                context = f"Task: {task}\nYour Proposal: {p['content']}\nOther Proposals: {[cp['content'] for cp in competitors]}"
+                comp_contents = [cp["content"] for cp in competitors]
+                context = (
+                    f"Task: {task}\nYour Proposal: {p['content']}\n"
+                    f"Other Proposals: {comp_contents}"
+                )
 
                 try:
                     # Agent critiques and improves its own proposal based on others
-                    coro = self.fleet.call_by_capability(
-                        f"{p['agent']}.refine", context=context
-                    )
+                    coro = self.fleet.call_by_capability(f"{p['agent']}.refine", context=context)
                     if loop.is_running():
                         coro.close()
                         refined = f"[DEFERRED] {p['agent']} refine"
                     else:
                         refined = loop.run_until_complete(coro)
 
-                    new_proposals.append(
-                        {"agent": p["agent"], "content": refined, "weight": p["weight"]}
-                    )
+                    new_proposals.append({"agent": p["agent"], "content": refined, "weight": p["weight"]})
                 except Exception:
                     new_proposals.append(p)
             current_proposals = new_proposals
@@ -159,9 +159,7 @@ class ConsensusOrchestrator:
         # For simplicity in this implementation, we pick the one with highest weight.
         # In a real system, we'd use semantic similarity to group proposals and sum weights.
         best_proposal = max(proposals, key=lambda x: x["weight"])
-        logging.info(
-            f"Consensus reached. Winner: {best_proposal['agent']} with weight {best_proposal['weight']}"
-        )
+        logging.info(f"Consensus reached. Winner: {best_proposal['agent']} with weight {best_proposal['weight']}")
         return best_proposal["content"]
 
     def update_reputation(self, agent_name: str, feedback_score: float) -> None:

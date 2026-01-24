@@ -12,21 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Discovery orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from typing import Any
-from src.core.base.Version import VERSION
+
+import contextlib
 import logging
 import socket
 import threading
 import time
-from typing import TYPE_CHECKING
-from zeroconf import IPVersion, ServiceInfo, Zeroconf, ServiceBrowser, ServiceListener
+from typing import TYPE_CHECKING, Any
+
+from zeroconf import (IPVersion, ServiceBrowser, ServiceInfo, ServiceListener,
+                      Zeroconf)
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class DiscoveryOrchestrator:
@@ -44,9 +52,7 @@ class DiscoveryOrchestrator:
         try:
             self.zeroconf = Zeroconf(ip_version=IPVersion.V4Only)
             self.listener = FleetServiceListener(self.fleet)
-            self.browser = ServiceBrowser(
-                self.zeroconf, self.SERVICE_TYPE, self.listener
-            )
+            self.browser = ServiceBrowser(self.zeroconf, self.SERVICE_TYPE, self.listener)
             self._is_advertising = False
 
             # Start advertising in a background thread to not block fleet init
@@ -58,9 +64,7 @@ class DiscoveryOrchestrator:
         """Handles internal discovery failures with a circuit breaker mechanism."""
         self._failure_count += 1
         if self._failure_count > 5:
-            logging.error(
-                f"Discovery: Circuit breaker OPEN due to multiple failures: {error}"
-            )
+            logging.error(f"Discovery: Circuit breaker OPEN due to multiple failures: {error}")
             self._circuit_open = True
             self._last_retry = time.time()
 
@@ -69,9 +73,7 @@ class DiscoveryOrchestrator:
         if self._circuit_open:
             if time.time() - self._last_retry > 60:
                 # 1 minute cooldown
-                logging.info(
-                    "Discovery: Circuit breaker HALF-OPEN, attempting retry..."
-                )
+                logging.info("Discovery: Circuit breaker HALF-OPEN, attempting retry...")
                 self._circuit_open = False
                 self._failure_count = 0
                 return True
@@ -110,9 +112,7 @@ class DiscoveryOrchestrator:
 
         # Get list of local agent names to share (limit to top 15)
         agent_names: list[str] = []
-        if hasattr(self.fleet, "agents") and hasattr(
-            self.fleet.agents, "registry_configs"
-        ):
+        if hasattr(self.fleet, "agents") and hasattr(self.fleet.agents, "registry_configs"):
             agent_names = list(self.fleet.agents.registry_configs.keys())
 
         info = ServiceInfo(
@@ -129,9 +129,7 @@ class DiscoveryOrchestrator:
         )
 
         try:
-            logging.info(
-                f"Discovery: Advertising local fleet node '{node_id}' at {local_ip}:{port}"
-            )
+            logging.info(f"Discovery: Advertising local fleet node '{node_id}' at {local_ip}:{port}")
             self.zeroconf.register_service(info, allow_name_change=True)
             self._is_advertising = True
             self._failure_count = 0  # Reset on success
@@ -190,7 +188,7 @@ class FleetServiceListener(ServiceListener):
             return
 
         # Filter out self
-        try:
+        with contextlib.suppress(Exception):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(("8.8.8.8", 80))
             local_ip = s.getsockname()[0]
@@ -198,8 +196,6 @@ class FleetServiceListener(ServiceListener):
             if addresses[0] == local_ip:
                 logging.debug(f"Discovery: Skipping local node discovery for {name}")
                 return
-        except Exception:
-            pass
 
         url = f"http://{addresses[0]}:{info.port}"
         agents_bytes = info.properties.get(b"agents", b"")
@@ -207,9 +203,7 @@ class FleetServiceListener(ServiceListener):
         version_bytes = info.properties.get(b"version", b"1.0.0")
         version = version_bytes.decode("utf-8")
 
-        logging.info(
-            f"Discovery: Found remote fleet node '{name}' at {url} with agents: {agents}"
-        )
+        logging.info(f"Discovery: Found remote fleet node '{name}' at {url} with agents: {agents}")
 
         # Register the remote node in the fleet
         try:

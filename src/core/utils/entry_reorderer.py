@@ -16,12 +16,14 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
+
+from src.core.base.common.types.changelog_entry import ChangelogEntry
+from src.core.base.lifecycle.version import VERSION
+
 from .GroupingStrategy import GroupingStrategy
-from typing import Dict, List
 
 __version__ = VERSION
+
 
 class EntryReorderer:
     """Reorders and groups changelog entries.
@@ -33,11 +35,7 @@ class EntryReorderer:
         >>> sorted_entries=reorderer.reorder(entries, GroupingStrategy.BY_PRIORITY)
     """
 
-    def reorder(
-        self,
-        entries: list[ChangelogEntry],
-        strategy: GroupingStrategy
-    ) -> list[ChangelogEntry]:
+    def reorder(self, entries: list[ChangelogEntry], strategy: GroupingStrategy) -> list[ChangelogEntry]:
         """Reorder entries based on strategy.
 
         Args:

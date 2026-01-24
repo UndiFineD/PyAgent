@@ -1,13 +1,36 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Storage.py module.
+"""
+
 from __future__ import annotations
+
+import contextlib
 from dataclasses import dataclass, field
 from typing import Any, List, Optional, Sequence
+
 import numpy as np
-import contextlib
+
 from .config import LogprobEntry, TopLogprob
+
 
 @dataclass
 class FlatLogprobs:
     """GC-optimized flat logprobs storage."""
+
     token_ids: np.ndarray
     logprobs: np.ndarray
     top_k_token_ids: np.ndarray
@@ -34,15 +57,14 @@ class FlatLogprobs:
 
     @property
     def memory_bytes(self) -> int:
-        return self.token_ids.nbytes + self.logprobs.nbytes + \
-               self.top_k_token_ids.nbytes + self.top_k_logprobs.nbytes
+        return self.token_ids.nbytes + self.logprobs.nbytes + self.top_k_token_ids.nbytes + self.top_k_logprobs.nbytes
 
     def slice(self, start: int, end: int) -> "FlatLogprobs":
         return FlatLogprobs(
             self.token_ids[start:end],
             self.logprobs[start:end],
             self.top_k_token_ids[start:end],
-            self.top_k_logprobs[start:end]
+            self.top_k_logprobs[start:end],
         )
 
     def append(self, other: "FlatLogprobs") -> "FlatLogprobs":
@@ -50,7 +72,7 @@ class FlatLogprobs:
             np.concatenate([self.token_ids, other.token_ids]),
             np.concatenate([self.logprobs, other.logprobs]),
             np.concatenate([self.top_k_token_ids, other.top_k_token_ids]),
-            np.concatenate([self.top_k_logprobs, other.top_k_logprobs])
+            np.concatenate([self.top_k_logprobs, other.top_k_logprobs]),
         )
 
     def mean_logprob(self) -> float:
@@ -67,7 +89,7 @@ class FlatLogprobs:
             np.array([], dtype=np.int32),
             np.array([], dtype=np.float32),
             np.zeros((0, top_k), dtype=np.int32),
-            np.zeros((0, top_k), dtype=np.float32)
+            np.zeros((0, top_k), dtype=np.float32),
         )
 
     @classmethod
@@ -76,7 +98,7 @@ class FlatLogprobs:
         token_ids = np.zeros(n, dtype=np.int32)
         logprobs = np.zeros(n, dtype=np.float32)
         top_k_ids = np.zeros((n, top_k), dtype=np.int32)
-        top_k_lps = np.full((n, top_k), -float('inf'), dtype=np.float32)
+        top_k_lps = np.full((n, top_k), -float("inf"), dtype=np.float32)
 
         for i, entry in enumerate(entries):
             token_ids[i] = entry.token_id
@@ -91,11 +113,14 @@ class FlatLogprobs:
         for i in range(self.num_tokens):
             top_logprobs = []
             for j in range(self.top_k):
-                if self.top_k_logprobs[i, j] > -float('inf'):
+                if self.top_k_logprobs[i, j] > -float("inf"):
                     tid = int(self.top_k_token_ids[i, j])
-                    top_logprobs.append(TopLogprob(tid, self._decode(tid, tokenizer), float(self.top_k_logprobs[i, j])))
+                    decoded = self._decode(tid, tokenizer)
+                    top_logprobs.append(TopLogprob(tid, decoded, float(self.top_k_logprobs[i, j])))
             tid = int(self.token_ids[i])
-            entries.append(LogprobEntry(tid, self._decode(tid, tokenizer), float(self.logprobs[i]), tuple(top_logprobs), i))
+            entries.append(
+                LogprobEntry(tid, self._decode(tid, tokenizer), float(self.logprobs[i]), tuple(top_logprobs), i)
+            )
         return entries
 
     def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:

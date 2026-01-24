@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TrendDirection import TrendDirection
+
 from dataclasses import dataclass, field
-from typing import List, Optional
+
+from src.core.base.lifecycle.version import VERSION
+
+from .trend_direction import TrendDirection
 
 __version__ = VERSION
+
 
 @dataclass
 class TrendData:
@@ -34,6 +37,7 @@ class TrendData:
         direction: Current trend direction.
         prediction: Predicted next value.
     """
+
     metric_name: str
     values: list[float] = field(default_factory=lambda: [])
     timestamps: list[str] = field(default_factory=lambda: [])

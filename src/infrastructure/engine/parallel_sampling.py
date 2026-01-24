@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 """
 Parallel Sampling - Multi-sample request handling (n > 1).
@@ -15,33 +29,35 @@ Beyond vLLM:
 - Sample quality scoring
 """
 
+import time
+from copy import copy
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
-from copy import copy
-import time
-import hashlib
 
 
 class SamplingStrategy(Enum):
     """Strategy for generating multiple samples."""
-    PARALLEL = auto()      # Independent parallel samples
-    BEAM_SEARCH = auto()   # Beam search with pruning
-    DIVERSE = auto()       # Diverse beam search
-    BEST_OF_N = auto()     # Generate n, return best
+
+    PARALLEL = auto()  # Independent parallel samples
+    BEAM_SEARCH = auto()  # Beam search with pruning
+    DIVERSE = auto()  # Diverse beam search
+    BEST_OF_N = auto()  # Generate n, return best
 
 
 class OutputKind(Enum):
     """Kind of output to return."""
-    FINAL_ONLY = auto()    # Only final output
-    DELTA = auto()         # Streaming deltas
-    CUMULATIVE = auto()    # Cumulative output
+
+    FINAL_ONLY = auto()  # Only final output
+    DELTA = auto()  # Streaming deltas
+    CUMULATIVE = auto()  # Cumulative output
 
 
 @dataclass
 class SamplingParams:
     """Parameters for sampling."""
-    n: int = 1                          # Number of samples
+
+    n: int = 1  # Number of samples
     temperature: float = 1.0
     top_p: float = 1.0
     top_k: int = -1
@@ -51,7 +67,7 @@ class SamplingParams:
     output_kind: OutputKind = OutputKind.FINAL_ONLY
 
     # Best-of-n parameters
-    best_of: Optional[int] = None       # Generate this many, return n best
+    best_of: Optional[int] = None  # Generate this many, return n best
 
     # Diverse sampling
     diversity_penalty: float = 0.0
@@ -64,7 +80,8 @@ class SamplingParams:
 @dataclass
 class CompletionOutput:
     """Output for a single completion."""
-    index: int                          # Index in n samples
+
+    index: int  # Index in n samples
     text: str = ""
     token_ids: List[int] = field(default_factory=list)
     cumulative_logprob: float = 0.0
@@ -101,6 +118,7 @@ class ParentRequest:
     For n > 1 sampling, creates n child requests and
     aggregates their outputs.
     """
+
     request_id: str
     sampling_params: SamplingParams
 
@@ -186,10 +204,7 @@ class ParentRequest:
         self.child_outputs[completion.index] = completion
 
         # Update generation token count
-        self.max_num_generation_tokens = max(
-            self.max_num_generation_tokens,
-            len(completion.token_ids)
-        )
+        self.max_num_generation_tokens = max(self.max_num_generation_tokens, len(completion.token_ids))
 
         already_finished = child_request_id not in self.child_requests
 
@@ -220,7 +235,7 @@ class ParentRequest:
                 output.compute_score()
 
             outputs.sort(key=lambda o: o.score, reverse=True)
-            outputs = outputs[:self.n]
+            outputs = outputs[: self.n]
 
             # Re-index
             for i, output in enumerate(outputs):
@@ -331,14 +346,16 @@ class ParallelSamplingManager:
 # Beyond vLLM: Advanced Sampling Strategies
 # ============================================================================
 
+
 @dataclass
 class BeamState:
     """State for beam search."""
+
     token_ids: List[int] = field(default_factory=list)
     score: float = 0.0
     finished: bool = False
 
-    def extend(self, token_id: int, logprob: float) -> 'BeamState':
+    def extend(self, token_id: int, logprob: float) -> "BeamState":
         """Extend beam with new token."""
         new_state = BeamState(
             token_ids=self.token_ids + [token_id],
@@ -408,7 +425,7 @@ class BeamSearchManager:
 
         # Keep top-k beams
         candidates.sort(key=beam_score, reverse=True)
-        self.beams[request_id] = candidates[:self.beam_width]
+        self.beams[request_id] = candidates[: self.beam_width]
 
         return self.beams[request_id]
 
@@ -429,10 +446,7 @@ class BeamSearchManager:
         n: int = 1,
     ) -> List[BeamState]:
         """Get best n sequences."""
-        all_beams = (
-            self.beams.get(request_id, []) +
-            self.finished_beams.get(request_id, [])
-        )
+        all_beams = self.beams.get(request_id, []) + self.finished_beams.get(request_id, [])
 
         def beam_score(b: BeamState) -> float:
             length = len(b.token_ids) ** self.length_penalty
@@ -521,7 +535,7 @@ class BestOfNFilter:
     def _default_score(self, output: CompletionOutput) -> float:
         """Default scoring: average log probability."""
         if not output.token_ids:
-            return float('-inf')
+            return float("-inf")
         return output.cumulative_logprob / len(output.token_ids)
 
     def select_best(
@@ -546,9 +560,11 @@ class BestOfNFilter:
 # Iteration Statistics
 # ============================================================================
 
+
 @dataclass
 class IterationStats:
     """Statistics for a single iteration/step."""
+
     iteration_timestamp: float = field(default_factory=time.time)
 
     # Token counts
@@ -575,13 +591,15 @@ class IterationStats:
         num_cached_tokens: int = 0,
     ) -> None:
         """Record metrics for a finished request."""
-        self.finished_requests.append({
-            'e2e_latency': e2e_latency,
-            'num_prompt_tokens': num_prompt_tokens,
-            'num_generation_tokens': num_generation_tokens,
-            'finish_reason': finish_reason,
-            'num_cached_tokens': num_cached_tokens,
-        })
+        self.finished_requests.append(
+            {
+                "e2e_latency": e2e_latency,
+                "num_prompt_tokens": num_prompt_tokens,
+                "num_generation_tokens": num_generation_tokens,
+                "finish_reason": finish_reason,
+                "num_cached_tokens": num_cached_tokens,
+            }
+        )
 
     def record_first_token(self, latency: float) -> None:
         """Record time to first token."""
@@ -600,10 +618,7 @@ class IterationStats:
         n_param = parent.n if parent is not None else 1
 
         if parent is not None:
-            num_generation_tokens = max(
-                num_generation_tokens,
-                parent.max_num_generation_tokens
-            )
+            num_generation_tokens = max(num_generation_tokens, parent.max_num_generation_tokens)
 
         if parent is None or parent.all_finished:
             self.max_num_generation_tokens_iter.append(num_generation_tokens)
@@ -616,18 +631,18 @@ class IterationStats:
 
 __all__ = [
     # Enums
-    'SamplingStrategy',
-    'OutputKind',
+    "SamplingStrategy",
+    "OutputKind",
     # Data classes
-    'SamplingParams',
-    'CompletionOutput',
-    'ParentRequest',
-    'IterationStats',
+    "SamplingParams",
+    "CompletionOutput",
+    "ParentRequest",
+    "IterationStats",
     # Managers
-    'ParallelSamplingManager',
-    'BeamSearchManager',
-    'DiverseSamplingManager',
-    'BestOfNFilter',
+    "ParallelSamplingManager",
+    "BeamSearchManager",
+    "DiverseSamplingManager",
+    "BestOfNFilter",
     # Beam search
-    'BeamState',
+    "BeamState",
 ]

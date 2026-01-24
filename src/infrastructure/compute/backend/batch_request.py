@@ -16,13 +16,15 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from dataclasses import dataclass, field
-from typing import List
+
 import time
 import uuid
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class BatchRequest:

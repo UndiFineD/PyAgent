@@ -11,37 +11,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Doc gen module.py module.
+"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import ast
 import os
 
-__version__ = VERSION
+from src.core.base.common.base_modules import BaseModule
 
-class DocGenCore:
+
+class DocGenModule(BaseModule):
     """
-    Pure logic for extracting documentation from Python source code.
-    No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
+    Consolidated core module for generating documentation.
+    Migrated from DocGenCore.
     """
 
-    @staticmethod
-    def extract_markdown_from_source(source_code: str, file_name: str) -> str:
+    def initialize(self) -> bool:
+        """Initialize documentation templates."""
+        return super().initialize()
+
+    def execute(self, source_code: str, file_name: str) -> str:
         """
-        Parses source code using AST and generates Markdown documentation.
-        
-        Args:
-            source_code: The raw Python source code as a string.
-            file_name: The name of the file for labeling in the Markdown.
-            
-        Returns:
-            A string containing the formatted Markdown documentation.
+        Extracts markdown documentation from Python source code.
         """
+        if not self.initialized:
+            self.initialize()
+
         try:
             tree = ast.parse(source_code)
-            
+
             md_content = f"# Documentation for {file_name}\n\n"
-            
+
             # Module docstring
             module_doc = ast.get_docstring(tree)
             if module_doc:
@@ -53,7 +56,7 @@ class DocGenCore:
                     class_doc = ast.get_docstring(node)
                     if class_doc:
                         md_content += f"{class_doc}\n\n"
-                    
+
                     for item in node.body:
                         if isinstance(item, ast.FunctionDef):
                             md_content += f"### Method: `{item.name}`\n"
@@ -72,10 +75,10 @@ class DocGenCore:
         except Exception as e:
             return f"Error extracting docs: {str(e)}"
 
-    @staticmethod
-    def get_doc_filename(rel_path: str) -> str:
-        """
-        Generates a standardized documentation filename from a relative path.
-        Example: src/utils/helper.py -> src_utils_helper.md
-        """
-        return rel_path.replace(os.sep, '_').replace('.py', '.md')
+    def get_doc_filename(self, rel_path: str) -> str:
+        """Generates a standardized documentation filename."""
+        return rel_path.replace(os.sep, "_").replace(".py", ".md")
+
+    def shutdown(self) -> bool:
+        """Cleanup documentation generator."""
+        return super().shutdown()

@@ -16,10 +16,11 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Dict, List
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class AccessController:
     """Tracks per-improvement permissions and roles."""

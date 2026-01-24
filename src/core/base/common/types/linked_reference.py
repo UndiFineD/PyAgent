@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class LinkedReference:
@@ -31,6 +34,7 @@ class LinkedReference:
         url: URL to the reference.
         title: Title / description of the reference.
     """
+
     ref_type: str
     ref_id: str
     url: str = ""

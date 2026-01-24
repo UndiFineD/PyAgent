@@ -30,7 +30,7 @@ class FleetInteractionRecorder:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    async def record_success(self, res_or_prompt: Any, *args: Any, **_kwargs: Any) -> None:
+    async def record_success(self, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
         """Records the success of a workflow step including Explainability and Telemetry."""
         # Detect calling convention (New: 8 parameters total, Legacy: 3)
         if len(args) == 7:

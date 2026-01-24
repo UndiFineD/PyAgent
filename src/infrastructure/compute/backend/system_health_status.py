@@ -16,12 +16,16 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .SystemState import SystemState
-from dataclasses import dataclass, field
+
 import time
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .system_state import SystemState
 
 __version__ = VERSION
+
 
 @dataclass
 class SystemHealthStatus:

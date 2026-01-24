@@ -20,18 +20,23 @@
 """Agent management logic for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any, Dict, List, Optional
-from .AgentColumn import AgentColumn
+
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .agent_column import AgentColumn
 
 __version__ = VERSION
 
+
 class AgentManager:
     """Manages the lifecycle and state of agent columns."""
+
     def __init__(self, main_app, columns_container) -> None:
         self.main_app: Any = main_app
         self.container: Any = columns_container
-        self.agent_columns = []
+        self.agent_columns: list[Any] = []
 
     def add_agent(self, name, preset_data=None) -> AgentColumn:
         """Creates and adds a new agent column."""
@@ -45,14 +50,14 @@ class AgentManager:
             "show_memory": self.main_app.show_memory_manager,
             "delegate": self.main_app.delegate_task,
             "duplicate": lambda data: self.add_agent(data.get("name", "Agent"), preset_data=data),
-            "show_settings": lambda: self.main_app.dialogs.show_settings_dialog(self.config_manager)
+            "show_settings": lambda: self.main_app.dialogs.show_settings_dialog(self.config_manager),
         }
         col = AgentColumn(self.container, name, callbacks)
         self.agent_columns.append(col)
-        
+
         if preset_data:
             col.set_data(preset_data)
-            
+
         self.main_app.status_var.set(f"Added {name} agent.")
         return col
 
@@ -93,13 +98,15 @@ class AgentManager:
         """Returns a serializable state of all agents."""
         state = []
         for col in self.agent_columns:
-            state.append({
-                "name": col.agent_name,
-                "file": col.file_var.get(),
-                "backend": col.backend_cb.get(),
-                "model": col.model_cb.get(),
-                "phase": col.phase_var.get()
-            })
+            state.append(
+                {
+                    "name": col.agent_name,
+                    "file": col.file_var.get(),
+                    "backend": col.backend_cb.get(),
+                    "model": col.model_cb.get(),
+                    "phase": col.phase_var.get(),
+                }
+            )
         return state
 
     def load_state(self, state) -> None:

@@ -16,21 +16,25 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any, Dict, List, Optional, Union
+
 import random
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 try:
     import numpy as np
 except ImportError:
-    np = None
+    np: Any = None
+
 
 class TestDataSeeder:
-    __test__ = False
     """Generates reproducible test data with optional seeding."""
+
+    __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
         """Initialize test data seeder.
@@ -57,7 +61,7 @@ class TestDataSeeder:
             {
                 "metric": f"metric_{i}",
                 "value": self._rng.uniform(0, 100),
-                "timestamp": time.time() + i
+                "timestamp": time.time() + i,
             }
             for i in range(count)
         ]
@@ -76,7 +80,7 @@ class TestDataSeeder:
             {
                 "test_name": f"test_{i}",
                 "status": "PASSED" if self._rng.random() < pass_rate else "FAILED",
-                "duration_ms": self._rng.uniform(10, 5000)
+                "duration_ms": self._rng.uniform(10, 5000),
             }
             for i in range(count)
         ]
@@ -94,9 +98,9 @@ class TestDataSeeder:
         func_id = self.seed if self.seed is not None else self._rng.randint(1, 100)
         return_val = self._rng.randint(1, 100)
         if language == "python":
-            return f'# Python file\ndef func_{func_id}():\n    return {return_val}\n'
+            return f"# Python file\ndef func_{func_id}():\n    return {return_val}\n"
         elif language == "javascript":
-            return f'// JavaScript file\nfunction func_{func_id}() {{\n  return {return_val};\n}}\n'
+            return f"// JavaScript file\nfunction func_{func_id}() {{\n  return {return_val};\n}}\n"
         else:
             return f"// Generic content\nval_{func_id} = {return_val}\n"
 

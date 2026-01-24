@@ -69,7 +69,7 @@ class TelemetryManager:
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
 
@@ -101,38 +101,6 @@ async def list_discovery_peers() -> dict[str, Any]:
 async def list_fastest_peers() -> dict[str, Any]:
     """Returns the top 5 lowest-latency peers discovered."""
     return {"peers": [p.to_dict() for p in fleet.get_fastest_peers()]}
-
-
-@app.get("/discovery/peers")
-async def list_discovery_peers() -> dict[str, Any]:
-    """Returns the list of peers discovered on the LAN."""
-    return {
-        "peers": [p.to_dict() for p in fleet.get_lan_peers()]
-    }
-
-
-@app.get("/discovery/peers/fastest")
-async def list_fastest_peers() -> dict[str, Any]:
-    """Returns the top 5 lowest-latency peers discovered."""
-    return {
-        "peers": [p.to_dict() for p in fleet.get_fastest_peers()]
-    }
-
-
-@app.get("/discovery/peers")
-async def list_discovery_peers() -> dict[str, Any]:
-    """Returns the list of peers discovered on the LAN."""
-    return {
-        "peers": [p.to_dict() for p in fleet.get_lan_peers()]
-    }
-
-
-@app.get("/discovery/peers/fastest")
-async def list_fastest_peers() -> dict[str, Any]:
-    """Returns the top 5 lowest-latency peers discovered."""
-    return {
-        "peers": [p.to_dict() for p in fleet.get_fastest_peers()]
-    }
 
 
 @app.post("/task")
@@ -172,7 +140,7 @@ async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
             )
         )
         return {"status": "success", "result": result}
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 
 

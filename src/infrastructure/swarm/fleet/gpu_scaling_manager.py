@@ -18,12 +18,15 @@ Scales agent pools based on GPU memory pressure and latency.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
 import random
-from typing import Dict, Any
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class GPUScalingManager:
     """Monitors GPU resources and triggers scaling events."""
@@ -40,13 +43,13 @@ class GPUScalingManager:
             # Simulate random load
             usage = random.uniform(50.0, 95.0)
             self.gpu_state[gpu_id] = usage
-            
+
             if usage > self.threshold:
                 actions[gpu_id] = "SCALE_UP_POD"
                 logging.warning(f"GPU high pressure detected: {gpu_id} at {usage}%. Action: {actions[gpu_id]}")
             else:
                 actions[gpu_id] = "STABLE"
-        
+
         return actions
 
     def get_resource_summary(self) -> dict[str, Any]:
@@ -54,5 +57,5 @@ class GPUScalingManager:
         return {
             "gpus": self.gpu_state,
             "threshold": self.threshold,
-            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values())
+            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values()),
         }

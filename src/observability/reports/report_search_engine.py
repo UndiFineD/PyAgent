@@ -16,15 +16,19 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
-from .ReportSearchResult import ReportSearchResult
-from .ReportType import ReportType
+
 import logging
 import re
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_search_result import ReportSearchResult
+from .report_type import ReportType
 
 # Rust acceleration imports
 try:
     from rust_core import tokenize_and_index_rust, tokenize_query_rust
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -50,9 +54,7 @@ class ReportSearchEngine:
         self._reports: dict[str, str] = {}
         logging.debug("ReportSearchEngine initialized")
 
-    def index_report(
-        self, file_path: str, report_type: ReportType, content: str
-    ) -> None:
+    def index_report(self, file_path: str, report_type: ReportType, content: str) -> None:
         """Index a report for searching.
         Args:
             file_path: Report file path.

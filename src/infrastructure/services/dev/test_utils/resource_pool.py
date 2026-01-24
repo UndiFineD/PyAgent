@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ResourceHandle import ResourceHandle
-from typing import Dict, Optional, Union
+
 import threading
 import time
 
+from src.core.base.lifecycle.version import VERSION
+
+from .resource_handle import ResourceHandle
+
 __version__ = VERSION
+
 
 class ResourcePool:
     """Manages resource allocation for tests."""
@@ -71,6 +74,7 @@ class ResourcePool:
     def wait_available(self, count: int = 1, timeout: float = 10.0) -> bool:
         """Wait for resources to be available."""
         import time as time_module
+
         start = time_module.time()
         while time_module.time() - start < timeout:
             if self.acquire(count) is not None:

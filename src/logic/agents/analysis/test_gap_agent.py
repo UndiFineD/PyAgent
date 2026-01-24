@@ -16,12 +16,14 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.TestGap import TestGap
-from typing import List
+
 import ast
 
+from src.core.base.common.types.test_gap import TestGap
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class TestGapAgent:
     """Identifies gaps in test coverage.
@@ -59,17 +61,19 @@ class TestGapAgent:
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 # Skip private and dunder methods
-                if node.name.startswith('_') and not node.name.startswith('__'):
+                if node.name.startswith("_") and not node.name.startswith("__"):
                     continue
                 complexity = self._calculate_complexity(node)
                 suggested_tests = self._suggest_tests(node)
-                self.gaps.append(TestGap(
-                    function_name=node.name,
-                    file_path=file_path,
-                    line_number=node.lineno,
-                    complexity=complexity,
-                    suggested_tests=suggested_tests
-                ))
+                self.gaps.append(
+                    TestGap(
+                        function_name=node.name,
+                        file_path=file_path,
+                        line_number=node.lineno,
+                        complexity=complexity,
+                        suggested_tests=suggested_tests,
+                    )
+                )
         return self.gaps
 
     def _calculate_complexity(self, node: ast.AST) -> int:
@@ -83,8 +87,18 @@ class TestGapAgent:
         """
         complexity = 1
         for child in ast.walk(node):
-            if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler,
-                                  ast.With, ast.Assert, ast.comprehension)):
+            if isinstance(
+                child,
+                (
+                    ast.If,
+                    ast.While,
+                    ast.For,
+                    ast.ExceptHandler,
+                    ast.With,
+                    ast.Assert,
+                    ast.comprehension,
+                ),
+            ):
                 complexity += 1
             elif isinstance(child, ast.BoolOp):
                 complexity += len(child.values) - 1

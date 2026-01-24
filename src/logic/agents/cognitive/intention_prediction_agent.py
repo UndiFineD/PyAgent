@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,14 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Intention Prediction Agent for predicting peer actions and goals.
+"""
 
-from __future__ import annotations
-from src.core.base.Version import VERSION
 import time
 import random
 import logging
 from typing import Any
-from src.logic.agents.cognitive.core.MetacognitiveCore import MetacognitiveCore
+
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
 
 __version__ = VERSION
 
@@ -83,10 +87,9 @@ class IntentionPredictionAgent:
         # Simple Markov-like simulation
         if last_action == "read_file":
             return {"prediction": "edit_file", "confidence": 0.65}
-        elif last_action == "create_file":
+        if last_action == "create_file":
             return {"prediction": "run_tests", "confidence": 0.8}
-        else:
-            return {"prediction": "wait_for_instruction", "confidence": 0.4}
+        return {"prediction": "wait_for_instruction", "confidence": 0.4}
 
     def share_thought_signal(
         self, sender_id: str, receivers: list[str], thought_payload: Any

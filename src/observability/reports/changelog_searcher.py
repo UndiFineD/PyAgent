@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
-from src.core.base.types import SearchResult
+
 import re
+
+from src.core.base.common.types.search_result import SearchResult
+from src.core.base.lifecycle.version import VERSION
 
 # Rust acceleration imports
 try:
-    from rust_core import search_content_scored_rust, extract_versions_rust
+    from rust_core import extract_versions_rust, search_content_scored_rust
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -90,9 +93,7 @@ class ChangelogSearcher:
         current_version = "Unknown"
         for i, line in enumerate(lines, 1):
             # Track current version
-            version_match = re.match(
-                r"##\s*\[?(\d+\.\d+\.\d+|\d{4}\.\d{2}\.\d{2})\]?", line
-            )
+            version_match = re.match(r"##\s*\[?(\d+\.\d+\.\d+|\d{4}\.\d{2}\.\d{2})\]?", line)
             if version_match:
                 current_version = version_match.group(1)
             # Search for query

@@ -18,18 +18,20 @@ Provides a unified interface for external communications.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
-import asyncio
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from typing import Any
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class MessagingAgent(BaseAgent):
     """Integrates with messaging platforms for fleet notifications."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -42,12 +44,13 @@ class MessagingAgent(BaseAgent):
     async def send_notification(self, platform: str, recipient: str, message: str) -> str:
         """Sends a message to a specific platform/recipient. (SKELETON)"""
         logging.info(f"Sending {platform} message to {recipient}: {message}")
-        
+
         # Phase 125: Privacy Guard Integration
         if hasattr(self, "fleet") and self.fleet:
             privacy_guard = self.fleet.agents.get("PrivacyGuard")
+
             if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):
-                check_result = await privacy_guard.verify_message_safety(message)
+                check_result = privacy_guard.verify_message_safety(message)
                 if not check_result.get("safe", True):
                     return f"SAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}"
 
@@ -58,14 +61,16 @@ class MessagingAgent(BaseAgent):
     async def poll_for_replies(self, platform: str) -> list[dict[str, Any]]:
         """Polls for new messages on a specific platform."""
         logging.info(f"Polling {platform} for new messages...")
-        return [] # Return empty list for now
+        return []  # Return empty list for now
 
     @as_tool
     async def format_for_mobile(self, report: str) -> str:
         """Truncates and formats a long report for messaging platforms."""
         return report[:500] + "..." if len(report) > 500 else report
 
+
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
+
     main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
     main()

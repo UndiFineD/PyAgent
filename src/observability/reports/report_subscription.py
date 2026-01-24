@@ -16,13 +16,16 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ReportType import ReportType
-from .SubscriptionFrequency import SubscriptionFrequency
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_type import ReportType
+from .subscription_frequency import SubscriptionFrequency
 
 __version__ = VERSION
+
 
 @dataclass
 class ReportSubscription:

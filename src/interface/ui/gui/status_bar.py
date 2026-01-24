@@ -20,18 +20,28 @@
 """Status Bar component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any
+
 import tkinter as tk
 from tkinter import ttk
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class StatusBar:
     """Handles status messages and UI feedback in the footer."""
+
     def __init__(self, parent, status_var) -> None:
         self.status_var: Any = status_var
-        self.label = ttk.Label(parent, textvariable=self.status_var, relief=tk.SUNKEN, anchor="w", padding=2)
+        self.label = ttk.Label(
+            parent,
+            textvariable=self.status_var,
+            relief=tk.SUNKEN,
+            anchor="w",
+            padding=2,
+        )
         self.label.pack(side=tk.BOTTOM, fill=tk.X)
 
     def set_status(self, message) -> None:

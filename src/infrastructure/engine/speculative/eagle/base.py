@@ -25,16 +25,11 @@ from typing import Any, Protocol
 
 
 class InputBuffer(Protocol):
-    """Protocol for input buffer providing token and state data."""
+    """Protocol for input buffer."""
 
-    def get_token_ids(self) -> list[int]:
-        """Retrieve the sequence of input token IDs."""
-
-    def get_positions(self) -> list[int]:
-        """Retrieve the sequence of token positions."""
-
-    def get_hidden_states(self) -> list[list[float]] | None:
-        """Retrieve hidden state vectors if available."""
+    def get_token_ids(self) -> list[int]: ...
+    def get_positions(self) -> list[int]: ...
+    def get_hidden_states(self) -> list[list[float]] | None: ...
 
 
 @dataclass(slots=True)

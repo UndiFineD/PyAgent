@@ -16,12 +16,14 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .CodeIssue import CodeIssue
-from .FilterCriteria import FilterCriteria
-from typing import List, Optional
+
+from src.core.base.lifecycle.version import VERSION
+
+from .code_issue import CodeIssue
+from .filter_criteria import FilterCriteria
 
 __version__ = VERSION
+
 
 class ReportFilter:
     """Filters reports based on criteria.

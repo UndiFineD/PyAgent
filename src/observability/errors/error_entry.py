@@ -16,18 +16,22 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ErrorCategory import ErrorCategory
-from .ErrorSeverity import ErrorSeverity
-from dataclasses import dataclass, field
-from typing import List
+
 import hashlib
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .error_category import ErrorCategory
+from .error_severity import ErrorSeverity
 
 __version__ = VERSION
+
 
 @dataclass
 class ErrorEntry:
     """A single error entry."""
+
     id: str = ""
     message: str = ""
     file_path: str = ""

@@ -12,51 +12,66 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Orchestrator registry.py module.
+"""
+
 # Import local version for gatekeeping
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-import logging
+
 import json
+import logging
 import os
-from typing import Dict, Any, List
 from pathlib import Path
-from .ResilientStubs import ResilientStub
-from .OrchestratorRegistryCore import OrchestratorRegistryCore
-from .BootstrapConfigs import BOOTSTRAP_ORCHESTRATORS
-from src.core.base.version import SDK_VERSION
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+
+from .bootstrap_configs import BOOTSTRAP_ORCHESTRATORS
+from .orchestrator_registry_core import OrchestratorRegistryCore
+from .resilient_stubs import ResilientStub
+
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
+
 class LazyOrchestratorMap:
     """A dictionary-like object that instantiates orchestrators only when accessed."""
-    def __init__(self, fleet_instance) -> None:
+
+    def __init__(self, fleet_instance: FleetManager) -> None:
         self.fleet = fleet_instance
         self.workspace_root = Path(fleet_instance.workspace_root)
-        self._instances = {}
+        self._instances: dict[Any, Any] = {}
         self._registry_core = OrchestratorRegistryCore(SDK_VERSION)
-        
+
         # 1. Manifest
         self._manifest_configs = self._load_manifests()
-        
+
         # 2. Dynamic Discovery
         discovered_files = self._scan_workspace_for_orchestrators()
         self._discovered_configs = self._registry_core.process_discovered_files(discovered_files)
         logging.info(f"Registry: Discovered {len(self._discovered_configs)} orchestrators.")
-        
+
         # Combined map: Bootstrap > Manifest > Discovery
         # Convert BOOTSTRAP_ORCHESTRATORS to the 4-tuple format (module, class, needs_fleet, arg)
         boot_configs = {k: (v[0], v[1], True, None) for k, v in BOOTSTRAP_ORCHESTRATORS.items()}
-        self._configs = {**self._discovered_configs, **self._manifest_configs, **boot_configs}
+        self._configs = {
+            **self._discovered_configs,
+            **self._manifest_configs,
+            **boot_configs,
+        }
 
     def _scan_workspace_for_orchestrators(self) -> list[str]:
         """Performs the I/O-bound scanning of the workspace."""
         subdirs = [
-            "src/infrastructure/orchestration", 
-            "src/logic/agents/cognitive", 
+            "src/infrastructure/orchestration",
+            "src/logic/agents/cognitive",
             "src/infrastructure/fleet",
             "src/logic/agents/swarm",
-            "src/logic/agents/security"
+            "src/logic/agents/security",
         ]
         found_paths = []
         for subdir in subdirs:
@@ -66,7 +81,7 @@ class LazyOrchestratorMap:
             # Phase 116: Performance Optimization
             for root, _, files in os.walk(search_root):
                 for file in files:
-                    if "Orchestrator" in file:
+                    if "orchestrator" in file.lower():
                         full_path = Path(root) / file
                         rel_path = full_path.relative_to(self.workspace_root)
                         found_paths.append(str(rel_path))
@@ -77,7 +92,7 @@ class LazyOrchestratorMap:
         manifest_configs = {}
         manifest_paths = [
             self.workspace_root / "plugins" / "orchestrator_manifest.json",
-            self.workspace_root / "plugins" / "manifest.json"
+            self.workspace_root / "plugins" / "manifest.json",
         ]
         for m_path in manifest_paths:
             if m_path.exists():
@@ -90,16 +105,16 @@ class LazyOrchestratorMap:
                     logging.error(f"Failed to load orchestrator manifest {m_path}: {e}")
         return manifest_configs
 
-    def __getattr__(self, name) -> Any:
+    def __getattr__(self, name: str) -> Any:
         if name in self.__dict__:
             return self.__dict__[name]
 
         if name in self._instances:
             return self._instances[name]
-        
+
         if name in self._configs:
             return self._instantiate(name, self._configs[name])
-            
+
         # Case-insensitive and underscore-tolerant fallback
         n_low = name.lower().replace("_", "")
         for k, cfg in self._configs.items():
@@ -112,22 +127,24 @@ class LazyOrchestratorMap:
         """Attempts to reload/re-instantiate a specific orchestrator."""
         if name in self._instances:
             del self._instances[name]
-        
+
         try:
             instance = getattr(self, name)
             # Check if it's still a stub
-            from .ResilientStubs import ResilientStub
+            from .resilient_stubs import ResilientStub
+
             return not isinstance(instance, ResilientStub)
         except Exception as e:
             logging.error(f"Failed to reload orchestrator '{name}': {e}")
             return False
 
-    def _instantiate(self, key, config) -> Any:
+    def _instantiate(self, key: str, config: tuple[str, str, bool, str | None]) -> Any:
         module_path, class_name, needs_fleet, arg_path_suffix = config
         try:
             import importlib
+
             module = importlib.import_module(module_path)
-            
+
             # Version Gatekeeping
             min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
             if not self._registry_core.is_compatible(min_sdk):
@@ -138,13 +155,14 @@ class LazyOrchestratorMap:
                 return stub
 
             orchestrator_class = getattr(module, class_name)
-            
+
             # Phase 125: Enhanced Instantiation with Agent Compatibility
             # Some orchestrators (e.g. WeightOrchestrator) inherit from BaseAgent
             # and require a workspace_root string as the first argument.
             instance = None
             try:
-                from src.core.base.BaseAgent import BaseAgent
+                from src.core.base.lifecycle.base_agent import BaseAgent
+
                 is_agent = issubclass(orchestrator_class, BaseAgent)
             except Exception:
                 is_agent = False
@@ -158,32 +176,36 @@ class LazyOrchestratorMap:
                     if hasattr(instance, "fleet"):
                         instance.fleet = self.fleet
                 except TypeError:
-                    instance = None # Fallback to standard logic
+                    instance = None  # Fallback to standard logic
 
             if instance is None:
                 if needs_fleet:
                     try:
-                       instance = orchestrator_class(fleet=self.fleet)
+                        instance = orchestrator_class(fleet=self.fleet)
                     except TypeError:
-                       try:
-                           instance = orchestrator_class(self.fleet)
-                       except TypeError:
-                           try:
-                               # Fallback for Engines/Managers that expect workspace_root string
-                               instance = orchestrator_class(str(self.workspace_root))
-                               if hasattr(instance, "fleet"):
-                                   instance.fleet = self.fleet
-                           except TypeError:
-                               try:
-                                   instance = orchestrator_class(fleet_manager=self.fleet)
-                               except TypeError:
-                                   instance = orchestrator_class()
+                        try:
+                            instance = orchestrator_class(self.fleet)
+                        except TypeError:
+                            try:
+                                # Fallback for Engines/Managers that expect workspace_root string
+                                instance = orchestrator_class(str(self.workspace_root))
+                                if hasattr(instance, "fleet"):
+                                    instance.fleet = self.fleet
+                            except TypeError:
+                                try:
+                                    instance = orchestrator_class(fleet_manager=self.fleet)
+                                except TypeError:
+                                    instance = orchestrator_class()
                 elif arg_path_suffix is not None:
                     base_path = self.workspace_root / arg_path_suffix
-                    instance = orchestrator_class(str(base_path)) if base_path.exists() else orchestrator_class(arg_path_suffix)
+                    instance = (
+                        orchestrator_class(str(base_path))
+                        if base_path.exists()
+                        else orchestrator_class(arg_path_suffix)
+                    )
                 else:
                     instance = orchestrator_class()
-                
+
             self._instances[key] = instance
             return instance
         except (ImportError, SyntaxError) as e:
@@ -197,12 +219,16 @@ class LazyOrchestratorMap:
 
     def keys(self) -> list[str]:
         """Returns list of available orchestrators."""
+
         return list(self._configs.keys())
 
-    def __contains__(self, key) -> bool:
+    def __contains__(self, key: object) -> bool:
         return key in self._configs
 
+
 class OrchestratorRegistry:
+    """Registry for mapping agent types to their corresponding orchestrators."""
+
     @staticmethod
-    def get_orchestrator_map(fleet_instance) -> LazyOrchestratorMap:
+    def get_orchestrator_map(fleet_instance: FleetManager) -> LazyOrchestratorMap:
         return LazyOrchestratorMap(fleet_instance)

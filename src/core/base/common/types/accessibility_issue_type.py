@@ -16,13 +16,17 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from enum import Enum
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class AccessibilityIssueType(Enum):
     """Types of accessibility issues in UI code."""
+
     MISSING_ALT_TEXT = "missing_alt_text"
     LOW_COLOR_CONTRAST = "low_color_contrast"
     MISSING_LABEL = "missing_label"

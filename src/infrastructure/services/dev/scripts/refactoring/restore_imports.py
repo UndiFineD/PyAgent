@@ -15,9 +15,11 @@
 """Script for restoring imports that were incorrectly commented out as unused."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -35,18 +37,18 @@ for root, _, files in os.walk(src_path):
             try:
                 with open(path, encoding="utf-8", errors="ignore") as f:
                     content = f.read()
-                
+
                 if "# Auto-removed unused" in content:
                     print(f"  Checking {file}...")
                     # Replace "# X # Auto-removed unused" with "X"
                     # Improved regex to be more flexible with leading hash and multiple suffixes
                     new_content = content
                     changes_in_file = 0
-                    
+
                     # Pattern for lines that were commented out with the suffix
                     # Capture the leading indentation
                     pattern = r"^(\s*)#+\s*(.*?)\s*# Auto-removed unused.*$"
-                    
+
                     lines = new_content.splitlines()
                     for i, line in enumerate(lines):
                         if "# Auto-removed unused" in line:
@@ -57,21 +59,24 @@ for root, _, files in os.walk(src_path):
                                 # Repeatedly strip if multiple patterns remain
                                 while "# Auto-removed unused" in restored:
                                     # Strip leading hash and trailing suffix again
-                                    inner_match = re.match(r"^\s*#+\s*(.*?)\s*# Auto-removed unused.*$", restored)
+                                    inner_match = re.match(
+                                        r"^\s*#+\s*(.*?)\s*# Auto-removed unused.*$",
+                                        restored,
+                                    )
                                     if inner_match:
                                         restored = inner_match.group(1)
                                     else:
                                         # If it has the suffix but not the leading hash, just strip suffix
                                         restored = re.sub(r"\s*# Auto-removed unused.*$", "", restored)
-                                
-                                print(f"    Restoring line {i+1}: {indent}{restored.strip()}")
+
+                                print(f"    Restoring line {i + 1}: {indent}{restored.strip()}")
                                 lines[i] = f"{indent}{restored}"
                                 changes_in_file += 1
                             else:
                                 # If it doesn't have the leading hash but has the suffix
                                 if "# Auto-removed unused" in line:
                                     restored = re.sub(r"\s*# Auto-removed unused.*$", "", line)
-                                    print(f"    Restoring line {i+1} (suffix only): {restored.strip()}")
+                                    print(f"    Restoring line {i + 1} (suffix only): {restored.strip()}")
                                     lines[i] = restored
                                     changes_in_file += 1
 

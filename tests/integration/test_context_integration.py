@@ -3,38 +3,31 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
-import json
-from datetime import datetime
-import pytest
-import logging
+from typing import List, Dict, Self
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
-    class agent_sys_path:
-        def __enter__(self) -> Self: 
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
+    class agent_sys_path:
+        def __enter__(self) -> Self:
             return self
-        def __exit__(self, *args) -> None: 
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestContextIntegration(unittest.TestCase):
     """Integration tests for context management."""
@@ -93,7 +86,6 @@ class TestContextIntegration(unittest.TestCase):
 # (from test_agent_context_improvements_comprehensive.py) ==========
 
 
-
 class TestGitHistoryIntegration(unittest.TestCase):
     """Test including recent git history in context."""
 
@@ -101,47 +93,49 @@ class TestGitHistoryIntegration(unittest.TestCase):
         """Test extracting last 10 commits."""
         git_history: List[Dict[str, str]] = [
             {
-                'commit': 'abc123',
-                'author': 'dev1',
-                'message': 'Fix bug in parser',
-                'date': '2025-12-16'
+                "commit": "abc123",
+                "author": "dev1",
+                "message": "Fix bug in parser",
+                "date": "2025-12-16",
             },
             {
-                'commit': 'def456',
-                'author': 'dev2',
-                'message': 'Add feature X',
-                'date': '2025-12-15'
+                "commit": "def456",
+                "author": "dev2",
+                "message": "Add feature X",
+                "date": "2025-12-15",
             },
             {
-                'commit': 'ghi789',
-                'author': 'dev1',
-                'message': 'Refactor context module',
-                'date': '2025-12-14'
+                "commit": "ghi789",
+                "author": "dev1",
+                "message": "Refactor context module",
+                "date": "2025-12-14",
             },
         ]
         self.assertEqual(len(git_history), 3)
-        self.assertEqual(git_history[0]['commit'], 'abc123')
+        self.assertEqual(git_history[0]["commit"], "abc123")
 
     def test_commit_message_parsing(self) -> None:
         """Test parsing commit messages for context."""
         commits: List[Dict[str, str]] = [
-            {'hash': 'abc123', 'message': 'Fix: resolve memory leak in parser'},
-            {'hash': 'def456', 'message': 'Feature: add async support'},
-            {'hash': 'ghi789', 'message': 'Refactor: extract utilities to separate module'}
+            {"hash": "abc123", "message": "Fix: resolve memory leak in parser"},
+            {"hash": "def456", "message": "Feature: add async support"},
+            {
+                "hash": "ghi789",
+                "message": "Refactor: extract utilities to separate module",
+            },
         ]
 
-        fix_commits: List[Dict[str, str]] = [c for c in commits if c['message'].startswith('Fix')]
+        fix_commits: List[Dict[str, str]] = [
+            c for c in commits if c["message"].startswith("Fix")
+        ]
         self.assertEqual(len(fix_commits), 1)
 
     def test_contributor_extraction(self) -> None:
         """Test extracting contributor information."""
         commits = [
-            {'author': 'alice@example.com', 'count': 15},
-            {'author': 'bob@example.com', 'count': 8},
-            {'author': 'charlie@example.com', 'count': 3}
+            {"author": "alice@example.com", "count": 15},
+            {"author": "bob@example.com", "count": 8},
+            {"author": "charlie@example.com", "count": 3},
         ]
-        top_contributor = max(commits, key=lambda x: x['count'])
-        self.assertEqual(top_contributor['author'], 'alice@example.com')
-
-
-
+        top_contributor = max(commits, key=lambda x: x["count"])
+        self.assertEqual(top_contributor["author"], "alice@example.com")

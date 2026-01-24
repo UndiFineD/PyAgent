@@ -16,12 +16,16 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .PerformanceMetricType import PerformanceMetricType
-from dataclasses import dataclass, field
+
 import time
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .performance_metric_type import PerformanceMetricType
 
 __version__ = VERSION
+
 
 @dataclass
 class PerformanceMetric:

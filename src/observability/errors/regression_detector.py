@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ErrorEntry import ErrorEntry
-from .RegressionInfo import RegressionInfo
-from typing import Dict, List, Optional
+
 import re
 
+from src.core.base.lifecycle.version import VERSION
+
+from .error_entry import ErrorEntry
+from .regression_info import RegressionInfo
+
 __version__ = VERSION
+
 
 class RegressionDetector:
     """Detects error regressions.
@@ -49,9 +52,7 @@ class RegressionDetector:
         signature = self._get_error_signature(error)
         self.fixed_errors[signature] = commit_hash
 
-    def check_regression(
-        self, error: ErrorEntry, current_commit: str = ""
-    ) -> RegressionInfo | None:
+    def check_regression(self, error: ErrorEntry, current_commit: str = "") -> RegressionInfo | None:
         """Check if an error is a regression.
 
         Args:
@@ -66,7 +67,7 @@ class RegressionDetector:
             regression = RegressionInfo(
                 error_id=error.id,
                 original_fix_commit=self.fixed_errors[signature],
-                regression_commit=current_commit
+                regression_commit=current_commit,
             )
             # Check if already tracked
             for r in self.regressions:

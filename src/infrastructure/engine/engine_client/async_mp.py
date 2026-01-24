@@ -1,17 +1,34 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: Async Multi-process Engine Client
 Queue-based asynchronous client.
 """
 
 from __future__ import annotations
+
 import asyncio
 import logging
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.types import EngineOutput
 
 if TYPE_CHECKING:
-    from src.infrastructure.engine.engine_client.types import EngineClientConfig, SchedulerOutput
+    from src.infrastructure.engine.engine_client.types import (
+        EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
 
@@ -41,10 +58,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
             try:
                 # Get next request with timeout
                 try:
-                    request_id, request = await asyncio.wait_for(
-                        self._request_queue.get(),
-                        timeout=0.1
-                    )
+                    request_id, request = await asyncio.wait_for(self._request_queue.get(), timeout=0.1)
                 except asyncio.TimeoutError:
                     continue
 
@@ -55,7 +69,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                     request_id=request_id,
                     outputs=[{"token_ids": list(range(request.scheduled_tokens))}],
                     finished=True,
-                    metrics={"latency_ms": 1.0}
+                    metrics={"latency_ms": 1.0},
                 )
 
                 await self._output_queue.put(output)
@@ -69,10 +83,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         """Handle output distribution to waiting futures."""
         while self._running:
             try:
-                output = await asyncio.wait_for(
-                    self._output_queue.get(),
-                    timeout=0.1
-                )
+                output = await asyncio.wait_for(self._output_queue.get(), timeout=0.1)
 
                 if output.request_id in self._pending_futures:
                     future = self._pending_futures.pop(output.request_id)
@@ -117,9 +128,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         timeout = (timeout_ms or self.config.request_timeout_ms) / 1000.0
 
         try:
-            return loop.run_until_complete(
-                asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
-            )
+            return loop.run_until_complete(asyncio.wait_for(self._pending_futures[request_id], timeout=timeout))
         except asyncio.TimeoutError:
             return None
 
@@ -131,10 +140,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         timeout = (timeout_ms or self.config.request_timeout_ms) / 1000.0
 
         try:
-            return await asyncio.wait_for(
-                self._pending_futures[request_id],
-                timeout=timeout
-            )
+            return await asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
         except asyncio.TimeoutError:
             return None
 

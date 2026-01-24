@@ -17,7 +17,8 @@ Core logic for Agent Resilience and Fault Tolerance.
 (Facade for src.core.base.common.resilience_core)
 """
 
-from src.core.base.common.resilience_core import ResilienceCore as StandardResilienceCore
+from src.core.base.common.resilience_core import \
+    ResilienceCore as StandardResilienceCore
 
 
 class ResilienceCore(StandardResilienceCore):

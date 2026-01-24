@@ -62,6 +62,7 @@ class TokenizerLike(Protocol):
         """Get the end-of-sequence token ID."""
 
 
+
 @dataclass
 class DetokenizeResult:
     """

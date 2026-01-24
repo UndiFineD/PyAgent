@@ -1,23 +1,6 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-FirewallAgent: Agent for enforcing network security, access control, and traffic filtering in the PyAgent swarm.
-Implements distributed firewall rules and adaptive threat response.
-"""
-
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
@@ -83,7 +66,7 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
             logging.error(f"[FirewallAgent] Failed to load whitelist: {e}")
         return []
 
-    async def _analyze_thought(self, event: dict[str, Any]) -> None:  # pylint: disable=too-many-return-statements
+    async def _analyze_thought(self, event: dict[str, Any]) -> None:
         """Inform the fleet and perform security analysis on the thought."""
         data = event.get("data", {})
         agent_name = data.get("agent", "Unknown")

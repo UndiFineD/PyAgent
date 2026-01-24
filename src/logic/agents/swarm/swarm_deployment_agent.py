@@ -11,18 +11,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Swarm deployment agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import os
 from typing import Any
-from src.core.base.BaseAgent import BaseAgent
-from src.observability.StructuredLogger import StructuredLogger
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 
 
-class SwarmDeploymentAgent(BaseAgent):
+class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Autonomous Fleet Expansion: Provisions and initializes new agent nodes
     on simulated cloud infrastructure.
@@ -54,13 +60,9 @@ class SwarmDeploymentAgent(BaseAgent):
         self.active_deployments.append(node_details)
         return node_details
 
-    def scale_swarm(
-        self, target_node_count: int, node_type: str
-    ) -> list[dict[str, Any]]:
+    def scale_swarm(self, target_node_count: int, node_type: str) -> list[dict[str, Any]]:
         """Scales the swarm up to the target count of nodes."""
-        current_count = sum(
-            1 for d in self.active_deployments if d["node_type"] == node_type
-        )
+        current_count = sum(1 for d in self.active_deployments if d["node_type"] == node_type)
         new_nodes = []
 
         if target_node_count > current_count:

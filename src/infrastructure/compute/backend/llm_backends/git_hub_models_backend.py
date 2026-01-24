@@ -12,13 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Git hub models backend.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import logging
 import os
 from pathlib import Path
-from .LLMBackend import LLMBackend
+
+from src.core.base.lifecycle.version import VERSION
+
+from .llm_backend import LLMBackend
 
 __version__ = VERSION
 
@@ -59,23 +66,17 @@ class GitHubModelsBackend(LLMBackend):
             try:
                 import subprocess
 
-                res = subprocess.run(
-                    ["gh", "auth", "token"], capture_output=True, text=True, check=False
-                )
+                res = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=False)
                 if res.returncode == 0:
                     token = res.stdout.strip()
                     if token:
-                        logging.debug(
-                            "GitHub Models: Using token from 'gh auth token'."
-                        )
+                        logging.debug("GitHub Models: Using token from 'gh auth token'.")
             except Exception:
                 pass
 
         if not token:
             logging.warning("GitHub Models: Missing token. Skipping.")
-            return (
-                ""  # Return empty instead of raising to allow fallback logic to proceed
-            )
+            return ""  # Return empty instead of raising to allow fallback logic to proceed
 
         logging.debug(f"DEBUG: using token: {token[:3]}...")
 
@@ -121,6 +122,7 @@ class GitHubModelsBackend(LLMBackend):
         timeout_s = kwargs.get("timeout_s", 60)
         import json
         import time
+
         start_t = time.time()
 
         for attempt in range(max_retries + 1):
@@ -128,14 +130,10 @@ class GitHubModelsBackend(LLMBackend):
                 # Use current token (might have been updated in previous attempt)
                 headers["Authorization"] = f"Bearer {token}"
 
-                response = self.session.post(
-                    url, headers=headers, data=json.dumps(payload), timeout=timeout_s
-                )
+                response = self.session.post(url, headers=headers, data=json.dumps(payload), timeout=timeout_s)
 
                 if response.status_code == 401:
-                    logging.warning(
-                        f"GitHub Models: Unauthorized (401) on attempt {attempt + 1}. Refreshing token..."
-                    )
+                    logging.warning(f"GitHub Models: Unauthorized (401) on attempt {attempt + 1}. Refreshing token...")
                     try:
                         import subprocess
 
@@ -149,9 +147,7 @@ class GitHubModelsBackend(LLMBackend):
                         new_token = res.stdout.strip() if res.returncode == 0 else ""
 
                         if new_token and new_token != token:
-                            logging.info(
-                                "GitHub Models: New token obtained via GitHub CLI. Retrying..."
-                            )
+                            logging.info("GitHub Models: New token obtained via GitHub CLI. Retrying...")
                             token = new_token
                             # Sticky token for session (Phase 141)
                             os.environ["GITHUB_TOKEN"] = token
@@ -175,9 +171,7 @@ class GitHubModelsBackend(LLMBackend):
                         logging.debug(f"GitHub Models token refresh error: {e}")
 
                 if response.status_code == 401:
-                    logging.warning(
-                        "GitHub Models: Unauthorized even after token refresh."
-                    )
+                    logging.warning("GitHub Models: Unauthorized even after token refresh.")
                     self._update_status("github_models", False)
                     return ""
 
@@ -203,9 +197,7 @@ class GitHubModelsBackend(LLMBackend):
                     threading.Event().wait(timeout=min(2**attempt, 10))
                 else:
                     # Lowered logging level for fallback-friendly behavior (Phase 123)
-                    logging.debug(
-                        f"GitHub Models call failed after {max_retries} retries: {e}"
-                    )
+                    logging.debug(f"GitHub Models call failed after {max_retries} retries: {e}")
                     self._update_status("github_models", False)
                     self._record(
                         "github_models",

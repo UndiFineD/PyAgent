@@ -19,15 +19,18 @@ Demonstrates fleet interaction.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
 from typing import Any
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class CommunityOrchestrator:
     """Mock orchestrator that coordinates between agents."""
-    
+
     def __init__(self, fleet: Any = None) -> None:
         self.fleet = fleet
         self.name = "CommunityOrchestrator"

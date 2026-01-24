@@ -17,12 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""Hierarchical memory storage and promotion logic for Memory Agents.
 
-
-"""
-MemoryStorageMixin: Provides hierarchical memory storage and promotion logic for Memory Agents in PyAgent.
-Handles memory persistence, promotion, and distributed storage strategies.
-Provides the machinery for persisting memory fragments into tiers and promoting them based on importance, recency, and utility metrics.
+Provides the machinery for persisting memory fragments into tiers and promoting
+them based on importance, recency, and utility metrics.
 """
 
 from __future__ import annotations

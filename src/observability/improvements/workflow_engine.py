@@ -16,12 +16,14 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .Improvement import Improvement
-from .TransitionResult import TransitionResult
-from typing import Dict, List
+
+from src.core.base.lifecycle.version import VERSION
+
+from .improvement import Improvement
+from .transition_result import TransitionResult
 
 __version__ = VERSION
+
 
 class WorkflowEngine:
     """Manages improvement workflow transitions."""

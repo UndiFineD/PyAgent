@@ -1,77 +1,61 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-# Phase 40: Extended with Advanced Sampling Parameters
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Sampling infrastructure module.
-
-Provides unified sampling strategies for token generation,
-inspired by vLLM's v1/sample architecture.
-
-Phase 40 additions:
-- AdvancedSamplingParams with vLLM parity
-- Bad words blocking
-- Token whitelisting
-- Mirostat sampling
-- Adaptive sampling based on entropy
-- Temperature scheduling
 """
 
-from .params import SamplingParams, SamplingState
-from .base import Sampler, HAS_RUST
-from .kernels import (
-    TemperatureSampler,
-    TopKSampler,
-    TopPSampler,
-    TopKTopPSampler,
-    GumbelSampler,
-    RepetitionPenaltySampler,
-    PenaltySampler,
-)
-from .beam_search import (
-    BeamSearchConfig,
-    BeamHypothesis,
-    BeamSearchSampler,
-)
-from .engine import SamplingPipeline, sample_logits
-
-from .advanced_sampling_params import (
-    # Enums
-    OutputKind,
-    StopCondition,
-    TemperatureSchedule,
-
-    # Core classes
-    AdvancedSamplingParams,
-
-    # Processors
-    LogitBiasBuilder,
-    BadWordsProcessor,
-    TokenWhitelistProcessor,
-    MirostatSampler,
-    SamplingEngine,
-
-    # Factory functions
-    create_sampling_params,
-    create_advanced_sampling_params,
-)
+from .base import HAS_RUST, Sampler  # noqa: F401
+from .params import SamplingParams, SamplingState  # noqa: F401
 
 __all__ = [
-    # SamplingEngine
-    "BeamHypothesis",
-    "BeamSearchConfig",
-    "BeamSearchSampler",
-    "GumbelSampler",
-    "Sampler",
     "SamplingParams",
-    "SamplingPipeline",
     "SamplingState",
+    "Sampler",
+    "HAS_RUST",
+]
+from .advanced_sampling_params import (AdvancedSamplingParams,  # noqa: F401
+                                       BadWordsProcessor, LogitBiasBuilder,
+                                       MirostatSampler, OutputKind,
+                                       SamplingEngine, StopCondition,
+                                       TemperatureSchedule,
+                                       TokenWhitelistProcessor,
+                                       create_advanced_sampling_params,
+                                       create_sampling_params)
+from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler  # noqa: F401
+from .engine import SamplingPipeline, sample_logits  # noqa: F401
+from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,  # noqa: F401
+                      TemperatureSampler, TopKSampler, TopKTopPSampler,
+                      TopPSampler)
+
+__all__ = [
+    "SamplingParams",
+    "SamplingState",
+    "Sampler",
+    "HAS_RUST",
     "TemperatureSampler",
     "TopKSampler",
-    "TopKTopPSampler",
     "TopPSampler",
+    "TopKTopPSampler",
+    "GumbelSampler",
+    "RepetitionPenaltySampler",
+    "PenaltySampler",
+    "BeamSearchConfig",
+    "BeamHypothesis",
+    "BeamSearchSampler",
+    "SamplingPipeline",
     "sample_logits",
-
-    # Phase 40 - Advanced Sampling
     "OutputKind",
     "StopCondition",
     "TemperatureSchedule",

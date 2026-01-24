@@ -16,16 +16,19 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ReportComparison import ReportComparison
+
 from pathlib import Path
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_comparison import ReportComparison
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+
 
 class ReportComparator:
     """Compares report versions to show differences.
@@ -65,15 +68,15 @@ class ReportComparator:
             added=added,
             removed=removed,
             changed=[],
-            unchanged_count=unchanged
+            unchanged_count=unchanged,
         )
 
     def _extract_items(self, content: str) -> list[str]:
         """Extract list items from markdown content."""
 
         items: list[str] = []
-        for line in content.split('\n'):
+        for line in content.split("\n"):
             line = line.strip()
-            if line.startswith('- '):
+            if line.startswith("- "):
                 items.append(line)
         return items

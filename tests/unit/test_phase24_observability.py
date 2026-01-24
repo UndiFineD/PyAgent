@@ -318,7 +318,9 @@ class TestToolParser:
 
     def test_tool_parser_decorator(self):
         """Test @tool_parser decorator."""
-        from src.core.base.logic.parsers.tool_parser import tool_parser, ToolParser, ToolParserManager, ExtractedToolCalls
+        from src.core.base.logic.parsers.tool_parser import (
+            tool_parser, ToolParser, ToolParserManager, ExtractedToolCalls
+        )
 
         @tool_parser("custom_test")
         class CustomParser(ToolParser):

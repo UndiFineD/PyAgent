@@ -18,7 +18,6 @@ Evolutionary Prompt Agent for genetic optimization of agent instructions.
 
 import random
 from typing import Any
-from pathlib import Path
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -108,7 +107,6 @@ class EvolutionaryPromptAgent(BaseAgent):
                     "parents": [parent1.get("sha"), parent2.get("sha")],
                     "fitness": 0.0,
                     "generation": self.generation + 1,
-                    "history": [],  # Add history for fitness tracking
                 }
             )
 
@@ -130,142 +128,3 @@ class EvolutionaryPromptAgent(BaseAgent):
             return "No population initialized."
         best = max(self.population, key=lambda x: x["fitness"])
         return best["prompt"]
-
-    @as_tool
-    def update_all_agent_prompts(self) -> dict[str, Any]:
-        """
-        Scans all agent directories in data/agents/ that have prompt.txt files
-        and updates them with evolved, optimized versions of their current prompts.
-        """
-        agents_dir = Path(self._workspace_root) / "data" / "agents"
-        if not agents_dir.exists():
-            return {"error": "Agents directory not found", "path": str(agents_dir)}
-
-        updated_agents = []
-        skipped_dirs = []
-
-        # Scan all agent directories
-        for agent_dir in agents_dir.iterdir():
-            if not agent_dir.is_dir():
-                continue
-
-            agent_name = agent_dir.name
-            prompt_file = agent_dir / "prompt.txt"
-
-            if not prompt_file.exists():
-                skipped_dirs.append(agent_name)
-                continue
-
-            try:
-                # Read current prompt
-                with open(prompt_file, 'r', encoding='utf-8') as f:
-                    current_prompt = f.read().strip()
-
-                if not current_prompt:
-                    skipped_dirs.append(f"{agent_name} (empty prompt)")
-                    continue
-
-                # Apply evolutionary optimization
-                optimized_prompt = self._optimize_agent_prompt(current_prompt, agent_name)
-
-                # Write back the optimized prompt
-                with open(prompt_file, 'w', encoding='utf-8') as f:
-                    f.write(optimized_prompt)
-
-                updated_agents.append({
-                    "agent": agent_name,
-                    "original_length": len(current_prompt),
-                    "optimized_length": len(optimized_prompt),
-                    "improvement": len(optimized_prompt) - len(current_prompt)
-                })
-
-            except Exception as e:  # pylint: disable=broad-exception-caught
-                skipped_dirs.append(f"{agent_name} (error: {str(e)})")
-
-        return {
-            "updated_count": len(updated_agents),
-            "updated_agents": updated_agents,
-            "skipped_count": len(skipped_dirs),
-            "skipped_dirs": skipped_dirs[:10],  # Limit for readability
-            "total_agent_dirs": len(list(agents_dir.iterdir())),
-            "dirs_with_prompts": len(updated_agents) + len([s for s in skipped_dirs if "(error:" in s or "(empty" in s])
-        }
-
-    def _optimize_agent_prompt(self, prompt: str, agent_name: str) -> str:
-        """
-        Applies evolutionary optimization to improve an agent prompt.
-        """
-        # Initialize population with the current prompt
-        self.initialize_population(prompt)
-
-        # Simulate some generations of evolution (simplified for bulk processing)
-        for _ in range(3):  # 3 generations for speed
-            # Mock fitness scores (in real usage, this would be based on actual performance)
-            for i, individual in enumerate(self.population):
-                # Simple heuristic: prefer prompts that are concise but comprehensive
-                fitness = self._calculate_prompt_fitness(individual["prompt"], agent_name)
-                self.record_fitness(i, fitness)
-
-            # Evolve to next generation
-            self.evolve_generation()
-
-        # Get the best evolved prompt
-        best_prompt = self.get_best_prompt()
-
-        # If evolution didn't produce a better result, apply minimal improvements
-        if best_prompt == "No population initialized." or len(best_prompt) < len(prompt) * 0.8:
-            best_prompt = self._apply_minimal_improvements(prompt, agent_name)
-
-        return best_prompt
-
-    def _calculate_prompt_fitness(self, prompt: str, agent_name: str) -> float:
-        """
-        Calculate a fitness score for a prompt based on various heuristics.
-        """
-        score = 0.0
-
-        # Prefer prompts that clearly identify the agent
-        if agent_name.lower() in prompt.lower():
-            score += 10
-
-        # Prefer concise prompts (but not too short)
-        length = len(prompt)
-        if 100 <= length <= 1000:
-            score += 20
-        elif length < 50:
-            score -= 10  # Too short
-        elif length > 2000:
-            score -= 5   # Too long
-
-        # Prefer prompts with clear instructions
-        instruction_words = ['you are', 'your role', 'you must', 'always', 'focus on']
-        for word in instruction_words:
-            if word in prompt.lower():
-                score += 2
-
-        # Prefer prompts that mention specific capabilities
-        capability_indicators = ['code', 'analyze', 'generate', 'optimize', 'process', 'handle']
-        capability_count = sum(1 for cap in capability_indicators if cap in prompt.lower())
-        score += capability_count * 3
-
-        return max(score, 0.1)  # Minimum score to avoid division by zero
-
-    def _apply_minimal_improvements(self, prompt: str, agent_name: str) -> str:
-        """
-        Apply minimal improvements to a prompt if evolution doesn't produce better results.
-        """
-        improved = prompt
-
-        # Ensure the prompt starts with agent identification
-        if not improved.lower().startswith('you are'):
-            improved = f"You are the {agent_name.replace('_', ' ').title()} Agent. {improved}"
-
-        # Add clarity markers if missing
-        if 'your role' not in improved.lower() and 'you must' not in improved.lower():
-            improved += "\n\nYour role is to assist with tasks effectively and efficiently."
-
-        # Ensure the prompt ends with a call to action or capability statement
-        if not any(phrase in improved.lower() for phrase in ['always', 'focus on', 'specialize in']):
-            improved += "\n\nAlways provide high-quality, accurate responses."
-
-        return improved

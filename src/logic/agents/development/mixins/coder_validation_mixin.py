@@ -63,7 +63,7 @@ class CoderValidationMixin:
                 check=False,
             )
             return result.returncode == 0
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error(f"flake8 validation failed: {e}")
             return True
         finally:

@@ -16,13 +16,17 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .UsageRecord import UsageRecord
-from typing import Any, Dict, List, Optional
+
 import threading
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .usage_record import UsageRecord
 
 __version__ = VERSION
+
 
 class SystemAnalytics:
     """Collects and reports backend usage analytics.

@@ -41,7 +41,6 @@ from src.logic.agents.specialists.mixins.accessibility_logic_mixin import \
 __version__ = VERSION
 
 
-# pylint: disable=too-many-ancestors
 class AccessibilityAgent(
     BaseAgent,
     HtmlAccessibilityMixin,

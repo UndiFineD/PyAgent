@@ -16,13 +16,17 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from enum import Enum
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class VersioningStrategy(Enum):
     """Supported versioning strategies."""
+
     SEMVER = "semver"  # Semantic Versioning (MAJOR.MINOR.PATCH)
     CALVER = "calver"  # Calendar Versioning (YYYY.MM.DD)
     CUSTOM = "custom"  # Custom versioning pattern

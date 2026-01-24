@@ -16,13 +16,15 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ErrorEntry import ErrorEntry
-from .ErrorImpact import ErrorImpact
-from .ErrorSeverity import ErrorSeverity
-from typing import Dict, List, Set
+
+from src.core.base.lifecycle.version import VERSION
+
+from .error_entry import ErrorEntry
+from .error_impact import ErrorImpact
+from .error_severity import ErrorSeverity
 
 __version__ = VERSION
+
 
 class ImpactAnalyzer:
     """Analyzes the impact of errors on the codebase.
@@ -70,18 +72,14 @@ class ImpactAnalyzer:
         affected_functions = self.function_map.get(error.file_path, [])
         downstream = self._find_downstream_effects(error.file_path)
 
-        impact_score = self._calculate_impact_score(
-            len(affected_files),
-            len(affected_functions),
-            error.severity
-        )
+        impact_score = self._calculate_impact_score(len(affected_files), len(affected_functions), error.severity)
 
         return ErrorImpact(
             error_id=error.id,
             affected_files=affected_files,
             affected_functions=affected_functions,
             downstream_effects=downstream,
-            impact_score=impact_score
+            impact_score=impact_score,
         )
 
     def _find_affected_files(self, file_path: str) -> list[str]:
@@ -99,9 +97,7 @@ class ImpactAnalyzer:
         self._find_downstream_recursive(file_path, effects, visited)
         return effects
 
-    def _find_downstream_recursive(
-        self, file_path: str, effects: list[str], visited: set[str]
-    ) -> None:
+    def _find_downstream_recursive(self, file_path: str, effects: list[str], visited: set[str]) -> None:
         """Recursively find downstream effects."""
         if file_path in visited:
             return
@@ -111,9 +107,7 @@ class ImpactAnalyzer:
                 effects.append(file)
                 self._find_downstream_recursive(file, effects, visited)
 
-    def _calculate_impact_score(
-        self, file_count: int, func_count: int, severity: ErrorSeverity
-    ) -> float:
+    def _calculate_impact_score(self, file_count: int, func_count: int, severity: ErrorSeverity) -> float:
         """Calculate an impact score."""
         base = severity.value * 10
         file_impact = min(file_count * 5, 30)

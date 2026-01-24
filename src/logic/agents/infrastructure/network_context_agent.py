@@ -16,23 +16,27 @@
 """Agent that maps the codebase into a graph of relationships."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
+
 import logging
 import os
 import re
 
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.cognitive.context.engines.graph_context_engine import \
+    GraphContextEngine
+
 __version__ = VERSION
+
 
 class NetworkContextAgent(BaseAgent):
     """Scans the codebase to build a graph of imports and class hierarchies."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.engine = GraphContextEngine(str(self.file_path.parent))
         self.graph_file = self.file_path.parent / ".agent_code_graph.json"
-        
+
         self._system_prompt = (
             "You are the Network Context Agent (Graph Specialist). "
             "Internalize the codebase as a graph where nodes are files/classes and edges are relationships. "
@@ -45,7 +49,7 @@ class NetworkContextAgent(BaseAgent):
     def scan_project(self) -> str:
         """Perform a full scan of the project to build the graph."""
         root = self.file_path.parent
-        
+
         # 1. Discover all python files as nodes
         py_files = []
         for p in root.rglob("*.py"):
@@ -60,19 +64,19 @@ class NetworkContextAgent(BaseAgent):
             rel_path = str(p.relative_to(root))
             try:
                 content = p.read_text(encoding="utf-8")
-                
+
                 # Find imports (from ... import ... or import ...)
                 # Simple regex for module names
                 imports = re.findall(r"^(?:from|import)\s+([\w\.]+)", content, re.MULTILINE)
                 for imp in imports:
                     # Clean up dots to find potential local files
                     # e.g. from .classes.agent import Agent -> classes.agent
-                    clean_imp = imp.lstrip('.')
-                    potential_path = clean_imp.replace('.', '/') + ".py"
-                    
+                    clean_imp = imp.lstrip(".")
+                    potential_path = clean_imp.replace(".", "/") + ".py"
+
                     # Search for this module in our known files
                     for other_rel in self.engine.graph.keys():
-                        if potential_path in other_rel or other_rel.replace('\\', '/') in potential_path:
+                        if potential_path in other_rel or other_rel.replace("\\", "/") in potential_path:
                             self.engine.add_edge(rel_path, other_rel, "imports")
 
                 # Find Class hierarchy
@@ -81,9 +85,9 @@ class NetworkContextAgent(BaseAgent):
                     cls_id = f"{rel_path}:{cls_name}"
                     self.engine.add_node(cls_id, "class", {"file": rel_path})
                     self.engine.add_edge(rel_path, cls_id, "contains")
-                    
+
                     if bases:
-                        for base in bases.split(','):
+                        for base in bases.split(","):
                             base = base.strip()
                             # Try to find the base class in same file or imports
                             # (Heuristic: search matching class names)
@@ -99,9 +103,9 @@ class NetworkContextAgent(BaseAgent):
         """Analyze the impact of changing a specific file."""
         self.engine.load(str(self.graph_file))
         rel_path = os.path.relpath(file_path, self.file_path.parent)
-        
+
         impacted_nodes = self.engine.get_transitive_neighbors(rel_path, depth=3)
-        
+
         report = [f"## Impact Analysis for {rel_path}"]
         if not impacted_nodes:
             report.append("No direct downstream dependencies found in the graph.")
@@ -111,5 +115,5 @@ class NetworkContextAgent(BaseAgent):
                 meta = self.engine.metadata.get(node, {})
                 node_type = meta.get("type", "unknown")
                 report.append(f"- **{node}** ({node_type})")
-                
+
         return "\n".join(report)

@@ -85,36 +85,13 @@ class CoreExpansionAgent(BaseAgent):
     def audit_environment(self) -> list[str]:
         """
         Lists currently installed packages in the environment.
-        Uses importlib.metadata with a silent fallback to pkg_resources.
         """
-        # 1. Try standard importlib.metadata (Python 3.8+)
         try:
             from importlib.metadata import distributions
-            results = []
-            for dist in distributions():
-                try:
-                    name = "Unknown"
-                    if dist.metadata:
-                        name = dist.metadata.get("Name") or getattr(dist, "name", "Unknown")
-                    else:
-                        name = getattr(dist, "name", "Unknown")
-                    results.append(f"{name}=={dist.version}")
-                except (AttributeError, KeyError, TypeError) as _e:
-                    continue
-            if results:
-                return results
-        except (ImportError, KeyError, AttributeError):
-            pass
 
-        # 2. Last resort fallback (pkg_resources is deprecated)
-        try:
-            import warnings
-            with warnings.catch_warnings():
-                # Filter both DeprecationWarning and UserWarning for pkg_resources
-                warnings.filterwarnings("ignore", category=DeprecationWarning)
-                warnings.filterwarnings("ignore", category=UserWarning, message=".*pkg_resources.*")
-                import pkg_resources  # pylint: disable=import-outside-toplevel
+            return [f"{d.metadata['Name']}=={d.version}" for d in distributions()]
+        except (ImportError, KeyError):
+            import pkg_resources
 
-            return [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
-        except (ImportError, AttributeError, Exception):  # pylint: disable=broad-exception-caught
-            return ["Error: Could not retrieve environment metadata."]
+            installed_packages = [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
+            return installed_packages

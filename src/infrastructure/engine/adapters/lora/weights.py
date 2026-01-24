@@ -1,15 +1,32 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """LoRA layer weight implementations."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
+
 import numpy as np
 
 try:
     from numpy.typing import NDArray
 except ImportError:
     from typing import Any
+
     NDArray = Any
 
 try:
@@ -21,6 +38,7 @@ except ImportError:
 @dataclass
 class LoRALayerWeights:
     """LoRA weights for a single layer."""
+
     lora_a: NDArray[np.float32]  # [rank, in_features]
     lora_b: NDArray[np.float32]  # [out_features, rank]
     scaling: float
@@ -64,7 +82,7 @@ class LoRALayerWeights:
                     self.in_features,
                     self.out_features,
                     self.rank,
-                    self.scaling
+                    self.scaling,
                 )
 
                 # Reshape back to original dimensions as needed
@@ -98,7 +116,7 @@ class LoRALayerWeights:
                     self.out_features,
                     self.in_features,
                     self.rank,
-                    self.scaling
+                    self.scaling,
                 )
                 return np.array(merged_flat, dtype=np.float32).reshape(base_weight.shape)
             except Exception:
@@ -116,6 +134,7 @@ class LoRALayerWeights:
 @dataclass
 class IA3LayerWeights:
     """IA3 (Input-Activation-Attention Scaling) weights for a single layer."""
+
     scaling_vector: NDArray[np.float32]  # [features]
     module_name: str
 
@@ -141,6 +160,7 @@ class IA3LayerWeights:
 @dataclass
 class PackedLoRAWeights:
     """Packed LoRA weights for fused QKV or gate+up projections."""
+
     lora_a: NDArray[np.float32]  # [num_layers, rank, in_features]
     lora_b: NDArray[np.float32]  # [num_layers, out_features, rank]
     scalings: list[float]

@@ -11,10 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core package.
+"""
+
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+__all__ = ["VERSION", "__version__"]
 
 # You may obtain a copy of the License at
 #

@@ -18,7 +18,6 @@ Internal managers for prompt, conversation, auth, and batch processing.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
 
 from src.core.base.lifecycle.version import VERSION
 
@@ -35,50 +34,6 @@ from .prompt_managers import (PromptTemplateManager, PromptVersion,  # noqa: F40
 from .resource_quota_manager import QuotaConfig, ResourceQuotaManager  # noqa: F401
 from .system_managers import (EventManager, FilePriorityManager, HealthChecker,  # noqa: F401
                               ProfileManager, ResponseCache, StatePersistence)
-=======
-from src.core.base.lifecycle.version import VERSION as VERSION
-from .prompt_managers import (
-    PromptTemplateManager as PromptTemplateManager,
-    PromptVersion as PromptVersion,
-    PromptVersionManager as PromptVersionManager,
-)
-from .conversation_managers import ConversationHistory as ConversationHistory
-from .auth_manager import (
-    AuthenticationManager as AuthenticationManager,
-    AuthManager as AuthManager,
-)
-from .batch_managers import (
-    BatchRequest as BatchRequest,
-    RequestBatcher as RequestBatcher,
-)
-from .processor_managers import (
-    ResponsePostProcessor as ResponsePostProcessor,
-    MultimodalProcessor as MultimodalProcessor,
-    SerializationManager as SerializationManager,
-)
-from .orchestration_managers import (
-    AgentComposer as AgentComposer,
-    ModelSelector as ModelSelector,
-    QualityScorer as QualityScorer,
-    ABTest as ABTest,
-)
-from .plugin_manager import (
-    PluginManager as PluginManager,
-    PluginMetadata as PluginMetadata,
-)
-from .system_managers import (
-    FilePriorityManager as FilePriorityManager,
-    ResponseCache as ResponseCache,
-    StatePersistence as StatePersistence,
-    EventManager as EventManager,
-    HealthChecker as HealthChecker,
-    ProfileManager as ProfileManager,
-)
-from .resource_quota_manager import (
-    ResourceQuotaManager as ResourceQuotaManager,
-    QuotaConfig as QuotaConfig,
-)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __version__ = VERSION
 __all__ = [

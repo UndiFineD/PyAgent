@@ -16,18 +16,21 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .CleanupStrategy import CleanupStrategy
-from pathlib import Path
-from typing import Any, List, Tuple
-from collections.abc import Callable
+
 import logging
 import shutil
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .cleanup_strategy import CleanupStrategy
 
 __version__ = VERSION
 
+
 class TestDataCleaner:
-    __test__ = False
     """Utilities for cleaning up test data.
 
     Manages cleanup of test artifacts with configurable strategies.
@@ -38,6 +41,8 @@ class TestDataCleaner:
         cleaner.register_file(temp_file)
         cleaner.cleanup_all()
     """
+
+    __test__ = False
 
     def __init__(self, strategy: CleanupStrategy = CleanupStrategy.IMMEDIATE) -> None:
         """Initialize cleaner.

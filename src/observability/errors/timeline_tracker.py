@@ -16,12 +16,16 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TimelineEvent import TimelineEvent
+
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .timeline_event import TimelineEvent
 
 __version__ = VERSION
+
 
 class TimelineTracker:
     """Tracks error events over time.
@@ -37,9 +41,7 @@ class TimelineTracker:
         """Initialize the timeline tracker."""
         self.events: list[TimelineEvent] = []
 
-    def record_event(
-        self, error_id: str, event_type: str, details: str = ""
-    ) -> TimelineEvent:
+    def record_event(self, error_id: str, event_type: str, details: str = "") -> TimelineEvent:
         """Record a timeline event.
 
         Args:
@@ -54,7 +56,7 @@ class TimelineTracker:
             timestamp=datetime.now().isoformat(),
             event_type=event_type,
             error_id=error_id,
-            details=details
+            details=details,
         )
         self.events.append(event)
         return event
@@ -63,14 +65,9 @@ class TimelineTracker:
         """Get all events for a specific error."""
         return [e for e in self.events if e.error_id == error_id]
 
-    def get_events_in_range(
-        self, start: str, end: str
-    ) -> list[TimelineEvent]:
+    def get_events_in_range(self, start: str, end: str) -> list[TimelineEvent]:
         """Get events within a time range."""
-        return [
-            e for e in self.events
-            if start <= e.timestamp <= end
-        ]
+        return [e for e in self.events if start <= e.timestamp <= end]
 
     def generate_timeline_data(self) -> dict[str, Any]:
         """Generate timeline data for visualization."""
@@ -82,7 +79,7 @@ class TimelineTracker:
         return {
             "total_events": len(self.events),
             "events_by_date": by_date,
-            "event_types": list(set(e.event_type for e in self.events))
+            "event_types": list(set(e.event_type for e in self.events)),
         }
 
     def clear(self) -> None:

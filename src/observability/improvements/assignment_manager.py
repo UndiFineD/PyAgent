@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class AssignmentManager:
     """Tracks assignees and ownership history."""

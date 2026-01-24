@@ -23,7 +23,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-from matplotlib.pylab import Generator
 import numpy as np
 
 
@@ -62,7 +61,7 @@ class SamplingParams:
     ignore_eos: bool = False
     logprobs: Optional[int] = None
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         """Validate parameters."""
         if self.temperature < 0:
             raise ValueError("temperature must be non-negative")
@@ -117,7 +116,7 @@ class SamplingState:
     # Random state for reproducibility
     rng: Optional[np.random.Generator] = None
 
-    def __post_init__(self) -> None:
+    def __post_init__(self):
         """Initialize random generator if not provided."""
         if self.rng is None:
             self.rng = np.random.default_rng()
@@ -136,5 +135,5 @@ class SamplingState:
     @classmethod
     def from_seed(cls, request_id: str, seed: Optional[int] = None) -> "SamplingState":
         """Create a state with a specific random seed."""
-        rng: Generator = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
+        rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
         return cls(request_id=request_id, rng=rng)

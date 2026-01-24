@@ -16,13 +16,17 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TestBaseline import TestBaseline
-from pathlib import Path
-from typing import Any, Dict, Optional
+
 import json
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_baseline import TestBaseline
 
 __version__ = VERSION
+
 
 class BaselineManager:
     """Manages test baselines for comparison.
@@ -67,12 +71,16 @@ class BaselineManager:
         baseline = TestBaseline(name=name, values=values, version=version)
 
         with open(self._get_path(name), "w") as f:
-            json.dump({
-                "name": baseline.name,
-                "values": baseline.values,
-                "created_at": baseline.created_at,
-                "version": baseline.version,
-            }, f, indent=2)
+            json.dump(
+                {
+                    "name": baseline.name,
+                    "values": baseline.values,
+                    "created_at": baseline.created_at,
+                    "version": baseline.version,
+                },
+                f,
+                indent=2,
+            )
 
         return baseline
 
@@ -150,5 +158,5 @@ class BaselineManager:
         return {
             "baseline_version": baseline.version,
             "diffs": diffs,
-            "passed": len(diffs) == 0,  # type: ignore[arg-type]
+            "passed": not diffs,  # type: ignore[arg-type]
         }

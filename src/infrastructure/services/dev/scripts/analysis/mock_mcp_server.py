@@ -16,11 +16,14 @@
 """Mock MCP server implementation for testing Agentic capabilities."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import json
 import sys
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 def main() -> None:
     """Run a basic JSON-RPC server loop for MCP tool mocking."""
@@ -28,27 +31,40 @@ def main() -> None:
         line = sys.stdin.readline()
         if not line:
             break
+
         try:
             request = json.loads(line)
             if request.get("method") == "tools/list":
                 response = {
                     "jsonrpc": "2.0",
                     "id": request.get("id"),
-                    "result": {"tools": [{"name": "echo_tool", "description": "Returns what you sent"}]}
+                    "result": {
+                        "tools": [
+                            {
+                                "name": "echo_tool",
+                                "description": "Returns what you sent",
+                            }
+                        ]
+                    },
                 }
             elif request.get("method") == "tools/call":
                 response = {
                     "jsonrpc": "2.0",
                     "id": request.get("id"),
-                    "result": {"content": f"Echo: {request['params']['arguments'].get('msg')}"}
+                    "result": {"content": f"Echo: {request['params']['arguments'].get('msg')}"},
                 }
             else:
-                response = {"jsonrpc": "2.0", "id": request.get("id"), "error": "Unknown method"}
-            
+                response = {
+                    "jsonrpc": "2.0",
+                    "id": request.get("id"),
+                    "error": "Unknown method",
+                }
+
             sys.stdout.write(json.dumps(response) + "\n")
             sys.stdout.flush()
         except Exception:
             break
+
 
 if __name__ == "__main__":
     main()

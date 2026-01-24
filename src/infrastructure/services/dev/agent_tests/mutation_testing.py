@@ -16,13 +16,16 @@
 """Mutation testing functionality."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import hashlib
-from typing import List, Dict
+
+from src.core.base.lifecycle.version import VERSION
+
 from .enums import MutationOperator
 from .models import Mutation
 
 __version__ = VERSION
+
 
 class MutationTester:
     """Test mutation analysis."""
@@ -39,34 +42,40 @@ class MutationTester:
         for i, line in enumerate(lines, 1):
             if "+" in line:
                 mut_id = hashlib.md5(f"{file_path}:{i}:+->-".encode()).hexdigest()[:8]
-                mutations.append(Mutation(
-                    id=mut_id,
-                    file_path=file_path,
-                    line_number=i,
-                    operator=MutationOperator.ARITHMETIC,
-                    original_code=line,
-                    mutated_code=line.replace("+", "-", 1)
-                ))
+                mutations.append(
+                    Mutation(
+                        id=mut_id,
+                        file_path=file_path,
+                        line_number=i,
+                        operator=MutationOperator.ARITHMETIC,
+                        original_code=line,
+                        mutated_code=line.replace("+", "-", 1),
+                    )
+                )
             if "==" in line:
                 mut_id = hashlib.md5(f"{file_path}:{i}:==->!=".encode()).hexdigest()[:8]
-                mutations.append(Mutation(
-                    id=mut_id,
-                    file_path=file_path,
-                    line_number=i,
-                    operator=MutationOperator.RELATIONAL,
-                    original_code=line,
-                    mutated_code=line.replace("==", "!=", 1)
-                ))
+                mutations.append(
+                    Mutation(
+                        id=mut_id,
+                        file_path=file_path,
+                        line_number=i,
+                        operator=MutationOperator.RELATIONAL,
+                        original_code=line,
+                        mutated_code=line.replace("==", "!=", 1),
+                    )
+                )
             if " and " in line:
                 mut_id = hashlib.md5(f"{file_path}:{i}:and->or".encode()).hexdigest()[:8]
-                mutations.append(Mutation(
-                    id=mut_id,
-                    file_path=file_path,
-                    line_number=i,
-                    operator=MutationOperator.LOGICAL,
-                    original_code=line,
-                    mutated_code=line.replace(" and ", " or ", 1)
-                ))
+                mutations.append(
+                    Mutation(
+                        id=mut_id,
+                        file_path=file_path,
+                        line_number=i,
+                        operator=MutationOperator.LOGICAL,
+                        original_code=line,
+                        mutated_code=line.replace(" and ", " or ", 1),
+                    )
+                )
         self.mutations.extend(mutations)
         return mutations
 
@@ -88,15 +97,18 @@ class MutationTester:
 
     def get_surviving_mutations(self) -> list[Mutation]:
         """Get mutations that survived (not killed)."""
+
         return [m for m in self.mutations if not m.killed]
 
     def generate_report(self) -> str:
         """Generate mutation testing report."""
+
         report = ["# Mutation Testing Report\n"]
         report.append(f"Total mutations: {len(self.mutations)}")
         report.append(f"Mutation score: {self.get_mutation_score():.1f}%\n")
 
         surviving = self.get_surviving_mutations()
+
         if surviving:
             report.append("## Surviving Mutations\n")
             for mut in surviving[:10]:
@@ -106,6 +118,7 @@ class MutationTester:
                 )
 
         return "\n".join(report)
+
 
 class MutationRunner:
     """Run mutation testing analysis."""
@@ -130,7 +143,7 @@ class MutationRunner:
                 line_number=self.mutation_counter,
                 operator=MutationOperator.ARITHMETIC,
                 original_code="",
-                mutated_code=""
+                mutated_code="",
             )
             mut.killed = killed
             self.tester.mutations.append(mut)

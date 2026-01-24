@@ -1,9 +1,23 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 System commands - stats, memory, health, CPU, disk.
 """
 
-from src.interface.slash_commands.registry import register
 from src.interface.slash_commands.core import CommandContext, CommandResult
+from src.interface.slash_commands.registry import register
 
 
 @register(
@@ -22,7 +36,7 @@ def cmd_stats(ctx: CommandContext) -> CommandResult:
 
     cpu_percent = psutil.cpu_percent(interval=0.1)
     memory = psutil.virtual_memory()
-    disk = psutil.disk_usage('/')
+    disk = psutil.disk_usage("/")
 
     output = (
         f"[CPU: {cpu_percent:.1f}% | "
@@ -181,11 +195,13 @@ def cmd_disk(ctx: CommandContext) -> CommandResult:
 
     try:
         disk = psutil.disk_usage(path)
-    except OSError as e:
+    except OSError:
         return CommandResult.fail(f"Invalid path: {path}")
 
+    used_gb = disk.used // (1024**3)
+    total_gb = disk.total // (1024**3)
     return CommandResult.ok(
-        output=f"[Disk ({path}): {disk.used // (1024**3):.1f}GB/{disk.total // (1024**3):.1f}GB ({disk.percent:.1f}%)]",
+        output=f"[Disk ({path}): {used_gb:.1f}GB/{total_gb:.1f}GB ({disk.percent:.1f}%)]",
         data={
             "path": path,
             "used_gb": disk.used / (1024**3),
@@ -207,6 +223,7 @@ def cmd_gpu(ctx: CommandContext) -> CommandResult:
     """Get GPU information."""
     try:
         import torch
+
         if torch.cuda.is_available():
             gpu_count = torch.cuda.device_count()
             current_device = torch.cuda.current_device()
@@ -254,14 +271,14 @@ def cmd_processes(ctx: CommandContext) -> CommandResult:
             pass
 
     procs = []
-    for proc in psutil.process_iter(['pid', 'name', 'cpu_percent']):
+    for proc in psutil.process_iter(["pid", "name", "cpu_percent"]):
         try:
             procs.append(proc.info)
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             pass
 
     # Sort by CPU and get top N
-    top = sorted(procs, key=lambda p: p.get('cpu_percent', 0) or 0, reverse=True)[:count]
+    top = sorted(procs, key=lambda p: p.get("cpu_percent", 0) or 0, reverse=True)[:count]
 
     output_parts = []
     for p in top:

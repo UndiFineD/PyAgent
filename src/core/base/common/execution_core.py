@@ -22,15 +22,18 @@ Handles concurrent, parallel, and serial task orchestration.
 """
 
 from __future__ import annotations
+
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, List, Callable
+from typing import Any, Callable, List
+
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class ExecutionCore(BaseCore):
     """

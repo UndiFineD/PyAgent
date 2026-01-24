@@ -16,14 +16,17 @@
 """Manager for automated deployment, containerization, and fleet-as-a-service scaling."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class DeploymentManager:
     """Automates the generation of infrastructure-as-code and container manifests for the fleet."""
-    
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.deployment_dir = self.workspace_root / "deploy"
@@ -37,7 +40,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 ENV COMPONENT={component}
-CMD ["python", "src/agent_remote.py"]
+CMD ["python", "src\agent_remote.py"]
 """
         file_path = self.deployment_dir / f"Dockerfile.{component}"
         with open(file_path, "w") as f:

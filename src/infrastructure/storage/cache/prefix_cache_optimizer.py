@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 PrefixCacheOptimizer: Prefix cache hit optimization with radix tree.
 
@@ -12,13 +26,14 @@ Beyond vLLM:
 """
 
 from __future__ import annotations
+
+import hashlib
 import logging
 import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Generic, Optional, TypeVar, Sequence, Hashable
-import hashlib
+from typing import Any, Optional, Sequence, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -27,20 +42,22 @@ T = TypeVar("T")
 
 class CacheTier(Enum):
     """Cache tier for multi-level caching."""
-    HOT = auto()    # L1: Frequently accessed
-    WARM = auto()   # L2: Recently accessed
-    COLD = auto()   # L3: Infrequently accessed
+
+    HOT = auto()  # L1: Frequently accessed
+    WARM = auto()  # L2: Recently accessed
+    COLD = auto()  # L3: Infrequently accessed
 
 
 @dataclass
 class PrefixCacheConfig:
     """Configuration for prefix cache."""
+
     max_cached_sequences: int = 10000
     min_prefix_length: int = 1
     max_prefix_length: int = 4096
     enable_prewarm: bool = True
     prewarm_threshold: int = 3  # Prewarm after N hits
-    hot_threshold: int = 10     # Promote to hot after N hits
+    hot_threshold: int = 10  # Promote to hot after N hits
     cold_timeout_s: float = 300.0  # Move to cold after 5 min inactive
     eviction_batch_size: int = 100
 
@@ -48,6 +65,7 @@ class PrefixCacheConfig:
 @dataclass
 class PrefixEntry:
     """An entry in the prefix cache."""
+
     prefix_hash: int
     token_ids: tuple[int, ...]
     block_ids: list[int]
@@ -66,6 +84,7 @@ class PrefixEntry:
 @dataclass
 class CacheHitResult:
     """Result of a cache hit lookup."""
+
     hit: bool
     matched_tokens: int = 0
     block_ids: list[int] = field(default_factory=list)
@@ -81,7 +100,7 @@ class RadixTreeNode:
     Each node represents a sequence of tokens.
     """
 
-    __slots__ = ('prefix', 'children', 'entry', 'is_leaf')
+    __slots__ = ("prefix", "children", "entry", "is_leaf")
 
     def __init__(self, prefix: tuple[int, ...] = ()):
         self.prefix: tuple[int, ...] = prefix
@@ -127,9 +146,11 @@ class PrefixTree:
 
                 # Find common prefix length
                 common_len = 0
-                while (common_len < len(child.prefix) and
-                       pos + common_len < len(tokens) and
-                       child.prefix[common_len] == tokens[pos + common_len]):
+                while (
+                    common_len < len(child.prefix)
+                    and pos + common_len < len(tokens)
+                    and child.prefix[common_len] == tokens[pos + common_len]
+                ):
                     common_len += 1
 
                 if common_len == len(child.prefix):
@@ -146,7 +167,7 @@ class PrefixTree:
 
                     # New node for remaining tokens
                     if pos + common_len < len(tokens):
-                        remaining = tokens[pos + common_len:]
+                        remaining = tokens[pos + common_len :]
                         new_node = RadixTreeNode(prefix=remaining)
                         new_node.entry = entry
                         new_node.is_leaf = True
@@ -186,18 +207,12 @@ class PrefixTree:
                 prefix_len = len(child.prefix)
                 if pos + prefix_len > len(tokens):
                     # Partial match at end
-                    matches = all(
-                        child.prefix[i] == tokens[pos + i]
-                        for i in range(len(tokens) - pos)
-                    )
+                    matches = all(child.prefix[i] == tokens[pos + i] for i in range(len(tokens) - pos))
                     if matches and child.is_leaf:
                         last_match = (pos + len(tokens) - pos, child.entry)
                     break
 
-                matches = all(
-                    child.prefix[i] == tokens[pos + i]
-                    for i in range(prefix_len)
-                )
+                matches = all(child.prefix[i] == tokens[pos + i] for i in range(prefix_len))
 
                 if not matches:
                     break
@@ -231,10 +246,7 @@ class PrefixTree:
                 if pos + prefix_len > len(tokens):
                     return False
 
-                matches = all(
-                    child.prefix[i] == tokens[pos + i]
-                    for i in range(prefix_len)
-                )
+                matches = all(child.prefix[i] == tokens[pos + i] for i in range(prefix_len))
 
                 if not matches:
                     return False
@@ -285,9 +297,9 @@ class PrefixCacheOptimizer:
         self._hash_to_entry: dict[int, PrefixEntry] = {}
 
         # Tiered caches
-        self._hot_cache: dict[int, PrefixEntry] = {}    # L1
-        self._warm_cache: dict[int, PrefixEntry] = {}   # L2
-        self._cold_cache: dict[int, PrefixEntry] = {}   # L3
+        self._hot_cache: dict[int, PrefixEntry] = {}  # L1
+        self._warm_cache: dict[int, PrefixEntry] = {}  # L2
+        self._cold_cache: dict[int, PrefixEntry] = {}  # L3
 
         # Pre-warm candidates
         self._prewarm_candidates: dict[int, int] = {}  # hash -> hit_count
@@ -302,10 +314,7 @@ class PrefixCacheOptimizer:
         logger.info("PrefixCacheOptimizer initialized")
 
     def cache_prefix(
-        self,
-        token_ids: Sequence[int],
-        block_ids: list[int],
-        metadata: Optional[dict[str, Any]] = None
+        self, token_ids: Sequence[int], block_ids: list[int], metadata: Optional[dict[str, Any]] = None
     ) -> int:
         """
         Cache a prefix with its block IDs.
@@ -332,7 +341,7 @@ class PrefixCacheOptimizer:
                 token_ids=tokens,
                 block_ids=block_ids,
                 tier=CacheTier.WARM,
-                metadata=metadata or {}
+                metadata=metadata or {},
             )
 
             self._hash_to_entry[prefix_hash] = entry
@@ -361,11 +370,7 @@ class PrefixCacheOptimizer:
 
             if result is None:
                 self._total_misses += 1
-                return CacheHitResult(
-                    hit=False,
-                    remaining_tokens=tokens,
-                    lookup_time_us=lookup_time
-                )
+                return CacheHitResult(hit=False, remaining_tokens=tokens, lookup_time_us=lookup_time)
 
             matched_len, entry = result
             entry.touch()
@@ -385,7 +390,7 @@ class PrefixCacheOptimizer:
                 block_ids=entry.block_ids.copy(),
                 remaining_tokens=tokens[matched_len:],
                 entry=entry,
-                lookup_time_us=lookup_time
+                lookup_time_us=lookup_time,
             )
 
     def get_computed_blocks(self, token_ids: Sequence[int]) -> list[int]:
@@ -474,8 +479,7 @@ class PrefixCacheOptimizer:
 
         # Move stale warm entries to cold
         stale_entries = [
-            (h, e) for h, e in self._warm_cache.items()
-            if now - e.last_access > self.config.cold_timeout_s
+            (h, e) for h, e in self._warm_cache.items() if now - e.last_access > self.config.cold_timeout_s
         ]
 
         for prefix_hash, entry in stale_entries:
@@ -484,12 +488,9 @@ class PrefixCacheOptimizer:
             entry.tier = CacheTier.COLD
 
         # Evict from cold
-        cold_entries = sorted(
-            self._cold_cache.items(),
-            key=lambda x: (x[1].hit_count, x[1].last_access)
-        )
+        cold_entries = sorted(self._cold_cache.items(), key=lambda x: (x[1].hit_count, x[1].last_access))
 
-        for prefix_hash, _ in cold_entries[:self.config.eviction_batch_size]:
+        for prefix_hash, _ in cold_entries[: self.config.eviction_batch_size]:
             self._remove_entry(prefix_hash)
             evicted += 1
 
@@ -524,11 +525,7 @@ class PrefixCacheOptimizer:
         Beyond vLLM: Speculative prefix pre-warming.
         """
         with self._lock:
-            sorted_candidates = sorted(
-                self._prewarm_candidates.items(),
-                key=lambda x: x[1],
-                reverse=True
-            )[:limit]
+            sorted_candidates = sorted(self._prewarm_candidates.items(), key=lambda x: x[1], reverse=True)[:limit]
 
             result = []
             for prefix_hash, _ in sorted_candidates:

@@ -1,8 +1,0 @@
-# PyAgent Requirements (Federated)
-# Optimized for Python 3.12
-# Main entry point - includes all sub-requirements
-
--r requirements/base.txt
--r requirements/dev.txt
--r requirements/ml.txt
-

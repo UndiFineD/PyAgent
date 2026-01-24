@@ -20,12 +20,15 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import time
 import urllib.parse
-from typing import Dict, Any
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class NotificationCore:
     """Pure logic core for notification management."""
@@ -34,10 +37,10 @@ class NotificationCore:
     def construct_payload(event_name: str, event_data: dict[str, Any]) -> dict[str, Any]:
         """Formats the JSON payload for webhook delivery."""
         return {
-            'event': event_name,
-            'timestamp': time.time(),
-            'data': event_data,
-            'version': '1.1.0'
+            "event": event_name,
+            "timestamp": time.time(),
+            "data": event_data,
+            "version": "1.1.0",
         }
 
     @staticmethod
@@ -46,11 +49,11 @@ class NotificationCore:
         try:
             domain = urllib.parse.urlparse(url).netloc
             return domain or url
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return url
 
     @staticmethod
     def validate_event_data(data: dict[str, Any]) -> bool:
         """Basic validation for event data structures."""
         # Ensure it's a non-empty dictionary
-        return isinstance(data, dict) and len(data) > 0
+        return isinstance(data, dict) and bool(data)

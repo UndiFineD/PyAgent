@@ -18,12 +18,15 @@ Optimizes expert routing for long-context tasks by considering KV-cache locality
 """
 
 import logging
-from typing import List, Optional, Any, Dict
-from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import CrossModelMoEOrchestrator
-from src.infrastructure.engine.kv_cache.context_sharder import ContextShardManager
-from src.core.base.common.models.communication_models import MoERoutingDecision
+from typing import Any, Dict
+
+from src.infrastructure.engine.kv_cache.context_sharder import \
+    ContextShardManager
+from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import \
+    CrossModelMoEOrchestrator
 
 logger = logging.getLogger(__name__)
+
 
 class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
     """
@@ -61,14 +64,14 @@ class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
 
                 if expert_rank == target_rank:
                     logger.debug(f"Locality Boost: Expert {expert_id} is on rank {target_rank}")
-                    weight *= 1.5 # 50% boost for locality
+                    weight *= 1.5  # 50% boost for locality
 
                 new_experts.append(expert_id)
                 new_weights.append(weight)
 
             # Normalize again
             total = sum(new_weights)
-            decision.routing_weights = [w/total for w in new_weights]
+            decision.routing_weights = [w / total for w in new_weights]
             # Re-sort
             sorted_pairs = sorted(zip(new_experts, decision.routing_weights), key=lambda x: x[1], reverse=True)
             decision.selected_experts = [p[0] for p in sorted_pairs]

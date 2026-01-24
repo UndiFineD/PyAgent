@@ -54,7 +54,7 @@ def run_audit(target_dir: str, threshold: int = 25, limit: int = 20):
                     comp = rc.calculate_cyclomatic_complexity(content)
                     if comp > threshold:
                         targets.append({"file": str(rel_path), "complexity": comp})
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:
                     logging.debug(f"Failed to analyze {rel_path}: {e}")
 
     targets.sort(key=lambda x: x["complexity"], reverse=True)

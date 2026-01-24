@@ -1,11 +1,31 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Config.py module.
+"""
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
-from .enums import StructuredOutputType, GuidedDecodingBackend, WhitespacePattern
-from .constraints import (
-    OutputConstraint, JsonSchemaConstraint, RegexConstraint,
-    ChoiceConstraint, GrammarConstraint
-)
+
+from .constraints import (ChoiceConstraint, GrammarConstraint,
+                          JsonSchemaConstraint, OutputConstraint,
+                          RegexConstraint)
+from .enums import (GuidedDecodingBackend, StructuredOutputType,
+                    WhitespacePattern)
+
 
 @dataclass
 class StructuredOutputConfig:
@@ -14,12 +34,13 @@ class StructuredOutputConfig:
 
     Inspired by vLLM's GuidedDecodingParams.
     """
+
     # Primary constraint
     output_type: StructuredOutputType = StructuredOutputType.JSON_SCHEMA
 
     # JSON Schema
     json_schema: Optional[Dict[str, Any]] = None
-    json_object: bool = False                # Force JSON object
+    json_object: bool = False  # Force JSON object
 
     # Regex
     regex: Optional[str] = None
@@ -33,7 +54,7 @@ class StructuredOutputConfig:
 
     # Backend selection
     backend: GuidedDecodingBackend = GuidedDecodingBackend.AUTO
-    backend_fallback: bool = True            # Fallback to other backends
+    backend_fallback: bool = True  # Fallback to other backends
 
     # Whitespace handling
     whitespace: WhitespacePattern = WhitespacePattern.MINIMAL
@@ -107,9 +128,11 @@ class StructuredOutputConfig:
             strict_mode=data.get("strict_mode", True),
         )
 
+
 @dataclass
 class ValidationResult:
     """Result of structured output validation."""
+
     valid: bool
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)

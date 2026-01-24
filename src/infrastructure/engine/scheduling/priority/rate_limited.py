@@ -1,20 +1,35 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Rate limited.py module.
+"""
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 import threading
 import time
-from typing import (
-    Dict,
-    Optional,
-    TypeVar,
-    Callable,
-)
 from concurrent.futures import Future
+from typing import Callable, Dict, Optional, TypeVar
+
+from .base import PriorityScheduler
 from .enums import TaskPriority
 from .models import TaskStats
-from .base import PriorityScheduler
 
-R = TypeVar('R')
+R = TypeVar("R")
+
 
 class RateLimitedScheduler:
     """
@@ -34,16 +49,14 @@ class RateLimitedScheduler:
             workers: Number of worker threads
         """
         self._rates = rates or {
-            TaskPriority.CRITICAL: float('inf'),
+            TaskPriority.CRITICAL: float("inf"),
             TaskPriority.HIGH: 100.0,
             TaskPriority.NORMAL: 50.0,
             TaskPriority.LOW: 20.0,
             TaskPriority.IDLE: 5.0,
         }
 
-        self._last_execution: Dict[TaskPriority, float] = {
-            p: 0.0 for p in TaskPriority
-        }
+        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p in TaskPriority}
 
         self._scheduler = PriorityScheduler(workers=workers)
         self._lock = threading.Lock()
@@ -55,7 +68,7 @@ class RateLimitedScheduler:
     ) -> Future[R]:
         """Submit a rate-limited task."""
         rate = self._rates.get(priority, 10.0)
-        min_interval = 1.0 / rate if rate < float('inf') else 0.0
+        min_interval = 1.0 / rate if rate < float("inf") else 0.0
 
         with self._lock:
             now = time.monotonic()

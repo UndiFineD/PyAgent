@@ -3,38 +3,35 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
+from typing import Any, List, Dict, Set, Self
 import json
 from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
 import os
 import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
-    class agent_sys_path:
-        def __enter__(self) -> Self: 
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
+    class agent_sys_path:
+        def __enter__(self) -> Self:
             return self
-        def __exit__(self, *args) -> None: 
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestPhase6Integration:
     """Integration tests for Phase 6 features."""
@@ -70,7 +67,7 @@ class TestPhase6Integration:
 
         criteria = FilterCriteria(
             categories=[IssueCategory.SYNTAX, IssueCategory.SECURITY],
-            min_severity=SeverityLevel.WARNING
+            min_severity=SeverityLevel.WARNING,
         )
         filter_obj = ReportFilter(criteria)
 
@@ -78,17 +75,17 @@ class TestPhase6Integration:
             CodeIssue(
                 message="Critical security issue",
                 category=IssueCategory.SECURITY,
-                severity=SeverityLevel.CRITICAL
+                severity=SeverityLevel.CRITICAL,
             ),
             CodeIssue(
                 message="Minor style issue",
                 category=IssueCategory.STYLE,
-                severity=SeverityLevel.INFO
+                severity=SeverityLevel.INFO,
             ),
             CodeIssue(
                 message="Syntax warning",
                 category=IssueCategory.SYNTAX,
-                severity=SeverityLevel.WARNING
+                severity=SeverityLevel.WARNING,
             ),
         ]
 
@@ -102,6 +99,7 @@ class TestPhase6Integration:
 # =============================================================================
 # Session 8: Enum Tests
 # =============================================================================
+
 
 class TestSession8Integration:
     """Integration tests for Session 8 features."""
@@ -203,7 +201,6 @@ class TestSession8Integration:
 # =============================================================================
 
 
-
 class TestReportIntegration(unittest.TestCase):
     """Integration tests for report generation."""
 
@@ -231,11 +228,11 @@ class TestReportIntegration(unittest.TestCase):
         """Test multi-format export workflow."""
         content = "# Report\n\nContent"
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(content)
             md_file: str = f.name
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write(content)
             txt_file: str = f.name
 
@@ -263,64 +260,62 @@ class TestReportIntegration(unittest.TestCase):
         assert reports[4]["data"]["count"] == 40
 
 
-
 class TestGitIntegration(unittest.TestCase):
     """Test git integration in reports."""
 
     def test_extract_authors_from_commits(self) -> None:
         """Test extracting authors from git history."""
         commits: List[Dict[str, str]] = [
-            {'hash': 'abc123', 'author': 'Alice', 'date': '2024-01-15'},
-            {'hash': 'def456', 'author': 'Bob', 'date': '2024-01-14'},
-            {'hash': 'ghi789', 'author': 'Alice', 'date': '2024-01-13'}
+            {"hash": "abc123", "author": "Alice", "date": "2024-01-15"},
+            {"hash": "def456", "author": "Bob", "date": "2024-01-14"},
+            {"hash": "ghi789", "author": "Alice", "date": "2024-01-13"},
         ]
 
-        authors: Set[str] = set(c['author'] for c in commits)
-        self.assertIn('Alice', authors)
-        self.assertIn('Bob', authors)
+        authors: Set[str] = set(c["author"] for c in commits)
+        self.assertIn("Alice", authors)
+        self.assertIn("Bob", authors)
 
     def test_commit_history_in_report(self) -> None:
         """Test including commit history in report."""
         commit_history = [
             {
-                'message': 'Add test coverage',
-                'author': 'Alice',
-                'date': '2024-01-15',
-                'files_changed': 3
+                "message": "Add test coverage",
+                "author": "Alice",
+                "date": "2024-01-15",
+                "files_changed": 3,
             },
             {
-                'message': 'Fix bug in agent',
-                'author': 'Bob',
-                'date': '2024-01-14',
-                'files_changed': 1
-            }
+                "message": "Fix bug in agent",
+                "author": "Bob",
+                "date": "2024-01-14",
+                "files_changed": 1,
+            },
         ]
 
         self.assertEqual(len(commit_history), 2)
-        self.assertEqual(commit_history[0]['files_changed'], 3)
+        self.assertEqual(commit_history[0]["files_changed"], 3)
 
     def test_blame_information_integration(self) -> None:
         """Test integrating git blame information."""
         blame_data = {
-            'file': 'agent.py',
-            'lines': [
+            "file": "agent.py",
+            "lines": [
                 {
-                    'number': 1,
-                    'author': 'Alice',
-                    'commit': 'abc123',
-                    'date': '2024-01-10'
+                    "number": 1,
+                    "author": "Alice",
+                    "commit": "abc123",
+                    "date": "2024-01-10",
                 },
                 {
-                    'number': 2,
-                    'author': 'Bob',
-                    'commit': 'def456',
-                    'date': '2024-01-15'
-                }
-            ]
+                    "number": 2,
+                    "author": "Bob",
+                    "commit": "def456",
+                    "date": "2024-01-15",
+                },
+            ],
         }
 
-        self.assertEqual(len(blame_data['lines']), 2)
-
+        self.assertEqual(len(blame_data["lines"]), 2)
 
 
 class TestTestCoverageIntegration(unittest.TestCase):
@@ -329,35 +324,34 @@ class TestTestCoverageIntegration(unittest.TestCase):
     def test_coverage_by_file(self) -> None:
         """Test reporting coverage by file."""
         coverage: Dict[str, float] = {
-            'agent.py': 85.5,
-            'base_agent/entrypoint.py': 92.0,
-            'agent_context.py': 78.5,
-            'errors/error_handler.py': 88.0
+            "agent.py": 85.5,
+            "base_agent\entrypoint.py": 92.0,
+            "agent_context.py": 78.5,
+            "errors\error_handler.py": 88.0,
         }
 
         low_coverage: List[str] = [f for f, c in coverage.items() if c < 80]
-        self.assertIn('agent_context.py', low_coverage)
+        self.assertIn("agent_context.py", low_coverage)
 
     def test_coverage_trends(self) -> None:
         """Test tracking coverage trends over time."""
         coverage_history = [
-            {'date': '2024-01-01', 'coverage': 75.0},
-            {'date': '2024-01-08', 'coverage': 78.5},
-            {'date': '2024-01-15', 'coverage': 85.5}
+            {"date": "2024-01-01", "coverage": 75.0},
+            {"date": "2024-01-08", "coverage": 78.5},
+            {"date": "2024-01-15", "coverage": 85.5},
         ]
 
-        trend = coverage_history[-1]['coverage'] - coverage_history[0]['coverage']
+        trend = coverage_history[-1]["coverage"] - coverage_history[0]["coverage"]
         self.assertEqual(trend, 10.5)
 
     def test_coverage_gaps_identification(self) -> None:
         """Test identifying coverage gaps."""
         gap_analysis: Dict[str, int] = {
-            'uncovered_functions': 5,
-            'uncovered_branches': 12,
-            'high_risk_uncovered': 2
+            "uncovered_functions": 5,
+            "uncovered_branches": 12,
+            "high_risk_uncovered": 2,
         }
 
-        self.assertGreater(gap_analysis['uncovered_branches'], gap_analysis['uncovered_functions'])
-
-
-
+        self.assertGreater(
+            gap_analysis["uncovered_branches"], gap_analysis["uncovered_functions"]
+        )

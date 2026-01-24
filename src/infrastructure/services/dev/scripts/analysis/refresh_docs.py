@@ -16,27 +16,32 @@
 Automatically regenerates project documentation based on current codebase state,
 including API docs, architecture diagrams, and status reports.
 """
+
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
-import sys
 import os
-from src.observability.reports.ReportGenerator import ReportGenerator
+import sys
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+from src.observability.reports.report_generator import ReportGenerator
 
 os.environ["PYTHONPATH"] = "."
 __version__ = VERSION
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s")
 
+
 def main() -> None:
     agent_dir = Path("src")
     output_dir = Path("docs/autodoc")
-    
+
     print(f"Refreshing autodoc: {agent_dir} -> {output_dir}")
     generator = ReportGenerator(agent_dir=agent_dir, output_dir=output_dir)
     results = generator.process_all_files()
     print(f"\nResults: {results}")
+
 
 if __name__ == "__main__":
     main()

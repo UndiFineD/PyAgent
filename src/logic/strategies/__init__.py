@@ -15,12 +15,17 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION as VERSION
+
 from collections.abc import Callable
-from .AgentStrategy import AgentStrategy as AgentStrategy
-from .ChainOfThoughtStrategy import ChainOfThoughtStrategy as ChainOfThoughtStrategy
-from .DirectStrategy import DirectStrategy as DirectStrategy
-from .ReflexionStrategy import ReflexionStrategy as ReflexionStrategy
+
+from src.core.base.lifecycle.version import VERSION
+
+from .agent_strategy import AgentStrategy  # noqa: F401
+from .chain_of_thought_strategy import (  # noqa: F401
+    ChainOfThoughtStrategy
+)
+from .direct_strategy import DirectStrategy  # noqa: F401
+from .reflexion_strategy import ReflexionStrategy  # noqa: F401
 
 # Type alias for the backend function signature
 # (prompt, system_prompt, history) -> response

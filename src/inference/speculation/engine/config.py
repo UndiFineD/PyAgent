@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration and enums for speculative decoding."""
@@ -9,19 +23,21 @@ from typing import Optional
 
 class SpecMethod(Enum):
     """Speculative decoding method types."""
-    NGRAM = auto()          # N-gram based prediction
-    EAGLE = auto()          # EAGLE draft model
-    EAGLE3 = auto()         # EAGLE3 draft model
-    MEDUSA = auto()         # Medusa multi-head
-    MTP = auto()            # Multi-Token Prediction
-    SUFFIX = auto()         # Suffix tree matching
-    DRAFT_MODEL = auto()    # Separate draft model
-    HYBRID = auto()         # Combination of methods
+
+    NGRAM = auto()  # N-gram based prediction
+    EAGLE = auto()  # EAGLE draft model
+    EAGLE3 = auto()  # EAGLE3 draft model
+    MEDUSA = auto()  # Medusa multi-head
+    MTP = auto()  # Multi-Token Prediction
+    SUFFIX = auto()  # Suffix tree matching
+    DRAFT_MODEL = auto()  # Separate draft model
+    HYBRID = auto()  # Combination of methods
 
 
 @dataclass
 class SpeculativeConfig:
     """Configuration for speculative decoding."""
+
     method: SpecMethod = SpecMethod.NGRAM
     num_speculative_tokens: int = 5
 

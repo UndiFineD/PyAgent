@@ -11,12 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Vector store.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
-from .storage_base import KnowledgeStore
+
 from typing import Any
-import logging
+
+from src.core.base.lifecycle.version import VERSION
+
+from .storage_base import KnowledgeStore
 
 __version__ = VERSION
 
@@ -27,31 +33,18 @@ class VectorKnowledgeStore(KnowledgeStore):
     Delegates to MemoryCore for unified semantic handling (Rust/ChromaDB).
     """
 
-    def store(
-        self, key: str, value: str, metadata: dict[str, Any] | None = None
-    ) -> bool:
+    def store(self, key: str, value: str, metadata: dict[str, Any] | None = None) -> bool:
         return self._memory_core.store_knowledge(
-            agent_id=self.agent_id,
-            key=key,
-            content=value,
-            mode="semantic",
-            metadata=metadata
+            agent_id=self.agent_id, key=key, content=value, mode="semantic", metadata=metadata
         )
 
     def retrieve(self, query: str, limit: int = 5) -> list[Any]:
         results = self._memory_core.retrieve_knowledge(
-            agent_id=self.agent_id,
-            query=query,
-            mode="semantic",
-            limit=limit
+            agent_id=self.agent_id, query=query, mode="semantic", limit=limit
         )
         # Extract content from standardized results
         return [r["content"] for r in results if "content" in r]
 
     def delete(self, key: str) -> bool:
         """Standardized deletion via MemoryCore."""
-        return self._memory_core.delete_knowledge(
-            agent_id=self.agent_id,
-            key=key,
-            mode="semantic"
-        )
+        return self._memory_core.delete_knowledge(agent_id=self.agent_id, key=key, mode="semantic")

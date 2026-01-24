@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass, field
-from typing import List, Optional
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class ARIAAttribute:
@@ -33,6 +35,7 @@ class ARIAAttribute:
         allowed_values: List of allowed values (if constrained).
         suggestion: Suggested improvement.
     """
+
     name: str
     value: str = ""
     is_valid: bool = True

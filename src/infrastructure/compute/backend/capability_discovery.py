@@ -16,11 +16,15 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .SystemCapability import SystemCapability
-from typing import Any, Dict, List, Optional
+
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .system_capability import SystemCapability
 
 __version__ = VERSION
+
 
 class CapabilityDiscovery:
     """Discovers and tracks backend capabilities.
@@ -101,7 +105,4 @@ class CapabilityDiscovery:
         Returns:
             Dict[str, List[str]]: Backend -> capability names mapping.
         """
-        return {
-            backend: [c.name for c in caps.values() if c.enabled]
-            for backend, caps in self._capabilities.items()
-        }
+        return {backend: [c.name for c in caps.values() if c.enabled] for backend, caps in self._capabilities.items()}

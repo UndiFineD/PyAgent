@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,22 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Localization agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-import re
+
 import logging
-from typing import Dict, List, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.logic.agents.intelligence.core.LocalizationCore import LocalizationCore
+import re
+from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.intelligence.core.localization_core import \
+    LocalizationCore
 
 __version__ = VERSION
 
-class LocalizationAgent(BaseAgent):
+
+class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Handles localization and internationalization (i18n) tasks.
     Integrated with LocalizationCore for cultural guardrails and multi-lang support.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -38,22 +48,18 @@ class LocalizationAgent(BaseAgent):
         Runs cultural guardrails on agent communication.
         """
         issues = self.core.detect_cultural_issues(text)
-        return {
-            "compliant": len(issues) == 0,
-            "issues": issues,
-            "count": len(issues)
-        }
+        return {"compliant": not issues, "issues": issues, "count": len(issues)}
 
-    def translate_comment(self, text: str, target_lang: str) -> str:
+    async def translate_comment(self, text: str, target_lang: str) -> str:
         """
         Translates a single agent comment using the core's formatting.
         """
         if target_lang not in self.supported_locales:
-             logging.warning(f"Target language {target_lang} not in core supported list.")
-             
+            logging.warning(f"Target language {target_lang} not in core supported list.")
+
         request = self.core.format_translation_request(text, target_lang)
         # In a real scenario, this would call self.improve_content or an API
-        return self.solve_translation_task(request)
+        return await self.solve_translation_task(request)
 
     def extract_strings(self, file_path: str) -> list[str]:
         """Extracts potential user-facing strings for translation."""
@@ -67,7 +73,7 @@ class LocalizationAgent(BaseAgent):
                 matches = re.finditer(r'_\(["\'](.*?)["\']\)', content)
                 for match in matches:
                     found_strings.append(match.group(1))
-        except Exception as e:
+        except (IOError, ValueError, RuntimeError) as e:
             logging.error(f"LocalizationAgent: Error reading {file_path}: {e}")
         return found_strings
 
@@ -75,10 +81,10 @@ class LocalizationAgent(BaseAgent):
         """Generates a JSON translation dictionary for a specific locale."""
         if locale not in self.supported_locales:
             logging.warning(f"Locale {locale} not officially supported.")
-        
+
         translation_map = {s: f"TRANSLATED_{locale}_{s}" for s in strings}
         return translation_map
 
-    def solve_translation_task(self, prompt: str) -> str:
+    async def solve_translation_task(self, prompt: str) -> str:
         """Uses LLM to help with complex translation tasks."""
-        return self.improve_content(f"Translate the following content preserving formatting: {prompt}")
+        return await self.improve_content(f"Translate the following content preserving formatting: {prompt}")

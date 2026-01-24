@@ -18,11 +18,13 @@ Improvements Agent: Maintains and improves improvement suggestions.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import sys
 from pathlib import Path
+
 from src.core.base.entrypoint import create_main_function
-from src.observability.improvements.ImprovementsAgent import ImprovementsAgent
+from src.core.base.lifecycle.version import VERSION
+from src.observability.improvements.improvements_agent import ImprovementsAgent
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent
@@ -36,9 +38,9 @@ __version__ = VERSION
 # Create main function using the helper
 main = create_main_function(
     ImprovementsAgent,
-    'Improvements Agent: Maintains and improves improvement suggestions',
-    'Path to the improvements file (e.g., file.improvements.md)'
+    "Improvements Agent: Maintains and improves improvement suggestions",
+    "Path to the improvements file (e.g., file.improvements.md)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

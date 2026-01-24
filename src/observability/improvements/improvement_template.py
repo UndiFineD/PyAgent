@@ -16,14 +16,18 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .EffortEstimate import EffortEstimate
-from .ImprovementCategory import ImprovementCategory
-from .ImprovementPriority import ImprovementPriority
+
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .effort_estimate import EffortEstimate
+from .improvement_category import ImprovementCategory
+from .improvement_priority import ImprovementPriority
 
 __version__ = VERSION
+
 
 @dataclass(init=False)
 class ImprovementTemplate:

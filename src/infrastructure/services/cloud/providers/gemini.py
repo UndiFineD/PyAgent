@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Google Gemini cloud provider connector.
 
@@ -8,16 +22,10 @@ from __future__ import annotations
 
 import os
 import time
-from typing import AsyncIterator, List, Optional, Dict, Any
+from typing import AsyncIterator, Dict, List, Optional
 
-from ..base import (
-    CloudProviderBase,
-    InferenceRequest,
-    InferenceResponse,
-    CloudProviderError,
-    RateLimitError,
-    AuthenticationError,
-)
+from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
+                    InferenceRequest, InferenceResponse, RateLimitError)
 
 
 class GeminiConnector(CloudProviderBase):
@@ -70,6 +78,7 @@ class GeminiConnector(CloudProviderBase):
 
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         import httpx
+
         start_time = time.perf_counter()
 
         if not self._api_key:
@@ -80,14 +89,15 @@ class GeminiConnector(CloudProviderBase):
             role = "user" if msg["role"] == "user" else "model"
             gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{request.model}:generateContent?key={self._api_key}"
+        base_url = "https://generativelanguage.googleapis.com/v1beta/models"
+        url = f"{base_url}/{request.model}:generateContent?key={self._api_key}"
         payload = {
             "contents": gemini_contents,
             "generationConfig": {
                 "temperature": request.temperature,
                 "maxOutputTokens": request.max_tokens,
                 "topP": request.top_p or 0.95,
-            }
+            },
         }
 
         async with httpx.AsyncClient(timeout=60.0) as client:
@@ -118,14 +128,15 @@ class GeminiConnector(CloudProviderBase):
                     latency_ms=(time.perf_counter() - start_time) * 1000,
                     provider="Google Gemini",
                     model=request.model,
-                    raw_response=data
+                    raw_response=data,
                 )
             except (KeyError, IndexError) as e:
                 raise CloudProviderError(f"Failed to parse Gemini response: {e}")
 
     async def stream(self, request: InferenceRequest) -> AsyncIterator[InferenceResponse]:
-        import httpx
         import json
+
+        import httpx
 
         if not self._api_key:
             raise AuthenticationError("Gemini API key is required.")
@@ -135,13 +146,17 @@ class GeminiConnector(CloudProviderBase):
             role = "user" if msg["role"] == "user" else "model"
             gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{request.model}:streamGenerateContent?alt=sse&key={self._api_key}"
+        base_url = "https://generativelanguage.googleapis.com/v1beta/models"
+        url = (
+            f"{base_url}/{request.model}:streamGenerateContent"
+            f"?alt=sse&key={self._api_key}"
+        )
         payload = {
             "contents": gemini_contents,
             "generationConfig": {
                 "temperature": request.temperature,
                 "maxOutputTokens": request.max_tokens,
-            }
+            },
         }
 
         async with httpx.AsyncClient(timeout=60.0) as client:
@@ -162,7 +177,7 @@ class GeminiConnector(CloudProviderBase):
                                         cost_estimate=0.0,
                                         latency_ms=0.0,
                                         provider="Google Gemini",
-                                        model=request.model
+                                        model=request.model,
                                     )
                         except json.JSONDecodeError:
                             continue

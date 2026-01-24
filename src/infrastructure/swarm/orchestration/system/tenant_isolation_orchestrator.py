@@ -11,12 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Tenant isolation orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
-import os
+
 import hashlib
+import os
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -32,9 +38,7 @@ class TenantIsolationOrchestrator:
         self.resource_limits: dict[str, dict[str, float]] = {}
         self.context_vaults: dict[str, bytes] = {}  # Simulated encrypted vaults
 
-    def set_resource_limits(
-        self, tenant_id: str, max_tokens: int, max_nodes: int
-    ) -> str:
+    def set_resource_limits(self, tenant_id: str, max_tokens: int, max_nodes: int) -> str:
         """Sets compute quotas for a specific tenant."""
         self.resource_limits[tenant_id] = {
             "max_tokens": max_tokens,

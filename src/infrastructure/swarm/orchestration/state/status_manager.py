@@ -11,19 +11,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Status manager.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import json
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class StatusManager:
     """Manages project execution status for the DirectorAgent and GUI."""
-    
+
     def __init__(self) -> None:
         self.status_file = Path("src/infrastructure/orchestration/status.json")
         self.clear_status()
@@ -35,7 +42,7 @@ class StatusManager:
             "active_project": None,
             "steps": [],
             "current_step_index": -1,
-            "overall_status": "Idle"
+            "overall_status": "Idle",
         }
         self._write(initial_data)
 
@@ -46,20 +53,22 @@ class StatusManager:
             "active_project": goal,
             "steps": [],
             "current_step_index": 0,
-            "overall_status": "Running"
+            "overall_status": "Running",
         }
         self._write(data)
 
     def add_step(self, agent: str, file: str, prompt: str) -> None:
         """Adds a scheduled step to the plan."""
         data = self._read()
-        data["steps"].append({
-            "agent": agent,
-            "file": file,
-            "prompt": prompt,
-            "status": "Pending",
-            "result": None
-        })
+        data["steps"].append(
+            {
+                "agent": agent,
+                "file": file,
+                "prompt": prompt,
+                "status": "Pending",
+                "result": None,
+            }
+        )
         self._write(data)
 
     def update_step_status(self, index: int, status: str, result: Any = None) -> None:

@@ -16,18 +16,21 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.CodeLanguage import CodeLanguage
-from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
-from dataclasses import dataclass
-from typing import Optional
+
 from collections.abc import Callable
+from dataclasses import dataclass
+
+from src.core.base.common.types.code_language import CodeLanguage
+from src.core.base.common.types.style_rule_severity import StyleRuleSeverity
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class StyleRule:
     """A configurable code style rule."""
+
     name: str
     pattern: str
     message: str

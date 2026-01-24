@@ -15,7 +15,8 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
-from .SearchAgent import SearchAgent as SearchAgent
+
+from src.core.base.lifecycle.version import VERSION
+from .search_agent import SearchAgent
 
 __version__ = VERSION

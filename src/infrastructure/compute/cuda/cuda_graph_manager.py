@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 CUDAGraphManager - CUDA graph capture and replay management.
 
@@ -15,18 +29,16 @@ Beyond vLLM:
 
 from __future__ import annotations
 
-import dataclasses
 import gc
 import logging
 import threading
 import time
 import weakref
-from abc import ABC, abstractmethod
 from collections import defaultdict
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from enum import IntEnum, auto
-from typing import Any, Callable, Dict, Generic, List, Optional, Set, Tuple, TypeVar
+from enum import IntEnum
+from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +47,10 @@ T = TypeVar("T")
 
 class CUDAGraphMode(IntEnum):
     """CUDA graph execution modes."""
-    NONE = 0      # No CUDA graphs, pure eager mode
-    PIECEWISE = 1 # Graphs between attention operations
-    FULL = 2      # Full model as single graph
+
+    NONE = 0  # No CUDA graphs, pure eager mode
+    PIECEWISE = 1  # Graphs between attention operations
+    FULL = 2  # Full model as single graph
 
     def has_graphs(self) -> bool:
         """Check if mode uses any CUDA graphs."""
@@ -58,6 +71,7 @@ class BatchDescriptor:
         num_reqs: Number of requests (optional)
         is_uniform_decode: Whether batch is uniform decode
     """
+
     num_tokens: int
     num_reqs: Optional[int] = None
     is_uniform_decode: bool = False
@@ -67,11 +81,7 @@ class BatchDescriptor:
 
     def relaxed(self) -> "BatchDescriptor":
         """Get relaxed key without num_reqs for fallback matching."""
-        return BatchDescriptor(
-            num_tokens=self.num_tokens,
-            num_reqs=None,
-            is_uniform_decode=self.is_uniform_decode
-        )
+        return BatchDescriptor(num_tokens=self.num_tokens, num_reqs=None, is_uniform_decode=self.is_uniform_decode)
 
 
 @dataclass
@@ -87,6 +97,7 @@ class CUDAGraphEntry:
         capture_time: When graph was captured
         replay_count: Number of times replayed
     """
+
     batch_descriptor: BatchDescriptor
     cudagraph: Any = None  # torch.cuda.CUDAGraph
     output: Any = None  # Weak ref to output
@@ -102,6 +113,7 @@ class CUDAGraphEntry:
 @dataclass
 class CUDAGraphOptions:
     """Options for CUDA graph wrapper behavior."""
+
     debug_log_enable: bool = True
     gc_disable: bool = False
     weak_ref_output: bool = True
@@ -111,6 +123,7 @@ class CUDAGraphOptions:
 @dataclass
 class CUDAGraphStats:
     """Statistics for CUDA graph usage."""
+
     captures: int = 0
     replays: int = 0
     cache_hits: int = 0
@@ -207,7 +220,7 @@ class CUDAGraphWrapper:
         *args: Any,
         batch_descriptor: Optional[BatchDescriptor] = None,
         cudagraph_runtime_mode: Optional[CUDAGraphMode] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Any:
         """
         Execute with CUDA graph capture/replay.
@@ -239,12 +252,7 @@ class CUDAGraphWrapper:
             else:
                 return self._capture(batch_descriptor, *args, **kwargs)
 
-    def _capture(
-        self,
-        descriptor: BatchDescriptor,
-        *args: Any,
-        **kwargs: Any
-    ) -> Any:
+    def _capture(self, descriptor: BatchDescriptor, *args: Any, **kwargs: Any) -> Any:
         """Capture a new CUDA graph."""
         if self.options.debug_log_enable:
             logger.debug(f"Capturing CUDA graph for {descriptor}")
@@ -270,7 +278,7 @@ class CUDAGraphWrapper:
             graph.capture_end()
 
             # Store output (optionally as weak ref)
-            if self.options.weak_ref_output and hasattr(output, '__weakref__'):
+            if self.options.weak_ref_output and hasattr(output, "__weakref__"):
                 try:
                     entry.output = weakref.ref(output)
                 except TypeError:
@@ -290,12 +298,7 @@ class CUDAGraphWrapper:
 
         return output
 
-    def _replay(
-        self,
-        descriptor: BatchDescriptor,
-        *args: Any,
-        **kwargs: Any
-    ) -> Any:
+    def _replay(self, descriptor: BatchDescriptor, *args: Any, **kwargs: Any) -> Any:
         """Replay a cached CUDA graph."""
         entry = self.entries[descriptor]
 
@@ -304,8 +307,7 @@ class CUDAGraphWrapper:
             current_addresses = self._get_input_addresses(args)
             if current_addresses != entry.input_addresses:
                 raise RuntimeError(
-                    f"Input addresses changed during replay. "
-                    f"Expected {entry.input_addresses}, got {current_addresses}"
+                    f"Input addresses changed during replay. Expected {entry.input_addresses}, got {current_addresses}"
                 )
 
         # Replay graph
@@ -322,11 +324,7 @@ class CUDAGraphWrapper:
             output = output()
         return output
 
-    def _cache_entry(
-        self,
-        descriptor: BatchDescriptor,
-        entry: CUDAGraphEntry
-    ) -> None:
+    def _cache_entry(self, descriptor: BatchDescriptor, entry: CUDAGraphEntry) -> None:
         """Cache entry with LRU eviction if needed."""
         # Evict if at capacity
         if len(self.entries) >= self.max_cached_graphs:
@@ -340,21 +338,18 @@ class CUDAGraphWrapper:
             return
 
         # Find entry with oldest capture time and lowest replay count
-        lru_key = min(
-            self.entries.keys(),
-            key=lambda k: (self.entries[k].replay_count, self.entries[k].capture_time)
-        )
+        lru_key = min(self.entries.keys(), key=lambda k: (self.entries[k].replay_count, self.entries[k].capture_time))
         del self.entries[lru_key]
 
     def _get_input_addresses(self, args: tuple) -> List[int]:
         """Get data pointer addresses for tensor inputs."""
         addresses = []
         for arg in args:
-            if hasattr(arg, 'data_ptr'):
+            if hasattr(arg, "data_ptr"):
                 addresses.append(arg.data_ptr())
-            elif hasattr(arg, '__iter__') and not isinstance(arg, (str, bytes)):
+            elif hasattr(arg, "__iter__") and not isinstance(arg, (str, bytes)):
                 for item in arg:
-                    if hasattr(item, 'data_ptr'):
+                    if hasattr(item, "data_ptr"):
                         addresses.append(item.data_ptr())
         return addresses
 
@@ -400,17 +395,14 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
         *args: Any,
         batch_descriptor: Optional[BatchDescriptor] = None,
         cudagraph_runtime_mode: Optional[CUDAGraphMode] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Any:
         """Execute with adaptive caching."""
         if batch_descriptor is not None:
             self.shape_frequency[batch_descriptor] += 1
 
         return super().__call__(
-            *args,
-            batch_descriptor=batch_descriptor,
-            cudagraph_runtime_mode=cudagraph_runtime_mode,
-            **kwargs
+            *args, batch_descriptor=batch_descriptor, cudagraph_runtime_mode=cudagraph_runtime_mode, **kwargs
         )
 
     def _evict_lru(self) -> None:
@@ -419,32 +411,19 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
             return
 
         # Don't evict entries with high replay count
-        candidates = [
-            k for k, v in self.entries.items()
-            if v.replay_count < self.min_replays_to_keep
-        ]
+        candidates = [k for k, v in self.entries.items() if v.replay_count < self.min_replays_to_keep]
 
         if not candidates:
             # All entries are important, use standard LRU
             candidates = list(self.entries.keys())
 
         # Evict least frequent among candidates
-        lru_key = min(
-            candidates,
-            key=lambda k: (
-                self.shape_frequency.get(k, 0),
-                self.entries[k].replay_count
-            )
-        )
+        lru_key = min(candidates, key=lambda k: (self.shape_frequency.get(k, 0), self.entries[k].replay_count))
         del self.entries[lru_key]
 
     def get_hot_shapes(self, top_k: int = 10) -> List[Tuple[BatchDescriptor, int]]:
         """Get most frequently accessed shapes."""
-        sorted_shapes = sorted(
-            self.shape_frequency.items(),
-            key=lambda x: x[1],
-            reverse=True
-        )
+        sorted_shapes = sorted(self.shape_frequency.items(), key=lambda x: x[1], reverse=True)
         return sorted_shapes[:top_k]
 
     def prewarm(self, shapes: List[BatchDescriptor], dummy_fn: Callable) -> None:
@@ -457,10 +436,7 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
 
 
 @contextmanager
-def cudagraph_context(
-    mode: CUDAGraphMode = CUDAGraphMode.NONE,
-    descriptor: Optional[BatchDescriptor] = None
-):
+def cudagraph_context(mode: CUDAGraphMode = CUDAGraphMode.NONE, descriptor: Optional[BatchDescriptor] = None):
     """Context manager for CUDA graph execution context."""
     # Store context in thread-local
     ctx = {"mode": mode, "descriptor": descriptor}
@@ -468,10 +444,7 @@ def cudagraph_context(
 
 
 def get_cudagraph_sizes(
-    capture_sizes: Optional[List[int]],
-    max_num_reqs: int,
-    max_num_tokens: int,
-    mode: CUDAGraphMode
+    capture_sizes: Optional[List[int]], max_num_reqs: int, max_num_tokens: int, mode: CUDAGraphMode
 ) -> List[int]:
     """
     Compute CUDA graph capture sizes.

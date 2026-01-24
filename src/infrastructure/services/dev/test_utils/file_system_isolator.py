@@ -16,15 +16,19 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .IsolationLevel import IsolationLevel
-from pathlib import Path
-from typing import Any, List, Optional
+
 import os
 import shutil
 import tempfile
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .isolation_level import IsolationLevel
 
 __version__ = VERSION
+
 
 class FileSystemIsolator:
     """Isolates file system operations for testing.

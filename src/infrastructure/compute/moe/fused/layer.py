@@ -1,11 +1,33 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Layer.py module.
+"""
+
 from __future__ import annotations
+
 import threading
+from typing import Any
+
 import numpy as np
-from typing import Any, Optional
+
 from .config import FusedMoEConfig, FusedMoEParallelConfig, FusedMoEQuantConfig
+from .dispatcher import SparseDispatcher
 from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
 from .utils import determine_expert_map
-from .dispatcher import SparseDispatcher
+
 
 class FusedMoELayer:
     """Fused Mixture of Experts layer."""
@@ -25,9 +47,7 @@ class FusedMoELayer:
         self.method = method or UnquantizedFusedMoEMethod()
 
         # Create weights
-        self.weights = self.method.create_weights(
-            self.config, self.parallel_config
-        )
+        self.weights = self.method.create_weights(self.config, self.parallel_config)
 
         # Expert mapping for EP
         self.local_num_experts, self.expert_map, self.expert_mask = determine_expert_map(
@@ -41,9 +61,7 @@ class FusedMoELayer:
         self.router_weight: np.ndarray | None = None
 
         # Dispatcher
-        self.sparse_dispatcher = SparseDispatcher(
-            config.num_experts, config.top_k
-        )
+        self.sparse_dispatcher = SparseDispatcher(config.num_experts, config.top_k)
 
         # Stats tracking
         self._expert_counts: np.ndarray = np.zeros(config.num_experts, dtype=np.int64)
@@ -59,9 +77,7 @@ class FusedMoELayer:
 
         if router_logits is None:
             if self.router_weight is None:
-                self.router_weight = np.random.randn(
-                    self.config.num_experts, hidden_size
-                ).astype(np.float32) * 0.01
+                self.router_weight = np.random.randn(self.config.num_experts, hidden_size).astype(np.float32) * 0.01
             router_logits = x @ self.router_weight.T
 
         output = self.method.apply(
@@ -77,7 +93,7 @@ class FusedMoELayer:
         return output
 
     def _update_stats(self, router_logits: np.ndarray) -> None:
-        top_k_indices = np.argsort(router_logits, axis=-1)[:, -self.config.top_k:]
+        top_k_indices = np.argsort(router_logits, axis=-1)[:, -self.config.top_k :]
 
         with self._lock:
             for idx in top_k_indices.flatten():

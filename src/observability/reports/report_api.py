@@ -16,17 +16,20 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ReportType import ReportType
-from pathlib import Path
-from typing import List, Optional
+
 import logging
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_type import ReportType
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+
 
 class ReportAPI:
     """API for programmatic report access.
@@ -75,12 +78,7 @@ class ReportAPI:
             return path.read_text(encoding="utf-8")
         return None
 
-    def create_report(
-        self,
-        file_stem: str,
-        report_type: ReportType,
-        content: str
-    ) -> bool:
+    def create_report(self, file_stem: str, report_type: ReportType, content: str) -> bool:
         """Create or update a report.
         Args:
             file_stem: File stem.

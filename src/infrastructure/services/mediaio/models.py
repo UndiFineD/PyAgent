@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,15 +20,16 @@ Models and configurations for media loading.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, List, Optional, Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
 
 class MediaType(Enum):
     """Supported media types."""
+
     IMAGE = auto()
     VIDEO = auto()
     AUDIO = auto()
@@ -23,6 +38,7 @@ class MediaType(Enum):
 
 class ImageFormat(Enum):
     """Supported image formats."""
+
     JPEG = auto()
     PNG = auto()
     WEBP = auto()
@@ -34,6 +50,7 @@ class ImageFormat(Enum):
 
 class VideoFormat(Enum):
     """Supported video formats."""
+
     MP4 = auto()
     WEBM = auto()
     AVI = auto()
@@ -43,6 +60,7 @@ class VideoFormat(Enum):
 
 class AudioFormat(Enum):
     """Supported audio formats."""
+
     WAV = auto()
     MP3 = auto()
     FLAC = auto()
@@ -52,24 +70,26 @@ class AudioFormat(Enum):
 
 class ResizeMode(Enum):
     """Image resize modes."""
-    CROP = auto()       # Center crop to target
-    PAD = auto()        # Pad to target maintaining aspect
-    STRETCH = auto()    # Stretch to target
-    SHORTEST = auto()   # Resize shortest side
-    LONGEST = auto()    # Resize longest side
+
+    CROP = auto()  # Center crop to target
+    PAD = auto()  # Pad to target maintaining aspect
+    STRETCH = auto()  # Stretch to target
+    SHORTEST = auto()  # Resize shortest side
+    LONGEST = auto()  # Resize longest side
 
 
 @dataclass
 class MediaMetadata:
     """Metadata for loaded media."""
+
     media_type: MediaType
     format: Union[ImageFormat, VideoFormat, AudioFormat, None]
     width: Optional[int] = None
     height: Optional[int] = None
     channels: int = 3
-    duration: Optional[float] = None     # For video/audio (seconds)
-    frame_count: Optional[int] = None    # For video
-    sample_rate: Optional[int] = None    # For audio
+    duration: Optional[float] = None  # For video/audio (seconds)
+    frame_count: Optional[int] = None  # For video
+    sample_rate: Optional[int] = None  # For audio
     file_size: int = 0
     hash: Optional[str] = None
 
@@ -77,7 +97,8 @@ class MediaMetadata:
 @dataclass
 class ImageData:
     """Loaded image data."""
-    data: np.ndarray                     # [H, W, C] or [N, H, W, C]
+
+    data: np.ndarray  # [H, W, C] or [N, H, W, C]
     metadata: MediaMetadata
     source: str
 
@@ -101,7 +122,8 @@ class ImageData:
 @dataclass
 class VideoData:
     """Loaded video data."""
-    frames: np.ndarray                   # [N, H, W, C]
+
+    frames: np.ndarray  # [N, H, W, C]
     metadata: MediaMetadata
     source: str
     timestamps: Optional[np.ndarray] = None
@@ -114,7 +136,8 @@ class VideoData:
 @dataclass
 class AudioData:
     """Loaded audio data."""
-    waveform: np.ndarray                 # [C, T] or [T]
+
+    waveform: np.ndarray  # [C, T] or [T]
     metadata: MediaMetadata
     source: str
 
@@ -128,6 +151,7 @@ class AudioData:
 @dataclass
 class MediaLoadConfig:
     """Configuration for media loading."""
+
     # Image settings
     target_size: Optional[Tuple[int, int]] = None
     resize_mode: ResizeMode = ResizeMode.SHORTEST
@@ -137,11 +161,11 @@ class MediaLoadConfig:
 
     # Video settings
     max_frames: int = 32
-    frame_rate: Optional[float] = None   # Sample at this FPS
+    frame_rate: Optional[float] = None  # Sample at this FPS
 
     # Audio settings
     target_sample_rate: int = 16000
-    max_duration: float = 30.0           # Max audio duration
+    max_duration: float = 30.0  # Max audio duration
     mono: bool = True
 
     # GPU settings

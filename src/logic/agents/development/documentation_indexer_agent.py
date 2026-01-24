@@ -15,17 +15,21 @@
 
 """Agent specializing in workspace-wide documentation indexing and retrieval (Tabby pattern)."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
+
 from pathlib import Path
-from typing import Dict, List
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class DocumentationIndexerAgent(BaseAgent):
     """Indexes workspace documentation and provides structured navigation/search."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -38,17 +42,17 @@ class DocumentationIndexerAgent(BaseAgent):
         """Crawls the workspace for markdown and text documentation."""
         index = {"docs": [], "source_comments": [], "readmes": []}
         root = Path(root_path)
-        
+
         for p in root.rglob("*.md"):
             if "README" in p.name:
                 index["readmes"].append(str(p.relative_to(root)))
             else:
                 index["docs"].append(str(p.relative_to(root)))
-                
+
         for p in root.rglob("*.py"):
             # Potential for extracting docstrings
             pass
-            
+
         return index
 
     def get_semantic_pointers(self, query: str) -> str:
@@ -56,11 +60,14 @@ class DocumentationIndexerAgent(BaseAgent):
         # This would use semantic search in a real implementation
         return f"Searching index for: {query}... (Pointers to be generated via embeddings)"
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Returns documentation snippets or paths."""
-        return self.get_semantic_pointers(input_text)
+        _ = target_file
+        return self.get_semantic_pointers(prompt)
+
 
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
+
     main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
     main()

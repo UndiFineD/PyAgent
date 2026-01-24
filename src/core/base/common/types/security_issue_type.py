@@ -16,13 +16,17 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from enum import Enum
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class SecurityIssueType(Enum):
     """Types of security vulnerabilities."""
+
     SQL_INJECTION = "sql_injection"
     XSS = "xss"
     HARDCODED_SECRET = "hardcoded_secret"

@@ -31,13 +31,13 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-# pylint: disable=too-many-ancestors
 class WeightOrchestrator(BaseAgent):
     """Orchestrates the distribution and activation of model weights across the fleet."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.weights_registry_path = Path(self._workspace_root) / "data/memory/agent_store/weights_registry.json"
+        self.workspace_root = Path(file_path).parent
+        self.weights_registry_path = self.workspace_root / "data/memory/agent_store/weights_registry.json"
         self.active_adapters: dict[str, str] = {}  # agent_name -> adapter_name
         self._load_registry()
         self._system_prompt = (
@@ -47,18 +47,18 @@ class WeightOrchestrator(BaseAgent):
     def _load_registry(self) -> bool:
         if self.weights_registry_path.exists():
             try:
-                with open(self.weights_registry_path, encoding='utf-8') as f:
+                with open(self.weights_registry_path) as f:
                     data = json.load(f)
                     self.active_adapters = data.get("active_adapters", {})
-            except (IOError, OSError, json.JSONDecodeError, UnicodeDecodeError) as e:
+            except Exception as e:
                 logging.error(f"WeightOrchestrator: Failed to load registry: {e}")
 
     def _save_registry(self) -> bool:
         try:
             self.weights_registry_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.weights_registry_path, 'w', encoding='utf-8') as f:
+            with open(self.weights_registry_path, "w") as f:
                 json.dump({"active_adapters": self.active_adapters}, f, indent=4)
-        except (IOError, OSError, TypeError, UnicodeEncodeError) as e:
+        except Exception as e:
             logging.error(f"WeightOrchestrator: Failed to save registry: {e}")
 
     @as_tool
@@ -92,9 +92,7 @@ class WeightOrchestrator(BaseAgent):
 
         return self.active_adapters
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Synchronizes and improves content based on weight distribution."""
-        _ = prompt, target_file
+    def improve_content(self, input_text: str) -> str:
         return f"Current fleet weight distribution: {len(self.active_adapters)} active adapters."
 
 

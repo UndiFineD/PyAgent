@@ -27,9 +27,6 @@ logger = logging.getLogger(__name__)
 class EventCore:
     """Core logic for event handling and history formatting."""
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
-
     def trigger_event(
         self, event: EventType, data: dict[str, Any], hooks: list[Callable[[dict[str, Any]], None]]
     ) -> None:
@@ -37,7 +34,7 @@ class EventCore:
         for callback in hooks:
             try:
                 callback(data)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning(f"Hook error for {event.value}: {e}")
 
     def filter_events(self, events: List[Dict[str, Any]], event_type: Optional[str] = None) -> List[Dict[str, Any]]:

@@ -12,9 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-VisionCore: Core logic for visual processing and perception in PyAgent.
-Supports image analysis, feature extraction, and multimodal reasoning for cognitive agents.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""VisionCore logic for PyAgent visual processing.
 
 Provides logic for image hashing, glitch detection, and visual signature extraction
 from GUI screenshots and other visual data sources.
@@ -22,7 +25,6 @@ from GUI screenshots and other visual data sources.
 
 from __future__ import annotations
 import hashlib
-from typing import List
 
 from src.core.base.lifecycle.version import VERSION
 
@@ -35,7 +37,7 @@ class VisionCore:
     and glitch detection in GUI screenshots.
     """
 
-    def calculate_image_hash(self, image_bytes: bytes | None) -> str:
+    def calculate_image_hash(self, image_bytes: bytes) -> str:
         """Deterministic hash of image data.
 
         Args:
@@ -44,11 +46,9 @@ class VisionCore:
         Returns:
             The MD5 hexadecimal hash.
         """
-        if image_bytes is None:
-            return hashlib.md5(b"").hexdigest()
         return hashlib.md5(image_bytes).hexdigest()
 
-    def detect_glitch_patterns(self, pixel_data: List[int] | None) -> bool:
+    def detect_glitch_patterns(self, pixel_data: list[int]) -> bool:
         """
         Heuristic-based glitch detection.
 

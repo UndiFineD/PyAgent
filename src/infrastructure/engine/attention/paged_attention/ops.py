@@ -34,7 +34,6 @@ class PagedAttentionOps:
         causal: bool = True,
         sliding_window: int | None = None,
     ) -> np.ndarray:
-        """Standard scaled dot-product attention."""
         scores = np.einsum("bhqd,bhkd->bhqk", query, key) * scale
         sq, sk = query.shape[2], key.shape[2]
         if causal:
@@ -58,7 +57,6 @@ class PagedAttentionOps:
         seq_lens: np.ndarray,
         config: AttentionConfig,
     ) -> np.ndarray:
-        """Basic paged attention implementation."""
         num_seqs, num_heads, head_size = query.shape
         output = np.zeros((num_seqs, num_heads, head_size), dtype=query.dtype)
         for seq_idx in range(num_seqs):
@@ -88,7 +86,6 @@ class PagedAttentionOps:
         config: AttentionConfig,
         partition_size: int = 512,
     ) -> np.ndarray:
-        """Paged attention with partition-based reduction."""
         ns, nh, hs = query.shape
         output = np.zeros((ns, nh, hs), dtype=query.dtype)
         for seq_idx in range(ns):
@@ -118,5 +115,4 @@ class PagedAttentionOps:
 
     @staticmethod
     def expand_kv_for_gqa(kv: np.ndarray, num_queries_per_kv: int) -> np.ndarray:
-        """Expands KV heads for Grouped Query Attention (GQA)."""
         return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)

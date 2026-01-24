@@ -20,8 +20,7 @@ requests across DP ranks.
 
 import logging
 import random
-import time
-from typing import Dict, List, Optional, Any
+from typing import Dict, List
 
 try:
     import rust_core as rc
@@ -29,6 +28,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class LoadBalancerClient:
     """
@@ -65,7 +65,10 @@ class LoadBalancerClient:
         """Returns the health status of all ranks."""
         health = {}
         for r, s in self.stats.items():
-            if s["load"] > 0.95: health[r] = "CONGESTED"
-            elif s["latency"] > 1.0: health[r] = "LAGGING"
-            else: health[r] = "OK"
+            if s["load"] > 0.95:
+                health[r] = "CONGESTED"
+            elif s["latency"] > 1.0:
+                health[r] = "LAGGING"
+            else:
+                health[r] = "OK"
         return health

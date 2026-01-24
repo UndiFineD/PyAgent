@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
+
+"""
+Subs engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Subscription and annotation management engine.
 
 from __future__ import annotations
+
+import contextlib
 import hashlib
 import logging
 from datetime import datetime
 from typing import Any, Callable
-from .Metrics import MetricAnnotation
-from .ObservabilityCore import MetricSubscription, StatsSubscription
+
+from .metrics import MetricAnnotation
+from .observability_core import MetricSubscription, StatsSubscription
 
 logger = logging.getLogger(__name__)
 
@@ -36,22 +43,14 @@ class AnnotationManager:
         self.annotations.setdefault(metric_name, []).append(annotation)
         return annotation
 
-    def get_annotations(
-        self, metric_name: str, annotation_type: str | None = None
-    ) -> list[MetricAnnotation]:
+    def get_annotations(self, metric_name: str, annotation_type: str | None = None) -> list[MetricAnnotation]:
         anns = self.annotations.get(metric_name, [])
-        return (
-            [a for a in anns if a.annotation_type == annotation_type]
-            if annotation_type
-            else anns
-        )
+        return [a for a in anns if a.annotation_type == annotation_type] if annotation_type else anns
 
     def delete_annotation(self, metric_name: str, timestamp: str) -> bool:
         if metric_name in self.annotations:
             original = self.annotations[metric_name]
-            self.annotations[metric_name] = [
-                a for a in original if a.timestamp != timestamp
-            ]
+            self.annotations[metric_name] = [a for a in original if a.timestamp != timestamp]
             return len(original) != len(self.annotations[metric_name])
         return False
 
@@ -86,9 +85,7 @@ class StatsAnnotationManager:
                 timestamp=str(ts),
                 text=str(kwargs.get("text", "")),
                 author=str(kwargs.get("author", "")),
-                annotation_type=str(
-                    kwargs.get("annotation_type", kwargs.get("type", "info"))
-                ),
+                annotation_type=str(kwargs.get("annotation_type", kwargs.get("type", "info"))),
             )
         self.annotations.setdefault(metric, []).append(annotation)
         return annotation
@@ -111,9 +108,7 @@ class SubscriptionManager:
         notify_on: list[str] | None = None,
         min_interval_seconds: int = 60,
     ) -> MetricSubscription:
-        sub_id = hashlib.md5(f"{metric_pattern}:{callback_url}".encode()).hexdigest()[
-            :8
-        ]
+        sub_id = hashlib.md5(f"{metric_pattern}:{callback_url}".encode()).hexdigest()[:8]
         sub = MetricSubscription(
             id=sub_id,
             metric_pattern=metric_pattern,
@@ -143,9 +138,7 @@ class SubscriptionManager:
         notified = []
         now = datetime.now()
         for sub_id, sub in self.subscriptions.items():
-            if event_type in sub.notify_on and fnmatch.fnmatch(
-                metric_name, sub.metric_pattern
-            ):
+            if event_type in sub.notify_on and fnmatch.fnmatch(metric_name, sub.metric_pattern):
                 last = self.last_notification.get(sub_id)
                 if not last or (now - last).total_seconds() >= sub.min_interval_seconds:
                     self.last_notification[sub_id] = now
@@ -175,9 +168,7 @@ class StatsSubscriptionManager:
             return self._subscribe_delivery(str(args[0]), str(args[1]), str(args[2]))
         raise TypeError("Invalid subscribe() arguments")
 
-    def _subscribe_delivery(
-        self, sub_id: str, pat: str, method: str
-    ) -> StatsSubscription:
+    def _subscribe_delivery(self, sub_id: str, pat: str, method: str) -> StatsSubscription:
         s_id = hashlib.md5(f"{sub_id}:{pat}:{method}".encode()).hexdigest()[:8]
         sub = StatsSubscription(
             id=s_id,
@@ -195,10 +186,8 @@ class StatsSubscriptionManager:
     def notify(self, metric: str, value: Any) -> None:
         if isinstance(value, (int, float)):
             for cb in self.subscribers.get(metric, []):
-                try:
+                with contextlib.suppress(Exception):
                     cb(float(value))
-                except Exception:
-                    pass
             return
         import fnmatch
 
@@ -206,7 +195,5 @@ class StatsSubscriptionManager:
             if fnmatch.fnmatch(metric, sub.metric_pattern):
                 handler = self._delivery_handlers.get(sub.delivery_method)
                 if handler:
-                    try:
+                    with contextlib.suppress(Exception):
                         handler(str(value))
-                    except Exception:
-                        pass

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 GuidanceBackend - Guidance library integration for structured output.
 
@@ -14,38 +28,25 @@ Beyond vLLM innovations:
 - Streaming token support
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generator,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
 import asyncio
 import hashlib
 import json
 import re
 import threading
-import time
-import weakref
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core
+    import rust_core  # noqa: F401
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -53,6 +54,7 @@ except ImportError:
 
 class GuidanceTemplateType(Enum):
     """Types of Guidance templates."""
+
     TEXT = auto()
     JSON = auto()
     REGEX = auto()
@@ -63,6 +65,7 @@ class GuidanceTemplateType(Enum):
 @dataclass
 class GuidanceVariable:
     """Variable in a Guidance template."""
+
     name: str
     type: str = "gen"
     regex: Optional[str] = None
@@ -86,14 +89,13 @@ class GuidanceTemplate:
 
     Represents a template with embedded generation instructions.
     """
+
     template_str: str
     variables: List[GuidanceVariable] = field(default_factory=list)
     template_type: GuidanceTemplateType = GuidanceTemplateType.TEXT
 
     # Parsing state
-    _parsed_segments: List[Tuple[str, Optional[GuidanceVariable]]] = field(
-        default_factory=list
-    )
+    _parsed_segments: List[Tuple[str, Optional[GuidanceVariable]]] = field(default_factory=list)
     _cache_key: str = field(default="")
 
     def __post_init__(self):
@@ -103,24 +105,20 @@ class GuidanceTemplate:
     def _parse_template(self) -> None:
         """Parse template into segments."""
         # Simple parsing: {{variable_name}}
-        pattern = r'\{\{(\w+)(?::([^}]+))?\}\}'
+        pattern = r"\{\{(\w+)(?::([^}]+))?\}\}"
         last_end = 0
         segments = []
 
         for match in re.finditer(pattern, self.template_str):
             # Add text before variable
             if match.start() > last_end:
-                segments.append((self.template_str[last_end:match.start()], None))
+                segments.append((self.template_str[last_end : match.start()], None))
 
             # Add variable
             var_name = match.group(1)
-            var_spec = match.group(2) or ""
 
             # Find or create variable
-            var = next(
-                (v for v in self.variables if v.name == var_name),
-                GuidanceVariable(name=var_name)
-            )
+            var = next((v for v in self.variables if v.name == var_name), GuidanceVariable(name=var_name))
             segments.append(("", var))
 
             last_end = match.end()
@@ -133,9 +131,7 @@ class GuidanceTemplate:
 
     def _compute_cache_key(self) -> str:
         """Compute cache key for template."""
-        content = self.template_str + str([
-            (v.name, v.type, v.regex) for v in self.variables
-        ])
+        content = self.template_str + str([(v.name, v.type, v.regex) for v in self.variables])
         return hashlib.md5(content.encode()).hexdigest()[:16]
 
     def get_prefix_text(self) -> str:
@@ -192,7 +188,7 @@ class GuidanceState:
                 for stop in var.stop:
                     if stop in self._current_var_buffer:
                         # Found stop, extract value
-                        value = self._current_var_buffer[:self._current_var_buffer.find(stop)]
+                        value = self._current_var_buffer[: self._current_var_buffer.find(stop)]
                         self.variable_values[var.name] = value
                         self.segment_index += 1
                         self._current_var_buffer = ""
@@ -276,7 +272,7 @@ class GuidanceGrammar:
         """Accept a token."""
         # Decode token to text
         try:
-            if hasattr(self.tokenizer, 'decode'):
+            if hasattr(self.tokenizer, "decode"):
                 text = self.tokenizer.decode([token_id])
             else:
                 text = f"token_{token_id}"
@@ -333,16 +329,16 @@ class GuidanceBackend:
 
         # Statistics
         self._stats = {
-            'compilations': 0,
-            'cache_hits': 0,
-            'cache_misses': 0,
+            "compilations": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
         }
 
     def _get_vocab_size(self, tokenizer: Any) -> int:
         """Get vocabulary size from tokenizer."""
-        if hasattr(tokenizer, 'vocab_size'):
+        if hasattr(tokenizer, "vocab_size"):
             return tokenizer.vocab_size
-        if hasattr(tokenizer, 'get_vocab'):
+        if hasattr(tokenizer, "get_vocab"):
             return len(tokenizer.get_vocab())
         return 32000  # Default fallback
 
@@ -361,7 +357,7 @@ class GuidanceBackend:
 
         with self._cache_lock:
             if cache_key in self._cache:
-                self._stats['cache_hits'] += 1
+                self._stats["cache_hits"] += 1
                 program = self._cache[cache_key]
                 return GuidanceGrammar(program, self.tokenizer)
 
@@ -372,8 +368,8 @@ class GuidanceBackend:
         )
 
         with self._cache_lock:
-            self._stats['cache_misses'] += 1
-            self._stats['compilations'] += 1
+            self._stats["cache_misses"] += 1
+            self._stats["compilations"] += 1
 
             # Evict if needed
             if len(self._cache) >= self.max_cache_size:
@@ -402,11 +398,9 @@ class GuidanceBackend:
 
         if schema_type == "object":
             props = schema.get("properties", {})
-            required = set(schema.get("required", []))
 
             parts = ["{"]
-            for i, (key, prop_schema) in enumerate(props.items()):
-                prop_type = prop_schema.get("type", "string")
+            for i, (key, _) in enumerate(props.items()):
                 if i > 0:
                     parts.append(",")
                 parts.append(f'"{key}":')
@@ -484,12 +478,12 @@ class AsyncGuidanceBackend(GuidanceBackend):
 
 
 __all__ = [
-    'GuidanceTemplateType',
-    'GuidanceVariable',
-    'GuidanceTemplate',
-    'GuidanceState',
-    'CompiledGuidanceProgram',
-    'GuidanceBackend',
-    'AsyncGuidanceBackend',
-    'GuidanceGrammar',
+    "GuidanceTemplateType",
+    "GuidanceVariable",
+    "GuidanceTemplate",
+    "GuidanceState",
+    "CompiledGuidanceProgram",
+    "GuidanceBackend",
+    "AsyncGuidanceBackend",
+    "GuidanceGrammar",
 ]

@@ -16,13 +16,17 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ParallelTestResult import ParallelTestResult
-from typing import Any, Dict, List
-from collections.abc import Callable
+
 import time
+from collections.abc import Callable
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .parallel_test_result import ParallelTestResult
 
 __version__ = VERSION
+
 
 class ParallelTestRunner:
     """Helper for parallel test execution.
@@ -68,6 +72,7 @@ class ParallelTestRunner:
             List of results from test functions.
         """
         from concurrent.futures import ThreadPoolExecutor, as_completed
+
         self.success_count = 0
         self.failure_count = 0
         results: list[Any] = []
@@ -117,7 +122,7 @@ class ParallelTestRunner:
         Returns:
             List of test results.
         """
-        from concurrent.futures import ThreadPoolExecutor, as_completed, Future
+        from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 
         self._results = []
 

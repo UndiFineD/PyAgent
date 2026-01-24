@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 """
 LoRA Request Lifecycle - Detailed tracking of per-request events and timing.
@@ -39,11 +53,14 @@ class RequestLifecycle:
         self._preemption_count = 0
         self._lock = threading.Lock()
 
-        self._record_event("created", {
-            'prompt_tokens': prompt_tokens,
-            'max_tokens': max_tokens,
-            'lora_adapter': lora_adapter,
-        })
+        self._record_event(
+            "created",
+            {
+                "prompt_tokens": prompt_tokens,
+                "max_tokens": max_tokens,
+                "lora_adapter": lora_adapter,
+            },
+        )
 
     def _record_event(self, event_type: str, data: Any = None) -> None:
         """Record an event."""
@@ -63,9 +80,7 @@ class RequestLifecycle:
 
             # Record time spent in old status
             if old_status in self._state_times:
-                self._state_times[old_status] = now - self._state_times.get(
-                    f"_start_{old_status}", self._created_time
-                )
+                self._state_times[old_status] = now - self._state_times.get(f"_start_{old_status}", self._created_time)
 
             self._status = new_status
             self._state_times[f"_start_{new_status}"] = now
@@ -73,10 +88,13 @@ class RequestLifecycle:
             if new_status == RequestStatus.PREEMPTED:
                 self._preemption_count += 1
 
-            self._record_event("state_transition", {
-                'from': old_status.name,
-                'to': new_status.name,
-            })
+            self._record_event(
+                "state_transition",
+                {
+                    "from": old_status.name,
+                    "to": new_status.name,
+                },
+            )
 
     def record_token(self) -> None:
         """Record a generated token."""
@@ -86,7 +104,7 @@ class RequestLifecycle:
 
             if self._first_token_time is None:
                 self._first_token_time = now
-                self._record_event("first_token", {'time': now})
+                self._record_event("first_token", {"time": now})
 
     def finish(self, reason: str = "stopped") -> None:
         """Mark request as finished."""
@@ -103,10 +121,13 @@ class RequestLifecycle:
                 new_status = RequestStatus.FINISHED_STOPPED
 
             self._status = new_status
-            self._record_event("finished", {
-                'reason': reason,
-                'tokens_generated': self._tokens_generated,
-            })
+            self._record_event(
+                "finished",
+                {
+                    "reason": reason,
+                    "tokens_generated": self._tokens_generated,
+                },
+            )
 
     @property
     def time_to_first_token(self) -> Optional[float]:
@@ -163,11 +184,9 @@ class RequestLifecycle:
                     result[status.name] = self._state_times[status]
 
             if self._first_token_time:
-                result['time_to_first_token'] = (
-                    self._first_token_time - self._created_time
-                )
+                result["time_to_first_token"] = self._first_token_time - self._created_time
             if self._finish_time:
-                result['total_latency'] = self._finish_time - self._created_time
+                result["total_latency"] = self._finish_time - self._created_time
 
             return result
 
@@ -230,38 +249,22 @@ class RequestLifecycleManager:
             if not self._completed:
                 return {}
 
-            ttft_values = [
-                r.time_to_first_token
-                for r in self._completed
-                if r.time_to_first_token is not None
-            ]
-            itl_values = [
-                r.inter_token_latency
-                for r in self._completed
-                if r.inter_token_latency is not None
-            ]
-            latency_values = [
-                r.total_latency
-                for r in self._completed
-                if r.total_latency is not None
-            ]
-            throughput_values = [
-                r.throughput
-                for r in self._completed
-                if r.throughput is not None
-            ]
+            ttft_values = [r.time_to_first_token for r in self._completed if r.time_to_first_token is not None]
+            itl_values = [r.inter_token_latency for r in self._completed if r.inter_token_latency is not None]
+            latency_values = [r.total_latency for r in self._completed if r.total_latency is not None]
+            throughput_values = [r.throughput for r in self._completed if r.throughput is not None]
 
             stats = {}
             if ttft_values:
-                stats['avg_ttft'] = sum(ttft_values) / len(ttft_values)
+                stats["avg_ttft"] = sum(ttft_values) / len(ttft_values)
                 sorted_ttft = sorted(ttft_values)
-                stats['p50_ttft'] = sorted_ttft[len(ttft_values) // 2]
-                stats['p99_ttft'] = sorted_ttft[int(len(ttft_values) * 0.99)]
+                stats["p50_ttft"] = sorted_ttft[len(ttft_values) // 2]
+                stats["p99_ttft"] = sorted_ttft[int(len(ttft_values) * 0.99)]
             if itl_values:
-                stats['avg_itl'] = sum(itl_values) / len(itl_values)
+                stats["avg_itl"] = sum(itl_values) / len(itl_values)
             if latency_values:
-                stats['avg_latency'] = sum(latency_values) / len(latency_values)
+                stats["avg_latency"] = sum(latency_values) / len(latency_values)
             if throughput_values:
-                stats['avg_throughput'] = sum(throughput_values) / len(throughput_values)
+                stats["avg_throughput"] = sum(throughput_values) / len(throughput_values)
 
             return stats

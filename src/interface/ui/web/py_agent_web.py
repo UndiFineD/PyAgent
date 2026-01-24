@@ -18,15 +18,7 @@ Generates data structures for internal/external dashboard consumers.
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
 
-=======
-from src.core.base.lifecycle.version import VERSION
-from .agent_bar import AgentBar
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 import json
 import logging
 from pathlib import Path
@@ -36,7 +28,7 @@ from src.core.base.lifecycle.version import VERSION
 
 from .agent_bar import AgentBar
 
-__version__: str = VERSION
+__version__ = VERSION
 
 
 class FleetWebUI:
@@ -47,30 +39,8 @@ class FleetWebUI:
         self.generative_registry: dict[str, dict[str, Any]] = {}  # Tambo Pattern
         self.agent_bar = AgentBar()
         self._register_default_components()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
 
     def _register_default_components(self):
-        """Registers system default components."""
-        self.register_generative_component(
-            "AgentBar",
-            "Floating real-time metrics and multimodal control bar.",
-            {"status": "string", "metrics": "object"}
-        )
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-
-    def _register_default_components(self):
-        """Registers system default components."""
-        self.register_generative_component(
-            "AgentBar",
-            "Floating real-time metrics and multimodal control bar.",
-            {"status": "string", "metrics": "object"}
-        )
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-
-    def _register_default_components(self) -> None:
         """Registers system default components."""
         self.register_generative_component(
             "AgentBar",
@@ -116,15 +86,15 @@ class FleetWebUI:
         if not workflow_state:
             return "graph TD\n  Empty[No Active Workflow]"
 
-        mermaid_lines: list[str] = ["graph LR"]
+        mermaid_lines = ["graph LR"]
         history = workflow_state.history
 
         last_node = "START"
         for i, entry in enumerate(history):
-            node_id: str = f"step_{i}_{entry['agent']}"
+            node_id = f"step_{i}_{entry['agent']}"
             mermaid_lines.append(f"  {last_node} --> {node_id}")
             mermaid_lines.append(f"  {node_id}[{entry['agent']}: {entry['action']}]")
-            last_node: str = node_id
+            last_node = node_id
 
         return "\n".join(mermaid_lines)
 
@@ -136,8 +106,9 @@ class FleetWebUI:
         """Backend for the File Explorer with Preview.
         Returns directory structure and file metadata.
         """
+        from pathlib import Path
 
-        base: Path = Path(self.fleet.workspace_root) / sub_path
+        base = Path(self.fleet.workspace_root) / sub_path
         if not base.exists():
             return {"error": f"Path {sub_path} not found"}
 
@@ -161,18 +132,14 @@ class FleetWebUI:
                 with open(file_path, encoding="utf-8") as f:
                     return f.read(500) + "..."
             return "[No Preview Available]"
-        except (RuntimeError, ValueError) as _e:
-            return "[Preview Error]"
-        except BaseException as e:  # pylint: disable=broad-exception-caught
-            import traceback
-            print(f"Error reading preview for {file_path}: {e}\n{traceback.format_exc()}")
+        except Exception:
             return "[Error Reading Preview]"
 
     def get_workflow_designer_state(self) -> dict[str, Any]:
         """Returns the available nodes and signals for the Graphical Workflow Designer."""
         available_agents = []
         for name, agent in self.fleet.agents.items():
-            methods: list[str] = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
+            methods = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
             available_agents.append(
                 {
                     "name": name,

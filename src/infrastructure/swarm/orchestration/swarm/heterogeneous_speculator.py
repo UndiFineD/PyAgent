@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 """
 Heterogeneous speculator.py module.
 """
@@ -21,26 +19,11 @@ Heterogeneous speculator.py module.
 import logging
 from typing import Any, List, Tuple
 
-from src.core.base.common.models.communication_models import ExpertProfile, MoERoutingDecision
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
     MoEGatekeeper
 
-logger: logging.Logger = logging.getLogger(__name__)
-
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-import logging
-import asyncio
-from typing import List, Dict, Any, Optional, Tuple
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
-from src.core.base.common.models.communication_models import ExpertProfile
-
 logger = logging.getLogger(__name__)
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+
 
 class HeterogeneousSpeculator:
     """
@@ -48,18 +31,8 @@ class HeterogeneousSpeculator:
     Pairs low-precision (FP8/INT4) fast experts with high-precision (FP16) verifiers.
     """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, gatekeeper: MoEGatekeeper) -> None:
-        self.gatekeeper: MoEGatekeeper = gatekeeper
-=======
     def __init__(self, gatekeeper: MoEGatekeeper):
         self.gatekeeper = gatekeeper
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-    def __init__(self, gatekeeper: MoEGatekeeper):
-        self.gatekeeper = gatekeeper
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def identify_speculative_pairs(self, domain: str) -> List[Tuple[str, str]]:
         """
@@ -67,24 +40,6 @@ class HeterogeneousSpeculator:
         Drafters: acceleration_type in ['fp8_bitnet', 'int4_quant']
         Verifiers: acceleration_type in ['h100_tensor', 'standard']
         """
-<<<<<<< HEAD
-<<<<<<< HEAD
-        experts: List[ExpertProfile] = list(self.gatekeeper.experts.values())
-
-        # Filter by domain
-        domain_experts: List[ExpertProfile] = [e for e in experts if domain in e.domains or "general" in e.domains]
-
-        drafters: List[ExpertProfile] = [
-            e for e in domain_experts
-            if e.acceleration_type in ["fp8_bitnet", "int4_quant"]
-        ]
-        verifiers: List[ExpertProfile] = [
-            e for e in domain_experts
-            if e.acceleration_type in ["h100_tensor", "standard"]
-        ]
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         experts = list(self.gatekeeper.experts.values())
 
         # Filter by domain
@@ -92,10 +47,6 @@ class HeterogeneousSpeculator:
 
         drafters = [e for e in domain_experts if e.acceleration_type in ["fp8_bitnet", "int4_quant"]]
         verifiers = [e for e in domain_experts if e.acceleration_type in ["h100_tensor", "standard"]]
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         pairs = []
         # Greedily pair top-performing drafters with top-performing verifiers
@@ -108,25 +59,11 @@ class HeterogeneousSpeculator:
         logger.info(f"[Phase 85] Heterogeneous pairs identified for domain '{domain}': {len(pairs)}")
         return pairs
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    async def execute_task(self, task: str, domain: str, _orchestrator: Any) -> MoERoutingDecision | dict[str, str]:
-        """
-        Convenience method to run a task through the swarm's speculative pipe.
-        """
-        pairs: List[Tuple[str]] = self.identify_speculative_pairs(domain)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     async def execute_task(self, task: str, domain: str, orchestrator: Any):
         """
         Convenience method to run a task through the swarm's speculative pipe.
         """
         pairs = self.identify_speculative_pairs(domain)
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         if not pairs:
             # Fallback to standard MoE routing
             logger.warning("No speculative pairs found, falling back to standard MoE.")
@@ -135,19 +72,4 @@ class HeterogeneousSpeculator:
         drafter_id, verifier_id = pairs[0]
         # In a real integration, we'd call SpeculativeSwarmOrchestrator.execute_speculative_task
         # Here we simulate the handoff
-<<<<<<< HEAD
-<<<<<<< HEAD
         return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-        return {
-            "mode": "speculative",
-            "drafter": drafter_id,
-            "verifier": verifier_id,
-            "task": task
-        }
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TestTimer import TestTimer
-from typing import Dict, List
+
 from collections.abc import Callable
 
+from src.core.base.lifecycle.version import VERSION
+
+from .test_timer import TestTimer
+
 __version__ = VERSION
+
 
 class Benchmarker:
     """Runs benchmarks and collects statistics."""
@@ -57,5 +60,5 @@ class Benchmarker:
             "min_ms": min(self.timings) * 1000,
             "max_ms": max(self.timings) * 1000,
             "average_ms": mean_seconds * 1000,
-            "iterations": iterations
+            "iterations": iterations,
         }

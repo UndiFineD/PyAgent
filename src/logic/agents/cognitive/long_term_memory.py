@@ -12,24 +12,21 @@ For more information, visit:
 No commands will be executed.
 """
 
-from __future__ import annotations
-from src.core.base.Version import VERSION
-from src.core.base.BaseAgent import BaseAgent
 import logging
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-class MarkdownAgent(BaseAgent):
-    """
-    MarkdownAgent specializing in technical documentation and markdown optimization.
-    """
-    def __init__(self, file_path: str, **kwargs) -> None:
-        super().__init__(file_path, **kwargs)
-        self._system_prompt = (
-            "You are a Markdown specialist. Your goal is to optimize documentation, "
-            "ensure technical accuracy, and maintain style consistency in .md files."
-        )
 
-    def _get_default_content(self) -> str:
-        return "# New Documentation\n\nContent pending..."
+class LongTermMemory:
+    """
+    LongTermMemory recovered after Copilot CLI deprecation event.
+    Standardized placeholder for future re-implementation.
+    """
 
+    def __init__(self, *args, **kwargs) -> None:
+        _ = args
+        _ = kwargs
+        self.version = VERSION
+        logging.info("LongTermMemory initialized (Placeholder).")

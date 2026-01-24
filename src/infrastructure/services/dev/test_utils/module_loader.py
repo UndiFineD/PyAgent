@@ -16,18 +16,20 @@
 """Module loading utilities for test environment."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import importlib.util
 import logging
 import re
 import sys
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 from types import ModuleType
-from typing import Optional
-from collections.abc import Iterator
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class ModuleLoader:
     """Handles dynamic loading of agent modules and sys.path management."""
@@ -90,7 +92,7 @@ class ModuleLoader:
             if not safe or safe[0].isdigit():
                 safe = f"m_{safe}"
             module_name = f"_dv_legacy_{safe}"
-        
+
         try:
             return self.load_module_from_path(module_name, path)
         except Exception:

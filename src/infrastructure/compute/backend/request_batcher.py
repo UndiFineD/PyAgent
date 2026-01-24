@@ -16,15 +16,19 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .BatchRequest import BatchRequest
-from typing import List, Optional
+
 import threading
 import time
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
+
+from .batch_request import BatchRequest
 
 # Infrastructure
 __version__ = VERSION
+
 
 class RequestBatcher:
     """Batches multiple requests for efficient processing.
@@ -92,10 +96,10 @@ class RequestBatcher:
         with self._lock:
             if not self._buffer:
                 return None
-            
+
             if self.recorder:
                 self.recorder.record_lesson("batch_created", {"size": len(self._buffer)})
-                
+
             batch = BatchRequest(requests=self._buffer.copy())
             self._buffer.clear()
             self._batch_start = None

@@ -3,38 +3,34 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
-import json
-from datetime import datetime
-import pytest
-import logging
+from typing import Any, List, Self
+from unittest.mock import MagicMock
 from pathlib import Path
 import sys
 import os
 import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
-    class agent_sys_path:
-        def __enter__(self) -> Self: 
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
+    class agent_sys_path:
+        def __enter__(self) -> Self:
             return self
-        def __exit__(self, *args) -> None: 
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestPhase6Integration:
     """Integration tests for Phase 6 features."""
@@ -97,7 +93,6 @@ class TestPhase6Integration:
 # =============================================================================
 
 
-
 class TestIntegration(unittest.TestCase):
     """Integration tests for test utilities."""
 
@@ -112,7 +107,6 @@ class TestIntegration(unittest.TestCase):
 
     def test_complex_mock_scenario(self) -> None:
         """Test complex mock scenario."""
-        from unittest.mock import MagicMock
         mock_service = MagicMock()
         mock_service.fetch_data.return_value = {"status": "ok"}
         mock_service.process_data.return_value = True
@@ -126,15 +120,14 @@ class TestIntegration(unittest.TestCase):
 
     def test_integration_with_fixtures(self) -> None:
         """Test integration with fixtures."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
             f.write("test data")
             filename: str = f.name
 
         try:
-            with open(filename, 'r') as f: str = f.read()
+            with open(filename, "r") as f:
+                content = f.read()
 
             self.assertEqual(content, "test data")
         finally:
             os.unlink(filename)
-
-

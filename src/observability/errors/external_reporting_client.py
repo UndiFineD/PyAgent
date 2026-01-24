@@ -16,13 +16,17 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ErrorEntry import ErrorEntry
-from .ExternalReporter import ExternalReporter
-from typing import Any, Dict, List
+
 import logging
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .error_entry import ErrorEntry
+from .external_reporter import ExternalReporter
 
 __version__ = VERSION
+
 
 class ExternalReportingClient:
     """Reports errors to external systems.
@@ -35,9 +39,7 @@ class ExternalReportingClient:
         dsn: Data source name or API key.
     """
 
-    def __init__(
-        self, system: ExternalReporter, dsn: str = ""
-    ) -> None:
+    def __init__(self, system: ExternalReporter, dsn: str = "") -> None:
         """Initialize the external reporting client.
 
         Args:
@@ -60,9 +62,7 @@ class ExternalReportingClient:
         if not self.enabled:
             return False
         self._build_payload(error)
-        logging.info(
-            f"Reporting to {self.system.value}: {error.id}"
-        )
+        logging.info(f"Reporting to {self.system.value}: {error.id}")
         # Actual implementation would send to the service
         return True
 
@@ -89,10 +89,10 @@ class ExternalReportingClient:
             "tags": {
                 "category": error.category.value,
                 "file": error.file_path,
-                "line": error.line_number
+                "line": error.line_number,
             },
             "extra": {
                 "stack_trace": error.stack_trace,
-                "suggested_fix": error.suggested_fix
-            }
+                "suggested_fix": error.suggested_fix,
+            },
         }

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Logic Prover Agent for formal verification of reasoning chains.
+"""
 
-from __future__ import annotations
-from src.core.base.Version import VERSION
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -35,7 +39,7 @@ class LogicProverAgent:
         Simulates formal logic verification (TPTP-like).
         """
         # Crude simulation of logical consistency
-        if not evidence or len(evidence) == 0:
+        if not evidence:
             return {"status": "unproven", "error": "Missing evidence for conclusion"}
 
         # Check if conclusion is derived from evidence in a simulated way

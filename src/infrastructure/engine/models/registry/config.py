@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Model configuration and metadata registry."""
@@ -122,15 +116,7 @@ class ModelFormat(Enum):
 
 
 @dataclass
-<<<<<<< HEAD
-<<<<<<< HEAD
 class ModelConfig:  # pylint: disable=too-many-instance-attributes
-=======
-class ModelConfig: # pylint: disable=too-many-instance-attributes
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-class ModelConfig: # pylint: disable=too-many-instance-attributes
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     """Model configuration."""
 
     model_name: str
@@ -149,15 +135,7 @@ class ModelConfig: # pylint: disable=too-many-instance-attributes
 
 
 @dataclass
-<<<<<<< HEAD
-<<<<<<< HEAD
 class ArchitectureSpec:  # pylint: disable=too-many-instance-attributes
-=======
-class ArchitectureSpec: # pylint: disable=too-many-instance-attributes
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-class ArchitectureSpec: # pylint: disable=too-many-instance-attributes
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     """Architecture specification."""
 
     name: str
@@ -175,15 +153,7 @@ class ArchitectureSpec: # pylint: disable=too-many-instance-attributes
 
 
 @dataclass
-<<<<<<< HEAD
-<<<<<<< HEAD
 class ModelInfo:  # pylint: disable=too-many-instance-attributes
-=======
-class ModelInfo: # pylint: disable=too-many-instance-attributes
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-class ModelInfo: # pylint: disable=too-many-instance-attributes
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     """Information about a model."""
 
     name: str

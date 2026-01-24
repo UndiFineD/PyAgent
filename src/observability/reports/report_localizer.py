@@ -16,13 +16,16 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .LocaleCode import LocaleCode
-from .LocalizedString import LocalizedString
-from typing import Dict, Optional
+
 import logging
 
+from src.core.base.lifecycle.version import VERSION
+
+from .locale_code import LocaleCode
+from .localized_string import LocalizedString
+
 __version__ = VERSION
+
 
 class ReportLocalizer:
     """Localizer for report internationalization.

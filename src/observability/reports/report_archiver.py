@@ -16,18 +16,21 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ArchivedReport import ArchivedReport
-from pathlib import Path
-from typing import Dict, List, Optional
+
 import logging
 import time
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+
+from .archived_report import ArchivedReport
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+
 
 class ReportArchiver:
     """Manager for report archiving with retention policies.
@@ -51,12 +54,7 @@ class ReportArchiver:
         self.archives: dict[str, list[ArchivedReport]] = {}
         logging.debug(f"ReportArchiver initialized at {self.archive_dir}")
 
-    def archive(
-        self,
-        file_path: str,
-        content: str,
-        retention_days: int = 90
-    ) -> ArchivedReport:
+    def archive(self, file_path: str, content: str, retention_days: int = 90) -> ArchivedReport:
         """Archive a report.
         Args:
             file_path: Source file path.
@@ -71,7 +69,7 @@ class ReportArchiver:
             report_id=report_id,
             file_path=file_path,
             content=content,
-            retention_days=retention_days
+            retention_days=retention_days,
         )
         if file_path not in self.archives:
             self.archives[file_path] = []

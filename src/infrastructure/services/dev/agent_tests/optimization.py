@@ -16,14 +16,19 @@
 """Test optimization and coverage analysis."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import List, Set, Tuple, Dict, Any
+
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .models import TestCase
 
 __version__ = VERSION
 
+
 class TestSuiteOptimizer:
     """Optimize test suites by removing redundant tests."""
+
     __test__ = False
 
     def __init__(self) -> None:
@@ -60,7 +65,7 @@ class TestSuiteOptimizer:
         overlaps: list[tuple[str, str, float]] = []
         test_ids = list(self.coverage_map.keys())
         for i, id_a in enumerate(test_ids):
-            for id_b in test_ids[i + 1:]:
+            for id_b in test_ids[i + 1 :]:
                 cov_a = self.coverage_map[id_a]
                 cov_b = self.coverage_map[id_b]
                 if not cov_a or not cov_b:
@@ -75,20 +80,18 @@ class TestSuiteOptimizer:
         """Suggest tests that could be removed."""
         suggestions: list[dict[str, Any]] = []
         for test_id in self.find_redundant_tests():
-            suggestions.append({
-                "test_id": test_id,
-                "reason": "fully_redundant",
-                "confidence": 0.9
-            })
+            suggestions.append({"test_id": test_id, "reason": "fully_redundant", "confidence": 0.9})
         for id_a, id_b, overlap in self.find_overlapping_tests():
             cov_a = len(self.coverage_map.get(id_a, set()))
             cov_b = len(self.coverage_map.get(id_b, set()))
             remove = id_a if cov_a < cov_b else id_b
-            suggestions.append({
-                "test_id": remove,
-                "reason": f"overlaps {overlap * 100:.0f}% with {id_a if remove == id_b else id_b}",
-                "confidence": 0.7
-            })
+            suggestions.append(
+                {
+                    "test_id": remove,
+                    "reason": f"overlaps {overlap * 100:.0f}% with {id_a if remove == id_b else id_b}",
+                    "confidence": 0.7,
+                }
+            )
         return suggestions
 
     def get_coverage(self, test_id: str) -> set[str]:
@@ -97,10 +100,12 @@ class TestSuiteOptimizer:
 
     def optimize(self) -> list[str]:
         """Return a minimized set of tests while preserving overall coverage."""
+
         if not self.coverage_map:
             return []
 
         all_coverage: set[str] = set()
+
         for cov in self.coverage_map.values():
             all_coverage |= set(cov)
 
@@ -115,6 +120,7 @@ class TestSuiteOptimizer:
             return list(self.coverage_map.keys())
 
         return kept
+
 
 class CoverageGapAnalyzer:
     """Analyzes coverage gaps."""

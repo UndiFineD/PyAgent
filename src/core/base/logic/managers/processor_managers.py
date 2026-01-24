@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Manager for response post-processing and multimodal inputs.
 (Facade for src.core.base.common.processor_core)
 """
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 from __future__ import annotations
 
@@ -39,7 +31,7 @@ class MultimodalProcessor:
     Facade for multimodal input processing.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         from src.core.base.common.processor_core import ProcessorCore
         self._core = ProcessorCore()
 
@@ -53,17 +45,9 @@ class SerializationManager:
     Facade for object serialization.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         from src.core.base.common.serialization_core import SerializationCore
         self._core = SerializationCore()
-
-    def serialize(self, data: Any) -> str:
-        """Alias for to_json for backward compatibility with some tests."""
-        return self._core.to_json(data)
-
-    def deserialize(self, data: str) -> Any:
-        """Alias for from_json for backward compatibility with some tests."""
-        return self._core.from_json(data)
 
     def to_json(self, data: Any) -> str:
         """Convert to JSON."""
@@ -72,19 +56,3 @@ class SerializationManager:
     def from_json(self, data: str) -> Any:
         """Parse from JSON."""
         return self._core.from_json(data)
-=======
-from src.core.base.common.processor_core import (
-    ProcessorCore as ResponsePostProcessor,
-    ProcessorCore as MultimodalProcessor
-)
-from src.core.base.common.serialization_core import SerializationCore as SerializationManager
-
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from src.core.base.common.processor_core import (
-    ProcessorCore as ResponsePostProcessor,
-    ProcessorCore as MultimodalProcessor
-)
-from src.core.base.common.serialization_core import SerializationCore as SerializationManager
-
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

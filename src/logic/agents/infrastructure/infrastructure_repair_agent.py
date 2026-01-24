@@ -18,13 +18,16 @@ Detects and fixes environment issues like missing dependencies or broken paths.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-import subprocess
+
 import logging
+import subprocess
 import sys
-from src.core.base.BaseAgent import BaseAgent
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class InfrastructureRepairAgent(BaseAgent):
     """Monitors and repairs the agent's execution environment."""
@@ -36,12 +39,13 @@ class InfrastructureRepairAgent(BaseAgent):
     def audit_environment(self) -> dict:
         """Checks for common environment issues."""
         import importlib.util
+
         issues = []
-        
+
         # Check for common packages
         if importlib.util.find_spec("pandas") is None:
             issues.append({"type": "missing_package", "package": "pandas"})
-            
+
         if importlib.util.find_spec("yaml") is None:
             issues.append({"type": "missing_package", "package": "pyyaml"})
 
@@ -60,7 +64,7 @@ class InfrastructureRepairAgent(BaseAgent):
             except Exception as e:
                 self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
                 return f"Failed to install {package}: {e}"
-        
+
         return "Unknown issue type."
 
     def auto_repair(self) -> str:
@@ -68,10 +72,10 @@ class InfrastructureRepairAgent(BaseAgent):
         report = self.audit_environment()
         if report["status"] == "clean":
             return "Environment is healthy."
-            
+
         results = []
         for issue in report["issues"]:
             res = self.repair_issue(issue)
             results.append(res)
-            
+
         return "\n".join(results)

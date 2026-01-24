@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.MigrationStatus import MigrationStatus
+
 from dataclasses import dataclass
 
+from src.core.base.common.types.migration_status import MigrationStatus
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class MigrationRule:
@@ -34,6 +37,7 @@ class MigrationRule:
         status: Current status of this migration rule.
         breaking_change: Whether this is a breaking change.
     """
+
     name: str
     old_pattern: str
     new_pattern: str

@@ -1,13 +1,29 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """In-memory and specialized multimodal cache implementations."""
 
 import threading
-from collections import OrderedDict, Counter
+from collections import Counter, OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple
+
 import numpy as np
+
 from .base import MultiModalCache
-from .data import MediaHash, CacheEntry
+from .data import CacheEntry, MediaHash
 
 
 class MemoryMultiModalCache(MultiModalCache):
@@ -52,19 +68,12 @@ class MemoryMultiModalCache(MultiModalCache):
             else:
                 size = 0
 
-            while (self._current_size + size > self.max_size_bytes or
-                   len(self._cache) >= self.max_entries):
+            while self._current_size + size > self.max_size_bytes or len(self._cache) >= self.max_entries:
                 if not self._cache:
                     break
                 self.evict(1)
 
-            entry = CacheEntry(
-                key=key,
-                data=data,
-                media_type=key.media_type,
-                size_bytes=size,
-                metadata=metadata or {}
-            )
+            entry = CacheEntry(key=key, data=data, media_type=key.media_type, size_bytes=size, metadata=metadata or {})
 
             if key_str in self._cache:
                 old = self._cache[key_str]
@@ -127,11 +136,7 @@ class PerceptualCache(MemoryMultiModalCache):
         self._perceptual_index: Dict[str, List[str]] = {}
 
     def put_with_perceptual(
-        self,
-        content_hash: MediaHash,
-        data: Any,
-        perceptual_hash: str,
-        metadata: Optional[Dict] = None
+        self, content_hash: MediaHash, data: Any, perceptual_hash: str, metadata: Optional[Dict] = None
     ) -> CacheEntry:
         """Put with perceptual hash index."""
         entry = self.put(content_hash, data, metadata)
@@ -155,7 +160,7 @@ class PerceptualCache(MemoryMultiModalCache):
             try:
                 cached_int = int(cached_phash, 16)
                 xor = phash_int ^ cached_int
-                distance = bin(xor).count('1')
+                distance = bin(xor).count("1")
                 max_bits = max(len(bin(phash_int)), len(bin(cached_int))) - 2
                 similarity = 1.0 - (distance / max(max_bits, 1))
                 if similarity >= self.similarity_threshold:
@@ -201,12 +206,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
         counter = Counter(subsequent)
         return [k for k, _ in counter.most_common(5)]
 
-    def schedule_prefetch(
-        self,
-        key: MediaHash,
-        loader: Callable[[], Any],
-        priority: float = 0.5
-    ) -> None:
+    def schedule_prefetch(self, key: MediaHash, loader: Callable[[], Any], priority: float = 0.5) -> None:
         """Schedule content for prefetch."""
         with self._prefetch_lock:
             if len(self._prefetch_queue) >= self.max_prefetch_queue:

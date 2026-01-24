@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .Improvement import Improvement
-from typing import List
+
 from collections.abc import Callable
 
+from src.core.base.lifecycle.version import VERSION
+
+from .improvement import Improvement
+
 __version__ = VERSION
+
 
 class ImprovementDashboard:
     """Renders a lightweight dashboard and emits update callbacks."""

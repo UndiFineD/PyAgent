@@ -8,113 +8,115 @@ for monitoring PyAgent system performance and health.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION as VERSION
 
+from src.core.base.lifecycle.version import VERSION
+
+from .ab_engine import (ABComparator, ABComparison, ABComparisonEngine,  # noqa: F401
+                        ABComparisonResult, ABSignificanceResult)
+from .access import StatsAccessController  # noqa: F401
+from .alerting import RetentionEnforcer, ThresholdAlertManager  # noqa: F401
+from .analysis import CorrelationAnalyzer  # noqa: F401
+from .api import APIEndpoint, StatsAPIServer  # noqa: F401
+from .engine import StatsNamespaceManager  # noqa: F401
+from .exporters import (CloudExporter, MetricsExporter, OTelManager,  # noqa: F401
+                        PrometheusExporter, Span, StatsExporter)
+from .federation import StatsFederation  # noqa: F401
+from .formula_engine import FormulaEngine, FormulaEngineCore, FormulaValidation  # noqa: F401
+from .metrics_core import (DerivedMetricCalculator, ModelFallbackCore,  # noqa: F401
+                           TokenCostCore)
+from .metrics_engine import (ModelFallbackEngine, ObservabilityEngine,  # noqa: F401
+                             TokenCostEngine)
+from .monitoring import ResourceMonitor  # noqa: F401
+from .namespaces import MetricNamespaceManager  # noqa: F401
 # Phase 317: Structured imports to restore package parity after Synaptic Modularization
-from .ObservabilityCore import (
-    Metric as Metric,
-    MetricType as MetricType,
-    Alert as Alert,
-    AlertSeverity as AlertSeverity,
-    Threshold as Threshold,
-    RetentionPolicy as RetentionPolicy,
-    MetricSnapshot as MetricSnapshot,
-    AggregationType as AggregationType,
-    MetricNamespace as MetricNamespace,
-    MetricAnnotation as MetricAnnotation,
-    MetricCorrelation as MetricCorrelation,
-    MetricSubscription as MetricSubscription,
-    ExportDestination as ExportDestination,
-    FederatedSource as FederatedSource,
-    FederationMode as FederationMode,
-    RollupConfig as RollupConfig,
-    StreamingConfig as StreamingConfig,
-    StreamingProtocol as StreamingProtocol,
-    DerivedMetric as DerivedMetric,
-    StatsNamespace as StatsNamespace,
-)
-
-from .MetricsEngine import (
-    ObservabilityEngine as ObservabilityEngine,
-    TokenCostEngine as TokenCostEngine,
-    ModelFallbackEngine as ModelFallbackEngine,
-)
-
-from .MetricsCore import (
-    DerivedMetricCalculator as DerivedMetricCalculator,
-    TokenCostCore as TokenCostCore,
-    ModelFallbackCore as ModelFallbackCore,
-)
-
-from .analysis import (
-    CorrelationAnalyzer as CorrelationAnalyzer,
-)
-
-from .FormulaEngine import (
-    FormulaEngine as FormulaEngine,
-    FormulaEngineCore as FormulaEngineCore,
-    FormulaValidation as FormulaValidation,
-)
-
-from .Monitoring import (
-    ResourceMonitor as ResourceMonitor,
-)
-
-from .Alerting import (
-    ThresholdAlertManager as ThresholdAlertManager,
-    RetentionEnforcer as RetentionEnforcer,
-)
-
-from .RollupEngine import (
-    StatsRollupCalculator as StatsRollupCalculator,
-    StatsRollup as StatsRollup,
-    StatsQueryEngine as StatsQueryEngine,
-)
-
-from .PredictionEngine import (
-    StatsChangeDetector as StatsChangeDetector,
-    StatsForecaster as StatsForecaster,
-)
-
-from .ABEngine import (
-    ABComparisonEngine as ABComparisonEngine,
-    ABComparator as ABComparator,
-    ABComparisonResult as ABComparisonResult,
-    ABSignificanceResult as ABSignificanceResult,
-    ABComparison as ABComparison,
-)
-
-from .exporters import (
-    MetricsExporter as MetricsExporter,
-    StatsExporter as StatsExporter,
-    PrometheusExporter as PrometheusExporter,
-    CloudExporter as CloudExporter,
-    OTelManager as OTelManager,
-    Span as Span,
-)
-from .StatsAgent import StatsAgent as StatsAgent
-from .ReportingAgent import ReportingAgent as ReportingAgent
-from .TransparencyAgent import TransparencyAgent as TransparencyAgent
-
-from .API import StatsAPIServer as StatsAPIServer, APIEndpoint as APIEndpoint
-from .streaming import (
-    StatsStreamManager as StatsStreamManager,
-    StatsStreamer as StatsStreamer,
-)
-from .engine import StatsNamespaceManager as StatsNamespaceManager
-from .namespaces import MetricNamespaceManager as MetricNamespaceManager
-from .federation import StatsFederation as StatsFederation
-from .Access import StatsAccessController as StatsAccessController
-from .StorageEngine import (
-    StatsBackupManager as StatsBackupManager,
-    StatsSnapshotManager as StatsSnapshotManager,
-    StatsCompressor as StatsCompressor,
-)
-from .SubsEngine import (
-    AnnotationManager as AnnotationManager,
-    StatsAnnotationManager as StatsAnnotationManager,
-    SubscriptionManager as SubscriptionManager,
-    StatsSubscriptionManager as StatsSubscriptionManager,
-)
+from .observability_core import (AggregationType, Alert, AlertSeverity,  # noqa: F401
+                                 DerivedMetric, ExportDestination,
+                                 FederatedSource, FederationMode, Metric,
+                                 MetricAnnotation, MetricCorrelation,
+                                 MetricNamespace, MetricSnapshot,
+                                 MetricSubscription, MetricType,
+                                 RetentionPolicy, RollupConfig, StatsNamespace,
+                                 StreamingConfig, StreamingProtocol, Threshold)
+from .prediction_engine import StatsChangeDetector, StatsForecaster  # noqa: F401
+from .reporting_agent import ReportingAgent  # noqa: F401
+from .rollup_engine import StatsQueryEngine, StatsRollup, StatsRollupCalculator  # noqa: F401
+from .stats_agent import StatsAgent  # noqa: F401
+from .storage_engine import (StatsBackupManager, StatsCompressor,  # noqa: F401
+                             StatsSnapshotManager)
+from .streaming import StatsStreamer, StatsStreamManager  # noqa: F401
+from .subs_engine import (AnnotationManager, StatsAnnotationManager,  # noqa: F401
+                          StatsSubscriptionManager, SubscriptionManager)
+from .transparency_agent import TransparencyAgent  # noqa: F401
 
 __version__ = VERSION
+
+__all__ = [
+    "VERSION",
+    "Metric",
+    "MetricType",
+    "Alert",
+    "AlertSeverity",
+    "Threshold",
+    "RetentionPolicy",
+    "MetricSnapshot",
+    "AggregationType",
+    "MetricNamespace",
+    "MetricAnnotation",
+    "MetricCorrelation",
+    "MetricSubscription",
+    "ExportDestination",
+    "FederatedSource",
+    "FederationMode",
+    "RollupConfig",
+    "StreamingConfig",
+    "StreamingProtocol",
+    "DerivedMetric",
+    "StatsNamespace",
+    "ObservabilityEngine",
+    "TokenCostEngine",
+    "ModelFallbackEngine",
+    "DerivedMetricCalculator",
+    "TokenCostCore",
+    "ModelFallbackCore",
+    "CorrelationAnalyzer",
+    "FormulaEngine",
+    "FormulaEngineCore",
+    "FormulaValidation",
+    "ResourceMonitor",
+    "ThresholdAlertManager",
+    "RetentionEnforcer",
+    "StatsRollupCalculator",
+    "StatsRollup",
+    "StatsQueryEngine",
+    "StatsChangeDetector",
+    "StatsForecaster",
+    "ABComparisonEngine",
+    "ABComparator",
+    "ABComparisonResult",
+    "ABSignificanceResult",
+    "ABComparison",
+    "MetricsExporter",
+    "StatsExporter",
+    "PrometheusExporter",
+    "CloudExporter",
+    "OTelManager",
+    "Span",
+    "StatsAgent",
+    "ReportingAgent",
+    "TransparencyAgent",
+    "StatsAPIServer",
+    "APIEndpoint",
+    "StatsStreamManager",
+    "StatsStreamer",
+    "StatsNamespaceManager",
+    "MetricNamespaceManager",
+    "StatsFederation",
+    "StatsAccessController",
+    "StatsBackupManager",
+    "StatsSnapshotManager",
+    "StatsCompressor",
+    "AnnotationManager",
+    "StatsAnnotationManager",
+    "SubscriptionManager",
+    "StatsSubscriptionManager",
+]

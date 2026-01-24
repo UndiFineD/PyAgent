@@ -73,8 +73,7 @@ class ToolDraftingCore:
         if self._rust_core:
             try:
                 return self._rust_core.validate_tool_name(name)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return name.isidentifier() and len(name) > 3
 

@@ -16,12 +16,15 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ReportAnnotation import ReportAnnotation
-from typing import Dict, List, Optional
+
 import logging
 
+from src.core.base.lifecycle.version import VERSION
+
+from .report_annotation import ReportAnnotation
+
 __version__ = VERSION
+
 
 class AnnotationManager:
     """Manager for report annotations and comments.
@@ -42,11 +45,7 @@ class AnnotationManager:
         logging.debug("AnnotationManager initialized")
 
     def add_annotation(
-        self,
-        report_id: str,
-        author: str,
-        content: str,
-        line_number: int | None = None
+        self, report_id: str, author: str, content: str, line_number: int | None = None
     ) -> ReportAnnotation:
         """Add an annotation.
         Args:
@@ -65,7 +64,7 @@ class AnnotationManager:
             report_id=report_id,
             author=author,
             content=content,
-            line_number=line_number
+            line_number=line_number,
         )
         if report_id not in self.annotations:
             self.annotations[report_id] = []

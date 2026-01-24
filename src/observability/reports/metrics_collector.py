@@ -16,12 +16,16 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ReportMetric import ReportMetric
-from typing import Any, Dict, List, Optional
+
 import logging
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_metric import ReportMetric
 
 __version__ = VERSION
+
 
 class MetricsCollector:
     """Collector for custom report metrics and KPIs.
@@ -46,7 +50,7 @@ class MetricsCollector:
         name: str,
         value: float,
         unit: str = "",
-        threshold: float | None = None
+        threshold: float | None = None,
     ) -> ReportMetric:
         """Record a metric.
         Args:
@@ -59,12 +63,7 @@ class MetricsCollector:
             Created metric.
         """
 
-        metric = ReportMetric(
-            name=name,
-            value=value,
-            unit=unit,
-            threshold=threshold
-        )
+        metric = ReportMetric(name=name, value=value, unit=unit, threshold=threshold)
         if file_path not in self.metrics:
             self.metrics[file_path] = []
         self.metrics[file_path].append(metric)
@@ -95,12 +94,9 @@ class MetricsCollector:
                 if metric.name not in averages:
                     averages[metric.name] = []
                 averages[metric.name].append(metric.value)
-        avg_summary = {
-            name: sum(vals) / len(vals) if vals else 0
-            for name, vals in averages.items()
-        }
+        avg_summary = {name: sum(vals) / len(vals) if vals else 0 for name, vals in averages.items()}
         return {
             "total_files": total_files,
             "total_metrics": total_metrics,
-            "averages": avg_summary
+            "averages": avg_summary,
         }

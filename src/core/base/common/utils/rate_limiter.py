@@ -16,13 +16,16 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.models import RateLimitConfig
-from typing import List, Optional, Dict, Any
+
 import threading
 import time
+from typing import Any
+
+from src.core.base.common.models import RateLimitConfig
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class RateLimiter:
     """Rate limiter for API calls using token bucket algorithm.
@@ -79,9 +82,7 @@ class RateLimiter:
                     self._request_timestamps.append(time.time())
                     # Clean old timestamps
                     cutoff = time.time() - 60
-                    self._request_timestamps = [
-                        t for t in self._request_timestamps if t > cutoff
-                    ]
+                    self._request_timestamps = [t for t in self._request_timestamps if t > cutoff]
                     return True
 
                 # Calculate wait time for at least 1 token

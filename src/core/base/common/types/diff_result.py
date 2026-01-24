@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass, field
-from typing import List, Tuple
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class DiffResult:
@@ -33,6 +35,7 @@ class DiffResult:
         unchanged: Lines unchanged.
         similarity_score: Percentage of similarity (0 - 100).
     """
+
     additions: list[str] = field(default_factory=lambda: [])
     deletions: list[str] = field(default_factory=lambda: [])
     modifications: list[tuple[str, str]] = field(default_factory=lambda: [])

@@ -82,7 +82,7 @@ class ModelForgeAgent(BaseAgent):
         try:
             await asyncio.to_thread(write_dataset)
             return f"Dataset prepared at {output_path} with {len(examples)} examples."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             return f"Failed to prepare dataset: {e}"
 
     @as_tool
@@ -125,7 +125,7 @@ class ModelForgeAgent(BaseAgent):
             # Save config to data/config (Phase 282: Dedicated config storage)
             config_path = Path("data/config") / f"{task_name}_adapter_config.json"
             config_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(config_path, 'w', encoding='utf-8') as f:
+            with open(config_path, "w") as f:
                 json.dump({"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f)
 
             # Keep adapter directory for other artifacts
@@ -159,7 +159,7 @@ class ModelForgeAgent(BaseAgent):
             return f"Error: Adapter '{task_name}' not found."
 
         def read_config() -> str:
-            with open(adapter_path, encoding='utf-8') as f:
+            with open(adapter_path) as f:
                 return f.read()
 
         return await asyncio.to_thread(read_config)

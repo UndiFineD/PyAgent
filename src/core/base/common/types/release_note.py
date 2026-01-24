@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class ReleaseNote:
@@ -34,6 +36,7 @@ class ReleaseNote:
         breaking_changes: List of breaking changes.
         full_changelog: Complete changelog text.
     """
+
     version: str
     title: str
     summary: str

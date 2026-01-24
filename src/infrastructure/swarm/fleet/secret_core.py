@@ -19,11 +19,15 @@ Pure logic for secret masking, validation, and naming policy.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class SecretCore:
+    """Core logic for secret management, masking, and validation."""
+
     def __init__(self) -> None:
         pass
 

@@ -38,33 +38,36 @@ class OllamaBackend(LLMBackend):
         system_prompt: str = "You are a helpful assistant.",
         **kwargs,
     ) -> str:
-        # Map 'tinyllama' to 'tinyllama:latest' to match Ollama's model tag
-        if model == "tinyllama":
-            model = "tinyllama:latest"
+        if not self._is_working("ollama"):
+            logging.debug("Ollama skipped due to connection cache.")
+            return ""
+
+        import os
+
+        base_url = kwargs.get("base_url") or os.environ.get("DV_OLLAMA_BASE_URL") or "http://localhost:11434"
+        url = base_url.rstrip("/") + "/api/generate"
+        payload = {
+            "model": model,
+            "system": system_prompt,
+            "prompt": prompt,
+            "stream": False,
+        }
+
+        timeout_s = kwargs.get("timeout_s", 120)
         import time
+
         start_t = time.time()
-        print(f"[OllamaBackend] Called with model: {model}\nPrompt: {prompt[:80]}{'...' if len(prompt) > 80 else ''}")
+
         try:
-            from ollama import chat as ollama_chat
-            messages = []
-            if system_prompt:
-                messages.append({"role": "system", "content": system_prompt})
-            messages.append({"role": "user", "content": prompt})
-            print(f"[OllamaBackend] Sending to ollama: model={model}, messages={messages}")
-            response = ollama_chat(
-                model=model,
-                messages=messages,
-            )
-            print(f"[OllamaBackend] Ollama raw response: {response}")
-            content = response.message.content if hasattr(response, "message") and hasattr(response.message, "content") else str(response)
+            response = self.session.post(url, json=payload, timeout=timeout_s)
+            response.raise_for_status()
+            content = response.json().get("response", "")
             latency = time.time() - start_t
-            print(f"[OllamaBackend] Ollama content: {content}")
             self._record("ollama", model, prompt, content, system_prompt=system_prompt, latency_s=latency)
             self._update_status("ollama", True)
             return content
         except Exception as e:
-            import traceback
-            print(f"[OllamaBackend] ERROR: {e}\n{traceback.format_exc()}")
+            # Lowered logging level for fallback-friendly behavior (Phase 123)
             logging.debug(f"Ollama call failed: {e}")
             self._update_status("ollama", False)
             self._record(
@@ -75,4 +78,4 @@ class OllamaBackend(LLMBackend):
                 system_prompt=system_prompt,
                 latency_s=time.time() - start_t,
             )
-            return "[OllamaBackend] ERROR: " + str(e)
+            return ""

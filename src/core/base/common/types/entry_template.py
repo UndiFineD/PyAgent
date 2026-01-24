@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class EntryTemplate:
@@ -32,6 +34,7 @@ class EntryTemplate:
         placeholders: List of placeholder names.
         description: Description of the template.
     """
+
     name: str
     template_text: str
     placeholders: list[str] = field(default_factory=lambda: [])

@@ -16,16 +16,18 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+
 import time
+from dataclasses import dataclass, field
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 @dataclass
 class TestLogEntry:
-    __test__ = False
     """A test log entry.
 
     Attributes:
@@ -35,6 +37,8 @@ class TestLogEntry:
         test_name: Associated test.
         extra: Extra data.
     """
+
+    __test__ = False
 
     level: str
     message: str

@@ -43,33 +43,31 @@ class CopilotCliBackend(LLMBackend):
             logging.debug("Copilot CLI skipped due to connection cache.")
             return ""
 
-        # Phase 336 Modification: Increased default timeout to 300s to support large context reasoning
-        timeout_s = kwargs.get("timeout_s", 300)
+        timeout_s = kwargs.get("timeout_s", 30)
         import time
 
         start_t = time.time()
         try:
             # Phase 141 Fix: Windows command line length limit (WinError 206)
             # gh copilot suggest doesn't need the full strategic roadmap, just a task summary.
-            # Phase 317 expansion: Increasing to 32000 to allow more context for code fixes.
-            max_char = 32000
+            # Phase 317 expansion: Increasing to 4000 to allow more context for code fixes.
+            max_char = 4000
             safe_prompt = prompt[:max_char] + "..." if len(prompt) > max_char else prompt
 
-            # Phase 336: Use stand-alone 'copilot' CLI instead of deprecated 'gh extension'
-            # We use -s (silent) and -p (prompt) for non-interactive mode.
-            cmd = ["copilot", "-s", "-p", safe_prompt]
-            process = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=timeout_s,
-                encoding="utf-8",
-                check=False,
-            )
+            # We use 'shell' type because suggest works best with it,
+            # though it's still far from a full LLM.
+            cmd = ["gh", "copilot", "suggest", "-t", "shell", safe_prompt]
+            process = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_s, encoding="utf-8")
             latency = time.time() - start_t
 
             if process.returncode == 0:
                 content = process.stdout.strip()
+
+                # Phase 317 Protection: Detecting gh-copilot deprecation message
+                if "gh-copilot extension has been deprecated" in content:
+                    logging.warning("Copilot CLI detected deprecation message. Skipping backend.")
+                    self._update_status("copilot_cli", False)
+                    return ""
 
                 self._record(
                     "copilot_cli",
@@ -81,32 +79,19 @@ class CopilotCliBackend(LLMBackend):
                 )
                 self._update_status("copilot_cli", True)
                 return content
-
-            logging.debug(f"Copilot CLI error: {process.stderr}")
-            self._update_status("copilot_cli", False)
-            self._record(
-                "copilot_cli",
-                model,
-                safe_prompt,
-                f"ERROR: {process.stderr}",
-                system_prompt=system_prompt,
-                latency_s=latency,
-            )
-            return ""
-        except subprocess.TimeoutExpired:
-            latency = time.time() - start_t
-            logging.warning(f"Copilot CLI timed out after {timeout_s}s")
-            self._update_status("copilot_cli", False)
-            self._record(
-                "copilot_cli",
-                model,
-                prompt[:100],
-                f"TIMEOUT: after {timeout_s}s",
-                system_prompt=system_prompt,
-                latency_s=latency,
-            )
-            return ""
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            else:
+                logging.debug(f"Copilot CLI error: {process.stderr}")
+                self._update_status("copilot_cli", False)
+                self._record(
+                    "copilot_cli",
+                    model,
+                    safe_prompt,
+                    f"ERROR: {process.stderr}",
+                    system_prompt=system_prompt,
+                    latency_s=latency,
+                )
+                return ""
+        except Exception as e:
             latency = time.time() - start_t
             logging.error(f"Failed to call Copilot CLI: {e}")
             self._update_status("copilot_cli", False)

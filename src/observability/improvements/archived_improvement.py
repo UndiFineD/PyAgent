@@ -16,11 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .Improvement import Improvement
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
+from .improvement import Improvement
+
 __version__ = VERSION
+
 
 @dataclass
 class ArchivedImprovement:
@@ -32,6 +36,7 @@ class ArchivedImprovement:
         archived_by: Who archived it.
         archive_reason: Why it was archived.
     """
+
     improvement: Improvement
     archived_date: str = ""
     archived_by: str = ""

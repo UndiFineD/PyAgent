@@ -177,7 +177,7 @@ class SpecToolAgent(BaseAgent):
 
             return f"Successfully generated tool: {output_path}. Methods: {len(paths)}"
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error(f"Spec generation failed: {e}")
             return f"Error parsing spec: {e}"
 

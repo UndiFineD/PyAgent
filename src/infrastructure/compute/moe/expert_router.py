@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Expert Router for Mixture of Experts.
 
@@ -15,9 +29,9 @@ from __future__ import annotations
 import math
 import threading
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Callable, Optional, TYPE_CHECKING
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
 
 import numpy as np
 
@@ -25,6 +39,7 @@ import numpy as np
 try:
     import torch
     import torch.nn.functional as F
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -34,6 +49,7 @@ except ImportError:
 # Try to import Rust accelerators
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -43,8 +59,10 @@ except ImportError:
 # Enums and Types
 # =============================================================================
 
+
 class RoutingMethod(str, Enum):
     """Routing method for token-to-expert assignment."""
+
     TOP_K = "top_k"  # Standard top-k routing
     EXPERT_CHOICE = "expert_choice"  # Expert chooses tokens
     SOFT_MOE = "soft_moe"  # Soft assignment
@@ -56,9 +74,11 @@ class RoutingMethod(str, Enum):
 # Configuration
 # =============================================================================
 
+
 @dataclass
 class RouterConfig:
     """Configuration for expert router."""
+
     num_experts: int
     top_k: int
     hidden_size: int
@@ -87,9 +107,11 @@ class RouterConfig:
 # Router Output
 # =============================================================================
 
+
 @dataclass
 class RouterOutput:
     """Output from router forward pass."""
+
     expert_indices: np.ndarray  # [batch, top_k] - selected expert indices
     expert_weights: np.ndarray  # [batch, top_k] - routing weights
     router_logits: np.ndarray  # [batch, num_experts] - raw logits
@@ -107,6 +129,7 @@ class RouterOutput:
 # Router Base Class
 # =============================================================================
 
+
 class RouterBase(ABC):
     """Base class for expert routers."""
 
@@ -114,9 +137,9 @@ class RouterBase(ABC):
         self.config = config
 
         # Router weight
-        self.weight = np.random.randn(
-            config.num_experts, config.hidden_size
-        ).astype(np.float32) * (1.0 / math.sqrt(config.hidden_size))
+        self.weight = np.random.randn(config.num_experts, config.hidden_size).astype(np.float32) * (
+            1.0 / math.sqrt(config.hidden_size)
+        )
 
         # Statistics tracking
         self._total_tokens = 0
@@ -222,6 +245,7 @@ class RouterBase(ABC):
 # Top-K Router
 # =============================================================================
 
+
 class TopKRouter(RouterBase):
     """
     Standard top-k router.
@@ -231,13 +255,11 @@ class TopKRouter(RouterBase):
 
     def forward(self, x: np.ndarray) -> RouterOutput:
         """Route using top-k selection."""
-        batch_size = x.shape[0]
-
         # Compute logits
         router_logits = self.compute_router_logits(x)
 
         # Get top-k experts
-        if HAS_RUST and hasattr(rust_core, 'topk_routing_rust'):
+        if HAS_RUST and hasattr(rust_core, "topk_routing_rust"):
             expert_indices, expert_weights = rust_core.topk_routing_rust(
                 router_logits, self.config.top_k, self.config.renormalize
             )
@@ -270,7 +292,7 @@ class TopKRouter(RouterBase):
         routing_weights = routing_weights / routing_weights.sum(axis=-1, keepdims=True)
 
         # Top-k selection
-        expert_indices = np.argsort(routing_weights, axis=-1)[:, -self.config.top_k:]
+        expert_indices = np.argsort(routing_weights, axis=-1)[:, -self.config.top_k :]
         expert_indices = expert_indices[:, ::-1]  # Descending order
 
         expert_weights = np.take_along_axis(routing_weights, expert_indices, axis=-1)
@@ -285,6 +307,7 @@ class TopKRouter(RouterBase):
 # =============================================================================
 # Grouped Top-K Router
 # =============================================================================
+
 
 class GroupedTopKRouter(RouterBase):
     """
@@ -308,7 +331,7 @@ class GroupedTopKRouter(RouterBase):
 
         # Select top-k groups first
         group_scores = logits_grouped.max(axis=-1)
-        top_groups = np.argsort(group_scores, axis=-1)[:, -self.config.topk_group:]
+        top_groups = np.argsort(group_scores, axis=-1)[:, -self.config.topk_group :]
 
         # Then select top-k experts within selected groups
         expert_indices = []
@@ -318,13 +341,13 @@ class GroupedTopKRouter(RouterBase):
             selected = []
             for g in top_groups[i]:
                 group_logits = logits_grouped[i, g]
-                top_in_group = np.argsort(group_logits)[-self.config.top_k:]
+                top_in_group = np.argsort(group_logits)[-self.config.top_k :]
                 selected.extend(g * experts_per_group + top_in_group)
 
             # Get final top-k from selected
             selected = np.array(selected)
             selected_scores = router_logits[i, selected]
-            final_topk = np.argsort(selected_scores)[-self.config.top_k:]
+            final_topk = np.argsort(selected_scores)[-self.config.top_k :]
 
             expert_indices.append(selected[final_topk][::-1])
             expert_weights.append(selected_scores[final_topk][::-1])
@@ -352,6 +375,7 @@ class GroupedTopKRouter(RouterBase):
 # =============================================================================
 # Expert Choice Router
 # =============================================================================
+
 
 class ExpertChoiceRouter(RouterBase):
     """
@@ -415,15 +439,15 @@ class ExpertChoiceRouter(RouterBase):
             valid_weights = expert_weights[i, valid]
 
             if len(valid_indices) > self.config.top_k:
-                top_k_pos = np.argsort(valid_weights)[-self.config.top_k:]
+                top_k_pos = np.argsort(valid_weights)[-self.config.top_k :]
                 final_indices.append(valid_indices[top_k_pos][::-1])
                 final_weights.append(valid_weights[top_k_pos][::-1])
             else:
                 # Pad with zeros if needed
                 padded_indices = np.zeros(self.config.top_k, dtype=np.int32)
                 padded_weights = np.zeros(self.config.top_k, dtype=np.float32)
-                padded_indices[:len(valid_indices)] = valid_indices
-                padded_weights[:len(valid_weights)] = valid_weights
+                padded_indices[: len(valid_indices)] = valid_indices
+                padded_weights[: len(valid_weights)] = valid_weights
                 final_indices.append(padded_indices)
                 final_weights.append(padded_weights)
 
@@ -448,6 +472,7 @@ class ExpertChoiceRouter(RouterBase):
 # =============================================================================
 # Soft MoE Router
 # =============================================================================
+
 
 class SoftMoERouter(RouterBase):
     """
@@ -475,7 +500,7 @@ class SoftMoERouter(RouterBase):
         all_weights = all_weights / all_weights.sum(axis=-1, keepdims=True)
 
         # Still select top-k for sparse computation
-        expert_indices = np.argsort(all_weights, axis=-1)[:, -self.config.top_k:][:, ::-1]
+        expert_indices = np.argsort(all_weights, axis=-1)[:, -self.config.top_k :][:, ::-1]
         expert_weights = np.take_along_axis(all_weights, expert_indices, axis=-1)
 
         # Renormalize selected
@@ -494,6 +519,7 @@ class SoftMoERouter(RouterBase):
 # =============================================================================
 # Beyond vLLM: Adaptive Router
 # =============================================================================
+
 
 class AdaptiveRouter(RouterBase):
     """
@@ -571,6 +597,7 @@ class AdaptiveRouter(RouterBase):
 # =============================================================================
 # Routing Simulator
 # =============================================================================
+
 
 class RoutingSimulator:
     """

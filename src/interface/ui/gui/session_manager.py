@@ -20,15 +20,19 @@
 """Session Management logic for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import json
-from typing import Any, Optional
 from tkinter import filedialog, messagebox
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class SessionManager:
     """Handles saving and loading of the GUI state."""
+
     def __init__(self, default_filename="gui_session.json") -> None:
         self.default_filename: str = default_filename
 
@@ -36,12 +40,12 @@ class SessionManager:
         """Saves session data to a JSON file."""
         filepath: str = filedialog.asksaveasfilename(
             initialfile=self.default_filename,
-            defaultextension=".json", 
-            filetypes=[("JSON", "*.json")]
+            defaultextension=".json",
+            filetypes=[("JSON", "*.json")],
         )
         if filepath:
             try:
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=4)
                 return True
             except Exception as e:
@@ -53,9 +57,9 @@ class SessionManager:
         filepath: str = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
         if not filepath:
             return None
-            
+
         try:
-            with open(filepath, encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 data = json.load(f)
             return data
         except Exception as e:

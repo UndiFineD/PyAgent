@@ -16,16 +16,19 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.models import SpanContext, TelemetrySpan
-from contextlib import contextmanager
-from typing import List, Optional, Dict, Any
-from collections.abc import Iterator
+
 import json
 import time
 import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
+from typing import Any
+
+from src.core.base.common.models import SpanContext, TelemetrySpan
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class TelemetryCollector:
     """Collect telemetry data for observability.
@@ -100,17 +103,19 @@ class TelemetryCollector:
         """
         spans_data: list[dict[str, Any]] = []
         for span in self._spans:
-            spans_data.append({
-                "name": span.name,
-                "trace_id": span.trace_id,
-                "span_id": span.span_id,
-                "parent_id": span.parent_id,
-                "start_time": span.start_time,
-                "end_time": span.end_time,
-                "duration_ms": (span.end_time - span.start_time) * 1000 if span.end_time else None,
-                "attributes": span.attributes,
-                "events": span.events,
-            })
+            spans_data.append(
+                {
+                    "name": span.name,
+                    "trace_id": span.trace_id,
+                    "span_id": span.span_id,
+                    "parent_id": span.parent_id,
+                    "start_time": span.start_time,
+                    "end_time": span.end_time,
+                    "duration_ms": (span.end_time - span.start_time) * 1000 if span.end_time else None,
+                    "attributes": span.attributes,
+                    "events": span.events,
+                }
+            )
         return json.dumps(spans_data, indent=2)
 
     def clear(self) -> None:

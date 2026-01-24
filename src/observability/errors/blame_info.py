@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class BlameInfo:
@@ -32,6 +35,7 @@ class BlameInfo:
         commit_date: Date of the commit.
         commit_message: Commit message.
     """
+
     error_id: str
     commit_hash: str = ""
     author: str = ""

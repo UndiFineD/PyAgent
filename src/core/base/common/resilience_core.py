@@ -18,12 +18,13 @@ Standardizes retry, backoff, and circuit breaker logic across the swarm.
 """
 
 from __future__ import annotations
-import random
-import time
+
 import asyncio
 import functools
 import logging
-from typing import Any, Callable, TypeVar, Coroutine, cast
+import random
+import time
+from typing import Any, Callable, Coroutine, TypeVar, cast
 
 try:
     import rust_core as rc
@@ -67,7 +68,11 @@ class ResilienceCore(BaseCore):
                         wait = current_delay * (random.random() + 0.5)  # jitter
                         logger.warning(
                             "Retrying %s (attempt %d/%d) after %.2fs due to: %s",
-                            func.__name__, attempt + 1, retries, wait, e
+                            func.__name__,
+                            attempt + 1,
+                            retries,
+                            wait,
+                            e,
                         )
                         time.sleep(wait)
                         current_delay *= backoff
@@ -88,9 +93,7 @@ class ResilienceCore(BaseCore):
     ) -> Callable[[Callable[..., Coroutine[Any, Any, T]]], Callable[..., Coroutine[Any, Any, T]]]:
         """Asynchronous retry decorator with exponential backoff."""
 
-        def decorator(
-            func: Callable[..., Coroutine[Any, Any, T]]
-        ) -> Callable[..., Coroutine[Any, Any, T]]:
+        def decorator(func: Callable[..., Coroutine[Any, Any, T]]) -> Callable[..., Coroutine[Any, Any, T]]:
             @functools.wraps(func)
             async def wrapper(*args: Any, **kwargs: Any) -> T:
                 last_exception = None
@@ -137,10 +140,10 @@ class ResilienceCore(BaseCore):
         if rc:
             try:
                 # Use Rust implementation for performance if available
-                return rc.calculate_backoff( # pylint: disable=no-member
+                return rc.calculate_backoff(  # pylint: disable=no-member
                     failure_count, threshold, base_timeout, multiplier, max_timeout
                 )
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if failure_count < threshold:
@@ -159,16 +162,14 @@ class ResilienceCore(BaseCore):
         return max(base_timeout / 2, backoff + jitter)
 
     @staticmethod
-    def should_attempt_recovery(
-        last_failure_time: float, current_time: float, timeout: float
-    ) -> bool:
+    def should_attempt_recovery(last_failure_time: float, current_time: float, timeout: float) -> bool:
         """Determines if the cooldown period has passed."""
         if rc:
             try:
-                return rc.should_attempt_recovery( # pylint: disable=no-member
+                return rc.should_attempt_recovery(  # pylint: disable=no-member
                     last_failure_time, current_time, timeout
                 )
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return (current_time - last_failure_time) > timeout
 
@@ -186,14 +187,14 @@ class ResilienceCore(BaseCore):
         if rc:
             try:
                 if hasattr(rc, "evaluate_state_transition"):
-                    return rc.evaluate_state_transition( # pylint: disable=no-member
+                    return rc.evaluate_state_transition(  # pylint: disable=no-member
                         current_state,
                         success_count,
                         consecutive_successes_needed,
                         failure_count,
                         failure_threshold,
                     )
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if current_state == "CLOSED":

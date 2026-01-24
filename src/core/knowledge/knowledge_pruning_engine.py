@@ -12,16 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Knowledge pruning engine.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
 import time
-from typing import List, Dict, Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 if TYPE_CHECKING:
     from .knowledge_engine import KnowledgeEngine
+
 
 class KnowledgePruningEngine:
     """
@@ -29,16 +36,18 @@ class KnowledgePruningEngine:
     Fosters 'Anchoring Strength' by preserving frequently accessed items
     and pruning redundant or stale data to optimize performance.
     """
+
     def __init__(self, engine: KnowledgeEngine) -> None:
         self.engine = engine
-        self.access_logs: dict[str, dict[str, Any]] = {} # id -> {"count": int, "last_access": float}
+        self.access_logs: dict[str, dict[str, Any]] = {}  # id -> {"count": int, "last_access": float}
 
     def log_access(self, element_id: str) -> None:
         """Records an access event to an element and updates timestamps."""
         import time
+
         if element_id not in self.access_logs:
             self.access_logs[element_id] = {"count": 0, "first_seen": time.time()}
-        
+
         self.access_logs[element_id]["count"] += 1
         self.access_logs[element_id]["last_access"] = time.time()
 
@@ -47,38 +56,35 @@ class KnowledgePruningEngine:
         Calculates the anchoring strength of a knowledge element (Phase 130).
         Strength = (Access Count) * exp(-decay_constant * (Current Time - Last Access))
         """
-        import time
         import math
-        
+        import time
+
         log = self.access_logs.get(element_id)
         if not log:
             return 0.0
-            
-        decay_constant = 0.0001 # Adjustable parameter
+
+        decay_constant = 0.0001  # Adjustable parameter
         age = time.time() - log["last_access"]
-        
+
         strength = log["count"] * math.exp(-decay_constant * age)
         return strength
 
-    def run_pruning_cycle(self, strength_threshold: float = 0.5, compression_threshold: float = 2.0) -> dict[str, list[str]]:
+    def run_pruning_cycle(
+        self, strength_threshold: float = 0.5, compression_threshold: float = 2.0
+    ) -> dict[str, list[str]]:
         """
         Executes a pruning cycle across all engine stores using anchoring strength.
         Items with strength < strength_threshold are considered candidates for eviction.
         """
         logging.info(f"KnowledgePruningEngine: Initiating neural pruning for agent {self.engine.agent_id}")
-        
-        pruned_report = {
-            "btree": [],
-            "graph": [],
-            "vector": [],
-            "compressed": []
-        }
+
+        pruned_report = {"btree": [], "graph": [], "vector": [], "compressed": []}
 
         # 1. Prune/Compress based on access logs (vitality)
         for element_id in list(self.access_logs.keys()):
             # Use anchoring strength instead of raw counts
             strength = self.get_anchoring_strength(element_id)
-            
+
             # Deletion path
             if strength <= strength_threshold:
                 if self.engine.btree.delete(element_id):
@@ -86,7 +92,7 @@ class KnowledgePruningEngine:
                 if self.engine.graph.delete(element_id):
                     pruned_report["graph"].append(element_id)
                 del self.access_logs[element_id]
-                
+
             # Compression path (Phase 128)
             elif strength <= compression_threshold:
                 if self.engine.compress_memory(element_id):
@@ -101,7 +107,12 @@ class KnowledgePruningEngine:
                 self.engine.graph.delete(node)
                 pruned_report["graph"].append(node)
 
-        logging.info(f"KnowledgePruningEngine: Pruning complete. Removed {len(pruned_report['btree'])} BTree items, {len(pruned_report['graph'])} Graph nodes, Compressed {len(pruned_report['compressed'])} items.")
+        logging.info(
+            "KnowledgePruningEngine: Pruning complete. Removed %d BTree items, %d Graph nodes, Compressed %d items.",
+            len(pruned_report["btree"]),
+            len(pruned_report["graph"]),
+            len(pruned_report["compressed"]),
+        )
         return pruned_report
 
     def decay_weights(self, factor: float = 0.8) -> None:
@@ -109,4 +120,4 @@ class KnowledgePruningEngine:
         for key in self.access_logs:
             # Note: access_logs[key] is a dict, but this legacy logic assumed it was a value.
             # We'll update the 'count' inside the dict.
-            self.access_logs[key]['count'] = int(self.access_logs[key]['count'] * factor)
+            self.access_logs[key]["count"] = int(self.access_logs[key]["count"] * factor)

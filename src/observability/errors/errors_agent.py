@@ -16,24 +16,29 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
-from .ErrorCategory import ErrorCategory
-from .ErrorCluster import ErrorCluster
-from .ErrorEntry import ErrorEntry
-from .ErrorPattern import ErrorPattern
-from .ErrorSeverity import ErrorSeverity
-from .SuppressionRule import SuppressionRule
-from src.core.base.BaseAgent import BaseAgent
-from datetime import datetime
-from typing import Any
+
 import hashlib
 import json
 import logging
 import re
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+from .error_category import ErrorCategory
+from .error_cluster import ErrorCluster
+from .error_entry import ErrorEntry
+from .error_pattern import ErrorPattern
+from .error_severity import ErrorSeverity
+from .suppression_rule import SuppressionRule
 
 # Rust acceleration imports
 try:
-    from rust_core import match_patterns_rust, check_suppression_rust
+    from rust_core import check_suppression_rust, match_patterns_rust
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -115,9 +120,7 @@ class ErrorsAgent(BaseAgent):
                 candidate = self.file_path.parent / (base_name + ext)
                 if candidate.exists() and candidate != self.file_path:
                     return
-            logging.warning(
-                f"Could not find associated code file for {self.file_path.name}"
-            )
+            logging.warning(f"Could not find associated code file for {self.file_path.name}")
 
     # ========== Error Management ==========
     def add_error(
@@ -131,9 +134,7 @@ class ErrorsAgent(BaseAgent):
         suggested_fix: str = "",
     ) -> ErrorEntry:
         """Add a new error entry."""
-        error_id = hashlib.md5(
-            f"{message}:{file_path}:{line_number}".encode()
-        ).hexdigest()[:8]
+        error_id = hashlib.md5(f"{message}:{file_path}:{line_number}".encode()).hexdigest()[:8]
         error = ErrorEntry(
             id=error_id,
             message=message,
@@ -198,9 +199,7 @@ class ErrorsAgent(BaseAgent):
 
     def prioritize_errors(self) -> list[ErrorEntry]:
         """Return errors sorted by priority (highest first)."""
-        return sorted(
-            self._errors, key=lambda e: self.calculate_severity_score(e), reverse=True
-        )
+        return sorted(self._errors, key=lambda e: self.calculate_severity_score(e), reverse=True)
 
     # ========== Error Clustering ==========
     def cluster_similar_errors(self) -> dict[str, ErrorCluster]:
@@ -356,9 +355,7 @@ class ErrorsAgent(BaseAgent):
         """Add an annotation to an error."""
         if error_id not in self._annotations:
             self._annotations[error_id] = []
-        self._annotations[error_id].append(
-            f"[{datetime.now().isoformat()}] {annotation}"
-        )
+        self._annotations[error_id].append(f"[{datetime.now().isoformat()}] {annotation}")
         return True
 
     def get_annotations(self, error_id: str) -> list[str]:
@@ -424,9 +421,7 @@ class ErrorsAgent(BaseAgent):
                 docs.append(f"### {category.value.title()}\n")
                 for error in errors:
                     status = "✓" if error.resolved else "✗"
-                    docs.append(
-                        f"- [{status}] {error.message} (line {error.line_number})"
-                    )
+                    docs.append(f"- [{status}] {error.message} (line {error.line_number})")
                 docs.append("")
         return "\n".join(docs)
 
@@ -450,9 +445,8 @@ class ErrorsAgent(BaseAgent):
             lines = ["id,message,file,line,severity,category,resolved"]
             for e in self._errors:
                 lines.append(
-                    f"{e.id},{e.message},{e.file_path},"
-                    f"{e.line_number},{e.severity.name},"
-                    f"{e.category.name},{e.resolved}"
+                    f"{e.id},{e.message},{e.file_path},{e.line_number},"
+                    f"{e.severity.name},{e.category.name},{e.resolved}"
                 )
             return "\n".join(lines)
         return ""
@@ -486,11 +480,12 @@ class ErrorsAgent(BaseAgent):
             "# Original error report preserved below:\n\n"
         )
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the error report.
 
         When Copilot CLI is unavailable, BaseAgent keeps the existing content
         unchanged (avoids duplicated wrapper sections).
         """
-        logging.info(f"Improving error report for {self.file_path}")
-        return super().improve_content(prompt)
+        actual_path = Path(target_file) if target_file else self.file_path
+        logging.info(f"Improving error report for {actual_path}")
+        return await super().improve_content(prompt, target_file=target_file)

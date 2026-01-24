@@ -11,11 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Policy enforcement agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import time
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -36,22 +42,17 @@ class PolicyEnforcementAgent:
         self.violation_log: list[dict[str, Any]] = []
         self.quarantine_list: set[str] = set()
 
-    def evaluate_action(
-        self, agent_id: str, action_type: str, metadata: Any
-    ) -> dict[str, Any]:
+    def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
         """
         Evaluates if an agent action complies with active policies.
         """
         violations = []
 
-        if (
-            action_type == "external_push"
-            and self.active_policies["no_external_data_leak"]
-        ):
+        if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
             if "credentials" in str(metadata).lower():
                 violations.append("DATA_LEAK_PREVENTION")
 
-        if len(violations) > 0:
+        if violations:
             self.violation_log.append(
                 {
                     "agent_id": agent_id,

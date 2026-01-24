@@ -12,14 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Morphological evolution agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.BaseUtilities import as_tool
-from src.logic.agents.system.core.MorphologyCore import MorphologyCore
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.system.core.morphology_core import MorphologyCore
 
 __version__ = VERSION
 
@@ -33,6 +39,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.capabilities.append("MorphologicalEvolution")
         self.core = MorphologyCore()
 
     def generate_agent_dna(self, agent_instance: BaseAgent) -> str:
@@ -46,30 +53,27 @@ class MorphologicalEvolutionAgent(BaseAgent):
             model="gpt-4o",  # Default
         )
 
-    def check_for_merge_opportunity(
-        self, agent_a_paths: list[str], agent_b_paths: list[str]
-    ) -> bool:
+    def check_for_merge_opportunity(self, agent_a_paths: list[str], agent_b_paths: list[str]) -> bool:
         """
         Checks if two agents should merge based on path overlap.
         """
         overlap = self.core.calculate_path_overlap(agent_a_paths, agent_b_paths)
         if overlap > 0.8:
-            logging.warning(
-                f"MorphologicalEvolution: High overlap ({overlap:.2f}) detected. MERGE recommended."
-            )
+            logging.warning(f"MorphologicalEvolution: High overlap ({overlap:.2f}) detected. MERGE recommended.")
             return True
         return False
 
     @as_tool
-    def analyze_api_morphology(
-        self, agent_name: str, call_logs: list[dict[str, Any]]
-    ) -> dict[str, Any]:
+    def MorphologicalEvolution(self, agent_name: str, call_logs: list[dict[str, Any]]) -> dict[str, Any]:
+        """Alias for morphological analysis used by fleet."""
+        return self.analyze_api_morphology(agent_name, call_logs)
+
+    @as_tool
+    def analyze_api_morphology(self, agent_name: str, call_logs: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Analyzes how an agent is being used and proposes a morphological evolution.
         """
-        logging.info(
-            f"MorphologicalEvolution: Analyzing usage patterns for {agent_name}"
-        )
+        logging.info(f"MorphologicalEvolution: Analyzing usage patterns for {agent_name}")
 
         # Determine if the agent is 'overloaded' or has 'redundant' parameters
         param_usage: dict[Any, Any] = {}
@@ -95,6 +99,6 @@ class MorphologicalEvolutionAgent(BaseAgent):
             "evolution_readiness": 0.85,
         }
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         # Standard implementation
         return "Morphological Evolution Report: Proposing structural symmetry for fleet interfaces."

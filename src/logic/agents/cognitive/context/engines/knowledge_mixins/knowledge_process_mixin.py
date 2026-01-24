@@ -16,6 +16,10 @@
 Knowledge process mixin for content analysis.
 """
 
+"""
+Knowledge process mixin for content analysis.
+"""
+
 import re
 
 class KnowledgeProcessMixin:

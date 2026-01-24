@@ -16,12 +16,16 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ErrorSeverity import ErrorSeverity
-from .NotificationChannel import NotificationChannel
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
+from .error_severity import ErrorSeverity
+from .notification_channel import NotificationChannel
+
 __version__ = VERSION
+
 
 @dataclass
 class NotificationConfig:
@@ -34,6 +38,7 @@ class NotificationConfig:
         enabled: Whether notifications are enabled.
         template: Message template.
     """
+
     channel: NotificationChannel
     endpoint: str
     min_severity: ErrorSeverity = ErrorSeverity.HIGH

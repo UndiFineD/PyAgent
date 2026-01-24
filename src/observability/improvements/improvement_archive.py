@@ -16,14 +16,18 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ArchivedImprovement import ArchivedImprovement
-from .Improvement import Improvement
-from .ImprovementCategory import ImprovementCategory
+
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .archived_improvement import ArchivedImprovement
+from .improvement import Improvement
+from .improvement_category import ImprovementCategory
 
 __version__ = VERSION
+
 
 class ImprovementArchive:
     """Archives old or completed improvements.
@@ -38,12 +42,7 @@ class ImprovementArchive:
         """Initialize the archive."""
         self.archive: list[ArchivedImprovement] = []
 
-    def archive_improvement(
-        self,
-        improvement: Improvement,
-        reason: str,
-        archived_by: str = ""
-    ) -> ArchivedImprovement:
+    def archive_improvement(self, improvement: Improvement, reason: str, archived_by: str = "") -> ArchivedImprovement:
         """Archive an improvement.
 
         Args:
@@ -58,7 +57,7 @@ class ImprovementArchive:
             improvement=improvement,
             archived_date=datetime.now().isoformat(),
             archived_by=archived_by,
-            archive_reason=reason
+            archive_reason=reason,
         )
         self.archive.append(archived)
         return archived
@@ -80,9 +79,7 @@ class ImprovementArchive:
         return None
 
     def search_archive(
-        self,
-        query: str = "",
-        category: ImprovementCategory | None = None
+        self, query: str = "", category: ImprovementCategory | None = None
     ) -> list[ArchivedImprovement]:
         """Search the archive.
 
@@ -110,7 +107,4 @@ class ImprovementArchive:
             cat = archived.improvement.category.value
             by_category[cat] = by_category.get(cat, 0) + 1
 
-        return {
-            "total_archived": len(self.archive),
-            "by_category": by_category
-        }
+        return {"total_archived": len(self.archive), "by_category": by_category}

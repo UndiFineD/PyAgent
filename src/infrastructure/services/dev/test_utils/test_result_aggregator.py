@@ -16,15 +16,18 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TestResult import TestResult
-from .TestStatus import TestStatus
-from typing import Any, Dict, List, Optional, Union
+
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_result import TestResult
+from .test_status import TestStatus
 
 __version__ = VERSION
 
+
 class TestResultAggregator:
-    __test__ = False
     """Aggregates test results for reporting.
 
     Example:
@@ -32,6 +35,8 @@ class TestResultAggregator:
         agg.add_result(TestResult(name="test1", status=TestStatus.PASSED))
         report=agg.get_report()
     """
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize result aggregator."""
@@ -57,7 +62,7 @@ class TestResultAggregator:
             test_result = TestResult(
                 test_name=f"{result}/{test_name}",
                 status=TestStatus[status.upper()] if hasattr(TestStatus, status.upper()) else TestStatus.PASSED,
-                duration_ms=0.0
+                duration_ms=0.0,
             )
             self._results.append(test_result)
         else:

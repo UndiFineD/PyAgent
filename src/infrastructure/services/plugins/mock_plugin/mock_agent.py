@@ -19,16 +19,20 @@ Demonstrates how to wrap a Core and interact with the Fleet.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
-from src.core.base.BaseAgent import BaseAgent
-from .MockCore import MockCore
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+from .mock_core import MockCore
 
 __version__ = VERSION
 
+
 class MockAgent(BaseAgent):
     """A mock agent that shows community developers the recommended pattern."""
-    
+
     def __init__(self, arg_path: str = "mock_config.json") -> None:
         # We don't strictly need a real config file for this mock
         super().__init__(arg_path)
@@ -39,10 +43,10 @@ class MockAgent(BaseAgent):
         """Main entry point for agent logic."""
         logging.info(f"MockAgent handling task: {task}")
         processed = self.core.format_mock_response(task)
-        
+
         # Accessing fleet-wide tools if registry is available
         # result = self.call_tool("SearchAgent", query="python patterns")
-        
+
         return f"MockAgent processed your task: {processed}"
 
     def get_status(self) -> dict:

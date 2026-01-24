@@ -16,13 +16,16 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ExecutionCondition import ExecutionCondition
-from pathlib import Path
-from typing import List, Dict, Any
+
 from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+from src.core.base.common.models.base_models import ExecutionCondition
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class ConditionalExecutor:
     """Execute agents based on file content conditions.
@@ -108,7 +111,7 @@ class ConditionalExecutor:
             condition = self._conditions[cond_name]
             try:
                 results.append(condition.check(file_path, content))
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 results.append(False)
 
         if not results:
@@ -116,5 +119,4 @@ class ConditionalExecutor:
 
         if require_all:
             return all(results)
-        else:
-            return any(results)
+        return any(results)

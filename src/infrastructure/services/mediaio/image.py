@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -8,19 +22,13 @@ from __future__ import annotations
 
 import io
 from pathlib import Path
-from typing import BinaryIO, Optional, Tuple, Union
+from typing import BinaryIO, Tuple, Union
 
 import numpy as np
 
 from .base import MediaLoader
-from .models import (
-    ImageData,
-    ImageFormat,
-    MediaLoadConfig,
-    MediaMetadata,
-    MediaType,
-    ResizeMode,
-)
+from .models import (ImageData, ImageFormat, MediaLoadConfig, MediaMetadata,
+                     MediaType, ResizeMode)
 
 
 class ImageLoader(MediaLoader):
@@ -32,6 +40,7 @@ class ImageLoader(MediaLoader):
 
         try:
             from PIL import Image
+
             self._pil_available = True
             self._Image = Image
         except ImportError:
@@ -39,6 +48,7 @@ class ImageLoader(MediaLoader):
 
         try:
             import cv2
+
             self._cv2_available = True
             self._cv2 = cv2
         except ImportError:
@@ -75,20 +85,17 @@ class ImageLoader(MediaLoader):
 
         return ImageData(data=img, metadata=metadata, source=source_str)
 
-    async def _read_source(
-        self,
-        source: Union[str, bytes, BinaryIO]
-    ) -> Tuple[bytes, str]:
+    async def _read_source(self, source: Union[str, bytes, BinaryIO]) -> Tuple[bytes, str]:
         """Read bytes from source."""
         if isinstance(source, bytes):
             return source, "<bytes>"
 
         if isinstance(source, (str, Path)):
             source_str = str(source)
-            if source_str.startswith(('http://', 'https://')):
+            if source_str.startswith(("http://", "https://")):
                 data = await self._fetch_url(source_str)
             else:
-                with open(source_str, 'rb') as f:
+                with open(source_str, "rb") as f:
                     data = f.read()
             return data, source_str
 
@@ -99,37 +106,35 @@ class ImageLoader(MediaLoader):
         """Fetch image from URL."""
         try:
             import aiohttp
+
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as resp:
                     return await resp.read()
         except ImportError:
             import urllib.request
+
             with urllib.request.urlopen(url) as resp:
                 return resp.read()
 
     def _detect_format(self, data: bytes) -> ImageFormat:
         """Detect image format from magic bytes."""
-        if data[:2] == b'\xff\xd8':
+        if data[:2] == b"\xff\xd8":
             return ImageFormat.JPEG
-        elif data[:8] == b'\x89PNG\r\n\x1a\n':
+        elif data[:8] == b"\x89PNG\r\n\x1a\n":
             return ImageFormat.PNG
-        elif data[:4] == b'RIFF' and data[8:12] == b'WEBP':
+        elif data[:4] == b"RIFF" and data[8:12] == b"WEBP":
             return ImageFormat.WEBP
-        elif data[:6] in (b'GIF87a', b'GIF89a'):
+        elif data[:6] in (b"GIF87a", b"GIF89a"):
             return ImageFormat.GIF
-        elif data[:2] == b'BM':
+        elif data[:2] == b"BM":
             return ImageFormat.BMP
         return ImageFormat.JPEG
 
-    async def _load_pil(
-        self,
-        data: bytes,
-        config: MediaLoadConfig
-    ) -> np.ndarray:
+    async def _load_pil(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
         """Load using PIL."""
         img = self._Image.open(io.BytesIO(data))
-        if img.mode != 'RGB':
-            img = img.convert('RGB')
+        if img.mode != "RGB":
+            img = img.convert("RGB")
 
         if config.target_size:
             img = self._resize_pil(img, config.target_size, config.resize_mode)
@@ -142,12 +147,7 @@ class ImageLoader(MediaLoader):
             arr = (arr - mean) / std
         return arr
 
-    def _resize_pil(
-        self,
-        img,
-        target: Tuple[int, int],
-        mode: ResizeMode
-    ):
+    def _resize_pil(self, img, target: Tuple[int, int], mode: ResizeMode):
         """Resize image using PIL."""
         w, h = img.size
         tw, th = target
@@ -164,7 +164,7 @@ class ImageLoader(MediaLoader):
             scale = min(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
             img = img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
-            result = self._Image.new('RGB', (tw, th), (0, 0, 0))
+            result = self._Image.new("RGB", (tw, th), (0, 0, 0))
             left = (tw - new_w) // 2
             top = (th - new_h) // 2
             result.paste(img, (left, top))
@@ -178,11 +178,7 @@ class ImageLoader(MediaLoader):
             new_w, new_h = int(w * scale), int(h * scale)
             return img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
 
-    async def _load_cv2(
-        self,
-        data: bytes,
-        config: MediaLoadConfig
-    ) -> np.ndarray:
+    async def _load_cv2(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
         """Load using OpenCV."""
         arr = np.frombuffer(data, dtype=np.uint8)
         img = self._cv2.imdecode(arr, self._cv2.IMREAD_COLOR)
@@ -199,12 +195,7 @@ class ImageLoader(MediaLoader):
             img = (img - mean) / std
         return img
 
-    def _resize_cv2(
-        self,
-        img: np.ndarray,
-        target: Tuple[int, int],
-        mode: ResizeMode
-    ) -> np.ndarray:
+    def _resize_cv2(self, img: np.ndarray, target: Tuple[int, int], mode: ResizeMode) -> np.ndarray:
         """Resize image using OpenCV."""
         h, w = img.shape[:2]
         tw, th = target

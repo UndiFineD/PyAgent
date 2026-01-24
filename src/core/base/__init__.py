@@ -10,21 +10,32 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 """
 Core primitives and base classes for PyAgent.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
-from .BaseAgent import BaseAgent as BaseAgent
-from .models import AgentConfig as AgentConfig, AgentState as AgentState, ResponseQuality as ResponseQuality, PromptTemplate as PromptTemplate
-from .interfaces import AgentInterface as AgentInterface, OrchestratorInterface as OrchestratorInterface
+
+from src.core.base.common.base_interfaces import (AgentInterface,
+                                                  OrchestratorInterface)
+from src.core.base.common.models import (AgentConfig, AgentState,
+                                         PromptTemplate, ResponseQuality)
+from src.core.base.common.models.core_enums import HealthStatus
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.logic.agent_plugin_base import AgentPluginBase
 
 __version__ = VERSION
+__all__ = [
+    "VERSION",
+    "BaseAgent",
+    "AgentConfig",
+    "AgentState",
+    "ResponseQuality",
+    "PromptTemplate",
+    "AgentInterface",
+    "OrchestratorInterface",
+    "AgentPluginBase",
+    "HealthStatus",
+]

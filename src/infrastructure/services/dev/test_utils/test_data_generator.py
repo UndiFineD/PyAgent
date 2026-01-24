@@ -16,21 +16,25 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+
 import json
+from datetime import datetime
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class TestDataGenerator:
-    __test__ = False
     """Generates realistic test data for agent testing.
 
     Example:
         gen=TestDataGenerator()
         code=gen.generate_python_code(with_errors=False)
     """
+
+    __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
         """Initialize data generator.
@@ -41,6 +45,7 @@ class TestDataGenerator:
         self.seed = seed
         if seed:
             import random
+
             random.seed(seed)
 
     def generate_python_code(

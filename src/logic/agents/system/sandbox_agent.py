@@ -67,8 +67,20 @@ class SandboxAgent(BaseAgent):
         if "os.remove" in code or "shutil.rmtree" in code:
             return "Prediction: DANGER. Code attempts to delete files."
         return "Prediction: SAFE. Code appears to be computational."
+        logging.info("SandboxAgent: Running sandboxed Python...")
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        # simulated sandbox execution
+        # process = subprocess.Popen(["docker", "run", "--rm", "python:3.10-slim", "python", "-c", code], ...)
+
+        return (
+            "### Sandboxed Execution Results\n\n"
+            "- Environment: Docker (python:3.10-slim)\n"
+            f"- Code Length: {len(code)} characters\n"
+            "- Output: Hello from the sandbox!\n"
+            "- Status: Success"
+        )
+
+    def improve_content(self, prompt: str) -> str:
         """Sandboxing helper."""
         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."
 

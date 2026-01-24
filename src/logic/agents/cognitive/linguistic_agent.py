@@ -17,17 +17,19 @@
 Ensures that the LLM only verbalizes grounded results and never hallucinates new technical facts.
 """
 
-from __future__ import annotations
-from src.core.base.version import VERSION
 import logging
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
+
+# pylint: disable=too-many-ancestors
 class LinguisticAgent(BaseAgent):
     """The linguistic surface layer of the PyAgent OS."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -40,7 +42,7 @@ class LinguisticAgent(BaseAgent):
         self.notification_templates = {
             "whatsapp": "🔔 *Update*: {message}\n\n_Status_: {status}",
             "telegram": "🚀 <b>System Notification</b>\n\n{message}\n\n<code>Target: {target}</code>",
-            "slack": ":robot_face: *PyAgent Notification*\n> {message}"
+            "slack": ":robot_face: *PyAgent Notification*\n> {message}",
         }
 
     def format_notification(self, platform: str, message: str, **kwargs) -> str:
@@ -62,11 +64,16 @@ class LinguisticAgent(BaseAgent):
             A natural language summary.
         """
         logging.info("LinguisticAgent: Articulating technical report...")
-        
+
         # In a real implementation, this would call the LLM with the report as context.
         # Here we simulate the constrained linguistic surface.
-        return f"Hello! Regarding your request: '{user_query}', I have processed it through the expert systems.\n\nSummary of results:\n{technical_report[:500]}..."
+        resp = (
+            f"Hello! Regarding your request: '{user_query}', "
+            "I have processed it through the expert systems.\n\n"
+            f"Summary of results:\n{technical_report[:500]}..."
+        )
+        return resp
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Entry point for verbalization."""
         return self.articulate_results(prompt, "How can I help you?")

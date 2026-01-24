@@ -1,19 +1,37 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Implementations of speculative token proposers."""
 
 from __future__ import annotations
+
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
+
 import numpy as np
-import time
+
 from .tree import SpeculativeTree
 
 
 @dataclass
 class ProposerStats:
     """Statistics for a proposer."""
+
     proposals_made: int = 0
     tokens_proposed: int = 0
     tokens_accepted: int = 0
@@ -42,10 +60,7 @@ class SpeculativeProposer(ABC):
 
     @abstractmethod
     def propose(
-        self,
-        input_ids: np.ndarray,
-        attention_mask: Optional[np.ndarray] = None,
-        num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
     ) -> SpeculativeTree:
         """Propose speculative tokens."""
         pass
@@ -83,7 +98,7 @@ class NgramProposer(SpeculativeProposer):
         for n in range(1, self.ngram_order + 1):
             table = self._ngram_tables[n]
             for i in range(len(tokens) - n):
-                context = tuple(tokens[i:i + n])
+                context = tuple(tokens[i : i + n])
                 next_token = tokens[i + n]
                 if context not in table:
                     table[context] = {}
@@ -106,10 +121,7 @@ class NgramProposer(SpeculativeProposer):
         return sorted(predictions.items(), key=lambda x: x[1], reverse=True)[:top_k]
 
     def propose(
-        self,
-        input_ids: np.ndarray,
-        attention_mask: Optional[np.ndarray] = None,
-        num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
     ) -> SpeculativeTree:
         """Propose speculative tokens using n-gram lookup."""
         start = time.perf_counter()
@@ -161,10 +173,7 @@ class MedusaProposer(SpeculativeProposer):
         return [(int(idx), float(probs[idx])) for idx in top_k_indices]
 
     def propose(
-        self,
-        input_ids: np.ndarray,
-        attention_mask: Optional[np.ndarray] = None,
-        num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
     ) -> SpeculativeTree:
         """Propose speculative tokens using Medusa heads."""
         start = time.perf_counter()

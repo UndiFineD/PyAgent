@@ -5,7 +5,7 @@ Agent verifier.py module.
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 
@@ -14,13 +14,14 @@ try:
 except ImportError:
     rc = None
 
+
 class AgentVerifier:
     """Handles quality and anchoring verification of agent responses."""
 
-    _embedding_model: Optional[Any] = None
+    _embedding_model = None
 
     @classmethod
-    def _get_embedding_model(cls) -> Optional[Any]:
+    def _get_embedding_model(cls) -> Any:
         """Lazy loading of the embedding model for semantic anchoring (Phase 257)."""
         if cls._embedding_model is None:
             try:
@@ -56,7 +57,7 @@ class AgentVerifier:
         if rc:
             try:
                 return rc.calculate_anchoring_fallback(result, context_text)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
         context_words = set(context_text.lower().split())
@@ -85,12 +86,12 @@ class AgentVerifier:
         return True, "Verified"
 
     @staticmethod
-    def fact_check() -> dict[str, Any]:
+    def fact_check(code_snippet: str, agent_id: str) -> dict[str, Any]:
         """Cross-references generated code snippets against knowledge base."""
         return {"valid": True, "hallucinations": []}
 
     @staticmethod
-    def secondary_verify() -> bool:
+    def secondary_verify(result: str, primary_model: str) -> bool:
         """Performs a cross-model verification loop."""
         return True
 
@@ -110,7 +111,7 @@ class AgentVerifier:
         if rc:
             try:
                 return rc.check_latent_reasoning(content, 0.1)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
         non_ascii = [c for c in content if ord(c) > 127]

@@ -15,14 +15,19 @@
 
 """Auto-extracted class from agent_coder.py"""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.MigrationRule import MigrationRule
-from src.core.base.types.MigrationStatus import MigrationStatus
-from typing import Any, Dict, List, Tuple
+
 import re
+from typing import Any
+
+from src.core.base.common.types.migration_rule import MigrationRule
+from src.core.base.common.types.migration_status import MigrationStatus
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class MigrationManager:
     """Manages code migration from old APIs to new ones.
@@ -74,11 +79,13 @@ class MigrationManager:
             rule.status = MigrationStatus.IN_PROGRESS
             new_result = re.sub(rule.old_pattern, rule.new_pattern, result)
             if new_result != result:
-                applied.append({
-                    "rule": rule.name,
-                    "description": rule.description,
-                    "breaking_change": rule.breaking_change
-                })
+                applied.append(
+                    {
+                        "rule": rule.name,
+                        "description": rule.description,
+                        "breaking_change": rule.breaking_change,
+                    }
+                )
                 rule.status = MigrationStatus.COMPLETED
                 result = new_result
             else:

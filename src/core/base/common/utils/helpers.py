@@ -16,14 +16,16 @@
 """Helper functions for dataclass default factories."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any, Final, TypeVar, TYPE_CHECKING
+
 from collections.abc import Iterable
+from typing import TYPE_CHECKING, Any, Final, TypeVar
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.core.base.models import AgentPluginConfig
+    from src.core.base.common.models import AgentPluginConfig
 
 # Import optional dependencies
 try:
@@ -46,36 +48,46 @@ HAS_TQDM: Final[bool] = _tqdm is not None
 _T = TypeVar("_T")
 
 if _tqdm is not None:
-    tqdm = _tqdm
+    tqdm = _tqdm  # pylint: disable=invalid-name
 else:
 
-    def tqdm[T](iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
+    # pylint: disable=invalid-name
+    def tqdm[_T](iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
         """Fallback if tqdm not available."""
+        _ = args, kwargs
         return iterable
+
 
 def _empty_dict_str_any() -> dict[str, Any]:
     """Helper function for default factory in dataclass fields."""
     return {}
 
+
 def _empty_dict_str_float() -> dict[str, float]:
     """Helper function for default factory in dataclass fields."""
+
     return {}
+
 
 def _empty_dict_str_int() -> dict[str, int]:
     """Helper function for default factory in dataclass fields."""
     return {}
 
+
 def _empty_dict_str_str() -> dict[str, str]:
     """Helper function for default factory in dataclass fields."""
     return {}
+
 
 def _empty_list_str() -> list[str]:
     """Helper function for default factory in dataclass fields."""
     return []
 
+
 def _empty_list_dict_str_any() -> list[dict[str, Any]]:
     """Helper function for default factory in dataclass fields."""
     return []
+
 
 def _empty_plugin_config_list() -> list[AgentPluginConfig]:
     """Helper function for default factory in dataclass fields."""

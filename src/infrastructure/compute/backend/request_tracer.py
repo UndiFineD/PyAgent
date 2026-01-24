@@ -16,16 +16,19 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .RequestContext import RequestContext
-from .RequestPriority import RequestPriority
-from typing import Dict, List, Optional
+
 import logging
 import threading
 import time
 import uuid
 
+from src.core.base.lifecycle.version import VERSION
+
+from .request_context import RequestContext
+from .request_priority import RequestPriority
+
 __version__ = VERSION
+
 
 class RequestTracer:
     """Traces requests with correlation IDs.
@@ -95,10 +98,7 @@ class RequestTracer:
             return None
 
         duration = time.time() - context.created_at
-        logging.debug(
-            f"Ended trace {request_id}: success={success}, "
-            f"duration={duration:.3f}s, size={response_size}"
-        )
+        logging.debug(f"Ended trace {request_id}: success={success}, duration={duration:.3f}s, size={response_size}")
         return duration
 
     def get_active_traces(self) -> list[RequestContext]:

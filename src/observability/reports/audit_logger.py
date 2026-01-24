@@ -16,14 +16,18 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .AuditAction import AuditAction
-from .AuditEntry import AuditEntry
-from typing import Any, Dict, List, Optional
+
 import logging
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .audit_action import AuditAction
+from .audit_entry import AuditEntry
 
 __version__ = VERSION
+
 
 class AuditLogger:
     """Logger for report audit trail.
@@ -47,7 +51,7 @@ class AuditLogger:
         action: AuditAction,
         user_id: str,
         report_id: str,
-        details: dict[str, Any] | None = None
+        details: dict[str, Any] | None = None,
     ) -> AuditEntry:
         """Log an action.
         Args:
@@ -65,7 +69,7 @@ class AuditLogger:
             action=action,
             user_id=user_id,
             report_id=report_id,
-            details=details or {}
+            details=details or {},
         )
         self.entries.append(entry)
         return entry

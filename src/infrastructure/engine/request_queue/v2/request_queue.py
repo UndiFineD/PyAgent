@@ -17,10 +17,11 @@ Advanced Asynchronous Request Queue (V2) for Phase 54.
 Supports priority, deadlines, and fair-share policies with Rust acceleration.
 """
 
-import logging
 import heapq
+import logging
 import time
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Any, Dict, List, Tuple
+
 from ...scheduling.advanced.config import RequestPriority
 
 try:
@@ -30,6 +31,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class RequestQueueV2:
     """
     Priority-based async queue for inference requests.
@@ -37,7 +39,7 @@ class RequestQueueV2:
     """
 
     def __init__(self):
-        self._waiting: List[Tuple[float, int, Any]] = [] # (priority_score, timestamp, request)
+        self._waiting: List[Tuple[float, int, Any]] = []  # (priority_score, timestamp, request)
         self._running: Dict[int, Any] = {}
         self._counter = 0
 
@@ -46,8 +48,8 @@ class RequestQueueV2:
         Calculates priority and adds request to the waiting queue.
         Uses Rust for high-speed priority calculation if available.
         """
-        priority = getattr(request, 'priority', RequestPriority.NORMAL)
-        deadline = getattr(request, 'deadline', time.time() + 60.0)
+        priority = getattr(request, "priority", RequestPriority.NORMAL)
+        deadline = getattr(request, "deadline", time.time() + 60.0)
 
         score = 0.0
         if rc and hasattr(rc, "request_priority_compute_rust"):
@@ -73,7 +75,7 @@ class RequestQueueV2:
 
         while self._waiting and current_tokens < max_tokens:
             score, count, req = heapq.heappop(self._waiting)
-            req_tokens = getattr(req, 'num_tokens', 1)
+            req_tokens = getattr(req, "num_tokens", 1)
 
             if current_tokens + req_tokens <= max_tokens:
                 batch.append(req)
@@ -96,11 +98,7 @@ class RequestQueueV2:
 
         max_urgency = 0.0
         if rc and hasattr(rc, "deadline_urgency_rust"):
-            deadlines = [getattr(r[2], 'deadline', 0) for r in self._waiting]
+            deadlines = [getattr(r[2], "deadline", 0) for r in self._waiting]
             max_urgency = rc.deadline_urgency_rust(deadlines)
 
-        return {
-            "depth": len(self._waiting),
-            "max_urgency": max_urgency,
-            "running_count": len(self._running)
-        }
+        return {"depth": len(self._waiting), "max_urgency": max_urgency, "running_count": len(self._running)}

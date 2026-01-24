@@ -13,19 +13,22 @@
 # limitations under the License.
 
 
-"""Agent specializing in proactive task management and recurring workflows (Sentient pattern)."""
+"""Agent specializing in proactive task management and recurring workflows."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-import logging
+
 import json
+import logging
 import time
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class ProactiveAgent(BaseAgent):
     """
     Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers,
@@ -93,7 +96,7 @@ class ProactiveAgent(BaseAgent):
 
         return triggered_tasks
 
-    def get_habit_recommendation(self, user_history: list[str]) -> str:
+    async def get_habit_recommendation(self, user_history: list[str]) -> str:
         """Uses LLM to detect user behavior patterns and recommend proactive habits."""
         if not user_history:
             return "Not enough data yet to establish habits."
@@ -108,15 +111,16 @@ class ProactiveAgent(BaseAgent):
             "Be concise and helpful."
         )
 
-        return self.think(prompt)
+        return await self.think(prompt)
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Returns proactive suggestions based on current context."""
-        return self.get_habit_recommendation([input_text])
+        _ = target_file
+        return await self.get_habit_recommendation([prompt])
 
 
 if __name__ == "__main__":
-    from src.core.base.BaseUtilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(ProactiveAgent)
+    main = create_main_function(ProactiveAgent, "ProactiveAgent: Specialist Agent", "Context for analysis")
     main()

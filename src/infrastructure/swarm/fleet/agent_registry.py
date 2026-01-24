@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
-MCPAgent = None  # Will be imported locally to avoid circular import
+from src.logic.agents.system.mcp_agent import MCPAgent
 
 from .agent_registry_core import AgentRegistryCore
 from .bootstrap_configs import BOOTSTRAP_AGENTS
@@ -35,16 +35,8 @@ from .resilient_stubs import ResilientStub
 if TYPE_CHECKING:
     from .fleet_manager import FleetManager
 
-
 # Import local version for gatekeeping
 __version__ = VERSION
-
-def get_mcp_agent(*args: Any, **kwargs: Any) -> Any:
-    global MCPAgent
-    if MCPAgent is None:
-        from src.logic.agents.system.mcp_agent import MCPAgent as _MCPAgent
-        MCPAgent = _MCPAgent
-    return MCPAgent(*args, **kwargs)
 
 
 class LazyAgentMap(dict):
@@ -78,18 +70,16 @@ class LazyAgentMap(dict):
     def _scan_workspace_for_agents(self) -> list[str]:
         """Performs the I/O-bound scanning of the workspace."""
         subdirs = [
-            "src/logic/agents/specialized",
-            "src/logic/agents/compliance",
-            "src/logic/agents/documentation",
-            "src/logic/agents/analysis",
-            "src/logic/agents/multimodal",
             "src/logic/agents/cognitive",
             "src/logic/agents/development",
             "src/logic/agents/infrastructure",
-            "src/logic/agents/intelligence",
             "src/logic/agents/security",
             "src/logic/agents/swarm",
             "src/logic/agents/system",
+            "src/logic/agents/specialized",
+            "src/logic/agents/intelligence",
+            "src/logic/agents/compliance",
+            "src/logic/agents/documentation",
             "plugins",
         ]
         found_paths = []
@@ -139,11 +129,11 @@ class LazyAgentMap(dict):
         for m_path in manifest_paths:
             if m_path.exists():
                 try:
-                    with open(m_path, encoding='utf-8') as f:
+                    with open(m_path) as f:
                         data = json.load(f)
                         configs: dict[str, tuple[str, str, str | None]] = self.core.parse_manifest(data)
                         manifest_configs.update(configs)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:
                     logging.error(f"Failed to load plugin manifest {m_path}: {e}")
         return manifest_configs
 
@@ -157,7 +147,7 @@ class LazyAgentMap(dict):
                 if not isinstance(instance, ResilientStub):
                     logging.info(f"Self-Healing: {key} successfully reloaded.")
                     return True
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
         return False
 
@@ -204,19 +194,10 @@ class LazyAgentMap(dict):
         return len(self.keys())
 
     def items(self) -> list[tuple[str, Any]]:
-        # pylint: disable=consider-using-dict-items
         return [(k, self[k]) for k in self.keys()]
 
     def values(self) -> list[Any]:
-        # pylint: disable=consider-using-dict-items
         return [self[k] for k in self.keys()]
-
-    def get(self, key: str, default: Any = None) -> Any:
-        """Safe access with lazy-loading support."""
-        try:
-            return self[key]
-        except (KeyError, Exception):  # pylint: disable=broad-exception-caught
-            return default
 
     def __contains__(self, key: Any) -> bool:
         if super().__contains__(key):
@@ -232,10 +213,10 @@ class LazyAgentMap(dict):
 
         # Case-insensitive check (Phase 104)
         k_norm = str(key).lower().replace("_", "")
-        for d_key, _ in self._discovered_configs.items():
+        for d_key in self._discovered_configs:
             if d_key.lower().replace("_", "") == k_norm:
                 return True
-        for d_key, _ in self.registry_configs.items():
+        for d_key in self.registry_configs:
             if d_key.lower().replace("_", "") == k_norm:
                 return True
 
@@ -299,7 +280,7 @@ class LazyAgentMap(dict):
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
             return stub
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"Failed to lazy-load agent {key} from {module_path}: {e}")
             return None
 
@@ -309,7 +290,7 @@ class LazyAgentMap(dict):
             instance = MCPAgent(class_name)
             self._instances[key] = instance
             return instance
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"Failed to start MCP Agent {key}: {e}")
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
@@ -352,8 +333,14 @@ class LazyAgentMap(dict):
             try:
                 instance.register_tools(self.fleet.registry)
                 logging.debug(f"Registered tools for {key}")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.warning(f"Failed to register tools for {key}: {e}")
+
+    def get(self, key: str, default: Any = None) -> Any:
+        try:
+            return self[key]
+        except KeyError:
+            return default
 
     def update(self, other: dict[str, Any]) -> None:
         # Allow manual overrides or additions (like SignalBus)

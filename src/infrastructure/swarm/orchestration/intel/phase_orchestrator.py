@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Phase orchestrator.py module.
+"""
+
 from __future__ import annotations
+
 import asyncio
 import json
-from src.observability.StructuredLogger import StructuredLogger
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.observability.structured_logger import StructuredLogger
 
 if TYPE_CHECKING:
     from ..fleet.FleetManager import FleetManager
@@ -91,9 +97,7 @@ class PhaseOrchestrator:
     async def _phase_plan(self, task: str, thought: str) -> list[dict[str, Any]]:
         """Synthesize steps."""
         prompt = f"Plan a PyAgent workflow for: {task}\nThought: {thought}\nOutput ONLY a JSON list of steps."
-        res = await self.fleet.call_by_capability(
-            "Security.improve_content", prompt=prompt
-        )
+        res = await self.fleet.call_by_capability("Security.improve_content", prompt=prompt)
         # Parse JSON from result
         try:
             # Simple extractor for markdown
@@ -125,25 +129,18 @@ class PhaseOrchestrator:
                 independent_shards.append(step)
 
         if independent_shards:
-            logger.info(
-                f"PhaseOrchestrator: Executing {len(independent_shards)} independent shards in parallel."
-            )
+            logger.info(f"PhaseOrchestrator: Executing {len(independent_shards)} independent shards in parallel.")
             # Execute independent shards concurrently
             shard_tasks = [
-                self.fleet.execute_workflow(f"Parallel Shard: {s.get('agent')}", [s])
-                for s in independent_shards
+                self.fleet.execute_workflow(f"Parallel Shard: {s.get('agent')}", [s]) for s in independent_shards
             ]
             shard_results = await asyncio.gather(*shard_tasks)
             combined_results = "\n".join(shard_results)
 
             # If there are subsequent sequential steps, run them now
             if sequential_steps:
-                logger.info(
-                    f"PhaseOrchestrator: Executing remaining {len(sequential_steps)} sequential steps."
-                )
-                seq_results = await self.fleet.execute_workflow(
-                    "Sequential Follow-up", sequential_steps
-                )
+                logger.info(f"PhaseOrchestrator: Executing remaining {len(sequential_steps)} sequential steps.")
+                seq_results = await self.fleet.execute_workflow("Sequential Follow-up", sequential_steps)
                 return f"{combined_results}\n\n{seq_results}"
 
             return combined_results

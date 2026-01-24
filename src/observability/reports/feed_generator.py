@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
-from .FeedFormat import FeedFormat
-from typing import Dict, List, Any
+
 import json
+from typing import Any
+
+from src.core.base.common.types.changelog_entry import ChangelogEntry
+from src.core.base.common.types.feed_format import FeedFormat
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class FeedGenerator:
     """Generates RSS / Atom feeds from changelog.
@@ -66,45 +69,52 @@ class FeedGenerator:
         lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
             '<feed xmlns="http://www.w3.org / 2005 / Atom">',
-            f'  <title>{project_name} Changelog</title>',
+            f"  <title>{project_name} Changelog</title>",
         ]
         for entry in entries[:20]:  # Limit to 20 entries
-            lines.extend([
-                '  <entry>',
-                f'    <title>[{entry.category}] {entry.description[:50]}</title>',
-                f'    <content>{entry.description}</content>',
-                '  </entry>'
-            ])
-        lines.append('</feed>')
-        return '\n'.join(lines)
+            lines.extend(
+                [
+                    "  <entry>",
+                    f"    <title>[{entry.category}] {entry.description[:50]}</title>",
+                    f"    <content>{entry.description}</content>",
+                    "  </entry>",
+                ]
+            )
+        lines.append("</feed>")
+        return "\n".join(lines)
 
     def _generate_rss(self, entries: list[ChangelogEntry], project_name: str) -> str:
         """Generate RSS 2.0 feed."""
         lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
             '<rss version="2.0">',
-            '  <channel>',
-            f'    <title>{project_name} Changelog</title>',
+            "  <channel>",
+            f"    <title>{project_name} Changelog</title>",
         ]
         for entry in entries[:20]:
-            lines.extend([
-                '    <item>',
-                f'      <title>{entry.description[:50]}</title>',
-                f'      <description>{entry.description}</description>',
-                '    </item>'
-            ])
-        lines.extend(['  </channel>', '</rss>'])
-        return '\n'.join(lines)
+            lines.extend(
+                [
+                    "    <item>",
+                    f"      <title>{entry.description[:50]}</title>",
+                    f"      <description>{entry.description}</description>",
+                    "    </item>",
+                ]
+            )
+        lines.extend(["  </channel>", "</rss>"])
+        return "\n".join(lines)
 
     def _generate_json(self, entries: list[ChangelogEntry], project_name: str) -> str:
         """Generate JSON Feed."""
         items: list[dict[str, str]] = [
-            {"title": f"[{e.category}] {e.description[:50]}", "content_text": e.description}
+            {
+                "title": f"[{e.category}] {e.description[:50]}",
+                "content_text": e.description,
+            }
             for e in entries[:20]
         ]
         feed: dict[str, Any] = {
             "version": "https://jsonfeed.org / version / 1.1",
             "title": f"{project_name} Changelog",
-            "items": items
+            "items": items,
         }
         return json.dumps(feed, indent=2)

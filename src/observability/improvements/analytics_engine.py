@@ -16,12 +16,14 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .CompletionTrend import CompletionTrend
-from .Improvement import Improvement
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
+
+from .completion_trend import CompletionTrend
+from .improvement import Improvement
 
 __version__ = VERSION
+
 
 class AnalyticsEngine:
     """Very small analytics engine used by tests."""

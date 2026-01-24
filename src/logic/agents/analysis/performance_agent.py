@@ -21,12 +21,15 @@ import re
 
 # Try to import rust acceleration
 try:
-    from rust_core import scan_optimization_patterns_rust  # pylint: disable=no-name-in-module
+    from rust_core import \
+        scan_optimization_patterns_rust  # pylint: disable=no-name-in-module
+
     HAS_RUST_CORE = True
 except ImportError:
     HAS_RUST_CORE = False
 
-from src.core.base.common.types.optimization_suggestion import OptimizationSuggestion
+from src.core.base.common.types.optimization_suggestion import \
+    OptimizationSuggestion
 from src.core.base.common.types.optimization_type import OptimizationType
 from src.core.base.lifecycle.version import VERSION
 

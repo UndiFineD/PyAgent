@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.ProfilingCategory import ProfilingCategory
+
 from dataclasses import dataclass
 
+from src.core.base.common.types.profiling_category import ProfilingCategory
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class ProfilingSuggestion:
@@ -33,6 +36,7 @@ class ProfilingSuggestion:
         estimated_impact: Estimated performance impact.
         profiling_approach: Suggested profiling approach.
     """
+
     category: ProfilingCategory
     function_name: str
     reason: str

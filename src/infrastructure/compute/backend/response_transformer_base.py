@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from abc import ABC, abstractmethod
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class ResponseTransformerBase(ABC):
     """Abstract base class for response transformers.

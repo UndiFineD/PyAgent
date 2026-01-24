@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 """
 Handy terminal mixin.py module.
@@ -64,24 +63,24 @@ class HandyTerminalMixin:
             import shlex
 
             cmd_args = shlex.split(command)
-            result = subprocess.run(cmd_args, capture_output=True, text=True, timeout=60, check=False)
+            result = subprocess.run(cmd_args, capture_output=True, text=True, timeout=60)
             if result.returncode == 0:
                 stdout = result.stdout[:1000]
                 self._record("execute_success", command, stdout)
                 return f"### ✅ Success:\n```text\n{stdout}\n```"
-
-            stderr = result.stderr[:500]
-            analysis = [
-                f"### ❌ Command Failed (Code {result.returncode}):",
-                f"**Stderr**: `{stderr}`",
-                "\n**Handy Diagnosis**:",
-                "- Suggested Fix: Check if dependencies are installed or if paths are correct.",
-                "- Context: This error often occurs when the environment is misconfigured.",
-            ]
-            res = "\n".join(analysis)
-            self._record("execute_fail", command, res)
-            return res
-        except (subprocess.SubprocessError, IOError, OSError, ValueError) as e:
+            else:
+                stderr = result.stderr[:500]
+                analysis = [
+                    f"### ❌ Command Failed (Code {result.returncode}):",
+                    f"**Stderr**: `{stderr}`",
+                    "\n**Handy Diagnosis**:",
+                    "- Suggested Fix: Check if dependencies are installed or if paths are correct.",
+                    "- Context: This error often occurs when the environment is misconfigured.",
+                ]
+                res = "\n".join(analysis)
+                self._record("execute_fail", command, res)
+                return res
+        except Exception as e:
             err_msg = f"Execution error: {e}"
             self._record("execute_error", command, err_msg)
             return err_msg

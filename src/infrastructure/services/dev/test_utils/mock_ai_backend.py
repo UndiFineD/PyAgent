@@ -16,19 +16,23 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .MockResponse import MockResponse
-from .MockResponseType import MockResponseType
-from typing import Dict, List, Tuple, Optional
+
 import logging
 import re
-import time
 import threading
+import time
 from pathlib import Path
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
+
+from .mock_response import MockResponse
+from .mock_response_type import MockResponseType
 
 # Infrastructure
 __version__ = VERSION
+
 
 class MockAIBackend:
     """Mock AI backend for testing.
@@ -136,10 +140,7 @@ class MockAIBackend:
             response_type: Type of error response.
             message: Error message.
         """
-        self._default_response = MockResponse(
-            response_type=response_type,
-            error_message=message
-        )
+        self._default_response = MockResponse(response_type=response_type, error_message=message)
 
     def get_call_history(self) -> list[tuple[str, float]]:
         """Get history of calls made."""

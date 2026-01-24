@@ -19,7 +19,7 @@ Implemented based on arXiv:2601.10639 (STEM Scaling, Jan 2026).
 """
 
 import torch
-from torch import nn
+import torch.nn as nn
 
 
 class STEMScalingLayer(nn.Module):
@@ -28,7 +28,7 @@ class STEMScalingLayer(nn.Module):
     Optimizes embeddings for ultra-long contexts (1M+ tokens).
     """
 
-    def __init__(self, hidden_dim: int, expansion_factor: int = 4) -> None:
+    def __init__(self, hidden_dim: int, expansion_factor: int = 4):
         super().__init__()
         self.hidden_dim = hidden_dim
         self.expansion_factor = expansion_factor
@@ -63,7 +63,7 @@ class STEMManager:
     Manages STEM scaling across layers and context windows.
     """
 
-    def __init__(self, hidden_dim: int) -> None:
+    def __init__(self, hidden_dim: int):
         self.layer = STEMScalingLayer(hidden_dim)
 
     def process_hidden_states(self, hidden_states: torch.Tensor, current_context_len: int) -> torch.Tensor:

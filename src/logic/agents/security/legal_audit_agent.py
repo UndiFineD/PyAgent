@@ -1,23 +1,6 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-LegalAuditAgent: Agent for auditing legal compliance, licensing, and intellectual property across the PyAgent swarm.
-Automates legal risk assessment and documentation.
-"""
-
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
@@ -44,7 +27,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class LegalAuditAgent(BaseAgent):
     """
     Phase 59: Autonomous Legal & Smart Contract Auditing.
     Scans codebases for licensing risks, liability concerns, and smart contract vulnerabilities.
@@ -68,7 +51,6 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
         """
-        _ = project_license
         scan = self.scan_licensing(content)
         violations = [
             license_name for license_name in scan["detected_licenses"] if license_name in self.license_blacklist

@@ -15,15 +15,7 @@ use pyo3::prelude::*;
 use std::collections::HashMap;
 
 #[pyfunction]
-<<<<<<< HEAD
-<<<<<<< HEAD
 pub fn workspace_init_rust(_size: usize) -> PyResult<u64> {
-=======
-pub fn workspace_init_rust(size: usize) -> PyResult<u64> {
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-pub fn workspace_init_rust(size: usize) -> PyResult<u64> {
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
     // Phase 52: Initialize DBO workspace
     Ok(0x52525252) 
 }

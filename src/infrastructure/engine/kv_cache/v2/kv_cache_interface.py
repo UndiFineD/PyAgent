@@ -18,8 +18,10 @@ Manages multi-group block allocation and dynamic layer-aware caching.
 """
 
 import logging
-from typing import Dict, List, Optional, Any, Tuple
+from typing import List, Optional
+
 import torch
+
 from .block_table import BlockTableV2
 
 try:
@@ -29,18 +31,14 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class KVCacheInterfaceV2:
     """
     High-level interface for managing hierarchical KV-Cache.
     Supports dynamic block allocation and multi-GPU synchronization.
     """
 
-    def __init__(self,
-                 num_layers: int,
-                 num_heads: int,
-                 head_size: int,
-                 num_blocks: int,
-                 block_size: int = 16):
+    def __init__(self, num_layers: int, num_heads: int, head_size: int, num_blocks: int, block_size: int = 16):
         self.num_layers = num_layers
         self.num_heads = num_heads
         self.head_size = head_size

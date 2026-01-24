@@ -29,7 +29,6 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-# pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
     """Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""
 
@@ -43,17 +42,17 @@ class InfrastructureManagerAgent(BaseAgent):
         )
 
     @as_tool
-    def list_proxmox_vms(self, host: str, _token_id: str, _secret: str) -> str:
+    def list_proxmox_vms(self, host: str, token_id: str, secret: str) -> str:
         """Lists all VMs and containers on a Proxmox host.
         Args:
             host: Proxmox host IP or domain.
-            _token_id: API Token ID.
-            _secret: API Secret.
+            token_id: API Token ID.
+            secret: API Secret.
         """
         logging.info(f"INFRA: Listing ProxMox VMs on {host}")
         # Simulation of Proxmox API call
         # url = f"https://{host}:8006/api2/json/nodes"
-        # headers = {"Authorization": f"PVEAPIToken={_token_id}={_secret}"}
+        # headers = {"Authorization": f"PVEAPIToken={token_id}={secret}"}
 
         return (
             f"### Proxmox Inventory for {host}\n"
@@ -63,18 +62,18 @@ class InfrastructureManagerAgent(BaseAgent):
         )
 
     @as_tool
-    def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, _token: str) -> str:
+    def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, token: str) -> str:
         """Controls a HomeAssistant device (light, switch, etc.).
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
             action: 'turn_on', 'turn_off', 'toggle'.
             api_url: HA Base URL.
-            _token: Long-lived access token.
+            token: Long-lived access token.
         """
         logging.info(f"INFRA: HomeAssistant {action} for {entity_id}")
         # Simulation of HA REST API call
         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"
-        # headers = {"Authorization": f"Bearer {_token}"}
+        # headers = {"Authorization": f"Bearer {token}"}
 
         return f"Successfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}."
 
@@ -91,10 +90,7 @@ class InfrastructureManagerAgent(BaseAgent):
             "uptime": "14 days, 3 hours",
         }
 
-    async def improve_content(self, prompt: str, target_file: str | None = None,
-                              task_context: dict[str, Any] | None = None) -> str:
-        """Standard async method for generic improvement/response (Infrastructure)."""
-        _ = target_file, task_context
+    def improve_content(self, prompt: str) -> str:
         return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration."
 
 

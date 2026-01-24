@@ -1,36 +1,34 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Disk-based cache for persistent storage.
 (Facade for src.core.base.common.cache_core)
 """
 
-from src.core.base.common.cache_core import CacheCore as StandardCacheCore
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-"""Disk-based cache for persistent storage."""
-
-from __future__ import annotations
-from src.core.base.version import VERSION
 import json
 import logging
 import time
 from pathlib import Path
-from typing import Optional
 
-__version__ = VERSION
+from src.core.base.common.cache_core import CacheCore as StandardCacheCore
 
-class DiskCache:
-    """A simple disk-based cache for persistent storage of AI responses."""
-=======
+
 class DiskCache(StandardCacheCore):
     """Facade for CacheCore."""
+
     pass
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-class DiskCache(StandardCacheCore):
-    """Facade for CacheCore."""
-    pass
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def __init__(self, cache_dir: Path, ttl_seconds: float | None = None) -> None:
         """Initialize disk cache.
@@ -62,11 +60,7 @@ class DiskCache(StandardCacheCore):
             value: Value to cache.
         """
         file_path = self._get_file_path(key)
-        data = {
-            "key": key,
-            "value": value,
-            "timestamp": time.time()
-        }
+        data = {"key": key, "value": value, "timestamp": time.time()}
         try:
             file_path.write_text(json.dumps(data), encoding="utf-8")
         except Exception as e:
@@ -87,7 +81,7 @@ class DiskCache(StandardCacheCore):
 
         try:
             data = json.loads(file_path.read_text(encoding="utf-8"))
-            
+
             # Check TTL
             if self.ttl_seconds is not None:
                 timestamp = data.get("timestamp", 0)
@@ -98,7 +92,7 @@ class DiskCache(StandardCacheCore):
                     except Exception:
                         logging.debug(f"Failed to unlink expired cache file {file_path}")
                     return None
-            
+
             return data.get("value")
         except Exception as e:
             logging.warning(f"Failed to read cache file {file_path}: {e}")

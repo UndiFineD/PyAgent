@@ -16,12 +16,15 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any, Dict, List
+
 import logging
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class ReportScheduler:
     """Scheduler for report generation.
@@ -40,12 +43,7 @@ class ReportScheduler:
         self.schedules: dict[str, dict[str, Any]] = {}
         logging.debug("ReportScheduler initialized")
 
-    def add_schedule(
-        self,
-        name: str,
-        cron_expr: str,
-        file_patterns: list[str]
-    ) -> None:
+    def add_schedule(self, name: str, cron_expr: str, file_patterns: list[str]) -> None:
         """Add a schedule.
         Args:
             name: Schedule name.
@@ -56,7 +54,7 @@ class ReportScheduler:
         self.schedules[name] = {
             "cron": cron_expr,
             "patterns": file_patterns,
-            "last_run": 0.0
+            "last_run": 0.0,
         }
 
     def remove_schedule(self, name: str) -> bool:

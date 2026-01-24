@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,61 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 System Managers for PyAgent.
 (Facade for src.core.base.common.*_core)
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
-from src.core.base.common.models import AgentEvent
-from src.core.base.common.models._factories import _empty_agent_event_handlers
-
-=======
-from src.core.base.common.priority_core import PriorityCore as FilePriorityManager
-from src.core.base.common.cache_core import CacheCore as ResponseCache
-from src.core.base.common.health_core import HealthCore as HealthChecker
-from src.core.base.common.profile_core import ProfileCore as ProfileManager
-
-from dataclasses import dataclass, field
-from typing import Any, Callable
 from src.core.base.common.models import AgentEvent, _empty_agent_event_handlers
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from src.core.base.common.priority_core import PriorityCore as FilePriorityManager
-from src.core.base.common.cache_core import CacheCore as ResponseCache
-from src.core.base.common.health_core import HealthCore as HealthChecker
-from src.core.base.common.profile_core import ProfileCore as ProfileManager
 
-from dataclasses import dataclass, field
-from typing import Any, Callable
-from src.core.base.common.models import AgentEvent, _empty_agent_event_handlers
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 @dataclass
 class EventManager:
     """Manages agent events. (Facade)"""
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     handlers: dict[AgentEvent, list[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-    handlers: dict[AgentEvent, list[Callable[..., None]]] = field(
-        default_factory=_empty_agent_event_handlers
-    )
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
     def on(self, event: AgentEvent, handler: Callable[..., None]) -> None:
         """Register an event handler."""
@@ -85,17 +47,7 @@ class EventManager:
                 else:
                     handler()
 
-@dataclass
-class StatePersistence:
-    """Persists agent state. (Facade)"""
-    state_file: Any
-    backup: bool = False
-    backup_count: int = 0
-    def save(self, state: dict[str, Any]) -> None: pass
-    def load(self, default: dict[str, Any] | None = None) -> dict[str, Any]: return default or {}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 @dataclass
 class StatePersistence:
     """Persists agent state. (Facade)"""
@@ -106,17 +58,9 @@ class StatePersistence:
 
     def save(self, state: dict[str, Any]) -> None:
         """Save the agent state."""
-        import json
-        with open(self.state_file, "w", encoding="utf-8") as f:
-            json.dump(state, f)
 
     def load(self, default: dict[str, Any] | None = None) -> dict[str, Any]:
         """Load the agent state."""
-        import json
-        p = Path(self.state_file)
-        if p.exists():
-            with open(p, "r", encoding="utf-8") as f:
-                return json.load(f)
         return default or {}
 
 
@@ -124,7 +68,7 @@ class StatePersistence:
 class FilePriorityManager:
     """Manages file priorities. (Facade)"""
 
-    def __init__(self, config: Any = None) -> None:
+    def __init__(self, config: Any = None):
         from src.core.base.common.priority_core import PriorityCore
         self._core = PriorityCore(config)
 
@@ -137,119 +81,36 @@ class FilePriorityManager:
 class HealthChecker:
     """Checks system health. (Facade)"""
 
-    def __init__(self, workspace_root: Path | None = None, repo_root: Path | None = None) -> None:
+    def __init__(self, workspace_root: Path | None = None):
         from src.core.base.common.health_core import HealthCore
-        self.workspace_root = workspace_root or repo_root
-        self.repo_root = self.workspace_root  # Legacy alias
-        self._core = HealthCore(self.workspace_root)
-
-    @property
-    def results(self) -> dict[str, Any]:
-        """Returns the health check results."""
-        return self._core.results
+        self._core = HealthCore(workspace_root)
 
     def check_git(self) -> Any:
         """Check git status."""
         return self._core.check_git()
-
-    def check_python(self) -> Any:
-        """Check python environment."""
-        return self._core.check_python()
-
-    def check(self) -> dict[str, Any]:
-        """General health check dictionary."""
-        results = self.run_all_checks()
-        is_healthy = all(r.status.name == "HEALTHY" for r in results.values())
-        return {
-            "status": "HEALTHY" if is_healthy else "UNHEALTHY",
-            "is_healthy": is_healthy,
-            "results": results
-        }
-
-    def run_all_checks(self) -> dict[str, Any]:
-        """Run all registered health checks."""
-        return self._core.run_all()
-
-    def record_request(self, agent_id: str = "default", success: bool = True, latency_ms: float = 0.0) -> None:
-        """Record a request for health tracking."""
-        # pylint: disable=unused-argument
-        # Some tests pass agent_id as first pos arg, some pass success as keyword
-        self._core.record_request(agent_id, success)
-
-    def get_metrics(self) -> dict[str, Any]:
-        """Get collected health metrics."""
-        return self._core.get_metrics()
-
-    def print_report(self) -> None:
-        """Print a health report to stdout."""
-        results = self._core.results
-        if not results:
-            results = self.run_all_checks()
-
-        print("\n=== PyAgent Health Report ===")
-        for name, check in results.items():
-            status_str = "OK" if check.status.name == "HEALTHY" else "FAIL"
-            print(f"[{status_str}] {name}: {check.response_time_ms:.1f}ms")
-            if check.error_message:
-                print(f"      Error: {check.error_message}")
-        print("=============================\n")
 
 
 @dataclass
 class ProfileManager:
     """Manages execution profiles. (Facade)"""
 
-    def __init__(self) -> None:
+    def __init__(self):
         from src.core.base.common.profile_core import ProfileCore
         self._core = ProfileCore()
-        self._profiles = self._core.profiles
 
     def activate(self, name: str) -> None:
         """Activate a profile."""
         self._core.activate(name)
-
-    def activate_profile(self, name: str) -> None:
-        """Alias for activate."""
-        self.activate(name)
-
-    def get_active_config(self) -> Any:
-        """Return the configuration for the active profile."""
-        from src.core.base.common.config_core import ConfigObject
-        profile = self._core.active_profile
-        if profile:
-            config_data = getattr(profile, "config", {})
-            return ConfigObject(config_data) if isinstance(config_data, dict) else config_data
-        return ConfigObject({})
-
-    def set_active(self, name: str) -> None:
-        """Alias for activate."""
-        self.activate(name)
-
-    def add_profile(self, profile: Any) -> None:
-        """Add a new execution profile."""
-        self._core.add_profile(profile)
-
-    def get_setting(self, key: str, default: Any = None) -> Any:
-        """Get a setting from the active profile."""
-        return self._core.get_setting(key, default)
 
 
 @dataclass
 class ResponseCache:
     """Caches responses. (Facade)"""
 
-    def __init__(self, cache_dir: Path | None = None) -> None:
+    def __init__(self, cache_dir: Path | None = None):
         from src.core.base.common.cache_core import CacheCore
         self._core = CacheCore(cache_dir)
 
     def get(self, key: str) -> Any:
         """Get cached response."""
         return self._core.get(key)
-
-    def set(self, key: str, value: Any) -> None:
-        """Set cached response."""
-        self._core.set(key, value)
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

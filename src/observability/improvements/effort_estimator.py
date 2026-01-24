@@ -16,14 +16,18 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .EffortEstimate import EffortEstimate
-from .EffortEstimateResult import EffortEstimateResult
-from .Improvement import Improvement
-from .ImprovementCategory import ImprovementCategory
-from typing import Any, Dict, List
+
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .effort_estimate import EffortEstimate
+from .effort_estimate_result import EffortEstimateResult
+from .improvement import Improvement
+from .improvement_category import ImprovementCategory
 
 __version__ = VERSION
+
 
 class EffortEstimator:
     """Estimates effort for improvements."""

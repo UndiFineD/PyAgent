@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
+
+from .changelog_entry import ChangelogEntry
 
 __version__ = VERSION
+
 
 @dataclass
 class MonorepoEntry:
@@ -33,6 +36,7 @@ class MonorepoEntry:
         entries: List of changelog entries for this package.
         path: Path to the package in the repo.
     """
+
     package_name: str
     version: str
     entries: list[ChangelogEntry] = field(default_factory=lambda: [])

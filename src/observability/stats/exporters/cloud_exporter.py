@@ -17,15 +17,6 @@
 
 from __future__ import annotations
 
-<<<<<<<< HEAD:src/observability/stats/exporters/cloud_exporter.py
-========
-
-from ..observability_core import ExportDestination
-from ..observability_core import Metric
-
-from datetime import datetime
-from typing import Any, Dict, List, Optional
->>>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules)):src/observability/stats/exporters/CloudExporter.py
 import json
 import logging
 from datetime import datetime
@@ -143,11 +134,11 @@ class CloudExporter:
                 tag_str = f"{{{tags}}}" if tags else ""
                 lines.append(f"{m.name}{tag_str} {m.value}")
 
-            with open(metrics_file, 'a', encoding='utf-8') as f:
+            with open(metrics_file, "a") as f:
                 f.write("\n".join(lines) + "\n")
 
             logging.info(f"Prometheus export: Appended {len(lines)} metrics to {metrics_file}")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"Prometheus export failed: {e}")
 
     def _export_generic(self) -> None:

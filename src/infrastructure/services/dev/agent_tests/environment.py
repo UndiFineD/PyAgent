@@ -16,25 +16,33 @@
 """Environment and data management for tests."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import random
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .models import TestEnvironment
 
 __version__ = VERSION
 
+
 def _empty_str_list() -> list[str]:
     return []
 
+
 def _empty_dict_any() -> dict[str, Any]:
     return {}
+
 
 class EnvironmentProvisioner:
     """Provision test environments."""
 
     @dataclass
     class ProvisionedEnvironment:
+        """Represents a provisioned development or testing environment."""
+
         status: str
         python_version: str = ""
         dependencies: list[str] = field(default_factory=_empty_str_list)
@@ -54,7 +62,7 @@ class EnvironmentProvisioner:
         variables: dict[str, str] | None = None,
         fixtures: list[str] | None = None,
         setup_commands: list[str] | None = None,
-        teardown_commands: list[str] | None = None
+        teardown_commands: list[str] | None = None,
     ) -> TestEnvironment:
         """Register a test environment."""
         env = TestEnvironment(
@@ -63,7 +71,7 @@ class EnvironmentProvisioner:
             variables=variables or {},
             fixtures=fixtures or [],
             setup_commands=setup_commands or [],
-            teardown_commands=teardown_commands or []
+            teardown_commands=teardown_commands or [],
         )
         self.environments[name] = env
         self.active[name] = False
@@ -86,28 +94,27 @@ class EnvironmentProvisioner:
         env = self.environments.get(name_key)
         if not env:
             return {"error": "Environment not found", "success": False}
+
         if self.active.get(name_key):
             return {"warning": "Already active", "success": True}
+
         for cmd in env.setup_commands:
             self._setup_logs.setdefault(name_key, []).append(f"Executed: {cmd}")
         self.active[name_key] = True
-        return {
-            "environment": name_key,
-            "success": True,
-            "variables": env.variables
-        }
+        return {"environment": name_key, "success": True, "variables": env.variables}
 
     def cleanup(self, env: Any) -> None:
         """Cleanup a provisioned environment (compat API)."""
         if hasattr(env, "status"):
             try:
                 env.status = "cleaned"
-            except Exception:
+            except (AttributeError, ValueError):
                 pass
 
     def teardown(self, name: str) -> dict[str, Any]:
         """Teardown an environment."""
         env = self.environments.get(name)
+
         if not env:
             return {"error": "Environment not found", "success": False}
         for cmd in env.teardown_commands:
@@ -122,6 +129,7 @@ class EnvironmentProvisioner:
     def get_logs(self, name: str) -> list[str]:
         """Get setup / teardown logs for an environment."""
         return self._setup_logs.get(name, [])
+
 
 class DataFactory:
     """Factory for creating test data."""

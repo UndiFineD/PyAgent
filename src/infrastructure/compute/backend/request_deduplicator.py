@@ -16,15 +16,18 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Dict, Optional
+
 import hashlib
 import threading
 import time
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 
 # Infrastructure
 __version__ = VERSION
+
 
 class RequestDeduplicator:
     """Deduplicates concurrent requests with identical prompts.

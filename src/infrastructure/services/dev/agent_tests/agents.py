@@ -11,27 +11,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Agents.py module.
+"""
+
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import ast
 import hashlib
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
-from src.core.base.BaseAgent import BaseAgent
-from src.infrastructure.dev.agent_tests.enums import (
-    TestPriority,
-    TestStatus,
-    CoverageType,
-)
-from src.infrastructure.dev.agent_tests.models import (
-    TestCase,
-    TestRun,
-    CoverageGap,
-    TestFactory,
-)
+from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.dev.agent_tests.enums import (CoverageType,
+                                                               TestPriority,
+                                                               TestStatus)
+from src.infrastructure.services.dev.agent_tests.models import (CoverageGap,
+                                                                TestCase,
+                                                                TestFactory,
+                                                                TestRun)
 
 __version__ = VERSION
 
@@ -47,6 +49,7 @@ __version__ = VERSION
 
 # from src.core.base.BaseAgent import BaseAgent, create_main_function
 
+
 class TestsAgent(BaseAgent):
     """Updates code file test suites using AI assistance.
 
@@ -54,6 +57,7 @@ class TestsAgent(BaseAgent):
     - self.file_path must point to a test file (usually starting with 'test_').
     - The agent attempts to locate the corresponding source file to provide context.
     """
+
     __test__ = False
 
     def __init__(self, file_path: str) -> None:
@@ -79,7 +83,7 @@ class TestsAgent(BaseAgent):
         line_number: int,
         priority: TestPriority = TestPriority.MEDIUM,
         tags: list[str] | None = None,
-        dependencies: list[str] | None = None
+        dependencies: list[str] | None = None,
     ) -> TestCase:
         """Add a new test case."""
         test_id = hashlib.md5(f"{name}:{file_path}".encode()).hexdigest()[:8]
@@ -90,7 +94,7 @@ class TestsAgent(BaseAgent):
             line_number=line_number,
             priority=priority,
             tags=tags or [],
-            dependencies=dependencies or []
+            dependencies=dependencies or [],
         )
         self._tests.append(test)
         return test
@@ -119,11 +123,7 @@ class TestsAgent(BaseAgent):
 
     def prioritize_tests(self) -> list[TestCase]:
         """Return tests sorted by priority (highest first)."""
-        return sorted(
-            self._tests,
-            key=lambda t: (t.priority.value, t.failure_count),
-            reverse=True
-        )
+        return sorted(self._tests, key=lambda t: (t.priority.value, t.failure_count), reverse=True)
 
     def calculate_priority_score(self, test: TestCase) -> float:
         """Calculate a priority score for a test."""
@@ -189,7 +189,7 @@ class TestsAgent(BaseAgent):
         line_start: int,
         line_end: int,
         coverage_type: CoverageType = CoverageType.LINE,
-        suggestion: str = ""
+        suggestion: str = "",
     ) -> CoverageGap:
         """Add a coverage gap."""
         gap = CoverageGap(
@@ -197,7 +197,7 @@ class TestsAgent(BaseAgent):
             line_start=line_start,
             line_end=line_end,
             coverage_type=coverage_type,
-            suggestion=suggestion
+            suggestion=suggestion,
         )
         self._coverage_gaps.append(gap)
         return gap
@@ -212,7 +212,7 @@ class TestsAgent(BaseAgent):
 
     def suggest_tests_for_gap(self, gap: CoverageGap) -> str:
         """Generate test suggestion for a coverage gap."""
-        file_name = gap.file_path.replace('/', '_').replace('.py', '')
+        file_name = gap.file_path.replace("/", "_").replace(".py", "")
         suggestion_body = gap.suggestion or f"assert True  # Placeholder for {gap.coverage_type.value} coverage"
         return (
             f"# Suggested test for {gap.file_path} "
@@ -229,14 +229,14 @@ class TestsAgent(BaseAgent):
         name: str,
         return_type: str,
         parameters: dict[str, str] | None = None,
-        generator: str = ""
+        generator: str = "",
     ) -> TestFactory:
         """Add a test data factory."""
         factory = TestFactory(
             name=name,
             return_type=return_type,
             parameters=parameters or {},
-            generator=generator
+            generator=generator,
         )
         self._factories[name] = factory
         return factory
@@ -260,15 +260,9 @@ class TestsAgent(BaseAgent):
 
     # ========== Test Execution Recording ==========
 
-    def record_test_run(
-        self,
-        test_results: dict[str, TestStatus],
-        duration_ms: float = 0.0
-    ) -> TestRun:
+    def record_test_run(self, test_results: dict[str, TestStatus], duration_ms: float = 0.0) -> TestRun:
         """Record a test execution run."""
-        run_id = hashlib.md5(
-            f"{datetime.now().isoformat()}:{len(test_results)}".encode()
-        ).hexdigest()[:8]
+        run_id = hashlib.md5(f"{datetime.now().isoformat()}:{len(test_results)}".encode()).hexdigest()[:8]
 
         passed = sum(1 for s in test_results.values() if s == TestStatus.PASSED)
         failed = sum(1 for s in test_results.values() if s == TestStatus.FAILED)
@@ -284,7 +278,7 @@ class TestsAgent(BaseAgent):
             skipped=skipped,
             errors=errors,
             duration_ms=duration_ms,
-            test_results=test_results
+            test_results=test_results,
         )
         self._test_runs.append(run)
 
@@ -373,21 +367,24 @@ class TestsAgent(BaseAgent):
                     status_icon = "✓" if test.status == TestStatus.PASSED else "✗"
                     docs.append(f"- [{status_icon}] `{test.name}` (line {test.line_number})")
                 docs.append("")
-        return '\n'.join(docs)
+        return "\n".join(docs)
 
     def export_tests(self, format: str = "json") -> str:
         """Export tests to various formats."""
         if format == "json":
-            data: list[dict[str, Any]] = [{
-                "id": t.id,
-                "name": t.name,
-                "file": t.file_path,
-                "line": t.line_number,
-                "priority": t.priority.name,
-                "status": t.status.value,
-                "flakiness": t.flakiness_score,
-                "tags": t.tags
-            } for t in self._tests]
+            data: list[dict[str, Any]] = [
+                {
+                    "id": t.id,
+                    "name": t.name,
+                    "file": t.file_path,
+                    "line": t.line_number,
+                    "priority": t.priority.name,
+                    "status": t.status.value,
+                    "flakiness": t.flakiness_score,
+                    "tags": t.tags,
+                }
+                for t in self._tests
+            ]
             return json.dumps(data, indent=2)
         return ""
 
@@ -415,7 +412,7 @@ class TestsAgent(BaseAgent):
             "flaky_tests": flaky_count,
             "coverage_gaps": len(self._coverage_gaps),
             "factories": len(self._factories),
-            "test_runs": len(self._test_runs)
+            "test_runs": len(self._test_runs),
         }
 
     # ========== Original Methods ==========
@@ -425,12 +422,14 @@ class TestsAgent(BaseAgent):
 
     def _get_fallback_response(self) -> str:
         """Return fallback response when Copilot is unavailable."""
-        return ("# AI Improvement Unavailable\n# GitHub CLI not found. Install from "
-                "https://cli.github.com/\n\n# Original test code preserved below:\n\n")
+        return (
+            "# AI Improvement Unavailable\n# GitHub CLI not found. Install from "
+            "https://cli.github.com/\n\n# Original test code preserved below:\n\n"
+        )
 
     def _find_source_file(self) -> Path | None:
         """Locate source file for test file (test_foo.py -> foo.py)."""
-        if not self.file_path.name.startswith('test_'):
+        if not self.file_path.name.startswith("test_"):
             return None
         source_name = self.file_path.name[5:]  # Remove test_ prefix
         # Try to find source file in common locations
@@ -439,12 +438,12 @@ class TestsAgent(BaseAgent):
         if source_path.exists():
             return source_path
         # 2. Parent directory (if tests are in tests/)
-        if self.file_path.parent.name == 'tests':
+        if self.file_path.parent.name == "tests":
             source_path = self.file_path.parent.parent / source_name
             if source_path.exists():
                 return source_path
         # 3. scripts / agent directory (specific to this project structure)
-        agent_dir = self.file_path.parent.parent / 'scripts' / 'agent'
+        agent_dir = self.file_path.parent.parent / "scripts" / "agent"
         source_path = agent_dir / source_name
         if source_path.exists():
             return source_path
@@ -467,12 +466,11 @@ class TestsAgent(BaseAgent):
             # Check 1: All test functions follow naming convention
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef):
-                    if not node.name.startswith('test_') and 'test' in node.name.lower():
+                    if not node.name.startswith("test_") and "test" in node.name.lower():
                         # Just a warning, might be a helper
                         pass
             # Check 2: Tests contain assertions
-            test_funcs = [n for n in ast.walk(tree) if isinstance(
-                n, ast.FunctionDef) and n.name.startswith('test_')]
+            test_funcs = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name.startswith("test_")]
             for func in test_funcs:
                 has_assert = any(isinstance(n, ast.Assert) for n in ast.walk(func))
                 # Simple check for pytest.raises context manager
@@ -482,7 +480,7 @@ class TestsAgent(BaseAgent):
                         for item in node.items:
                             if isinstance(item.context_expr, ast.Call):
                                 if isinstance(item.context_expr.func, ast.Attribute):
-                                    if item.context_expr.func.attr == 'raises':
+                                    if item.context_expr.func.attr == "raises":
                                         has_raises = True
                 if not (has_assert or has_raises):
                     issues.append(f"Test '{func.name}' lacks assertions")
@@ -507,7 +505,7 @@ class TestsAgent(BaseAgent):
         if source_path and source_path.exists():
             logging.debug(f"Using source file context: {source_path}")
             try:
-                source_content = source_path.read_text(encoding='utf-8')
+                source_content = source_path.read_text(encoding="utf-8")
                 # Truncate source content if it's too large to avoid context window issues
                 # Assuming ~4 chars per token, 8000 tokens ~ 32000 chars.
                 # Leave room for prompt and response.
@@ -524,28 +522,36 @@ class TestsAgent(BaseAgent):
                 logging.warning(f"Failed to read source file context: {e}")
         new_content = super().improve_content(enhanced_prompt)
         # Validate syntax
+
         if not self._validate_syntax(new_content):
             logging.error("Generated tests failed syntax validation. Reverting.")
             self.current_content = self.previous_content
+
             return self.previous_content
         logging.debug("Syntax validation passed")
         # Validate structure
         self._validate_test_structure(new_content)
+
         return new_content
 
     def update_file(self) -> bool:
         """Write the improved content back to the file (no markdown fixing for test files)."""
-        self.file_path.write_text(self.current_content, encoding='utf-8')
+        self.file_path.write_text(self.current_content, encoding="utf-8")
+
         return True
+
 
 # create_main_function is not available in the current refactored structure
 # def main() would need to be implemented separately if needed for CLI use
-#main = create_main_function(
+# main = create_main_function(
+
+
 #    TestsAgent,
 #    'Tests Agent: Updates code file test suites',
 #    'Path to the tests file (e.g., test_file.py)'
-#)
+# )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # CLI interface would be implemented here if needed
     pass

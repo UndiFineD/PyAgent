@@ -15,10 +15,11 @@
 """Script for migrating hardcoded version strings to use the central VERSION import."""
 
 from __future__ import annotations
+
 import os
 
 src_path = r"c:\DEV\PyAgent\src"
-version_import = "from src.core.base.version import VERSION"
+version_import = "from src.core.base.lifecycle.version import VERSION"
 target_version = 'VERSION = "2.1.2-stable"'
 
 print(f"Starting version migration in: {src_path}")
@@ -34,7 +35,7 @@ for root, _, files in os.walk(src_path):
             try:
                 with open(path, encoding="utf-8", errors="ignore") as f:
                     content = f.read()
-                
+
                 if target_version in content:
                     # Replace the hardcoded version with an import
                     # We look for the line and replace it
@@ -47,7 +48,7 @@ for root, _, files in os.walk(src_path):
                             modified = True
                         else:
                             new_lines.append(line)
-                    
+
                     if modified:
                         new_content = "\n".join(new_lines) + ("\n" if content.endswith("\n") else "")
                         with open(path, "w", encoding="utf-8") as f:

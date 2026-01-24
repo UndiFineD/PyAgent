@@ -1,7 +1,27 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Parsers.py module.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Generator, Iterator, List, Optional, Tuple
-from .enums import ReasoningFormat, ToolCallFormat, ParseState
-from .data_classes import ThinkingBlock, ToolCall, ParseResult
+
+from .data_classes import ParseResult, ThinkingBlock, ToolCall
+from .enums import ParseState, ReasoningFormat, ToolCallFormat
+
 
 class ReasoningParser(ABC):
     """Abstract base for reasoning token extraction."""
@@ -26,10 +46,7 @@ class ReasoningParser(ABC):
         pass
 
     @abstractmethod
-    def parse_streaming(
-        self,
-        token_stream: Iterator[str]
-    ) -> Generator[Tuple[str, bool], None, ParseResult]:
+    def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         """Parse streaming tokens, yield (token, is_thinking)."""
         pass
 
@@ -39,6 +56,7 @@ class ReasoningParser(ABC):
         self._buffer = ""
         self._thinking_blocks = []
         self._current_block_start = 0
+
 
 class ToolParser(ABC):
     """Abstract base for tool/function call parsing."""
@@ -59,8 +77,7 @@ class ToolParser(ABC):
 
     @abstractmethod
     def parse_streaming(
-        self,
-        token_stream: Iterator[str]
+        self, token_stream: Iterator[str]
     ) -> Generator[Tuple[str, Optional[ToolCall]], None, List[ToolCall]]:
         """Parse streaming tokens for tool calls."""
         pass

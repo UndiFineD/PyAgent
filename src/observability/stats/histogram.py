@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Histogram - Efficient percentile and distribution tracking.
 
@@ -9,18 +23,18 @@ Goes beyond vLLM with production-grade metrics:
 
 Phase 18: Beyond vLLM - Advanced Metrics
 """
+
 from __future__ import annotations
-import bisect
+
 import math
 import threading
-import time
-from dataclasses import dataclass, field
-from typing import Iterator
+from dataclasses import dataclass
 
 
 @dataclass
 class HistogramBucket:
     """A single histogram bucket."""
+
     lower_bound: float
     upper_bound: float
     count: int = 0
@@ -70,8 +84,8 @@ class Histogram:
         self._buckets = self._create_buckets()
         self._count = 0
         self._sum = 0.0
-        self._min = float('inf')
-        self._max = float('-inf')
+        self._min = float("inf")
+        self._max = float("-inf")
         self._underflow = 0
         self._overflow = 0
         self._lock = threading.Lock()
@@ -189,7 +203,7 @@ class Histogram:
         """Get maximum observed value."""
         return self._max if self._count > 0 else 0.0
 
-    def merge(self, other: 'Histogram') -> 'Histogram':
+    def merge(self, other: "Histogram") -> "Histogram":
         """
         Merge with another histogram.
 
@@ -219,27 +233,24 @@ class Histogram:
 
     def get_buckets(self) -> list[tuple[float, float, int]]:
         """Get bucket data as (lower, upper, count) tuples."""
-        return [
-            (b.lower_bound, b.upper_bound, b.count)
-            for b in self._buckets
-        ]
+        return [(b.lower_bound, b.upper_bound, b.count) for b in self._buckets]
 
     def get_stats(self) -> dict:
         """Get comprehensive statistics."""
         return {
-            'count': self._count,
-            'sum': round(self._sum, 4),
-            'mean': round(self.mean(), 4),
-            'min': round(self.min_observed, 4),
-            'max': round(self.max_observed, 4),
-            'p50': round(self.percentile(50), 4),
-            'p75': round(self.percentile(75), 4),
-            'p90': round(self.percentile(90), 4),
-            'p95': round(self.percentile(95), 4),
-            'p99': round(self.percentile(99), 4),
-            'p999': round(self.percentile(99.9), 4),
-            'underflow': self._underflow,
-            'overflow': self._overflow,
+            "count": self._count,
+            "sum": round(self._sum, 4),
+            "mean": round(self.mean(), 4),
+            "min": round(self.min_observed, 4),
+            "max": round(self.max_observed, 4),
+            "p50": round(self.percentile(50), 4),
+            "p75": round(self.percentile(75), 4),
+            "p90": round(self.percentile(90), 4),
+            "p95": round(self.percentile(95), 4),
+            "p99": round(self.percentile(99), 4),
+            "p999": round(self.percentile(99.9), 4),
+            "underflow": self._underflow,
+            "overflow": self._overflow,
         }
 
     def reset(self) -> None:
@@ -249,8 +260,8 @@ class Histogram:
                 bucket.count = 0
             self._count = 0
             self._sum = 0.0
-            self._min = float('inf')
-            self._max = float('-inf')
+            self._min = float("inf")
+            self._max = float("-inf")
             self._underflow = 0
             self._overflow = 0
 
@@ -285,7 +296,7 @@ class ExponentialHistogram:
         """
         self._scale = scale
         self._max_buckets = max_buckets
-        self._base = 2 ** (2 ** -scale)
+        self._base = 2 ** (2**-scale)
 
         # Positive and negative buckets
         self._positive: dict[int, int] = {}
@@ -294,8 +305,8 @@ class ExponentialHistogram:
 
         self._count = 0
         self._sum = 0.0
-        self._min = float('inf')
-        self._max = float('-inf')
+        self._min = float("inf")
+        self._max = float("-inf")
         self._lock = threading.Lock()
 
     def _value_to_bucket(self, value: float) -> int:
@@ -310,7 +321,7 @@ class ExponentialHistogram:
 
     def _bucket_to_upper(self, index: int) -> float:
         """Get upper bound for bucket index."""
-        return self._base ** index
+        return self._base**index
 
     def add(self, value: float) -> None:
         """Add a value to the histogram."""
@@ -371,18 +382,18 @@ class ExponentialHistogram:
     def get_stats(self) -> dict:
         """Get statistics."""
         return {
-            'count': self._count,
-            'sum': round(self._sum, 4),
-            'mean': round(self.mean(), 4),
-            'min': round(self._min, 4) if self._count > 0 else 0,
-            'max': round(self._max, 4) if self._count > 0 else 0,
-            'p50': round(self.percentile(50), 4),
-            'p90': round(self.percentile(90), 4),
-            'p99': round(self.percentile(99), 4),
-            'scale': self._scale,
-            'positive_buckets': len(self._positive),
-            'negative_buckets': len(self._negative),
-            'zero_count': self._zero_count,
+            "count": self._count,
+            "sum": round(self._sum, 4),
+            "mean": round(self.mean(), 4),
+            "min": round(self._min, 4) if self._count > 0 else 0,
+            "max": round(self._max, 4) if self._count > 0 else 0,
+            "p50": round(self.percentile(50), 4),
+            "p90": round(self.percentile(90), 4),
+            "p99": round(self.percentile(99), 4),
+            "scale": self._scale,
+            "positive_buckets": len(self._positive),
+            "negative_buckets": len(self._negative),
+            "zero_count": self._zero_count,
         }
 
     def reset(self) -> None:
@@ -393,8 +404,8 @@ class ExponentialHistogram:
             self._zero_count = 0
             self._count = 0
             self._sum = 0.0
-            self._min = float('inf')
-            self._max = float('-inf')
+            self._min = float("inf")
+            self._max = float("-inf")
 
 
 class LatencyHistogram(Histogram):
@@ -416,7 +427,7 @@ class LatencyHistogram(Histogram):
     def __init__(self) -> None:
         """Initialize latency histogram (0.1ms to 60s)."""
         super().__init__(
-            min_value=0.1,      # 0.1ms
+            min_value=0.1,  # 0.1ms
             max_value=60000.0,  # 60 seconds
             num_buckets=100,
             logarithmic=True,
@@ -440,7 +451,7 @@ class SizeHistogram(Histogram):
     def __init__(self) -> None:
         """Initialize size histogram (1 byte to 1GB)."""
         super().__init__(
-            min_value=1.0,              # 1 byte
+            min_value=1.0,  # 1 byte
             max_value=1_000_000_000.0,  # 1 GB
             num_buckets=100,
             logarithmic=True,
@@ -448,9 +459,9 @@ class SizeHistogram(Histogram):
 
 
 __all__ = [
-    'Histogram',
-    'HistogramBucket',
-    'ExponentialHistogram',
-    'LatencyHistogram',
-    'SizeHistogram',
+    "Histogram",
+    "HistogramBucket",
+    "ExponentialHistogram",
+    "LatencyHistogram",
+    "SizeHistogram",
 ]

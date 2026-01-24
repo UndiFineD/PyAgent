@@ -17,12 +17,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""Hierarchical memory query logic for Memory Agents.
 
-
-"""
-MemoryQueryMixin: Provides hierarchical memory query logic for Memory Agents in PyAgent.
-Supports multi-level memory search, retrieval, and query optimization.
-Provides strategies for searching across multiple memory tiers (short, mid, long, archival) with support for tag filtering and Rust-accelerated search.
+Provides strategies for searching across multiple memory tiers (short, mid, long,
+archival) with support for tag filtering and Rust-accelerated search.
 """
 
 from __future__ import annotations

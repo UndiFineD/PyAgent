@@ -12,20 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Testgenerated agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
+
 import logging
 
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class TestGeneratedAgent(BaseAgent):
     """
     Generated Agent: TestGenerated
     Capabilities: Perform complex math and string analysis
     """
-    
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.name = "TestGenerated"

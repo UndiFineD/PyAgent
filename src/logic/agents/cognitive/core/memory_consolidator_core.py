@@ -13,16 +13,17 @@
 # limitations under the License.
 
 
-"""
-MemoryConsolidatorCore logic for PyAgent.
-Pure logic for distilling interactions into insights.
-No I/O or side effects.
+"""MemoryConsolidatorCore logic for PyAgent.
+
+Pure logic for distilling interactions into insights. Maintains the integrity
+of memory fragments during the consolidation process.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
 import time
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from rust_core import filter_memory_by_query_rust

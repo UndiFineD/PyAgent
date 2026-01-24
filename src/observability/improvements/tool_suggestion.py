@@ -16,11 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .AnalysisToolType import AnalysisToolType
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
+from .analysis_tool_type import AnalysisToolType
+
 __version__ = VERSION
+
 
 @dataclass
 class ToolSuggestion:
@@ -34,6 +38,7 @@ class ToolSuggestion:
         message: Suggestion message.
         suggested_fix: Optional code fix.
     """
+
     tool_type: AnalysisToolType
     tool_name: str
     file_path: str

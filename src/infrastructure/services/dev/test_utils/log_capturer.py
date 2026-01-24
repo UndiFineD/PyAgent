@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any, List, Optional
+
 import logging
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class LogCapturer:
     """Captures logging output for testing."""

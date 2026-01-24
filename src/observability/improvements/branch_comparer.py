@@ -16,20 +16,24 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .BranchComparison import BranchComparison
-from .BranchComparisonStatus import BranchComparisonStatus
-from .Improvement import Improvement
-from .ImprovementDiff import ImprovementDiff
-from .ImprovementDiffType import ImprovementDiffType
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+
 import hashlib
 import logging
 import re
 import subprocess
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .branch_comparison import BranchComparison
+from .branch_comparison_status import BranchComparisonStatus
+from .improvement import Improvement
+from .improvement_diff import ImprovementDiff
+from .improvement_diff_type import ImprovementDiffType
 
 __version__ = VERSION
+
 
 class BranchComparer:
     """Comparer for improvements across git branches.
@@ -65,12 +69,7 @@ class BranchComparer:
             self.recorder.record_interaction("Git", "BranchComparer", action, result)
         logging.debug(f"BranchComparer initialized for {self.repo_path}")
 
-    def compare(
-        self,
-        source_branch: str,
-        target_branch: str,
-        file_path: str
-    ) -> BranchComparison:
+    def compare(self, source_branch: str, target_branch: str, file_path: str) -> BranchComparison:
         """Compare improvements between branches.
 
         Args:
@@ -85,7 +84,7 @@ class BranchComparer:
             source_branch=source_branch,
             target_branch=target_branch,
             file_path=file_path,
-            status=BranchComparisonStatus.IN_PROGRESS
+            status=BranchComparisonStatus.IN_PROGRESS,
         )
 
         try:
@@ -98,20 +97,12 @@ class BranchComparer:
             target_improvements = self._parse_improvements(target_content)
 
             # Calculate differences
-            comparison.diffs = self._calculate_diffs(
-                source_improvements, target_improvements
-            )
+            comparison.diffs = self._calculate_diffs(source_improvements, target_improvements)
 
             # Count by type
-            comparison.added_count = sum(
-                1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED
-            )
-            comparison.removed_count = sum(
-                1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.REMOVED
-            )
-            comparison.modified_count = sum(
-                1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.MODIFIED
-            )
+            comparison.added_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED)
+            comparison.removed_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.REMOVED)
+            comparison.modified_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.MODIFIED)
 
             comparison.status = BranchComparisonStatus.COMPLETED
 
@@ -138,7 +129,7 @@ class BranchComparer:
                 cwd=self.repo_path,
                 capture_output=True,
                 text=True,
-                check=True
+                check=True,
             )
             return result.stdout
         except subprocess.CalledProcessError:
@@ -156,26 +147,21 @@ class BranchComparer:
         improvements: dict[str, Improvement] = {}
 
         # Parse improvement items from markdown
-        pattern = r'- \[[ x]\] (.+?)(?=\n- \[|\n##|\Z)'
+        pattern = r"- \[[ x]\] (.+?)(?=\n- \[|\n##|\Z)"
         matches = re.findall(pattern, content, re.DOTALL)
 
         for i, match in enumerate(matches):
-            title = match.strip().split('\n')[0]
+            title = match.strip().split("\n")[0]
             improvement_id = f"imp_{i}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
 
             improvements[improvement_id] = Improvement(
-                id=improvement_id,
-                title=title,
-                description=match.strip(),
-                file_path=""
+                id=improvement_id, title=title, description=match.strip(), file_path=""
             )
 
         return improvements
 
     def _calculate_diffs(
-        self,
-        source: dict[str, Improvement],
-        target: dict[str, Improvement]
+        self, source: dict[str, Improvement], target: dict[str, Improvement]
     ) -> list[ImprovementDiff]:
         """Calculate differences between two improvement sets.
 
@@ -194,42 +180,47 @@ class BranchComparer:
             in_target = imp_id in target
 
             if in_source and not in_target:
-                diffs.append(ImprovementDiff(
-                    improvement_id=imp_id,
-                    diff_type=ImprovementDiffType.REMOVED,
-                    source_version=source[imp_id],
-                    change_summary="Improvement removed in target branch"
-                ))
+                diffs.append(
+                    ImprovementDiff(
+                        improvement_id=imp_id,
+                        diff_type=ImprovementDiffType.REMOVED,
+                        source_version=source[imp_id],
+                        change_summary="Improvement removed in target branch",
+                    )
+                )
             elif in_target and not in_source:
-                diffs.append(ImprovementDiff(
-                    improvement_id=imp_id,
-                    diff_type=ImprovementDiffType.ADDED,
-                    target_version=target[imp_id],
-                    change_summary="New improvement in target branch"
-                ))
+                diffs.append(
+                    ImprovementDiff(
+                        improvement_id=imp_id,
+                        diff_type=ImprovementDiffType.ADDED,
+                        target_version=target[imp_id],
+                        change_summary="New improvement in target branch",
+                    )
+                )
             elif source[imp_id].title != target[imp_id].title:
-                diffs.append(ImprovementDiff(
-                    improvement_id=imp_id,
-                    diff_type=ImprovementDiffType.MODIFIED,
-                    source_version=source[imp_id],
-                    target_version=target[imp_id],
-                    change_summary="Improvement title or content changed"
-                ))
+                diffs.append(
+                    ImprovementDiff(
+                        improvement_id=imp_id,
+                        diff_type=ImprovementDiffType.MODIFIED,
+                        source_version=source[imp_id],
+                        target_version=target[imp_id],
+                        change_summary="Improvement title or content changed",
+                    )
+                )
             else:
-                diffs.append(ImprovementDiff(
-                    improvement_id=imp_id,
-                    diff_type=ImprovementDiffType.UNCHANGED,
-                    source_version=source[imp_id],
-                    target_version=target[imp_id],
-                    change_summary="No changes"
-                ))
+                diffs.append(
+                    ImprovementDiff(
+                        improvement_id=imp_id,
+                        diff_type=ImprovementDiffType.UNCHANGED,
+                        source_version=source[imp_id],
+                        target_version=target[imp_id],
+                        change_summary="No changes",
+                    )
+                )
 
         return diffs
 
-    def get_added_improvements(
-        self,
-        comparison: BranchComparison
-    ) -> list[Improvement]:
+    def get_added_improvements(self, comparison: BranchComparison) -> list[Improvement]:
         """Get improvements added in target branch.
 
         Args:
@@ -239,14 +230,10 @@ class BranchComparer:
             List of added improvements.
         """
         return [
-            d.target_version for d in comparison.diffs
-            if d.diff_type == ImprovementDiffType.ADDED and d.target_version
+            d.target_version for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED and d.target_version
         ]
 
-    def get_removed_improvements(
-        self,
-        comparison: BranchComparison
-    ) -> list[Improvement]:
+    def get_removed_improvements(self, comparison: BranchComparison) -> list[Improvement]:
         """Get improvements removed in target branch.
 
         Args:
@@ -256,14 +243,12 @@ class BranchComparer:
             List of removed improvements.
         """
         return [
-            d.source_version for d in comparison.diffs
+            d.source_version
+            for d in comparison.diffs
             if d.diff_type == ImprovementDiffType.REMOVED and d.source_version
         ]
 
-    def get_modified_improvements(
-        self,
-        comparison: BranchComparison
-    ) -> list[tuple[Improvement, Improvement]]:
+    def get_modified_improvements(self, comparison: BranchComparison) -> list[tuple[Improvement, Improvement]]:
         """Get improvements modified between branches.
 
         Args:
@@ -275,17 +260,10 @@ class BranchComparer:
         return [
             (d.source_version, d.target_version)
             for d in comparison.diffs
-            if d.diff_type == ImprovementDiffType.MODIFIED
-            and d.source_version and d.target_version
+            if d.diff_type == ImprovementDiffType.MODIFIED and d.source_version and d.target_version
         ]
 
-    def detect_conflicts(
-        self,
-        base_branch: str,
-        branch1: str,
-        branch2: str,
-        file_path: str
-    ) -> list[ImprovementDiff]:
+    def detect_conflicts(self, base_branch: str, branch1: str, branch2: str, file_path: str) -> list[ImprovementDiff]:
         """Detect conflicting changes in a three-way comparison.
 
         Args:
@@ -301,25 +279,13 @@ class BranchComparer:
         comp2 = self.compare(base_branch, branch2, file_path)
 
         # Find improvements modified in both branches
-        modified1 = {
-            d.improvement_id for d in comp1.diffs
-            if d.diff_type == ImprovementDiffType.MODIFIED
-        }
-        modified2 = {
-            d.improvement_id for d in comp2.diffs
-            if d.diff_type == ImprovementDiffType.MODIFIED
-        }
+        modified1 = {d.improvement_id for d in comp1.diffs if d.diff_type == ImprovementDiffType.MODIFIED}
+        modified2 = {d.improvement_id for d in comp2.diffs if d.diff_type == ImprovementDiffType.MODIFIED}
 
         conflicts = modified1 & modified2
-        return [
-            d for d in comp1.diffs
-            if d.improvement_id in conflicts
-        ]
+        return [d for d in comp1.diffs if d.improvement_id in conflicts]
 
-    def generate_merge_report(
-        self,
-        comparison: BranchComparison
-    ) -> str:
+    def generate_merge_report(self, comparison: BranchComparison) -> str:
         """Generate a markdown merge report.
 
         Args:
@@ -350,12 +316,14 @@ class BranchComparer:
             emoji = {
                 ImprovementDiffType.ADDED: "➕",
                 ImprovementDiffType.REMOVED: "➖",
-                ImprovementDiffType.MODIFIED: "📝"
+                ImprovementDiffType.MODIFIED: "📝",
             }.get(diff.diff_type, "•")
 
             title = (
-                diff.target_version.title if diff.target_version
-                else diff.source_version.title if diff.source_version
+                diff.target_version.title
+                if diff.target_version
+                else diff.source_version.title
+                if diff.source_version
                 else diff.improvement_id
             )
             lines.append(f"- {emoji} {title}")

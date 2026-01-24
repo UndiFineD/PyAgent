@@ -55,7 +55,7 @@ class FleetRoutingCore:
     def _ensure_agents_loaded(self, goal: str) -> None:
         """Heuristically load agents based on the goal string."""
         g_low = goal.lower().replace("_", "").replace("-", "")
-        for hint_key, agent_name in self.fleet.capability_hints.items():
+        for hint_key, agent_name in self.fleet._capability_hints.items():
             if hint_key.lower().replace("_", "") in g_low and agent_name in self.fleet.agents:
                 _ = self.fleet.agents[agent_name]  # Force load
                 logging.info(f"Fleet: Lazy-loaded '{agent_name}' for capability '{hint_key}'")
@@ -90,9 +90,9 @@ class FleetRoutingCore:
             async def run_tool() -> Any:
                 if inspect.iscoroutinefunction(self.fleet.registry.call_tool):
                     return await self.fleet.registry.call_tool(best_tool, **kwargs)
-
-                loop = asyncio.get_running_loop()
-                return await loop.run_in_executor(None, self.fleet.registry.call_tool, best_tool, **kwargs)
+                else:
+                    loop = asyncio.get_running_loop()
+                    return await loop.run_in_executor(None, self.fleet.registry.call_tool, best_tool, **kwargs)
 
             if is_essential:
                 res = await run_tool()
@@ -110,13 +110,13 @@ class FleetRoutingCore:
 
             if self.fleet.rl_selector:
                 self.fleet.rl_selector.update_stats(best_tool, success=True)
-            await self.fleet.record_success(f"Capability call: {goal} with {kwargs}", str(res), "internal_ai")
+            await self.fleet._record_success(f"Capability call: {goal} with {kwargs}", str(res), "internal_ai")
             return res
-        except Exception as exc:  # pylint: disable=broad-exception-caught
+        except Exception as e:
             if self.fleet.rl_selector:
                 self.fleet.rl_selector.update_stats(best_tool, success=False)
-            logging.error(f"Error executing tool {best_tool}: {exc}")
-            return await self._attempt_self_healing(best_tool, owner, exc, **kwargs)
+            logging.error(f"Error executing tool {best_tool}: {e}")
+            return await self._attempt_self_healing(best_tool, owner, e, **kwargs)
         finally:
             if hasattr(self.fleet, "telemetry"):
                 self.fleet.telemetry.trace_workflow(f"tool_{best_tool}", time.time() - start_time)
@@ -151,10 +151,10 @@ class FleetRoutingCore:
         clean_kwargs = {k: v for k, v in kwargs.items() if k != "agent_name"}
         if inspect.iscoroutinefunction(self.fleet.self_healing.attempt_repair):
             return await self.fleet.self_healing.attempt_repair(target_agent, error, **clean_kwargs)
+        else:
+            return self.fleet.self_healing.attempt_repair(target_agent, error, **clean_kwargs)
 
-        return self.fleet.self_healing.attempt_repair(target_agent, error, **clean_kwargs)
-
-    def route_task(self, task_type: str, _task_data: Any) -> str:
+    def route_task(self, task_type: str, task_data: Any) -> str:
         """Routes tasks based on system load and hardware availability."""
         stats = self.fleet.telemetry.orchestrator.monitor.get_current_stats()
         is_compute_heavy = task_type in ["training", "indexing", "llm_finetune"]
@@ -162,7 +162,7 @@ class FleetRoutingCore:
         if is_compute_heavy and stats["gpu"]["available"]:
             logging.info(f"Fleet: Routing {task_type} to GPU node ({stats['gpu']['type']})")
             return f"ROUTED:GPU:{stats['gpu']['type']}"
-        if is_compute_heavy and stats["status"] == "CRITICAL":
+        elif is_compute_heavy and stats["status"] == "CRITICAL":
             logging.warning("Fleet: System critical, deferring compute-heavy task.")
             return "DEFERRED:LOAD_CRITICAL"
 

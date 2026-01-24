@@ -16,16 +16,19 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TestLogEntry import TestLogEntry
-from contextlib import contextmanager
-from typing import Any, Dict, List, Optional
+
 from collections.abc import Iterator
+from contextlib import contextmanager
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_log_entry import TestLogEntry
 
 __version__ = VERSION
 
+
 class TestLogger:
-    __test__ = False
     """Logger for test debugging.
 
     Captures logs during test execution for debugging.
@@ -37,6 +40,8 @@ class TestLogger:
             # ... test code ...
         logs=logger.get_logs("test_name")
     """
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize logger."""

@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class ColorContrastResult:
@@ -34,6 +37,7 @@ class ColorContrastResult:
         min_ratio_aa: Minimum required ratio for AA.
         min_ratio_aaa: Minimum required ratio for AAA.
     """
+
     foreground: str
     background: str
     contrast_ratio: float

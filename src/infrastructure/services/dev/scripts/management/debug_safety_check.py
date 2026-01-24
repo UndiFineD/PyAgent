@@ -11,19 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Debug safety check.py module.
+"""
+
 # Ensure the project root is in PYTHONPATH
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
+import logging
 import os
 import sys
-import logging
-from src.infrastructure.fleet.FleetManager import FleetManager
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
@@ -40,7 +44,7 @@ def main() -> None:
     # 1. Privacy Check (Latest Phase 95)
     logging.info("[Step 1] Privacy Check (PII Detection)")
     # Scan a few key files for PII
-    privacy_files = ["src/infrastructure/fleet/FleetManager.py", "requirements.txt"]
+    privacy_files = ["src\\infrastructure\fleet\fleet_manager.py", "requirements.txt"]
     for pf in privacy_files:
         path = os.path.join(root, pf)
         if os.path.exists(path):
@@ -57,7 +61,7 @@ def main() -> None:
     # 2. Security Audit (Phase 84)
     logging.info("[Step 2] Security Audit (Secret Scanning)")
     security_findings = fleet.security_audit_agent.scan_file(
-        os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
+        os.path.join(root, "src\\infrastructure\fleet\fleet_manager.py")
     )
     if security_findings:
         logging.info(f"  - Found {len(security_findings)} potential security issues.")
@@ -78,16 +82,14 @@ def main() -> None:
     # 4. Code Quality (Phase 87)
     logging.info("[Step 4] Code Quality (Style/Complexity)")
     quality_res = fleet.code_quality_agent.analyze_file_quality(
-        os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
+        os.path.join(root, "src\\infrastructure\fleet\fleet_manager.py")
     )
     logging.info(f"  - FleetManager Quality Score: {quality_res['score']}/100")
     if quality_res["issues"]:
         logging.info(f"    - Issues: {len(quality_res['issues'])}")
 
     logging.info("--- Summary ---")
-    logging.info(
-        "Safety Audit Complete. The codebase has multiple active monitoring agents in place."
-    )
+    logging.info("Safety Audit Complete. The codebase has multiple active monitoring agents in place.")
 
 
 if __name__ == "__main__":

@@ -16,17 +16,19 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TestStatus import TestStatus
-from dataclasses import dataclass, field
-from typing import Optional
+
 import time
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_status import TestStatus
 
 __version__ = VERSION
 
+
 @dataclass
 class TestResult:
-    __test__ = False
     """Result of a test execution.
 
     Attributes:
@@ -43,4 +45,5 @@ class TestResult:
     duration_ms: float = 0.0
     error_message: str | None = None
     assertions_count: int = 0
+    __test__ = False
     timestamp: float = field(default_factory=time.time)

@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ErrorEntry import ErrorEntry
-from .FixSuggestion import FixSuggestion
-from typing import Dict, List, Optional
+
 import re
 
+from src.core.base.lifecycle.version import VERSION
+
+from .error_entry import ErrorEntry
+from .fix_suggestion import FixSuggestion
+
 __version__ = VERSION
+
 
 class AutoFixSuggester:
     """Generates automated fix suggestions for errors.
@@ -37,18 +40,14 @@ class AutoFixSuggester:
     def __init__(self) -> None:
         """Initialize the auto-fix suggester."""
         self.fix_patterns: dict[str, str] = {
-            r"NameError: name '(\w+)' is not defined":
-                "Define variable '{0}' before use or import it",
-            r"ImportError: No module named '(\w+)'":
-                "Install module with: pip install {0}",
-            r"TypeError: unsupported operand type":
-                "Check operand types and convert if necessary",
-            r"AttributeError: '(\w+)' object has no attribute '(\w+)'":
-                "Check if '{1}' exists on {0} object or use hasattr()",
-            r"IndexError: list index out of range":
-                "Check list bounds before accessing index",
-            r"KeyError: '(\w+)'":
-                "Use .get('{0}', default) or check key existence",
+            r"NameError: name '(\w+)' is not defined": "Define variable '{0}' before use or import it",
+            r"ImportError: No module named '(\w+)'": "Install module with: pip install {0}",
+            r"TypeError: unsupported operand type": "Check operand types and convert if necessary",
+            r"AttributeError: '(\w+)' object has no attribute '(\w+)'": (
+                "Check if '{1}' exists on {0} object or use hasattr()"
+            ),
+            r"IndexError: list index out of range": "Check list bounds before accessing index",
+            r"KeyError: '(\w+)'": "Use .get('{0}', default) or check key existence",
         }
 
     def add_pattern(self, pattern: str, fix_template: str) -> None:
@@ -78,13 +77,11 @@ class AutoFixSuggester:
                     error_id=error.id,
                     suggestion=suggestion,
                     confidence=0.8,
-                    source="pattern_match"
+                    source="pattern_match",
                 )
         return None
 
-    def suggest_all(
-        self, errors: list[ErrorEntry]
-    ) -> list[FixSuggestion]:
+    def suggest_all(self, errors: list[ErrorEntry]) -> list[FixSuggestion]:
         """Generate suggestions for multiple errors."""
         suggestions: list[FixSuggestion] = []
         for error in errors:

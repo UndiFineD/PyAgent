@@ -16,15 +16,19 @@
 """Auto-extracted class from agent_strategies.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
+
+from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
+
 
 class AgentStrategy(ABC):
     """Abstract base class for agent execution strategies."""
@@ -36,7 +40,7 @@ class AgentStrategy(ABC):
         context: str,
         backend_call: BackendFunction,
         system_prompt: str | None = None,
-        history: list[dict[str, str]] | None = None
+        history: list[dict[str, str]] | None = None,
     ) -> str:
         """Execute the strategy to generate a response.
 

@@ -16,11 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .Improvement import Improvement
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
+from .improvement import Improvement
+
 __version__ = VERSION
+
 
 @dataclass
 class ConflictResolution:
@@ -32,6 +36,7 @@ class ConflictResolution:
         strategy: Resolution strategy used.
         resolved_by: Who resolved the conflict.
     """
+
     improvement_id: str
     resolution: Improvement
     strategy: str = "manual"

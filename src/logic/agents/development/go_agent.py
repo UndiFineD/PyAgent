@@ -15,19 +15,24 @@
 
 """Agent specializing in Go (Golang) programming."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.logic.agents.development.CoderAgent import CoderAgent
-from src.core.base.utilities import create_main_function
+
+from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.development.coder_agent import CoderAgent
 
 __version__ = VERSION
 
+
 class GoAgent(CoderAgent):
     """Agent for Go code improvement and auditing."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "go"
+
         self._system_prompt = (
             "You are a Go Expert. "
             "Focus on concurrency patterns (goroutines, channels), "
@@ -36,7 +41,8 @@ class GoAgent(CoderAgent):
         )
 
     def _get_default_content(self) -> str:
-        return "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, Go!\")\n}\n"
+        return 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, Go!")\n}\n'
+
 
 if __name__ == "__main__":
     main = create_main_function(GoAgent, "Go Agent", "Path to Go file (.go)")

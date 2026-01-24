@@ -18,11 +18,13 @@ Tests Agent: Maintains and updates test suites for the workspace.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import sys
 from pathlib import Path
-from src.core.base.utilities import create_main_function
-from src.infrastructure.dev.agent_tests.agents import TestsAgent
+
+from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.dev.agent_tests.agents import TestsAgent
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]
@@ -36,9 +38,9 @@ __version__ = VERSION
 # Create main function using the helper
 main = create_main_function(
     TestsAgent,
-    'Tests Agent: Updates code file test suites',
-    'Path to the test file (e.g., test_file.py)'
+    "Tests Agent: Updates code file test suites",
+    "Path to the test file (e.g., test_file.py)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

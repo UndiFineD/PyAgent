@@ -11,24 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Graph store.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import hashlib
-from .storage_base import KnowledgeStore
-<<<<<<< HEAD
-<<<<<<< HEAD
-from typing import Any, List
-import json
-=======
-from typing import Any
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from typing import Any
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .storage_base import KnowledgeStore
 
 __version__ = VERSION
+
 
 class GraphKnowledgeStore(KnowledgeStore):
     """
@@ -36,7 +35,7 @@ class GraphKnowledgeStore(KnowledgeStore):
     Scales to trillions of triples by sharding nodes across the filesystem.
     Utilization of MemoryCore for standardized backend.
     """
-    
+
     def _hash_node(self, node_id: str) -> str:
         return hashlib.md5(node_id.encode()).hexdigest()
 
@@ -45,57 +44,24 @@ class GraphKnowledgeStore(KnowledgeStore):
         hash_val = self._hash_node(node_id)
         tier1 = hash_val[:2]
         tier2 = hash_val[2:4]
-<<<<<<< HEAD
-        
-=======
 
         # Use MemoryCore via base class to ensure path alignment
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         shard_dir = self.storage_path / tier1 / tier2
         shard_dir.mkdir(exist_ok=True, parents=True)
         return shard_dir / f"{node_id}.json"
 
     def store(self, node: str, target: Any, relationship: str = "related_to") -> bool:
         path = self._get_node_path(node)
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
-        if path.exists():
-            with open(path) as f:
-                data = json.load(f)
-        else:
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
         # Use memory_core.retrieve_knowledge logic or standardized load_json
         data = self._memory_core._storage.load_json(path)
         if not data:
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
             data = {"id": node, "edges": []}
-            
+
         data["edges"].append({"to": target, "type": relationship})
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
-        with open(path, "w") as f:
-            json.dump(data, f)
-=======
 
         # Atomic write via storage core
         self._memory_core._storage.save_json(path, data)
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-
-        # Atomic write via storage core
-        self._memory_core._storage.save_json(path, data)
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         return True
 
     def retrieve(self, node: str, limit: int = 5) -> list[Any]:

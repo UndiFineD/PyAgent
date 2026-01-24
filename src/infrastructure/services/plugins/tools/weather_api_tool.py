@@ -11,32 +11,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Weather api tool.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any
+
 import logging
-from src.core.base.ConnectivityManager import ConnectivityManager
+from typing import Any
+
 import requests
-from src.core.base.utilities import as_tool
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class Weather_APITool:
     """Auto-generated tool class"""
 
     def __init__(self, base_url: str = "http://localhost:8080") -> None:
-        self.name = 'Weather_API'
-        self.base_url = base_url.rstrip('/')
+        self.name = "Weather_API"
+        self.base_url = base_url.rstrip("/")
 
     @as_tool
     def get_weather(self, **kwargs: Any) -> Any:
         """Get weather"""
         url = f"{self.base_url}/weather"
         try:
-            response = requests.request('GET', url, json=kwargs, timeout=30)
+            response = requests.request("GET", url, json=kwargs, timeout=30)
             response.raise_for_status()
             return response.json()
         except Exception as e:
             logging.error(f"Tool get_weather failed: {e}")
-            return {"error": str(e), "path": '/weather', "method": 'GET'}
+            return {"error": str(e), "path": "/weather", "method": "GET"}

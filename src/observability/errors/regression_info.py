@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class RegressionInfo:
@@ -31,6 +34,7 @@ class RegressionInfo:
         regression_commit: Commit that reintroduced the error.
         occurrences: Number of times this error has regressed.
     """
+
     error_id: str
     original_fix_commit: str = ""
     regression_commit: str = ""

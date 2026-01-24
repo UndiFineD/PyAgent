@@ -1,9 +1,24 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Fast Serialization with msgpack and CBOR support.
 
 Phase 19: Beyond vLLM - Performance Patterns
 High-performance serialization for inter-process communication.
 """
+
 from __future__ import annotations
 
 import json
@@ -13,26 +28,16 @@ import threading
 import time
 import zlib
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Type,
-    TypeVar,
-    Union,
-    Tuple,
-)
+from typing import Any, Dict, List, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class SerializationFormat(Enum):
     """Supported serialization formats."""
+
     JSON = auto()
     PICKLE = auto()
     MSGPACK = auto()
@@ -43,6 +48,7 @@ class SerializationFormat(Enum):
 @dataclass
 class SerializerStats:
     """Statistics for serializer operations."""
+
     serializations: int = 0
     deserializations: int = 0
     bytes_serialized: int = 0
@@ -68,13 +74,13 @@ class SerializerStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            'serializations': self.serializations,
-            'deserializations': self.deserializations,
-            'bytes_serialized': self.bytes_serialized,
-            'bytes_deserialized': self.bytes_deserialized,
-            'errors': self.errors,
-            'avg_serialize_time_us': self.avg_serialize_time_us,
-            'avg_deserialize_time_us': self.avg_deserialize_time_us,
+            "serializations": self.serializations,
+            "deserializations": self.deserializations,
+            "bytes_serialized": self.bytes_serialized,
+            "bytes_deserialized": self.bytes_deserialized,
+            "errors": self.errors,
+            "avg_serialize_time_us": self.avg_serialize_time_us,
+            "avg_deserialize_time_us": self.avg_deserialize_time_us,
         }
 
 
@@ -120,7 +126,7 @@ class Serializer(ABC):
                 self._stats.bytes_serialized += len(data)
                 self._stats.total_serialize_time_ns += time.perf_counter_ns() - start
             return data
-        except Exception as e:
+        except Exception:
             with self._lock:
                 self._stats.errors += 1
             raise
@@ -143,7 +149,7 @@ class Serializer(ABC):
                 self._stats.bytes_deserialized += len(data)
                 self._stats.total_deserialize_time_ns += time.perf_counter_ns() - start
             return obj
-        except Exception as e:
+        except Exception:
             with self._lock:
                 self._stats.errors += 1
             raise
@@ -191,7 +197,7 @@ class JSONSerializer(Serializer):
             indent=self._indent,
             ensure_ascii=self._ensure_ascii,
             default=str,
-        ).encode('utf-8')
+        ).encode("utf-8")
 
         if self._compress:
             data = zlib.compress(data, self._compress_level)
@@ -203,7 +209,7 @@ class JSONSerializer(Serializer):
         if self._compress:
             data = zlib.decompress(data)
 
-        return json.loads(data.decode('utf-8'))
+        return json.loads(data.decode("utf-8"))
 
 
 class PickleSerializer(Serializer):
@@ -276,6 +282,7 @@ class MsgPackSerializer(Serializer):
         # Try to import msgpack
         try:
             import msgpack
+
             self._msgpack = msgpack
             self._available = True
         except ImportError:
@@ -296,7 +303,7 @@ class MsgPackSerializer(Serializer):
         """Serialize to msgpack bytes."""
         if not self._available:
             # Fallback to JSON
-            return json.dumps(obj, default=str).encode('utf-8')
+            return json.dumps(obj, default=str).encode("utf-8")
 
         return self._msgpack.packb(
             obj,
@@ -308,7 +315,7 @@ class MsgPackSerializer(Serializer):
         """Deserialize from msgpack bytes."""
         if not self._available:
             # Fallback to JSON
-            return json.loads(data.decode('utf-8'))
+            return json.loads(data.decode("utf-8"))
 
         return self._msgpack.unpackb(
             data,
@@ -330,6 +337,7 @@ class CBORSerializer(Serializer):
         # Try to import cbor2
         try:
             import cbor2
+
             self._cbor2 = cbor2
             self._available = True
         except ImportError:
@@ -349,14 +357,14 @@ class CBORSerializer(Serializer):
     def _serialize(self, obj: Any) -> bytes:
         """Serialize to CBOR bytes."""
         if not self._available:
-            return json.dumps(obj, default=str).encode('utf-8')
+            return json.dumps(obj, default=str).encode("utf-8")
 
         return self._cbor2.dumps(obj)
 
     def _deserialize(self, data: bytes) -> Any:
         """Deserialize from CBOR bytes."""
         if not self._available:
-            return json.loads(data.decode('utf-8'))
+            return json.loads(data.decode("utf-8"))
 
         return self._cbor2.loads(data)
 
@@ -391,53 +399,53 @@ class BinarySerializer(Serializer):
         """Serialize to custom binary format."""
         parts: List[bytes] = []
         self._encode_value(obj, parts)
-        return b''.join(parts)
+        return b"".join(parts)
 
     def _encode_value(self, obj: Any, parts: List[bytes]) -> None:
         """Encode a single value."""
         if obj is None:
-            parts.append(struct.pack('B', self.TAG_NONE))
+            parts.append(struct.pack("B", self.TAG_NONE))
 
         elif isinstance(obj, bool):
-            parts.append(struct.pack('BB', self.TAG_BOOL, 1 if obj else 0))
+            parts.append(struct.pack("BB", self.TAG_BOOL, 1 if obj else 0))
 
         elif isinstance(obj, int):
-            parts.append(struct.pack('B', self.TAG_INT))
-            parts.append(struct.pack('<q', obj))  # 64-bit signed
+            parts.append(struct.pack("B", self.TAG_INT))
+            parts.append(struct.pack("<q", obj))  # 64-bit signed
 
         elif isinstance(obj, float):
-            parts.append(struct.pack('B', self.TAG_FLOAT))
-            parts.append(struct.pack('<d', obj))  # 64-bit double
+            parts.append(struct.pack("B", self.TAG_FLOAT))
+            parts.append(struct.pack("<d", obj))  # 64-bit double
 
         elif isinstance(obj, str):
-            encoded = obj.encode('utf-8')
-            parts.append(struct.pack('B', self.TAG_STR))
-            parts.append(struct.pack('<I', len(encoded)))  # 32-bit length
+            encoded = obj.encode("utf-8")
+            parts.append(struct.pack("B", self.TAG_STR))
+            parts.append(struct.pack("<I", len(encoded)))  # 32-bit length
             parts.append(encoded)
 
         elif isinstance(obj, bytes):
-            parts.append(struct.pack('B', self.TAG_BYTES))
-            parts.append(struct.pack('<I', len(obj)))
+            parts.append(struct.pack("B", self.TAG_BYTES))
+            parts.append(struct.pack("<I", len(obj)))
             parts.append(obj)
 
         elif isinstance(obj, (list, tuple)):
-            parts.append(struct.pack('B', self.TAG_LIST))
-            parts.append(struct.pack('<I', len(obj)))
+            parts.append(struct.pack("B", self.TAG_LIST))
+            parts.append(struct.pack("<I", len(obj)))
             for item in obj:
                 self._encode_value(item, parts)
 
         elif isinstance(obj, dict):
-            parts.append(struct.pack('B', self.TAG_DICT))
-            parts.append(struct.pack('<I', len(obj)))
+            parts.append(struct.pack("B", self.TAG_DICT))
+            parts.append(struct.pack("<I", len(obj)))
             for key, value in obj.items():
                 self._encode_value(key, parts)
                 self._encode_value(value, parts)
 
         else:
             # Fallback to string representation
-            s = str(obj).encode('utf-8')
-            parts.append(struct.pack('B', self.TAG_STR))
-            parts.append(struct.pack('<I', len(s)))
+            s = str(obj).encode("utf-8")
+            parts.append(struct.pack("B", self.TAG_STR))
+            parts.append(struct.pack("<I", len(s)))
             parts.append(s)
 
     def _deserialize(self, data: bytes) -> Any:
@@ -447,53 +455,50 @@ class BinarySerializer(Serializer):
 
     def _decode_value(self, data: bytes, offset: List[int]) -> Any:
         """Decode a single value."""
-        tag = struct.unpack_from('B', data, offset[0])[0]
+        tag = struct.unpack_from("B", data, offset[0])[0]
         offset[0] += 1
 
         if tag == self.TAG_NONE:
             return None
 
         elif tag == self.TAG_BOOL:
-            value = struct.unpack_from('B', data, offset[0])[0]
+            value = struct.unpack_from("B", data, offset[0])[0]
             offset[0] += 1
             return value != 0
 
         elif tag == self.TAG_INT:
-            value = struct.unpack_from('<q', data, offset[0])[0]
+            value = struct.unpack_from("<q", data, offset[0])[0]
             offset[0] += 8
             return value
 
         elif tag == self.TAG_FLOAT:
-            value = struct.unpack_from('<d', data, offset[0])[0]
+            value = struct.unpack_from("<d", data, offset[0])[0]
             offset[0] += 8
             return value
 
         elif tag == self.TAG_STR:
-            length = struct.unpack_from('<I', data, offset[0])[0]
+            length = struct.unpack_from("<I", data, offset[0])[0]
             offset[0] += 4
-            value = data[offset[0]:offset[0] + length].decode('utf-8')
+            value = data[offset[0] : offset[0] + length].decode("utf-8")
             offset[0] += length
             return value
 
         elif tag == self.TAG_BYTES:
-            length = struct.unpack_from('<I', data, offset[0])[0]
+            length = struct.unpack_from("<I", data, offset[0])[0]
             offset[0] += 4
-            value = data[offset[0]:offset[0] + length]
+            value = data[offset[0] : offset[0] + length]
             offset[0] += length
             return value
 
         elif tag == self.TAG_LIST:
-            length = struct.unpack_from('<I', data, offset[0])[0]
+            length = struct.unpack_from("<I", data, offset[0])[0]
             offset[0] += 4
             return [self._decode_value(data, offset) for _ in range(length)]
 
         elif tag == self.TAG_DICT:
-            length = struct.unpack_from('<I', data, offset[0])[0]
+            length = struct.unpack_from("<I", data, offset[0])[0]
             offset[0] += 4
-            return {
-                self._decode_value(data, offset): self._decode_value(data, offset)
-                for _ in range(length)
-            }
+            return {self._decode_value(data, offset): self._decode_value(data, offset) for _ in range(length)}
 
         else:
             raise ValueError(f"Unknown tag: {tag}")
@@ -562,7 +567,7 @@ class SerializerRegistry:
 
         for fmt in priority:
             serializer = self._serializers[fmt]
-            if hasattr(serializer, 'is_available'):
+            if hasattr(serializer, "is_available"):
                 if serializer.is_available:
                     return serializer
             else:

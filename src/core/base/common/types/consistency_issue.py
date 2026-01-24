@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class ConsistencyIssue:
@@ -32,6 +34,7 @@ class ConsistencyIssue:
         occurrences: List of file:line locations.
         recommended_style: The recommended consistent style.
     """
+
     issue_type: str
     description: str
     occurrences: list[str]

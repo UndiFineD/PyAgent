@@ -16,8 +16,10 @@
 """Logging configuration for PyAgent."""
 
 from __future__ import annotations
+
 import logging
 import os
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION

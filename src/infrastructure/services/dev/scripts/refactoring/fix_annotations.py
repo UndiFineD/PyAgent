@@ -15,9 +15,11 @@
 """Script for fixing broken annotation imports by converting them to future imports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -28,9 +30,14 @@ for root, _, files in os.walk(src_path):
             path = os.path.join(root, file)
             with open(path, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-            
+
             if "import annotations" in content and "from __future__ import annotations" not in content:
-                new_content = re.sub(r"^import annotations$", r"from __future__ import annotations", content, flags=re.MULTILINE)
+                new_content = re.sub(
+                    r"^import annotations$",
+                    r"from __future__ import annotations",
+                    content,
+                    flags=re.MULTILINE,
+                )
                 if new_content != content:
                     with open(path, "w", encoding="utf-8") as f:
                         f.write(new_content)

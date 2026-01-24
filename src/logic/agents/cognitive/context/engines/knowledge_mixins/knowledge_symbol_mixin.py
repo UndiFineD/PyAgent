@@ -16,6 +16,10 @@
 Knowledge symbol mixin for symbol extraction logic.
 """
 
+"""
+Knowledge symbol mixin for symbol extraction logic.
+"""
+
 import re
 from typing import Any
 

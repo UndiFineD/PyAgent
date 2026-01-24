@@ -17,12 +17,14 @@ Enables 'core' logic to find agent implementations without hardcoded paths.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import importlib
 import logging
 import os
 from pathlib import Path
 from typing import Any, Type
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -33,9 +35,7 @@ class ModuleLoader:
     _module_cache: dict[str, str] = {}  # agent_type -> module_path
 
     @classmethod
-    def find_agent_module_path(
-        cls, agent_type: str, start_dirs: list[str] | None = None
-    ) -> str | None:
+    def find_agent_module_path(cls, agent_type: str, start_dirs: list[str] | None = None) -> str | None:
         """
         Recursively searches for a python file matching the agent type.
         Returns the dotted module path (e.g. 'src.logic.agents.development.coder_agent').
@@ -65,9 +65,7 @@ class ModuleLoader:
                         # Convert file path to module path
                         # e.g. src/logic/agents/development/CoderAgent.py -> src.logic.agents.development.CoderAgent
                         relative = rel_path.relative_to(workspace_root)
-                        module_path = (
-                            str(relative).replace(os.sep, ".").replace(".py", "")
-                        )
+                        module_path = str(relative).replace(os.sep, ".").replace(".py", "")
 
                         cls._module_cache[agent_type] = module_path
                         return module_path
@@ -97,7 +95,8 @@ class ModuleLoader:
         except (ImportError, AttributeError, ModuleNotFoundError) as e:
             logging.error(
                 "ModuleLoader: Failed to load class %s from %s. Error: %s",
-                agent_type, module_path, e
+                agent_type,
+                module_path,
+                e,
             )
-            raise
             raise ImportError(f"Could not load agent class {agent_type}") from e

@@ -15,35 +15,38 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
-from .AutoFixSuggester import AutoFixSuggester as AutoFixSuggester
-from .BlameInfo import BlameInfo as BlameInfo
-from .BlameTracker import BlameTracker as BlameTracker
-from .BranchComparer import BranchComparer as BranchComparer
-from .BranchComparison import BranchComparison as BranchComparison
-from .ErrorBudget import ErrorBudget as ErrorBudget
-from .ErrorBudgetManager import ErrorBudgetManager as ErrorBudgetManager
-from .ErrorCategory import ErrorCategory as ErrorCategory
-from .ErrorCluster import ErrorCluster as ErrorCluster
-from .ErrorEntry import ErrorEntry as ErrorEntry
-from .ErrorImpact import ErrorImpact as ErrorImpact
-from .ErrorPattern import ErrorPattern as ErrorPattern
-from .ErrorSeverity import ErrorSeverity as ErrorSeverity
-from .ErrorsAgent import ErrorsAgent as ErrorsAgent, DEFAULT_ERROR_PATTERNS as DEFAULT_ERROR_PATTERNS
-from .ExternalReporter import ExternalReporter as ExternalReporter
-from .ExternalReportingClient import ExternalReportingClient as ExternalReportingClient
-from .FixSuggestion import FixSuggestion as FixSuggestion
-from .ImpactAnalyzer import ImpactAnalyzer as ImpactAnalyzer
-from .NotificationChannel import NotificationChannel as NotificationChannel
-from .NotificationConfig import NotificationConfig as NotificationConfig
-from .NotificationManager import NotificationManager as NotificationManager
-from .RegressionDetector import RegressionDetector as RegressionDetector
-from .RegressionInfo import RegressionInfo as RegressionInfo
-from .SuppressionRule import SuppressionRule as SuppressionRule
-from .TimelineEvent import TimelineEvent as TimelineEvent
-from .TimelineTracker import TimelineTracker as TimelineTracker
-from .TrendAnalyzer import TrendAnalyzer as TrendAnalyzer
-from .TrendData import TrendData as TrendData
-from .TrendDirection import TrendDirection as TrendDirection
+
+from src.core.base.lifecycle.version import VERSION
+
+from .auto_fix_suggester import AutoFixSuggester  # noqa: F401
+from .blame_info import BlameInfo  # noqa: F401
+from .blame_tracker import BlameTracker  # noqa: F401
+from .branch_comparer import BranchComparer  # noqa: F401
+from .branch_comparison import BranchComparison  # noqa: F401
+from .error_budget import ErrorBudget  # noqa: F401
+from .error_budget_manager import ErrorBudgetManager  # noqa: F401
+from .error_category import ErrorCategory  # noqa: F401
+from .error_cluster import ErrorCluster  # noqa: F401
+from .error_entry import ErrorEntry  # noqa: F401
+from .error_impact import ErrorImpact  # noqa: F401
+from .error_pattern import ErrorPattern  # noqa: F401
+from .error_severity import ErrorSeverity  # noqa: F401
+from .errors_agent import DEFAULT_ERROR_PATTERNS  # noqa: F401
+from .errors_agent import ErrorsAgent  # noqa: F401
+from .external_reporter import ExternalReporter  # noqa: F401
+from .external_reporting_client import ExternalReportingClient  # noqa: F401
+from .fix_suggestion import FixSuggestion  # noqa: F401
+from .impact_analyzer import ImpactAnalyzer  # noqa: F401
+from .notification_channel import NotificationChannel  # noqa: F401
+from .notification_config import NotificationConfig  # noqa: F401
+from .notification_manager import NotificationManager  # noqa: F401
+from .regression_detector import RegressionDetector  # noqa: F401
+from .regression_info import RegressionInfo  # noqa: F401
+from .suppression_rule import SuppressionRule  # noqa: F401
+from .timeline_event import TimelineEvent  # noqa: F401
+from .timeline_tracker import TimelineTracker  # noqa: F401
+from .trend_analyzer import TrendAnalyzer  # noqa: F401
+from .trend_data import TrendData  # noqa: F401
+from .trend_direction import TrendDirection  # noqa: F401
 
 __version__ = VERSION

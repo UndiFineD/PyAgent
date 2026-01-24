@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .LocalizationLanguage import LocalizationLanguage
+
 from dataclasses import dataclass, field
-from typing import Dict
+
+from src.core.base.lifecycle.version import VERSION
+
+from .localization_language import LocalizationLanguage
 
 __version__ = VERSION
+
 
 @dataclass
 class LocalizedEntry:
@@ -33,6 +36,7 @@ class LocalizedEntry:
         translations: Dictionary of translations by language code.
         auto_translated: Whether translations were auto - generated.
     """
+
     original_text: str
     language: LocalizationLanguage = LocalizationLanguage.ENGLISH
     translations: dict[str, str] = field(default_factory=lambda: {})

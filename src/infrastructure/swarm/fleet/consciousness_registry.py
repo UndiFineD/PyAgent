@@ -45,7 +45,7 @@ class ConsciousnessRegistry:
                 registry = SignalRegistry()
                 registry.subscribe("thought_stream", cls._instance._on_thought)
                 logging.debug("ConsciousnessRegistry: Subscribed to thought_stream.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.debug(f"ConsciousnessRegistry: Failed to subscribe to signals: {e}")
         return cls._instance
 

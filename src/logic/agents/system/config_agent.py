@@ -18,26 +18,20 @@ Inspired by external-secrets and infrastructure-as-code patterns.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-import os
+
 import yaml
-<<<<<<< HEAD
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-=======
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.validation import ValidationCore
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 __version__ = VERSION
 
+
 class ConfigAgent(BaseAgent):
     """Ensures the agent fleet has all necessary configurations and API keys."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.validator = ValidationCore()
@@ -53,22 +47,14 @@ class ConfigAgent(BaseAgent):
     def validate_env(self) -> str:
         """Checks for required environment variables."""
         required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]
-<<<<<<< HEAD
-<<<<<<< HEAD
-        missing = [key for key in required if key not in os.environ]
-        
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         success, missing = self.validator.validate_env_vars(required)
 
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
         report = ["## ⚙️ Environment Validation\n"]
         if success:
             report.append("✅ All required environment variables are set.")
         else:
             report.append(f"❌ **Missing variables**: {', '.join(missing)}")
-            
+
         return "\n".join(report)
 
     @as_tool
@@ -77,11 +63,11 @@ class ConfigAgent(BaseAgent):
         config_path = self.workspace_root / "config" / "models.yaml"
         if not config_path.exists():
             return "❌ `config/models.yaml` not found."
-            
+
         try:
             with open(config_path) as f:
                 data = yaml.safe_load(f)
-            
+
             # Simple structure check
             if "models" in data and isinstance(data["models"], list):
                 return f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
@@ -90,5 +76,5 @@ class ConfigAgent(BaseAgent):
         except Exception as e:
             return f"❌ Error parsing `models.yaml`: {e}"
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()

@@ -16,6 +16,10 @@
 Core summary mixin for cognitive agents.
 """
 
+"""
+Core summary mixin for cognitive agents.
+"""
+
 from typing import Any
 
 class CoreSummaryMixin:

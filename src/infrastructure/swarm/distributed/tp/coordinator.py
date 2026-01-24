@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -7,7 +21,7 @@ Process group coordinator for distributed operations.
 import logging
 from typing import Any
 
-from .models import ParallelConfig, RankInfo, ParallelMode
+from .models import ParallelConfig, ParallelMode, RankInfo
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +29,7 @@ logger = logging.getLogger(__name__)
 try:
     import torch
     import torch.distributed as dist
+
     HAS_DIST = dist.is_available()
 except ImportError:
     HAS_DIST = False
@@ -94,10 +109,7 @@ class GroupCoordinator:
         # Each TP group spans consecutive ranks within a PP stage
         for dp in range(dp_size):
             for pp in range(pp_size):
-                ranks = [
-                    dp * pp_size * tp_size + pp * tp_size + tp
-                    for tp in range(tp_size)
-                ]
+                ranks = [dp * pp_size * tp_size + pp * tp_size + tp for tp in range(tp_size)]
                 group = dist.new_group(ranks)
                 if self.rank_info.global_rank in ranks:
                     self._tp_group = group
@@ -112,10 +124,7 @@ class GroupCoordinator:
         # Each PP group spans ranks at same TP position
         for dp in range(dp_size):
             for tp in range(tp_size):
-                ranks = [
-                    dp * pp_size * tp_size + pp * tp_size + tp
-                    for pp in range(pp_size)
-                ]
+                ranks = [dp * pp_size * tp_size + pp * tp_size + tp for pp in range(pp_size)]
                 group = dist.new_group(ranks)
                 if self.rank_info.global_rank in ranks:
                     self._pp_group = group
@@ -130,10 +139,7 @@ class GroupCoordinator:
         # Each DP group spans ranks at same TP+PP position
         for tp in range(tp_size):
             for pp in range(pp_size):
-                ranks = [
-                    dp * pp_size * tp_size + pp * tp_size + tp
-                    for dp in range(dp_size)
-                ]
+                ranks = [dp * pp_size * tp_size + pp * tp_size + tp for dp in range(dp_size)]
                 group = dist.new_group(ranks)
                 if self.rank_info.global_rank in ranks:
                     self._dp_group = group

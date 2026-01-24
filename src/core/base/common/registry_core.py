@@ -15,13 +15,14 @@
 """Unified Registry core for all PyAgent components."""
 
 import logging
-from typing import Dict, List, Optional, TypeVar, Generic, Callable, Tuple
+from typing import Callable, Dict, Generic, List, Optional, Tuple, TypeVar
+
 from .base_core import BaseCore
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 try:
-    import rust_core as rc # pylint: disable=import-error
+    import rust_core as rc  # pylint: disable=import-error
 except ImportError:
     rc = None
 
@@ -33,20 +34,18 @@ class RegistryCore(BaseCore, Generic[T]):
     Generic registry to handle Tools, Signals, Plugins, and Capabilities.
     Standardizes registration, lookup, and lifecycle management.
     """
+
     def __init__(self, name: str):
         BaseCore.__init__(self, name=name)
         self._items: Dict[str, T] = {}
-        self._hooks: Dict[str, List[Callable[[str, T], None]]] = {
-            "on_register": [],
-            "on_unregister": []
-        }
+        self._hooks: Dict[str, List[Callable[[str, T], None]]] = {"on_register": [], "on_unregister": []}
 
     def detect_cycles(self, nodes: List[str], edges: List[Tuple[str, str]]) -> bool:
         """High-speed cycle detection for dependency graphs."""
-        if rc and hasattr(rc, "detect_cycles_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "detect_cycles_rust"):  # pylint: disable=no-member
             try:
-                return rc.detect_cycles_rust(nodes, edges) # type: ignore # pylint: disable=no-member
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.detect_cycles_rust(nodes, edges)  # type: ignore # pylint: disable=no-member
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         # Simple DFS fallback
@@ -77,10 +76,10 @@ class RegistryCore(BaseCore, Generic[T]):
 
     def topological_sort(self, nodes: List[str], edges: List[Tuple[str, str]]) -> List[str]:
         """Rust-accelerated topological sort for agent task ordering."""
-        if rc and hasattr(rc, "topological_sort_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "topological_sort_rust"):  # pylint: disable=no-member
             try:
-                return rc.topological_sort_rust(nodes, edges) # type: ignore # pylint: disable=no-member
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.topological_sort_rust(nodes, edges)  # type: ignore # pylint: disable=no-member
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         # Simple Kahn's algorithm fallback
@@ -113,7 +112,7 @@ class RegistryCore(BaseCore, Generic[T]):
         for hook in self._hooks["on_register"]:
             try:
                 hook(key, item)
-            except Exception as e: # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.error("[%s] Registry hook 'on_register' failed for %s: %s", self.name, key, e)
 
         return True
@@ -125,7 +124,7 @@ class RegistryCore(BaseCore, Generic[T]):
             for hook in self._hooks["on_unregister"]:
                 try:
                     hook(key, item)
-                except Exception as e: # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught
                     logger.error("[%s] Registry hook 'on_unregister' failed for %s: %s", self.name, key, e)
         return item
 

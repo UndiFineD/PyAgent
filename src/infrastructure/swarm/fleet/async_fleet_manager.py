@@ -32,7 +32,7 @@ from .workflow_state import WorkflowState
 __version__ = VERSION
 
 
-class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
+class AsyncFleetManager(FleetManager):
     """Executes agent workflows in parallel using native asyncio.
     Supports dependency-aware batching for optimized execution (Phase 232).
     """
@@ -147,10 +147,10 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
             del self.active_workflows[workflow_id]
             del self._migration_events[workflow_id]
             return True
-
-        logging.error(f"Migration of {workflow_id} failed during handoff.")
-        state.set("migration_pending", False)
-        return False
+        else:
+            logging.error(f"Migration of {workflow_id} failed during handoff.")
+            state.set("migration_pending", False)
+            return False
 
     async def handoff_state(self, state: WorkflowState) -> bool:
         """Phase 239: Receives a migrated workflow state and prepares for resumption."""
@@ -179,7 +179,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
         self.telemetry.start_trace(trace_id)
 
         try:
-            from src.infrastructure.swarm.orchestration.system.lock_manager import \
+            from src.infrastructure.swarm.orchestration.LockManager import \
                 LockManager
 
             locker = LockManager()
@@ -190,9 +190,9 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
                     # Execute task
                     if inspect.iscoroutinefunction(action_fn):
                         return await action_fn(*args)
-
-                    loop = asyncio.get_running_loop()
-                    return await loop.run_in_executor(None, action_fn, *args)
+                    else:
+                        loop = asyncio.get_running_loop()
+                        return await loop.run_in_executor(None, action_fn, *args)
 
                 res = res_list[0]
                 l_type = "file" if any(c in res for c in "/\\.") else "memory"
@@ -206,7 +206,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
                 res = await self._pre_commit_audit(res, agent_name)
 
             return res
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             self.telemetry.end_trace(
                 trace_id,
                 agent_name,
@@ -253,7 +253,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
                     "and has not been verified for legal accuracy.*"
                 )
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.debug(f"Audit failed (Agent likely not found or errored): {e}")
 
         return content
@@ -262,10 +262,10 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     # Test script
     from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
-    from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
+    from src.logic.agents.security.SecurityGuardAgent import SecurityGuardAgent
 
-    ROOT_PATH = "."
-    afleet = AsyncFleetManager(ROOT_PATH)
+    root = "."
+    afleet = AsyncFleetManager(root)
     afleet.register_agent("K1", KnowledgeAgent)
     afleet.register_agent("S1", SecurityGuardAgent)
 
@@ -275,7 +275,6 @@ if __name__ == "__main__":
     ]
 
     async def run_test() -> None:
-        """Executes a test workflow."""
         report = await afleet.execute_workflow_async("Parallel Test", wf)
         print(report)
 

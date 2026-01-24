@@ -16,18 +16,21 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from pathlib import Path
-from typing import Any, Dict, Optional
+
 import json
 import logging
 import time
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+
 
 class ReportCacheManager:
     """Manages report caching with invalidation strategies.
@@ -52,7 +55,7 @@ class ReportCacheManager:
         if self.cache_file.exists():
             try:
                 data = json.loads(self.cache_file.read_text())
-                self._cache = data.get('cache', {})
+                self._cache = data.get("cache", {})
             except Exception as e:
                 logging.warning(f"Failed to load cache: {e}")
 
@@ -60,9 +63,7 @@ class ReportCacheManager:
         """Save cache to disk."""
 
         try:
-            data: dict[str, Any] = {
-                'cache': self._cache
-            }
+            data: dict[str, Any] = {"cache": self._cache}
             self.cache_file.write_text(json.dumps(data, indent=2))
         except Exception as e:
             logging.warning(f"Failed to save cache: {e}")
@@ -81,9 +82,9 @@ class ReportCacheManager:
             return None
         entry = self._cache[cache_key]
         # Check if expired
-        if time.time() > entry.get('expires_at', 0):
+        if time.time() > entry.get("expires_at", 0):
             return None
-        return entry.get('content')
+        return entry.get("content")
 
     def set(self, file_path: str, content_hash: str, content: str, ttl: int = 3600) -> None:
         """Cache report content.
@@ -95,10 +96,7 @@ class ReportCacheManager:
         """
 
         cache_key = f"{file_path}:{content_hash}"
-        self._cache[cache_key] = {
-            'content': content,
-            'expires_at': time.time() + ttl
-        }
+        self._cache[cache_key] = {"content": content, "expires_at": time.time() + ttl}
         self._save_cache()
 
     def invalidate_by_path(self, file_path: str) -> None:

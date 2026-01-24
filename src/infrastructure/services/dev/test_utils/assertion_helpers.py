@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
+import re
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
-import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class AssertionHelpers:
     """Helper functions for common assertions in tests."""

@@ -19,17 +19,21 @@ Demonstrates the Core/Shell pattern.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.BaseAgent import BaseAgent
-from .CommunityCore import CommunityCore
+
 import logging
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
+from .community_core import CommunityCore
 
 __version__ = VERSION
 
+
 class CommunityAgent(BaseAgent):
     """A flexible agent shell that uses CommunityCore for logic."""
-    
-    def __init__(self, path: str = None) -> None:
+
+    def __init__(self, path: str | None = None) -> None:
         super().__init__(path)
         self.name = "CommunityAgent"
         self.core = CommunityCore()

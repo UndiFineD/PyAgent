@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,18 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Cooperative Communication Agent for high-speed signal synchronization.
+"""
 
-from __future__ import annotations
-from src.core.base.Version import VERSION
 import time
 import logging
 from typing import Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.BaseUtilities import as_tool
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class CooperativeCommunicationAgent(BaseAgent):
     """
     Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
@@ -65,6 +70,7 @@ class CooperativeCommunicationAgent(BaseAgent):
         """
         Multicasts a thought packet to all connected nodes.
         """
+        _ = thought_payload
         packet_id = f"thought_{int(time.time() * 1000)}"
         logging.info(f"COOP: Broadcasting {packet_id} from {origin_node}")
         return {
@@ -94,11 +100,11 @@ class CooperativeCommunicationAgent(BaseAgent):
         }
 
     @as_tool
-    def optimize_bandwidth(self, active_tasks: list[str]) -> str:
+    async def optimize_bandwidth(self, active_tasks: list[str]) -> str:
         """Uses LLM reasoning to suggest the most efficient communication topology."""
         prompt = (
             f"Analyze the following active fleet tasks: {active_tasks}\n\n"
             "Suggest an optimal peer-to-peer topology (e.g., Star, Ring, Mesh) "
             "to minimize cross-node latency while maximizing data throughput."
         )
-        return self.think(prompt)
+        return await self.think(prompt)

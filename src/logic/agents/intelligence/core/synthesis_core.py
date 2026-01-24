@@ -66,7 +66,7 @@ class SynthesisCore:
 
                 SynthesisCore._transformer_cache = rust_core.NeuralTransformer(config)
                 logging.info("SynthesisCore: Initialized Rust transformer.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.warning(f"SynthesisCore: Failed to initialize Rust transformer: {e}")
                 SynthesisCore._rust_failed = True
 
@@ -99,7 +99,7 @@ class SynthesisCore:
                     pass
 
                 return res
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.debug(f"SynthesisCore: Rust generation failed: {e}")
 
         results = []
@@ -134,7 +134,7 @@ class SynthesisCore:
                         pass
 
                 return vec
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.debug(f"SynthesisCore: Rust vectorization failed: {e}")
 
         # In a real scenario, this would call a local embedding model
@@ -148,7 +148,7 @@ class SynthesisCore:
         if HAS_RUST:
             try:
                 return rust_core.average_feature_vectors(vectors)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
         if not vectors:

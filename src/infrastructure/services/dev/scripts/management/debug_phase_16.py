@@ -12,30 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Debug phase 16.py module.
+"""
+
 # Add src to path
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
-import sys
 import os
+import sys
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.system.MCPAgent import MCPAgent
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.logic.agents.system.mcp_agent import MCPAgent
 
 sys.path.append(str(Path(__file__).parent))
 
 __version__ = VERSION
+
 
 def test_phase_16() -> None:
     """Validate MCP integration and service mesh synchronization."""
     logging.basicConfig(level=logging.INFO)
     workspace = os.getcwd()
     fleet = FleetManager(workspace)
-    
+
     print("\n--- Phase 16: MCP Integration (Server Init) ---")
-    mcp_agent = MCPAgent(str(Path(workspace) / "src/logic/agents/system/MCPAgent.py"))
-    
+    mcp_agent = MCPAgent(str(Path(workspace) / "src\\logic\agents\\system\\mcp_agent.py"))
+
     # We use 'python' to run our mock server
     res = mcp_agent.initialize_mcp_server("test_server", ["python", str(Path(workspace) / "mock_mcp_server.py")])
     print(f"Init Status: {res}")
@@ -45,6 +52,7 @@ def test_phase_16() -> None:
     print(f"Tool Call Response: {res}")
 
     print("\n--- Phase 16: Service Mesh Sync ---")
+
     fleet.register_remote_node("http://remote-node-1:8080", ["Analyzer"])
     fleet.mesh.sync_with_remote("http://remote-node-1:8080")
     status = fleet.mesh.get_mesh_status()
@@ -54,6 +62,7 @@ def test_phase_16() -> None:
         print("\nMCP Service Mesh validation COMPLETED.")
     else:
         print("\nMCP Service Mesh validation FAILED.")
+
 
 if __name__ == "__main__":
     test_phase_16()

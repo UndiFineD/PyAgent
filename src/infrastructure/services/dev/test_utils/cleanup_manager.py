@@ -16,12 +16,14 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import List
-from collections.abc import Callable
+
 import logging
+from collections.abc import Callable
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class CleanupManager:
     """Manages cleanup hooks for tests."""

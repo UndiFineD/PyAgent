@@ -12,26 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Resilience agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
 import time
 from pathlib import Path
-from typing import Dict, Any
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-from src.core.base.ConnectivityManager import ConnectivityManager
+from typing import Any
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 
 __version__ = VERSION
+
 
 class ResilienceAgent(BaseAgent):
     """
     Agent responsible for autonomous compute resource management.
     Monitors swarm health, handles failovers, and optimizes resource allocation.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -40,7 +48,7 @@ class ResilienceAgent(BaseAgent):
             "You monitor resource usage, detect hanging processes, and "
             "trigger autonomous failovers between nodes."
         )
-        
+
         # Phase 108: Intelligence and Resilience
         work_root = getattr(self, "_workspace_root", None)
         self.connectivity = ConnectivityManager(work_root)
@@ -74,7 +82,7 @@ class ResilienceAgent(BaseAgent):
         stats = {
             "rebalanced_agents": 3,
             "latency_reduction_est": "15ms",
-            "cpu_savings": "12%"
+            "cpu_savings": "12%",
         }
         self._record("optimization", stats)
         return stats

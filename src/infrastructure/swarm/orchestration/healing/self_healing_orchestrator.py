@@ -11,19 +11,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Self healing orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
-from src.core.base.AgentVerification import CodeIntegrityVerifier, CodeHealthAuditor
-import time
+
 import logging
-import os
+import time
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
-from .SelfHealingCore import SelfHealingCore
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.logic.agent_verification import (CodeHealthAuditor,
+                                                    CodeIntegrityVerifier)
+
+from .self_healing_core import SelfHealingCore
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
@@ -46,6 +53,7 @@ class SelfHealingOrchestrator:
         # Derive project root from module location for consistent resolution
         self.work_root = Path(__file__).resolve().parents[4]  # Adjust depth as needed
         self._load_strategic_overrides()
+
     def _load_strategic_overrides(self) -> None:
         """
         Loads strategic healing parameters from docs/prompt/context.txt.
@@ -122,23 +130,17 @@ class SelfHealingOrchestrator:
     def attempt_recovery(self, agent_name: str) -> bool:
         """Attempts to restart a failed agent and restore its last known state."""
         action = self.core.get_recovery_action(agent_name)
-        logging.info(
-            f"Self-Healing: Recovery action '{action}' triggered for {agent_name}"
-        )
+        logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")
 
         success = False
 
         # Action implementation using FleetManager/Registry
         if action == "reinitialize" or action == "restart_process":
             # Attempt to reload through the registry
-            if hasattr(self.fleet_manager, "agents") and hasattr(
-                self.fleet_manager.agents, "try_reload"
-            ):
+            if hasattr(self.fleet_manager, "agents") and hasattr(self.fleet_manager.agents, "try_reload"):
                 success = self.fleet_manager.agents.try_reload(agent_name)
             else:
-                logging.warning(
-                    f"Self-Healing: FleetManager registry unavailable for {agent_name} recovery."
-                )
+                logging.warning(f"Self-Healing: FleetManager registry unavailable for {agent_name} recovery.")
                 success = False
 
         if success:
@@ -161,17 +163,13 @@ class SelfHealingOrchestrator:
             logging.info(f"Self-Healing: Successfully recovered {agent_name}")
             return True
         elif action == "apoptosis":
-            logging.error(
-                f"Self-Healing: Agent {agent_name} is unrecoverable. Initiating apoptosis."
-            )
+            logging.error(f"Self-Healing: Agent {agent_name} is unrecoverable. Initiating apoptosis.")
             # Logic to remove from registry or kill process here
             return False
 
         return False
 
-    def attempt_repair(
-        self, agent_name: str, error: Exception | None = None, **kwargs
-    ) -> Any:
+    def attempt_repair(self, agent_name: str, error: Exception | None = None, **kwargs) -> Any:
         """Alias for attempt_recovery (Legacy Phase 35 compatibility)."""
         logging.info(f"Self-Healing: Attempting repair for {agent_name}...")
         self.attempt_recovery(agent_name)
@@ -193,9 +191,7 @@ class SelfHealingOrchestrator:
         if not self.recovery_logs:
             return
 
-        logging.info(
-            "Self-Healing: Reviewing recovery logs for new intelligence lessons..."
-        )
+        logging.info("Self-Healing: Reviewing recovery logs for new intelligence lessons...")
         for log in self.recovery_logs[-10:]:
             if log.get("action") == "apoptosis":
                 lesson = f"Lesson: Agent {log['agent']} reached apoptosis. Root cause analysis needed."

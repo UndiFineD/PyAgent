@@ -16,15 +16,18 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 @dataclass
 class QualityScore:
     """Code quality score with breakdown."""
+
     overall_score: float = 0.0
     maintainability: float = 0.0
     readability: float = 0.0

@@ -29,7 +29,7 @@ class FleetDiscoveryMixin:
 
         metadata = {
             "version": getattr(self, "version", "unknown"),
-            "capabilities": list(getattr(self, "capability_hints", {}).keys())[:10],
+            "capabilities": list(getattr(self, "_capability_hints", {}).keys())[:10],
         }
 
         self._discovery = LANDiscovery(
@@ -80,6 +80,6 @@ class FleetDiscoveryMixin:
                             for rp in remote_peers:
                                 # Logic to update local discovery with merged peers
                                 if hasattr(self, "_discovery"):
-                                    self._discovery.update_peer(rp)
-                except Exception as exc:  # pylint: disable=broad-exception-caught
-                    logger.debug(f"FleetDiscovery: Failed to sync with {peer.agent_id}: {exc}")
+                                    self._discovery._update_peer(rp)
+                except Exception as e:
+                    logger.debug(f"FleetDiscovery: Failed to sync with {peer.agent_id}: {e}")

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
 Orchestration Managers for multi-agent workflows.
 (Facade for src.core.base.common.orchestration_core)
 """
 
 from __future__ import annotations
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 from typing import Any
 
@@ -37,7 +29,7 @@ class AgentComposer:
     Facade for composing complex multi-agent workflows.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         from src.core.base.common.orchestration_core import OrchestrationCore
         self._core = OrchestrationCore()
 
@@ -51,7 +43,7 @@ class ModelSelector:
     Facade for selecting models for specific tasks.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         from src.core.base.common.model_selector_core import ModelSelectorCore
         self._core = ModelSelectorCore()
 
@@ -63,21 +55,3 @@ class ModelSelector:
 
 
 __all__ = ["ABTest", "AgentComposer", "ModelSelector", "QualityScorer"]
-=======
-from src.core.base.common.orchestration_core import (
-    OrchestrationCore as AgentComposer,
-    QualityScorer,
-    ABTest
-)
-from src.core.base.common.model_selector_core import ModelSelectorCore as ModelSelector
-
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-from src.core.base.common.orchestration_core import (
-    OrchestrationCore as AgentComposer,
-    QualityScorer,
-    ABTest
-)
-from src.core.base.common.model_selector_core import ModelSelectorCore as ModelSelector
-
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)

@@ -11,19 +11,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Storage base.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
 from pathlib import Path
+from typing import Any
+
 from src.core.base.common.memory_core import MemoryCore
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class KnowledgeStore(ABC):
     """Base interface for all knowledge storage types."""
-    
+
     def __init__(self, agent_id: str, storage_path: Path) -> None:
         self.agent_id = agent_id
         self.storage_path = storage_path

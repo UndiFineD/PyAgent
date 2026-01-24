@@ -12,17 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Intent coherence engine.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import logging
-from typing import Any, TYPE_CHECKING
 from datetime import datetime
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class IntentCoherenceEngine:
@@ -71,9 +77,7 @@ class IntentCoherenceEngine:
         if not self.global_intent:
             return local_task
 
-        logging.info(
-            f"IntentCoherenceEngine: Aligning {agent_name} with global intent."
-        )
+        logging.info(f"IntentCoherenceEngine: Aligning {agent_name} with global intent.")
 
         # In a real implementation, we'd use an LLM or vector similarity to
         # project the local task into the global intent space.

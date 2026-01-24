@@ -21,9 +21,9 @@ class FleetTaskMixin:
 
     def preempt_lower_priority_tasks(self: FleetManager, new_priority: AgentPriority) -> None:
         """Suspends all tasks with lower priority than the new high-priority task."""
-        for _tid, data in self.active_tasks.items():
+        for tid, data in self.active_tasks.items():
             if data["priority"].value > new_priority.value:
-                logging.info(f"Preempting lower-priority task {_tid} ({data['priority'].name})")
+                logging.info(f"Preempting lower-priority task {tid} ({data['priority'].name})")
                 for agent in data.get("agents", []):
                     if hasattr(agent, "suspend"):
                         agent.suspend()
@@ -33,7 +33,7 @@ class FleetTaskMixin:
         # Check if any Critical/High tasks are still active
         critical_active = any(d["priority"].value < AgentPriority.NORMAL.value for d in self.active_tasks.values())
         if not critical_active:
-            for _tid, data in self.active_tasks.items():
+            for tid, data in self.active_tasks.items():
                 for agent in data.get("agents", []):
                     if hasattr(agent, "resume"):
                         agent.resume()
@@ -44,11 +44,11 @@ class FleetTaskMixin:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""
         return await self.execution_core.execute_reliable_task(task, priority=priority)
 
-    async def record_success(self: FleetManager, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
+    async def _record_success(self: FleetManager, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
         """Records the success of a workflow step (Delegated)."""
         await self.interaction_recorder.record_success(res_or_prompt, *args, **kwargs)
 
-    async def record_failure(self: FleetManager, prompt: str, error: str, model: str) -> None:
+    async def _record_failure(self: FleetManager, prompt: str, error: str, model: str) -> None:
         """Records errors, failures, and mistakes (Delegated)."""
         await self.interaction_recorder.record_failure(prompt, error, model)
 

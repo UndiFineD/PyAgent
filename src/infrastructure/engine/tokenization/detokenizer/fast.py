@@ -49,7 +49,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
         skip_special_tokens: bool = True,
         spaces_between_special_tokens: bool = True,
         stop_checker: Optional[StopChecker] = None,
-    ) -> None:
+    ):
         super().__init__(
             tokenizer,
             skip_special_tokens,
@@ -66,7 +66,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
             if hasattr(self.tokenizer, "all_special_ids"):
                 self._special_token_ids = set(self.tokenizer.all_special_ids)
             elif hasattr(self.tokenizer, "special_tokens_map"):
-                for token in self.tokenizer.special_tokens_map.values():
+                for name, token in self.tokenizer.special_tokens_map.items():
                     if isinstance(token, str):
                         tid = self.tokenizer.convert_tokens_to_ids(token)
                         if isinstance(tid, int):

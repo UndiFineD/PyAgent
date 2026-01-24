@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .SLALevel import SLALevel
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
+
+from .sla_level import SLALevel
 
 __version__ = VERSION
+
 
 @dataclass
 class SLAConfiguration:
@@ -33,6 +36,7 @@ class SLAConfiguration:
         escalation_hours: Hours before escalation.
         notification_emails: Emails to notify.
     """
+
     level: SLALevel
     max_hours: int
     escalation_hours: int

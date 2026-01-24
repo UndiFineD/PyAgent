@@ -16,15 +16,19 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .RecordedRequest import RecordedRequest
-from typing import Any, Dict, List, Optional
+
 import json
 import threading
 import time
 import uuid
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .recorded_request import RecordedRequest
 
 __version__ = VERSION
+
 
 class RequestRecorder:
     """Records and replays requests for debugging and testing.
@@ -88,7 +92,7 @@ class RequestRecorder:
             self._recordings.append(recording)
             # Trim to max size
             if len(self._recordings) > self.max_recordings:
-                self._recordings = self._recordings[-self.max_recordings:]
+                self._recordings = self._recordings[-self.max_recordings :]
 
         return recording
 

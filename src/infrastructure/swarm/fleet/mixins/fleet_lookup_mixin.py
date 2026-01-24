@@ -47,11 +47,11 @@ class FleetLookupMixin:
             effective_name = name.replace("backend", "system")
 
         # 1. Capability Hints Fallback (Phase 125: Check explicit mappings first)
-        hints = self.__dict__.get("capability_hints", {})
+        hints = self.__dict__.get("_capability_hints", {})
         if effective_name in hints:
             target = hints[effective_name]
             # Avoid infinite recursion if target resolves back to name or effective_name
-            if target not in (effective_name, name):
+            if target != effective_name and target != name:
                 try:
                     return getattr(self, target)
                 except AttributeError:
@@ -59,7 +59,7 @@ class FleetLookupMixin:
         elif name != effective_name and name in hints:
             target = hints[name]
             # Avoid recursion if target resolves back to name or effective_name
-            if target not in (name, effective_name):
+            if target != name and target != effective_name:
                 try:
                     return getattr(self, target)
                 except AttributeError:
@@ -77,8 +77,8 @@ class FleetLookupMixin:
                         return getattr(orchestrators, name)
                     except AttributeError:
                         pass
-            except (TypeError, KeyError, RuntimeError) as exc:
-                logging.debug(f"Fleet: Lazy-load error for orchestrator '{name}': {exc}")
+            except Exception as e:
+                logging.debug(f"Fleet: Lazy-load error for orchestrator '{name}': {e}")
 
         # 3. Try Agents
         if "agents" in current_dict:
@@ -86,66 +86,55 @@ class FleetLookupMixin:
             try:
                 # LazyAgentMap implements __getitem__ with fallback logic
                 return agents[effective_name]
-            except (KeyError, TypeError, AttributeError) as e:
+            except (KeyError, Exception):
                 if effective_name != name:
                     try:
                         return agents[name]
-                    except (KeyError, TypeError, AttributeError):
+                    except (KeyError, Exception):
                         pass
 
         raise AttributeError(f"'FleetManager' object has no attribute '{name}'")
 
     @property
     def telemetry(self: FleetManager) -> ObservabilityEngine:
-        """Returns the observability engine for the fleet."""
         return self.orchestrators.telemetry
 
     @property
     def registry(self: FleetManager) -> ToolRegistry:
-        """Returns the tool and agent registry."""
         return self.orchestrators.registry
 
     @property
     def signals(self: FleetManager) -> SignalRegistry:
-        """Returns the signal bus for the fleet."""
         return self.orchestrators.signals
 
     @property
     def recorder(self: FleetManager) -> LocalContextRecorder:
-        """Returns the local context recorder."""
         return self.orchestrators.recorder
 
     @property
     def sql_metadata(self: FleetManager) -> SqlMetadataHandler:
-        """Returns the SQL metadata handler."""
         return self.orchestrators.sql_metadata
 
     @property
     def self_healing(self: FleetManager) -> SelfHealingOrchestrator:
-        """Returns the self-healing orchestrator."""
         return self.orchestrators.self_healing
 
     @property
     def self_improvement(self: FleetManager) -> SelfImprovementOrchestrator:
-        """Returns the self-improvement orchestrator."""
         return self.orchestrators.self_improvement
 
     @property
     def global_context(self: FleetManager) -> GlobalContextEngine:
-        """Returns the global context engine."""
         return self.orchestrators.global_context
 
     @property
     def fallback(self: FleetManager) -> ModelFallbackEngine:
-        """Returns the model fallback engine."""
         return self.orchestrators.fallback_engine
 
     @property
     def core(self: FleetManager) -> Any:
-        """Returns the routing core."""
         return self.orchestrators.core
 
     @property
     def rl_selector(self: FleetManager) -> Any:
-        """Returns the reinforcement learning selector."""
         return getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)

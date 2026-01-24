@@ -17,23 +17,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""MIRIX 6-tier memory engine utilizing ChromaDB.
 
+Provides high-level abstraction for multi-tier memory management including
+Core, Episodic, Semantic, Procedural, Resource, and Knowledge tiers.
 """
-TieredMemoryEngine: Implements a MIRIX 6-tier memory engine utilizing ChromaDB for
-scalable, multi-level memory management in PyAgent. Supports hierarchical storage,
-retrieval, and promotion of agent memory fragments across short, mid, long, and
-archival tiers.
-"""
+
 import logging
 from typing import Any, List, Dict, Optional
-
-logger = logging.getLogger(__name__)
 
 
 class TieredMemoryEngine:
     """Manages the 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and Knowledge."""
 
-    def __init__(self, db_path: str) -> None:
+    def __init__(self, db_path: str):
         """Initialize the tiered memory engine.
 
         Args:
@@ -50,12 +47,11 @@ class TieredMemoryEngine:
             content: The content to record.
             metadata: Optional metadata for the memory record.
         """
-        logger.info(f"MIRIX: Recording to {tier} tier.")
+        logging.info(f"MIRIX: Recording to {tier} tier.")
         _ = (content, metadata)  # Mark as used
 
     def query_tier(self, tier: str, query: str, limit: int = 3) -> str:
-        """
-        Queries a specific memory tier.
+        """Queries a specific memory tier.
 
         Args:
             tier: The tier to query.
@@ -69,8 +65,7 @@ class TieredMemoryEngine:
         return f"Simulated context from {tier} tier for query: {query}"
 
     def upsert_documents(self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]) -> None:
-        """
-        Bulk updates the vector database.
+        """Bulk updates the vector database.
 
         Args:
             documents: List of document strings.

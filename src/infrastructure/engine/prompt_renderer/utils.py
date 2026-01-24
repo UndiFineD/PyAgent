@@ -22,21 +22,18 @@ from __future__ import annotations
 
 import base64
 import contextlib
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, Tuple
 
 from .models import (EmbeddingInput, PromptConfig, RenderResult,
                      TruncationResult, TruncationStrategy)
 from .salt import CacheSaltGenerator
 from .truncation import TruncationManager
 
-if TYPE_CHECKING:
-    from .renderers import ChatRenderer, CompletionRenderer
-
 
 class EmbeddingLoader:
     """Load embeddings from various formats."""
 
-    ENCODINGS: Dict[str, Tuple[str | int]] = {
+    ENCODINGS = {
         "float32": ("f", 4),
         "float16": ("e", 2),
         "bfloat16": ("e", 2),
@@ -52,16 +49,16 @@ class EmbeddingLoader:
             raise ValueError(f"Unknown encoding: {encoding}")
 
         format_char, byte_size = cls.ENCODINGS[encoding]
-        decoded: bytes = base64.b64decode(data)
-        num_floats: int = len(decoded) // byte_size
-        values: Tuple[Any] = struct.unpack(f"{num_floats}{format_char}", decoded)
+        decoded = base64.b64decode(data)
+        num_floats = len(decoded) // byte_size
+        values = struct.unpack(f"{num_floats}{format_char}", decoded)
 
         dim = int(len(values) ** 0.5)
         if dim * dim != len(values):
             return EmbeddingInput(embeddings=[list(values)])
 
         embeddings = []
-        for i: int in range(0, len(values), dim):
+        for i in range(0, len(values), dim):
             embeddings.append(list(values[i : i + dim]))
 
         return EmbeddingInput(embeddings=embeddings, encoding=encoding)
@@ -69,8 +66,8 @@ class EmbeddingLoader:
     @classmethod
     def load_file(cls, path: str, encoding: str = "float32") -> EmbeddingInput:
         """Load embeddings from file."""
-        with open(path, 'rb', encoding='utf-8') as f: base64.IO[Any]:
-            data: str = base64.b64encode(f.read()).decode()
+        with open(path, "rb") as f:
+            data = base64.b64encode(f.read()).decode()
         return cls.load_base64(data, encoding)
 
     @classmethod
@@ -86,8 +83,8 @@ class EmbeddingLoader:
             raise ValueError(f"Unknown encoding: {encoding}")
 
         format_char, _ = cls.ENCODINGS[encoding]
-        flat: List[float] = [v for emb: List[float] in embeddings for v: float in emb]
-        packed: bytes = struct.pack(f"{len(flat)}{format_char}", *flat)
+        flat = [v for emb in embeddings for v in emb]
+        packed = struct.pack(f"{len(flat)}{format_char}", *flat)
         return base64.b64encode(packed).decode()
 
 
@@ -138,7 +135,7 @@ def apply_chat_template(
     from .renderers import ChatRenderer
 
     renderer = ChatRenderer()
-    return renderer.apply_template(
+    return renderer._apply_template(
         messages,
         template or renderer.DEFAULT_TEMPLATE,
         add_generation_prompt,
@@ -166,3 +163,30 @@ def generate_cache_salt(
         add_special_tokens=add_special_tokens,
     )
     return CacheSaltGenerator.generate(config, kwargs)
+
+
+def _try_rust_render_template(
+    template: str,
+    messages: List[Dict[str, Any]],
+    add_generation_prompt: bool,
+) -> Optional[str]:
+    """Try Rust-accelerated template rendering."""
+    try:
+        from rust_core import render_chat_template_rust
+
+        return render_chat_template_rust(template, messages, add_generation_prompt)
+    except ImportError:
+        return None
+
+
+def _try_rust_find_placeholders(
+    text: str,
+    patterns: List[str],
+) -> Optional[List[int]]:
+    """Try Rust-accelerated placeholder finding."""
+    try:
+        from rust_core import find_placeholders_rust
+
+        return find_placeholders_rust(text, patterns)
+    except ImportError:
+        return None

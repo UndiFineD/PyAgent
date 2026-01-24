@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class RollbackRecord:
@@ -32,6 +35,7 @@ class RollbackRecord:
         previous_state: State before the improvement.
         rollback_commit: Git commit of the rollback.
     """
+
     improvement_id: str
     rollback_date: str = ""
     reason: str = ""

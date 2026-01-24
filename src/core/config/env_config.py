@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Environment Configuration Module - Phase 20: Production Infrastructure
 ========================================================================
@@ -18,22 +32,11 @@ Author: PyAgent Phase 20
 
 from __future__ import annotations
 
-import functools
+import json
 import logging
 import os
-import json
-from dataclasses import dataclass, field
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Generic,
-    Literal,
-    TypeVar,
-    overload,
-    get_args,
-    get_origin,
-)
+from dataclasses import dataclass
+from typing import Any, Callable, Generic, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -61,8 +64,15 @@ class EnvVar(Generic[T]):
     """
 
     __slots__ = (
-        "name", "default", "type_", "validator", "transformer",
-        "description", "deprecated", "_cached_value", "_is_cached"
+        "name",
+        "default",
+        "type_",
+        "validator",
+        "transformer",
+        "description",
+        "deprecated",
+        "_cached_value",
+        "_is_cached",
     )
 
     def __init__(
@@ -105,6 +115,7 @@ class EnvVar(Generic[T]):
 
         if self.deprecated:
             import warnings
+
             warnings.warn(
                 f"Environment variable {self.name} is deprecated: {self.deprecated}",
                 DeprecationWarning,
@@ -126,10 +137,7 @@ class EnvVar(Generic[T]):
 
         # Validate the value
         if self.validator and not self.validator(value):
-            raise ValueError(
-                f"Invalid value for {self.name}: {raw_value} "
-                f"(validation failed)"
-            )
+            raise ValueError(f"Invalid value for {self.name}: {raw_value} (validation failed)")
 
         self._cached_value = value
         self._is_cached = True
@@ -294,6 +302,7 @@ def get_env_json(name: str, default: T) -> T:
 @dataclass
 class EnvConfigMeta:
     """Metadata for an environment configuration."""
+
     name: str
     description: str
     default: Any
@@ -337,13 +346,15 @@ class EnvConfig:
         for name in dir(cls):
             attr = getattr(cls, name, None)
             if isinstance(attr, EnvVar):
-                metadata.append(EnvConfigMeta(
-                    name=attr.name,
-                    description=attr.description,
-                    default=attr.default,
-                    type_name=attr.type_.__name__ if attr.type_ else "unknown",
-                    deprecated=attr.deprecated is not None,
-                ))
+                metadata.append(
+                    EnvConfigMeta(
+                        name=attr.name,
+                        description=attr.description,
+                        default=attr.default,
+                        type_name=attr.type_.__name__ if attr.type_ else "unknown",
+                        deprecated=attr.deprecated is not None,
+                    )
+                )
         return metadata
 
     @classmethod
@@ -369,9 +380,14 @@ class EnvConfig:
 
         for meta in cls.get_metadata():
             try:
-                value = getattr(cls, [n for n in dir(cls)
-                                     if isinstance(getattr(cls, n, None), EnvVar)
-                                     and getattr(cls, n).name == meta.name][0])
+                value = getattr(
+                    cls,
+                    [
+                        n
+                        for n in dir(cls)
+                        if isinstance(getattr(cls, n, None), EnvVar) and getattr(cls, n).name == meta.name
+                    ][0],
+                )
             except Exception:
                 value = "<error>"
 
@@ -456,10 +472,7 @@ class NamespacedConfig:
     def to_dict(self) -> dict[str, str]:
         """Get all environment variables with this namespace."""
         prefix = f"{self.namespace}{self.sep}"
-        return {
-            k: v for k, v in os.environ.items()
-            if k.startswith(prefix)
-        }
+        return {k: v for k, v in os.environ.items() if k.startswith(prefix)}
 
 
 # ============================================================================

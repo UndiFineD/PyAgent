@@ -14,7 +14,7 @@ from src.core.base.lifecycle.version import is_gate_open
 class OrchestratorCycleMixin:
     """Methods for managing the improvement cycle and gates."""
 
-    def run_improvement_cycle(self, target_dir: str = "src", allow_triton_check: bool = True) -> dict[str, Any]:
+    def run_improvement_cycle(self, target_dir: str = "src") -> dict[str, Any]:
         """Runs a full scan and fix cycle across the specified directory."""
         if not self._check_gate_stability():
             return {"error": "Stability gate closed - system requires manual stabilization"}
@@ -29,7 +29,7 @@ class OrchestratorCycleMixin:
             "details": [],
         }
 
-        debt_records: list[tuple[str, str, str, int, float]] = self._scan_and_repair_files(target_dir, results, allow_triton_check=allow_triton_check)
+        debt_records: list[tuple[str, str, str, int, float]] = self._scan_and_repair_files(target_dir, results)
         self._record_debt_to_sql(debt_records)
         self._log_results(results)
 
@@ -45,7 +45,7 @@ class OrchestratorCycleMixin:
         """Verifies if the system is stable enough for autonomous changes."""
         from src.core.base.lifecycle.version import STABILITY_SCORE
 
-        if not is_gate_open(100, encoding='utf-8') or STABILITY_SCORE < 0.8:
+        if not is_gate_open(100) or STABILITY_SCORE < 0.8:
             logging.error(
                 f"Self-Improvement: System stability too low ({STABILITY_SCORE}) for autonomous code modification."
             )
@@ -60,5 +60,5 @@ class OrchestratorCycleMixin:
                 self.active_tasks = self.fleet.intelligence.get_actionable_improvement_tasks()
                 if self.active_tasks:
                     logging.info(f"Self-Improvement: Hive mind provided {len(self.active_tasks)} actionable tasks.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.debug(f"Hive task ingestion failed: {e}")

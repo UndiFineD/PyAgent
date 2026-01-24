@@ -11,16 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Ui architect agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 from typing import Any
-from src.core.base.BaseAgent import BaseAgent
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class UIArchitectAgent(BaseAgent):
+class UiArchitectAgent(BaseAgent):
     """
     Phase 54: UI Architect Agent.
     Designs and generates dynamic UI layouts for the Fleet Dashboard.
@@ -31,9 +37,7 @@ class UIArchitectAgent(BaseAgent):
         super().__init__(path)
         self.layouts: dict[str, Any] = {}
 
-    def design_dashboard_layout(
-        self, active_workflow: str, agent_list: list[str]
-    ) -> dict[str, Any]:
+    def design_dashboard_layout(self, active_workflow: str, agent_list: list[str]) -> dict[str, Any]:
         """Creates a layout JSON based on active agents and workflow type."""
         layout = {
             "title": f"Live View: {active_workflow}",

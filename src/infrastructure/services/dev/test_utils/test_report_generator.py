@@ -16,16 +16,20 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+
 import json
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class TestReportGenerator:
-    __test__ = False
     """Generates test reports in various formats."""
+
+    __test__ = False
 
     def __init__(self, output_dir: str | Path | None = None) -> None:
         """Initialize report generator."""
@@ -36,20 +40,24 @@ class TestReportGenerator:
 
     def add_result(self, test_name: str, passed: bool, duration_ms: float) -> None:
         """Add test result (legacy API)."""
-        self.results.append({
-            "test_name": test_name,
-            "status": "passed" if passed else "failed",
-            "duration_ms": float(duration_ms),
-        })
+        self.results.append(
+            {
+                "test_name": test_name,
+                "status": "passed" if passed else "failed",
+                "duration_ms": float(duration_ms),
+            }
+        )
 
     def add_test_result(self, test_name: str, status: str, duration_ms: float, error: str = "") -> None:
         """Add test result (test compatibility API)."""
-        self.results.append({
-            "test_name": test_name,
-            "status": status,
-            "duration_ms": float(duration_ms),
-            "error": error,
-        })
+        self.results.append(
+            {
+                "test_name": test_name,
+                "status": status,
+                "duration_ms": float(duration_ms),
+                "error": error,
+            }
+        )
 
     def _render_html(self) -> str:
         rows = ""
@@ -58,15 +66,14 @@ class TestReportGenerator:
             duration = float(r.get("duration_ms", 0.0))
             error = str(r.get("error", ""))
             rows += (
-                f"<tr><td>{r.get('test_name', '')}</td><td>{status}</td><td>{duration:.2f}ms</td>"
-                f"<td>{error}</td></tr>"
+                f"<tr><td>{r.get('test_name', '')}</td><td>{status}</td><td>{duration:.2f}ms</td><td>{error}</td></tr>"
             )
         return (
-            '<html><head><title>Test Report</title></head><body>'
-            '<h1>Test Results</h1>'
+            "<html><head><title>Test Report</title></head><body>"
+            "<h1>Test Results</h1>"
             '<table border="1">'
-            '<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>'
-            f'{rows}</table></body></html>'
+            "<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>"
+            f"{rows}</table></body></html>"
         )
 
     def generate_html(self) -> Path:

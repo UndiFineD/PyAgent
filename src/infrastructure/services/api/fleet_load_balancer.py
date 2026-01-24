@@ -12,18 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Fleet load balancer.py module.
+"""
+
 
 from __future__ import annotations
 
-import asyncio
 import logging
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.services.api.core.gateway_core import GatewayCore
-from src.infrastructure.swarm.fleet.core.load_balancer_core import (AgentMetrics, LoadBalancerCore)
+from src.infrastructure.swarm.fleet.core.load_balancer_core import (
+    AgentMetrics, LoadBalancerCore)
 
-__version__: str = VERSION
+__version__ = VERSION
 
 
 class FleetLoadBalancer:
@@ -33,23 +37,20 @@ class FleetLoadBalancer:
     """
 
     def __init__(self, fleet) -> None:
-        """Initialize the Fleet Load Balancer."""
-        self.fleet: Any = fleet
+        self.fleet = fleet
         self.gateway_core = GatewayCore()
         self.lb_core = LoadBalancerCore()
         self.request_queue: list[dict[str, Any]] = []
         self.agent_metrics: dict[str, AgentMetrics] = {}
 
-    async def balance_request(self, interface: str, command: str) -> dict[str, Any]:
+    def balance_request(self, interface: str, command: str) -> dict[str, Any]:
         """
         Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
         """
         logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
 
-        assigned_model: str = await asyncio.to_thread(
-            self.gateway_core.resolve_model_by_affinity, interface
-        )
+        assigned_model = self.gateway_core.resolve_model_by_affinity(interface)
 
         # Simple simulation: If queue is large, increase latency or reject
         if len(self.request_queue) > 100:
@@ -64,8 +65,7 @@ class FleetLoadBalancer:
             "estimated_wait_ms": len(self.request_queue) * 10,
         }
 
-    async def get_stats(self) -> dict[str, Any]:
-        """Get statistics about the current state of the load balancer."""
+    def get_stats(self) -> dict[str, Any]:
         return {
             "queue_depth": len(self.request_queue),
             "interface_diversity": list(set(r["interface"] for r in self.request_queue)),

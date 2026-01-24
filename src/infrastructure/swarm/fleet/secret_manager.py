@@ -1,52 +1,57 @@
-<<<<<<< HEAD
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Secret logic handler.
 (Facade for src.core.base.common.secret_core)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 """
-Secret logic handler.
-(Facade for src.core.base.common.secret_core)
-"""
-
-from src.core.base.common.secret_core import SecretCore as StandardSecretCore
-
-class SecretManager(StandardSecretCore):
-    """Facade for SecretCore."""
-    pass
-
-from src.core.base.common.secret_core import SecretCore as StandardSecretCore
-
-class SecretManager(StandardSecretCore):
-    """Facade for SecretCore."""
-    pass
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-import os
+
 import json
 import logging
-from typing import Optional
-from .SecretCore import SecretCore
+import os
+from typing import Any
+
+from src.core.base.common.secret_core import SecretCore as StandardSecretCore
+from src.core.base.lifecycle.version import VERSION
+
+from .secret_core import SecretCore
 
 __version__ = VERSION
 
-class SecretManager:
+
+class SecretManager(StandardSecretCore):
     """
     Provides secure access to credentials and API keys.
     Shell for SecretCore.
     """
 
-    def __init__(self, provider: str = "local", vault_path: str = "data/memory/agent_store/vault.json") -> None:
+    def __init__(
+        self,
+        provider: str = "local",
+        vault_path: str = "data/memory/agent_store/vault.json",
+    ) -> None:
         self.provider = provider
         self.vault_path = vault_path
         self.core = SecretCore()
-        self._cache = {}
+        self._cache: dict[Any, Any] = {}
         self.providers = {
             "local": self._fetch_local,
             "azure": self._fetch_azure,
             "vault": self._fetch_vault,
-            "file": self._fetch_file_vault
+            "file": self._fetch_file_vault,
         }
         self._load_file_vault()
 
@@ -88,15 +93,15 @@ class SecretManager:
         """Retrieves a secret from the configured provider."""
         if key in self._cache:
             return self._cache[key]
-            
+
         fetch_func = self.providers.get(self.provider, self._fetch_local)
         value = fetch_func(key)
-        
+
         if value:
             masked = self.core.mask_secret(value)
             logging.info(f"Retrieved secret {key} -> {masked}")
             return value
-            
+
         return default
 
     def set_secret(self, key: str, value: str, persist: bool = False) -> None:

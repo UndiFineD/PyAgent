@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class FixSuggestion:
@@ -32,6 +35,7 @@ class FixSuggestion:
         code_snippet: Example code for the fix.
         source: Source of the suggestion.
     """
+
     error_id: str
     suggestion: str
     confidence: float = 0.0

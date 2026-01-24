@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
+
+"""
+Streaming.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Real-time stats streaming engine.
 
 from __future__ import annotations
+
+import contextlib
 import logging
 from typing import Any, Callable
-from .Metrics import Metric
-from .ObservabilityCore import StreamingConfig
+
+from .metrics import Metric
+from .observability_core import StreamingConfig
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +54,8 @@ class StatsStreamManager:
         if name in self.streams:
             self.streams[name].add_data(data)
         for cb in self.subscribers.get(name, []):
-            try:
+            with contextlib.suppress(Exception):
                 cb(data)
-            except Exception:
-                pass
 
     def subscribe(self, name: str, callback: Callable[[Any], None]) -> None:
         self.subscribers.setdefault(name, []).append(callback)

@@ -18,24 +18,29 @@ Utility script to rename the project from DebVisor to PyAgent across the workspa
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import os
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 def replace_in_file(filepath: str) -> None:
     try:
-        with open(filepath, encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             content = f.read()
-        
+
         new_content = content.replace("DebVisor", "PyAgent").replace("debvisor", "pyagent")
-        
+
         if content != new_content:
             print(f"Updating {filepath}")
-            with open(filepath, 'w', encoding='utf-8') as f:
+
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(new_content)
     except Exception as e:
         print(f"Skipping {filepath}: {e}")
+
 
 def main() -> None:
     start_dirs = ["src", "tests", "docs"]
@@ -45,6 +50,7 @@ def main() -> None:
                 for file in files:
                     if file.endswith((".py", ".md", ".txt", ".json")):
                         replace_in_file(os.path.join(root, file))
+
 
 if __name__ == "__main__":
     main()

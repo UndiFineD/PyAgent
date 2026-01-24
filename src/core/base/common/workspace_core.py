@@ -18,18 +18,20 @@ Unified workspace and path management core.
 
 import logging
 from pathlib import Path
-from typing import Set, Dict, Optional, Union, List
+from typing import Dict, List, Optional, Set, Union
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
+
 class WorkspaceCore:
     """
     Centralized handler for workspace-wide path logic and file ignore rules.
     """
-    _instance: Optional['WorkspaceCore'] = None
+
+    _instance: Optional["WorkspaceCore"] = None
     _ignore_cache: Dict[str, Set[str]] = {}
     _ignore_cache_time: Dict[str, float] = {}
     _initialized: bool = False
@@ -54,9 +56,9 @@ class WorkspaceCore:
             self.root_dir = curr
             for parent in [curr] + list(curr.parents):
                 if (
-                    (parent / ".git").exists() or
-                    (parent / "pyproject.toml").exists() or
-                    (parent / "requirements.txt").exists()
+                    (parent / ".git").exists()
+                    or (parent / "pyproject.toml").exists()
+                    or (parent / "requirements.txt").exists()
                 ):
                     self.root_dir = parent
                     break
@@ -124,9 +126,7 @@ class WorkspaceCore:
 
             content = ignore_path.read_text(encoding="utf-8")
             patterns = {
-                line.strip()
-                for line in content.split("\n")
-                if line.strip() and not line.strip().startswith("#")
+                line.strip() for line in content.split("\n") if line.strip() and not line.strip().startswith("#")
             }
 
             self._ignore_cache[cache_key] = patterns

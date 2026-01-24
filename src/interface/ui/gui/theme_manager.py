@@ -20,15 +20,19 @@
 """Theme Management logic for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Any
+
 import tkinter as tk
 from tkinter import ttk
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
 class ThemeManager:
     """Handles switching between light and dark themes for the GUI."""
+
     def __init__(self, root) -> None:
         self.root: Any = root
         self.is_dark_mode = True
@@ -37,20 +41,25 @@ class ThemeManager:
         style = ttk.Style()
         if self.is_dark_mode:
             bg, fg = "#2d2d2d", "#ffffff"
-            style.theme_use('clam')
+            style.theme_use("clam")
             style.configure("TFrame", background=bg)
             style.configure("TLabel", background=bg, foreground=fg)
             style.configure("TLabelframe", background=bg, foreground=fg)
             style.configure("TLabelframe.Label", background=bg, foreground=fg)
             style.configure("TButton", background="#4a4a4a", foreground=fg)
             style.configure("Header.TFrame", background="#3e3e42")
-            style.configure("Treeview", background="#3d3d3d", foreground=fg, fieldbackground="#3d3d3d")
+            style.configure(
+                "Treeview",
+                background="#3d3d3d",
+                foreground=fg,
+                fieldbackground="#3d3d3d",
+            )
             self.root.configure(bg=bg)
         else:
-            style.theme_use('default')
+            style.theme_use("default")
             style.configure("Header.TFrame", background="#e1e1e1")
             self.root.configure(bg="#f0f0f0")
-        
+
         self.refresh_widgets(self.root)
 
     def toggle_theme(self) -> None:
@@ -61,7 +70,7 @@ class ThemeManager:
         bg: str = "#2d2d2d" if self.is_dark_mode else "#f0f0f0"
         fg: str = "white" if self.is_dark_mode else "black"
         text_bg: str = "#1e1e1e" if self.is_dark_mode else "white"
-        
+
         for child in parent.winfo_children():
             if isinstance(child, tk.Text):
                 child.configure(bg=text_bg, fg=fg, insertbackground=fg)

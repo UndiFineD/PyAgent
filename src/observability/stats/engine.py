@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
+
+"""
+Engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Observability and statistics engines/orchestrators.
 
 from __future__ import annotations
+
 import logging
 import time
 from pathlib import Path
 from typing import Any
-from .Alerting import ThresholdAlertManager
+
+from .alerting import ThresholdAlertManager
 from .analysis import TokenCostEngine
-from .RollupEngine import StatsQueryEngine, StatsRollupCalculator
-from .exporters import MetricsExporter, OTelManager, PrometheusExporter
-from .Metrics import AgentMetric, Metric
+from .exporters.metrics_exporter import MetricsExporter
+from .exporters.otel_manager import OTelManager
+from .exporters.prometheus_exporter import PrometheusExporter
+from .metrics import AgentMetric, Metric
+from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
 
 logger = logging.getLogger(__name__)
 
@@ -120,7 +128,7 @@ class StatsNamespaceManager:
         self.namespaces: dict[str, Any] = {}
 
     def create(self, name: str) -> Any:
-        from .ObservabilityCore import StatsNamespace
+        from .observability_core import StatsNamespace
 
         ns = StatsNamespace(name)
         self.namespaces[name] = ns

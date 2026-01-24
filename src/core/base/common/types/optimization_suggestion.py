@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.OptimizationType import OptimizationType
+
 from dataclasses import dataclass
 
+from src.core.base.common.types.optimization_type import OptimizationType
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class OptimizationSuggestion:
@@ -34,6 +37,7 @@ class OptimizationSuggestion:
         before_snippet: Code before optimization.
         after_snippet: Suggested optimized code.
     """
+
     type: OptimizationType
     description: str
     impact: str

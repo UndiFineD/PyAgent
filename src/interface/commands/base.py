@@ -81,9 +81,7 @@ class CommandResult:
     """Whether output should be inserted inline."""
 
     @classmethod
-    def ok(
-        cls, output: str, data: dict[str, Any] | None = None, inline: bool = True
-    ) -> CommandResult:
+    def ok(cls, output: str, data: dict[str, Any] | None = None, inline: bool = True) -> CommandResult:
         """Create a successful result."""
         return cls(success=True, output=output, data=data or {}, inline=inline)
 
@@ -117,7 +115,6 @@ class CommandDefinition:
 
     requires_args: bool = False
     """Whether arguments are required."""
-
 
 
 @dataclass

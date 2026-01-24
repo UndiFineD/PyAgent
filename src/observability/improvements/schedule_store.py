@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ScheduledImprovement import ScheduledImprovement
-from typing import Dict, List, Optional
+
+from src.core.base.lifecycle.version import VERSION
+
+from .scheduled_improvement import ScheduledImprovement
 
 __version__ = VERSION
+
 
 class _ScheduleStore:
     """Mapping wrapper that compares equal to {} and [] when empty."""
@@ -32,7 +34,7 @@ class _ScheduleStore:
         if isinstance(other, dict):
             return self._data == other
         if isinstance(other, list):
-            return len(other) == 0 and len(self._data) == 0
+            return not other and not self._data
         return False
 
     def __contains__(self, key: object) -> bool:

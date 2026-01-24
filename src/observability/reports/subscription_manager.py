@@ -16,14 +16,18 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ReportSubscription import ReportSubscription
-from .ReportType import ReportType
-from typing import Any, Dict, List
+
 import logging
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_subscription import ReportSubscription
+from .report_type import ReportType
 
 __version__ = VERSION
+
 
 class SubscriptionManager:
     """Manager for report subscriptions and scheduled delivery.
@@ -75,12 +79,7 @@ class SubscriptionManager:
 
         return [s for s in self.subscriptions.values() if s.enabled]
 
-    def queue_delivery(
-        self,
-        subscriber_id: str,
-        report_content: str,
-        report_type: ReportType
-    ) -> None:
+    def queue_delivery(self, subscriber_id: str, report_content: str, report_type: ReportType) -> None:
         """Queue a report delivery.
         Args:
             subscriber_id: Target subscriber.
@@ -88,12 +87,14 @@ class SubscriptionManager:
             report_type: Type of report.
         """
 
-        self.delivery_queue.append({
-            "subscriber_id": subscriber_id,
-            "content": report_content,
-            "type": report_type,
-            "queued_at": time.time()
-        })
+        self.delivery_queue.append(
+            {
+                "subscriber_id": subscriber_id,
+                "content": report_content,
+                "type": report_type,
+                "queued_at": time.time(),
+            }
+        )
 
     def process_deliveries(self) -> int:
         """Process pending deliveries.

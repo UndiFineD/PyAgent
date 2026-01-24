@@ -19,24 +19,29 @@
 """Unified Lesson and Learning core."""
 
 import hashlib
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import List, Set, Optional
+from typing import List, Optional, Set
+
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
+
 @dataclass
 class Lesson:
     """Captures a learned pattern or error correction for shared memory."""
+
     error_pattern: str
     cause: str
     solution: str
     impact_score: float = 0.5
+
 
 class LessonCore(BaseCore):
     """
@@ -44,11 +49,7 @@ class LessonCore(BaseCore):
     Inherits from BaseCore for standardized persistence.
     """
 
-    def __init__(
-        self,
-        persistence_path: Optional[str] = None,
-        repo_root: Optional[str] = None
-    ):
+    def __init__(self, persistence_path: Optional[str] = None, repo_root: Optional[str] = None):
         super().__init__(name="Lesson", repo_root=repo_root)
         self.known_failures: Set[str] = set()
         self.lessons: List[Lesson] = []
@@ -84,10 +85,7 @@ class LessonCore(BaseCore):
 
     def save_lessons(self) -> None:
         """Persists lessons to disk."""
-        data = {
-            "known_failures": list(self.known_failures),
-            "lessons": [asdict(l) for l in self.lessons]
-        }
+        data = {"known_failures": list(self.known_failures), "lessons": [asdict(lesson) for lesson in self.lessons]}
         self._storage.save_json(self.persistence_path, data)
 
     def load_lessons(self) -> None:
@@ -95,4 +93,4 @@ class LessonCore(BaseCore):
         data = self._storage.load_json(self.persistence_path)
         if data:
             self.known_failures = set(data.get("known_failures", []))
-            self.lessons = [Lesson(**l) for l in data.get("lessons", [])]
+            self.lessons = [Lesson(**lesson) for lesson in data.get("lessons", [])]

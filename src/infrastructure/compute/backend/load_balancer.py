@@ -16,15 +16,19 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .SystemConfig import SystemConfig
-from .ProviderType import ProviderType
-from .LoadBalanceStrategy import LoadBalanceStrategy
-from typing import Any, Dict, List, Optional
+
 import logging
 import threading
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .load_balance_strategy import LoadBalanceStrategy
+from .provider_type import ProviderType
+from .system_config import SystemConfig
 
 __version__ = VERSION
+
 
 class LoadBalancer:
     """Load balancer for multiple backend endpoints.
@@ -38,7 +42,12 @@ class LoadBalancer:
         backend=lb.next()
     """
 
-    def __init__(self, strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN,
+        *args,
+        **kwargs,
+    ) -> None:
         """Initialize load balancer.
 
         Args:

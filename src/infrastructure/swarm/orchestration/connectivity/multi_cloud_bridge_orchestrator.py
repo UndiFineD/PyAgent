@@ -11,11 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Multi cloud bridge orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 from typing import Any
-from src.observability.StructuredLogger import StructuredLogger
+
+from src.core.base.lifecycle.version import VERSION
+from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 
@@ -44,9 +50,7 @@ class MultiCloudBridgeOrchestrator:
         logger.info(f"Bridge: Linked {node_id} on {provider} ({region})")
         return True
 
-    def sync_state_cross_cloud(
-        self, state_data: dict[str, Any], source_provider: str
-    ) -> dict[str, Any]:
+    def sync_state_cross_cloud(self, state_data: dict[str, Any], source_provider: str) -> dict[str, Any]:
         """Synchronizes state data from a source provider to all other linked cloud providers."""
         logger.info(f"Bridge: Initiating cross-cloud sync from {source_provider}...")
 
@@ -57,9 +61,7 @@ class MultiCloudBridgeOrchestrator:
             if self.cloud_nodes[target]:
                 # Simulate synchronization latency and success
                 success_count += 1
-                logger.info(
-                    f"Bridge: Synced state to {target} (Across {len(self.cloud_nodes[target])} nodes)"
-                )
+                logger.info(f"Bridge: Synced state to {target} (Across {len(self.cloud_nodes[target])} nodes)")
 
         sync_event = {
             "source": source_provider,
@@ -82,9 +84,7 @@ class MultiCloudBridgeOrchestrator:
     def route_message(self, message: str, target_provider: str) -> bool:
         """Routes a message to a specific cloud provider's network."""
         if not self.cloud_nodes[target_provider]:
-            logger.info(
-                f"Bridge: No nodes available on {target_provider} to receive message."
-            )
+            logger.info(f"Bridge: No nodes available on {target_provider} to receive message.")
             return False
         logger.info(f"Bridge: Routed message to {target_provider}: {message[:20]}...")
         return True

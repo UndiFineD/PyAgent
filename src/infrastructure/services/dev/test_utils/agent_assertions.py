@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .TestAssertion import TestAssertion
-from typing import List
+
 import json
 import re
 
+from src.core.base.lifecycle.version import VERSION
+
+from .test_assertion import TestAssertion
+
 __version__ = VERSION
+
 
 class AgentAssertions:
     """Custom assertion helpers for agent testing.
@@ -112,7 +115,7 @@ class AgentAssertions:
             issues.append("missing headers")
         if code_blocks and "```" not in content:
             issues.append("missing code blocks")
-        passed = len(issues) == 0
+        passed = not issues
         assertion = TestAssertion(
             name="markdown_structure",
             expected="valid structure",

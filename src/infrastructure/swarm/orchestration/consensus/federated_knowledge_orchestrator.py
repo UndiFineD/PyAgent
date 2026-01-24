@@ -19,14 +19,14 @@ Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import logging
-import asyncio
 from typing import Any
-from src.infrastructure.orchestration.connectivity.InterFleetBridgeOrchestrator import (
-    InterFleetBridgeOrchestrator,
-)
-from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.orchestration.connectivity.inter_fleet_bridge_orchestrator import \
+    InterFleetBridgeOrchestrator
+from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 __version__ = VERSION
 
@@ -34,15 +34,11 @@ __version__ = VERSION
 class FederatedKnowledgeOrchestrator:
     """Orchestrates the synchronization of cognitive insights across distributed fleets."""
 
-    def __init__(
-        self, fleet_manager: Any | None = None, fleet: Any | None = None
-    ) -> None:
+    def __init__(self, fleet_manager: Any | None = None, fleet: Any | None = None) -> None:
         self.fleet = fleet_manager or fleet
         if not self.fleet:
             # Fallback or stub if no fleet provided
-            logging.warning(
-                "FederatedKnowledgeOrchestrator initialized without fleet_manager."
-            )
+            logging.warning("FederatedKnowledgeOrchestrator initialized without fleet_manager.")
 
         self.bridge = InterFleetBridgeOrchestrator(self.fleet)
         workspace_root = "."
@@ -58,27 +54,21 @@ class FederatedKnowledgeOrchestrator:
 
         self.sync_history: list[dict[str, Any]] = []
 
-    async def broadcast_lesson(
-        self, lesson_id: str, lesson_data: dict[str, Any]
-    ) -> dict[str, Any]:
+    async def broadcast_lesson(self, lesson_id: str, lesson_data: dict[str, Any]) -> dict[str, Any]:
         """Broadcasts a successful outcome/lesson to the federated network.
 
         Args:
             lesson_id: Unique identifier for the lesson.
             lesson_data: The outcome details (agent, task, success, fix).
         """
-        logging.info(
-            f"FederatedKnowledge: Broadcasting lesson '{lesson_id}' to the network."
-        )
+        logging.info(f"FederatedKnowledge: Broadcasting lesson '{lesson_id}' to the network.")
 
         # Policy-driven Anonymization
         clean_lesson = {
             "agent": lesson_data.get("agent", "Unknown"),
             "task_type": lesson_data.get("task_type", "generic_refinement"),
             "success": lesson_data.get("success", False),
-            "fix_pattern": lesson_data.get(
-                "fix", "Standardized best practices application"
-            ),
+            "fix_pattern": lesson_data.get("fix", "Standardized best practices application"),
         }
 
         # Determine actual peers from bridge
@@ -92,22 +82,16 @@ class FederatedKnowledgeOrchestrator:
             res = await self.bridge.send_signal(peer, "knowledge_sync", clean_lesson)
             results.append(res)
 
-        self.sync_history.append(
-            {"id": lesson_id, "status": "broadcasted", "targets": peers}
-        )
+        self.sync_history.append({"id": lesson_id, "status": "broadcasted", "targets": peers})
         return {"status": "success", "peer_count": len(peers), "results": results}
 
-    def receive_and_fuse_knowledge(
-        self, incoming_knowledge: list[dict[str, Any]]
-    ) -> int:
+    def receive_and_fuse_knowledge(self, incoming_knowledge: list[dict[str, Any]]) -> int:
         """Fuses incoming lessons from external fleets into the local Knowledge agent.
 
         Args:
             incoming_knowledge: List of lesson dictionaries.
         """
-        logging.info(
-            f"FederatedKnowledge: Received {len(incoming_knowledge)} insights. Starting fusion."
-        )
+        logging.info(f"FederatedKnowledge: Received {len(incoming_knowledge)} insights. Starting fusion.")
         fused_count = 0
         for info in incoming_knowledge:
             # Fuse into local long term memory (Semantic Layer)
@@ -133,9 +117,7 @@ class FederatedKnowledgeOrchestrator:
 
         # If no real peers, simulate the ingestion from a known research repository (Phase 41 requirement)
         if not peer_list:
-            logging.warning(
-                "FederatedKnowledge: No live peers found. Polling global knowledge cache."
-            )
+            logging.warning("FederatedKnowledge: No live peers found. Polling global knowledge cache.")
             mock_external_knowledge = [
                 {
                     "agent": "Coder",

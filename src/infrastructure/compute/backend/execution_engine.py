@@ -16,12 +16,15 @@
 """Multi-backend execution engine with fallback and caching capabilities."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+
 import sys
 from pathlib import Path
 from typing import Any
+
 import requests
-from src.infrastructure.backend.SubagentRunner import SubagentRunner
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.subagent_runner import SubagentRunner
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]
@@ -74,9 +77,7 @@ def reset_metrics() -> None:
     _runner.reset_metrics()
 
 
-def validate_response_content(
-    response: str, content_types: list[str] | None = None
-) -> bool:
+def validate_response_content(response: str, content_types: list[str] | None = None) -> bool:
     """Validate AI response content."""
     return _runner.validate_response_content(response, content_types)
 
@@ -86,9 +87,7 @@ def estimate_tokens(text: str) -> int:
     return _runner.estimate_tokens(text)
 
 
-def estimate_cost(
-    tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03
-) -> float:
+def estimate_cost(tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03) -> float:
     """Estimate cost."""
     return _runner.estimate_cost(tokens, model, rate_per_1k_input)
 
@@ -137,9 +136,7 @@ def llm_chat_via_copilot_cli(prompt: str) -> str | None:
     return None
 
 
-def run_subagent(
-    description: str, prompt: str, original_content: str = ""
-) -> str | None:
+def run_subagent(description: str, prompt: str, original_content: str = "") -> str | None:
     """Run a subagent."""
     return _runner.run_subagent(description, prompt, original_content)
 

@@ -16,12 +16,16 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.utils._helpers import _empty_dict_str_any, _empty_list_str
+
 from dataclasses import dataclass, field
 from typing import Any
 
+from src.core.base.common.utils.helpers import (_empty_dict_str_any,
+                                                _empty_list_str)
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 @dataclass
 class AgentTemplate:

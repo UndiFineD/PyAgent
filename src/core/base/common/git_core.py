@@ -22,8 +22,10 @@ Standardizes branch management, commits, and status retrieval.
 """
 
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
+
 from .base_core import BaseCore
 from .shell_core import ShellCore
 
@@ -31,6 +33,7 @@ try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class GitCore(BaseCore):
     """

@@ -15,35 +15,17 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
+
 from dataclasses import dataclass, field
-<<<<<<< HEAD
-from typing import Optional, Any
-from src.core.base.models import AgentPluginConfig, RateLimitConfig
-from src.core.base.utils._helpers import (
-=======
 from typing import Any
+
+from ..lifecycle.version import VERSION
 from .models import AgentPluginConfig, RateLimitConfig
-from .utils.helpers import (
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-    _empty_dict_str_any,
-    _empty_plugin_config_list,
-    _empty_list_str,
-    _empty_dict_str_int,
-)
-<<<<<<< HEAD
-<<<<<<< HEAD
-from src.core.base.version import VERSION
-=======
-from ..lifecycle.version import VERSION
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-from ..lifecycle.version import VERSION
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
+from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
+                            _empty_list_str, _empty_plugin_config_list)
 
 __version__ = VERSION
+
 
 @dataclass
 class AgentConfig:  # pylint: disable=too-many-instance-attributes
@@ -62,6 +44,7 @@ class AgentConfig:  # pylint: disable=too-many-instance-attributes
         selective_agents: Agents to execute.
         timeout_per_agent: Timeout settings per agent.
     """
+
     repo_root: str = "."
     agents_only: bool = False
     max_files: int | None = None
@@ -77,7 +60,7 @@ class AgentConfig:  # pylint: disable=too-many-instance-attributes
     enable_async: bool = False
     enable_multiprocessing: bool = False
     max_workers: int = 4
-    strategy: str = 'direct'
+    strategy: str = "direct"
     enable_file_locking: bool = False
     incremental: bool = False
     graceful_shutdown: bool = False

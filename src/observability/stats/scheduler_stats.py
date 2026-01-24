@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Scheduler Statistics.
 
@@ -20,6 +34,7 @@ from typing import Any
 
 class MetricExportFormat(str, Enum):
     """Format for metric export."""
+
     DICT = "dict"
     PROMETHEUS = "prometheus"
     JSON = "json"
@@ -240,11 +255,11 @@ class PerfStats:
     @property
     def total_time_ms(self) -> float:
         return (
-            self.schedule_time_ms +
-            self.model_forward_time_ms +
-            self.sample_time_ms +
-            self.all_reduce_time_ms +
-            self.cache_swap_time_ms
+            self.schedule_time_ms
+            + self.model_forward_time_ms
+            + self.sample_time_ms
+            + self.all_reduce_time_ms
+            + self.cache_swap_time_ms
         )
 
     @property
@@ -410,22 +425,24 @@ class SchedulerStats:
     def to_prometheus(self) -> str:
         """Export as Prometheus format."""
         lines = [
-            f'scheduler_running_requests {{}} {self.num_running_reqs}',
-            f'scheduler_waiting_requests {{}} {self.num_waiting_reqs}',
-            f'scheduler_step_counter {{}} {self.step_counter}',
-            f'kv_cache_usage {{}} {self.kv_cache_usage}',
-            f'prefix_cache_hit_rate {{}} {self.prefix_cache_stats.hit_rate}',
-            f'prefix_cache_hits_total {{}} {self.prefix_cache_stats.num_hits}',
-            f'prefix_cache_misses_total {{}} {self.prefix_cache_stats.num_misses}',
+            f"scheduler_running_requests {{}} {self.num_running_reqs}",
+            f"scheduler_waiting_requests {{}} {self.num_waiting_reqs}",
+            f"scheduler_step_counter {{}} {self.step_counter}",
+            f"kv_cache_usage {{}} {self.kv_cache_usage}",
+            f"prefix_cache_hit_rate {{}} {self.prefix_cache_stats.hit_rate}",
+            f"prefix_cache_hits_total {{}} {self.prefix_cache_stats.num_hits}",
+            f"prefix_cache_misses_total {{}} {self.prefix_cache_stats.num_misses}",
         ]
 
         if self.spec_decoding_stats:
-            lines.extend([
-                f'spec_decode_drafts_total {{}} {self.spec_decoding_stats.num_drafts}',
-                f'spec_decode_acceptance_rate {{}} {self.spec_decoding_stats.acceptance_rate}',
-            ])
+            lines.extend(
+                [
+                    f"spec_decode_drafts_total {{}} {self.spec_decoding_stats.num_drafts}",
+                    f"spec_decode_acceptance_rate {{}} {self.spec_decoding_stats.acceptance_rate}",
+                ]
+            )
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
 
 class SchedulerStatsCollector:
@@ -456,7 +473,7 @@ class SchedulerStatsCollector:
 
         # Trim history
         if len(self._history) > self.window_size:
-            self._history = self._history[-self.window_size:]
+            self._history = self._history[-self.window_size :]
 
         self._current.reset()
         return snapshot
@@ -484,6 +501,7 @@ class SchedulerStatsCollector:
 # =============================================================================
 # Convenience Functions
 # =============================================================================
+
 
 def create_scheduler_stats(
     enable_spec_decoding: bool = False,

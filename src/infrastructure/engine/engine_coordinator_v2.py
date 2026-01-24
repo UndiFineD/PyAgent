@@ -17,9 +17,8 @@ Engine Coordinator (V2) for Phase 54.
 Manages the lifecycle of the inference engine, error recovery, and async state transitions.
 """
 
-import logging
 import asyncio
-from typing import Dict, List, Optional, Any
+import logging
 from enum import Enum
 
 try:
@@ -29,12 +28,14 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class EngineState(Enum):
     STARTING = 0
     RUNNING = 1
     COOLDOWN = 2
     ERROR = 3
     STOPPED = 4
+
 
 class EngineCoordinator:
     """

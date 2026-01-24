@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # PyAgent Phase 44: Encoder Cache Manager for Multimodal Models
 # Implements vLLM's EncoderCacheManager for vision/multimodal caching
@@ -21,72 +35,76 @@ from __future__ import annotations
 
 import hashlib
 import time
-import weakref
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, Callable, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 import numpy as np
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
+    pass
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class CacheTier(Enum):
     """Cache storage tier."""
-    MEMORY = auto()      # In-memory (fastest)
-    DISK = auto()        # Disk-based (persistent)
-    REMOTE = auto()      # Remote storage (shared)
+
+    MEMORY = auto()  # In-memory (fastest)
+    DISK = auto()  # Disk-based (persistent)
+    REMOTE = auto()  # Remote storage (shared)
 
 
 class EvictionPolicy(Enum):
     """Cache eviction policy."""
-    LRU = auto()         # Least recently used
-    LFU = auto()         # Least frequently used
-    FIFO = auto()        # First in first out
-    PRIORITY = auto()    # Priority-based
+
+    LRU = auto()  # Least recently used
+    LFU = auto()  # Least frequently used
+    FIFO = auto()  # First in first out
+    PRIORITY = auto()  # Priority-based
 
 
 @dataclass
 class CacheConfig:
     """Configuration for encoder cache."""
-    cache_size: int = 1000              # Max number of entries
-    memory_budget_mb: float = 512.0     # Memory budget in MB
+
+    cache_size: int = 1000  # Max number of entries
+    memory_budget_mb: float = 512.0  # Memory budget in MB
     eviction_policy: EvictionPolicy = EvictionPolicy.LRU
-    enable_dedup: bool = True           # Content-based deduplication
-    enable_prefetch: bool = False       # Predictive prefetching
-    prefetch_window: int = 3            # Number of items to prefetch
-    ttl_seconds: float = 0.0            # Time-to-live (0 = no expiry)
-    use_weak_refs: bool = True          # Use weak references for outputs
-    hash_algorithm: str = "sha256"      # Hash algorithm for dedup
+    enable_dedup: bool = True  # Content-based deduplication
+    enable_prefetch: bool = False  # Predictive prefetching
+    prefetch_window: int = 3  # Number of items to prefetch
+    ttl_seconds: float = 0.0  # Time-to-live (0 = no expiry)
+    use_weak_refs: bool = True  # Use weak references for outputs
+    hash_algorithm: str = "sha256"  # Hash algorithm for dedup
 
     def __post_init__(self) -> None:
         if self.cache_size < 1:
             raise ValueError(f"cache_size must be >= 1, got {self.cache_size}")
         if self.memory_budget_mb <= 0:
-            raise ValueError(f"memory_budget_mb must be > 0")
+            raise ValueError("memory_budget_mb must be > 0")
 
 
 @dataclass
 class CacheEntry:
     """A single cache entry."""
-    key: str                            # Unique identifier (hash)
-    data: Any                           # Cached data (encoder output)
-    size_bytes: int                     # Size in bytes
-    access_count: int = 0               # Access count for LFU
+
+    key: str  # Unique identifier (hash)
+    data: Any  # Cached data (encoder output)
+    size_bytes: int  # Size in bytes
+    access_count: int = 0  # Access count for LFU
     last_access: float = field(default_factory=time.time)
     created_at: float = field(default_factory=time.time)
-    priority: int = 0                   # Higher = more important
+    priority: int = 0  # Higher = more important
     request_refs: set[str] = field(default_factory=set)  # Request IDs using this
 
     def touch(self) -> None:
@@ -113,6 +131,7 @@ class CacheEntry:
 @dataclass
 class CacheStats:
     """Cache statistics."""
+
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -329,7 +348,7 @@ class EncoderCacheManager:
 
     def compute_hash(self, data: Any) -> str:
         """Compute content hash for deduplication."""
-        if HAS_RUST and hasattr(rust_core, 'blake3_hash_rust'):
+        if HAS_RUST and hasattr(rust_core, "blake3_hash_rust"):
             if isinstance(data, np.ndarray):
                 return rust_core.blake3_hash_rust(data.tobytes())
 
@@ -363,7 +382,7 @@ class EncoderCacheManager:
         if not self.config.enable_prefetch:
             return
 
-        for key in keys[:self.config.prefetch_window]:
+        for key in keys[: self.config.prefetch_window]:
             if key not in self._cache:
                 try:
                     data = loader(key)
@@ -377,10 +396,7 @@ class EncoderCacheManager:
     def evict_unreferenced(self) -> int:
         """Evict all unreferenced entries."""
         evicted = 0
-        keys_to_evict = [
-            key for key, entry in self._cache.items()
-            if not entry.is_referenced
-        ]
+        keys_to_evict = [key for key, entry in self._cache.items() if not entry.is_referenced]
 
         for key in keys_to_evict:
             self._evict_entry(key)
@@ -433,10 +449,7 @@ class EncoderCacheManager:
     def _select_eviction_candidate(self) -> str | None:
         """Select entry to evict based on policy."""
         # Prefer unreferenced entries first
-        unreferenced = [
-            (key, entry) for key, entry in self._cache.items()
-            if not entry.is_referenced
-        ]
+        unreferenced = [(key, entry) for key, entry in self._cache.items() if not entry.is_referenced]
 
         if unreferenced:
             candidates = unreferenced
@@ -493,10 +506,7 @@ class EncoderCacheManager:
         elif isinstance(data, (list, tuple)):
             return sum(self._estimate_size(item) for item in data)
         elif isinstance(data, dict):
-            return sum(
-                self._estimate_size(k) + self._estimate_size(v)
-                for k, v in data.items()
-            )
+            return sum(self._estimate_size(k) + self._estimate_size(v) for k, v in data.items())
         else:
             # Rough estimate for other objects
             return 64  # Minimum object size
@@ -569,6 +579,7 @@ class MultiTierEncoderCache:
             return None
 
         import os
+
         filepath = os.path.join(self.disk_path, self._disk_index[key])
 
         if os.path.exists(filepath):
@@ -584,6 +595,7 @@ class MultiTierEncoderCache:
             return False
 
         import os
+
         os.makedirs(self.disk_path, exist_ok=True)
 
         filename = f"{hashlib.md5(key.encode()).hexdigest()}.npy"

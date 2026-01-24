@@ -12,24 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Self archiving agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import logging
 import os
-from typing import List
 from datetime import datetime
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from pathlib import Path
+
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
 
 class SelfArchivingAgent(BaseAgent):
     """
     Phase 35: Recursive Self-Archiving.
     Identifies abandoned code paths or low-utility memories and compresses them into archives.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -47,7 +54,7 @@ class SelfArchivingAgent(BaseAgent):
         # Mock logic to 'find' some obsolete paths
         targets = [
             str(Path(__file__).resolve().parents[4]) + "/logs/session_old_001.log",
-            str(Path(__file__).resolve().parents[4]) + "/memory/abandoned_plan_v1.json"
+            str(Path(__file__).resolve().parents[4]) + "/memory/abandoned_plan_v1.json",
         ]
         return targets
 
@@ -58,16 +65,16 @@ class SelfArchivingAgent(BaseAgent):
         """
         if not targets:
             return "No targets provided for archiving."
-            
+
         logging.info(f"SelfArchiving: Archiving {len(targets)} targets.")
         # Simplified simulation: just pretend we archived them
         os.path.join(os.path.dirname(self.file_path), "archives")
-        
+
         report = f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
         for t in targets:
             report += f"- [ARCHIVED] {t}\n"
-            
+
         return report
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.archive_targets(self.identify_archivable_targets())

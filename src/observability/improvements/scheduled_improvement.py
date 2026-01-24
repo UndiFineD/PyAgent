@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .ScheduleStatus import ScheduleStatus
+
 from dataclasses import dataclass, field
-from typing import List
+
+from src.core.base.lifecycle.version import VERSION
+
+from .schedule_status import ScheduleStatus
 
 __version__ = VERSION
+
 
 @dataclass
 class ScheduledImprovement:
@@ -35,6 +38,7 @@ class ScheduledImprovement:
         status: Current schedule status.
         sprint_id: Optional sprint identifier.
     """
+
     improvement_id: str
     scheduled_start: str = ""
     scheduled_end: str = ""

@@ -16,18 +16,20 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .CleanupStrategy import CleanupStrategy
-from .IsolationLevel import IsolationLevel
+
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Optional
+
+from src.core.base.lifecycle.version import VERSION
+
+from .cleanup_strategy import CleanupStrategy
+from .isolation_level import IsolationLevel
 
 __version__ = VERSION
 
+
 @dataclass
 class TestEnvironment:
-    __test__ = False
     """Test environment configuration.
 
     Attributes:
@@ -37,6 +39,8 @@ class TestEnvironment:
         isolation_level: File system isolation.
         cleanup: Cleanup strategy.
     """
+
+    __test__ = False
 
     name: str
     env_vars: dict[str, str] = field(default_factory=lambda: {})

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -9,11 +23,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
 
 class TokenizerBackend(Enum):
     """Supported tokenizer backends."""
+
     HUGGINGFACE = auto()
     TIKTOKEN = auto()
     MISTRAL = auto()
@@ -23,6 +39,7 @@ class TokenizerBackend(Enum):
 
 class SpecialTokenHandling(Enum):
     """How to handle special tokens."""
+
     INCLUDE = auto()
     EXCLUDE = auto()
     BOS_ONLY = auto()
@@ -32,6 +49,7 @@ class SpecialTokenHandling(Enum):
 
 class TruncationStrategy(Enum):
     """Truncation strategies for long sequences."""
+
     NONE = auto()
     LEFT = auto()
     RIGHT = auto()
@@ -40,6 +58,7 @@ class TruncationStrategy(Enum):
 
 class PaddingStrategy(Enum):
     """Padding strategies for batched inputs."""
+
     NONE = auto()
     MAX_LENGTH = auto()
     LONGEST = auto()
@@ -48,6 +67,7 @@ class PaddingStrategy(Enum):
 @dataclass
 class TokenizerConfig:
     """Configuration for tokenizer initialization."""
+
     model_name: str
     backend: TokenizerBackend = TokenizerBackend.HUGGINGFACE
     revision: Optional[str] = None
@@ -62,19 +82,22 @@ class TokenizerConfig:
     extra_config: Dict[str, Any] = field(default_factory=dict)
 
     def __hash__(self) -> int:
-        return hash((
-            self.model_name,
-            self.backend,
-            self.revision,
-            self.trust_remote_code,
-            self.use_fast,
-            self.max_length,
-        ))
+        return hash(
+            (
+                self.model_name,
+                self.backend,
+                self.revision,
+                self.trust_remote_code,
+                self.use_fast,
+                self.max_length,
+            )
+        )
 
 
 @dataclass
 class TokenizerInfo:
     """Information about a loaded tokenizer."""
+
     backend: TokenizerBackend
     vocab_size: int
     bos_token_id: Optional[int]
@@ -104,6 +127,7 @@ class TokenizerInfo:
 @dataclass
 class TokenizeResult:
     """Result of tokenization."""
+
     input_ids: List[int]
     attention_mask: Optional[List[int]] = None
     token_type_ids: Optional[List[int]] = None
@@ -127,6 +151,7 @@ class TokenizeResult:
 @dataclass
 class BatchTokenizeResult:
     """Result of batch tokenization."""
+
     input_ids: List[List[int]]
     attention_mask: Optional[List[List[int]]] = None
     token_counts: List[int] = field(default_factory=list)
@@ -136,7 +161,7 @@ class BatchTokenizeResult:
         self.token_counts = [len(ids) for ids in self.input_ids]
         self.max_length = max(self.token_counts) if self.token_counts else 0
 
-    def pad_to_max(self, pad_token_id: int = 0) -> 'BatchTokenizeResult':
+    def pad_to_max(self, pad_token_id: int = 0) -> "BatchTokenizeResult":
         padded_ids = []
         padded_mask = []
         for ids in self.input_ids:

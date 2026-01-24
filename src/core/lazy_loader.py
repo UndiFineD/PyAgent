@@ -42,7 +42,6 @@ Example usage:
 from __future__ import annotations
 
 import importlib
-import sys
 from functools import lru_cache
 from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
 
@@ -246,13 +245,9 @@ class ModuleLazyLoader:
             self._cache[name] = attr
             return attr
         except ImportError as e:
-            raise ImportError(
-                f"Failed to lazy import {name!r} from {module_path}: {e}"
-            ) from e
+            raise ImportError(f"Failed to lazy import {name!r} from {module_path}: {e}") from e
         except AttributeError as e:
-            raise AttributeError(
-                f"Module {module_path!r} has no attribute {attr_name!r}: {e}"
-            ) from e
+            raise AttributeError(f"Module {module_path!r} has no attribute {attr_name!r}: {e}") from e
 
     def available_names(self) -> list[str]:
         """

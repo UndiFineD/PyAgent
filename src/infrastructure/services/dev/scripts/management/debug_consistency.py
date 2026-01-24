@@ -18,10 +18,13 @@ Debug script to check for consistency in _record calls across the workspace.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+
 import os
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 def main() -> None:
     root = "src"
@@ -31,15 +34,18 @@ def main() -> None:
         for f in files:
             if f.endswith(".py"):
                 path = os.path.join(r, f)
+
                 try:
                     with open(path, encoding="utf-8", errors="ignore") as file:
                         content = file.read()
                         if "self._record(" in content and "def _record(" not in content:
                             findings.append(path)
+
                 except Exception:
                     pass
 
     print("\n".join(findings))
+
 
 if __name__ == "__main__":
     main()
