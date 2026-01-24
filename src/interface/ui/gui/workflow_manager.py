@@ -20,9 +20,11 @@
 """Workflow management for step-by-step BMAD project execution."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 from tkinter import messagebox
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

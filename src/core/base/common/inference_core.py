@@ -17,11 +17,14 @@ Core logic for inference, tokenization, and model adaptation.
 """
 
 from __future__ import annotations
+
 import logging
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List, Optional
+
+from ....infrastructure.engine.tokenization.utils import (estimate_token_count,
+                                                          get_tokenizer)
 from .base_core import BaseCore
 from .models.communication_models import PromptTemplate
-from ....infrastructure.engine.tokenization.utils import estimate_token_count, get_tokenizer
 
 try:
     import rust_core as rc
@@ -29,6 +32,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.inference")
+
 
 class InferenceCore(BaseCore):
     """

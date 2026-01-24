@@ -11,13 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Mcp server.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from fastapi import FastAPI
 from fastapi_mcp import FastApiMCP
-from src.logic.agents.development.spec_tool_agent import SpecToolAgent
+
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent
+from src.logic.agents.development.spec_tool_agent import SpecToolAgent
 
 __version__ = VERSION
 

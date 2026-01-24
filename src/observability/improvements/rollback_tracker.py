@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+import json
+from datetime import datetime
+
 from src.core.base.lifecycle.version import VERSION
+
 from .improvement import Improvement
 from .rollback_record import RollbackRecord
-from datetime import datetime
-import json
 
 __version__ = VERSION
 
@@ -53,9 +56,7 @@ class RollbackTracker:
             }
         )
 
-    def record_rollback(
-        self, improvement: Improvement, reason: str, commit_hash: str = ""
-    ) -> RollbackRecord:
+    def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:
         """Record a rollback.
 
         Args:

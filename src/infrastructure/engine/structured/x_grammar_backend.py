@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 XGrammarBackend - XGrammar-based structured output backend.
 
@@ -14,41 +28,29 @@ Beyond vLLM innovations:
 - Performance profiling and metrics
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Protocol,
-    Tuple,
-    TypeVar,
-    Union,
-)
-import threading
-import time
 import hashlib
 import json
-import weakref
+import threading
+import time
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, Dict, List, Optional, Tuple, Union
 
-from .models import FSMTransitionTable
-from .json_schema import JsonSchemaGrammar
-from .regex import RegexGrammar
 from .ebnf import EBNFGrammar
+from .json_schema import JsonSchemaGrammar
+from .models import FSMTransitionTable
+from .regex import RegexGrammar
 
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core
+    import rust_core  # noqa: F401
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -56,6 +58,7 @@ except ImportError:
 
 class GrammarType(Enum):
     """Types of grammar specifications."""
+
     JSON_SCHEMA = auto()
     JSON_OBJECT = auto()
     REGEX = auto()
@@ -67,6 +70,7 @@ class GrammarType(Enum):
 
 class VocabType(Enum):
     """Vocabulary encoding types."""
+
     RAW = auto()
     BYTE_FALLBACK = auto()
     BYTE_LEVEL = auto()
@@ -80,6 +84,7 @@ class TokenizerInfo:
     Encapsulates vocabulary and tokenizer metadata needed for
     grammar compilation and bitmask generation.
     """
+
     encoded_vocab: Tuple[str, ...]
     vocab_type: VocabType
     vocab_size: int
@@ -117,11 +122,11 @@ class TokenizerInfo:
 
         # Get stop token IDs
         stop_token_ids = []
-        if hasattr(tokenizer, 'eos_token_id') and tokenizer.eos_token_id is not None:
+        if hasattr(tokenizer, "eos_token_id") and tokenizer.eos_token_id is not None:
             stop_token_ids.append(tokenizer.eos_token_id)
 
         # Detect add_prefix_space
-        add_prefix_space = getattr(tokenizer, 'add_prefix_space', True)
+        add_prefix_space = getattr(tokenizer, "add_prefix_space", True)
 
         return cls(
             encoded_vocab=tuple(encoded_vocab),
@@ -134,9 +139,9 @@ class TokenizerInfo:
     @staticmethod
     def _detect_vocab_type(tokenizer: Any) -> VocabType:
         """Detect vocabulary type from tokenizer."""
-        if hasattr(tokenizer, 'is_tekken') and tokenizer.is_tekken:
+        if hasattr(tokenizer, "is_tekken") and tokenizer.is_tekken:
             return VocabType.RAW
-        if hasattr(tokenizer, 'byte_fallback') and tokenizer.byte_fallback:
+        if hasattr(tokenizer, "byte_fallback") and tokenizer.byte_fallback:
             return VocabType.BYTE_FALLBACK
         return VocabType.BYTE_LEVEL
 
@@ -149,6 +154,7 @@ class CompiledGrammar:
     Holds the compiled grammar state and provides methods for
     token acceptance checking and bitmask generation.
     """
+
     grammar_type: GrammarType
     grammar_spec: str
     vocab_size: int
@@ -206,7 +212,7 @@ class CompiledGrammar:
         """Rollback the last N tokens."""
         if num_tokens > 0 and len(self._accepted_tokens) >= num_tokens:
             self._accepted_tokens = self._accepted_tokens[:-num_tokens]
-            self._state_history = self._state_history[:len(self._accepted_tokens) + 1]
+            self._state_history = self._state_history[: len(self._accepted_tokens) + 1]
             self._current_state = self._state_history[-1]
 
     def reset(self) -> None:
@@ -246,7 +252,8 @@ class CompiledGrammar:
         # High performance approach: use the Rust helper if we have a list of allowed IDs
         allowed_ids = []
         for tid, tstr in self.token_strings.items():
-            if not tstr: continue
+            if not tstr:
+                continue
 
             # Check if this token is allowed starting from current state
             temp_state = self._current_state
@@ -274,7 +281,6 @@ class CompiledGrammar:
                     bitmask[tid] = 1
 
 
-
 @dataclass
 class GrammarMatcher:
     """
@@ -283,6 +289,7 @@ class GrammarMatcher:
     Wraps CompiledGrammar with additional state management
     for speculative decoding scenarios.
     """
+
     grammar: CompiledGrammar
     max_rollback_tokens: int = 0
 
@@ -345,10 +352,10 @@ class GrammarCompiler:
 
         # Statistics
         self._stats = {
-            'compilations': 0,
-            'cache_hits': 0,
-            'cache_misses': 0,
-            'total_compile_time': 0.0,
+            "compilations": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
+            "total_compile_time": 0.0,
         }
 
     def compile_json_schema(
@@ -382,8 +389,8 @@ class GrammarCompiler:
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
 
-        self._stats['compilations'] += 1
-        self._stats['total_compile_time'] += time.time() - start_time
+        self._stats["compilations"] += 1
+        self._stats["total_compile_time"] += time.time() - start_time
 
         self._put_cached(cache_key, grammar)
         return grammar
@@ -414,8 +421,8 @@ class GrammarCompiler:
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
 
-        self._stats['compilations'] += 1
-        self._stats['total_compile_time'] += time.time() - start_time
+        self._stats["compilations"] += 1
+        self._stats["total_compile_time"] += time.time() - start_time
 
         self._put_cached(cache_key, grammar)
         return grammar
@@ -446,8 +453,8 @@ class GrammarCompiler:
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
 
-        self._stats['compilations'] += 1
-        self._stats['total_compile_time'] += time.time() - start_time
+        self._stats["compilations"] += 1
+        self._stats["total_compile_time"] += time.time() - start_time
 
         self._put_cached(cache_key, grammar)
         return grammar
@@ -459,7 +466,7 @@ class GrammarCompiler:
     ) -> CompiledGrammar:
         """Compile structural tag grammar."""
         if isinstance(spec, list):
-            spec_str = json.dumps({'structures': spec, 'triggers': triggers or []})
+            spec_str = json.dumps({"structures": spec, "triggers": triggers or []})
         else:
             spec_str = spec
 
@@ -477,8 +484,8 @@ class GrammarCompiler:
             vocab_size=self.tokenizer_info.vocab_size,
         )
 
-        self._stats['compilations'] += 1
-        self._stats['total_compile_time'] += time.time() - start_time
+        self._stats["compilations"] += 1
+        self._stats["total_compile_time"] += time.time() - start_time
 
         self._put_cached(cache_key, grammar)
         return grammar
@@ -486,15 +493,15 @@ class GrammarCompiler:
     def _get_cached(self, key: str) -> Optional[CompiledGrammar]:
         """Get grammar from cache."""
         if not self.cache_enabled:
-            self._stats['cache_misses'] += 1
+            self._stats["cache_misses"] += 1
             return None
 
         with self._lock:
             grammar = self._cache.get(key)
             if grammar is not None:
-                self._stats['cache_hits'] += 1
+                self._stats["cache_hits"] += 1
             else:
-                self._stats['cache_misses'] += 1
+                self._stats["cache_misses"] += 1
             return grammar
 
     def _put_cached(self, key: str, grammar: CompiledGrammar) -> None:
@@ -505,8 +512,7 @@ class GrammarCompiler:
         with self._lock:
             # Evict if needed
             estimated_size = len(grammar.grammar_spec) * 2
-            while (self._cache_size_bytes + estimated_size > self.cache_limit_bytes
-                   and self._cache):
+            while self._cache_size_bytes + estimated_size > self.cache_limit_bytes and self._cache:
                 old_key = next(iter(self._cache))
                 old_grammar = self._cache.pop(old_key)
                 self._cache_size_bytes -= len(old_grammar.grammar_spec) * 2
@@ -688,9 +694,9 @@ class XGrammarBackend:
     def get_stats(self) -> Dict[str, Any]:
         """Get backend statistics."""
         stats = self.compiler.get_stats()
-        stats['vocab_size'] = self.vocab_size
-        stats['num_speculative_tokens'] = self.num_speculative_tokens
-        stats['bitmask_pool_size'] = len(self._bitmask_pool)
+        stats["vocab_size"] = self.vocab_size
+        stats["num_speculative_tokens"] = self.num_speculative_tokens
+        stats["bitmask_pool_size"] = len(self._bitmask_pool)
         return stats
 
     def destroy(self) -> None:
@@ -774,14 +780,14 @@ class CompositeGrammar:
 
 
 __all__ = [
-    'GrammarType',
-    'VocabType',
-    'TokenizerInfo',
-    'CompiledGrammar',
-    'GrammarMatcher',
-    'GrammarCompiler',
-    'XGrammarGrammar',
-    'XGrammarBackend',
-    'AsyncXGrammarBackend',
-    'CompositeGrammar',
+    "GrammarType",
+    "VocabType",
+    "TokenizerInfo",
+    "CompiledGrammar",
+    "GrammarMatcher",
+    "GrammarCompiler",
+    "XGrammarGrammar",
+    "XGrammarBackend",
+    "AsyncXGrammarBackend",
+    "CompositeGrammar",
 ]

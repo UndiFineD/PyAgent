@@ -17,14 +17,18 @@ Core logic for conversation history and message management.
 """
 
 from __future__ import annotations
+
 from typing import List
+
 from .base_core import BaseCore
-from .models import MessageRole, ConversationMessage
+from .models import ConversationMessage, MessageRole
+
 
 class ConversationCore(BaseCore):
     """
     Authoritative engine for conversation state.
     """
+
     def __init__(self, max_messages: int = 100) -> None:
         super().__init__()
         self.messages: List[ConversationMessage] = []
@@ -35,7 +39,7 @@ class ConversationCore(BaseCore):
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
-            self.messages = self.messages[-self.max_messages:]
+            self.messages = self.messages[-self.max_messages :]
 
     def get_history(self) -> List[ConversationMessage]:
         """Return a copy of the conversation history."""

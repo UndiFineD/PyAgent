@@ -1,32 +1,38 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Memory Arena - Bump allocator for temporary allocations.
 
 Phase 19: Beyond vLLM - Performance Patterns
 Arena allocation for reduced allocation overhead.
 """
+
 from __future__ import annotations
 
-import mmap
 import threading
-from dataclasses import dataclass, field
-from typing import (
-    Any,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    TypeVar,
-    Union,
-)
 from contextlib import contextmanager
-import weakref
+from dataclasses import dataclass
+from typing import Any, Dict, Generic, List, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 @dataclass
 class ArenaStats:
     """Statistics for arena allocations."""
+
     allocations: int = 0
     bytes_allocated: int = 0
     bytes_wasted: int = 0
@@ -43,12 +49,12 @@ class ArenaStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            'allocations': self.allocations,
-            'bytes_allocated': self.bytes_allocated,
-            'bytes_wasted': self.bytes_wasted,
-            'resets': self.resets,
-            'peak_usage': self.peak_usage,
-            'fragmentation_ratio': self.fragmentation_ratio,
+            "allocations": self.allocations,
+            "bytes_allocated": self.bytes_allocated,
+            "bytes_wasted": self.bytes_wasted,
+            "resets": self.resets,
+            "peak_usage": self.peak_usage,
+            "fragmentation_ratio": self.fragmentation_ratio,
         }
 
 
@@ -160,7 +166,7 @@ class MemoryArena:
 
             # Return view into current block
             block = self._blocks[self._current_block]
-            return memoryview(block)[start:start + size]
+            return memoryview(block)[start : start + size]
 
     def alloc_bytes(self, size: int) -> bytearray:
         """
@@ -365,7 +371,7 @@ class StackArena:
             self._stats.bytes_allocated += size
             self._stats.peak_usage = max(self._stats.peak_usage, self._top)
 
-            return memoryview(self._buffer)[start:start + size]
+            return memoryview(self._buffer)[start : start + size]
 
     def reset(self) -> None:
         """Reset arena completely."""
@@ -470,7 +476,7 @@ class SlabAllocator(Generic[T]):
             self._stats.bytes_allocated += self._object_size
 
             slab = self._slabs[slab_idx]
-            return memoryview(slab)[offset:offset + self._object_size]
+            return memoryview(slab)[offset : offset + self._object_size]
 
     def free(self, view: memoryview) -> None:
         """
@@ -523,7 +529,7 @@ def get_thread_arena(size: int = 1024 * 1024) -> MemoryArena:
     Returns:
         Thread-local arena instance
     """
-    if not hasattr(_thread_local, 'arena'):
+    if not hasattr(_thread_local, "arena"):
         _thread_local.arena = MemoryArena(block_size=size)
     return _thread_local.arena
 

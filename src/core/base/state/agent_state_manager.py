@@ -18,13 +18,16 @@ Handles persistence of agent memory, history, and metadata.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import collections
+import json
 import logging
 import time
-import collections
 from pathlib import Path
 from typing import Any
+
 from src.core.base.common.file_system_core import FileSystemCore
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -32,9 +35,7 @@ __version__ = VERSION
 class EmergencyEventLog:
     """Phase 278: Ring buffer recording the last 10 filesystem actions for recovery."""
 
-    def __init__(
-        self, log_path: Path = Path("data/logs/emergency_recovery.log")
-    ) -> None:
+    def __init__(self, log_path: Path = Path("data/logs/emergency_recovery.log")) -> None:
         self.log_path = log_path
         self.buffer = collections.deque(maxlen=10)
         self._fs = FileSystemCore()
@@ -47,16 +48,17 @@ class EmergencyEventLog:
                 content = self.log_path.read_text(encoding="utf-8")
                 self.buffer.extend(content.splitlines())
 
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
     def record_action(self, action: str, details: str) -> None:
+        """Record an action to the emergency log."""
         event = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {action}: {details}"
 
         self.buffer.append(event)
         try:
             self._fs.atomic_write(self.log_path, "\n".join(self.buffer))
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
 
 
@@ -84,9 +86,7 @@ class StateTransaction:
                 backup_path = self.temp_dir / f"{file.name}_{self.id}.bak"
                 self._fs.safe_copy(file, backup_path)
                 self.backups[file] = backup_path
-        logging.info(
-            f"Transaction {self.id} started. {len(self.backups)} files backed up."
-        )
+        logging.info(f"Transaction {self.id} started. {len(self.backups)} files backed up.")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
@@ -115,6 +115,7 @@ class AgentStateManager:
     """Manages saving and loading agent state to/from disk."""
 
     @staticmethod
+    # pylint: disable=too-many-positional-arguments
     def save_state(
         file_path: Path,
         current_state: str,
@@ -124,7 +125,6 @@ class AgentStateManager:
         path: Path | None = None,
     ) -> None:
         """Save agent state to disk."""
-        import json
         state_path: Path = path or file_path.with_suffix(".state.json")
         state: dict[str, Any] = {
             "file_path": str(file_path),
@@ -145,6 +145,6 @@ class AgentStateManager:
 
         try:
             return json.loads(state_path.read_text(encoding="utf-8"))
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.warning(f"Failed to load state: {e}")
             return None

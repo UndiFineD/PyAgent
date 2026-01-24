@@ -1,6 +1,28 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Mapping.py module.
+"""
+
 from __future__ import annotations
+
 from typing import Any, Callable, overload
-from src.core.base.common.utils.jsontree.types import JSONTree, _JSONTree, _T, _U
+
+from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+                                                       _JSONTree)
+
 
 @overload
 def json_map_leaves(
@@ -49,12 +71,12 @@ def json_map_leaves(
     """
     if isinstance(value, dict):
         return {k: json_map_leaves(func, v) for k, v in value.items()}  # type: ignore
-    elif isinstance(value, list):
+    if isinstance(value, list):
         return [json_map_leaves(func, v) for v in value]  # type: ignore
-    elif isinstance(value, tuple):
+    if isinstance(value, tuple):
         return tuple(json_map_leaves(func, v) for v in value)
-    else:
-        return func(value)
+
+    return func(value)
 
 
 def json_map_leaves_async(

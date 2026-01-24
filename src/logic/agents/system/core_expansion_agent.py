@@ -12,14 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core expansion agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import subprocess
 import sys
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -44,9 +50,7 @@ class CoreExpansionAgent(BaseAgent):
         """
         Attempts to install a missing Python package using pip.
         """
-        logging.info(
-            f"CoreExpansionAgent: Attempting to install package: {package_name}"
-        )
+        logging.info(f"CoreExpansionAgent: Attempting to install package: {package_name}")
 
         try:
             # Use subprocess to run pip
@@ -60,16 +64,12 @@ class CoreExpansionAgent(BaseAgent):
             logging.info(f"CoreExpansionAgent: Successfully installed {package_name}")
 
             # Phase 108: Record intelligence for future dependency graph learning
-            self._record(
-                cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip"
-            )
+            self._record(cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip")
 
             return f"Success: {package_name} installed.\nStdout: {result.stdout}"
         except subprocess.CalledProcessError as e:
             err_msg = e.stderr or str(e)
-            logging.error(
-                f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}"
-            )
+            logging.error(f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}")
 
             # Phase 108: Record failure as a lesson
             self._record(
@@ -93,7 +93,5 @@ class CoreExpansionAgent(BaseAgent):
         except (ImportError, KeyError):
             import pkg_resources
 
-            installed_packages = [
-                f"{d.project_name}=={d.version}" for d in pkg_resources.working_set
-            ]
+            installed_packages = [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
             return installed_packages

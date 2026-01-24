@@ -1,10 +1,24 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Core logic for Dependency Management (Phase 176).
 Handles pip-audit execution and version pinning.
 """
 
-import subprocess
 import os
+import subprocess
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 
@@ -18,9 +32,7 @@ class DependencyCore:
         Runs pip-audit and returns the summary.
         """
         try:
-            result = subprocess.run(
-                ["pip-audit", "--format", "plain"], capture_output=True, text=True
-            )
+            result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
             output = result.stdout or result.stderr
         except FileNotFoundError:
             output = "pip-audit not installed. Run 'pip install pip-audit' to enable."
@@ -36,9 +48,7 @@ class DependencyCore:
         return output
 
     @staticmethod
-    def pin_requirements(
-        file_path: str, recorder: ContextRecorderInterface | None = None
-    ) -> int:
+    def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
         """
         Ensures all packages in a file are pinned with ==.
         Returns the number of lines modified.
@@ -61,17 +71,11 @@ class DependencyCore:
         for line in lines:
             stripped = line.strip()
             # If line is a package and not pinned
-            if (
-                stripped
-                and not stripped.startswith("#")
-                and not stripped.startswith("-r")
-            ):
+            if stripped and not stripped.startswith("#") and not stripped.startswith("-r"):
                 if "==" not in stripped and ">=" not in stripped:
                     # In a real scenario, we'd fetch current version.
                     # For this phase, we'll mark it for review if not pinned.
-                    new_lines.append(
-                        line.replace(stripped, stripped + "==LATEST-CHECK-REQUIRED")
-                    )
+                    new_lines.append(line.replace(stripped, stripped + "==LATEST-CHECK-REQUIRED"))
                     modified += 1
                 else:
                     new_lines.append(line)

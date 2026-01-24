@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -7,17 +21,10 @@ Core renderers for prompt rendering.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from .base import PromptRenderer
-from .models import (
-    InputType,
-    PromptConfig,
-    RenderResult,
-    TruncationResult,
-)
-from .salt import CacheSaltGenerator
-from .truncation import TruncationManager
+from .models import InputType, PromptConfig, RenderResult
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +65,7 @@ class CompletionRenderer(PromptRenderer):
 
         if config.normalize_unicode:
             import unicodedata
+
             text = unicodedata.normalize("NFC", text)
 
         tokens = self._tokenize(text, config.add_special_tokens)
@@ -95,9 +103,7 @@ class ChatRenderer(PromptRenderer):
         """Render chat prompt."""
         if config.messages is None:
             # Fallback to completion rendering
-            return CompletionRenderer(
-                self.tokenizer, self.max_model_tokens
-            ).render(config)
+            return CompletionRenderer(self.tokenizer, self.max_model_tokens).render(config)
 
         # Apply chat template
         text = self._apply_template(
@@ -138,12 +144,13 @@ class ChatRenderer(PromptRenderer):
         """Apply Jinja2 chat template."""
         # Try Rust acceleration first
         from .utils import _try_rust_render_template
+
         rust_rendered = _try_rust_render_template(template, messages, add_generation_prompt)
         if rust_rendered:
             return rust_rendered
 
         try:
-            from jinja2 import Environment, BaseLoader
+            from jinja2 import BaseLoader, Environment
 
             env = Environment(loader=BaseLoader())
             tmpl = env.from_string(template)
@@ -182,6 +189,7 @@ class ChatRenderer(PromptRenderer):
 
         # Try Rust acceleration
         from .utils import _try_rust_find_placeholders
+
         rust_positions = _try_rust_find_placeholders(text, patterns)
         if rust_positions:
             return rust_positions

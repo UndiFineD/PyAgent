@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: Pooling Infrastructure
 vLLM-inspired pooling metadata and cursor management.
@@ -12,28 +26,29 @@ Beyond vLLM:
 from __future__ import annotations
 
 import threading
-import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, TypeVar, Union
+from typing import Dict, List, Optional, TypeVar
 
 import numpy as np
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
     rust_core = None
 
 # Type variable for tensor types
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class PoolingStrategy(Enum):
     """Pooling strategies for sequence embeddings."""
+
     MEAN = auto()
     MAX = auto()
     FIRST = auto()
@@ -50,6 +65,7 @@ class PoolingCursor:
     Tracks the position within a sequence for pooling operations,
     supporting both contiguous and chunked prefill scenarios.
     """
+
     # Sequence tracking
     seq_start_idx: int
     seq_len: int
@@ -102,6 +118,7 @@ class PoolingStates:
 
     Tracks intermediate states for multi-pass pooling strategies.
     """
+
     # Accumulation state
     sum_hidden: Optional[np.ndarray] = None
     max_hidden: Optional[np.ndarray] = None
@@ -124,7 +141,7 @@ class PoolingStates:
         if strategy == PoolingStrategy.MEAN:
             self.sum_hidden = np.zeros(hidden_dim, dtype=np.float32)
         elif strategy == PoolingStrategy.MAX:
-            self.max_hidden = np.full(hidden_dim, float('-inf'), dtype=np.float32)
+            self.max_hidden = np.full(hidden_dim, float("-inf"), dtype=np.float32)
         elif strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             self.sum_hidden = np.zeros(hidden_dim, dtype=np.float32)
             self.attention_sum = 0.0
@@ -176,6 +193,7 @@ class PoolingMetadata:
 
     Contains all information needed to perform pooling across a batch.
     """
+
     # Batch information
     batch_size: int
 
@@ -203,7 +221,7 @@ class PoolingMetadata:
         hidden_dim: int,
         strategy: PoolingStrategy = PoolingStrategy.MEAN,
         chunk_sizes: Optional[List[int]] = None,
-    ) -> 'PoolingMetadata':
+    ) -> "PoolingMetadata":
         """Create pooling metadata for a batch."""
         batch_size = len(seq_starts)
         is_chunked = chunk_sizes is not None
@@ -377,6 +395,7 @@ class PoolerOutput:
 
     Contains pooled embeddings and metadata.
     """
+
     embeddings: List[np.ndarray]
     seq_ids: List[str]
     strategy: PoolingStrategy
@@ -484,7 +503,7 @@ def pool_with_rust(
 
     Returns pooled embeddings if Rust is available.
     """
-    if HAS_RUST and hasattr(rust_core, 'pool_sequences'):
+    if HAS_RUST and hasattr(rust_core, "pool_sequences"):
         return rust_core.pool_sequences(
             hidden_states,
             seq_starts,
@@ -495,17 +514,17 @@ def pool_with_rust(
 
 
 __all__ = [
-    'PoolingStrategy',
-    'PoolingCursor',
-    'PoolingStates',
-    'PoolingMetadata',
-    'Pooler',
-    'MeanPooler',
-    'MaxPooler',
-    'LastTokenPooler',
-    'AttentionWeightedPooler',
-    'PoolerFactory',
-    'PoolerOutput',
-    'ChunkedPoolingManager',
-    'pool_with_rust',
+    "PoolingStrategy",
+    "PoolingCursor",
+    "PoolingStates",
+    "PoolingMetadata",
+    "Pooler",
+    "MeanPooler",
+    "MaxPooler",
+    "LastTokenPooler",
+    "AttentionWeightedPooler",
+    "PoolerFactory",
+    "PoolerOutput",
+    "ChunkedPoolingManager",
+    "pool_with_rust",
 ]

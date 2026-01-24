@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
+
+"""
+Merge conflict mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
+
 from typing import Any
+
 
 class MergeConflictMixin:
     """Mixin for handling merge conflicts in file content."""
@@ -36,7 +42,10 @@ class MergeConflictMixin:
                 theirs = []
             elif in_conflict:
                 # Optimized conflict parsing
-                if "=======" not in content[content.find("<<<<<<<", conflict_start) : content.find(line, conflict_start)]:
+                if (
+                    "======="
+                    not in content[content.find("<<<<<<<", conflict_start) : content.find(line, conflict_start)]
+                ):
                     ours.append(line)
                 else:
                     theirs.append(line)

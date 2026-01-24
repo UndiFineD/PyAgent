@@ -16,10 +16,12 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
+
+from collections.abc import Callable
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
 from src.logic.orchestration.agent_chain_step import AgentChainStep
-from typing import Any
-from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -73,9 +75,7 @@ class AgentChain:
         self._steps.append(step)
         return self
 
-    def execute(
-        self, initial_input: Any, agent_executor: Callable[[str, Any], Any]
-    ) -> list[dict[str, Any]]:
+    def execute(self, initial_input: Any, agent_executor: Callable[[str, Any], Any]) -> list[dict[str, Any]]:
         """Execute the chain.
 
         Args:

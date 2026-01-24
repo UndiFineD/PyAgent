@@ -12,23 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+"""
+Evolutionary Prompt Agent for genetic optimization of agent instructions.
+"""
+
 import random
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 from src.logic.agents.cognitive.core.evolution_core import EvolutionCore
 
 __version__ = VERSION
 
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-
+# pylint: disable=too-many-ancestors
 class EvolutionaryPromptAgent(BaseAgent):
     """
     Agent that implements genetic algorithms to 'breed' and evolve system prompts.
@@ -89,7 +88,7 @@ class EvolutionaryPromptAgent(BaseAgent):
         winners = self.population[: self.population_size // 2]
 
         new_population = []
-        for i in range(self.population_size):
+        for _ in range(self.population_size):
             parent1 = random.choice(winners)
             parent2 = random.choice(winners)
 

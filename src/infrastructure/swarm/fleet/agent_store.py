@@ -18,10 +18,12 @@ Allows agents to 'buy' or download new capabilities.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 
 class AgentStore:
@@ -46,9 +48,7 @@ class AgentStore:
     def list_templates(self) -> dict[str, dict[str, Any]]:
         return self.templates
 
-    def purchase_template(
-        self, agent_id: str, template_name: str, economy: Any
-    ) -> dict[str, Any] | None:
+    def purchase_template(self, agent_id: str, template_name: str, economy: Any) -> dict[str, Any] | None:
         """Purchases a template using agent credits."""
         if template_name not in self.templates:
             return None

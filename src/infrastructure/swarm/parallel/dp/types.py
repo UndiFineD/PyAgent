@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -11,29 +25,37 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Optional
 
+
 class DPRole(Enum):
     """Data parallel role."""
-    MASTER = auto()    # Coordinates workers
-    WORKER = auto()    # Executes work
-    HYBRID = auto()    # Both roles
+
+    MASTER = auto()  # Coordinates workers
+    WORKER = auto()  # Executes work
+    HYBRID = auto()  # Both roles
+
 
 class WorkerHealth(Enum):
     """Worker health status."""
+
     HEALTHY = auto()
     DEGRADED = auto()
     RECOVERING = auto()
     FAILED = auto()
 
+
 class LoadBalanceStrategy(Enum):
     """Load balancing strategy."""
+
     ROUND_ROBIN = auto()
     LEAST_LOADED = auto()
-    P2C = auto()               # Power of Two Choices
-    LOCALITY_AWARE = auto()    # Prefer local workers
+    P2C = auto()  # Power of Two Choices
+    LOCALITY_AWARE = auto()  # Prefer local workers
+
 
 @dataclass
 class DPConfig:
     """Configuration for data parallel coordinator."""
+
     num_workers: int = 1
     dp_rank: int = 0
     dp_size: int = 1
@@ -45,9 +67,11 @@ class DPConfig:
     enable_locality: bool = True
     locality_groups: list[list[int]] = field(default_factory=list)
 
+
 @dataclass
 class WorkerState:
     """State of a DP worker."""
+
     worker_id: int
     dp_rank: int
     health: WorkerHealth = WorkerHealth.HEALTHY
@@ -63,9 +87,11 @@ class WorkerState:
         """Update average latency with EMA."""
         self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
 
+
 @dataclass
 class StepState:
     """State for a single step."""
+
     step_id: int
     wave_id: int
     request_count: int = 0
@@ -82,9 +108,11 @@ class StepState:
         end = self.end_time or time.time()
         return (end - self.start_time) * 1000
 
+
 @dataclass
 class WaveState:
     """State for an execution wave."""
+
     wave_id: int
     num_steps: int = 0
     completed_steps: int = 0

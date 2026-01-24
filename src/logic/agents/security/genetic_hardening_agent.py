@@ -12,18 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Genetic hardening agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class GeneticHardeningAgent(BaseAgent):
+class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Implements Genetic Code Hardening (Phase 32).
     Automatically evolves the codebase structure to be more resilient to errors.
@@ -72,9 +78,7 @@ class GeneticHardeningAgent(BaseAgent):
         """
         Applies hardening rules to the code to 'evolve' it into a more resilient version.
         """
-        logging.info(
-            f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules."
-        )
+        logging.info(f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules.")
 
         prompt = (
             f"Code:\n{code}\n\n"

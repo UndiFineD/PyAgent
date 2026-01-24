@@ -16,12 +16,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
+
 from .effort_estimate import EffortEstimate
 from .improvement_category import ImprovementCategory
 from .improvement_priority import ImprovementPriority
-from dataclasses import dataclass
-from typing import Any
 
 __version__ = VERSION
 

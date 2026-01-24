@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .test_log_entry import TestLogEntry
+
+from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
-from collections.abc import Iterator
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_log_entry import TestLogEntry
 
 __version__ = VERSION
 

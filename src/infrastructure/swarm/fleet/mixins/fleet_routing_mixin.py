@@ -1,12 +1,18 @@
+
+"""
+Fleet routing mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
 import logging
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
 
 class FleetRoutingMixin:
     """Mixin for task routing and remote node registration in FleetManager."""
@@ -19,13 +25,12 @@ class FleetRoutingMixin:
         Uses VersionGate to ensure compatibility (Phase 104).
         """
         from src.core.base.lifecycle.version import SDK_VERSION
+        from src.infrastructure.swarm.fleet.remote_agent_proxy import \
+            RemoteAgentProxy
         from src.infrastructure.swarm.fleet.version_gate import VersionGate
-        from src.infrastructure.swarm.fleet.remote_agent_proxy import RemoteAgentProxy
 
         if not VersionGate.is_compatible(SDK_VERSION, remote_version):
-            logging.warning(
-                f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})"
-            )
+            logging.warning(f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})")
             return
 
         self.remote_nodes.append(node_url)

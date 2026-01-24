@@ -18,11 +18,12 @@ Inspired by external-secrets and infrastructure-as-code patterns.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
+
 import yaml
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.validation import ValidationCore
 
 __version__ = VERSION
@@ -69,9 +70,7 @@ class ConfigAgent(BaseAgent):
 
             # Simple structure check
             if "models" in data and isinstance(data["models"], list):
-                return (
-                    f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
-                )
+                return f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
             else:
                 return "❌ `models.yaml` has invalid structure (missing 'models' list)."
         except Exception as e:

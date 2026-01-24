@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -8,8 +22,8 @@ from __future__ import annotations
 
 from typing import List, Optional, Sequence
 
-from .models import TokenizerConfig
 from .base import BaseTokenizer
+from .models import TokenizerConfig
 
 
 class TiktokenTokenizer(BaseTokenizer):
@@ -34,6 +48,7 @@ class TiktokenTokenizer(BaseTokenizer):
         """Load tiktoken encoding."""
         try:
             import tiktoken
+
             model_name = self.config.model_name.lower()
             if model_name in ["cl100k_base", "p50k_base", "r50k_base", "o200k_base"]:
                 self._encoding = tiktoken.get_encoding(model_name)

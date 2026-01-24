@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Swarm topology reporter.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import logging
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -42,12 +48,8 @@ class SwarmTopologyReporter:
     ) -> None:
         self.nodes.append({"id": node_id, "group": group, "meta": metadata or {}})
 
-    def record_link(
-        self, source: str, target: str, strength: float = 1.0, type: str = "coord"
-    ) -> None:
-        self.links.append(
-            {"source": source, "target": target, "value": strength, "type": type}
-        )
+    def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:
+        self.links.append({"source": source, "target": target, "value": strength, "type": type})
 
     def export(self) -> None:
         data = {

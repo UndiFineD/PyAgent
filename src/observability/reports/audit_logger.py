@@ -16,12 +16,15 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .audit_action import AuditAction
-from .audit_entry import AuditEntry
-from typing import Any
+
 import logging
 import time
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .audit_action import AuditAction
+from .audit_entry import AuditEntry
 
 __version__ = VERSION
 

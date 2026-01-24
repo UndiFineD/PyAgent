@@ -13,16 +13,18 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
+"""
+Auto-extracted class from agent_context.py
+"""
 
-from __future__ import annotations
+import logging
+from pathlib import Path
+
 from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
-from src.logic.agents.cognitive.context.models.file_category import FileCategory
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
-from pathlib import Path
-import logging
+from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
+from src.logic.agents.cognitive.context.models.file_category import FileCategory
 
 from src.logic.agents.cognitive.context_template_mixin import ContextTemplateMixin, DEFAULT_TEMPLATES
 from src.logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
@@ -35,6 +37,7 @@ from src.logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class ContextAgent(
     BaseAgent,
     ContextTemplateMixin,
@@ -143,12 +146,14 @@ class ContextAgent(
             "# Original content preserved below:\n\n"
         )
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the context.
 
         When Copilot CLI is unavailable, BaseAgent keeps the existing file
         content unchanged instead of injecting duplicated placeholder blocks.
         """
+        _ = prompt
+        _ = target_file
         logging.info(f"Improving context for {self.file_path}")
         # Include source code in AI context for accurate descriptions
         if self.source_path and self.source_path.exists():

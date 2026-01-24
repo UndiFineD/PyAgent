@@ -12,19 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Holographic Context Agent for multi-perspective context snapshots.
+"""
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 import time
 import random
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class HolographicContextAgent(BaseAgent):
     """
     Agent that manages multi-perspective context snapshots (Holograms).
@@ -46,11 +50,14 @@ class HolographicContextAgent(BaseAgent):
         self,
         name: str,
         state_data: dict[str, Any],
-        angles: list[str] = ["security", "performance"],
+        angles: list[str] | None = None,
     ) -> str:
         """
         Creates a multi-angle 'hologram' of the provided state data.
         """
+        if angles is None:
+            angles = ["security", "performance"]
+
         hologram = {
             "timestamp": time.time(),
             "source_data": state_data,

@@ -11,9 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Code quality module.py module.
+"""
+
 from __future__ import annotations
+
 import re
 from typing import Any
+
 from src.core.base.common.base_modules import BaseModule
 
 

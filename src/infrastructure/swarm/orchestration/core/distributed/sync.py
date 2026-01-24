@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -9,11 +23,7 @@ from __future__ import annotations
 import logging
 import threading
 from abc import ABC, abstractmethod
-from typing import (
-    Any,
-    Dict,
-    Optional,
-)
+from typing import Any, Dict, Optional
 
 from src.core.rust_bridge import RustBridge
 
@@ -53,11 +63,14 @@ class NixlSyncProvider(DistributedSyncProvider):
 
         # Initialize NIXL RDMA stubs in Rust
         try:
-            self.rust_bridge.execute("nixl_zero_copy_map_rust", {
-                "rank": rank,
-                "world_size": world_size,
-                "map_size": 1024 * 1024,  # 1MB for control state
-            })
+            self.rust_bridge.execute(
+                "nixl_zero_copy_map_rust",
+                {
+                    "rank": rank,
+                    "world_size": world_size,
+                    "map_size": 1024 * 1024,  # 1MB for control state
+                },
+            )
         except Exception as e:
             logger.warning("Failed to initialize Nixl RDMA sync: %s. Falling back to TCP.", e)
 
@@ -65,11 +78,14 @@ class NixlSyncProvider(DistributedSyncProvider):
         """RDMA-accelerated barrier."""
         try:
             # nixl_rdma_send_rust can be used for fast signal pulses
-            result = self.rust_bridge.execute("nixl_rdma_send_rust", {
-                "type": "barrier",
-                "name": name,
-                "timeout": timeout,
-            })
+            result = self.rust_bridge.execute(
+                "nixl_rdma_send_rust",
+                {
+                    "type": "barrier",
+                    "name": name,
+                    "timeout": timeout,
+                },
+            )
             return result.get("success", False)
         except Exception:
             return False

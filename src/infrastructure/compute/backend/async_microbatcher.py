@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 AsyncMicrobatcher - Async micro-batching for LLM operations.
 
@@ -6,23 +20,25 @@ with configurable batch size and timeout.
 
 Phase 17: vLLM Pattern Integration
 """
-from __future__ import annotations
-import asyncio
-import time
-from collections.abc import Callable, Awaitable
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from typing import TypeVar, Generic, Optional, Any
-import threading
-import queue
 
-T = TypeVar('T')  # Input type
-R = TypeVar('R')  # Result type
+from __future__ import annotations
+
+import asyncio
+import queue
+import threading
+import time
+from collections.abc import Awaitable, Callable
+from dataclasses import dataclass, field
+from typing import Generic, Optional, TypeVar
+
+T = TypeVar("T")  # Input type
+R = TypeVar("R")  # Result type
 
 
 @dataclass
 class BatchItem(Generic[T, R]):
     """A single item in a batch with its associated future."""
+
     data: T
     future: asyncio.Future[R]
     timestamp: float = field(default_factory=time.time)
@@ -31,6 +47,7 @@ class BatchItem(Generic[T, R]):
 @dataclass
 class BatchStats:
     """Statistics for batching performance."""
+
     total_items: int = 0
     total_batches: int = 0
     total_wait_time_ms: float = 0.0
@@ -52,11 +69,11 @@ class BatchStats:
 
     def to_dict(self) -> dict:
         return {
-            'total_items': self.total_items,
-            'total_batches': self.total_batches,
-            'avg_batch_size': round(self.avg_batch_size, 2),
-            'avg_wait_time_ms': round(self.avg_wait_time_ms, 2),
-            'max_batch_size_seen': self.max_batch_size_seen,
+            "total_items": self.total_items,
+            "total_batches": self.total_batches,
+            "avg_batch_size": round(self.avg_batch_size, 2),
+            "avg_wait_time_ms": round(self.avg_wait_time_ms, 2),
+            "max_batch_size_seen": self.max_batch_size_seen,
         }
 
 
@@ -191,8 +208,7 @@ class AsyncMicrobatcher(Generic[T, R]):
         # Wait for at least one item
         try:
             item = await asyncio.wait_for(
-                self._queue.get(),
-                timeout=self._batch_wait_timeout_s if self._running else 0.1
+                self._queue.get(), timeout=self._batch_wait_timeout_s if self._running else 0.1
             )
             batch.append(item)
         except asyncio.TimeoutError:
@@ -205,10 +221,7 @@ class AsyncMicrobatcher(Generic[T, R]):
                 break
 
             try:
-                item = await asyncio.wait_for(
-                    self._queue.get(),
-                    timeout=remaining
-                )
+                item = await asyncio.wait_for(self._queue.get(), timeout=remaining)
                 batch.append(item)
             except asyncio.TimeoutError:
                 break
@@ -368,8 +381,8 @@ class SyncMicrobatcher(Generic[T, R]):
 
 
 __all__ = [
-    'AsyncMicrobatcher',
-    'SyncMicrobatcher',
-    'BatchItem',
-    'BatchStats',
+    "AsyncMicrobatcher",
+    "SyncMicrobatcher",
+    "BatchItem",
+    "BatchStats",
 ]

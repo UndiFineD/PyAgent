@@ -16,14 +16,14 @@
 
 """Auto-extracted class from agent_context.py"""
 
-from __future__ import annotations
+from typing import Any
+import logging
+
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.utils.search_algorithm import SearchAlgorithm
 from src.logic.agents.cognitive.context.models.semantic_search_result import (
     SemanticSearchResult,
 )
-from typing import Any
-import logging
 
 __version__ = VERSION
 
@@ -61,48 +61,51 @@ class SemanticSearchEngine:
         self._client = None
         self._collection = None
 
+    def _maybe_patch_pydantic(self) -> None:
+        """Handle Pydantic v2 compatibility for older ChromaDB versions."""
+        try:
+            import pydantic  # pylint: disable=import-outside-toplevel
+            if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):
+                from pydantic_settings import BaseSettings  # pylint: disable=import-outside-toplevel
+                # Only patch if not already present
+                if not hasattr(pydantic, "BaseSettings"):
+                    pydantic.BaseSettings = BaseSettings
+        except (ImportError, AttributeError):
+            pass
+
     def _get_collection(self) -> Any:
         """Lazy initialization of ChromaDB collection."""
-        if self._collection is None:
-            try:
-                # Handle Pydantic v2 compatibility for older ChromaDB versions
-                try:
-                    import pydantic
-                    if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):
-                        try:
-                            from pydantic_settings import BaseSettings
-                            # Only patch if not already present
-                            if not hasattr(pydantic, "BaseSettings"):
-                                pydantic.BaseSettings = BaseSettings
-                        except ImportError:
-                            pass
-                except ImportError:
-                    pass
+        if self._collection is not None:
+            return self._collection
 
-                import chromadb
-                from chromadb.utils import embedding_functions
+        try:
+            self._maybe_patch_pydantic()
 
-                if self.persist_directory:
-                    self._client = chromadb.PersistentClient(
-                        path=self.persist_directory
-                    )
-                else:
-                    self._client = chromadb.EphemeralClient()
+            import chromadb  # pylint: disable=import-outside-toplevel
+            from chromadb.utils import embedding_functions  # pylint: disable=import-outside-toplevel
 
-                emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-                    model_name="all-MiniLM-L6-v2"
+            if self.persist_directory:
+                self._client = chromadb.PersistentClient(
+                    path=self.persist_directory
                 )
+            else:
+                self._client = chromadb.EphemeralClient()
 
-                self._collection = self._client.get_or_create_collection(
-                    name="pyagent_code",
-                    embedding_function=emb_fn,
-                    metadata={"hnsw:space": self.similarity_metric},
-                )
-            except Exception as e:
-                logging.warning(
-                    f"Failed to initialize ChromaDB: {e}. Falling back to keyword search."
-                )
-                return None
+            emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+                model_name="all-MiniLM-L6-v2"
+            )
+
+            self._collection = self._client.get_or_create_collection(
+                name="pyagent_code",
+                embedding_function=emb_fn,
+                metadata={"hnsw:space": self.similarity_metric},
+            )
+        except (ImportError, RuntimeError, ValueError) as e:
+            logging.warning(
+                f"Failed to initialize ChromaDB: {e}. Falling back to keyword search."
+            )
+            return None
+
         return self._collection
 
     def set_algorithm(self, algorithm: SearchAlgorithm) -> None:
@@ -208,7 +211,7 @@ class SemanticSearchEngine:
                                 )
                             )
                     return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
-            except Exception:
+            except (RuntimeError, AttributeError):
                 pass  # Fall through to Python implementation
 
         # Python fallback

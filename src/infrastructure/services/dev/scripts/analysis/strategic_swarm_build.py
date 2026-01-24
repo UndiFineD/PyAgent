@@ -18,11 +18,13 @@ optimization and strategic execution of complex workflows.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import logging
 import os
 import sys
-import logging
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -33,9 +35,10 @@ logging.basicConfig(level=logging.ERROR)
 sys.path.append(os.getcwd())
 
 try:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-    from src.infrastructure.compute.backend.llm_client import LLMClient
     import requests
+
+    from src.infrastructure.compute.backend.llm_client import LLMClient
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 except ImportError as e:
     print(f"FAILED TO IMPORT: {e}")
     sys.exit(1)
@@ -59,9 +62,7 @@ def main() -> None:
             intelligence = fleet.intelligence
             print("✅ 'intelligence' attribute found via FleetManager delegation.")
         except AttributeError:
-            print(
-                "❌ Failed to resolve Intelligence Orchestrator. Check BootstrapConfigs."
-            )
+            print("❌ Failed to resolve Intelligence Orchestrator. Check BootstrapConfigs.")
             return
 
     # 2. Read the Strategic Prompt from note.txt
@@ -78,9 +79,7 @@ def main() -> None:
     print("Feeding prompt to Hive Mind insight pool...")
 
     # Contribute to Swarm Intelligence
-    intelligence.contribute_insight(
-        agent_name="User_StrategicDirective", insight=strategic_prompt, confidence=1.0
-    )
+    intelligence.contribute_insight(agent_name="User_StrategicDirective", insight=strategic_prompt, confidence=1.0)
     print("✅ Directive stored in context.")
 
     # 3. Demonstrate External Learning
@@ -99,9 +98,7 @@ def main() -> None:
     print("Consulting Gemini 3 Flash (GitHub Models) for architectural refinement...")
     try:
         # Note: If GITHUB_TOKEN is not set, this will fail gracefully or use fallback
-        external_lesson = ai.llm_chat_via_github_models(
-            learning_prompt, model="google/gemini-2.0-flash-exp"
-        )
+        external_lesson = ai.llm_chat_via_github_models(learning_prompt, model="google/gemini-2.0-flash-exp")
         if external_lesson:
             print("\n[External Insight Recieved]:")
             print(external_lesson[:300] + "...")
@@ -112,9 +109,7 @@ def main() -> None:
             )
             print("✅ Insight integrated into Collective Intelligence.")
         else:
-            print(
-                "⚠️ External consultation returned no content. Continuing with local synthesis."
-            )
+            print("⚠️ External consultation returned no content. Continuing with local synthesis.")
     except Exception as e:
         print(f"⚠️ External consult skipped (likely missing API key): {e}")
 
@@ -136,10 +131,11 @@ def main() -> None:
     print("Ready to implement changes from run_fleet_self_improvement.py? YES.")
     print("Architecture Tiers Validated? YES.")
     print("\n[Command to start autonomous build (Run 50 Cycles with strategic note)]:")
-    print(
-        str(Path(__file__).resolve().parents[4])
-        + "/.venv/Scripts/python.exe src/infrastructure/dev/scripts/run_fleet_self_improvement.py -c 50 -p docs\\notes\\note.txt"
-    )
+    python_path = str(
+        Path(__file__).resolve().parents[4]
+    ) + "/.venv/Scripts/python.exe"
+    script_path = "src/infrastructure/dev/scripts/run_fleet_self_improvement.py"
+    print(f"{python_path} {script_path} -c 50 -p docs\\notes\\note.txt")
 
 
 if __name__ == "__main__":

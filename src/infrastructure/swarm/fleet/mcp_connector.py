@@ -16,12 +16,14 @@
 """Low-level connector for Model Context Protocol (MCP) servers using stdio transport."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import logging
 import subprocess
 import threading
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -54,9 +56,7 @@ class MCPConnector:
     def start(self) -> None:
         """Launches the MCP server process."""
         try:
-            logging.info(
-                f"Starting MCP server '{self.name}' with command: {' '.join(self.command)}"
-            )
+            logging.info(f"Starting MCP server '{self.name}' with command: {' '.join(self.command)}")
             self.process = subprocess.Popen(
                 self.command,
                 stdin=subprocess.PIPE,
@@ -80,9 +80,7 @@ class MCPConnector:
         for line in self.process.stderr:
             logging.warning(f"[MCP:{self.name}:ERR] {line.strip()}")
 
-    def call(
-        self, method: str, params: dict[str, Any], timeout: int = 30
-    ) -> dict[str, Any]:
+    def call(self, method: str, params: dict[str, Any], timeout: int = 30) -> dict[str, Any]:
         """Sends a JSON-RPC request and waits for the response."""
         if not self.is_running or not self.process or not self.process.stdin:
             return {"error": "MCP server not running"}

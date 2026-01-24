@@ -15,16 +15,14 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any
-from .models import AgentPluginConfig, RateLimitConfig
-from .utils.helpers import (
-    _empty_dict_str_any,
-    _empty_plugin_config_list,
-    _empty_list_str,
-    _empty_dict_str_int,
-)
+
 from ..lifecycle.version import VERSION
+from .models import AgentPluginConfig, RateLimitConfig
+from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
+                            _empty_list_str, _empty_plugin_config_list)
 
 __version__ = VERSION
 

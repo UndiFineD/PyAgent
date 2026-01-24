@@ -22,17 +22,21 @@ Core logic for model selection and routing.
 """
 
 from __future__ import annotations
+
 import logging
 from dataclasses import dataclass, field
 from typing import Dict
+
 from .base_core import BaseCore
 from .models import ModelConfig
+
 
 @dataclass
 class ModelSelectorCore(BaseCore):
     """
     Authoritative engine for selecting models based on agent type and task size.
     """
+
     models: Dict[str, ModelConfig] = field(
         default_factory=lambda: {
             "default": ModelConfig(model_id="gpt-3.5-turbo"),

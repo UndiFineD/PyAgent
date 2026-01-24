@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Prefix Cache System.
 
@@ -16,10 +30,11 @@ import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Generic, TypeVar
+from typing import Any
 
 try:
     import xxhash
+
     HAS_XXHASH = True
 except ImportError:
     HAS_XXHASH = False
@@ -27,9 +42,10 @@ except ImportError:
 
 class EvictionPolicy(str, Enum):
     """Cache eviction policy."""
-    LRU = "lru"    # Least Recently Used
-    LFU = "lfu"    # Least Frequently Used
-    ARC = "arc"    # Adaptive Replacement Cache
+
+    LRU = "lru"  # Least Recently Used
+    LFU = "lfu"  # Least Frequently Used
+    ARC = "arc"  # Adaptive Replacement Cache
     FIFO = "fifo"  # First In First Out
 
 
@@ -195,7 +211,7 @@ class PrefixCacheManager:
 
         # Split into blocks
         for i in range(0, len(token_ids), block_size):
-            block_tokens = tuple(token_ids[i:i + block_size])
+            block_tokens = tuple(token_ids[i : i + block_size])
             if len(block_tokens) < block_size:
                 # Partial block - pad or skip
                 continue
@@ -277,7 +293,7 @@ class PrefixCacheManager:
                     break
 
         elif policy == EvictionPolicy.LFU:
-            min_freq = float('inf')
+            min_freq = float("inf")
             for block_id, freq in self._frequency.items():
                 block = self._blocks.get(block_id)
                 if block and block.is_freeable and freq < min_freq:
@@ -369,7 +385,7 @@ class PrefixCacheManager:
         matching_ids: list[int] = []
 
         for i in range(0, len(token_ids), block_size):
-            block_tokens = tuple(token_ids[i:i + block_size])
+            block_tokens = tuple(token_ids[i : i + block_size])
             if len(block_tokens) < block_size:
                 break
 
@@ -436,6 +452,7 @@ class BlockHasher:
 # =============================================================================
 # Convenience Functions
 # =============================================================================
+
 
 def create_prefix_cache(
     block_size: int = 16,

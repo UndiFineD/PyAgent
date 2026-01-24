@@ -14,8 +14,9 @@
 
 """Knowledge Mixin for BaseAgent."""
 
-from typing import Any
 from pathlib import Path
+from typing import Any
+
 from src.core.base.common.memory_core import MemoryCore
 from src.core.base.logic.sharded_knowledge_core import ShardedKnowledgeCore
 
@@ -32,9 +33,8 @@ class KnowledgeMixin:
         try:
             # pylint: disable=import-outside-toplevel
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
-            self.knowledge = KnowledgeEngine(
-                agent_id=agent_name, base_path=Path("data/agents")
-            )
+
+            self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=Path("data/agents"))
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
 
@@ -45,25 +45,17 @@ class KnowledgeMixin:
         self._prompt_templates: dict[str, Any] = {}
 
     def store_episode(
-        self,
-        task: str,
-        content: str,
-        success: bool,
-        metadata: dict[str, Any] | None = None
+        self, task: str, content: str, success: bool, metadata: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """Creates and stores an episodic memory via MemoryCore."""
         episode = self.memory_core.create_episode(
-            agent_id=self.agent_name,
-            task=task,
-            content=content,
-            success=success,
-            metadata=metadata
+            agent_id=self.agent_name, task=task, content=content, success=success, metadata=metadata
         )
         self.memory_core.store_knowledge(
             agent_id=self.agent_name,
             key=f"ep_{episode['timestamp'].replace(':', '-')}",
             content=episode,
-            mode="structured"
+            mode="structured",
         )
         return episode
 
@@ -106,26 +98,20 @@ class KnowledgeMixin:
     def _build_prompt_with_history(self, prompt: str) -> str:
         """Build a prompt string including history."""
         history = self.get_history()
-        history_text = "\n".join(
-            [f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}" for m in history]
-        )
+        history_text = "\n".join([f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}" for m in history])
         return f"{history_text}\nUSER: {prompt}"
 
     @property
     def global_context(self) -> Any:
         """Access global context engine."""
-        if (
-            hasattr(self, "fleet")
-            and getattr(self, "fleet")
-            and hasattr(getattr(self, "fleet"), "global_context")
-        ):
+        if hasattr(self, "fleet") and getattr(self, "fleet") and hasattr(getattr(self, "fleet"), "global_context"):
             return getattr(getattr(self, "fleet"), "global_context")
         if self._local_global_context is None:
             try:
                 # pylint: disable=import-outside-toplevel
-                from src.logic.agents.cognitive.context.engines.global_context_engine import (
-                    GlobalContextEngine,
-                )
+                from src.logic.agents.cognitive.context.engines.global_context_engine import \
+                    GlobalContextEngine
+
                 self._local_global_context = GlobalContextEngine(self._workspace_root)
             except (ImportError, ValueError):
                 pass

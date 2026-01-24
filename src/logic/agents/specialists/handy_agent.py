@@ -18,13 +18,18 @@ Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from pathlib import Path
-from src.logic.agents.specialists.mixins.handy_file_system_mixin import HandyFileSystemMixin
-from src.logic.agents.specialists.mixins.handy_terminal_mixin import HandyTerminalMixin
-from src.logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
+
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
+from src.logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
+from src.logic.agents.specialists.mixins.handy_file_system_mixin import \
+    HandyFileSystemMixin
+from src.logic.agents.specialists.mixins.handy_terminal_mixin import \
+    HandyTerminalMixin
 
 __version__ = VERSION
 
@@ -43,6 +48,5 @@ class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreM
         # Phase 108: Intelligence Harvesting
         work_root = getattr(self, "_workspace_root", None)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
-
 
     # Methods delegated to mixins

@@ -20,8 +20,10 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from bs4 import BeautifulSoup
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -34,7 +36,7 @@ class WebCore:
             import rust_core
 
             self._rust_core = rust_core.WebCore()  # type: ignore[attr-defined]
-        except (ImportError, Exception):
+        except (ImportError, RuntimeError, ValueError):
             self._rust_core = None
 
     def clean_html(self, html_content: str) -> str:
@@ -45,7 +47,7 @@ class WebCore:
         if hasattr(self, "_rust_core") and self._rust_core:
             try:
                 return self._rust_core.clean_html(html_content)
-            except Exception:
+            except (RuntimeError, ValueError):
                 pass
 
         # Fallback to pure python (which starts here)

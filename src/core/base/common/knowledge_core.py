@@ -22,15 +22,18 @@ Handles trillion-parameter scale entity distribution.
 """
 
 from __future__ import annotations
+
 import hashlib
 from pathlib import Path
 from typing import Any, Dict, Optional
+
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class KnowledgeCore(BaseCore):
     """
@@ -54,6 +57,7 @@ class KnowledgeCore(BaseCore):
     def index_entity(self, entity: Dict[str, Any]) -> bool:
         """Maintains the global knowledge index footprint."""
         key = entity.get("id") or entity.get("name", "unknown")
-        _shard = self.get_shard_id(key)  # Prefix with underscore to mark as unused for now
+        # Determine shard placement but don't store yet
+        self.get_shard_id(key)
         # Logic for writing to shard storage
         return True

@@ -18,19 +18,21 @@ Allows visualization of agent chains and request propagation across nodes.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
 import uuid
-from typing import Any
 from dataclasses import dataclass, field
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.observability.stats.core.tracing_core import TracingCore
 
 # Phase 307: Official OpenTelemetry SDK integration
 try:
     from opentelemetry import trace
-    from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.resources import Resource
+    from opentelemetry.sdk.trace import TracerProvider
 
     # Initialize Global Tracer
     resource = Resource(attributes={"service.name": "pyagent-fleet"})
@@ -62,9 +64,7 @@ class OTelManager:
     """
 
     def __init__(self) -> None:
-        self.active_spans: dict[
-            str, Any
-        ] = {}  # Now stores real OTel spans if available
+        self.active_spans: dict[str, Any] = {}  # Now stores real OTel spans if available
         self.completed_spans: list[Span] = []
         self.core = TracingCore()
         if HAS_OTEL:

@@ -11,16 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Legal audit agent.py module.
+"""
+
 from __future__ import annotations
+
+import asyncio
 import os
 import re
-import asyncio
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 
-class LegalAuditAgent(BaseAgent):
+class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Phase 286: Legal Audit Agent.
     Verifies that all source files and third-party code comply with the project's
@@ -35,36 +41,7 @@ class LegalAuditAgent(BaseAgent):
             "Apache-2.0",
             "MIT",
         ]
-        self.header_pattern = re.compile(
-            r"Licensed under the Apache License, Version 2.0"
-        )
-
-    @as_tool
-    async def run_audit(self, target_dir: str) -> dict[str, Any]:
-        """Scans a directory for license compliance issues."""
-
-        def walk_and_check() -> dict[str, Any]:
-            results = {"compliant": [], "non_compliant": [], "missing_hashes": []}
-
-            for root, _, files in os.walk(target_dir):
-                if "node_modules" in root or ".git" in root or "__pycache__" in root:
-                    continue
-                for file in files:
-                    if file.endswith((".py", ".ts", ".js", ".go", ".rs")):
-                        path = os.path.join(root, file)
-                        try:
-                            with open(path, "r", encoding="utf-8") as f:
-                                content = f.read()
-                                if self.header_pattern.search(content):
-                                    results["compliant"].append(path)
-                                else:
-                                    results["non_compliant"].append(path)
-                        except Exception:
-                            continue
-            return results
-
-        loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(None, walk_and_check)
+        self.header_pattern = re.compile(r"Licensed under the Apache License, Version 2.0")
 
     def scan_licensing(self, content: str) -> dict[str, Any]:
         """Identifies licenses and flags copyleft risks (Phase 59)."""
@@ -81,17 +58,17 @@ class LegalAuditAgent(BaseAgent):
 
         return {
             "detected_licenses": detected,
-            "risk_level": "high" if any(l in ["GPL", "AGPL"] for l in detected) else "low",
-            "summary": f"Detected: {', '.join(detected) if detected else 'None'}"
+            "risk_level": "high" if any(lic in ["GPL", "AGPL"] for lic in detected) else "low",
+            "summary": f"Detected: {', '.join(detected) if detected else 'None'}",
         }
 
+    @as_tool
     async def run_audit(self, directory: str) -> dict[str, Any]:
         """Scans a directory for license compliance (Phase 59)."""
-        import os
-        results = {"compliant": [], "non_compliant": []}
+        results: dict[str, list[Any]] = {"compliant": [], "non_compliant": []}
 
         def walk_and_check():
-            for root, dirs, files in os.walk(directory):
+            for root, _, files in os.walk(directory):
                 if any(x in root for x in [".git", "__pycache__", "node_modules"]):
                     continue
 
@@ -113,26 +90,18 @@ class LegalAuditAgent(BaseAgent):
                                     "issue": "Missing or unsupported license header",
                                 }
                             )
-                    except Exception as e:
-                        results["non_compliant"].append(
-                            {"file": path, "issue": f"Error reading file: {str(e)}"}
-                        )
+                    except (IOError, UnicodeDecodeError) as e:
+                        results["non_compliant"].append({"file": path, "issue": f"Error reading file: {str(e)}"})
             return results
 
-        import asyncio
         return await asyncio.to_thread(walk_and_check)
 
-    def verify_smart_contract(self, contract_code: str) -> dict:
+    def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
         """Verifies a smart contract for legal commonalities and risks (Phase 59)."""
-        return {
-            "risk_level": "low",
-            "findings": ["Standard ERC20 implementation detected."],
-            "compliant": True
-        }
+        _ = contract_code
+        return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}
 
-    async def get_improvement_items(
-        self, context: dict[str, Any]
-    ) -> list[dict[str, Any]]:
+    async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
         """Provides improvements for files missing license headers."""
         target = context.get("target_dir", ".")
         audit = await self.run_audit(target)
@@ -147,3 +116,14 @@ class LegalAuditAgent(BaseAgent):
                 }
             )
         return improvements
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Improve legal compliance of a file or directory."""
+        path = target_file if target_file else prompt
+        if os.path.isfile(path):
+            with open(path, "r", encoding="utf-8") as f:
+                res = self.scan_licensing(f.read())
+            return f"Legal Audit for {path}: {res['summary']} (Risk: {res['risk_level']})"
+
+        audit = await self.run_audit(path)
+        return f"Audit for {path}: {len(audit['compliant'])} Compliant, {len(audit['non_compliant'])} Issues."

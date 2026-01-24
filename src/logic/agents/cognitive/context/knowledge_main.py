@@ -14,15 +14,16 @@
 
 
 """
-Knowledge Agent: Manages workspace knowledge and backlinks.
+CLI entry point for Knowledge Agent.
 """
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import sys
 import argparse
 import logging
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 __version__ = VERSION
 
@@ -33,10 +34,9 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
-
 
 def main() -> None:
+    """Entry point for Knowledge Agent CLI."""
     parser = argparse.ArgumentParser(
         description="Knowledge Agent: Manages workspace knowledge and backlinks"
     )

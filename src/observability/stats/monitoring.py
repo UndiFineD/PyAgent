@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
+
+"""
+Monitoring.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # System resource monitoring engine.
 
 from __future__ import annotations
+
 import logging
 import platform
 from pathlib import Path

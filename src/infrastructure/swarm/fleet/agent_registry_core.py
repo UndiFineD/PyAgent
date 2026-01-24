@@ -24,17 +24,21 @@ Phase 15 Rust Optimizations:
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
-import logging
-from typing import Any
+
 import contextlib
+import logging
+import os
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .version_gate import VersionGate
 
 logger = logging.getLogger(__name__)
 
 try:
-    from rust_core import topological_sort_rust, to_snake_case_rust
+    from rust_core import to_snake_case_rust, topological_sort_rust
+
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -42,6 +46,7 @@ except ImportError:
 # Additional Rust functions for Phase 15
 try:
     from rust_core import detect_cycles_rust
+
     _RUST_CYCLES = True
 except ImportError:
     _RUST_CYCLES = False
@@ -55,9 +60,7 @@ class AgentRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def process_discovered_files(
-        self, file_paths: list[str]
-    ) -> dict[str, tuple[str, str, str | None]]:
+    def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, str | None]]:
         """
         Processes a list of file paths and extracts agent/orchestrator configurations.
         Expects relative paths from workspace root.
@@ -70,19 +73,14 @@ class AgentRegistryCore:
                 continue
 
             agent_name = file[:-3]
-            module_path = (
-                rel_path.replace(os.path.sep, ".")
-                .replace("/", ".")
-                .replace(".py", "")
-            )
+            module_path = rel_path.replace(os.path.sep, ".").replace("/", ".").replace(".py", "")
 
             # Register multiple variants for the same module
             self._register_agent_variants(discovered, agent_name, module_path)
         return discovered
 
     def _register_agent_variants(
-        self, discovered: dict[str, tuple[str, str, str | None]],
-        agent_name: str, module_path: str
+        self, discovered: dict[str, tuple[str, str, str | None]], agent_name: str, module_path: str
     ) -> None:
         """Helper to register an agent under its primary, snake_case, and short names."""
         pascal_name = self._to_pascal_case(agent_name)
@@ -109,9 +107,7 @@ class AgentRegistryCore:
             return name[:-12].rstrip("_")
         return None
 
-    def parse_manifest(
-        self, raw_manifest: dict[str, Any]
-    ) -> dict[str, tuple[str, str, str | None]]:
+    def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, str | None]]:
         """
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {AgentName: (module, class, config)}.
@@ -135,9 +131,7 @@ class AgentRegistryCore:
         """
         return VersionGate.is_compatible(self.sdk_version, required_version)
 
-    def detect_circular_dependencies(
-        self, dep_graph: dict[str, list[str]]
-    ) -> list[list[str]]:
+    def detect_circular_dependencies(self, dep_graph: dict[str, list[str]]) -> list[list[str]]:
         """
         Logic for detecting circular dependencies in the agent graph.
         Useful for preventing init-loop during complex swarm orchestration.
@@ -179,6 +173,7 @@ class AgentRegistryCore:
                 return to_snake_case_rust(name)
         # Python fallback
         import re
+
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
         return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
 
@@ -186,9 +181,7 @@ class AgentRegistryCore:
         """Converts snake_case to PascalCase."""
         return "".join(word.capitalize() for word in name.split("_"))
 
-    def validate_agent_structure(
-        self, agent_instance: Any, required_methods: list[str] | None = None
-    ) -> list[str]:
+    def validate_agent_structure(self, agent_instance: Any, required_methods: list[str] | None = None) -> list[str]:
         """
         Checks if an agent instance has the required methods.
         Returns a list of missing methods.

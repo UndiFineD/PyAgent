@@ -19,9 +19,11 @@ Implemented as part of Phase 40: Swarm-Wide Neural Pruning.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.neural_pruning_engine import NeuralPruningEngine
 
 __version__ = VERSION
@@ -46,9 +48,7 @@ class SwarmPruningOrchestrator:
         Args:
             threshold: The synaptic weight threshold below which a node is pruned.
         """
-        logging.info(
-            "SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle."
-        )
+        logging.info("SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle.")
 
         # 1. Prune underutilized synapses/paths
         pruned_nodes = self.pruning_engine.prune_underutilized(threshold=threshold)

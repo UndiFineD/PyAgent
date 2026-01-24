@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 """
 Iteration Metrics - Comprehensive per-iteration statistics and metrics.
@@ -15,26 +29,28 @@ Beyond vLLM:
 - Trend analysis
 """
 
+import statistics
+import threading
+import time
+from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Deque, Dict, List, Optional, Tuple
-from collections import deque
-import time
-import statistics
-import threading
 
 
 class MetricType(Enum):
     """Type of metric."""
-    COUNTER = auto()      # Monotonically increasing
-    GAUGE = auto()        # Point-in-time value
-    HISTOGRAM = auto()    # Distribution
-    SUMMARY = auto()      # Percentiles
+
+    COUNTER = auto()  # Monotonically increasing
+    GAUGE = auto()  # Point-in-time value
+    HISTOGRAM = auto()  # Distribution
+    SUMMARY = auto()  # Percentiles
 
 
 @dataclass
 class BaseCacheStats:
     """Base class for cache statistics."""
+
     reset: bool = False
     requests: int = 0
     queries: int = 0
@@ -51,6 +67,7 @@ class BaseCacheStats:
 @dataclass
 class PrefixCacheStats(BaseCacheStats):
     """Statistics for prefix cache."""
+
     preempted_requests: int = 0
     preempted_queries: int = 0
     preempted_hits: int = 0
@@ -86,6 +103,7 @@ class MultiModalCacheStats(BaseCacheStats):
 @dataclass
 class KVCacheEvictionEvent:
     """Single KV cache block eviction sample."""
+
     block_id: int
     lifetime_seconds: float
     idle_seconds: float
@@ -126,8 +144,7 @@ class CachingMetrics:
         self.aggregated_query_hit += stats.hits
 
         # Maintain window size
-        while (len(self.query_queue) > 1 and
-               self.aggregated_requests > self.max_recent_requests):
+        while len(self.query_queue) > 1 and self.aggregated_requests > self.max_recent_requests:
             old_reqs, old_queries, old_hits = self.query_queue.popleft()
             self.aggregated_requests -= old_reqs
             self.aggregated_query_total -= old_queries
@@ -156,6 +173,7 @@ class CachingMetrics:
 @dataclass
 class RequestStateStats:
     """Stats tracked across request lifecycle."""
+
     num_generation_tokens: int = 0
 
     # Timestamps
@@ -186,6 +204,7 @@ class RequestStateStats:
 @dataclass
 class FinishedRequestStats:
     """Stats for a completed request."""
+
     request_id: str
     finish_reason: str
 
@@ -216,6 +235,7 @@ class FinishedRequestStats:
 @dataclass
 class SchedulerStats:
     """Stats from the scheduler."""
+
     num_running_reqs: int = 0
     num_waiting_reqs: int = 0
 
@@ -241,6 +261,7 @@ class SchedulerStats:
 @dataclass
 class IterationStats:
     """Comprehensive stats for a single iteration."""
+
     iteration_timestamp: float = field(default_factory=time.time)
 
     # Token counts
@@ -271,15 +292,17 @@ class IterationStats:
         is_corrupted: bool = False,
     ) -> None:
         """Record a finished request."""
-        self.finished_requests.append(FinishedRequestStats(
-            request_id=request_id,
-            finish_reason=finish_reason,
-            e2e_latency=e2e_latency,
-            num_prompt_tokens=num_prompt_tokens,
-            num_generation_tokens=num_generation_tokens,
-            num_cached_tokens=num_cached_tokens,
-            is_corrupted=is_corrupted,
-        ))
+        self.finished_requests.append(
+            FinishedRequestStats(
+                request_id=request_id,
+                finish_reason=finish_reason,
+                e2e_latency=e2e_latency,
+                num_prompt_tokens=num_prompt_tokens,
+                num_generation_tokens=num_generation_tokens,
+                num_cached_tokens=num_cached_tokens,
+                is_corrupted=is_corrupted,
+            )
+        )
 
         if is_corrupted:
             self.num_corrupted_reqs += 1
@@ -288,6 +311,7 @@ class IterationStats:
 # ============================================================================
 # Beyond vLLM: Advanced Metrics
 # ============================================================================
+
 
 class PercentileTracker:
     """
@@ -380,7 +404,7 @@ class TrendAnalyzer:
             (direction, slope) where direction is 'increasing', 'decreasing', or 'stable'
         """
         if len(self._values) < 2:
-            return 'stable', 0.0
+            return "stable", 0.0
 
         # Simple linear regression
         n = len(self._values)
@@ -389,20 +413,20 @@ class TrendAnalyzer:
         sum_xy = sum(v[0] * v[1] for v in self._values)
         sum_xx = sum(v[0] ** 2 for v in self._values)
 
-        denom = n * sum_xx - sum_x ** 2
+        denom = n * sum_xx - sum_x**2
         if abs(denom) < 1e-10:
-            return 'stable', 0.0
+            return "stable", 0.0
 
         slope = (n * sum_xy - sum_x * sum_y) / denom
 
         # Determine direction based on slope magnitude
         threshold = 0.01  # Sensitivity threshold
         if slope > threshold:
-            return 'increasing', slope
+            return "increasing", slope
         elif slope < -threshold:
-            return 'decreasing', slope
+            return "decreasing", slope
         else:
-            return 'stable', slope
+            return "stable", slope
 
 
 class AnomalyDetector:
@@ -442,7 +466,7 @@ class AnomalyDetector:
             return False
 
         variance = self._m2 / self._count
-        std = variance ** 0.5
+        std = variance**0.5
 
         if std < 1e-10:
             return False
@@ -524,23 +548,20 @@ class MetricsCollector:
         """Get summary of all metrics."""
         with self._lock:
             return {
-                'counters': dict(self.counters),
-                'gauges': dict(self.gauges),
-                'histograms': {
+                "counters": dict(self.counters),
+                "gauges": dict(self.gauges),
+                "histograms": {
                     name: {
-                        'mean': tracker.mean,
-                        'p50': tracker.p50,
-                        'p90': tracker.p90,
-                        'p99': tracker.p99,
+                        "mean": tracker.mean,
+                        "p50": tracker.p50,
+                        "p90": tracker.p90,
+                        "p99": tracker.p99,
                     }
                     for name, tracker in self.histograms.items()
                 },
-                'trends': {
-                    name: analyzer.get_trend()
-                    for name, analyzer in self.trends.items()
-                },
-                'cache': {
-                    'hit_rate': self.cache_metrics.hit_rate,
+                "trends": {name: analyzer.get_trend() for name, analyzer in self.trends.items()},
+                "cache": {
+                    "hit_rate": self.cache_metrics.hit_rate,
                 },
             }
 
@@ -551,22 +572,22 @@ class MetricsCollector:
 
 __all__ = [
     # Enums
-    'MetricType',
+    "MetricType",
     # Base stats
-    'BaseCacheStats',
-    'PrefixCacheStats',
-    'MultiModalCacheStats',
-    'KVCacheEvictionEvent',
+    "BaseCacheStats",
+    "PrefixCacheStats",
+    "MultiModalCacheStats",
+    "KVCacheEvictionEvent",
     # Caching
-    'CachingMetrics',
+    "CachingMetrics",
     # Request stats
-    'RequestStateStats',
-    'FinishedRequestStats',
-    'SchedulerStats',
-    'IterationStats',
+    "RequestStateStats",
+    "FinishedRequestStats",
+    "SchedulerStats",
+    "IterationStats",
     # Advanced metrics
-    'PercentileTracker',
-    'TrendAnalyzer',
-    'AnomalyDetector',
-    'MetricsCollector',
+    "PercentileTracker",
+    "TrendAnalyzer",
+    "AnomalyDetector",
+    "MetricsCollector",
 ]

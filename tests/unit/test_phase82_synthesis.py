@@ -21,11 +21,17 @@ def test_trace_synthesis_synergy():
     logger = SwarmAuditLogger(log_to_file=False)
 
     # Task 1: Coding domain, Experts A and B, High quality (0.9)
-    logger.log_event("t1", "routing", "Selecting experts", {"domain": "coding", "selected_experts": ["expert_a", "expert_b"]})
+    logger.log_event(
+        "t1", "routing", "Selecting experts",
+        {"domain": "coding", "selected_experts": ["expert_a", "expert_b"]}
+    )
     logger.log_event("t1", "fusion", "Fused output", {"fusion_quality": 0.9})
 
     # Task 2: Coding domain, Experts A and C, Low quality (0.4)
-    logger.log_event("t2", "routing", "Selecting experts", {"domain": "coding", "selected_experts": ["expert_a", "expert_c"]})
+    logger.log_event(
+        "t2", "routing", "Selecting experts",
+        {"domain": "coding", "selected_experts": ["expert_a", "expert_c"]}
+    )
     logger.log_event("t2", "fusion", "Fused output", {"fusion_quality": 0.4})
 
     # 2. Run Synthesizer

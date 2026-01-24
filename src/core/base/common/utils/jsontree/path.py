@@ -1,20 +1,41 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Path.py module.
+"""
+
 from __future__ import annotations
+
 import re
 from typing import Any
-from src.core.base.common.utils.jsontree.types import JSONTree, _T, _U
+
+from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree
+
 
 def _parse_path(path: str, separator: str = ".") -> list[str | int]:
     """Parse a dot-notation path into parts, handling array indices."""
     parts: list[str | int] = []
 
     # Split by separator, but keep array indices
-    for part in re.split(rf'(?<!\[){re.escape(separator)}', path):
+    for part in re.split(rf"(?<!\[){re.escape(separator)}", path):
         # Check for array indices
-        match = re.match(r'^(.+?)\[(\d+)\]$', part)
+        match = re.match(r"^(.+?)\[(\d+)\]$", part)
         if match:
             parts.append(match.group(1))
             parts.append(int(match.group(2)))
-        elif re.match(r'^\[(\d+)\]$', part):
+        elif re.match(r"^\[(\d+)\]$", part):
             parts.append(int(part[1:-1]))
         else:
             parts.append(part)

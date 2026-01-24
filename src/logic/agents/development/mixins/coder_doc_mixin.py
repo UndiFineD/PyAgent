@@ -16,9 +16,14 @@
 Documentation generation logic for CoderCore.
 """
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 import ast
+
 from src.core.base.common.types.code_language import CodeLanguage
+
 
 class CoderDocMixin:
     """Mixin for generating documentation from code."""
@@ -63,9 +68,7 @@ class CoderDocMixin:
                 if method_doc:
                     class_docs.append(f"{method_doc}\n")
                 # Document parameters
-                params = [
-                    arg.arg for arg in item.args.args if arg.arg != "self"
-                ]
+                params = [arg.arg for arg in item.args.args if arg.arg != "self"]
                 if params:
                     class_docs.append(f"**Parameters:** {', '.join(params)}\n")
         class_docs.append("\n")

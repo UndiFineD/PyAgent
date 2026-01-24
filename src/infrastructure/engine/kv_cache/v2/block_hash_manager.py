@@ -17,9 +17,9 @@ Content-based Block Hash Manager for Phase 53.
 Enables prefix caching and block sharing via cryptographic hashing of token sequences.
 """
 
-import logging
 import hashlib
-from typing import Dict, List, Optional, Any
+import logging
+from typing import Dict, List, Optional
 
 try:
     import rust_core as rc
@@ -27,6 +27,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class BlockHashManager:
     """
@@ -46,7 +47,7 @@ class BlockHashManager:
             return rc.kv_block_hash_rust(tokens)
 
         # Fallback: SHA256
-        token_str = ",".join(map(str, tokens)).encode('utf-8')
+        token_str = ",".join(map(str, tokens)).encode("utf-8")
         return hashlib.sha256(token_str).hexdigest()
 
     def register_block(self, block_id: int, tokens: List[int]):
@@ -71,7 +72,4 @@ class BlockHashManager:
 
     def get_stats(self) -> Dict[str, int]:
         """Returns statistics on hash registry usage."""
-        return {
-            "registered_hashes": len(self.hash_to_block),
-            "tracked_blocks": len(self.block_to_hash)
-        }
+        return {"registered_hashes": len(self.hash_to_block), "tracked_blocks": len(self.block_to_hash)}

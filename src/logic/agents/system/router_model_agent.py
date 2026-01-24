@@ -11,11 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Router model agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -69,9 +75,7 @@ class RouterModelAgent(BaseAgent):
         Prioritizes 'internal_ai' unless capability requirements exceed it.
         """
         if self.recorder:
-            self.recorder.record_lesson(
-                "router_decision_request", {"task": task_type, "max_cost": max_cost}
-            )
+            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})
 
         # Phase 120: Heuristic Risk/Capability Mapping
         if "high_reasoning" in task_type.lower():
@@ -108,11 +112,7 @@ class RouterModelAgent(BaseAgent):
             return long_prompt
 
         # Simple simulation: take start and end
-        compressed = (
-            long_prompt[: target_tokens // 2]
-            + "\n...[OMITTED]...\n"
-            + long_prompt[-target_tokens // 2 :]
-        )
+        compressed = long_prompt[: target_tokens // 2] + "\n...[OMITTED]...\n" + long_prompt[-target_tokens // 2 :]
         return compressed
 
     def get_routing_stats(self) -> dict[str, Any]:

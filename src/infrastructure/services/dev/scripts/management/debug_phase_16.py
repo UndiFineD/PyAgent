@@ -12,14 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Debug phase 16.py module.
+"""
+
 # Add src to path
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-import sys
 import os
+import sys
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from src.logic.agents.system.mcp_agent import MCPAgent
 
@@ -35,12 +41,10 @@ def test_phase_16() -> None:
     fleet = FleetManager(workspace)
 
     print("\n--- Phase 16: MCP Integration (Server Init) ---")
-    mcp_agent = MCPAgent(str(Path(workspace) / "src\logic\agents\system\mcp_agent.py"))
+    mcp_agent = MCPAgent(str(Path(workspace) / "src\\logic\agents\\system\\mcp_agent.py"))
 
     # We use 'python' to run our mock server
-    res = mcp_agent.initialize_mcp_server(
-        "test_server", ["python", str(Path(workspace) / "mock_mcp_server.py")]
-    )
+    res = mcp_agent.initialize_mcp_server("test_server", ["python", str(Path(workspace) / "mock_mcp_server.py")])
     print(f"Init Status: {res}")
 
     print("\n--- Phase 16: MCP Tool Call ---")

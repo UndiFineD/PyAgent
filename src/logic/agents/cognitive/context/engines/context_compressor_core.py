@@ -20,9 +20,10 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import re
 import ast
+
+from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core
@@ -56,14 +57,14 @@ class ContextCompressorCore:
                             bases_str = (
                                 f"({', '.join([ast.unparse(b) for b in node.bases])})"
                             )
-                        except Exception:
+                        except (AttributeError, ValueError, TypeError):
                             bases_str = "(...)"
                     compressed_lines.append(f"class {node.name}{bases_str}:")
 
                 elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     try:
                         args_str = ast.unparse(node.args)
-                    except Exception:
+                    except (AttributeError, ValueError, TypeError):
                         args_str = "..."
 
                     prefix = "async " if isinstance(node, ast.AsyncFunctionDef) else ""
@@ -75,7 +76,7 @@ class ContextCompressorCore:
             unique_signatures = sorted(list(set(compressed_lines)))
             return "\n".join(unique_signatures)
 
-        except Exception:
+        except (SyntaxError, ValueError, AttributeError):
             # Fallback to simple regex if AST fails (e.g. invalid syntax)
             return ContextCompressorCore.regex_fallback_compress(content)
 
@@ -85,7 +86,7 @@ class ContextCompressorCore:
         if HAS_RUST:
             try:
                 return rust_core.regex_compress_python(content)  # type: ignore[attr-defined]
-            except Exception:
+            except (RuntimeError, AttributeError):
                 pass
         signatures = re.findall(
             r"^\s*(?:async\s+)?(?:def|class)\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:",
@@ -100,7 +101,7 @@ class ContextCompressorCore:
         if HAS_RUST:
             try:
                 return rust_core.summarize_markdown(content)  # type: ignore[attr-defined]
-            except Exception:
+            except (RuntimeError, AttributeError):
                 pass
         headers = re.findall(r"^(#+ .*)$", content, re.MULTILINE)
         return "\n".join(headers)
@@ -115,6 +116,6 @@ class ContextCompressorCore:
         """Determines logic mode based on file extension."""
         if filename.endswith(".py"):
             return "python"
-        elif filename.endswith(".md"):
+        if filename.endswith(".md"):
             return "markdown"
         return "head"

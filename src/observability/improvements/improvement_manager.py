@@ -17,9 +17,11 @@ Extracted from ImprovementsAgent for decomposition.
 """
 
 from __future__ import annotations
+
 import hashlib
 import re
 from datetime import datetime
+
 from .effort_estimate import EffortEstimate
 from .improvement import Improvement
 from .improvement_category import ImprovementCategory
@@ -33,10 +35,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         name="add_tests",
         category=ImprovementCategory.TESTING,
         title_pattern="Add tests for {function_name}",
-        description_template=(
-            "Add unit tests to cover {function_name} including "
-            "edge cases and error handling."
-        ),
+        description_template=("Add unit tests to cover {function_name} including edge cases and error handling."),
         default_effort=EffortEstimate.SMALL,
     ),
     ImprovementTemplate(
@@ -45,8 +44,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         category=ImprovementCategory.MAINTAINABILITY,
         title_pattern="Add type hints to {function_name}",
         description_template=(
-            "Add proper type annotations to {function_name} for "
-            "better IDE support and documentation."
+            "Add proper type annotations to {function_name} for better IDE support and documentation."
         ),
         default_effort=EffortEstimate.TRIVIAL,
     ),
@@ -101,9 +99,7 @@ class ImprovementManager:
     ) -> Improvement:
         """Add a new improvement."""
         final_path = file_path if file_path is not None else self.base_file_path
-        improvement_id = hashlib.md5(
-            f"{title}:{final_path}:{datetime.now().isoformat()}".encode()
-        ).hexdigest()[:8]
+        improvement_id = hashlib.md5(f"{title}:{final_path}:{datetime.now().isoformat()}".encode()).hexdigest()[:8]
 
         improvement = Improvement(
             id=improvement_id,
@@ -127,9 +123,7 @@ class ImprovementManager:
         self._improvements = []
         current_priority = ImprovementPriority.MEDIUM
 
-        item_re = re.compile(
-            r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?"
-        )
+        item_re = re.compile(r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?")
         desc_re = re.compile(r"^\s+-\s*(.*)")
         section_re = re.compile(r"^##\s+(.*)")
 
@@ -165,10 +159,7 @@ class ImprovementManager:
                 category = ImprovementCategory.OTHER
                 cat_part = category_val.split(",")[0].strip()
                 for cat in ImprovementCategory:
-                    if (
-                        cat.value.lower() == cat_part.lower()
-                        or cat.name.lower() == cat_part.lower()
-                    ):
+                    if cat.value.lower() == cat_part.lower() or cat.name.lower() == cat_part.lower():
                         category = cat
                         break
 

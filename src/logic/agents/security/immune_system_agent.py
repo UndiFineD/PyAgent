@@ -19,12 +19,14 @@ and monitoring swarm health for corrupted nodes.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import re
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -62,9 +64,7 @@ class ImmuneSystemAgent(BaseAgent):
             node_id: The ID of the node to fix.
             issue_type: The nature of the failure (e.g., 'crash', 'logical_loop', 'unauthorized_access').
         """
-        logging.info(
-            f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})"
-        )
+        logging.info(f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})")
 
         # simulated healing steps
         steps = [
@@ -74,10 +74,7 @@ class ImmuneSystemAgent(BaseAgent):
             "Step 4: Gradually restore node connections",
         ]
 
-        return (
-            f"Self-healing complete for {node_id}. Integrity Level: 100%. \n"
-            + "\n".join(steps)
-        )
+        return f"Self-healing complete for {node_id}. Integrity Level: 100%. \n" + "\n".join(steps)
 
     @as_tool
     def scan_for_injections(self, input_text: str) -> dict[str, Any]:
@@ -88,7 +85,8 @@ class ImmuneSystemAgent(BaseAgent):
         findings = []
 
         try:
-            from rust_core import scan_injections_rust  # type: ignore[attr-defined]
+            from rust_core import \
+                scan_injections_rust  # type: ignore[attr-defined]
 
             rust_findings = scan_injections_rust(input_text)
             for idx, matched in rust_findings:
@@ -141,9 +139,7 @@ class ImmuneSystemAgent(BaseAgent):
         """Disables an agent node suspected of being compromised or corrupted."""
         if agent_id not in self.quarantined_nodes:
             self.quarantined_nodes.append(agent_id)
-            logging.error(
-                f"ImmuneSystem: Quarantining node '{agent_id}' due to safety breach."
-            )
+            logging.error(f"ImmuneSystem: Quarantining node '{agent_id}' due to safety breach.")
             return f"Node {agent_id} has been quarantined."
         return f"Node {agent_id} is already in quarantine."
 
@@ -180,7 +176,5 @@ class ImmuneSystemAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation"
-    )
+    main = create_main_function(ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation")
     main()

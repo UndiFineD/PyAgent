@@ -18,9 +18,11 @@ Helps create Next.js or React interfaces for the fleet.
 """
 
 from __future__ import annotations
+
 import logging
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 class DashboardAgent(BaseAgent):
@@ -83,7 +85,5 @@ export default {name};
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        DashboardAgent, "Dashboard Agent", "Dashboard source path"
-    )
+    main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")
     main()

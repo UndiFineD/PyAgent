@@ -16,9 +16,11 @@
 """Validation script for Phase 8: Production Readiness & Phase 9: Security/Infra."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION

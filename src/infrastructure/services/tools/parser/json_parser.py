@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - JSON Parser
 
@@ -10,14 +24,8 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, List, Optional, Tuple
 
-from .base import (
-    ToolParser,
-    ToolParserType,
-    ToolCall,
-    ToolParseResult,
-    StreamingToolState,
-    extract_json_from_text,
-)
+from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
+                   ToolParserType, extract_json_from_text)
 
 
 class JsonToolParser(ToolParser):
@@ -116,14 +124,14 @@ class JsonToolParser(ToolParser):
 
         # Track brace depth
         for char in delta:
-            if char == '"' and (len(state.buffer) < 2 or state.buffer[-2] != '\\'):
+            if char == '"' and (len(state.buffer) < 2 or state.buffer[-2] != "\\"):
                 state.in_string = not state.in_string
             elif not state.in_string:
-                if char == '{':
+                if char == "{":
                     if state.brace_depth == 0:
                         state.in_tool_call = True
                     state.brace_depth += 1
-                elif char == '}':
+                elif char == "}":
                     state.brace_depth -= 1
                     if state.brace_depth == 0 and state.in_tool_call:
                         # Complete JSON object
@@ -131,9 +139,7 @@ class JsonToolParser(ToolParser):
                             json_match = self._extract_last_json(state.buffer)
                             if json_match:
                                 data = json.loads(json_match)
-                                tool_call = self._parse_json_object(
-                                    data, state.tool_call_index
-                                )
+                                tool_call = self._parse_json_object(data, state.tool_call_index)
                                 if tool_call:
                                     completed_tool = tool_call
                                     state.completed_tools.append(tool_call)
@@ -153,16 +159,16 @@ class JsonToolParser(ToolParser):
         for i in range(len(text) - 1, -1, -1):
             char = text[i]
 
-            if char == '"' and (i == 0 or text[i-1] != '\\'):
+            if char == '"' and (i == 0 or text[i - 1] != "\\"):
                 in_string = not in_string
             elif not in_string:
-                if char == '}':
+                if char == "}":
                     if brace_depth == 0:
                         start = i
                     brace_depth += 1
-                elif char == '{':
+                elif char == "{":
                     brace_depth -= 1
                     if brace_depth == 0:
-                        return text[i:start+1]
+                        return text[i : start + 1]
 
         return None

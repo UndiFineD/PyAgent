@@ -23,7 +23,9 @@ Inherits from BaseCore for lifecycle and I/O.
 
 import logging
 from typing import Any, Dict, Optional
+
 from .base_core import BaseCore
+
 
 class BaseManager(BaseCore):
     """

@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Context distillation.py module.
+"""
+
 import logging
+from typing import Any, Dict, Optional, Tuple
+
 import numpy as np
-from typing import List, Dict, Any, Tuple, Optional
 
 logger = logging.getLogger(__name__)
+
 
 class ContextDistiller:
     """
@@ -27,7 +33,9 @@ class ContextDistiller:
     def __init__(self, target_reduction: float = 0.5):
         self.target_reduction = target_reduction
 
-    def distill_shard(self, kv_data: np.ndarray, attention_scores: Optional[np.ndarray] = None) -> Tuple[np.ndarray, Dict[str, Any]]:
+    def distill_shard(
+        self, kv_data: np.ndarray, attention_scores: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, Dict[str, Any]]:
         """
         Reduces a KV tensor by selecting high-impact tokens.
         If no attention scores are provided, it uses uniform sampling.
@@ -38,7 +46,7 @@ class ContextDistiller:
         if attention_scores is not None:
             # Select top-k tokens based on attention
             indices = np.argsort(attention_scores)[-keep_count:]
-            indices.sort() # Keep temporal order
+            indices.sort()  # Keep temporal order
         else:
             # Uniform sampling
             indices = np.linspace(0, seq_len - 1, keep_count, dtype=int)
@@ -49,7 +57,7 @@ class ContextDistiller:
             "original_len": seq_len,
             "distilled_len": keep_count,
             "indices": indices.tolist(),
-            "compression_ratio": seq_len / keep_count
+            "compression_ratio": seq_len / keep_count,
         }
 
         logger.info(f"[Phase 89] ContextDistillation: Reduced shard from {seq_len} to {keep_count} tokens.")

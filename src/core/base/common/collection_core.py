@@ -18,9 +18,10 @@
 # limitations under the License.
 """Unified collection and data structure management core."""
 
-from typing import Any, Dict, List, TypeVar, Iterable
+from typing import Any, Dict, Iterable, List, TypeVar
 
 T = TypeVar("T")
+
 
 class CollectionCore:
     """
@@ -41,7 +42,7 @@ class CollectionCore:
     def chunk_list(data: List[T], size: int) -> Iterable[List[T]]:
         """Yield successive chunks from a list."""
         for i in range(0, len(data), size):
-            yield data[i:i + size]
+            yield data[i : i + size]
 
     @staticmethod
     def flatten(nested_list: List[List[T]]) -> List[T]:

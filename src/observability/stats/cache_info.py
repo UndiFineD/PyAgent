@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 CacheInfo - LRU Cache with hit/miss statistics and pinned items.
 
@@ -5,20 +19,23 @@ Inspired by vLLM's cache.py patterns for production cache monitoring.
 
 Phase 17: vLLM Pattern Integration
 """
+
 from __future__ import annotations
+
 import threading
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from typing import TypeVar, Generic, Optional, Hashable, Iterator
+from typing import Generic, Hashable, Optional, TypeVar
 
-K = TypeVar('K', bound=Hashable)
-V = TypeVar('V')
+K = TypeVar("K", bound=Hashable)
+V = TypeVar("V")
 
 
 @dataclass
 class CacheStats:
     """Statistics for cache performance monitoring."""
+
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -41,7 +58,7 @@ class CacheStats:
         """Cache miss ratio (0.0 to 1.0)."""
         return 1.0 - self.hit_ratio
 
-    def reset(self) -> 'CacheStats':
+    def reset(self) -> "CacheStats":
         """Reset stats and return a copy of the old stats."""
         old = CacheStats(
             hits=self.hits,
@@ -57,18 +74,19 @@ class CacheStats:
 
     def to_dict(self) -> dict:
         return {
-            'hits': self.hits,
-            'misses': self.misses,
-            'total': self.total,
-            'hit_ratio': round(self.hit_ratio, 4),
-            'evictions': self.evictions,
-            'pins': self.pins,
+            "hits": self.hits,
+            "misses": self.misses,
+            "total": self.total,
+            "hit_ratio": round(self.hit_ratio, 4),
+            "evictions": self.evictions,
+            "pins": self.pins,
         }
 
 
 @dataclass
 class CacheEntry(Generic[V]):
     """A cache entry with value, timestamp, and pin status."""
+
     value: V
     created_at: float = field(default_factory=time.time)
     last_access: float = field(default_factory=time.time)
@@ -353,13 +371,13 @@ class LRUCache(Generic[K, V]):
         """Get comprehensive cache information."""
         with self._lock:
             return {
-                'name': self._name,
-                'size': self.size,
-                'capacity': self._max_size,
-                'usage': round(self.usage, 4),
-                'pinned_count': len(self._pinned),
-                'ttl_seconds': self._ttl_seconds,
-                'stats': self._stats.to_dict(),
+                "name": self._name,
+                "size": self.size,
+                "capacity": self._max_size,
+                "usage": round(self.usage, 4),
+                "pinned_count": len(self._pinned),
+                "ttl_seconds": self._ttl_seconds,
+                "stats": self._stats.to_dict(),
             }
 
     def _record_hit(self) -> None:
@@ -410,8 +428,8 @@ class TTLLRUCache(LRUCache[K, V]):
 
 
 __all__ = [
-    'LRUCache',
-    'TTLLRUCache',
-    'CacheStats',
-    'CacheEntry',
+    "LRUCache",
+    "TTLLRUCache",
+    "CacheStats",
+    "CacheEntry",
 ]

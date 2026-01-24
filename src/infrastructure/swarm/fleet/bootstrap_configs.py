@@ -19,6 +19,7 @@ These must remain static to ensure the system can boot up before dynamic discove
 """
 
 from __future__ import annotations
+
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.registry_overlay import RegistryOverlay
 

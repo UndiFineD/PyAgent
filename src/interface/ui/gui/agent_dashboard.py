@@ -20,10 +20,12 @@
 """Dashboard component for managing multiple agent columns."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 import tkinter as tk
 from tkinter import ttk
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -41,17 +43,11 @@ class AgentDashboard:
         v_scrollbar = ttk.Scrollbar(self.frame, orient="vertical", command=canvas.yview)
         self.dash_content = ttk.Frame(canvas)
 
-        self.dash_content.bind(
-            "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
+        self.dash_content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         # Ensure dash_content matches canvas width
-        canvas.bind(
-            "<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width)
-        )
+        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
 
-        canvas_window: int = canvas.create_window(
-            (0, 0), window=self.dash_content, anchor="nw"
-        )
+        canvas_window: int = canvas.create_window((0, 0), window=self.dash_content, anchor="nw")
         canvas.configure(yscrollcommand=v_scrollbar.set)
 
         v_scrollbar.pack(side="right", fill="y")
@@ -66,12 +62,8 @@ class AgentDashboard:
             font=("Segoe UI", 9, "bold"),
         ).pack(side=tk.LEFT, padx=5)
 
-        ttk.Button(dash_ctrl, text="Collapse All", command=self.collapse_all).pack(
-            side=tk.RIGHT, padx=2
-        )
-        ttk.Button(dash_ctrl, text="Expand All", command=self.expand_all).pack(
-            side=tk.RIGHT, padx=2
-        )
+        ttk.Button(dash_ctrl, text="Collapse All", command=self.collapse_all).pack(side=tk.RIGHT, padx=2)
+        ttk.Button(dash_ctrl, text="Expand All", command=self.expand_all).pack(side=tk.RIGHT, padx=2)
 
         ttk.Button(
             dash_ctrl,
@@ -93,9 +85,7 @@ class AgentDashboard:
             text="+ Security",
             command=lambda: self.callbacks.get("add_agent")("Security"),
         ).pack(side=tk.LEFT, padx=2)
-        ttk.Button(
-            dash_ctrl, text="+ Custom...", command=self.callbacks.get("add_custom")
-        ).pack(side=tk.LEFT, padx=5)
+        ttk.Button(dash_ctrl, text="+ Custom...", command=self.callbacks.get("add_custom")).pack(side=tk.LEFT, padx=5)
 
         # Container for columns (rows now)
         self.columns_container = ttk.Frame(self.dash_content)

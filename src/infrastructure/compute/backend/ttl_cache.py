@@ -1,21 +1,50 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Cache with time-to-live expiration.
 (Facade for src.core.base.common.cache_core)
 """
 
+from __future__ import annotations
+
+import threading
+import time
+from dataclasses import dataclass
+from typing import Any
+
 from src.core.base.common.cache_core import CacheCore as StandardCacheCore
 
-class TTLCache(StandardCacheCore):
-    """Facade for CacheCore."""
-    pass
 
+@dataclass
+class CachedResponse:
+    """Structure for a cached response with metadata."""
+
+    content: str
+    created_at: float
+    expires_at: float
+    hit_count: int = 0
+
+
+class TTLCache(StandardCacheCore):
+    """
     Caches responses with configurable TTL, automatically expiring stale entries.
 
     Example:
-        cache=TTLCache(default_ttl_seconds=300)
+        cache = TTLCache(default_ttl_seconds=300)
         cache.set("key", "value")
-
-        result=cache.get("key")  # Returns "value" if not expired
+        result = cache.get("key")  # Returns "value" if not expired
     """
 
     def __init__(
@@ -29,6 +58,7 @@ class TTLCache(StandardCacheCore):
             default_ttl_seconds: Default TTL for entries.
             max_entries: Maximum cache entries.
         """
+        super().__init__()
         self.default_ttl_seconds = default_ttl_seconds
         self.max_entries = max_entries
         self._cache: dict[str, CachedResponse] = {}

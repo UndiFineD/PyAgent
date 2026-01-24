@@ -12,20 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Idiom Extractor Agent for project-specific coding patterns.
+"""
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import os
 import json
 import logging
 import re
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class IdiomExtractorAgent(BaseAgent):
     """
     Agent responsible for extracting project-specific coding idioms and patterns.
@@ -81,7 +85,7 @@ class IdiomExtractorAgent(BaseAgent):
                                 elif ":param" in content:
                                     idioms["docstring_style"] = "reStructuredText"
 
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught
                         logging.warning(f"Error reading {file}: {e}")
 
         # Deduplicate and sort
@@ -94,7 +98,12 @@ class IdiomExtractorAgent(BaseAgent):
         with open(self.idioms_file, "w", encoding="utf-8") as f:
             json.dump(idioms, f, indent=4)
 
-        return f"Successfully extracted {len(idioms['common_decorators'])} decorators and {len(idioms['frequent_imports'])} common imports. Saved to {self.idioms_file}."
+        msg = (
+            f"Successfully extracted {len(idioms['common_decorators'])} decorators "
+            f"and {len(idioms['frequent_imports'])} common imports. "
+            f"Saved to {self.idioms_file}."
+        )
+        return msg
 
     @as_tool
     def get_current_idioms(self) -> dict[str, Any]:

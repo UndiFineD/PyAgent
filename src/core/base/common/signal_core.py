@@ -17,19 +17,23 @@ Core logic for signal broadcasting and pub-sub messaging.
 """
 
 from __future__ import annotations
+
 import logging
 import queue
 import threading
-from typing import Any, Dict, List, Callable
+from typing import Any, Callable, Dict, List
+
 from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.signal")
+
 
 class SignalCore(BaseCore):
     """
     Authoritative engine for agent signals and inter-process events.
     Standardizes subscription and broadcast logic across the swarm.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self._subscribers: Dict[str, List[Callable[[Any, str], None]]] = {}

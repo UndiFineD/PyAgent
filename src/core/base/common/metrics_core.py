@@ -21,10 +21,12 @@ Core logic for metrics collection and performance analysis.
 """
 
 from __future__ import annotations
-import time
+
 import logging
+import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
+
 from .base_core import BaseCore
 
 try:
@@ -34,17 +36,21 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.metrics")
 
+
 @dataclass
 class MetricRecord:
     """Represents a single metric data point."""
+
     name: str
     value: float
     timestamp: float = field(default_factory=time.time)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class AgentMetrics:
     """Manages execution metrics and statistics for an agent."""
+
     files_processed: int = 0
     files_modified: int = 0
     agents_applied: dict[str, int] = field(default_factory=dict)
@@ -102,10 +108,12 @@ Agents applied:
             "agents_applied": self.agents_applied,
         }
 
+
 class MetricsCore(BaseCore):
     """
     Authoritative engine for agent metrics collection and performance analysis.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self._metrics = AgentMetrics()
@@ -137,9 +145,7 @@ class MetricsCore(BaseCore):
         self.record_metric(key, elapsed, metadata)
         return elapsed
 
-    def record_metric(
-        self, name: str, value: float, metadata: Dict[str, Any] | None = None
-    ) -> None:
+    def record_metric(self, name: str, value: float, metadata: Dict[str, Any] | None = None) -> None:
         """Records a custom metric data point."""
         self.records.append(MetricRecord(name, value, metadata=metadata or {}))
         # Keep buffer sane
@@ -156,9 +162,7 @@ class MetricsCore(BaseCore):
         report["custom_metrics"] = [r.__dict__ for r in self.records]
         return report
 
-    def calculate_anchoring_strength(
-        self, result: str, _context_pool: Optional[Dict[str, Any]] = None
-    ) -> float:
+    def calculate_anchoring_strength(self, result: str, _context_pool: Optional[Dict[str, Any]] = None) -> float:
         """Calculate the 'Anchoring Strength' metric (Stanford Research 2025)."""
         if not result:
             return 0.0
@@ -214,6 +218,6 @@ class MetricsCore(BaseCore):
         res = []
         for i in range(len(values)):
             start = max(0, i - window + 1)
-            slice_vals = values[start:i+1]
+            slice_vals = values[start : i + 1]
             res.append(sum(slice_vals) / len(slice_vals))
         return res

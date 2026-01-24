@@ -16,10 +16,13 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
+
+from dataclasses import dataclass
+
 from src.core.base.lifecycle.version import VERSION
+
 from .issue_category import IssueCategory
 from .severity_level import SeverityLevel
-from dataclasses import dataclass
 
 __version__ = VERSION
 

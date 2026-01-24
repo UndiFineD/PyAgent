@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 DynamicImporter - Runtime import utilities for dynamic module loading.
 
@@ -27,7 +41,7 @@ import logging
 import sys
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Callable, Generic, TypeVar, overload
+from typing import Any, Generic, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +85,7 @@ def import_from_path(
     if not file_path.exists():
         raise FileNotFoundError(f"Module file not found: {file_path}")
 
-    if not file_path.suffix == ".py":
+    if file_path.suffix != ".py":
         raise ImportError(f"Expected .py file, got: {file_path}")
 
     spec = importlib.util.spec_from_file_location(module_name, file_path)
@@ -352,9 +366,7 @@ class LazyModuleRegistry:
 
         if name not in self._registry:
             available = ", ".join(sorted(self._registry.keys()))
-            raise KeyError(
-                f"Module '{name}' not registered. Available: {available}"
-            )
+            raise KeyError(f"Module '{name}' not registered. Available: {available}")
 
         qualname = self._registry[name]
         obj = resolve_obj_by_qualname(qualname)
@@ -574,10 +586,7 @@ def require_module(
     if min_version is not None:
         version = getattr(module, "__version__", "0.0.0")
         if _compare_versions(version, min_version) < 0:
-            msg = (
-                f"Module '{module_name}' version {version} is too old. "
-                f"Minimum required: {min_version}."
-            )
+            msg = f"Module '{module_name}' version {version} is too old. Minimum required: {min_version}."
             if install_hint:
                 msg += f" Upgrade with: {install_hint}"
             raise ImportError(msg)
@@ -592,6 +601,7 @@ def _compare_versions(v1: str, v2: str) -> int:
     Returns:
         -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2.
     """
+
     def normalize(v: str) -> tuple[int, ...]:
         return tuple(int(x) for x in v.split(".")[:3])
 
@@ -599,7 +609,7 @@ def _compare_versions(v1: str, v2: str) -> int:
 
     if n1 < n2:
         return -1
-    elif n1 > n2:
+    if n1 > n2:
         return 1
     return 0
 

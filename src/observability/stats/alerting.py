@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
+
+"""
+Alerting.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Logic for thresholds, alerting, and retention enforcement.
 
 from __future__ import annotations
+
 import logging
 from datetime import datetime
 from typing import Any
-from .observability_core import Alert, AlertSeverity, RetentionPolicy, Threshold
+
+from .observability_core import (Alert, AlertSeverity, RetentionPolicy,
+                                 Threshold)
 
 try:
     from rust_core import match_policies_rust
+
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -72,9 +80,7 @@ class ThresholdAlertManager:
                     id=f"{metric_name}_{datetime.now().timestamp()}",
                     metric_name=metric_name,
                     current_value=value,
-                    threshold_value=t.max_value
-                    if t.max_value is not None
-                    else t.min_value,  # type: ignore
+                    threshold_value=t.max_value if t.max_value is not None else t.min_value,  # type: ignore
                     severity=t.severity or AlertSeverity.MEDIUM,
                     message=t.message or f"Threshold breach for {metric_name}",
                     timestamp=datetime.now().isoformat(),

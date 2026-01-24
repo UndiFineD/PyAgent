@@ -15,16 +15,21 @@
 """Content scanning logic for SecurityCore."""
 
 from __future__ import annotations
+
 import re
+
 from src.core.base.common.types.security_issue_type import SecurityIssueType
-from src.core.base.common.types.security_vulnerability import SecurityVulnerability
+from src.core.base.common.types.security_vulnerability import \
+    SecurityVulnerability
 
 # Rust acceleration imports
 try:
     from rust_core import scan_lines_multi_pattern_rust
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
+
 
 class SecurityScannerMixin:
     """Mixin for content and injection scanning."""
@@ -80,10 +85,17 @@ class SecurityScannerMixin:
     def scan_for_injection(self, content: str) -> list[str]:
         """Detects prompt injection or agent manipulation attempts."""
         injection_patterns = {
-            "Instruction Override": r"(?i)(ignore previous instructions|disregard all earlier commands|system prompt reset|you are now a|stay in character as)",
+            "Instruction Override": (
+                r"(?i)(ignore previous instructions|disregard all earlier commands|"
+                r"system prompt reset|you are now a|stay in character as)"
+            ),
             "Indirect Directive": r"(?i)(agent:|assistant:|bot:)\s*(execute|run|delete|send|upload|rm |chmod)",
-            "Payload Loader": r"(?i)(fetch the following url and run|download and execute|base64 decode this|eval\(base64)",
-            "Social Engineering": r"(?i)(congratulations!|security alert: action|verify your account|login to continue)",
+            "Payload Loader": (
+                r"(?i)(fetch the following url and run|download and execute|base64 decode this|eval\(base64)"
+            ),
+            "Social Engineering": (
+                r"(?i)(congratulations!|security alert: action|verify your account|login to continue)"
+            ),
         }
         findings = []
         for name, pattern in injection_patterns.items():

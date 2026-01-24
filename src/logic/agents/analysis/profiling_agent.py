@@ -16,14 +16,17 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types.profiling_category import ProfilingCategory
-from src.core.base.common.types.profiling_suggestion import ProfilingSuggestion
-from typing import Any
+
 import ast
 import logging
 import pstats
-from src.observability.stats.core.profiling_core import ProfilingCore, ProfileStats
+from typing import Any
+
+from src.core.base.common.types.profiling_category import ProfilingCategory
+from src.core.base.common.types.profiling_suggestion import ProfilingSuggestion
+from src.core.base.lifecycle.version import VERSION
+from src.observability.stats.core.profiling_core import (ProfileStats,
+                                                         ProfilingCore)
 
 __version__ = VERSION
 

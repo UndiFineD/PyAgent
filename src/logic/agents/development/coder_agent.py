@@ -15,29 +15,36 @@
 
 """Auto-extracted class from agent_coder.py"""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import logging
+from pathlib import Path
+
 from src.core.base.common.types.code_language import CodeLanguage
 from src.core.base.common.types.code_metrics import CodeMetrics
 from src.core.base.common.types.code_smell import CodeSmell
 from src.core.base.common.types.quality_score import QualityScore
 from src.core.base.common.types.refactoring_pattern import RefactoringPattern
 from src.core.base.common.types.style_rule import StyleRule
-from src.logic.agents.development.coder_core import CoderCore, DEFAULT_PYTHON_STYLE_RULES
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.development.mixins.agent.agent_language_mixin import AgentLanguageMixin
-from src.logic.agents.development.mixins.agent.agent_style_mixin import AgentStyleMixin
-from src.logic.agents.development.mixins.agent.agent_metrics_mixin import AgentMetricsMixin
-from src.logic.agents.development.mixins.agent.agent_refactor_mixin import AgentRefactorMixin
-from pathlib import Path
-import logging
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.development.coder_core import (
+    DEFAULT_PYTHON_STYLE_RULES, CoderCore)
+from src.logic.agents.development.mixins.agent.agent_language_mixin import \
+    AgentLanguageMixin
+from src.logic.agents.development.mixins.agent.agent_metrics_mixin import \
+    AgentMetricsMixin
+from src.logic.agents.development.mixins.agent.agent_refactor_mixin import \
+    AgentRefactorMixin
+from src.logic.agents.development.mixins.agent.agent_style_mixin import \
+    AgentStyleMixin
 
 __version__ = VERSION
 
 
-class CoderAgent(
-    BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMixin, AgentRefactorMixin
-):
+class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMixin, AgentRefactorMixin):
     """Updates code files using AI assistance.
 
     Invariants:
@@ -138,9 +145,7 @@ class CoderAgent(
         logging.debug("Syntax validation passed")
         # Validate style (flake8)
         if not self._validate_flake8(new_content):
-            logging.warning(
-                "Generated code failed style validation (flake8). Proceeding anyway."
-            )
+            logging.warning("Generated code failed style validation (flake8). Proceeding anyway.")
         else:
             logging.debug("Style validation passed")
         return new_content

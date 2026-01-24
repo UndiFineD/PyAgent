@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -8,14 +22,12 @@ from __future__ import annotations
 
 import logging
 import threading
-from typing import (
-    Dict,
-    Optional,
-)
+from typing import Dict, Optional
 
 import numpy as np
 
-from .config import EngineIdentity, EngineState, LoadBalancingStrategy, ParallelConfig
+from .config import (EngineIdentity, EngineState, LoadBalancingStrategy,
+                     ParallelConfig)
 from .messages import MetricsMessage
 
 logger = logging.getLogger(__name__)
@@ -78,10 +90,7 @@ class DPCoordinator:
             Engine ID, or None if no engines available.
         """
         with self._lock:
-            ready_engines = [
-                eid for eid, state in self._engine_states.items()
-                if state == EngineState.READY
-            ]
+            ready_engines = [eid for eid, state in self._engine_states.items() if state == EngineState.READY]
 
             if not ready_engines:
                 return None
@@ -93,7 +102,7 @@ class DPCoordinator:
 
             elif self.load_balancing == LoadBalancingStrategy.LEAST_LOADED:
                 # Select engine with lowest queue depth
-                min_load = float('inf')
+                min_load = float("inf")
                 selected = ready_engines[0]
                 for eid in ready_engines:
                     metrics = self._engine_metrics.get(eid)

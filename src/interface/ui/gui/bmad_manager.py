@@ -20,11 +20,15 @@
 """BMAD (Bulk Multi-Agent Deployment) component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import tkinter as tk
-from tkinter import ttk, messagebox
+
 import os
-from .constants import BMAD_AGENTS, BMAD_TRACKS, BMAD_PHASES, DEFAULT_INSTRUCTIONS
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+from src.core.base.lifecycle.version import VERSION
+
+from .constants import (BMAD_AGENTS, BMAD_PHASES, BMAD_TRACKS,
+                        DEFAULT_INSTRUCTIONS)
 
 __version__ = VERSION
 
@@ -36,9 +40,7 @@ class BmadManager:
         self.parent = parent
         self.callbacks = callbacks
         self.recorder = None  # Phase 108: Optional recorder
-        self.frame = ttk.LabelFrame(
-            parent, text="BMAD - Bulk Multi-Agent Deployment", padding=10
-        )
+        self.frame = ttk.LabelFrame(parent, text="BMAD - Bulk Multi-Agent Deployment", padding=10)
         self.setup_ui()
 
     def _record(self, action: str, result: str) -> None:
@@ -51,9 +53,7 @@ class BmadManager:
         method_frame = ttk.Frame(self.frame)
         method_frame.pack(fill=tk.X, pady=5)
 
-        ttk.Label(
-            method_frame, text="Methodology Track:", font=("Segoe UI", 9, "bold")
-        ).pack(anchor=tk.W)
+        ttk.Label(method_frame, text="Methodology Track:", font=("Segoe UI", 9, "bold")).pack(anchor=tk.W)
         self.track_var = tk.StringVar(value="BMad Method")
         track_cb = ttk.Combobox(
             method_frame,
@@ -75,9 +75,7 @@ class BmadManager:
         # 2. Phase Selection
         self.phase_frame = ttk.Frame(self.frame)
         self.phase_frame.pack(fill=tk.X, pady=5)
-        ttk.Label(
-            self.phase_frame, text="Current Phase:", font=("Segoe UI", 9, "bold")
-        ).pack(anchor=tk.W)
+        ttk.Label(self.phase_frame, text="Current Phase:", font=("Segoe UI", 9, "bold")).pack(anchor=tk.W)
         self.phase_var = tk.StringVar(value="Implementation")
         self.phase_sel_container = ttk.Frame(self.phase_frame)
         self.phase_sel_container.pack(fill=tk.X)
@@ -87,9 +85,7 @@ class BmadManager:
         file_mode_frame = ttk.Frame(self.frame)
         file_mode_frame.pack(fill=tk.X, pady=5)
 
-        ttk.Label(
-            file_mode_frame, text="Target Scope:", font=("Segoe UI", 9, "bold")
-        ).pack(anchor=tk.W)
+        ttk.Label(file_mode_frame, text="Target Scope:", font=("Segoe UI", 9, "bold")).pack(anchor=tk.W)
         self.target_mode = tk.StringVar(value="selected")
         scope_opts_frame = ttk.Frame(file_mode_frame)
         scope_opts_frame.pack(fill=tk.X)
@@ -99,22 +95,18 @@ class BmadManager:
             variable=self.target_mode,
             value="selected",
         ).pack(side=tk.LEFT, padx=5)
-        ttk.Radiobutton(
-            scope_opts_frame, text="Project", variable=self.target_mode, value="project"
-        ).pack(side=tk.LEFT, padx=5)
-        ttk.Radiobutton(
-            scope_opts_frame, text="Git Changes", variable=self.target_mode, value="git"
-        ).pack(side=tk.LEFT, padx=5)
+        ttk.Radiobutton(scope_opts_frame, text="Project", variable=self.target_mode, value="project").pack(
+            side=tk.LEFT, padx=5
+        )
+        ttk.Radiobutton(scope_opts_frame, text="Git Changes", variable=self.target_mode, value="git").pack(
+            side=tk.LEFT, padx=5
+        )
 
         # 4. Agent Selection (Dynamic Grid)
         agent_header = ttk.Frame(self.frame)
         agent_header.pack(fill=tk.X, pady=5)
-        ttk.Label(
-            agent_header, text="Apply Agents:", font=("Segoe UI", 9, "bold")
-        ).pack(side=tk.LEFT)
-        ttk.Button(
-            agent_header, text="All", width=5, command=lambda: self.set_all_agents(True)
-        ).pack(side=tk.RIGHT)
+        ttk.Label(agent_header, text="Apply Agents:", font=("Segoe UI", 9, "bold")).pack(side=tk.LEFT)
+        ttk.Button(agent_header, text="All", width=5, command=lambda: self.set_all_agents(True)).pack(side=tk.RIGHT)
         ttk.Button(
             agent_header,
             text="None",
@@ -143,12 +135,8 @@ class BmadManager:
             style="Accent.TButton",
             command=self.deploy_bulk,
         ).pack(fill=tk.X, pady=2)
-        ttk.Button(
-            btn_frame, text="🔄 START BMAD WORKFLOW", command=self.start_workflow_action
-        ).pack(fill=tk.X, pady=2)
-        ttk.Button(btn_frame, text="⚡ Workflow-Init", command=self.workflow_init).pack(
-            fill=tk.X, pady=2
-        )
+        ttk.Button(btn_frame, text="🔄 START BMAD WORKFLOW", command=self.start_workflow_action).pack(fill=tk.X, pady=2)
+        ttk.Button(btn_frame, text="⚡ Workflow-Init", command=self.workflow_init).pack(fill=tk.X, pady=2)
 
     def on_track_change(self, event: tk.Event) -> None:
         track = self.track_var.get()
@@ -208,9 +196,7 @@ class BmadManager:
             root = self.callbacks["get_project_root"]()
             exts = {".py", ".js", ".ts", ".md"}  # BMAD scope
             for r, d, f in os.walk(root):
-                if any(
-                    x in r for x in {".git", "__pycache__", ".venv", "node_modules"}
-                ):
+                if any(x in r for x in {".git", "__pycache__", ".venv", "node_modules"}):
                     continue
                 for file in f:
                     if os.path.splitext(file)[1] in exts:
@@ -221,9 +207,7 @@ class BmadManager:
                 import subprocess
 
                 cmd = ["git", "ls-files", "-m", "-o", "--exclude-standard"]
-                result = subprocess.check_output(
-                    cmd, cwd=root, stderr=subprocess.STDOUT, text=True
-                )
+                result = subprocess.check_output(cmd, cwd=root, stderr=subprocess.STDOUT, text=True)
                 for line in result.splitlines():
                     if line.endswith(".py") or line.endswith(".md"):
                         targets.append(os.path.join(root, line))
@@ -235,9 +219,7 @@ class BmadManager:
             if sel_path:
                 targets = [sel_path]
             else:
-                messagebox.showwarning(
-                    "Warning", "No files selected in Project Explorer."
-                )
+                messagebox.showwarning("Warning", "No files selected in Project Explorer.")
                 return []
         return targets
 
@@ -274,9 +256,7 @@ class BmadManager:
 
                 # Apply Phase instruction if available
                 phase = self.phase_var.get()
-                instr = DEFAULT_INSTRUCTIONS.get(
-                    agent_name, f"Role: {agent_name}. Phase: {phase}."
-                )
+                instr = DEFAULT_INSTRUCTIONS.get(agent_name, f"Role: {agent_name}. Phase: {phase}.")
                 col.local_context.delete("1.0", tk.END)
                 col.local_context.insert("1.0", f"--- BMAD {phase} PHASE ---\n{instr}")
 

@@ -12,16 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Fleet execution core.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
-import time
-import inspect
+
 import asyncio
 import contextlib
-from typing import Any, TYPE_CHECKING
+import inspect
+import logging
+import time
+from typing import TYPE_CHECKING, Any
+
 from src.core.base.common.models import AgentPriority
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 
 __version__ = VERSION
@@ -44,16 +50,16 @@ class FleetExecutionCore:
             # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)
             with contextlib.suppress(RuntimeError):
                 loop = asyncio.get_running_loop()
-                loop.create_task(self.fleet.signals.emit(
-                    "WORKFLOW_REJECTED",
-                    {"task": task, "violations": ethics_report["violations"]},
-                    sender="FleetManager",
-                ))
+                loop.create_task(
+                    self.fleet.signals.emit(
+                        "WORKFLOW_REJECTED",
+                        {"task": task, "violations": ethics_report["violations"]},
+                        sender="FleetManager",
+                    )
+                )
         return ethics_report
 
-    async def execute_reliable_task(
-        self, task: str, priority: AgentPriority = AgentPriority.NORMAL
-    ) -> str:
+    async def execute_reliable_task(self, task: str, priority: AgentPriority = AgentPriority.NORMAL) -> str:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""
         task_id = f"task_{int(time.time() * 1000)}"
         self.fleet.active_tasks[task_id] = {"priority": priority, "agents": []}
@@ -73,29 +79,19 @@ class FleetExecutionCore:
 
         try:
             # Phase 152: Transition core logic to async
-            technical_report = await self.fleet.structured_orchestrator.execute_task(
-                task
-            )
+            technical_report = await self.fleet.structured_orchestrator.execute_task(task)
             res = self.fleet.linguist.articulate_results(technical_report, task)
             await self.fleet._record_success(task, res, current_model)
             return res
         except Exception as e:
             await self.fleet._record_failure(task, str(e), current_model)
             logging.error(f"Fleet failure: {e}")
-            fallback_model = self.fleet.fallback_engine.get_fallback_model(
-                current_model, str(e)
-            )
+            fallback_model = self.fleet.fallback_engine.get_fallback_model(current_model, str(e))
             if fallback_model and fallback_model != current_model:
-                logging.warning(
-                    f"Self-Healing: Retrying with fallback model {fallback_model}..."
-                )
+                logging.warning(f"Self-Healing: Retrying with fallback model {fallback_model}...")
                 try:
-                    technical_report = (
-                        await self.fleet.structured_orchestrator.execute_task(task)
-                    )
-                    return self.fleet.linguist.articulate_results(
-                        technical_report, task
-                    )
+                    technical_report = await self.fleet.structured_orchestrator.execute_task(task)
+                    return self.fleet.linguist.articulate_results(technical_report, task)
                 except Exception as e2:
                     logging.critical(f"Self-Healing: Fallback also failed: {e2}")
             raise
@@ -119,9 +115,7 @@ class FleetExecutionCore:
 
         try:
             if self.fleet.kill_switch:
-                logging.error(
-                    "Fleet KILL SWITCH active. Workflow terminated immediately."
-                )
+                logging.error("Fleet KILL SWITCH active. Workflow terminated immediately.")
                 return "ERROR: Fleet Terminal Kill Switch Active."
 
             ethics_report = self._check_ethics(task)
@@ -151,9 +145,7 @@ class FleetExecutionCore:
 
         return "# Fleet Workflow Summary\n\n" + "\n".join(results)
 
-    async def _process_workflow_step(
-        self, step: dict[str, Any], workflow_id: str, priority: AgentPriority
-    ) -> str:
+    async def _process_workflow_step(self, step: dict[str, Any], workflow_id: str, priority: AgentPriority) -> str:
         """Processes a single step in a multi-agent workflow."""
         agent_name = step.get("agent", "Unknown")
         action_name = step.get("action", "Unknown")
@@ -161,10 +153,7 @@ class FleetExecutionCore:
 
         # Process variables (e.g., $last_result)
         processed_args = [
-            self.fleet.state.get(arg[1:], arg)
-            if isinstance(arg, str) and arg.startswith("$")
-            else arg
-            for arg in args
+            self.fleet.state.get(arg[1:], arg) if isinstance(arg, str) and arg.startswith("$") else arg for arg in args
         ]
 
         agent = self.fleet.agents.get(agent_name)
@@ -173,9 +162,11 @@ class FleetExecutionCore:
             # Fire-and-forget signal emmission
             try:
                 loop = asyncio.get_running_loop()
-                loop.create_task(self.fleet.signals.emit(
-                    "AGENT_NOT_FOUND", {"agent": agent_name, "step": step}, sender="FleetManager"
-                ))
+                loop.create_task(
+                    self.fleet.signals.emit(
+                        "AGENT_NOT_FOUND", {"agent": agent_name, "step": step}, sender="FleetManager"
+                    )
+                )
             except RuntimeError:
                 pass
             return f"### Error\n{err}\n"
@@ -197,11 +188,13 @@ class FleetExecutionCore:
         # Signal start
         try:
             loop = asyncio.get_running_loop()
-            loop.create_task(self.fleet.signals.emit(
-                "STEP_STARTED",
-                {"agent": agent_name, "action": action_name, "args": processed_args},
-                sender="FleetManager",
-            ))
+            loop.create_task(
+                self.fleet.signals.emit(
+                    "STEP_STARTED",
+                    {"agent": agent_name, "action": action_name, "args": processed_args},
+                    sender="FleetManager",
+                )
+            )
         except RuntimeError:
             pass
 
@@ -243,7 +236,9 @@ class FleetExecutionCore:
                 msg = f"LOOP DETECTED: {action_signature} repeated 3 times."
                 try:
                     loop = asyncio.get_running_loop()
-                    loop.create_task(self.fleet.signals.emit("LOOP_DETECTED", {"action": action_signature}, sender="FleetManager"))
+                    loop.create_task(
+                        self.fleet.signals.emit("LOOP_DETECTED", {"action": action_signature}, sender="FleetManager")
+                    )
                 except RuntimeError:
                     pass
                 return False, "", msg
@@ -267,7 +262,9 @@ class FleetExecutionCore:
                     self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=True)
 
                 token_info = getattr(agent, "_last_token_usage", {"input": 0, "output": 0, "model": current_model})
-                await self.fleet._record_success(res, workflow_id, agent_name, action_name, args, token_info, trace_id, start_time)
+                await self.fleet._record_success(
+                    res, workflow_id, agent_name, action_name, args, token_info, trace_id, start_time
+                )
                 self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
                 success = True
             except Exception as e:
@@ -280,7 +277,9 @@ class FleetExecutionCore:
                     await asyncio.sleep(1.0)
                     continue
 
-                self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="error", metadata={"error": error_msg})
+                self.fleet.telemetry.end_trace(
+                    trace_id, agent_name, action_name, status="error", metadata={"error": error_msg}
+                )
                 break
 
         return success, res, error_msg

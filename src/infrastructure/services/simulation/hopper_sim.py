@@ -19,11 +19,14 @@ Part of the Phase 130 performance optimization suite.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from dataclasses import dataclass
 from enum import Enum, auto
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.simulation.core.simulation_core import \
+    SimulationCore
 from src.observability.structured_logger import StructuredLogger
-from src.infrastructure.services.simulation.core.simulation_core import SimulationCore
 
 __version__ = VERSION
 
@@ -56,9 +59,7 @@ class HopperSim:
     def __init__(self, config: HopperConfig = HopperConfig()):
         self.config = config
 
-    def estimate_matmul_latency(
-        self, m: int, n: int, k: int, precision: Precision = Precision.FP16
-    ) -> float:
+    def estimate_matmul_latency(self, m: int, n: int, k: int, precision: Precision = Precision.FP16) -> float:
         """
         Estimates the latency of a C = A * B matmul operation.
         Returns estimated time in milliseconds.
@@ -94,17 +95,13 @@ class HopperSim:
         overhead_factor = 1.15
         return max(theoretical_lat, memory_lat) * overhead_factor
 
-    def simulate_distributed_training(
-        self, batch_size: int, seq_len: int, d_model: int, num_gpus: int
-    ) -> dict:
+    def simulate_distributed_training(self, batch_size: int, seq_len: int, d_model: int, num_gpus: int) -> dict:
         # QKV Projections: 3 * [B, S, D] * [D, D]
         m, n, k = batch_size * seq_len, d_model, d_model
         latency_qkv = self.estimate_matmul_latency(m, n, k) * 3
 
         # Attention: [B, S, S] * [S, D] (Simplified)
-        latency_attn = self.estimate_matmul_latency(
-            batch_size * seq_len, seq_len, d_model
-        )
+        latency_attn = self.estimate_matmul_latency(batch_size * seq_len, seq_len, d_model)
 
         total_ms = (latency_qkv + latency_attn) / num_gpus  # Simplified linear scaling
 
@@ -129,13 +126,9 @@ class HopperSim:
             active_agents -= len(failures)
 
             bar = core.format_progress_bar(step, steps)
-            logger.info(
-                f"Step {step:02d}: {bar} | Failed: {len(failures)} | Alive: {active_agents}"
-            )
+            logger.info(f"Step {step:02d}: {bar} | Failed: {len(failures)} | Alive: {active_agents}")
 
-        logger.info(
-            f"=== TEST COMPLETE. Final Resilience: {active_agents / agent_count * 100:.1f}% ==="
-        )
+        logger.info(f"=== TEST COMPLETE. Final Resilience: {active_agents / agent_count * 100:.1f}% ===")
 
 
 if __name__ == "__main__":

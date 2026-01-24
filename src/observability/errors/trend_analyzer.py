@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
+
+from datetime import datetime
+
 from src.core.base.lifecycle.version import VERSION
+
 from .trend_data import TrendData
 from .trend_direction import TrendDirection
-from datetime import datetime
 
 __version__ = VERSION
 
@@ -68,9 +71,7 @@ class TrendAnalyzer:
             return data
         # Calculate direction
         recent = data.values[-5:] if len(data.values) >= 5 else data.values
-        avg_change = sum(recent[i] - recent[i - 1] for i in range(1, len(recent))) / (
-            len(recent) - 1
-        )
+        avg_change = sum(recent[i] - recent[i - 1] for i in range(1, len(recent))) / (len(recent) - 1)
         if avg_change > 0.1:
             data.direction = TrendDirection.INCREASING
         elif avg_change < -0.1:
@@ -98,9 +99,7 @@ class TrendAnalyzer:
         last_value = data.values[-1]
         avg_change = 0.0
         if len(data.values) >= 2:
-            changes = [
-                data.values[i] - data.values[i - 1] for i in range(1, len(data.values))
-            ]
+            changes = [data.values[i] - data.values[i - 1] for i in range(1, len(data.values))]
             avg_change = sum(changes) / len(changes)
         for i in range(periods):
             predictions.append(last_value + avg_change * (i + 1))

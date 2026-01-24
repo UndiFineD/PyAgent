@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Set
+from typing import Any, List, Dict, Set, Self
 import json
 from datetime import datetime
 from pathlib import Path

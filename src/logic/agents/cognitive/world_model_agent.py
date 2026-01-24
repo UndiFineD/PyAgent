@@ -13,19 +13,24 @@
 # limitations under the License.
 
 
+"""Agent for maintaining a 'World Model' of the workspace and environment."""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
-import json
-import os
+
 import ast
+import json
+import logging
+import os
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class WorldModelAgent(BaseAgent):
     """
     Agent responsible for maintaining a 'World Model' of the workspace and environment.
@@ -44,6 +49,7 @@ class WorldModelAgent(BaseAgent):
 
     def analyze_ast_impact(self, file_path: str, proposed_change: str) -> list[str]:
         """Performs AST-based dependency mapping to predict impact of a change."""
+        _ = proposed_change
         impacted_symbols = []
         if not os.path.exists(file_path):
             return ["File non-existent"]
@@ -55,7 +61,7 @@ class WorldModelAgent(BaseAgent):
             for node in ast.walk(tree):
                 if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                     impacted_symbols.append(node.name)
-        except Exception as e:
+        except (SyntaxError, OSError, IOError) as e:
             return [f"AST Error: {str(e)}"]
 
         return impacted_symbols
@@ -77,14 +83,14 @@ class WorldModelAgent(BaseAgent):
         prompt = (
             f"Given the context: {current_context}\n"
             f"Predict the outcome of this action: {action_description}\n"
-            "Format your response as a JSON object with keys: 'success_probability', 'predicted_changes', 'risks', 'validation_steps'."
+            "Format your response as a JSON object with keys: "
+            "'success_probability', 'predicted_changes', 'risks', 'validation_steps'."
         )
 
         response = await self.think(prompt)
         try:
-            import json
             return json.loads(response)
-        except Exception:
+        except json.JSONDecodeError:
             return {
                 "success_probability": 0.8,
                 "predicted_changes": ["Hypothetical changes based on description"],
@@ -102,11 +108,11 @@ class WorldModelAgent(BaseAgent):
             f"WorldModelAgent: Simulating workspace state with {len(hypothetical_changes)} changes."
         )
 
-        simulation = "SIMULATED WORKSPACE STATE:\n"
+        simulation_lines = ["SIMULATED WORKSPACE STATE:"]
         for change in hypothetical_changes:
-            simulation += f"- [SIMULATED] {change}\n"
+            simulation_lines.append(f"- [SIMULATED] {change}")
 
-        return simulation
+        return "\n".join(simulation_lines)
 
     @as_tool
     async def simulate_agent_interaction(
@@ -133,7 +139,7 @@ class WorldModelAgent(BaseAgent):
         response = await self.think(prompt)
         try:
             return json.loads(response)
-        except Exception:
+        except json.JSONDecodeError:
             return {
                 "bottlenecks": ["Communication overhead"],
                 "division_of_labor": {

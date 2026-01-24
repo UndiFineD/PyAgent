@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
+
+import re
+
 from src.core.base.lifecycle.version import VERSION
+
 from .error_entry import ErrorEntry
 from .regression_info import RegressionInfo
-import re
 
 __version__ = VERSION
 
@@ -49,9 +52,7 @@ class RegressionDetector:
         signature = self._get_error_signature(error)
         self.fixed_errors[signature] = commit_hash
 
-    def check_regression(
-        self, error: ErrorEntry, current_commit: str = ""
-    ) -> RegressionInfo | None:
+    def check_regression(self, error: ErrorEntry, current_commit: str = "") -> RegressionInfo | None:
         """Check if an error is a regression.
 
         Args:

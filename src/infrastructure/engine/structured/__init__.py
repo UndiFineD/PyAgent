@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 39: Structured Output / Guided Decoding
 # Inspired by vLLM's structured output framework
@@ -13,55 +27,23 @@ This module provides grammar-based token constraints for:
 - Function call validation
 """
 
-from src.infrastructure.engine.structured.structured_output_manager import (
-    StructuredOutputManager,
-    StructuredOutputBackend,
-    StructuredOutputGrammar,
-    GrammarType,
-    GrammarSpec,
-    CompilationResult,
-)
-
 from src.infrastructure.engine.structured.grammar_engine import (
-    GrammarEngine,
-    RegexGrammar,
-    JsonSchemaGrammar,
-    ChoiceGrammar,
-    EBNFGrammar,
-    FSMState,
-    TokenMask,
-)
-
+    ChoiceGrammar, EBNFGrammar, FSMState, GrammarEngine, JsonSchemaGrammar,
+    RegexGrammar, TokenMask)
 from src.infrastructure.engine.structured.logit_processor import (
-    LogitProcessor,
-    ConstrainedLogitProcessor,
-    BitmaskLogitProcessor,
-    CompositeLogitProcessor,
-    LogitBias,
-)
-
+    BitmaskLogitProcessor, CompositeLogitProcessor, ConstrainedLogitProcessor,
+    LogitBias, LogitProcessor)
+from src.infrastructure.engine.structured.structured_output_manager import (
+    CompilationResult, GrammarSpec, GrammarType, StructuredOutputBackend,
+    StructuredOutputGrammar, StructuredOutputManager)
 # Phase 41: Enhanced structured output parameters
 from src.infrastructure.engine.structured.structured_output_params import (
-    StructuredOutputType,
-    ConstraintType,
-    SchemaFormat,
-    GuidedDecodingBackend,
-    WhitespacePattern,
-    OutputConstraint,
-    JsonSchemaConstraint,
-    RegexConstraint,
-    ChoiceConstraint,
-    GrammarConstraint,
-    TypeConstraint,
-    StructuredOutputConfig,
-    ValidationResult,
-    ConstraintBuilder,
-    StructuredOutputValidator,
-    create_json_constraint,
-    create_regex_constraint,
-    create_choice_constraint,
-    combine_constraints,
-)
+    ChoiceConstraint, ConstraintBuilder, ConstraintType, GrammarConstraint,
+    GuidedDecodingBackend, JsonSchemaConstraint, OutputConstraint,
+    RegexConstraint, SchemaFormat, StructuredOutputConfig,
+    StructuredOutputType, StructuredOutputValidator, TypeConstraint,
+    ValidationResult, WhitespacePattern, combine_constraints,
+    create_choice_constraint, create_json_constraint, create_regex_constraint)
 
 __all__ = [
     # Manager

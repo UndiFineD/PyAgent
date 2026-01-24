@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Core logic for Android ADB integration (Phase 175).
 Encapsulates ADB commands for UI testing.
@@ -6,9 +20,9 @@ Optimized for eventual Rust migration (Phase 3).
 
 from __future__ import annotations
 
-import subprocess
 import shlex
-from typing import TypedDict, Optional
+import subprocess
+from typing import Optional, TypedDict
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 
@@ -85,9 +99,7 @@ class AndroidCore:
                 provider="android",
                 model="adb",
                 prompt=cmd_str,
-                result=result["output"]
-                if result["success"]
-                else f"Error: {result['error']}",
+                result=result["output"] if result["success"] else f"Error: {result['error']}",
                 meta={"serial": serial, "success": result["success"]},
             )
 
@@ -139,16 +151,12 @@ class AndroidCore:
         # Note: /sdcard/ is standard but not guaranteed on all devices, but standard enough for now.
         temp_remote_path = "/sdcard/screen_capture_temp.png"
 
-        cap_res = AndroidCore.run_adb_command(
-            ["shell", "screencap", "-p", temp_remote_path], serial, recorder
-        )
+        cap_res = AndroidCore.run_adb_command(["shell", "screencap", "-p", temp_remote_path], serial, recorder)
         if not cap_res["success"]:
             return cap_res
 
         # 2. Pull directly to output path
-        pull_res = AndroidCore.run_adb_command(
-            ["pull", temp_remote_path, output_path], serial, recorder
-        )
+        pull_res = AndroidCore.run_adb_command(["pull", temp_remote_path, output_path], serial, recorder)
 
         # 3. Cleanup (optional but good practice)
         AndroidCore.run_adb_command(["shell", "rm", temp_remote_path], serial, recorder)

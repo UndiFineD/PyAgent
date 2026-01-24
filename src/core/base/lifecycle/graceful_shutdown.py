@@ -16,6 +16,7 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
+
 import json
 import logging
 import signal
@@ -23,8 +24,8 @@ import time
 from pathlib import Path
 from typing import Any, cast
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models import ShutdownState
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -40,9 +41,7 @@ class GracefulShutdown:
         state_file: Path to state persistence file.
     """
 
-    def __init__(
-        self, repo_root: Path | str, state_file: str = ".agent_shutdown.json"
-    ) -> None:
+    def __init__(self, repo_root: Path | str, state_file: str = ".agent_shutdown.json") -> None:
         """Initialize graceful shutdown handler.
 
         Args:
@@ -136,9 +135,7 @@ class GracefulShutdown:
 
         try:
             raw = json.loads(self.state_file.read_text())
-            data: dict[str, Any] = (
-                cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
-            )
+            data: dict[str, Any] = cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
             state = ShutdownState(
                 shutdown_requested=False,  # Reset for resume
                 current_file=data.get("current_file"),
@@ -147,8 +144,7 @@ class GracefulShutdown:
                 start_time=data.get("start_time", time.time()),
             )
             logging.info(
-                "Loaded resume state: %s completed, %s pending",
-                len(state.completed_files), len(state.pending_files)
+                "Loaded resume state: %s completed, %s pending", len(state.completed_files), len(state.pending_files)
             )
             return state
         except Exception as e:  # pylint: disable=broad-exception-caught

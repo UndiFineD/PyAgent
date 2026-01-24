@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
+
+"""
+Exporters.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Consolidated exporters for Prometheus, OTel, and Cloud Monitoring.
 
 from __future__ import annotations
+
 import json
 import logging
 import time
 import uuid
 from dataclasses import dataclass, field
 from typing import Any
+
 from .analysis import TracingCore
-from .observability_core import ExportDestination
 from .metrics import Metric
+from .observability_core import ExportDestination
 
 logger = logging.getLogger(__name__)
 
@@ -37,9 +43,7 @@ class PrometheusExporter:
     def __init__(self) -> None:
         self.metrics_registry: dict[str, float] = {}
 
-    def record_metric(
-        self, name: str, value: float, labels: dict[str, str] | None = None
-    ) -> None:
+    def record_metric(self, name: str, value: float, labels: dict[str, str] | None = None) -> None:
         label_str = ""
         if labels:
             label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
@@ -95,9 +99,7 @@ class OTelManager:
             span.attributes.update(attributes)
 
         total_latency = span.end_time - span.start_time
-        breakdown = self.core.calculate_latency_breakdown(
-            total_latency, network_latency_sec
-        )
+        breakdown = self.core.calculate_latency_breakdown(total_latency, network_latency_sec)
         span.attributes.update(breakdown)
 
         self.completed_spans.append(span)
@@ -112,9 +114,7 @@ class OTelManager:
 class CloudExporter:
     """Export stats to cloud monitoring services."""
 
-    def __init__(
-        self, destination: ExportDestination, api_key: str = "", endpoint: str = ""
-    ) -> None:
+    def __init__(self, destination: ExportDestination, api_key: str = "", endpoint: str = "") -> None:
         self.destination = destination
         self.api_key = api_key
         self.endpoint = endpoint or self._get_default_endpoint()

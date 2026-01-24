@@ -66,7 +66,7 @@ class ContextDataMixin:
             self._ensure_shard_loaded("facts")
 
         if not hasattr(self, "memory") or not hasattr(self, "core"):
-             return
+            return
 
         self.memory["facts"][key] = self.core.prepare_fact(key, value)
         if hasattr(self, "save"):
@@ -78,7 +78,7 @@ class ContextDataMixin:
             self._ensure_shard_loaded("insights")
 
         if not hasattr(self, "memory") or not hasattr(self, "core"):
-             return
+            return
 
         entry = self.core.prepare_insight(insight, source_agent)
         # Avoid duplicates in insights

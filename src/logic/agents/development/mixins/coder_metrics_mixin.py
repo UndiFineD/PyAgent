@@ -12,10 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Coder metrics mixin.py module.
+"""
+
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 import ast
 import math
+
 from src.core.base.common.types.code_metrics import CodeMetrics
+
 
 class CoderMetricsMixin:
     """Mixin for CoderCore to handle complex metrics calculations."""
@@ -47,12 +56,16 @@ class CoderMetricsMixin:
         if metrics.lines_of_code <= 0:
             return 100.0
 
-        halstead_volume = metrics.lines_of_code * math.log2(
-            max(1, metrics.function_count + metrics.class_count + 1)
-        )
+        halstead_volume = metrics.lines_of_code * math.log2(max(1, metrics.function_count + metrics.class_count + 1))
         cc = max(1, metrics.cyclomatic_complexity)
         loc = metrics.lines_of_code
         cm = metrics.lines_of_comments
 
-        mi = 171 - 5.2 * math.log(halstead_volume + 1) - 0.23 * cc - 16.2 * math.log(loc + 1) + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
+        mi = (
+            171
+            - 5.2 * math.log(halstead_volume + 1)
+            - 0.23 * cc
+            - 16.2 * math.log(loc + 1)
+            + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
+        )
         return max(0, min(100, mi))

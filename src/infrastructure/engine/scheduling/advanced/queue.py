@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Priority queue implementation for request scheduling."""
@@ -6,6 +20,7 @@ import heapq
 import threading
 import time
 from typing import Optional
+
 from .config import RequestState
 from .request import ScheduledRequest
 
@@ -23,7 +38,7 @@ class PriorityRequestQueue:
 
         # Starvation prevention
         self._age_interval = 1.0  # seconds
-        self._max_age = 10.0      # seconds before priority boost
+        self._max_age = 10.0  # seconds before priority boost
         self._last_age_time = time.time()
 
     def _get_priority_score(self, request: ScheduledRequest) -> float:
@@ -46,7 +61,7 @@ class PriorityRequestQueue:
             request._sequence = self._sequence
 
             priority_score = self._get_priority_score(request)
-            deadline = request.deadline if request.deadline else float('inf')
+            deadline = request.deadline if request.deadline else float("inf")
 
             entry = (
                 priority_score,
@@ -121,13 +136,15 @@ class PriorityRequestQueue:
             else:
                 new_priority = entry[0]
 
-            new_heap.append((
-                new_priority,
-                entry[1],
-                entry[2],
-                entry[3],
-                request,
-            ))
+            new_heap.append(
+                (
+                    new_priority,
+                    entry[1],
+                    entry[2],
+                    entry[3],
+                    request,
+                )
+            )
 
         heapq.heapify(new_heap)
         self._heap = new_heap

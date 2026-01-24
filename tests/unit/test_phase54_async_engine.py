@@ -84,13 +84,18 @@ def test_request_queue_v2_priority():
     from src.infrastructure.engine.request_queue.v2.request_queue import RequestQueueV2
     queue = RequestQueueV2()
 
-    req_low = MockRequest(request_id=1, prompt_len=1, output_len=1, tokens=[], priority=RequestPriority.LOW)
-    req_high = MockRequest(request_id=2, prompt_len=1, output_len=1, tokens=[], priority=RequestPriority.HIGH)
+    req_low = MockRequest(
+        request_id=1, prompt_len=1, output_len=1, tokens=[], priority=RequestPriority.LOW
+    )
+    req_high = MockRequest(
+        request_id=2, prompt_len=1, output_len=1, tokens=[], priority=RequestPriority.HIGH
+    )
 
     queue.add_request(req_low)
     queue.add_request(req_high)
 
     batch = queue.pop_next_batch(max_tokens=10)
     assert len(batch) == 2
-    # High priority should be first if scoring is correct (though pop_next_batch doesn't guarantee order in the flat list)
+    # High priority should be first if scoring is correct
+    # (though pop_next_batch doesn't guarantee order in the flat list)
     # But internal heap should have prioritized it.

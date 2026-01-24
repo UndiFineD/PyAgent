@@ -11,12 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Swarm arbitrator agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import time
 import uuid
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.swarm.core.auction_core import AuctionCore
 
 __version__ = VERSION
@@ -80,21 +86,16 @@ class SwarmArbitratorAgent:
     def _update_reputation(self, agent_id: str, delta: float) -> None:
         if not agent_id:
             return
-        self.reputation_scores[agent_id] = (
-            self.reputation_scores.get(agent_id, 1.0) + delta
-        )
+        self.reputation_scores[agent_id] = self.reputation_scores.get(agent_id, 1.0) + delta
         # Clamp between 0.0 (Malicious/Incompetent) and 2.0 (Highly Trusted)
-        self.reputation_scores[agent_id] = max(
-            0.0, min(2.0, self.reputation_scores[agent_id])
-        )
+        self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
 
     def get_reputation_report(self) -> dict[str, float]:
         """Returns the current reputation scores for all known agents."""
         return self.reputation_scores
 
-    def submit_bid(
-        self, agent_id: str, resource: str, quantity: float, price: float
-    ) -> dict[str, Any]:
+    def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
+        """Submits a bid for a resource (Phase 317)."""
         bid_id = str(uuid.uuid4())
         status = "allocated" if price >= 50 else "queued"
 
@@ -111,19 +112,16 @@ class SwarmArbitratorAgent:
         return entry
 
     def get_resource_usage_report(self) -> dict[str, Any]:
-        allocated = [
-            k for k, v in self.resource_ledger.items() if v["status"] == "allocated"
-        ]
+        """Returns the resource usage report (Phase 317)."""
+        allocated = [k for k, v in self.resource_ledger.items() if v["status"] == "allocated"]
         return {"allocation_count": len(allocated), "details": allocated}
 
     def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
+        """Preempts low priority tasks (Phase 317)."""
         preempted = []
         for tid, entry in self.resource_ledger.items():
             # Only preempt allocated tasks
-            if (
-                entry.get("status") == "allocated"
-                and entry.get("bid_price", 0) < min_bid
-            ):
+            if entry.get("status") == "allocated" and entry.get("bid_price", 0) < min_bid:
                 entry["status"] = "preempted"
                 preempted.append(tid)
         return {"preempted_tasks": preempted, "count": len(preempted)}

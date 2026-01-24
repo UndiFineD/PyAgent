@@ -16,16 +16,20 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
+
+import logging
+import os
+from pathlib import Path
+from typing import Any
+
+import requests
+
+from src.core.base.common.types.changelog_entry import ChangelogEntry
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types import changelog_entry
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+
 from .import_source import ImportSource
 from .imported_entry import ImportedEntry
-from typing import Any
-import logging
-from pathlib import Path
-from src.core.base.logic.connectivity_manager import ConnectivityManager
-import os
-import requests
 
 __version__ = VERSION
 
@@ -46,9 +50,8 @@ class ExternalImporter:
         self.github_token = os.environ.get("GITHUB_TOKEN")
         self.conn_mgr = ConnectivityManager(workspace_root=workspace_root)
         try:
-            from src.infrastructure.compute.backend.local_context_recorder import (
-                LocalContextRecorder,
-            )
+            from src.infrastructure.compute.backend.local_context_recorder import \
+                LocalContextRecorder
 
             root = Path(workspace_root) if workspace_root else Path.cwd()
             self.recorder = LocalContextRecorder(workspace_root=root)
@@ -67,9 +70,7 @@ class ExternalImporter:
         if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
 
-    def import_github_releases(
-        self, owner: str, repo: str, pages: int = 1
-    ) -> list[ImportedEntry]:
+    def import_github_releases(self, owner: str, repo: str, pages: int = 1) -> list[ImportedEntry]:
         """Import entries from GitHub releases using the official API (Simulated Tier 1).
 
         Args:
@@ -81,9 +82,7 @@ class ExternalImporter:
             List of imported entries.
         """
         if not self.conn_mgr.is_online("github_api"):
-            logging.warning(
-                f"GitHub API is currently down (cached). Skipping fetch for {owner}/{repo}."
-            )
+            logging.warning(f"GitHub API is currently down (cached). Skipping fetch for {owner}/{repo}.")
             return []
 
         logging.info(f"Fetching GitHub releases for {owner}/{repo}")
@@ -107,9 +106,7 @@ class ExternalImporter:
                         break
                     all_releases.extend(releases)
                 else:
-                    logging.error(
-                        f"GitHub API Error: {response.status_code} - {response.text}"
-                    )
+                    logging.error(f"GitHub API Error: {response.status_code} - {response.text}")
                     break
         except Exception as e:
             logging.error(f"GitHub API Exception: {e}")
@@ -152,9 +149,7 @@ class ExternalImporter:
 
         return entries
 
-    def import_jira(
-        self, project_key: str, max_results: int = 50
-    ) -> list[ImportedEntry]:
+    def import_jira(self, project_key: str, max_results: int = 50) -> list[ImportedEntry]:
         """Import entries from JIRA using REST API (v2 feature).
 
         Args:
@@ -183,9 +178,7 @@ class ExternalImporter:
                 if response.status_code == 200:
                     all_issues = response.json().get("issues", [])
                 else:
-                    logging.error(
-                        f"JIRA API Error: {response.status_code} - {response.text}"
-                    )
+                    logging.error(f"JIRA API Error: {response.status_code} - {response.text}")
             except Exception as e:
                 logging.error(f"JIRA API Exception: {e}")
 

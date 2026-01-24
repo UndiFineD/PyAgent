@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import numpy as np
+"""
+Semantic hashing.py module.
+"""
+
 import logging
-from typing import List, Dict, Any, Set
+from typing import Dict, List, Set
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
+
 
 class SemanticHasher:
     """
@@ -39,7 +45,7 @@ class SemanticHasher:
         if len(embedding) != self.dimension:
             # Simple padding/truncation for flex
             temp = np.zeros(self.dimension)
-            temp[:min(len(embedding), self.dimension)] = embedding[:min(len(embedding), self.dimension)]
+            temp[: min(len(embedding), self.dimension)] = embedding[: min(len(embedding), self.dimension)]
             embedding = temp
 
         projections = np.dot(self.projections, embedding)

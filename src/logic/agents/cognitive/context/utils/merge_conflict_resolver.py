@@ -13,15 +13,20 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
+"""Merge conflict resolution engine for Cognitive agents.
+
+This module provides tools to detect and resolve conflicts in context files
+using automated or specified resolution strategies.
+"""
 
 from __future__ import annotations
+import re
+
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.utils.conflict_resolution import (
     ConflictResolution,
 )
 from src.logic.agents.cognitive.context.models.merge_conflict import MergeConflict
-import re
 
 __version__ = VERSION
 
@@ -32,14 +37,24 @@ class MergeConflictResolver:
     Provides strategies for resolving conflicts during context merges.
 
     Example:
-        >>> resolver=MergeConflictResolver()
-        >>> resolved=resolver.resolve(conflict, ConflictResolution.OURS)
+        >>> resolver = MergeConflictResolver()
+        >>> resolved = resolver.resolve(conflict, ConflictResolution.OURS)
     """
 
     def __init__(self, strategy: ConflictResolution = ConflictResolution.AUTO) -> None:
+        """Initialize the conflict resolver.
+
+        Args:
+            strategy: The default resolution strategy to use.
+        """
         self.strategy: ConflictResolution = strategy
 
     def set_strategy(self, strategy: ConflictResolution) -> None:
+        """Set the default conflict resolution strategy.
+
+        Args:
+            strategy: The conflict resolution strategy.
+        """
         self.strategy = strategy
 
     def detect_conflicts(
@@ -50,6 +65,13 @@ class MergeConflictResolver:
         Supports two modes:
         - detect_conflicts(content_with_markers)
         - detect_conflicts(ours, theirs)
+
+        Args:
+            ours: The "ours" content or content with conflict markers.
+            theirs: Optional "theirs" content.
+
+        Returns:
+            List of detected MergeConflict objects.
         """
         if theirs is None:
             content = ours

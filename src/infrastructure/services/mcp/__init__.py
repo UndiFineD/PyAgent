@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,26 +20,15 @@ Model Context Protocol (MCP) Tool Integration.
 
 from __future__ import annotations
 
-from .models import (
-    MCPServerConfig,
-    MCPServerType,
-    ToolSchema,
-    ToolCall,
-    ToolResult,
-    ToolStatus,
-    MCPSession,
-    SessionState,
-)
-from .base import MCPToolServer
-from .sse import SSEMCPServer
-from .local import LocalMCPServer
-from .adapter import SchemaAdapter
-from .registry import MCPServerRegistry, SessionManager
-from .mcp_tool_server import (
-    adapt_tool_schema,
-    create_mcp_session,
-    discover_mcp_servers,
-)
+from .adapter import SchemaAdapter  # noqa: F401
+from .base import MCPToolServer  # noqa: F401
+from .local import LocalMCPServer  # noqa: F401
+from .mcp_tool_server import (adapt_tool_schema, create_mcp_session,  # noqa: F401
+                              discover_mcp_servers)
+from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,  # noqa: F401
+                     ToolCall, ToolResult, ToolSchema, ToolStatus)
+from .registry import MCPServerRegistry, SessionManager  # noqa: F401
+from .sse import SSEMCPServer  # noqa: F401
 
 __all__ = [
     "MCPServerConfig",
@@ -46,4 +49,3 @@ __all__ = [
     "create_mcp_session",
     "discover_mcp_servers",
 ]
-

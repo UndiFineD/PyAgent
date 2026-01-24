@@ -15,9 +15,11 @@
 """Comprehensive script for repairing improperly indented imports and VERSION placement."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -31,6 +33,7 @@ def fix_all() -> None:
         for file in files:
             if file.endswith(".py"):
                 _process_file(os.path.join(root, file))
+
 
 def _should_skip_dir(root: str) -> bool:
     """Returns True if the directory should be skipped during repair."""

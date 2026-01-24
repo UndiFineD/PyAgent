@@ -15,15 +15,18 @@
 """Models for agent communication, prompts, and tracing."""
 
 from __future__ import annotations
+
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
-from .core_enums import MessageRole, FilePriority, InputType
-from .base_models import _empty_list_str, _empty_list_dict_str_any, _empty_dict_str_any
+
+from .base_models import (_empty_dict_str_any, _empty_list_dict_str_any,
+                          _empty_list_str)
+from .core_enums import FilePriority, InputType, MessageRole
 
 
 @dataclass(slots=True)
@@ -77,6 +80,7 @@ class PromptTemplate:
     tags: list[str] = field(default_factory=_empty_list_str)
 
     def render(self, **kwargs: Any) -> str:
+        """Render the prompt template with context variables."""
         return self.template.format(**kwargs)
 
 
@@ -98,6 +102,7 @@ class ConversationHistory:
         self.max_messages = max_messages
 
     def add(self, role: MessageRole, content: str) -> None:
+        """Add a message to the history."""
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
@@ -195,8 +200,9 @@ class SwarmAuditTrail:
     Detailed audit log for swarm decision making (Phase 69).
     Tracks routing, fusion, and expert selection reasoning.
     """
+
     request_id: str
-    step: str # "routing", "execution", "fusion"
+    step: str  # "routing", "execution", "fusion"
     decision_summary: str
     raw_data: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     timestamp: float = field(default_factory=time.time)
@@ -226,9 +232,11 @@ class PromptTemplateManager:
         self.templates: dict[str, PromptTemplate] = {}
 
     def register(self, template: PromptTemplate) -> None:
+        """Register a new template."""
         self.templates[template.name] = template
 
     def render(self, template_name: str, **kwargs: Any) -> str:
+        """Render a registered template."""
         template = self.templates[template_name]
         return template.render(**kwargs)
 
@@ -240,9 +248,11 @@ class ResponsePostProcessor:
         self.hooks: list[tuple[Callable[[str], str], int]] = []
 
     def register(self, hook: Callable[[str], str], priority: int = 0) -> None:
+        """Register a post-processing hook."""
         self.hooks.append((hook, priority))
 
     def process(self, text: str) -> str:
+        """Apply all registered hooks to the text."""
         sorted_hooks = sorted(self.hooks, key=lambda x: x[1], reverse=True)
         for hook, _ in sorted_hooks:
             text = hook(text)
@@ -270,7 +280,7 @@ class PromptVersion:
     prompt_text: str = ""
     weight: float = 1.0
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         version: str | None = None,
         content: str | None = None,
@@ -301,7 +311,7 @@ class PromptVersion:
 class BatchRequest:
     """Request in a batch processing queue."""
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         file_path: Path | None = None,
         prompt: str | None = None,
@@ -317,15 +327,18 @@ class BatchRequest:
         self.items: list[Any] = []
 
     def add(self, item: Any) -> None:
+        """Add an item to the batch."""
         if self.max_size is not None and len(self.items) >= self.max_size:
             return
         self.items.append(item)
 
     @property
     def size(self) -> int:
+        """Return the number of items in the batch."""
         return len(self.items)
 
     def execute(self, processor: Callable[[list[Any]], list[Any]]) -> list[Any]:
+        """Execute the batch using the provided processor."""
         return processor(self.items)
 
 
@@ -360,13 +373,16 @@ class ContextWindow:
 
     @property
     def used_tokens(self) -> int:
+        """Calculate total number of tokens used."""
         return sum(self.token_counts)
 
     @property
     def available_tokens(self) -> int:
+        """Calculate remaining token budget."""
         return max(0, self.max_tokens - self.used_tokens)
 
     def add(self, message: str, token_count: int) -> None:
+        """Add a message and its token count, enforcing max_tokens."""
         self.messages.append(message)
         self.token_counts.append(token_count)
         while self.used_tokens > self.max_tokens and self.messages:
@@ -374,6 +390,7 @@ class ContextWindow:
             self.token_counts.pop(0)
 
     def clear(self) -> None:
+        """Clear all messages from the window."""
         self.messages.clear()
         self.token_counts.clear()
 
@@ -385,15 +402,19 @@ class MultimodalBuilder:
     inputs: list[MultimodalInput] = field(default_factory=list)
 
     def add(self, content: str, input_type: InputType) -> None:
+        """Add a generic multimodal input."""
         self.inputs.append(MultimodalInput(content=content, input_type=input_type))
 
     def add_text(self, content: str) -> None:
+        """Add text input."""
         self.inputs.append(MultimodalInput(content=content, input_type=InputType.TEXT))
 
     def add_image(self, content: str) -> None:
+        """Add image input."""
         self.inputs.append(MultimodalInput(content=content, input_type=InputType.IMAGE))
 
     def build(self) -> list[MultimodalInput]:
+        """Return the list of built inputs."""
         return self.inputs
 
 
@@ -427,12 +448,15 @@ class SpanContext:
     """Context for a telemetry span."""
 
     def __init__(self, span: TelemetrySpan) -> None:
+        """Initialize span context."""
         self._span = span
 
     def set_attribute(self, key: str, value: Any) -> None:
+        """Set an attribute on the span."""
         self._span.attributes[key] = value
 
     def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
+        """Add an event to the span."""
         self._span.events.append(
             {
                 "name": name,

@@ -1,17 +1,35 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Verifies speculative tokens against target model outputs."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import List, Optional
+
 import numpy as np
+
 from .config import AcceptanceMethod
 
 
 @dataclass
 class VerificationResult:
     """Result of speculative token verification."""
+
     accepted_tokens: List[int]
     accepted_count: int
     total_proposed: int
@@ -29,10 +47,7 @@ class SpeculativeVerifier:
     """Verifies speculative tokens against target model."""
 
     def __init__(
-        self,
-        vocab_size: int,
-        method: AcceptanceMethod = AcceptanceMethod.SPECULATIVE,
-        temperature: float = 1.0
+        self, vocab_size: int, method: AcceptanceMethod = AcceptanceMethod.SPECULATIVE, temperature: float = 1.0
     ):
         self.vocab_size = vocab_size
         self.method = method
@@ -67,14 +82,11 @@ class SpeculativeVerifier:
             total_proposed=len(proposed_tokens),
             acceptance_rate=len(accepted) / max(1, len(proposed_tokens)),
             rollback_position=rollback_pos,
-            bonus_token=bonus if rollback_pos < len(proposed_tokens) else None
+            bonus_token=bonus if rollback_pos < len(proposed_tokens) else None,
         )
 
     def verify_speculative(
-        self,
-        proposed_tokens: List[int],
-        draft_probs: np.ndarray,
-        target_logits: np.ndarray
+        self, proposed_tokens: List[int], draft_probs: np.ndarray, target_logits: np.ndarray
     ) -> VerificationResult:
         """Standard speculative sampling verification."""
         target_probs = []
@@ -108,14 +120,11 @@ class SpeculativeVerifier:
             total_proposed=len(proposed_tokens),
             acceptance_rate=len(accepted) / max(1, len(proposed_tokens)),
             rollback_position=rollback_pos,
-            bonus_token=bonus
+            bonus_token=bonus,
         )
 
     def verify(
-        self,
-        proposed_tokens: List[int],
-        target_logits: np.ndarray,
-        draft_probs: Optional[np.ndarray] = None
+        self, proposed_tokens: List[int], target_logits: np.ndarray, draft_probs: Optional[np.ndarray] = None
     ) -> VerificationResult:
         """Verify using configured method."""
         if self.method == AcceptanceMethod.GREEDY:

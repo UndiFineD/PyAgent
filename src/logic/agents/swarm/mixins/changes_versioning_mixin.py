@@ -17,10 +17,13 @@ Versioning logic for ChangesAgent.
 """
 
 from __future__ import annotations
+
 import logging
 import re
 from datetime import datetime
+
 from ..versioning_strategy import VersioningStrategy
+
 
 class ChangesVersioningMixin:
     """Mixin for managing versioning strategies."""

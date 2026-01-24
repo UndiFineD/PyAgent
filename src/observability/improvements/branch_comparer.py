@@ -16,18 +16,21 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+import hashlib
+import logging
+import re
+import subprocess
+from pathlib import Path
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
+
 from .branch_comparison import BranchComparison
 from .branch_comparison_status import BranchComparisonStatus
 from .improvement import Improvement
 from .improvement_diff import ImprovementDiff
 from .improvement_diff_type import ImprovementDiffType
-from pathlib import Path
-from typing import Any
-import hashlib
-import logging
-import re
-import subprocess
 
 __version__ = VERSION
 
@@ -66,9 +69,7 @@ class BranchComparer:
             self.recorder.record_interaction("Git", "BranchComparer", action, result)
         logging.debug(f"BranchComparer initialized for {self.repo_path}")
 
-    def compare(
-        self, source_branch: str, target_branch: str, file_path: str
-    ) -> BranchComparison:
+    def compare(self, source_branch: str, target_branch: str, file_path: str) -> BranchComparison:
         """Compare improvements between branches.
 
         Args:
@@ -96,24 +97,12 @@ class BranchComparer:
             target_improvements = self._parse_improvements(target_content)
 
             # Calculate differences
-            comparison.diffs = self._calculate_diffs(
-                source_improvements, target_improvements
-            )
+            comparison.diffs = self._calculate_diffs(source_improvements, target_improvements)
 
             # Count by type
-            comparison.added_count = sum(
-                1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED
-            )
-            comparison.removed_count = sum(
-                1
-                for d in comparison.diffs
-                if d.diff_type == ImprovementDiffType.REMOVED
-            )
-            comparison.modified_count = sum(
-                1
-                for d in comparison.diffs
-                if d.diff_type == ImprovementDiffType.MODIFIED
-            )
+            comparison.added_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED)
+            comparison.removed_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.REMOVED)
+            comparison.modified_count = sum(1 for d in comparison.diffs if d.diff_type == ImprovementDiffType.MODIFIED)
 
             comparison.status = BranchComparisonStatus.COMPLETED
 
@@ -241,14 +230,10 @@ class BranchComparer:
             List of added improvements.
         """
         return [
-            d.target_version
-            for d in comparison.diffs
-            if d.diff_type == ImprovementDiffType.ADDED and d.target_version
+            d.target_version for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED and d.target_version
         ]
 
-    def get_removed_improvements(
-        self, comparison: BranchComparison
-    ) -> list[Improvement]:
+    def get_removed_improvements(self, comparison: BranchComparison) -> list[Improvement]:
         """Get improvements removed in target branch.
 
         Args:
@@ -263,9 +248,7 @@ class BranchComparer:
             if d.diff_type == ImprovementDiffType.REMOVED and d.source_version
         ]
 
-    def get_modified_improvements(
-        self, comparison: BranchComparison
-    ) -> list[tuple[Improvement, Improvement]]:
+    def get_modified_improvements(self, comparison: BranchComparison) -> list[tuple[Improvement, Improvement]]:
         """Get improvements modified between branches.
 
         Args:
@@ -277,14 +260,10 @@ class BranchComparer:
         return [
             (d.source_version, d.target_version)
             for d in comparison.diffs
-            if d.diff_type == ImprovementDiffType.MODIFIED
-            and d.source_version
-            and d.target_version
+            if d.diff_type == ImprovementDiffType.MODIFIED and d.source_version and d.target_version
         ]
 
-    def detect_conflicts(
-        self, base_branch: str, branch1: str, branch2: str, file_path: str
-    ) -> list[ImprovementDiff]:
+    def detect_conflicts(self, base_branch: str, branch1: str, branch2: str, file_path: str) -> list[ImprovementDiff]:
         """Detect conflicting changes in a three-way comparison.
 
         Args:
@@ -300,16 +279,8 @@ class BranchComparer:
         comp2 = self.compare(base_branch, branch2, file_path)
 
         # Find improvements modified in both branches
-        modified1 = {
-            d.improvement_id
-            for d in comp1.diffs
-            if d.diff_type == ImprovementDiffType.MODIFIED
-        }
-        modified2 = {
-            d.improvement_id
-            for d in comp2.diffs
-            if d.diff_type == ImprovementDiffType.MODIFIED
-        }
+        modified1 = {d.improvement_id for d in comp1.diffs if d.diff_type == ImprovementDiffType.MODIFIED}
+        modified2 = {d.improvement_id for d in comp2.diffs if d.diff_type == ImprovementDiffType.MODIFIED}
 
         conflicts = modified1 & modified2
         return [d for d in comp1.diffs if d.improvement_id in conflicts]

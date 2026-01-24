@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -11,16 +25,10 @@ import logging
 import threading
 import time
 import uuid
-from typing import (
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    TypeVar,
-)
+from typing import Callable, Dict, Generic, List, Optional, TypeVar
 
-from .config import EngineIdentity, LoadBalancingStrategy, ParallelConfig, WorkerIdentity
+from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
+                     WorkerIdentity)
 from .coordinator import DPCoordinator
 from .messages import RequestMessage, ResponseMessage
 from .worker import BaseWorker, WorkerProcess
@@ -145,9 +153,7 @@ class AsyncMPClient(Generic[T]):
     async def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
         """Get a response asynchronously."""
         if self._loop:
-            return await self._loop.run_in_executor(
-                None, self._sync_client.get_response, timeout
-            )
+            return await self._loop.run_in_executor(None, self._sync_client.get_response, timeout)
         return None
 
 
@@ -214,10 +220,7 @@ class DPLBAsyncMPClient(Generic[T]):
     async def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
         """Get a response from any client."""
         # Poll all clients
-        tasks = [
-            asyncio.create_task(client.get_response(timeout=0.01))
-            for client in self._clients.values()
-        ]
+        tasks = [asyncio.create_task(client.get_response(timeout=0.01)) for client in self._clients.values()]
 
         done, pending = await asyncio.wait(
             tasks,

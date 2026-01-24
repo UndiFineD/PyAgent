@@ -17,13 +17,15 @@
 import asyncio
 import logging
 from typing import Any
-from src.core.base.logic.managers.resource_quota_manager import ResourceQuotaManager, QuotaConfig
+
+from src.core.base.logic.managers.resource_quota_manager import (
+    QuotaConfig, ResourceQuotaManager)
 
 
 class GovernanceMixin:
     """Handles resource quotas, preemption, and security clearance."""
 
-    def __init__(self, config: Any, **kwargs: Any) -> None:
+    def __init__(self, config: Any, **_kwargs: Any) -> None:
         self.quotas = ResourceQuotaManager(
             config=QuotaConfig(
                 max_tokens=getattr(config, "max_tokens_per_session", None),
@@ -67,6 +69,7 @@ class GovernanceMixin:
         try:
             # pylint: disable=import-outside-toplevel
             from src.logic.agents.security.firewall_agent import FirewallAgent
+
             firewall = None
             if hasattr(self, "fleet") and self.fleet:
                 firewall = self.fleet.agents.get("FirewallAgent")
@@ -74,9 +77,7 @@ class GovernanceMixin:
             if not firewall:
                 firewall = FirewallAgent()
 
-            return await firewall.request_clearance_blocking(
-                self.__class__.__name__, thought
-            )
+            return await firewall.request_clearance_blocking(self.__class__.__name__, thought)
         except Exception as e:  # pylint: disable=broad-exception-caught
             logging.debug("Firewall clearance defaulted to True (Error: %s)", e)
             return True

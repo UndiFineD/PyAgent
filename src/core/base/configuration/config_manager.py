@@ -17,10 +17,8 @@ Centralized configuration manager.
 (Facade for src.core.base.common.config_core)
 """
 
-from src.core.base.common.config_core import (
-    ConfigCore as ConfigManager,
-    ConfigObject
-)
+from src.core.base.common.config_core import ConfigCore as ConfigManager
+from src.core.base.common.config_core import ConfigObject
 
 # Export ConfigManager as CoreConfigManager for legacy compatibility if needed
 CoreConfigManager = ConfigManager

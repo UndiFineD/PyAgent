@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
+
+"""
+Storage engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Backup, snapshot, and compression engine.
 # Phase 16: Rust acceleration for JSON serialization and compression
 
 from __future__ import annotations
+
 import contextlib
 import json
 import logging
 import zlib
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from dataclasses import dataclass
+
 from .observability_core import StatsSnapshot
 
 logger = logging.getLogger(__name__)
@@ -19,6 +25,7 @@ logger = logging.getLogger(__name__)
 # Phase 16: Rust acceleration imports
 try:
     import rust_core
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -44,10 +51,7 @@ class StatsBackupManager:
         self.backups: dict[str, dict[str, Any]] = {}
 
     def _safe_name(self, name: str) -> str:
-        return (
-            "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name)
-            or "backup"
-        )
+        return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name) or "backup"
 
     def create_backup(self, name: str, data: dict[str, Any]) -> StatsBackup:
         timestamp = datetime.now().isoformat()
@@ -59,9 +63,7 @@ class StatsBackupManager:
         )
         if self.backup_dir:
             path.write_text(
-                json.dumps(
-                    {"name": name, "timestamp": timestamp, "data": data}, indent=2
-                ),
+                json.dumps({"name": name, "timestamp": timestamp, "data": data}, indent=2),
                 encoding="utf-8",
             )
         return StatsBackup(name=name, path=path, timestamp=timestamp)
@@ -76,11 +78,7 @@ class StatsBackupManager:
                 if self.backup_dir
                 else Path(f"{self._safe_name(name)}.json")
             )
-            backups.append(
-                StatsBackup(
-                    name=name, path=path_obj, timestamp=data.get("timestamp", "")
-                )
-            )
+            backups.append(StatsBackup(name=name, path=path_obj, timestamp=data.get("timestamp", "")))
 
         # Add from disk if not already present
         if self.backup_dir and self.backup_dir.exists():
@@ -102,11 +100,7 @@ class StatsBackupManager:
         if name in self.backups:
             return self.backups[name]["data"]
 
-        path = (
-            self.backup_dir / f"{self._safe_name(name)}.json"
-            if self.backup_dir
-            else None
-        )
+        path = self.backup_dir / f"{self._safe_name(name)}.json" if self.backup_dir else None
         if path and path.exists():
             with contextlib.suppress(Exception):
                 payload = json.loads(path.read_text(encoding="utf-8"))
@@ -128,9 +122,7 @@ class StatsSnapshotManager:
         self.snapshots: dict[str, StatsSnapshot] = {}
 
     def create_snapshot(self, name: str, data: dict[str, Any]) -> StatsSnapshot:
-        snapshot = StatsSnapshot(
-            name=name, data=data, timestamp=datetime.now().isoformat()
-        )
+        snapshot = StatsSnapshot(name=name, data=data, timestamp=datetime.now().isoformat())
         self.snapshots[name] = snapshot
         if self.snapshot_dir:
             path = self.snapshot_dir / f"{name}.json"
@@ -200,9 +192,7 @@ class StatsCompressor:
                         return result
 
         payload = (
-            (b"b" + bytes(data))
-            if isinstance(data, (bytes, bytearray))
-            else (b"j" + json.dumps(data).encode("utf-8"))
+            (b"b" + bytes(data)) if isinstance(data, (bytes, bytearray)) else (b"j" + json.dumps(data).encode("utf-8"))
         )
         return zlib.compress(payload)
 

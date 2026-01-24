@@ -19,10 +19,12 @@ and minimizing token usage for long-running sub-swarm dialogues.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -39,18 +41,12 @@ class CompressionAgent(BaseAgent):
         )
 
     @as_tool
-    async def compress_history(
-        self, history: list[dict[str, str]], target_tokens: int = 500
-    ) -> str:
+    async def compress_history(self, history: list[dict[str, str]], target_tokens: int = 500) -> str:
         """Compresses a conversation history into a dense summary block."""
-        logging.info(
-            f"CompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} tokens."
-        )
+        logging.info(f"CompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} tokens.")
 
         # Serialize history for prompting
-        history_text = "\n".join(
-            [f"{m.get('role', 'user')}: {m.get('content', '')}" for m in history]
-        )
+        history_text = "\n".join([f"{m.get('role', 'user')}: {m.get('content', '')}" for m in history])
 
         prompt = (
             f"Please compress the following conversation history into a dense summary. "
@@ -66,7 +62,11 @@ class CompressionAgent(BaseAgent):
     async def extract_gist(self, complex_report: str) -> str:
         """Extracts the 'gist' or 'bottom line' from a technical report."""
         logging.info("CompressionAgent: Extracting gist from report.")
-        prompt = f"Provide a one-paragraph 'gist' of this technical report. Focus on the final conclusion.\n\nREPORT:\n{complex_report}"
+        prompt = (
+            "Provide a one-paragraph 'gist' of this technical report. "
+            "Focus on the final conclusion.\n\n"
+            f"REPORT:\n{complex_report}"
+        )
 
         return await self.think(prompt)
 

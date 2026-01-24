@@ -1,13 +1,20 @@
+
+"""
+Handy terminal mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
 import subprocess
 from typing import TYPE_CHECKING
+
 from src.core.base.common.base_utilities import as_tool
 
 if TYPE_CHECKING:
     from src.logic.agents.specialists.handy_agent import HandyAgent
+
 
 class HandyTerminalMixin:
     """Mixin for terminal execution and slash command handling in HandyAgent."""
@@ -23,9 +30,7 @@ class HandyTerminalMixin:
         elif command == "/summarize":
             res = f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview..."
         else:
-            res = (
-                f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
-            )
+            res = f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
 
         self._record("slash_command", {"cmd": command, "args": args}, res)
         return res
@@ -58,9 +63,7 @@ class HandyTerminalMixin:
             import shlex
 
             cmd_args = shlex.split(command)
-            result = subprocess.run(
-                cmd_args, capture_output=True, text=True, timeout=60
-            )
+            result = subprocess.run(cmd_args, capture_output=True, text=True, timeout=60)
             if result.returncode == 0:
                 stdout = result.stdout[:1000]
                 self._record("execute_success", command, stdout)

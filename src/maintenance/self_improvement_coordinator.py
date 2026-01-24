@@ -1,13 +1,19 @@
+
+"""
+Self improvement coordinator.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # SelfImprovementCoordinator: Automates the monitoring and implementation of improvements.
 
-import os
-import re
-import logging
 import asyncio
 import json
-from typing import List, Dict, Any, Optional
+import logging
+import os
+import re
+import time
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 
 class SelfImprovementCoordinator:
     """
@@ -32,27 +38,29 @@ class SelfImprovementCoordinator:
 
         # Phase 50: Budget & Cloud integration
         from src.infrastructure.services.cloud.budget import BudgetManager
+
         self.budget = BudgetManager(
-            daily_limit=25.0, # Target from cloud_integration.md
-            monthly_limit=250.0
+            daily_limit=25.0,  # Target from cloud_integration.md
+            monthly_limit=250.0,
         )
 
     def _init_discovery(self):
         """Initializes LANDiscovery for peer finding."""
         try:
-            from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
+            from src.infrastructure.swarm.network.lan_discovery import \
+                LANDiscovery
+
             secret_key = os.getenv("PYAGENT_SECRET")
             if not secret_key:
                 self.logger.warning("PYAGENT_SECRET not set; LAN discovery disabled for security.")
                 return
             self.discovery = LANDiscovery(
-                agent_id=f"Coordinator-{os.getpid()}",
-                service_port=8000,
-                secret_key=secret_key
+                agent_id=f"Coordinator-{os.getpid()}", service_port=8000, secret_key=secret_key
             )
             self.discovery.start()
         except ImportError:
             self.logger.warning("LANDiscovery not available.")
+
     async def load_strategic_context(self):
         """Loads and parses context.txt and prompt.txt for strategic directives."""
         self.directives = {
@@ -60,7 +68,7 @@ class SelfImprovementCoordinator:
             "research_links": [],
             "cloud_providers": [],
             "healing_metrics": {},
-            "target_peers": []
+            "target_peers": [],
         }
 
         files_to_check = [self.context_file, self.prompt_file]
@@ -78,7 +86,10 @@ class SelfImprovementCoordinator:
                 peers = re.findall(r"peer:\s*([\w\-]+)", content)
                 self.directives["target_peers"].extend(peers)
 
-        self.logger.info(f"Strategic context loaded: {len(self.directives['fixed_prompts'])} directives, {len(self.directives['target_peers'])} target peers.")
+        self.logger.info(
+            f"Strategic context loaded: {len(self.directives['fixed_prompts'])} directives, "
+            f"{len(self.directives['target_peers'])} target peers."
+        )
 
     async def discover_external_servers(self) -> List[Dict[str, Any]]:
         """
@@ -91,24 +102,24 @@ class SelfImprovementCoordinator:
         if self.discovery:
             with self.discovery._lock:
                 for peer_id, info in self.discovery.registry.items():
-                    all_nodes.append({
-                        "id": peer_id,
-                        "type": "lan_peer",
-                        "ip": info.ip,
-                        "port": info.port,
-                        "status": "online"
-                    })
+                    all_nodes.append(
+                        {"id": peer_id, "type": "lan_peer", "ip": info.ip, "port": info.port, "status": "online"}
+                    )
 
         # 2. Discover registered MCP servers
         try:
-            from src.infrastructure.services.mcp.registry import MCPServerRegistry
+            from src.infrastructure.services.mcp.registry import \
+                MCPServerRegistry
+
             registry = MCPServerRegistry()
             for name, server in registry.servers.items():
-                all_nodes.append({
-                    "id": name,
-                    "type": "mcp_server",
-                    "status": "connected" if name in registry._sessions else "registered"
-                })
+                all_nodes.append(
+                    {
+                        "id": name,
+                        "type": "mcp_server",
+                        "status": "connected" if name in registry._sessions else "registered",
+                    }
+                )
         except ImportError as e:
             self.logger.debug(f"MCPServerRegistry not available for discovery: {e}")
         except Exception as e:
@@ -116,7 +127,6 @@ class SelfImprovementCoordinator:
 
         # 3. Check persistent ConnectivityManager status
         try:
-            from src.core.base.logic.connectivity_manager import ConnectivityManager
             # Ensure connectivity status is checked from the source
             status_file = self.workspace_root / "data" / "logs" / "connectivity_status.json"
             if status_file.exists():
@@ -148,7 +158,9 @@ class SelfImprovementCoordinator:
 
         # 1. Identify targets from strategic context
         await self.load_strategic_context()
-        topics = [p.split(":", 1)[1].strip() for p in self.directives["fixed_prompts"] if p.lower().startswith("research:")]
+        topics = [
+            p.split(":", 1)[1].strip() for p in self.directives["fixed_prompts"] if p.lower().startswith("research:")
+        ]
 
         if not topics:
             self.logger.info("No explicit research topics found. Checking for general multimodal cues.")
@@ -158,7 +170,9 @@ class SelfImprovementCoordinator:
                 return
 
         # 2. Instantiate Director for cross-agent orchestration
-        from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
+        from src.infrastructure.swarm.orchestration.swarm.director_agent import \
+            DirectorAgent
+
         # Use a temporary or the main improvements file
         director = DirectorAgent(str(self.improvements_file))
 
@@ -205,11 +219,11 @@ class SelfImprovementCoordinator:
         Phase 317: Automated Self-Healing Trigger.
         Reads health stats and documentation context to trigger repairs.
         """
-        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
-        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
+        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import \
+            SelfHealingOrchestrator
 
         # Initialize orchestrator (which now loads overrides from docs/prompt)
-        orchestrator = SelfHealingOrchestrator(None) # type: ignore
+        orchestrator = SelfHealingOrchestrator(None)  # type: ignore
 
         # 1. Check Project Integrity (Imports/Syntax)
         integrity_report = orchestrator.check_project_integrity()
@@ -226,7 +240,7 @@ class SelfImprovementCoordinator:
             "integrity": integrity_report,
             "health": health_audit,
             "failures": failed_agents,
-            "actions_taken": []
+            "actions_taken": [],
         }
 
         if failed_agents:
@@ -262,7 +276,7 @@ class SelfImprovementCoordinator:
             "status": "success",
             "peer": target_peer,
             "task_id": f"rem_{int(time.time())}",
-            "result": "Task accepted by remote coordinator"
+            "result": "Task accepted by remote coordinator",
         }
 
     async def run_discovery_cycle(self):
@@ -298,8 +312,8 @@ class SelfImprovementCoordinator:
         # Find ScienceDirect PIIs
         sciencedirect_links = re.findall(r"sciencedirect\.com/science/article/pii/(\w+)", content)
 
-        links = [f"https://arxiv.org/abs/{l}" for l in arxiv_links]
-        links.extend([f"https://www.sciencedirect.com/science/article/pii/{l}" for l in sciencedirect_links])
+        links = [f"https://arxiv.org/abs/{link}" for link in arxiv_links]
+        links.extend([f"https://www.sciencedirect.com/science/article/pii/{link}" for link in sciencedirect_links])
         return list(set(links))
 
     async def sync_with_roadmap(self, active_ideas: List[Dict[str, Any]]):
@@ -330,17 +344,23 @@ class SelfImprovementCoordinator:
 
         try:
             if status == "PLANNED" or status == "PLANNING":
-                from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
+                from src.infrastructure.swarm.orchestration.swarm.director_agent import \
+                    DirectorAgent
+
                 self.logger.info(f"Handing off to DirectorAgent: {title}")
                 agent = DirectorAgent(str(self.improvements_file))
 
                 # Hand off task to director
-                prompt = f"Improvement Task: {title}\nPlease decompose this and delegate to the appropriate specialists."
+                prompt = (
+                    f"Improvement Task: {title}\nPlease decompose this and delegate to the appropriate specialists."
+                )
                 res = await agent.think(prompt)
                 print(f"  -> [DIRECTOR RESPONSE] {res[:200]}...")
 
             elif status == "RESEARCH":
-                from src.logic.agents.intelligence.research_agent import ResearchAgent
+                from src.logic.agents.intelligence.research_agent import \
+                    ResearchAgent
+
                 self.logger.info(f"Handing off to ResearchAgent: {title}")
                 agent = ResearchAgent(str(self.improvements_file))
 
@@ -355,7 +375,9 @@ class SelfImprovementCoordinator:
         except Exception as e:
             self.logger.error(f"  -> [ERROR] Failed to trigger agent: {e}")
             import traceback
+
             self.logger.error(traceback.format_exc())
+
 
 async def main():
     coordinator = SelfImprovementCoordinator(os.getcwd())
@@ -374,6 +396,7 @@ async def main():
     # 3. Generate action plan
     await coordinator.generate_action_plan(active_ideas)
     print("--- Cycle Complete ---")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

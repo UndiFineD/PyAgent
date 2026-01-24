@@ -20,11 +20,13 @@
 """Project Explorer component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import logging
 import os
 import tkinter as tk
 from tkinter import ttk
-import logging
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -57,9 +59,7 @@ class ProjectExplorer:
         self.tree = ttk.Treeview(self.frame, selectmode="browse")
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        tree_scroll = ttk.Scrollbar(
-            self.frame, orient=tk.VERTICAL, command=self.tree.yview
-        )
+        tree_scroll = ttk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.tree.yview)
         tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         self.tree.configure(yscrollcommand=tree_scroll.set)
 
@@ -123,9 +123,7 @@ class ProjectExplorer:
                 }:
                     continue
 
-                node = self.tree.insert(
-                    parent, "end", text=item, values=[abspath], open=False
-                )
+                node = self.tree.insert(parent, "end", text=item, values=[abspath], open=False)
                 if is_dir:
                     self.tree.insert(node, "end")
         except Exception as e:

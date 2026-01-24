@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .ab_test_variant import ABTestVariant
-from typing import Any
+
 import threading
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .ab_test_variant import ABTestVariant
 
 __version__ = VERSION
 
@@ -148,9 +151,7 @@ class ABTester:
                     variant.metrics[metric] = value
                 else:
                     n = variant.sample_count
-                    variant.metrics[metric] = (
-                        variant.metrics[metric] * (n - 1) + value
-                    ) / n
+                    variant.metrics[metric] = (variant.metrics[metric] * (n - 1) + value) / n
 
     def get_results(self, test_name: str) -> dict[str, Any] | None:
         """Get test results.

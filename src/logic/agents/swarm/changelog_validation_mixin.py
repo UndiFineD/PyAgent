@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
+
+"""
+Changelog validation mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
+
 import re
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 if TYPE_CHECKING:
     from .changelog_entry import ChangelogEntry
+
 
 class ChangelogValidationMixin:
     """Mixin for validating changelog entries and content."""
@@ -41,21 +48,25 @@ class ChangelogValidationMixin:
         # Check for merge conflicts
         conflicts = self.detect_merge_conflicts(content)
         if conflicts:
-            all_issues.append({
-                "type": "merge_conflict",
-                "count": len(conflicts),
-                "severity": "error",
-                "message": f"Found {len(conflicts)} unresolved merge conflict(s)",
-            })
+            all_issues.append(
+                {
+                    "type": "merge_conflict",
+                    "count": len(conflicts),
+                    "severity": "error",
+                    "message": f"Found {len(conflicts)} unresolved merge conflict(s)",
+                }
+            )
 
         # Check for required sections
         if hasattr(self, "_template") and self._template:
             for section in self._template.sections:
                 if f"### {section}" not in content and f"## {section}" not in content:
-                    all_issues.append({
-                        "type": "missing_section",
-                        "section": section,
-                        "severity": "warning",
-                        "message": f"Missing recommended section: {section}",
-                    })
+                    all_issues.append(
+                        {
+                            "type": "missing_section",
+                            "section": section,
+                            "severity": "warning",
+                            "message": f"Missing recommended section: {section}",
+                        }
+                    )
         return all_issues

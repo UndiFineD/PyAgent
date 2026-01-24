@@ -16,9 +16,12 @@
 """Cross-browser and scheduling functionality."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 from collections.abc import Callable
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .enums import BrowserType
 from .models import CrossBrowserConfig, ScheduleSlot
 
@@ -31,9 +34,7 @@ class CrossBrowserRunner:
     def __init__(self, config: CrossBrowserConfig) -> None:
         """Initialize cross-browser runner."""
         self.config = config
-        self.results: dict[BrowserType, list[dict[str, Any]]] = {
-            b: [] for b in config.browsers
-        }
+        self.results: dict[BrowserType, list[dict[str, Any]]] = {b: [] for b in config.browsers}
         self._drivers: dict[BrowserType, bool] = {}
 
     def setup_driver(self, browser: BrowserType) -> bool:
@@ -45,9 +46,7 @@ class CrossBrowserRunner:
         """Teardown browser driver."""
         self._drivers[browser] = False
 
-    def run_test(
-        self, test_name: str, test_code: Callable[[], bool]
-    ) -> dict[BrowserType, dict[str, Any]]:
+    def run_test(self, test_name: str, test_code: Callable[[], bool]) -> dict[BrowserType, dict[str, Any]]:
         """Run a test across all browsers."""
         results: dict[BrowserType, dict[str, Any]] = {}
         for browser in self.config.browsers:
@@ -113,13 +112,9 @@ class TestScheduler:
         else:
             return self._schedule_load_balanced(tests, start_time)
 
-    def _schedule_load_balanced(
-        self, tests: list[str], start_time: str
-    ) -> list[ScheduleSlot]:
+    def _schedule_load_balanced(self, tests: list[str], start_time: str) -> list[ScheduleSlot]:
         """Create load-balanced schedule."""
-        sorted_tests = sorted(
-            tests, key=lambda t: self._test_durations.get(t, 1000), reverse=True
-        )
+        sorted_tests = sorted(tests, key=lambda t: self._test_durations.get(t, 1000), reverse=True)
         worker_loads: list[list[str]] = [[] for _ in range(self.num_workers)]
         worker_times = [0.0] * self.num_workers
         for test in sorted_tests:
@@ -138,9 +133,7 @@ class TestScheduler:
                 self.schedule.append(slot)
         return self.schedule
 
-    def _schedule_sequential(
-        self, tests: list[str], start_time: str
-    ) -> list[ScheduleSlot]:
+    def _schedule_sequential(self, tests: list[str], start_time: str) -> list[ScheduleSlot]:
         """Create sequential schedule."""
         slot = ScheduleSlot(start_time=start_time, end_time="", tests=tests, workers=1)
         self.schedule = [slot]

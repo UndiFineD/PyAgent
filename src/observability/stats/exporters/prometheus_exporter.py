@@ -18,8 +18,10 @@ Enables real-time dashboards in Grafana and ELK stack.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -30,9 +32,7 @@ class PrometheusExporter:
     def __init__(self) -> None:
         self.metrics_registry: dict[str, float] = {}
 
-    def record_metric(
-        self, name: str, value: float, labels: dict[str, str] | None = None
-    ) -> str:
+    def record_metric(self, name: str, value: float, labels: dict[str, str] | None = None) -> str:
         """Records a metric with optional labels."""
         label_str = ""
         if labels:

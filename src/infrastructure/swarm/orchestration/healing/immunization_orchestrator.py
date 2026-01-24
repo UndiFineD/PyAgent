@@ -12,12 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Immunization orchestrator.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import re
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -42,9 +48,7 @@ class ImmunizationOrchestrator:
         """
         for signature in self.threat_signatures:
             if re.search(signature, prompt, re.IGNORECASE):
-                logging.warning(
-                    f"ImmunizationOrchestrator: Adversarial pattern detected: {signature}"
-                )
+                logging.warning(f"ImmunizationOrchestrator: Adversarial pattern detected: {signature}")
                 return True
         return False
 
@@ -52,9 +56,7 @@ class ImmunizationOrchestrator:
         """
         Develops a new signature from an adversarial example.
         """
-        logging.info(
-            f"ImmunizationOrchestrator: Immunizing fleet against new threat: {label}"
-        )
+        logging.info(f"ImmunizationOrchestrator: Immunizing fleet against new threat: {label}")
 
         # In a real system, we'd use an LLM or clustering to generate a clean regex
         # For simulation, we take a substring or simplified pattern
@@ -72,9 +74,7 @@ class ImmunizationOrchestrator:
 
             # Broadcast the new antibody to the fleet
             if hasattr(self.fleet, "signals"):
-                self.fleet.signals.emit(
-                    "FLEET_IMMUNIZED", {"threat": label, "pattern": pattern}
-                )
+                self.fleet.signals.emit("FLEET_IMMUNIZED", {"threat": label, "pattern": pattern})
 
         return pattern
 

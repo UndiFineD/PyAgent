@@ -1,31 +1,60 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Config.py module.
+"""
+
 from __future__ import annotations
+
 import hashlib
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:
+    from src.infrastructure.engine.decoding.grammar.base import \
+        StructuredOutputGrammar
+
 
 class GrammarType(Enum):
     """Types of grammar constraints supported."""
+
     NONE = auto()
-    JSON = auto()           # JSON Schema validation
-    JSON_OBJECT = auto()    # Any valid JSON object
-    REGEX = auto()          # Regular expression
-    GRAMMAR = auto()        # EBNF/Lark grammar
-    CHOICE = auto()         # Choice from list
+    JSON = auto()  # JSON Schema validation
+    JSON_OBJECT = auto()  # Any valid JSON object
+    REGEX = auto()  # Regular expression
+    GRAMMAR = auto()  # EBNF/Lark grammar
+    CHOICE = auto()  # Choice from list
     FUNCTION_CALL = auto()  # Function call schema
-    STRUCTURAL_TAG = auto() # XML-like structural tags
+    STRUCTURAL_TAG = auto()  # XML-like structural tags
+
 
 class CompilationStatus(Enum):
     """Status of grammar compilation."""
+
     PENDING = auto()
     COMPILING = auto()
     READY = auto()
     FAILED = auto()
     CACHED = auto()
 
+
 @dataclass(frozen=True)
 class GrammarSpec:
     """Specification for a grammar constraint."""
+
     grammar_type: GrammarType
     spec: str  # JSON schema string, regex pattern, EBNF, or choice list
     strict: bool = True  # Whether to strictly enforce the grammar
@@ -36,9 +65,11 @@ class GrammarSpec:
         content = f"{self.grammar_type.name}:{self.spec}:{self.strict}"
         return hashlib.sha256(content.encode()).hexdigest()[:16]
 
+
 @dataclass
 class CompilationResult:
     """Result of grammar compilation."""
+
     status: CompilationStatus
     grammar: Optional["StructuredOutputGrammar"] = None
     error: Optional[str] = None
@@ -52,17 +83,21 @@ class CompilationResult:
     def is_failed(self) -> bool:
         return self.status == CompilationStatus.FAILED
 
+
 @dataclass
 class ValidationResult:
     """Result of token validation."""
+
     is_valid: bool
     accepted_prefix_length: int = 0
     error_message: Optional[str] = None
     suggestion: Optional[str] = None
 
+
 @dataclass
 class BackendStats:
     """Statistics for a structured output backend."""
+
     grammars_compiled: int = 0
     grammars_cached: int = 0
     compilations_failed: int = 0

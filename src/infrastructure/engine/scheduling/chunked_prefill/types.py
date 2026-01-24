@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Types and data structures for chunked prefill."""
 
 from __future__ import annotations
@@ -7,30 +21,33 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class ChunkState(Enum):
     """State of a prefill chunk."""
-    PENDING = auto()      # Not yet scheduled
-    SCHEDULED = auto()    # Scheduled for execution
-    RUNNING = auto()      # Currently executing
-    COMPLETED = auto()    # Finished successfully
-    FAILED = auto()       # Error during execution
-    CANCELLED = auto()    # Cancelled before completion
+
+    PENDING = auto()  # Not yet scheduled
+    SCHEDULED = auto()  # Scheduled for execution
+    RUNNING = auto()  # Currently executing
+    COMPLETED = auto()  # Finished successfully
+    FAILED = auto()  # Error during execution
+    CANCELLED = auto()  # Cancelled before completion
 
 
 class ChunkPriority(Enum):
     """Priority for chunk scheduling."""
-    CRITICAL = 0    # First chunks of critical requests
-    HIGH = 1        # Continuation of in-flight requests
-    NORMAL = 2      # Standard priority
-    LOW = 3         # Background requests
+
+    CRITICAL = 0  # First chunks of critical requests
+    HIGH = 1  # Continuation of in-flight requests
+    NORMAL = 2  # Standard priority
+    LOW = 3  # Background requests
 
 
 @dataclass
 class ChunkMetrics:
     """Metrics for chunk processing."""
+
     created_at: float = 0.0
     scheduled_at: float = 0.0
     started_at: float = 0.0
@@ -70,6 +87,7 @@ class PrefillChunk:
         end_idx: End token index (exclusive)
         tokens: Token IDs for this chunk
     """
+
     chunk_id: str
     request_id: str
     chunk_index: int
@@ -117,6 +135,7 @@ class ChunkedRequest:
         total_tokens: Total prompt tokens
         chunks: List of chunks for this request
     """
+
     request_id: str
     total_tokens: int
     chunk_size: int
@@ -163,6 +182,7 @@ class ChunkedRequest:
 @dataclass
 class ChunkedPrefillConfig:
     """Configuration for chunked prefill."""
+
     default_chunk_size: int = 512
     min_chunk_size: int = 64
     max_chunk_size: int = 2048

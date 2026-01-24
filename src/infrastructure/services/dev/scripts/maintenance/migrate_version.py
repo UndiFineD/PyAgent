@@ -15,6 +15,7 @@
 """Script for migrating hardcoded version strings to use the central VERSION import."""
 
 from __future__ import annotations
+
 import os
 
 src_path = r"c:\DEV\PyAgent\src"
@@ -49,9 +50,7 @@ for root, _, files in os.walk(src_path):
                             new_lines.append(line)
 
                     if modified:
-                        new_content = "\n".join(new_lines) + (
-                            "\n" if content.endswith("\n") else ""
-                        )
+                        new_content = "\n".join(new_lines) + ("\n" if content.endswith("\n") else "")
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(new_content)
                         print(f"  Migrated: {path}")
@@ -59,6 +58,4 @@ for root, _, files in os.walk(src_path):
             except Exception as e:
                 print(f"  Error processing {path}: {e}")
 
-print(
-    f"\nFinished. Processed {files_processed} files, modified {files_modified} files."
-)
+print(f"\nFinished. Processed {files_processed} files, modified {files_modified} files.")

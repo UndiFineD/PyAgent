@@ -17,16 +17,17 @@
 Applies Bayes' theorem to update beliefs based on new evidence.
 """
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class BayesianReasoningAgent(BaseAgent):
     """Integrates Bayesian methods for robust fleet decision-making."""
 
@@ -94,15 +95,16 @@ class BayesianReasoningAgent(BaseAgent):
 
         return f"Policy Decision: Recommended '{best_action}'. Analysis: {', '.join(results)}"
 
-    async def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Analyzes text for uncertainty and provides Bayesian calibration."""
-        prompt = (
+        _ = target_file
+        full_prompt = (
             "Analyze the following report or code for potential uncertainties or failure points. "
             "Assign probabilistic confidence scores to different success paths and suggest a "
             "Bayesian strategy to mitigate risks.\n\n"
-            f"Content:\n{input_text}"
+            f"Content:\n{prompt}"
         )
-        return await self.think(prompt)
+        return await self.think(full_prompt)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: Caching Metrics with Sliding Window
 vLLM-inspired cache metrics with sliding window aggregation.
@@ -15,13 +29,14 @@ from __future__ import annotations
 import threading
 import time
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Deque, Dict, List, Optional, Tuple
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -30,6 +45,7 @@ except ImportError:
 
 class CacheType(Enum):
     """Types of caches."""
+
     PREFIX = auto()
     BLOCK = auto()
     KV = auto()
@@ -38,6 +54,7 @@ class CacheType(Enum):
 
 class EvictionReason(Enum):
     """Reasons for cache eviction."""
+
     LRU = auto()
     MEMORY_PRESSURE = auto()
     EXPLICIT = auto()
@@ -48,23 +65,25 @@ class EvictionReason(Enum):
 @dataclass
 class CacheEvent:
     """Single cache event for sliding window tracking."""
+
     timestamp: float
     is_hit: bool
     bytes_accessed: int = 0
     latency_ns: int = 0
 
     @classmethod
-    def hit(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> 'CacheEvent':
+    def hit(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> "CacheEvent":
         return cls(time.time(), True, bytes_accessed, latency_ns)
 
     @classmethod
-    def miss(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> 'CacheEvent':
+    def miss(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> "CacheEvent":
         return cls(time.time(), False, bytes_accessed, latency_ns)
 
 
 @dataclass
 class EvictionEvent:
     """Cache eviction event (vLLM KVCacheEvictionEvent equivalent)."""
+
     timestamp: float
     num_blocks: int
     reason: EvictionReason
@@ -75,6 +94,7 @@ class EvictionEvent:
 @dataclass
 class CacheStats:
     """Aggregate cache statistics."""
+
     total_hits: int = 0
     total_misses: int = 0
     total_evictions: int = 0
@@ -94,6 +114,7 @@ class CacheStats:
 @dataclass
 class SlidingWindowStats:
     """Statistics from a sliding window of events."""
+
     hits: int = 0
     misses: int = 0
     hit_rate: float = 0.0
@@ -339,9 +360,7 @@ class PrefixCacheStats:
         self._metrics.observe_hit(bytes_accessed, latency_ns)
         with self._lock:
             self._prefix_lengths.append(prefix_length)
-            self._shared_prefixes[prefix_hash] = (
-                self._shared_prefixes.get(prefix_hash, 0) + 1
-            )
+            self._shared_prefixes[prefix_hash] = self._shared_prefixes.get(prefix_hash, 0) + 1
 
     def observe_prefix_miss(
         self,
@@ -387,13 +406,13 @@ class PrefixCacheStats:
     def get_stats(self) -> Dict[str, Any]:
         """Get comprehensive statistics."""
         return {
-            'hit_rate': self.get_hit_rate(),
-            'total_hit_rate': self._metrics.get_total_hit_rate(),
-            'avg_prefix_length': self.get_avg_prefix_length(),
-            'sharing_factor': self.get_sharing_factor(),
-            'eviction_rate': self._metrics.get_eviction_rate(),
-            'cache_stats': self._metrics.get_stats(),
-            'window_stats': self._metrics.get_window_stats(),
+            "hit_rate": self.get_hit_rate(),
+            "total_hit_rate": self._metrics.get_total_hit_rate(),
+            "avg_prefix_length": self.get_avg_prefix_length(),
+            "sharing_factor": self.get_sharing_factor(),
+            "eviction_rate": self._metrics.get_eviction_rate(),
+            "cache_stats": self._metrics.get_stats(),
+            "window_stats": self._metrics.get_window_stats(),
         }
 
 
@@ -413,9 +432,7 @@ class MultiLevelCacheMetrics:
         """Get or create metrics for a cache type."""
         with self._lock:
             if cache_type not in self._caches:
-                self._caches[cache_type] = CachingMetrics(
-                    cache_type, self._window_seconds
-                )
+                self._caches[cache_type] = CachingMetrics(cache_type, self._window_seconds)
             return self._caches[cache_type]
 
     def observe_hit(
@@ -453,10 +470,7 @@ class MultiLevelCacheMetrics:
     def get_all_stats(self) -> Dict[CacheType, CacheStats]:
         """Get statistics for all caches."""
         with self._lock:
-            return {
-                cache_type: metrics.get_stats()
-                for cache_type, metrics in self._caches.items()
-            }
+            return {cache_type: metrics.get_stats() for cache_type, metrics in self._caches.items()}
 
     def get_memory_pressure(self) -> float:
         """
@@ -465,15 +479,9 @@ class MultiLevelCacheMetrics:
         Beyond vLLM: Predictive memory pressure based on eviction rate.
         """
         with self._lock:
-            total_eviction_rate = sum(
-                m.get_eviction_rate() for m in self._caches.values()
-            )
-            total_peak = sum(
-                m.get_stats().peak_size_bytes for m in self._caches.values()
-            )
-            total_current = sum(
-                m.get_stats().current_size_bytes for m in self._caches.values()
-            )
+            total_eviction_rate = sum(m.get_eviction_rate() for m in self._caches.values())
+            total_peak = sum(m.get_stats().peak_size_bytes for m in self._caches.values())
+            total_current = sum(m.get_stats().current_size_bytes for m in self._caches.values())
 
             # Combine utilization and eviction rate
             utilization = total_current / total_peak if total_peak > 0 else 0.0
@@ -492,21 +500,21 @@ def observe_with_rust(
 
     Returns (hits, misses, hit_rate) if Rust is available.
     """
-    if HAS_RUST and hasattr(rust_core, 'cache_observe'):
+    if HAS_RUST and hasattr(rust_core, "cache_observe"):
         return rust_core.cache_observe(is_hit, bytes_accessed, latency_ns)
     return None
 
 
 __all__ = [
-    'CacheType',
-    'EvictionReason',
-    'CacheEvent',
-    'EvictionEvent',
-    'CacheStats',
-    'SlidingWindowStats',
-    'SlidingWindowMetrics',
-    'CachingMetrics',
-    'PrefixCacheStats',
-    'MultiLevelCacheMetrics',
-    'observe_with_rust',
+    "CacheType",
+    "EvictionReason",
+    "CacheEvent",
+    "EvictionEvent",
+    "CacheStats",
+    "SlidingWindowStats",
+    "SlidingWindowMetrics",
+    "CachingMetrics",
+    "PrefixCacheStats",
+    "MultiLevelCacheMetrics",
+    "observe_with_rust",
 ]

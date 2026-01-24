@@ -11,8 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Agents.py module.
+"""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import ast
 import hashlib
 import json
@@ -20,18 +24,16 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.services.dev.agent_tests.enums import (
-    TestPriority,
-    TestStatus,
-    CoverageType,
-)
-from src.infrastructure.services.dev.agent_tests.models import (
-    TestCase,
-    TestRun,
-    CoverageGap,
-    TestFactory,
-)
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.dev.agent_tests.enums import (CoverageType,
+                                                               TestPriority,
+                                                               TestStatus)
+from src.infrastructure.services.dev.agent_tests.models import (CoverageGap,
+                                                                TestCase,
+                                                                TestFactory,
+                                                                TestRun)
 
 __version__ = VERSION
 
@@ -121,9 +123,7 @@ class TestsAgent(BaseAgent):
 
     def prioritize_tests(self) -> list[TestCase]:
         """Return tests sorted by priority (highest first)."""
-        return sorted(
-            self._tests, key=lambda t: (t.priority.value, t.failure_count), reverse=True
-        )
+        return sorted(self._tests, key=lambda t: (t.priority.value, t.failure_count), reverse=True)
 
     def calculate_priority_score(self, test: TestCase) -> float:
         """Calculate a priority score for a test."""
@@ -213,10 +213,7 @@ class TestsAgent(BaseAgent):
     def suggest_tests_for_gap(self, gap: CoverageGap) -> str:
         """Generate test suggestion for a coverage gap."""
         file_name = gap.file_path.replace("/", "_").replace(".py", "")
-        suggestion_body = (
-            gap.suggestion
-            or f"assert True  # Placeholder for {gap.coverage_type.value} coverage"
-        )
+        suggestion_body = gap.suggestion or f"assert True  # Placeholder for {gap.coverage_type.value} coverage"
         return (
             f"# Suggested test for {gap.file_path} "
             f"lines {gap.line_start}-{gap.line_end}\n"
@@ -263,13 +260,9 @@ class TestsAgent(BaseAgent):
 
     # ========== Test Execution Recording ==========
 
-    def record_test_run(
-        self, test_results: dict[str, TestStatus], duration_ms: float = 0.0
-    ) -> TestRun:
+    def record_test_run(self, test_results: dict[str, TestStatus], duration_ms: float = 0.0) -> TestRun:
         """Record a test execution run."""
-        run_id = hashlib.md5(
-            f"{datetime.now().isoformat()}:{len(test_results)}".encode()
-        ).hexdigest()[:8]
+        run_id = hashlib.md5(f"{datetime.now().isoformat()}:{len(test_results)}".encode()).hexdigest()[:8]
 
         passed = sum(1 for s in test_results.values() if s == TestStatus.PASSED)
         failed = sum(1 for s in test_results.values() if s == TestStatus.FAILED)
@@ -361,9 +354,7 @@ class TestsAgent(BaseAgent):
         # Summary
         docs.append("## Summary\n")
         docs.append(f"- Total Tests: {len(self._tests)}")
-        docs.append(
-            f"- Critical: {len(self.get_tests_by_priority(TestPriority.CRITICAL))}"
-        )
+        docs.append(f"- Critical: {len(self.get_tests_by_priority(TestPriority.CRITICAL))}")
         docs.append(f"- Flaky: {len(self.detect_flaky_tests())}")
         docs.append(f"- Coverage Gaps: {len(self._coverage_gaps)}\n")
         # Tests by priority
@@ -374,9 +365,7 @@ class TestsAgent(BaseAgent):
                 docs.append(f"### {priority.name}\n")
                 for test in tests:
                     status_icon = "✓" if test.status == TestStatus.PASSED else "✗"
-                    docs.append(
-                        f"- [{status_icon}] `{test.name}` (line {test.line_number})"
-                    )
+                    docs.append(f"- [{status_icon}] `{test.name}` (line {test.line_number})")
                 docs.append("")
         return "\n".join(docs)
 
@@ -413,12 +402,8 @@ class TestsAgent(BaseAgent):
         for priority in TestPriority:
             count = len([t for t in self._tests if t.priority == priority])
             by_priority[priority.name] = count
-        avg_duration = (
-            sum(t.duration_ms for t in self._tests) / total if total > 0 else 0
-        )
-        flaky_count = len(
-            [t for t in self._tests if t.flakiness_score > self._flakiness_threshold]
-        )
+        avg_duration = sum(t.duration_ms for t in self._tests) / total if total > 0 else 0
+        flaky_count = len([t for t in self._tests if t.flakiness_score > self._flakiness_threshold])
         return {
             "total_tests": total,
             "by_status": by_status,
@@ -481,18 +466,11 @@ class TestsAgent(BaseAgent):
             # Check 1: All test functions follow naming convention
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef):
-                    if (
-                        not node.name.startswith("test_")
-                        and "test" in node.name.lower()
-                    ):
+                    if not node.name.startswith("test_") and "test" in node.name.lower():
                         # Just a warning, might be a helper
                         pass
             # Check 2: Tests contain assertions
-            test_funcs = [
-                n
-                for n in ast.walk(tree)
-                if isinstance(n, ast.FunctionDef) and n.name.startswith("test_")
-            ]
+            test_funcs = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name.startswith("test_")]
             for func in test_funcs:
                 has_assert = any(isinstance(n, ast.Assert) for n in ast.walk(func))
                 # Simple check for pytest.raises context manager
@@ -533,9 +511,7 @@ class TestsAgent(BaseAgent):
                 # Leave room for prompt and response.
                 max_source_chars = 20000
                 if len(source_content) > max_source_chars:
-                    source_content = (
-                        source_content[:max_source_chars] + "\n# ... (truncated)"
-                    )
+                    source_content = source_content[:max_source_chars] + "\n# ... (truncated)"
                 enhanced_prompt = (
                     f"{prompt}\n\n"
                     f"# Source Code being tested ({source_path.name}):\n"

@@ -1,12 +1,23 @@
 #!/usr/bin/env python3
+
+"""
+Python accessibility mixin.py module.
+"""
+
+# pylint: disable=too-many-ancestors
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
+
 import re
+
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
+from src.core.base.common.types.accessibility_issue_type import \
+    AccessibilityIssueType
+from src.core.base.common.types.accessibility_severity import \
+    AccessibilitySeverity
 from src.core.base.common.types.wcag_level import WCAGLevel
+
 
 class PythonAccessibilityMixin:
     """Mixin for Python UI accessibility analysis."""
@@ -26,10 +37,7 @@ class PythonAccessibilityMixin:
                 line_num = content[: match.start()].count("\n") + 1
 
                 # Check for tooltips / accessibility text
-                if (
-                    "tooltip" not in widget_call.lower()
-                    and "help" not in widget_call.lower()
-                ):
+                if "tooltip" not in widget_call.lower() and "help" not in widget_call.lower():
                     self.issues.append(
                         AccessibilityIssue(
                             issue_type=AccessibilityIssueType.ARIA_MISSING,

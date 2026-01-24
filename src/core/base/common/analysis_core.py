@@ -28,6 +28,7 @@ try:
 except ImportError:
     rc = None
 
+
 class AnalysisCore:
     """
     Standardized tools for analyzing Python source code without execution.
@@ -65,10 +66,7 @@ class AnalysisCore:
 
         try:
             if isinstance(source_or_path, Path):
-                tree = ast.parse(
-                    source_or_path.read_text(encoding="utf-8"),
-                    feature_version=(3, 11)
-                )
+                tree = ast.parse(source_or_path.read_text(encoding="utf-8"), feature_version=(3, 11))
             else:
                 tree = ast.parse(source_or_path, feature_version=(3, 11))
         except Exception:  # pylint: disable=broad-exception-caught

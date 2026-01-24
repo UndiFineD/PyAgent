@@ -16,15 +16,17 @@
 """Agent specializing in code quality, linting, and style enforcement."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import subprocess
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class LintingAgent(BaseAgent):
+class LintingAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Ensures code adheres to quality standards by running linters."""
 
     def __init__(self, file_path: str) -> None:
@@ -46,6 +48,7 @@ class LintingAgent(BaseAgent):
                 ["flake8", "--max-line-length=120", "--ignore=E203,W503", target_path],
                 capture_output=True,
                 text=True,
+                check=False,
             )
             # Phase 108: Record linting result
             self._record(
@@ -60,7 +63,7 @@ class LintingAgent(BaseAgent):
             return f"### Flake8 Issues\n```plaintext\n{result.stdout}\n```"
         except FileNotFoundError:
             return "❌ flake8 not installed in the current environment."
-        except Exception as e:
+        except (subprocess.SubprocessError, RuntimeError) as e:
             return f"❌ Error running flake8: {e}"
 
     def run_mypy(self, target_path: str) -> str:
@@ -70,6 +73,7 @@ class LintingAgent(BaseAgent):
                 ["mypy", "--ignore-missing-imports", target_path],
                 capture_output=True,
                 text=True,
+                check=False,
             )
             if "Success: no issues found" in result.stdout:
                 return "✅ No type issues found by mypy."
@@ -77,14 +81,14 @@ class LintingAgent(BaseAgent):
             return f"### Mypy Issues\n```plaintext\n{result.stdout}\n```"
         except FileNotFoundError:
             return "❌ mypy not installed in the current environment."
-        except Exception as e:
+        except (subprocess.SubprocessError, RuntimeError) as e:
             return f"❌ Error running mypy: {e}"
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform a quality audit on a file or directory."""
         # prompt is expected to be a path
 
-        path = prompt if prompt else "."
+        path = target_file if target_file else (prompt if prompt else ".")
         flake8_res = self.run_flake8(path)
         mypy_res = self.run_mypy(path)
 

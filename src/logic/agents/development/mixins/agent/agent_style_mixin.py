@@ -14,9 +14,14 @@
 
 """Style enforcement logic for CoderAgent."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
 from typing import Any
+
 from src.core.base.common.types.style_rule import StyleRule
+
 
 class AgentStyleMixin:
     """Mixin for managing and checking code style rules."""

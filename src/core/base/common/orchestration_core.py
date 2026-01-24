@@ -22,19 +22,23 @@ Core logic for multi-agent orchestration and workflow management.
 """
 
 from __future__ import annotations
+
 import random
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Dict, List
+
 from .base_core import BaseCore
 from .models import ComposedAgent
 
 if TYPE_CHECKING:
-    from src.core.base.logic.agent import BaseAgent
+    pass
+
 
 class OrchestrationCore(BaseCore):
     """
     Authoritative engine for multi-agent workflows.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self.agents: List[ComposedAgent] = []
@@ -95,18 +99,20 @@ class OrchestrationCore(BaseCore):
             for dep in agent_config.depends_on:
                 if dep in self.results:
                     enhanced_prompt += f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
-            if current_content and hasattr(agent, 'previous_content'):
+            if current_content and hasattr(agent, "previous_content"):
                 agent.previous_content = current_content
             result = agent.improve_content(enhanced_prompt)
             self.results[agent_type] = result
             current_content = result
         return self.results
 
+
 @dataclass
 class QualityScorer:
     """
     Evaluates text quality based on weighted criteria.
     """
+
     criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
 
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
@@ -127,11 +133,13 @@ class QualityScorer:
             total_weight += weight
         return total_score / total_weight if total_weight > 0 else 0.0
 
+
 @dataclass
 class ABTest:
     """
     Simple A/B testing harness for variants.
     """
+
     name: str
     variants: List[str]
     weights: List[float] = field(default_factory=list)

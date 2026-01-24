@@ -17,18 +17,21 @@
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
-from .base_interfaces import Loadable, Saveable, Component
+
+from ..lifecycle.version import VERSION
+from .base_interfaces import Component, Loadable, Saveable
 from .storage_core import StorageCore
 from .workspace_core import WorkspaceCore
-from ..lifecycle.version import VERSION
 
 logger = logging.getLogger("pyagent.core")
+
 
 class BaseCore(Loadable, Saveable, Component):
     """
     Standardized base for all Core/Service classes.
     Handles standard I/O, naming, and versioning.
     """
+
     def __init__(self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None):
         self.name = name or self.__class__.__name__
         self.version = VERSION
@@ -65,7 +68,7 @@ class BaseCore(Loadable, Saveable, Component):
             else:
                 self._storage.save_json(save_path, self._state)
             return True
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)
             return False
 

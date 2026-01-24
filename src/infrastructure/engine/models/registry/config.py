@@ -1,14 +1,31 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Model configuration and metadata registry."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum, Flag, auto
 from typing import Any, Dict, List, Optional
 
+
 class ModelCapability(Flag):
     """Model capability flags."""
+
     TEXT = auto()
     VISION = auto()
     AUDIO = auto()
@@ -20,8 +37,10 @@ class ModelCapability(Flag):
     THINKING = auto()
     MULTIMODAL = VISION | AUDIO
 
+
 class ModelArchitecture(Enum):
     """Known model architectures."""
+
     LLAMA = auto()
     MISTRAL = auto()
     QWEN = auto()
@@ -69,8 +88,10 @@ class ModelArchitecture(Enum):
     WHISPER = auto()
     CUSTOM = auto()
 
+
 class QuantizationType(Enum):
     """Quantization types."""
+
     NONE = auto()
     INT8 = auto()
     INT4 = auto()
@@ -82,8 +103,10 @@ class QuantizationType(Enum):
     EXLLAMA = auto()
     MARLIN = auto()
 
+
 class ModelFormat(Enum):
     """Model file formats."""
+
     HUGGINGFACE = auto()
     SAFETENSORS = auto()
     PYTORCH = auto()
@@ -91,9 +114,11 @@ class ModelFormat(Enum):
     ONNX = auto()
     TENSORRT = auto()
 
+
 @dataclass
-class ModelConfig: # pylint: disable=too-many-instance-attributes
+class ModelConfig:  # pylint: disable=too-many-instance-attributes
     """Model configuration."""
+
     model_name: str
     architecture: Optional[ModelArchitecture] = None
     quantization: QuantizationType = QuantizationType.NONE
@@ -108,9 +133,11 @@ class ModelConfig: # pylint: disable=too-many-instance-attributes
     def __hash__(self) -> int:
         return hash((self.model_name, self.architecture, self.quantization))
 
+
 @dataclass
-class ArchitectureSpec: # pylint: disable=too-many-instance-attributes
+class ArchitectureSpec:  # pylint: disable=too-many-instance-attributes
     """Architecture specification."""
+
     name: str
     architecture: ModelArchitecture
     capabilities: ModelCapability
@@ -124,9 +151,11 @@ class ArchitectureSpec: # pylint: disable=too-many-instance-attributes
     default_dtype: str = "bfloat16"
     architecture_patterns: List[str] = field(default_factory=list)
 
+
 @dataclass
-class ModelInfo: # pylint: disable=too-many-instance-attributes
+class ModelInfo:  # pylint: disable=too-many-instance-attributes
     """Information about a model."""
+
     name: str
     architecture: ModelArchitecture
     capabilities: ModelCapability
@@ -166,9 +195,11 @@ class ModelInfo: # pylint: disable=too-many-instance-attributes
             "is_multimodal": self.is_multimodal,
         }
 
+
 @dataclass
 class VRAMEstimate:
     """VRAM requirement estimation."""
+
     model_weights_gb: float
     kv_cache_per_token_mb: float
     activation_memory_gb: float

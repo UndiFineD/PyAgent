@@ -8,27 +8,15 @@ Modularized via the 'core_logic' subpackage to maintain <500 line limit.
 """
 
 from __future__ import annotations
+
 import logging
 import os
-from typing import Any, Dict, List, Tuple, Callable
-from src.core.base.common.models import (
-    AgentConfig,
-    ConversationMessage,
-)
+from typing import Any, Callable, Dict, List, Tuple
 
+from src.core.base.common.models import AgentConfig, ConversationMessage
 # Phase 317: Modularized Logic Mixins
-from src.core.base.logic.core import (
-    ValidationCore,
-    MetricsCore,
-    FormattingCore,
-    UtilsCore,
-    EventCore,
-)
-
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None
+from src.core.base.logic.core import (EventCore, FormattingCore, MetricsCore,
+                                      UtilsCore, ValidationCore)
 
 logger = logging.getLogger(__name__)
 
@@ -49,9 +37,7 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
         """Fix markdown formatting in content (Pure Logic)."""
         return self.fix_markdown(content)
 
-    def prepare_capability_payload(
-        self, agent_name: str, capabilities: list[str]
-    ) -> dict[str, Any]:
+    def prepare_capability_payload(self, agent_name: str, capabilities: list[str]) -> dict[str, Any]:
         """Prepare the payload for capability registration."""
         return {"agent": agent_name, "capabilities": capabilities}
 
@@ -68,15 +54,11 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
             token_budget=int(os.environ.get("DV_AGENT_TOKEN_BUDGET", "100000")),
         )
 
-    def process_token_tracking(
-        self, input_tokens: int, output_tokens: int, model: str
-    ) -> dict[str, Any]:
+    def process_token_tracking(self, input_tokens: int, output_tokens: int, model: str) -> dict[str, Any]:
         """Calculates token tracking update dict."""
         return {"input": input_tokens, "output": output_tokens, "model": model}
 
-    def check_token_budget(
-        self, current_usage: int, estimated_tokens: int, budget: int
-    ) -> bool:
+    def check_token_budget(self, current_usage: int, estimated_tokens: int, budget: int) -> bool:
         """Check if request fits within token budget (Logic)."""
         return (current_usage + estimated_tokens) <= budget
 
@@ -85,9 +67,7 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
         if not cache:
             return {"entries": 0, "total_hits": 0, "avg_quality": 0.0}
         total_hits = sum(getattr(e, "hit_count", 0) for e in cache.values())
-        avg_quality = sum(getattr(e, "quality_score", 0) for e in cache.values()) / len(
-            cache
-        )
+        avg_quality = sum(getattr(e, "quality_score", 0) for e in cache.values()) / len(cache)
         return {
             "entries": len(cache),
             "total_hits": total_hits,
@@ -98,11 +78,7 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
         self, backend_status: dict[str, Any], cache_len: int, plugins: list[str]
     ) -> Tuple[bool, dict[str, Any]]:
         """Evaluate health status based on backend and components (Logic)."""
-        backend_available = any(
-            v.get("available", False)
-            for v in backend_status.values()
-            if isinstance(v, dict)
-        )
+        backend_available = any(v.get("available", False) for v in backend_status.values() if isinstance(v, dict))
         details = {
             "backends": backend_status,
             "cache_entries": cache_len,
@@ -141,14 +117,9 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
         if memory_docs:
             memory_context = "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
 
-        return (
-            self.build_prompt_with_history(prompt, history, system_prompt)
-            + memory_context
-        )
+        return self.build_prompt_with_history(prompt, history, system_prompt) + memory_context
 
-    def finalize_improvement(
-        self, improvement: str, post_processors: list[Callable[[str], str]]
-    ) -> str:
+    def finalize_improvement(self, improvement: str, post_processors: list[Callable[[str], str]]) -> str:
         """Apply post-processors to improvement string."""
         for processor in post_processors:
             improvement = processor(improvement)
@@ -163,4 +134,3 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
             "# Windows: winget install GitHub.Copilot\n"
             "# npm: npm install -g @github/copilot\n"
         )
-

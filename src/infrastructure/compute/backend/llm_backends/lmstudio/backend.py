@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,18 +20,11 @@ LM Studio LLM backend implementation.
 
 import logging
 import time
-from typing import (
-    Any,
-    Callable,
-    Iterator,
-    Optional,
-    Sequence,
-    TYPE_CHECKING,
-)
+from typing import TYPE_CHECKING, Any, Callable, Iterator, Optional, Sequence
 
 from ..llm_backend import LLMBackend
-from .models import LMStudioConfig
 from .cache import ModelCache
+from .models import LMStudioConfig
 
 if TYPE_CHECKING:
     import lmstudio
@@ -55,6 +62,7 @@ class LMStudioBackend(LLMBackend):
 
         try:
             import lmstudio
+
             self._sdk_available = True
             logger.debug(f"LM Studio SDK version: {lmstudio.__version__}")
             return True
@@ -118,6 +126,7 @@ class LMStudioBackend(LLMBackend):
         """List currently loaded models in LM Studio."""
         try:
             import lmstudio
+
             models = lmstudio.list_loaded_models()
             return [m.path for m in models]
         except Exception as e:
@@ -128,6 +137,7 @@ class LMStudioBackend(LLMBackend):
         """List downloaded models available in LM Studio."""
         try:
             import lmstudio
+
             models = lmstudio.list_downloaded_models()
             return [m.path for m in models]
         except Exception as e:
@@ -383,10 +393,12 @@ class LMStudioBackend(LLMBackend):
             tool_calls = []
             if hasattr(result, "tool_calls") and result.tool_calls:
                 for tc in result.tool_calls:
-                    tool_calls.append({
-                        "name": tc.name,
-                        "arguments": tc.arguments,
-                    })
+                    tool_calls.append(
+                        {
+                            "name": tc.name,
+                            "arguments": tc.arguments,
+                        }
+                    )
 
             return {
                 "content": str(result),

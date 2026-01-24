@@ -12,7 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Constants.py module.
+"""
+
 from __future__ import annotations
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -89,14 +94,40 @@ BMAD_PHASES = ["Analysis", "Planning", "Solutioning", "Implementation", "Validat
 
 # Agent Specific Instructions (Placeholders for BMAD instructions)
 DEFAULT_INSTRUCTIONS = {
-    "Developer": "Act as a Senior Software Engineer. Implement features with high performance, modularity, and clean code principles. Use modern libraries and maintain consistent style. Focus on idiomatic Python and best practices.",
-    "Architect": "Act as a Principal Architect. Define system boundaries, selection of frameworks, and scalability strategies. Ensure modularity and future-proofing in all designs. Implement Multi-Agent Orchestration principles.",
-    "PM": "Act as a Technical Product Manager. Translate business goals into technical requirements. Organize tasks into logical milestones and verify acceptance criteria. Use iterative refinement workflows.",
-    "UX Designer": "Act as a Senior UX/UI Designer. Focus on user-centric design, accessibility (WCAG), and responsive layouts. Provide detailed visual specifications and component logic for multi-modal interfaces.",
-    "Test Architect": "Act as a Quality Lead. Design comprehensive test suites including unit, integration, and end-to-end tests. Focus on boundary cases, regression reliability, and RAG evaluation metrics.",
-    "Security Auditor": "Act as a Security Expert. Identify potential vulnerabilities, perform dependency scans, and ensure data privacy compliance. Follow OWASP Best Practices and LLM-ops security standards.",
-    "Tech Writer": "Act as a Lead Technical Writer. Produce clear, concise documentation for APIs, users, and internal developers. Use structured formats like Markdown and ensure knowledge graph consistency.",
-    "Researcher": "Act as a Market/Tech Researcher. Scan for current trends, competitive analysis, and emerging technologies using available search tools. Synthesize findings into actionable technical reports for 2025.",
+    "Developer": (
+        "Act as a Senior Software Engineer. Implement features with high performance, modularity, and "
+        "clean code principles. Use modern libraries and maintain consistent style. Focus on idiomatic "
+        "Python and best practices."
+    ),
+    "Architect": (
+        "Act as a Principal Architect. Define system boundaries, selection of frameworks, and scalability "
+        "strategies. Ensure modularity and future-proofing in all designs. Implement Multi-Agent "
+        "Orchestration principles."
+    ),
+    "PM": (
+        "Act as a Technical Product Manager. Translate business goals into technical requirements. "
+        "Organize tasks into logical milestones and verify acceptance criteria. Use iterative refinement workflows."
+    ),
+    "UX Designer": (
+        "Act as a Senior UX/UI Designer. Focus on user-centric design, accessibility (WCAG), and responsive "
+        "layouts. Provide detailed visual specifications and component logic for multi-modal interfaces."
+    ),
+    "Test Architect": (
+        "Act as a Quality Lead. Design comprehensive test suites including unit, integration, and "
+        "end-to-end tests. Focus on boundary cases, regression reliability, and RAG evaluation metrics."
+    ),
+    "Security Auditor": (
+        "Act as a Security Expert. Identify potential vulnerabilities, perform dependency scans, and "
+        "ensure data privacy compliance. Follow OWASP Best Practices and LLM-ops security standards."
+    ),
+    "Tech Writer": (
+        "Act as a Lead Technical Writer. Produce clear, concise documentation for APIs, users, and internal "
+        "developers. Use structured formats like Markdown and ensure knowledge graph consistency."
+    ),
+    "Researcher": (
+        "Act as a Market/Tech Researcher. Scan for current trends, competitive analysis, and emerging "
+        "technologies using available search tools. Synthesize findings into actionable technical reports for 2025."
+    ),
 }
 
 # Model Token Limits (Context Window Management)

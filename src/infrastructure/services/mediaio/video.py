@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -8,20 +22,17 @@ from __future__ import annotations
 
 from typing import BinaryIO, Tuple, Union
 
+import numpy as np
+
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
 
-class VideoLoader(MediaLoader):
-from .models import (
-    MediaLoadConfig,
-    MediaMetadata,
-    MediaType,
-    VideoData,
-    VideoFormat,
-)
+from .base import MediaLoader
+from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
+                     VideoFormat)
 
 
 class VideoLoader(MediaLoader):
@@ -31,6 +42,7 @@ class VideoLoader(MediaLoader):
         self._cv2_available = False
         try:
             import cv2
+
             self._cv2_available = True
             self._cv2 = cv2
         except ImportError:
@@ -50,7 +62,8 @@ class VideoLoader(MediaLoader):
 
         if isinstance(source, bytes):
             import tempfile
-            with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as f:
+
+            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:
                 f.write(source)
                 path = f.name
             source_str = "<bytes>"
@@ -66,11 +79,7 @@ class VideoLoader(MediaLoader):
             timestamps=timestamps,
         )
 
-    async def _load_frames(
-        self,
-        path: str,
-        config: MediaLoadConfig
-    ) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
+    async def _load_frames(self, path: str, config: MediaLoadConfig) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
         """Load frames from video file."""
         if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):
             # TensorRT path for 120fps optimization
@@ -115,17 +124,11 @@ class VideoLoader(MediaLoader):
                         if rc and hasattr(rc, "image_resize_rust"):
                             h, w, c = frame.shape
                             th, tw = config.target_size
-                            resized = rc.image_resize_rust(
-                                frame.flatten().astype(np.float32).tolist(),
-                                h, w, c, th, tw
-                            )
+                            pixels = frame.flatten().astype(np.float32).tolist()
+                            resized = rc.image_resize_rust(pixels, h, w, c, th, tw)
                             frame = np.array(resized, dtype=np.float32).reshape(th, tw, c)
                         else:
-                            frame = self._cv2.resize(
-                                frame,
-                                config.target_size,
-                                interpolation=self._cv2.INTER_LINEAR
-                            )
+                            frame = self._cv2.resize(frame, config.target_size, interpolation=self._cv2.INTER_LINEAR)
                     frames.append(frame)
                     timestamps.append(idx / fps if fps > 0 else 0)
 

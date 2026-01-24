@@ -1,13 +1,33 @@
-# SPDX-License-Identifier: Apache-2.0
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Storage.py module.
+"""
+
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Sequence
+
 import numpy as np
-from .config import AttentionConfig
+
 
 @dataclass
 class BlockTable:
     """Manages physical block allocation for sequences."""
+
     num_blocks: int
     block_size: int
     block_tables: dict[int, list[int]] = field(default_factory=dict)
@@ -17,14 +37,17 @@ class BlockTable:
         self.free_blocks = set(range(self.num_blocks))
 
     def allocate_block(self, seq_id: int) -> int:
-        if not self.free_blocks: raise RuntimeError("No free blocks available")
+        if not self.free_blocks:
+            raise RuntimeError("No free blocks available")
         block_idx = self.free_blocks.pop()
-        if seq_id not in self.block_tables: self.block_tables[seq_id] = []
+        if seq_id not in self.block_tables:
+            self.block_tables[seq_id] = []
         self.block_tables[seq_id].append(block_idx)
         return block_idx
 
     def free_sequence(self, seq_id: int) -> list[int]:
-        if seq_id not in self.block_tables: return []
+        if seq_id not in self.block_tables:
+            return []
         freed = self.block_tables.pop(seq_id)
         self.free_blocks.update(freed)
         return freed
@@ -36,12 +59,14 @@ class BlockTable:
         return len(self.block_tables.get(seq_id, []))
 
     @property
-    def num_free_blocks(self) -> int: return len(self.free_blocks)
+    def num_free_blocks(self) -> int:
+        return len(self.free_blocks)
 
 
 @dataclass
 class SlotMapping:
     """Maps tokens to (block_idx, block_offset) slots."""
+
     block_size: int
     slots: np.ndarray = field(default_factory=lambda: np.array([], dtype=np.int64))
 
@@ -59,18 +84,20 @@ class SlotMapping:
             offset = i % self.block_size
             if block_idx < len(block_table):
                 slots[i] = self.compute_slot(block_table[block_idx], offset)
-            else: slots[i] = -1
+            else:
+                slots[i] = -1
         return slots
 
 
 @dataclass
 class PagedKVCache:
     """Block-organized key/value cache."""
+
     num_blocks: int
     block_size: int
     num_kv_heads: int
     head_size: int
-    dtype: np.dtype = np.float32
+    dtype: np.dtype = field(default_factory=lambda: np.dtype(np.float32))
     key_cache: np.ndarray | None = field(default=None, repr=False)
     value_cache: np.ndarray | None = field(default=None, repr=False)
 
@@ -81,7 +108,8 @@ class PagedKVCache:
 
     def write(self, key: np.ndarray, value: np.ndarray, slot_mapping: np.ndarray) -> None:
         for i, slot in enumerate(slot_mapping):
-            if slot < 0: continue
+            if slot < 0:
+                continue
             block_idx, offset = divmod(slot, self.block_size)
             self.key_cache[block_idx, offset] = key[i]
             self.value_cache[block_idx, offset] = value[i]
@@ -98,12 +126,15 @@ class PagedKVCache:
         return keys, values
 
     def get_memory_usage(self) -> int:
-        return (self.key_cache.nbytes + self.value_cache.nbytes) if self.key_cache is not None else 0
+        if self.key_cache is not None and self.value_cache is not None:
+            return self.key_cache.nbytes + self.value_cache.nbytes
+        return 0
 
 
 @dataclass
 class AttentionMetadata:
     """Metadata for batched attention computation."""
+
     seq_lens: np.ndarray
     query_start_loc: np.ndarray
     max_query_len: int
@@ -114,12 +145,17 @@ class AttentionMetadata:
     num_decode_tokens: int = 0
 
     @property
-    def num_seqs(self) -> int: return len(self.seq_lens)
+    def num_seqs(self) -> int:
+        return len(self.seq_lens)
+
     @property
-    def total_tokens(self) -> int: return int(np.sum(self.seq_lens))
+    def total_tokens(self) -> int:
+        return int(np.sum(self.seq_lens))
 
     @classmethod
-    def from_seq_lens(cls, seq_lens: Sequence[int], block_tables: list[list[int]], block_size: int, max_blocks_per_seq: int) -> "AttentionMetadata":
+    def from_seq_lens(
+        cls, seq_lens: Sequence[int], block_tables: list[list[int]], block_size: int, max_blocks_per_seq: int
+    ) -> "AttentionMetadata":
         seq_lens_arr = np.array(seq_lens, dtype=np.int32)
         query_start_loc = np.zeros(len(seq_lens) + 1, dtype=np.int32)
         query_start_loc[1:] = np.cumsum(seq_lens_arr)
@@ -135,8 +171,14 @@ class AttentionMetadata:
         token_idx = 0
         for seq_idx, seq_len in enumerate(seq_lens):
             seq_slots = slot_mapper.map_sequence_slots(block_tables[seq_idx], seq_len)
-            slot_mapping[token_idx:token_idx + seq_len] = seq_slots
+            slot_mapping[token_idx : token_idx + seq_len] = seq_slots
             token_idx += seq_len
 
-        return cls(seq_lens=seq_lens_arr, query_start_loc=query_start_loc, max_query_len=max(seq_lens, default=0),
-                   max_seq_len=max(seq_lens, default=0), block_tables=block_tables_arr, slot_mapping=slot_mapping)
+        return cls(
+            seq_lens=seq_lens_arr,
+            query_start_loc=query_start_loc,
+            max_query_len=max(seq_lens, default=0),
+            max_seq_len=max(seq_lens, default=0),
+            block_tables=block_tables_arr,
+            slot_mapping=slot_mapping,
+        )

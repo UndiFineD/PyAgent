@@ -16,12 +16,14 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from pathlib import Path
-from typing import Any
+
 import json
 import logging
 import time
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -84,9 +86,7 @@ class ReportCacheManager:
             return None
         return entry.get("content")
 
-    def set(
-        self, file_path: str, content_hash: str, content: str, ttl: int = 3600
-    ) -> None:
+    def set(self, file_path: str, content_hash: str, content: str, ttl: int = 3600) -> None:
         """Cache report content.
         Args:
             file_path: Path to source file.
@@ -105,9 +105,7 @@ class ReportCacheManager:
             file_path: Path to file.
         """
 
-        keys_to_delete = [
-            k for k in self._cache.keys() if k.startswith(f"{file_path}:")
-        ]
+        keys_to_delete = [k for k in self._cache.keys() if k.startswith(f"{file_path}:")]
         for key in keys_to_delete:
             del self._cache[key]
         self._save_cache()

@@ -11,11 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Code quality core.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 import re
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -47,7 +53,7 @@ class CodeQualityCore:
             try:
                 # Rust returns dicts directly compatible
                 return self._rust_core.check_python_source_quality(source)
-            except Exception:
+            except RuntimeError:
                 pass
 
         issues: list[dict[str, Any]] = []
@@ -71,7 +77,7 @@ class CodeQualityCore:
         if self._rust_core:
             try:
                 return self._rust_core.analyze_rust_source(source)
-            except Exception:
+            except RuntimeError:
                 pass
 
         issues: list[dict[str, Any]] = []
@@ -105,7 +111,7 @@ class CodeQualityCore:
         if self._rust_core:
             try:
                 return self._rust_core.analyze_js_source(source)
-            except Exception:
+            except RuntimeError:
                 pass
 
         issues: list[dict[str, Any]] = []

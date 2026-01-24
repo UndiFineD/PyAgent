@@ -18,19 +18,19 @@ including API docs, architecture diagrams, and status reports.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-import sys
 import os
-from src.observability.reports.report_generator import ReportGenerator
+import sys
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+from src.observability.reports.report_generator import ReportGenerator
 
 os.environ["PYTHONPATH"] = "."
 __version__ = VERSION
 
-logging.basicConfig(
-    level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s"
-)
+logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s")
 
 
 def main() -> None:

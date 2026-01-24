@@ -17,14 +17,16 @@ Swarm Audit Service (Phase 69).
 Captures and persists decision-making trails for the MoE Swarm.
 """
 
-import logging
 import json
-import time
+import logging
 import os
-from typing import List, Dict, Any, Optional
+import time
+from typing import Any, Dict, List
+
 from src.core.base.common.models.communication_models import SwarmAuditTrail
 
 logger = logging.getLogger(__name__)
+
 
 class SwarmAuditLogger:
     """
@@ -41,7 +43,9 @@ class SwarmAuditLogger:
         if self.log_to_file:
             os.makedirs(os.path.dirname(self.storage_path), exist_ok=True)
 
-    def log_event(self, task_id: str, event_type: str, description: str, data: Dict[str, Any], duration_ms: float = 0.0):
+    def log_event(
+        self, task_id: str, event_type: str, description: str, data: Dict[str, Any], duration_ms: float = 0.0
+    ):
         """Records a specific step in a swarm task."""
         trail = SwarmAuditTrail(
             request_id=task_id,
@@ -49,7 +53,7 @@ class SwarmAuditLogger:
             decision_summary=description,
             raw_data=data,
             timestamp=time.time(),
-            duration_ms=duration_ms
+            duration_ms=duration_ms,
         )
 
         if task_id not in self.trails:
@@ -63,14 +67,19 @@ class SwarmAuditLogger:
         """Appends a single audit event to the JSONL log file."""
         try:
             with open(self.storage_path, "a") as f:
-                f.write(json.dumps({
-                    "task_id": event.request_id,
-                    "event_type": event.step,
-                    "description": event.decision_summary,
-                    "data": event.raw_data,
-                    "timestamp": event.timestamp,
-                    "duration_ms": event.duration_ms
-                }) + "\n")
+                f.write(
+                    json.dumps(
+                        {
+                            "task_id": event.request_id,
+                            "event_type": event.step,
+                            "description": event.decision_summary,
+                            "data": event.raw_data,
+                            "timestamp": event.timestamp,
+                            "duration_ms": event.duration_ms,
+                        }
+                    )
+                    + "\n"
+                )
         except Exception as e:
             logger.error(f"Failed to persist audit event: {e}")
 

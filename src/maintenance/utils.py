@@ -10,11 +10,14 @@ and environment verification used by other maintenance components.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class MaintenanceUtils:
     """
@@ -24,7 +27,7 @@ class MaintenanceUtils:
     including log rotation, temporary file pruning, and environment
     integrity checks required for long-running autonomous operations.
     """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.version = VERSION
         logging.info(f"MaintenanceUtils initialized (v{VERSION}).")
-

@@ -15,9 +15,11 @@
 """Script for restoring codebase state by fixing common automated editing errors."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -41,17 +43,11 @@ def restoration() -> None:
                     )
 
                     # 2. Fix empty blocks caused by masking
-                    content = re.sub(
-                        r"(if TYPE_CHECKING:)\n(\s*)#", r"\1\n\2pass\n\2#", content
-                    )
+                    content = re.sub(r"(if TYPE_CHECKING:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
 
                     content = re.sub(r"(try:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
-                    content = re.sub(
-                        r"(except [\w.]+ as \w+:)\n(\s*)#", r"\1\n\2pass\n\2#", content
-                    )
-                    content = re.sub(
-                        r"(except:\s*)\n(\s*)#", r"\1\n\2pass\n\2#", content
-                    )
+                    content = re.sub(r"(except [\w.]+ as \w+:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
+                    content = re.sub(r"(except:\s*)\n(\s*)#", r"\1\n\2pass\n\2#", content)
 
                     # 3. Fix f-string break in CodeGenerator.py
                     if "CodeGenerator.py" in path:

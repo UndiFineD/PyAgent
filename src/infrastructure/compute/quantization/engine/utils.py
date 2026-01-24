@@ -1,14 +1,36 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Utils.py module.
+"""
+
 from __future__ import annotations
-import numpy as np
+
 from typing import TYPE_CHECKING
-from .config import QuantConfig, QuantScheme, QuantStrategy
-from .tensor import QuantizedTensor
-from .linear import LinearQuantizer
+
+import numpy as np
+
 from .awq import AWQQuantizer
+from .config import QuantConfig, QuantScheme, QuantStrategy
 from .gptq import GPTQQuantizer
+from .linear import LinearQuantizer
+from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+
 
 def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
     flat = data.flatten()
@@ -20,6 +42,7 @@ def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
 
     packed = (evens & 0x0F) | ((odds & 0x0F) << 4)
     return packed.astype(np.int8)
+
 
 def unpack_int4(packed: NDArray[np.int8]) -> NDArray[np.int8]:
     flat = packed.flatten()
@@ -34,6 +57,7 @@ def unpack_int4(packed: NDArray[np.int8]) -> NDArray[np.int8]:
     unpacked[1::2] = upper
 
     return unpacked
+
 
 def compute_scales_minmax(
     weight: NDArray[np.float32],
@@ -55,6 +79,7 @@ def compute_scales_minmax(
         zp = int(round(-min_val / scale)) + qmin
         zp = np.clip(zp, qmin, qmax)
         return np.array([scale], dtype=np.float32), np.array([zp], dtype=np.int32)
+
 
 def quantize_tensor(
     tensor: NDArray[np.float32],
@@ -80,6 +105,7 @@ def quantize_tensor(
 
     return quantizer.quantize(tensor)
 
+
 def get_quantization_error(
     original: NDArray[np.float32],
     qtensor: QuantizedTensor,
@@ -90,7 +116,7 @@ def get_quantization_error(
     mae = np.mean(np.abs(original - dequant))
     max_error = np.max(np.abs(original - dequant))
 
-    signal_power = np.mean(original ** 2)
+    signal_power = np.mean(original**2)
     noise_power = mse
     snr = 10 * np.log10(signal_power / (noise_power + 1e-10))
 

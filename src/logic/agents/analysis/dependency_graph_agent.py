@@ -11,16 +11,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Dependency graph agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
+
 import ast
+import os
 from pathlib import Path
 from typing import Any
 
+from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
 try:
     from rust_core import find_dependents_rust
+
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -28,13 +37,14 @@ except ImportError:
 __version__ = VERSION
 
 
-class DependencyGraphAgent:
+class DependencyGraphAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Maps and analyzes dependencies between agent modules and classes.
     Helps in understanding the impact of changes and optimizing imports.
     """
 
     def __init__(self, workspace_path: str | Path) -> None:
+        super().__init__(str(workspace_path) if workspace_path else ".")
         self.workspace_path = Path(workspace_path)
         self.dependency_map: dict[str, list[str]] = {}  # module -> list of imports
 
@@ -52,9 +62,7 @@ class DependencyGraphAgent:
                     full_path = Path(root) / file
                     try:
                         rel_path = full_path.relative_to(self.workspace_path)
-                        self.dependency_map[str(rel_path)] = self._extract_imports(
-                            full_path
-                        )
+                        self.dependency_map[str(rel_path)] = self._extract_imports(full_path)
                     except ValueError:
                         continue
 
@@ -73,7 +81,7 @@ class DependencyGraphAgent:
                 elif isinstance(node, ast.ImportFrom):
                     if node.module:
                         imports.add(node.module)
-        except Exception:
+        except (SyntaxError, EnvironmentError, ValueError):
             pass
         return list(imports)
 
@@ -101,7 +109,21 @@ class DependencyGraphAgent:
         return {
             "node_count": len(self.dependency_map),
             "edge_count": total_links,
-            "density": total_links / (len(self.dependency_map) ** 2)
-            if self.dependency_map
-            else 0,
+            "density": total_links / (len(self.dependency_map) ** 2) if self.dependency_map else 0,
         }
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Analyze dependency impact."""
+        self.scan_dependencies()
+        module = target_file if target_file else prompt
+        impact = self.get_impact_scope(module)
+
+        if not impact:
+            return f"✅ No modules directly depend on {module} according to current scan."
+
+        return f"## Dependency Impact for: {module}\n" + "\n".join([f"- {m}" for m in impact])
+
+
+if __name__ == "__main__":
+    main = create_main_function(DependencyGraphAgent, "Dependency Agent", "Module to analyze")
+    main()

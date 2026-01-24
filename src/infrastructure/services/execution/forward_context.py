@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 ForwardContext.py - Execution context management for model forward passes.
 
@@ -13,15 +27,14 @@ import threading
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from enum import IntEnum, auto
 from typing import Any, Generator, NamedTuple, Optional
 
 import numpy as np
 
-
 # ============================================================================
 # Batch Descriptor
 # ============================================================================
+
 
 class BatchDescriptor(NamedTuple):
     """
@@ -30,6 +43,7 @@ class BatchDescriptor(NamedTuple):
     Uniquely identifies a padded batch configuration for graph key matching.
     Based on vLLM's BatchDescriptor pattern.
     """
+
     num_tokens: int
     num_reqs: Optional[int] = None
     uniform: bool = False
@@ -69,6 +83,7 @@ class BatchDescriptor(NamedTuple):
 # Data Parallel Metadata
 # ============================================================================
 
+
 @dataclass
 class DPMetadata:
     """
@@ -77,6 +92,7 @@ class DPMetadata:
     Tracks token distribution across data parallel ranks for synchronization.
     Based on vLLM's DPMetadata pattern.
     """
+
     world_size: int = 1
     rank: int = 0
     num_tokens_across_dp: Optional[np.ndarray] = None
@@ -131,6 +147,7 @@ class DPMetadata:
 # Forward Context
 # ============================================================================
 
+
 @dataclass
 class ForwardContext:
     """
@@ -141,6 +158,7 @@ class ForwardContext:
 
     Based on vLLM's ForwardContext pattern.
     """
+
     # Attention metadata (dict mapping layer name to metadata)
     attn_metadata: Optional[dict[str, Any]] = None
 
@@ -205,7 +223,7 @@ def get_forward_context() -> ForwardContext:
 
     Raises RuntimeError if no context is set.
     """
-    ctx = getattr(_thread_local, 'forward_context', None)
+    ctx = getattr(_thread_local, "forward_context", None)
     if ctx is None:
         raise RuntimeError("No forward context is set. Use set_forward_context() first.")
     return ctx
@@ -213,12 +231,12 @@ def get_forward_context() -> ForwardContext:
 
 def is_forward_context_available() -> bool:
     """Check if a forward context is currently set."""
-    return getattr(_thread_local, 'forward_context', None) is not None
+    return getattr(_thread_local, "forward_context", None) is not None
 
 
 def _set_forward_context(ctx: Optional[ForwardContext]) -> Optional[ForwardContext]:
     """Internal: set context and return previous."""
-    prev = getattr(_thread_local, 'forward_context', None)
+    prev = getattr(_thread_local, "forward_context", None)
     _thread_local.forward_context = ctx
     return prev
 
@@ -226,6 +244,7 @@ def _set_forward_context(ctx: Optional[ForwardContext]) -> Optional[ForwardConte
 # ============================================================================
 # Context Creation
 # ============================================================================
+
 
 def create_forward_context(
     attn_metadata: Optional[dict[str, Any]] = None,
@@ -270,6 +289,7 @@ def create_forward_context(
 # ============================================================================
 # Context Manager
 # ============================================================================
+
 
 @contextmanager
 def set_forward_context(
@@ -323,6 +343,7 @@ def set_forward_context(
 # Timing Utilities
 # ============================================================================
 
+
 class ForwardTimingTracker:
     """
     Tracks forward pass timing statistics.
@@ -351,12 +372,12 @@ class ForwardTimingTracker:
                 if len(times) > 1:
                     arr = np.array(times)
                     stats[batch_size] = {
-                        'count': len(times),
-                        'mean_ms': float(np.mean(arr)),
-                        'p50_ms': float(np.percentile(arr, 50)),
-                        'p99_ms': float(np.percentile(arr, 99)),
-                        'min_ms': float(np.min(arr)),
-                        'max_ms': float(np.max(arr)),
+                        "count": len(times),
+                        "mean_ms": float(np.mean(arr)),
+                        "p50_ms": float(np.percentile(arr, 50)),
+                        "p99_ms": float(np.percentile(arr, 99)),
+                        "min_ms": float(np.min(arr)),
+                        "max_ms": float(np.max(arr)),
                     }
             return stats
 

@@ -1,17 +1,34 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 """
 KVzap: Surrogate-model-based KV cache pruning.
 Implemented based on arXiv:2601.07891 (NVIDIA research, Jan 2026).
 """
 
-from typing import Optional, Tuple, Dict, Any
+from dataclasses import dataclass
+from typing import Tuple
+
 import torch
 import torch.nn as nn
-from dataclasses import dataclass
+
 
 @dataclass
 class KVzapConfig:
     """Configuration for KVzap pruning."""
+
     hidden_dim: int
     num_heads: int
     threshold: float = -4.0
@@ -19,11 +36,13 @@ class KVzapConfig:
     use_mlp: bool = True
     enabled: bool = True
 
+
 class KVzapSurrogate(nn.Module):
     """
     Lightweight surrogate model to predict KV importance scores from hidden states.
     Efficiently predicts which tokens can be safely pruned from the cache.
     """
+
     def __init__(self, config: KVzapConfig):
         super().__init__()
         self.config = config
@@ -31,7 +50,7 @@ class KVzapSurrogate(nn.Module):
             self.model = nn.Sequential(
                 nn.Linear(config.hidden_dim, config.hidden_dim // 8),
                 nn.GELU(),
-                nn.Linear(config.hidden_dim // 8, config.num_heads)
+                nn.Linear(config.hidden_dim // 8, config.num_heads),
             )
         else:
             self.model = nn.Linear(config.hidden_dim, config.num_heads)
@@ -41,10 +60,12 @@ class KVzapSurrogate(nn.Module):
         # output: [batch, seq_len, num_heads]
         return self.model(hidden_states)
 
+
 class KVzapPruner:
     """
     Orchestrates KV cache pruning using the surrogate model.
     """
+
     def __init__(self, config: KVzapConfig):
         self.config = config
         self.surrogate = KVzapSurrogate(config)
@@ -60,7 +81,7 @@ class KVzapPruner:
             # Protect the most recent window tokens (Sliding Window protection)
             seq_len = hidden_states.shape[1]
             if seq_len > self.config.window_size:
-                scores[:, -self.config.window_size:, :] = float('inf')
+                scores[:, -self.config.window_size :, :] = float("inf")
 
             return scores
 
@@ -69,10 +90,7 @@ class KVzapPruner:
         return scores >= self.config.threshold
 
     def prune_kv(
-        self,
-        hidden_states: torch.Tensor,
-        keys: torch.Tensor,
-        values: torch.Tensor
+        self, hidden_states: torch.Tensor, keys: torch.Tensor, values: torch.Tensor
     ) -> Tuple[torch.Tensor, torch.Tensor, float]:
         """
         Prunes KV cache based on predicted importance.

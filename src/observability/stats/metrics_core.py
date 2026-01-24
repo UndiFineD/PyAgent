@@ -17,13 +17,13 @@ No I/O operations, no file access, no external calls.
 """
 
 from __future__ import annotations
-import ast
+
 import contextlib
-import math
-import operator
 import logging
-from typing import Any, Dict, List, Tuple
+import math
 from dataclasses import dataclass
+from typing import Any, Dict, List, Tuple
+
 from src.core.base.common.formula_core import FormulaCore
 
 try:
@@ -66,9 +66,7 @@ class TokenCostCore:
         """Initialize token cost calculator."""
         self.cache: Dict[Tuple[int, int, str], TokenCostResult] = {}
 
-    def calculate_cost(
-        self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo"
-    ) -> TokenCostResult:
+    def calculate_cost(self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo") -> TokenCostResult:
         """Calculate total cost for token usage (pure calculation).
 
         Args:
@@ -84,9 +82,7 @@ class TokenCostCore:
             try:
                 # pylint: disable=no-member
                 # Returns (total_cost, input_cost, output_cost)
-                total, i_cost, o_cost = rc.calculate_token_cost(
-                    input_tokens, output_tokens, model
-                )
+                total, i_cost, o_cost = rc.calculate_token_cost(input_tokens, output_tokens, model)
                 return TokenCostResult(
                     total_cost=total,
                     input_cost=i_cost,
@@ -171,16 +167,8 @@ class ModelFallbackCore:
 
         candidates = []
         for model, caps in self.model_capabilities.items():
-            if (
-                caps["cost"] <= max_cost
-                and caps["speed"] >= required_speed
-                and caps["quality"] >= required_quality
-            ):
-                score = (
-                    (caps["speed"] * 0.3)
-                    + (caps["quality"] * 0.5)
-                    + ((1 - caps["cost"]) * 0.2)
-                )
+            if caps["cost"] <= max_cost and caps["speed"] >= required_speed and caps["quality"] >= required_quality:
+                score = (caps["speed"] * 0.3) + (caps["quality"] * 0.5) + ((1 - caps["cost"]) * 0.2)
                 candidates.append((model, score))
 
         if not candidates:
@@ -226,11 +214,7 @@ class DerivedMetricCalculator:
             raise KeyError(f"Derived metric {metric_name} not found")
 
         metric_def = self.derived_metrics[metric_name]
-        formula = (
-            getattr(metric_def, "formula", metric_def)
-            if not isinstance(metric_def, str)
-            else metric_def
-        )
+        formula = getattr(metric_def, "formula", metric_def) if not isinstance(metric_def, str) else metric_def
 
         return self.evaluate_formula(formula, context)
 
@@ -247,9 +231,7 @@ class DerivedMetricCalculator:
         # pylint: disable=import-outside-toplevel
         from src.observability.stats.observability_core import DerivedMetric
 
-        metric = DerivedMetric(
-            name=name, dependencies=dependencies, formula=formula
-        )
+        metric = DerivedMetric(name=name, dependencies=dependencies, formula=formula)
         self.derived_metrics[name] = metric
         return metric
 
@@ -313,11 +295,7 @@ class StatsRollupCore:
             return 0.0
         sorted_vals = sorted(values)
         idx = len(sorted_vals) // 2
-        return (
-            sorted_vals[idx]
-            if len(sorted_vals) % 2 == 1
-            else (sorted_vals[idx - 1] + sorted_vals[idx]) / 2
-        )
+        return sorted_vals[idx] if len(sorted_vals) % 2 == 1 else (sorted_vals[idx - 1] + sorted_vals[idx]) / 2
 
     def rollup_p95(self, values: List[float]) -> float:
         """Calculate 95th percentile (pure calculation)."""
@@ -358,9 +336,7 @@ class StatsRollupCore:
 class CorrelationCore:
     """Pure correlation analysis (Rust-convertible)."""
 
-    def calculate_correlation(
-        self, series1: List[float], series2: List[float]
-    ) -> float:
+    def calculate_correlation(self, series1: List[float], series2: List[float]) -> float:
         """Calculate Pearson correlation coefficient (pure calculation).
 
         Args:
@@ -373,9 +349,7 @@ class CorrelationCore:
         if rc:
             with contextlib.suppress(Exception):
                 # pylint: disable=no-member
-                return rc.calculate_pearson_correlation_rust(
-                    series1, series2
-                )  # type: ignore[attr-defined]
+                return rc.calculate_pearson_correlation_rust(series1, series2)  # type: ignore[attr-defined]
 
         if len(series1) != len(series2) or len(series1) < 2:
             return 0.0
@@ -396,9 +370,7 @@ class CorrelationCore:
 class ABTestCore:
     """Pure A/B testing calculations (Rust-convertible)."""
 
-    def calculate_significance(
-        self, control_values: List[float], treatment_values: List[float]
-    ) -> Dict[str, float]:
+    def calculate_significance(self, control_values: List[float], treatment_values: List[float]) -> Dict[str, float]:
         """Calculate statistical significance (pure calculation).
 
         Uses simplified t-test approach.
@@ -417,9 +389,7 @@ class ABTestCore:
                     control_values, treatment_values
                 )  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught
-                logger.warning(
-                    "Rust calculate_statistical_significance failed: %s. Using Python fallback.", e
-                )
+                logger.warning("Rust calculate_statistical_significance failed: %s. Using Python fallback.", e)
 
         if not control_values or not treatment_values:
             return {"p_value": 1.0, "t_statistic": 0.0, "effect_size": 0.0}
@@ -427,17 +397,10 @@ class ABTestCore:
         control_mean = sum(control_values) / len(control_values)
         treatment_mean = sum(treatment_values) / len(treatment_values)
 
-        control_var = sum((x - control_mean) ** 2 for x in control_values) / len(
-            control_values
-        )
-        treatment_var = sum((x - treatment_mean) ** 2 for x in treatment_values) / len(
-            treatment_values
-        )
+        control_var = sum((x - control_mean) ** 2 for x in control_values) / len(control_values)
+        treatment_var = sum((x - treatment_mean) ** 2 for x in treatment_values) / len(treatment_values)
 
-        pooled_se = math.sqrt(
-            (control_var / len(control_values))
-            + (treatment_var / len(treatment_values))
-        )
+        pooled_se = math.sqrt((control_var / len(control_values)) + (treatment_var / len(treatment_values)))
         t_stat = (treatment_mean - control_mean) / pooled_se if pooled_se > 0 else 0
 
         effect_size = (
@@ -452,9 +415,7 @@ class ABTestCore:
             "effect_size": effect_size,
         }
 
-    def calculate_sample_size(
-        self, effect_size: float, alpha: float = 0.05, power: float = 0.8
-    ) -> int:
+    def calculate_sample_size(self, effect_size: float, alpha: float = 0.05, power: float = 0.8) -> int:
         """Calculate required sample size (pure calculation).
 
         Args:
@@ -468,9 +429,7 @@ class ABTestCore:
         if rc:
             try:
                 # pylint: disable=no-member
-                return rc.calculate_sample_size(
-                    effect_size, alpha, power
-                )  # type: ignore[attr-defined]
+                return rc.calculate_sample_size(effect_size, alpha, power)  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning("Rust calculate_sample_size failed: %s. Falling back to Python.", e)
 

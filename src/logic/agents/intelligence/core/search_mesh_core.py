@@ -1,4 +1,23 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Search mesh core.py module.
+"""
+
 from __future__ import annotations
+
 from typing import Any
 
 try:
@@ -25,9 +44,7 @@ class SearchMeshCore:
             "generic": 1.0,
         }
 
-    def aggregate_results(
-        self, raw_results: dict[str, list[dict[str, Any]]]
-    ) -> list[dict[str, Any]]:
+    def aggregate_results(self, raw_results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
         """
         Takes raw results from multiple providers and merges them into a ranked list.
         Each result should have: 'title', 'url', 'snippet', 'score' (optional).
@@ -77,17 +94,13 @@ class SearchMeshCore:
         master_list.sort(key=lambda x: x["total_score"], reverse=True)
         return master_list
 
-    def filter_redundant(
-        self, results: list[dict[str, Any]], remembered_urls: set[str]
-    ) -> list[dict[str, Any]]:
+    def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
         """
         Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
         """
         return [res for res in results if res["url"] not in remembered_urls]
 
-    async def parallel_search_placeholder(
-        self, providers: list[str], query: str
-    ) -> dict[str, list[dict[str, Any]]]:
+    async def parallel_search_placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
         """
         Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).

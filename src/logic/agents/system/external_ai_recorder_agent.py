@@ -18,12 +18,14 @@ Captures prompts, contexts, and responses provided to/from external systems like
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import time
 from pathlib import Path
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -46,9 +48,7 @@ class ExternalAIRecorderAgent(BaseAgent):
         )
 
     @as_tool
-    def record_external_interaction(
-        self, external_ai_name: str, prompt: str, context: str, response: str
-    ) -> str:
+    def record_external_interaction(self, external_ai_name: str, prompt: str, context: str, response: str) -> str:
         """Saves a session with an external AI to the local learning archive.
         Args:
             external_ai_name: Name of the external system (e.g., 'Claude-3.5', 'GPT-4o').

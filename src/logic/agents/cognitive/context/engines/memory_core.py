@@ -19,8 +19,9 @@ Delegates to the standardized src.core.base.common.memory_core.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.memory_core import MemoryCore as StandardMemoryCore
 
 __version__ = VERSION
@@ -33,7 +34,7 @@ class MemoryCore:
         self._core = StandardMemoryCore()
         self.baseline_utility = baseline_utility
 
-    def create_episode(
+    def create_episode(  # pylint: disable=too-many-positional-arguments
         self,
         agent_name: str,
         task: str,

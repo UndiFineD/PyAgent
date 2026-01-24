@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
+
+"""
+Ab engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # A/B testing and comparison engine.
 # Phase 16: Rust acceleration for statistical significance calculations
 
 from __future__ import annotations
+
+import contextlib
 import hashlib
 import logging
-import contextlib
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -15,6 +20,7 @@ logger = logging.getLogger(__name__)
 # Phase 16: Rust acceleration imports
 try:
     import rust_core
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -65,9 +71,7 @@ class ABComparisonEngine:
 
         return comparison
 
-    def add_metric(
-        self, comparison_id: str, version: str, metric_name: str, value: float
-    ) -> bool:
+    def add_metric(self, comparison_id: str, version: str, metric_name: str, value: float) -> bool:
         comp = self.comparisons.get(comparison_id)
         if not comp:
             return False
@@ -99,9 +103,7 @@ class ABComparisonEngine:
             "metrics_count": len(comp.metrics_a) + len(comp.metrics_b),
         }
 
-    def calculate_winner(
-        self, comparison_id: str, metric_name: str, higher_is_better: bool = True
-    ) -> dict[str, Any]:
+    def calculate_winner(self, comparison_id: str, metric_name: str, higher_is_better: bool = True) -> dict[str, Any]:
         comp = self.comparisons.get(comparison_id)
         if not comp:
             return {"error": "Comparison not found"}
@@ -128,15 +130,12 @@ class ABComparisonEngine:
 class ABComparator:
     """Compares A/B test metrics."""
 
-    def compare(
-        self, a_data: dict[str, float], b_data: dict[str, float]
-    ) -> ABComparisonResult:
+    def compare(self, a_data: dict[str, float], b_data: dict[str, float]) -> ABComparisonResult:
         common = sorted(set(a_data.keys()) & set(b_data.keys()))
         diffs = {
             k: float(b_data[k]) - float(a_data[k])
             for k in common
-            if isinstance(a_data[k], (int, float))
-            and isinstance(b_data[k], (int, float))
+            if isinstance(a_data[k], (int, float)) and isinstance(b_data[k], (int, float))
         }
         return ABComparisonResult(metrics_compared=len(common), differences=diffs)
 
@@ -147,9 +146,7 @@ class ABComparator:
         alpha: float = 0.05,
     ) -> ABSignificanceResult:
         if not control_values or not treatment_values:
-            return ABSignificanceResult(
-                p_value=1.0, is_significant=False, effect_size=0.0
-            )
+            return ABSignificanceResult(p_value=1.0, is_significant=False, effect_size=0.0)
 
         # Phase 16: Try Rust-accelerated t-test calculation
         if _RUST_AVAILABLE and hasattr(rust_core, "calculate_ttest_rust"):
@@ -166,6 +163,4 @@ class ABComparator:
         mean_b = sum(treatment_values) / len(treatment_values)
         effect = mean_b - mean_a
         p_value = 0.01 if abs(effect) >= 1.0 else 0.5
-        return ABSignificanceResult(
-            p_value=p_value, is_significant=p_value < alpha, effect_size=effect
-        )
+        return ABSignificanceResult(p_value=p_value, is_significant=p_value < alpha, effect_size=effect)

@@ -13,16 +13,20 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class FractalKnowledgeOrchestrator:
     """
     FractalKnowledgeOrchestrator recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("FractalKnowledgeOrchestrator initialized (Placeholder).")
@@ -33,6 +37,5 @@ class FractalKnowledgeOrchestrator:
         return {
             "topic": topic,
             "unified_wisdom": f"Fractal synthesis of {topic} from {len(agents)} experts.",
-            "confidence": 0.95
+            "confidence": 0.95,
         }
-

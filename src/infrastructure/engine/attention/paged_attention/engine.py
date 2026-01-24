@@ -1,10 +1,30 @@
-# SPDX-License-Identifier: Apache-2.0
-import numpy as np
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Engine.py module.
+"""
+
 from typing import Dict, List
-from .enums import KVCacheDtype
+
+import numpy as np
+
 from .config import AttentionConfig
-from .storage import BlockTable, SlotMapping, PagedKVCache
+from .enums import KVCacheDtype
 from .ops import PagedAttentionOps
+from .storage import BlockTable, PagedKVCache, SlotMapping
+
 
 class PagedAttentionEngine:
     def __init__(self, config: AttentionConfig, num_blocks: int = 1024):
@@ -16,9 +36,11 @@ class PagedAttentionEngine:
         self._seq_positions: Dict[int, int] = {}
 
     def allocate_sequence(self, seq_id: int, initial_len: int = 0) -> None:
-        if seq_id in self.block_table.block_tables: return
+        if seq_id in self.block_table.block_tables:
+            return
         nb = (initial_len + self.config.block_size - 1) // self.config.block_size
-        for _ in range(max(1, nb)): self.block_table.allocate_block(seq_id)
+        for _ in range(max(1, nb)):
+            self.block_table.allocate_block(seq_id)
         self._seq_positions[seq_id] = initial_len
 
     def append_kv(self, seq_id: int, key: np.ndarray, value: np.ndarray) -> None:
@@ -27,7 +49,8 @@ class PagedAttentionEngine:
         rb = (cp + nt + self.config.block_size - 1) // self.config.block_size
         cb = self.block_table.num_allocated_blocks(seq_id)
         while cb < rb:
-            self.block_table.allocate_block(seq_id); cb += 1
+            self.block_table.allocate_block(seq_id)
+            cb += 1
         bt = self.block_table.get_block_table(seq_id)
         slots = np.zeros(nt, dtype=np.int64)
         for i in range(nt):
@@ -43,9 +66,11 @@ class PagedAttentionEngine:
         bt = np.full((len(seq_ids), mb), -1, dtype=np.int32)
         for i, sid in enumerate(seq_ids):
             tbl = self.block_table.get_block_table(sid)
-            for j, b in enumerate(tbl[:mb]): bt[i, j] = b
-        return PagedAttentionOps.paged_attention_v2(query, self.kv_cache, bt, sl, self.config) if use_v2 else \
-               PagedAttentionOps.paged_attention_v1(query, self.kv_cache, bt, sl, self.config)
+            for j, b in enumerate(tbl[:mb]):
+                bt[i, j] = b
+        if use_v2:
+            return PagedAttentionOps.paged_attention_v2(query, self.kv_cache, bt, sl, self.config)
+        return PagedAttentionOps.paged_attention_v1(query, self.kv_cache, bt, sl, self.config)
 
     def free_sequence(self, seq_id: int) -> None:
         self.block_table.free_sequence(seq_id)
@@ -59,6 +84,18 @@ class PagedAttentionEngine:
             "kv_cache_memory_mb": self.kv_cache.get_memory_usage() / (1024 * 1024),
         }
 
-def create_attention_engine(head_size: int = 64, num_heads: int = 32, num_kv_heads: int = 8, block_size: int = 16, num_blocks: int = 1024) -> PagedAttentionEngine:
-    config = AttentionConfig(head_size=head_size, num_heads=num_heads, num_kv_heads=num_kv_heads, block_size=block_size)
+
+def create_attention_engine(
+    head_size: int = 64,
+    num_heads: int = 32,
+    num_kv_heads: int = 8,
+    block_size: int = 16,
+    num_blocks: int = 1024,
+) -> PagedAttentionEngine:
+    config = AttentionConfig(
+        head_size=head_size,
+        num_heads=num_heads,
+        num_kv_heads=num_kv_heads,
+        block_size=block_size
+    )
     return PagedAttentionEngine(config, num_blocks)

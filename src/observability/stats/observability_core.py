@@ -1,18 +1,45 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Observability core logic.
 (Facade for src.core.base.common.telemetry_core)
 """
 
-from src.core.base.common.telemetry_core import (
-    TelemetryCore as ObservabilityCore,
-    MetricType,
-    Metric,
-)
+import contextlib
+import json
+import logging
+import math
+import zlib
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
+
+from src.core.base.common.telemetry_core import Metric, MetricType
+
+# Try to import rust_core
+try:
+    import rust_core as rc
+
+    HAS_RUST = True
+except ImportError:
+    rc = None
+    HAS_RUST = False
 
 # Additional types specific to Observability tier
-from typing import Any, Dict, List, Optional, Union, Callable
-from enum import Enum
-from dataclasses import dataclass, field
+
 
 class AlertSeverity(Enum):
     CRITICAL = 5
@@ -20,6 +47,7 @@ class AlertSeverity(Enum):
     MEDIUM = 3
     LOW = 2
     INFO = 1
+
 
 @dataclass
 class Alert:
@@ -31,6 +59,7 @@ class Alert:
     message: str
     timestamp: str
 
+
 @dataclass
 class Threshold:
     metric_name: str
@@ -38,19 +67,6 @@ class Threshold:
     max_value: float | None = None
     severity: AlertSeverity | None = None
     message: str = ""
-
-@dataclass
-class RollupConfig:
-    metric_name: str
-    interval: str
-    aggregation: str
-
-    operator: str = ""  # For backwards compatibility
-    value: float = 0.0  # For backwards compatibility
-
-    def __post_init__(self) -> None:
-        if self.severity is None:
-            self.severity = AlertSeverity.MEDIUM
 
 
 @dataclass
@@ -295,9 +311,7 @@ class StatsCore:
     """Core logic for statistics processing, separated from the Agent shell."""
 
     @staticmethod
-    def detect_anomaly(
-        history: list[Metric], value: float, threshold_std: float = 2.0
-    ) -> tuple[bool, float]:
+    def detect_anomaly(history: list[Metric], value: float, threshold_std: float = 2.0) -> tuple[bool, float]:
         """Detect if a value is anomalous using standard deviation."""
         if len(history) < 2:
             return False, 0.0
@@ -336,12 +350,7 @@ class StatsCore:
         """Compress metric history."""
         if not metrics:
             return b""
-        data = json.dumps(
-            [
-                {"value": m.value, "timestamp": m.timestamp, "tags": m.tags}
-                for m in metrics
-            ]
-        )
+        data = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])
         return zlib.compress(data.encode("utf-8"))
 
     @staticmethod
@@ -366,9 +375,7 @@ class StatsCore:
         plt.show()
 
     @staticmethod
-    def compare_snapshots(
-        s1: MetricSnapshot, s2: MetricSnapshot
-    ) -> dict[str, dict[str, float | int]]:
+    def compare_snapshots(s1: MetricSnapshot, s2: MetricSnapshot) -> dict[str, dict[str, float | int]]:
         """Compare two snapshots."""
         comparison: dict[str, dict[str, float | int]] = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
@@ -385,9 +392,7 @@ class StatsCore:
         return comparison
 
     @staticmethod
-    def apply_retention(
-        metrics_dict: dict[str, list[Metric]], policies: dict[str, RetentionPolicy]
-    ) -> int:
+    def apply_retention(metrics_dict: dict[str, list[Metric]], policies: dict[str, RetentionPolicy]) -> int:
         """Apply retention policies to metrics."""
         removed = 0
         now = datetime.now()
@@ -400,9 +405,7 @@ class StatsCore:
             if policy.max_age_days > 0:
                 cutoff = now - timedelta(days=policy.max_age_days)
                 orig = len(metrics)
-                metrics_dict[key] = [
-                    m for m in metrics if datetime.fromisoformat(m.timestamp) > cutoff
-                ]
+                metrics_dict[key] = [m for m in metrics if datetime.fromisoformat(m.timestamp) > cutoff]
                 removed += orig - len(metrics_dict[key])
 
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
@@ -417,9 +420,7 @@ class StatsNamespace:
     def __init__(self, name: str) -> None:
         self.name = name
         self.metrics: dict[str, list[Metric]] = {}
-        self.metric_values: dict[
-            str, float
-        ] = {}  # Direct metric values for set_metric/get_metric
+        self.metric_values: dict[str, float] = {}  # Direct metric values for set_metric/get_metric
 
     def add_metric(self, metric: Metric) -> None:
         """Add a metric to namespace."""

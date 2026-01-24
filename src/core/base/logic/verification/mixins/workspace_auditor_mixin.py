@@ -1,18 +1,24 @@
+
+"""
+Workspace auditor mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import ast
-import re
-import logging
 import contextlib
+import logging
+import re
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Dict, List
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
 
 class WorkspaceAuditorMixin:
     """Methods for auditing the workspace for tech debt with Rust acceleration."""
@@ -23,13 +29,13 @@ class WorkspaceAuditorMixin:
         Offloads regex-heavy scanning to Rust if available.
         """
         results = {
-            "bare_excepts": [],           # (file, line)
-            "hardcoded_paths": [],        # (file, line, path)
-            "todos": [],                  # (file, task)
-            "print_statements": [],       # [files]
-            "undocumented_classes": [],   # (file, class_name, line)
-            "stubs": [],                   # [files]
-            "large_files": [],            # (file, size)
+            "bare_excepts": [],  # (file, line)
+            "hardcoded_paths": [],  # (file, line, path)
+            "todos": [],  # (file, task)
+            "print_statements": [],  # [files]
+            "undocumented_classes": [],  # (file, class_name, line)
+            "stubs": [],  # [files]
+            "large_files": [],  # (file, size)
         }
 
         root_path = Path(root_dir)
@@ -41,14 +47,12 @@ class WorkspaceAuditorMixin:
             try:
                 # Patterns to detect via Rust regex engine
                 dangerous = [
-                    (r"['""]C:\\[a-zA-Z0-9]", "Hardcoded Windows path"),
-                    (r"['""]/home/|['""]/Users/", "Hardcoded Nix path"),
+                    (r"['" "]C:\\[a-zA-Z0-9]", "Hardcoded Windows path"),
+                    (r"['" "]/home/|['" "]/Users/", "Hardcoded Nix path"),
                     (r"^\s*print\(", "Print statement"),
                 ]
                 rust_findings = rust_core.scan_workspace_quality_rust(
-                    str(root_dir),
-                    [".git", "__pycache__", "rust_core", "venv", ".venv", "target"],
-                    dangerous
+                    str(root_dir), [".git", "__pycache__", "rust_core", "venv", ".venv", "target"], dangerous
                 )
 
                 for file_path, findings in rust_findings.items():
@@ -101,9 +105,7 @@ class WorkspaceAuditorMixin:
 
                         if isinstance(node, ast.ClassDef):
                             if not ast.get_docstring(node):
-                                results["undocumented_classes"].append(
-                                    (str(file_path), node.name, node.lineno)
-                                )
+                                results["undocumented_classes"].append((str(file_path), node.name, node.lineno))
 
                     if file_path.name != "__init__.py" and self._check_is_stub(tree):
                         results["stubs"].append(str(file_path))
@@ -118,6 +120,7 @@ class WorkspaceAuditorMixin:
 
     def _check_is_stub(self, tree: ast.AST) -> bool:
         from .stub_detector_mixin import StubDetectorMixin
+
         has_defs = False
         is_stub = True
         for node in tree.body:

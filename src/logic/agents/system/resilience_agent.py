@@ -12,17 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Resilience agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 
 __version__ = VERSION
 
@@ -52,9 +59,7 @@ class ResilienceAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}
-                self.recorder.record_interaction(
-                    "resilience", "swarm_health", event_type, str(details), meta=meta
-                )
+                self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)
             except Exception as e:
                 logging.error(f"ResilienceManager: Recording failed: {e}")
 
@@ -63,13 +68,9 @@ class ResilienceAgent(BaseAgent):
         """
         Migrates high-priority agent tasks from a failing node to a healthy one.
         """
-        logging.warning(
-            f"ResilienceManager: Triggering failover from {source_node} to {target_node}"
-        )
+        logging.warning(f"ResilienceManager: Triggering failover from {source_node} to {target_node}")
         # Simulated failover logic
-        self._record(
-            "failover", {"from": source_node, "to": target_node, "status": "success"}
-        )
+        self._record("failover", {"from": source_node, "to": target_node, "status": "success"})
         return True
 
     @as_tool

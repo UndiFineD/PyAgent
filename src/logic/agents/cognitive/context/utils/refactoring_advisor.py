@@ -13,15 +13,20 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_context.py"""
+"""Refactoring advice engine for Cognitive agents.
+
+This module analyzes agent contexts to identify potential refactoring
+opportunities and suggestions, leveraging Rust acceleration when available.
+"""
 
 from __future__ import annotations
+import re
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.refactoring_suggestion import (
     RefactoringSuggestion,
 )
-from typing import Any
-import re
 
 try:
     from rust_core import apply_patterns_rust
@@ -38,11 +43,12 @@ class RefactoringAdvisor:
     Analyzes context to suggest code refactoring opportunities.
 
     Example:
-        >>> advisor=RefactoringAdvisor()
-        >>> suggestions=advisor.analyze(contexts)
+        >>> advisor = RefactoringAdvisor()
+        >>> suggestions = advisor.analyze(contexts)
     """
 
     def __init__(self) -> None:
+        """Initialize refactoring advisor."""
         self.patterns: dict[str, dict[str, str]] = {}
 
     def add_pattern(self, name: str, pattern: str, description: str) -> None:

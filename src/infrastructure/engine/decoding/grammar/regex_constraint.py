@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -8,17 +22,11 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import (
-    Callable,
-    List,
-    Optional,
-    Set,
-)
+from typing import Callable, List, Optional, Set
 
 import numpy as np
 
 from .base import StructuredOutputGrammar
-
 
 try:
     import rust_core as rc
@@ -72,7 +80,7 @@ class RegexGrammar(StructuredOutputGrammar):
                     self._token_to_chars.append(list(s.encode("utf-8")))
 
                 self._has_fsm = True
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 self._has_fsm = False
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
@@ -125,7 +133,7 @@ class RegexGrammar(StructuredOutputGrammar):
                 if self._regex.match(text[:i]):
                     return True
             return not text
-        except Exception: # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
@@ -184,11 +192,9 @@ class RegexGrammar(StructuredOutputGrammar):
             try:
                 # Use Rust to calculate bitmask for current state across entire vocab
                 # pylint: disable=no-member
-                mask = rc.fill_token_bitmask_rust(
-                    self._fsm_state, self._transitions, self._token_to_chars
-                )
+                mask = rc.fill_token_bitmask_rust(self._fsm_state, self._transitions, self._token_to_chars)
                 return {i for i, allowed in enumerate(mask) if allowed}
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         valid: Set[int] = set()

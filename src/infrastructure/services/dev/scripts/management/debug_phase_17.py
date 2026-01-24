@@ -12,14 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Debug phase 17.py module.
+"""
+
 # Add src to path
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-import sys
 import os
+import sys
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 from src.logic.agents.intelligence.web_agent import WebAgent
 
@@ -35,9 +41,7 @@ def test_phase_17() -> None:
     fleet = FleetManager(workspace)
 
     print("\n--- Phase 17: WebAgent (Simulation) ---")
-    web_agent = WebAgent(
-        str(Path(workspace) / "src\logic\agents\intelligence\web_agent.py")
-    )
+    web_agent = WebAgent(str(Path(workspace) / "src\\logic\agents\\intelligence\\web_agent.py"))
     search_results = web_agent.search_web("PyAgent GitHub")
     print(f"Search Results: {search_results}")
 

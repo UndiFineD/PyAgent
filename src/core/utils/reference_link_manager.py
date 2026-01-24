@@ -16,8 +16,9 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
+
+from src.core.base.common.types.linked_reference import LinkedReference
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types import linked_reference
 
 __version__ = VERSION
 
@@ -40,9 +41,7 @@ class ReferenceLinkManager:
         """Initialize the reference link manager."""
         self.references: dict[str, list[LinkedReference]] = {}
 
-    def add_commit_reference(
-        self, entry_id: str, commit_sha: str, url: str = "", title: str = ""
-    ) -> LinkedReference:
+    def add_commit_reference(self, entry_id: str, commit_sha: str, url: str = "", title: str = "") -> LinkedReference:
         """Add a commit reference to an entry.
 
         Args:
@@ -54,17 +53,13 @@ class ReferenceLinkManager:
         Returns:
             The created LinkedReference.
         """
-        ref = LinkedReference(
-            ref_type="commit", ref_id=commit_sha[:7], url=url, title=title
-        )
+        ref = LinkedReference(ref_type="commit", ref_id=commit_sha[:7], url=url, title=title)
         if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
         return ref
 
-    def add_issue_reference(
-        self, entry_id: str, issue_number: str, url: str = "", title: str = ""
-    ) -> LinkedReference:
+    def add_issue_reference(self, entry_id: str, issue_number: str, url: str = "", title: str = "") -> LinkedReference:
         """Add an issue reference to an entry.
 
         Args:
@@ -76,9 +71,7 @@ class ReferenceLinkManager:
         Returns:
             The created LinkedReference.
         """
-        ref = LinkedReference(
-            ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title
-        )
+        ref = LinkedReference(ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title)
         if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
@@ -96,8 +89,4 @@ class ReferenceLinkManager:
         refs = self.references.get(entry_id, [])
         if not refs:
             return ""
-        return (
-            " ("
-            + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs)
-            + ")"
-        )
+        return " (" + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs) + ")"

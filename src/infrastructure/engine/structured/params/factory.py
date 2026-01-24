@@ -1,7 +1,27 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Factory.py module.
+"""
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 from typing import Any, Dict, List, Optional
-from .enums import StructuredOutputType
+
 from .config import StructuredOutputConfig
+from .enums import StructuredOutputType
+
 
 def create_json_constraint(
     schema: Optional[Dict[str, Any]] = None,
@@ -23,6 +43,7 @@ def create_json_constraint(
         json_schema=schema,
     )
 
+
 def create_regex_constraint(
     pattern: str,
     flags: int = 0,
@@ -33,6 +54,7 @@ def create_regex_constraint(
         regex=pattern,
     )
 
+
 def create_choice_constraint(
     choices: List[str],
 ) -> StructuredOutputConfig:
@@ -41,6 +63,7 @@ def create_choice_constraint(
         output_type=StructuredOutputType.CHOICE,
         choices=choices,
     )
+
 
 def combine_constraints(
     *configs: StructuredOutputConfig,

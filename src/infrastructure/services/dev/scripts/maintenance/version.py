@@ -11,17 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Version.py module.
+"""
+
 # PyAgent Versioning Gatekeeper
 # This file serves as the source of truth for the project's current maturity level.
 
 from __future__ import annotations
+
 from typing import Any
 
 VERSION = "2.1.8-stable"
 EVOLUTION_PHASE = 119
-STABILITY_SCORE = (
-    1.0  # Phase 108: Multi-Agent Logic Harvesting and Rust-Readiness verified
-)
+STABILITY_SCORE = 1.0  # Phase 108: Multi-Agent Logic Harvesting and Rust-Readiness verified
 
 
 def is_gate_open(required_phase: int) -> bool:

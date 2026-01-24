@@ -1,8 +1,28 @@
-from enum import Enum
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Config.py module.
+"""
+
 from dataclasses import dataclass
+from enum import Enum
+
 
 class QuantScheme(Enum):
     """Quantization scheme types."""
+
     INT4 = "int4"
     INT8 = "int8"
     FP8 = "fp8"
@@ -10,16 +30,20 @@ class QuantScheme(Enum):
     AWQ = "awq"  # Activation-aware Weight Quantization
     GPTQ = "gptq"  # GPTQ quantization
 
+
 class QuantStrategy(Enum):
     """Quantization granularity strategy."""
+
     TENSOR = "tensor"  # Single scale per tensor
     CHANNEL = "channel"  # Per output channel
     GROUP = "group"  # Per group of weights
     BLOCK = "block"  # Block-wise quantization
 
+
 @dataclass
 class QuantConfig:
     """Configuration for quantization."""
+
     bits: int = 8
     scheme: QuantScheme = QuantScheme.INT8
     strategy: QuantStrategy = QuantStrategy.GROUP

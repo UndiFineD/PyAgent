@@ -11,20 +11,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Code quality agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
-import subprocess
-import re
+
 import json
+import os
+import re
+import subprocess
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class CodeQualityAgent(BaseAgent):
+class CodeQualityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Automated Code Quality Guard: Performs linting, formatting checks,
     and complexity analysis for Python, Rust, and JavaScript.
@@ -56,9 +62,7 @@ class CodeQualityAgent(BaseAgent):
 
         report = {
             "file": file_path,
-            "timestamp": os.path.getmtime(file_path)
-            if os.path.exists(file_path)
-            else 0,
+            "timestamp": os.path.getmtime(file_path) if os.path.exists(file_path) else 0,
             "issues": issues,
             "score": max(0, 100 - (len(issues) * 5)),
         }
@@ -82,7 +86,7 @@ class CodeQualityAgent(BaseAgent):
                                 "message": f"Line too long ({len(line.rstrip())} > 120)",
                             }
                         )
-        except Exception as e:
+        except (IOError, EnvironmentError) as e:
             issues.append(
                 {
                     "type": "Error",
@@ -101,9 +105,7 @@ class CodeQualityAgent(BaseAgent):
 
             # Intelligence: Record shell interaction (Phase 108)
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_interaction(
-                    "Shell", "Flake8", f"Linting {path}", str(result.stdout)[:500]
-                )
+                self.recorder.record_interaction("Shell", "Flake8", f"Linting {path}", str(result.stdout)[:500])
 
             if result.stdout:
                 # Flake8 doesn't natively support JSON without plugins,
@@ -120,19 +122,22 @@ class CodeQualityAgent(BaseAgent):
                         )
         except FileNotFoundError:
             # Fallback to internal checks if flake8 is missing
-            with open(path, encoding="utf-8") as f:
-                for i, line in enumerate(f, 1):
-                    if len(line) > 120:
-                        issues.append(
-                            {
-                                "line": i,
-                                "type": "Style",
-                                "message": "Line too long (>120 chars)",
-                            }
-                        )
+            try:
+                with open(path, encoding="utf-8") as f:
+                    for i, line in enumerate(f, 1):
+                        if len(line) > 120:
+                            issues.append(
+                                {
+                                    "line": i,
+                                    "type": "Style",
+                                    "message": "Line too long (>120 chars)",
+                                }
+                            )
+            except (IOError, EnvironmentError):
+                pass
         return issues
 
-    def _check_rust_quality(self, path: str) -> list[dict[str, Any]]:
+    def _check_rust_quality(self, _path: str) -> list[dict[str, Any]]:
         """Run cargo clippy for Rust quality analysis."""
         issues = []
         try:
@@ -162,12 +167,8 @@ class CodeQualityAgent(BaseAgent):
                         if msg.get("level") in ["warning", "error"]:
                             issues.append(
                                 {
-                                    "line": msg.get("spans", [{}])[0].get(
-                                        "line_start", 0
-                                    ),
-                                    "column": msg.get("spans", [{}])[0].get(
-                                        "column_start", 0
-                                    ),
+                                    "line": msg.get("spans", [{}])[0].get("line_start", 0),
+                                    "column": msg.get("spans", [{}])[0].get("column_start", 0),
                                     "message": msg.get("message", "") + " (Clippy)",
                                     "type": "Suggestion",
                                 }
@@ -175,7 +176,7 @@ class CodeQualityAgent(BaseAgent):
                 except json.JSONDecodeError:
                     pass
 
-        except Exception:
+        except (subprocess.SubprocessError, RuntimeError):
             pass
 
         return issues
@@ -183,17 +184,19 @@ class CodeQualityAgent(BaseAgent):
     def _check_js_quality(self, path: str) -> list[dict[str, Any]]:
         """Run eslint for JavaScript/TypeScript quality analysis."""
         try:
-            subprocess.run(
-                ["npx", "eslint", path, "--format", "json"], capture_output=True
-            )
+            subprocess.run(["npx", "eslint", path, "--format", "json"], capture_output=True, check=False)
             return []
         except FileNotFoundError:
-            return [
-                {"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}
-            ]
+            return [{"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}]
 
     def get_aggregate_score(self) -> float:
         """Returns the average quality score across all analyzed files."""
         if not self.quality_reports:
             return 100.0
         return sum(r["score"] for r in self.quality_reports) / len(self.quality_reports)
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Analyze code quality for a given prompt."""
+        path = target_file if target_file else prompt
+        report = self.analyze_file_quality(path)
+        return json.dumps(report, indent=2)

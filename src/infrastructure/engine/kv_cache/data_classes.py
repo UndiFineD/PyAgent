@@ -1,12 +1,33 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Data classes.py module.
+"""
+
 # SPDX-License-Identifier: Apache-2.0
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Sequence, Tuple
 import time
-from .enums import CacheGroupType, AllocationStrategy, EvictionPolicy
+from dataclasses import dataclass, field
+from typing import List, Optional, Sequence, Tuple
+
+from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy
+
 
 @dataclass(frozen=True)
 class BlockHash:
     """Immutable block hash for prefix caching."""
+
     hash_bytes: bytes
 
     def __hash__(self) -> int:
@@ -20,12 +41,13 @@ class BlockHash:
     @property
     def as_int(self) -> int:
         """Convert to integer for legacy compatibility."""
-        return int.from_bytes(self.hash_bytes[:8], byteorder='big')
+        return int.from_bytes(self.hash_bytes[:8], byteorder="big")
 
 
 @dataclass(frozen=True)
 class BlockHashWithGroupId:
     """Block hash combined with group ID for multi-group caching."""
+
     block_hash: BlockHash
     group_id: int
 
@@ -36,14 +58,15 @@ class BlockHashWithGroupId:
 @dataclass
 class KVCacheBlock:
     """KV cache block metadata."""
+
     block_id: int
     ref_cnt: int = 0
     block_hash: Optional[BlockHashWithGroupId] = None
     is_null: bool = False
 
     # Doubly-linked list pointers for free block queue
-    prev_free_block: Optional['KVCacheBlock'] = None
-    next_free_block: Optional['KVCacheBlock'] = None
+    prev_free_block: Optional["KVCacheBlock"] = None
+    next_free_block: Optional["KVCacheBlock"] = None
 
     # Timing for eviction decisions
     last_access_time: float = field(default_factory=time.time)
@@ -65,29 +88,24 @@ class KVCacheBlock:
 @dataclass
 class KVCacheBlocks:
     """Allocation result for multi-group KV cache."""
+
     blocks: Tuple[Sequence[KVCacheBlock], ...]
 
-    def __add__(self, other: 'KVCacheBlocks') -> 'KVCacheBlocks':
+    def __add__(self, other: "KVCacheBlocks") -> "KVCacheBlocks":
         """Combine two KVCacheBlocks instances."""
-        combined = tuple(
-            list(b1) + list(b2)
-            for b1, b2 in zip(self.blocks, other.blocks)
-        )
+        combined = tuple(list(b1) + list(b2) for b1, b2 in zip(self.blocks, other.blocks))
         return KVCacheBlocks(combined)
 
     def get_block_ids(self) -> Tuple[List[int], ...]:
         """Get block IDs for all groups."""
-        return tuple(
-            [block.block_id for block in group]
-            for group in self.blocks
-        )
+        return tuple([block.block_id for block in group] for group in self.blocks)
 
     def is_empty(self) -> bool:
         """Check if all groups are empty."""
         return all(not group for group in self.blocks)
 
     @classmethod
-    def empty(cls, num_groups: int) -> 'KVCacheBlocks':
+    def empty(cls, num_groups: int) -> "KVCacheBlocks":
         """Create empty KVCacheBlocks."""
         return cls(tuple(() for _ in range(num_groups)))
 
@@ -95,6 +113,7 @@ class KVCacheBlocks:
 @dataclass
 class CacheGroupSpec:
     """Specification for a KV cache group."""
+
     group_id: int
     group_type: CacheGroupType
     block_size: int
@@ -118,6 +137,7 @@ class CacheGroupSpec:
 @dataclass
 class CacheConfig:
     """Configuration for KV cache."""
+
     num_blocks: int
     block_size: int
     groups: List[CacheGroupSpec]

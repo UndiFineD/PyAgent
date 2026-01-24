@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -19,38 +33,27 @@ Beyond vLLM:
 
 from __future__ import annotations
 
-import asyncio
 import logging
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Protocol,
-    Sequence,
-    Tuple,
-    TypeVar,
-    Union,
-)
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
 # Try importing optional dependencies
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import torch
-    import torch.distributed as dist
+    import torch  # noqa: F401
+    import torch.distributed as dist  # noqa: F401
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -58,6 +61,7 @@ except ImportError:
 
 class BatchPhase(Enum):
     """Phase of batch processing."""
+
     PREFILL = auto()
     DECODE = auto()
     MIXED = auto()
@@ -65,10 +69,11 @@ class BatchPhase(Enum):
 
 class AllReduceStrategy(Enum):
     """Strategy for distributed reduction."""
-    RING = auto()        # Ring all-reduce
-    TREE = auto()        # Tree-based reduction
-    RECURSIVE = auto()   # Recursive halving
-    NCCL = auto()        # Use NCCL primitives
+
+    RING = auto()  # Ring all-reduce
+    TREE = auto()  # Tree-based reduction
+    RECURSIVE = auto()  # Recursive halving
+    NCCL = auto()  # Use NCCL primitives
 
 
 @dataclass
@@ -77,6 +82,7 @@ class BatchRequest:
 
     Tracks per-request state within a batch.
     """
+
     request_id: str
     tokens: List[int]
     seq_len: int
@@ -101,6 +107,7 @@ class BatchMetadata:
 
     Inspired by vLLM's batch metadata structures.
     """
+
     batch_id: str
     phase: BatchPhase
 
@@ -139,6 +146,7 @@ class DCPPlanConfig:
 
     Controls how batches are planned and executed.
     """
+
     # Batch sizing
     max_batch_size: int = 256
     max_tokens_per_batch: int = 8192
@@ -169,6 +177,7 @@ class ExecutionPlan:
 
     Produced by plan() method, consumed by run() method.
     """
+
     batch_id: str
     phase: BatchPhase
 
@@ -293,11 +302,13 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         remote_transfers = []
         for req in sorted_requests:
             if req.remote_engine_id:
-                remote_transfers.append({
-                    "request_id": req.request_id,
-                    "remote_engine_id": req.remote_engine_id,
-                    "block_ids": block_allocation[req.request_id],
-                })
+                remote_transfers.append(
+                    {
+                        "request_id": req.request_id,
+                        "remote_engine_id": req.remote_engine_id,
+                        "block_ids": block_allocation[req.request_id],
+                    }
+                )
 
         plan = ExecutionPlan(
             batch_id=batch_id,
@@ -324,9 +335,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         position_ids = input_tensors.get("position_ids")
 
         # Build attention mask
-        total_tokens = sum(
-            end - start for start, end in plan.token_positions.values()
-        )
+        total_tokens = sum(end - start for start, end in plan.token_positions.values())
 
         # Run attention (mock if no function provided)
         if self._attention_fn:
@@ -412,9 +421,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         request_order = [r.request_id for r in requests]
 
         # Single token per request for decode
-        token_positions = {
-            r.request_id: (i, i + 1) for i, r in enumerate(requests)
-        }
+        token_positions = {r.request_id: (i, i + 1) for i, r in enumerate(requests)}
 
         # Use remote blocks if available, else local
         block_allocation = {}
@@ -518,9 +525,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         # Combine with log-sum-exp
         stacked = torch.stack(gathered_lse)
         max_lse = torch.max(stacked, dim=0).values
-        combined = max_lse + torch.log(
-            torch.sum(torch.exp(stacked - max_lse), dim=0)
-        )
+        combined = max_lse + torch.log(torch.sum(torch.exp(stacked - max_lse), dim=0))
 
         output["lse"] = combined
         return output

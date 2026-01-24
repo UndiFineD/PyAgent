@@ -49,7 +49,8 @@ async def test_exact_hash_cache():
     await deduper.register_query("Hello", "t1")
     deduper.complete_query("t1", "Hi")
 
-    # Second registration for exact same string should return result directly (mocked in our logic to return result if cached)
+    # Second registration for exact same string should return result directly
+    # (mocked in our logic to return result if cached)
     res = await deduper.register_query("Hello", "t2")
     assert res == "Hi"
     print("[Phase 86] Deduplicator successfully served exact repeat from cache.")

@@ -15,9 +15,11 @@
 """Script for restoring standard typing and library imports that were masked."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -34,7 +36,8 @@ def fix_file(file_path: str) -> None:
         # Match common commented out standard imports with any number of # and spaces
 
         if re.search(
-            r"(from|import)\s+(typing|dataclasses|pathlib|enum|abc|json|logging|argparse|os|sys|time|datetime|functools|itertools|re|inspect|threading|collections)",
+            r"(from|import)\s+(typing|dataclasses|pathlib|enum|abc|json|logging|"
+            r"argparse|os|sys|time|datetime|functools|itertools|re|inspect|threading|collections)",
             line,
         ):
             if "#" in line:

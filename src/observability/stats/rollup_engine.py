@@ -1,23 +1,30 @@
 #!/usr/bin/env python3
+
+"""
+Rollup engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Rollup, query, and correlation analyzer engine.
 # Phase 16: Rust acceleration for aggregation and percentile calculations
 
 from __future__ import annotations
+
 import contextlib
 import logging
 import math
 from datetime import datetime
 from typing import Any
+
 from .metrics import AggregationType, Metric
+from .metrics_core import CorrelationCore, StatsRollupCore
 from .observability_core import RollupConfig
-from .metrics_core import StatsRollupCore, CorrelationCore
 
 logger = logging.getLogger(__name__)
 
 # Phase 16: Rust acceleration imports
 try:
     import rust_core
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -69,9 +76,7 @@ class StatsRollupCalculator:
         self.rollups[metric] = results
         return results
 
-    def calculate_rollup(
-        self, metrics: list[float], aggregation_type: AggregationType
-    ) -> float:
+    def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
         if not metrics:
             return 0.0
         if aggregation_type == AggregationType.SUM:
@@ -115,9 +120,7 @@ class StatsRollup:
         self.rollups[name] = []
         return config
 
-    def add_value(
-        self, metric_name: str, value: float, timestamp: datetime | None = None
-    ) -> None:
+    def add_value(self, metric_name: str, value: float, timestamp: datetime | None = None) -> None:
         ts = timestamp or datetime.now()
         if metric_name not in self._raw_data:
             self._raw_data[metric_name] = []
@@ -222,11 +225,7 @@ class StatsQueryEngine:
             if start is not None or end is not None:
                 start_v = float(start) if start is not None else float("-inf")
                 end_v = float(end) if end is not None else float("inf")
-                rows = [
-                    r
-                    for r in rows
-                    if start_v <= float(r.get("timestamp", 0.0)) <= end_v
-                ]
+                rows = [r for r in rows if start_v <= float(r.get("timestamp", 0.0)) <= end_v]
 
             if aggregation:
                 values: list[float] = []
@@ -268,9 +267,7 @@ class CorrelationAnalyzer:
     """Analyze correlations between metrics."""
 
     def __init__(self) -> None:
-        self.correlations: list[
-            Any
-        ] = []  # Use Any for MetricCorrelation to avoid circular import if needed
+        self.correlations: list[Any] = []  # Use Any for MetricCorrelation to avoid circular import if needed
         self._metric_history: dict[str, list[float]] = {}
         self.core = CorrelationCore()
 
@@ -297,9 +294,7 @@ class CorrelationAnalyzer:
             # Pearson correlation fallback
             mean_a = sum(values_a) / n
             mean_b = sum(values_b) / n
-            numerator = sum(
-                (values_a[i] - mean_a) * (values_b[i] - mean_b) for i in range(n)
-            )
+            numerator = sum((values_a[i] - mean_a) * (values_b[i] - mean_b) for i in range(n))
             denom_a = math.sqrt(sum((x - mean_a) ** 2 for x in values_a))
             denom_b = math.sqrt(sum((x - mean_b) ** 2 for x in values_b))
             if denom_a == 0 or denom_b == 0:
@@ -320,11 +315,13 @@ class CorrelationAnalyzer:
     def find_strong_correlations(self, threshold: float = 0.8) -> list[Any]:
         """Find strong correlations."""
         from types import SimpleNamespace
+
         keys = list(self._metric_history.keys())
 
         # Rust-accelerated O(N²) pairwise correlation
         with contextlib.suppress(ImportError, Exception):
             from rust_core import find_strong_correlations_rust
+
             metric_values = [self._metric_history[k] for k in keys]
             rust_results = find_strong_correlations_rust(metric_values, threshold)
 

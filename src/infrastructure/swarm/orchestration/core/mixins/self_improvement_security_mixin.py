@@ -17,8 +17,10 @@ Security analysis logic for SelfImprovementCore.
 """
 
 from __future__ import annotations
+
 import re
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 
 class SelfImprovementSecurityMixin:
     """Mixin for security-related analysis."""
@@ -34,13 +36,9 @@ class SelfImprovementSecurityMixin:
 
         if _RUST_ACCEL and rc is not None:
             try:
-                rust_findings = rc.analyze_security_patterns_rust(
-                    content, dangerous_patterns
-                )
+                rust_findings = rc.analyze_security_patterns_rust(content, dangerous_patterns)
                 for line_num, pattern, msg in rust_findings:
-                    if "SelfImprovementCore" in content and pattern in str(
-                        dangerous_patterns
-                    ):
+                    if "SelfImprovementCore" in content and pattern in str(dangerous_patterns):
                         continue
                     findings.append(
                         {
@@ -60,9 +58,7 @@ class SelfImprovementSecurityMixin:
                 if re.search(pattern, line):
                     if "# nosec" in line:
                         continue
-                    if "SelfImprovementCore" in content and pattern in str(
-                        dangerous_patterns
-                    ):
+                    if "SelfImprovementCore" in content and pattern in str(dangerous_patterns):
                         continue
 
                     findings.append(

@@ -15,9 +15,11 @@
 """Script for automatically injecting missing dataclass imports where decorators are used."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -32,10 +34,7 @@ def fix_dataclass_imports(root_dir: str) -> None:
                 with open(path, encoding="utf-8") as f:
                     content = f.read()
 
-                if (
-                    "@dataclass" in content
-                    and "from dataclasses import dataclass" not in content
-                ):
+                if "@dataclass" in content and "from dataclasses import dataclass" not in content:
                     print(f"Fixing {path}")
                     # Look for the commented out version with regex
 
@@ -52,9 +51,7 @@ def fix_dataclass_imports(root_dir: str) -> None:
                         inserted = False
                         for i, line in enumerate(lines):
                             if line.startswith("import ") or line.startswith("from "):
-                                lines.insert(
-                                    i, "from dataclasses import dataclass, field"
-                                )
+                                lines.insert(i, "from dataclasses import dataclass, field")
                                 inserted = True
                                 break
                         if not inserted:

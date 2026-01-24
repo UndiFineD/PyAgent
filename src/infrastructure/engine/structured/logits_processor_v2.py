@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 LogitsProcessorV2 - Enhanced logits processor interface.
 
@@ -14,35 +28,22 @@ Beyond vLLM innovations:
 - Processor hot-swapping
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Protocol,
-    Sequence,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
 import threading
-import time
-import weakref
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from enum import Enum, auto
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Type
 
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core
+    import rust_core  # noqa: F401
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -50,6 +51,7 @@ except ImportError:
 
 class MoveDirectionality(Enum):
     """Direction of request movement within batch."""
+
     UNIDIRECTIONAL = auto()  # One-way move: i1 -> i2
     SWAP = auto()  # Two-way swap: i1 <-> i2
 
@@ -57,6 +59,7 @@ class MoveDirectionality(Enum):
 @dataclass
 class SamplingParams:
     """Sampling parameters for a request."""
+
     temperature: float = 1.0
     top_p: float = 1.0
     top_k: int = -1
@@ -92,6 +95,7 @@ class BatchUpdate:
     within the persistent batch. Operations should be processed in order:
     removed, added, moved.
     """
+
     batch_size: int
     removed: Sequence[RemovedRequest]
     added: Sequence[AddedRequest]
@@ -130,12 +134,14 @@ class BatchUpdateBuilder:
         output_token_ids: Optional[List[int]] = None,
     ) -> "BatchUpdateBuilder":
         """Add a request to the batch."""
-        self._added.append((
-            index,
-            params,
-            prompt_token_ids,
-            output_token_ids or [],
-        ))
+        self._added.append(
+            (
+                index,
+                params,
+                prompt_token_ids,
+                output_token_ids or [],
+            )
+        )
         return self
 
     def remove_request(self, index: int) -> "BatchUpdateBuilder":
@@ -273,14 +279,11 @@ class MinPLogitsProcessor(LogitsProcessor):
         if batch_update is None:
             return
 
-        needs_update = False
-
         # Process added requests
         for index, params, _, _ in batch_update.added:
             min_p = params.min_p
             min_p_before = self.min_p_cpu[index]
             if min_p_before != min_p:
-                needs_update = True
                 self.min_p_cpu[index] = min_p
                 if min_p and not min_p_before:
                     self.min_p_count += 1
@@ -290,7 +293,6 @@ class MinPLogitsProcessor(LogitsProcessor):
         if self.min_p_count:
             # Process removed requests
             if batch_update.removed:
-                needs_update = True
                 for index in batch_update.removed:
                     if self.min_p_cpu[index]:
                         self.min_p_cpu[index] = 0.0
@@ -301,7 +303,6 @@ class MinPLogitsProcessor(LogitsProcessor):
                 min_p_a = self.min_p_cpu[from_idx]
                 min_p_b = self.min_p_cpu[to_idx]
                 if min_p_a != min_p_b:
-                    needs_update = True
                     self.min_p_cpu[to_idx] = min_p_a
                     if direction == MoveDirectionality.SWAP:
                         self.min_p_cpu[from_idx] = min_p_b
@@ -338,7 +339,7 @@ class MinPLogitsProcessor(LogitsProcessor):
 
         # Mask tokens below threshold
         mask = probs < thresholds
-        logits[mask] = float('-inf')
+        logits[mask] = float("-inf")
 
         return logits
 
@@ -479,9 +480,7 @@ class CompositeLogitsProcessor(LogitsProcessor):
     def is_argmax_invariant(self) -> bool:
         """Check if all processors are argmax invariant."""
         if self._argmax_invariant is None:
-            self._argmax_invariant = all(
-                p.is_argmax_invariant() for p in self.processors
-            )
+            self._argmax_invariant = all(p.is_argmax_invariant() for p in self.processors)
         return self._argmax_invariant
 
     def update_state(self, batch_update: Optional[BatchUpdate]) -> None:
@@ -578,16 +577,16 @@ class LogitsProcessorRegistry:
 
 
 __all__ = [
-    'MoveDirectionality',
-    'SamplingParams',
-    'RemovedRequest',
-    'AddedRequest',
-    'MovedRequest',
-    'BatchUpdate',
-    'BatchUpdateBuilder',
-    'LogitsProcessor',
-    'MinPLogitsProcessor',
-    'LogitBiasLogitsProcessor',
-    'CompositeLogitsProcessor',
-    'LogitsProcessorRegistry',
+    "MoveDirectionality",
+    "SamplingParams",
+    "RemovedRequest",
+    "AddedRequest",
+    "MovedRequest",
+    "BatchUpdate",
+    "BatchUpdateBuilder",
+    "LogitsProcessor",
+    "MinPLogitsProcessor",
+    "LogitBiasLogitsProcessor",
+    "CompositeLogitsProcessor",
+    "LogitsProcessorRegistry",
 ]

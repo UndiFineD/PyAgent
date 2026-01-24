@@ -18,16 +18,18 @@ Inspired by Open Interpreter and Openator.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
-import sys
-import json
-import shutil
-import platform
-import logging
+
 import asyncio
-from src.core.base.lifecycle.base_agent import BaseAgent
+import json
+import logging
+import os
+import platform
+import shutil
+import sys
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
@@ -68,7 +70,10 @@ class KernelAgent(BaseAgent):
         """Checks available disk space at the specified path."""
         try:
             total, used, free = await asyncio.to_thread(shutil.disk_usage, path)
-            return f"Disk Usage for {path}: {used // (2**30)}GB used / {free // (2**30)}GB free (Total: {total // (2**30)}GB)"
+            return (
+                f"Disk Usage for {path}: {used // (2**30)}GB used / "
+                f"{free // (2**30)}GB free (Total: {total // (2**30)}GB)"
+            )
         except Exception as e:
             return f"Error checking disk space: {e}"
 
@@ -80,9 +85,7 @@ class KernelAgent(BaseAgent):
         logging.warning(f"KernelAgent auditing shell command: {command}")
 
         # Security Audit (HITL Gate)
-        risk_level, warning = await asyncio.to_thread(
-            self.security_guard.audit_command, command
-        )
+        risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
         if risk_level == "HIGH" and not force:
             return (
                 f"BLOCKED: High-risk command detected.\n"
@@ -114,14 +117,10 @@ class KernelAgent(BaseAgent):
                 proc.kill()
                 await proc.wait()
                 if hasattr(self, "recorder") and self.recorder:
-                    self.recorder.record_lesson(
-                        "kernel_shell_timeout", {"command": command}
-                    )
+                    self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
                 return "Error: Command timed out after 30 seconds."
 
         except Exception as e:
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_lesson(
-                    "kernel_shell_error", {"command": command, "error": str(e)}
-                )
+                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
             return f"Error executing command: {e}"

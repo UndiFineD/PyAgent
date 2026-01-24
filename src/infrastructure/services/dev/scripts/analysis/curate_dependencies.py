@@ -18,6 +18,7 @@ Scans the workspace for imports and cross-references with requirements.txt.
 """
 
 from __future__ import annotations
+
 import re
 from pathlib import Path
 
@@ -56,10 +57,7 @@ def curate_dependencies() -> None:
                     if match:
                         module = match.group(1).lower()
                         # Ignore internal imports
-                        if (
-                            not (src_dir / module).exists()
-                            and not (src_dir / (module + ".py")).exists()
-                        ):
+                        if not (src_dir / module).exists() and not (src_dir / (module + ".py")).exists():
                             imported_modules.add(module)
         except Exception as e:
             print(f"Error reading {py_file}: {e}")
@@ -79,9 +77,7 @@ def curate_dependencies() -> None:
     req_modules = set()
     for rm in req_modules_raw:
         normalized = rm.replace("-", "_")
-        mapped = PACKAGE_TO_IMPORT_MAP.get(
-            rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)
-        ).lower()
+        mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
         req_modules.add(mapped)
 
     # 3. Intersection and delta
@@ -93,9 +89,7 @@ def curate_dependencies() -> None:
     for rm in req_modules_raw:
         normalized = rm.replace("-", "_")
 
-        mapped = PACKAGE_TO_IMPORT_MAP.get(
-            rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)
-        ).lower()
+        mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
         if mapped in unused_normalized:
             unused_raw.append(rm)
 

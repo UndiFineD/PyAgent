@@ -19,18 +19,19 @@ Inspired by multi-agent-generator and LangGraph.
 """
 
 from __future__ import annotations
-from pathlib import Path
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from src.core.base.lifecycle.base_agent import BaseAgent
+from pathlib import Path
+
 from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.version import EVOLUTION_PHASE
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import EVOLUTION_PHASE, VERSION
 from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 
 __version__ = VERSION
 
 
-class PatternOrchestrator(BaseAgent):
+class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
     """Orchestrates multi-agent teams using battle-tested coordination patterns.
     Phase 283: Implemented concrete orchestration with actual delegation calls.
     """
@@ -77,11 +78,12 @@ class PatternOrchestrator(BaseAgent):
         """Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""
         if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
-            self._state_data["active_track"] = (
-                self.active_track
-            )  # Phase 283 Persistence
+            self._state_data["active_track"] = self.active_track  # Phase 283 Persistence
             self._apply_vibe_persona()
-            return f"Vibe-Coding track set to {self.active_track}. Persona: {VIBE_CODING_2025_TRACKS[self.active_track]['persona'][:100]}..."
+            return (
+                f"Vibe-Coding track set to {self.active_track}. Persona: "
+                f"{VIBE_CODING_2025_TRACKS[self.active_track]['persona'][:100]}..."
+            )
         return f"Error: Track '{track_name}' not found. Available: {list(VIBE_CODING_2025_TRACKS.keys())}"
 
     @as_tool
@@ -95,7 +97,7 @@ class PatternOrchestrator(BaseAgent):
         )
 
     @as_tool
-    def orchestrate_supervisor(self, goal: str, specialists: list[str]) -> str:
+    async def orchestrate_supervisor(self, goal: str, specialists: list[str]) -> str:
         """Runs the Supervisor pattern (Phase 283): delegates sub-goals to specialist agents."""
         logging.info(f"ORCHESTRATOR: Supervisor mode for goal: {goal}")
 
@@ -108,18 +110,18 @@ class PatternOrchestrator(BaseAgent):
             logging.info(f"Supervisor: Delegating to {agent_type}")
             try:
                 # Recursive call (Phase 283)
-                result = delegator.delegate(
+                result = await delegator.delegate(
                     agent_type=agent_type,
-                    task=f"As Supervisor, I need you to address: {goal}",
+                    prompt=f"As Supervisor, I need you to address: {goal}",
                 )
                 results.append(f"[{agent_type}]: {result[:150]}...")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 results.append(f"[{agent_type}]: FAILED - {e}")
 
         return f"Supervisor results for '{goal}':\n\n" + "\n".join(results)
 
     @as_tool
-    def orchestrate_debate(self, topic: str, pro_agent: str, con_agent: str) -> str:
+    async def orchestrate_debate(self, topic: str, pro_agent: str, con_agent: str) -> str:
         """Runs the Debate pattern (Phase 283): agents argue iterations to reach consensus."""
         logging.info(f"ORCHESTRATOR: Debate mode for topic: {topic}")
 
@@ -129,19 +131,22 @@ class PatternOrchestrator(BaseAgent):
 
         # Iterative debate (Phase 283)
         logging.info(f"Debate: {pro_agent} vs {con_agent} on '{topic}'")
-        pro_arg = delegator.delegate(
+        pro_arg = await delegator.delegate(
             agent_type=pro_agent,
-            task=f"Provide a strong technical argument FOR: {topic}",
+            prompt=f"Provide a strong technical argument FOR: {topic}",
         )
-        con_arg = delegator.delegate(
+        con_arg = await delegator.delegate(
             agent_type=con_agent,
-            task=f"Provide a strong technical argument AGAINST: {topic}. Respond to: {pro_arg[:200]}",
+            prompt=f"Provide a strong technical argument AGAINST: {topic}. Respond to: {pro_arg[:200]}",
         )
 
         # Consensus
-        consensus = delegator.delegate(
+        consensus = await delegator.delegate(
             agent_type="ArchitectAgent",
-            task=f"Synthesize a final consensus for topic '{topic}' based on PRO ({pro_agent}): {pro_arg[:300]} and CON ({con_agent}): {con_arg[:300]}",
+            prompt=(
+                f"Synthesize a final consensus for topic '{topic}' based on "
+                f"PRO ({pro_agent}): {pro_arg[:300]} and CON ({con_agent}): {con_arg[:300]}"
+            ),
         )
 
         return (
@@ -154,6 +159,7 @@ class PatternOrchestrator(BaseAgent):
     @as_tool
     def orchestrate_consensus_voting(self, task: str, solutions: list[str]) -> str:
         """Runs weighted voting to choose the best implementation path."""
+        _ = solutions
         logging.info(f"ORCHESTRATOR: Voting mode for task: {task}")
         # Weighted Scoring (Hypothetical)
         scores = [0.85, 0.92, 0.78]  # Simulated confidence scores
@@ -177,10 +183,11 @@ class PatternOrchestrator(BaseAgent):
         return f"Final Pipeline Output: {current_data}"
 
     @as_tool
-    def orchestrate_mapreduce(self, file_path: str, chunk_size: int = 1000) -> str:
+    async def orchestrate_mapreduce(self, file_path: str, chunk_size: int = 1000) -> str:
         """Runs MapReduce (Phase 283): splits file, processes in parallel, merges results."""
-        from src.core.base.execution.agent_delegator import AgentDelegator
         import math
+
+        from src.core.base.execution.agent_delegator import AgentDelegator
 
         path = Path(file_path)
         if not path.exists():
@@ -197,18 +204,17 @@ class PatternOrchestrator(BaseAgent):
             # Map phase
 
             logging.info(f"MapReduce: Processing chunk {i + 1}/{num_chunks}")
-            shard_res = delegator.delegate(
+            shard_res = await delegator.delegate(
                 agent_type="CoderAgent",
-                task=f"Analyze this code shard for bugs: {chunk}",
+                prompt=f"Analyze this code shard for bugs: {chunk}",
             )
             shards.append(shard_res)
 
         # Reduce phase
         logging.info("MapReduce: Reducing results.")
-        summary = delegator.delegate(
+        summary = await delegator.delegate(
             agent_type="ArchitectAgent",
-            task=f"Merge these {len(shards)} analysis shards into a final report: "
-            + "\n---\n".join(shards)[:2000],
+            prompt=f"Merge these {len(shards)} analysis shards into a final report: " + "\n---\n".join(shards)[:2000],
         )
 
         return f"MapReduce Complete for {file_path}:\n\n{summary}"
@@ -220,14 +226,13 @@ class PatternOrchestrator(BaseAgent):
 
         return f"Technical report for task '{task}': Validated and processed via PatternOrchestrator logic."
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Improve content by routing through orchestration patterns."""
         return f"PatternOrchestrator ready to route: {prompt} (Target: {target_file})"
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs"
-    )
+    main = create_main_function(PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs")
     main()

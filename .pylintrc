@@ -1,0 +1,35 @@
+[MASTER]
+ignore=CVS
+ignore-patterns=
+persistent=yes
+load-plugins=
+
+[MESSAGES CONTROL]
+confidence=
+disable=
+    import-outside-toplevel,
+    too-many-instance-attributes,
+    too-many-arguments,
+    too-many-locals,
+    too-many-branches,
+    too-many-statements,
+    too-few-public-methods,
+    duplicate-code,
+    no-member,
+    logging-fstring-interpolation
+
+[REPORTS]
+output-format=text
+reports=no
+# evaluation=10.0*(10[error]+5[warning]+1[convention]+1[refactor])/count(statement)
+
+[FORMAT]
+max-line-length=120
+max-module-lines=2000
+indent-string='    '
+
+[VARIABLES]
+dummy-variables-rgx=_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy
+
+[TYPECHECK]
+generated-members=

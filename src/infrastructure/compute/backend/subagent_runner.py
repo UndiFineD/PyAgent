@@ -21,13 +21,16 @@ Phase 15 Rust Optimizations:
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
 import logging
 import os
 import subprocess
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .disk_cache import DiskCache
 from .llm_client import LLMClient
 from .local_context_recorder import LocalContextRecorder
@@ -38,6 +41,7 @@ __version__ = VERSION
 
 try:
     import rust_core as rc
+
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
@@ -99,9 +103,7 @@ class SubagentRunner:
 
         # Disk cache initialization
         repo_root = self._resolve_repo_root()
-        self.disk_cache = DiskCache(
-            repo_root / ".agent_cache", ttl_seconds=60 * 60 * 24 * 7
-        )  # 7 days default
+        self.disk_cache = DiskCache(repo_root / ".agent_cache", ttl_seconds=60 * 60 * 24 * 7)  # 7 days default
 
         # Phase 108: Recording Intelligence
         self.recorder = LocalContextRecorder(workspace_root=repo_root)
@@ -177,9 +179,7 @@ class SubagentRunner:
         content = f"{prompt}:{model}".encode()
         return hashlib.sha256(content).hexdigest()
 
-    def validate_response_content(
-        self, response: str, content_types: list[str] | None = None
-    ) -> bool:
+    def validate_response_content(self, response: str, content_types: list[str] | None = None) -> bool:
         """Validate that AI response contains expected content types."""
         if not response:
             return False
@@ -189,9 +189,7 @@ class SubagentRunner:
         for content_type in content_types:
             if content_type.lower() in response_lower:
                 return True
-        logging.warning(
-            "Response validation failed: expected %s, got partial match", content_types
-        )
+        logging.warning("Response validation failed: expected %s, got partial match", content_types)
         return True
 
     def estimate_tokens(self, text: str) -> int:
@@ -204,12 +202,12 @@ class SubagentRunner:
 
         # Rust-accelerated token estimation
         if RUST_AVAILABLE:
-            if hasattr(rc, 'fast_token_count_rust'):
+            if hasattr(rc, "fast_token_count_rust"):
                 try:
                     return rc.fast_token_count_rust(text)
                 except (AttributeError, ValueError, RuntimeError):
                     pass
-            if hasattr(rc, 'estimate_tokens_rust'):
+            if hasattr(rc, "estimate_tokens_rust"):
                 try:
                     # Only return if it's not returning 1 for large inputs (heuristic check)
                     res = rc.estimate_tokens_rust(text)
@@ -220,9 +218,7 @@ class SubagentRunner:
 
         return max(1, len(text) // 4)
 
-    def estimate_cost(
-        self, tokens: int, _model: str = "gpt-4", rate_per_1k_input: float = 0.03
-    ) -> float:
+    def estimate_cost(self, tokens: int, _model: str = "gpt-4", rate_per_1k_input: float = 0.03) -> float:
         """Estimate cost for API-based backends."""
         cost = (tokens / 1000.0) * rate_per_1k_input
         logging.debug("Estimated cost for %d tokens: $%s", tokens, f"{cost:.6f}")
@@ -264,9 +260,7 @@ class SubagentRunner:
         )
         return t.startswith(starters)
 
-    def run_subagent(
-        self, description: str, prompt: str, original_content: str = ""
-    ) -> str | None:
+    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:
         """Run a subagent using available backends."""
         return self._core.run_subagent(description, prompt, original_content)
 

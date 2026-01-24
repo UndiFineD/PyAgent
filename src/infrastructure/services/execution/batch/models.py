@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -8,11 +22,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple
+
 import numpy as np
+
 
 class MoveDirectionality(Enum):
     """Direction of request movement in batch."""
+
     SWAP = auto()  # Bidirectional swap
     MOVE_TO = auto()  # Unidirectional move
 
@@ -22,6 +39,7 @@ class CachedRequestState:
     """
     Per-request state cache matching vLLM's CachedRequestState.
     """
+
     req_id: str
     prompt_token_ids: Optional[List[int]] = None
     mm_features: List[dict[str, Any]] = field(default_factory=list)
@@ -60,6 +78,7 @@ class BatchUpdateBuilder:
     """
     Tracks request movements within a batch for logits processors.
     """
+
     moved: List[Tuple[int, int, MoveDirectionality]] = field(default_factory=list)
     added: List[Tuple[str, int]] = field(default_factory=list)  # (req_id, index)
     removed: List[Tuple[str, int]] = field(default_factory=list)  # (req_id, index)
@@ -88,6 +107,7 @@ class SamplingMetadata:
     """
     GPU-resident sampling parameters for a batch.
     """
+
     temperature: Any  # torch.Tensor | None
     top_p: Any  # torch.Tensor | None
     top_k: Any  # torch.Tensor | None
@@ -108,6 +128,7 @@ class InputBatch:
     """
     Complete batch representation for model execution.
     """
+
     req_ids: List[str]
     num_reqs: int
     idx_mapping: Any  # torch.Tensor - request index to batch position

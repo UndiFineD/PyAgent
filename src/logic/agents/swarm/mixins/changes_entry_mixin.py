@@ -17,11 +17,14 @@ Entry management logic for ChangesAgent.
 """
 
 from __future__ import annotations
+
 import logging
 from datetime import datetime
 from typing import List, Optional
+
 from ..changelog_entry import ChangelogEntry
 from ..validation_rule import ValidationRule
+
 
 class ChangesEntryMixin:
     """Mixin for managing changelog entries."""

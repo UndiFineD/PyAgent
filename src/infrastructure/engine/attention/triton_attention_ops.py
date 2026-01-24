@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -25,13 +39,14 @@ import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Protocol, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 # Try importing PyTorch and Triton
 try:
     import torch
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -39,6 +54,7 @@ except ImportError:
 try:
     import triton
     import triton.language as tl
+
     HAS_TRITON = True
 except ImportError:
     HAS_TRITON = False
@@ -46,15 +62,17 @@ except ImportError:
 
 class AttentionBackend(Enum):
     """Available attention backends."""
-    TRITON = auto()       # Triton kernel
-    FLASH_ATTN = auto()   # Flash Attention
-    XFORMERS = auto()     # xFormers memory efficient
-    SDPA = auto()         # PyTorch SDPA
-    NAIVE = auto()        # Reference implementation
+
+    TRITON = auto()  # Triton kernel
+    FLASH_ATTN = auto()  # Flash Attention
+    XFORMERS = auto()  # xFormers memory efficient
+    SDPA = auto()  # PyTorch SDPA
+    NAIVE = auto()  # Reference implementation
 
 
 class PrecisionMode(Enum):
     """Precision mode for attention computation."""
+
     FP32 = auto()
     FP16 = auto()
     BF16 = auto()
@@ -67,6 +85,7 @@ class AttentionConfig:
 
     Inspired by vLLM's attention configuration patterns.
     """
+
     # Basic attention config
     num_heads: int = 32
     head_dim: int = 128
@@ -108,6 +127,7 @@ class AttentionMetadata:
 
     Mirrors vLLM's AttentionMetadata structure.
     """
+
     # Sequence info
     seq_lens: List[int] = field(default_factory=list)
     max_decode_seq_len: int = 0
@@ -159,6 +179,7 @@ class AttentionKernel(ABC):
 
 
 if HAS_TRITON and HAS_TORCH:
+
     @triton.jit
     def _paged_attention_kernel(
         output_ptr,
@@ -212,7 +233,7 @@ if HAS_TRITON and HAS_TORCH:
 
         # Initialize accumulator
         acc = tl.zeros([BLOCK_D], dtype=tl.float32)
-        max_logit = float('-inf')
+        max_logit = float("-inf")
         sum_exp = 0.0
 
         # Process each block
@@ -224,8 +245,7 @@ if HAS_TRITON and HAS_TORCH:
             phys_block = tl.load(block_tables_ptr + block_table_offset + block_idx * stride_block_tables_block)
 
             # Load key block
-            k_offset = (phys_block * stride_k_cache_block +
-                       kv_head_idx * stride_k_cache_head)
+            k_offset = phys_block * stride_k_cache_block + kv_head_idx * stride_k_cache_head
 
             # Compute attention scores for this block
             for seq_pos in range(block_size):
@@ -233,9 +253,7 @@ if HAS_TRITON and HAS_TORCH:
                 if abs_pos < context_len:
                     # Load key vector
                     k = tl.load(
-                        k_cache_ptr + k_offset +
-                        seq_pos * stride_k_cache_seq +
-                        dim_offsets * stride_k_cache_dim
+                        k_cache_ptr + k_offset + seq_pos * stride_k_cache_seq + dim_offsets * stride_k_cache_dim
                     )
 
                     # Compute attention score
@@ -247,9 +265,11 @@ if HAS_TRITON and HAS_TORCH:
                     new_exp = tl.exp(score - new_max)
 
                     # Load value vector
-                    v_offset = (phys_block * stride_v_cache_block +
-                               kv_head_idx * stride_v_cache_head +
-                               seq_pos * stride_v_cache_seq)
+                    v_offset = (
+                        phys_block * stride_v_cache_block
+                        + kv_head_idx * stride_v_cache_head
+                        + seq_pos * stride_v_cache_seq
+                    )
                     v = tl.load(v_cache_ptr + v_offset + dim_offsets * stride_v_cache_dim)
 
                     # Update accumulator with online softmax
@@ -307,11 +327,22 @@ class TritonPagedAttention(AttentionKernel):
             metadata.block_tables,
             metadata.context_lens,
             # Strides
-            query.stride(0), query.stride(1), query.stride(2),
-            k_cache.stride(0), k_cache.stride(1), k_cache.stride(2), k_cache.stride(3),
-            v_cache.stride(0), v_cache.stride(1), v_cache.stride(2), v_cache.stride(3),
-            output.stride(0), output.stride(1), output.stride(2),
-            metadata.block_tables.stride(0), metadata.block_tables.stride(1),
+            query.stride(0),
+            query.stride(1),
+            query.stride(2),
+            k_cache.stride(0),
+            k_cache.stride(1),
+            k_cache.stride(2),
+            k_cache.stride(3),
+            v_cache.stride(0),
+            v_cache.stride(1),
+            v_cache.stride(2),
+            v_cache.stride(3),
+            output.stride(0),
+            output.stride(1),
+            output.stride(2),
+            metadata.block_tables.stride(0),
+            metadata.block_tables.stride(1),
             # Config
             num_heads=num_heads,
             head_dim=head_dim,
@@ -422,7 +453,7 @@ class SlidingWindowAttention(AttentionKernel):
 
         # Compute attention
         scores = torch.matmul(query, key.transpose(-2, -1)) * self.scale
-        scores = scores.masked_fill(~mask, float('-inf'))
+        scores = scores.masked_fill(~mask, float("-inf"))
         attn_weights = torch.softmax(scores, dim=-1)
         output = torch.matmul(attn_weights, value)
 
@@ -438,6 +469,7 @@ class KVSplitConfig:
 
     Inspired by vLLM's KV split patterns for decode attention.
     """
+
     num_splits: int = 8
     split_overlap: int = 0  # For context continuity
     use_parallel_reduction: bool = True
@@ -497,16 +529,11 @@ class TritonAttentionOps:
         Automatically selects appropriate kernel based on context.
         """
         # Check if sliding window is needed
-        if (self._sliding_kernel and
-            metadata.max_decode_seq_len > self.config.sliding_window_size):
-            return self._sliding_kernel.forward(
-                query, key, value, metadata, k_cache, v_cache
-            )
+        if self._sliding_kernel and metadata.max_decode_seq_len > self.config.sliding_window_size:
+            return self._sliding_kernel.forward(query, key, value, metadata, k_cache, v_cache)
 
         # Use main kernel
-        return self._kernel.forward(
-            query, key, value, metadata, k_cache, v_cache
-        )
+        return self._kernel.forward(query, key, value, metadata, k_cache, v_cache)
 
     def paged_attention_decode(
         self,
@@ -530,13 +557,9 @@ class TritonAttentionOps:
 
         # For long contexts, use KV splits
         if max_context_len > self._kv_split.max_context_per_split * self._kv_split.num_splits:
-            return self._split_kv_attention(
-                query, k_cache, v_cache, metadata
-            )
+            return self._split_kv_attention(query, k_cache, v_cache, metadata)
 
-        return self._kernel.forward(
-            query, None, None, metadata, k_cache, v_cache
-        )
+        return self._kernel.forward(query, None, None, metadata, k_cache, v_cache)
 
     def _split_kv_attention(
         self,
@@ -558,8 +581,6 @@ class TritonAttentionOps:
 
         # Collect split outputs
         split_outputs = []
-        split_maxes = []
-        split_sums = []
 
         for i in range(num_splits):
             start_pos = i * split_size
@@ -571,18 +592,12 @@ class TritonAttentionOps:
             # Create split metadata
             split_metadata = AttentionMetadata(
                 block_tables=metadata.block_tables,
-                context_lens=torch.clamp(
-                    metadata.context_lens - start_pos,
-                    min=0,
-                    max=end_pos - start_pos
-                ),
+                context_lens=torch.clamp(metadata.context_lens - start_pos, min=0, max=end_pos - start_pos),
                 max_decode_seq_len=end_pos - start_pos,
             )
 
             # Get split output with attention statistics
-            split_out = self._kernel.forward(
-                query, None, None, split_metadata, k_cache, v_cache
-            )
+            split_out = self._kernel.forward(query, None, None, split_metadata, k_cache, v_cache)
             split_outputs.append(split_out)
 
         # Aggregate splits (simplified - full implementation would use log-sum-exp)

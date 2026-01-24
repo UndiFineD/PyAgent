@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List
+from typing import Any, List, Self
 from unittest.mock import MagicMock
 from pathlib import Path
 import sys

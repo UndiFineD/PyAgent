@@ -18,16 +18,22 @@ Debug script to identify intelligence gaps where IO/Shell operations are not rec
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 def main() -> None:
     root = "src"
-    io_pattern = r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell|sqlite3\.(connect|execute|read_sql)|pd\.read_sql)"
+    io_pattern = (
+        r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|"
+        r"subprocess\.(run|call|Popen|check_call|check_output)\(|"
+        r"adb shell|sqlite3\.(connect|execute|read_sql)|pd\.read_sql)"
+    )
 
     findings = []
 

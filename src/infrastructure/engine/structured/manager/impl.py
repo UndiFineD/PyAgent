@@ -1,10 +1,32 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Impl.py module.
+"""
+
 from __future__ import annotations
-import json
+
 import contextlib
+import json
 from typing import Callable, Dict, List, Optional, Sequence
+
 import numpy as np
+
 from .base import StructuredOutputGrammar
 from .config import GrammarSpec
+
 
 class SimpleRegexGrammar(StructuredOutputGrammar):
     """
@@ -21,6 +43,7 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         super().__init__(grammar_spec, vocab_size, request_id)
 
         import re
+
         self._pattern = re.compile(grammar_spec.spec)
         self._generated_text = ""
         self._token_strings = token_strings or {}
@@ -66,6 +89,7 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
 
     def get_allowed_tokens(self) -> List[int]:
         return list(range(self.vocab_size))
+
 
 class ChoiceGrammar(StructuredOutputGrammar):
     """Grammar for choosing from a fixed set of options."""

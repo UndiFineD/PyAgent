@@ -1,7 +1,26 @@
-import time
-import rust_core
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Bench transformer.py module.
+"""
+
 import statistics
-import logging
+import time
+
+import rust_core
+
 
 def run_performance_test(duration_secs=60):
     # 1. Setup Hardware and Model
@@ -18,9 +37,7 @@ def run_performance_test(duration_secs=60):
     print("-" * 50)
 
     # 2. Prepare Sample Corpus
-    sample_text = (
-        "The quick brown fox jumps over the lazy dog. " * 10
-    ) # ~90 tokens
+    sample_text = "The quick brown fox jumps over the lazy dog. " * 10  # ~90 tokens
     tokens_per_call = len(sample_text.split())
 
     # 3. Warmup
@@ -46,7 +63,7 @@ def run_performance_test(duration_secs=60):
         total_tokens += tokens_per_call
 
     actual_duration = time.time() - start_all
-    avg_latency = statistics.mean(iteration_times) * 1000 # ms
+    avg_latency = statistics.mean(iteration_times) * 1000  # ms
     tps = total_tokens / actual_duration
 
     print("-" * 50)
@@ -55,6 +72,7 @@ def run_performance_test(duration_secs=60):
     print(f"Avg Latency:       {avg_latency:.2f}ms per batch ({tokens_per_call} tokens)")
     print(f"Throughput (TPS):  {tps:.2f} tokens/second")
     print("=" * 50)
+
 
 if __name__ == "__main__":
     # Run for 5 minutes as requested

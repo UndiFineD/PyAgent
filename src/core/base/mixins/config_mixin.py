@@ -15,7 +15,9 @@
 """Mixin for agent configuration access."""
 
 from typing import Any
+
 from src.core.base.configuration.config_manager import config
+
 
 class ConfigMixin:
     """Provides configuration access to agents."""

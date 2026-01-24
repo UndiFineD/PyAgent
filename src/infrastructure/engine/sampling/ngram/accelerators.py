@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 """
 N-gram Accelerators - Numba and Rust-based high-performance matching.
@@ -9,7 +23,8 @@ import numpy as np
 
 # Try to import rust_core for acceleration
 try:
-    import rust_core
+    import rust_core  # noqa: F401
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -17,12 +32,14 @@ except ImportError:
 # Try to import numba for JIT compilation
 try:
     from numba import njit, prange
+
     HAS_NUMBA = True
 except ImportError:
     HAS_NUMBA = False
 
 
 if HAS_NUMBA:
+
     @njit
     def _ngram_match_numba(
         tokens: np.ndarray,
@@ -51,14 +68,14 @@ if HAS_NUMBA:
 
     @njit(parallel=True)
     def _batch_propose_numba(
-        all_tokens: np.ndarray,       # Flattened tokens
-        token_offsets: np.ndarray,    # Start offset for each sequence
-        token_lengths: np.ndarray,    # Length of each sequence
+        all_tokens: np.ndarray,  # Flattened tokens
+        token_offsets: np.ndarray,  # Start offset for each sequence
+        token_lengths: np.ndarray,  # Length of each sequence
         min_n: int,
         max_n: int,
         k: int,
-        proposals: np.ndarray,        # Output: [batch, k]
-        proposal_lens: np.ndarray,    # Output: [batch]
+        proposals: np.ndarray,  # Output: [batch, k]
+        proposal_lens: np.ndarray,  # Output: [batch]
     ) -> None:
         """Numba-accelerated batch proposal."""
         batch_size = len(token_offsets)
@@ -71,7 +88,7 @@ if HAS_NUMBA:
                 proposal_lens[b] = 0
                 continue
 
-            tokens = all_tokens[offset:offset + length]
+            tokens = all_tokens[offset : offset + length]
 
             # Simple greedy matching for now
             best_len = 0
@@ -81,7 +98,7 @@ if HAS_NUMBA:
                 if n > length:
                     continue
 
-                pattern = tokens[-(n-1):]
+                pattern = tokens[-(n - 1) :]
 
                 # Find matches
                 for i in range(length - n):

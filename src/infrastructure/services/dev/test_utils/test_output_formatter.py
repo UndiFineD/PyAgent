@@ -16,8 +16,10 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -71,9 +73,7 @@ class TestOutputFormatter:
         """
         return f"{passed} passed, {failed} failed out of {total} tests"
 
-    def format_result(
-        self, test_name: str, status: Any, duration_ms: float, error_message: str = ""
-    ) -> str:
+    def format_result(self, test_name: str, status: Any, duration_ms: float, error_message: str = "") -> str:
         """Format a test result based on status.
 
         Args:

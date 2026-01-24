@@ -16,13 +16,16 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .recorded_request import RecordedRequest
-from typing import Any
+
 import json
 import threading
 import time
 import uuid
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .recorded_request import RecordedRequest
 
 __version__ = VERSION
 

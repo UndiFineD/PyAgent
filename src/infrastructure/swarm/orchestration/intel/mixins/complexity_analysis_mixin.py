@@ -1,13 +1,20 @@
+
+"""
+Complexity analysis mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
-import os
+
 import logging
+import os
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import \
+        SelfImprovementAnalysis
+
 
 class ComplexityAnalysisMixin:
     """Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis."""
@@ -37,11 +44,7 @@ class ComplexityAnalysisMixin:
 
                         comp = rc.calculate_cyclomatic_complexity(content)
                         if comp > 25:
-                            targets.append({
-                                "file": rel_path,
-                                "complexity": comp,
-                                "type": "Complexity Issue"
-                            })
+                            targets.append({"file": rel_path, "complexity": comp, "type": "Complexity Issue"})
                     except Exception as e:
                         logging.debug(f"Complexity scan failed for {rel_path}: {e}")
 

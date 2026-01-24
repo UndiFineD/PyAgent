@@ -16,9 +16,10 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
+
+from src.core.base.common.types.diff_result import DiffResult
+from src.core.base.common.types.diff_view_mode import DiffViewMode
 from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types import diff_result
-from src.core.base.common.types import diff_view_mode
 
 __version__ = VERSION
 

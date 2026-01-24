@@ -1,31 +1,62 @@
+
+"""
+Math agent.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import math
 import re
-from typing import Any, Dict, List, Optional, Union
-from src.core.base.lifecycle.base_agent import BaseAgent
+from typing import Any, Dict, List, Optional
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 # Safe math namespace for expression evaluation
 SAFE_MATH_NAMESPACE = {
     "__builtins__": {},
-    "abs": abs, "round": round, "min": min, "max": max, "sum": sum, "len": len,
-    "pow": pow, "int": int, "float": float,
-    "sin": math.sin, "cos": math.cos, "tan": math.tan,
-    "asin": math.asin, "acos": math.acos, "atan": math.atan, "atan2": math.atan2,
-    "sinh": math.sinh, "cosh": math.cosh, "tanh": math.tanh,
-    "log": math.log, "log10": math.log10, "log2": math.log2, "exp": math.exp,
-    "sqrt": math.sqrt, "ceil": math.ceil, "floor": math.floor,
-    "factorial": math.factorial, "gcd": math.gcd,
-    "pi": math.pi, "e": math.e, "tau": math.tau, "inf": math.inf,
-    "degrees": math.degrees, "radians": math.radians,
+    "abs": abs,
+    "round": round,
+    "min": min,
+    "max": max,
+    "sum": sum,
+    "len": len,
+    "pow": pow,
+    "int": int,
+    "float": float,
+    "sin": math.sin,
+    "cos": math.cos,
+    "tan": math.tan,
+    "asin": math.asin,
+    "acos": math.acos,
+    "atan": math.atan,
+    "atan2": math.atan2,
+    "sinh": math.sinh,
+    "cosh": math.cosh,
+    "tanh": math.tanh,
+    "log": math.log,
+    "log10": math.log10,
+    "log2": math.log2,
+    "exp": math.exp,
+    "sqrt": math.sqrt,
+    "ceil": math.ceil,
+    "floor": math.floor,
+    "factorial": math.factorial,
+    "gcd": math.gcd,
+    "pi": math.pi,
+    "e": math.e,
+    "tau": math.tau,
+    "inf": math.inf,
+    "degrees": math.degrees,
+    "radians": math.radians,
 }
+
 
 class MathAgent(BaseAgent):
     """
@@ -53,6 +84,7 @@ class MathAgent(BaseAgent):
             # Try Rust-accelerated evaluation first
             try:
                 import rust_core
+
                 if hasattr(rust_core, "evaluate_formula"):
                     result = rust_core.evaluate_formula(sanitized)
                     self._record_calculation(expression, result, "rust")
@@ -89,7 +121,7 @@ class MathAgent(BaseAgent):
             "variable": variable,
             "solution": extracted,
             "reasoning": result,
-            "status": "success" if extracted else "symbolic"
+            "status": "success" if extracted else "symbolic",
         }
 
     @as_tool
@@ -100,7 +132,9 @@ class MathAgent(BaseAgent):
         return {"expression": expression, "variable": variable, "derivative": result}
 
     @as_tool
-    async def compute_integral(self, expression: str, variable: str = "x", bounds: Optional[tuple] = None) -> Dict[str, Any]:
+    async def compute_integral(
+        self, expression: str, variable: str = "x", bounds: Optional[tuple] = None
+    ) -> Dict[str, Any]:
         """Computes the integral (definite or indefinite)."""
         if bounds:
             prompt = f"Compute the definite integral of {expression} d{variable} from {bounds[0]} to {bounds[1]}."
@@ -148,17 +182,15 @@ class MathAgent(BaseAgent):
     def _sanitize_expression(self, expr: str) -> str:
         """Removes potentially dangerous constructs."""
         # Remove anything that looks like function calls to non-math functions
-        sanitized = re.sub(r'\b(import|exec|eval|compile|open|__\w+__)\b', '', expr)
+        sanitized = re.sub(r"\b(import|exec|eval|compile|open|__\w+__)\b", "", expr)
         return sanitized.strip()
 
     def _record_calculation(self, expression: str, result: Any, engine: str) -> None:
         import time
-        self._calculation_history.append({
-            "expression": expression,
-            "result": result,
-            "engine": engine,
-            "timestamp": time.time()
-        })
+
+        self._calculation_history.append(
+            {"expression": expression, "result": result, "engine": engine, "timestamp": time.time()}
+        )
 
     async def _llm_solve(self, expression: str) -> Dict[str, Any]:
         """Uses LLM for complex mathematical reasoning."""
@@ -166,7 +198,7 @@ class MathAgent(BaseAgent):
         llm_result = await self.improve_content(prompt)
 
         # Try to extract a number from the response
-        numbers = re.findall(r'[-+]?\d*\.?\d+', llm_result)
+        numbers = re.findall(r"[-+]?\d*\.?\d+", llm_result)
         final_answer = float(numbers[-1]) if numbers else None
 
         return {
@@ -174,5 +206,5 @@ class MathAgent(BaseAgent):
             "result": final_answer,
             "reasoning": llm_result,
             "status": "llm_fallback",
-            "engine": "llm"
+            "engine": "llm",
         }

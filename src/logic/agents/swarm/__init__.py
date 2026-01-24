@@ -11,16 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-Agents specializing in swarm coordination and fleet-wide management.
-"""
+"""Swarm agents package."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION as VERSION
-from .orchestrator_agent import OrchestratorAgent as OrchestratorAgent
+
+from src.core.base.lifecycle.version import VERSION
+
+from .orchestrator_agent import OrchestratorAgent
 
 __version__ = VERSION
 
-# Backward compatibility (Agent was renamed to OrchestratorAgent)
 Agent = OrchestratorAgent

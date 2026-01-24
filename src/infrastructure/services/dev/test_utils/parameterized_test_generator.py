@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .parameterized_test_case import ParameterizedTestCase
-from typing import Any
+
 from collections.abc import Callable
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .parameterized_test_case import ParameterizedTestCase
 
 __version__ = VERSION
 

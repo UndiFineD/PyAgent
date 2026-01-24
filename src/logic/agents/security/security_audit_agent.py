@@ -11,13 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Security audit agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -49,9 +55,7 @@ class SecurityAuditAgent(BaseAgent):
             # Rust acceleration for secret scanning
             try:
                 from rust_core import (  # type: ignore[attr-defined]
-                    scan_hardcoded_secrets_rust,
-                    scan_insecure_patterns_rust,
-                )
+                    scan_hardcoded_secrets_rust, scan_insecure_patterns_rust)
 
                 # Scan for hardcoded secrets
                 secret_findings = scan_hardcoded_secrets_rust(content)
@@ -97,9 +101,7 @@ class SecurityAuditAgent(BaseAgent):
                         flag_end = pattern.find(")") + 1
                         flags = pattern[:flag_end]
                         actual_pattern = pattern[flag_end:]
-                        full_pattern = (
-                            f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
-                        )
+                        full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
                     else:
                         full_pattern = f"\\b{pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
 
@@ -133,10 +135,7 @@ class SecurityAuditAgent(BaseAgent):
                             }
                         )
 
-                if (
-                    re.search(r"shell\s*=\s*True", content)
-                    and "SecurityAuditAgent" not in content
-                ):
+                if re.search(r"shell\s*=\s*True", content) and "SecurityAuditAgent" not in content:
                     shell_match = re.search(r".*shell\s*=\s*True.*", content)
                     if shell_match and "# nosec" not in shell_match.group(0):
                         findings.append(
@@ -176,10 +175,7 @@ class SecurityAuditAgent(BaseAgent):
         for root, dirs, files in os.walk(self.workspace_path):
             # Skip hidden dirs and common excludes
             dirs[:] = [
-                d
-                for d in dirs
-                if not d.startswith(".")
-                and d not in ["node_modules", "__pycache__", ".venv", "venv"]
+                d for d in dirs if not d.startswith(".") and d not in ["node_modules", "__pycache__", ".venv", "venv"]
             ]
 
             for file in files:
