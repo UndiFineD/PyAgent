@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # PyAgent Phase 44: Top-K/Top-P Sampler with Platform Optimizations
 # Implements vLLM's TopKTopPSampler with FlashInfer/aiter support
@@ -26,7 +40,7 @@ import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -36,6 +50,7 @@ if TYPE_CHECKING:
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -43,43 +58,47 @@ except ImportError:
 
 class SamplingBackend(Enum):
     """Available sampling backends."""
-    NUMPY = auto()       # Pure NumPy (always available)
-    PYTORCH = auto()     # PyTorch (GPU if available)
+
+    NUMPY = auto()  # Pure NumPy (always available)
+    PYTORCH = auto()  # PyTorch (GPU if available)
     FLASHINFER = auto()  # FlashInfer optimized
-    AITER = auto()       # ROCm aiter ops
-    RUST = auto()        # Rust acceleration
+    AITER = auto()  # ROCm aiter ops
+    RUST = auto()  # Rust acceleration
 
 
 class NucleusSamplingVariant(Enum):
     """Nucleus sampling variants."""
-    STANDARD = auto()    # Standard top-p
-    TYPICAL = auto()     # Typical sampling (entropy-based)
-    ETA = auto()         # Eta sampling
-    EPSILON = auto()     # Epsilon sampling
-    MIN_P = auto()       # Min-P filtering
+
+    STANDARD = auto()  # Standard top-p
+    TYPICAL = auto()  # Typical sampling (entropy-based)
+    ETA = auto()  # Eta sampling
+    EPSILON = auto()  # Epsilon sampling
+    MIN_P = auto()  # Min-P filtering
 
 
 class TemperatureSchedule(Enum):
     """Temperature scheduling strategies."""
-    CONSTANT = auto()    # Fixed temperature
-    LINEAR = auto()      # Linear decay
-    COSINE = auto()      # Cosine annealing
-    ADAPTIVE = auto()    # Entropy-adaptive
+
+    CONSTANT = auto()  # Fixed temperature
+    LINEAR = auto()  # Linear decay
+    COSINE = auto()  # Cosine annealing
+    ADAPTIVE = auto()  # Entropy-adaptive
 
 
 @dataclass
 class SamplingConfig:
     """Configuration for top-k/top-p sampling."""
-    top_k: int = 0           # 0 = disabled
-    top_p: float = 1.0       # 1.0 = disabled
-    min_p: float = 0.0       # 0.0 = disabled
+
+    top_k: int = 0  # 0 = disabled
+    top_p: float = 1.0  # 1.0 = disabled
+    min_p: float = 0.0  # 0.0 = disabled
     temperature: float = 1.0
     temperature_schedule: TemperatureSchedule = TemperatureSchedule.CONSTANT
     temperature_min: float = 0.1
     temperature_decay_steps: int = 100
     variant: NucleusSamplingVariant = NucleusSamplingVariant.STANDARD
     typical_p: float = 0.95  # For typical sampling
-    eta: float = 0.001       # For eta sampling
+    eta: float = 0.001  # For eta sampling
     epsilon: float = 0.0001  # For epsilon sampling
     backend: SamplingBackend = SamplingBackend.NUMPY
     seed: int | None = None
@@ -98,6 +117,7 @@ class SamplingConfig:
 @dataclass
 class SamplingState:
     """Mutable state for temperature scheduling."""
+
     step: int = 0
     current_temperature: float = 1.0
     entropy_history: list[float] = field(default_factory=list)
@@ -205,7 +225,7 @@ class TopKTopPSampler:
         logits = self._apply_filters(logits, k, p)
 
         # Sample
-        if HAS_RUST and hasattr(rust_core, 'topk_topp_sample_rust'):
+        if HAS_RUST and hasattr(rust_core, "topk_topp_sample_rust"):
             samples = rust_core.topk_topp_sample_rust(logits)
         else:
             samples = self._sample_numpy(logits)
@@ -254,7 +274,7 @@ class TopKTopPSampler:
             return logits
 
         # Use Rust if available
-        if HAS_RUST and hasattr(rust_core, 'apply_top_k_rust'):
+        if HAS_RUST and hasattr(rust_core, "apply_top_k_rust"):
             return rust_core.apply_top_k_rust(logits, k)
 
         # NumPy implementation
@@ -279,7 +299,7 @@ class TopKTopPSampler:
             return logits
 
         # Use Rust if available
-        if HAS_RUST and hasattr(rust_core, 'apply_top_p_rust'):
+        if HAS_RUST and hasattr(rust_core, "apply_top_p_rust"):
             return rust_core.apply_top_p_rust(logits, p)
 
         # NumPy implementation
@@ -475,10 +495,10 @@ class BatchTopKTopPSampler:
 
     def sample_batch(
         self,
-        logits: NDArray[np.float32],        # [batch, vocab]
-        temperatures: NDArray[np.float32],   # [batch]
-        top_ks: NDArray[np.int32],           # [batch]
-        top_ps: NDArray[np.float32],         # [batch]
+        logits: NDArray[np.float32],  # [batch, vocab]
+        temperatures: NDArray[np.float32],  # [batch]
+        top_ks: NDArray[np.int32],  # [batch]
+        top_ps: NDArray[np.float32],  # [batch]
     ) -> NDArray[np.int32]:
         """
         Sample from batched logits with per-request parameters.
@@ -486,10 +506,8 @@ class BatchTopKTopPSampler:
         Returns:
             Sampled token indices [batch]
         """
-        if HAS_RUST and hasattr(rust_core, 'batch_topk_topp_sample_rust'):
-            return rust_core.batch_topk_topp_sample_rust(
-                logits, temperatures, top_ks, top_ps
-            )
+        if HAS_RUST and hasattr(rust_core, "batch_topk_topp_sample_rust"):
+            return rust_core.batch_topk_topp_sample_rust(logits, temperatures, top_ks, top_ps)
 
         # Python fallback - process each request
         batch_size = logits.shape[0]
@@ -497,7 +515,7 @@ class BatchTopKTopPSampler:
 
         for b in range(batch_size):
             # Apply temperature
-            scaled_logits = logits[b:b+1] / max(temperatures[b], 1e-7)
+            scaled_logits = logits[b : b + 1] / max(temperatures[b], 1e-7)
 
             # Sample with per-request params
             config = SamplingConfig(
@@ -533,7 +551,7 @@ class GumbelSoftmaxSampler:
         Returns:
             (soft_samples, hard_indices): Soft samples and discrete indices
         """
-        if HAS_RUST and hasattr(rust_core, 'gumbel_sample_rust'):
+        if HAS_RUST and hasattr(rust_core, "gumbel_sample_rust"):
             gumbel = rust_core.gumbel_sample_rust(logits.shape)
         else:
             # Sample from Gumbel(0, 1)

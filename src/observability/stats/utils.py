@@ -12,18 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Utils.py module.
+"""
+
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import argparse
+import contextlib
 import json
 import logging
 import sys
-import contextlib
+
+from src.core.base.lifecycle.version import VERSION
+
 from .stats_agent import StatsAgent
 
 __version__ = VERSION
@@ -35,9 +42,7 @@ def main() -> None:
         description="Stats Agent: Reports file update statistics",
         epilog="Example: python src/agent_stats.py --files src/*.py",
     )
-    parser.add_argument(
-        "--files", nargs="+", required=True, help="List of files to analyze"
-    )
+    parser.add_argument("--files", nargs="+", required=True, help="List of files to analyze")
     parser.add_argument(
         "--format",
         choices=["text", "json", "csv"],
@@ -45,14 +50,10 @@ def main() -> None:
         help="Output format",
     )
     parser.add_argument("--coverage", help="Path to code coverage report")
-    parser.add_argument(
-        "--export", nargs="+", help="Export formats (json, csv, html, sqlite)"
-    )
+    parser.add_argument("--export", nargs="+", help="Export formats (json, csv, html, sqlite)")
     parser.add_argument("--baseline", help="Path to baseline stats for comparison")
     parser.add_argument("--verbose", default="normal", help="Verbosity level")
-    parser.add_argument(
-        "--no-cascade", action="store_true", help="Unused, for compatibility"
-    )
+    parser.add_argument("--no-cascade", action="store_true", help="Unused, for compatibility")
     args = parser.parse_args()
 
     # Setup logging
@@ -79,7 +80,6 @@ def main() -> None:
 
         # Visualize only if requested and available
         with contextlib.suppress(ImportError):
-            import matplotlib
             agent.visualize_stats()
     except ValueError as e:
         logging.error(str(e))

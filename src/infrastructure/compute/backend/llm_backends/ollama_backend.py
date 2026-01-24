@@ -12,10 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Ollama backend.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
+
+from src.core.base.lifecycle.version import VERSION
+
 from .llm_backend import LLMBackend
 
 __version__ = VERSION
@@ -37,11 +44,7 @@ class OllamaBackend(LLMBackend):
 
         import os
 
-        base_url = (
-            kwargs.get("base_url")
-            or os.environ.get("DV_OLLAMA_BASE_URL")
-            or "http://localhost:11434"
-        )
+        base_url = kwargs.get("base_url") or os.environ.get("DV_OLLAMA_BASE_URL") or "http://localhost:11434"
         url = base_url.rstrip("/") + "/api/generate"
         payload = {
             "model": model,
@@ -52,6 +55,7 @@ class OllamaBackend(LLMBackend):
 
         timeout_s = kwargs.get("timeout_s", 120)
         import time
+
         start_t = time.time()
 
         try:
@@ -67,6 +71,11 @@ class OllamaBackend(LLMBackend):
             logging.debug(f"Ollama call failed: {e}")
             self._update_status("ollama", False)
             self._record(
-                "ollama", model, prompt, f"ERROR: {str(e)}", system_prompt=system_prompt, latency_s=time.time() - start_t
+                "ollama",
+                model,
+                prompt,
+                f"ERROR: {str(e)}",
+                system_prompt=system_prompt,
+                latency_s=time.time() - start_t,
             )
             return ""

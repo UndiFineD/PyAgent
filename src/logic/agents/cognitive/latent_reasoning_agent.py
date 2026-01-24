@@ -20,16 +20,17 @@ latent reasoning consistency across language boundaries.
 Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
 """
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import create_main_function, as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class LatentReasoningAgent(BaseAgent):
     """
     Guardrail agent that validates cross-lingual reasoning integrity.
@@ -53,6 +54,7 @@ class LatentReasoningAgent(BaseAgent):
         Audits a response for latent reasoning consistency.
         Flags outputs where reasoning strength likely drops due to language-specific training gaps.
         """
+        _ = response
         logging.info(
             f"LatentReasoningAgent: Auditing {language} output for task: {task[:30]}"
         )
@@ -85,18 +87,18 @@ class LatentReasoningAgent(BaseAgent):
         self, chain_of_thought: list[str], target_language: str
     ) -> bool:
         """
-
-
-
         Verifies if each step of the reasoning chain holds up in the target language.
         """
         # Logic to simulate cross-lingual logical entailment
+        _ = chain_of_thought
+        _ = target_language
         return True
 
-    def improve_content(self, content: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Analyze content for linguistic bias."""
+        _ = target_file
         # Simple analysis
-        return f"Latent Reasoning Audit complete for: {content[:100]}..."
+        return f"Latent Reasoning Audit complete for: {prompt[:100]}..."
 
 
 if __name__ == "__main__":

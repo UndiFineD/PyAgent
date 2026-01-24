@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
+
+"""
+Streaming.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Real-time stats streaming engine.
 
 from __future__ import annotations
-import logging
+
 import contextlib
+import logging
 from typing import Any, Callable
+
 from .metrics import Metric
 from .observability_core import StreamingConfig
 

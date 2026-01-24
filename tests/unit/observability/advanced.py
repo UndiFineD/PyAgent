@@ -2,7 +2,7 @@
 """Test classes from test_agent_stats.py - advanced module."""
 
 from __future__ import annotations
-from typing import Any
+from typing import Any, Self
 from sqlite3 import Connection
 from sqlite3 import Cursor
 import unittest

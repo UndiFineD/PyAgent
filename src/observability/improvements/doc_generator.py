@@ -16,9 +16,12 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .improvement import Improvement
+
 from typing import Any, cast
+
+from src.core.base.lifecycle.version import VERSION
+
+from .improvement import Improvement
 
 __version__ = VERSION
 
@@ -32,9 +35,7 @@ class DocGenerator:
         }
 
     def generate(self, improvement: Improvement, include_metadata: bool = False) -> str:
-        base = self.templates["default"].format(
-            title=improvement.title, description=improvement.description
-        )
+        base = self.templates["default"].format(title=improvement.title, description=improvement.description)
         if include_metadata:
             meta = getattr(improvement, "metadata", None)
             if isinstance(meta, dict) and meta:

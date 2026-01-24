@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -10,20 +24,17 @@ import io
 from pathlib import Path
 from typing import BinaryIO, Tuple, Union
 
+import numpy as np
+
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
 
-class AudioLoader(MediaLoader):
-from .models import (
-    AudioData,
-    AudioFormat,
-    MediaLoadConfig,
-    MediaMetadata,
-    MediaType,
-)
+from .base import MediaLoader
+from .models import (AudioData, AudioFormat, MediaLoadConfig, MediaMetadata,
+                     MediaType)
 
 
 class AudioLoader(MediaLoader):
@@ -34,12 +45,14 @@ class AudioLoader(MediaLoader):
         self._librosa_available = False
         try:
             from scipy.io import wavfile
+
             self._scipy_available = True
             self._wavfile = wavfile
         except ImportError:
             pass
         try:
             import librosa
+
             self._librosa_available = True
             self._librosa = librosa
         except ImportError:
@@ -58,7 +71,7 @@ class AudioLoader(MediaLoader):
             data = source
             source_str = "<bytes>"
         elif isinstance(source, (str, Path)):
-            with open(str(source), 'rb') as f:
+            with open(str(source), "rb") as f:
                 data = f.read()
             source_str = str(source)
         else:
@@ -103,13 +116,13 @@ class AudioLoader(MediaLoader):
 
     def _detect_format(self, data: bytes) -> AudioFormat:
         """Detect audio format from magic bytes."""
-        if data[:4] == b'RIFF' and data[8:12] == b'WAVE':
+        if data[:4] == b"RIFF" and data[8:12] == b"WAVE":
             return AudioFormat.WAV
-        elif data[:3] == b'ID3' or data[:2] == b'\xff\xfb':
+        elif data[:3] == b"ID3" or data[:2] == b"\xff\xfb":
             return AudioFormat.MP3
-        elif data[:4] == b'fLaC':
+        elif data[:4] == b"fLaC":
             return AudioFormat.FLAC
-        elif data[:4] == b'OggS':
+        elif data[:4] == b"OggS":
             return AudioFormat.OGG
         return AudioFormat.WAV
 
@@ -123,15 +136,12 @@ class AudioLoader(MediaLoader):
             waveform = waveform / 2147483648.0
         return waveform, sample_rate
 
-    async def _load_librosa(
-        self,
-        data: bytes,
-        source: str
-    ) -> Tuple[np.ndarray, int]:
+    async def _load_librosa(self, data: bytes, source: str) -> Tuple[np.ndarray, int]:
         """Load audio using librosa."""
         import tempfile
+
         if source == "<bytes>" or source == "<stream>":
-            with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f:
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
                 f.write(data)
                 path = f.name
         else:
@@ -139,12 +149,7 @@ class AudioLoader(MediaLoader):
         waveform, sample_rate = self._librosa.load(path, sr=None)
         return waveform, sample_rate
 
-    def _resample(
-        self,
-        waveform: np.ndarray,
-        orig_sr: int,
-        target_sr: int
-    ) -> np.ndarray:
+    def _resample(self, waveform: np.ndarray, orig_sr: int, target_sr: int) -> np.ndarray:
         """Resample audio."""
         if rc and hasattr(rc, "resample_audio_rust"):
             if waveform.ndim == 1:

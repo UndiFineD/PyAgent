@@ -20,10 +20,12 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import time
 import urllib.parse
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -32,9 +34,7 @@ class NotificationCore:
     """Pure logic core for notification management."""
 
     @staticmethod
-    def construct_payload(
-        event_name: str, event_data: dict[str, Any]
-    ) -> dict[str, Any]:
+    def construct_payload(event_name: str, event_data: dict[str, Any]) -> dict[str, Any]:
         """Formats the JSON payload for webhook delivery."""
         return {
             "event": event_name,
@@ -49,7 +49,7 @@ class NotificationCore:
         try:
             domain = urllib.parse.urlparse(url).netloc
             return domain or url
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return url
 
     @staticmethod

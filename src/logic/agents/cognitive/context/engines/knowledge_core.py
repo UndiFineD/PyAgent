@@ -19,8 +19,9 @@ Contains pure regex and indexing logic for fast symbol discovery.
 This file is optimized for Rust migration (Phase 114).
 """
 
-from src.core.base.lifecycle.version import VERSION
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin
 from .knowledge_mixins.knowledge_search_mixin import KnowledgeSearchMixin
 from .knowledge_mixins.knowledge_process_mixin import KnowledgeProcessMixin

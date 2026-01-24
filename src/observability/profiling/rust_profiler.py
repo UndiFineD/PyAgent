@@ -18,21 +18,23 @@ Tracks call counts, execution time, and generates optimization reports.
 """
 
 from __future__ import annotations
-import time
-import functools
-import threading
-import json
+
 import ast
+import functools
+import json
 import re
+import threading
+import time
+from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
-from dataclasses import dataclass
-from collections import defaultdict
 
 
 @dataclass
 class FunctionStats:
     """Statistics for a single Rust function."""
+
     name: str
     call_count: int = 0
     total_time_ns: int = 0
@@ -65,55 +67,125 @@ class RustProfiler:
     # All known Rust functions (72 total as of Phase 13)
     RUST_FUNCTIONS = [
         # Security (8)
-        "scan_code_vulnerabilities_rust", "scan_injections_rust", "scan_pii_rust",
-        "analyze_thought_rust", "scan_hardcoded_secrets_rust", "scan_insecure_patterns_rust",
-        "scan_optimization_patterns_rust", "scan_secrets_rust",
+        "scan_code_vulnerabilities_rust",
+        "scan_injections_rust",
+        "scan_pii_rust",
+        "analyze_thought_rust",
+        "scan_hardcoded_secrets_rust",
+        "scan_insecure_patterns_rust",
+        "scan_optimization_patterns_rust",
+        "scan_secrets_rust",
         # Statistics (4)
-        "calculate_pearson_correlation", "predict_linear", "predict_with_confidence_rust",
+        "calculate_pearson_correlation",
+        "predict_linear",
+        "predict_with_confidence_rust",
         "aggregate_score_rust",
         # Neural (1)
         "cluster_interactions_rust",
         # Base (1)
         "is_response_valid_rust",
         # Text Processing (58)
-        "tokenize_and_index_rust", "tokenize_query_rust", "calculate_text_similarity_rust",
-        "find_similar_pairs_rust", "bulk_tokenize_rust", "word_frequencies_rust",
-        "deduplicate_strings_rust", "match_patterns_rust", "bulk_match_patterns_rust",
-        "check_suppression_rust", "scan_lines_multi_pattern_rust", "search_content_scored_rust",
-        "extract_versions_rust", "batch_scan_files_rust", "cosine_similarity_rust",
-        "batch_cosine_similarity_rust", "find_strong_correlations_rust", "search_with_tags_rust",
-        "filter_memory_by_query_rust", "find_dependents_rust", "match_policies_rust",
-        "search_blocks_rust", "apply_patterns_rust", "analyze_security_patterns_rust",
-        "calculate_coupling_rust", "topological_sort_rust", "partition_to_shards_rust",
-        "count_untyped_functions_rust", "build_graph_edges_rust", "find_duplicate_code_rust",
-        "linear_forecast_rust", "check_style_patterns_rust", "scan_compliance_patterns_rust",
-        "normalize_and_hash_rust", "generate_unified_diff_rust", "calculate_jaccard_set_rust",
-        "fast_cache_key_rust", "fast_prefix_key_rust", "select_best_agent_rust",
-        "aggregate_file_metrics_rust", "calculate_weighted_load_rust", "detect_failed_agents_rust",
-        "calculate_variance_rust", "validate_semver_rust", "analyze_failure_strategy_rust",
-        "analyze_tech_debt_rust", "calculate_sum_rust", "calculate_avg_rust",
-        "calculate_min_rust", "calculate_max_rust", "calculate_median_rust",
-        "calculate_p95_rust", "calculate_p99_rust", "calculate_stddev_rust",
-        "calculate_pearson_correlation_rust", "calculate_shard_id_rust",
-        "merge_knowledge_rust", "filter_stable_knowledge_rust",
+        "tokenize_and_index_rust",
+        "tokenize_query_rust",
+        "calculate_text_similarity_rust",
+        "find_similar_pairs_rust",
+        "bulk_tokenize_rust",
+        "word_frequencies_rust",
+        "deduplicate_strings_rust",
+        "match_patterns_rust",
+        "bulk_match_patterns_rust",
+        "check_suppression_rust",
+        "scan_lines_multi_pattern_rust",
+        "search_content_scored_rust",
+        "extract_versions_rust",
+        "batch_scan_files_rust",
+        "cosine_similarity_rust",
+        "batch_cosine_similarity_rust",
+        "find_strong_correlations_rust",
+        "search_with_tags_rust",
+        "filter_memory_by_query_rust",
+        "find_dependents_rust",
+        "match_policies_rust",
+        "search_blocks_rust",
+        "apply_patterns_rust",
+        "analyze_security_patterns_rust",
+        "calculate_coupling_rust",
+        "topological_sort_rust",
+        "partition_to_shards_rust",
+        "count_untyped_functions_rust",
+        "build_graph_edges_rust",
+        "find_duplicate_code_rust",
+        "linear_forecast_rust",
+        "check_style_patterns_rust",
+        "scan_compliance_patterns_rust",
+        "normalize_and_hash_rust",
+        "generate_unified_diff_rust",
+        "calculate_jaccard_set_rust",
+        "fast_cache_key_rust",
+        "fast_prefix_key_rust",
+        "select_best_agent_rust",
+        "aggregate_file_metrics_rust",
+        "calculate_weighted_load_rust",
+        "detect_failed_agents_rust",
+        "calculate_variance_rust",
+        "validate_semver_rust",
+        "analyze_failure_strategy_rust",
+        "analyze_tech_debt_rust",
+        "calculate_sum_rust",
+        "calculate_avg_rust",
+        "calculate_min_rust",
+        "calculate_max_rust",
+        "calculate_median_rust",
+        "calculate_p95_rust",
+        "calculate_p99_rust",
+        "calculate_stddev_rust",
+        "calculate_pearson_correlation_rust",
+        "calculate_shard_id_rust",
+        "merge_knowledge_rust",
+        "filter_stable_knowledge_rust",
         # Phase 14: Cognitive & Buffer (8)
-        "count_hedge_words_rust", "predict_intent_rust", "top_k_indices_rust",
-        "decompose_activations_rust", "sort_buffer_by_priority_rust", "filter_stale_entries_rust",
-        "calculate_statistical_significance", "calculate_sample_size",
+        "count_hedge_words_rust",
+        "predict_intent_rust",
+        "top_k_indices_rust",
+        "decompose_activations_rust",
+        "sort_buffer_by_priority_rust",
+        "filter_stale_entries_rust",
+        "calculate_statistical_significance",
+        "calculate_sample_size",
         # Phase 15: Core & Infrastructure (8)
-        "analyze_structure_rust", "estimate_tokens_rust", "detect_cycles_rust",
-        "validate_response_rust", "process_text_rust", "exponential_forecast_rust",
-        "batch_token_count_rust", "graph_bfs_rust",
+        "analyze_structure_rust",
+        "estimate_tokens_rust",
+        "detect_cycles_rust",
+        "validate_response_rust",
+        "process_text_rust",
+        "exponential_forecast_rust",
+        "batch_token_count_rust",
+        "graph_bfs_rust",
         # Phase 16: Vector Math & Aggregation (12)
-        "compute_embedding_stats_rust", "kmeans_cluster_rust", "compute_similarity_matrix_rust",
-        "pca_reduce_rust", "random_projection_rust", "compress_json_rust",
-        "decompress_json_rust", "weighted_random_select_rust", "keyword_search_score_rust",
-        "calculate_ttest_rust", "batch_aggregate_rust", "rolling_window_rust",
+        "compute_embedding_stats_rust",
+        "kmeans_cluster_rust",
+        "compute_similarity_matrix_rust",
+        "pca_reduce_rust",
+        "random_projection_rust",
+        "compress_json_rust",
+        "decompress_json_rust",
+        "weighted_random_select_rust",
+        "keyword_search_score_rust",
+        "calculate_ttest_rust",
+        "batch_aggregate_rust",
+        "rolling_window_rust",
         # Phase 17: vLLM-Inspired Math & Utils (11)
-        "cdiv_rust", "next_power_of_2_rust", "prev_power_of_2_rust",
-        "round_up_rust", "round_down_rust", "atomic_counter_add_rust",
-        "xxhash_rust", "fast_cache_hash_rust", "cache_hit_ratio_rust",
-        "batch_cdiv_rust", "batch_next_power_of_2_rust",
+        "cdiv_rust",
+        "next_power_of_2_rust",
+        "prev_power_of_2_rust",
+        "round_up_rust",
+        "round_down_rust",
+        "atomic_counter_add_rust",
+        "xxhash_rust",
+        "fast_cache_hash_rust",
+        "cache_hit_ratio_rust",
+        "batch_cdiv_rust",
+        "batch_next_power_of_2_rust",
     ]
 
     def __new__(cls) -> "RustProfiler":
@@ -193,14 +265,17 @@ class RustProfiler:
     def get_stats(self) -> dict[str, FunctionStats]:
         """Get copy of all statistics."""
         with self._stats_lock:
-            return {k: FunctionStats(
-                name=v.name,
-                call_count=v.call_count,
-                total_time_ns=v.total_time_ns,
-                min_time_ns=v.min_time_ns,
-                max_time_ns=v.max_time_ns,
-                python_fallback_count=v.python_fallback_count,
-            ) for k, v in self._stats.items()}
+            return {
+                k: FunctionStats(
+                    name=v.name,
+                    call_count=v.call_count,
+                    total_time_ns=v.total_time_ns,
+                    min_time_ns=v.min_time_ns,
+                    max_time_ns=v.max_time_ns,
+                    python_fallback_count=v.python_fallback_count,
+                )
+                for k, v in self._stats.items()
+            }
 
     def get_report(self) -> dict[str, Any]:
         """Generate a comprehensive profiling report."""
@@ -210,18 +285,10 @@ class RustProfiler:
         called_funcs = {k: v for k, v in stats.items() if v.call_count > 0}
 
         # Sort by total time
-        by_time = sorted(
-            called_funcs.items(),
-            key=lambda x: x[1].total_time_ns,
-            reverse=True
-        )
+        by_time = sorted(called_funcs.items(), key=lambda x: x[1].total_time_ns, reverse=True)
 
         # Sort by call count
-        by_calls = sorted(
-            called_funcs.items(),
-            key=lambda x: x[1].call_count,
-            reverse=True
-        )
+        by_calls = sorted(called_funcs.items(), key=lambda x: x[1].call_count, reverse=True)
 
         total_calls = sum(s.call_count for s in called_funcs.values())
         total_time_ms = sum(s.total_time_ms for s in called_funcs.values())
@@ -234,9 +301,9 @@ class RustProfiler:
                 "total_calls": total_calls,
                 "total_time_ms": round(total_time_ms, 2),
                 "total_python_fallbacks": total_fallbacks,
-                "rust_utilization_pct": round(
-                    (total_calls - total_fallbacks) / total_calls * 100, 2
-                ) if total_calls > 0 else 0.0,
+                "rust_utilization_pct": round((total_calls - total_fallbacks) / total_calls * 100, 2)
+                if total_calls > 0
+                else 0.0,
             },
             "by_time": [
                 {
@@ -257,9 +324,7 @@ class RustProfiler:
                 }
                 for k, v in by_calls[:20]
             ],
-            "unused_functions": [
-                k for k, v in stats.items() if v.call_count == 0
-            ],
+            "unused_functions": [k for k, v in stats.items() if v.call_count == 0],
             "source_locations": dict(self._source_locations),
         }
 
@@ -282,13 +347,13 @@ class RustProfiler:
 
         print("\n⏱️ TOP FUNCTIONS BY TIME")
         print(f"  {'Function':<45} {'Calls':>8} {'Total(ms)':>10} {'Avg(μs)':>10}")
-        print(f"  {'-'*45} {'-'*8} {'-'*10} {'-'*10}")
+        print(f"  {'-' * 45} {'-' * 8} {'-' * 10} {'-' * 10}")
         for item in report["by_time"][:15]:
             print(f"  {item['function']:<45} {item['calls']:>8,} {item['total_ms']:>10.3f} {item['avg_us']:>10.2f}")
 
         print("\n📈 TOP FUNCTIONS BY CALL COUNT")
         print(f"  {'Function':<45} {'Calls':>8} {'Total(ms)':>10}")
-        print(f"  {'-'*45} {'-'*8} {'-'*10}")
+        print(f"  {'-' * 45} {'-' * 8} {'-' * 10}")
         for item in report["by_calls"][:15]:
             print(f"  {item['function']:<45} {item['calls']:>8,} {item['total_ms']:>10.3f}")
 
@@ -313,6 +378,7 @@ class RustProfiler:
 
 def profile_rust_call(func_name: str) -> Callable:
     """Decorator to profile Rust function calls."""
+
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -327,7 +393,9 @@ def profile_rust_call(func_name: str) -> Callable:
                 elapsed = time.perf_counter_ns() - start
                 profiler.record_call(func_name, elapsed, used_rust=False)
                 raise
+
         return wrapper
+
     return decorator
 
 
@@ -458,9 +526,7 @@ class RustUsageScanner:
             "usage_by_function": dict(all_usage),
             "unused_functions": sorted(unused_funcs),
             "top_used": sorted(
-                [(k, v["src_count"] + v["test_count"]) for k, v in all_usage.items()],
-                key=lambda x: x[1],
-                reverse=True
+                [(k, v["src_count"] + v["test_count"]) for k, v in all_usage.items()], key=lambda x: x[1], reverse=True
             )[:20],
         }
 
@@ -484,6 +550,7 @@ def create_profiled_rust_core():
             original = getattr(rc, name)
 
             if callable(original) and name in profiler.RUST_FUNCTIONS:
+
                 @functools.wraps(original)
                 def profiled_func(*args, **kwargs):
                     start = time.perf_counter_ns()
@@ -496,6 +563,7 @@ def create_profiled_rust_core():
                         elapsed = time.perf_counter_ns() - start
                         profiler.record_call(name, elapsed, used_rust=False)
                         raise
+
                 return profiled_func
             return original
 
@@ -528,7 +596,7 @@ if __name__ == "__main__":
     # Print summary
     summary = report["summary"]
     print("\n📊 RUST USAGE SCAN RESULTS")
-    print(f"{'='*50}")
+    print(f"{'=' * 50}")
     print(f"Source files scanned:    {summary['src_files_scanned']}")
     print(f"Source files with Rust:  {summary['src_files_with_rust']}")
     print(f"Test files scanned:      {summary['test_files_scanned']}")
@@ -539,7 +607,7 @@ if __name__ == "__main__":
 
     print("\n🏆 TOP 15 MOST USED FUNCTIONS")
     print(f"{'Function':<45} {'Usage':>8}")
-    print(f"{'-'*45} {'-'*8}")
+    print(f"{'-' * 45} {'-' * 8}")
     for func_name, count in report["top_used"][:15]:
         print(f"{func_name:<45} {count:>8}")
 

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -20,20 +34,13 @@ Key Patterns:
 from __future__ import annotations
 
 import logging
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    List,
-    Optional,
-    Tuple,
-)
+from typing import TYPE_CHECKING, Any, List
 
-from src.core.rust_bridge import RustBridge
 from src.core.lazy_loader import LazyLoader
 
 if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorBase
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
+        KVConnectorBase
 
 logger = logging.getLogger(__name__)
 
@@ -57,8 +64,7 @@ class TensorParallelTransfer:
         self.tp_size = tp_size
         self.local_connector = local_connector
 
-        logger.info("TensorParallelTransfer initialized for rank %d/%d",
-                    tp_rank, tp_size)
+        logger.info("TensorParallelTransfer initialized for rank %d/%d", tp_rank, tp_size)
 
     def _aggregate_tp_metadata_rust(self, metadata_shards: List[bytes]) -> bytes:
         """Rust-accelerated aggregation of TP rank metadata."""
@@ -85,6 +91,7 @@ class TensorParallelTransfer:
         """Verify that all TP ranks have consistent KV transfer state."""
         # Typically involves an All-Reduce or All-Gather on checksums
         return True
+
 
 # Lazy loading registration
 _orchestrator = LazyLoader("src.infrastructure.storage.kv_transfer.tensor_parallel_transfer", "TensorParallelTransfer")

@@ -15,6 +15,10 @@ COPYRIGHT_BLOCK = """# Copyright 2026 PyAgent Authors
 # limitations under the License.
 """
 
+"""
+Fix headers.py module.
+"""
+
 
 def fix_header(lines: list[str], filename: str = "") -> list[str]:
     shebang = None
@@ -34,23 +38,15 @@ def fix_header(lines: list[str], filename: str = "") -> list[str]:
             shebang = line
             continue
         # Skip existing copyright blocks to avoid duplicates
-        if stripped.startswith("# Copyright") or stripped.startswith(
-            "# Licensed under the Apache"
-        ):
+        if stripped.startswith("# Copyright") or stripped.startswith("# Licensed under the Apache"):
             continue
         if "http://www.apache.org/licenses/LICENSE-2.0" in stripped:
             continue
         if "Unless required by applicable law or agreed to in writing" in stripped:
             continue
-        if (
-            'distributed under the License is distributed on an "AS IS" BASIS'
-            in stripped
-        ):
+        if 'distributed under the License is distributed on an "AS IS" BASIS' in stripped:
             continue
-        if (
-            "See the License for the specific language governing permissions"
-            in stripped
-        ):
+        if "See the License for the specific language governing permissions" in stripped:
             continue
 
         if re.match(r"^from\s+__future__\s+import\s+annotations", stripped):
@@ -77,10 +73,7 @@ def fix_header(lines: list[str], filename: str = "") -> list[str]:
 
     # 2. Add Docstring if one exists at the top of remaining
     idx = 0
-    if idx < len(remaining) and (
-        remaining[idx].strip().startswith('"""')
-        or remaining[idx].strip().startswith("'''")
-    ):
+    if idx < len(remaining) and (remaining[idx].strip().startswith('"""') or remaining[idx].strip().startswith("'''")):
         start_quote = remaining[idx].strip()[:3]
         new_lines.append(remaining[idx])
         if remaining[idx].strip().count(start_quote) == 1:

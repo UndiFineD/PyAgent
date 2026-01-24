@@ -17,20 +17,24 @@ Core logic for performance-based routing and task distribution.
 """
 
 from __future__ import annotations
+
 import os
 from typing import Any, Dict, Optional
+
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc # pylint: disable=import-error
+    import rust_core as rc  # pylint: disable=import-error
 except ImportError:
     rc = None
+
 
 class RoutingCore(BaseCore):
     """
     Authoritative engine for task routing and provider selection.
     Balances latency, cost, and quality metrics across backend providers.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self.providers = [
@@ -45,18 +49,18 @@ class RoutingCore(BaseCore):
         self,
         task_type: str = "general",
         priority: str = "balanced",
-        performance_report: Optional[Dict[str, Any]] = None
+        performance_report: Optional[Dict[str, Any]] = None,
     ) -> str:
         """
         Optimal provider selection logic.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
         """
-        if rc and hasattr(rc, "select_provider_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "select_provider_rust"):  # pylint: disable=no-member
             try:
-                return rc.select_provider_rust( # pylint: disable=no-member
+                return rc.select_provider_rust(  # pylint: disable=no-member
                     task_type, priority, performance_report or {}
-                ) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                )  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         # Default logic (can be expanded with weighted averages)

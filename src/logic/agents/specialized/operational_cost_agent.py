@@ -1,13 +1,19 @@
+
+"""
+Operational cost agent.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Apache 2.0 License
 
 from __future__ import annotations
+
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 
-class OperationalCostAgent(BaseAgent):
+class OperationalCostAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Phase 286: Operational Cost Agent.
     Estimates the real-world dollar cost of improvement cycles based on model usage.
@@ -37,14 +43,25 @@ class OperationalCostAgent(BaseAgent):
             rate = self.pricing.get(model, 1.0)  # Default to 1.0/million if unknown
             cost = (count / 1_000_000) * rate
             total_usd += cost
-            details.append(
-                {"model": model, "tokens": count, "cost_usd": round(cost, 4)}
-            )
+            details.append({"model": model, "tokens": count, "cost_usd": round(cost, 4)})
 
         return {"total_usd": round(total_usd, 2), "breakdown": details}
 
-    async def get_improvement_items(
-        self, context: dict[str, Any]
-    ) -> list[dict[str, Any]]:
+    async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
+        """Provides financial audit results."""
+        _ = context
         # Financial agent doesn't modify code directly, it audits.
         return []
+
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Analyze operational cost based on prompt data."""
+        _ = target_file
+        # Assume prompt contains json of token usage
+        import json
+
+        try:
+            usage = json.loads(prompt)
+            report = await self.calculate_run_cost(usage)
+            return f"Cost Analysis: ${report['total_usd']} USD."
+        except json.JSONDecodeError:
+            return "Usage: OperationalCostAgent requires a JSON string of token usage patterns."

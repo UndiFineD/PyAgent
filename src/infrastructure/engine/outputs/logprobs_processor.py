@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: Logprobs Tensors and Lists
 vLLM-inspired logprobs data structures with optimized handling.
@@ -12,19 +26,17 @@ Beyond vLLM:
 from __future__ import annotations
 
 import threading
-import time
-from abc import ABC, abstractmethod
 from collections import defaultdict
 from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Callable, Dict, Generic, Iterator, List, Optional, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 
 # Try to import rust_core for acceleration
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -34,17 +46,19 @@ except ImportError:
 @dataclass
 class TokenLogprob:
     """Single token with its log probability."""
+
     token_id: int
     token: str
     logprob: float
 
-    def __lt__(self, other: 'TokenLogprob') -> bool:
+    def __lt__(self, other: "TokenLogprob") -> bool:
         return self.logprob > other.logprob  # Higher logprob = better
 
 
 @dataclass
 class TopLogprobs:
     """Top logprobs for a single position."""
+
     position: int
     token_id: int
     token: str
@@ -60,7 +74,7 @@ class TopLogprobs:
         tokens: List[str],
         selected_idx: int,
         k: int = 5,
-    ) -> 'TopLogprobs':
+    ) -> "TopLogprobs":
         """Create from arrays."""
         # Get top-k indices
         if k >= len(logprobs):
@@ -107,9 +121,7 @@ class LogprobsLists:
         with self._lock:
             if seq_idx >= len(self._sequences):
                 # Extend if needed
-                self._sequences.extend(
-                    [] for _ in range(seq_idx - len(self._sequences) + 1)
-                )
+                self._sequences.extend([] for _ in range(seq_idx - len(self._sequences) + 1))
             self._sequences[seq_idx].append(logprobs)
 
     def get_sequence(self, seq_idx: int) -> List[TopLogprobs]:
@@ -147,6 +159,7 @@ class LogprobsTensors:
     - Sparse storage for memory efficiency
     - Lazy evaluation support
     """
+
     # Main storage
     logprobs: np.ndarray  # (batch, seq_len, vocab_size) or sparse
     token_ids: np.ndarray  # (batch, seq_len)
@@ -169,14 +182,14 @@ class LogprobsTensors:
         vocab_size: int,
         top_k: int = 5,
         sparse: bool = False,
-    ) -> 'LogprobsTensors':
+    ) -> "LogprobsTensors":
         """Create empty tensors."""
         if sparse:
             # Only store top-k logprobs
-            logprobs = np.full((batch_size, max_seq_len, top_k), float('-inf'), dtype=np.float32)
+            logprobs = np.full((batch_size, max_seq_len, top_k), float("-inf"), dtype=np.float32)
             token_ids = np.zeros((batch_size, max_seq_len, top_k), dtype=np.int64)
         else:
-            logprobs = np.full((batch_size, max_seq_len, vocab_size), float('-inf'), dtype=np.float32)
+            logprobs = np.full((batch_size, max_seq_len, vocab_size), float("-inf"), dtype=np.float32)
             token_ids = np.zeros((batch_size, max_seq_len), dtype=np.int64)
 
         return cls(
@@ -197,7 +210,7 @@ class LogprobsTensors:
         """Set logprobs at a position."""
         if len(self.logprobs.shape) == 3 and self.logprobs.shape[2] == self.top_k:
             # Sparse storage
-            top_indices = np.argpartition(logprobs, -self.top_k)[-self.top_k:]
+            top_indices = np.argpartition(logprobs, -self.top_k)[-self.top_k :]
             self.logprobs[batch_idx, position] = logprobs[top_indices]
             self.token_ids[batch_idx, position] = top_indices
         else:
@@ -241,7 +254,7 @@ class LogprobsTensors:
                     token_id = int(self.token_ids[batch_idx, pos])
 
                     # Get top-k
-                    top_indices = np.argpartition(logprobs, -self.top_k)[-self.top_k:]
+                    top_indices = np.argpartition(logprobs, -self.top_k)[-self.top_k :]
                     top_indices = top_indices[np.argsort(logprobs[top_indices])[::-1]]
 
                     top_k_list = [
@@ -322,6 +335,7 @@ class SamplerOutput:
 
     Contains sampled tokens and optional logprobs.
     """
+
     # Sampled tokens
     sampled_token_ids: np.ndarray  # (batch_size,) or (batch_size, num_samples)
 
@@ -356,6 +370,7 @@ class ModelRunnerOutput:
 
     Contains all outputs from a single forward pass.
     """
+
     # Sampler output
     sampler_output: SamplerOutput
 
@@ -379,7 +394,7 @@ class ModelRunnerOutput:
         sampled_token_ids: np.ndarray,
         req_ids: List[str],
         logprobs: Optional[LogprobsTensors] = None,
-    ) -> 'ModelRunnerOutput':
+    ) -> "ModelRunnerOutput":
         """Create a model runner output."""
         sampler_output = SamplerOutput(
             sampled_token_ids=sampled_token_ids,
@@ -479,7 +494,7 @@ def extract_top_k_logprobs_rust(
 
     Returns (top_logprobs, top_indices) if Rust is available.
     """
-    if HAS_RUST and hasattr(rust_core, 'extract_top_k_logprobs'):
+    if HAS_RUST and hasattr(rust_core, "extract_top_k_logprobs"):
         return rust_core.extract_top_k_logprobs(logprobs, k)
     return None
 
@@ -493,20 +508,20 @@ def batch_logprobs_to_cpu_rust(
 
     Returns transferred (logprobs, token_ids) if Rust is available.
     """
-    if HAS_RUST and hasattr(rust_core, 'batch_logprobs_transfer'):
+    if HAS_RUST and hasattr(rust_core, "batch_logprobs_transfer"):
         return rust_core.batch_logprobs_transfer(logprobs, token_ids)
     return None
 
 
 __all__ = [
-    'TokenLogprob',
-    'TopLogprobs',
-    'LogprobsLists',
-    'LogprobsTensors',
-    'AsyncCPUTransfer',
-    'SamplerOutput',
-    'ModelRunnerOutput',
-    'StreamingLogprobsCollector',
-    'extract_top_k_logprobs_rust',
-    'batch_logprobs_to_cpu_rust',
+    "TokenLogprob",
+    "TopLogprobs",
+    "LogprobsLists",
+    "LogprobsTensors",
+    "AsyncCPUTransfer",
+    "SamplerOutput",
+    "ModelRunnerOutput",
+    "StreamingLogprobsCollector",
+    "extract_top_k_logprobs_rust",
+    "batch_logprobs_to_cpu_rust",
 ]

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -5,19 +19,13 @@ Intel XPU (GPU/Accelerator) platform implementation.
 """
 
 from __future__ import annotations
+
 import contextlib
 from typing import List, Set
 
-from .models import (
-    PlatformType,
-    DeviceCapability,
-    MemoryInfo,
-    DeviceFeature,
-    AttentionBackend,
-    QuantizationType,
-    DeviceInfo,
-)
 from .base import Platform
+from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
+                     DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
 
 
 class XpuPlatform(Platform):
@@ -30,8 +38,9 @@ class XpuPlatform(Platform):
     @classmethod
     def is_available(cls) -> bool:
         try:
+            import intel_extension_for_pytorch  # noqa: F401
             import torch
-            import intel_extension_for_pytorch
+
             return hasattr(torch, "xpu") and torch.xpu.is_available()
         except ImportError:
             return False
@@ -40,6 +49,7 @@ class XpuPlatform(Platform):
         count = 0
         with contextlib.suppress(Exception):
             import torch
+
             count = torch.xpu.device_count()
         return count
 
@@ -50,6 +60,7 @@ class XpuPlatform(Platform):
         name = f"Intel-XPU-{device_id}"
         with contextlib.suppress(Exception):
             import torch
+
             name = torch.xpu.get_device_name(device_id)
         return name
 
@@ -57,6 +68,7 @@ class XpuPlatform(Platform):
         info = MemoryInfo(total_bytes=0, free_bytes=0, used_bytes=0, reserved_bytes=0)
         with contextlib.suppress(Exception):
             import torch
+
             props = torch.xpu.get_device_properties(device_id)
             total = props.total_memory
             info = MemoryInfo(total_bytes=total, free_bytes=total, used_bytes=0, reserved_bytes=0)

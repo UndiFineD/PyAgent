@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 """
 LoRA Stats Types - Enums and DataClasses for LoRA adapter tracking.
@@ -13,6 +27,7 @@ from typing import Dict, Optional, Tuple
 
 class LoRALoadState(Enum):
     """State of a LoRA adapter."""
+
     NOT_LOADED = auto()
     LOADING = auto()
     LOADED = auto()
@@ -22,6 +37,7 @@ class LoRALoadState(Enum):
 
 class RequestStatus(Enum):
     """Status of a request in the system."""
+
     WAITING = auto()
     RUNNING = auto()
     PREEMPTED = auto()
@@ -33,6 +49,7 @@ class RequestStatus(Enum):
 @dataclass
 class LoRAAdapterInfo:
     """Information about a LoRA adapter."""
+
     adapter_id: str
     rank: int
     alpha: float
@@ -56,6 +73,7 @@ class LoRARequestState:
 
     Tracks per-request LoRA adapter usage and timing.
     """
+
     request_id: str
     adapter_id: str
     adapter_rank: int
@@ -101,6 +119,7 @@ class LoRAStats:
     """
     Aggregate statistics for LoRA operations.
     """
+
     # Request counts
     total_requests: int = 0
     active_requests: int = 0

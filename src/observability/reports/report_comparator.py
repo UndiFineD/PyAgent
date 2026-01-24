@@ -16,9 +16,12 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .report_comparison import ReportComparison
+
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_comparison import ReportComparison
 
 __version__ = VERSION
 
@@ -41,9 +44,7 @@ class ReportComparator:
 
         self.reports_dir = reports_dir
 
-    def compare(
-        self, old_path: str, new_path: str, old_content: str, new_content: str
-    ) -> ReportComparison:
+    def compare(self, old_path: str, new_path: str, old_content: str, new_content: str) -> ReportComparison:
         """Compare two report versions.
         Args:
             old_path: Path to old version.

@@ -18,11 +18,14 @@ Enables sharing lessons between decoupled fleet instances.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import logging
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .knowledge_transfer_core import KnowledgeTransferCore
 
 __version__ = VERSION
@@ -47,9 +50,7 @@ class KnowledgeTransferEngine:
         with open(export_file, "w") as f:
             json.dump(knowledge_data, f, indent=2)
 
-        logging.info(
-            f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}"
-        )
+        logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")
         return str(export_file)
 
     def import_knowledge(self, source_file: str) -> dict[str, Any]:
@@ -64,8 +65,6 @@ class KnowledgeTransferEngine:
         logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")
         return data
 
-    def merge_lessons(
-        self, current_lessons: list[Any], imported_lessons: list[Any]
-    ) -> list[Any]:
+    def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
         """Merges imported lessons into the current set, avoiding duplicates."""
         return self.core.merge_lessons(current_lessons, imported_lessons)

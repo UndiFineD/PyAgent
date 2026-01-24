@@ -1,20 +1,27 @@
+
+"""
+Structural analysis mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
 import os
 import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import \
+        SelfImprovementAnalysis
+
 
 class StructuralAnalysisMixin:
     """Mixin for structural health and versioning checks in SelfImprovementAnalysis."""
 
     def check_versioning(self: SelfImprovementAnalysis) -> dict[str, str] | None:
         """Checks if the mandatory Version.py gatekeeper exists."""
-        version_file = os.path.join(self.workspace_root, "src\core\base\version.py")
+        version_file = os.path.join(self.workspace_root, "src/core/base/version.py")
         if not os.path.exists(version_file):
             return {
                 "type": "Versioning Issue",
@@ -38,19 +45,15 @@ class StructuralAnalysisMixin:
             )
 
         # Resilience check (HTTP pooling)
-        if (
-            re.search(r"requests\.(get|post|put|delete|patch|request)\(", content)
-            or "http.client" in content
-        ):
-            if (
-                "TTL" not in content
-                and "status_cache" not in content.lower()
-                and "ConnectivityManager" not in content
-            ):
+        if re.search(r"requests\.(get|post|put|delete|patch|request)\(", content) or "http.client" in content:
+            if "TTL" not in content and "status_cache" not in content.lower() and "ConnectivityManager" not in content:
                 findings.append(
                     {
                         "type": "Resilience Issue",
-                        "message": "Direct HTTP calls detected without connection status caching. Use 15-minute TTL status checks or ConnectivityManager.",
+                        "message": (
+                            "Direct HTTP calls detected without connection status caching. "
+                            "Use 15-minute TTL status checks or ConnectivityManager."
+                        ),
                         "file": rel_path,
                     }
                 )
@@ -65,10 +68,7 @@ class StructuralAnalysisMixin:
         """Integrates findings from the collective intelligence task pool."""
         if active_tasks:
             for task in active_tasks:
-                if (
-                    os.path.basename(file_path).lower()
-                    in task.get("description", "").lower()
-                ):
+                if os.path.basename(file_path).lower() in task.get("description", "").lower():
                     findings.append(
                         {
                             "type": "Swarm Intelligence Fix",

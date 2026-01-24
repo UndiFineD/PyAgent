@@ -16,11 +16,13 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+from collections.abc import Callable
+from dataclasses import dataclass
+
 from src.core.base.common.types.code_language import CodeLanguage
 from src.core.base.common.types.style_rule_severity import StyleRuleSeverity
-from dataclasses import dataclass
-from collections.abc import Callable
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

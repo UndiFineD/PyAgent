@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 CpuGpuBufferPool.py - Paired CPU/GPU tensor buffers.
 
@@ -10,20 +24,21 @@ Phase 29: Execution Context, Batching & Async Streaming
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List, Tuple
-from enum import Enum
 import threading
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-
 
 # ============================================================================
 # Memory Placement
 # ============================================================================
 
+
 class MemoryPlacement(Enum):
     """Memory placement options."""
+
     CPU = "cpu"
     GPU = "gpu"
     PINNED = "pinned"  # Pinned CPU memory for fast transfers
@@ -34,6 +49,7 @@ class MemoryPlacement(Enum):
 # CPU/GPU Buffer
 # ============================================================================
 
+
 @dataclass
 class CpuGpuBuffer:
     """
@@ -42,6 +58,7 @@ class CpuGpuBuffer:
     Maintains both CPU and GPU views of the same data.
     Based on vLLM's CpuGpuBuffer pattern.
     """
+
     name: str
     shape: Tuple[int, ...]
     dtype: np.dtype
@@ -149,6 +166,7 @@ class CpuGpuBuffer:
 # UVA Buffer Pool
 # ============================================================================
 
+
 class UvaBufferPool:
     """
     Pool of CPU/GPU buffers for efficient reuse.
@@ -251,6 +269,7 @@ class UvaBufferPool:
 # Pinned Memory Manager
 # ============================================================================
 
+
 class PinnedMemoryManager:
     """
     Manager for pinned (page-locked) memory buffers.
@@ -323,6 +342,7 @@ class PinnedMemoryManager:
 # Buffer Utilities
 # ============================================================================
 
+
 def copy_with_indices(
     src: np.ndarray,
     dst: np.ndarray,
@@ -333,7 +353,7 @@ def copy_with_indices(
 
     dst[i] = src[indices[i]] for all i.
     """
-    np.take(src, indices, axis=0, out=dst[:len(indices)])
+    np.take(src, indices, axis=0, out=dst[: len(indices)])
 
 
 def scatter_with_indices(
@@ -346,7 +366,7 @@ def scatter_with_indices(
 
     dst[indices[i]] = src[i] for all i.
     """
-    dst[indices] = src[:len(indices)]
+    dst[indices] = src[: len(indices)]
 
 
 def pad_to_multiple(
@@ -366,7 +386,7 @@ def pad_to_multiple(
     pad_width = [(0, 0)] * arr.ndim
     pad_width[axis] = (0, padding)
 
-    return np.pad(arr, pad_width, mode='constant', constant_values=pad_value)
+    return np.pad(arr, pad_width, mode="constant", constant_values=pad_value)
 
 
 def compute_cumsum_offsets(lengths: np.ndarray) -> np.ndarray:

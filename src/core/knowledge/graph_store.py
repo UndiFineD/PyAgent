@@ -11,13 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Graph store.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
-from .storage_base import KnowledgeStore
-from typing import Any
 from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .storage_base import KnowledgeStore
 
 __version__ = VERSION
 

@@ -16,8 +16,9 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 from enum import Enum
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

@@ -17,12 +17,14 @@ Core logic for plugin discovery, loading, and registration.
 """
 
 from __future__ import annotations
+
+import importlib
 import json
 import logging
-import importlib
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
+
 from .base_core import BaseCore
 
 try:
@@ -36,12 +38,14 @@ except ImportError:
     VersionGate = None
 
 if TYPE_CHECKING:
-    from src.core.base.logic.agent_plugin_base import AgentPluginBase
+    pass
+
 
 @dataclass
 # pylint: disable=too-many-instance-attributes
 class PluginMetadata:
     """Strictly typed metadata for a plugin."""
+
     module_path: str
     class_name: str
     needs_fleet: bool = True
@@ -56,6 +60,7 @@ class PluginMetadata:
         """Retrieves an attribute value."""
         return getattr(self, key, default)
 
+
 # pylint: disable=too-many-instance-attributes
 class PluginCore(BaseCore):
     """
@@ -68,7 +73,7 @@ class PluginCore(BaseCore):
         self.plugins_dir = self.workspace_root / "plugins"
         self.registry_path = self.plugins_dir / "manifest.json"
         self.loaded_meta: Dict[str, PluginMetadata] = {}
-        self.active_plugins: Dict[str, Any] = {} # Any to avoid circular dependency on logic
+        self.active_plugins: Dict[str, Any] = {}  # Any to avoid circular dependency on logic
         self.logger = logging.getLogger("pyagent.plugin_core")
 
         if not self.plugins_dir.exists():
@@ -111,7 +116,7 @@ class PluginCore(BaseCore):
                 return VersionGate.is_compatible(current_version, required_version)
             except (AttributeError, RuntimeError):
                 pass
-        return True # Default to true if validator is missing
+        return True  # Default to true if validator is missing
 
     def load_plugin(self, plugin_name: str) -> Optional[Any]:
         """Loads and initializes a plugin instance."""
@@ -127,13 +132,13 @@ class PluginCore(BaseCore):
             plugin_class = getattr(module, meta.class_name)
 
             instance = plugin_class()
-            if hasattr(instance, 'setup'):
+            if hasattr(instance, "setup"):
                 instance.setup()
 
             # Health check immediately after setup
-            if hasattr(instance, 'health_check'):
+            if hasattr(instance, "health_check"):
                 health = instance.health_check()
-                if hasattr(health, 'status') and health.status != "healthy":
+                if hasattr(health, "status") and health.status != "healthy":
                     self.logger.error("Plugin '%s' failed health check", plugin_name)
                     return None
 
@@ -162,22 +167,19 @@ class PluginCore(BaseCore):
         plugin_class = getattr(module, meta.class_name)
         instance = plugin_class()
 
-        if hasattr(instance, 'run'):
+        if hasattr(instance, "run"):
             original_run = instance.run
             allowed_permissions = meta.permissions or []
 
             def restricted_run(file_path: Path, context: Dict[str, Any]) -> bool:
                 if "read:src" not in allowed_permissions and "src" in str(file_path):
-                    self.logger.error(
-                        "Permission Denied: Plugin '%s' attempted to read 'src' path.",
-                        name
-                    )
+                    self.logger.error("Permission Denied: Plugin '%s' attempted to read 'src' path.", name)
                     return False
                 return original_run(file_path, context)
 
             instance.run = restricted_run
 
-        if hasattr(instance, 'setup'):
+        if hasattr(instance, "setup"):
             instance.setup()
         self.active_plugins[name] = instance
         return instance
@@ -191,7 +193,7 @@ class PluginCore(BaseCore):
         """Deactivates a specific plugin by name."""
         if name in self.active_plugins:
             plugin = self.active_plugins[name]
-            if hasattr(plugin, 'shutdown'):
+            if hasattr(plugin, "shutdown"):
                 plugin.shutdown()
             del self.active_plugins[name]
 
@@ -207,7 +209,7 @@ class PluginCore(BaseCore):
     def shutdown_all(self) -> None:
         """Gracefully shuts down all active plugins."""
         for name, plugin in self.active_plugins.items():
-            if hasattr(plugin, 'shutdown'):
+            if hasattr(plugin, "shutdown"):
                 try:
                     plugin.shutdown()
                     self.logger.info("Plugin shutdown: %s", name)

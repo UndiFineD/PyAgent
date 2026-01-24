@@ -15,10 +15,15 @@
 
 """Auto-extracted class from agent_coder.py"""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.types.modernization_suggestion import ModernizationSuggestion
+
 import re
+
+from src.core.base.common.types.modernization_suggestion import \
+    ModernizationSuggestion
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

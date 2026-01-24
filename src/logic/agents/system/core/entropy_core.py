@@ -1,13 +1,28 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Core logic for Entropy Measurement (Phase 172).
 Calculates structural complexity metrics.
 """
 
-import os
 import ast
+import os
 
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -36,9 +51,7 @@ class EntropyCore:
 
         complexity = 1
         for node in ast.walk(tree):
-            if isinstance(
-                node, (ast.If, ast.While, ast.For, ast.And, ast.Or, ast.ExceptHandler)
-            ):
+            if isinstance(node, (ast.If, ast.While, ast.For, ast.And, ast.Or, ast.ExceptHandler)):
                 complexity += 1
         return complexity
 
@@ -78,11 +91,9 @@ class EntropyCore:
         # Rust-accelerated aggregation
         if HAS_RUST:
             try:
-                metrics_tuples = [
-                    (m["size_bytes"], m["lines"], m["complexity"])
-                    for m in all_metrics
-                ]
-                avg_size, avg_complexity, max_complexity, count = rc.aggregate_file_metrics_rust(  # type: ignore[attr-defined]
+                metrics_tuples = [(m["lines"], m["complexity"]) for m in all_metrics]
+                # type: ignore[attr-defined]
+                avg_size, avg_complexity, max_complexity, count = rc.aggregate_file_metrics_rust(
                     metrics_tuples
                 )
                 return {

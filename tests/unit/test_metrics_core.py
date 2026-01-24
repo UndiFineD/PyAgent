@@ -112,7 +112,8 @@ class TestStatsRollupCore:
 
         assert core.rollup_min(values) <= p50 <= core.rollup_max(values)
         if len(values) >= 20:
-            # p95 should generally be higher than p50 for typical distributions, but not strictly guaranteed for all random sets
+            # p95 should generally be higher than p50 for typical distributions,
+            # but not strictly guaranteed for all random sets
             pass
 
 

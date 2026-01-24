@@ -12,13 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Heterogeneous speculator.py module.
+"""
+
 import logging
-import asyncio
-from typing import List, Dict, Any, Optional, Tuple
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
-from src.core.base.common.models.communication_models import ExpertProfile
+from typing import Any, List, Tuple
+
+from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+    MoEGatekeeper
 
 logger = logging.getLogger(__name__)
+
 
 class HeterogeneousSpeculator:
     """
@@ -67,9 +72,4 @@ class HeterogeneousSpeculator:
         drafter_id, verifier_id = pairs[0]
         # In a real integration, we'd call SpeculativeSwarmOrchestrator.execute_speculative_task
         # Here we simulate the handoff
-        return {
-            "mode": "speculative",
-            "drafter": drafter_id,
-            "verifier": verifier_id,
-            "task": task
-        }
+        return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}

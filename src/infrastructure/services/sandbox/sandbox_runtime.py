@@ -1,5 +1,24 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Sandbox runtime.py module.
+"""
+
 import logging
 from typing import Any
+
 from src.infrastructure.services.sandbox.core.sandbox_core import SandboxCore
 
 
@@ -12,22 +31,16 @@ class SandboxRuntime:
         self.core = SandboxCore()
         self.active_containers: dict[str, Any] = {}
 
-    def run_isolated(
-        self, agent_id: str, code: str, risk_level: str = "medium"
-    ) -> dict[str, Any]:
+    def run_isolated(self, agent_id: str, code: str, risk_level: str = "medium") -> dict[str, Any]:
         """Runs agent code in an isolated environment after validation."""
         config = self.core.get_security_profile(risk_level)
         validation = self.core.validate_code_execution(code, config)
 
         if not validation["allowed"]:
-            logging.error(
-                f"Sandbox: Code rejected for agent {agent_id}: {validation['issues']}"
-            )
+            logging.error(f"Sandbox: Code rejected for agent {agent_id}: {validation['issues']}")
             return {"success": False, "errors": validation["issues"]}
 
-        logging.info(
-            f"Sandbox: Executing code for {agent_id} in {config.memory_mb}MB container."
-        )
+        logging.info(f"Sandbox: Executing code for {agent_id} in {config.memory_mb}MB container.")
         # Implementation would call Docker/Podman here.
         # For now, we simulate success within the Core logic.
         return {"success": True, "quota_applied": validation["quota"]}

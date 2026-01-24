@@ -46,8 +46,6 @@ pub fn run_tensorrt_inference_rust(
 /// Strategic planning for AMD NPU (Ryzen AI) support.
 /// Currently requires the AMD Ryzen AI SDK to be installed and linked.
 pub mod amd_npu {
-    use super::*;
-
     #[cfg(feature = "amd_npu")]
     #[link(name = "amd_npu")]
     extern "C" {
@@ -89,7 +87,7 @@ pub mod amd_npu {
 /// ROCm/HIP Acceleration Strategy
 pub mod rocm {
     // Strategy for AMD GPU acceleration using ROCm/HIP
-    pub fn is_available() -> bool {
+    pub fn _is_available() -> bool {
         // Implementation for checking ROCm availability
         false
     }

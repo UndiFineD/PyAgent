@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Tenant bridge.py module.
+"""
+
 import logging
-from typing import List, Dict, Any, Optional
-from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import SwarmTraceSynthesizer
+from typing import Any, Dict
+
+from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import \
+    SwarmTraceSynthesizer
 
 logger = logging.getLogger(__name__)
+
 
 class TenantKnowledgeBridge:
     """
@@ -42,13 +49,12 @@ class TenantKnowledgeBridge:
         anonymized = {
             "expert_synergies": raw_wisdom.get("expert_synergies", {}),
             "top_experts": raw_wisdom.get("top_experts", []),
-            "metadata": {
-                "source": "swarm_collective",
-                "protection": "differential_orchestration_privacy"
-            }
+            "metadata": {"source": "swarm_collective", "protection": "differential_orchestration_privacy"},
         }
 
-        logger.info(f"[Phase 84] Anonymized knowledge bridge generated. Synergy count: {len(anonymized['expert_synergies'])}")
+        logger.info(
+            f"[Phase 84] Anonymized knowledge bridge generated. Synergy count: {len(anonymized['expert_synergies'])}"
+        )
         return anonymized
 
     def apply_cross_tenant_wisdom(self, target_predictor: Any, global_wisdom: Dict[str, Any]):
@@ -72,4 +78,4 @@ class TenantKnowledgeBridge:
         if hasattr(target_predictor, "_precompute_biases"):
             target_predictor.expert_biases = target_predictor._precompute_biases()
 
-        logger.info(f"[Phase 84] Applied global cross-tenant wisdom to reward predictor.")
+        logger.info("[Phase 84] Applied global cross-tenant wisdom to reward predictor.")

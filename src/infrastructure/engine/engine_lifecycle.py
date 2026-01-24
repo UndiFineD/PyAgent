@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -30,16 +44,11 @@ import logging
 import signal
 import threading
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set
 
-from .request_lifecycle import (
-    FinishReason,
-    Request,
-    RequestQueue,
-    RequestStatus,
-    RequestTracker,
-)
+from .request_lifecycle import (FinishReason, Request, RequestQueue,
+                                RequestTracker)
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +56,7 @@ logger = logging.getLogger(__name__)
 # ==============================================================================
 # Engine State Enum
 # ==============================================================================
+
 
 class EngineState(enum.Enum):
     """
@@ -57,12 +67,13 @@ class EngineState(enum.Enum):
                                     |
                               SHUTTING_DOWN -> DEAD
     """
-    INITIALIZING = "initializing"   # Engine is starting up
-    READY = "ready"                 # Ready to accept requests
-    RUNNING = "running"             # Processing requests
-    SLEEPING = "sleeping"           # Power-saving mode
-    SHUTTING_DOWN = "shutting_down" # Graceful shutdown in progress
-    DEAD = "dead"                   # Engine is terminated
+
+    INITIALIZING = "initializing"  # Engine is starting up
+    READY = "ready"  # Ready to accept requests
+    RUNNING = "running"  # Processing requests
+    SLEEPING = "sleeping"  # Power-saving mode
+    SHUTTING_DOWN = "shutting_down"  # Graceful shutdown in progress
+    DEAD = "dead"  # Engine is terminated
 
     def __str__(self) -> str:
         return self.value
@@ -107,6 +118,7 @@ _ENGINE_TRANSITIONS: Dict[EngineState, Set[EngineState]] = {
 # Engine Configuration
 # ==============================================================================
 
+
 @dataclass
 class EngineConfig:
     """
@@ -122,6 +134,7 @@ class EngineConfig:
         sleep_level: Default sleep level (1-3)
         health_check_interval: Interval for health checks
     """
+
     max_requests: int = 256
     max_tokens_per_step: int = 8192
     step_timeout: float = 30.0
@@ -140,6 +153,7 @@ class EngineConfig:
 # ==============================================================================
 # Engine Lifecycle Manager
 # ==============================================================================
+
 
 class EngineLifecycleManager:
     """
@@ -434,9 +448,7 @@ class EngineLifecycleManager:
 
         try:
             # Schedule waiting requests
-            available_slots = (
-                self.config.max_requests - self.request_queue.get_num_running()
-            )
+            available_slots = self.config.max_requests - self.request_queue.get_num_running()
             if available_slots > 0:
                 self.request_queue.schedule_next(available_slots)
 
@@ -526,6 +538,7 @@ class EngineLifecycleManager:
 
     def setup_signal_handlers(self) -> None:
         """Set up signal handlers for graceful shutdown."""
+
         def signal_handler(signum, frame):
             logger.info("Received signal %s, initiating shutdown", signum)
             self.shutdown()

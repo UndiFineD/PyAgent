@@ -17,10 +17,10 @@ Data Parallel Engine Sync for Phase 55.
 Manages engine state transitions across multiple DP ranks to ensure wave coherence.
 """
 
-import logging
 import asyncio
-from typing import Dict, List, Optional, Any
+import logging
 from enum import Enum
+from typing import Dict
 
 try:
     import rust_core as rc
@@ -29,11 +29,13 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class SyncState(Enum):
     READY = 0
     WAVE_RUNNING = 1
     WAVE_COMPLETE = 2
     PAUSED = 3
+
 
 class DPEngineSync:
     """

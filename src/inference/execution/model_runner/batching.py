@@ -1,9 +1,24 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Automatic batching support for the model runner."""
 
 import asyncio
 from typing import Optional
+
 from .config import ModelInput, ModelOutput, SchedulerOutput
 from .runner import AsyncModelRunner
 
@@ -15,12 +30,7 @@ class BatchedAsyncRunner:
     Beyond vLLM: Automatic micro-batching for efficiency.
     """
 
-    def __init__(
-        self,
-        runner: AsyncModelRunner,
-        max_batch_size: int = 32,
-        batch_timeout_ms: float = 5.0
-    ):
+    def __init__(self, runner: AsyncModelRunner, max_batch_size: int = 32, batch_timeout_ms: float = 5.0):
         self._runner = runner
         self._max_batch_size = max_batch_size
         self._batch_timeout_ms = batch_timeout_ms
@@ -61,7 +71,7 @@ class BatchedAsyncRunner:
         scheduler_output = SchedulerOutput(
             request_ids=[inp.request_id for inp in inputs],
             inputs=inputs,
-            total_tokens=sum(len(inp.input_ids) for inp in inputs)
+            total_tokens=sum(len(inp.input_ids) for inp in inputs),
         )
 
         try:
@@ -74,10 +84,7 @@ class BatchedAsyncRunner:
         except Exception as e:
             for future in futures:
                 if not future.done():
-                    error_output = ModelOutput(
-                        request_id="error",
-                        error=str(e)
-                    )
+                    error_output = ModelOutput(request_id="error", error=str(e))
                     future.set_result(error_output)
 
     async def run_batch_loop(self) -> None:

@@ -18,34 +18,35 @@ Autonomous Fleet Self-Improvement Loop.
 Scans the workspace for issues, applies autonomous fixes, and harvests external intelligence.
 """
 
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import os
+import re
+import subprocess
+import sys
+import time
+from pathlib import Path
+from typing import Any
+
 # ruff: noqa: E402
 
-from __future__ import annotations
-import os
-import sys
-
 # Ensure the project root is in PYTHONPATH before importing from src
-project_root = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
-)
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.core.base.lifecycle.version import VERSION
-import json
-import time
-import logging
-import argparse
-import subprocess
-import re
-from pathlib import Path
-from typing import Any
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.observability.structured_logger import StructuredLogger
+from src.core.base.lifecycle.version import VERSION  # noqa: E402
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: E402
+from src.observability.structured_logger import StructuredLogger  # noqa: E402
+
 
 # Phase 317: Specialized helpers to reduce complexity
 class DirectiveParser:
     """Parses strategic directives from prompt and context files."""
+
     def __init__(self, root: str, prompt_path: str | None, context_path: str | None):
         self.root = Path(root)
         self.prompt_path = prompt_path
@@ -71,9 +72,7 @@ class DirectiveParser:
         if not self.strategic_note:
             return ["src"]
 
-        focus_match = re.search(
-            r"@focus:\s*(\[.*?\]|.*?\n)", self.strategic_note, re.DOTALL | re.IGNORECASE
-        )
+        focus_match = re.search(r"@focus:\s*(\[.*?\]|.*?\n)", self.strategic_note, re.DOTALL | re.IGNORECASE)
         if not focus_match:
             return ["src"]
 
@@ -93,6 +92,7 @@ class DirectiveParser:
             return
 
         import shlex
+
         cmd_matches = re.findall(r"@cmd:\s*(.*)", self.strategic_note, re.IGNORECASE)
         for cmd in cmd_matches:
             clean_cmd = cmd.strip().strip('"').strip("'")
@@ -102,8 +102,10 @@ class DirectiveParser:
             except Exception as e:
                 logging.error(f"   - Command failed: {e}")
 
+
 class IntelligenceHarvester:
     """Orchestrates external intelligence harvesting."""
+
     def __init__(self, fleet: FleetManager, model_name: str):
         self.fleet = fleet
         self.model_name = model_name
@@ -144,8 +146,10 @@ class IntelligenceHarvester:
 
         return lessons
 
+
 class CycleOrchestrator:
     """Manages the execution of multiple improvement cycles."""
+
     def __init__(self, fleet: FleetManager, args: argparse.Namespace):
         self.fleet = fleet
         self.args = args
@@ -160,20 +164,20 @@ class CycleOrchestrator:
             current_cycle += 1
 
             run_cycle(
-                self.fleet, self.root, self.logger,
+                self.fleet,
+                self.root,
+                self.logger,
                 prompt_path=self.args.prompt,
                 context_path=self.args.context,
                 current_cycle=current_cycle,
-                model_name=self.args.model
+                model_name=self.args.model,
             )
 
             if not self.is_infinite and current_cycle >= self.args.cycles:
                 break
 
             self.logger.info("Waiting before next cycle... (Press Ctrl+C to stop)")
-            _cycle_throttle(
-                self.args.delay, self.root, self._get_last_focus(), use_watcher=self.args.watch
-            )
+            _cycle_throttle(self.args.delay, self.root, self._get_last_focus(), use_watcher=self.args.watch)
 
     def _get_last_focus(self) -> list[str]:
         """Peeks at the prompt for the watcher's benefit."""
@@ -223,13 +227,28 @@ def run_cycle(
         combined_stats["details"].extend(stats.get("details", []))
 
     # 3. Report Results
-    logger.info(f" - Scanned: {combined_stats['files_scanned']}, Issues: {combined_stats['issues_found']}, Fixed: {combined_stats['fixes_applied']}")
+    logger.info(
+        " - Scanned: %s, Issues: %s, Fixed: %s",
+        combined_stats["files_scanned"],
+        combined_stats["issues_found"],
+        combined_stats["fixes_applied"],
+    )
 
-    _report_remaining_debt(combined_stats, logger, fleet, root, target_dirs=target_dirs, prompt_path=prompt_path, model_name=model_name, current_cycle=current_cycle)
+    _report_remaining_debt(
+        combined_stats,
+        logger,
+        fleet,
+        root,
+        target_dirs=target_dirs,
+        prompt_path=prompt_path,
+        model_name=model_name,
+        current_cycle=current_cycle,
+    )
 
     # 4. Harvest External Intelligence
     harvester = IntelligenceHarvester(fleet, model_name)
     harvester.harvest()
+
 
 def consult_external_models(fleet, broken_items, prompt_path=None, model_name=None):
     """
@@ -240,6 +259,7 @@ def consult_external_models(fleet, broken_items, prompt_path=None, model_name=No
         print(f" - Analyzed {len(broken_items)} debt clusters.")
     print(" - Federated consensus reached: Continue localized refactoring.")
 
+
 def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
     """Filters and summarizes issues that were not fixed."""
     broken_items = []
@@ -248,17 +268,20 @@ def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
         if unfixed:
             # Filter matches for the orchestrator itself if they are false positives
             if "run_fleet_self_improvement.py" in detail["file"]:
-                unfixed = [i for i in unfixed if "subprocess.run" not in str(i) and "time.sleep" not in str(i)]
+                unfixed = [
+                    i for i in unfixed
+                    if "subprocess.run" not in str(i) and "time.sleep" not in str(i)
+                ]
 
             if unfixed:
                 broken_items.append({"file": detail["file"], "remaining_issues": unfixed})
     return broken_items
 
+
 def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, Any]) -> None:
     """Updates FLEET_AUTO_DOC.md with cycle results."""
-    doc_res = fleet.doc_gen_agent.extract_docs(
-        os.path.join(root, "src\infrastructure\fleet\fleet_manager.py")
-    )
+    fleet_path = os.path.join(root, "src/infrastructure/fleet/fleet_manager.py")
+    doc_res = fleet.doc_gen_agent.extract_docs(fleet_path)
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")
 
     with open(doc_path, "w", encoding="utf-8") as f:
@@ -267,10 +290,12 @@ def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, 
 
     maintenance_summary = (
         f"\n## {time.strftime('%Y-%m-%d')} - Maintenance Cycle Summary\n"
-        f"The fleet's SelfImprovementOrchestrator completed a cycle over {stats['files_scanned']} files. Re-stabilization phase engaged.\n"
+        f"The fleet's SelfImprovementOrchestrator completed a cycle over "
+        f"{stats['files_scanned']} files. Re-stabilization phase engaged.\n"
     )
     with open(doc_path, "a", encoding="utf-8") as f:
         f.write(maintenance_summary)
+
 
 def _log_explainability(fleet: FleetManager, stats: dict[str, Any]) -> None:
     """Logs the reasoning for the improvement cycle."""
@@ -278,17 +303,17 @@ def _log_explainability(fleet: FleetManager, stats: dict[str, Any]) -> None:
         "self_improvement_01",
         "SelfImprovementOrchestrator",
         "run_improvement_cycle",
-        "Autonomous fleet optimization maintains system health and security parity.",
-        {"stats": stats},
+        justification="Autonomous fleet optimization maintains system health and security parity.",
+        context={"stats": stats},
     )
+
 
 def _verify_ai_recording(fleet: FleetManager) -> None:
     """Verifies that local interaction recording is functional."""
     test_prompt = "How can we optimize for a trillion parameters?"
     test_result = "By using compressed sharding and adler32 hashing for high-speed indexing."
-    fleet.recorder.record_interaction(
-        "internal_fleet_optimizer", "logic-v1", test_prompt, test_result
-    )
+    fleet.recorder.record_interaction("internal_fleet_optimizer", "logic-v1", test_prompt, test_result)
+
 
 def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
     """Triggers knowledge synthesis from the swarm."""
@@ -298,6 +323,7 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
             print(f"\n[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
     except Exception as e:
         print(f"\n[Intelligence] Synthesis skipped: {e}")
+
 
 def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: list[str], broken_items: list) -> None:
     """Removes completed directives from the prompt file."""
@@ -325,13 +351,17 @@ def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: 
         new_content = re.sub(r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE)
 
     new_content = re.sub(r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE)
-    new_content = re.sub(r"^@python:\s*\"\"\"(.*?)\"\"\"\n?", "", new_content, count=1, flags=re.DOTALL | re.IGNORECASE)
+    new_content = re.sub(
+        r"^@python:\s*\"\"\"(.*?)\"\"\"\n?", "", new_content, count=1,
+        flags=re.DOTALL | re.IGNORECASE
+    )
     new_content = re.sub(r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
     new_content = re.sub(r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
 
     if new_content != content:
         p_path.write_text(new_content.strip() + "\n", encoding="utf-8")
         print(f" - Updated {p_path.name}: Verified directives REMOVED.")
+
 
 def _report_remaining_debt(
     stats: dict[str, Any],
@@ -377,9 +407,7 @@ def _report_remaining_debt(
     print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")
 
 
-def _cycle_throttle(
-    delay: int, root: str, target_dirs: list[str], use_watcher: bool = False
-) -> None:
+def _cycle_throttle(delay: int, root: str, target_dirs: list[str], use_watcher: bool = False) -> None:
     """
     Implement a controlled delay between improvement cycles.
     Uses 'watchfiles' for event-driven triggering if available and requested (Phase 147).
@@ -418,13 +446,9 @@ def _cycle_throttle(
                 logging.debug(f"Watcher failed: {e}")
 
             if isinstance(e, ImportError):
-                print(
-                    " - [Watcher Fallback] 'watchfiles' package not found. Using time-based delay."
-                )
+                print(" - [Watcher Fallback] 'watchfiles' package not found. Using time-based delay.")
             else:
-                print(
-                    f" - [Watcher Fallback] Watcher error: {e}. Using time-based delay."
-                )
+                print(f" - [Watcher Fallback] Watcher error: {e}. Using time-based delay.")
 
     print(f" - [Throttle] Waiting {delay}s for next cycle...")
     # Use threading.Event to avoid synchronous wait performance warnings

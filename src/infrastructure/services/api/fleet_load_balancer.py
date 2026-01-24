@@ -12,16 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Fleet load balancer.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.services.api.core.gateway_core import GatewayCore
 from src.infrastructure.swarm.fleet.core.load_balancer_core import (
-    LoadBalancerCore,
-    AgentMetrics,
-)
+    AgentMetrics, LoadBalancerCore)
 
 __version__ = VERSION
 
@@ -44,9 +48,7 @@ class FleetLoadBalancer:
         Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
         """
-        logging.info(
-            f"LoadBalancer: Incoming request from {interface}: {command[:30]}..."
-        )
+        logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
 
         assigned_model = self.gateway_core.resolve_model_by_affinity(interface)
 
@@ -54,9 +56,7 @@ class FleetLoadBalancer:
         if len(self.request_queue) > 100:
             return {"status": "REJECTED", "reason": "High Traffic Load"}
 
-        self.request_queue.append(
-            {"interface": interface, "command": command, "model": assigned_model}
-        )
+        self.request_queue.append({"interface": interface, "command": command, "model": assigned_model})
 
         return {
             "status": "ACCEPTED",
@@ -68,7 +68,5 @@ class FleetLoadBalancer:
     def get_stats(self) -> dict[str, Any]:
         return {
             "queue_depth": len(self.request_queue),
-            "interface_diversity": list(
-                set(r["interface"] for r in self.request_queue)
-            ),
+            "interface_diversity": list(set(r["interface"] for r in self.request_queue)),
         }

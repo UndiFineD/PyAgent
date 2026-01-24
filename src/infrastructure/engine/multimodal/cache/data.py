@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Data structures for multimodal caching."""
@@ -5,12 +19,14 @@
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict
-from .enums import MediaType, HashAlgorithm
+
+from .enums import HashAlgorithm, MediaType
 
 
 @dataclass(frozen=True)
 class MediaHash:
     """Content hash for media items."""
+
     value: str
     algorithm: HashAlgorithm
     media_type: MediaType
@@ -28,8 +44,9 @@ class MediaHash:
 @dataclass
 class CacheEntry:
     """Entry in the multimodal cache."""
+
     key: MediaHash
-    data: Any                              # Cached data (embeddings, processed tensors)
+    data: Any  # Cached data (embeddings, processed tensors)
     media_type: MediaType
     size_bytes: int
     created_at: float = field(default_factory=time.time)
@@ -46,6 +63,7 @@ class CacheEntry:
 @dataclass
 class CacheStats:
     """Statistics for cache performance."""
+
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -62,6 +80,7 @@ class CacheStats:
 @dataclass
 class PlaceholderRange:
     """Range of tokens for multimodal placeholder."""
+
     start: int
     end: int
     modality: MediaType

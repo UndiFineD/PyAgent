@@ -18,11 +18,13 @@ Provides tools for remote system administration and automated environment scalin
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -60,9 +62,7 @@ class InfrastructureManagerAgent(BaseAgent):
         )
 
     @as_tool
-    def control_homeassistant_device(
-        self, entity_id: str, action: str, api_url: str, token: str
-    ) -> str:
+    def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, token: str) -> str:
         """Controls a HomeAssistant device (light, switch, etc.).
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
@@ -97,7 +97,5 @@ class InfrastructureManagerAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        InfrastructureManagerAgent, "Infra Manager", "Infra logs"
-    )
+    main = create_main_function(InfrastructureManagerAgent, "Infra Manager", "Infra logs")
     main()

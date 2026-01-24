@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
+
+"""
+Federation.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Stats federation engine.
 
 from __future__ import annotations
+
 import logging
 from datetime import datetime
 from typing import Any
-from .metrics import AggregationResult
-from .observability_core import FederatedSource, FederationMode, AggregationType
+
 from src.core.base.logic.connectivity_manager import ConnectivityManager
+
+from .metrics import AggregationResult
+from .observability_core import (AggregationType, FederatedSource,
+                                 FederationMode)
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +38,7 @@ class StatsFederation:
         data: dict[str, float] | None = None,
         healthy: bool = True,
     ) -> None:
-        source = FederatedSource(
-            repo_url=name, api_endpoint=endpoint or "", enabled=healthy
-        )
+        source = FederatedSource(repo_url=name, api_endpoint=endpoint or "", enabled=healthy)
         self.sources[name] = source
         self._last_sync[name] = datetime.min
         if data:
@@ -52,13 +58,7 @@ class StatsFederation:
             try:
                 data = self.connectivity.get_json(source.api_endpoint)
                 if isinstance(data, dict):
-                    source.metrics.update(
-                        {
-                            k: float(v)
-                            for k, v in data.items()
-                            if isinstance(v, (int, float))
-                        }
-                    )
+                    source.metrics.update({k: float(v) for k, v in data.items() if isinstance(v, (int, float))})
                     return source.metrics
             except Exception as e:
                 logger.error(f"Sync failed for {name}: {e}")
@@ -67,9 +67,7 @@ class StatsFederation:
     def sync_all(self) -> dict[str, dict[str, float]]:
         return {name: self.sync_source(name) for name in self.sources}
 
-    def aggregate(
-        self, metric_name: str, aggregation: AggregationType = AggregationType.SUM
-    ) -> AggregationResult:
+    def aggregate(self, metric_name: str, aggregation: AggregationType = AggregationType.SUM) -> AggregationResult:
         values = []
         failed = 0
         for name, src in self.sources.items():

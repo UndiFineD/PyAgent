@@ -1,11 +1,26 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 """
 TableCache: Trie-based metadata precomputation for Text-to-SQL.
 Implemented based on arXiv:2601.08743 (Jan 2026).
 """
 
-from typing import Dict, List, Set, Optional
 import dataclasses
+from typing import Any, Dict, List, Optional
+
 
 @dataclasses.dataclass
 class TableMetadata:
@@ -13,16 +28,19 @@ class TableMetadata:
     columns: List[str]
     sample_rows: List[Dict[str, Any]] = dataclasses.field(default_factory=list)
 
+
 class TableTrieNode:
     def __init__(self):
         self.children: Dict[str, TableTrieNode] = {}
         self.metadata: Optional[TableMetadata] = None
+
 
 class TableCacheManager:
     """
     Manages a Trie-based cache of database schema metadata.
     Enables 3.6x TTFT speedup for Text-to-SQL tasks by pre-filtering schema.
     """
+
     def __init__(self):
         self.root = TableTrieNode()
         self.table_count = 0

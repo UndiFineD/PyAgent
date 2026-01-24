@@ -1,19 +1,33 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Registry.py module.
+"""
+
 import logging
-from typing import Dict, Optional, Any, List
-from .base import (
-    ModalityType,
-    MultiModalConfig,
-    MultiModalData,
-    MultiModalInputs,
-    BaseMultiModalProcessor,
-    PlaceholderInfo,
-)
+from typing import Any, Dict, List, Optional
+
+from .audio import AudioProcessor
+from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,
+                   MultiModalData, MultiModalInputs, PlaceholderInfo)
+from .embed import TextEmbedProcessor
 from .image import ImageProcessor
 from .video import VideoProcessor
-from .audio import AudioProcessor
-from .embed import TextEmbedProcessor
 
 logger = logging.getLogger(__name__)
+
 
 class MultiModalRegistry:
     """Central registry for multimodal processors."""
@@ -76,12 +90,14 @@ class MultiModalRegistry:
                 num_tokens = processor.get_placeholder_count(image, **kwargs)
 
                 embeddings.append(emb)
-                placeholders.append(PlaceholderInfo(
-                    modality=ModalityType.IMAGE,
-                    item_idx=idx,
-                    start_idx=offset,
-                    length=num_tokens,
-                ))
+                placeholders.append(
+                    PlaceholderInfo(
+                        modality=ModalityType.IMAGE,
+                        item_idx=idx,
+                        start_idx=offset,
+                        length=num_tokens,
+                    )
+                )
                 offset += num_tokens
 
             result.mm_embeddings["image"] = embeddings
@@ -103,12 +119,14 @@ class MultiModalRegistry:
                 num_tokens = meta.get("total_tokens", processor.get_placeholder_count(video, **kwargs))
 
                 embeddings.append(emb)
-                placeholders.append(PlaceholderInfo(
-                    modality=ModalityType.VIDEO,
-                    item_idx=idx,
-                    start_idx=offset,
-                    length=num_tokens,
-                ))
+                placeholders.append(
+                    PlaceholderInfo(
+                        modality=ModalityType.VIDEO,
+                        item_idx=idx,
+                        start_idx=offset,
+                        length=num_tokens,
+                    )
+                )
                 offset += num_tokens
 
             result.mm_embeddings["video"] = embeddings
@@ -130,12 +148,14 @@ class MultiModalRegistry:
                 num_tokens = meta.get("num_frames", processor.get_placeholder_count(audio, **kwargs))
 
                 embeddings.append(emb)
-                placeholders.append(PlaceholderInfo(
-                    modality=ModalityType.AUDIO,
-                    item_idx=idx,
-                    start_idx=offset,
-                    length=num_tokens,
-                ))
+                placeholders.append(
+                    PlaceholderInfo(
+                        modality=ModalityType.AUDIO,
+                        item_idx=idx,
+                        start_idx=offset,
+                        length=num_tokens,
+                    )
+                )
                 offset += num_tokens
 
             result.mm_embeddings["audio"] = embeddings
@@ -153,12 +173,14 @@ class MultiModalRegistry:
                 num_tokens = meta.get("num_tokens", 1)
 
                 embeddings.append(emb)
-                placeholders.append(PlaceholderInfo(
-                    modality=ModalityType.EMBEDS,
-                    item_idx=idx,
-                    start_idx=offset,
-                    length=num_tokens,
-                ))
+                placeholders.append(
+                    PlaceholderInfo(
+                        modality=ModalityType.EMBEDS,
+                        item_idx=idx,
+                        start_idx=offset,
+                        length=num_tokens,
+                    )
+                )
                 offset += num_tokens
 
             result.mm_embeddings["embeds"] = embeddings
@@ -166,8 +188,10 @@ class MultiModalRegistry:
 
         return result
 
+
 # Global registry instance
 MULTIMODAL_REGISTRY = MultiModalRegistry()
+
 
 def process_multimodal_inputs(
     mm_data: MultiModalData,
@@ -175,6 +199,7 @@ def process_multimodal_inputs(
     **kwargs: Any,
 ) -> MultiModalInputs:
     return MULTIMODAL_REGISTRY.process_inputs(mm_data, config, **kwargs)
+
 
 def get_placeholder_tokens(
     mm_inputs: MultiModalInputs,

@@ -15,10 +15,13 @@
 
 """Agent specializing in PowerShell scripting."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
+
+from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
-from src.core.base.common.base_utilities import create_main_function
 
 __version__ = VERSION
 
@@ -41,7 +44,5 @@ class PowershellAgent(CoderAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        PowershellAgent, "PowerShell Agent", "Path to .ps1 file"
-    )
+    main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")
     main()

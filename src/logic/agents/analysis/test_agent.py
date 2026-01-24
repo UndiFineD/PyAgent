@@ -18,16 +18,18 @@ Inspired by SGI-Bench and py.test.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import subprocess
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class TestAgent(BaseAgent):
+class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Executes unit and integration tests and analyzes failures."""
 
     def __init__(self, file_path: str) -> None:
@@ -49,7 +51,7 @@ class TestAgent(BaseAgent):
 
             # Converted to list-based execution to prevent shell injection
             cmd = [sys.executable, "-m", "pytest", path, "--tb=short", "--maxfail=5"]
-            result = subprocess.run(cmd, shell=False, capture_output=True, text=True)
+            result = subprocess.run(cmd, shell=False, capture_output=True, text=True, check=False)
 
             # Phase 108: Record test execution patterns
             self._record(
@@ -62,16 +64,14 @@ class TestAgent(BaseAgent):
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
                 report.append("✅ **Status**: All tests passed.")
-                report.append(
-                    f"```text\n{result.stdout.splitlines()[-1]}\n```"
-                )  # Last line summary
+                report.append(f"```text\n{result.stdout.splitlines()[-1] if result.stdout else 'No output'}\n```")
             else:
                 report.append(f"❌ **Status**: {result.returncode} tests FAILED.\n")
                 report.append("### Failure Details")
                 report.append(f"```text\n{result.stdout}\n```")
 
             return "\n".join(report)
-        except Exception as e:
+        except (subprocess.SubprocessError, RuntimeError, OSError) as e:
             return f"Error running tests: {e}"
 
     @as_tool
@@ -79,6 +79,7 @@ class TestAgent(BaseAgent):
         """Runs tests for a single file."""
         return self.run_tests(file_path)
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Runs tests based on user prompt."""
-        return self.run_tests()
+        path = target_file if target_file else (prompt if prompt else "tests")
+        return self.run_tests(path)

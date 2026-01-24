@@ -11,13 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Self healing engine core.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -31,9 +38,7 @@ class SelfHealingEngineCore:
     Decides what kind of fix is needed based on the traceback.
     """
 
-    def analyze_failure(
-        self, agent_name: str, tool_name: str, error_msg: str, tb: str
-    ) -> dict[str, Any]:
+    def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> dict[str, Any]:
         """Analyzes a failure and suggests a strategy."""
         # Rust-accelerated strategy detection
         if HAS_RUST:

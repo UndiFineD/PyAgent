@@ -16,14 +16,16 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from pathlib import Path
-from typing import Any
+
 import json
 import logging
 import threading
 import time
 import uuid
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -88,9 +90,7 @@ class ConnectionPool:
     def acquire(self, backend: str) -> Any:
         """Acquire a connection, respecting the status cache (Phase 108)."""
         if not self.is_backend_working(backend):
-            logging.debug(
-                f"ConnectionPool: Skipping '{backend}' (cached as non-working)"
-            )
+            logging.debug(f"ConnectionPool: Skipping '{backend}' (cached as non-working)")
             return None
 
         with self._lock:

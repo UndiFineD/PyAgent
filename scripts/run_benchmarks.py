@@ -24,8 +24,21 @@ async def main():
     test_texts = {
         "Short": "What is Python?",
         "Medium": "Explain the concept of technical debt in software development.",
-        "Long": "Provide a comprehensive analysis of microservices architecture, including its advantages, disadvantages, common patterns, best practices, and real-world use cases." * 3,
-        "Code": "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target: return mid\n        elif arr[mid] < target: left = mid + 1\n        else: right = mid - 1\n    return -1"
+        "Long": (
+            "Provide a comprehensive analysis of microservices architecture, "
+            "including its advantages, disadvantages, common patterns, "
+            "best practices, and real-world use cases."
+        ) * 3,
+        "Code": (
+            "def binary_search(arr, target):\n"
+            "    left, right = 0, len(arr) - 1\n"
+            "    while left <= right:\n"
+            "        mid = (left + right) // 2\n"
+            "        if arr[mid] == target: return mid\n"
+            "        elif arr[mid] < target: left = mid + 1\n"
+            "        else: right = mid - 1\n"
+            "    return -1"
+        )
     }
 
     print("\n🚀 Running Tokenization Benchmarks...")

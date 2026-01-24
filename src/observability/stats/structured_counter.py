@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 StructuredCounter - Dataclass-based structured metric counters.
 
@@ -11,7 +25,7 @@ from __future__ import annotations
 
 import copy
 from contextlib import contextmanager
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, fields
 from typing import Any, Generator, TypeVar
 
 T = TypeVar("T", bound="StructuredCounter")
@@ -122,6 +136,7 @@ class CompilationCounter(StructuredCounter):
 
     Based on vLLM's compilation counter pattern.
     """
+
     num_models_seen: int = 0
     num_graphs_seen: int = 0
     num_piecewise_graphs_seen: int = 0
@@ -134,6 +149,7 @@ class CompilationCounter(StructuredCounter):
 @dataclass
 class RequestCounter(StructuredCounter):
     """Counter for tracking request-related metrics."""
+
     requests_received: int = 0
     requests_completed: int = 0
     requests_failed: int = 0
@@ -146,6 +162,7 @@ class RequestCounter(StructuredCounter):
 @dataclass
 class CacheCounter(StructuredCounter):
     """Counter for tracking cache-related metrics."""
+
     cache_hits: int = 0
     cache_misses: int = 0
     cache_evictions: int = 0
@@ -162,6 +179,7 @@ class CacheCounter(StructuredCounter):
 @dataclass
 class PoolCounter(StructuredCounter):
     """Counter for tracking object pool metrics."""
+
     objects_acquired: int = 0
     objects_released: int = 0
     objects_created: int = 0
@@ -178,6 +196,7 @@ class PoolCounter(StructuredCounter):
 @dataclass
 class QueueCounter(StructuredCounter):
     """Counter for tracking queue metrics."""
+
     items_enqueued: int = 0
     items_dequeued: int = 0
     items_dropped: int = 0

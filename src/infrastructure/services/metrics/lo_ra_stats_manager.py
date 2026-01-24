@@ -1,25 +1,39 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 LoRA Stats and Request State Tracking.
 
 Refactored to modular package structure for Phase 317.
 """
 
-from src.infrastructure.services.metrics.lora.types import (
-    LoRALoadState, RequestStatus, LoRAAdapterInfo,
-    LoRARequestState, LoRAStats
-)
-from src.infrastructure.services.metrics.lora.manager import LoRAStatsManager
 from src.infrastructure.services.metrics.lora.lifecycle import (
-    RequestLifecycle, RequestLifecycleManager
-)
+    RequestLifecycle, RequestLifecycleManager)
+from src.infrastructure.services.metrics.lora.manager import LoRAStatsManager
+from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
+                                                            LoRALoadState,
+                                                            LoRARequestState,
+                                                            LoRAStats,
+                                                            RequestStatus)
 
 __all__ = [
-    'LoRALoadState',
-    'RequestStatus',
-    'LoRAAdapterInfo',
-    'LoRARequestState',
-    'LoRAStats',
-    'LoRAStatsManager',
-    'RequestLifecycle',
-    'RequestLifecycleManager',
+    "LoRALoadState",
+    "RequestStatus",
+    "LoRAAdapterInfo",
+    "LoRARequestState",
+    "LoRAStats",
+    "LoRAStatsManager",
+    "RequestLifecycle",
+    "RequestLifecycleManager",
 ]

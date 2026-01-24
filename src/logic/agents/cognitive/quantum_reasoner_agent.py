@@ -13,17 +13,22 @@
 # limitations under the License.
 
 
+"""Agent for handling ambiguity using quantum-inspired parallel reasoning branches."""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class QuantumReasonerAgent(BaseAgent):
     """
     Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
@@ -34,9 +39,10 @@ class QuantumReasonerAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Quantum Reasoner Agent. "
-            "Your goal is to handle task ambiguity by generating multiple parallel reasoning paths (superposition states). "
-            "You then calculate probability amplitudes (scores) for each path and collapse them into the optimal solution."
+            "You are the Quantum Reasoner Agent. Your goal is to handle task ambiguity "
+            "by generating multiple parallel reasoning paths (superposition states). "
+            "You then calculate probability amplitudes (scores) for each path "
+            "and collapse them into the optimal solution."
         )
 
     @as_tool
@@ -108,7 +114,7 @@ class QuantumReasonerAgent(BaseAgent):
         try:
             score_str = await self.think(prompt)
             return float(score_str)
-        except Exception:
+        except (ValueError, TypeError):
             return 0.5  # Default probability on failure
 
     @as_tool

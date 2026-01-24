@@ -17,10 +17,11 @@ Core logic for fleet stability, health monitoring, and anomaly detection.
 """
 
 from __future__ import annotations
-import time
+
 import contextlib
+import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 try:
     import rust_core as rc  # pylint: disable=no-member
@@ -29,9 +30,11 @@ except ImportError:
 
 from .base_core import BaseCore
 
+
 @dataclass
 class HealthStatus:
     """Status tracking for individual agents or components."""
+
     component_id: str
     is_alive: bool = True
     last_seen: float = field(default_factory=time.time)
@@ -39,6 +42,7 @@ class HealthStatus:
     latency_ms: float = 0.0
     status_msg: str = "ok"
     metrics: Dict[str, Any] = field(default_factory=dict)
+
 
 class StabilityCore(BaseCore):
     """
@@ -52,9 +56,7 @@ class StabilityCore(BaseCore):
         self.max_errors: int = 5
         self.health_registry: Dict[str, HealthStatus] = {}
 
-    def update_status(
-        self, component_id: str, latency: float = 0.0, error: bool = False, **metrics
-    ) -> bool:
+    def update_status(self, component_id: str, latency: float = 0.0, error: bool = False, **metrics) -> bool:
         """Updates internal status for a component."""
         now = time.time()
         if component_id not in self.health_registry:

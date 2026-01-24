@@ -15,11 +15,15 @@
 
 """Agent specializing in automated documentation generation and maintenance."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 __version__ = VERSION
@@ -31,9 +35,7 @@ class DocumentationAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
-        self.knowledge = KnowledgeAgent(
-            str(self.workspace_root / "src\logic\agents\cognitive\knowledge_agent.py")
-        )
+        self.knowledge = KnowledgeAgent(str(self.workspace_root / "src/logic/agents/cognitive/knowledge_agent.py"))
         self._system_prompt = (
             "You are the Documentation Agent. "
             "Your role is to maintain clear, accurate technical documentation. "
@@ -50,13 +52,9 @@ class DocumentationAgent(BaseAgent):
 
         # Get structural briefs
         py_files = [
-            str(p.relative_to(self.workspace_root))
-            for p in classes_dir.rglob("*.py")
-            if "__init__" not in p.name
+            str(p.relative_to(self.workspace_root)) for p in classes_dir.rglob("*.py") if "__init__" not in p.name
         ]
-        briefing = self.knowledge.get_compressed_briefing(
-            py_files[:10]
-        )  # Top 10 for summary
+        briefing = self.knowledge.get_compressed_briefing(py_files[:10])  # Top 10 for summary
 
         doc = [
             "# Technical Reference Guide",
@@ -81,13 +79,12 @@ class DocumentationAgent(BaseAgent):
 
         return f"Reference documentation updated at: {ref_path}"
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform documentation maintenance."""
+        _ = prompt, target_file
         return self.generate_reference()
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')"
-    )
+    main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")
     main()

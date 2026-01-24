@@ -12,23 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Run autonomous fleet healing.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import os
+
 import logging
+import os
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import (
-    SelfImprovementOrchestrator,
-)
+from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import \
+    SelfImprovementOrchestrator
 
 __version__ = VERSION
 
 # Initialize logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 
 def run_autonomous_maintenance() -> None:
@@ -56,20 +59,12 @@ def run_autonomous_maintenance() -> None:
 
     # 3. Relational Scale Optimization
 
-    logging.info(
-        "[2/3] Optimizing Relational Metadata (Trillion-Parameter Scalability)..."
-    )
+    logging.info("[2/3] Optimizing Relational Metadata (Trillion-Parameter Scalability)...")
     fleet.sql_metadata.optimize_db()
 
     # 4. Interaction Record Audit
     logging.info("[3/3] Auditing AI Interaction Shards...")
-    shard_count = len(
-        list(
-            (workspace_root / "data/logs" / "external_ai_learning").glob(
-                "shard_*.jsonl.gz"
-            )
-        )
-    )
+    shard_count = len(list((workspace_root / "data/logs" / "external_ai_learning").glob("shard_*.jsonl.gz")))
     logging.info(f" - Active Shards: {shard_count}")
 
     logging.info(" - Recording Strategy: Compressed Monthly/Zlib (Active)")
@@ -78,9 +73,7 @@ def run_autonomous_maintenance() -> None:
     untyped_files = [
         d["file"]
         for d in results["details"]
-        if any(
-            i["type"] == "Rust Readiness Task" and not i["fixed"] for i in d["issues"]
-        )
+        if any(i["type"] == "Rust Readiness Task" and not i["fixed"] for i in d["issues"])
     ]
     if untyped_files:
         logging.info(f"--- PENDING RUST CONVERSION TARGETS ({len(untyped_files)}) ---")
@@ -90,9 +83,7 @@ def run_autonomous_maintenance() -> None:
             logging.info(f" ... and {len(untyped_files) - 5} more.")
 
     else:
-        logging.info(
-            "[SUCCESS] Codebase type coverage reached optimal threshold for Rust migration."
-        )
+        logging.info("[SUCCESS] Codebase type coverage reached optimal threshold for Rust migration.")
 
     logging.info("=== MAINTENANCE CYCLE COMPLETE ===")
 

@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
+
+"""
+Access.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Access control for stats.
 
 from __future__ import annotations
+
 import fnmatch
 
 
@@ -15,9 +20,7 @@ class StatsAccessController:
     def grant(self, user: str, pattern: str, level: str = "read") -> None:
         self.permissions.setdefault(user, {})[pattern] = level
 
-    def can_access(
-        self, user: str, resource: str, required_level: str = "read"
-    ) -> bool:
+    def can_access(self, user: str, resource: str, required_level: str = "read") -> bool:
         if user not in self.permissions:
             return False
         req = required_level.lower()

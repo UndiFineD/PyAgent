@@ -18,6 +18,7 @@ Handles variable substitution, template registration, and versioning.
 """
 
 from __future__ import annotations
+
 from typing import Any, Dict, List
 
 try:
@@ -26,6 +27,7 @@ except ImportError:
     rc = None
 
 from .base_core import BaseCore
+
 
 class TemplateCore(BaseCore):
     """

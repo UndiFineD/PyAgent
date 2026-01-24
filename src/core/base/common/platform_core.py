@@ -19,19 +19,21 @@
 
 """Unified platform and hardware detection core."""
 
+import logging
+import os
 import platform
 import sys
-import os
-import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger("pyagent.platform")
+
 
 class PlatformCore:
     """
     Standardized detector for environment, OS, and hardware capabilities.
     """
-    _instance: Optional['PlatformCore'] = None
+
+    _instance: Optional["PlatformCore"] = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -91,6 +93,7 @@ class PlatformCore:
         """Basic resource usage without full psutil dependency requirement."""
         try:
             import psutil  # pylint: disable=import-outside-toplevel
+
             cpu = psutil.cpu_percent(interval=None)
             mem = psutil.virtual_memory()._asdict()
             return {"cpu_percent": cpu, "memory": mem}
@@ -105,10 +108,12 @@ class PlatformCore:
 
         try:
             import torch  # pylint: disable=import-outside-toplevel
+
             return torch.cuda.is_available()
         except ImportError:
             try:
                 import tensorflow as tf  # pylint: disable=import-outside-toplevel
-                return len(tf.config.list_physical_devices('GPU')) > 0
+
+                return len(tf.config.list_physical_devices("GPU")) > 0
             except ImportError:
                 return False

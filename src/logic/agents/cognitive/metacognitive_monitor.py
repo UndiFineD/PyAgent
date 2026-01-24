@@ -13,18 +13,21 @@
 # limitations under the License.
 
 
-"""Shell for MetacognitiveMonitor, handling logging and alerting."""
+"""Metacognitive Monitor for handling logging and alerting."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class MetacognitiveMonitor(BaseAgent):
     """
     Tier 2 (Cognitive Logic) - Metacognitive Monitor: Evaluates the internal

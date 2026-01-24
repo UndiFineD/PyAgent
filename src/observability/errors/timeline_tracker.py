@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .timeline_event import TimelineEvent
+
 from datetime import datetime
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .timeline_event import TimelineEvent
 
 __version__ = VERSION
 
@@ -38,9 +41,7 @@ class TimelineTracker:
         """Initialize the timeline tracker."""
         self.events: list[TimelineEvent] = []
 
-    def record_event(
-        self, error_id: str, event_type: str, details: str = ""
-    ) -> TimelineEvent:
+    def record_event(self, error_id: str, event_type: str, details: str = "") -> TimelineEvent:
         """Record a timeline event.
 
         Args:

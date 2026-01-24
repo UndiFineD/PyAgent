@@ -1,15 +1,36 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Sharding and partitioning logic.
 (Facade for src.core.base.common.shard_core)
 """
 
-from src.core.base.common.shard_core import ShardCore as ShardManager
+import logging
+from pathlib import Path
+
+from src.core.base.common.shard_core import ShardCore as StandardShardCore
+
+
+class ShardManager(StandardShardCore):
+    """Facade for ShardCore."""
+
+    def __init__(self, workspace_root: str):
         self.workspace_root = Path(workspace_root)
         self.shards: dict[str, set[str]] = {}  # Shard name to agent names
         self.agent_to_shard: dict[str, str] = {}
-        self.communication_log: dict[
-            frozenset[str], int
-        ] = {}  # Pairs of agents to frequency
+        self.communication_log: dict[frozenset[str], int] = {}  # Pairs of agents to frequency
 
     def log_communication(self, agent_a: str, agent_b: str) -> None:
         """Records a communication event between two agents."""
@@ -20,9 +41,7 @@ from src.core.base.common.shard_core import ShardCore as ShardManager
         """Initializes a new shard."""
         if shard_name not in self.shards:
             self.shards[shard_name] = set()
-            logging.info(
-                f"ShardManager: Created shard '{shard_name}' with capacity {capacity}"
-            )
+            logging.info(f"ShardManager: Created shard '{shard_name}' with capacity {capacity}")
 
     def assign_agent(self, agent_name: str, shard_name: str) -> bool:
         """Assigns an agent to a specific shard."""
@@ -52,9 +71,7 @@ from src.core.base.common.shard_core import ShardCore as ShardManager
         Dynamic sharding logic based on communication frequency.
         Nodes that talk to each other frequently (>= threshold) are clustered together.
         """
-        logging.info(
-            "ShardManager: Running dynamic sharding optimization (Phase 128)..."
-        )
+        logging.info("ShardManager: Running dynamic sharding optimization (Phase 128)...")
 
         # Identify high-frequency pairings
         clusters: list[set[str]] = []
@@ -76,6 +93,4 @@ from src.core.base.common.shard_core import ShardCore as ShardManager
             for agent in cluster:
                 self.assign_agent(agent, shard_name)
 
-        logging.info(
-            f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards."
-        )
+        logging.info(f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards.")

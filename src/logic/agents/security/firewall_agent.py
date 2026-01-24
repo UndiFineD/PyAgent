@@ -11,21 +11,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Firewall agent.py module.
+"""
+
 from __future__ import annotations
-import logging
+
 import json
+import logging
 import re
 from pathlib import Path
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+    SignalRegistry
 
 try:
     import rust_core
 except ImportError:
     rust_core = None
 
-class FirewallAgent(BaseAgent):
+
+class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-return-statements
     """
     Firewall Agent: Gatekeeper for agent actions.
     Ensures 'thought_stream' signals are analyzed and clearance is granted
@@ -51,10 +59,10 @@ class FirewallAgent(BaseAgent):
         """Loads whitelisted domains from config."""
         try:
             if self.whitelist_path.exists():
-                with open(self.whitelist_path, "r") as f:
+                with open(self.whitelist_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     return data.get("whitelisted_domains", [])
-        except Exception as e:
+        except (IOError, json.JSONDecodeError) as e:
             logging.error(f"[FirewallAgent] Failed to load whitelist: {e}")
         return []
 
@@ -82,27 +90,40 @@ class FirewallAgent(BaseAgent):
                 # If Rust passed, we consider it granted (Hybrid approach)
                 self._grant(agent_name, thought)
                 return
-            except Exception as e:
+            except (AttributeError, RuntimeError) as e:
                 logging.error(f"[FirewallAgent] Rust analysis failed, falling back to Python: {e}")
 
         # 2. Destructive Operations Check (Python Fallback)
         # Block any mentions of destructive file/disk operations
         destructive_patterns = [
-            r"\bDELETE\b", r"\bFORMAT\b", r"\bPARTITION\b", r"\bDISK\b",
-            r"\bRM\s+-RF\b", r"\bWIPE\b", r"\bERASE\b", r"DROP\s+TABLE",
-            r"\bMKFS\b", r"\bFDISK\b", r"\bMKDIR\b", r"\bRMDIR\b",
-            r"\bOS\.REMOVE\b", r"\bSHUTIL\.RMTREE\b", r"\bPATH\.UNLINK\b"
+            r"\bDELETE\b",
+            r"\bFORMAT\b",
+            r"\bPARTITION\b",
+            r"\bDISK\b",
+            r"\bRM\s+-RF\b",
+            r"\bWIPE\b",
+            r"\bERASE\b",
+            r"DROP\s+TABLE",
+            r"\bMKFS\b",
+            r"\bFDISK\b",
+            r"\bMKDIR\b",
+            r"\bRMDIR\b",
+            r"\bOS\.REMOVE\b",
+            r"\bSHUTIL\.RMTREE\b",
+            r"\bPATH\.UNLINK\b",
         ]
 
         for pattern in destructive_patterns:
             if re.search(pattern, thought, re.IGNORECASE):
-                logging.warning(f"[FirewallAgent] DENIED: Destructive action detected ('{pattern}'). Human permission required.")
+                logging.warning(
+                    f"[FirewallAgent] DENIED: Destructive action detected ('{pattern}'). Human permission required."
+                )
                 self._deny(agent_name, thought)
                 return
 
         # 3. Internet Access Check (Whitelist enforced)
         # Detect URLs or network-related keywords
-        urls = re.findall(r'https?://([a-zA-Z0-9.-]+)', thought)
+        urls = re.findall(r"https?://([a-zA-Z0-9.-]+)", thought)
         if not urls and any(kw in thought.upper() for kw in ["CURL", "WGET", "REQUESTS.GET", "URLLIB"]):
             # Generic network intent without specific URL? Potential bypass or discovery.
             logging.warning("[FirewallAgent] DENIED: Undisclosed internet access intent detected.")
@@ -150,7 +171,5 @@ class FirewallAgent(BaseAgent):
         A synchronous-like awaitable call for agents that need immediate clearance.
         """
         # Trigger analysis if it wasn't already caught by signal
-        await self._analyze_thought({
-            "data": {"agent": agent_name, "thought": thought}
-        })
+        await self._analyze_thought({"data": {"agent": agent_name, "thought": thought}})
         return self.has_clearance(agent_name, thought)

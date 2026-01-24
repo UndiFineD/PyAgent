@@ -11,13 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Performance profiling agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import time
+
 import random
+import time
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -83,7 +89,5 @@ class PerformanceProfilingAgent(BaseAgent):
         """Returns a high-level performance summary."""
         return {
             "snapshots_captured": len(self.metrics_history),
-            "status": "Healthy"
-            if not self.analyze_bottlenecks()
-            else "Action Required",
+            "status": "Healthy" if not self.analyze_bottlenecks() else "Action Required",
         }

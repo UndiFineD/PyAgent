@@ -19,12 +19,14 @@ Coordinates between the ModelForgeAgent and individual agents to hot-swap capabi
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
 from pathlib import Path
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -35,12 +37,12 @@ class WeightOrchestrator(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = Path(file_path).parent
-        self.weights_registry_path = (
-            self.workspace_root / "data/memory/agent_store/weights_registry.json"
-        )
+        self.weights_registry_path = self.workspace_root / "data/memory/agent_store/weights_registry.json"
         self.active_adapters: dict[str, str] = {}  # agent_name -> adapter_name
         self._load_registry()
-        self._system_prompt = "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
+        self._system_prompt = (
+            "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
+        )
 
     def _load_registry(self) -> bool:
         if self.weights_registry_path.exists():
@@ -62,9 +64,7 @@ class WeightOrchestrator(BaseAgent):
     @as_tool
     def activate_adapter(self, agent_name: str, adapter_name: str) -> bool:
         """Assigns an adapter to an agent and triggers a 'weights_updated' signal."""
-        logging.info(
-            f"WeightOrchestrator: Activating adapter '{adapter_name}' for agent '{agent_name}'"
-        )
+        logging.info(f"WeightOrchestrator: Activating adapter '{adapter_name}' for agent '{agent_name}'")
         self.active_adapters[agent_name] = adapter_name
         self._save_registry()
         # In a real system, this would trigger a signal that the agent's Proxy or Backend listens to

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Core logic for Config Hygiene (Phase 174).
 Handles JSON Schema validation for configuration files.
@@ -39,9 +53,7 @@ class ConfigHygieneCore:
             return False, str(e)
 
     @staticmethod
-    def extract_env_vars(
-        config_data: dict[str, Any], prefix: str = "PYAGENT_"
-    ) -> dict[str, str]:
+    def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
         """
         Helper to flatten nested config into env-style key-value pairs.
         """
@@ -55,16 +67,12 @@ class ConfigHygieneCore:
         return ConfigHygieneCore._extract_env_vars_python(config_data, prefix)
 
     @staticmethod
-    def _extract_env_vars_python(
-        config_data: dict[str, Any], prefix: str
-    ) -> dict[str, str]:
+    def _extract_env_vars_python(config_data: dict[str, Any], prefix: str) -> dict[str, str]:
         env_vars = {}
         for k, v in config_data.items():
             if isinstance(v, (str, int, float, bool)):
                 env_vars[f"{prefix}{k.upper()}"] = str(v)
             elif isinstance(v, dict):
-                sub = ConfigHygieneCore._extract_env_vars_python(
-                    v, f"{prefix}{k.upper()}_"
-                )
+                sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")
                 env_vars.update(sub)
         return env_vars

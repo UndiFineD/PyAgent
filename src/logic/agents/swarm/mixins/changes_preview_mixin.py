@@ -17,8 +17,10 @@ Preview management logic for ChangesAgent.
 """
 
 from __future__ import annotations
+
 import logging
 from typing import Any, Dict
+
 
 class ChangesPreviewMixin:
     """Mixin for managing preview mode and changes."""
@@ -46,9 +48,7 @@ class ChangesPreviewMixin:
         new_lines = content.split("\n")
 
         added = len([line for line in new_lines if line and line not in original_lines])
-        removed = len(
-            [line for line in original_lines if line and line not in new_lines]
-        )
+        removed = len([line for line in original_lines if line and line not in new_lines])
 
         return {
             "original_lines": len(original_lines),

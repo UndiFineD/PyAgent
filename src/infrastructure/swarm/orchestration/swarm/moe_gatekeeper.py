@@ -17,15 +17,21 @@ MoE Gatekeeper (Phase 61).
 Routes tasks to specialized agents (experts) based on semantic similarity.
 """
 
-import logging
-import numpy as np
 import asyncio
-from typing import List, Dict, Any, Optional
-from src.core.base.common.models.communication_models import ExpertProfile, MoERoutingDecision
-from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
+import logging
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+
+from src.core.base.common.models.communication_models import (
+    ExpertProfile, MoERoutingDecision)
+from src.infrastructure.engine.models.similarity import \
+    EmbeddingSimilarityService
+
 from .audit_logger import SwarmAuditLogger
 
 logger = logging.getLogger(__name__)
+
 
 class MoEGatekeeper:
     """
@@ -33,11 +39,13 @@ class MoEGatekeeper:
     Unlike compute-level MoE, this works at the task/agent level.
     """
 
-    def __init__(self,
-                 similarity_service: EmbeddingSimilarityService,
-                 audit_logger: Optional[SwarmAuditLogger] = None,
-                 topology_manager: Optional[Any] = None,
-                 reward_predictor: Optional[Any] = None):
+    def __init__(
+        self,
+        similarity_service: EmbeddingSimilarityService,
+        audit_logger: Optional[SwarmAuditLogger] = None,
+        topology_manager: Optional[Any] = None,
+        reward_predictor: Optional[Any] = None,
+    ):
         self.similarity_service = similarity_service
         self.audit_logger = audit_logger
         self.topology_manager = topology_manager
@@ -149,7 +157,7 @@ class MoEGatekeeper:
         decision = MoERoutingDecision(
             task_id="moe_" + prompt[:16].replace(" ", "_"),
             selected_experts=selected_experts,
-            routing_weights=normalized_weights
+            routing_weights=normalized_weights,
         )
 
         if self.audit_logger:
@@ -157,10 +165,7 @@ class MoEGatekeeper:
                 task_id=decision.task_id,
                 event_type="routing_decision",
                 description=f"Routed task to {len(selected_experts)} experts",
-                data={
-                    "experts": selected_experts,
-                    "weights": normalized_weights
-                }
+                data={"experts": selected_experts, "weights": normalized_weights},
             )
 
         return decision

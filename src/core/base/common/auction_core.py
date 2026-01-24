@@ -17,7 +17,8 @@ Core logic for Swarm Resource Auctioning.
 Implements the VCG auction model for truthful bidding.
 """
 
-from typing import Any, List, Dict
+from typing import Any, Dict, List
+
 from .base_core import BaseCore
 
 try:
@@ -25,13 +26,12 @@ try:
 except ImportError:
     rc = None
 
+
 class AuctionCore(BaseCore):
     """Authoritative engine for VCG-based resource auctions."""
 
     @staticmethod
-    def calculate_vcg_auction(
-        bids: List[Dict[str, Any]], slots: int
-    ) -> List[Dict[str, Any]]:
+    def calculate_vcg_auction(bids: List[Dict[str, Any]], slots: int) -> List[Dict[str, Any]]:
         """Calculate winners and prices for a VCG auction.
 
         Args:
@@ -41,11 +41,11 @@ class AuctionCore(BaseCore):
         Returns:
             List of winning bids with 'price_paid' attribute.
         """
-        if rc and hasattr(rc, "calculate_vcg_auction"): # pylint: disable=no-member
+        if rc and hasattr(rc, "calculate_vcg_auction"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.calculate_vcg_auction(bids, slots) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.calculate_vcg_auction(bids, slots)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if not bids:
@@ -58,9 +58,7 @@ class AuctionCore(BaseCore):
         return winners
 
     @staticmethod
-    def enforce_vram_quota(
-        agent_vram_request: float, total_available: float, quota_percent: float = 0.2
-    ) -> bool:
+    def enforce_vram_quota(agent_vram_request: float, total_available: float, quota_percent: float = 0.2) -> bool:
         """Enforce resource quotas for VRAM allocation.
 
         Args:
@@ -71,12 +69,10 @@ class AuctionCore(BaseCore):
         Returns:
             True if within quota, False otherwise.
         """
-        if rc and hasattr(rc, "enforce_vram_quota"): # pylint: disable=no-member
+        if rc and hasattr(rc, "enforce_vram_quota"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.enforce_vram_quota(
-                    agent_vram_request, total_available, quota_percent
-                ) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return agent_vram_request <= (total_available * quota_percent)

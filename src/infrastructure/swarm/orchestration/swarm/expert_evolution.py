@@ -18,11 +18,14 @@ Reinforcement loop that adjusts expert scores based on real-world outcomes.
 """
 
 import logging
-from typing import Dict, List
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
+from typing import List
+
 from src.core.base.common.models.communication_models import ExpertEvaluation
+from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+    MoEGatekeeper
 
 logger = logging.getLogger(__name__)
+
 
 class ExpertEvolutionService:
     """
@@ -64,9 +67,5 @@ class ExpertEvolutionService:
 
     def get_top_performing_experts(self, limit: int = 5) -> List[str]:
         """Returns the IDs of the highest scoring experts."""
-        sorted_experts = sorted(
-            self.gatekeeper.experts.values(),
-            key=lambda x: x.performance_score,
-            reverse=True
-        )
+        sorted_experts = sorted(self.gatekeeper.experts.values(), key=lambda x: x.performance_score, reverse=True)
         return [e.agent_id for e in sorted_experts[:limit]]

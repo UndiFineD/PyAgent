@@ -1,26 +1,38 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Secret logic handler.
 (Facade for src.core.base.common.secret_core)
 """
 
-from src.core.base.common.secret_core import SecretCore as StandardSecretCore
-
-class SecretManager(StandardSecretCore):
-    """Facade for SecretCore."""
-    pass
-
 from __future__ import annotations
-from typing import Any
-from src.core.base.lifecycle.version import VERSION
-import os
+
 import json
 import logging
+import os
+from typing import Any
+
+from src.core.base.common.secret_core import SecretCore as StandardSecretCore
+from src.core.base.lifecycle.version import VERSION
+
 from .secret_core import SecretCore
 
 __version__ = VERSION
 
 
-class SecretManager:
+class SecretManager(StandardSecretCore):
     """
     Provides secure access to credentials and API keys.
     Shell for SecretCore.
@@ -49,9 +61,7 @@ class SecretManager:
             try:
                 with open(self.vault_path) as f:
                     self._cache.update(json.load(f))
-                logging.info(
-                    f"Loaded {len(self._cache)} secrets from {self.vault_path}"
-                )
+                logging.info(f"Loaded {len(self._cache)} secrets from {self.vault_path}")
             except Exception as e:
                 logging.error(f"Failed to load vault file: {e}")
 

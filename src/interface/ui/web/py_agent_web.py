@@ -18,12 +18,15 @@ Generates data structures for internal/external dashboard consumers.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .agent_bar import AgentBar
+
 import json
 import logging
-from typing import Any
 from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .agent_bar import AgentBar
 
 __version__ = VERSION
 
@@ -42,12 +45,10 @@ class FleetWebUI:
         self.register_generative_component(
             "AgentBar",
             "Floating real-time metrics and multimodal control bar.",
-            {"status": "string", "metrics": "object"}
+            {"status": "string", "metrics": "object"},
         )
 
-    def register_generative_component(
-        self, name: str, description: str, props_schema: dict[str, Any]
-    ) -> str:
+    def register_generative_component(self, name: str, description: str, props_schema: dict[str, Any]) -> str:
         """Registers a UI component that the AI can choose to render dynamically (Tambo Pattern)."""
         self.generative_registry[name] = {
             "description": description,
@@ -138,11 +139,7 @@ class FleetWebUI:
         """Returns the available nodes and signals for the Graphical Workflow Designer."""
         available_agents = []
         for name, agent in self.fleet.agents.items():
-            methods = [
-                m
-                for m in dir(agent)
-                if not m.startswith("_") and callable(getattr(agent, m))
-            ]
+            methods = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
             available_agents.append(
                 {
                     "name": name,
@@ -162,7 +159,5 @@ class FleetWebUI:
         return {
             "local_fleet": {"agents": len(self.fleet.agents), "status": "active"},
             "remote_nodes": self.fleet.remote_nodes,
-            "mesh_status": self.fleet.mesh.get_mesh_status()
-            if hasattr(self.fleet, "mesh")
-            else "Unknown",
+            "mesh_status": self.fleet.mesh.get_mesh_status() if hasattr(self.fleet, "mesh") else "Unknown",
         }

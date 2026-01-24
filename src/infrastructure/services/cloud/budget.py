@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Budget management for cloud AI spending.
 
@@ -6,12 +20,12 @@ Provides thread-safe cost tracking with daily/monthly limits and alerts.
 
 from __future__ import annotations
 
-import threading
-from dataclasses import dataclass, field
-from datetime import datetime, date
-from typing import Dict, List, Optional, Callable
-from collections import defaultdict
 import logging
+import threading
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import date, datetime
+from typing import Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -126,9 +140,11 @@ class BudgetManager:
 
             # Check monthly limit
             if self.month_spend + estimated_cost > self.monthly_limit:
-                logger.warning(
-                    f"Monthly budget exceeded: {self.month_spend:.4f} + {estimated_cost:.4f} > {self.monthly_limit:.2f}"
+                msg = (
+                    f"Monthly budget exceeded: {self.month_spend:.4f} + "
+                    f"{estimated_cost:.4f} > {self.monthly_limit:.2f}"
                 )
+                logger.warning(msg)
                 return False
 
             return True
@@ -232,23 +248,27 @@ class BudgetManager:
         # Daily threshold alert
         daily_ratio = self.today_spend / self.daily_limit if self.daily_limit > 0 else 0
         if daily_ratio >= self.alert_threshold and "daily_threshold" not in self._alerts_sent:
-            self._send_alert(BudgetAlert(
-                alert_type="threshold",
-                message=f"Daily spend at {daily_ratio*100:.1f}% of limit",
-                current_spend=self.today_spend,
-                limit=self.daily_limit,
-            ))
+            self._send_alert(
+                BudgetAlert(
+                    alert_type="threshold",
+                    message=f"Daily spend at {daily_ratio * 100:.1f}% of limit",
+                    current_spend=self.today_spend,
+                    limit=self.daily_limit,
+                )
+            )
             self._alerts_sent.add("daily_threshold")
 
         # Monthly threshold alert
         monthly_ratio = self.month_spend / self.monthly_limit if self.monthly_limit > 0 else 0
         if monthly_ratio >= self.alert_threshold and "monthly_threshold" not in self._alerts_sent:
-            self._send_alert(BudgetAlert(
-                alert_type="threshold",
-                message=f"Monthly spend at {monthly_ratio*100:.1f}% of limit",
-                current_spend=self.month_spend,
-                limit=self.monthly_limit,
-            ))
+            self._send_alert(
+                BudgetAlert(
+                    alert_type="threshold",
+                    message=f"Monthly spend at {monthly_ratio * 100:.1f}% of limit",
+                    current_spend=self.month_spend,
+                    limit=self.monthly_limit,
+                )
+            )
             self._alerts_sent.add("monthly_threshold")
 
     def _send_alert(self, alert: BudgetAlert) -> None:

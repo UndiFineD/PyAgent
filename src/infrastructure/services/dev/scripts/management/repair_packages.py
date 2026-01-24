@@ -11,11 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Repair packages.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -52,9 +58,7 @@ def fix_imports(file_path: str) -> bool:
     if "tests" in str(file_path):
         content = content.replace("from fleet.", "from src.infrastructure.swarm.fleet.")
 
-        content = content.replace(
-            "from orchestration.", "from src.infrastructure.swarm.orchestration."
-        )
+        content = content.replace("from orchestration.", "from src.infrastructure.swarm.orchestration.")
         content = content.replace("from agents.", "from src.logic.agents.")
         content = content.replace("from base_agent.", "from src.core.base.")
 
@@ -107,7 +111,9 @@ def main() -> None:
                 continue
             if "self.core = CircuitBreakerCore()" in line:
                 new_lines.append(
-                    "        self.impl = CircuitBreakerImpl(name=name, failure_threshold=failure_threshold, recovery_timeout=recovery_timeout)\n"
+                    "        self.impl = CircuitBreakerImpl(\n"
+                    "            name=name, failure_threshold=failure_threshold, recovery_timeout=recovery_timeout\n"
+                    "        )\n"
                 )
                 continue
             if "def is_open(self) -> bool:" in line:
@@ -127,9 +133,7 @@ def main() -> None:
     # Remove the blocking src/agent.py if it exists
     agent_py = src / "agent.py"
     if agent_py.exists():
-        print(
-            "Moving src/agent.py to src/agent_deprecated.py to avoid namespace conflict"
-        )
+        print("Moving src/agent.py to src/agent_deprecated.py to avoid namespace conflict")
         if (src / "agent_deprecated.py").exists():
             agent_py.unlink()
         else:

@@ -18,16 +18,19 @@ Ingests SOTA research (simulated) and generates new agentic tools.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+
 from .research_core import ResearchCore
 
 __version__ = VERSION
 
 
-class ResearchAgent(BaseAgent):
+class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Analyzes research papers and drafts new tool implementations using the SGI-Bench DCAP Cycle."""
 
     def __init__(self, file_path: str) -> None:
@@ -63,9 +66,7 @@ class ResearchAgent(BaseAgent):
         analysis = self.core.analyze_paper(title, summary)
 
         if self.memory and hasattr(self.memory, "add_entity"):
-            self.memory.add_entity(
-                title, {"type": "paper", "summary": summary, "analysis": analysis}
-            )
+            self.memory.add_entity(title, {"type": "paper", "summary": summary, "analysis": analysis})
 
         return f"Successfully ingested paper '{title}'. Capabilities identified for tool generation."
 
@@ -76,16 +77,13 @@ class ResearchAgent(BaseAgent):
         tool_code = self.core.draft_tool_code(title)
         return tool_code
 
-        return f"Tool draft generated for '{title}':\n{tool_code}"
-
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        _ = target_file
         return f"ResearchAgent scanning for SOTA updates: {prompt} (Target: {target_file})"
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        ResearchAgent, "Research Agent", "Research database path"
-    )
+    main = create_main_function(ResearchAgent, "Research Agent", "Research database path")
     main()

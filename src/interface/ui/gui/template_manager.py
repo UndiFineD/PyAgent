@@ -20,8 +20,10 @@
 """BMAD Template Manager for providing structured document templates."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import tkinter as tk
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

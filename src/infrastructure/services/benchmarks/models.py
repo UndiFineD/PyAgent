@@ -1,13 +1,20 @@
+
+"""
+Models.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
+
 
 @dataclass
 class BenchmarkResult:
     """Standardized result for any benchmark test across PyAgent."""
+
     name: str
     duration: float
     iterations: int = 1

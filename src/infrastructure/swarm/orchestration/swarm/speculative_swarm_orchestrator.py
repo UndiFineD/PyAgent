@@ -19,14 +19,15 @@ Enables cross-agent speculative execution where fast agents draft for accurate a
 
 import logging
 import time
-import asyncio
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, Optional
+
 from src.core.base.common.models.communication_models import (
-    SpeculativeProposal, VerificationOutcome, CascadeContext
-)
-from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
+    CascadeContext, SpeculativeProposal, VerificationOutcome)
+from src.infrastructure.engine.models.similarity import \
+    EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)
+
 
 class SpeculativeSwarmOrchestrator:
     """
@@ -39,18 +40,10 @@ class SpeculativeSwarmOrchestrator:
         self.similarity_service = EmbeddingSimilarityService()
         self.similarity_threshold = similarity_threshold
         self.active_speculations: Dict[str, SpeculativeProposal] = {}
-        self.stats = {
-            "total_speculations": 0,
-            "accepted_proposals": 0,
-            "total_latency_saved": 0.0
-        }
+        self.stats = {"total_speculations": 0, "accepted_proposals": 0, "total_latency_saved": 0.0}
 
     async def execute_speculative_task(
-        self,
-        task: str,
-        draft_agent_id: str,
-        target_agent_id: str,
-        context: Optional[CascadeContext] = None
+        self, task: str, draft_agent_id: str, target_agent_id: str, context: Optional[CascadeContext] = None
     ) -> VerificationOutcome:
         """
         Executes a task using speculative swarm logic.
@@ -61,9 +54,7 @@ class SpeculativeSwarmOrchestrator:
         # 1. Start the drafting agent (Fast tier)
         logger.info(f"SpeculativeSwarm: Drafting task via {draft_agent_id}")
         draft_task = self.fleet.delegate_task(
-            task,
-            draft_agent_id,
-            context=context.next_level(draft_agent_id) if context else None
+            task, draft_agent_id, context=context.next_level(draft_agent_id) if context else None
         )
 
         # 2. In real scenario, we might start the target agent's prefill/context loading in parallel
@@ -74,20 +65,17 @@ class SpeculativeSwarmOrchestrator:
             request_id=str(time.time()),
             draft_content=draft_result.get("content", ""),
             confidence_score=draft_result.get("confidence", 0.5),
-            proposer_id=draft_agent_id
+            proposer_id=draft_agent_id,
         )
 
         # 3. Verification by Target Agent (Accurate tier)
         logger.info(f"SpeculativeSwarm: Verifying proposal via {target_agent_id}")
         verify_prompt = (
-            f"Verify and refine this draft completion for the task: '{task}'\n"
-            f"Draft: {proposal.draft_content}"
+            f"Verify and refine this draft completion for the task: '{task}'\nDraft: {proposal.draft_content}"
         )
 
         verify_task = self.fleet.delegate_task(
-            verify_prompt,
-            target_agent_id,
-            context=context.next_level(target_agent_id) if context else None
+            verify_prompt, target_agent_id, context=context.next_level(target_agent_id) if context else None
         )
 
         final_result = await verify_task
@@ -95,8 +83,7 @@ class SpeculativeSwarmOrchestrator:
 
         # 4. Analyze outcome using semantic similarity (Phase 57)
         similarity = await self.similarity_service.compute_similarity(
-            proposal.draft_content,
-            final_result.get("content", "")
+            proposal.draft_content, final_result.get("content", "")
         )
         accepted = similarity >= self.similarity_threshold
 
@@ -107,7 +94,7 @@ class SpeculativeSwarmOrchestrator:
             accepted_length=len(proposal.draft_content) if accepted else 0,
             correction_applied=not accepted,
             verifier_id=target_agent_id,
-            latency_delta=end_time - start_time
+            latency_delta=end_time - start_time,
         )
 
         if accepted:
@@ -119,10 +106,11 @@ class SpeculativeSwarmOrchestrator:
         """Returns performance metrics for the speculative swarm."""
         acceptance_rate = (
             self.stats["accepted_proposals"] / self.stats["total_speculations"]
-            if self.stats["total_speculations"] > 0 else 0
+            if self.stats["total_speculations"] > 0
+            else 0
         )
         return {
             "acceptance_rate": acceptance_rate,
             "total_speculations": self.stats["total_speculations"],
-            "total_latency_saved": self.stats["total_latency_saved"]
+            "total_latency_saved": self.stats["total_latency_saved"],
         }

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,15 +20,9 @@ LoRA adapter manager.
 
 import logging
 import time
-from typing import (
-    Any,
-    Dict,
-    List,
-    Optional,
-    Set,
-)
+from typing import Any, Dict, List, Optional, Set
 
-from .models import LoraConfig, LoraAdapter, AdapterState, HAS_LORA
+from .models import HAS_LORA, AdapterState, LoraAdapter, LoraConfig
 from .registry import LoraRegistry
 
 logger = logging.getLogger(__name__)
@@ -111,7 +119,7 @@ class LoraManager:
             logger.info("Activated LoRA adapter: %s (%.1fms)", name, adapter.load_time_ms)
             return True
 
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             adapter.state = AdapterState.ERROR
             logger.error("Failed to activate adapter %s: %s", name, e)
             return False
@@ -177,11 +185,7 @@ class LoraManager:
 
     def get_active_adapters(self) -> List[LoraAdapter]:
         """Get list of currently active adapters."""
-        return [
-            self.registry.get(name)
-            for name in self._active_adapters
-            if self.registry.get(name) is not None
-        ]
+        return [self.registry.get(name) for name in self._active_adapters if self.registry.get(name) is not None]
 
     def list_adapters(self) -> List[Dict[str, Any]]:
         """List all registered adapters with status."""
@@ -225,8 +229,5 @@ class LoraManager:
             "active_count": len(self._active_adapters),
             "registered_count": len(self.registry.list_adapters()),
             "max_loras": self.config.max_loras,
-            "hit_rate": (
-                self._stats["cache_hits"] /
-                max(1, self._stats["cache_hits"] + self._stats["cache_misses"])
-            ),
+            "hit_rate": (self._stats["cache_hits"] / max(1, self._stats["cache_hits"] + self._stats["cache_misses"])),
         }

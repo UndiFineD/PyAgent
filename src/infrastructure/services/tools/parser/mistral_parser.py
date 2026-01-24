@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Mistral Parser
 
@@ -10,13 +24,8 @@ from __future__ import annotations
 import json
 from typing import Optional, Tuple
 
-from .base import (
-    ToolParser,
-    ToolParserType,
-    ToolCall,
-    ToolParseResult,
-    StreamingToolState,
-)
+from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
+                   ToolParserType)
 
 
 class MistralToolParser(ToolParser):
@@ -83,15 +92,15 @@ class MistralToolParser(ToolParser):
         if state.in_tool_call:
             # Track array completion
             for char in delta:
-                if char == '[':
+                if char == "[":
                     state.brace_depth += 1
-                elif char == ']':
+                elif char == "]":
                     state.brace_depth -= 1
 
                     if state.brace_depth == 0:
                         # Complete array
                         idx = state.buffer.index(self.TOOL_CALLS_TAG)
-                        tool_json = state.buffer[idx + len(self.TOOL_CALLS_TAG):].strip()
+                        tool_json = state.buffer[idx + len(self.TOOL_CALLS_TAG) :].strip()
 
                         try:
                             tool_list = json.loads(tool_json)

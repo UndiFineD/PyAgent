@@ -12,10 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Vllm native backend.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
+
+from src.core.base.lifecycle.version import VERSION
+
 from .llm_backend import LLMBackend
 
 __version__ = VERSION
@@ -32,13 +39,12 @@ class VllmNativeBackend(LLMBackend):
         **kwargs,
     ) -> str:
         import time
+
         start_t = time.time()
         try:
             from ..vllm_native_engine import VllmNativeEngine
 
-            engine = VllmNativeEngine.get_instance(
-                model_name=model or "meta-llama/Llama-3-8B-Instruct"
-            )
+            engine = VllmNativeEngine.get_instance(model_name=model or "meta-llama/Llama-3-8B-Instruct")
             if not engine.enabled:
                 return ""
 

@@ -19,16 +19,18 @@ blog posts, and technical papers into the agent's knowledge base.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class ResourceCurationAgent(BaseAgent):
+class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Manages the 'Good Read Unit' and research link lifecycle."""
 
     def __init__(self, file_path: str = ".") -> None:
@@ -62,7 +64,7 @@ class ResourceCurationAgent(BaseAgent):
             library.append(resource)
             self._save_library(library)
             return f"Resource '{title}' added to the Research Library."
-        except Exception as e:
+        except (IOError, json.JSONDecodeError) as e:
             return f"Failed to add resource: {e}"
 
     @as_tool
@@ -72,7 +74,7 @@ class ResourceCurationAgent(BaseAgent):
         return f"Processed {len(urls)} research items. Recommendations sent to KnowledgeAgent."
 
     def _load_library(self) -> list[dict[str, Any]]:
-        import os
+        import os  # pylint: disable=import-outside-toplevel
 
         if not os.path.exists(self.library_path):
             return []
@@ -84,7 +86,9 @@ class ResourceCurationAgent(BaseAgent):
         with open(self.library_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Updates the library summary (Phase 284: Ensure async)."""
+        _ = (prompt, target_file)
         return f"Library currently contains {len(self._load_library())} curated research units."
 
 

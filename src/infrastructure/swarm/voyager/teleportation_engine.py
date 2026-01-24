@@ -1,14 +1,21 @@
+
+"""
+Teleportation engine.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Teleportation Engine)
 
-import msgpack
-import zlib
 import base64
-from typing import Any, Dict, Optional
-from src.observability.structured_logger import StructuredLogger
+import zlib
+from typing import Any, Dict
+
+import msgpack
+
 from src.core.base.lifecycle.version import VERSION
+from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
+
 
 class TeleportationEngine:
     """
@@ -31,7 +38,7 @@ class TeleportationEngine:
             "memory": getattr(agent, "memory", {}),
             "mission_params": getattr(agent, "mission_params", {}),
             "lineage": getattr(agent, "lineage", []),
-            "dynamic_weights": getattr(agent, "dynamic_weights", {})
+            "dynamic_weights": getattr(agent, "dynamic_weights", {}),
         }
 
         # Serialize with MessagePack
@@ -62,7 +69,7 @@ class TeleportationEngine:
     @staticmethod
     def encode_for_transport(blob: bytes) -> str:
         """Encodes binary blob as a base64 string for text-based protocols (JSON/HTTP)."""
-        return base64.b64encode(blob).decode('utf-8')
+        return base64.b64encode(blob).decode("utf-8")
 
     @staticmethod
     def decode_from_transport(encoded: str) -> bytes:

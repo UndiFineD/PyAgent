@@ -16,13 +16,15 @@
 """Backend implementation handlers for SubagentRunner."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import json
 import logging
 import os
 import subprocess
-import json
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -62,17 +64,12 @@ class BackendHandlers:
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
         try:
-            max_context_chars = int(
-                os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000")
-            )
+            max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
         except ValueError:
             max_context_chars = 12_000
         trimmed_original = (original_content or "")[:max_context_chars]
         return (
-            f"Task: {description}\\n\\n"
-            f"Prompt:\\n{prompt}\\n\\n"
-            "Context (existing file content):\\n"
-            f"{trimmed_original}"
+            f"Task: {description}\\n\\nPrompt:\\n{prompt}\\n\\nContext (existing file content):\\n{trimmed_original}"
         ).strip()
 
     @staticmethod
@@ -122,9 +119,7 @@ class BackendHandlers:
                 logging.info("Codex CLI backend succeeded")
                 return stdout
             if result.returncode != 0:
-                logging.debug(
-                    f"Codex CLI failed (code {result.returncode}): {result.stderr}"
-                )
+                logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")
         except subprocess.TimeoutExpired:
             logging.warning("Codex CLI timed out")
         except Exception as e:
@@ -154,9 +149,7 @@ class BackendHandlers:
         return None
 
     @staticmethod
-    def try_gh_copilot(
-        full_prompt: str, repo_root: Path, allow_non_command: bool = False
-    ) -> str | None:
+    def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
         # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
@@ -189,18 +182,9 @@ class BackendHandlers:
             return None
 
         base_url = (
-            (
-                os.environ.get("GITHUB_MODELS_BASE_URL")
-                or "https://models.inference.ai.azure.com"
-            )
-            .strip()
-            .rstrip("/")
+            (os.environ.get("GITHUB_MODELS_BASE_URL") or "https://models.inference.ai.azure.com").strip().rstrip("/")
         )
-        model = (
-            os.environ.get("DV_AGENT_MODEL")
-            or os.environ.get("GITHUB_MODELS_MODEL")
-            or "gpt-4o-mini"
-        ).strip()
+        model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini").strip()
 
         token = os.environ.get("GITHUB_TOKEN")
         if not token:
@@ -245,9 +229,7 @@ class BackendHandlers:
                 "max_tokens": 4096,
             }
             url = f"{base_url}/v1/chat/completions"
-            response = requests_lib.post(
-                url, headers=headers, data=json.dumps(payload), timeout=120
-            )
+            response = requests_lib.post(url, headers=headers, data=json.dumps(payload), timeout=120)
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()

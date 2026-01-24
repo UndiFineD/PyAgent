@@ -16,25 +16,24 @@
 """Auto-extracted class from agent_stats.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.observability.stats.observability_core import Alert
-from src.observability.stats.observability_core import AlertSeverity
-from src.observability.stats.observability_core import Metric
-from src.observability.stats.observability_core import MetricSnapshot
-from src.observability.stats.observability_core import MetricType
-from src.observability.stats.observability_core import RetentionPolicy
-from src.observability.stats.observability_core import Threshold
-from src.observability.stats.observability_core import StatsCore
-from datetime import datetime
-from pathlib import Path
-from typing import Any
-from collections.abc import Callable
+
 import csv
 import hashlib
 import json
 import logging
-from src.observability.structured_logger import StructuredLogger
 import zlib
+from collections.abc import Callable
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+from src.observability.stats.observability_core import (Alert, AlertSeverity,
+                                                        Metric, MetricSnapshot,
+                                                        MetricType,
+                                                        RetentionPolicy,
+                                                        StatsCore, Threshold)
+from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 
@@ -159,9 +158,7 @@ class StatsAgent:
                 return False
             val_to_check = history[-1].value
             hist_to_check = history[:-1]
-            is_anom, _ = StatsCore.detect_anomaly(
-                hist_to_check, val_to_check, threshold_std
-            )
+            is_anom, _ = StatsCore.detect_anomaly(hist_to_check, val_to_check, threshold_std)
             return is_anom
 
         is_anomaly, z_score = StatsCore.detect_anomaly(history, value, threshold_std)
@@ -252,9 +249,7 @@ class StatsAgent:
         elif threshold.min_value is not None:
             threshold_value = float(threshold.min_value)
         alert = Alert(
-            id=hashlib.md5(f"{metric.name}:{metric.timestamp}".encode()).hexdigest()[
-                :8
-            ],
+            id=hashlib.md5(f"{metric.name}:{metric.timestamp}".encode()).hexdigest()[:8],
             metric_name=metric.name,
             current_value=metric.value,
             threshold_value=threshold_value,
@@ -279,13 +274,9 @@ class StatsAgent:
         return count
 
     # ========== Snapshots ==========
-    def create_snapshot(
-        self, name: str = "", tags: dict[str, str] | None = None
-    ) -> MetricSnapshot:
+    def create_snapshot(self, name: str = "", tags: dict[str, str] | None = None) -> MetricSnapshot:
         """Create a snapshot of current metrics."""
-        current_stats: dict[str, float] = {
-            k: float(v) for k, v in self.calculate_stats().items()
-        }
+        current_stats: dict[str, float] = {k: float(v) for k, v in self.calculate_stats().items()}
         custom: dict[str, float] = self.collect_custom_metrics()
         metrics: dict[str, float] = {**current_stats, **custom}
         snapshot = MetricSnapshot(
@@ -306,9 +297,7 @@ class StatsAgent:
         """Get recent snapshots."""
         return self._snapshots[-limit:]
 
-    def compare_snapshots(
-        self, snapshot1_name: str, snapshot2_name: str
-    ) -> dict[str, dict[str, float | int]]:
+    def compare_snapshots(self, snapshot1_name: str, snapshot2_name: str) -> dict[str, dict[str, float | int]]:
         """Compare two snapshots."""
         s1 = self.get_snapshot(snapshot1_name)
         s2 = self.get_snapshot(snapshot2_name)
@@ -352,12 +341,9 @@ class StatsAgent:
         # Tests might seed _metric_history directly.
         if metric_name in self._metric_history:
             return zlib.compress(
-                json.dumps(
-                    [
-                        {"timestamp": ts, "value": val}
-                        for ts, val in self._metric_history[metric_name]
-                    ]
-                ).encode("utf-8")
+                json.dumps([{"timestamp": ts, "value": val} for ts, val in self._metric_history[metric_name]]).encode(
+                    "utf-8"
+                )
             )
         return StatsCore.compress_metrics(self._metrics.get(metric_name, []))
 
@@ -373,9 +359,7 @@ class StatsAgent:
             return []
         data = json.loads(zlib.decompress(compressed).decode("utf-8"))
         if not metric_name:
-            return [
-                (item.get("timestamp", ""), item.get("value", 0.0)) for item in data
-            ]
+            return [(item.get("timestamp", ""), item.get("value", 0.0)) for item in data]
         return [
             Metric(
                 name=metric_name,
@@ -486,9 +470,7 @@ class StatsAgent:
 
                 conn = sqlite3.connect(f"{output_path}.db")
                 cursor = conn.cursor()
-                cursor.execute(
-                    "CREATE TABLE IF NOT EXISTS stats (metric TEXT, value INTEGER)"
-                )
+                cursor.execute("CREATE TABLE IF NOT EXISTS stats (metric TEXT, value INTEGER)")
                 cursor.executemany(
                     "INSERT INTO stats (metric, value) VALUES (?, ?)",
                     self.stats.items(),
@@ -538,8 +520,6 @@ class StatsAgent:
             logger.info(f"Files with descriptions: {fmt(stats['files_with_context'])}")
             logger.info(f"Files with changelogs: {fmt(stats['files_with_changes'])}")
             logger.info(f"Files with error reports: {fmt(stats['files_with_errors'])}")
-            logger.info(
-                f"Files with improvements: {fmt(stats['files_with_improvements'])}"
-            )
+            logger.info(f"Files with improvements: {fmt(stats['files_with_improvements'])}")
             logger.info(f"Files with tests: {fmt(stats['files_with_tests'])}")
             logger.info("====================")

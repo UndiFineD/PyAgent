@@ -16,11 +16,14 @@
 """Agent specializing in analyzing, documenting, and suggesting fixes for errors."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import sys
 from pathlib import Path
+
 from src.core.base.entrypoint import create_main_function
-from src.observability.errors import errors_agent
+from src.core.base.lifecycle.version import VERSION
+
+from .errors_agent import ErrorsAgent
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]

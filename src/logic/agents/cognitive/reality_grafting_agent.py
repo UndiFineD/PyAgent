@@ -13,15 +13,20 @@
 # limitations under the License.
 
 
+"""Agent for integrating simulated logic paths into production codebases."""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class RealityGraftingAgent(BaseAgent):
     """
     Tier 2 (Cognitive Logic) - Reality Grafting Agent: Integrates successful
@@ -59,6 +64,6 @@ class RealityGraftingAgent(BaseAgent):
         logging.info(f"Grafting successful for {focus_area}")
         return report
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         # Standard implementation for base agent compatibility
         return self.graft_skill("manual_graft", prompt)

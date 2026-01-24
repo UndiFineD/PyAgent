@@ -16,15 +16,18 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+
+from datetime import datetime, timedelta
+from typing import Any
+
 from src.core.base.lifecycle.version import VERSION
+
 from .improvement import Improvement
 from .resource_allocation import ResourceAllocation
 from .schedule_status import ScheduleStatus
+from .schedule_store import _ScheduleStore
 from .scheduled_entry import ScheduledEntry
 from .scheduled_improvement import ScheduledImprovement
-from .schedule_store import _ScheduleStore
-from datetime import datetime, timedelta
-from typing import Any
 
 __version__ = VERSION
 

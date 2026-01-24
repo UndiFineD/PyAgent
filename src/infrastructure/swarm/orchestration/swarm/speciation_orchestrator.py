@@ -18,14 +18,17 @@ Analyzes task patterns to suggest when new specialized agent types should be cre
 """
 
 from __future__ import annotations
+
 import logging
-from typing import Dict, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List
+
 from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
+
 
 class SpeciationOrchestrator:
     """
@@ -38,7 +41,7 @@ class SpeciationOrchestrator:
         self.species_map: Dict[str, List[str]] = {
             "developer": ["CoderAgent", "SandboxAgent", "GitAgent"],
             "researcher": ["KnowledgeAgent", "SearchAgent"],
-            "coordinator": ["PatternOrchestrator", "FleetManager"]
+            "coordinator": ["PatternOrchestrator", "FleetManager"],
         }
         logging.info(f"SpeciationOrchestrator v{VERSION} initialized.")
 
@@ -46,11 +49,7 @@ class SpeciationOrchestrator:
         """Creates a specialized sub-swarm (species) for a specific domain."""
         logging.info(f"Speciation: Creating new species for domain {domain}")
         breed_name = f"{domain.split('-')[-1]}-Specialist"
-        return {
-            "domain": domain,
-            "breed_name": breed_name,
-            "agents": [f"{breed_name}-1", f"{breed_name}-2"]
-        }
+        return {"domain": domain, "breed_name": breed_name, "agents": [f"{breed_name}-1", f"{breed_name}-2"]}
 
     def identify_niche_gap(self, unhandled_tasks: List[str]) -> str | None:
         """
@@ -71,7 +70,7 @@ class SpeciationOrchestrator:
                 if kw in task.lower():
                     counts[kw] += 1
 
-        top_niche = max(counts, key=counts.get) # type: ignore
+        top_niche = max(counts, key=counts.get)  # type: ignore
         if counts[top_niche] > 2:
             return keywords[top_niche]
 
@@ -81,4 +80,3 @@ class SpeciationOrchestrator:
         """Records the creation of a new specialized agent type."""
         logging.info(f"Speciation: New species '{species_name}' evolved from '{parent_type}'.")
         return True
-

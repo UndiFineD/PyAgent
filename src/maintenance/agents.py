@@ -10,12 +10,15 @@ obsolete agent logs, and ensuring agent-specific reminders are generated.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from datetime import datetime
 from typing import Any
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class AgentsMaintenance:
     """
@@ -26,6 +29,7 @@ class AgentsMaintenance:
     by auditing their interaction history and generating proactive maintenance
     reminders.
     """
+
     def __init__(self, fleet_manager: Any = None) -> None:
         self.version = VERSION
         self.fleet_manager = fleet_manager

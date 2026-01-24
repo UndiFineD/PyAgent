@@ -16,10 +16,13 @@
 """Environment and data management for tests."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import random
 from dataclasses import dataclass, field
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .models import TestEnvironment
 
 __version__ = VERSION
@@ -177,8 +180,6 @@ class DataFactory:
         result.update(kwargs)
         return result
 
-    def create_batch(
-        self, kind: str, count: int, overrides: dict[str, Any] | None = None
-    ) -> list[dict[str, Any]]:
+    def create_batch(self, kind: str, count: int, overrides: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         """Create a batch of objects for a kind."""
         return [self.create(kind, overrides=overrides or {}) for _ in range(count)]

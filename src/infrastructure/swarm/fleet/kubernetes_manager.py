@@ -18,9 +18,11 @@ Handles deployment and lifecycle of agent-specific containers.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -32,9 +34,7 @@ class KubernetesManager:
         self.namespace = namespace
         self.active_deployments: list[str] = []
 
-    def deploy_agent_pod(
-        self, agent_name: str, image: str = "pyagent-worker:latest"
-    ) -> str:
+    def deploy_agent_pod(self, agent_name: str, image: str = "pyagent-worker:latest") -> str:
         """Generates a K8s Pod/Deployment manifest for a specialized agent."""
         logging.info(f"K8S: Deploying {agent_name} to namespace {self.namespace}")
 

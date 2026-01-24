@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -6,16 +20,17 @@ Guided decoding engine for structured output generation.
 
 from __future__ import annotations
 
+import gc
 import json
 import logging
-import re
 import os
-import gc
+import re
 from typing import Any, Dict, List, Optional, Union
 
 # Check torch availability
 try:
     import torch
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -23,8 +38,8 @@ except ImportError:
 
 # Check vLLM availability
 try:
-    from vllm import SamplingParams
-    from vllm import LLM
+    from vllm import LLM, SamplingParams
+
     HAS_VLLM = True
 except ImportError:
     HAS_VLLM = False
@@ -33,7 +48,8 @@ except ImportError:
 
 # Check outlines availability
 try:
-    import outlines # pylint: disable=unused-import
+    import outlines  # noqa: F401 # pylint: disable=unused-import
+
     HAS_OUTLINES = True
 except ImportError:
     HAS_OUTLINES = False

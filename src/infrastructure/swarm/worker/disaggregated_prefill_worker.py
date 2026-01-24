@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -20,29 +34,17 @@ Inspired by vLLM's specialized worker architectures.
 from __future__ import annotations
 
 import logging
-import threading
-import time
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    List,
-    Optional,
-    Tuple,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from src.core.rust_bridge import RustBridge
 from src.core.lazy_loader import LazyLoader
-from src.infrastructure.storage.cache.kv_cache_manager import KVCacheConfig, DeviceType
 from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
-    KVTransferConfig,
-    KVConnectorRole,
-)
+    KVConnectorRole, KVTransferConfig)
 
 if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorBase
-    from src.infrastructure.storage.cache.kv_cache_manager import KVCacheManager
+    from src.infrastructure.storage.cache.kv_cache_manager import \
+        KVCacheManager
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
+        KVConnectorBase
 
 logger = logging.getLogger(__name__)
 
@@ -92,8 +94,7 @@ class DisaggregatedPrefillWorker:
         # self.cache_manager = KVCacheManager(...)
 
         # Setup KV Transfer Connector (e.g., Mooncake or Nixl)
-        connector_type = self.kv_transfer_config.kv_connector
-        # if connector_type == "MooncakeConnector":
+        # if self.kv_transfer_config.kv_connector == "MooncakeConnector":
         #    from src.infrastructure.storage.kv_transfer.MooncakeConnector import MooncakeConnector
         #    self.kv_connector = MooncakeConnector(self.kv_transfer_config)
 
@@ -141,7 +142,7 @@ class DisaggregatedPrefillWorker:
             "active_requests": len(self._requests_in_prefill),
             "tokens_prefilled": self.tokens_prefilled,
             "requests_completed": self.requests_completed,
-            "connector_health": self.kv_connector.get_health_report() if self.kv_connector else None
+            "connector_health": self.kv_connector.get_health_report() if self.kv_connector else None,
         }
 
     def shutdown(self):
@@ -150,6 +151,7 @@ class DisaggregatedPrefillWorker:
         if self.kv_connector:
             self.kv_connector.close()
         logger.info("DisaggregatedPrefillWorker %s shut down.", self.worker_id)
+
 
 # Lazy loading registration
 _worker = LazyLoader("src.infrastructure.swarm.worker.disaggregated_prefill_worker", "DisaggregatedPrefillWorker")

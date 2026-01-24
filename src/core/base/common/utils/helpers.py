@@ -16,9 +16,11 @@
 """Helper functions for dataclass default factories."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any, Final, TypeVar, TYPE_CHECKING
+
 from collections.abc import Iterable
+from typing import TYPE_CHECKING, Any, Final, TypeVar
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -46,11 +48,13 @@ HAS_TQDM: Final[bool] = _tqdm is not None
 _T = TypeVar("_T")
 
 if _tqdm is not None:
-    tqdm = _tqdm
+    tqdm = _tqdm  # pylint: disable=invalid-name
 else:
 
-    def tqdm[T](iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
+    # pylint: disable=invalid-name
+    def tqdm[_T](iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
         """Fallback if tqdm not available."""
+        _ = args, kwargs
         return iterable
 
 

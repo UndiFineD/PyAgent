@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Extension Registry Module - Phase 20: Production Infrastructure
 ================================================================
@@ -20,22 +34,11 @@ from __future__ import annotations
 
 import logging
 import threading
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Generic,
-    TypeVar,
-    Protocol,
-    runtime_checkable,
-    overload,
-)
-from functools import wraps
+from typing import TYPE_CHECKING, Any, Callable, Generic, TypeVar
 
 if TYPE_CHECKING:
-    from typing import ClassVar
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -84,15 +87,14 @@ class ExtensionManager:
         Returns:
             Decorator function that registers and returns the class.
         """
+
         def wrap(cls_to_register: _T) -> _T:
             with self._lock:
                 if name in self._name2class:
-                    logger.warning(
-                        "Overwriting existing registration '%s' in %s",
-                        name, self.name
-                    )
+                    logger.warning("Overwriting existing registration '%s' in %s", name, self.name)
                 self._name2class[name] = cls_to_register
             return cls_to_register
+
         return wrap
 
     def register_class(self, name: str, cls: type) -> None:
@@ -105,10 +107,7 @@ class ExtensionManager:
         """
         with self._lock:
             if name in self._name2class:
-                logger.warning(
-                    "Overwriting existing registration '%s' in %s",
-                    name, self.name
-                )
+                logger.warning("Overwriting existing registration '%s' in %s", name, self.name)
             self._name2class[name] = cls
 
     def unregister(self, name: str) -> bool:
@@ -146,10 +145,7 @@ class ExtensionManager:
             cls = self._name2class.get(cls_name)
         if cls is None:
             available = list(self._name2class.keys())
-            raise KeyError(
-                f"Extension class '{cls_name}' not found in {self.name}. "
-                f"Available: {available}"
-            )
+            raise KeyError(f"Extension class '{cls_name}' not found in {self.name}. Available: {available}")
         return cls(*args, **kwargs)
 
     def get_class(self, cls_name: str) -> type | None:
@@ -225,19 +221,16 @@ class TypedExtensionManager(Generic[_Base]):
 
         Validates that the class inherits from the base class.
         """
+
         def wrap(cls_to_register: type[_Base]) -> type[_Base]:
             if not issubclass(cls_to_register, self.base_class):
-                raise TypeError(
-                    f"Class {cls_to_register.__name__} must inherit from "
-                    f"{self.base_class.__name__}"
-                )
+                raise TypeError(f"Class {cls_to_register.__name__} must inherit from {self.base_class.__name__}")
             with self._lock:
                 if name in self._name2class:
-                    logger.warning(
-                        f"Overwriting existing registration '{name}' in {self.name}"
-                    )
+                    logger.warning(f"Overwriting existing registration '{name}' in {self.name}")
                 self._name2class[name] = cls_to_register
             return cls_to_register
+
         return wrap
 
     def load(self, cls_name: str, *args: Any, **kwargs: Any) -> _Base:
@@ -246,10 +239,7 @@ class TypedExtensionManager(Generic[_Base]):
             cls = self._name2class.get(cls_name)
         if cls is None:
             available = list(self._name2class.keys())
-            raise KeyError(
-                f"Extension class '{cls_name}' not found in {self.name}. "
-                f"Available: {available}"
-            )
+            raise KeyError(f"Extension class '{cls_name}' not found in {self.name}. Available: {available}")
         return cls(*args, **kwargs)
 
     def get_class(self, cls_name: str) -> type[_Base] | None:
@@ -283,6 +273,7 @@ class TypedExtensionManager(Generic[_Base]):
 @dataclass
 class ExtensionInfo:
     """Metadata for a registered extension."""
+
     name: str
     cls: type
     priority: int = 0
@@ -313,12 +304,7 @@ class MultiExtensionManager:
         self._extensions: dict[str, list[ExtensionInfo]] = {}
         self._lock = threading.RLock()
 
-    def register(
-        self,
-        name: str,
-        priority: int = 0,
-        **metadata: Any
-    ) -> Callable[[_T], _T]:
+    def register(self, name: str, priority: int = 0, **metadata: Any) -> Callable[[_T], _T]:
         """
         Decorator to register a class with the given name and priority.
 
@@ -327,6 +313,7 @@ class MultiExtensionManager:
             priority: Higher priority extensions are loaded first.
             **metadata: Additional metadata to store with the extension.
         """
+
         def wrap(cls_to_register: _T) -> _T:
             info = ExtensionInfo(
                 name=name,
@@ -340,6 +327,7 @@ class MultiExtensionManager:
                 self._extensions[name].append(info)
                 self._extensions[name].sort()  # Sort by priority
             return cls_to_register
+
         return wrap
 
     def get_first(self, name: str, *args: Any, **kwargs: Any) -> Any:
@@ -430,9 +418,7 @@ class LazyExtensionManager:
             spec: The import spec in 'module:class' or 'module.submodule:class' format.
         """
         if ":" not in spec:
-            raise ValueError(
-                f"Invalid spec '{spec}'. Must be in 'module:class' format."
-            )
+            raise ValueError(f"Invalid spec '{spec}'. Must be in 'module:class' format.")
         with self._lock:
             self._lazy_specs[name] = spec
             # Clear cached load if re-registering

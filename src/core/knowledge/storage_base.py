@@ -11,13 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Storage base.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from abc import ABC, abstractmethod
-from typing import Any
 from pathlib import Path
+from typing import Any
+
 from src.core.base.common.memory_core import MemoryCore
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -33,9 +39,7 @@ class KnowledgeStore(ABC):
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
-    def store(
-        self, key: str, value: Any, metadata: dict[str, Any] | None = None
-    ) -> bool:
+    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
         raise NotImplementedError()
 
     @abstractmethod

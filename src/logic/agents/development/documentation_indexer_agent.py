@@ -15,10 +15,14 @@
 
 """Agent specializing in workspace-wide documentation indexing and retrieval (Tabby pattern)."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from pathlib import Path
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -54,19 +58,16 @@ class DocumentationIndexerAgent(BaseAgent):
     def get_semantic_pointers(self, query: str) -> str:
         """Returns pointers to documentation relevant to the query."""
         # This would use semantic search in a real implementation
-        return (
-            f"Searching index for: {query}... (Pointers to be generated via embeddings)"
-        )
+        return f"Searching index for: {query}... (Pointers to be generated via embeddings)"
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Returns documentation snippets or paths."""
-        return self.get_semantic_pointers(input_text)
+        _ = target_file
+        return self.get_semantic_pointers(prompt)
 
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index"
-    )
+    main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
     main()

@@ -232,7 +232,10 @@ class TestHermesToolParser:
         """Test parsing multiple Hermes calls."""
         parser = HermesToolParser()
 
-        text = '<tool_call>{"name": "func1", "arguments": {}}</tool_call><tool_call>{"name": "func2", "arguments": {}}</tool_call>'
+        text = (
+            '<tool_call>{"name": "func1", "arguments": {}}</tool_call>'
+            '<tool_call>{"name": "func2", "arguments": {}}</tool_call>'
+        )
         result = parser.parse(text)
 
         assert len(result.tool_calls) == 2

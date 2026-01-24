@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
+
+"""
+Tensorrt loader.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # TensorRT Engine Loader for Phase 51 Multimedia & Attention.
 # Provides 120fps throughput for separate Video, Audio, and Text channels.
 
-import os
 import logging
-from typing import Optional, List, Dict, Any
+import os
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
 # Try to import rust_core for low-level acceleration
@@ -14,6 +19,7 @@ try:
     import rust_core
 except ImportError:
     rust_core = None
+
 
 class TensorRTLoader:
     """
@@ -73,10 +79,7 @@ class TensorRTLoader:
         Packs channels into a single TensorRT execution block.
         """
         # Simulated packing logic
-        return {
-            "video_processed": video_frames * 0.5,
-            "audio_processed": audio_samples * 0.5
-        }
+        return {"video_processed": video_frames * 0.5, "audio_processed": audio_samples * 0.5}
 
     def close(self):
         """Releases all hardware resources."""

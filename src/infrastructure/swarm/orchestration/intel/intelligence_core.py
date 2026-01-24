@@ -19,11 +19,13 @@ Handles weight calculation, insight distillation, and pattern matching.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
-from typing import Any
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc
@@ -55,9 +57,7 @@ class IntelligenceCore:
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root
 
-    def filter_relevant_insights(
-        self, pool: list[dict[str, Any]], limit: int = 20
-    ) -> list[SwarmInsight]:
+    def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
         """Filters and converts raw insight dictionaries into SwarmInsight objects."""
         if rc:
             try:
@@ -79,18 +79,17 @@ class IntelligenceCore:
             )
         return insights
 
-    def generate_synthesis_prompt(
-        self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]
-    ) -> str:
+    def generate_synthesis_prompt(self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]) -> str:
         """Constructs a prompt for AI synthesis from collected insights."""
         lines = [i.format_for_pool() for i in insights]
         for lesson in sql_lessons:
-            lines.append(
-                f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})"
-            )
+            lines.append(f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})")
 
         pool_text = "\n".join(lines)
-        return f"Analyze these swarm insights and relational lessons. Synthesize the top 3 high-level patterns or warnings:\n{pool_text}"
+        return (
+            "Analyze these swarm insights and relational lessons. "
+            f"Synthesize the top 3 high-level patterns or warnings:\n{pool_text}"
+        )
 
     def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[str]:
         """Filters raw AI output to ensure patterns are technically relevant."""

@@ -16,10 +16,12 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .system_version import SystemVersion
+
 import logging
-from src.core.base.lifecycle.version import SDK_VERSION
+
+from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+
+from .system_version import SystemVersion
 
 __version__ = VERSION
 

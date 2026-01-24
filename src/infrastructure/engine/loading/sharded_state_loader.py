@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Sharded State Loader for PyAgent
 
@@ -24,31 +38,16 @@ import glob
 import os
 import re
 import threading
-import time
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from pathlib import Path
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    Generator,
-    Iterable,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    Union,
-)
+from dataclasses import dataclass
+from typing import (TYPE_CHECKING, Any, Callable, Dict, Generator, List,
+                    Optional, Tuple)
 
 if TYPE_CHECKING:
-    import torch
-    import numpy as np
+    pass
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -61,6 +60,7 @@ class ShardPattern:
 
     vLLM Pattern: DEFAULT_PATTERN = "model-rank-{rank}-part-{part}.safetensors"
     """
+
     template: str = "model-rank-{rank}-part-{part}.safetensors"
     rank_placeholder: str = "{rank}"
     part_placeholder: str = "{part}"
@@ -85,6 +85,7 @@ class ShardPattern:
 @dataclass
 class ShardedTensor:
     """Represents a tensor that is sharded across ranks."""
+
     name: str
     shape: Tuple[int, ...]
     dtype: str
@@ -122,8 +123,8 @@ class SubtensorFilter:
         storage_groups: Dict[Tuple[Any, int], List[Tuple[str, Any]]] = {}
 
         for key, tensor in tensors.items():
-            if hasattr(tensor, 'numel') and tensor.numel() > 0:
-                if hasattr(tensor, 'untyped_storage'):
+            if hasattr(tensor, "numel") and tensor.numel() > 0:
+                if hasattr(tensor, "untyped_storage"):
                     ptr = tensor.untyped_storage().data_ptr()
                     device = tensor.device
                     group_key = (device, ptr)
@@ -189,17 +190,11 @@ class ShardedStateLoader:
 
         Supports both local filesystem and (conceptually) S3 paths.
         """
-        pattern_str = os.path.join(
-            model_path,
-            self.pattern.format_for_rank(self.rank, "*")
-        )
+        pattern_str = os.path.join(model_path, self.pattern.format_for_rank(self.rank, "*"))
 
         files = glob.glob(pattern_str)
         if not files:
-            raise ValueError(
-                f"No shard files found for rank {self.rank} "
-                f"with pattern: {pattern_str}"
-            )
+            raise ValueError(f"No shard files found for rank {self.rank} with pattern: {pattern_str}")
 
         return sorted(files)
 
@@ -308,9 +303,11 @@ class IncrementalShardLoader:
 
         try:
             from safetensors.torch import load_file
+
             shard_data = load_file(shard_file)
         except ImportError:
             import torch
+
             shard_data = torch.load(shard_file, map_location="cpu", weights_only=True)
 
         with self._lock:
@@ -364,23 +361,21 @@ class AsyncShardLoader:
         """Load a single file."""
         try:
             from safetensors.torch import load_file
+
             return load_file(file_path)
         except ImportError:
             import torch
+
             return torch.load(file_path, map_location="cpu", weights_only=True)
 
     def _start_prefetch(self, file_paths: List[str]) -> None:
         """Start prefetching files."""
         if self._executor is None:
-            self._executor = concurrent.futures.ThreadPoolExecutor(
-                max_workers=self.max_workers
-            )
+            self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers)
 
         for path in file_paths:
             if path not in self._prefetch_futures:
-                self._prefetch_futures[path] = self._executor.submit(
-                    self._load_file, path
-                )
+                self._prefetch_futures[path] = self._executor.submit(self._load_file, path)
 
     def load_weights_async(
         self,
@@ -391,7 +386,7 @@ class AsyncShardLoader:
 
         try:
             # Start initial prefetch
-            self._start_prefetch(shard_files[:self.prefetch_count])
+            self._start_prefetch(shard_files[: self.prefetch_count])
 
             for i, shard_file in enumerate(shard_files):
                 # Start prefetching next batch
@@ -425,9 +420,7 @@ class AsyncShardLoader:
         async def load_shard(path: str) -> Dict[str, Any]:
             return await loop.run_in_executor(None, self._load_file, path)
 
-        results = await asyncio.gather(*[
-            load_shard(f) for f in shard_files
-        ])
+        results = await asyncio.gather(*[load_shard(f) for f in shard_files])
 
         merged = {}
         for result in results:
@@ -443,9 +436,7 @@ def compute_shard_assignment_rust(
 ) -> List[int]:
     """Compute optimal shard assignment using Rust."""
     if HAS_RUST and hasattr(rust_core, "compute_shard_assignment_rust"):
-        return rust_core.compute_shard_assignment_rust(
-            num_params, num_ranks, param_sizes
-        )
+        return rust_core.compute_shard_assignment_rust(num_params, num_ranks, param_sizes)
 
     # Python fallback - simple round-robin
     return [i % num_ranks for i in range(num_params)]

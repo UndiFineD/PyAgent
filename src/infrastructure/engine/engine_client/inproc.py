@@ -1,17 +1,34 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Phase 45: In-process Engine Client
 Single-GPU in-process execution.
 """
 
 from __future__ import annotations
+
 import asyncio
 import logging
-from typing import Optional, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Optional
+
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.types import EngineOutput
 
 if TYPE_CHECKING:
-    from src.infrastructure.engine.engine_client.types import EngineClientConfig, SchedulerOutput
+    from src.infrastructure.engine.engine_client.types import (
+        EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +41,7 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     """
 
     def __init__(
-        self,
-        config: EngineClientConfig,
-        engine_core: Optional[Callable[[SchedulerOutput], EngineOutput]] = None
+        self, config: EngineClientConfig, engine_core: Optional[Callable[[SchedulerOutput], EngineOutput]] = None
     ):
         super().__init__(config)
         self._engine_core = engine_core
@@ -45,10 +60,7 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         if self._engine_core is None:
             # Mock execution for testing
             output = EngineOutput(
-                request_id=request_id,
-                outputs=[{"token_ids": [1, 2, 3]}],
-                finished=True,
-                metrics={"latency_ms": 1.0}
+                request_id=request_id, outputs=[{"token_ids": [1, 2, 3]}], finished=True, metrics={"latency_ms": 1.0}
             )
         else:
             output = self._engine_core(request)

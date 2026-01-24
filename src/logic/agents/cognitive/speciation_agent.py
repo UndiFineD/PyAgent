@@ -12,16 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Speciation Agent module for agent evolution and niche specialization."""
 
 from __future__ import annotations
+
 import logging
 import os
+from pathlib import Path
 from typing import Any
+
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
-from pathlib import Path
 
 
+# pylint: disable=too-many-ancestors
 class SpeciationAgent(BaseAgent):
     """
     Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
@@ -81,11 +85,11 @@ class {new_agent_name}(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 f.write(specialized_code)
             temp_path.replace(output_path)
-        except Exception as e:
+        except (OSError, IOError) as e:
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception:
+                except (OSError, IOError):
                     pass
             logging.error(f"SpeciationAgent: Failed to save agent code atomically: {e}")
             raise
@@ -142,7 +146,7 @@ class {new_agent_name}(BaseAgent):
             str(agent_path.with_suffix("")).replace(os.path.sep, ".").replace("/", ".")
         )
         if rel_import.startswith("src."):
-            rel_import = rel_import  # Already correct
+            pass  # Already correct
         else:
             rel_import = f"src.{rel_import}"
 

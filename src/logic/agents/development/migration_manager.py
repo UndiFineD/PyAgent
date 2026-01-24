@@ -15,12 +15,16 @@
 
 """Auto-extracted class from agent_coder.py"""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+import re
+from typing import Any
+
 from src.core.base.common.types.migration_rule import MigrationRule
 from src.core.base.common.types.migration_status import MigrationStatus
-from typing import Any
-import re
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

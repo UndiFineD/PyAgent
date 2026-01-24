@@ -16,9 +16,11 @@
 """Mock MCP server implementation for testing Agentic capabilities."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import sys
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -49,9 +51,7 @@ def main() -> None:
                 response = {
                     "jsonrpc": "2.0",
                     "id": request.get("id"),
-                    "result": {
-                        "content": f"Echo: {request['params']['arguments'].get('msg')}"
-                    },
+                    "result": {"content": f"Echo: {request['params']['arguments'].get('msg')}"},
                 }
             else:
                 response = {

@@ -13,16 +13,20 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 
+from src.core.base.lifecycle.version import VERSION
+
 __version__ = VERSION
+
 
 class EmotionalRegulationOrchestrator:
     """
     EmotionalRegulationOrchestrator recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         self.urgency = 0.5
@@ -38,4 +42,3 @@ class EmotionalRegulationOrchestrator:
         if self.urgency > 0.7:
             return "FAST_PATH"
         return "DEEP_REASONING_PATH"
-

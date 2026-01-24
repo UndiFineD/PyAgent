@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -59,8 +73,11 @@ class TruncationManager:
         removed = original - target
         truncated = tokens[removed:]
         return truncated, TruncationResult(
-            original_tokens=original, truncated_tokens=len(truncated), removed_tokens=removed,
-            strategy_used=TruncationStrategy.LEFT, removed_ranges=[(0, removed)]
+            original_tokens=original,
+            truncated_tokens=len(truncated),
+            removed_tokens=removed,
+            strategy_used=TruncationStrategy.LEFT,
+            removed_ranges=[(0, removed)],
         )
 
     @classmethod
@@ -68,8 +85,11 @@ class TruncationManager:
         truncated = tokens[:target]
         removed = original - target
         return truncated, TruncationResult(
-            original_tokens=original, truncated_tokens=len(truncated), removed_tokens=removed,
-            strategy_used=TruncationStrategy.RIGHT, removed_ranges=[(target, original)]
+            original_tokens=original,
+            truncated_tokens=len(truncated),
+            removed_tokens=removed,
+            strategy_used=TruncationStrategy.RIGHT,
+            removed_ranges=[(target, original)],
         )
 
     @classmethod
@@ -79,8 +99,11 @@ class TruncationManager:
         truncated = tokens[:keep_start] + tokens[-keep_end:]
         removed = original - target
         return truncated, TruncationResult(
-            original_tokens=original, truncated_tokens=len(truncated), removed_tokens=removed,
-            strategy_used=TruncationStrategy.MIDDLE, removed_ranges=[(keep_start, original - keep_end)]
+            original_tokens=original,
+            truncated_tokens=len(truncated),
+            removed_tokens=removed,
+            strategy_used=TruncationStrategy.MIDDLE,
+            removed_ranges=[(keep_start, original - keep_end)],
         )
 
     @classmethod

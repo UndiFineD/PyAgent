@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
+
+"""
+Chain of thought strategy.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Apache 2.0 License
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .agent_strategy import AgentStrategy
-from typing import TYPE_CHECKING
+
 import logging
+from typing import TYPE_CHECKING
+
+from src.core.base.lifecycle.version import VERSION
+
+from .agent_strategy import AgentStrategy
 
 if TYPE_CHECKING:
     from collections.abc import Callable

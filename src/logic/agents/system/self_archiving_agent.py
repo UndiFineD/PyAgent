@@ -12,15 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Self archiving agent.py module.
+"""
+
 
 from __future__ import annotations
-from pathlib import Path
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import os
 from datetime import datetime
-from src.core.base.lifecycle.base_agent import BaseAgent
+from pathlib import Path
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -44,9 +50,7 @@ class SelfArchivingAgent(BaseAgent):
         """
         Scans for files or memory entries that haven't been accessed in the given threshold.
         """
-        logging.info(
-            f"SelfArchiving: Scanning for targets older than {threshold_days} days."
-        )
+        logging.info(f"SelfArchiving: Scanning for targets older than {threshold_days} days.")
         # Mock logic to 'find' some obsolete paths
         targets = [
             str(Path(__file__).resolve().parents[4]) + "/logs/session_old_001.log",
@@ -66,9 +70,7 @@ class SelfArchivingAgent(BaseAgent):
         # Simplified simulation: just pretend we archived them
         os.path.join(os.path.dirname(self.file_path), "archives")
 
-        report = (
-            f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
-        )
+        report = f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
         for t in targets:
             report += f"- [ARCHIVED] {t}\n"
 

@@ -11,11 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Doc gen core.py module.
+"""
+
+# pylint: disable=too-many-ancestors
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import ast
 import os
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -26,8 +34,7 @@ class DocGenCore:
     No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
     """
 
-    @staticmethod
-    def extract_markdown_from_source(source_code: str, file_name: str) -> str:
+    def extract_markdown_from_source(self, source_code: str, file_name: str) -> str:
         """
         Parses source code using AST and generates Markdown documentation.
 
@@ -50,28 +57,37 @@ class DocGenCore:
 
             for node in tree.body:
                 if isinstance(node, ast.ClassDef):
-                    md_content += f"## Class: `{node.name}`\n"
-                    class_doc = ast.get_docstring(node)
-                    if class_doc:
-                        md_content += f"{class_doc}\n\n"
-
-                    for item in node.body:
-                        if isinstance(item, ast.FunctionDef):
-                            md_content += f"### Method: `{item.name}`\n"
-                            func_doc = ast.get_docstring(item)
-                            if func_doc:
-                                md_content += f"{func_doc}\n\n"
-
+                    md_content += self._format_class_docs(node)
                 elif isinstance(node, ast.FunctionDef):
-                    md_content += f"## Function: `{node.name}`\n"
-                    func_doc = ast.get_docstring(node)
-                    if func_doc:
-                        md_content += f"{func_doc}\n\n"
+                    md_content += self._format_function_docs(node, level=2)
 
             return md_content
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return f"Error extracting docs: {str(e)}"
+
+    def _format_class_docs(self, node: ast.ClassDef) -> str:
+        """Helper to format documentation for a class."""
+        md_content = f"## Class: `{node.name}`\n"
+        class_doc = ast.get_docstring(node)
+        if class_doc:
+            md_content += f"{class_doc}\n\n"
+
+        for item in node.body:
+            if isinstance(item, ast.FunctionDef):
+                md_content += self._format_function_docs(item, level=3)
+        return md_content
+
+    @staticmethod
+    def _format_function_docs(node: ast.FunctionDef, level: int = 2) -> str:
+        """Helper to format documentation for a function or method."""
+        prefix = "#" * level
+        header = "Method" if level == 3 else "Function"
+        md_content = f"{prefix} {header}: `{node.name}`\n"
+        func_doc = ast.get_docstring(node)
+        if func_doc:
+            md_content += f"{func_doc}\n\n"
+        return md_content
 
     @staticmethod
     def get_doc_filename(rel_path: str) -> str:

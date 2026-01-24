@@ -20,11 +20,13 @@
 """Diff Viewer component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import tkinter as tk
-from tkinter import ttk, messagebox
+
 import difflib
+import tkinter as tk
+from tkinter import messagebox, ttk
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -35,9 +37,7 @@ class DiffViewer:
     def __init__(self, parent: Any) -> None:
         self.parent = parent
 
-    def show_diff(
-        self, original_path: str, changed_content: str, title: str = "Changes Preview"
-    ) -> None:
+    def show_diff(self, original_path: str, changed_content: str, title: str = "Changes Preview") -> None:
         if not original_path:
             messagebox.showwarning("Warning", "No original file specified.")
             return
@@ -59,9 +59,7 @@ class DiffViewer:
 
         diff_text = "\n".join(list(diff))
         if not diff_text:
-            messagebox.showinfo(
-                "No Changes", "The proposed content is identical to the original."
-            )
+            messagebox.showinfo("No Changes", "The proposed content is identical to the original.")
             return
 
         # Create diff window
@@ -82,11 +80,7 @@ class DiffViewer:
                 text.insert(tk.END, line + "\n", "add")
             elif line.startswith("-") and not line.startswith("---"):
                 text.insert(tk.END, line + "\n", "remove")
-            elif (
-                line.startswith("@@")
-                or line.startswith("---")
-                or line.startswith("+++")
-            ):
+            elif line.startswith("@@") or line.startswith("---") or line.startswith("+++"):
                 text.insert(tk.END, line + "\n", "header")
             else:
                 text.insert(tk.END, line + "\n")

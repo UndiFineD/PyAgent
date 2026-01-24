@@ -18,7 +18,10 @@ def mock_run_subagent(description, prompt, original_content=""):
         return """
         [
             {"agent": "MarkdownAgent", "file": "docs/AUTO_DOC.md", "prompt": "Create initial automation docs."},
-            {"agent": "CoderAgent", "file": "scripts\auto_doc.py", "prompt": "Create a script to automate documentation."}
+            {
+                "agent": "CoderAgent", "file": "scripts\auto_doc.py",
+                "prompt": "Create a script to automate documentation."
+            }
         ]
         """
 

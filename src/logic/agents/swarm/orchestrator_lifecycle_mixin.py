@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
+
+"""
+Orchestrator lifecycle mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from __future__ import annotations
+
 import logging
 from pathlib import Path
+
 from src.core.base.common.models import AgentHealthCheck, HealthStatus
 from src.core.base.lifecycle.graceful_shutdown import GracefulShutdown
 from src.core.base.logic.managers.system_managers import HealthChecker

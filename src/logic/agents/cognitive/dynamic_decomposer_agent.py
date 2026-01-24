@@ -17,17 +17,18 @@
 Handles dynamic task splitting, load balancing, and capability-based routing.
 """
 
-from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class DynamicDecomposerAgent(BaseAgent):
     """Orchestrates complex task splitting and routes sub-tasks to specialized agents based on load."""
 
@@ -47,6 +48,7 @@ class DynamicDecomposerAgent(BaseAgent):
             complex_task: The high-level user request.
             available_agents: List of agent names currently active.
         """
+        _ = available_agents
         logging.info(f"DynamicDecomposer: Decomposing task: {complex_task[:50]}...")
 
         # In a real implementation, this would involve LLM reasoning to split the task
@@ -83,10 +85,13 @@ class DynamicDecomposerAgent(BaseAgent):
     @as_tool
     def balance_swarm_load(self, pending_tasks: list[dict[str, Any]]) -> str:
         """Re-routes tasks among agents to prevent bottlenecks."""
-
+        _ = pending_tasks
         return "Swarm load balancing: Workload evenly distributed. No re-routing necessary."
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Optimizes fleet content based on cognitive reasoning."""
+        _ = prompt
+        _ = target_file
         return "Task decomposition workflows are optimized for maximum parallelization."
 
 

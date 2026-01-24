@@ -18,13 +18,15 @@ Debug script for testing Phases 20 (Visual/Multimodal) and 21 (Distributed Obser
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from pathlib import Path
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
-from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.MultiModalContextAgent import MultiModalContextAgent
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent
+from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
 
 __version__ = VERSION
 
@@ -32,9 +34,9 @@ __version__ = VERSION
 def test_visualization_and_memory() -> None:
     print("\n--- Testing Phase 20: Visual & Multimodal ---")
     root = Path(str(Path(__file__).resolve().parents[5]) + "")
-    viz = VisualizerAgent(str(root / "src\logic\agents\cognitive\visualizer_agent.py"))
+    viz = VisualizerAgent(str(root / "src/logic/agents/cognitive/visualizer_agent.py"))
 
-    mem = GraphMemoryAgent(str(root / "src\logic\agents\cognitive\graph_memory_agent.py"))
+    mem = GraphMemoryAgent(str(root / "src/logic/agents/cognitive/graph_memory_agent.py"))
 
     # 1. Test Integration
 
@@ -48,9 +50,7 @@ def test_visualization_and_memory() -> None:
 
     # 2. Test MultiModal (Simulated)
 
-    mm = MultiModalContextAgent(
-        str(root / "src\logic\agents\system\multi_modal_context_agent.py")
-    )
+    mm = MultiModalContextAgent(str(root / "src\\logic\agents\\system\\multi_modal_context_agent.py"))
 
     # Create a dummy file for testing
     dummy_img = root / "dummy_ui.png"

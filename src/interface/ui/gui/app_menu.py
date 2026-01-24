@@ -20,9 +20,12 @@
 """Menu Bar component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 import tkinter as tk
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .constants import BMAD_AGENTS
 
 __version__ = VERSION
@@ -40,28 +43,18 @@ class AppMenu:
     def setup_menus(self) -> None:
         # File Menu
         file_menu = tk.Menu(self.menubar, tearoff=0)
-        file_menu.add_command(
-            label="New Session", command=self.callbacks.get("new_session")
-        )
-        file_menu.add_command(
-            label="Save Session", command=self.callbacks.get("save_session")
-        )
-        file_menu.add_command(
-            label="Load Session", command=self.callbacks.get("load_session")
-        )
+        file_menu.add_command(label="New Session", command=self.callbacks.get("new_session"))
+        file_menu.add_command(label="Save Session", command=self.callbacks.get("save_session"))
+        file_menu.add_command(label="Load Session", command=self.callbacks.get("load_session"))
         file_menu.add_separator()
-        file_menu.add_command(
-            label="Settings...", command=self.callbacks.get("show_settings")
-        )
+        file_menu.add_command(label="Settings...", command=self.callbacks.get("show_settings"))
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.callbacks.get("exit"))
         self.menubar.add_cascade(label="File", menu=file_menu)
 
         # View Menu
         view_menu = tk.Menu(self.menubar, tearoff=0)
-        view_menu.add_command(
-            label="Toggle Theme", command=self.callbacks.get("toggle_theme")
-        )
+        view_menu.add_command(label="Toggle Theme", command=self.callbacks.get("toggle_theme"))
         self.menubar.add_cascade(label="View", menu=view_menu)
 
         # Agents Menu
@@ -72,23 +65,17 @@ class AppMenu:
                 command=lambda t=atype: self.callbacks.get("add_agent")(t),
             )
         agents_menu.add_separator()
-        agents_menu.add_command(
-            label="Add Custom Agent...", command=self.callbacks.get("add_custom")
-        )
+        agents_menu.add_command(label="Add Custom Agent...", command=self.callbacks.get("add_custom"))
         self.menubar.add_cascade(label="Agents", menu=agents_menu)
 
         # BMAD Menu
         bmad_menu = tk.Menu(self.menubar, tearoff=0)
-        bmad_menu.add_command(
-            label="BMAD Wizard...", command=self.callbacks.get("bmad_wizard")
-        )
+        bmad_menu.add_command(label="BMAD Wizard...", command=self.callbacks.get("bmad_wizard"))
         bmad_menu.add_separator()
         tracks_menu = tk.Menu(bmad_menu, tearoff=0)
         from .constants import BMAD_TRACKS
 
         for track in BMAD_TRACKS.keys():
-            tracks_menu.add_command(
-                label=track, command=lambda t=track: self.callbacks.get("set_track")(t)
-            )
+            tracks_menu.add_command(label=track, command=lambda t=track: self.callbacks.get("set_track")(t))
         bmad_menu.add_cascade(label="Methodology Tracks", menu=tracks_menu)
         self.menubar.add_cascade(label="BMAD", menu=bmad_menu)

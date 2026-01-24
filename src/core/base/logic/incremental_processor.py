@@ -16,17 +16,18 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
+
 import logging
-from pathlib import Path
 import time
+from pathlib import Path
 from typing import Any
 
 import blake3
 import cbor2
 import orjson
 
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models import IncrementalState
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -66,9 +67,7 @@ class IncrementalProcessor:
                     # pylint: disable=no-member
                     data = orjson.loads(json_state.read_bytes())
                     self._apply_state_data(data)
-                    logging.info(
-                        "Migrated incremental state from %s to CBOR", json_state
-                    )
+                    logging.info("Migrated incremental state from %s to CBOR", json_state)
                     return
                 except Exception as e:  # pylint: disable=broad-exception-caught
                     logging.warning("Failed to migrate from JSON: %s", e)
@@ -77,9 +76,7 @@ class IncrementalProcessor:
         try:
             data = cbor2.loads(self.state_file.read_bytes())
             self._apply_state_data(data)
-            logging.info(
-                "Loaded incremental state (CBOR/BLAKE3) from %s", self.state_file
-            )
+            logging.info("Loaded incremental state (CBOR/BLAKE3) from %s", self.state_file)
         except Exception as e:  # pylint: disable=broad-exception-caught
             logging.warning("Failed to load state with CBOR: %s", e)
 
@@ -131,16 +128,12 @@ class IncrementalProcessor:
             if path_str in self.state.file_hashes:
                 current_hash = self._compute_file_hash(file_path)
                 if current_hash != self.state.file_hashes[path_str]:
-                    logging.warning(
-                        "IncrementalProcessor: DETECTED MUTATION in %s", path_str
-                    )
+                    logging.warning("IncrementalProcessor: DETECTED MUTATION in %s", path_str)
                     mutated.append(file_path)
         return mutated
 
     # PHASE 263: TOKEN-AWARE BATCHING
-    def batch_requests(
-        self, files: list[Path], token_limit: int = 4096
-    ) -> list[list[Path]]:
+    def batch_requests(self, files: list[Path], token_limit: int = 4096) -> list[list[Path]]:
         """Groups small file requests into batches for efficient LLM processing."""
         batches: list[list[Path]] = []
         current_batch: list[Path] = []
@@ -178,10 +171,7 @@ class IncrementalProcessor:
         if current_batch:
             batches.append(current_batch)
 
-        logging.info(
-            "Batched %d files into %d efficient processing units.",
-            len(files), len(batches)
-        )
+        logging.info("Batched %d files into %d efficient processing units.", len(files), len(batches))
         return batches
 
     def get_changed_files(self, files: list[Path]) -> list[Path]:

@@ -1,6 +1,25 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Estimator.py module.
+"""
+
 from __future__ import annotations
-from typing import List, Optional
-from .config import ModelInfo, QuantizationType, VRAMEstimate, ModelArchitecture, ModelCapability
+
+from .config import ModelInfo, QuantizationType, VRAMEstimate
+
 
 class VRAMEstimator:
     """Estimate VRAM requirements for models."""
@@ -10,7 +29,13 @@ class VRAMEstimator:
 
     @classmethod
     def estimate(cls, info: ModelInfo, ctx: int = 4096, batch: int = 1, dtype: str = "float16") -> VRAMEstimate:
-        bpp = 1 if info.quantization == QuantizationType.INT8 else 0.5 if info.quantization in (QuantizationType.INT4, QuantizationType.AWQ) else cls.BYTES_PER_PARAM.get(dtype, 2)
+        bpp = (
+            1
+            if info.quantization == QuantizationType.INT8
+            else 0.5
+            if info.quantization in (QuantizationType.INT4, QuantizationType.AWQ)
+            else cls.BYTES_PER_PARAM.get(dtype, 2)
+        )
         weights_gb = (info.num_params * bpp) / (1024**3)
         kv_heads = info.num_kv_heads or info.num_attention_heads
         head_dim = info.hidden_size // info.num_attention_heads

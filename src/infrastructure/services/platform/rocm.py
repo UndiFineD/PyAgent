@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -7,17 +21,11 @@ AMD ROCm platform implementation.
 from __future__ import annotations
 
 import logging
-from typing import List, Set, Optional
+from typing import List, Set
 
-from .models import (
-    PlatformType,
-    DeviceCapability,
-    MemoryInfo,
-    DeviceFeature,
-    AttentionBackend,
-    QuantizationType,
-)
 from .base import Platform
+from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
+                     MemoryInfo, PlatformType, QuantizationType)
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +43,7 @@ class RocmPlatform(Platform):
     def is_available(cls) -> bool:
         try:
             import torch
+
             return torch.cuda.is_available() and hasattr(torch.version, "hip")
         except ImportError:
             return False
@@ -42,6 +51,7 @@ class RocmPlatform(Platform):
     def _get_torch(self):
         if self._torch is None:
             import torch
+
             self._torch = torch
         return self._torch
 
@@ -83,11 +93,7 @@ class RocmPlatform(Platform):
         features = DeviceFeature.FP16 | DeviceFeature.BF16 | DeviceFeature.INT8
         name = self.get_device_name(device_id).lower()
         if "mi250" in name or "mi300" in name:
-            features |= (
-                DeviceFeature.TENSOR_CORES
-                | DeviceFeature.FLASH_ATTENTION
-                | DeviceFeature.INFINITY_FABRIC
-            )
+            features |= DeviceFeature.TENSOR_CORES | DeviceFeature.FLASH_ATTENTION | DeviceFeature.INFINITY_FABRIC
         if self.get_device_count() > 1:
             features |= DeviceFeature.MULTI_GPU
         return features

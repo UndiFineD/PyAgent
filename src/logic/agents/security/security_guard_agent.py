@@ -16,9 +16,10 @@
 """Agent specializing in security validation and safety checks."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.security_core import SecurityCore
 
 __version__ = VERSION
@@ -29,16 +30,12 @@ class SecurityGuardAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.capabilities.extend(
-            ["security-audit", "secret-scanning", "vulnerability-detection"]
-        )  # Phase 241
-        self.security_core = SecurityCore(
-            workspace_root=str(self.file_path.parent.parent.parent)
-        )
+        self.capabilities.extend(["security-audit", "secret-scanning", "vulnerability-detection"])  # Phase 241
+        self.security_core = SecurityCore(workspace_root=str(self.file_path.parent.parent.parent))
         self._system_prompt = (
-            "You are the Security Guard Agent. "
-            "Your role is to inspect proposed changes and commands for security risks. "
-            "Look for: Hardcoded secrets, destructive commands (rm -rf /), unauthorized network access, and malicious logic. "
+            "You are the Security Guard Agent. Your role is to inspect proposed changes "
+            "and commands for security risks. Look for: Hardcoded secrets, destructive "
+            "commands (rm -rf /), unauthorized network access, and malicious logic. "
             "Output a 'Safety Audit' report. If a risk is high, explicitly say 'RISK: HIGH'."
         )
 
@@ -62,9 +59,7 @@ class SecurityGuardAgent(BaseAgent):
         """Scans for indirect prompt injection via the security core."""
         return self.security_core.scan_for_injection(content)
 
-    def generate_safety_report(
-        self, task: str, code_changes: str, commands: list[str]
-    ) -> str:
+    def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:
         """Generates a comprehensive safety audit report."""
         vulnerabilities = self.security_core.scan_content(code_changes)
 
@@ -87,17 +82,11 @@ class SecurityGuardAgent(BaseAgent):
             report.append("- No high-risk patterns detected in code changes.")
         else:
             for v in vulnerabilities:
-                report.append(
-                    f"- [{v.severity.upper()}] Line {v.line_number}: {v.description}"
-                )
+                report.append(f"- [{v.severity.upper()}] Line {v.line_number}: {v.description}")
                 report.append(f"  * Fix: {v.fix_suggestion}")
 
         report.append("\n## Command Audit")
-        report.extend(
-            command_reports
-            if command_reports
-            else ["- No commands provided for audit."]
-        )
+        report.extend(command_reports if command_reports else ["- No commands provided for audit."])
 
         return "\n".join(report)
 
@@ -152,7 +141,5 @@ class SecurityGuardAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        SecurityGuardAgent, "SecurityGuard Agent", "Content or Command to audit"
-    )
+    main = create_main_function(SecurityGuardAgent, "SecurityGuard Agent", "Content or Command to audit")
     main()

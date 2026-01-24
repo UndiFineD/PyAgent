@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
+
+"""
+Thought debugger.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 269: Interactive Thought Debugger
 
 from __future__ import annotations
+
+import logging
 import sys
 import time
-import logging
 from typing import Any
-from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+
 from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+    SignalRegistry
 
 
 class ThoughtDebugger:
@@ -64,9 +71,7 @@ class ThoughtDebugger:
             # Note: This will block the thread emitting the signal!
 
             # In a live fleet, this acts as a 'breakpoint'.
-            choice = (
-                input("\n[DEBUG] (ENTER=Continue, q=Quit, m=Menu): ").lower().strip()
-            )
+            choice = input("\n[DEBUG] (ENTER=Continue, q=Quit, m=Menu): ").lower().strip()
             if choice == "q":
                 self.stop()
 

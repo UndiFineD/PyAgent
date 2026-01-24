@@ -1,7 +1,12 @@
+
+"""
+Stub detector mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import ast
+
 
 class StubDetectorMixin:
     """Methods for detecting stub nodes in the AST."""
@@ -14,9 +19,7 @@ class StubDetectorMixin:
                 s
                 for s in node.body
                 if not (
-                    isinstance(s, ast.Expr)
-                    and isinstance(s.value, ast.Constant)
-                    and isinstance(s.value.value, str)
+                    isinstance(s, ast.Expr) and isinstance(s.value, ast.Constant) and isinstance(s.value.value, str)
                 )
             ]
             if not body:
@@ -26,17 +29,11 @@ class StubDetectorMixin:
             stmt = body[0]
             if isinstance(stmt, ast.Pass):
                 return True
-            if (
-                isinstance(stmt, ast.Expr)
-                and isinstance(stmt.value, ast.Constant)
-                and stmt.value.value is Ellipsis
-            ):
+            if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Constant) and stmt.value.value is Ellipsis:
                 return True
             if isinstance(stmt, ast.Raise):
                 exc_name = ""
-                if isinstance(stmt.exc, ast.Call) and isinstance(
-                    stmt.exc.func, ast.Name
-                ):
+                if isinstance(stmt.exc, ast.Call) and isinstance(stmt.exc.func, ast.Name):
                     exc_name = stmt.exc.func.id
                 elif isinstance(stmt.exc, ast.Name):
                     exc_name = stmt.exc.id
@@ -52,9 +49,7 @@ class StubDetectorMixin:
                 s
                 for s in node.body
                 if not (
-                    isinstance(s, ast.Expr)
-                    and isinstance(s.value, ast.Constant)
-                    and isinstance(s.value.value, str)
+                    isinstance(s, ast.Expr) and isinstance(s.value, ast.Constant) and isinstance(s.value.value, str)
                 )
             ]
             if not body:
@@ -62,6 +57,7 @@ class StubDetectorMixin:
             for item in body:
                 if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     from .stub_detector_mixin import StubDetectorMixin
+
                     res = StubDetectorMixin._is_stub_node(item)
                     if res is False:
                         return False

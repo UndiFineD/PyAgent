@@ -1,14 +1,21 @@
+
+"""
+Fleet discovery mixin.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 320: Fleet Discovery Mixin
 
 from __future__ import annotations
+
 import os
-import logging
-from typing import List, Dict, Any, Optional
-from src.infrastructure.swarm.network.lan_discovery import LANDiscovery, PeerInfo
+from typing import List
+
+from src.infrastructure.swarm.network.lan_discovery import (LANDiscovery,
+                                                            PeerInfo)
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
+
 
 class FleetDiscoveryMixin:
     """
@@ -22,14 +29,11 @@ class FleetDiscoveryMixin:
 
         metadata = {
             "version": getattr(self, "version", "unknown"),
-            "capabilities": list(getattr(self, "_capability_hints", {}).keys())[:10]
+            "capabilities": list(getattr(self, "_capability_hints", {}).keys())[:10],
         }
 
         self._discovery = LANDiscovery(
-            agent_id=agent_id,
-            service_port=service_port,
-            secret_key=secret,
-            metadata=metadata
+            agent_id=agent_id, service_port=service_port, secret_key=secret, metadata=metadata
         )
         self._discovery.start()
         logger.info(f"FleetDiscovery: Initialized discovery for {agent_id}")

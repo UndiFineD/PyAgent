@@ -16,17 +16,14 @@
 """Data models for test agent functionality."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from dataclasses import dataclass, field
 from typing import Any
-from .enums import (
-    TestPriority,
-    TestStatus,
-    CoverageType,
-    BrowserType,
-    TestSourceType,
-    MutationOperator,
-)
+
+from src.core.base.lifecycle.version import VERSION
+
+from .enums import (BrowserType, CoverageType, MutationOperator, TestPriority,
+                    TestSourceType, TestStatus)
 
 __version__ = VERSION
 
@@ -126,9 +123,7 @@ class VisualRegressionConfig:
 
     diff_threshold: float = 0.01
     browsers: list[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
-    viewport_sizes: list[tuple[int, int]] = field(
-        default_factory=lambda: [(1920, 1080)]
-    )
+    viewport_sizes: list[tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
 
     ignore_regions: list[tuple[int, int, int, int]] = field(default_factory=lambda: [])
 

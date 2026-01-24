@@ -30,7 +30,10 @@ def test_latent_reasoning_guardrails() -> None:
     assert audit_eng["is_consistent"] is True
 
     # Test low-resource language with complex task
-    complex_task = "Identify the morphological differences between Swahili and Telugu in the context of neural syntax pruning."
+    complex_task = (
+        "Identify the morphological differences between Swahili and Telugu "
+        "in the context of neural syntax pruning."
+    )
     audit_swa = agent.audit_multilingual_output(complex_task, "...", "Swahili")
     assert audit_swa["is_consistent"] is False
     assert "English-centered reasoning drift" in audit_swa["detected_bias"]

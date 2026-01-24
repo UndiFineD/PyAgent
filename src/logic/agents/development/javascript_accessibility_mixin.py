@@ -1,12 +1,23 @@
 #!/usr/bin/env python3
+
+"""
+Javascript accessibility mixin.py module.
+"""
+
+# pylint: disable=too-many-ancestors
 # Copyright 2026 PyAgent Authors
 
 from __future__ import annotations
+
 import re
+
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
+from src.core.base.common.types.accessibility_issue_type import \
+    AccessibilityIssueType
+from src.core.base.common.types.accessibility_severity import \
+    AccessibilitySeverity
 from src.core.base.common.types.wcag_level import WCAGLevel
+
 
 class JavascriptAccessibilityMixin:
     """Mixin for Javascript UI accessibility analysis."""

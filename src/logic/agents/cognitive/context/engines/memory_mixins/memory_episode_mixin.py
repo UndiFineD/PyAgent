@@ -1,6 +1,10 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+Memory episode mixin for recording agent experiences.
+"""
+
 import logging
 from datetime import datetime
 from typing import Any
@@ -8,7 +12,7 @@ from typing import Any
 class MemoryEpisodeMixin:
     """Methods for recording and updating episodes."""
 
-    def record_episode(
+    def record_episode(  # pylint: disable=too-many-positional-arguments
         self,
         agent_name: str,
         task: str,
@@ -37,7 +41,7 @@ class MemoryEpisodeMixin:
                     ],
                     ids=[f"mem_{len(self.episodes)}_{int(datetime.now().timestamp())}"],
                 )
-            except Exception as e:
+            except (RuntimeError, ValueError, AttributeError) as e:
                 logging.error(f"Failed to index memory: {e}")
 
         self.save()
@@ -60,8 +64,8 @@ class MemoryEpisodeMixin:
                 collection.update(ids=[memory_id], metadatas=[meta])
 
                 # Update local list too
-                for ep in self.episodes:
+                for _ep in self.episodes:
                     # Note: memory_id format check or matching logic here
                     pass
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError) as e:
             logging.error(f"Failed to update utility for {memory_id}: {e}")

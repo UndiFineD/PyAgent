@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 LogitsProcessor - Composable token filtering pipeline.
 
@@ -10,28 +24,20 @@ Phase 23: Advanced Serialization & Validation
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from collections.abc import Callable, Sequence
-from dataclasses import dataclass, field
-from typing import Protocol, Any, TYPE_CHECKING
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Protocol
 
 try:
     import torch
+
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
     torch = None
 
 try:
-    import numpy as np
-    NUMPY_AVAILABLE = True
-except ImportError:
-    NUMPY_AVAILABLE = False
-    np = None
-
-# Try Rust acceleration
-try:
     import rust_core
+
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
@@ -77,7 +83,6 @@ class LogitsProcessor(Protocol):
         Returns:
             Modified logits tensor
         """
-        ...
 
 
 class LogitsProcessorList:
@@ -151,6 +156,7 @@ class TemperatureProcessor:
             res = rust_core.apply_temperature_rust(l_list, self.temperature)
             if hasattr(logits, "device"):
                 import torch
+
                 return torch.tensor(res, device=logits.device, dtype=logits.dtype)
             return res
 
@@ -191,6 +197,7 @@ class TopKProcessor:
 
             if hasattr(logits, "device"):
                 import torch
+
                 return torch.tensor(res, device=logits.device, dtype=logits.dtype)
             return res
 
@@ -269,11 +276,10 @@ class RepetitionPenaltyProcessor:
         # Use Rust acceleration if available
         if RUST_AVAILABLE and hasattr(rust_core, "apply_repetition_penalty_rust"):
             l_list = logits.tolist() if hasattr(logits, "tolist") else logits
-            res = rust_core.apply_repetition_penalty_rust(
-                l_list, list(input_ids), self.penalty
-            )
+            res = rust_core.apply_repetition_penalty_rust(l_list, list(input_ids), self.penalty)
             if hasattr(logits, "device"):
                 import torch
+
                 return torch.tensor(res, device=logits.device, dtype=logits.dtype)
             return res
 
@@ -446,6 +452,7 @@ class FrequencyPenaltyProcessor:
 
         # Count frequencies
         from collections import Counter
+
         freq = Counter(input_ids)
 
         logits = logits.clone()

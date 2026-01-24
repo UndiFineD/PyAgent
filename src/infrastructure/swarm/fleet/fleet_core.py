@@ -19,9 +19,11 @@ Contains pure logic for tool scoring, capability mapping, and state transition v
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 from functools import lru_cache
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -29,13 +31,9 @@ __version__ = VERSION
 class FleetCore:
     """Pure logic core for the FleetManager."""
 
-    def __init__(
-        self, fleet: Any | None = None, default_score_threshold: int = 10
-    ) -> None:
+    def __init__(self, fleet: Any | None = None, default_score_threshold: int = 10) -> None:
         # Handle cases where registry injects fleet instance as first arg
-        if not isinstance(default_score_threshold, (int, float)) and isinstance(
-            fleet, (int, float)
-        ):
+        if not isinstance(default_score_threshold, (int, float)) and isinstance(fleet, (int, float)):
             self.default_score_threshold = fleet
         elif isinstance(fleet, (int, float)):
             self.default_score_threshold = float(fleet)

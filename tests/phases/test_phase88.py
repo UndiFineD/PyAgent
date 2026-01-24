@@ -12,7 +12,12 @@ class TestDocGen(unittest.TestCase):
         self.test_file = "test_module.py"
         with open(self.test_file, "w") as f:
             f.write(
-                '"""Module docstring."""\n\nclass MyClass:\n    """Class docstring."""\n    def my_method(self):\n        """Method docstring."""\n        pass\n'
+                '"""Module docstring."""\n\n'
+                'class MyClass:\n'
+                '    """Class docstring."""\n'
+                '    def my_method(self):\n'
+                '        """Method docstring."""\n'
+                '        pass\n'
             )
 
     def tearDown(self):

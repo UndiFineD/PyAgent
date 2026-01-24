@@ -13,16 +13,21 @@
 # limitations under the License.
 
 
+"""Agent for managing emotional intelligence and communication style of the fleet."""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class PersonalityCoreAgent(BaseAgent):
     """
     Manages the 'emotional intelligence' and 'vibes' of the fleet.

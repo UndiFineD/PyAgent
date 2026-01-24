@@ -18,13 +18,17 @@ Extracted from SelfImprovementOrchestrator for Rust-readiness.
 """
 
 from __future__ import annotations
+
 import re
-from typing import Dict, List, Any, Optional
-from .mixins.self_improvement_security_mixin import SelfImprovementSecurityMixin
+from typing import Any, Dict, List, Optional
+
 from .mixins.self_improvement_quality_mixin import SelfImprovementQualityMixin
+from .mixins.self_improvement_security_mixin import \
+    SelfImprovementSecurityMixin
 
 try:
     import rust_core as rc
+
     _RUST_ACCEL = True
 except ImportError:
     rc = None  # type: ignore[assignment]
@@ -58,7 +62,10 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         ]
 
         # IO patterns for intelligence gap detection
-        self.io_pattern = r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell)"
+        self.io_pattern = (
+            r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|"
+            r"subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell)"
+        )
 
     def analyze_content(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
         """
@@ -81,9 +88,7 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
     def _analyze_via_rust(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
         """Uses Rust accelerator for high-performance analysis."""
         try:
-            rust_findings = rc.analyze_code_quality_rust(
-                content, file_path_rel, self.dangerous_patterns
-            )
+            rust_findings = rc.analyze_code_quality_rust(content, file_path_rel, self.dangerous_patterns)
             findings = []
             for issue_type, message, line_num in rust_findings:
                 finding = {

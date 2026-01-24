@@ -19,14 +19,16 @@ Analyzes historical patterns to forecast potential failures.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
+import logging
+from datetime import datetime
 from pathlib import Path
 from typing import Any
-from datetime import datetime
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -68,9 +70,7 @@ class TemporalPredictorAgent(BaseAgent):
             logging.error(f"TemporalPredictor: Failed to save history: {e}")
 
     @as_tool
-    def record_execution_event(
-        self, event_type: str, status: str, metadata: dict[str, Any]
-    ) -> str:
+    def record_execution_event(self, event_type: str, status: str, metadata: dict[str, Any]) -> str:
         """Records an execution event for future temporal analysis."""
         history = self._load_history()
         event = {
@@ -107,7 +107,10 @@ class TemporalPredictorAgent(BaseAgent):
         if len(last_failures) >= 3:
             return {
                 "status": "high_risk",
-                "prediction": f"High probability of failure in the next 30 minutes based on recent {len(last_failures)} errors.",
+                "prediction": (
+                    f"High probability of failure in the next 30 minutes based on recent "
+                    f"{len(last_failures)} errors."
+                ),
                 "recommendation": "Initiate anticipatory cache clearing and connection pooling reset.",
             }
 
@@ -119,9 +122,7 @@ class TemporalPredictorAgent(BaseAgent):
     @as_tool
     def suggest_preemptive_fix(self, failure_prediction: str) -> str:
         """Suggests a preemptive action to avoid a predicted failure."""
-        logging.info(
-            f"TemporalPredictor: Generating preemptive fix for: {failure_prediction}"
-        )
+        logging.info(f"TemporalPredictor: Generating preemptive fix for: {failure_prediction}")
 
         if "high_risk" in failure_prediction.lower():
             return "RECOMMENDATION: Scale up VM instances on CloudSwarm and enable aggressive retries."
@@ -136,7 +137,5 @@ class TemporalPredictorAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(
-        TemporalPredictorAgent, "Temporal Predictor Agent", "Predictive execution tool"
-    )
+    main = create_main_function(TemporalPredictorAgent, "Temporal Predictor Agent", "Predictive execution tool")
     main()

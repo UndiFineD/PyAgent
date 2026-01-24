@@ -18,17 +18,19 @@ Consolidates individual agent memory shards into a unified global knowledge grap
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 from pathlib import Path
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class KnowledgeFusionAgent(BaseAgent):
     """Fuses distributed memory shards and resolves conflicts in the collective knowledge base."""
 
@@ -58,11 +60,11 @@ class KnowledgeFusionAgent(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(graph, f, indent=2)
             temp_path.replace(self.global_graph_path)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception:
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"KnowledgeFusion: Atomic save failed: {e}")
             raise
@@ -98,7 +100,7 @@ class KnowledgeFusionAgent(BaseAgent):
                         graph["nodes"].append(item)
                         added_nodes += 1
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logging.error(f"KnowledgeFusion: Error processing shard {path}: {e}")
 
         self._save_global_graph(graph)
@@ -111,7 +113,10 @@ class KnowledgeFusionAgent(BaseAgent):
 
         return f"Conflict resolution for '{keyword}': No critical contradictions found. Knowledge remains stable."
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Optimizes fleet content based on cognitive reasoning."""
+        _ = prompt
+        _ = target_file
         return "Global knowledge fusion is optimized. Swarm shards are synchronized."
 
 

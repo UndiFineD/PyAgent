@@ -1,12 +1,32 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Manager.py module.
+"""
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 import threading
 import time
 from typing import Any, Dict, Optional
-from .enums import SchedulingPolicy, RequestStatus
-from .models import QueuedRequest
+
+from .enums import RequestStatus, SchedulingPolicy
 from .factory import create_request_queue
+from .models import QueuedRequest
+
 
 class RequestQueueManager:
     """
@@ -76,11 +96,11 @@ class RequestQueueManager:
         """Get queue statistics."""
         with self._lock:
             return {
-                'policy': self.policy.value,
-                'current_size': len(self._queue),
-                'max_size': self.max_queue_size,
-                'total_added': self.total_added,
-                'total_popped': self.total_popped,
-                'total_removed': self.total_removed,
-                'max_observed_size': self.max_observed_size,
+                "policy": self.policy.value,
+                "current_size": len(self._queue),
+                "max_size": self.max_queue_size,
+                "total_added": self.total_added,
+                "total_popped": self.total_popped,
+                "total_removed": self.total_removed,
+                "max_observed_size": self.max_observed_size,
             }

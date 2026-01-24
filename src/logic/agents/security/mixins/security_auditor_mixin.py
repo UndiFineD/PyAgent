@@ -15,7 +15,9 @@
 """Command and script auditing logic for SecurityCore."""
 
 from __future__ import annotations
+
 import re
+
 
 class SecurityAuditorMixin:
     """Mixin for command and shell script auditing."""
@@ -49,15 +51,11 @@ class SecurityAuditorMixin:
 
         # Unquoted variable expansion
         if re.search(r"\$[a-zA-Z_][a-zA-Z0-9_]*[^\"']", script_content):
-            findings.append(
-                "SC2086: Unquoted variable expansion. Prone to word splitting and globbing."
-            )
+            findings.append("SC2086: Unquoted variable expansion. Prone to word splitting and globbing.")
 
         # Backticks vs $(...)
         if re.search(r"`.*`", script_content):
-            findings.append(
-                "SC2006: Use of legacy backticks for command substitution. Use $(...) instead."
-            )
+            findings.append("SC2006: Use of legacy backticks for command substitution. Use $(...) instead.")
 
         # Useless cat
         if re.search(r"cat\s+.*\s*\|\s*grep", script_content):
@@ -65,8 +63,6 @@ class SecurityAuditorMixin:
 
         # POSIX compatibility
         if "#!/bin/sh" in script_content and "[[" in script_content:
-            findings.append(
-                "SC2039: [[ .. ]] is a bash/zsh extension. Use [ .. ] for standard POSIX sh."
-            )
+            findings.append("SC2039: [[ .. ]] is a bash/zsh extension. Use [ .. ] for standard POSIX sh.")
 
         return findings

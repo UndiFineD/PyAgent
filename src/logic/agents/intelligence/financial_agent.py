@@ -16,16 +16,18 @@
 """Agent specializing in financial analysis and advice."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
+
 import logging
+from typing import Any
+
+from src.core.base.common.base_utilities import as_tool, create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class FinancialAgent(BaseAgent):
+class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Agent for autonomous financial research and analysis (Dexter Pattern)."""
 
     def __init__(self, file_path: str) -> None:
@@ -49,9 +51,7 @@ class FinancialAgent(BaseAgent):
             {"task": "Compare with sector average", "status": "pending"},
         ]
 
-        return (
-            f"Research plan created with {len(self.research_plan)} tasks for: {query}"
-        )
+        return f"Research plan created with {len(self.research_plan)} tasks for: {query}"
 
     @as_tool
     def validate_sufficiency(self, data: dict[str, Any]) -> str:
@@ -73,7 +73,5 @@ class FinancialAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        FinancialAgent, "Financial Agent", "File containing financial data or topic"
-    )
+    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial data or topic")
     main()

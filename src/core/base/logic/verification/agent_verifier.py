@@ -1,13 +1,19 @@
+
+"""
+Agent verifier.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 from typing import Any
+
 import numpy as np
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class AgentVerifier:
     """Handles quality and anchoring verification of agent responses."""
@@ -20,15 +26,14 @@ class AgentVerifier:
         if cls._embedding_model is None:
             try:
                 from sentence_transformers import SentenceTransformer
+
                 cls._embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
             except ImportError:
                 return None
         return cls._embedding_model
 
     @classmethod
-    def calculate_anchoring_strength(
-        cls, result: str, context_pool: dict[str, Any]
-    ) -> float:
+    def calculate_anchoring_strength(cls, result: str, context_pool: dict[str, Any]) -> float:
         """
         Calculates the 'Anchoring Strength' metric using Semantic Cosine Similarity.
         """

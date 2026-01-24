@@ -11,19 +11,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Compliance agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 from pathlib import Path
-from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
-from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
+
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
+
+from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
+from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
 
 __version__ = VERSION
 
 
-class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):
+class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  # pylint: disable=too-many-ancestors
     """
     Phase 57: Data Privacy & Compliance.
     Scans memory shards for PII and sensitive data patterns.
@@ -42,18 +50,14 @@ class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):
         work_root = getattr(self, "_workspace_root", None)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
-
     # Logic delegated to mixins
 
-    def scan_shard(self, content: str) -> dict:
+    def scan_shard(self, shard_data: str) -> dict:
         """Scans a memory shard for compliance issues (Phase 57)."""
         import re
+
         findings = []
         for name, pattern in self.pii_patterns.items():
-            if re.search(pattern, content):
+            if re.search(pattern, shard_data):
                 findings.append(name)
-        return {
-            "compliant": len(findings) == 0,
-            "findings": findings,
-            "pii_detected": len(findings) > 0
-        }
+        return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}

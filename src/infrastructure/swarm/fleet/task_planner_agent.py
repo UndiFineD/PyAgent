@@ -16,12 +16,14 @@
 """Agent specializing in breaking down complex tasks into executable workflows."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 import logging
 from typing import Any
+
+from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -73,9 +75,7 @@ class TaskPlannerAgent(BaseAgent):
         )
 
         # 1. Verification of state (OBSERVE)
-        plan.append(
-            {"agent": "Knowledge", "action": "query_knowledge", "args": [user_request]}
-        )
+        plan.append({"agent": "Knowledge", "action": "query_knowledge", "args": [user_request]})
 
         # 2. Logic Step (THINK)
         # 3. Work Step (EXECUTE)
@@ -120,7 +120,5 @@ class TaskPlannerAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(
-        TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for"
-    )
+    main = create_main_function(TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for")
     main()

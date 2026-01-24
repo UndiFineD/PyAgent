@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Weight Loading Utilities for PyAgent
 
@@ -30,25 +44,18 @@ import threading
 import time
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    BinaryIO,
-    Generator,
-    Optional,
-    Union,
-)
-from contextlib import contextmanager
+from typing import TYPE_CHECKING, Any, BinaryIO, Generator, Optional, Union
 
 if TYPE_CHECKING:
-    import numpy as np
-    import torch
+    pass
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -56,6 +63,7 @@ except ImportError:
 
 class WeightFormat(Enum):
     """Supported weight file formats."""
+
     SAFETENSORS = auto()
     PYTORCH = auto()  # .bin, .pt
     NUMPY = auto()  # .npy
@@ -67,6 +75,7 @@ class WeightFormat(Enum):
 @dataclass(frozen=True)
 class WeightSpec:
     """Specification for a weight tensor."""
+
     name: str
     shape: tuple[int, ...]
     dtype: str
@@ -89,6 +98,7 @@ class WeightSpec:
 @dataclass
 class LoadStats:
     """Statistics for weight loading."""
+
     total_bytes: int = 0
     total_tensors: int = 0
     load_time_seconds: float = 0.0
@@ -132,11 +142,7 @@ class AtomicWriter:
         temp_dir.mkdir(parents=True, exist_ok=True)
 
         self.temp_fd, self.temp_path = tempfile.mkstemp(dir=str(temp_dir))
-        self.temp_file = os.fdopen(
-            self.temp_fd,
-            mode=self.mode,
-            encoding=self.encoding
-        )
+        self.temp_file = os.fdopen(self.temp_fd, mode=self.mode, encoding=self.encoding)
         return self.temp_file
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> bool:
@@ -247,7 +253,7 @@ class SafetensorsLoader(WeightLoader):
     ) -> Generator[tuple[str, Any], None, None]:
         """Iterate over safetensor weights."""
         try:
-            from safetensors.torch import safe_open, load_file
+            from safetensors.torch import load_file, safe_open
         except ImportError as e:
             raise ImportError("safetensors package required for SafetensorsLoader") from e
 
@@ -273,12 +279,14 @@ class SafetensorsLoader(WeightLoader):
             with safe_open(file_path, framework="pt") as f:
                 for name in f.keys():
                     tensor = f.get_tensor(name)
-                    specs.append(WeightSpec(
-                        name=name,
-                        shape=tuple(tensor.shape),
-                        dtype=str(tensor.dtype),
-                        file_path=file_path,
-                    ))
+                    specs.append(
+                        WeightSpec(
+                            name=name,
+                            shape=tuple(tensor.shape),
+                            dtype=str(tensor.dtype),
+                            file_path=file_path,
+                        )
+                    )
         return specs
 
 
@@ -310,9 +318,7 @@ class MultiThreadWeightLoader(WeightLoader):
         if not file_paths:
             return 1  # Minimum 1 worker even for empty list
 
-        total_size = sum(
-            os.path.getsize(f) for f in file_paths if os.path.exists(f)
-        )
+        total_size = sum(os.path.getsize(f) for f in file_paths if os.path.exists(f))
         optimal = max(1, total_size // self.min_file_size_per_worker)
         return max(1, min(optimal, self.max_workers, len(file_paths)))
 
@@ -320,9 +326,11 @@ class MultiThreadWeightLoader(WeightLoader):
         """Load a single file."""
         try:
             from safetensors.torch import load_file
+
             return load_file(file_path, device=device)
         except ImportError:
             import torch
+
             return torch.load(file_path, map_location=device, weights_only=True)
 
     def iterate_weights(
@@ -335,10 +343,7 @@ class MultiThreadWeightLoader(WeightLoader):
         start_time = time.perf_counter()
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
-            futures = {
-                executor.submit(self._load_file, f, device): f
-                for f in file_paths
-            }
+            futures = {executor.submit(self._load_file, f, device): f for f in file_paths}
 
             for future in concurrent.futures.as_completed(futures):
                 try:
@@ -526,8 +531,7 @@ def validate_weight_shapes_rust(
             errors.append(f"Missing weight: {exp['name']}")
         elif spec_map[exp["name"]]["shape"] != exp["shape"]:
             errors.append(
-                f"Shape mismatch for {exp['name']}: "
-                f"got {spec_map[exp['name']]['shape']}, expected {exp['shape']}"
+                f"Shape mismatch for {exp['name']}: got {spec_map[exp['name']]['shape']}, expected {exp['shape']}"
             )
     return errors
 
@@ -542,13 +546,13 @@ def filter_shared_tensors(tensors: dict[str, Any]) -> dict[str, Any]:
     storage_to_keys: dict[int, list[str]] = defaultdict(list)
 
     for key, tensor in tensors.items():
-        if hasattr(tensor, 'data_ptr'):
+        if hasattr(tensor, "data_ptr"):
             ptr = tensor.data_ptr()
             storage_to_keys[ptr].append(key)
 
     result = {}
     for key, tensor in tensors.items():
-        if hasattr(tensor, 'data_ptr'):
+        if hasattr(tensor, "data_ptr"):
             ptr = tensor.data_ptr()
             keys = storage_to_keys[ptr]
             # Keep only the first key alphabetically

@@ -15,13 +15,15 @@
 
 """Agent specializing in architectural analysis and decoupled system design."""
 
+# pylint: disable=too-many-ancestors
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import create_main_function
-from src.logic.agents.cognitive.context.engines.graph_context_engine import (
-    GraphContextEngine,
-)
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.cognitive.context.engines.graph_context_engine import \
+    GraphContextEngine
 from src.logic.agents.development.arch_core import ArchCore
 
 __version__ = VERSION
@@ -57,9 +59,7 @@ class ArchAdvisorAgent(BaseAgent):
 
         # Hotspots (High Out-degree)
         report.append("### 🚩 Dependency Hotspots (High Out-degree)")
-        report.append(
-            "These files depend on many other things and might be too complex:"
-        )
+        report.append("These files depend on many other things and might be too complex:")
 
         for node, degree in top_out:
             report.append(f"- **{node}**: {degree} dependencies")
@@ -67,16 +67,15 @@ class ArchAdvisorAgent(BaseAgent):
         # Central Hubs (High In-degree)
         report.append("\n### 🏗️ Central Hubs (High In-degree)")
 
-        report.append(
-            "These files are used by many other modules. Changes here have high impact:"
-        )
+        report.append("These files are used by many other modules. Changes here have high impact:")
         for node, degree in top_in:
             report.append(f"- **{node}**: {degree} dependers")
 
         return "\n".join(report)
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform architectural review."""
+        _ = prompt, target_file  # Mark as used for pylint if needed
         return self.analyze_coupling()
 
 

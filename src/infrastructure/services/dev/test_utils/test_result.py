@@ -16,10 +16,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .test_status import TestStatus
-from dataclasses import dataclass, field
+
 import time
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .test_status import TestStatus
 
 __version__ = VERSION
 

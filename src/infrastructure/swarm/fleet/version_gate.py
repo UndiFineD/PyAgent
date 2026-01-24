@@ -19,8 +19,10 @@ Handles semantic versioning checks and capability validation.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -62,9 +64,7 @@ class VersionGate:
             # Patch check
             return curr_parts[2] >= req_parts[2]
         except Exception as e:
-            logging.debug(
-                f"VersionGate: Failed to parse version '{current}' or '{required}': {e}"
-            )
+            logging.debug(f"VersionGate: Failed to parse version '{current}' or '{required}': {e}")
             # Fail safe: if we can't parse, assume it's legacy (compatible)
             return True
 

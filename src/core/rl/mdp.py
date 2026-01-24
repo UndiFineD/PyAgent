@@ -1,18 +1,25 @@
+
+"""
+Mdp.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Markov Decision Process (MDP) Implementation - Phase 319 Enhanced
 
 from __future__ import annotations
-from typing import Any, Dict, List, Tuple, Optional, Callable
-from dataclasses import dataclass, field
-from collections import defaultdict
-import random
+
 import logging
+import random
+from collections import defaultdict
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class Transition:
     """Represents a state transition with optional metadata."""
+
     state: Any
     action: Any
     next_state: Any
@@ -21,9 +28,11 @@ class Transition:
     timestamp: float = 0.0
     priority: float = 1.0  # For prioritized experience replay
 
+
 @dataclass
 class ExperienceReplayBuffer:
     """Circular buffer for storing and sampling transitions."""
+
     capacity: int = 10000
     buffer: List[Transition] = field(default_factory=list)
     position: int = 0
@@ -40,11 +49,12 @@ class ExperienceReplayBuffer:
 
     def prioritized_sample(self, batch_size: int, alpha: float = 0.6) -> List[Transition]:
         """Samples with priority weighting."""
-        priorities = [t.priority ** alpha for t in self.buffer]
+        priorities = [t.priority**alpha for t in self.buffer]
         total = sum(priorities)
         probs = [p / total for p in priorities]
         indices = random.choices(range(len(self.buffer)), weights=probs, k=min(batch_size, len(self.buffer)))
         return [self.buffer[i] for i in indices]
+
 
 class MDP:
     """
@@ -64,9 +74,12 @@ class MDP:
         self.reward_model: Dict[Tuple[Any, Any], List[float]] = defaultdict(list)
         self.replay_buffer = ExperienceReplayBuffer()
 
-    def add_transition(self, state: Any, action: Any, next_state: Any, reward: float, done: bool, timestamp: float = 0.0) -> None:
+    def add_transition(
+        self, state: Any, action: Any, next_state: Any, reward: float, done: bool, timestamp: float = 0.0
+    ) -> None:
         """Records a transition and updates internal models."""
         import time
+
         t = Transition(state, action, next_state, reward, done, timestamp or time.time())
         self.transitions.append(t)
         self.replay_buffer.push(t)
@@ -126,7 +139,7 @@ class MDP:
         """Extracts greedy policy from value function."""
         for state in self.states:
             best_action = None
-            best_value = -float('inf')
+            best_value = -float("inf")
             for action in self.actions:
                 expected_value = 0.0
                 for next_state in self.states:
@@ -146,7 +159,7 @@ class MDP:
         """Computes discounted cumulative return."""
         total = 0.0
         for i, t in enumerate(self.transitions):
-            total += (self.gamma ** i) * t.reward
+            total += (self.gamma**i) * t.reward
         return total
 
     def to_dict(self) -> Dict[str, Any]:
@@ -157,5 +170,5 @@ class MDP:
             "total_reward": self.get_reward_sum(),
             "discounted_return": self.get_discounted_return(),
             "gamma": self.gamma,
-            "replay_buffer_size": len(self.replay_buffer.buffer)
+            "replay_buffer_size": len(self.replay_buffer.buffer),
         }

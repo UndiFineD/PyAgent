@@ -18,12 +18,11 @@ Implements non-blocking scheduling updates, speculative token handling, and stru
 """
 
 import logging
-import asyncio
-from typing import Dict, List, Optional, Any, Set
 import time
+from typing import Any, Dict, List
 
-from .scheduler_output import SchedulerOutput, ScheduledSequence
 from ...request_queue.v2.request_queue import RequestQueueV2
+from .scheduler_output import ScheduledSequence, SchedulerOutput
 
 try:
     import rust_core as rc
@@ -31,6 +30,7 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
 
 class AsyncSchedulerV2:
     """
@@ -64,8 +64,8 @@ class AsyncSchedulerV2:
                 prompt_len=req.prompt_len,
                 output_len=req.output_len,
                 tokens=req.tokens,
-                spec_tokens=getattr(req, 'spec_tokens', None),
-                priority=int(req.priority.value)
+                spec_tokens=getattr(req, "spec_tokens", None),
+                priority=int(req.priority.value),
             )
             output.add_sequence(seq)
 

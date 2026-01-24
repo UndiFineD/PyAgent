@@ -16,9 +16,12 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .trend_direction import TrendDirection
+
 from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
+
+from .trend_direction import TrendDirection
 
 __version__ = VERSION
 

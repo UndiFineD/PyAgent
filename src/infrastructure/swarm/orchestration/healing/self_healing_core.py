@@ -20,7 +20,9 @@ and recovery strategy selection.
 """
 
 from __future__ import annotations
+
 from src.core.base.common import StabilityCore
+
 
 class SelfHealingCore(StabilityCore):
     """Facade delegating to StabilityCore implementation."""
@@ -53,4 +55,3 @@ class SelfHealingCore(StabilityCore):
             return p_parts[0] == r_parts[0] and p_parts[1] >= r_parts[1]
         except (ValueError, AttributeError):
             return False
-

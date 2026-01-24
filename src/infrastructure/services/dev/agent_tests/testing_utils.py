@@ -12,13 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Testing utils.py module.
+"""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
 import json
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .enums import TestSourceType
-from .models import AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig
+from .models import (AggregatedResult, ContractTest, TestStatus,
+                     VisualRegressionConfig)
 
 __version__ = VERSION
 
@@ -43,9 +51,7 @@ class VisualRegressionTester:
 
     def capture_baseline(self, component_id: str, screenshot_path: str) -> str:
         """Capture a baseline screenshot."""
-        image_hash = hashlib.md5(
-            f"{component_id}:{screenshot_path}".encode()
-        ).hexdigest()
+        image_hash = hashlib.md5(f"{component_id}:{screenshot_path}".encode()).hexdigest()
         self.baselines[component_id] = image_hash
         return image_hash
 
@@ -79,9 +85,7 @@ class VisualRegressionTester:
         if failed:
             report.append("## Failed Components\n")
             for r in failed:
-                report.append(
-                    f"- **{r['component_id']}**: {r['diff_percentage'] * 100:.2f}% diff"
-                )
+                report.append(f"- **{r['component_id']}**: {r['diff_percentage'] * 100:.2f}% diff")
         return "\n".join(report)
 
     def run_for_browsers(self, component_id: str) -> list[dict[str, Any]]:
@@ -128,9 +132,7 @@ class ContractTestRunner:
         self.contracts[contract_id] = contract
         return contract
 
-    def verify_consumer(
-        self, contract_id: str, actual_request: dict[str, Any]
-    ) -> dict[str, Any]:
+    def verify_consumer(self, contract_id: str, actual_request: dict[str, Any]) -> dict[str, Any]:
         """Verify consumer sends correct request."""
         contract = self.contracts.get(contract_id)
         if not contract:
@@ -145,17 +147,13 @@ class ContractTestRunner:
         self.results.append(result)
         return result
 
-    def verify_provider(
-        self, contract_id: str, actual_response: dict[str, Any], actual_status: int
-    ) -> dict[str, Any]:
+    def verify_provider(self, contract_id: str, actual_response: dict[str, Any], actual_status: int) -> dict[str, Any]:
         """Verify provider sends correct response."""
         contract = self.contracts.get(contract_id)
         if not contract:
             return {"error": "Contract not found", "valid": False}
         status_match = actual_status == contract.status_code
-        schema_valid = all(
-            k in actual_response for k in contract.response_schema.keys()
-        )
+        schema_valid = all(k in actual_response for k in contract.response_schema.keys())
         result: dict[str, Any] = {
             "contract_id": contract_id,
             "side": "provider",
@@ -178,8 +176,7 @@ class ContractTestRunner:
             "consumer": {"name": consumer},
             "provider": {"name": contracts[0].provider if contracts else ""},
             "interactions": [
-                {"request": {"path": c.endpoint}, "response": {"status": c.status_code}}
-                for c in contracts
+                {"request": {"path": c.endpoint}, "response": {"status": c.status_code}} for c in contracts
             ],
         }
         return json.dumps(pact, indent=2)
@@ -311,9 +308,7 @@ class ResultAggregator:
         return {
             "total_passed": passed,
             "total_failed": failed,
-            "total_skipped": sum(
-                1 for r in self.results if r.status == TestStatus.SKIPPED
-            ),
+            "total_skipped": sum(1 for r in self.results if r.status == TestStatus.SKIPPED),
             "total_duration_ms": summary.get("total_duration_ms", 0),
         }
 
@@ -327,16 +322,12 @@ class ResultAggregator:
         later_results = self.results[mid_point:]
 
         earlier_rate = (
-            sum(1 for r in earlier_results if r.status == TestStatus.PASSED)
-            / len(earlier_results)
+            sum(1 for r in earlier_results if r.status == TestStatus.PASSED) / len(earlier_results)
             if earlier_results
             else 0
         )
         later_rate = (
-            sum(1 for r in later_results if r.status == TestStatus.PASSED)
-            / len(later_results)
-            if later_results
-            else 0
+            sum(1 for r in later_results if r.status == TestStatus.PASSED) / len(later_results) if later_results else 0
         )
 
         if later_rate > earlier_rate:

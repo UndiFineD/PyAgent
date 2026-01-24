@@ -16,9 +16,11 @@
 """Mock orchestrator plugin for demonstrating community extension patterns."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

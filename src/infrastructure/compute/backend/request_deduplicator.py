@@ -16,11 +16,14 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import hashlib
 import threading
 import time
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.compute.backend.local_context_recorder import \
+    LocalContextRecorder
 
 # Infrastructure
 __version__ = VERSION
@@ -41,9 +44,7 @@ class RequestDeduplicator:
             dedup.store_result("prompt", result)
     """
 
-    def __init__(
-        self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None
-    ) -> None:
+    def __init__(self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None) -> None:
         """Initialize deduplicator.
 
         Args:
@@ -75,9 +76,7 @@ class RequestDeduplicator:
 
         with self._lock:
             # Clean expired entries
-            expired = [
-                k for k, t in self._pending.items() if now - t > self.ttl_seconds
-            ]
+            expired = [k for k, t in self._pending.items() if now - t > self.ttl_seconds]
             for k in expired:
                 self._pending.pop(k, None)
                 self._events.pop(k, None)

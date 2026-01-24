@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 EngineCoreClient - Client interfaces for engine communication.
 
@@ -8,37 +22,24 @@ implementations for communicating with EngineCore.
 from __future__ import annotations
 
 import asyncio
+import logging
 import queue
 import threading
-import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Awaitable, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
-import logging
+from typing import Any, List, Optional
+
+from .engine_core import (EngineCore, EngineCoreOutputs, EngineCoreProc,
+                          MockExecutor, Request, SimpleScheduler)
+from .output_processor import EngineCoreRequest
 
 logger = logging.getLogger(__name__)
-
-# Import from sibling modules
-from .engine_core import (
-    EngineCore,
-    EngineCoreProc,
-    Request,
-    SchedulerOutput,
-    ModelRunnerOutput,
-    EngineCoreOutputs,
-    SimpleScheduler,
-    MockExecutor,
-)
-from .output_processor import (
-    EngineCoreRequest,
-    EngineCoreOutput,
-    SamplingParams,
-)
 
 
 class RequestType(Enum):
     """Types of requests to engine core."""
+
     ADD_REQUEST = auto()
     ABORT_REQUESTS = auto()
     GET_OUTPUT = auto()
@@ -52,6 +53,7 @@ class RequestType(Enum):
 @dataclass
 class ClientConfig:
     """Configuration for engine core clients."""
+
     max_batch_size: int = 32
     max_tokens: int = 4096
     log_stats: bool = True

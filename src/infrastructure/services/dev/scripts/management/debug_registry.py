@@ -15,9 +15,11 @@
 """Debug script for inspecting the agent registry."""
 
 from __future__ import annotations
+
+import os
+
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-import os
 
 __version__ = VERSION
 

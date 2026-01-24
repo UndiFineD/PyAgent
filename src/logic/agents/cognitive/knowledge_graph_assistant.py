@@ -1,7 +1,23 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Assistant for managing the knowledge graph and impact radius.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Assistant for managing the knowledge graph and impact radius.
+"""
 
 from typing import Set
+
 
 class KnowledgeGraphAssistant:
     """Handles backlinks, dependency tracking, and graph visualization."""
@@ -11,6 +27,7 @@ class KnowledgeGraphAssistant:
 
     def get_impact_radius(self, query: str) -> Set[str]:
         """Calculates which modules might be impacted by a change."""
+        _ = query
         return set()
 
     def find_backlinks(self, target_file: str, index: dict[str, list[str]]) -> list[str]:
@@ -19,7 +36,7 @@ class KnowledgeGraphAssistant:
         target_name = target_file.split(".")[0]  # Support WikiStyle [[Note]] matches [[Note.md]]
         for source_file, symbols in index.items():
             for symbol in symbols:
-                if symbol == target_file or symbol == target_name:
+                if symbol in (target_file, target_name):
                     backlinks.append(source_file)
         return backlinks
 
@@ -42,5 +59,3 @@ class KnowledgeGraphAssistant:
     def generate_mermaid_graph(self) -> str:
         """Compatibility wrapper."""
         return self.generate_mermaid({})
-        """Exports the current knowledge graph as a Mermaid string."""
-        return "graph TD\n  A[Workspace] --> B[src]"

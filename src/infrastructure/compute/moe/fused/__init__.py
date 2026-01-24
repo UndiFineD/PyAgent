@@ -1,9 +1,28 @@
-from .config import FusedMoEConfig, FusedMoEParallelConfig, FusedMoEQuantConfig, ExpertPlacementStrategy
-from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
-from .dispatcher import SparseDispatcher, DenseDispatcher
-from .utils import determine_expert_map
-from .layer import FusedMoELayer
-from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Fused package.
+"""
+
+from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer  # noqa: F401
+from .config import (ExpertPlacementStrategy, FusedMoEConfig,  # noqa: F401
+                     FusedMoEParallelConfig, FusedMoEQuantConfig)
+from .dispatcher import DenseDispatcher, SparseDispatcher  # noqa: F401
+from .layer import FusedMoELayer  # noqa: F401
+from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod  # noqa: F401
+from .utils import determine_expert_map  # noqa: F401
 
 __all__ = [
     "FusedMoEConfig",

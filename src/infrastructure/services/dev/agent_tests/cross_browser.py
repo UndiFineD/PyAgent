@@ -16,11 +16,14 @@
 """Cross-browser testing classes."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import Any
+
 from collections.abc import Callable
-from src.infrastructure.services.dev.agent_tests.models import CrossBrowserConfig
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.services.dev.agent_tests.enums import BrowserType
+from src.infrastructure.services.dev.agent_tests.models import \
+    CrossBrowserConfig
 
 __version__ = VERSION
 
@@ -43,9 +46,7 @@ class CrossBrowserRunner:
             config: The configuration to use.
         """
         self.config = config
-        self.results: dict[BrowserType, list[dict[str, Any]]] = {
-            b: [] for b in config.browsers
-        }
+        self.results: dict[BrowserType, list[dict[str, Any]]] = {b: [] for b in config.browsers}
         self._drivers: dict[BrowserType, bool] = {}
 
     def setup_driver(self, browser: BrowserType) -> bool:
@@ -69,9 +70,7 @@ class CrossBrowserRunner:
         """
         self._drivers[browser] = False
 
-    def run_test(
-        self, test_name: str, test_code: Callable[[], bool]
-    ) -> dict[BrowserType, dict[str, Any]]:
+    def run_test(self, test_name: str, test_code: Callable[[], bool]) -> dict[BrowserType, dict[str, Any]]:
         """Run a test across all browsers.
 
         Args:

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -7,18 +21,13 @@ Base class for incremental detokenization.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import (
-    List,
-    Optional,
-    Tuple,
-    Union,
-)
+from typing import List, Optional, Tuple, Union
 
+from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
+    StopChecker
 from src.infrastructure.engine.tokenization.detokenizer.types import (
-    TokenizerLike,
-    DetokenizeResult,
-)
-from src.infrastructure.engine.tokenization.detokenizer.stop_checker import StopChecker
+    DetokenizeResult, TokenizerLike)
+
 
 class IncrementalDetokenizer(ABC):
     """
@@ -114,11 +123,9 @@ class IncrementalDetokenizer(ABC):
 
         # Check for stop strings
         if self.stop_checker and new_text:
-            stop_string, text_before = self.stop_checker.check_text(
-                self.output_text + new_text
-            )
+            stop_string, text_before = self.stop_checker.check_text(self.output_text + new_text)
             if stop_string is not None:
-                new_text = text_before[len(self.output_text):]
+                new_text = text_before[len(self.output_text) :]
                 self._finished = True
                 self._stop_reason = stop_string
 

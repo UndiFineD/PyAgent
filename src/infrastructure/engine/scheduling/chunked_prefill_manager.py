@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """ChunkedPrefillManager - Chunked prefill orchestration for long prompts.
 
 This module implements chunked prefill for processing long prompts across
@@ -20,29 +34,26 @@ Example:
 
 from __future__ import annotations
 
+import contextlib
 import threading
 import time
-import contextlib
-from typing import Any, Callable, Optional, Iterator, TypeVar
+from typing import Any, Callable, Iterator, Optional, TypeVar
 
 from src.infrastructure.engine.scheduling.chunked_prefill.types import (
-    ChunkState,
-    ChunkPriority,
-    PrefillChunk,
-    ChunkedRequest,
-    ChunkedPrefillConfig,
-)
+    ChunkedPrefillConfig, ChunkedRequest, ChunkPriority, ChunkState,
+    PrefillChunk)
 
 # Try to import Rust accelerations
 HAS_RUST = False
 _bridge = None
 with contextlib.suppress(Exception):
     from src.core.rust_bridge import get_bridge
+
     _bridge = get_bridge()
-    HAS_RUST = hasattr(_bridge, 'chunk_boundaries_rust')
+    HAS_RUST = hasattr(_bridge, "chunk_boundaries_rust")
 
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class ChunkedPrefillManager:
@@ -240,17 +251,14 @@ class ChunkedPrefillManager:
             # Simple token estimation (~4 chars per token)
             estimated_tokens = len(prompt) // 4
             fake_tokens = list(range(estimated_tokens))
-            return self.create_chunks(
-                request_id, fake_tokens, priority, chunk_size
-            )
+            return self.create_chunks(request_id, fake_tokens, priority, chunk_size)
 
         tokens = self.tokenize_fn(prompt)
-        return self.create_chunks(
-            request_id, tokens, priority, chunk_size
-        )
+        return self.create_chunks(request_id, tokens, priority, chunk_size)
 
     def _sort_pending(self) -> None:
         """Sort pending chunks by priority."""
+
         def chunk_priority(chunk_id: str) -> tuple[int, int, float]:
             chunk = self._chunks.get(chunk_id)
             if chunk is None:
@@ -518,9 +526,7 @@ class ChunkedPrefillManager:
                 "progress": request.progress,
                 "is_complete": request.is_complete,
                 "total_tokens": request.total_tokens,
-                "chunk_states": {
-                    c.chunk_id: c.state.name for c in request.chunks
-                },
+                "chunk_states": {c.chunk_id: c.state.name for c in request.chunks},
             }
 
     @property
@@ -535,7 +541,8 @@ class ChunkedPrefillManager:
                 "total_tokens_processed": self._total_tokens_processed,
                 "avg_tokens_per_chunk": (
                     self._total_tokens_processed / self._total_chunks_completed
-                    if self._total_chunks_completed > 0 else 0
+                    if self._total_chunks_completed > 0
+                    else 0
                 ),
             }
 
@@ -570,5 +577,5 @@ def chunk_prompt(
     """
     chunks: list[list[int]] = []
     for i in range(0, len(tokens), chunk_size):
-        chunks.append(tokens[i:i + chunk_size])
+        chunks.append(tokens[i : i + chunk_size])
     return chunks

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -25,6 +39,7 @@ logger = logging.getLogger(__name__)
 # Try to import torch and triton
 try:
     import torch
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -33,6 +48,7 @@ except ImportError:
 try:
     import triton
     import triton.language as tl
+
     HAS_TRITON = True
 except ImportError:
     HAS_TRITON = False
@@ -42,14 +58,22 @@ except ImportError:
 
 # Triton-based persistent matmul kernel
 if HAS_TRITON:
+
     @triton.jit
     def _matmul_persistent_kernel(
-        a_ptr, b_ptr, c_ptr,
+        a_ptr,
+        b_ptr,
+        c_ptr,
         bias_ptr,
-        M, N, K,
-        stride_am, stride_ak,
-        stride_bk, stride_bn,
-        stride_cm, stride_cn,
+        M,
+        N,
+        K,
+        stride_am,
+        stride_ak,
+        stride_bk,
+        stride_bn,
+        stride_cm,
+        stride_cn,
         HAS_BIAS: tl.constexpr,
         BLOCK_SIZE_M: tl.constexpr,
         BLOCK_SIZE_N: tl.constexpr,
@@ -144,17 +168,23 @@ def matmul_persistent(
     BLOCK_SIZE_K = 64
     GROUP_SIZE_M = 8
 
-    grid = lambda META: (
-        triton.cdiv(M, META['BLOCK_SIZE_M']) * triton.cdiv(N, META['BLOCK_SIZE_N']),
-    )
+    def grid(META):
+        return (triton.cdiv(M, META["BLOCK_SIZE_M"]) * triton.cdiv(N, META["BLOCK_SIZE_N"]),)
 
     _matmul_persistent_kernel[grid](
-        a, b, c,
+        a,
+        b,
+        c,
         bias if bias is not None else a,  # Dummy if no bias
-        M, N, K,
-        a.stride(0), a.stride(1),
-        b.stride(0), b.stride(1),
-        c.stride(0), c.stride(1),
+        M,
+        N,
+        K,
+        a.stride(0),
+        a.stride(1),
+        b.stride(0),
+        b.stride(1),
+        c.stride(0),
+        c.stride(1),
         HAS_BIAS=bias is not None,
         BLOCK_SIZE_M=BLOCK_SIZE_M,
         BLOCK_SIZE_N=BLOCK_SIZE_N,
@@ -381,6 +411,7 @@ def gelu_batch_invariant(input: Any) -> Any:
     if not HAS_TORCH:
         # Numpy GELU using error function
         from scipy import special
+
         return 0.5 * input * (1.0 + special.erf(input / math.sqrt(2.0)))
 
     # Use PyTorch's GELU with tanh approximation for speed
@@ -541,7 +572,7 @@ def attention_output_batch_invariant(
 
     # Apply mask
     if mask is not None:
-        scores = scores.masked_fill(~mask, float('-inf'))
+        scores = scores.masked_fill(~mask, float("-inf"))
 
     # Deterministic softmax
     weights = softmax_batch_invariant(scores, dim=-1)

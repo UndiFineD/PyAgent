@@ -16,9 +16,11 @@
 """Agent for connecting to local Ollama instances on edge nodes (Phase 125)."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 import requests
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -26,9 +28,7 @@ __version__ = VERSION
 class OllamaConnectorAgent(BaseAgent):
     """Handles local inference requests via the Ollama API."""
 
-    def __init__(
-        self, file_path: str, endpoint: str = "http://localhost:11434"
-    ) -> None:
+    def __init__(self, file_path: str, endpoint: str = "http://localhost:11434") -> None:
         super().__init__(file_path)
         self.endpoint = endpoint
         self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
@@ -58,9 +58,7 @@ class OllamaConnectorAgent(BaseAgent):
 
             # Phase 120: Harvest intelligence/interaction to shards
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_interaction(
-                    provider="Ollama", model=model, prompt=prompt, result=response_text
-                )
+                self.recorder.record_interaction(provider="Ollama", model=model, prompt=prompt, result=response_text)
             return response_text
         except Exception as e:
             error_msg = f"Exception during local inference: {e}"

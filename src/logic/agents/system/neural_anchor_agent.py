@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Neural anchor agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import re
 from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+
 from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -39,9 +45,7 @@ class NeuralAnchorAgent(BaseAgent):
         )
 
     @as_tool
-    def load_anchor_source(
-        self, source_name: str, content: str, source_type: str = "doc"
-    ) -> str:
+    def load_anchor_source(self, source_name: str, content: str, source_type: str = "doc") -> str:
         """
         Registers a verified source of truth to be used for anchoring.
         """
@@ -78,9 +82,7 @@ class NeuralAnchorAgent(BaseAgent):
         return {"claim": claim, "is_grounded": grounded, "validations": results}
 
     @as_tool
-    def anchor_reasoning_step(
-        self, reasoning_chain: list[str], sources: list[str]
-    ) -> list[dict[str, Any]]:
+    def anchor_reasoning_step(self, reasoning_chain: list[str], sources: list[str]) -> list[dict[str, Any]]:
         """
         Iteratively validates a chain of reasoning steps.
         """

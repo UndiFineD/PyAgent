@@ -23,17 +23,25 @@ VIBE_CODING_2025_TRACKS = {
         "phase_range": (0, 100),
     },
     "DEFINE": {
-        "persona": "Requirement Analyst. Focus on technical specifications, contract definitions, and interface design.",
+        "persona": (
+            "Requirement Analyst. Focus on technical specifications, "
+            "contract definitions, and interface design."
+        ),
         "workflow": "Contract drafting, schema validation, and dependency mapping.",
         "phase_range": (100, 150),
     },
     "DESIGN": {
-        "persona": "Architect. Focus on system coupling, side-effect isolation, and core/shell separation.",
+        "persona": (
+            "Architect. Focus on system coupling, side-effect isolation, and core/shell separation."
+        ),
         "workflow": "Logic extraction, core-logic auditing, and Rust-readiness manifest updates.",
         "phase_range": (150, 200),
     },
     "BUILD": {
-        "persona": "Rigid Implementer. Focus on high-velocity code generation, performance optimization, and type safety.",
+        "persona": (
+            "Rigid Implementer. Focus on high-velocity code generation, "
+            "performance optimization, and type safety."
+        ),
         "workflow": "Phase-based roadmap execution, logic core creation, and agentic self-healing.",
         "phase_range": (200, 250),
     },

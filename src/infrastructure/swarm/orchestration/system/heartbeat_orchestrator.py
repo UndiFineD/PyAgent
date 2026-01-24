@@ -13,21 +13,25 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 import time
 from typing import TYPE_CHECKING, Dict
+
+from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
+
 class HeartbeatOrchestrator:
     """
     HeartbeatOrchestrator for managing agent vitality signals.
     Standardized implementation for Phase 125 validation.
     """
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.version = VERSION
@@ -38,4 +42,3 @@ class HeartbeatOrchestrator:
         """Records a heartbeat for the given agent."""
         self.last_seen[agent_name] = time.time()
         logging.debug(f"Heartbeat: Recorded signal from {agent_name}")
-

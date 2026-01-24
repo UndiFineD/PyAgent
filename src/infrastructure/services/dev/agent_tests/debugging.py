@@ -16,11 +16,14 @@
 """Debugging utilities for test execution."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
 from .enums import ExecutionMode
 from .models import ExecutionTrace
 
@@ -148,6 +151,7 @@ class TestProfiler:
         """Stop profiling and record results."""
 
         import time
+
         from .models import TestProfile
 
         start = self._start_times.pop(test_id, time.time())
@@ -165,16 +169,12 @@ class TestProfiler:
 
     def get_slowest_tests(self, limit: int = 10) -> list[Any]:
         """Get the slowest tests."""
-        sorted_profiles = sorted(
-            self.profiles.values(), key=lambda p: p.cpu_time_ms, reverse=True
-        )
+        sorted_profiles = sorted(self.profiles.values(), key=lambda p: p.cpu_time_ms, reverse=True)
         return sorted_profiles[:limit]
 
     def get_memory_heavy_tests(self, limit: int = 10) -> list[Any]:
         """Get tests with highest memory usage."""
-        sorted_profiles = sorted(
-            self.profiles.values(), key=lambda p: p.memory_peak_mb, reverse=True
-        )
+        sorted_profiles = sorted(self.profiles.values(), key=lambda p: p.memory_peak_mb, reverse=True)
         return sorted_profiles[:limit]
 
     def generate_report(self) -> str:
@@ -183,10 +183,7 @@ class TestProfiler:
         report.append(f"Total profiled: {len(self.profiles)}\n")
         report.append("## Slowest Tests\n")
         for profile in self.get_slowest_tests(5):
-            report.append(
-                f"- `{profile.test_id}`: {profile.cpu_time_ms:.2f}ms, "
-                f"{profile.memory_peak_mb:.1f}MB"
-            )
+            report.append(f"- `{profile.test_id}`: {profile.cpu_time_ms:.2f}ms, {profile.memory_peak_mb:.1f}MB")
         return "\n".join(report)
 
 

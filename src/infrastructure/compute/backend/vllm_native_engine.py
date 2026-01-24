@@ -19,9 +19,11 @@ Optimized for local inference and future trillion-parameter context handling.
 """
 
 from __future__ import annotations
+
 import logging
 import os
 from typing import Any, Optional
+
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -76,26 +78,19 @@ class VllmNativeEngine:
                 if "VLLM_TARGET_DEVICE" not in os.environ:
                     if torch.cuda.is_available():
                         os.environ["VLLM_TARGET_DEVICE"] = "cuda"
-                        logging.info(
-                            "vLLM: CUDA detected. Using GPU for native inference."
-                        )
+                        logging.info("vLLM: CUDA detected. Using GPU for native inference.")
                     else:
                         os.environ["VLLM_TARGET_DEVICE"] = "cpu"
-                        logging.warning(
-                            "vLLM: No CUDA detected. Using CPU mode (Lower performance)."
-                        )
+                        logging.warning("vLLM: No CUDA detected. Using CPU mode (Lower performance).")
 
                 logging.info(
                     "Initializing Native vLLM: %s (Device: %s)...",
                     self.model_name,
-                    os.environ.get("VLLM_TARGET_DEVICE", "auto")
+                    os.environ.get("VLLM_TARGET_DEVICE", "auto"),
                 )
 
                 # Only check CUDA if we aren't explicitly targeting CPU
-                if (
-                    os.environ.get("VLLM_TARGET_DEVICE") != "cpu"
-                    and not torch.cuda.is_available()
-                ):
+                if os.environ.get("VLLM_TARGET_DEVICE") != "cpu" and not torch.cuda.is_available():
                     logging.warning("vLLM: No CUDA detected. Falling back to CPU mode.")
                     os.environ["VLLM_TARGET_DEVICE"] = "cpu"
 
@@ -110,7 +105,7 @@ class VllmNativeEngine:
 
                 self._llm = LLM(**kwargs)
                 return True
-            except Exception as e: # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logging.error("Failed to start Native vLLM Engine: %s", e)
                 self.enabled = False
                 return False
@@ -148,11 +143,7 @@ class VllmNativeEngine:
 
         try:
             # Format according to chat templates if possible, or simple concat
-            full_prompt = (
-                f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:"
-                if system_prompt
-                else prompt
-            )
+            full_prompt = f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:" if system_prompt else prompt
 
             # Build sampling params with optional guided decoding
             sampling_kwargs = {
@@ -175,14 +166,12 @@ class VllmNativeEngine:
             if lora_request is not None:
                 generate_kwargs["lora_request"] = lora_request
 
-            outputs = self._llm.generate(
-                [full_prompt], sampling_params, **generate_kwargs
-            )
+            outputs = self._llm.generate([full_prompt], sampling_params, **generate_kwargs)
 
             if outputs:
                 return outputs[0].outputs[0].text
             return ""
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.error("Native vLLM generation failed: %s", e)
             return ""
 
@@ -245,6 +234,7 @@ class VllmNativeEngine:
             # and try to trigger GC or rely on process exit.
             # pylint: disable=import-outside-toplevel
             import gc
+
             import torch
 
             del self._llm

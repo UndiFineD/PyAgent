@@ -1,11 +1,31 @@
-from typing import Tuple, Any
-from .base import HAS_TORCH, HAS_NUMPY, RotaryEmbeddingBase
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Neox.py module.
+"""
+
+from typing import Any, Tuple
+
+from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
 from .config import RoPEConfig
 
 if HAS_TORCH:
     import torch
 if HAS_NUMPY:
     import numpy as np
+
 
 class NeoxRotaryEmbedding(RotaryEmbeddingBase):
     """NeoX style rotary position embedding.
@@ -21,18 +41,9 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
     def _compute_inv_freq(self) -> Any:
         """Compute inverse frequencies."""
         if HAS_TORCH:
-            return 1.0 / (
-                self.base ** (
-                    torch.arange(0, self.rotary_dim, 2, dtype=torch.float32)
-                    / self.rotary_dim
-                )
-            )
+            return 1.0 / (self.base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
         elif HAS_NUMPY:
-            return 1.0 / (
-                self.base ** (
-                    np.arange(0, self.rotary_dim, 2, axis=0) / self.rotary_dim
-                )
-            )
+            return 1.0 / (self.base ** (np.arange(0, self.rotary_dim, 2, axis=0) / self.rotary_dim))
         raise RuntimeError("No numerical backend available")
 
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
@@ -85,8 +96,8 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
             return torch.cat((-x2, x1), dim=-1)
 
         # Apply to query
-        q_rotary = query[..., :self.rotary_dim]
-        q_pass = query[..., self.rotary_dim:]
+        q_rotary = query[..., : self.rotary_dim]
+        q_pass = query[..., self.rotary_dim :]
 
         cos_q = cos.unsqueeze(-2)  # Add head dimension
         sin_q = sin.unsqueeze(-2)
@@ -95,8 +106,8 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
         query_out = torch.cat([q_rotated, q_pass], dim=-1) if q_pass.numel() > 0 else q_rotated
 
         # Apply to key
-        k_rotary = key[..., :self.rotary_dim]
-        k_pass = key[..., self.rotary_dim:]
+        k_rotary = key[..., : self.rotary_dim]
+        k_pass = key[..., self.rotary_dim :]
 
         k_rotated = k_rotary * cos_q + rotate_half(k_rotary) * sin_q
         key_out = torch.cat([k_rotated, k_pass], dim=-1) if k_pass.numel() > 0 else k_rotated
@@ -121,12 +132,12 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
             x2 = x[..., x.shape[-1] // 2 :]
             return np.concatenate((-x2, x1), axis=-1)
 
-        q_rotary = query[..., :self.rotary_dim]
+        q_rotary = query[..., : self.rotary_dim]
         cos_q = np.expand_dims(cos, axis=-2)
         sin_q = np.expand_dims(sin, axis=-2)
 
         q_rotated = q_rotary * cos_q + rotate_half(q_rotary) * sin_q
-        k_rotary = key[..., :self.rotary_dim]
+        k_rotary = key[..., : self.rotary_dim]
         k_rotated = k_rotary * cos_q + rotate_half(k_rotary) * sin_q
 
         return q_rotated, k_rotated

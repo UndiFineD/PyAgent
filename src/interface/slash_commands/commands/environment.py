@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Environment and version commands.
 """
@@ -6,8 +20,8 @@ import os
 import platform
 import sys
 
-from src.interface.slash_commands.registry import register
 from src.interface.slash_commands.core import CommandContext, CommandResult
+from src.interface.slash_commands.registry import register
 
 
 @register(
@@ -76,10 +90,11 @@ def cmd_env(ctx: CommandContext) -> CommandResult:
 )
 def cmd_python(ctx: CommandContext) -> CommandResult:
     """Get Python interpreter information."""
+    v = sys.version_info
     return CommandResult.ok(
-        output=f"[Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro} at {sys.executable}]",
+        output=f"[Python {v.major}.{v.minor}.{v.micro} at {sys.executable}]",
         data={
-            "version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+            "version": f"{v.major}.{v.minor}.{v.micro}",
             "executable": sys.executable,
             "prefix": sys.prefix,
             "platform": sys.platform,
@@ -113,6 +128,7 @@ def cmd_cwd(ctx: CommandContext) -> CommandResult:
 def cmd_hostname(ctx: CommandContext) -> CommandResult:
     """Get system hostname."""
     import socket
+
     hostname = socket.gethostname()
 
     try:

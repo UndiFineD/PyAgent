@@ -20,10 +20,12 @@
 """Agent Column component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox, ttk
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -31,9 +33,7 @@ __version__ = VERSION
 class AgentColumn:
     """A vertical column representing a single agent's controls and logs."""
 
-    def __init__(
-        self, parent: tk.Widget, agent_name: str, callbacks: dict[str, Any]
-    ) -> None:
+    def __init__(self, parent: tk.Widget, agent_name: str, callbacks: dict[str, Any]) -> None:
         self.agent_name = agent_name
         self.callbacks = callbacks
 
@@ -51,9 +51,7 @@ class AgentColumn:
         self.phase_var = tk.StringVar(value="None")
         self.is_minimized = False
 
-        self.frame = ttk.LabelFrame(
-            parent, text=f"Agent: {agent_name}", style="Agent.TLabelframe"
-        )
+        self.frame = ttk.LabelFrame(parent, text=f"Agent: {agent_name}", style="Agent.TLabelframe")
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         self.setup_ui()
@@ -64,14 +62,10 @@ class AgentColumn:
         header_frame.pack(fill=tk.X, padx=2, pady=2)
 
         # Minimize Toggle
-        self.min_btn = ttk.Button(
-            header_frame, text="▼", width=3, command=self.toggle_minimize
-        )
+        self.min_btn = ttk.Button(header_frame, text="▼", width=3, command=self.toggle_minimize)
         self.min_btn.pack(side=tk.LEFT, padx=(0, 5))
 
-        ttk.Label(
-            header_frame, text=self.agent_name, font=("Segoe UI", 10, "bold")
-        ).pack(side=tk.LEFT)
+        ttk.Label(header_frame, text=self.agent_name, font=("Segoe UI", 10, "bold")).pack(side=tk.LEFT)
 
         # Phase Indicator
         phase_lbl = tk.Label(
@@ -120,17 +114,11 @@ class AgentColumn:
         ).pack(side=tk.RIGHT)
 
         # Context
-        self.ctx_toggle = ttk.Button(
-            self.content_frame, text="Toggle Local Context", command=self.toggle_context
-        )
+        self.ctx_toggle = ttk.Button(self.content_frame, text="Toggle Local Context", command=self.toggle_context)
         self.ctx_toggle.pack(fill=tk.X, padx=2, pady=2)
 
-        self.local_context = tk.Text(
-            self.content_frame, height=4, font=("Consolas", 9), bg="#f9f9f9"
-        )
-        self.local_context.insert(
-            "1.0", f"Specific instructions for {self.agent_name}..."
-        )
+        self.local_context = tk.Text(self.content_frame, height=4, font=("Consolas", 9), bg="#f9f9f9")
+        self.local_context.insert("1.0", f"Specific instructions for {self.agent_name}...")
 
         # Log
         log_header = ttk.Frame(self.content_frame)
@@ -154,9 +142,7 @@ class AgentColumn:
             width=8,
             command=lambda: self.callbacks.get("show_memory")(self.agent_name),
         ).pack(side=tk.RIGHT)
-        ttk.Button(
-            log_header, text="Delegate", width=8, command=self.show_delegate_menu
-        ).pack(side=tk.RIGHT)
+        ttk.Button(log_header, text="Delegate", width=8, command=self.show_delegate_menu).pack(side=tk.RIGHT)
 
         self.log_text = tk.Text(
             self.content_frame,
@@ -195,17 +181,13 @@ class AgentColumn:
         self.backend_cb.set("auto")
         self.backend_cb.pack(side=tk.LEFT, padx=1)
 
-        ttk.Button(
-            mini_toolbar, text="⚙️", width=3, command=self.show_settings_callback
-        ).pack(side=tk.LEFT, padx=1)
+        ttk.Button(mini_toolbar, text="⚙️", width=3, command=self.show_settings_callback).pack(side=tk.LEFT, padx=1)
 
         # Task Prompt
         prompt_container = ttk.Frame(control_area)
         prompt_container.pack(fill=tk.X)
 
-        self.prompt_text = tk.Text(
-            prompt_container, height=3, font=("Consolas", 10), undo=True
-        )
+        self.prompt_text = tk.Text(prompt_container, height=3, font=("Consolas", 10), undo=True)
         self.prompt_text.pack(fill=tk.X, side=tk.TOP)
 
         # Actions at bottom right
@@ -253,9 +235,7 @@ class AgentColumn:
 
     def reset_memory(self) -> None:
         """Clears the conversation history for this agent."""
-        if messagebox.askyesno(
-            "Reset Memory", "Clear conversation history for this agent?"
-        ):
+        if messagebox.askyesno("Reset Memory", "Clear conversation history for this agent?"):
             self.stop_callback(self.agent_name, reset_history=True)
             self.log_text.insert(tk.END, "\n[Memory Reset]\n")
 

@@ -17,18 +17,21 @@ Core logic for response caching and prompt prefix mapping.
 """
 
 from __future__ import annotations
+
 import hashlib
 import json
 import logging
 import time
 from pathlib import Path
-from typing import Dict, Optional, Any
+from typing import Any, Dict, Optional
+
 from .base_core import BaseCore
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class CacheCore(BaseCore):
     """
@@ -45,11 +48,11 @@ class CacheCore(BaseCore):
         self.logger = logging.getLogger("pyagent.cache_core")
 
     def _get_cache_key(self, content: str) -> str:
-        if rc and hasattr(rc, "fast_cache_key_rust"): # pylint: disable=no-member
+        if rc and hasattr(rc, "fast_cache_key_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
-                return rc.fast_cache_key_rust(content) # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+                return rc.fast_cache_key_rust(content)  # type: ignore
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return hashlib.md5(content.encode()).hexdigest()
 
@@ -60,11 +63,7 @@ class CacheCore(BaseCore):
     def set(self, prompt: str, response: Any, ttl_seconds: int = 3600) -> None:
         """Stores a result in memory and disk cache."""
         key = self._get_cache_key(prompt)
-        self.cache_data[key] = {
-            "result": response,
-            "timestamp": time.time(),
-            "ttl": ttl_seconds
-        }
+        self.cache_data[key] = {"result": response, "timestamp": time.time(), "ttl": ttl_seconds}
 
         if len(prompt) > 500:
             prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
@@ -72,13 +71,10 @@ class CacheCore(BaseCore):
 
         cache_file = self.cache_dir / f"{key}.json"
         try:
-            cache_file.write_text(json.dumps({
-                "prompt": prompt,
-                "response": response,
-                "timestamp": time.time(),
-                "ttl": ttl_seconds
-            }))
-        except Exception as e: # pylint: disable=broad-exception-caught
+            cache_file.write_text(
+                json.dumps({"prompt": prompt, "response": response, "timestamp": time.time(), "ttl": ttl_seconds})
+            )
+        except Exception as e:  # pylint: disable=broad-exception-caught
             self.logger.error("Failed to write cache file: %s", e)
 
     def get(self, prompt: str) -> Optional[Any]:
@@ -102,9 +98,9 @@ class CacheCore(BaseCore):
                     self.cache_data[key] = {
                         "result": data["response"],
                         "timestamp": data["timestamp"],
-                        "ttl": data["ttl"]
+                        "ttl": data["ttl"],
                     }
                     return data["response"]
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return None

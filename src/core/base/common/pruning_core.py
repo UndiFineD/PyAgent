@@ -21,11 +21,13 @@ Unified Pruning and Synaptic Decay core.
 """
 
 from __future__ import annotations
+
+import logging
 import math
 import time
-import logging
 from dataclasses import dataclass, field
-from typing import Optional, Dict, List
+from typing import Dict, List, Optional
+
 from .base_core import BaseCore
 
 try:
@@ -35,14 +37,17 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.pruning")
 
+
 @dataclass
 class SynapticWeight:
     """State tracking for neural synaptic weights during swarm pruning."""
+
     agent_id: str
     weight: float = 1.0  # 0.0 to 1.0
     last_fired: float = field(default_factory=time.time)
     last_fired_cycle: int = 0
     refractory_until: float = 0.0
+
 
 class PruningCore(BaseCore):
     """

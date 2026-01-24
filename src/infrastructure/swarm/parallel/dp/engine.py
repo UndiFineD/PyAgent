@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -10,18 +24,16 @@ import logging
 import threading
 import time
 from collections import deque
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
-from src.infrastructure.swarm.parallel.dp.types import (
-    DPConfig,
-    WorkerState,
-    WorkerHealth,
-    StepState,
-    WaveState,
-)
 from src.infrastructure.swarm.parallel.dp.balancer import P2CLoadBalancer
+from src.infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
+                                                        WaveState,
+                                                        WorkerHealth,
+                                                        WorkerState)
 
 logger = logging.getLogger(__name__)
+
 
 class DPEngineCoreProc:
     """
@@ -47,9 +59,7 @@ class DPEngineCoreProc:
 
         # Load balancer
         self._load_balancer = P2CLoadBalancer(
-            list(self._workers.values()),
-            self.config.p2c_sample_size,
-            self.config.enable_locality
+            list(self._workers.values()), self.config.p2c_sample_size, self.config.enable_locality
         )
 
         # Barriers for synchronization
@@ -73,11 +83,7 @@ class DPEngineCoreProc:
                     locality_group = group_idx
                     break
 
-            self._workers[i] = WorkerState(
-                worker_id=i,
-                dp_rank=i % self.config.dp_size,
-                locality_group=locality_group
-            )
+            self._workers[i] = WorkerState(worker_id=i, dp_rank=i % self.config.dp_size, locality_group=locality_group)
 
     def begin_step(self, num_requests: int = 0) -> StepState:
         """Begin a new step."""
@@ -85,11 +91,7 @@ class DPEngineCoreProc:
             self._step_counter += 1
             self._step_request_count = num_requests
 
-            step = StepState(
-                step_id=self._step_counter,
-                wave_id=self._wave_id,
-                request_count=num_requests
-            )
+            step = StepState(step_id=self._step_counter, wave_id=self._wave_id, request_count=num_requests)
             self._current_step = step
             return step
 
@@ -153,12 +155,7 @@ class DPEngineCoreProc:
         worker.pending_requests += 1
         return worker.worker_id
 
-    def complete_request(
-        self,
-        worker_id: int,
-        latency_ms: float,
-        success: bool = True
-    ) -> None:
+    def complete_request(self, worker_id: int, latency_ms: float, success: bool = True) -> None:
         """Mark request as complete on worker."""
         with self._lock:
             if worker_id not in self._workers:
@@ -204,10 +201,7 @@ class DPEngineCoreProc:
     def get_healthy_workers(self) -> list[WorkerState]:
         """Get only healthy workers."""
         with self._lock:
-            return [
-                w for w in self._workers.values()
-                if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)
-            ]
+            return [w for w in self._workers.values() if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)]
 
     def get_metrics(self) -> dict[str, Any]:
         """Get coordinator metrics."""

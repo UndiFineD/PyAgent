@@ -16,9 +16,11 @@
 """Validation script for Phase 11: Market & Economy."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
@@ -34,9 +36,7 @@ def test_market_features() -> None:
     alice_bal = fleet.economy.get_balance("AliceAgent")
     print(f"Alice Starting Balance: {alice_bal}")
 
-    success = fleet.economy.transfer_credits(
-        "AliceAgent", "BobAgent", 50.0, "Subcontracting research"
-    )
+    success = fleet.economy.transfer_credits("AliceAgent", "BobAgent", 50.0, "Subcontracting research")
     print(f"Transfer Alice -> Bob (50.0): {'Success' if success else 'Failed'}")
     print(f"Alice New Balance: {fleet.economy.get_balance('AliceAgent')}")
 

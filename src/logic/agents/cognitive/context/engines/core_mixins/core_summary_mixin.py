@@ -1,6 +1,10 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
+Core summary mixin for cognitive agents.
+"""
+
 from typing import Any
 
 class CoreSummaryMixin:

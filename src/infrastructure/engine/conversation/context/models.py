@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -14,6 +28,7 @@ from typing import Any, Dict, List, Optional
 
 class ContextState(Enum):
     """Conversation context state."""
+
     ACTIVE = "active"
     WAITING_INPUT = "waiting_input"
     WAITING_TOOL = "waiting_tool"
@@ -25,6 +40,7 @@ class ContextState(Enum):
 
 class TurnType(Enum):
     """Conversation turn type."""
+
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
@@ -35,6 +51,7 @@ class TurnType(Enum):
 
 class ToolExecutionPolicy(Enum):
     """Tool execution policy."""
+
     SEQUENTIAL = "sequential"  # Execute tools one at a time
     PARALLEL = "parallel"  # Execute tools in parallel
     BATCH = "batch"  # Batch similar tools
@@ -44,6 +61,7 @@ class ToolExecutionPolicy(Enum):
 @dataclass
 class TokenMetrics:
     """Token usage metrics."""
+
     input_tokens: int = 0
     output_tokens: int = 0
     cached_tokens: int = 0
@@ -83,6 +101,7 @@ class TokenMetrics:
 @dataclass
 class ConversationTurn:
     """Single conversation turn."""
+
     id: str
     type: TurnType
     content: Any
@@ -127,6 +146,7 @@ class ConversationTurn:
 @dataclass
 class ToolExecution:
     """Tool execution record."""
+
     call_id: str
     tool_name: str
     arguments: Dict[str, Any]
@@ -150,6 +170,7 @@ class ToolExecution:
 @dataclass
 class ContextConfig:
     """Context configuration."""
+
     max_turns: int = 100
     max_tokens: int = 128000
     max_tool_calls_per_turn: int = 10
@@ -173,6 +194,7 @@ class ContextConfig:
 @dataclass
 class ContextSnapshot:
     """Snapshot of context state."""
+
     context_id: str
     timestamp: float
     state: ContextState

@@ -16,9 +16,12 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .rollback_point import RollbackPoint
+
 from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .rollback_point import RollbackPoint
 
 __version__ = VERSION
 
@@ -30,9 +33,7 @@ class RollbackManager:
         self.rollbacks: list[RollbackPoint] = []
         self._by_id: dict[str, list[RollbackPoint]] = {}
 
-    def create_rollback_point(
-        self, improvement_id: str, state: dict[str, Any]
-    ) -> RollbackPoint:
+    def create_rollback_point(self, improvement_id: str, state: dict[str, Any]) -> RollbackPoint:
         point = RollbackPoint(improvement_id=improvement_id, state=dict(state))
         self.rollbacks.append(point)
         self._by_id.setdefault(improvement_id, []).append(point)

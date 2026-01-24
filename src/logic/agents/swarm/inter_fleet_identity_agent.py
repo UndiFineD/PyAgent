@@ -11,20 +11,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Inter fleet identity agent.py module.
+"""
+
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-import time
+
 import hashlib
+import time
 import uuid
 from typing import Any
+
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.identity_core import IdentityCore
 
 __version__ = VERSION
 
 
-class InterFleetIdentityAgent(BaseAgent):
+class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated
     identities for agents across multiple fleets using cryptographic signing and DID.
@@ -36,9 +42,7 @@ class InterFleetIdentityAgent(BaseAgent):
         self.core = IdentityCore()
         self.fleet_id = str(uuid.uuid4())
         self.known_fleets: dict[Any, Any] = {}  # fleet_id -> {pub_key, metadata}
-        self.authorized_agents: dict[
-            Any, Any
-        ] = {}  # agent_id -> {fleet_id, permissions}
+        self.authorized_agents: dict[Any, Any] = {}  # agent_id -> {fleet_id, permissions}
         self.session_tokens: dict[Any, Any] = {}  # token -> {agent_id, expiry}
 
     def generate_fleet_handshake(self) -> dict[str, Any]:
@@ -55,9 +59,7 @@ class InterFleetIdentityAgent(BaseAgent):
         self.known_fleets[fleet_id] = metadata
         return {"status": "registered", "fleet_id": fleet_id}
 
-    def authorize_remote_agent(
-        self, agent_id: str, remote_fleet_id: str, permissions: list[str]
-    ) -> bool:
+    def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> bool:
         """Authorizes an agent from a remote fleet with specific permissions."""
         if remote_fleet_id not in self.known_fleets:
             return {"status": "error", "message": "Unknown fleet ID"}

@@ -5,23 +5,25 @@
 # Phase 14: Rust acceleration for variance, stasis detection, and forecasting
 
 from __future__ import annotations
+
 import ast
 import contextlib
 import logging
 import math
-import operator
 import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .observability_core import DerivedMetric, MetricCorrelation
-from .ab_engine import ABComparisonResult, ABSignificanceResult
 from src.core.base.common.formula_core import FormulaCore
+
+from .ab_engine import ABComparisonResult, ABSignificanceResult
+from .observability_core import DerivedMetric, MetricCorrelation
 
 try:
     import rust_core as rc
+
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
@@ -29,6 +31,7 @@ except ImportError:
 
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     HAS_PSUTIL = False
@@ -50,6 +53,7 @@ MODEL_COSTS = {
 @dataclass(frozen=True)
 class ProfileStats:
     """Statistics for a single function call profile."""
+
     function_name: str
     call_count: int
     total_time: float
@@ -78,13 +82,9 @@ class ProfilingCore:
 
         return results
 
-    def identify_bottlenecks(
-        self, stats: list[ProfileStats], threshold_ms: float = 100.0
-    ) -> list[str]:
+    def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
         """Identify functions exceeding a latency threshold."""
-        return [
-            s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)
-        ]
+        return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
 
     def calculate_optimization_priority(self, stats: ProfileStats) -> float:
         """Calculate optimization priority based on total time and call count."""
@@ -94,6 +94,7 @@ class ProfilingCore:
 @dataclass(frozen=True)
 class FleetMetrics:
     """Consolidated metrics for a fleet of agents."""
+
     avg_error_rate: float
     total_token_out: int
     active_agent_count: int
@@ -107,9 +108,7 @@ class StabilityCore:
     - calculate_variance_rust: Fast variance calculation for stasis detection
     """
 
-    def calculate_stability_score(
-        self, metrics: FleetMetrics, sae_anomalies: int
-    ) -> float:
+    def calculate_stability_score(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
         """Calculate stability score.
 
         Uses Rust-accelerated logic if available.
@@ -143,7 +142,7 @@ class StabilityCore:
             return False
 
         # Rust-accelerated variance calculation
-        if RUST_AVAILABLE and hasattr(rc, 'calculate_variance_rust'):
+        if RUST_AVAILABLE and hasattr(rc, "calculate_variance_rust"):
             with contextlib.suppress(Exception):
                 variance = rc.calculate_variance_rust(score_history)
                 return variance < 0.0001
@@ -166,9 +165,7 @@ class TracingCore:
         """Create a standard OTel span context."""
         return {"trace_id": trace_id, "span_id": span_id, "version": "OTel-1.1"}
 
-    def calculate_latency_breakdown(
-        self, total_time: float, network_time: float
-    ) -> dict[str, float]:
+    def calculate_latency_breakdown(self, total_time: float, network_time: float) -> dict[str, float]:
         """Calculate network vs thinking latency breakdown."""
         thinking_time = total_time - network_time
         return {
@@ -230,7 +227,7 @@ class DerivedMetricCalculator:
             result = FormulaCore.evaluate(derived.formula, metric_values)
             self._cache[name] = result
             return result
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logger.error("Failed to calculate %s: %s", name, e)
             return None
 
@@ -249,9 +246,7 @@ class CorrelationAnalyzer:
 
         self._metric_history[metric_name].append(value)
 
-    def compute_correlation(
-        self, metric_a: str, metric_b: str
-    ) -> MetricCorrelation | None:
+    def compute_correlation(self, metric_a: str, metric_b: str) -> MetricCorrelation | None:
         """Compute the Pearson correlation between two metrics."""
         va, vb = (
             self._metric_history.get(metric_a, []),
@@ -283,13 +278,9 @@ class CorrelationAnalyzer:
 
         return res
 
-    def find_strong_correlations(
-        self, threshold: float = 0.8
-    ) -> list[MetricCorrelation]:
+    def find_strong_correlations(self, threshold: float = 0.8) -> list[MetricCorrelation]:
         """Find correlations exceeding a threshold."""
-        return [
-            c for c in self.correlations if abs(c.correlation_coefficient) >= threshold
-        ]
+        return [c for c in self.correlations if abs(c.correlation_coefficient) >= threshold]
 
 
 class FormulaEngineCore:
@@ -303,11 +294,7 @@ class FormulaEngineCore:
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
                 # Convert variables to dict[str, float] for Rust (excludes list/complex types)
-                float_vars = {
-                    k: float(v)
-                    for k, v in variables.items()
-                    if isinstance(v, (int, float))
-                }
+                float_vars = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
                 # pylint: disable=no-member
                 return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
 
@@ -322,7 +309,7 @@ class FormulaEngineCore:
 
         try:
             return FormulaCore.evaluate(formula, variables)
-        except Exception: # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return 0.0
 
     def validate_logic(self, formula: str) -> dict[str, Any]:
@@ -338,12 +325,13 @@ class FormulaEngineCore:
             ast.parse(test_f, mode="eval")
 
             return {"is_valid": True, "error": None}
-        except Exception as e: # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return {"is_valid": False, "error": str(e)}
 
 
 class FormulaEngine:
     """Orchestrates formula definition and calculation."""
+
     def __init__(self) -> None:
         self.formulas: dict[str, str] = {}
 
@@ -361,6 +349,7 @@ class FormulaEngine:
 
 class TokenCostCore:
     """Core logic for calculating token costs."""
+
     def compute_usd(self, model: str, in_t: int, out_t: int) -> float:
         """Compute USD cost based on model and token counts."""
         mk = model.lower()
@@ -373,18 +362,18 @@ class TokenCostCore:
 
 class TokenCostEngine:
     """Service for managing token costs."""
+
     def __init__(self) -> None:
         self.core = TokenCostCore()
 
-    def calculate_cost(
-        self, model_name: str, input_tokens: int = 0, output_tokens: int = 0
-    ) -> float:
+    def calculate_cost(self, model_name: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
         """Calculate cost for a model call."""
         return self.core.compute_usd(model_name, input_tokens, output_tokens)
 
 
 class ModelFallbackCore:
     """Logic for determining model fallback chains."""
+
     def __init__(self, chains: dict[str, list[str]] | None = None) -> None:
         self.chains = chains or {
             "high_performance": ["gpt-4o", "claude-3-5-sonnet", "gpt-4-turbo"],
@@ -403,6 +392,7 @@ class ModelFallbackCore:
 
 class ModelFallbackEngine:
     """Service for handling model fallbacks."""
+
     def __init__(self, cost_engine: TokenCostEngine | None = None) -> None:
         self.cost_engine = cost_engine
         self.core = ModelFallbackCore()
@@ -414,6 +404,7 @@ class ModelFallbackEngine:
 
 class StatsRollupCalculator:
     """Calculate rolled-up statistics over time intervals."""
+
     def __init__(self) -> None:
         self._points: dict[str, list[tuple[float, float]]] = {}
 
@@ -446,6 +437,7 @@ class StatsRollupCalculator:
 
 class StatsForecaster:
     """Basic forecasting logic for metrics."""
+
     def predict(self, hist: list[float], periods: int = 3) -> list[float]:
         """Predict future points using simple trend analysis."""
         if periods <= 0 or not hist:
@@ -459,6 +451,7 @@ class StatsForecaster:
 
 class ABComparator:
     """Compare sets of metrics for A/B testing."""
+
     def compare(self, a: dict[str, float], b: dict[str, float]) -> ABComparisonResult:
         """Compare two sets of metrics."""
         common = sorted(set(a.keys()) & set(b.keys()))
@@ -483,6 +476,7 @@ class ABComparator:
 
 class ResourceMonitor:
     """Monitor system resources."""
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
 

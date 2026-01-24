@@ -12,12 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Trace synthesis.py module.
+"""
+
 import logging
-from typing import List, Dict, Any, Optional
 from collections import defaultdict
-from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+from typing import Any, Dict, List
+
+from src.infrastructure.swarm.orchestration.swarm.audit_logger import \
+    SwarmAuditLogger
 
 logger = logging.getLogger(__name__)
+
 
 class SwarmTraceSynthesizer:
     """
@@ -68,9 +75,9 @@ class SwarmTraceSynthesizer:
 
         # Normalize wisdom
         final_wisdom = {
-            "domain_baselines": {d: sum(s)/len(s) for d, s in domain_success.items()},
+            "domain_baselines": {d: sum(s) / len(s) for d, s in domain_success.items()},
             "expert_synergies": {},
-            "top_experts": sorted(expert_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+            "top_experts": sorted(expert_counts.items(), key=lambda x: x[1], reverse=True)[:5],
         }
 
         for ex1, peers in expert_affinities.items():

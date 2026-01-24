@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +13,12 @@
 # limitations under the License.
 
 
+"""Optimizes LTM by ranking importance and pruning low-utility or stale data slices."""
+
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import time
 from typing import Any
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

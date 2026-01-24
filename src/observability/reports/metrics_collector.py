@@ -16,10 +16,13 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .report_metric import ReportMetric
-from typing import Any
+
 import logging
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+from .report_metric import ReportMetric
 
 __version__ = VERSION
 
@@ -91,10 +94,7 @@ class MetricsCollector:
                 if metric.name not in averages:
                     averages[metric.name] = []
                 averages[metric.name].append(metric.value)
-        avg_summary = {
-            name: sum(vals) / len(vals) if vals else 0
-            for name, vals in averages.items()
-        }
+        avg_summary = {name: sum(vals) / len(vals) if vals else 0 for name, vals in averages.items()}
         return {
             "total_files": total_files,
             "total_metrics": total_metrics,

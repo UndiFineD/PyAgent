@@ -8,12 +8,14 @@ Decentralized merging of specialized LoRA adapters across the agent fleet.
 Enables 'Swarm Learning' without centralized bottleneck.
 """
 
-import logging
-import numpy as np
 import asyncio
-from typing import List, Dict, Any, Optional
+import logging
+from typing import Any, Dict, List
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
+
 
 class SwarmTrainingCoordinator:
     """
@@ -36,7 +38,7 @@ class SwarmTrainingCoordinator:
 
         # Simulate weight extraction and averaging
         # In a real system, we would average the tensors (e.g. A and B matrices)
-        merged_weights = np.zeros(128) # Mock weight vector
+        merged_weights = np.zeros(128)  # Mock weight vector
         total_weight = 0
 
         for adapter in peer_adapters:
@@ -50,10 +52,10 @@ class SwarmTrainingCoordinator:
             "domain": task_domain,
             "version": f"swarm_v{len(peer_adapters)}",
             "weights": (merged_weights / total_weight).tolist(),
-            "consensus_score": min(1.0, total_weight / 10.0)
+            "consensus_score": min(1.0, total_weight / 10.0),
         }
 
-        await asyncio.sleep(0.1) # Simulate complex GPU kernel for merging
+        await asyncio.sleep(0.1)  # Simulate complex GPU kernel for merging
         return final_adapter
 
     def broadcast_adapter(self, adapter: Dict[str, Any]):

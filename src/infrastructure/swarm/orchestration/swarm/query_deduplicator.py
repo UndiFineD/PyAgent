@@ -12,13 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
+"""
+Query deduplicator.py module.
+"""
+
 import asyncio
+import logging
 import time
-from typing import Dict, Any, Optional, List
-from src.infrastructure.engine.models.similarity import EmbeddingSimilarityService
+from typing import Any, Dict, Optional
+
+from src.infrastructure.engine.models.similarity import \
+    EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)
+
 
 class SwarmQueryDeduplicator:
     """
@@ -49,18 +56,16 @@ class SwarmQueryDeduplicator:
         for inflight_id, data in self.inflight_queries.items():
             similarity = await self.similarity_service.compute_similarity(prompt, data["prompt"])
             if similarity >= self.threshold:
-                logger.info(f"[Phase 86] Deduplicator: Semantic collision ({similarity:.3f}). "
-                            f"Joining task {task_id} to existing {inflight_id}.")
+                logger.info(
+                    f"[Phase 86] Deduplicator: Semantic collision ({similarity:.3f}). "
+                    f"Joining task {task_id} to existing {inflight_id}."
+                )
                 return data["future"]
 
         # No match found, register this query
         loop = asyncio.get_running_loop()
         future = loop.create_future()
-        self.inflight_queries[task_id] = {
-            "prompt": prompt,
-            "future": future,
-            "start_time": time.time()
-        }
+        self.inflight_queries[task_id] = {"prompt": prompt, "future": future, "start_time": time.time()}
         return None
 
     def complete_query(self, task_id: str, result: Any):
@@ -74,6 +79,5 @@ class SwarmQueryDeduplicator:
 
     def cleanup(self):
         """Prunes stale entries."""
-        cutoff = time.time() - 3600 # 1 hour
         # Cleanup recent_results could be added here
         pass

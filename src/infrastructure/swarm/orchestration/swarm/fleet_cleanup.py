@@ -10,9 +10,10 @@ Ensures the swarm doesn't suffer from resource exhaustion.
 
 import logging
 import time
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
+
 
 class FleetDecommissioner:
     """
@@ -40,7 +41,11 @@ class FleetDecommissioner:
                 to_prune.append(agent_id)
 
         for agent_id in to_prune:
-            logger.warning(f"FleetCleanup: Pruning low-perf agent {agent_id} (Score {self.gatekeeper.experts[agent_id].performance_score})")
+            logger.warning(
+                "FleetCleanup: Pruning low-perf agent %s (Score %s)",
+                agent_id,
+                self.gatekeeper.experts[agent_id].performance_score,
+            )
             del self.gatekeeper.experts[agent_id]
             stats["agents_pruned"] += 1
 

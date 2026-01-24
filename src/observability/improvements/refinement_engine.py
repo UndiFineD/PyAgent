@@ -18,10 +18,12 @@ Improvements Agent: Maintains and improves improvement suggestions.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import sys
 from pathlib import Path
+
 from src.core.base.entrypoint import create_main_function
+from src.core.base.lifecycle.version import VERSION
 from src.observability.improvements.improvements_agent import ImprovementsAgent
 
 # Ensure project root and src are in path for modular imports

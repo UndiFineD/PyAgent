@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 AsyncOutputHandler.py - Async copy streams and CUDA event synchronization.
 
@@ -9,16 +23,15 @@ Phase 29: Execution Context, Batching & Async Streaming
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List, Callable, TypeVar
-from enum import Enum
-import threading
-import queue
-import time
 import logging
+import queue
+import threading
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 import numpy as np
-
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +42,10 @@ T = TypeVar("T")
 # Async State
 # ============================================================================
 
+
 class AsyncState(Enum):
     """State of an async operation."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -41,6 +56,7 @@ class AsyncState(Enum):
 # CUDA Event (Simulated)
 # ============================================================================
 
+
 @dataclass
 class CudaEvent:
     """
@@ -48,6 +64,7 @@ class CudaEvent:
 
     In real implementation, wraps torch.cuda.Event.
     """
+
     name: str = ""
     recorded_at: Optional[float] = None
     synchronized: bool = False
@@ -76,6 +93,7 @@ class CudaEvent:
 # CUDA Stream (Simulated)
 # ============================================================================
 
+
 @dataclass
 class CudaStream:
     """
@@ -83,6 +101,7 @@ class CudaStream:
 
     In real implementation, wraps torch.cuda.Stream.
     """
+
     name: str = "default"
     _operations: List[Callable] = field(default_factory=list)
     _events: List[CudaEvent] = field(default_factory=list)
@@ -109,6 +128,7 @@ class CudaStream:
 # Async Output
 # ============================================================================
 
+
 @dataclass
 class AsyncOutput:
     """
@@ -117,6 +137,7 @@ class AsyncOutput:
     Based on vLLM's AsyncOutput pattern for overlapping
     compute and memory transfers.
     """
+
     # Output arrays
     sampled_token_ids: Optional[np.ndarray] = None
     logprobs: Optional[np.ndarray] = None
@@ -175,6 +196,7 @@ class AsyncOutput:
 # Async Copy Functions
 # ============================================================================
 
+
 def async_copy_to_np(
     src: np.ndarray,
     stream: Optional[CudaStream] = None,
@@ -218,6 +240,7 @@ def async_copy_batch(
 # ============================================================================
 # Async Barrier
 # ============================================================================
+
 
 class AsyncBarrier:
     """
@@ -275,6 +298,7 @@ def async_barrier(outputs: List[AsyncOutput]) -> None:
 # ============================================================================
 # Async Output Handler
 # ============================================================================
+
 
 class AsyncOutputHandler:
     """
@@ -392,6 +416,7 @@ class AsyncOutputHandler:
 # ============================================================================
 # Double Buffer
 # ============================================================================
+
 
 class DoubleBuffer:
     """

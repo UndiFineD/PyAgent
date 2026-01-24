@@ -18,22 +18,24 @@
 # limitations under the License.
 """Unified file system core for atomic I/O and shared access."""
 
-import os
-import shutil
-import logging
-import tempfile
 import fnmatch
 import hashlib
+import logging
+import os
+import shutil
+import tempfile
 from pathlib import Path
-from typing import Optional, Union, List, Set
+from typing import List, Optional, Set, Union
+
+from .models import LockType
 from .storage_core import StorageCore
 from .utils.file_lock_manager import FileLockManager
-from .models import LockType
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
+
 
 class FileSystemCore:
     """
@@ -48,10 +50,7 @@ class FileSystemCore:
         self._ignore_patterns: Set[str] = set()
 
     def discover_files(
-        self,
-        root: Path,
-        patterns: Optional[List[str]] = None,
-        ignore: Optional[List[str]] = None
+        self, root: Path, patterns: Optional[List[str]] = None, ignore: Optional[List[str]] = None
     ) -> List[Path]:
         """Discovers files matching patterns, respecting ignore list."""
         if patterns is None:
@@ -92,11 +91,7 @@ class FileSystemCore:
         return found
 
     def atomic_write(
-        self,
-        path: Union[str, Path],
-        content: str,
-        encoding: str = "utf-8",
-        use_lock: bool = True
+        self, path: Union[str, Path], content: str, encoding: str = "utf-8", use_lock: bool = True
     ) -> bool:
         """
         Write content to a file atomically by using a temporary file.
@@ -117,11 +112,7 @@ class FileSystemCore:
 
             # Create temporary file in the same directory to ensure same filesystem (for os.rename)
             with tempfile.NamedTemporaryFile(
-                mode='w',
-                dir=p.parent,
-                delete=False,
-                encoding=encoding,
-                suffix=".tmp"
+                mode="w", dir=p.parent, delete=False, encoding=encoding, suffix=".tmp"
             ) as tmp_file:
                 tmp_file.write(content)
                 tmp_path = Path(tmp_file.name)

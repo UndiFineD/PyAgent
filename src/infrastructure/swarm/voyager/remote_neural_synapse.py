@@ -1,13 +1,20 @@
+
+"""
+Remote neural synapse.py module.
+"""
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Remote Neural Synapse)
 
 import asyncio
 from typing import Any, Dict, List, Optional
-from src.infrastructure.swarm.voyager.teleportation_engine import TeleportationEngine
+
+from src.infrastructure.swarm.voyager.teleportation_engine import \
+    TeleportationEngine
 from src.infrastructure.swarm.voyager.transport_layer import VoyagerTransport
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
+
 
 class RemoteNeuralSynapse:
     """
@@ -72,7 +79,7 @@ class RemoteNeuralSynapse:
         payload = {
             "type": "teleport",
             "agent_blob": self.engine.encode_for_transport(blob),
-            "sender_id": self.fleet_manager.fleet_id if hasattr(self.fleet_manager, 'fleet_id') else "unknown"
+            "sender_id": self.fleet_manager.fleet_id if hasattr(self.fleet_manager, "fleet_id") else "unknown",
         }
 
         logger.info(f"Synapse: Firing synaptic teleport of {agent.name} to {peer_address}:{transport_port}...")

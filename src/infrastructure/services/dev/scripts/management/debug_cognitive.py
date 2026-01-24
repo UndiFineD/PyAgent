@@ -16,9 +16,11 @@
 """Validation script for Phase 12: Cognitive Architectures."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import logging
 from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
@@ -32,18 +34,12 @@ def test_cognitive_features() -> None:
 
     print("--- Phase 12: Metacognitive Monitoring ---")
     reasoning = "I think perhaps this might work, but i am not sure if it is likely the best way."
-    eval_res = fleet.metacognition.evaluate_reasoning(
-        "TestAgent", "Risk Analysis", reasoning
-    )
+    eval_res = fleet.metacognition.evaluate_reasoning("TestAgent", "Risk Analysis", reasoning)
     print(f"Metacognitive Eval: {eval_res}")
 
     print("\n--- Phase 12: Theory of Mind ---")
-    fleet.tom.update_model(
-        "CoderAgent", {"domain": "Python", "strength": "refactoring"}
-    )
-    fleet.tom.update_model(
-        "DataAgent", {"domain": "SQL", "strength": "query_optimization"}
-    )
+    fleet.tom.update_model("CoderAgent", {"domain": "Python", "strength": "refactoring"})
+    fleet.tom.update_model("DataAgent", {"domain": "SQL", "strength": "query_optimization"})
 
     collaborators = fleet.tom.suggest_collaborator("I need help with a Python function")
     print(f"Suggested Collaborators for Python: {collaborators}")

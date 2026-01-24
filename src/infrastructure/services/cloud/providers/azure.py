@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Azure AI Foundry cloud provider connector.
 
@@ -6,22 +20,16 @@ Provides integration with Azure AI Foundry (formerly Azure ML) for inference req
 
 from __future__ import annotations
 
+import logging
 import os
 import time
-import json
-import logging
-from typing import AsyncIterator, List, Optional, Dict, Any
+from typing import List, Optional
 
-from ..base import (
-    CloudProviderBase,
-    InferenceRequest,
-    InferenceResponse,
-    CloudProviderError,
-    RateLimitError,
-    AuthenticationError,
-)
+from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
+                    InferenceRequest, InferenceResponse, RateLimitError)
 
 logger = logging.getLogger(__name__)
+
 
 class AzureAIConnector(CloudProviderBase):
     """
@@ -74,6 +82,7 @@ class AzureAIConnector(CloudProviderBase):
 
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         import httpx
+
         start_time = time.perf_counter()
 
         if not self._api_key or not self._endpoint:
@@ -87,7 +96,7 @@ class AzureAIConnector(CloudProviderBase):
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self._api_key}" if not self._is_entra_token() else f"Bearer {self._api_key}",
-            "api-key": self._api_key # Azure specific header
+            "api-key": self._api_key,  # Azure specific header
         }
 
         payload = {
@@ -95,7 +104,7 @@ class AzureAIConnector(CloudProviderBase):
             "max_tokens": request.max_tokens,
             "temperature": request.temperature,
             "top_p": request.top_p or 1.0,
-            "stream": False # Streaming handled separately if needed
+            "stream": False,  # Streaming handled separately if needed
         }
 
         async with httpx.AsyncClient(timeout=60.0) as client:
@@ -128,12 +137,12 @@ class AzureAIConnector(CloudProviderBase):
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
                 cost=cost,
-                raw_response=data
+                raw_response=data,
             )
 
     def _is_entra_token(self) -> bool:
         # Check if the key looks like an Entra id token or a simple API key
-        return len(self._api_key) > 64 # Heuristic
+        return len(self._api_key) > 64  # Heuristic
 
     def _calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
         pricing = self.PRICING.get(model, {"input": 1.0, "output": 1.0})

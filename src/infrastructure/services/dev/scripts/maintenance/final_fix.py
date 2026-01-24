@@ -15,9 +15,11 @@
 """Script for applying final import formatting fixes across the workspace."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
 import os
 import re
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

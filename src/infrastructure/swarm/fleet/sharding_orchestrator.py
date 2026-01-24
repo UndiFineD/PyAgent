@@ -18,14 +18,17 @@ Optimizes swarm latency by clustering frequently interacting agents.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-import logging
+
 import json
-import numpy as np
-from pathlib import Path
+import logging
 from collections import Counter
+from pathlib import Path
+
+import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -45,9 +48,7 @@ class ShardingOrchestrator:
         self._total_interactions = 0
         self._current_mapping: dict[str, str] = {}  # agent -> shard_id
 
-    def record_interaction(
-        self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0
-    ) -> None:
+    def record_interaction(self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0) -> None:
         """Records a communication event and updates VRAM telemetry (Phase 234)."""
         pair = tuple(sorted([agent_a, agent_b]))
         self._counts[pair] += 1
@@ -65,9 +66,7 @@ class ShardingOrchestrator:
         if old_shard == target_shard_id:
             return
 
-        logging.info(
-            f"ShardingOrchestrator: MIGRATING '{agent_name}' from {old_shard} to {target_shard_id}"
-        )
+        logging.info(f"ShardingOrchestrator: MIGRATING '{agent_name}' from {old_shard} to {target_shard_id}")
         # In a real system, this would involve updating the AgentRegistry
         # or notifying the FleetManager to update the agent's signal bus.
         self._current_mapping[agent_name] = target_shard_id
@@ -113,9 +112,7 @@ class ShardingOrchestrator:
             for agent in agent_list:
                 self.migrate_agent(agent, shard_id)
 
-        logging.info(
-            f"ShardingOrchestrator: Rebalancing complete. {len(new_mapping)} shards active."
-        )
+        logging.info(f"ShardingOrchestrator: Rebalancing complete. {len(new_mapping)} shards active.")
 
     def _sync_mapping_to_disk(self) -> None:
         """Internal helper to persist current mapping."""

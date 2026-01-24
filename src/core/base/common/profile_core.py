@@ -22,9 +22,12 @@ Core logic for execution profiles and configuration management.
 """
 
 from __future__ import annotations
+
 from typing import Dict, Optional
+
 from .base_core import BaseCore
 from .models import ExecutionProfile
+
 
 class ProfileCore(BaseCore):
     """
