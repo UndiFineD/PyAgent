@@ -366,10 +366,11 @@ class ConversationLinearizer:
         self,
         input_format: InputFormat = InputFormat.CHATML,
         add_generation_prompt: bool = True,
+        **kwargs: Any,
     ):
-        self.format = input_format
+        self.format = kwargs.get("format", input_format)
         self.add_generation_prompt = add_generation_prompt
-        self.template = PromptTemplate.get_template(input_format)
+        self.template = PromptTemplate.get_template(self.format)
 
     def linearize(self, chat: ChatPrompt) -> str:
         """Convert chat to linear prompt string."""

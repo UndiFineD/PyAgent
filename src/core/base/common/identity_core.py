@@ -110,3 +110,16 @@ class IdentityCore(BaseCore):
                 pass
         # In a real implementation, this would use asymmetrical crypto.
         return self.sign_payload(payload, public_key) == signature
+
+    def validate_identity(self, identity: AgentIdentity) -> bool:
+        """
+        Validates an agent identity following Phase 119 rules.
+        - agent_id must be 16 characters.
+        - agent_id must NOT contain '@'.
+        """
+        agent_id = identity.agent_id
+        if len(agent_id) != 16:
+            return False
+        if "@" in agent_id:
+            return False
+        return True

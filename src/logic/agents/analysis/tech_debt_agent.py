@@ -48,7 +48,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
-            tree = ast.parse(content)
+            tree = ast.parse(content, filename=file_path)
 
             # Check for missing docstrings
             for node in ast.walk(tree):

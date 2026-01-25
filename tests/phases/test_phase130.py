@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Tests for Phase 130: Trillion-Scale Sharding and Resilience.
+"""
+
 from pathlib import Path
 from src.core.knowledge.btree_store import BTreeKnowledgeStore
 from src.logic.agents.cognitive.latent_reasoning_agent import LatentReasoningAgent
@@ -51,6 +55,7 @@ def test_phase130_btree_sharding() -> None:
 
     # Verify sharding (hash based path)
     if hasattr(store, "_hash_key"):
+        # pylint: disable=protected-access
         h = store._hash_key(key)
         tier1, tier2 = h[:2], h[2:4]
         db_path = store.storage_path / tier1 / tier2 / "shard.db"
@@ -59,14 +64,14 @@ def test_phase130_btree_sharding() -> None:
 
 def test_phase130_agent_integration() -> None:
     """Basic sanity check for specialized agents."""
-    latent_agent = LatentReasoningAgent(file_path="src\core\base\base_agent.py")
+    latent_agent = LatentReasoningAgent(file_path="src/core/base/base_agent.py")
     # Corrected method based on actual code
     audit_res = latent_agent.audit_multilingual_output(
         "Calculate 1+1", "The answer is 2.", "Swahili"
     )
     assert "is_consistent" in audit_res
 
-    optimizer = ModelOptimizerAgent(file_path="src\core\base\base_agent.py")
+    optimizer = ModelOptimizerAgent(file_path="src/core/base/base_agent.py")
     strategy = optimizer.select_optimization_strategy(70, 24, ["h100"])
     assert "FP8" in strategy.get("quantization", "") or strategy.get("hopper_optimized")
 

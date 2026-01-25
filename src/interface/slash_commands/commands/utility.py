@@ -19,8 +19,8 @@ Utility commands - tokens, uuid, random, help.
 import random as random_module
 import uuid as uuid_module
 
-from src.interface.slash_commands.core import CommandContext, CommandResult
-from src.interface.slash_commands.registry import get_global_registry, register
+from ..core import CommandContext, CommandResult
+from ..registry import get_global_registry, register
 
 
 @register(

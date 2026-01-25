@@ -67,6 +67,7 @@ class LazyOrchestratorMap:
     def _scan_workspace_for_orchestrators(self) -> list[str]:
         """Performs the I/O-bound scanning of the workspace."""
         subdirs = [
+            "src/infrastructure/swarm/orchestration",
             "src/infrastructure/orchestration",
             "src/logic/agents/cognitive",
             "src/infrastructure/fleet",

@@ -41,6 +41,10 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Phone": r"\b(?:\d{3}[-.]?)?\d{3}[-.]?\d{4}\b",
             "SSN": r"\b\d{3}-\d{2}-\d{4}\b",
             "CreditCard": r"\b(?:\d[ -]*?){13,16}\b",
+            "AWS_KEY": r"(?i)AKIA[0-9A-Z]{16}",
+            "AWS_SECRET": r"(?i)SECRET.*['\"]?[a-zA-Z0-9/+=]{40}['\"]?",
+            "GENERIC_TOKEN": r"(?i)(token|auth|key|secret)[ \t]*[:=][ \t]*['\"]?[a-zA-Z0-9_\-\.]{16,}",
+            "GITHUB_TOKEN": r"ghp_[a-zA-Z0-9]{36}",
         }
         self.redaction_logs: list[Any] = []
 

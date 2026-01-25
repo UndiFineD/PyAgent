@@ -173,7 +173,7 @@ class Request:
         self._transition_to(RequestStatus.RUNNING)
         if self.first_scheduled_time is None:
             self.first_scheduled_time = now
-        self._record_event(RequestEventType.SCHEDULED)
+        self.record_event(RequestEventType.SCHEDULED)
 
     def add_output_token(self, token_id: int) -> None:
         """Add a generated token to the output."""
@@ -183,19 +183,19 @@ class Request:
         self.output_token_ids.append(token_id)
         if was_empty:
             self.first_token_time = time.time()
-            self._record_event(RequestEventType.FIRST_TOKEN)
+            self.record_event(RequestEventType.FIRST_TOKEN)
 
     def preempt(self) -> None:
         """Preempt the request (move back to waiting)."""
         self._transition_to(RequestStatus.PREEMPTED)
-        self._record_event(RequestEventType.PREEMPTED)
+        self.record_event(RequestEventType.PREEMPTED)
 
     def resume(self) -> None:
         """Resume a preempted request."""
         if self.status != RequestStatus.PREEMPTED:
             raise ValueError("Can only resume preempted requests")
         self.status = RequestStatus.WAITING
-        self._record_event(RequestEventType.RESUMED)
+        self.record_event(RequestEventType.RESUMED)
 
     def finish(
         self,
@@ -216,7 +216,7 @@ class Request:
         self.finish_reason = reason
         self.stop_reason = stop_reason
         self.finished_time = time.time()
-        self._record_event(
+        self.record_event(
             RequestEventType.FINISHED,
             {"reason": str(reason), "stop_reason": stop_reason},
         )
@@ -227,7 +227,7 @@ class Request:
             self.status = RequestStatus.FINISHED_ABORTED
             self.finish_reason = FinishReason.ABORT
             self.finished_time = time.time()
-            self._record_event(RequestEventType.ABORTED)
+            self.record_event(RequestEventType.ABORTED)
 
     def error(self, error_msg: Optional[str] = None) -> None:
         """Mark the request as errored."""
@@ -235,7 +235,7 @@ class Request:
             self.status = RequestStatus.FINISHED_ERROR
             self.finish_reason = FinishReason.ERROR
             self.finished_time = time.time()
-            self._record_event(RequestEventType.ERROR, {"message": error_msg})
+            self.record_event(RequestEventType.ERROR, {"message": error_msg})
 
     def should_stop(self, max_model_len: Optional[int] = None) -> bool:
         """Check if the request should stop generating."""

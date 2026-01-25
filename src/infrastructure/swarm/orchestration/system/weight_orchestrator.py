@@ -37,8 +37,7 @@ class WeightOrchestrator(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.workspace_root = Path(file_path).parent
-        self.weights_registry_path = self.workspace_root / "data/memory/agent_store/weights_registry.json"
+        self.weights_registry_path = Path(self._workspace_root) / "data/memory/agent_store/weights_registry.json"
         self.active_adapters: dict[str, str] = {}  # agent_name -> adapter_name
         self._load_registry()
         self._system_prompt = (
