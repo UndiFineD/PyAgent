@@ -27,7 +27,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
-from src.core.base.common.telemetry_core import Metric
+from src.core.base.common.telemetry_core import Metric, MetricType  # pylint: disable=unused-import
 
 # Try to import rust_core
 try:

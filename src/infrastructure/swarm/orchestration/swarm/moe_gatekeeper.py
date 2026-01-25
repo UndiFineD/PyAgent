@@ -27,8 +27,7 @@ from src.core.base.common.models.communication_models import (
     ExpertProfile, MoERoutingDecision)
 from src.infrastructure.engine.models.similarity import \
     EmbeddingSimilarityService
-
-from .audit_logger import SwarmAuditLogger
+from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 
 logger = logging.getLogger(__name__)
 
@@ -82,19 +81,19 @@ class MoEGatekeeper:
         cache_key = f"{task_prompt[:128]}_{top_k}"
         if cache_key in self.routing_cache:
             logger.debug(f"Gatekeeper: Cache hit for task '{task_prompt[:20]}...'")
-            return self.routing_cache[cache_key]
+            decision = self.routing_cache[cache_key]
+        else:
+            task_emb = await self.similarity_service.get_embedding(task_prompt)
+            decision = await self._compute_routing(task_prompt, task_emb, top_k)
 
-        task_emb = await self.similarity_service.get_embedding(task_prompt)
-        decision = await self._compute_routing(task_prompt, task_emb, top_k)
+            # Cache Update
+            if len(self.routing_cache) < self.max_cache_size:
+                self.routing_cache[cache_key] = decision
 
         # Phase 70: Track usage for dynamic scaling/cloning
         if self.topology_manager:
             for expert_id in decision.selected_experts:
                 self.topology_manager.record_usage(expert_id)
-
-        # Cache Update
-        if len(self.routing_cache) < self.max_cache_size:
-            self.routing_cache[cache_key] = decision
 
         return decision
 
@@ -120,7 +119,9 @@ class MoEGatekeeper:
             if len(expert_vec) == 0:
                 # Mock a vector based on domains if empty
                 # Use a specific seed based on the domain string for deterministic testing
-                np.random.seed(abs(hash(" ".join(profile.domains))) % (2**32))
+                import zlib
+                seed = zlib.adler32(" ".join(profile.domains).encode()) & 0xFFFFFFFF
+                np.random.seed(seed)
                 expert_vec = np.random.randn(384).astype(np.float32)
                 expert_vec /= np.linalg.norm(expert_vec)
                 profile.specialization_vector = expert_vec.tolist()

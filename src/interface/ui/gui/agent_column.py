@@ -229,9 +229,8 @@ class AgentColumn:
             self.min_btn.config(text="▶")
         self.is_minimized = not self.is_minimized
 
-    def remove_callback(self, frame: tk.Widget, name: str) -> None:
+    def remove_placeholder(self, frame: tk.Widget, name: str) -> None:
         """Standard remove method."""
-        pass  # Placeholder as we usually use the one from AgentManager
 
     def reset_memory(self) -> None:
         """Clears the conversation history for this agent."""
@@ -272,12 +271,14 @@ class AgentColumn:
             self.delegate_callback(target_agent, content, self.file_var.get())
 
     def toggle_context(self) -> None:
+        """Toggle the visibility of the local context text area."""
         if self.local_context.winfo_viewable():
             self.local_context.pack_forget()
         else:
             self.local_context.pack(fill=tk.X, padx=2, pady=2, after=self.ctx_toggle)
 
     def get_data(self) -> dict:
+        """Get the current UI state as a dictionary."""
         return {
             "name": self.agent_name,
             "file": self.file_var.get(),
@@ -288,6 +289,7 @@ class AgentColumn:
         }
 
     def set_data(self, data: dict) -> None:
+        """Set the UI state from a dictionary."""
         self.file_var.set(data.get("file", ""))
         self.backend_cb.set(data.get("backend", "auto"))
         self.model_cb.set(data.get("model", "default"))
@@ -297,6 +299,7 @@ class AgentColumn:
         self.prompt_text.insert("1.0", data.get("prompt", ""))
 
     def get_config(self) -> dict:
+        """Get the configuration for persistent storage."""
         return {
             "type": self.agent_name,
             "backend": self.backend_cb.get(),
@@ -305,6 +308,7 @@ class AgentColumn:
         }
 
     def on_start(self) -> None:
+        """Update UI state when agent starts processing."""
         self.is_running = True
         self.run_btn.config(state=tk.DISABLED)
         self.stop_btn.config(state=tk.NORMAL)
@@ -312,6 +316,7 @@ class AgentColumn:
         self.progress.start()
 
     def on_finish(self) -> None:
+        """Update UI state when agent finishes processing."""
         self.is_running = False
         self.run_btn.config(state=tk.NORMAL)
         self.stop_btn.config(state=tk.DISABLED)

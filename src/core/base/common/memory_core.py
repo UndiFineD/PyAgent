@@ -25,6 +25,7 @@ from typing import Any, Dict, List, Optional
 
 from .file_system_core import FileSystemCore
 from .storage_core import StorageCore
+from .workspace_core import WorkspaceCore
 
 try:
     import rust_core as rc
@@ -56,7 +57,7 @@ class MemoryCore:
         # pylint: disable=attribute-defined-outside-init
         self._fs = FileSystemCore()
         self._storage = StorageCore()
-        self.base_path = Path("data/memory")
+        self.base_path = WorkspaceCore().get_path("data/memory")
         self._fs.ensure_directory(self.base_path)
         self.index_path = Path("data/agent_knowledge_index.json")
 

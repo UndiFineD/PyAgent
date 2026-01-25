@@ -34,6 +34,8 @@ from src.core.base.logic.neural_pruning_engine import NeuralPruningEngine
 
 
 class TestPhase40(IsolatedAsyncioTestCase):
+    """Integrations tests for neural pruning and debugging."""
+
     def setUp(self):
         self.workspace_root = os.getcwd()
         logging.basicConfig(level=logging.DEBUG)
@@ -68,10 +70,10 @@ class TestPhase40(IsolatedAsyncioTestCase):
         print(f"Efficient Weight: {efficient_weight}")
         print(f"Wasteful Weight: {wasteful_weight}")
 
-        self.assertGreater(efficient_weight, wasteful_weight)
+        self.assertGreater(efficient_weight.weight, wasteful_weight.weight)
 
         # Run pruning cycle with a threshold that should prune WastefulAgent
-        result = orchestrator.run_pruning_cycle(threshold=1.0)
+        result = orchestrator.run_pruning_cycle(threshold=0.8)
         self.assertIn("WastefulAgent", result["pruned_nodes"])
         self.assertNotIn("EfficientAgent", result["pruned_nodes"])
 

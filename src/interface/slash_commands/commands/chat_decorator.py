@@ -28,8 +28,8 @@ import html
 import re
 from typing import Literal
 
-from src.interface.slash_commands.core import CommandContext, CommandResult
-from src.interface.slash_commands.registry import register
+from ..core import CommandContext, CommandResult
+from ..registry import register
 
 # Safe inline CSS styles (no external resources, no scripts)
 STYLES = {

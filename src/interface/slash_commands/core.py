@@ -412,13 +412,13 @@ class SlashCommands:
             prefix: Command prefix (default: "/")
             auto_load: Whether to auto-load built-in commands
         """
-        from src.interface.slash_commands.registry import get_global_registry
+        from .registry import get_global_registry
 
         self.registry = registry or get_global_registry()
         self.prefix = prefix
 
         if auto_load:
-            from src.interface.slash_commands.loader import load_commands
+            from .loader import load_commands
 
             load_commands(self.registry)
 

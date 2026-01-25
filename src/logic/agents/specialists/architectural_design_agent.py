@@ -156,9 +156,14 @@ class ArchitecturalDesignAgent(BaseAgent):
             "Produce the final refined spatial concept mapping."
         )
         final_concept = await self.run_subagent("generator: final refinement", final_prompt)
+        self.design_state["concepts"].append(final_concept)
         self.design_state["spatial_concept"] = final_concept
         self.current_phase = DesignPhase.CONCEPT_GENERATION
-        return {"phase": self.current_phase.value, "concept": final_concept, "critique": critique}
+        return {
+            "phase": self.current_phase.value,
+            "final_optimized_concept": final_concept,
+            "internal_critique": critique
+        }
 
     @as_tool
     async def iterative_visual_refinement(self, visual_feedback: str) -> Dict[str, Any]:

@@ -34,11 +34,11 @@ class KnowledgeMixin:
             # pylint: disable=import-outside-toplevel
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
 
-            self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=Path("data/agents"))
+            self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=workspace_root / "data/agents")
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
 
-        self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
+        self.sharded_knowledge = ShardedKnowledgeCore(base_path=workspace_root / "data/agents")
         self._local_global_context: Any = None
         self._workspace_root = workspace_root
         self._notes: list[str] = []

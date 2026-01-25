@@ -36,13 +36,14 @@ class RetryHelper:
         self.delay_seconds = float(delay_seconds)
 
     def retry(self, fn: Callable[[], T]) -> T:
+        """Retry a function multiple times."""
         last_exc: BaseException | None = None
         for attempt in range(self.max_retries):
             try:
                 return fn()
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # noqa: BLE001
-                last_exc = exc
+                last_exc = e
                 if attempt == self.max_retries - 1:
                     raise
                 if self.delay_seconds > 0:

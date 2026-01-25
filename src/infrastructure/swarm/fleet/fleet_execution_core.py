@@ -156,6 +156,9 @@ class FleetExecutionCore:
             self.fleet.state.get(arg[1:], arg) if isinstance(arg, str) and arg.startswith("$") else arg for arg in args
         ]
 
+        variant_name = agent_name  # Placeholder for Phase 105
+        _ = variant_name
+
         agent = self.fleet.agents.get(agent_name)
         if not agent:
             err = f"Error: Agent '{agent_name}' not found."
@@ -179,7 +182,8 @@ class FleetExecutionCore:
 
         action_fn = getattr(agent, action_name, None)
         if not action_fn:
-            return f"### Error from {agent_name}\nAction '{action_name}' not supported.\n"
+            err = f"Action '{action_name}' not supported."
+            return f"### Error from {agent_name}\n{err}\n"
 
         trace_id = f"{workflow_id}_{agent_name}_{action_name}"
         start_time = time.time()
@@ -265,6 +269,21 @@ class FleetExecutionCore:
                 await self.fleet.record_success(
                     res, workflow_id, agent_name, action_name, args, token_info, trace_id, start_time
                 )
+
+                # Phase 96: Explainability and Reasoning Trace
+                try:
+                    explanation_agent = self.fleet.explainability
+                    if explanation_agent:
+                        # justify_action handles both prompt and result-based logic
+                        justification = explanation_agent.justify_action(agent_name, action_name, res)
+                        explanation_agent.log_reasoning_step(
+                            workflow_id, agent_name, action_name, justification, {"args": args}
+                        )
+                    else:
+                        logging.warning("Fleet: Explainability agent not found.")
+                except Exception as e:  # pylint: disable=broad-exception-caught
+                    logging.error(f"Fleet: Explainability trace failed: {e}")
+
                 self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
                 success = True
             except Exception as exc:  # pylint: disable=broad-exception-caught
