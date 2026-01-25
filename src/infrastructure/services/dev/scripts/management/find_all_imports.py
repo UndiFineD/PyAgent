@@ -32,7 +32,7 @@ for root_dir in ["src", "tests"]:
                         for i, line in enumerate(f):
                             if "from agent_" in line or "import agent_" in line or "from classes." in line:
                                 results.append(f"{path}:{i + 1}:{line.strip()}")
-                except Exception:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     pass
 with open("find_result.txt", "w", encoding="utf-8") as f:
     f.write("\n".join(results))

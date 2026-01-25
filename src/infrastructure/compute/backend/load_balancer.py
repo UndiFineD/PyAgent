@@ -45,8 +45,6 @@ class LoadBalancer:
     def __init__(
         self,
         strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN,
-        *args,
-        **kwargs,
     ) -> None:
         """Initialize load balancer.
 
@@ -117,10 +115,10 @@ class LoadBalancer:
                 backend = enabled[self._index % len(enabled)]
                 self._index += 1
                 return backend
-            elif self.strategy == LoadBalanceStrategy.LEAST_CONNECTIONS:
+            if self.strategy == LoadBalanceStrategy.LEAST_CONNECTIONS:
                 backend = min(enabled, key=lambda b: self._connections.get(b.name, 0))
                 return backend
-            elif self.strategy == LoadBalanceStrategy.WEIGHTED:
+            if self.strategy == LoadBalanceStrategy.WEIGHTED:
                 # Weighted round robin
                 total_weight = sum(b.weight for b in enabled)
                 if total_weight == 0:
@@ -133,9 +131,9 @@ class LoadBalancer:
                         self._index += 1
                         return backend
                 return enabled[-1]
-            else:
-                # FAILOVER
-                return enabled[0]
+
+            # FAILOVER
+            return enabled[0]
 
     def mark_connection_start(self, name: str) -> None:
         """Mark connection started for backend."""

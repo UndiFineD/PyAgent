@@ -46,7 +46,7 @@ class AttributionEngine:
 
     def _load(self) -> list[dict[str, Any]]:
         if self.log_file.exists():
-            with open(self.log_file) as f:
+            with open(self.log_file, encoding='utf-8') as f:
                 return json.load(f)
         return []
 
@@ -80,7 +80,7 @@ class AttributionEngine:
         self._save()
 
     def _save(self) -> None:
-        with open(self.log_file, "w") as f:
+        with open(self.log_file, 'w', encoding='utf-8') as f:
             json.dump(self.records, f, indent=2)
 
     def get_lineage(self, content_hash: str) -> list[dict[str, Any]]:

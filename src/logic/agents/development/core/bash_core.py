@@ -111,7 +111,7 @@ class BashCore:
                 "issues": [],
                 "error": "shellcheck not found. Please install it.",
             }
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             error_msg = str(e)
             if recorder:
                 recorder.record_interaction(

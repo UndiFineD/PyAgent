@@ -41,13 +41,11 @@ class AttentionBackend(ABC, Generic[T]):
     @abstractmethod
     def get_name() -> str:
         """Get the backend name."""
-        ...
 
     @staticmethod
     @abstractmethod
     def get_capabilities() -> AttentionCapabilities:
         """Get backend capabilities."""
-        ...
 
     @abstractmethod
     def forward(
@@ -73,7 +71,6 @@ class AttentionBackend(ABC, Generic[T]):
         Returns:
             Attention output [batch*seq, num_heads, head_dim]
         """
-        ...
 
     def supports(self, attn_type: AttentionType) -> bool:
         """Check if backend supports attention type."""

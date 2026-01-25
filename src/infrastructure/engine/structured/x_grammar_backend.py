@@ -94,7 +94,7 @@ class TokenizerInfo:
     @property
     def token_strings(self) -> Dict[int, str]:
         """Get mapping of token ID to string."""
-        return {i: s for i, s in enumerate(self.encoded_vocab)}
+        return dict(enumerate(self.encoded_vocab))
 
     @property
     def eos_token_id(self) -> Optional[int]:
@@ -210,7 +210,7 @@ class CompiledGrammar:
 
     def rollback(self, num_tokens: int) -> None:
         """Rollback the last N tokens."""
-        if num_tokens > 0 and len(self._accepted_tokens) >= num_tokens:
+        if 0 < num_tokens <= len(self._accepted_tokens):
             self._accepted_tokens = self._accepted_tokens[:-num_tokens]
             self._state_history = self._state_history[: len(self._accepted_tokens) + 1]
             self._current_state = self._state_history[-1]

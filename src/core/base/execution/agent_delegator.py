@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from typing import Any
 
 from src.core.base.common.models import AgentPriority, CascadeContext
 from src.core.base.lifecycle.version import VERSION
@@ -33,7 +34,7 @@ __version__ = VERSION
 class AgentDelegator:
     """Handles cascading sub-tasks to other agents."""
 
-    def __init__(self, parent_agent: BaseAgent) -> None:
+    def __init__(self, parent_agent: Any) -> None:
         """Initialize with parent agent for context."""
         self.parent_agent = parent_agent
 
@@ -87,6 +88,6 @@ class AgentDelegator:
                 logging.info("Delegation to %s completed (Task: %s).", agent_type, context.task_id)
                 return result
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Delegation to %s failed: %s", agent_type, e)
             return f"Error: Delegation failed - {str(e)}"

@@ -1,0 +1,46 @@
+diff --git a/src/logic/agents/development/SecurityAuditManager.py b/src/logic/agents/development/SecurityAuditManager.py
+index 2488274..eec36c8 100644
+--- a/src/logic/agents/development/SecurityAuditManager.py
++++ b/src/logic/agents/development/SecurityAuditManager.py
+@@ -27,13 +27,23 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import uuid
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class SecurityAuditManager:
+     """Manages fleet security including certificates and access control."""
+-    
++
+     def __init__(self) -> None:
+         self.certificates: dict[str, dict[str, Any]] = {}
+ 
+@@ -51,7 +61,7 @@ class SecurityAuditManager:
+     def audit_agent_permissions(self, agent_id: str) -> list[str]:
+         """Audits an agent's permissions against the security policy."""
+         # Simulated audit
+-        violations = []
++        violations: list[Any] = []
+         logging.info(f"Auditing agent {agent_id}...")
+         return violations
+ 
+@@ -62,4 +72,4 @@ class SecurityAuditManager:
+         for forbidden in blacklist:
+             if forbidden in command.lower():
+                 return False
+-        return True
+\ No newline at end of file
++        return True

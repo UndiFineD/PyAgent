@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/context/utils/RefactoringAdvisor.py b/src/logic/agents/cognitive/context/utils/RefactoringAdvisor.py
+index be69e66..cdac2c9 100644
+--- a/src/logic/agents/cognitive/context/utils/RefactoringAdvisor.py
++++ b/src/logic/agents/cognitive/context/utils/RefactoringAdvisor.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.RefactoringSuggestion import RefactoringSuggestion
+-from typing import Any, Dict, List
++from typing import Any
+ import re
+ 
+ __version__ = VERSION

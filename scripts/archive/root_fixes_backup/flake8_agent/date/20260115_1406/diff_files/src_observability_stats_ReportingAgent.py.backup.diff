@@ -1,0 +1,90 @@
+diff --git a/src/observability/stats/ReportingAgent.py b/src/observability/stats/ReportingAgent.py
+index 30d055c..9adeba6 100644
+--- a/src/observability/stats/ReportingAgent.py
++++ b/src/observability/stats/ReportingAgent.py
+@@ -24,6 +24,11 @@ from src.core.base.BaseAgent import BaseAgent
+ if TYPE_CHECKING:
+     from src.infrastructure.fleet.FleetManager import FleetManager
+ 
++
++
++
++
++
+ class ReportingAgent(BaseAgent):
+     """
+     Observer agent that generates executive dashboards and reports
+@@ -38,7 +43,7 @@ class ReportingAgent(BaseAgent):
+     async def generate_dashboard(self) -> str:
+         """Runs a workflow to gather data and build a markdown dashboard."""
+         logging.info("ReportingAgent: Initiating dashboard generation workflow...")
+-        
++
+         # Load required agents if not present
+         from src.logic.agents.cognitive.MemoryConsolidationAgent import MemoryConsolidationAgent
+         from src.observability.stats.TransparencyAgent import TransparencyAgent
+@@ -51,7 +56,7 @@ class ReportingAgent(BaseAgent):
+         from src.logic.agents.system.MCPAgent import MCPAgent
+         from src.logic.agents.development.ToolEvolutionAgent import ToolEvolutionAgent
+         from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
+-        
++
+         self.fleet.register_agent("Consolidator", MemoryConsolidationAgent, str(self.workspace_root / "src/logic/agents/cognitive/MemoryConsolidationAgent.py"))
+         self.fleet.register_agent("Transparency", TransparencyAgent, str(self.workspace_root / "src/observability/stats/TransparencyAgent.py"))
+         self.fleet.register_agent("SpecAgent", SpecToolAgent, str(self.workspace_root / "src/logic/agents/development/SpecToolAgent.py"))
+@@ -66,12 +71,12 @@ class ReportingAgent(BaseAgent):
+ 
+         metrics = self.fleet.telemetry.get_metrics()
+         gantt_lines = ["gantt", "    title Fleet Performance Overview", "    dateFormat  HH:mm:ss", "    axisFormat %H:%M:%S"]
+-        
++
+         for m in metrics[-10:]: # Last 10
+             start_time = datetime.fromtimestamp(m.get("timestamp", time.time())).strftime("%H:%M:%S")
+             duration_sec = m.get("duration", 0)
+             gantt_lines.append(f"    {m.get('agent', 'unknown')} : {m.get('action', 'none')}, {start_time}, {duration_sec}s")
+-            
++
+         mermaid_gantt = "```mermaid\n" + "\n".join(gantt_lines) + "\n```"
+ 
+         workflow = [
+@@ -82,10 +87,10 @@ class ReportingAgent(BaseAgent):
+             {"agent": "Visualizer", "action": "generate_call_graph", "args": ["src/core"]},
+             {"agent": "Knowledge", "action": "get_graph_mermaid", "args": []}
+         ]
+-        
++
+         raw_report = await self.fleet.execute_workflow("Dashboard Update", workflow)
+         summary = self.fleet.telemetry.get_summary()
+-        
++
+         dashboard = [
+             "# 🚀 PyAgent Active Progress Dashboard",
+             f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*",
+@@ -99,17 +104,24 @@ class ReportingAgent(BaseAgent):
+             "## 📝 Detailed Workflow Report",
+             raw_report
+         ]
+-        
++
+         return "\n".join(dashboard)
+ 
+     async def improve_content(self, prompt: str) -> str:
+         """Alias for dashboard generation or refinement."""
+         return await self.generate_dashboard()
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     # Local test
+     import asyncio
++    from src.observability.StructuredLogger import StructuredLogger
+     from src.infrastructure.fleet.FleetManager import FleetManager
++    logger = StructuredLogger(__name__)
+     f = FleetManager()
+     agent = ReportingAgent(f)
+-    print(asyncio.run(agent.generate_dashboard()))
+\ No newline at end of file
++    logger.info(asyncio.run(agent.generate_dashboard()))

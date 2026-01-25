@@ -22,6 +22,7 @@ __version__ = VERSION
 
 
 class ProviderType(Enum):
+    """Types of compute providers available."""
     LOCAL = "local"
     GITHUB = "github"
     AZURE = "azure"
@@ -30,6 +31,7 @@ class ProviderType(Enum):
 
 
 class ScalingStrategy(Enum):
+    """Strategies for dynamic fleet scaling."""
     ROUND_ROBIN = "round_robin"
     LEAST_LOADED = "least_loaded"
     LATENCY_WEIGHTED = "latency_weighted"
@@ -62,6 +64,7 @@ class ScalingDecision:
     urgency: float = 0.5  # 0.0 to 1.0
 
 
+# pylint: disable=too-many-ancestors
 class ScalingAgent(BaseAgent):
     """
     Agent specializing in dynamic fleet scaling, multi-provider deployment,
@@ -86,14 +89,17 @@ class ScalingAgent(BaseAgent):
 
     @property
     def total_capacity(self) -> int:
+        """Calculates total healthy capacity."""
         return sum(p.capacity for p in self._providers.values() if p.is_healthy)
 
     @property
     def total_active(self) -> int:
+        """Calculates total active agents across all providers."""
         return sum(p.active_agents for p in self._providers.values())
 
     @property
     def utilization(self) -> float:
+        """Calculates current fleet utilization."""
         cap = self.total_capacity
         return self.total_active / cap if cap > 0 else 0.0
 
@@ -258,7 +264,7 @@ class ScalingAgent(BaseAgent):
                     remaining -= alloc
             return result
 
-        elif priority == "speed":
+        if priority == "speed":
             # Prefer low-latency providers
             sorted_providers = sorted(healthy.items(), key=lambda x: x[1].avg_latency_ms)
             result = {}
@@ -270,13 +276,13 @@ class ScalingAgent(BaseAgent):
                     remaining -= alloc
             return result
 
-        else:  # balanced
-            total_cap = sum(m.capacity for m in healthy.values())
-            return (
-                {pt: max(1, int(target * (m.capacity / total_cap))) for pt, m in healthy.items()}
-                if total_cap > 0
-                else {}
-            )
+        # balanced
+        total_cap = sum(m.capacity for m in healthy.values())
+        return (
+            {pt: max(1, int(target * (m.capacity / total_cap))) for pt, m in healthy.items()}
+            if total_cap > 0
+            else {}
+        )
 
     def _select_provider(self, strategy: ScalingStrategy) -> ProviderType:
         """Selects a provider based on the current strategy."""
@@ -290,17 +296,17 @@ class ScalingAgent(BaseAgent):
             idx = len(self._scaling_history) % len(healthy)
             return healthy[idx]
 
-        elif strategy == ScalingStrategy.LEAST_LOADED:
+        if strategy == ScalingStrategy.LEAST_LOADED:
             return min(
                 healthy,
                 key=lambda pt: self._providers[pt].active_agents / max(1, self._providers[pt].capacity)
             )
 
-        elif strategy == ScalingStrategy.LATENCY_WEIGHTED:
+        if strategy == ScalingStrategy.LATENCY_WEIGHTED:
             return min(healthy, key=lambda pt: self._providers[pt].avg_latency_ms)
 
-        elif strategy == ScalingStrategy.COST_OPTIMIZED:
+        if strategy == ScalingStrategy.COST_OPTIMIZED:
             return min(healthy, key=lambda pt: self._providers[pt].cost_per_token)
 
-        else:  # PRIORITY_BASED
-            return healthy[0]
+        # PRIORITY_BASED
+        return healthy[0]

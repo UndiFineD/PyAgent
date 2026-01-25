@@ -1,0 +1,25 @@
+diff --git a/src/logic/agents/swarm/FleetEconomyAgent.py b/src/logic/agents/swarm/FleetEconomyAgent.py
+index efc88a1..ecd9408 100644
+--- a/src/logic/agents/swarm/FleetEconomyAgent.py
++++ b/src/logic/agents/swarm/FleetEconomyAgent.py
+@@ -108,5 +108,19 @@ class FleetEconomyAgent:
+             "task": task_id
+         }
+ 
++    def resolve_bids(self) -> dict[str, Any]:
++        """Resolves all pending auctions (Phase 77)."""
++        allocated = []
++        with sqlite3.connect(self.db_path) as conn:
++            cursor = conn.execute("SELECT DISTINCT task_id FROM bids WHERE status = 'active'")
++            tasks = [row[0] for row in cursor.fetchall()]
++
++        for task_id in tasks:
++            res = self.resolve_auction(task_id)
++            if "winner" in res:
++                allocated.append(res["task"])
++        
++        return {"allocated_tasks": allocated}
++
+     def get_wallet_summary(self) -> dict[str, float]:
+         return self.wallets
+\ No newline at end of file

@@ -43,7 +43,7 @@ class MorphologyCore:
         if HAS_RUST:
             try:
                 return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         set_a, set_b = set(path_a), set(path_b)
         if not set_a or not set_b:

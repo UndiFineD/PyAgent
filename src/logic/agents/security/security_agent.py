@@ -24,7 +24,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-class SecurityAgent(BaseAgent):
+class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Agent for security analysis of code and configuration."""
 
     def __init__(self, file_path: str) -> None:

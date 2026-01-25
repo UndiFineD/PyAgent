@@ -21,6 +21,7 @@ import csv
 import hashlib
 import json
 import logging
+import time
 import zlib
 from collections.abc import Callable
 from datetime import datetime
@@ -121,13 +122,18 @@ class StatsAgent:
         tags: dict[str, str] | None = None,
     ) -> Metric:
         """Add a metric value."""
+        # Note: Core Metric doesn't support namespace natively.
+        # We store it in tags for compatibility.
+        actual_tags = tags or {}
+        if namespace != "default":
+            actual_tags["namespace"] = namespace
+
         metric = Metric(
             name=name,
             value=value,
             metric_type=metric_type,
-            timestamp=datetime.now().isoformat(),
-            namespace=namespace,
-            tags=tags or {},
+            timestamp=time.time(),
+            tags=actual_tags,
         )
         if name not in self._metrics:
             self._metrics[name] = []
@@ -366,8 +372,7 @@ class StatsAgent:
                 value=item["value"],
                 metric_type=metric_type,
                 timestamp=item["timestamp"],
-                namespace=namespace,
-                tags=item.get("tags", {}),
+                tags={**item.get("tags", {}), "namespace": namespace},
             )
             for item in data
         ]
@@ -444,7 +449,7 @@ class StatsAgent:
 
     def track_code_coverage(self, coverage_report: str) -> None:
         """Track code coverage metrics from a coverage report."""
-        with open(coverage_report) as file:
+        with open(coverage_report, encoding='utf-8') as file:
             coverage_data = json.load(file)
         self.stats["code_coverage"] = coverage_data.get("total_coverage", 0)
 
@@ -452,7 +457,7 @@ class StatsAgent:
         """Export stats to multiple formats."""
         for fmt in formats:
             if fmt == "json":
-                with open(f"{output_path}.json", "w") as json_file:
+                with open(f"{output_path}.json", 'w', encoding='utf-8') as json_file:
                     json.dump(self.stats, json_file, indent=2)
             elif fmt == "csv":
                 with open(f"{output_path}.csv", "w", newline="") as csv_file:
@@ -460,7 +465,7 @@ class StatsAgent:
                     writer.writerow(self.stats.keys())
                     writer.writerow(self.stats.values())
             elif fmt == "html":
-                with open(f"{output_path}.html", "w") as html_file:
+                with open(f"{output_path}.html", 'w', encoding='utf-8') as html_file:
                     html_file.write("<html><body><h1>Stats Report</h1><table>")
                     for key, value in self.stats.items():
                         html_file.write(f"<tr><td>{key}</td><td>{value}</td></tr>")

@@ -83,7 +83,7 @@ class ParallelTestRunner:
                     result = future.result()
                     results.append(result)
                     self.success_count += 1
-                except Exception:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     self.failure_count += 1
                     if fail_fast:
                         executor.shutdown(wait=False)
@@ -107,7 +107,7 @@ class ParallelTestRunner:
                 duration_ms=(time.time() - start) * 1000,
                 worker_id=worker_id,
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return ParallelTestResult(
                 test_name=name,
                 passed=False,

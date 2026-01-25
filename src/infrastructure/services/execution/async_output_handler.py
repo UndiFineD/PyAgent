@@ -219,7 +219,7 @@ def async_copy_to_np(
             output.copy_event = stream.record_event()
 
         output.mark_completed()
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         output.mark_failed(e)
 
     return output

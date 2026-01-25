@@ -189,6 +189,7 @@ class BloomFilter:
 
     def union(self, other: "BloomFilter") -> "BloomFilter":
         """Create union of two filters (must be same size)."""
+        # pylint: disable=protected-access
         if self._size != other._size or self._num_hashes != other._num_hashes:
             raise ValueError("Filters must have same size and hash count")
 
@@ -391,6 +392,7 @@ class ScalableBloomFilter:
 
         if current.fill_ratio > 0.5:
             # Create new filter with tighter FP rate
+            # pylint: disable=protected-access
             new_capacity = current._expected_items * self._growth_factor
             new_fp = self._fp_rate * (self._fp_tightening_ratio ** len(self._filters))
 

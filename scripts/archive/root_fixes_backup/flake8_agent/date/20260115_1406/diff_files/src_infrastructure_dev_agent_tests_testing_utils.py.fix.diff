@@ -1,0 +1,107 @@
+diff --git a/src/infrastructure/dev/agent_tests/testing_utils.py b/src/infrastructure/dev/agent_tests/testing_utils.py
+index 7789389..6165229 100644
+--- a/src/infrastructure/dev/agent_tests/testing_utils.py
++++ b/src/infrastructure/dev/agent_tests/testing_utils.py
+@@ -16,7 +16,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import hashlib
+ import json
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from .enums import TestSourceType
+ from .models import (
+     AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig
+@@ -32,6 +32,16 @@ __version__ = VERSION
+ 
+ """Testing utilities for visual regression, contract testing, and results aggregation."""
+ 
++
++
++
++
++
++
++
++
++
++
+ class VisualRegressionTester:
+     """Visual regression testing for UI components."""
+ 
+@@ -91,11 +101,21 @@ class VisualRegressionTester:
+             result: dict[str, Any] = {
+                 "browser": browser.value,
+                 "component_id": component_id,
++
++
++
++
++
+                 "passed": True
+             }
+             results.append(result)
+         return results
+ 
++
++
++
++
++
+ class ContractTestRunner:
+     """Contract testing for API boundaries."""
+ 
+@@ -179,6 +199,11 @@ class ContractTestRunner:
+     def export_pact(self, consumer: str) -> str:
+         """Export contracts in Pact format."""
+         contracts = self.get_contracts_for_consumer(consumer)
++
++
++
++
++
+         pact: dict[str, Any] = {
+             "consumer": {"name": consumer},
+             "provider": {"name": contracts[0].provider if contracts else ""},
+@@ -189,6 +214,11 @@ class ContractTestRunner:
+         }
+         return json.dumps(pact, indent=2)
+ 
++
++
++
++
++
+ class ResultAggregator:
+     """Aggregate test results from multiple sources."""
+ 
+@@ -322,6 +352,11 @@ class ResultAggregator:
+         earlier_rate = (
+             sum(1 for r in earlier_results if r.status == TestStatus.PASSED) /
+             len(earlier_results) if len(earlier_results) > 0 else 0
++
++
++
++
++
+         )
+         later_rate = (
+             sum(1 for r in later_results if r.status == TestStatus.PASSED) /
+@@ -337,6 +372,11 @@ class ResultAggregator:
+ 
+         return {"pass_rate_trend": trend}
+ 
++
++
++
++
++
+ class TestMetricsCollector:
+     """Collect test execution metrics."""
+     __test__ = False
+@@ -368,4 +408,4 @@ class TestMetricsCollector:
+ 
+     def get_flaky_tests(self) -> dict[str, int]:
+         """Get flaky tests."""
+-        return self.flaky_tests.copy()
+\ No newline at end of file
++        return self.flaky_tests.copy()

@@ -1,0 +1,111 @@
+diff --git a/src/logic/agents/development/DocInferenceAgent.py b/src/logic/agents/development/DocInferenceAgent.py
+index 0bd5206..4c71d9e 100644
+--- a/src/logic/agents/development/DocInferenceAgent.py
++++ b/src/logic/agents/development/DocInferenceAgent.py
+@@ -27,7 +27,7 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool, create_main_function
+ 
+@@ -39,9 +39,14 @@ try:
+ except ImportError:
+     HAS_PYPDF = False
+ 
++
++
++
++
++
+ class DocInferenceAgent(BaseAgent):
+     """Manages high-accuracy OCR and document layout reconstruction."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -55,17 +60,17 @@ class DocInferenceAgent(BaseAgent):
+     @as_tool
+     def parse_pdf_text(self, pdf_path: str) -> str:
+         """Reads text from a PDF file using pypdf.
+-        
++
+         Args:
+             pdf_path: Path to the PDF file.
+         """
+         if not HAS_PYPDF:
+             return "Error: pypdf library not installed. Please install it to use this tool."
+-            
++
+         path = Path(pdf_path)
+         if not path.exists():
+             return f"Error: File {pdf_path} not found."
+-            
++
+         try:
+             reader = PdfReader(pdf_path)
+             text = ""
+@@ -76,20 +81,20 @@ class DocInferenceAgent(BaseAgent):
+             return f"Error parsing PDF: {str(e)}"
+ 
+     @as_tool
+-    def ingest_document_to_knowledge(self, doc_path: str, tags: list[str] = None) -> dict[str, Any]:
++    def ingest_document_to_knowledge(self, doc_path: str, tags: list[str] | None = None) -> dict[str, Any]:
+         """Converts a document into context-aware Knowledge for the Fleet.
+-        
++
+         Args:
+             doc_path: Path to the document (PDF, Image, Text).
+             tags: Optional metadata tags.
+         """
+         logging.info(f"DocInference: Ingesting {doc_path} into Knowledge.")
+         content = self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."
+-        
++
+         # Here we would typically interface with KnowledgeAgent or save to a known export path
+         export_dir = Path("data/memory/knowledge_exports")
+         export_dir.mkdir(exist_ok=True)
+-        
++
+         knowledge_file = export_dir / f"{Path(doc_path).stem}_knowledge.json"
+         knowledge_data = {
+             "source": doc_path,
+@@ -97,10 +102,10 @@ class DocInferenceAgent(BaseAgent):
+             "tags": tags or ["ingested", "doc_inference"],
+             "type": "unstructured_to_knowledge"
+         }
+-        
++
+         with open(knowledge_file, 'w', encoding='utf-8') as f:
+             json.dump(knowledge_data, f, indent=4)
+-            
++
+         return {
+             "status": "success",
+             "message": f"Successfully ingested {doc_path} into {knowledge_file}",
+@@ -113,7 +118,7 @@ class DocInferenceAgent(BaseAgent):
+         path = Path(doc_path)
+         if not path.exists():
+             return f"Error: Document {doc_path} not found."
+-            
++
+         logging.info(f"DocInference: Processing {doc_path} into {format}")
+         # Mocking the layout conversion logic
+         return f"Successfully reconstructed {doc_path} as {format}. Tables extracted: 2, Handwriting detected: Yes."
+@@ -137,6 +142,11 @@ class DocInferenceAgent(BaseAgent):
+         """Generic processing helper."""
+         return f"DocInference status: Layout engine active. Ready for {prompt}."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(DocInferenceAgent, "Document Inference Agent", "Path to document")
+-    main()
+\ No newline at end of file
++    main()

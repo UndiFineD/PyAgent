@@ -27,7 +27,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-class LegalAuditAgent(BaseAgent):
+class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Phase 59: Autonomous Legal & Smart Contract Auditing.
     Scans codebases for licensing risks, liability concerns, and smart contract vulnerabilities.
@@ -51,6 +51,7 @@ class LegalAuditAgent(BaseAgent):
         Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
         """
+        _ = project_license
         scan = self.scan_licensing(content)
         violations = [
             license_name for license_name in scan["detected_licenses"] if license_name in self.license_blacklist

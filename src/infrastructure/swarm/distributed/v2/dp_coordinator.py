@@ -108,7 +108,7 @@ class DPCoordinatorV2:
             if msg.get("type") == "NEW_WAVE":
                 self.current_wave = msg["wave_id"]
             return msg
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"ZMQ Receive failed: {e}")
             return None
 

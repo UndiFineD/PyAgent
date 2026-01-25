@@ -1,0 +1,34 @@
+diff --git a/src/infrastructure/dev/test_utils/BaselineManager.py b/src/infrastructure/dev/test_utils/BaselineManager.py
+index 340af9b..4e95428 100644
+--- a/src/infrastructure/dev/test_utils/BaselineManager.py
++++ b/src/infrastructure/dev/test_utils/BaselineManager.py
+@@ -24,11 +24,21 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TestBaseline import TestBaseline
+ from pathlib import Path
+-from typing import Any, Dict, Optional
++from typing import Any
+ import json
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class BaselineManager:
+     """Manages test baselines for comparison.
+ 
+@@ -156,4 +166,4 @@ class BaselineManager:
+             "baseline_version": baseline.version,
+             "diffs": diffs,
+             "passed": len(diffs) == 0,  # type: ignore[arg-type]
+-        }
+\ No newline at end of file
++        }

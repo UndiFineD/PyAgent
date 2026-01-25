@@ -106,7 +106,7 @@ class ChatRenderer(PromptRenderer):
             return CompletionRenderer(self.tokenizer, self.max_model_tokens).render(config)
 
         # Apply chat template
-        text = self._apply_template(
+        text = self.apply_template(
             config.messages,
             config.chat_template or self.DEFAULT_TEMPLATE,
             config.add_generation_prompt,
@@ -135,7 +135,7 @@ class ChatRenderer(PromptRenderer):
             cache_salt=self._generate_cache_salt(config),
         )
 
-    def _apply_template(
+    def apply_template(
         self,
         messages: List[Dict[str, Any]],
         template: str,
@@ -143,7 +143,7 @@ class ChatRenderer(PromptRenderer):
     ) -> str:
         """Apply Jinja2 chat template."""
         # Try Rust acceleration first
-        from .utils import _try_rust_render_template
+        from .helpers import _try_rust_render_template
 
         rust_rendered = _try_rust_render_template(template, messages, add_generation_prompt)
         if rust_rendered:
@@ -182,13 +182,13 @@ class ChatRenderer(PromptRenderer):
     def _find_image_positions(
         self,
         text: str,
-        images: List[Dict[str, Any]],
+        _images: List[Dict[str, Any]],
     ) -> Optional[List[int]]:
         """Find image placeholder positions in text."""
         patterns = ["<image>", "[IMAGE]", "<|image|>", "{{IMAGE}}"]
 
         # Try Rust acceleration
-        from .utils import _try_rust_find_placeholders
+        from .helpers import _try_rust_find_placeholders
 
         rust_positions = _try_rust_find_placeholders(text, patterns)
         if rust_positions:

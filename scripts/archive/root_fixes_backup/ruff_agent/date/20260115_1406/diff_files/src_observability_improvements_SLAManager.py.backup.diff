@@ -1,0 +1,13 @@
+diff --git a/src/observability/improvements/SLAManager.py b/src/observability/improvements/SLAManager.py
+index d31c602..7cac909 100644
+--- a/src/observability/improvements/SLAManager.py
++++ b/src/observability/improvements/SLAManager.py
+@@ -77,7 +77,7 @@ class SLAManager:
+             else:
+                 try:
+                     created_dt = datetime.fromisoformat(str(created))
+-                except Exception:
++                except (ValueError, TypeError):
+                     created_dt = None
+ 
+             if not created_dt:

@@ -22,17 +22,15 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from .awq import AWQQuantizer
-from .config import QuantConfig, QuantScheme, QuantStrategy
-from .gptq import GPTQQuantizer
-from .linear import LinearQuantizer
-from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
+    from .tensor import QuantizedTensor
+
 
 def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
+    """Packs 8-bit integers into 4-bit representation (two per byte)."""
     flat = data.flatten()
     if len(flat) % 2 != 0:
         flat = np.pad(flat, (0, 1), constant_values=0)
@@ -45,6 +43,7 @@ def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
 
 
 def unpack_int4(packed: NDArray[np.int8]) -> NDArray[np.int8]:
+    """Unpacks 4-bit integers from packed 8-bit bytes."""
     flat = packed.flatten()
     lower = flat & 0x0F
     upper = (flat >> 4) & 0x0F
@@ -64,6 +63,7 @@ def compute_scales_minmax(
     bits: int = 8,
     symmetric: bool = True,
 ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
+    """Computes quantization scales and zero-points using min-max range."""
     qmax = (1 << (bits - 1)) - 1 if symmetric else (1 << bits) - 1
     qmin = -(1 << (bits - 1)) if symmetric else 0
 
@@ -71,45 +71,21 @@ def compute_scales_minmax(
         max_val = np.max(np.abs(weight))
         scale = max_val / qmax if max_val > 0 else 1.0
         return np.array([scale], dtype=np.float32), None
-    else:
-        min_val = np.min(weight)
-        max_val = np.max(weight)
-        scale = (max_val - min_val) / (qmax - qmin)
-        scale = max(scale, 1e-8)
-        zp = int(round(-min_val / scale)) + qmin
-        zp = np.clip(zp, qmin, qmax)
-        return np.array([scale], dtype=np.float32), np.array([zp], dtype=np.int32)
 
-
-def quantize_tensor(
-    tensor: NDArray[np.float32],
-    bits: int = 8,
-    group_size: int = 128,
-    symmetric: bool = True,
-    scheme: str = "linear",
-) -> QuantizedTensor:
-    config = QuantConfig(
-        bits=bits,
-        scheme=QuantScheme[scheme.upper()] if scheme.upper() in QuantScheme.__members__ else QuantScheme.INT8,
-        strategy=QuantStrategy.GROUP if group_size > 0 else QuantStrategy.TENSOR,
-        group_size=group_size,
-        symmetric=symmetric,
-    )
-
-    if scheme.lower() == "awq":
-        quantizer = AWQQuantizer(config)
-    elif scheme.lower() == "gptq":
-        quantizer = GPTQQuantizer(config)
-    else:
-        quantizer = LinearQuantizer(config)
-
-    return quantizer.quantize(tensor)
+    min_val = np.min(weight)
+    max_val = np.max(weight)
+    scale = (max_val - min_val) / (qmax - qmin)
+    scale = max(scale, 1e-8)
+    zp = int(round(-min_val / scale)) + qmin
+    zp = np.clip(zp, qmin, qmax)
+    return np.array([scale], dtype=np.float32), np.array([zp], dtype=np.int32)
 
 
 def get_quantization_error(
     original: NDArray[np.float32],
     qtensor: QuantizedTensor,
 ) -> dict[str, float]:
+    """Calculates error metrics between original and dequantized tensors."""
     dequant = qtensor.dequantize()
 
     mse = np.mean((original - dequant) ** 2)

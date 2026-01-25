@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/development/HandyAgent.py b/src/logic/agents/development/HandyAgent.py
+index 737828e..fe67fa8 100644
+--- a/src/logic/agents/development/HandyAgent.py
++++ b/src/logic/agents/development/HandyAgent.py
+@@ -28,7 +28,7 @@ import subprocess
+ import shutil
+ import time
+ from pathlib import Path
+-from typing import List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+@@ -141,4 +141,4 @@ class HandyAgent(BaseAgent):
+ 
+     def improve_content(self, prompt: str) -> str:
+         """Evaluates a terminal-oriented request."""
+-        return "Handy Agent active. Ready for shell operations."
+\ No newline at end of file
++        return "Handy Agent active. Ready for shell operations."

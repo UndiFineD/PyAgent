@@ -49,27 +49,27 @@ class MultiModalCache(ABC):
     @abstractmethod
     def get(self, key: MediaHash) -> Optional[CacheEntry]:
         """Get entry from cache."""
-        pass
+        raise NotImplementedError("Subclasses must implement get()")
 
     @abstractmethod
     def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
         """Put entry into cache."""
-        pass
+        raise NotImplementedError("Subclasses must implement put()")
 
     @abstractmethod
     def evict(self, count: int = 1) -> int:
         """Evict entries, return number evicted."""
-        pass
+        raise NotImplementedError("Subclasses must implement evict()")
 
     @abstractmethod
     def clear(self) -> None:
         """Clear all entries."""
-        pass
+        raise NotImplementedError("Subclasses must implement clear()")
 
     @abstractmethod
     def contains(self, key: MediaHash) -> bool:
         """Check if key exists in cache."""
-        pass
+        raise NotImplementedError("Subclasses must implement contains()")
 
     def get_or_compute(
         self, key: MediaHash, compute_fn: Callable[[], Any], metadata: Optional[Dict] = None

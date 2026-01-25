@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/agent_tests/mutation_testing.py b/src/infrastructure/dev/agent_tests/mutation_testing.py
+index f77c07f..b097346 100644
+--- a/src/infrastructure/dev/agent_tests/mutation_testing.py
++++ b/src/infrastructure/dev/agent_tests/mutation_testing.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import hashlib
+-from typing import List, Dict
+ from .enums import MutationOperator
+ from .models import Mutation
+ 

@@ -23,8 +23,8 @@ import heapq
 import time
 from typing import Iterator, List, Set, TypeVar
 
-from ..base import RequestQueue
-from ..models import QueuedRequest
+from src.infrastructure.engine.request_queue.base import RequestQueue
+from src.infrastructure.engine.request_queue.models import QueuedRequest
 
 T = TypeVar("T", bound=QueuedRequest)
 
@@ -58,10 +58,10 @@ class PriorityQueue(RequestQueue):
         """Add request (same as add for priority queue)."""
         self.add(request)
 
-    def remove(self, request: T) -> bool:
+    def remove(self, value: T) -> bool:
         """Remove a specific request."""
         try:
-            self._heap.remove(request)
+            self._heap.remove(value)
             heapq.heapify(self._heap)
             return True
         except ValueError:

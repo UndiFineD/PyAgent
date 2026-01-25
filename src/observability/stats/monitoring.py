@@ -52,7 +52,7 @@ class ResourceMonitor:
                 stats["status"] = "WARNING"
             else:
                 stats["status"] = "HEALTHY"
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to gather resource stats: {e}")
             stats["status"] = "ERROR"
         return stats

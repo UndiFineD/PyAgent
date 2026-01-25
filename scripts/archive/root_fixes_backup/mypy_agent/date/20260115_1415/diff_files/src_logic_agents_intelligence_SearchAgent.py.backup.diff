@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/intelligence/SearchAgent.py b/src/logic/agents/intelligence/SearchAgent.py
+index 1e3d9f1..7f3e8c0 100644
+--- a/src/logic/agents/intelligence/SearchAgent.py
++++ b/src/logic/agents/intelligence/SearchAgent.py
+@@ -29,7 +29,6 @@ import os
+ import requests
+ import time
+ from pathlib import Path
+-from typing import Optional
+ from src.core.base.ConnectivityManager import ConnectivityManager
+ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ from .SearchCore import SearchCore
+@@ -183,4 +182,4 @@ class SearchAgent(BaseAgent):
+ 
+ if __name__ == "__main__":
+     main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")
+-    main()
+\ No newline at end of file
++    main()

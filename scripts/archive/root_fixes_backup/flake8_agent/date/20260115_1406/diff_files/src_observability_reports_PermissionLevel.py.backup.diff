@@ -1,0 +1,22 @@
+diff --git a/src/observability/reports/PermissionLevel.py b/src/observability/reports/PermissionLevel.py
+index 9986a60..900f267 100644
+--- a/src/observability/reports/PermissionLevel.py
++++ b/src/observability/reports/PermissionLevel.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class PermissionLevel(Enum):
+     """Permission levels for report access."""
+ 
+     NONE = 0
+     READ = 1
+     WRITE = 2
+-    ADMIN = 3
+\ No newline at end of file
++    ADMIN = 3

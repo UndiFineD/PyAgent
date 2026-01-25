@@ -74,7 +74,7 @@ class KernelAgent(BaseAgent):
                 f"Disk Usage for {path}: {used // (2**30)}GB used / "
                 f"{free // (2**30)}GB free (Total: {total // (2**30)}GB)"
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error checking disk space: {e}"
 
     @as_tool
@@ -120,7 +120,7 @@ class KernelAgent(BaseAgent):
                     self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
                 return "Error: Command timed out after 30 seconds."
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
             return f"Error executing command: {e}"

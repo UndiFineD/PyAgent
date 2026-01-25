@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/IdiomExtractorAgent.py b/src/logic/agents/cognitive/IdiomExtractorAgent.py
+index c3b1f56..a960c7b 100644
+--- a/src/logic/agents/cognitive/IdiomExtractorAgent.py
++++ b/src/logic/agents/cognitive/IdiomExtractorAgent.py
+@@ -24,7 +24,7 @@ import os
+ import json
+ import logging
+ import re
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 

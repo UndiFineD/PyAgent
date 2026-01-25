@@ -66,7 +66,7 @@ class OllamaBackend(LLMBackend):
             self._record("ollama", model, prompt, content, system_prompt=system_prompt, latency_s=latency)
             self._update_status("ollama", True)
             return content
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Lowered logging level for fallback-friendly behavior (Phase 123)
             logging.debug(f"Ollama call failed: {e}")
             self._update_status("ollama", False)

@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/CompileResult.py b/src/observability/reports/CompileResult.py
+index 739dca3..e7e1866 100644
+--- a/src/observability/reports/CompileResult.py
++++ b/src/observability/reports/CompileResult.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 

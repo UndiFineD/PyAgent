@@ -120,8 +120,8 @@ Set of possible schemas for a single prompt:
 """
 
 # TypeVar without default for Python 3.12 compatibility
-T1 = TypeVar("T1", bound=SingletonPrompt)
-T2 = TypeVar("T2", bound=SingletonPrompt)
+T1 = TypeVar("T1", bound=SingletonPrompt)  # pylint: disable=invalid-name
+T2 = TypeVar("T2", bound=SingletonPrompt)  # pylint: disable=invalid-name
 
 
 class ExplicitEncoderDecoderPrompt(TypedDict, Generic[T1, T2]):

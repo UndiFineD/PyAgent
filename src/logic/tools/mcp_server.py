@@ -19,7 +19,14 @@ Mcp server.py module.
 from __future__ import annotations
 
 from fastapi import FastAPI
-from fastapi_mcp import FastApiMCP
+try:
+    from fastapi_mcp import FastApiMCP
+except ImportError:
+    # pylint: disable=invalid-name
+    class FastApiMCP:
+        """Dummy FastApiMCP class for type checking when package is missing."""
+        def __init__(self, *args, **kwargs):
+            pass
 
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent

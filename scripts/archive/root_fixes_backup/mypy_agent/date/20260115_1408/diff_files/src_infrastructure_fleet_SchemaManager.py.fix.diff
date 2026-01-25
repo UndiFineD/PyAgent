@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/fleet/SchemaManager.py b/src/infrastructure/fleet/SchemaManager.py
+index a2dd9ae..5da225a 100644
+--- a/src/infrastructure/fleet/SchemaManager.py
++++ b/src/infrastructure/fleet/SchemaManager.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -50,4 +50,4 @@ class SchemaManager:
+ 
+     def list_known_databases(self) -> list[str]:
+         """Returns IDs of all registered databases."""
+-        return list(self.schemas.keys())
+\ No newline at end of file
++        return list(self.schemas.keys())

@@ -79,10 +79,6 @@ class FlashAttentionBackend(AttentionBackend[None]):
             logger.warning("flash_attn not available, falling back to SDPA")
             return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
 
-        # FlashAttention expects [batch, seqlen, heads, head_dim]
-        # Reshape accordingly
-        batch_seq, num_heads, head_dim = query.shape
-
         q = query.unsqueeze(0)  # Add batch dim
         k = key.unsqueeze(0)
         v = value.unsqueeze(0)

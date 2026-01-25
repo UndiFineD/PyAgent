@@ -1,3 +1,7 @@
+
+"""
+Test Phase65 Compression module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 65: Adaptive Swarm Compression

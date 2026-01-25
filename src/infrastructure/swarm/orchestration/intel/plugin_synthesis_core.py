@@ -93,7 +93,7 @@ class PluginSynthesisCore:
                     if node.attr.startswith("__"):
                         return False
             return True
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     @staticmethod

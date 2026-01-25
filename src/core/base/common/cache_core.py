@@ -52,7 +52,8 @@ class CacheCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.fast_cache_key_rust(content)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return hashlib.md5(content.encode()).hexdigest()
 
@@ -74,7 +75,7 @@ class CacheCore(BaseCore):
             cache_file.write_text(
                 json.dumps({"prompt": prompt, "response": response, "timestamp": time.time(), "ttl": ttl_seconds})
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to write cache file: %s", e)
 
     def get(self, prompt: str) -> Optional[Any]:
@@ -101,6 +102,7 @@ class CacheCore(BaseCore):
                         "ttl": data["ttl"],
                     }
                     return data["response"]
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return None

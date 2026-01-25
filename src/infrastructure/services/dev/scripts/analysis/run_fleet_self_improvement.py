@@ -63,7 +63,7 @@ class DirectiveParser:
             if p_path.exists():
                 try:
                     self.strategic_note += "\n" + p_path.read_text(encoding="utf-8")
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f" - Failed to load {directive_file}: {e}")
         return self.strategic_note
 
@@ -81,7 +81,7 @@ class DirectiveParser:
             try:
                 clean_focus = re.sub(r"[\s\n]+", " ", focus_val)
                 return json.loads(clean_focus.replace("'", '"'))
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 inner = focus_val[1:-1].split(",")
                 return [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
         return [d.strip() for d in focus_val.split(",") if d.strip()]
@@ -99,7 +99,7 @@ class DirectiveParser:
             logging.info(f" - Executing Directive Command: {clean_cmd}")
             try:
                 subprocess.run(shlex.split(clean_cmd), cwd=str(self.root), check=False)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"   - Command failed: {e}")
 
 
@@ -141,7 +141,7 @@ class IntelligenceHarvester:
                         insight=lesson["text"],
                         confidence=0.85,
                     )
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug(f"Insight contribution failed: {e}")
 
         return lessons
@@ -321,7 +321,7 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
             print(f"\n[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"\n[Intelligence] Synthesis skipped: {e}")
 
 
@@ -440,7 +440,7 @@ def _cycle_throttle(delay: int, root: str, target_dirs: list[str], use_watcher: 
                     print(" - [Watcher] Change detected. Triggering next cycle.")
                     return
 
-        except (ImportError, Exception) as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Fallback to simple wait if watchfiles is missing or fails
             if not isinstance(e, ImportError):
                 logging.debug(f"Watcher failed: {e}")

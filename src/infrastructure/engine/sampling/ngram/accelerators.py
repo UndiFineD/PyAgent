@@ -23,6 +23,7 @@ import numpy as np
 
 # Try to import rust_core for acceleration
 try:
+    # pylint: disable=unused-import
     import rust_core  # noqa: F401
 
     HAS_RUST = True
@@ -39,6 +40,14 @@ except ImportError:
 
 
 if HAS_NUMBA:
+
+    @njit(inline="always")
+    def _is_match(tokens: np.ndarray, i: int, pattern: np.ndarray, n: int) -> bool:
+        """Check if pattern matches tokens at index i."""
+        for j in range(n - 1):
+            if tokens[i + j] != pattern[j]:
+                return False
+        return True
 
     @njit
     def _ngram_match_numba(
@@ -65,6 +74,32 @@ if HAS_NUMBA:
                     break
 
         return matches[:match_count]
+
+    @njit(inline="always")
+    def _find_best_match(
+        tokens: np.ndarray,
+        n: int,
+        length: int,
+        k: int,
+        best_len: int,
+        best_proposal: np.ndarray,
+    ) -> int:
+        """Find the best match for a given n-gram length."""
+        pattern = tokens[-(n - 1) :]
+        new_best_len = best_len
+
+        for i in range(length - n):
+            if _is_match(tokens, i, pattern, n):
+                cont_start = i + n - 1
+                cont_len = min(k, length - cont_start)
+
+                if cont_len > new_best_len:
+                    new_best_len = cont_len
+                    for c in range(cont_len):
+                        best_proposal[c] = tokens[cont_start + c]
+                    # Return immediately for greedy match within this n
+                    return new_best_len
+        return new_best_len
 
     @njit(parallel=True)
     def _batch_propose_numba(
@@ -98,26 +133,7 @@ if HAS_NUMBA:
                 if n > length:
                     continue
 
-                pattern = tokens[-(n - 1) :]
-
-                # Find matches
-                for i in range(length - n):
-                    found = True
-                    for j in range(n - 1):
-                        if tokens[i + j] != pattern[j]:
-                            found = False
-                            break
-
-                    if found:
-                        # Get continuation
-                        cont_start = i + n - 1
-                        cont_len = min(k, length - cont_start)
-
-                        if cont_len > best_len:
-                            best_len = cont_len
-                            for c in range(cont_len):
-                                best_proposal[c] = tokens[cont_start + c]
-                            break
+                best_len = _find_best_match(tokens, n, length, k, best_len, best_proposal)
 
                 if best_len > 0:
                     break

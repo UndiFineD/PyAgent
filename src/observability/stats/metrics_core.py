@@ -89,7 +89,7 @@ class TokenCostCore:
                     output_cost=o_cost,
                     currency="USD",
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_token_cost failed: %s. Falling back to Python.", e)
 
         # check cache
@@ -158,7 +158,7 @@ class ModelFallbackCore:
             try:
                 # pylint: disable=no-member
                 return rc.select_best_model(constraints)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust select_best_model failed: %s. Falling back to Python.", e)
 
         max_cost = constraints.get("max_cost", 1.0)
@@ -189,7 +189,7 @@ class ModelFallbackCore:
             try:
                 # pylint: disable=no-member
                 return rc.get_fallback_chain(primary)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust get_fallback_chain failed: %s. Falling back to Python.", e)
 
         fallback_chains = {
@@ -241,7 +241,7 @@ class DerivedMetricCalculator:
             try:
                 # pylint: disable=no-member
                 return rc.evaluate_formula(formula, values)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust evaluate_formula failed: %s. Falling back to Python.", e)
 
         return FormulaCore.evaluate(formula, values)
@@ -303,7 +303,7 @@ class StatsRollupCore:
             try:
                 # pylint: disable=no-member
                 return rc.calculate_p95_rust(values)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_p95_rust failed: %s. Falling back to Python.", e)
 
         if not values or len(values) < 20:
@@ -388,7 +388,7 @@ class ABTestCore:
                 return rc.calculate_statistical_significance(
                     control_values, treatment_values
                 )  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_statistical_significance failed: %s. Using Python fallback.", e)
 
         if not control_values or not treatment_values:
@@ -430,7 +430,7 @@ class ABTestCore:
             try:
                 # pylint: disable=no-member
                 return rc.calculate_sample_size(effect_size, alpha, power)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_sample_size failed: %s. Falling back to Python.", e)
 
         # Simplified formula: n = 2 * (z_alpha + z_beta)^2 / effect_size^2

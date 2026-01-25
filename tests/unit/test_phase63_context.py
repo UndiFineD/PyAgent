@@ -1,3 +1,7 @@
+
+"""
+Test Phase63 Context module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 63: Context Sharding and Locality-Aware MoE

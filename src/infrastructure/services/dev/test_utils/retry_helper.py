@@ -40,7 +40,7 @@ class RetryHelper:
         for attempt in range(self.max_retries):
             try:
                 return fn()
-            except Exception as exc:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # noqa: BLE001
                 last_exc = exc
                 if attempt == self.max_retries - 1:

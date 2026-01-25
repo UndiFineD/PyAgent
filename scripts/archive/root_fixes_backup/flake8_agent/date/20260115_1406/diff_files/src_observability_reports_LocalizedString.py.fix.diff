@@ -1,0 +1,32 @@
+diff --git a/src/observability/reports/LocalizedString.py b/src/observability/reports/LocalizedString.py
+index 99e7672..d6b1f99 100644
+--- a/src/observability/reports/LocalizedString.py
++++ b/src/observability/reports/LocalizedString.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class LocalizedString:
+     """Localized string with translations.
+@@ -38,4 +47,4 @@ class LocalizedString:
+ 
+     key: str
+     translations: dict[str, str] = field(default_factory=dict)  # type: ignore[assignment]
+-    default: str = ""
+\ No newline at end of file
++    default: str = ""

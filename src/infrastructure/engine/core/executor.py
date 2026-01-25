@@ -43,4 +43,3 @@ class MockExecutor(Executor):
 
     def shutdown(self) -> None:
         """No-op shutdown."""
-        pass

@@ -1,0 +1,79 @@
+diff --git a/src/logic/agents/intelligence/ResearchAgent.py b/src/logic/agents/intelligence/ResearchAgent.py
+index ade6b2f..6271372 100644
+--- a/src/logic/agents/intelligence/ResearchAgent.py
++++ b/src/logic/agents/intelligence/ResearchAgent.py
+@@ -25,9 +25,9 @@ Ingests SOTA research (simulated) and generates new agentic tools.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
++from .ResearchCore import ResearchCore
+ 
+ __version__ = VERSION
+ 
+@@ -36,6 +36,7 @@ class ResearchAgent(BaseAgent):
+     
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
++        self.core = ResearchCore()
+         self._system_prompt = (
+             "You are the SOTA Research Agent. "
+             "You follow the SGI-Bench (Scientific General Intelligence) DCAP cycle:\n"
+@@ -51,24 +52,7 @@ class ResearchAgent(BaseAgent):
+         """Executes a full Deliberation-Conception-Action-Perception cycle on a topic."""
+         logging.info(f"RESEARCH: Executing DCAP cycle for {topic}")
+         
+-        # Phase 1: Deliberation
+-        deliberation = f"Deliberating on '{topic}': Assessing implications of {content[:50]}..."
+-        
+-        # Phase 2: Conception
+-        conception = f"Conceiving tool structure for '{topic}' based on extracted patterns."
+-        
+-        # Phase 3: Action
+-        tool_code = f"def {topic.lower().replace(' ', '_')}_tool():\n    return 'Logic from {topic}'"
+-        
+-        # Phase 4: Perception
+-        perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow)."
+-        
+-        result = {
+-            "deliberation": deliberation,
+-            "conception": conception,
+-            "action": tool_code,
+-            "perception": perception
+-        }
++        result = self.core.execute_dcap_cycle(topic, content)
+         
+         if self.memory and hasattr(self.memory, 'add_entity'):
+             self.memory.add_entity(topic, {"type": "dcap_research", "data": result})
+@@ -79,11 +63,10 @@ class ResearchAgent(BaseAgent):
+     def ingest_paper(self, title: str, summary: str) -> str:
+         """Analyzes a research paper summary and identifies new capabilities."""
+         logging.info(f"RESEARCH: Ingesting paper '{title}'")
+-        # In a real system, this would call an LLM to extract a 'Recipe'
+-        f"Analysis of '{title}': Identifies core logic: {summary[:100]}..."
++        analysis = self.core.analyze_paper(title, summary)
+         
+         if self.memory and hasattr(self.memory, 'add_entity'):
+-            self.memory.add_entity(title, {"type": "paper", "summary": summary})
++            self.memory.add_entity(title, {"type": "paper", "summary": summary, "analysis": analysis})
+         
+         return f"Successfully ingested paper '{title}'. Capabilities identified for tool generation."
+ 
+@@ -91,13 +74,8 @@ class ResearchAgent(BaseAgent):
+     def generate_tool_from_research(self, title: str) -> str:
+         """Drafts a Python tool implementation based on an ingested paper."""
+         logging.info(f"RESEARCH: Generating tool based on {title}")
+-        # In a real system, this would use an LLM to write the code
+-        tool_code = f"""
+-# Tool generated from research: {title}
+-def research_driven_logic() -> str:
+-    # Extracted algorithm here
+-    return "Optimized result based on {title}"
+-"""
++        tool_code = self.core.draft_tool_code(title)
++        return tool_code
+         return f"Tool draft generated for '{title}':\n{tool_code}"
+ 
+     def improve_content(self, prompt: str) -> str:

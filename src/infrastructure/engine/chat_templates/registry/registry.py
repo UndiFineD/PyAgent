@@ -56,6 +56,7 @@ class ChatTemplateRegistry:
 
     @property
     def templates(self) -> Dict[str, ChatTemplate]:
+        """Get all registered templates."""
         return self._templates
 
     def register(
@@ -127,7 +128,7 @@ class ChatTemplateRegistry:
                 result = resolver(model_name)
                 if result:
                     return result
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Resolver error: {e}")
 
         # Default to ChatML

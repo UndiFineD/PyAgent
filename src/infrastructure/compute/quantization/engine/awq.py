@@ -48,6 +48,7 @@ class AWQQuantizer(Quantizer):
         weight: NDArray[np.float32],
         activations: NDArray[np.float32] | None = None,
     ) -> QuantizedTensor:
+        """Quantizes weights using activation-aware scaling to protect salient weights."""
         activations = activations if activations is not None else self.calibration_data
 
         if activations is not None:
@@ -68,6 +69,7 @@ class AWQQuantizer(Quantizer):
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
+        """Dequantizes the tensor and reverses AWQ scaling if applicable."""
         result = qtensor.dequantize()
         if qtensor.shape in self._importance_cache:
             importance = self._importance_cache[qtensor.shape]
@@ -79,6 +81,7 @@ class AWQQuantizer(Quantizer):
         activations: NDArray[np.float32],
         weight: NDArray[np.float32],
     ) -> NDArray[np.float32]:
+        """Calculates weight importance scores from calibration activations."""
         act_importance = np.mean(np.abs(activations), axis=0)
         weight_importance = np.max(np.abs(weight), axis=0)
         importance = act_importance * weight_importance

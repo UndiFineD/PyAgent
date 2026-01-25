@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/intelligence/FeatureStoreAgent.py b/src/logic/agents/intelligence/FeatureStoreAgent.py
+index 3c2e174..1da2459 100644
+--- a/src/logic/agents/intelligence/FeatureStoreAgent.py
++++ b/src/logic/agents/intelligence/FeatureStoreAgent.py
+@@ -29,7 +29,7 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ from pathlib import Path
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore

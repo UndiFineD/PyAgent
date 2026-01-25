@@ -1,0 +1,44 @@
+diff --git a/src/logic/agents/system/TemporalShardAgent.py b/src/logic/agents/system/TemporalShardAgent.py
+index e2b8ff4..b1f6432 100644
+--- a/src/logic/agents/system/TemporalShardAgent.py
++++ b/src/logic/agents/system/TemporalShardAgent.py
+@@ -26,12 +26,22 @@ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class TemporalShardAgent(BaseAgent):
+     """
+     Agent responsible for temporal sharding of memory.
+     Allows for 'flashbacks' and retrieval of context based on temporal relevance.
+     """
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -47,7 +57,7 @@ class TemporalShardAgent(BaseAgent):
+         Retrieves relevant context from a specific temporal shard.
+         """
+         logging.info(f"TemporalShardAgent: Retrieving context for {current_task} from {time_window}")
+-        
++
+         # Simulated retrieval
+         return f"FLASHBACK [{time_window}]: Similar task performed. Key findings: used 'as_tool' decorator."
+ 
+@@ -58,4 +68,4 @@ class TemporalShardAgent(BaseAgent):
+         """
+         logging.info(f"TemporalShardAgent: Creating anchor for {event_description[:30]}...")
+         # Persistence logic would go here
+-        return True
+\ No newline at end of file
++        return True

@@ -19,8 +19,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from ..lifecycle.version import VERSION
-from .models import AgentPluginConfig, RateLimitConfig
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.models.agent_models import AgentPluginConfig
+from src.core.base.common.models.fleet_models import RateLimitConfig
 from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
                             _empty_list_str, _empty_plugin_config_list)
 

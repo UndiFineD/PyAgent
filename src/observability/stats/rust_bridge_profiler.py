@@ -56,7 +56,7 @@ class RustBridgeProfiler:
                 self.stats[fname]["calls"] += 1
                 self.stats[fname]["total_ns"] += duration
                 return result
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Still record the time even if it failed
                 duration = time.perf_counter_ns() - start
                 self.stats[fname]["calls"] += 1

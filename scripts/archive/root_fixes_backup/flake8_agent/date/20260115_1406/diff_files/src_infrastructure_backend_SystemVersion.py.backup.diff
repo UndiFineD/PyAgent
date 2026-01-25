@@ -1,0 +1,24 @@
+diff --git a/src/infrastructure/backend/SystemVersion.py b/src/infrastructure/backend/SystemVersion.py
+index 9450a8e..0d58588 100644
+--- a/src/infrastructure/backend/SystemVersion.py
++++ b/src/infrastructure/backend/SystemVersion.py
+@@ -22,7 +22,11 @@
+ 
+ from __future__ import annotations
+ from dataclasses import dataclass, field
+-from typing import List
++
++
++
++
++
+ 
+ @dataclass
+ class SystemVersion:
+@@ -32,4 +36,4 @@ class SystemVersion:
+     version: str
+     capabilities: list[str] = field(default_factory=lambda: [])
+     api_version: str = "v1"
+-    deprecated_features: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    deprecated_features: list[str] = field(default_factory=lambda: [])

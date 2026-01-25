@@ -182,7 +182,7 @@ class CircuitBreaker:
         return self.state == CircuitState.CLOSED
 
     @property
-    def is_open(self) -> bool:
+    def is_open(self, encoding='utf-8') -> bool:
         """Check if circuit is open (rejecting requests)."""
         return self.state == CircuitState.OPEN
 
@@ -324,7 +324,7 @@ class CircuitBreaker:
             # Don't count excluded exceptions as failures
             self._record_success()
             raise
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._record_failure()
             raise
 
@@ -351,7 +351,7 @@ class CircuitBreaker:
         except self._excluded_exceptions:
             self._record_success()
             raise
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._record_failure()
             raise
 

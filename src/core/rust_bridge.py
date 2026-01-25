@@ -53,7 +53,7 @@ class RustBridge:
             return {}
         try:
             return rc.calculate_metrics_rust(content)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("RustBridge: calculate_metrics failed: %s", e)
             return {}
 
@@ -72,7 +72,7 @@ class RustBridge:
             return seed % shard_count
         try:
             return rc.calculate_interaction_shard_md5(key, shard_count)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"RustBridge: calculate_shard_id failed: {e}")
             import hashlib
             h = hashlib.md5(key.encode()).digest()
@@ -93,7 +93,7 @@ class RustBridge:
             return result
         try:
             return rc.bulk_replace_rust(content, replacements)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"RustBridge: bulk_replace failed: {e}")
             return content
 
@@ -118,12 +118,13 @@ class RustBridge:
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(text)
                     results[path] = changed
-                except Exception:  # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                     results[path] = False
             return results
         try:
             return rc.bulk_replace_files_rust(file_paths, replacements)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"RustBridge: bulk_replace_files failed: {e}")
             return {p: False for p in file_paths}
 
@@ -161,6 +162,20 @@ class RustBridge:
         if not RUST_AVAILABLE or not hasattr(rc, "event_query_rust"):
             return None
         return rc.event_query_rust(*args, **kwargs)  # type: ignore
+
+    @staticmethod
+    def image_resize_rust(*args, **kwargs) -> Any:
+        """Audited image resizing."""
+        if not RUST_AVAILABLE or not hasattr(rc, "image_resize_rust"):
+            return None
+        return rc.image_resize_rust(*args, **kwargs)  # type: ignore
+
+    @staticmethod
+    def normalize_pixels_rust(*args, **kwargs) -> Any:
+        """Audited pixel normalization."""
+        if not RUST_AVAILABLE or not hasattr(rc, "normalize_pixels_rust"):
+            return None
+        return rc.normalize_pixels_rust(*args, **kwargs)  # type: ignore
 
     @staticmethod
     def is_rust_active() -> bool:

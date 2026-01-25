@@ -36,6 +36,7 @@ class DequantizedLinear:
         qweight: QuantizedTensor,
         bias: NDArray[np.float32] | None = None,
     ):
+        """Initializes a layer with quantized weights and optional bias."""
         self.qweight = qweight
         self.bias = bias
         self._dequant_cache: NDArray[np.float32] | None = None
@@ -45,6 +46,7 @@ class DequantizedLinear:
         x: NDArray[np.float32],
         use_cache: bool = True,
     ) -> NDArray[np.float32]:
+        """Performs a forward pass, dequantizing the weights on-the-fly."""
         if use_cache and self._dequant_cache is not None:
             weight = self._dequant_cache
         else:
@@ -60,12 +62,15 @@ class DequantizedLinear:
         return output
 
     def clear_cache(self):
+        """Flushes the dequantized weight cache to save memory."""
         self._dequant_cache = None
 
     @property
     def in_features(self) -> int:
+        """Returns the number of input features."""
         return self.qweight.shape[1] if len(self.qweight.shape) >= 2 else self.qweight.shape[0]
 
     @property
     def out_features(self) -> int:
+        """Returns the number of output features."""
         return self.qweight.shape[0]

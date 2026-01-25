@@ -39,6 +39,7 @@ class LogprobsProcessor:
     def process_logits(
         self, logits: np.ndarray, token_ids: np.ndarray, tokenizer: Optional[Any] = None
     ) -> Union[FlatLogprobs, List[LogprobEntry]]:
+        """Process raw logits into formatted logprobs."""
         logprobs = self._log_softmax(logits)
         n = len(token_ids)
         selected_logprobs = logprobs[np.arange(n), token_ids]
@@ -81,11 +82,13 @@ class LogprobsProcessor:
         return [self.process_logits(logits, tids, tokenizer) for logits, tids in zip(batch_logits, batch_token_ids)]
 
     def _log_softmax(self, logits: np.ndarray) -> np.ndarray:
+        """Numerically stable log-softmax."""
         max_logits = np.max(logits, axis=-1, keepdims=True)
         shifted = logits - max_logits
         return shifted - np.log(np.sum(np.exp(shifted), axis=-1, keepdims=True))
 
     def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:
+        """Decode token ID to string if possible."""
         if tokenizer:
             with contextlib.suppress(AttributeError, ValueError, RuntimeError):
                 return tokenizer.decode([tid])
@@ -108,15 +111,18 @@ class StreamingLogprobs:
 
     @property
     def num_tokens(self) -> int:
+        """Get number of accumulated tokens."""
         return self._position
 
     @property
     def mean_logprob(self) -> float:
+        """Get average logprob."""
         with self._lock:
             return self._sum_logprobs / self._position if self._position > 0 else 0.0
 
     @property
     def perplexity(self) -> float:
+        """Get perplexity."""
         with self._lock:
             return math.exp(-self.mean_logprob) if self._position > 0 else 1.0
 
@@ -127,6 +133,7 @@ class StreamingLogprobs:
         top_k_ids: Optional[np.ndarray] = None,
         top_k_logprobs: Optional[np.ndarray] = None,
     ):
+        """Append a new token to the stream."""
         with self._lock:
             if self._position >= self.max_tokens:
                 return
@@ -164,6 +171,7 @@ class StreamingLogprobs:
             self._top_k_lps.fill(-float("inf"))
 
     def finalize(self) -> FlatLogprobs:
+        """Finalize and return accumulated logprobs as FlatLogprobs."""
         with self._lock:
             n = self._position
             return FlatLogprobs(

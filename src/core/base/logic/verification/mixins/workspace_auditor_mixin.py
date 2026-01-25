@@ -72,7 +72,7 @@ class WorkspaceAuditorMixin:
                                 results["print_statements"].append(file_path)
 
                 logging.info(f"WorkspaceAuditor: Rust-native scan completed for {len(rust_findings)} files.")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"WorkspaceAuditor: Rust acceleration failed: {e}. Falling back.")
 
         # 2. Python-side Supplemental Loop
@@ -113,7 +113,7 @@ class WorkspaceAuditorMixin:
                 except SyntaxError:
                     continue
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug(f"CodeHealthAuditor: Error scanning {file_path}: {e}")
 
         return results

@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/DependencyResolver.py b/src/observability/improvements/DependencyResolver.py
+index 948c075..d9ee0df 100644
+--- a/src/observability/improvements/DependencyResolver.py
++++ b/src/observability/improvements/DependencyResolver.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 

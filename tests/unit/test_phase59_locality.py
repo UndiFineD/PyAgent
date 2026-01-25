@@ -1,3 +1,7 @@
+
+"""
+Test Phase59 Locality module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 59: Locality-aware DP

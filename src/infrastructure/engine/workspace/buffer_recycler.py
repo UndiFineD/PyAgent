@@ -56,7 +56,8 @@ class BufferRecycler:
                 buf = rc.buffer_recycle_acquire_rust(target_size)
                 if buf:
                     return buf
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         pool = self._pools.get(target_size)

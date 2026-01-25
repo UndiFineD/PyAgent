@@ -60,11 +60,12 @@ class KnowledgeFusionAgent(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(graph, f, indent=2)
             temp_path.replace(self.global_graph_path)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception:  # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"KnowledgeFusion: Atomic save failed: {e}")
             raise
@@ -100,7 +101,7 @@ class KnowledgeFusionAgent(BaseAgent):
                         graph["nodes"].append(item)
                         added_nodes += 1
 
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"KnowledgeFusion: Error processing shard {path}: {e}")
 
         self._save_global_graph(graph)

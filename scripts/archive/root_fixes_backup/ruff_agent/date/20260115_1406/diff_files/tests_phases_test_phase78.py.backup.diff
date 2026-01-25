@@ -1,0 +1,12 @@
+diff --git a/tests/phases/test_phase78.py b/tests/phases/test_phase78.py
+index 3f495c9..76bbc42 100644
+--- a/tests/phases/test_phase78.py
++++ b/tests/phases/test_phase78.py
+@@ -6,6 +6,7 @@ from pathlib import Path
+ # Ensure src is in sys.path
+ root = Path(__file__).resolve().parents[2].parent
+ if str(root) not in sys.path:
++    sys.path.append(str(root))
+ 
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 

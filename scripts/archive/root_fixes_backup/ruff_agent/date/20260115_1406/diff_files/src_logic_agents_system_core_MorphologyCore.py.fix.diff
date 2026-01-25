@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/system/core/MorphologyCore.py b/src/logic/agents/system/core/MorphologyCore.py
+index aa54c0f..2624fc3 100644
+--- a/src/logic/agents/system/core/MorphologyCore.py
++++ b/src/logic/agents/system/core/MorphologyCore.py
+@@ -1,6 +1,5 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List
+ import json
+ 
+ class MorphologyCore:

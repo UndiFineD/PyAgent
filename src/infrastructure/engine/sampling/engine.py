@@ -34,9 +34,11 @@ class SamplingPipeline:
     """Composable pipeline of samplers."""
 
     def __init__(self, samplers: Optional[List[Sampler]] = None):
+        """Initialize the sampling pipeline."""
         self.samplers = samplers or []
 
     def add_sampler(self, sampler: Sampler) -> "SamplingPipeline":
+        """Add a sampler to the pipeline."""
         self.samplers.append(sampler)
         return self
 
@@ -46,6 +48,7 @@ class SamplingPipeline:
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
+        """Process logits through all samplers."""
         result = logits
         for sampler in self.samplers:
             result = sampler.forward(result, params, state)
@@ -57,6 +60,7 @@ class SamplingPipeline:
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
+        """Sample from processed logits."""
         result = logits
         for sampler in self.samplers[:-1]:
             result = sampler.forward(result, params, state)

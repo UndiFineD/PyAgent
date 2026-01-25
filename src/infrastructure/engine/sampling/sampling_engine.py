@@ -17,9 +17,11 @@ Sampling engine.py module.
 """
 
 # Modularized SamplingEngine Wrapper
+from .advanced_sampling_params import (SamplingEngine,
+                                       create_sampling_engine)
+from .engine import SamplingPipeline, sample_logits
 from .base import HAS_RUST, Sampler
 from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler
-from .engine import SamplingEngine, create_sampling_engine
 from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,
                       TemperatureSampler, TopKSampler, TopKTopPSampler,
                       TopPSampler)
@@ -41,5 +43,7 @@ __all__ = [
     "BeamHypothesis",
     "BeamSearchSampler",
     "SamplingEngine",
+    "SamplingPipeline",
+    "sample_logits",
     "create_sampling_engine",
 ]

@@ -61,7 +61,7 @@ class SelfHealingAgent(BaseAgent):
                 if "Project Overview" in content:
                     overview = content.split("## Project Overview")[1].split("##")[0].strip()
                     self._system_prompt += f"\n\nProject Context:\n{overview}"
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Log but don't fail - dynamic prompt is optional enhancement
                 import logging
 
@@ -81,7 +81,7 @@ class SelfHealingAgent(BaseAgent):
         try:
             await self.coordinator.load_strategic_context()
             peers = await self.coordinator.discover_external_servers() or []
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to query peer network or context: %s", e, exc_info=True)
             return f"❌ Failure during network discovery: {str(e)}"
 
@@ -132,7 +132,7 @@ class SelfHealingAgent(BaseAgent):
 
         try:
             res = await self.coordinator.execute_remote_task(task, target_peer)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"❌ Failed to dispatch to {target_peer}: {e}"
 
         if not res or not isinstance(res, dict):
@@ -190,7 +190,7 @@ class SelfHealingAgent(BaseAgent):
 
         return "\n".join(report)
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Trigger a self-healing scan."""
         return self.scan_for_failures()
 

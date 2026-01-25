@@ -110,7 +110,7 @@ class AzureAIConnector(CloudProviderBase):
         async with httpx.AsyncClient(timeout=60.0) as client:
             try:
                 response = await client.post(url, json=payload, headers=headers)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 raise CloudProviderError(f"Azure AI connection failed: {e}")
 
             if response.status_code == 429:

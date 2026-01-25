@@ -1,0 +1,23 @@
+diff --git a/src/logic/agents/system/MessagingAgent.py b/src/logic/agents/system/MessagingAgent.py
+index ad8830e..da244ef 100644
+--- a/src/logic/agents/system/MessagingAgent.py
++++ b/src/logic/agents/system/MessagingAgent.py
+@@ -25,8 +25,7 @@ Provides a unified interface for external communications.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-import asyncio
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -52,7 +51,7 @@ class MessagingAgent(BaseAgent):
+         if hasattr(self, "fleet") and self.fleet:
+             privacy_guard = self.fleet.agents.get("PrivacyGuard")
+             if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):
+-                check_result = await privacy_guard.verify_message_safety(message)
++                check_result = privacy_guard.verify_message_safety(message)
+                 if not check_result.get("safe", True):
+                     return f"SAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}"
+ 

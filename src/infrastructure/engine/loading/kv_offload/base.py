@@ -33,28 +33,28 @@ class OffloadingBackend(ABC):
     @abstractmethod
     def medium(self) -> str:
         """Return storage medium identifier."""
-        pass
+        raise NotImplementedError
 
     @property
     @abstractmethod
     def block_size(self) -> int:
         """Return block size in bytes."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_num_free_blocks(self) -> int:
         """Get number of available blocks."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def allocate_blocks(self, block_hashes: List[BlockHash]) -> List[BlockStatus]:
         """Allocate storage for blocks."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def free(self, block: BlockStatus) -> None:
         """Free a block's storage."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_load_store_spec(
@@ -63,7 +63,7 @@ class OffloadingBackend(ABC):
         blocks: List[BlockStatus],
     ) -> LoadStoreSpec:
         """Create load/store specification."""
-        pass
+        raise NotImplementedError
 
 
 class OffloadingManager(ABC):
@@ -72,22 +72,22 @@ class OffloadingManager(ABC):
     @abstractmethod
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
         """Find length of maximal cached prefix."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def prepare_load(self, block_hashes: Iterable[BlockHash]) -> LoadStoreSpec:
         """Prepare blocks for loading."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
         """Mark blocks as recently used."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
         """Mark load as complete."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def prepare_store(
@@ -95,7 +95,7 @@ class OffloadingManager(ABC):
         block_hashes: Iterable[BlockHash],
     ) -> Optional[PrepareStoreOutput]:
         """Prepare to store blocks."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def complete_store(
@@ -104,4 +104,4 @@ class OffloadingManager(ABC):
         success: bool = True,
     ) -> None:
         """Mark store as complete."""
-        pass
+        raise NotImplementedError

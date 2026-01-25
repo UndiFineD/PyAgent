@@ -1,0 +1,65 @@
+diff --git a/tests/specialists/test_specialists.py b/tests/specialists/test_specialists.py
+index f38f334..6347c03 100644
+--- a/tests/specialists/test_specialists.py
++++ b/tests/specialists/test_specialists.py
+@@ -1,5 +1,4 @@
+ import sys
+-import os
+ from pathlib import Path
+ 
+ # Add src to path
+@@ -9,17 +8,42 @@ from src.logic.agents.development.RustAgent import RustAgent
+ from src.logic.agents.development.GoAgent import GoAgent
+ from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+ 
++
++
++
++
++
++
++
++
++
++
+ def test_specialists_exist() -> None:
+     print("Checking specialist availability...")
+     agents = [
+         DirectorAgent("test_plan.md"),
+         RustAgent("test.rs"),
+         GoAgent("test.go"),
++
++
++
++
++
+         KnowledgeAgent(".")
+     ]
+     for agent in agents:
+         print(f"Verified: {agent.__class__.__name__}")
+ 
++
++
++
++
++
++
++
++
++
++
+ def test_knowledge_agent_scan() -> None:
+     print("\nTesting KnowledgeAgent scanning...")
+     ka = KnowledgeAgent(Path("."))
+@@ -28,6 +52,11 @@ def test_knowledge_agent_scan() -> None:
+     assert "DirectorAgent" in context
+     print("KnowledgeAgent scan: SUCCESS")
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     try:
+         test_specialists_exist()

@@ -60,7 +60,7 @@ class OrchestratorScanMixin:
             try:
                 if self.fleet and hasattr(self.fleet, "sql_metadata"):
                     self.fleet.sql_metadata.bulk_record_debt(debt_records)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to bulk record debt to SQL: {e}")
 
     def _analyze_and_fix(self, file_path: str) -> list[dict[str, Any]]:
@@ -73,7 +73,7 @@ class OrchestratorScanMixin:
         try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return []
 
         rel_path = os.path.relpath(file_path, self.workspace_root)

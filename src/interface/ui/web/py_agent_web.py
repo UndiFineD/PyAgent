@@ -132,7 +132,7 @@ class FleetWebUI:
                 with open(file_path, encoding="utf-8") as f:
                     return f.read(500) + "..."
             return "[No Preview Available]"
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return "[Error Reading Preview]"
 
     def get_workflow_designer_state(self) -> dict[str, Any]:

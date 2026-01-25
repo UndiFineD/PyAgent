@@ -27,7 +27,11 @@ from .storage import BlockTable, PagedKVCache, SlotMapping
 
 
 class PagedAttentionEngine:
+    """
+    Engine for managing paged KV cache and executing paged attention operations.
+    """
     def __init__(self, config: AttentionConfig, num_blocks: int = 1024):
+        """Initializes the paged attention engine."""
         self.config = config
         self.block_table = BlockTable(num_blocks, config.block_size)
         dtype = np.float16 if config.kv_cache_dtype == KVCacheDtype.FP16 else np.float32
@@ -36,6 +40,7 @@ class PagedAttentionEngine:
         self._seq_positions: Dict[int, int] = {}
 
     def allocate_sequence(self, seq_id: int, initial_len: int = 0) -> None:
+        """Allocates blocks for a new sequence."""
         if seq_id in self.block_table.block_tables:
             return
         nb = (initial_len + self.config.block_size - 1) // self.config.block_size
@@ -44,6 +49,7 @@ class PagedAttentionEngine:
         self._seq_positions[seq_id] = initial_len
 
     def append_kv(self, seq_id: int, key: np.ndarray, value: np.ndarray) -> None:
+        """Appends KV pairs for a sequence to the cache."""
         nt = key.shape[0]
         cp = self._seq_positions.get(seq_id, 0)
         rb = (cp + nt + self.config.block_size - 1) // self.config.block_size
@@ -61,8 +67,9 @@ class PagedAttentionEngine:
         self._seq_positions[seq_id] = cp + nt
 
     def forward(self, query: np.ndarray, seq_ids: List[int], use_v2: bool = True) -> np.ndarray:
+        """Performs paged attention forward pass."""
         sl = np.array([self._seq_positions.get(sid, 0) for sid in seq_ids], dtype=np.int32)
-        mb = max([self.block_table.num_allocated_blocks(sid) for sid in seq_ids], default=1)
+        mb = max((self.block_table.num_allocated_blocks(sid) for sid in seq_ids), default=1)
         bt = np.full((len(seq_ids), mb), -1, dtype=np.int32)
         for i, sid in enumerate(seq_ids):
             tbl = self.block_table.get_block_table(sid)
@@ -73,10 +80,12 @@ class PagedAttentionEngine:
         return PagedAttentionOps.paged_attention_v1(query, self.kv_cache, bt, sl, self.config)
 
     def free_sequence(self, seq_id: int) -> None:
+        """Frees blocks allocated for a sequence."""
         self.block_table.free_sequence(seq_id)
         self._seq_positions.pop(seq_id, None)
 
     def get_stats(self) -> dict:
+        """Returns cache and engine statistics."""
         return {
             "num_sequences": len(self._seq_positions),
             "num_allocated_blocks": self.block_table.num_blocks - self.block_table.num_free_blocks,
@@ -92,6 +101,7 @@ def create_attention_engine(
     block_size: int = 16,
     num_blocks: int = 1024,
 ) -> PagedAttentionEngine:
+    """Utility function to create a PagedAttentionEngine with default config."""
     config = AttentionConfig(
         head_size=head_size,
         num_heads=num_heads,

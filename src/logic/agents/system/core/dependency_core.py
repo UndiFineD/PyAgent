@@ -63,7 +63,7 @@ class DependencyCore:
                 )
             return 0
 
-        with open(file_path) as f:
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
 
         new_lines = []
@@ -82,7 +82,7 @@ class DependencyCore:
             else:
                 new_lines.append(line)
 
-        with open(file_path, "w") as f:
+        with open(file_path, 'w', encoding='utf-8') as f:
             f.writelines(new_lines)
 
         if recorder:

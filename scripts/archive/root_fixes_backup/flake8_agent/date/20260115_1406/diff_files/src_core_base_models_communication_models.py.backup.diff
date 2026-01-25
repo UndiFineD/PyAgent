@@ -1,0 +1,237 @@
+diff --git a/src/core/base/models/communication_models.py b/src/core/base/models/communication_models.py
+index 0d944e1..9199f7f 100644
+--- a/src/core/base/models/communication_models.py
++++ b/src/core/base/models/communication_models.py
+@@ -20,12 +20,11 @@ import uuid
+ from dataclasses import dataclass, field
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from collections.abc import Callable
+ from .enums import (
+-    MessageRole, 
+-    AgentEvent, 
+-    FilePriority, 
++    MessageRole,
++    FilePriority,
+     InputType
+ )
+ from .base_models import (
+@@ -34,6 +33,11 @@ from .base_models import (
+     _empty_dict_str_any
+ )
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class CascadeContext:
+     """
+@@ -46,7 +50,7 @@ class CascadeContext:
+     parent_agent_id: str | None = None
+     cascade_depth: int = 0
+     max_depth: int = 10
+-    
++
+     def next_level(self, agent_id: str) -> CascadeContext:
+         """Create a child context for the next level of delegation."""
+         return CascadeContext(
+@@ -62,6 +66,11 @@ class CascadeContext:
+         """Check if recursion depth limit reached."""
+         return self.cascade_depth >= self.max_depth
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class PromptTemplate:
+     """ reusable prompt template. """
+@@ -76,6 +85,11 @@ class PromptTemplate:
+     def render(self, **kwargs: Any) -> str:
+         return self.template.format(**kwargs)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ConversationMessage:
+     """A message in conversation history."""
+@@ -83,6 +97,11 @@ class ConversationMessage:
+     content: str
+     timestamp: float = field(default_factory=time.time)
+ 
++
++
++
++
++
+ class ConversationHistory:
+     """Manages a conversation history with message storage and retrieval."""
+ 
+@@ -102,6 +121,11 @@ class ConversationHistory:
+     def clear(self) -> None:
+         self.messages.clear()
+ 
++
++
++
++
++
+ class PromptTemplateManager:
+     """Manages a collection of prompt templates."""
+ 
+@@ -115,6 +139,11 @@ class PromptTemplateManager:
+         template = self.templates[template_name]
+         return template.render(**kwargs)
+ 
++
++
++
++
++
+ class ResponsePostProcessor:
+     """Manages post-processing hooks for agent responses."""
+ 
+@@ -130,6 +159,11 @@ class ResponsePostProcessor:
+             text = hook(text)
+         return text
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class PromptVersion:
+     """Versioned prompt for A/B testing."""
+@@ -139,7 +173,7 @@ class PromptVersion:
+     active: bool = True
+     created_at: datetime = field(default_factory=datetime.now)
+     metrics: dict[str, float] = field(default_factory=_empty_dict_str_any)
+-    
++
+     # Old API compatibility fields (initialized in __init__)
+     version_id: str = ""
+     template_id: str = ""
+@@ -171,6 +205,11 @@ class PromptVersion:
+         self.prompt_text = self.content
+         self.weight = weight
+ 
++
++
++
++
++
+ class BatchRequest:
+     """Request in a batch processing queue."""
+ 
+@@ -201,6 +240,11 @@ class BatchRequest:
+     def execute(self, processor: Callable[[list[Any]], list[Any]]) -> list[Any]:
+         return processor(self.items)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class BatchResult:
+     """Result of a batch processing request."""
+@@ -210,6 +254,11 @@ class BatchResult:
+     error: str = ""
+     processing_time: float = 0.0
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class MultimodalInput:
+     """Multimodal input for agents."""
+@@ -218,6 +267,11 @@ class MultimodalInput:
+     mime_type: str = ""
+     metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ContextWindow:
+     """Manages token-based context window."""
+@@ -244,6 +298,11 @@ class ContextWindow:
+         self.messages.clear()
+         self.token_counts.clear()
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class MultimodalBuilder:
+     """Builds multimodal input sets."""
+@@ -253,14 +312,19 @@ class MultimodalBuilder:
+         self.inputs.append(MultimodalInput(content=content, input_type=input_type))
+ 
+     def add_text(self, content: str) -> None:
+-        self.inputs.append(MultimodalInput(content=content, input_type=InputType.TEXT))     
++        self.inputs.append(MultimodalInput(content=content, input_type=InputType.TEXT))
+ 
+     def add_image(self, content: str) -> None:
+-        self.inputs.append(MultimodalInput(content=content, input_type=InputType.IMAGE))    
++        self.inputs.append(MultimodalInput(content=content, input_type=InputType.IMAGE))
+ 
+     def build(self) -> list[MultimodalInput]:
+         return self.inputs
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class CachedResult:
+     """A cached agent result."""
+@@ -271,6 +335,11 @@ class CachedResult:
+     timestamp: float = field(default_factory=time.time)
+     ttl_seconds: int = 3600
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class TelemetrySpan:
+     """A telemetry span for tracing."""
+@@ -283,6 +352,11 @@ class TelemetrySpan:
+     attributes: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+     events: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
+ 
++
++
++
++
++
+ class SpanContext:
+     """Context for a telemetry span."""
+ 
+@@ -292,7 +366,7 @@ class SpanContext:
+     def set_attribute(self, key: str, value: Any) -> None:
+         self._span.attributes[key] = value
+ 
+-    def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:    
++    def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
+         self._span.events.append({
+             "name": name,
+             "timestamp": time.time(),

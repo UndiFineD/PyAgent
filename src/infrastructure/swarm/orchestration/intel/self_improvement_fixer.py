@@ -46,6 +46,6 @@ class SelfImprovementFixer:
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(new_content)
             return True
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to apply patch to {file_path}: {e}")
             return False

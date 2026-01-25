@@ -34,6 +34,7 @@ logger = logging.getLogger("pyagent.multimodal.muxer")
 
 
 class ChannelType(Enum):
+    """Enumeration of supported modality channel types."""
     TEXT = 0x01
     AUDIO = 0x02
     VIDEO = 0x03
@@ -42,6 +43,7 @@ class ChannelType(Enum):
 
 @dataclass
 class ModalityChannel:
+    """Configuration for a specific modality streaming channel."""
     name: str
     modality_type: str
     fps: float = 120.0

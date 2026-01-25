@@ -1,0 +1,32 @@
+diff --git a/src/infrastructure/dev/test_utils/FlakinessReport.py b/src/infrastructure/dev/test_utils/FlakinessReport.py
+index e3ef62a..50fc6e2 100644
+--- a/src/infrastructure/dev/test_utils/FlakinessReport.py
++++ b/src/infrastructure/dev/test_utils/FlakinessReport.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class FlakinessReport:
+     """Report of test flakiness analysis.
+@@ -45,4 +54,4 @@ class FlakinessReport:
+     passes: int
+     failures: int
+     flakiness_score: float
+-    failure_messages: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    failure_messages: list[str] = field(default_factory=lambda: [])

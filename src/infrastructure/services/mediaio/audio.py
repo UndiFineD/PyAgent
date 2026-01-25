@@ -71,7 +71,7 @@ class AudioLoader(MediaLoader):
             data = source
             source_str = "<bytes>"
         elif isinstance(source, (str, Path)):
-            with open(str(source), "rb") as f:
+            with open(str(source, encoding='utf-8'), "rb") as f:
                 data = f.read()
             source_str = str(source)
         else:

@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/ImpactScorer.py b/src/observability/improvements/ImpactScorer.py
+index 4b7c41c..4161490 100644
+--- a/src/observability/improvements/ImpactScorer.py
++++ b/src/observability/improvements/ImpactScorer.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 

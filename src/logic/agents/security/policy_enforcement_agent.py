@@ -46,6 +46,7 @@ class PolicyEnforcementAgent:
         """
         Evaluates if an agent action complies with active policies.
         """
+        _ = (agent_id, action_type, metadata)
         violations = []
 
         if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
@@ -72,4 +73,5 @@ class PolicyEnforcementAgent:
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}
 
     def is_agent_quarantined(self, agent_id: str) -> bool:
+        """Checks if an agent is in the quarantine list."""
         return agent_id in self.quarantine_list

@@ -174,8 +174,8 @@ class UBatchBarrier:
         try:
             idx = self._barrier.wait(timeout)
             return idx
-        except threading.BrokenBarrierError:
-            raise RuntimeError("Barrier broken - thread failed")
+        except threading.BrokenBarrierError as exc:
+            raise RuntimeError("Barrier broken - thread failed") from exc
 
     def reset(self) -> None:
         """Reset barrier for next synchronization."""
@@ -263,7 +263,7 @@ class UBatchWrapper:
         token_pos = 0
         req_pos = 0
 
-        for i in range(num_ubatches):
+        for _ in range(num_ubatches):
             token_end = min(token_pos + tokens_per_ubatch, num_tokens)
             req_end = min(req_pos + reqs_per_ubatch, num_reqs)
 
@@ -335,7 +335,7 @@ class UBatchWrapper:
             output = self.runnable(**sliced_inputs)
             context.signal_ready()
             return (context.thread_id, output)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"UBatch {context.thread_id} failed: {e}")
             context.signal_ready()
             raise
@@ -379,9 +379,9 @@ class UBatchWrapper:
             try:
                 thread_id, output = future.result(timeout=self.config.barrier_timeout)
                 results.append((thread_id, output))
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self._state = UBatchState.FAILED
-                raise RuntimeError(f"Micro-batch failed: {e}")
+                raise RuntimeError(f"Micro-batch failed: {e}") from e
 
         # Sort by thread_id and concatenate
         results.sort(key=lambda x: x[0])

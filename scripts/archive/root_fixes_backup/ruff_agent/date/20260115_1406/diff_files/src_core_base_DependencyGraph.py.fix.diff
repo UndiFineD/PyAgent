@@ -1,0 +1,12 @@
+diff --git a/src/core/base/DependencyGraph.py b/src/core/base/DependencyGraph.py
+index 762c80d..21f79b0 100644
+--- a/src/core/base/DependencyGraph.py
++++ b/src/core/base/DependencyGraph.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List, Set, Optional, Dict
+ import graphlib
+ 
+ __version__ = VERSION

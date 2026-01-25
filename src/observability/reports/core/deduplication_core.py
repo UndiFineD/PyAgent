@@ -35,7 +35,7 @@ class DeduplicationCore:
         if rc:
             try:
                 return rc.calculate_jaccard_similarity(s1, s2)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 pass
 
         set1 = set(s1.lower().split())
@@ -58,7 +58,7 @@ class DeduplicationCore:
                 messages = [item.get(key, "") for item in items]
                 unique_indices = rc.deduplicate_by_similarity(messages, threshold)  # type: ignore[attr-defined]
                 return [items[i] for i in unique_indices]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 pass
 
         unique_items = []

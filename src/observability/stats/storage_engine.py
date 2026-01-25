@@ -212,5 +212,5 @@ class StatsCompressor:
             return json.loads(body.decode("utf-8"))
         try:
             return json.loads(payload.decode("utf-8"))
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return payload

@@ -35,17 +35,6 @@ from typing import Any
 
 import numpy as np
 
-# Optional torch import
-try:
-    import torch
-    import torch.nn.functional as F
-
-    HAS_TORCH = True
-except ImportError:
-    HAS_TORCH = False
-    torch = None  # type: ignore
-    F = None  # type: ignore
-
 # Try to import Rust accelerators
 try:
     import rust_core
@@ -157,7 +146,6 @@ class RouterBase(ABC):
         Returns:
             RouterOutput with expert assignments and weights
         """
-        pass
 
     def compute_router_logits(self, x: np.ndarray) -> np.ndarray:
         """Compute router logits."""
@@ -356,9 +344,9 @@ class GroupedTopKRouter(RouterBase):
         expert_weights = np.array(expert_weights)
 
         # Apply softmax and renormalize
-        expert_weights = np.exp(expert_weights - expert_weights.max(axis=-1, keepdims=True))
+        expert_weights = np.exp(expert_weights - np.max(expert_weights, axis=-1, keepdims=True))
         if self.config.renormalize:
-            expert_weights = expert_weights / expert_weights.sum(axis=-1, keepdims=True)
+            expert_weights = expert_weights / np.sum(expert_weights, axis=-1, keepdims=True)
 
         # Update statistics
         self.update_stats(expert_indices)
@@ -674,7 +662,7 @@ class RoutingSimulator:
 
             # Count tokens going to other devices
             for expert_idx in device_routing.flatten():
-                if not (device_experts_start <= expert_idx < device_experts_end):
+                if not device_experts_start <= expert_idx < device_experts_end:
                     cross_device += 1
 
         total_assignments = self.num_tokens * self.top_k

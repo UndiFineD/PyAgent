@@ -38,6 +38,7 @@ class ContextManager:
     """
 
     def __init__(self, default_config: Optional[ContextConfig] = None):
+        """Initialize the context manager."""
         self._contexts: Dict[str, ConversationContext] = {}
         self._default_config = default_config or ContextConfig()
         self._cleanup_task: Optional[asyncio.Task] = None
@@ -45,6 +46,7 @@ class ContextManager:
 
     @property
     def active_contexts_count(self) -> int:
+        """Get the number of active contexts."""
         return len([c for c in self._contexts.values() if c.is_active])
 
     def create_context(
@@ -101,7 +103,9 @@ class ContextManager:
             try:
                 await asyncio.sleep(interval)
                 await self.purge_expired_contexts()
-            except Exception as e:
+            except asyncio.CancelledError:
+                break
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Error in context cleanup: {e}")
 
     async def purge_expired_contexts(self) -> int:
@@ -111,7 +115,7 @@ class ContextManager:
 
         for ctx_id, ctx in self._contexts.items():
             ttl = ctx.config.ttl
-            if ttl > 0 and (now - ctx._last_activity) > ttl:
+            if 0 < ttl < (now - ctx.last_activity):
                 expired_ids.append(ctx_id)
 
         count = 0
@@ -143,16 +147,15 @@ class ContextManager:
         logger.info("Context Manager shut down")
 
 
-# Global context manager instance
-_global_manager: Optional[ContextManager] = None
+# Storage for global context manager instance
+_MANAGER_STORAGE: Dict[str, Optional[ContextManager]] = {"instance": None}
 
 
 def get_context_manager() -> ContextManager:
     """Get or create singleton instance."""
-    global _global_manager
-    if _global_manager is None:
-        _global_manager = ContextManager()
-    return _global_manager
+    if _MANAGER_STORAGE["instance"] is None:
+        _MANAGER_STORAGE["instance"] = ContextManager()
+    return _MANAGER_STORAGE["instance"]
 
 
 def create_context(
@@ -171,15 +174,7 @@ def merge_contexts(
     primary: ConversationContext, secondary: ConversationContext, deduplicate: bool = True
 ) -> ConversationContext:
     """Merge turns from secondary into primary context."""
-    seen_ids = {t.id for t in primary.turns} if deduplicate else set()
-
-    for turn in secondary.turns:
-        if deduplicate and turn.id in seen_ids:
-            continue
-        primary._turn_tracker._turns.append(turn)
-        primary._turn_tracker._turn_index[turn.id] = turn
-
-    primary._update_activity()
+    primary.import_turns(secondary.turns, deduplicate=deduplicate)
     return primary
 
 

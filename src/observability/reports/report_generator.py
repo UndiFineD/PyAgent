@@ -88,7 +88,7 @@ class ReportGenerator:
                     count += 1
                 else:
                     skipped += 1
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logging.error(f"Error processing {py_path.name}: {e}")
                 errors_count += 1
 
@@ -299,7 +299,7 @@ class ReportGenerator:
                     for default in node.args.defaults:
                         if isinstance(default, (ast.List, ast.Dict)):
                             known.append(f"Hazard: Mutable default in `{node.name}`.")
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             pass
 
         if known:
@@ -392,12 +392,12 @@ class ReportGenerator:
                         issues.append(f"Function `{node.name}` has a mutable default argument.")
                         break
         # 2. Broad exceptions
-        if "except Exception:" in source or "except:" in source:
-            issues.append("Avoid broad `except:` or `except Exception:`; catch specific errors.")
+        if "except Exception:" in source:
+            issues.append("Avoid broad `except Exception:`; catch specific errors.")
         # 3. Bare excepts
         for node in ast.walk(tree):
-            if isinstance(node, ast.ExceptHandler) and node.type is None:
-                issues.append("Contains bare `except:` clause (catches SystemExit / KeyboardInterrupt).")
+            if isinstance(node, ast.ExceptHandler) and (node.type is None or (isinstance(node.type, ast.Name) and node.type.id == "Exception")):
+                issues.append("Contains bare or broad `except` clause.")
             if isinstance(node, ast.FunctionDef):
                 missing_arg_type = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
                 missing_return_type = node.returns is None

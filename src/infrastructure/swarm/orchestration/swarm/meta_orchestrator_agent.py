@@ -98,7 +98,7 @@ class MetaOrchestratorAgent(BaseAgent):
             elif "```" in res:
                 res = res.split("```")[-1].split("```")[0].strip()
             return json.loads(res)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"MetaOrchestrator failed to parse decomposition JSON: {e}")
             return [
                 {

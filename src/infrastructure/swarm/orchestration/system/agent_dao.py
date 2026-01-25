@@ -65,7 +65,9 @@ class AgentDAO(BaseAgent):
 
         return sorted(task_queue)  # Default to alpha for mock, in real it would use consensus weight
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """DAO content optimization (stub)."""
+        _ = prompt, target_file
         return "The DAO maintains the equilibrium of agent resource consumption."
 
 

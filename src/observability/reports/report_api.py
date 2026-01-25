@@ -98,5 +98,5 @@ class ReportAPI:
         try:
             path.write_text(content, encoding="utf-8")
             return True
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return False

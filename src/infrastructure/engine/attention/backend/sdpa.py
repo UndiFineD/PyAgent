@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 # Try to import torch
 try:
-    import torch
+    import torch  # pylint: disable=unused-import
 
     HAS_TORCH = True
 except ImportError:
@@ -85,7 +85,7 @@ class TorchSDPABackend(AttentionBackend[None]):
 
         import torch.nn.functional as F
 
-        batch_seq, num_heads, head_dim = query.shape
+        _, num_heads, _ = query.shape
         _, num_kv_heads, _ = key.shape
 
         # Handle GQA/MQA
@@ -101,7 +101,7 @@ class TorchSDPABackend(AttentionBackend[None]):
         k = key.unsqueeze(0).transpose(1, 2)
         v = value.unsqueeze(0).transpose(1, 2)
 
-        output = F.scaled_dot_product_attention(
+        output = F.scaled_dot_product_attention(  # pylint: disable=not-callable
             q,
             k,
             v,

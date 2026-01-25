@@ -1,0 +1,14 @@
+diff --git a/src/infrastructure/dev/test_utils/TestDataSeeder.py b/src/infrastructure/dev/test_utils/TestDataSeeder.py
+index df62a63..211548a 100644
+--- a/src/infrastructure/dev/test_utils/TestDataSeeder.py
++++ b/src/infrastructure/dev/test_utils/TestDataSeeder.py
+@@ -34,8 +34,8 @@ except ImportError:
+     np = None
+ 
+ class TestDataSeeder:
+-    __test__ = False
+     """Generates reproducible test data with optional seeding."""
++    __test__ = False
+ 
+     def __init__(self, seed: int | None = None) -> None:
+         """Initialize test data seeder.

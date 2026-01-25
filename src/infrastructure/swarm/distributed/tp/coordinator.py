@@ -27,13 +27,13 @@ logger = logging.getLogger(__name__)
 
 # Try to import torch.distributed
 try:
-    import torch
+    import torch as _torch  # pylint: disable=unused-import
     import torch.distributed as dist
 
     HAS_DIST = dist.is_available()
 except ImportError:
     HAS_DIST = False
-    torch = None
+    _torch = None
     dist = None
 
 
@@ -169,22 +169,20 @@ class GroupCoordinator:
         """Get world size for a parallelism mode."""
         if mode is None or mode == ParallelMode.DATA:
             return self.config.world_size
-        elif mode == ParallelMode.TENSOR:
+        if mode == ParallelMode.TENSOR:
             return self.config.tensor_parallel_size
-        elif mode == ParallelMode.PIPELINE:
+        if mode == ParallelMode.PIPELINE:
             return self.config.pipeline_parallel_size
-        else:
-            return 1
+        return 1
 
     def get_rank(self, mode: ParallelMode | None = None) -> int:
         """Get rank for a parallelism mode."""
         if mode is None:
             return self.rank_info.global_rank
-        elif mode == ParallelMode.TENSOR:
+        if mode == ParallelMode.TENSOR:
             return self.rank_info.tp_rank
-        elif mode == ParallelMode.PIPELINE:
+        if mode == ParallelMode.PIPELINE:
             return self.rank_info.pp_rank
-        elif mode == ParallelMode.DATA:
+        if mode == ParallelMode.DATA:
             return self.rank_info.dp_rank
-        else:
-            return 0
+        return 0

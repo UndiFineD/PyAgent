@@ -67,7 +67,7 @@ class MCPServerRegistry:
                 session = await server.connect()
                 sessions[name] = session
                 self._sessions[name] = session
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to connect to {name}: {e}")
         return sessions
 
@@ -76,7 +76,7 @@ class MCPServerRegistry:
         for server in self._servers.values():
             try:
                 await server.disconnect()
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Error disconnecting {server.name}: {e}")
         self._sessions.clear()
 

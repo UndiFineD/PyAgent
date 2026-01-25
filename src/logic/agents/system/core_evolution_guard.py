@@ -43,7 +43,7 @@ class CoreEvolutionGuard:
         """Calculates SHA256 hash of a file."""
         hasher = hashlib.sha256()
         try:
-            with open(file_path, "rb") as f:
+            with open(file_path, 'rb') as f:
                 buf = f.read()
                 hasher.update(buf)
             return hasher.hexdigest()

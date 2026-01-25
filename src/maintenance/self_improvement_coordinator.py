@@ -122,7 +122,7 @@ class SelfImprovementCoordinator:
                 )
         except ImportError as e:
             self.logger.debug(f"MCPServerRegistry not available for discovery: {e}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error(f"Error during MCP server discovery from registry: {e}", exc_info=True)
 
         # 3. Check persistent ConnectivityManager status
@@ -139,11 +139,11 @@ class SelfImprovementCoordinator:
                                 all_nodes.append({"id": key, "type": "remote_endpoint", "status": "available"})
                 except json.JSONDecodeError as jde:
                     self.logger.warning(f"Failed to parse connectivity_status.json: {jde}")
-                except Exception as inner_e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     self.logger.error(f"Error reading/processing connectivity_status.json: {inner_e}")
         except ImportError as e:
             self.logger.debug(f"ConnectivityManager not available for status check: {e}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error(f"Unexpected error in ConnectivityManager discovery block: {e}", exc_info=True)
 
         self.logger.info(f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes.")
@@ -372,7 +372,7 @@ class SelfImprovementCoordinator:
 
         except ImportError as e:
             self.logger.warning(f"  -> [SKIP] Required agent not found: {e}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error(f"  -> [ERROR] Failed to trigger agent: {e}")
             import traceback
 

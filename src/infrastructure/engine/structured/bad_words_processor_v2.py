@@ -39,7 +39,7 @@ except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # noqa: F401
+    import rust_core  # pylint: disable=unused-import
 
     HAS_RUST = True
 except ImportError:
@@ -150,7 +150,7 @@ class BadWordsProcessorV2(LogitsProcessor):
             return
 
         # Process added requests
-        for index, params, prompt_tokens, output_tokens in batch_update.added:
+        for index, params, _, output_tokens in batch_update.added:
             if params.bad_words:
                 self._bad_words[index] = list(params.bad_words)
                 self._tries[index] = self._build_trie(params.bad_words)
@@ -207,10 +207,11 @@ class BadWordsProcessorV2(LogitsProcessor):
 
         if HAS_RUST:
             return self._apply_rust(logits)
-        elif HAS_NUMPY and isinstance(logits, np.ndarray):
+
+        if HAS_NUMPY and isinstance(logits, np.ndarray):
             return self._apply_numpy(logits)
-        else:
-            return self._apply_generic(logits)
+
+        return self._apply_generic(logits)
 
     def _apply_rust(self, logits: Any) -> Any:
         """Apply using Rust acceleration."""

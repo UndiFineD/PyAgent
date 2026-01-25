@@ -1,0 +1,105 @@
+diff --git a/src/core/base/exceptions.py b/src/core/base/exceptions.py
+index 7790838..b06d1b3 100644
+--- a/src/core/base/exceptions.py
++++ b/src/core/base/exceptions.py
+@@ -13,28 +13,97 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
+-from typing import Optional
++
++
++
++
++
++
++
++
++
++
+ 
+ class PyAgentException(Exception):
++
++
++
++
++
+     """Base exception for all PyAgent errors."""
+     def __init__(self, message: str, error_code: str | None = None) -> None:
+         super().__init__(message)
++
++
++
++
++
+         self.error_code = error_code
+ 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ class InfrastructureError(PyAgentException):
+     """Errors related to system infrastructure (I/O, Network)."""
+ 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ class LogicError(PyAgentException):
+     """Errors related to agent logic or reasoning failure."""
+ 
++
++
++
++
++
+ class SecurityError(PyAgentException):
+     """Errors related to unauthorized access or safety violations."""
+ 
++
++
++
++
++
+ class ModelError(PyAgentException):
+     """Errors related to LLM connectivity or output parsing."""
+ 
++
++
++
++
++
+ class ConfigurationError(PyAgentException):
+     """Errors in settings or manifest validation."""
+ 
++
++
++
++
++
+ class CycleInterrupt(PyAgentException):
+-    """Interruption of an agent cycle (e.g., quota exceeded)."""
+\ No newline at end of file
++    """Interruption of an agent cycle (e.g., quota exceeded)."""

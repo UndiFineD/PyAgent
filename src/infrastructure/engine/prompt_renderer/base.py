@@ -44,7 +44,7 @@ class PromptRenderer(ABC):
     @abstractmethod
     def render(self, config: PromptConfig) -> RenderResult:
         """Render prompt from configuration."""
-        ...
+        raise NotImplementedError("Subclasses must implement render")
 
     def _tokenize(self, text: str, add_special_tokens: bool = True) -> List[int]:
         """Tokenize text."""

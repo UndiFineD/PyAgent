@@ -1,0 +1,61 @@
+diff --git a/src/infrastructure/fleet/OrchestratorRegistry.py b/src/infrastructure/fleet/OrchestratorRegistry.py
+index 212c397..8375d71 100644
+--- a/src/infrastructure/fleet/OrchestratorRegistry.py
++++ b/src/infrastructure/fleet/OrchestratorRegistry.py
+@@ -24,18 +24,21 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ import os
+-from typing import Dict, Any, List
++from typing import Any, TYPE_CHECKING
+ from pathlib import Path
+ from .ResilientStubs import ResilientStub
+ from .OrchestratorRegistryCore import OrchestratorRegistryCore
+ from .BootstrapConfigs import BOOTSTRAP_ORCHESTRATORS
+ from src.core.base.version import SDK_VERSION
+ 
++if TYPE_CHECKING:
++    from src.infrastructure.fleet.FleetManager import FleetManager
++
+ __version__ = VERSION
+ 
+ class LazyOrchestratorMap:
+     """A dictionary-like object that instantiates orchestrators only when accessed."""
+-    def __init__(self, fleet_instance) -> None:
++    def __init__(self, fleet_instance: FleetManager) -> None:
+         self.fleet = fleet_instance
+         self.workspace_root = Path(fleet_instance.workspace_root)
+         self._instances = {}
+@@ -95,7 +98,7 @@ class LazyOrchestratorMap:
+                     logging.error(f"Failed to load orchestrator manifest {m_path}: {e}")
+         return manifest_configs
+ 
+-    def __getattr__(self, name) -> Any:
++    def __getattr__(self, name: str) -> Any:
+         if name in self.__dict__:
+             return self.__dict__[name]
+ 
+@@ -127,7 +130,7 @@ class LazyOrchestratorMap:
+             logging.error(f"Failed to reload orchestrator '{name}': {e}")
+             return False
+ 
+-    def _instantiate(self, key, config) -> Any:
++    def _instantiate(self, key: str, config: tuple[str, str, bool, str | None]) -> Any:
+         module_path, class_name, needs_fleet, arg_path_suffix = config
+         try:
+             import importlib
+@@ -204,10 +207,11 @@ class LazyOrchestratorMap:
+         """Returns list of available orchestrators."""
+         return list(self._configs.keys())
+ 
+-    def __contains__(self, key) -> bool:
++    def __contains__(self, key: object) -> bool:
+         return key in self._configs
+ 
+ class OrchestratorRegistry:
++    """Registry for mapping agent types to their corresponding orchestrators."""
+     @staticmethod
+-    def get_orchestrator_map(fleet_instance) -> LazyOrchestratorMap:
++    def get_orchestrator_map(fleet_instance: FleetManager) -> LazyOrchestratorMap:
+         return LazyOrchestratorMap(fleet_instance)
+\ No newline at end of file

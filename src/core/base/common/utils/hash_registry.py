@@ -311,7 +311,7 @@ class ContentHasher:
     def hash_file(self, filepath: str, chunk_size: int = 8192) -> str:
         """Hash a file's contents."""
         h = hashlib.sha256()  # Use SHA-256 for file hashing
-        with open(filepath, "rb") as f:
+        with open(filepath, 'rb', encoding='utf-8') as f:
             while chunk := f.read(chunk_size):
                 h.update(chunk)
         result = h.hexdigest()

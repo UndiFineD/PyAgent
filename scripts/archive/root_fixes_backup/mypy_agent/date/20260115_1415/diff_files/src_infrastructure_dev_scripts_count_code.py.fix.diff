@@ -1,0 +1,19 @@
+diff --git a/src/infrastructure/dev/scripts/count_code.py b/src/infrastructure/dev/scripts/count_code.py
+index 6f64207..48d358a 100644
+--- a/src/infrastructure/dev/scripts/count_code.py
++++ b/src/infrastructure/dev/scripts/count_code.py
+@@ -22,6 +22,7 @@ Provides functions to count lines of code, measure file sizes, and generate
+ code statistics across the project.
+ """
+ from __future__ import annotations
++from pathlib import Path
+ from src.core.base.version import VERSION
+ import os
+ import ast
+@@ -66,4 +67,4 @@ for root, dirs, files in os.walk(src_path):
+                 stubs.append((path, count))
+ 
+ for path, count in sorted(stubs, key=lambda x: x[1]):
+-    print(f"{count}: {path}")
+\ No newline at end of file
++    print(f"{count}: {path}")

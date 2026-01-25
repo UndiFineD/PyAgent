@@ -1,0 +1,30 @@
+diff --git a/src/infrastructure/fleet/BootstrapConfigs.py b/src/infrastructure/fleet/BootstrapConfigs.py
+index 69abfce..ed877d6 100644
+--- a/src/infrastructure/fleet/BootstrapConfigs.py
++++ b/src/infrastructure/fleet/BootstrapConfigs.py
+@@ -25,7 +25,6 @@ These must remain static to ensure the system can boot up before dynamic discove
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Tuple, Optional
+ from src.infrastructure.fleet.RegistryOverlay import RegistryOverlay
+ 
+ __version__ = VERSION
+@@ -97,7 +96,7 @@ BOOTSTRAP_ORCHESTRATORS = {
+         "SelfHealingOrchestrator"
+     ),
+     "telemetry": (
+-        "src.observability.stats.ObservabilityEngine",
++        "src.observability.stats.metrics_engine",
+         "ObservabilityEngine"
+     ),
+     "self_improvement": (
+@@ -129,7 +128,7 @@ BOOTSTRAP_ORCHESTRATORS = {
+         "AgentEconomy"
+     ),
+     "resources": (
+-        "src.observability.stats.ResourceMonitor",
++        "src.observability.stats.monitoring",
+         "ResourceMonitor"
+     ),
+     "gossip": (

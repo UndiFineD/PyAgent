@@ -227,7 +227,7 @@ class DerivedMetricCalculator:
             result = FormulaCore.evaluate(derived.formula, metric_values)
             self._cache[name] = result
             return result
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to calculate %s: %s", name, e)
             return None
 
@@ -309,7 +309,8 @@ class FormulaEngineCore:
 
         try:
             return FormulaCore.evaluate(formula, variables)
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return 0.0
 
     def validate_logic(self, formula: str) -> dict[str, Any]:
@@ -325,7 +326,7 @@ class FormulaEngineCore:
             ast.parse(test_f, mode="eval")
 
             return {"is_valid": True, "error": None}
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return {"is_valid": False, "error": str(e)}
 
 

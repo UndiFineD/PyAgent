@@ -1,0 +1,33 @@
+diff --git a/src/infrastructure/backend/SystemCapability.py b/src/infrastructure/backend/SystemCapability.py
+index fb6a8c2..3110339 100644
+--- a/src/infrastructure/backend/SystemCapability.py
++++ b/src/infrastructure/backend/SystemCapability.py
+@@ -23,10 +23,20 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class SystemCapability:
+     """A capability supported by a backend."""
+@@ -34,4 +44,4 @@ class SystemCapability:
+     name: str
+     description: str
+     enabled: bool = True
+-    parameters: dict[str, Any] = field(default_factory=lambda: {})
+\ No newline at end of file
++    parameters: dict[str, Any] = field(default_factory=lambda: {})

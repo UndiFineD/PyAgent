@@ -1,0 +1,23 @@
+diff --git a/src/observability/reports/ReportCache.py b/src/observability/reports/ReportCache.py
+index 4590f71..9220142 100644
+--- a/src/observability/reports/ReportCache.py
++++ b/src/observability/reports/ReportCache.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ReportCache:
+     """Cache for report data.
+@@ -41,4 +46,4 @@ class ReportCache:
+     content_hash: str = ""
+     content: str = ""
+     created_at: float = 0.0
+-    ttl_seconds: int = 3600
+\ No newline at end of file
++    ttl_seconds: int = 3600

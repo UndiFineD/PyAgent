@@ -48,6 +48,16 @@ class GraphContextEngine:
         key = f"{source}->{target}"
         self.metadata[key] = {"type": relationship}
 
+    def add_node(self, node_id: str, node_type: str, metadata: dict[str, Any] | None = None) -> None:
+        """Add a node and its metadata to the graph (Phase 72)."""
+        if node_id not in self.graph:
+            self.graph[node_id] = set()
+        if node_id not in self.metadata:
+            self.metadata[node_id] = {}
+        self.metadata[node_id]["type"] = node_type
+        if metadata:
+            self.metadata[node_id].update(metadata)
+
     def scan_project(self, start_path: Path | None = None) -> None:
         """Scans files using AST to build a detailed relationship graph."""
         target = start_path or self.workspace_root
@@ -105,24 +115,26 @@ class GraphContextEngine:
 
         return affected
 
-    def save(self) -> None:
+    def save(self, file_path: str | Path | None = None) -> None:
         """Serialize graph to disk."""
+        target = Path(file_path) if file_path else self.persist_file
         data = {
             "graph": {k: list(v) for k, v in self.graph.items()},
             "metadata": self.metadata,
             "symbols": self.symbols,
         }
-        with open(self.persist_file, "w", encoding="utf-8") as f:
+        with open(target, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
-    def load(self) -> None:
+    def load(self, file_path: str | Path | None = None) -> None:
         """Load graph from disk."""
-        if self.persist_file.exists():
+        target = Path(file_path) if file_path else self.persist_file
+        if target.exists():
             try:
-                with open(self.persist_file, "r", encoding="utf-8") as f:
+                with open(target, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 self.graph = {k: set(v) for k, v in data.get("graph", {}).items()}
                 self.metadata = data.get("metadata", {})
                 self.symbols = data.get("symbols", {})
             except (json.JSONDecodeError, IOError, OSError) as e:
-                logging.error(f"Error loading graph: {e}")
+                logging.error(f"Error loading graph from {target}: {e}")

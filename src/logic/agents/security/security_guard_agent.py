@@ -25,7 +25,7 @@ from src.logic.agents.security.security_core import SecurityCore
 __version__ = VERSION
 
 
-class SecurityGuardAgent(BaseAgent):
+class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Protects the workspace by validating diffs and commands."""
 
     def __init__(self, file_path: str) -> None:
@@ -111,8 +111,9 @@ class SecurityGuardAgent(BaseAgent):
 
         return False
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform a security audit of the provided snippet or command."""
+        _ = target_file
         secrets = self.scan_for_secrets(prompt)
         risk_level, command_warning = self.audit_command(prompt)
         injections = self.scan_for_injection(prompt)
@@ -128,7 +129,7 @@ class SecurityGuardAgent(BaseAgent):
         if is_jailbreak:
             report.append("> [!DANGER] Jailbreak Attempt Detected")
 
-        if secretions := (secrets + injections):
+        if secretions := secrets + injections:
             report.append("> [!CAUTION] Security Threats Detected")
             for s in secretions:
                 report.append(f"> - {s}")

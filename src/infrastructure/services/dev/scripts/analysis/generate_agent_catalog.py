@@ -71,7 +71,7 @@ def generate_catalog() -> None:
                                 "File": f"[{file_path.name}](../{rel_path})",
                             }
                         )
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Warning: Failed to parse {file_path}: {e}")
 
     # Sort data

@@ -49,6 +49,14 @@ class SerializationManager:
         from src.core.base.common.serialization_core import SerializationCore
         self._core = SerializationCore()
 
+    def serialize(self, data: Any) -> str:
+        """Alias for to_json for backward compatibility with some tests."""
+        return self._core.to_json(data)
+
+    def deserialize(self, data: str) -> Any:
+        """Alias for from_json for backward compatibility with some tests."""
+        return self._core.from_json(data)
+
     def to_json(self, data: Any) -> str:
         """Convert to JSON."""
         return self._core.to_json(data)

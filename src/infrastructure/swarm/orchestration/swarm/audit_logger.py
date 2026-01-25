@@ -66,7 +66,7 @@ class SwarmAuditLogger:
     def _persist_event(self, event: SwarmAuditTrail):
         """Appends a single audit event to the JSONL log file."""
         try:
-            with open(self.storage_path, "a") as f:
+            with open(self.storage_path, 'a', encoding='utf-8') as f:
                 f.write(
                     json.dumps(
                         {
@@ -80,7 +80,7 @@ class SwarmAuditLogger:
                     )
                     + "\n"
                 )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to persist audit event: {e}")
 
     def get_trail(self, task_id: str) -> List[SwarmAuditTrail]:

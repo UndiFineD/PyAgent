@@ -1,0 +1,30 @@
+diff --git a/src/observability/reports/SubscriptionManager.py b/src/observability/reports/SubscriptionManager.py
+index 541edbe..e2296cf 100644
+--- a/src/observability/reports/SubscriptionManager.py
++++ b/src/observability/reports/SubscriptionManager.py
+@@ -24,12 +24,17 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportSubscription import ReportSubscription
+ from .ReportType import ReportType
+-from typing import Any, Dict, List
++from typing import Any
+ import logging
+ import time
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SubscriptionManager:
+     """Manager for report subscriptions and scheduled delivery.
+     Handles subscriber management, delivery scheduling, and
+@@ -108,4 +113,4 @@ class SubscriptionManager:
+ 
+         processed = len(self.delivery_queue)
+         self.delivery_queue.clear()
+-        return processed
+\ No newline at end of file
++        return processed

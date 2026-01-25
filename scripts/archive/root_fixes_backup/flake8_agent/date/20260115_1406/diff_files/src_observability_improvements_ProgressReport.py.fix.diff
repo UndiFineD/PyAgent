@@ -1,0 +1,32 @@
+diff --git a/src/observability/improvements/ProgressReport.py b/src/observability/improvements/ProgressReport.py
+index a38c1c3..01d0415 100644
+--- a/src/observability/improvements/ProgressReport.py
++++ b/src/observability/improvements/ProgressReport.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List, Tuple
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ProgressReport:
+     """Progress report for improvements dashboard.
+@@ -44,4 +53,4 @@ class ProgressReport:
+     in_progress_count: int = 0
+     blocked_count: int = 0
+     velocity: float = 0.0
+-    burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
+\ No newline at end of file
++    burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]

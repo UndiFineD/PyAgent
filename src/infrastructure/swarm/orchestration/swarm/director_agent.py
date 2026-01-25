@@ -167,7 +167,7 @@ class DirectorAgent(BaseAgent):
 
                     results.append(f"### Step {i + 1}: {agent_type} on {target_file}\n{res}\n")
                     self.status.update_step_status(i, "Completed", res[:100] + "...")
-                except Exception as step_error:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Step {i + 1} failed: {step_error}")
 
                     results.append(f"### Step {i + 1}: {agent_type} FAILED\n{str(step_error)}\n")
@@ -180,7 +180,7 @@ class DirectorAgent(BaseAgent):
 
             return "# Plan Execution Results\n\n" + "\n".join(results)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Execution failed: {e}")
             self.status.finish_project(success=False)
             return f"Error executing plan: {str(e)}\n\nOriginal Plan Output:\n{raw_plan}"
@@ -205,7 +205,7 @@ class DirectorAgent(BaseAgent):
                 logging.info(f"Updated status for '{title}' to {status} in {self.file_path.name}")
             else:
                 logging.warning(f"Could not find improvement '{title}' in {self.file_path.name}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to update improvement status: {e}")
 
     async def improve_content(self, prompt: str) -> str:

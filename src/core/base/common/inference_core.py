@@ -40,8 +40,8 @@ class InferenceCore(BaseCore):
     Handles tokenization, prompt rendering, and LoRA adapter management.
     """
 
-    def __init__(self, name: str = "InferenceCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
+    def __init__(self, name: str = "InferenceCore", repo_root: Optional[str] = None) -> None:
+        super().__init__(name=name, repo_root=repo_root)
         self.templates: Dict[str, PromptTemplate] = {}
 
     def register_template(self, template: PromptTemplate) -> None:
@@ -65,7 +65,8 @@ class InferenceCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.count_tokens_rust(text, model_name)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return estimate_token_count(text, model_name)
 
@@ -84,7 +85,7 @@ class InferenceCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.apply_lora_rust(base_model, adapters)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Rust LoRA application failed: %s", e)
 
         # Python fallback (placeholder for actual linear algebra)

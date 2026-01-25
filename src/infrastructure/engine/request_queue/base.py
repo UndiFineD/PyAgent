@@ -33,36 +33,31 @@ class RequestQueue(ABC, Generic[T]):
     @abstractmethod
     def add(self, request: T) -> None:
         """Add a request to the queue."""
-        pass
 
     @abstractmethod
     def pop(self) -> T:
         """Pop the next request from the queue."""
-        pass
 
     @abstractmethod
     def peek(self) -> T:
         """Peek at the next request without removing."""
-        pass
 
     @abstractmethod
     def prepend(self, request: T) -> None:
         """Add request to front (for preemption)."""
-        pass
 
     @abstractmethod
-    def remove(self, request: T) -> bool:
+    def remove(self, value: T) -> bool:
         """Remove a specific request."""
-        pass
 
     @abstractmethod
     def __len__(self) -> int:
-        pass
+        """Get queue length."""
 
     @abstractmethod
     def __bool__(self) -> bool:
-        pass
+        """Check if queue is not empty."""
 
     @abstractmethod
     def __iter__(self) -> Iterator[T]:
-        pass
+        """Iterate over queued requests."""

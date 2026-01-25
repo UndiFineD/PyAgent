@@ -22,8 +22,8 @@ Fair.py module.
 from collections import deque
 from typing import Dict, Iterator, TypeVar
 
-from ..base import RequestQueue
-from ..models import QueuedRequest
+from src.infrastructure.engine.request_queue.base import RequestQueue
+from src.infrastructure.engine.request_queue.models import QueuedRequest
 
 T = TypeVar("T", bound=QueuedRequest)
 
@@ -102,13 +102,13 @@ class FairQueue(RequestQueue):
         self._client_queues[client_id].appendleft(request)
         self._total_requests += 1
 
-    def remove(self, request: T) -> bool:
+    def remove(self, value: T) -> bool:
         """Remove specific request."""
-        client_id = request.client_id or "default"
+        client_id = value.client_id or "default"
 
         if client_id in self._client_queues:
             try:
-                self._client_queues[client_id].remove(request)
+                self._client_queues[client_id].remove(value)
                 self._total_requests -= 1
                 return True
             except ValueError:

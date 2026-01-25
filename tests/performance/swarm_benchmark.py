@@ -20,7 +20,7 @@ class SwarmBenchmark:
         if self.history_file.exists():
             try:
                 return json.loads(self.history_file.read_text())
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to load benchmark history: {e}")
         return []
 
@@ -33,7 +33,7 @@ class SwarmBenchmark:
 
         try:
             self.history_file.write_text(json.dumps(self.history, indent=2))
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to save benchmark metrics: {e}")
 
     def check_regression(self, current_ttft: float) -> bool:

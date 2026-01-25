@@ -1,0 +1,14 @@
+diff --git a/tests/phases/test_phase33.py b/tests/phases/test_phase33.py
+index abb9d2c..982ec50 100644
+--- a/tests/phases/test_phase33.py
++++ b/tests/phases/test_phase33.py
+@@ -1,9 +1,7 @@
+ #!/usr/bin/env python3
+ 
+ import os
+-import sys
+ import logging
+-from pathlib import Path
+ 
+ # Add the workspace root to sys.path
+ 

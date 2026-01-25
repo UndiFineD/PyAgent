@@ -1,0 +1,26 @@
+diff --git a/src/logic/agents/intelligence/ResearchSynthesisAgent.py b/src/logic/agents/intelligence/ResearchSynthesisAgent.py
+index 7ba7a4e..5db6381 100644
+--- a/src/logic/agents/intelligence/ResearchSynthesisAgent.py
++++ b/src/logic/agents/intelligence/ResearchSynthesisAgent.py
+@@ -21,6 +21,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from typing import Dict, List, Any
+ from src.core.base.BaseAgent import BaseAgent
++from src.observability.StructuredLogger import StructuredLogger
+ 
+ __version__ = VERSION
+ 
+@@ -32,11 +33,12 @@ class ResearchSynthesisAgent(BaseAgent):
+     def __init__(self, workspace_path: str) -> None:
+         super().__init__(workspace_path)
+         self.workspace_path = workspace_path
++        self.logger = StructuredLogger(agent_id="ResearchSynthesisAgent")
+         self.research_library = {} # topic -> research_summary
+ 
+     def conduct_research(self, topic: str, focus_areas: list[str]) -> dict[str, Any]:
+         """Conducts a simulated research session on a given topic."""
+-        print(f"Conducting research on: {topic}")
++        self.logger.info(f"Conducting research on: {topic}", topic=topic, areas=focus_areas)
+         research_id = f"R-{hash(topic) % 1000}"
+         
+         # Simulate research gathering

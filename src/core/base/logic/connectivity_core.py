@@ -18,9 +18,36 @@ Core logic for connectivity.
 (Facade for src.core.base.common.connectivity_core)
 """
 
+from typing import Any
 from src.core.base.common.connectivity_core import \
     ConnectivityCore as StandardConnectivityCore
 
 
 class ConnectivityCore(StandardConnectivityCore):
     """Facade for ConnectivityCore."""
+
+
+class BinaryTransport:
+    """
+    Utility for packing and unpacking binary payloads.
+    Uses msgpack and zlib for compression.
+    """
+
+    @staticmethod
+    def pack(data: Any, compress: bool = False) -> bytes:
+        """Pack data into binary format."""
+        import msgpack
+        packed = msgpack.packb(data, use_bin_type=True)
+        if compress:
+            import zlib
+            packed = zlib.compress(packed)
+        return packed
+
+    @staticmethod
+    def unpack(data: bytes, compressed: bool = False) -> Any:
+        """Unpack data from binary format."""
+        import msgpack
+        if compressed:
+            import zlib
+            data = zlib.decompress(data)
+        return msgpack.unpackb(data, raw=False)

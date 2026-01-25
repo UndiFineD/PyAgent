@@ -50,8 +50,8 @@ class HuggingFaceTokenizer(BaseTokenizer):
                     self._tokenizer.pad_token = self._tokenizer.eos_token
                 else:
                     self._tokenizer.add_special_tokens({"pad_token": "[PAD]"})
-        except ImportError:
-            raise ImportError("transformers package required for HuggingFace tokenizer")
+        except ImportError as exc:
+            raise ImportError("transformers package required for HuggingFace tokenizer") from exc
 
     @property
     def vocab_size(self) -> int:

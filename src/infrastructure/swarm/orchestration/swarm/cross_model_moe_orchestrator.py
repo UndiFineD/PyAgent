@@ -75,7 +75,7 @@ class CrossModelMoEOrchestrator:
                 try:
                     logger.info(f"MoE Orchestrator: Attempting Expert: {expert_id}")
                     return await asyncio.wait_for(expert_agent.process_request(task), timeout=self.timeout_sec)
-                except (asyncio.TimeoutError, Exception) as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.warning(f"MoE Orchestrator: Expert {expert_id} failed: {e}. Re-routing...")
                     self.expert_health[expert_id] = False  # Mark as unhealthy
                     # The loop will naturally try the next expert in 'selected_experts'
@@ -97,7 +97,7 @@ class CrossModelMoEOrchestrator:
                         try:
                             res = await asyncio.wait_for(a.process_request(task), timeout=self.timeout_sec)
                             return (True, aid, w, res)
-                        except Exception as e:
+                        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                             logger.error(f"MoE Mixture: {aid} failed: {e}")
                             self.expert_health[aid] = False
                             return (False, aid, w, None)

@@ -39,9 +39,11 @@ class TokenizerPool:
         self._available: List[bool] = []
         self._lock = threading.Lock()
         self._condition = threading.Condition(self._lock)
+        self._current: Optional[BaseTokenizer] = None
         self._init_pool()
 
     def _init_pool(self):
+        """Initialize the tokenizer pool."""
         registry = TokenizerRegistry()
         for _ in range(self.pool_size):
             tokenizer = registry.get_tokenizer(self.config)
@@ -49,6 +51,7 @@ class TokenizerPool:
             self._available.append(True)
 
     def acquire(self, timeout: Optional[float] = None) -> Optional[BaseTokenizer]:
+        """Acquire a tokenizer from the pool."""
         with self._condition:
             start = time.monotonic()
             while True:
@@ -65,6 +68,7 @@ class TokenizerPool:
                     self._condition.wait()
 
     def release(self, tokenizer: BaseTokenizer):
+        """Release a tokenizer back into the pool."""
         with self._condition:
             for i, t in enumerate(self._pool):
                 if t is tokenizer:

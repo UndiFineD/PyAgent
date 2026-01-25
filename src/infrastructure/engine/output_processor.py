@@ -215,11 +215,11 @@ class RequestState:
     @classmethod
     def from_new_request(
         cls,
-        tokenizer: Any,
+        _tokenizer: Any,
         request: EngineCoreRequest,
         prompt: Optional[str],
-        parent_req: Optional[ParentRequest] = None,
-        request_index: int = 0,
+        _parent_req: Optional[ParentRequest] = None,
+        _request_index: int = 0,
         queue: Optional[RequestOutputCollector] = None,
         log_stats: bool = False,
         stream_interval: int = 1,
@@ -379,7 +379,7 @@ class OutputProcessor:
 
     def propagate_error(self, e: Exception) -> None:
         """Propagate error to all request queues."""
-        for request_id, state in self.request_states.items():
+        for _, state in self.request_states.items():
             if state.queue is not None:
                 state.queue.put(e)  # type: ignore
 
@@ -398,11 +398,11 @@ class OutputProcessor:
             raise ValueError(f"Request id {request_id} already running.")
 
         state = RequestState.from_new_request(
-            tokenizer=self.tokenizer,
+            _tokenizer=self.tokenizer,
             request=request,
             prompt=prompt,
-            parent_req=parent_req,
-            request_index=request_index,
+            _parent_req=parent_req,
+            _request_index=request_index,
             queue=queue,
             log_stats=self.log_stats,
             stream_interval=self.stream_interval,
@@ -430,7 +430,7 @@ class OutputProcessor:
     def abort_requests(
         self,
         request_ids: List[str],
-        internal: bool = False,
+        _internal: bool = False,
     ) -> List[str]:
         """Abort requests and return list of aborted IDs."""
         aborted = []
@@ -458,8 +458,8 @@ class OutputProcessor:
     def process_outputs(
         self,
         engine_core_outputs: List[EngineCoreOutput],
-        engine_core_timestamp: Optional[float] = None,
-        iteration_stats: Optional[Any] = None,
+        _engine_core_timestamp: Optional[float] = None,
+        _iteration_stats: Optional[Any] = None,
     ) -> OutputProcessorOutput:
         """
         Process EngineCoreOutputs into RequestOutputs.

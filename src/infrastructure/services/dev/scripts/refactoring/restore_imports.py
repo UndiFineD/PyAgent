@@ -86,7 +86,7 @@ for root, _, files in os.walk(src_path):
                             f.write(new_content)
                         print(f"  Modified: {path} ({changes_in_file} lines restored)")
                         files_modified += 1
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 print(f"  Error processing {path}: {e}")
 
 print(f"\nFinished. Processed {files_processed} files, modified {files_modified} files.")

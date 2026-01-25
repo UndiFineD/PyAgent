@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """
-Workspace maintenance.py module.
+Workspace maintenance module for auditing and cleanup.
 """
-# Copyright 2026 PyAgent Authors
-# Consolidated Maintenance and Audit utilities for the PyAgent workspace.
 
 from __future__ import annotations
 
@@ -14,193 +24,206 @@ import re
 from pathlib import Path
 from typing import List, Tuple
 
+from src.maintenance.mixins.pylint_fixer_mixin import PylintFixerMixin
+from src.maintenance.mixins.import_cleanup_mixin import ImportCleanupMixin
+
 logger = logging.getLogger(__name__)
 
-
-class WorkspaceMaintenance:
-    """Consolidates file system auditing, naming convention enforcement, and cleanup."""
+class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
+    """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
 
     DEFAULT_EXCLUSIONS = {
-        ".git",
-        ".venv",
-        ".vscode",
-        ".mypy_cache",
-        ".pytest_cache",
-        ".ruff_cache",
-        ".agent_cache",
-        "target",
-        "node_modules",
-        ".hypothesis",
-        "__pycache__",
+        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache", 
+        ".ruff_cache", ".agent_cache", "target", "node_modules", 
+        ".hypothesis", "__pycache__", "reports", "archive"
     }
 
-    def __init__(self, workspace_root: str | Path = ".") -> None:
+    STANDARD_HEADER = """#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+
+    def __init__(self, workspace_root: str | Path = "."):
         self.workspace_root = Path(workspace_root).resolve()
 
-    def find_large_files(
-        self, search_roots: List[str] = ["src"], threshold: int = 500, top_n: int = 10
-    ) -> List[Tuple[int, Path]]:
-        """
-        Scans specified directories for Python files exceeding the line count threshold.
-        Returns a sorted list of (line_count, path).
-        """
+    def _is_excluded(self, path: str | Path) -> bool:
+        p = Path(path)
+        parts = p.parts
+        for part in parts:
+            if part in self.DEFAULT_EXCLUSIONS:
+                return True
+        return False
+
+    def run_standard_cycle(self):
+        """Executes a standard maintenance cycle."""
+        logger.info("Starting standard maintenance cycle...")
+        self.apply_header_compliance()
+        self.apply_docstring_compliance()
+        self.fix_pylint_violations()
+        logger.info("Cycle complete.")
+
+    def find_large_files(self, threshold_kb: int = 100) -> List[Tuple[int, Path]]:
+        """Identifies files exceeding the specified size threshold."""
         results = []
-        for root_name in search_roots:
-            root_path = self.workspace_root / root_name
-            if not root_path.exists():
-                logger.warning(f"Search root {root_path} does not exist.")
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
                 continue
+            for name in files:
+                path = Path(root) / name
+                try:
+                    size = path.stat().st_size // 1024
+                    if size > threshold_kb:
+                        results.append((size, path.relative_to(self.workspace_root)))
+                except OSError:
+                    continue
+        return sorted(results, key=lambda x: x[0], reverse=True)
 
-            for dirpath, dirnames, filenames in os.walk(root_path):
-                # Prune excluded directories
-                dirnames[:] = [d for d in dirnames if d not in self.DEFAULT_EXCLUSIONS]
-
-                for filename in filenames:
-                    if filename.endswith(".py"):
-                        filepath = Path(dirpath) / filename
-                        count = self._get_line_count(filepath)
-
-                        # Check for 'facade' keyword to skip if necessary (logic from find_large_files.py)
-                        is_facade = False
-                        try:
-                            with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
-                                first_part = f.read(500).lower()
-                                if "facade" in first_part:
-                                    is_facade = True
-                        except Exception:
-                            pass
-
-                        if count > threshold and not is_facade:
-                            results.append((count, filepath))
-
-        results.sort(key=lambda x: x[0], reverse=True)
-        return results[:top_n]
-
-    def audit_naming_conventions(self) -> List[Path]:
-        """
-        Identifies files and directories that do not follow snake_case naming.
-        Returns a list of violating relative paths.
-        """
+    def audit_naming_conventions(self) -> List[str]:
+        """Checks for files or directories not following snake_case naming."""
         violations = []
-        for path in self.workspace_root.rglob("*"):
-            # Skip excluded paths
-            if any(part in self.DEFAULT_EXCLUSIONS for part in path.parts):
+        for root, dirs, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
                 continue
-
-            # Skip hidden files
-            if path.name.startswith("."):
-                continue
-
-            # Skip standard exceptions
-            if path.name in [
-                "README.md",
-                "Cargo.toml",
-                "Cargo.lock",
-                "LICENSE",
-                "pytest.ini",
-                "requirements.txt",
-                "QUICKSTART_TOKEN_BENCHMARKS.md",
-                "package.json",
-            ]:
-                continue
-
-            stem = path.stem
-            if not self._is_snake_case(stem):
-                violations.append(path.relative_to(self.workspace_root))
-
+            for name in files + dirs:
+                if name.startswith(".") or name.startswith("__") or name in ["README.md", "LICENSE"]:
+                    continue
+                if not re.match(r"^[a-z0-9_]+(\.[a-z0-9_]+)*$", name):
+                    violations.append(str(Path(root) / name))
         return violations
 
-    def fix_naming_conventions(self, dry_run: bool = True) -> List[Tuple[Path, Path]]:
-        """
-        Attempts to rename files and directories to snake_case.
-        Returns a list of (old_path, new_path) transformations.
-        """
-        transformations = []
-        # Walk bottom-up to avoid issues when renaming parents
-        for root, dirs, files in os.walk(self.workspace_root, topdown=False):
-            # Prune exclusions
-            dirs[:] = [d for d in dirs if d not in self.DEFAULT_EXCLUSIONS]
-            if any(ex in root for ex in self.DEFAULT_EXCLUSIONS):
+    def audit_headers(self) -> List[Path]:
+        """Identifies Python files missing the standard license header."""
+        missing = []
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
                 continue
+            for file in files:
+                if file.endswith(".py"):
+                    path = Path(root) / file
+                    try:
+                        content = path.read_text(encoding="utf-8")
+                        if "Copyright 2026 PyAgent Authors" not in content:
+                            missing.append(path)
+                    except Exception:  # pylint: disable=broad-exception-caught
+                        continue
+        return missing
 
-            # Process files
-            for name in files:
-                if name in ["README.md", "LICENSE", "Cargo.toml", "package.json", "pytest.ini", "requirements.txt"]:
+    def find_long_lines(self, max_len: int = 120) -> List[str]:
+        """Identifies lines exceeding max_len characters."""
+        violations = []
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for file in files:
+                if not file.endswith(".py"):
                     continue
+                path = Path(root) / file
+                try:
+                    lines = path.read_text(encoding="utf-8").splitlines()
+                    for i, line in enumerate(lines, 1):
+                        if len(line) > max_len:
+                            violations.append(f"{path.name}:{i}:{len(line)}")
+                except Exception:  # pylint: disable=broad-exception-caught
+                    continue
+        return violations
 
-                new_name = self._to_snake_case(name)
-                if new_name != name:
-                    old_path = Path(root) / name
-                    new_path = Path(root) / new_name
-                    transformations.append((old_path, new_path))
-                    if not dry_run:
-                        self._safe_rename(old_path, new_path)
+    def fix_whitespace(self):
+        """Removes trailing whitespace and tabs from all Python files."""
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for file in files:
+                if file.endswith(".py"):
+                    path = Path(root) / file
+                    try:
+                        content = path.read_text(encoding="utf-8")
+                        lines = content.splitlines()
+                        new_lines = [line.rstrip() for line in lines]
+                        new_content = "\n".join(new_lines)
+                        if not content.endswith("\n") and content != "":
+                            # Keep newline at end of file if it had one, or add one if it didn't but had content
+                            pass
+                        # To match test expectations exactly:
+                        new_content = "\n".join(new_lines)
+                        if content.endswith("\n"):
+                            new_content += "\n"
+                        path.write_text(new_content, encoding="utf-8")
+                    except Exception:  # pylint: disable=broad-exception-caught
+                        continue
 
-            # Process directories
-            for name in dirs:
-                new_name = self._to_snake_case(name)
-                if new_name != name:
-                    old_path = Path(root) / name
-                    new_path = Path(root) / new_name
-                    transformations.append((old_path, new_path))
-                    if not dry_run:
-                        self._safe_rename(old_path, new_path)
+    def apply_header_compliance(self):
+        """Ensures all Python files have the standard license header."""
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for file in files:
+                if file.endswith(".py"):
+                    path = Path(root) / file
+                    self._apply_file_header(path)
 
-        return transformations
-
-    def _get_line_count(self, file_path: Path) -> int:
+    def _apply_file_header(self, path: Path):
         try:
-            with open(file_path, "rb") as f:
-                content = f.read()
-                return content.count(b"\n") + (1 if content and not content.endswith(b"\n") else 0)
-        except Exception:
-            return 0
+            content = path.read_text(encoding="utf-8")
+            if "Copyright 2026 PyAgent Authors" not in content:
+                # Strip existing shebang if any
+                if content.startswith("#!"):
+                    lines = content.splitlines()
+                    content = "\n".join(lines[1:])
+                path.write_text(self.STANDARD_HEADER + "\n" + content, encoding="utf-8")
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logger.error(f"Error applying header to {path}: {e}")
 
-    def _is_snake_case(self, name: str) -> bool:
-        return re.fullmatch(r"[a-z0-9_]+", name) is not None
+    def apply_docstring_compliance(self):
+        """Ensures all Python files have a module docstring."""
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for file in files:
+                if file.endswith(".py"):
+                    path = Path(root) / file
+                    self._apply_docstring(path)
 
-    def _to_snake_case(self, name: str) -> str:
-        if name == "__init__.py":
-            return name
-        path_obj = Path(name)
-        stem = path_obj.stem
-        suffix = path_obj.suffix
-
-        # Replace spaces and hyphens
-        temp = stem.replace(" ", "_").replace("-", "_")
-        # Split CamelCase
-        s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", temp)
-        s2 = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
-        # Clean up dots and underscores
-        new_stem = s2.replace(".", "_")
-        new_stem = re.sub("_+", "_", new_stem).strip("_")
-
-        return new_stem + suffix
-
-    def _safe_rename(self, old_path: Path, new_path: Path) -> None:
-        if new_path.exists() and old_path.name.lower() != new_path.name.lower():
-            logger.error(f"Collision: {old_path} -> {new_path}")
-            return
+    def _apply_docstring(self, path: Path):
         try:
-            # Handle Windows case-insensitivity
-            temp_path = old_path.with_name(old_path.name + ".tmp_rename")
-            os.rename(old_path, temp_path)
-            os.rename(temp_path, new_path)
-            logger.info(f"Renamed: {old_path} -> {new_path}")
-        except Exception as e:
-            logger.error(f"Error renaming {old_path}: {e}")
+            content = path.read_text(encoding="utf-8")
+            if '"""' not in content and "'''" not in content:
+                # Add a simple docstring after header
+                lines = content.splitlines()
+                header_end = 0
+                for i, line in enumerate(lines):
+                    if "limitations under the License." in line:
+                        header_end = i + 1
+                        break
 
+                module_name = path.stem.replace("_", " ").title()
+                docstring = f'\n"""\n{module_name} module.\n"""\n'
+                new_content = "\n".join(lines[:header_end]) + docstring + "\n".join(lines[header_end:])
+                path.write_text(new_content, encoding="utf-8")
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logger.error(f"Error applying docstring to {path}: {e}")
+
+    def fix_pylint_violations(self):
+        """Walks through the workspace and applies available Pylint fixes."""
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for file in files:
+                if file.endswith(".py"):
+                    path = Path(root) / file
+                    self.fix_unspecified_encoding(path)
+                    self.fix_no_else_return(path)
+                    self.fix_broad_exception(path)
 
 if __name__ == "__main__":
-    # Example usage if run directly
-    maint = WorkspaceMaintenance("c:/DEV/PyAgent")
-    print("--- Large Files ---")
-    for count, path in maint.find_large_files():
-        print(f"{count}: {path}")
-
-    print("\n--- Naming Violations ---")
-    violations = maint.audit_naming_conventions()
-    for v in violations[:10]:
-        print(v)
-    if len(violations) > 10:
-        print(f"... and {len(violations) - 10} more.")
+    maint = WorkspaceMaintenance()
+    maint.run_standard_cycle()

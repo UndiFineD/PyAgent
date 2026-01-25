@@ -66,7 +66,7 @@ class RedQueenCore:
         if HAS_RUST:
             try:
                 return rc.evaluate_bypass(response, forbidden_patterns)  # type: ignore[attr-defined]
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
         matches = 0
         for pattern in forbidden_patterns:

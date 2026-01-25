@@ -39,7 +39,7 @@ class SecurityReporterMixin:
                         "timestamp": time.time(),
                     },
                 )
-            except Exception as e:
+            except (AttributeError, RuntimeError, TypeError) as e:
                 logging.debug(f"SecurityCore: Failed to record finding: {e}")
 
     def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:

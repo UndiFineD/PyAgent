@@ -155,7 +155,7 @@ class EngineConfig:
 # ==============================================================================
 
 
-class EngineLifecycleManager:
+class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
     """
     Manages the lifecycle of an inference engine.
 
@@ -265,7 +265,7 @@ class EngineLifecycleManager:
             if self.config.on_state_change:
                 try:
                     self.config.on_state_change(old_state, new_state)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.exception("Error in state change callback: %s", e)
 
             return True
@@ -476,14 +476,14 @@ class EngineLifecycleManager:
                     if self.config.on_request_complete:
                         try:
                             self.config.on_request_complete(request)
-                        except Exception as e:
+                        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                             logger.exception("Error in completion callback: %s", e)
 
             # Transition back to ready if no work remains
             if not self.request_queue.has_unfinished_requests():
                 self._transition_to(EngineState.READY)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._last_error = e
             self._error_count += 1
             logger.exception("Error during step: %s", e)
@@ -539,7 +539,7 @@ class EngineLifecycleManager:
     def setup_signal_handlers(self) -> None:
         """Set up signal handlers for graceful shutdown."""
 
-        def signal_handler(signum, frame):
+        def signal_handler(signum, _frame):
             logger.info("Received signal %s, initiating shutdown", signum)
             self.shutdown()
 

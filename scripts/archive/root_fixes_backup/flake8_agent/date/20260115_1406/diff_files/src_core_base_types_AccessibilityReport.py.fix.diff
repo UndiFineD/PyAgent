@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/AccessibilityReport.py b/src/core/base/types/AccessibilityReport.py
+index d46be5b..fa727c0 100644
+--- a/src/core/base/types/AccessibilityReport.py
++++ b/src/core/base/types/AccessibilityReport.py
+@@ -25,10 +25,19 @@ from src.core.base.version import VERSION
+ from src.core.base.types.AccessibilityIssue import AccessibilityIssue
+ from src.core.base.types.WCAGLevel import WCAGLevel
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class AccessibilityReport:
+     """Comprehensive accessibility report.
+@@ -50,4 +59,4 @@ class AccessibilityReport:
+     compliance_score: float = 100.0
+     critical_count: int = 0
+     serious_count: int = 0
+-    recommendations: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    recommendations: list[str] = field(default_factory=lambda: [])

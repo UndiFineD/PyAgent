@@ -64,7 +64,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
         return False
 
     @as_tool
-    def MorphologicalEvolution(self, agent_name: str, call_logs: list[dict[str, Any]]) -> dict[str, Any]:
+    def morphological_evolution(self, agent_name: str, call_logs: list[dict[str, Any]]) -> dict[str, Any]:
         """Alias for morphological analysis used by fleet."""
         return self.analyze_api_morphology(agent_name, call_logs)
 
@@ -99,6 +99,6 @@ class MorphologicalEvolutionAgent(BaseAgent):
             "evolution_readiness": 0.85,
         }
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         # Standard implementation
         return "Morphological Evolution Report: Proposing structural symmetry for fleet interfaces."

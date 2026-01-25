@@ -1,0 +1,12 @@
+diff --git a/src/core/base/types/ConsistencyIssue.py b/src/core/base/types/ConsistencyIssue.py
+index 08890c7..8a557a3 100644
+--- a/src/core/base/types/ConsistencyIssue.py
++++ b/src/core/base/types/ConsistencyIssue.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import List
+ 
+ __version__ = VERSION
+ 

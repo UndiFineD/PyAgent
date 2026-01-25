@@ -58,7 +58,7 @@ class SwarmTopologyReporter:
             "timestamp": "2026-01-11T18:00:00",
         }
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.output_path, "w") as f:
+        with open(self.output_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)
         logging.info(f"Topology exported to {self.output_path}")
 

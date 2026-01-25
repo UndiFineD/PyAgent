@@ -25,6 +25,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class OllamaConnectorAgent(BaseAgent):
     """Handles local inference requests via the Ollama API."""
 
@@ -38,7 +39,7 @@ class OllamaConnectorAgent(BaseAgent):
         try:
             response = requests.get(f"{self.endpoint}/api/tags", timeout=2)
             return response.status_code == 200
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     def generate_local(self, prompt: str, model: str = "llama3") -> str:
@@ -49,7 +50,7 @@ class OllamaConnectorAgent(BaseAgent):
         payload = {"model": model, "prompt": prompt, "stream": False}
 
         try:
-            response = requests.post(f"{self.endpoint}/api/generate", json=payload)
+            response = requests.post(f"{self.endpoint}/api/generate", json=payload, timeout=30)
             response_text = ""
             if response.status_code == 200:
                 response_text = response.json().get("response", "")
@@ -60,7 +61,7 @@ class OllamaConnectorAgent(BaseAgent):
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_interaction(provider="Ollama", model=model, prompt=prompt, result=response_text)
             return response_text
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             error_msg = f"Exception during local inference: {e}"
 
             if hasattr(self, "recorder") and self.recorder:
@@ -77,5 +78,5 @@ class OllamaConnectorAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(OllamaConnectorAgent)
+    main = create_main_function(OllamaConnectorAgent, "Ollama Edge Connector", "Edge Intelligence logs")
     main()

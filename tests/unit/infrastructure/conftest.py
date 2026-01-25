@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import pytest
 from tests.utils.agent_test_utils import agent_dir_on_path
 
@@ -81,7 +95,7 @@ def agent_backend_module():
                 sub_mod = importlib.import_module(mod_path)
                 if hasattr(sub_mod, cls_name):
                     setattr(main_mod, cls_name, getattr(sub_mod, cls_name))
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Silently fail if optional modules are missing dependencies
                 pass
 
@@ -95,7 +109,7 @@ def agent_backend_module():
                 sub_mod = importlib.import_module(mod_path)
                 if hasattr(sub_mod, real_name):
                     setattr(main_mod, alias, getattr(sub_mod, real_name))
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         return main_mod

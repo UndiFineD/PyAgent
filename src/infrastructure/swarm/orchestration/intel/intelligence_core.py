@@ -63,7 +63,7 @@ class IntelligenceCore:
             try:
                 # Optimized sort and truncate in Rust
                 pool = rc.filter_relevant_insights(pool, limit)  # type: ignore[attr-defined]
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Rust filter_relevant_insights failed: {e}")
 
         insights = []

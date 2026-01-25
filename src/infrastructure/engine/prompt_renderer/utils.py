@@ -22,12 +22,15 @@ from __future__ import annotations
 
 import base64
 import contextlib
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from .models import (EmbeddingInput, PromptConfig, RenderResult,
                      TruncationResult, TruncationStrategy)
 from .salt import CacheSaltGenerator
 from .truncation import TruncationManager
+
+if TYPE_CHECKING:
+    from .renderers import ChatRenderer, CompletionRenderer
 
 
 class EmbeddingLoader:
@@ -66,7 +69,7 @@ class EmbeddingLoader:
     @classmethod
     def load_file(cls, path: str, encoding: str = "float32") -> EmbeddingInput:
         """Load embeddings from file."""
-        with open(path, "rb") as f:
+        with open(path, 'rb', encoding='utf-8') as f:
             data = base64.b64encode(f.read()).decode()
         return cls.load_base64(data, encoding)
 
@@ -135,7 +138,7 @@ def apply_chat_template(
     from .renderers import ChatRenderer
 
     renderer = ChatRenderer()
-    return renderer._apply_template(
+    return renderer.apply_template(
         messages,
         template or renderer.DEFAULT_TEMPLATE,
         add_generation_prompt,
@@ -163,30 +166,3 @@ def generate_cache_salt(
         add_special_tokens=add_special_tokens,
     )
     return CacheSaltGenerator.generate(config, kwargs)
-
-
-def _try_rust_render_template(
-    template: str,
-    messages: List[Dict[str, Any]],
-    add_generation_prompt: bool,
-) -> Optional[str]:
-    """Try Rust-accelerated template rendering."""
-    try:
-        from rust_core import render_chat_template_rust
-
-        return render_chat_template_rust(template, messages, add_generation_prompt)
-    except ImportError:
-        return None
-
-
-def _try_rust_find_placeholders(
-    text: str,
-    patterns: List[str],
-) -> Optional[List[int]]:
-    """Try Rust-accelerated placeholder finding."""
-    try:
-        from rust_core import find_placeholders_rust
-
-        return find_placeholders_rust(text, patterns)
-    except ImportError:
-        return None

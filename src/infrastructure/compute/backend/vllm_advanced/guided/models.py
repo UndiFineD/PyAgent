@@ -111,7 +111,7 @@ class RegexPattern:
         try:
             re.compile(self.pattern)
         except re.error as e:
-            raise ValueError(f"Invalid regex pattern: {e}")
+            raise ValueError(f"Invalid regex pattern: {e}") from e
 
     def to_guided_config(self) -> GuidedConfig:
         """Convert to GuidedConfig for use with decoder."""
@@ -122,27 +122,33 @@ class RegexPattern:
 
     @classmethod
     def email(cls) -> "RegexPattern":
+        """Pattern for common email addresses."""
         return cls(pattern=cls.EMAIL, name="email")
 
     @classmethod
     def phone_us(cls) -> "RegexPattern":
+        """Pattern for US phone numbers."""
         return cls(pattern=cls.PHONE_US, name="phone_us")
 
     @classmethod
     def url(cls) -> "RegexPattern":
+        """Pattern for absolute URLs."""
         return cls(pattern=cls.URL, name="url")
 
     @classmethod
     def date_iso(cls) -> "RegexPattern":
+        """Pattern for ISO 8601 dates."""
         return cls(pattern=cls.DATE_ISO, name="date_iso")
 
     @classmethod
     def one_of(cls, *patterns: str) -> "RegexPattern":
+        """Pattern matching any of the provided sub-patterns."""
         combined = "|".join(f"({p})" for p in patterns)
         return cls(pattern=combined, name="one_of")
 
     @classmethod
     def sequence(cls, *patterns: str, separator: str = "") -> "RegexPattern":
+        """Pattern matching a sequence of sub-patterns with a separator."""
         combined = separator.join(patterns)
         return cls(pattern=combined, name="sequence")
 
@@ -169,16 +175,20 @@ class ChoiceConstraint:
 
     @classmethod
     def yes_no(cls) -> "ChoiceConstraint":
+        """Constraint for binary 'yes' or 'no' responses."""
         return cls(["yes", "no"])
 
     @classmethod
     def true_false(cls) -> "ChoiceConstraint":
+        """Constraint for boolean 'true' or 'false' responses."""
         return cls(["true", "false"])
 
     @classmethod
     def sentiment(cls) -> "ChoiceConstraint":
+        """Constraint for common sentiment categories."""
         return cls(["positive", "negative", "neutral"])
 
     @classmethod
     def rating(cls, min_val: int = 1, max_val: int = 5) -> "ChoiceConstraint":
+        """Constraint for integer ratings in the specified range."""
         return cls([str(i) for i in range(min_val, max_val + 1)])

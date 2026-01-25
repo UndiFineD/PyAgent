@@ -36,8 +36,8 @@ class HardwareCore(BaseCore):
     Standard interface for hardware-specific optimizations (NPU, GPU).
     """
 
-    def __init__(self, name: str = "HardwareCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
+    def __init__(self, name: str = "HardwareCore", repo_root: Optional[str] = None) -> None:
+        super().__init__(name=name, repo_root=repo_root)
         self._npu_status = False
 
     def initialize_npu(self) -> bool:

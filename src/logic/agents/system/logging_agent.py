@@ -70,7 +70,7 @@ class LoggingAgent(BaseAgent):
                     return (
                         f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
                     )
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     return f"LoggingAgent: Failed to configure SysLog: {e}"
 
             return await asyncio.to_thread(init_syslog)

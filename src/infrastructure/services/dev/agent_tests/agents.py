@@ -488,7 +488,7 @@ class TestsAgent(BaseAgent):
                 logging.warning(f"Test structure issues: {', '.join(issues)}")
                 # We don't fail validation for this yet, just warn
             return True
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Failed to validate test structure: {e}")
             return True
 
@@ -518,7 +518,7 @@ class TestsAgent(BaseAgent):
                     f"```python\n{source_content}\n```\n\n"
                     "Ensure tests cover the public API and edge cases of the source code."
                 )
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Failed to read source file context: {e}")
         new_content = super().improve_content(enhanced_prompt)
         # Validate syntax

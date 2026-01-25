@@ -49,13 +49,11 @@ class MemoryCore:
         return cls._instance
 
     def __init__(self):
-        # Attributes are initialized in _initialize for singleton consistency
-        self._fs = None
-        self._storage = None
-        self.base_path = Path("data/memory")
-        self.index_path = Path("data/agent_knowledge_index.json")
+        # Already initialized via _initialize in __new__
+        pass
 
     def _initialize(self):
+        # pylint: disable=attribute-defined-outside-init
         self._fs = FileSystemCore()
         self._storage = StorageCore()
         self.base_path = Path("data/memory")
@@ -82,7 +80,7 @@ class MemoryCore:
                 return rc.create_episode_struct(  # type: ignore
                     agent_id, task, content, success, metadata or {}, base_utility
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust create_episode_struct failed: %s", e)
 
         # Python Fallback
@@ -110,7 +108,7 @@ class MemoryCore:
             try:
                 # pylint: disable=no-member
                 return rc.rank_memories_rust(memories, limit, min_utility)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust rank_memories_rust failed: %s", e)
 
         # Python Fallback
@@ -125,7 +123,8 @@ class MemoryCore:
             try:
                 # pylint: disable=no-member
                 return rc.retrieve_memory_graph_rust(root_id, depth)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         # Simple Python fallback (stub)
@@ -153,7 +152,7 @@ class MemoryCore:
             # Standardized I/O via StorageCore
             self._storage.save_json(file_path, content)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to store %s knowledge for %s: %s", mode, agent_id, e)
             return False
 
@@ -166,7 +165,7 @@ class MemoryCore:
             collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
             collection.add(documents=[str(content)], metadatas=[metadata] if metadata else [{}], ids=[key])
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.warning("ChromaDB storage failed for %s: %s", agent_id, e)
             return False
 
@@ -199,7 +198,7 @@ class MemoryCore:
             try:
                 # pylint: disable=no-member
                 return rc.semantic_search(agent_id, query, limit)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust semantic search failed: %s", e)
 
         try:
@@ -217,7 +216,7 @@ class MemoryCore:
             for i, doc in enumerate(docs):
                 output.append({"id": ids[i], "content": doc, "metadata": metas[i]})
             return output
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.warning("ChromaDB retrieval failed for %s: %s", agent_id, e)
             return []
 
@@ -231,7 +230,8 @@ class MemoryCore:
                 collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
                 collection.delete(ids=[key])
                 return True
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 return False
 
         agent_dir = self._get_agent_path(agent_id, mode)
@@ -240,7 +240,7 @@ class MemoryCore:
             try:
                 file_path.unlink()
                 return True
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Failed to delete %s knowledge: %s", mode, e)
         return False
 

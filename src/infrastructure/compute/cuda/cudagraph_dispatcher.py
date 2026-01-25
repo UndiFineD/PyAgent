@@ -97,12 +97,10 @@ class DispatchPolicy(ABC):
     @abstractmethod
     def should_use_graph(self, key: DispatchKey, graph_available: bool) -> bool:
         """Determine if graph should be used."""
-        pass
 
     @abstractmethod
     def select_mode(self, key: DispatchKey, available_modes: Set[DispatchMode]) -> DispatchMode:
         """Select execution mode."""
-        pass
 
 
 class DefaultDispatchPolicy(DispatchPolicy):
@@ -325,9 +323,9 @@ class CudagraphDispatcher:
         if hasattr(graph, "replay"):
             graph.replay()
             return None  # Output retrieved separately
-        else:
-            # Fallback for mock graphs
-            return self.eager_runner(*args, **kwargs)
+
+        # Fallback for mock graphs
+        return self.eager_runner(*args, **kwargs)
 
     def _replay_piecewise(self, entry: GraphEntry, *args: Any, **kwargs: Any) -> Any:
         """Replay piecewise graphs."""
@@ -378,11 +376,11 @@ class CompositeDispatcher:
         with self._lock:
             dispatchers = list(self._dispatchers)
 
-        for priority, name, dispatcher in dispatchers:
+        for _, name, dispatcher in dispatchers:
             try:
                 if dispatcher.has_graph(key):
                     return dispatcher.dispatch(key, *args, **kwargs)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Dispatcher {name} failed: {e}")
                 continue
 

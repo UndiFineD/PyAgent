@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/AgentRegistryCore.py b/src/infrastructure/fleet/AgentRegistryCore.py
+index f05b8a6..cee3af6 100644
+--- a/src/infrastructure/fleet/AgentRegistryCore.py
++++ b/src/infrastructure/fleet/AgentRegistryCore.py
+@@ -26,7 +26,7 @@ Pure logic component to be potentially rustified.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+-from typing import Dict, List, Any, Optional, Tuple
++from typing import Any
+ from .VersionGate import VersionGate
+ 
+ __version__ = VERSION

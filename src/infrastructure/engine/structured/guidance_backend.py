@@ -45,7 +45,7 @@ except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # noqa: F401
+    import rust_core  # pylint: disable=unused-import
 
     HAS_RUST = True
 except ImportError:
@@ -97,6 +97,16 @@ class GuidanceTemplate:
     # Parsing state
     _parsed_segments: List[Tuple[str, Optional[GuidanceVariable]]] = field(default_factory=list)
     _cache_key: str = field(default="")
+
+    @property
+    def parsed_segments(self) -> List[Tuple[str, Optional[GuidanceVariable]]]:
+        """Get parsed template segments."""
+        return self._parsed_segments
+
+    @property
+    def cache_key(self) -> str:
+        """Get template cache key."""
+        return self._cache_key
 
     def __post_init__(self):
         self._parse_template()
@@ -171,11 +181,11 @@ class GuidanceState:
         self.generated_text += token_text
 
         # Check if we've completed current segment
-        if self.segment_index >= len(self.template._parsed_segments):
+        if self.segment_index >= len(self.template.parsed_segments):
             self.is_complete = True
             return True
 
-        text, var = self.template._parsed_segments[self.segment_index]
+        text, var = self.template.parsed_segments[self.segment_index]
 
         if var is None:
             # Text segment - check if matches
@@ -238,7 +248,7 @@ class CompiledGuidanceProgram:
 
     def fill_bitmask(
         self,
-        state: GuidanceState,
+        _state: GuidanceState,
         bitmask: "np.ndarray",
     ) -> None:
         """Fill bitmask with allowed tokens."""
@@ -277,7 +287,7 @@ class GuidanceGrammar:
             else:
                 text = f"token_{token_id}"
             return self.accept_token_text(text)
-        except Exception:
+        except (ValueError, TypeError, AttributeError, RuntimeError):
             return False
 
     def accept_token_text(self, text: str) -> bool:
@@ -353,7 +363,7 @@ class GuidanceBackend:
             variables=variables or [],
         )
 
-        cache_key = template._cache_key
+        cache_key = template.cache_key
 
         with self._cache_lock:
             if cache_key in self._cache:
@@ -409,19 +419,19 @@ class GuidanceBackend:
 
             return "".join(parts)
 
-        elif schema_type == "array":
+        if schema_type == "array":
             return "[{{items}}]"
 
-        elif schema_type == "string":
+        if schema_type == "string":
             if "enum" in schema:
                 options = "|".join(f'"{opt}"' for opt in schema["enum"])
                 return f"{{{{choice:{options}}}}}"
             return '"{{value}}"'
 
-        elif schema_type in ("number", "integer"):
+        if schema_type in ("number", "integer"):
             return "{{number}}"
 
-        elif schema_type == "boolean":
+        if schema_type == "boolean":
             return "{{choice:true|false}}"
 
         return "{{value}}"

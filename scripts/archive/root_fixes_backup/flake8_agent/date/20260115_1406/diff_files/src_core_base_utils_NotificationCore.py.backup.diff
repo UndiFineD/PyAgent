@@ -1,0 +1,28 @@
+diff --git a/src/core/base/utils/NotificationCore.py b/src/core/base/utils/NotificationCore.py
+index 4a29567..5a00efd 100644
+--- a/src/core/base/utils/NotificationCore.py
++++ b/src/core/base/utils/NotificationCore.py
+@@ -28,10 +28,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+ import urllib.parse
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class NotificationCore:
+     """Pure logic core for notification management."""
+ 
+@@ -58,4 +63,4 @@ class NotificationCore:
+     def validate_event_data(data: dict[str, Any]) -> bool:
+         """Basic validation for event data structures."""
+         # Ensure it's a non-empty dictionary
+-        return isinstance(data, dict) and len(data) > 0
+\ No newline at end of file
++        return isinstance(data, dict) and len(data) > 0

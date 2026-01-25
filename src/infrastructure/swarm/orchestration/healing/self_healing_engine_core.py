@@ -51,7 +51,7 @@ class SelfHealingEngineCore:
                     "strategy": strategy,
                     "is_critical": "Registry" in agent_name or "Fleet" in agent_name,
                 }
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         strategy = "manual_review"

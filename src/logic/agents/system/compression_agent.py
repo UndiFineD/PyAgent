@@ -70,7 +70,7 @@ class CompressionAgent(BaseAgent):
 
         return await self.think(prompt)
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return "Context compression logic is active. Information density is optimal."
 
 

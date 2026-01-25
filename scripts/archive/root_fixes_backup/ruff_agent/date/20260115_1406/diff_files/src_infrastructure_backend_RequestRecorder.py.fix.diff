@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/RequestRecorder.py b/src/infrastructure/backend/RequestRecorder.py
+index e745529..8bcd9c6 100644
+--- a/src/infrastructure/backend/RequestRecorder.py
++++ b/src/infrastructure/backend/RequestRecorder.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .RecordedRequest import RecordedRequest
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import json
+ import threading
+ import time

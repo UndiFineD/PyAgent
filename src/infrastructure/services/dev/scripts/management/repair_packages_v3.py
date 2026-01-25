@@ -44,11 +44,11 @@ def fix_content(file_path: str | Path) -> bool:
     try:
         with open(file_path, encoding="utf-8") as f:
             content = f.read()
-    except Exception:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         try:
             with open(file_path, encoding="latin-1") as f:
                 content = f.read()
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     original = content

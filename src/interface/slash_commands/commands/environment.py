@@ -31,7 +31,7 @@ from src.interface.slash_commands.registry import register
     aliases=["ver", "v"],
     category="environment",
 )
-def cmd_version(ctx: CommandContext) -> CommandResult:
+def cmd_version(_ctx: CommandContext) -> CommandResult:
     """Get Python and OS version."""
     python_version = sys.version.split()[0]
 
@@ -88,7 +88,7 @@ def cmd_env(ctx: CommandContext) -> CommandResult:
     aliases=["py"],
     category="environment",
 )
-def cmd_python(ctx: CommandContext) -> CommandResult:
+def cmd_python(_ctx: CommandContext) -> CommandResult:
     """Get Python interpreter information."""
     v = sys.version_info
     return CommandResult.ok(
@@ -109,7 +109,7 @@ def cmd_python(ctx: CommandContext) -> CommandResult:
     aliases=["pwd", "dir"],
     category="environment",
 )
-def cmd_cwd(ctx: CommandContext) -> CommandResult:
+def cmd_cwd(_ctx: CommandContext) -> CommandResult:
     """Get current working directory."""
     cwd = os.getcwd()
     return CommandResult.ok(
@@ -125,7 +125,7 @@ def cmd_cwd(ctx: CommandContext) -> CommandResult:
     aliases=["host"],
     category="environment",
 )
-def cmd_hostname(ctx: CommandContext) -> CommandResult:
+def cmd_hostname(_ctx: CommandContext) -> CommandResult:
     """Get system hostname."""
     import socket
 
@@ -149,7 +149,7 @@ def cmd_hostname(ctx: CommandContext) -> CommandResult:
     category="environment",
     aliases=["user"],
 )
-def cmd_user(ctx: CommandContext) -> CommandResult:
+def cmd_user(_ctx: CommandContext) -> CommandResult:
     """Get current user name."""
     import getpass
 
@@ -169,7 +169,7 @@ def cmd_user(ctx: CommandContext) -> CommandResult:
     aliases=["virtualenv"],
     category="environment",
 )
-def cmd_venv(ctx: CommandContext) -> CommandResult:
+def cmd_venv(_ctx: CommandContext) -> CommandResult:
     """Get virtual environment information."""
     venv = os.environ.get("VIRTUAL_ENV")
 

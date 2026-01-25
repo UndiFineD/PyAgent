@@ -540,6 +540,6 @@ def compute_arc_target_rust(
     if hit_in_b1:
         delta = max(1.0, b2_size / max(1, b1_size))
         return min(current_target + delta, float(capacity))
-    else:
-        delta = max(1.0, b1_size / max(1, b2_size))
-        return max(current_target - delta, 0.0)
+
+    delta = max(1.0, b1_size / max(1, b2_size))
+    return max(current_target - delta, 0.0)

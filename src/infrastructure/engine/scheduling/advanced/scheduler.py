@@ -78,7 +78,7 @@ class AdvancedRequestScheduler:
 
         with self._lock:
             self._sequence += 1
-            request._sequence = self._sequence
+            request.sequence = self._sequence
 
         self.waiting.push(request)
         return request

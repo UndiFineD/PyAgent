@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/ServiceMesh.py b/src/infrastructure/orchestration/ServiceMesh.py
+index 76fcea5..0ddd79a 100644
+--- a/src/infrastructure/orchestration/ServiceMesh.py
++++ b/src/infrastructure/orchestration/ServiceMesh.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

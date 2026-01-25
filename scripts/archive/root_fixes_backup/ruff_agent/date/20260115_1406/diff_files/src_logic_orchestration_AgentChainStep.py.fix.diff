@@ -1,0 +1,13 @@
+diff --git a/src/logic/orchestration/AgentChainStep.py b/src/logic/orchestration/AgentChainStep.py
+index 2bfa7cd..c3716d5 100644
+--- a/src/logic/orchestration/AgentChainStep.py
++++ b/src/logic/orchestration/AgentChainStep.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional, Any
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION

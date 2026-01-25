@@ -126,7 +126,7 @@ class Serializer(ABC):
                 self._stats.bytes_serialized += len(data)
                 self._stats.total_serialize_time_ns += time.perf_counter_ns() - start
             return data
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             with self._lock:
                 self._stats.errors += 1
             raise
@@ -149,7 +149,7 @@ class Serializer(ABC):
                 self._stats.bytes_deserialized += len(data)
                 self._stats.total_deserialize_time_ns += time.perf_counter_ns() - start
             return obj
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             with self._lock:
                 self._stats.errors += 1
             raise

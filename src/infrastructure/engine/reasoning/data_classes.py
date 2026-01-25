@@ -70,6 +70,7 @@ class ToolCall:
     is_complete: bool = True
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert tool call to dictionary format."""
         return {
             "id": self.id,
             "type": "function",
@@ -100,12 +101,15 @@ class ParseResult:
 
     @property
     def has_thinking(self) -> bool:
+        """Check if result has thinking blocks."""
         return bool(self.thinking_blocks)
 
     @property
     def has_tool_calls(self) -> bool:
+        """Check if result has tool calls."""
         return bool(self.tool_calls)
 
     @property
     def total_thinking_length(self) -> int:
+        """Calculate total number of characters in all thinking blocks."""
         return sum(len(block) for block in self.thinking_blocks)

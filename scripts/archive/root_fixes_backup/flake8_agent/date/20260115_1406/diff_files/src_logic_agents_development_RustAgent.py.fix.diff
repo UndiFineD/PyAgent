@@ -1,0 +1,47 @@
+diff --git a/src/logic/agents/development/RustAgent.py b/src/logic/agents/development/RustAgent.py
+index 0273316..0d03315 100644
+--- a/src/logic/agents/development/RustAgent.py
++++ b/src/logic/agents/development/RustAgent.py
+@@ -27,9 +27,19 @@ from src.core.base.utilities import create_main_function
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class RustAgent(CoderAgent):
+     """Agent for Rust code improvement and auditing."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._language = "rust"
+@@ -38,11 +48,21 @@ class RustAgent(CoderAgent):
+             "Focus on memory safety, ownership patterns, idiomatic usage of Result/Option, "
+             "zero-cost abstractions, and effective use of the borrow checker. "
+             "Suggest crates from crates.io where appropriate for common tasks."
++
++
++
++
++
+         )
+ 
+     def _get_default_content(self) -> str:
+         return 'fn main() {\n    println!("Hello, Rust!");\n}\n'
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(RustAgent, "Rust Agent", "Path to Rust file (.rs)")
+     main()

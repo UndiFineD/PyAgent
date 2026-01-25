@@ -51,7 +51,7 @@ class StabilityCore:
                     "latency_p95": metrics.latency_p95,
                 }
                 return rc.calculate_stability_score(m_dict, sae_anomalies)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         # Baseline: 1.0
@@ -72,7 +72,7 @@ class StabilityCore:
             try:
                 variance = rc.calculate_variance_rust(score_history)  # type: ignore[attr-defined]
                 return len(score_history) >= 10 and variance < 0.0001
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         if len(score_history) < 10:
             return False
@@ -84,7 +84,7 @@ class StabilityCore:
         if rc:
             try:
                 return rc.get_healing_threshold(stability_score)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         if stability_score < 0.3:
             return 0.9  # Aggressive healing

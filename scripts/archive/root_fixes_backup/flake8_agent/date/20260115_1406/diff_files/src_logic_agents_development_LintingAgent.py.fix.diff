@@ -1,0 +1,50 @@
+diff --git a/src/logic/agents/development/LintingAgent.py b/src/logic/agents/development/LintingAgent.py
+index 2dea3fd..b881532 100644
+--- a/src/logic/agents/development/LintingAgent.py
++++ b/src/logic/agents/development/LintingAgent.py
+@@ -28,9 +28,19 @@ from src.core.base.utilities import create_main_function
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class LintingAgent(BaseAgent):
+     """Ensures code adheres to quality standards by running linters."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -84,13 +94,23 @@ class LintingAgent(BaseAgent):
+         path = prompt if prompt else "."
+         flake8_res = self.run_flake8(path)
+         mypy_res = self.run_mypy(path)
+-        
++
+         return (
++
++
++
++
++
+             f"## Quality Audit for: {path}\n\n"
+             f"{flake8_res}\n\n"
+             f"{mypy_res}"
+         )
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(LintingAgent, "Linting Agent", "Path to audit")
+     main()

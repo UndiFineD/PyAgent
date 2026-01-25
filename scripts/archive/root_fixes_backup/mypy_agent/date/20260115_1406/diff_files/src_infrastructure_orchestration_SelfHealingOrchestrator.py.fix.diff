@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/orchestration/SelfHealingOrchestrator.py b/src/infrastructure/orchestration/SelfHealingOrchestrator.py
+index 687b3af..af126f5 100644
+--- a/src/infrastructure/orchestration/SelfHealingOrchestrator.py
++++ b/src/infrastructure/orchestration/SelfHealingOrchestrator.py
+@@ -21,7 +21,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+ import logging
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from .SelfHealingCore import SelfHealingCore
+ 
+ __version__ = VERSION
+@@ -97,7 +97,7 @@ class SelfHealingOrchestrator:
+             
+         return False
+ 
+-    def attempt_repair(self, agent_name: str, error: Exception = None, **kwargs) -> Any:
++    def attempt_repair(self, agent_name: str, error: Exception | None = None, **kwargs) -> Any:
+         """Alias for attempt_recovery (Legacy Phase 35 compatibility)."""
+         logging.info(f"Self-Healing: Attempting repair for {agent_name}...")
+         self.attempt_recovery(agent_name)
+@@ -129,4 +129,4 @@ class SelfHealingOrchestrator:
+                         interaction_id=f"recovery_{int(log['timestamp'])}",
+                         text=lesson,
+                         category="Self-Healing Failure"
+-                    )
+\ No newline at end of file
++                    )

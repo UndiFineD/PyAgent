@@ -86,11 +86,11 @@ class ExecutionProfile:
 
     name: str
     max_files: int | None = None
-
     timeout: int = 120
     parallel: bool = False
     workers: int = 4
     dry_run: bool = False
+    config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
 
 @dataclass(slots=True)

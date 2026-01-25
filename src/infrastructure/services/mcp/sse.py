@@ -53,7 +53,7 @@ class SSEMCPServer(MCPToolServer):
             self._session.state = SessionState.READY
             self._session.connected_at = time.time()
             logger.info(f"Connected to SSE server {self.name} with {len(tools)} tools")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._session.state = SessionState.ERROR
             self._session.error_message = str(e)
             logger.error(f"Failed to connect to {self.name}: {e}")
@@ -86,7 +86,7 @@ class SSEMCPServer(MCPToolServer):
             try:
                 if hasattr(self._client, "close"):
                     await self._client.close()
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Error closing SSE client: {e}")
             self._client = None
 
@@ -121,7 +121,7 @@ class SSEMCPServer(MCPToolServer):
                 self._tools[schema.name] = schema
 
             return self._apply_namespace_filter(tools)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to list tools: {e}")
             raise
 
@@ -158,7 +158,7 @@ class SSEMCPServer(MCPToolServer):
                 error="Tool execution timed out",
                 duration_ms=(time.time() - start_time) * 1000,
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return ToolResult(
                 call_id=call.id,
                 name=call.name,

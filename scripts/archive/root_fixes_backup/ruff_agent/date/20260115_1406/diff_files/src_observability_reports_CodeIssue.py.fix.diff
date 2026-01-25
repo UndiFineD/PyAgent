@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/CodeIssue.py b/src/observability/reports/CodeIssue.py
+index 17a8b5a..00b3c8f 100644
+--- a/src/observability/reports/CodeIssue.py
++++ b/src/observability/reports/CodeIssue.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from .IssueCategory import IssueCategory
+ from .SeverityLevel import SeverityLevel
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
