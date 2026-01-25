@@ -37,7 +37,11 @@ class ContextManager:
     Registry and lifecycle manager for conversation contexts.
     """
 
+<<<<<<< HEAD
     def __init__(self, default_config: Optional[ContextConfig] = None) -> None:
+=======
+    def __init__(self, default_config: Optional[ContextConfig] = None):
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         """Initialize the context manager."""
         self._contexts: Dict[str, ConversationContext] = {}
         self._default_config = default_config or ContextConfig()

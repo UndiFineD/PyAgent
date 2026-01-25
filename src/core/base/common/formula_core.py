@@ -69,7 +69,8 @@ class FormulaCore:
             try:
                 # pylint: disable=no-member
                 return rc.compute_perplexity_rust(logprobs)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         if not logprobs:
@@ -84,7 +85,8 @@ class FormulaCore:
             try:
                 # pylint: disable=no-member
                 return rc.compute_entropy_rust(logprobs)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         if not logprobs:
@@ -119,7 +121,7 @@ class FormulaCore:
 
             tree = ast.parse(expression, mode="eval")
             return cls._eval_node(tree.body, variables)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Formula evaluation failed for '%s': %s", expression, e)
             raise
 

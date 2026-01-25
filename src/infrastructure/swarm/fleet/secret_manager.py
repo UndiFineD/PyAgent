@@ -43,6 +43,7 @@ class SecretManager(StandardSecretCore):
         provider: str = "local",
         vault_path: str = "data/memory/agent_store/vault.json",
     ) -> None:
+        super().__init__()
         self.provider = provider
         self.vault_path = vault_path
         self.core = SecretCore()
@@ -59,10 +60,10 @@ class SecretManager(StandardSecretCore):
         """Loads secrets from a local JSON file if it exists."""
         if os.path.exists(self.vault_path):
             try:
-                with open(self.vault_path) as f:
+                with open(self.vault_path, encoding='utf-8') as f:
                     self._cache.update(json.load(f))
                 logging.info(f"Loaded {len(self._cache)} secrets from {self.vault_path}")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to load vault file: {e}")
 
     def _save_file_vault(self) -> None:
@@ -70,9 +71,9 @@ class SecretManager(StandardSecretCore):
         try:
             # Ensure directory exists
             os.makedirs(os.path.dirname(self.vault_path), exist_ok=True)
-            with open(self.vault_path, "w") as f:
+            with open(self.vault_path, 'w', encoding='utf-8') as f:
                 json.dump(self._cache, f, indent=4)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to save vault file: {e}")
 
     def _fetch_local(self, key: str) -> str | None:

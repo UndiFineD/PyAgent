@@ -20,8 +20,8 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from src.core.base.common.utils.scheduled_execution import ScheduledExecution
-from src.core.base.lifecycle.version import VERSION
+from .scheduled_execution import ScheduledExecution
+from ...lifecycle.version import VERSION
 
 __version__ = VERSION
 

@@ -70,7 +70,7 @@ class BaselineManager:
 
         baseline = TestBaseline(name=name, values=values, version=version)
 
-        with open(self._get_path(name), "w") as f:
+        with open(self._get_path(name, encoding='utf-8'), "w") as f:
             json.dump(
                 {
                     "name": baseline.name,
@@ -97,7 +97,7 @@ class BaselineManager:
         if not path.exists():
             return None
 
-        with open(path) as f:
+        with open(path, encoding='utf-8') as f:
             data = json.load(f)
 
         return TestBaseline(

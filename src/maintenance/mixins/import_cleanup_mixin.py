@@ -12,12 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
+=======
+import os
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 import re
 import logging
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+<<<<<<< HEAD
 logger: logging.Logger = logging.getLogger(__name__)
+=======
+logger = logging.getLogger(__name__)
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
 class ImportCleanupMixin:
     """Provides utilities for resolving and fixing Python imports after refactors."""
@@ -29,16 +37,27 @@ class ImportCleanupMixin:
         """
         name_map = {}
         for d in dirs:
+<<<<<<< HEAD
             dp: Path = root_dir / d
+=======
+            dp = root_dir / d
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             if not dp.exists():
                 continue
             for p in dp.rglob("*"):
                 if p.name == "__init__.py":
                     continue
+<<<<<<< HEAD
                 parent: str = str(p.parent.resolve()).lower()
                 name: str = p.stem if not p.is_dir() else p.name
                 # Remove underscores/dashes for fuzzy matching if needed
                 low: str = name.replace("_", "").replace("-", "").lower()
+=======
+                parent = str(p.parent.resolve()).lower()
+                name = p.stem if not p.is_dir() else p.name
+                # Remove underscores/dashes for fuzzy matching if needed
+                low = name.replace("_", "").replace("-", "").lower()
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 name_map[(parent, low)] = name
         return name_map
 
@@ -51,18 +70,31 @@ class ImportCleanupMixin:
         search_dirs: List[str]
     ) -> str:
         """Resolves a module string to its correct casing and path."""
+<<<<<<< HEAD
         parts: List[str] = mod_str.split(".")
         if mod_str.startswith("."):
             # Relative import
             m: re.Match[str] | None = re.match(r"^(\.+)", mod_str)
             dots: int = len(m.group(1))
             rel_parts: List[str] = parts[dots-1:]
+=======
+        parts = mod_str.split(".")
+        if mod_str.startswith("."):
+            # Relative import
+            m = re.match(r"^(\.+)", mod_str)
+            dots = len(m.group(1))
+            rel_parts = parts[dots-1:]
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             if rel_parts and rel_parts[0].startswith("."):
                 rel_parts[0] = rel_parts[0].lstrip(".")
             if rel_parts and not rel_parts[0]:
                 rel_parts.pop(0)
 
+<<<<<<< HEAD
             curr: Path = current_file.parent.resolve()
+=======
+            curr = current_file.parent.resolve()
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             for _ in range(dots - 1):
                 curr = curr.parent
 
@@ -83,7 +115,11 @@ class ImportCleanupMixin:
             for i, p in enumerate(parts):
                 if curr_path is None:
                     # Look for root/part
+<<<<<<< HEAD
                     low: str = p.lower()
+=======
+                    low = p.lower()
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                     for d in search_dirs:
                         if d.lower() == low:
                             curr_path = root_dir / d
@@ -94,17 +130,27 @@ class ImportCleanupMixin:
                     else:
                         return mod_str  # External module
 
+<<<<<<< HEAD
                 low: str = p.replace("_", "").replace("-", "").lower()
                 key: Tuple[str] = (str(curr_path).lower(), low)
                 if key in name_map:
                     real: str = name_map[key]
                     res.append(real)
                     curr_path: Path = curr_path / real
+=======
+                low = p.replace("_", "").replace("-", "").lower()
+                key = (str(curr_path).lower(), low)
+                if key in name_map:
+                    real = name_map[key]
+                    res.append(real)
+                    curr_path = curr_path / real
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 else:
                     res.extend(parts[i:])
                     break
             return ".".join(res)
 
+<<<<<<< HEAD
     def fix_imports_in_file(self, file_path: Path, name_map: dict[tuple[str, str], str], root_dir: Path, search_dirs: list[str]) -> bool:
         """Updates imports in a file to match the actual filesystem casing/naming."""
         try:
@@ -118,6 +164,21 @@ class ImportCleanupMixin:
             # Regex for 'import ...' and 'from ... import ...'
             new_content: str = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
             new_content: str = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
+=======
+    def fix_imports_in_file(self, file_path: Path, name_map: Dict, root_dir: Path, search_dirs: List[str]) -> bool:
+        """Updates imports in a file to match the actual filesystem casing/naming."""
+        try:
+            content = file_path.read_text(encoding="utf-8")
+
+            def replacer(match):
+                mod = match.group(2)
+                resolved = self.resolve_module_path(mod, file_path, name_map, root_dir, search_dirs)
+                return f"{match.group(1)}{resolved}"
+
+            # Regex for 'import ...' and 'from ... import ...'
+            new_content = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
+            new_content = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
             if new_content != content:
                 file_path.write_text(new_content, encoding="utf-8")

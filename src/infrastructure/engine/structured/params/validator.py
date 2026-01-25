@@ -99,6 +99,6 @@ class StructuredOutputValidator:
 
         return False
 
-    def _could_match_regex(self, text: str, pattern: str) -> bool:
+    def _could_match_regex(self, _text: str, _pattern: str) -> bool:
         """Check if text could still match regex."""
         return True

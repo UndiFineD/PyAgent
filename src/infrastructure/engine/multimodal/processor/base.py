@@ -68,9 +68,11 @@ class MultiModalConfig:
     audio_token: str = "<audio>"
 
     def get_limit(self, modality: str) -> int:
+        """Get the maximum number of items allowed for a modality."""
         return self.limit_per_prompt.get(modality, 1)
 
     def get_media_kwargs(self, modality: str) -> Dict[str, Any]:
+        """Get media I/O keyword arguments for a modality."""
         return self.media_io_kwargs.get(modality, {})
 
 
@@ -86,6 +88,7 @@ class PlaceholderInfo:
 
     @property
     def end_idx(self) -> int:
+        """Calculate the ending index of the placeholder."""
         return self.start_idx + self.length
 
 
@@ -99,16 +102,18 @@ class MultiModalData:
     embeds: List[np.ndarray] = field(default_factory=list)
 
     def is_empty(self) -> bool:
+        """Check if there is no multimodal data at all."""
         return not self.images and not self.videos and not self.audios and not self.embeds
 
     def get_modality_count(self, modality: ModalityType) -> int:
+        """Get the number of items for a specific modality."""
         if modality == ModalityType.IMAGE:
             return len(self.images)
-        elif modality == ModalityType.VIDEO:
+        if modality == ModalityType.VIDEO:
             return len(self.videos)
-        elif modality == ModalityType.AUDIO:
+        if modality == ModalityType.AUDIO:
             return len(self.audios)
-        elif modality == ModalityType.EMBEDS:
+        if modality == ModalityType.EMBEDS:
             return len(self.embeds)
         return 0
 
@@ -123,9 +128,11 @@ class MultiModalInputs:
     mm_kwargs: Dict[str, Any] = field(default_factory=dict)
 
     def has_multimodal(self) -> bool:
+        """Check if any multimodal embeddings are present."""
         return any(bool(embeds) for embeds in self.mm_embeddings.values())
 
     def get_placeholder_count(self) -> int:
+        """Get total number of placeholder tokens across all modalities."""
         return sum(sum(p.length for p in placeholders) for placeholders in self.mm_placeholders.values())
 
 
@@ -145,12 +152,15 @@ class BaseMultiModalProcessor(ABC, Generic[T]):
         self,
         data: T,
         **kwargs: Any,
-    ) -> Tuple[np.ndarray, Dict[str, Any]]: ...
+    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        """Process raw modality data into a tensor and metadata."""
 
     @abstractmethod
-    def get_placeholder_count(self, data: T, **kwargs: Any) -> int: ...
+    def get_placeholder_count(self, data: T, **kwargs: Any) -> int:
+        """Calculate the number of placeholder tokens needed for this data."""
 
     def compute_hash(self, data: T) -> str:
+        """Compute a thumbprint hash for the modality data."""
         if isinstance(data, np.ndarray):
             return hashlib.sha256(data.tobytes()).hexdigest()[:16]
         return hashlib.sha256(str(data).encode()).hexdigest()[:16]

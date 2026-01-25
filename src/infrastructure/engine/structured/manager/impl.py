@@ -133,7 +133,11 @@ class ChoiceGrammar(StructuredOutputGrammar):
         request_id: Optional[str] = None,
         token_strings: Optional[Dict[int, str]] = None,
         encode_fn: Optional[Callable[[str], List[int]]] = None,
+<<<<<<< HEAD
     ) -> None:
+=======
+    ):
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         """
         Initialize ChoiceGrammar.
 

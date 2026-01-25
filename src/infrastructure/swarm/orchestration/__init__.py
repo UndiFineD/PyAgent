@@ -17,9 +17,13 @@ Orchestration package.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION
+
+from . import system
 
 __version__ = VERSION
+__all__ = ["VERSION", "system"]
+
 
 # You may obtain a copy of the License at
 #

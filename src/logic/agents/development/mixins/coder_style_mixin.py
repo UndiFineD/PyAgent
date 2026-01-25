@@ -73,7 +73,7 @@ class CoderStyleMixin:
                         }
                     )
             return violations
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Rust optimization failed for check_style: {e}")
             return []
 

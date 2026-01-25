@@ -46,8 +46,6 @@ except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # noqa: F401
-
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -83,19 +81,15 @@ class GrammarProtocol(Protocol):
 
     def accept_token(self, token_id: int) -> bool:
         """Accept a token."""
-        ...
 
     def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
         """Fill bitmask for next token."""
-        ...
 
     def is_terminated(self) -> bool:
         """Check if grammar is terminated."""
-        ...
 
     def reset(self) -> None:
         """Reset grammar state."""
-        ...
 
 
 @runtime_checkable
@@ -104,15 +98,12 @@ class BackendProtocol(Protocol):
 
     def compile_json_schema(self, schema: str) -> Any:
         """Compile JSON schema."""
-        ...
 
     def allocate_bitmask(self, batch_size: int) -> "np.ndarray":
         """Allocate bitmask."""
-        ...
 
     def get_stats(self) -> Dict[str, Any]:
         """Get statistics."""
-        ...
 
 
 @dataclass
@@ -207,7 +198,7 @@ class BackendWrapper:
 
                 return result, None
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._stats["compile_errors"] += 1
             logger.error(f"Compilation error in {self.backend_type}: {e}")
             return None, str(e)
@@ -358,7 +349,7 @@ class StructuredOutputOrchestrator:
                 continue
 
             wrapper = self._backends[backend_type]
-            result, error = wrapper.compile(constraint)
+            result, _error = wrapper.compile(constraint)
 
             if result is not None:
                 self._stats["fallback_count"] += 1
@@ -537,7 +528,7 @@ class BatchProcessor:
     ) -> List[bool]:
         """Accept tokens for all batch items."""
         results = []
-        for i, (token_id, handle) in enumerate(zip(token_ids, self._handles)):
+        for token_id, handle in zip(token_ids, self._handles):
             if handle is not None:
                 results.append(handle.accept_token(token_id))
             else:

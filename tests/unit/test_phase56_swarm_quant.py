@@ -1,3 +1,7 @@
+
+"""
+Test Phase56 Swarm Quant module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 56: Quantization Manager & Speculative Swarm Orchestrator

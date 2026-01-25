@@ -197,7 +197,7 @@ class SqlMetadataHandler:
                 # shard_YYYYMM_000.jsonl.gz -> 000
                 try:
                     shard_num = int(shard_file.split("_")[-1].split(".")[0])
-                except Exception:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     shard_num = 0
                 shard_path = os.path.join(self.shards_dir, shard_file)
 
@@ -234,7 +234,7 @@ class SqlMetadataHandler:
                                     )
 
                             indexed_count += 1
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Failed to index shard {shard_file}: {e}")
             conn.commit()
         return indexed_count

@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Base.py module.
-"""
+"""Base scheduler implementation for priority-based task execution."""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -134,7 +132,7 @@ class PriorityScheduler:
 
         return future
 
-    def _worker_loop(self, worker_id: int) -> None:
+    def _worker_loop(self, _worker_id: int) -> None:
         """Worker thread main loop."""
         while self._running:
             task = self._get_next_task()
@@ -199,7 +197,7 @@ class PriorityScheduler:
         except TimeoutError:
             self._handle_timeout(task)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             task.state = TaskState.FAILED
             task.error = e
 
@@ -222,7 +220,7 @@ class PriorityScheduler:
         def wrapper():
             try:
                 result_container.append(func())
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 error_container.append(e)
             finally:
                 completed.set()
@@ -255,7 +253,7 @@ class PriorityScheduler:
         with self._lock:
             for priority in TaskPriority:
                 queue = self._queues[priority]
-                for i, task in enumerate(queue):
+                for _i, task in enumerate(queue):
                     if task.id == task_id and task.state == TaskState.PENDING:
                         task.state = TaskState.CANCELLED
                         if task.future:
@@ -264,7 +262,7 @@ class PriorityScheduler:
                         return True
         return False
 
-    def shutdown(self, wait: bool = True, timeout: Optional[float] = None) -> None:
+    def shutdown(self, wait: bool = True, _timeout: Optional[float] = None) -> None:
         """Shutdown the scheduler."""
         self._running = False
         with self._not_empty:

@@ -39,9 +39,9 @@ class SafetyAuditTrail:
     def _load_log(self) -> str:
         if self.log_path.exists():
             try:
-                with open(self.log_path) as f:
+                with open(self.log_path, encoding='utf-8') as f:
                     self.violations = json.load(f)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"SafetyAuditTrail: Error loading log: {e}")
 
     def log_violation(self, agent_name: str, task: str, violations: list, level: str = "HIGH") -> str:
@@ -59,9 +59,9 @@ class SafetyAuditTrail:
 
     def _save_log(self) -> str:
         try:
-            with open(self.log_path, "w") as f:
+            with open(self.log_path, 'w', encoding='utf-8') as f:
                 json.dump(self.violations, f, indent=2)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"SafetyAuditTrail: Error saving log: {e}")
 
     def get_summary(self) -> str:

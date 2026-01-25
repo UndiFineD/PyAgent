@@ -46,9 +46,11 @@ class TopLogprob:
 
     @property
     def probability(self) -> float:
+        """Get token probability."""
         return math.exp(self.logprob)
 
     def __lt__(self, other: "TopLogprob") -> bool:
+        """Compare logprobs (for sorting)."""
         return self.logprob < other.logprob
 
 
@@ -64,10 +66,12 @@ class LogprobEntry:
 
     @property
     def probability(self) -> float:
+        """Get token probability."""
         return math.exp(self.logprob)
 
     @property
     def entropy(self) -> float:
+        """Get token distribution entropy."""
         if not self.top_logprobs:
             return 0.0
         probs = [math.exp(t.logprob) for t in self.top_logprobs]
@@ -79,6 +83,7 @@ class LogprobEntry:
 
 
 def compute_perplexity(logprobs: Sequence[float]) -> float:
+    """Compute perplexity from a sequence of logprobs."""
     if not logprobs:
         return 0.0
     mean_logprob = sum(logprobs) / len(logprobs)
@@ -94,19 +99,23 @@ class PromptLogprobs:
         self.logprobs = logprobs
 
     def __len__(self) -> int:
+        """Get number of tokens."""
         return len(self.token_ids)
 
     def __getitem__(self, index: int) -> Tuple[int, str, float]:
+        """Get entry at index."""
         return (self.token_ids[index], self.tokens[index], self.logprobs[index])
 
     @property
     def mean_logprob(self) -> float:
+        """Get average logprob."""
         if not self.logprobs:
             return 0.0
         return sum(self.logprobs) / len(self.logprobs)
 
     @property
     def perplexity(self) -> float:
+        """Get perplexity."""
         return compute_perplexity(self.logprobs)
 
 
@@ -117,37 +126,46 @@ class SampleLogprobs:
     entries: List[LogprobEntry] = field(default_factory=list)
 
     def __len__(self) -> int:
+        """Get number of entries."""
         return len(self.entries)
 
     def __getitem__(self, index: int) -> LogprobEntry:
+        """Get entry at index."""
         return self.entries[index]
 
     def __iter__(self) -> Iterator[LogprobEntry]:
+        """Iterate over entries."""
         return iter(self.entries)
 
     def append(self, entry: LogprobEntry):
+        """Append new logprob entry."""
         self.entries.append(entry)
 
     @property
     def token_ids(self) -> List[int]:
+        """Get list of token IDs."""
         return [e.token_id for e in self.entries]
 
     @property
     def tokens(self) -> List[str]:
+        """Get list of token strings."""
         return [e.token for e in self.entries]
 
     @property
     def logprobs(self) -> List[float]:
+        """Get list of logprobs."""
         return [e.logprob for e in self.entries]
 
     @property
     def mean_logprob(self) -> float:
+        """Get average logprob."""
         if not self.entries:
             return 0.0
         return sum(e.logprob for e in self.entries) / len(self.entries)
 
     @property
     def perplexity(self) -> float:
+        """Get perplexity."""
         return compute_perplexity(self.logprobs)
 
 
@@ -161,6 +179,7 @@ class LogprobsResult:
 
     @property
     def total_tokens(self) -> int:
+        """Get total tokens (prompt + sample)."""
         total = 0
         if self.prompt_logprobs:
             total += len(self.prompt_logprobs)
@@ -170,6 +189,7 @@ class LogprobsResult:
 
     @property
     def total_perplexity(self) -> float:
+        """Get perplexity across all tokens."""
         all_logprobs = []
         if self.prompt_logprobs:
             all_logprobs.extend(self.prompt_logprobs.logprobs)

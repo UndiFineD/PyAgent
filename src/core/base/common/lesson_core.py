@@ -65,7 +65,8 @@ class LessonCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_failure_hash(error_msg)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         normalized = "".join([c for c in error_msg.lower() if not c.isdigit()])
         return hashlib.sha256(normalized.encode()).hexdigest()

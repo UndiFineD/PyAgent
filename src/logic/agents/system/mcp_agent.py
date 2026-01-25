@@ -59,11 +59,11 @@ class MCPAgent(BaseAgent):
             report = ["## 🔌 Discovered MCP Servers"]
             for cfg in mcp_configs:
                 try:
-                    with open(cfg) as f:
+                    with open(cfg, encoding='utf-8') as f:
                         data = json.load(f)
                         for server_name, server_config in data.get("mjs_servers", {}).items():
                             report.append(f"- **{server_name}**: {server_config.get('command')}")
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     report.append(f"- Error reading `{cfg}`: {e}")
             return "\n".join(report)
 

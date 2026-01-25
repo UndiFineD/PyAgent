@@ -27,7 +27,7 @@ EVOLUTION_PHASE = 119
 STABILITY_SCORE = 1.0  # Phase 108: Multi-Agent Logic Harvesting and Rust-Readiness verified
 
 
-def is_gate_open(required_phase: int) -> bool:
+def is_gate_open(required_phase: int, encoding='utf-8') -> bool:
     """Gatekeeping: Returns True if the system maturity allows for the required phase."""
     return EVOLUTION_PHASE >= required_phase
 

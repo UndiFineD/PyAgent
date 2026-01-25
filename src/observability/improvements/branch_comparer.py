@@ -106,7 +106,7 @@ class BranchComparer:
 
             comparison.status = BranchComparisonStatus.COMPLETED
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Branch comparison failed: {e}")
             comparison.status = BranchComparisonStatus.FAILED
 

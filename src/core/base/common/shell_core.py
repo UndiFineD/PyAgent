@@ -66,7 +66,7 @@ class ShellCore:
                 # CoreConfigManager inherits from BaseCore which provides repo_root
                 config = CoreConfigManager()
                 self.repo_root = getattr(config, "repo_root", Path.cwd())
-            except (ImportError, Exception):  # pylint: disable=broad-exception-caught
+            except (ImportError, Exception):  # pylint: disable=unused-variable, broad-exception-caught
                 self.repo_root = Path.cwd()
 
         self.logger = logging.getLogger("pyagent.shell")
@@ -91,8 +91,15 @@ class ShellCore:
             "NO_PROXY",
             "AGENT_MODELS_CONFIG",
             "PYAGENT_ENV",
+            "AGENT_NAME",
+            "WORKSPACE_ROOT",
         }
-        return {k: v for k, v in env.items() if k.upper() in allow_list}
+        sanitized = {}
+        for k, v in env.items():
+            k_upper = k.upper()
+            if k_upper in allow_list or k_upper.startswith("PYAGENT_") or k_upper.startswith("DV_"):
+                sanitized[k] = v
+        return sanitized
 
     def strip_ansi(self, text: str) -> str:
         """Removes ANSI escape sequences from a string."""
@@ -147,7 +154,7 @@ class ShellCore:
                 duration=time.perf_counter() - start_time,
             )
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to execute %s: %s", cmd[0], e)
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
@@ -182,7 +189,7 @@ class ShellCore:
                     stderr=stderr,
                     duration=time.perf_counter() - start_time,
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self.logger.warning("Rust shell execution failed: %s", e)
 
         current_env = os.environ.copy()
@@ -220,7 +227,7 @@ class ShellCore:
                 stderr=e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or ""),
                 duration=time.perf_counter() - start_time,
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to execute %s: %s", cmd[0], e)
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 

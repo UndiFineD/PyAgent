@@ -134,7 +134,7 @@ class BenchmarkSuite:
                 total_tokens=total_tokens,
                 metrics={"output_length": len(str(output))},
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             duration = time.perf_counter() - start
             res = BenchmarkResult(name=label, duration=duration, success=False, error=str(e))
             self.logger.error(f"Agent benchmark failed: {e}")

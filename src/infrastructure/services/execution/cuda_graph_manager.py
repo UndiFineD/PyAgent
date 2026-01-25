@@ -299,7 +299,7 @@ class CUDAGraphManager:
                     has_lora=False,
                     has_multimodal=False,
                 )
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Failed to capture graph for {num_tokens}x{num_reqs}: {e}")
 
         self._warmup_complete = True
@@ -384,7 +384,7 @@ class CUDAGraphManager:
             )
             return entry
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to capture CUDA graph: {e}")
             return None
 

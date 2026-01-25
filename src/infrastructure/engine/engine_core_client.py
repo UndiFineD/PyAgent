@@ -88,23 +88,20 @@ class EngineCoreClient(ABC):
 
     def profile(self, is_start: bool = True) -> None:
         """Start or stop profiling."""
-        pass
 
     def reset_prefix_cache(
         self,
-        reset_running_requests: bool = False,
-        reset_connector: bool = False,
+        _reset_running_requests: bool = False,
+        _reset_connector: bool = False,
     ) -> bool:
         """Reset the prefix cache."""
         return False
 
     def sleep(self, level: int = 1) -> None:
         """Put engine to sleep."""
-        pass
 
     def wake_up(self, tags: Optional[List[str]] = None) -> None:
         """Wake up engine from sleep."""
-        pass
 
     def is_sleeping(self) -> bool:
         """Check if engine is sleeping."""
@@ -112,7 +109,6 @@ class EngineCoreClient(ABC):
 
     def execute_dummy_batch(self) -> None:
         """Execute a dummy batch for warmup."""
-        pass
 
     # Async variants
     async def get_output_async(self) -> EngineCoreOutputs:
@@ -129,11 +125,9 @@ class EngineCoreClient(ABC):
 
     async def profile_async(self, is_start: bool = True) -> None:
         """Start or stop profiling (async)."""
-        pass
 
     async def execute_dummy_batch_async(self) -> None:
         """Execute a dummy batch for warmup (async)."""
-        pass
 
 
 class InprocClient(EngineCoreClient):
@@ -241,6 +235,11 @@ class SyncMPClient(EngineCoreClient):
         self._worker_thread = threading.Thread(target=self._run_engine_loop, daemon=True)
         self._worker_thread.start()
 
+    @property
+    def is_shutdown(self) -> bool:
+        """Check if engine is shutdown."""
+        return self._shutdown_flag.is_set()
+
     def _run_engine_loop(self) -> None:
         """Background thread running the engine."""
         while not self._shutdown_flag.is_set():
@@ -329,7 +328,7 @@ class AsyncMPClient(EngineCoreClient):
     async def _process_outputs(self) -> None:
         """Background task to process outputs."""
         loop = asyncio.get_event_loop()
-        while not self._sync_client._shutdown_flag.is_set():
+        while not self._sync_client.is_shutdown:
             try:
                 # Non-blocking check
                 outputs = await loop.run_in_executor(
@@ -339,7 +338,8 @@ class AsyncMPClient(EngineCoreClient):
                 await self._output_queue.put(outputs)
             except queue.Empty:
                 await asyncio.sleep(0.01)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 break
 
     async def get_output_async(self) -> EngineCoreOutputs:
@@ -399,12 +399,11 @@ def create_client(
 
     if client_type == "inproc":
         return InprocClient(config=config)
-    elif client_type == "sync_mp":
+    if client_type == "sync_mp":
         return SyncMPClient(config=config)
-    elif client_type == "async_mp":
+    if client_type == "async_mp":
         return AsyncMPClient(config=config)
-    else:
-        raise ValueError(f"Unknown client type: {client_type}")
+    raise ValueError(f"Unknown client type: {client_type}")
 
 
 __all__ = [

@@ -97,7 +97,7 @@ class ParallelProcessor:
             """Inner wrapper to handle single file execution and errors."""
             try:
                 return worker_func(file_path)
-            except Exception as exc:  # pylint: disable=broad-exception-caught
+            except Exception as exc:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error("[ParallelProcessor] Failed to process %s: %s", file_path.name, str(exc))
                 return None
 
@@ -108,6 +108,6 @@ class ParallelProcessor:
             # ExecutionCore handles the pooled thread execution
             results = await self._execution_core.execute_parallel(tasks)
             return [r for r in results if r is not None]
-        except Exception as exc:  # pylint: disable=broad-exception-caught
+        except Exception as exc:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("[ParallelProcessor] Async batch processing failed: %s", str(exc))
             return []

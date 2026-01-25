@@ -39,12 +39,14 @@ class ProposerStats:
 
     @property
     def acceptance_rate(self) -> float:
+        """Calculate the token acceptance rate."""
         if self.tokens_proposed == 0:
             return 0.0
         return self.tokens_accepted / self.tokens_proposed
 
     @property
     def avg_proposal_time_ms(self) -> float:
+        """Calculate average proposal time in milliseconds."""
         if self.proposals_made == 0:
             return 0.0
         return self.proposal_time_ms / self.proposals_made
@@ -63,12 +65,12 @@ class SpeculativeProposer(ABC):
         self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
     ) -> SpeculativeTree:
         """Propose speculative tokens."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
         """Update proposer state after verification."""
-        pass
+        raise NotImplementedError
 
     def get_stats(self) -> ProposerStats:
         """Get copy of proposer statistics."""
@@ -159,6 +161,7 @@ class MedusaProposer(SpeculativeProposer):
     def __init__(self, vocab_size: int, max_speculation_depth: int = 5, num_heads: int = 4, top_k_per_head: int = 5):
         super().__init__(vocab_size, max_speculation_depth)
         self.num_heads = min(num_heads, max_speculation_depth)
+        self.top_k_per_head = top_k_per_head
         # Placeholder weights
         self._head_weights = [np.random.randn(vocab_size) * 0.01 for _ in range(self.num_heads)]
 

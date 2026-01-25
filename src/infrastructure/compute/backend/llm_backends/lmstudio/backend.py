@@ -85,7 +85,7 @@ class LMStudioBackend(LLMBackend):
             self._client = lmstudio.Client(self.config.api_host)
             logger.info(f"Connected to LM Studio at {self.config.api_host}")
             return self._client
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to connect to LM Studio: {e}")
             self._update_status(self.PROVIDER_ID, False)
             raise
@@ -104,7 +104,7 @@ class LMStudioBackend(LLMBackend):
             self._async_client = lmstudio.AsyncClient(self.config.api_host)
             logger.info(f"Async connected to LM Studio at {self.config.api_host}")
             return self._async_client
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to create async LM Studio client: {e}")
             raise
 
@@ -113,7 +113,7 @@ class LMStudioBackend(LLMBackend):
         if self._client is not None:
             try:
                 self._client.close()
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
             self._client = None
 
@@ -129,7 +129,7 @@ class LMStudioBackend(LLMBackend):
 
             models = lmstudio.list_loaded_models()
             return [m.path for m in models]
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.debug(f"Failed to list loaded models: {e}")
             return []
 
@@ -140,7 +140,7 @@ class LMStudioBackend(LLMBackend):
 
             models = lmstudio.list_downloaded_models()
             return [m.path for m in models]
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.debug(f"Failed to list downloaded models: {e}")
             return []
 
@@ -167,7 +167,7 @@ class LMStudioBackend(LLMBackend):
         except lmstudio.LMStudioModelNotFoundError:
             logger.warning(f"Model '{model}' not found in LM Studio")
             raise
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to get model '{model}': {e}")
             raise
 
@@ -239,7 +239,7 @@ class LMStudioBackend(LLMBackend):
                 system_prompt=system_prompt,
             )
             return ""
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.debug(f"LM Studio call failed: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return ""
@@ -284,7 +284,7 @@ class LMStudioBackend(LLMBackend):
             )
             self._update_status(self.PROVIDER_ID, True)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"LM Studio streaming error: {e}")
             self._update_status(self.PROVIDER_ID, False)
 
@@ -323,7 +323,7 @@ class LMStudioBackend(LLMBackend):
 
                 return response_text
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"LM Studio async error: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return ""
@@ -354,7 +354,7 @@ class LMStudioBackend(LLMBackend):
                 embeddings.append(list(vec))
 
             return embeddings
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"LM Studio embedding error: {e}")
             return []
 
@@ -404,7 +404,7 @@ class LMStudioBackend(LLMBackend):
                 "content": str(result),
                 "tool_calls": tool_calls,
             }
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"LM Studio tool calling error: {e}")
             return {"content": "", "tool_calls": []}
 
@@ -426,7 +426,7 @@ class LMStudioBackend(LLMBackend):
             is_healthy = bool(models)
             self._update_status(self.PROVIDER_ID, is_healthy)
             return is_healthy
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._update_status(self.PROVIDER_ID, False)
             return False
 

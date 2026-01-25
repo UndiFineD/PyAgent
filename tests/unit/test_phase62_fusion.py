@@ -1,3 +1,7 @@
+
+"""
+Test Phase62 Fusion module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 62: Weighted Expert Fusion

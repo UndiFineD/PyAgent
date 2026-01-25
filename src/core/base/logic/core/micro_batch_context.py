@@ -55,7 +55,8 @@ try:
 
     _BRIDGE = get_bridge()
     HAS_RUST = hasattr(_BRIDGE, "stream_sync_rust")
-except Exception:  # pylint: disable=broad-exception-caught
+except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
     HAS_RUST = False
     _BRIDGE = None
 

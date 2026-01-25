@@ -52,7 +52,7 @@ class AsyncPriorityScheduler:
     async def submit(
         self,
         coro: Coroutine[Any, Any, R],
-        priority: TaskPriority = TaskPriority.NORMAL,
+        _priority: TaskPriority = TaskPriority.NORMAL,
         deadline_ms: Optional[float] = None,
     ) -> R:
         """
@@ -91,7 +91,7 @@ class AsyncPriorityScheduler:
                     self._stats.timeouts += 1
                 raise
 
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 async with self._lock:
                     self._stats.failed += 1
                 raise

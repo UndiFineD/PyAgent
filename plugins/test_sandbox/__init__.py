@@ -1,5 +1,8 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +47,7 @@ class testsandbox(AgentPluginBase):
     def shutdown(self):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         pass
 =======
         pass
@@ -51,3 +55,6 @@ class testsandbox(AgentPluginBase):
 =======
         pass
 >>>>>>> d6712a17b (phase 320)
+=======
+        pass
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)

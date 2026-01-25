@@ -70,7 +70,7 @@ def strict_scan() -> None:
                             # (e.g. template_placeholders is okay, but "placeholder" in a string is not)
 
                             issues.append(f"{path}:{i + 1} - {msg}: {line.strip()}")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 print(f"Error reading {path}: {e}")
 
     if not issues:

@@ -19,7 +19,7 @@ Implemented based on arXiv:2601.10639 (STEM Scaling, Jan 2026).
 """
 
 import torch
-import torch.nn as nn
+from torch import nn
 
 
 class STEMScalingLayer(nn.Module):

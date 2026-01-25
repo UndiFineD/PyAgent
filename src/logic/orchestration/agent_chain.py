@@ -125,7 +125,7 @@ class AgentChain:
 
                 current_input = output
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self._results.append(
                     {
                         "agent": step.agent_name,

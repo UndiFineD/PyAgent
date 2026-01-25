@@ -16,6 +16,8 @@
 Global command registry and registration utilities.
 """
 
+# pylint: disable=cyclic-import
+
 from __future__ import annotations
 
 from typing import Any, Callable
@@ -27,23 +29,23 @@ from src.interface.slash_commands.core import (CommandDefinition,
 # Global Registry
 # ============================================================================
 
-_global_registry: CommandRegistry | None = None
+_GLOBAL_REGISTRY: CommandRegistry | None = None
 
 
 def get_global_registry() -> CommandRegistry:
     """Get the global command registry."""
-    global _global_registry
-    if _global_registry is None:
-        _global_registry = CommandRegistry()
-    return _global_registry
+    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
+    if _GLOBAL_REGISTRY is None:
+        _GLOBAL_REGISTRY = CommandRegistry()
+    return _GLOBAL_REGISTRY
 
 
 def reset_global_registry() -> None:
     """Reset the global registry (for testing)."""
-    global _global_registry
-    if _global_registry:
-        _global_registry.clear()
-    _global_registry = None
+    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
+    if _GLOBAL_REGISTRY:
+        _GLOBAL_REGISTRY.clear()
+    _GLOBAL_REGISTRY = None
 
 
 # ============================================================================

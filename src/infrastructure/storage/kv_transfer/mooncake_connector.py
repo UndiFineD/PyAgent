@@ -273,7 +273,7 @@ class MooncakeConnector(KVConnectorBase):
                     else:
                         self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
                         self.failed_transferred += 1
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Mooncake pull failed: %s", e)
                 with self._lock:
                     self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
@@ -307,7 +307,7 @@ class MooncakeConnector(KVConnectorBase):
                         # Update registry that we (this node) have these blocks
                         # Or if we pushed to a specific buffer node, update accordingly.
                         # self._block_registry[block_id] = self.node_id
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Mooncake push failed for layer %s: %s", layer_name, e)
                 with self._lock:
                     self.failed_transferred += 1

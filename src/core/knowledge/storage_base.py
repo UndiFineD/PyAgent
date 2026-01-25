@@ -40,12 +40,15 @@ class KnowledgeStore(ABC):
 
     @abstractmethod
     def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
+        """Store a piece of knowledge."""
         raise NotImplementedError()
 
     @abstractmethod
     def retrieve(self, query: Any, limit: int = 5) -> list[Any]:
+        """Retrieve knowledge based on a query."""
         raise NotImplementedError()
 
     @abstractmethod
     def delete(self, key: str) -> bool:
+        """Delete a piece of knowledge by key."""
         raise NotImplementedError()

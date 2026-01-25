@@ -173,14 +173,14 @@ class NgramProposer:
         if self.config.strategy == MatchingStrategy.FIRST:
             return base_score
 
-        elif self.config.strategy == MatchingStrategy.LONGEST:
+        if self.config.strategy == MatchingStrategy.LONGEST:
             return base_score * 10  # Prioritize length
 
-        elif self.config.strategy == MatchingStrategy.RECENT:
+        if self.config.strategy == MatchingStrategy.RECENT:
             recency = position / max(1, total_length)
             return base_score * (1 + recency * self.config.recency_weight)
 
-        elif self.config.strategy == MatchingStrategy.WEIGHTED:
+        if self.config.strategy == MatchingStrategy.WEIGHTED:
             recency = position / max(1, total_length)
             ngram_bonus = ngram_size / self.config.max_n
             return base_score * (1 + recency * self.config.recency_weight + ngram_bonus)

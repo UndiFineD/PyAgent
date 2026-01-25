@@ -56,7 +56,7 @@ class EBNFGrammar(GrammarEngine):
                 fsm = self._rule_to_fsm(first_rule, rules)
             self._rule_cache[spec] = fsm
             return fsm
-        except Exception:
+        except (ValueError, KeyError, TypeError, RuntimeError):
             return self._build_literal_fsm(spec)
 
     def _parse_ebnf(self, spec: str) -> Dict[str, str]:
@@ -71,7 +71,7 @@ class EBNFGrammar(GrammarEngine):
                 rules[name.strip()] = expr.strip()
         return rules
 
-    def _rule_to_fsm(self, rule: str, all_rules: Dict[str, str]) -> FSMTransitionTable:
+    def _rule_to_fsm(self, rule: str, _all_rules: Dict[str, str]) -> FSMTransitionTable:
         """Convert a single rule to FSM."""
         regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
         pattern = rule.replace(" ", "")

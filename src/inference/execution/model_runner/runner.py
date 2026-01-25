@@ -129,7 +129,7 @@ class AsyncModelRunner:
 
             return output
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             error_output = self._output_pool.acquire()
             if error_output:
                 error_output.request_id = request_id

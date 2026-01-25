@@ -47,21 +47,54 @@ class StructuredOutputGrammar(ABC):
 
     @abstractmethod
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
-        pass
+        """
+        Update the grammar state by accepting a sequence of tokens.
+
+        Args:
+            tokens: Sequence of token IDs to accept.
+
+        Returns:
+            True if all tokens were accepted, False otherwise.
+        """
 
     @abstractmethod
     def validate_tokens(self, tokens: Sequence[int]) -> int:
-        pass
+        """
+        Validate a sequence of tokens against the grammar.
+
+        Args:
+            tokens: Sequence of token IDs to validate.
+
+        Returns:
+            The number of tokens from the prefix that are valid.
+        """
 
     @abstractmethod
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
-        pass
+        """
+        Fill a token bitmask with allowed tokens for the current state.
+
+        Args:
+            bitmask: Boolean numpy array of shape (batch_size, vocab_size).
+            batch_index: Index in the batch to fill.
+        """
 
     @abstractmethod
     def get_allowed_tokens(self) -> List[int]:
-        pass
+        """
+        Get a list of allowed token IDs for the current state.
+
+        Returns:
+            List of allowed token IDs.
+        """
 
     def rollback(self, num_tokens: int) -> None:
+        """
+        Roll back the grammar state by a number of tokens.
+
+        Args:
+            num_tokens: Number of tokens to roll back.
+        """
         if num_tokens <= 0:
             return
 
@@ -74,9 +107,16 @@ class StructuredOutputGrammar(ABC):
         self._is_terminated = False
 
     def is_terminated(self) -> bool:
+        """
+        Check if the grammar has reached a termination state.
+
+        Returns:
+            True if terminated, False otherwise.
+        """
         return self._is_terminated
 
     def reset(self) -> None:
+        """Reset the grammar state."""
         self._is_terminated = False
         self._tokens_accepted = 0
         self._state_history.clear()
@@ -93,6 +133,14 @@ class StructuredOutputBackend(ABC):
         tokenizer_encode: Optional[Callable[[str], List[int]]] = None,
         tokenizer_decode: Optional[Callable[[List[int]], str]] = None,
     ):
+        """
+        Initialize the backend.
+
+        Args:
+            vocab_size: Size of the vocabulary.
+            tokenizer_encode: Optional function to encode text to tokens.
+            tokenizer_decode: Optional function to decode tokens to text.
+        """
         self.vocab_size = vocab_size
         self.tokenizer_encode = tokenizer_encode
         self.tokenizer_decode = tokenizer_decode
@@ -105,19 +153,48 @@ class StructuredOutputBackend(ABC):
         grammar_spec: GrammarSpec,
         request_id: Optional[str] = None,
     ) -> StructuredOutputGrammar:
-        pass
+        """
+        Compile a grammar specification into a grammar instance.
+
+        Args:
+            grammar_spec: The grammar specification to compile.
+            request_id: Optional unique identifier for the request.
+
+        Returns:
+            A compiled grammar instance.
+        """
 
     @abstractmethod
     def get_supported_types(self) -> List[GrammarType]:
-        pass
+        """
+        Get the list of grammar types supported by this backend.
+
+        Returns:
+            List of supported GrammarType enums.
+        """
 
     def allocate_token_bitmask(
         self,
         max_batch_size: int,
     ) -> np.ndarray:
+        """
+        Allocate a bitmask array for token filtering.
+
+        Args:
+            max_batch_size: Maximum batch size for the bitmask.
+
+        Returns:
+            A boolean numpy array of shape (max_batch_size, vocab_size).
+        """
         return np.zeros((max_batch_size, self.vocab_size), dtype=np.bool_)
 
     def get_stats(self) -> BackendStats:
+        """
+        Get current statistics for the backend.
+
+        Returns:
+            A BackendStats instance.
+        """
         with self._lock:
             return BackendStats(
                 grammars_compiled=self.stats.grammars_compiled,
@@ -127,3 +204,19 @@ class StructuredOutputBackend(ABC):
                 total_tokens_validated=self.stats.total_tokens_validated,
                 validation_rejections=self.stats.validation_rejections,
             )
+
+    def record_compilation_success(self, elapsed_ms: float) -> None:
+        """
+        Record a successful grammar compilation.
+
+        Args:
+            elapsed_ms: Time taken for compilation in milliseconds.
+        """
+        with self._lock:
+            self.stats.grammars_compiled += 1
+            self.stats.total_compile_time_ms += elapsed_ms
+
+    def record_compilation_failure(self) -> None:
+        """Record a failed grammar compilation."""
+        with self._lock:
+            self.stats.compilations_failed += 1

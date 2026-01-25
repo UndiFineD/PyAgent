@@ -40,7 +40,7 @@ class ReportingAgent(BaseAgent):
     """
 
     def __init__(self, fleet: FleetManager) -> None:
-        super().__init__("Reporting", "Expert report generation and dashboarding.")
+        super().__init__(agent_name="Reporting")
         self.fleet = fleet
         self.workspace_root = Path(os.getcwd())
 
@@ -53,7 +53,8 @@ class ReportingAgent(BaseAgent):
         from src.logic.agents.cognitive.memory_consolidation_agent import \
             MemoryConsolidationAgent
         from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
-        from src.logic.agents.development.pull_request_agent import PRAgent
+        from src.logic.agents.development.pull_request_agent import \
+            PullRequestAgent
         from src.logic.agents.development.spec_tool_agent import SpecToolAgent
         from src.logic.agents.development.tool_evolution_agent import \
             ToolEvolutionAgent
@@ -84,7 +85,7 @@ class ReportingAgent(BaseAgent):
         )
         self.fleet.register_agent(
             "PR",
-            PRAgent,
+            PullRequestAgent,
             str(self.workspace_root / "src/logic/agents/development/pull_request_agent.py"),
         )
         self.fleet.register_agent(
@@ -181,6 +182,6 @@ if __name__ == "__main__":
     from src.observability.structured_logger import StructuredLogger
 
     logger = StructuredLogger(__name__)
-    f = FleetManager()
+    f = FleetManager(workspace_root=os.getcwd())
     agent = ReportingAgent(f)
     logger.info(asyncio.run(agent.generate_dashboard()))

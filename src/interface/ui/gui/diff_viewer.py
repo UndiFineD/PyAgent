@@ -45,7 +45,7 @@ class DiffViewer:
         try:
             with open(original_path, encoding="utf-8") as f:
                 original_content = f.read()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             messagebox.showerror("Error", f"Failed to read original file: {e}")
             return
 

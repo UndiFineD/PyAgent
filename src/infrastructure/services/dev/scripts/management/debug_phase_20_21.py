@@ -110,7 +110,7 @@ if __name__ == "__main__":
         test_observability()
         test_gui_backend()
         print("\n✅ ALL PHASE 20-22 TESTS PASSED!")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"❌ TEST FAILED: {e}")
         import traceback
 

@@ -63,7 +63,7 @@ class LLMClient:
                 self.session = requests_lib.Session()
                 # Security Patch 115.1: Harden session against decompression bombs and redirect chains
                 self.session.max_redirects = 5
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self.session = requests_lib
 
         # Auto-init recorder if workspace provided, else None
@@ -86,7 +86,7 @@ class LLMClient:
             "lmstudio": LMStudioBackend(self.session, self.connectivity, self.recorder),
         }
 
-    def chat(self, provider: str, model: str, prompt: str, system_prompt: str = "") -> str:
+    def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "") -> str:
         """Central entry point for chat completion. Compresses prompt before sending."""
         # 1. Compress system prompt via Core
         self.pooling_core.compress_prompt(system_prompt)
@@ -138,7 +138,7 @@ class LLMClient:
                     "timestamp_unix": time.time(),
                 }
                 self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Silently fail logging so we don't block the actual logic
                 logging.error(f"Failed to record interaction: {e}")
 
@@ -258,10 +258,10 @@ class LLMClient:
             if result and len(result) > 10:
                 self._result_cache[cache_key] = result
                 return result
-            else:
-                # If preferred failed or returned trash, mark it unavailable and fallback
-                logging.debug(f"LLMClient: Preferred '{preferred}' returned insufficient result. Falling back.")
-                self.connectivity.update_status(preferred, False)
+
+            # If preferred failed or returned trash, mark it unavailable and fallback
+            logging.debug(f"LLMClient: Preferred '{preferred}' returned insufficient result. Falling back.")
+            self.connectivity.update_status(preferred, False)
 
         # Robustness Patch (Phase 141): If all known endpoints are cached as offline,
         # force a retry across all of them ignoring the skipped cache.

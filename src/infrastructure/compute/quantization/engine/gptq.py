@@ -49,9 +49,10 @@ class GPTQQuantizer(Quantizer):
         weight: NDArray[np.float32],
         hessian: NDArray[np.float32] | None = None,
     ) -> QuantizedTensor:
+        """Quantizes weights using the GPTQ Hessian-based algorithm."""
         from .utils import pack_int4
 
-        out_features, in_features = weight.shape
+        _, in_features = weight.shape
 
         if hessian is None:
             linear_quant = LinearQuantizer(self.config)
@@ -69,7 +70,7 @@ class GPTQQuantizer(Quantizer):
         qweight = self._gptq_quantize(weight, hessian_inv)
 
         linear_quant = LinearQuantizer(self.config)
-        scale, zp = linear_quant._compute_group_params(weight)
+        scale, zp = linear_quant.compute_group_params(weight)
 
         if self.config.bits == 4:
             qweight = pack_int4(qweight)
@@ -86,6 +87,7 @@ class GPTQQuantizer(Quantizer):
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
+        """Dequantizes a GPTQ-compressed tensor."""
         return qtensor.dequantize()
 
     def _gptq_quantize(
@@ -93,7 +95,8 @@ class GPTQQuantizer(Quantizer):
         weight: NDArray[np.float32],
         hessian_inv: NDArray[np.float32],
     ) -> NDArray[np.int8]:
-        out_features, in_features = weight.shape
+        """Internal implementation of GPTQ weight update loop."""
+        _, in_features = weight.shape
         qweight = np.zeros_like(weight, dtype=np.int8)
         w = weight.copy()
 

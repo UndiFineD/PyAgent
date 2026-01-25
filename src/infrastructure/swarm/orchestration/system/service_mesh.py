@@ -15,6 +15,7 @@ No commands will be executed.
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
@@ -27,6 +28,7 @@ class ServiceMesh:
     Standardized placeholder for future re-implementation.
     """
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        _ = args, kwargs
         self.version = VERSION
         logging.info("ServiceMesh initialized (Placeholder).")

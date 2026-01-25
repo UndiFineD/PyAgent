@@ -1045,3 +1045,10 @@ autonomous vehicles
 high‑FPS multimodal agents
 
 It’s the closest thing to “LoRA but fast enough for 120 fps”.
+
+## orgaanise directories
+
+- [ ] move files from `.beads` to `data\beads` and remove `.beads` directory
+- [ ] move files from `.agent_cache` to `data\agent_cache` and remove `.agent_cache` directory
+- [ ] move files from `.hypothesis` to `data\hypothesis` and remove `.hypothesis` directory
+- [ ] 

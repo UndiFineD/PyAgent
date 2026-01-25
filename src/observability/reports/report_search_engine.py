@@ -75,7 +75,7 @@ class ReportSearchEngine:
                     for fp, rt, ln in locations:
                         self.index[word].append((fp, ReportType[rt], ln))
                 return
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 pass  # Fall back to Python
 
         # Python fallback: Build index
@@ -99,7 +99,7 @@ class ReportSearchEngine:
         if _RUST_AVAILABLE:
             try:
                 words = tokenize_query_rust(query)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 words = re.findall(r"\w+", query.lower())
         else:
             words = re.findall(r"\w+", query.lower())

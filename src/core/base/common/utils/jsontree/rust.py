@@ -42,14 +42,16 @@ try:
         """Rust-accelerated leaf iteration."""
         try:
             return json_iter_leaves_rust(value)
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return _json_iter_leaves_native(value)
 
     def json_count_leaves_fast(value: JSONTree[_T]) -> int:
         """Rust-accelerated leaf counting."""
         try:
             return json_count_leaves_rust(value)
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return _json_count_leaves_native(value)
 
     def json_flatten_fast(
@@ -59,7 +61,8 @@ try:
         """Rust-accelerated flattening."""
         try:
             return json_flatten_rust(value, separator)
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return _json_flatten_native(value, separator)
 
     RUST_ACCELERATION_AVAILABLE = True

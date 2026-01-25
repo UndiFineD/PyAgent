@@ -86,7 +86,7 @@ class AgentMetricsMixin:
 
                 if match:
                     return float(match.group(1))
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug(f"Coverage calculation failed: {e}")
 
         return 0.0

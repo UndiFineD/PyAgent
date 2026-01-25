@@ -40,6 +40,7 @@ class ImmuneResponseOrchestrator:
         """
         Simulates deploying a hot-patch to all running agent nodes.
         """
+        _ = patch_code
         self.vulnerability_db[vulnerability_id] = {
             "status": "patched",
             "deployed_at": time.time(),
@@ -57,7 +58,7 @@ class ImmuneResponseOrchestrator:
                 f"Patch deployment: {vulnerability_id}",
                 "Deployed",
             )
-        except Exception:
+        except (ImportError, AttributeError):
             pass
 
         return {
@@ -110,6 +111,7 @@ class HoneypotAgent:
         return {"safe": True}
 
     def get_trap_statistics(self) -> dict[str, Any]:
+        """Returns statistics on trapped adversarial attempts."""
         return {
             "attempts_neutralized": len(self.trapped_attempts),
             "attacker_profiles_identified": 0,

@@ -58,7 +58,7 @@ class TensorizerWriter:
 
     def open(self) -> None:
         """Open file for writing."""
-        self._file = open(self.path, "wb")
+        self._file = open(self.path, 'wb')
         self._write_header()
 
     def close(self) -> None:

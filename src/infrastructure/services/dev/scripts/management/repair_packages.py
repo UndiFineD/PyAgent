@@ -45,7 +45,7 @@ def fix_imports(file_path: str) -> bool:
         try:
             with open(file_path, encoding="latin-1") as f:
                 content = f.read()
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     original = content
@@ -116,8 +116,8 @@ def main() -> None:
                     "        )\n"
                 )
                 continue
-            if "def is_open(self) -> bool:" in line:
-                new_lines.append("    def is_open(self) -> bool:\n")
+            if "def is_open(self, encoding='utf-8') -> bool:" in line:
+                new_lines.append("    def is_open(self, encoding='utf-8') -> bool:\n")
                 new_lines.append('        return self.impl.state == "OPEN"\n')
                 skip_to_class = True  # Simplified implementation
                 break

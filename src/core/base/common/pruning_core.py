@@ -56,7 +56,7 @@ class PruningCore(BaseCore):
     """
 
     def __init__(self, name: str = "Pruning", repo_root: Optional[str] = None):
-        super().__init__(name=name, root_path=repo_root)
+        super().__init__(name=name, repo_root=repo_root)
         self.weights: Dict[str, SynapticWeight] = {}
         self.interaction_history: List[tuple[str, str, float]] = []
         self.current_cycle: int = 0
@@ -75,7 +75,8 @@ class PruningCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_decay_rust([1.0], age_seconds / half_life)[0]  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         return math.exp(-0.693 * age_seconds / half_life)
@@ -96,7 +97,8 @@ class PruningCore(BaseCore):
                 sync.weight = new_weight
                 sync.last_fired = time.time()
                 return new_weight
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         if success:
@@ -118,7 +120,8 @@ class PruningCore(BaseCore):
                 # Assuming Rust takes a dict or value
                 # pylint: disable=no-member
                 return rc.is_in_refractory_rust(sync.refractory_until)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return time.time() < sync.refractory_until
 

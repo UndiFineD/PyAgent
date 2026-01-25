@@ -35,7 +35,7 @@ class RegistryCore(BaseCore, Generic[T]):
     Standardizes registration, lookup, and lifecycle management.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str = "generic"):
         BaseCore.__init__(self, name=name)
         self._items: Dict[str, T] = {}
         self._hooks: Dict[str, List[Callable[[str, T], None]]] = {"on_register": [], "on_unregister": []}
@@ -45,7 +45,8 @@ class RegistryCore(BaseCore, Generic[T]):
         if rc and hasattr(rc, "detect_cycles_rust"):  # pylint: disable=no-member
             try:
                 return rc.detect_cycles_rust(nodes, edges)  # type: ignore # pylint: disable=no-member
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         # Simple DFS fallback
@@ -79,7 +80,8 @@ class RegistryCore(BaseCore, Generic[T]):
         if rc and hasattr(rc, "topological_sort_rust"):  # pylint: disable=no-member
             try:
                 return rc.topological_sort_rust(nodes, edges)  # type: ignore # pylint: disable=no-member
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         # Simple Kahn's algorithm fallback
@@ -102,8 +104,22 @@ class RegistryCore(BaseCore, Generic[T]):
 
         return sorted_nodes if len(sorted_nodes) == len(nodes) else []
 
-    def register(self, key: str, item: T) -> bool:
-        """Register an item with a specific key."""
+    def register(self, key: str, item: Optional[T] = None) -> bool:
+        """Register an item with a specific key. Supports single-argument item registration."""
+        from typing import cast
+
+        if item is None:
+            # Fallback for single-argument registration where key acts as the item
+            item = cast(T, key)
+            if hasattr(item, "__name__"):
+                key = getattr(item, "__name__")
+            elif hasattr(item, "agent_name") and isinstance(getattr(item, "agent_name"), str):
+                key = getattr(item, "agent_name")
+            elif hasattr(item, "name") and isinstance(getattr(item, "name"), str):
+                key = getattr(item, "name")
+            else:
+                key = str(item)
+
         if key in self._items:
             logger.warning("[%s] Overwriting existing registry item: %s", self.name, key)
 
@@ -112,7 +128,7 @@ class RegistryCore(BaseCore, Generic[T]):
         for hook in self._hooks["on_register"]:
             try:
                 hook(key, item)
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("[%s] Registry hook 'on_register' failed for %s: %s", self.name, key, e)
 
         return True
@@ -124,7 +140,7 @@ class RegistryCore(BaseCore, Generic[T]):
             for hook in self._hooks["on_unregister"]:
                 try:
                     hook(key, item)
-                except Exception as e:  # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error("[%s] Registry hook 'on_unregister' failed for %s: %s", self.name, key, e)
         return item
 

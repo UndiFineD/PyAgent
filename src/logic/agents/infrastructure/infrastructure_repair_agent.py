@@ -29,6 +29,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class InfrastructureRepairAgent(BaseAgent):
     """Monitors and repairs the agent's execution environment."""
 
@@ -61,7 +62,7 @@ class InfrastructureRepairAgent(BaseAgent):
                 subprocess.check_call([sys.executable, "-m", "pip", "install", package])
                 self._record(cmd_str, "Success", provider="Shell", model="pip")
                 return f"Successfully installed {package}."
-            except Exception as e:
+            except (subprocess.CalledProcessError, OSError) as e:
                 self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
                 return f"Failed to install {package}: {e}"
 

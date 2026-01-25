@@ -85,7 +85,7 @@ class ReflectionMixin:
 
             return reflection_output
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("[%s] Reflection cycle failed: %s", self.__class__.__name__, e)
             self._reflection_enabled = True
             return result

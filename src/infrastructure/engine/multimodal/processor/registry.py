@@ -41,10 +41,12 @@ class MultiModalRegistry:
         modality: ModalityType,
         processor: BaseMultiModalProcessor,
     ) -> None:
+        """Register a processor for a specific modality."""
         self._processors[modality] = processor
         logger.debug("Registered processor for %s", modality.name)
 
     def get_processor(self, modality: ModalityType) -> Optional[BaseMultiModalProcessor]:
+        """Get the registered processor for a modality, if any."""
         return self._processors.get(modality)
 
     def create_processor(
@@ -52,18 +54,18 @@ class MultiModalRegistry:
         modality: ModalityType,
         config: Optional[MultiModalConfig] = None,
     ) -> BaseMultiModalProcessor:
+        """Create a new processor instance for the given modality."""
         config = config or self._default_config
 
         if modality == ModalityType.IMAGE:
             return ImageProcessor(config=config)
-        elif modality == ModalityType.VIDEO:
+        if modality == ModalityType.VIDEO:
             return VideoProcessor(config=config)
-        elif modality == ModalityType.AUDIO:
+        if modality == ModalityType.AUDIO:
             return AudioProcessor(config=config)
-        elif modality == ModalityType.EMBEDS:
+        if modality == ModalityType.EMBEDS:
             return TextEmbedProcessor(config=config)
-        else:
-            raise ValueError(f"Unsupported modality: {modality}")
+        raise ValueError(f"Unsupported modality: {modality}")
 
     def process_inputs(
         self,
@@ -71,6 +73,7 @@ class MultiModalRegistry:
         config: Optional[MultiModalConfig] = None,
         **kwargs: Any,
     ) -> MultiModalInputs:
+        """Process multiple modalities into unified inputs for the model."""
         config = config or self._default_config
         result = MultiModalInputs()
 
@@ -198,6 +201,7 @@ def process_multimodal_inputs(
     config: Optional[MultiModalConfig] = None,
     **kwargs: Any,
 ) -> MultiModalInputs:
+    """Entry point for processing multimodal data using the global registry."""
     return MULTIMODAL_REGISTRY.process_inputs(mm_data, config, **kwargs)
 
 
@@ -206,6 +210,7 @@ def get_placeholder_tokens(
     modality: str,
     token_id: int,
 ) -> List[int]:
+    """Generate the total sequence of placeholder tokens for a modality."""
     placeholders = mm_inputs.mm_placeholders.get(modality, [])
     total_tokens = sum(p.length for p in placeholders)
     return [token_id] * total_tokens

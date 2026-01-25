@@ -35,26 +35,26 @@ class ReasoningParser(ABC):
         self.reasoning_format = reasoning_format
         self.start_marker = start_marker
         self.end_marker = end_marker
-        self._state = ParseState.IDLE
-        self._buffer = ""
-        self._thinking_blocks: List[ThinkingBlock] = []
+        self.state = ParseState.IDLE
+        self.buffer = ""
+        self.thinking_blocks: List[ThinkingBlock] = []
         self._current_block_start = 0
 
     @abstractmethod
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
         """Extract thinking blocks from text, return content and blocks."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         """Parse streaming tokens, yield (token, is_thinking)."""
-        pass
+        raise NotImplementedError
 
     def reset(self) -> None:
         """Reset parser state."""
-        self._state = ParseState.IDLE
-        self._buffer = ""
-        self._thinking_blocks = []
+        self.state = ParseState.IDLE
+        self.buffer = ""
+        self.thinking_blocks = []
         self._current_block_start = 0
 
 
@@ -73,14 +73,14 @@ class ToolParser(ABC):
     @abstractmethod
     def parse_tool_calls(self, text: str) -> List[ToolCall]:
         """Parse tool calls from text."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def parse_streaming(
         self, token_stream: Iterator[str]
     ) -> Generator[Tuple[str, Optional[ToolCall]], None, List[ToolCall]]:
         """Parse streaming tokens for tool calls."""
-        pass
+        raise NotImplementedError
 
     def generate_call_id(self) -> str:
         """Generate unique tool call ID."""

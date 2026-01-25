@@ -353,28 +353,34 @@ class PercentileTracker:
 
     @property
     def p50(self) -> float:
+        """Get 50th percentile."""
         return self.percentile(50)
 
     @property
     def p90(self) -> float:
+        """Get 90th percentile."""
         return self.percentile(90)
 
     @property
     def p95(self) -> float:
+        """Get 95th percentile."""
         return self.percentile(95)
 
     @property
     def p99(self) -> float:
+        """Get 99th percentile."""
         return self.percentile(99)
 
     @property
     def mean(self) -> float:
+        """Get mean value."""
         if not self._values:
             return 0.0
         return statistics.mean(self._values)
 
     @property
     def std(self) -> float:
+        """Get standard deviation."""
         if len(self._values) < 2:
             return 0.0
         return statistics.stdev(self._values)
@@ -423,10 +429,9 @@ class TrendAnalyzer:
         threshold = 0.01  # Sensitivity threshold
         if slope > threshold:
             return "increasing", slope
-        elif slope < -threshold:
+        if slope < -threshold:
             return "decreasing", slope
-        else:
-            return "stable", slope
+        return "stable", slope
 
 
 class AnomalyDetector:
@@ -476,10 +481,12 @@ class AnomalyDetector:
 
     @property
     def mean(self) -> float:
+        """Get mean value."""
         return self._mean
 
     @property
     def std(self) -> float:
+        """Get standard deviation."""
         if self._count < 2:
             return 0.0
         return (self._m2 / self._count) ** 0.5

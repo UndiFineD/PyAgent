@@ -78,7 +78,7 @@ class FleetConsensusManager:
                 try:
                     res = self.fleet.agents[agent_name].improve_content(task)
                     proposals[agent_name] = res
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Fleet: Agent {agent_name} failed to provide consensus proposal: {e}")
 
         if not proposals:
@@ -114,7 +114,7 @@ class FleetConsensusManager:
                         },
                     )
                 )
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"FleetConsensus: Failed to trigger federated broadcast: {e}")
 
         return result

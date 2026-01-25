@@ -1,3 +1,7 @@
+
+"""
+Test Phase64 Latency module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 64: MoE Routing Latency Optimization

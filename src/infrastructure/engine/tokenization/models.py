@@ -111,6 +111,7 @@ class TokenizerInfo:
     special_tokens: Dict[str, int] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert tokenizer info to a serializable dictionary."""
         return {
             "backend": self.backend.name,
             "vocab_size": self.vocab_size,
@@ -140,6 +141,7 @@ class TokenizeResult:
         self.num_tokens = len(self.input_ids)
 
     def to_numpy(self) -> Dict[str, np.ndarray]:
+        """Convert results to a dictionary of NumPy arrays."""
         result = {"input_ids": np.array(self.input_ids, dtype=np.int64)}
         if self.attention_mask:
             result["attention_mask"] = np.array(self.attention_mask, dtype=np.int64)
@@ -162,6 +164,7 @@ class BatchTokenizeResult:
         self.max_length = max(self.token_counts) if self.token_counts else 0
 
     def pad_to_max(self, pad_token_id: int = 0) -> "BatchTokenizeResult":
+        """Pad all sequences in the batch to match the maximum sequence length."""
         padded_ids = []
         padded_mask = []
         for ids in self.input_ids:

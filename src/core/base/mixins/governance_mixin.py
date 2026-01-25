@@ -34,7 +34,7 @@ class GovernanceMixin:
         )
         self._suspended: bool = False
 
-    async def _check_preemption(self) -> None:
+    async def check_preemption(self) -> None:
         """Wait if the agent is suspended."""
         while self._suspended:
             await asyncio.sleep(0.5)
@@ -47,7 +47,7 @@ class GovernanceMixin:
         """Resume agent execution."""
         self._suspended = False
 
-    async def _request_firewall_clearance(self, thought: str) -> bool:
+    async def request_firewall_clearance(self, thought: str) -> bool:
         """Inform fleet of thought and wait for FirewallAgent clearance."""
         # Check for clearance (avoid recursion for FirewallAgent)
         if self.__class__.__name__ == "FirewallAgent":
@@ -63,7 +63,7 @@ class GovernanceMixin:
                     "thought_stream",
                     {"agent": self.__class__.__name__, "thought": thought},
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug("Thought emission failed: %s", e)
 
         try:
@@ -78,6 +78,6 @@ class GovernanceMixin:
                 firewall = FirewallAgent()
 
             return await firewall.request_clearance_blocking(self.__class__.__name__, thought)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug("Firewall clearance defaulted to True (Error: %s)", e)
             return True

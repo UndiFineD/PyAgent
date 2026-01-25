@@ -1,4 +1,21 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Test Phase123 Decentralization module.
+"""
+
+#!/usr/bin/env python3
 
 import unittest
 import json
@@ -67,7 +84,12 @@ class TestPhase123Decentralization(unittest.TestCase):
 
     def test_distributed_logging(self) -> None:
         log_file = os.path.join(self.test_dir, "logging_agent.py")
+<<<<<<< HEAD
         with open(log_file, "w") as f: f.write("#")
+=======
+        with open(log_file, 'w', encoding='utf-8') as f:
+            f.write("#")
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         agent = LoggingAgent(log_file)
         # Test configuration
         res = agent.configure_aggregator(url="http://mock-aggregator:8080/log")
@@ -92,7 +114,12 @@ class TestPhase123Decentralization(unittest.TestCase):
 
     def test_did_sovereign_identity(self) -> None:
         id_file = os.path.join(self.test_dir, "identity_agent.py")
+<<<<<<< HEAD
         with open(id_file, "w") as f: f.write("#")
+=======
+        with open(id_file, 'w', encoding='utf-8') as f:
+            f.write("#")
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         agent = AgentIdentityAgent(id_file)
         
         # 1. Create DID for Alice

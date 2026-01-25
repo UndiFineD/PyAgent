@@ -44,13 +44,6 @@ logger = logging.getLogger(__name__)
 
 # Try importing optional dependencies
 try:
-    import numpy as np  # noqa: F401
-
-    HAS_NUMPY = True
-except ImportError:
-    HAS_NUMPY = False
-
-try:
     import torch  # noqa: F401
     import torch.distributed as dist  # noqa: F401
 
@@ -133,10 +126,12 @@ class BatchMetadata:
 
     @property
     def is_prefill(self) -> bool:
+        """Check if phase is prefill."""
         return self.phase == BatchPhase.PREFILL
 
     @property
     def is_decode(self) -> bool:
+        """Check if phase is decode."""
         return self.phase == BatchPhase.DECODE
 
 
@@ -213,7 +208,7 @@ class BatchExecutor(ABC):
 
         Returns execution plan without running.
         """
-        ...
+        raise NotImplementedError
 
     @abstractmethod
     def run(
@@ -230,7 +225,7 @@ class BatchExecutor(ABC):
         Returns:
             Output tensors and metadata
         """
-        ...
+        raise NotImplementedError
 
 
 class BatchDCPPrefillWrapper(BatchExecutor):

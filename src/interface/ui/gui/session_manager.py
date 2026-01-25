@@ -48,7 +48,7 @@ class SessionManager:
                 with open(filepath, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=4)
                 return True
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 messagebox.showerror("Save Error", f"Failed to save session: {e}")
         return False
 
@@ -62,6 +62,6 @@ class SessionManager:
             with open(filepath, encoding="utf-8") as f:
                 data = json.load(f)
             return data
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             messagebox.showerror("Load Error", f"Failed to load session: {e}")
             return None

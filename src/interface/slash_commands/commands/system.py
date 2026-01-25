@@ -27,7 +27,7 @@ from src.interface.slash_commands.registry import register
     aliases=["sys", "system"],
     category="system",
 )
-def cmd_stats(ctx: CommandContext) -> CommandResult:
+def cmd_stats(_ctx: CommandContext) -> CommandResult:
     """Get system CPU, memory, disk stats."""
     try:
         import psutil
@@ -65,7 +65,7 @@ def cmd_stats(ctx: CommandContext) -> CommandResult:
     aliases=["mem", "ram"],
     category="system",
 )
-def cmd_memory(ctx: CommandContext) -> CommandResult:
+def cmd_memory(_ctx: CommandContext) -> CommandResult:
     """Get detailed memory information."""
     try:
         import psutil
@@ -102,7 +102,7 @@ def cmd_memory(ctx: CommandContext) -> CommandResult:
     aliases=["ping", "status"],
     category="system",
 )
-def cmd_health(ctx: CommandContext) -> CommandResult:
+def cmd_health(_ctx: CommandContext) -> CommandResult:
     """Check system health."""
     try:
         import psutil
@@ -149,7 +149,7 @@ def cmd_health(ctx: CommandContext) -> CommandResult:
     aliases=["processor"],
     category="system",
 )
-def cmd_cpu(ctx: CommandContext) -> CommandResult:
+def cmd_cpu(_ctx: CommandContext) -> CommandResult:
     """Get CPU information."""
     try:
         import psutil
@@ -219,7 +219,7 @@ def cmd_disk(ctx: CommandContext) -> CommandResult:
     aliases=["cuda", "nvidia"],
     category="system",
 )
-def cmd_gpu(ctx: CommandContext) -> CommandResult:
+def cmd_gpu(_ctx: CommandContext) -> CommandResult:
     """Get GPU information."""
     try:
         import torch

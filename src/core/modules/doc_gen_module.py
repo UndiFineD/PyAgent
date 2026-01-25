@@ -72,7 +72,7 @@ class DocGenModule(BaseModule):
 
             return md_content
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error extracting docs: {str(e)}"
 
     def get_doc_filename(self, rel_path: str) -> str:

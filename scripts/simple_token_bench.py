@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#!/usr/bin/env python3
 """
 Simple Token Generation Speed Test for PyAgent
 
@@ -81,7 +95,7 @@ try:
 
 except ImportError:
     print("⚠️  Rust core not available (performance acceleration disabled)")
-except Exception as e:
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     print(f"❌ Rust test failed: {e}")
 
 # Test 3: Streaming engine availability
@@ -146,7 +160,7 @@ try:
     print("\n⚠️  Actual generation test requires agent initialization")
     print("   Use full benchmark script for end-to-end testing")
 
-except Exception as e:
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     print(f"❌ Generation test failed: {e}")
 
 # Summary
@@ -165,8 +179,8 @@ else:
 try:
     import rust_core
     available_features.append("Rust acceleration")
-except:
-    unavailable_features.append("Rust acceleration")
+except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+unavailable_features.append("Rust acceleration")
 
 if any(status for _, status, _ in backends_status):
     available_features.append(f"{sum(1 for _, s, _ in backends_status if s)}/{len(backends_status)} backends")

@@ -97,11 +97,11 @@ class LazyOrchestratorMap:
         for m_path in manifest_paths:
             if m_path.exists():
                 try:
-                    with open(m_path) as f:
+                    with open(m_path, encoding='utf-8') as f:
                         data = json.load(f)
                         configs = self._registry_core.parse_manifest(data)
                         manifest_configs.update(configs)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Failed to load orchestrator manifest {m_path}: {e}")
         return manifest_configs
 
@@ -131,10 +131,8 @@ class LazyOrchestratorMap:
         try:
             instance = getattr(self, name)
             # Check if it's still a stub
-            from .resilient_stubs import ResilientStub
-
             return not isinstance(instance, ResilientStub)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to reload orchestrator '{name}': {e}")
             return False
 
@@ -164,7 +162,7 @@ class LazyOrchestratorMap:
                 from src.core.base.lifecycle.base_agent import BaseAgent
 
                 is_agent = issubclass(orchestrator_class, BaseAgent)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 is_agent = False
 
             if is_agent:
@@ -213,7 +211,7 @@ class LazyOrchestratorMap:
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
             return stub
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to lazy-load orchestrator {key} from {module_path}: {e}")
             return None
 
@@ -231,4 +229,5 @@ class OrchestratorRegistry:
 
     @staticmethod
     def get_orchestrator_map(fleet_instance: FleetManager) -> LazyOrchestratorMap:
+        """Factory method to create a new live orchestrator map for a fleet."""
         return LazyOrchestratorMap(fleet_instance)

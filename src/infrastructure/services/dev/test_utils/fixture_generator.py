@@ -119,6 +119,6 @@ class FixtureGenerator:
             if fixture.teardown_fn and fixture.data:
                 try:
                     fixture.teardown_fn(fixture.data)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.warning(f"Failed to cleanup fixture {fixture.name}: {e}")
         self._fixtures.clear()

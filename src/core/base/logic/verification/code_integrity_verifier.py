@@ -32,7 +32,7 @@ class CodeIntegrityVerifier:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     tree = ast.parse(f.read())
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 report["syntax_errors"].append(f"{file_path}: {e}")
                 continue
 
@@ -75,6 +75,7 @@ class CodeIntegrityVerifier:
                 rel_path = str(py_file.relative_to(root_dir.parent)).replace("\\", "/")
                 for cls in classes:
                     mapping[cls] = rel_path
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 continue
         return mapping

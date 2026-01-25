@@ -176,7 +176,7 @@ def detect_cloud_provider() -> str:
     for vendor_file in vendor_files:
         try:
             if os.path.isfile(vendor_file):
-                with open(vendor_file, "r") as f:
+                with open(vendor_file, 'r', encoding='utf-8') as f:
                     content = f.read().lower()
                     for identifier, provider in cloud_identifiers.items():
                         if identifier in content:
@@ -396,7 +396,7 @@ class UsageMessage:
 
         try:
             os.makedirs(os.path.dirname(_USAGE_STATS_JSON_PATH), exist_ok=True)
-            with open(_USAGE_STATS_JSON_PATH, "w") as f:
+            with open(_USAGE_STATS_JSON_PATH, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2)
         except (IOError, PermissionError):
             pass

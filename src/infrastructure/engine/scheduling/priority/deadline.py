@@ -120,7 +120,7 @@ class DeadlineScheduler:
                 with self._lock:
                     self._stats.completed += 1
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 task.state = TaskState.FAILED
                 if task.future:
                     task.future.set_exception(e)

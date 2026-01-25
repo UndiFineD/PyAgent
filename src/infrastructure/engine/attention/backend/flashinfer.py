@@ -73,7 +73,7 @@ class FlashInferBackend(AttentionBackend[None]):
     ) -> Any:
         """FlashInfer implementation."""
         try:
-            import flashinfer  # noqa: F401
+            import flashinfer  # pylint: disable=unused-import # noqa: F401
         except ImportError:
             logger.warning("flashinfer not available, falling back to SDPA")
             return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)

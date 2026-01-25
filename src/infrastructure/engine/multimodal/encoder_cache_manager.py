@@ -362,10 +362,9 @@ class EncoderCacheManager:
 
         if self.config.hash_algorithm == "sha256":
             return hashlib.sha256(content).hexdigest()
-        elif self.config.hash_algorithm == "md5":
+        if self.config.hash_algorithm == "md5":
             return hashlib.md5(content).hexdigest()
-        else:
-            return hashlib.blake2b(content).hexdigest()
+        return hashlib.blake2b(content).hexdigest()
 
     def prefetch(
         self,
@@ -390,8 +389,10 @@ class EncoderCacheManager:
                         content_hash = self.compute_hash(data) if self.config.enable_dedup else None
                         self.put(key, data, content_hash=content_hash)
                         self.stats.prefetch_hits += 1
-                except Exception:
-                    pass  # Prefetch failures are non-critical
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
+                    # Prefetch failures are non-critical
+                    pass
 
     def evict_unreferenced(self) -> int:
         """Evict all unreferenced entries."""
@@ -463,15 +464,15 @@ class EncoderCacheManager:
             # Least recently used
             return min(candidates, key=lambda x: x[1].last_access)[0]
 
-        elif self.config.eviction_policy == EvictionPolicy.LFU:
+        if self.config.eviction_policy == EvictionPolicy.LFU:
             # Least frequently used
             return min(candidates, key=lambda x: x[1].access_count)[0]
 
-        elif self.config.eviction_policy == EvictionPolicy.FIFO:
+        if self.config.eviction_policy == EvictionPolicy.FIFO:
             # First in first out
             return min(candidates, key=lambda x: x[1].created_at)[0]
 
-        elif self.config.eviction_policy == EvictionPolicy.PRIORITY:
+        if self.config.eviction_policy == EvictionPolicy.PRIORITY:
             # Lowest priority first, then LRU
             return min(candidates, key=lambda x: (x[1].priority, x[1].last_access))[0]
 
@@ -501,15 +502,14 @@ class EncoderCacheManager:
         """Estimate size of data in bytes."""
         if isinstance(data, np.ndarray):
             return data.nbytes
-        elif isinstance(data, (bytes, bytearray)):
+        if isinstance(data, (bytes, bytearray)):
             return len(data)
-        elif isinstance(data, (list, tuple)):
+        if isinstance(data, (list, tuple)):
             return sum(self._estimate_size(item) for item in data)
-        elif isinstance(data, dict):
+        if isinstance(data, dict):
             return sum(self._estimate_size(k) + self._estimate_size(v) for k, v in data.items())
-        else:
-            # Rough estimate for other objects
-            return 64  # Minimum object size
+        # Rough estimate for other objects
+        return 64  # Minimum object size
 
     @property
     def num_free_slots(self) -> int:
@@ -569,7 +569,7 @@ class MultiTierEncoderCache:
         """Put data into specified tier."""
         if tier == CacheTier.MEMORY:
             return self.memory_cache.put(key, data, request_id)
-        elif tier == CacheTier.DISK and self.disk_path:
+        if tier == CacheTier.DISK and self.disk_path:
             return self._save_to_disk(key, data)
         return False
 
@@ -585,7 +585,8 @@ class MultiTierEncoderCache:
         if os.path.exists(filepath):
             try:
                 return np.load(filepath, allow_pickle=True)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 return None
         return None
 
@@ -605,7 +606,8 @@ class MultiTierEncoderCache:
             np.save(filepath, data, allow_pickle=True)
             self._disk_index[key] = filename
             return True
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return False
 
 

@@ -117,7 +117,7 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
     # 2. Bare excepts
     for node in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler) and node.type is None:
-            issues.append("Contains bare `except Exception:` clause (catches SystemExit / KeyboardInterrupt).")
+            issues.append("Contains bare `except` clause.")
     # 3. Missing type hints
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):

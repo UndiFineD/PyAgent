@@ -58,7 +58,7 @@ class GitHubModelsBackend(LLMBackend):
                         if token:
                             logging.debug(f"DEBUG: token found in file: {path}")
                             break
-                    except Exception:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         continue
 
         # Phase 120: Fallback to GitHub CLI token if possible
@@ -71,7 +71,7 @@ class GitHubModelsBackend(LLMBackend):
                     token = res.stdout.strip()
                     if token:
                         logging.debug("GitHub Models: Using token from 'gh auth token'.")
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         if not token:
@@ -167,7 +167,7 @@ class GitHubModelsBackend(LLMBackend):
                             logging.warning(
                                 "GitHub Models: Token refresh returned identical token. Authorization likely revoked."
                             )
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.debug(f"GitHub Models token refresh error: {e}")
 
                 if response.status_code == 401:
@@ -189,7 +189,7 @@ class GitHubModelsBackend(LLMBackend):
                 )
                 self._update_status("github_models", True)
                 return content
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 latency = time.time() - start_t
                 if attempt < max_retries:
                     import threading

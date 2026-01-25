@@ -1,3 +1,7 @@
+
+"""
+Benchmark Kv V1 Vs V2 module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Performance benchmark: KV V1 (Structural) vs KV V2 (Vectorized)
@@ -70,14 +74,14 @@ if __name__ == "__main__":
     try:
         t1 = benchmark_v1(num_blocks=BLOCKS, num_iters=ITERS)
         print(f"V1 (Structural/OOD) Time: {t1:.4f}s")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"V1 Failed: {e}")
         t1 = 0
 
     try:
         t2 = benchmark_v2(num_blocks=BLOCKS, num_iters=ITERS)
         print(f"V2 (Vectorized/Hybrid) Time: {t2:.4f}s")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"V2 Failed: {e}")
         t2 = 0
 

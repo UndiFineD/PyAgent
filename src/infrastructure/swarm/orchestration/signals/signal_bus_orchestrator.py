@@ -36,7 +36,7 @@ class SignalBusOrchestrator(StandardSignalCore):
                     for callback in self._subscribers[signal_type]:
                         try:
                             callback(msg["payload"], msg["sender"])
-                        except Exception as e:
+                        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                             logging.error(f"SignalBus: Callback error for {signal_type}: {e}")
                 self._queue.task_done()
             except queue.Empty:

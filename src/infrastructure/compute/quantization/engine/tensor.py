@@ -39,6 +39,7 @@ class QuantizedTensor:
         shape: tuple[int, ...],
         config: QuantConfig,
     ):
+        """Initializes a quantized tensor with data and calibration parameters."""
         self.data = data
         self.scale = scale
         self.zero_point = zero_point
@@ -46,6 +47,7 @@ class QuantizedTensor:
         self.config = config
 
     def dequantize(self) -> NDArray[np.float32]:
+        """Reconstructs float32 values from the quantized data."""
         from .utils import unpack_int4
 
         if self.config.bits == 4:
@@ -93,6 +95,7 @@ class QuantizedTensor:
 
     @property
     def memory_bytes(self) -> int:
+        """Calculates total memory footprint of the quantized tensor (bytes)."""
         data_bytes = self.data.nbytes
         scale_bytes = self.scale.nbytes
         zp_bytes = self.zero_point.nbytes if self.zero_point is not None else 0
@@ -100,5 +103,6 @@ class QuantizedTensor:
 
     @property
     def compression_ratio(self) -> float:
+        """Returns the ratio between FP32 size and current memory usage."""
         original_bytes = np.prod(self.shape) * 4  # FP32
         return original_bytes / self.memory_bytes

@@ -47,7 +47,7 @@ class KnowledgeTransferEngine:
         """Exports a fleet's knowledge (lessons, entities) to a shareable file."""
         export_file = self.export_path / f"knowledge_{fleet_id}.json"
 
-        with open(export_file, "w") as f:
+        with open(export_file, 'w', encoding='utf-8') as f:
             json.dump(knowledge_data, f, indent=2)
 
         logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")
@@ -59,7 +59,7 @@ class KnowledgeTransferEngine:
         if not source_path.exists():
             raise FileNotFoundError(f"Knowledge file not found: {source_file}")
 
-        with open(source_path) as f:
+        with open(source_path, encoding='utf-8') as f:
             data = json.load(f)
 
         logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")

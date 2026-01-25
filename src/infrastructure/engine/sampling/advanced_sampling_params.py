@@ -196,11 +196,11 @@ class AdvancedSamplingParams(SamplingParams):
         if self.temperature_schedule == TemperatureSchedule.LINEAR_DECAY:
             return self.temperature - decay_progress * (self.temperature - self.temperature_decay_target)
 
-        elif self.temperature_schedule == TemperatureSchedule.COSINE_DECAY:
+        if self.temperature_schedule == TemperatureSchedule.COSINE_DECAY:
             cosine_factor = 0.5 * (1 + math.cos(math.pi * decay_progress))
             return self.temperature_decay_target + cosine_factor * (self.temperature - self.temperature_decay_target)
 
-        elif self.temperature_schedule == TemperatureSchedule.WARMUP_DECAY:
+        if self.temperature_schedule == TemperatureSchedule.WARMUP_DECAY:
             return self.temperature - decay_progress * (self.temperature - self.temperature_decay_target)
 
         return self.temperature
@@ -356,7 +356,8 @@ class TokenWhitelistProcessor:
     def apply_to_logits(self, logits: np.ndarray, vocab_size: Optional[int] = None) -> np.ndarray:
         """Apply whitelist masking to logits."""
         mask = self.build_mask(vocab_size or len(logits))
-        logits[~mask] = -float("inf")
+        if mask is not None:
+            logits[~mask] = -float("inf")
         return logits
 
 
@@ -438,6 +439,11 @@ class MirostatSampler:
 # =============================================================================
 # Sampling Engine
 # =============================================================================
+
+
+def create_sampling_engine(params: Union[SamplingParams, AdvancedSamplingParams]) -> SamplingEngine:
+    """Factory function for SamplingEngine."""
+    return SamplingEngine(params)
 
 
 class SamplingEngine:

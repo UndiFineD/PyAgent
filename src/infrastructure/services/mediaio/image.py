@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Image loader implementation.
-"""
+"""Image loader implementation."""
+
+# pylint: disable=too-many-function-args
 
 from __future__ import annotations
 
@@ -37,18 +35,14 @@ class ImageLoader(MediaLoader):
     def __init__(self):
         self._pil_available = False
         self._cv2_available = False
-
         try:
             from PIL import Image
-
             self._pil_available = True
-            self._Image = Image
+            self._image_lib = Image
         except ImportError:
             pass
-
         try:
             import cv2
-
             self._cv2_available = True
             self._cv2 = cv2
         except ImportError:
@@ -89,13 +83,12 @@ class ImageLoader(MediaLoader):
         """Read bytes from source."""
         if isinstance(source, bytes):
             return source, "<bytes>"
-
         if isinstance(source, (str, Path)):
             source_str = str(source)
             if source_str.startswith(("http://", "https://")):
                 data = await self._fetch_url(source_str)
             else:
-                with open(source_str, "rb") as f:
+                with open(source_str, 'rb') as f:
                     data = f.read()
             return data, source_str
 
@@ -106,13 +99,11 @@ class ImageLoader(MediaLoader):
         """Fetch image from URL."""
         try:
             import aiohttp
-
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as resp:
                     return await resp.read()
         except ImportError:
             import urllib.request
-
             with urllib.request.urlopen(url) as resp:
                 return resp.read()
 
@@ -120,19 +111,19 @@ class ImageLoader(MediaLoader):
         """Detect image format from magic bytes."""
         if data[:2] == b"\xff\xd8":
             return ImageFormat.JPEG
-        elif data[:8] == b"\x89PNG\r\n\x1a\n":
+        if data[:8] == b"\x89PNG\r\n\x1a\n":
             return ImageFormat.PNG
-        elif data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
             return ImageFormat.WEBP
-        elif data[:6] in (b"GIF87a", b"GIF89a"):
+        if data[:6] in (b"GIF87a", b"GIF89a"):
             return ImageFormat.GIF
-        elif data[:2] == b"BM":
+        if data[:2] == b"BM":
             return ImageFormat.BMP
         return ImageFormat.JPEG
 
     async def _load_pil(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
         """Load using PIL."""
-        img = self._Image.open(io.BytesIO(data))
+        img = self._image_lib.open(io.BytesIO(data))
         if img.mode != "RGB":
             img = img.convert("RGB")
 
@@ -151,32 +142,36 @@ class ImageLoader(MediaLoader):
         """Resize image using PIL."""
         w, h = img.size
         tw, th = target
+
         if mode == ResizeMode.STRETCH:
-            return img.resize((tw, th), self._Image.Resampling.BICUBIC)
-        elif mode == ResizeMode.CROP:
+            return img.resize((tw, th), self._image_lib.Resampling.BICUBIC)
+
+        if mode == ResizeMode.CROP:
             scale = max(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
-            img = img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
+            img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
             left = (new_w - tw) // 2
             top = (new_h - th) // 2
             return img.crop((left, top, left + tw, top + th))
-        elif mode == ResizeMode.PAD:
+
+        if mode == ResizeMode.PAD:
             scale = min(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
-            img = img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
-            result = self._Image.new("RGB", (tw, th), (0, 0, 0))
+            img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
+            result = self._image_lib.new("RGB", (tw, th), (0, 0, 0))
             left = (tw - new_w) // 2
             top = (th - new_h) // 2
             result.paste(img, (left, top))
             return result
-        elif mode == ResizeMode.SHORTEST:
+
+        if mode == ResizeMode.SHORTEST:
             scale = min(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
-            return img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
-        else:
-            scale = max(tw / w, th / h)
-            new_w, new_h = int(w * scale), int(h * scale)
-            return img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
+            return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
+
+        scale = max(tw / w, th / h)
+        new_w, new_h = int(w * scale), int(h * scale)
+        return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
 
     async def _load_cv2(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
         """Load using OpenCV."""
@@ -199,10 +194,13 @@ class ImageLoader(MediaLoader):
         """Resize image using OpenCV."""
         h, w = img.shape[:2]
         tw, th = target
+
         if mode == ResizeMode.STRETCH:
             return self._cv2.resize(img, (tw, th), interpolation=self._cv2.INTER_LINEAR)
-        elif mode == ResizeMode.SHORTEST:
+
+        if mode == ResizeMode.SHORTEST:
             scale = min(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
             return self._cv2.resize(img, (new_w, new_h), interpolation=self._cv2.INTER_LINEAR)
+
         return self._cv2.resize(img, (tw, th), interpolation=self._cv2.INTER_LINEAR)

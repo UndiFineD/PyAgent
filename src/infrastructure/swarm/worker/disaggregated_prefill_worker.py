@@ -132,7 +132,6 @@ class DisaggregatedPrefillWorker:
     def handle_chunked_prefill(self, request: Any, chunk_size: int):
         """Handle massive prompts by breaking them into manageable chunks."""
         # For each chunk, compute and intermediate KV sync
-        pass
 
     def get_status(self) -> Dict[str, Any]:
         """Return worker health and performance stats."""

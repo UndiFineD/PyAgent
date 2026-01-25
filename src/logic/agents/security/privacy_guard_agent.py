@@ -27,7 +27,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-class PrivacyGuardAgent(BaseAgent):
+class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Privacy Guard Agent: Monitors fleet communications for PII (Personally
     Identifiable Information), performs redaction, and tracks compliance.

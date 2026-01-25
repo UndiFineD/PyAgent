@@ -61,7 +61,7 @@ def discover_adapters(
 
     for config_path in directory.rglob(pattern):
         try:
-            with open(config_path) as f:
+            with open(config_path, encoding='utf-8') as f:
                 config = json.load(f)
 
             adapters.append(
@@ -74,7 +74,7 @@ def discover_adapters(
                     "target_modules": config.get("target_modules", []),
                 }
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.debug(f"Failed to parse adapter config {config_path}: {e}")
 
     return adapters

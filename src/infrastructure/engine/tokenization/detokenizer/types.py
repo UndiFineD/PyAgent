@@ -60,8 +60,11 @@ class TokenizerLike(Protocol):
     @property
     def eos_token_id(self) -> Optional[int]:
         """Get the end-of-sequence token ID."""
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
 
 @dataclass

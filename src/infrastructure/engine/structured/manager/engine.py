@@ -75,6 +75,15 @@ class StructuredOutputManager:
         backend: StructuredOutputBackend,
         grammar_types: Optional[List[GrammarType]] = None,
     ) -> None:
+        """
+        Register a structured output backend.
+
+        Args:
+            name: Unique name for the backend.
+            backend: The backend instance to register.
+            grammar_types: Optional list of grammar types this backend handles.
+                If not provided, uses the backend's default supported types.
+        """
         self._backends[name] = backend
 
         types_to_register = grammar_types or backend.get_supported_types()
@@ -85,6 +94,15 @@ class StructuredOutputManager:
         self,
         grammar_type: GrammarType,
     ) -> Optional[StructuredOutputBackend]:
+        """
+        Get the backend responsible for a specific grammar type.
+
+        Args:
+            grammar_type: The type of grammar to find a backend for.
+
+        Returns:
+            A backend instance or None if not found.
+        """
         backend_name = self._type_to_backend.get(grammar_type)
         if backend_name:
             return self._backends.get(backend_name)
@@ -96,6 +114,17 @@ class StructuredOutputManager:
         request_id: Optional[str] = None,
         async_compile: bool = False,
     ) -> Union[StructuredOutputGrammar, Future]:
+        """
+        Compile a grammar specification.
+
+        Args:
+            grammar_spec: The grammar specification to compile.
+            request_id: Optional unique identifier for the request.
+            async_compile: Whether to compile asynchronously.
+
+        Returns:
+            A compiled grammar instance, or a Future if compiled asynchronously.
+        """
         self._total_requests += 1
         cache_key = grammar_spec.to_cache_key()
 
@@ -125,6 +154,7 @@ class StructuredOutputManager:
         request_id: Optional[str],
         cache_key: str,
     ) -> StructuredOutputGrammar:
+        """Inner method to perform grammar compilation."""
         import time
 
         start = time.perf_counter()
@@ -133,15 +163,12 @@ class StructuredOutputManager:
             grammar = backend.compile_grammar(grammar_spec, request_id)
             elapsed_ms = (time.perf_counter() - start) * 1000
 
-            with backend._lock:
-                backend.stats.grammars_compiled += 1
-                backend.stats.total_compile_time_ms += elapsed_ms
+            backend.record_compilation_success(elapsed_ms)
 
             self._add_to_cache(cache_key, grammar)
             return grammar
-        except Exception:
-            with backend._lock:
-                backend.stats.compilations_failed += 1
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            backend.record_compilation_failure()
             raise
         finally:
             self._pending_compilations.pop(cache_key, None)
@@ -181,6 +208,16 @@ class StructuredOutputManager:
         grammars: Sequence[Optional[StructuredOutputGrammar]],
         bitmask: Optional[np.ndarray] = None,
     ) -> np.ndarray:
+        """
+        Fill a batch token bitmask for multiple grammars.
+
+        Args:
+            grammars: Sequence of grammar instances (one per batch item).
+            bitmask: Optional bitmask to fill. If None, uses internal buffer.
+
+        Returns:
+            The filled bitmask array.
+        """
         batch_size = len(grammars)
 
         if bitmask is None:
@@ -197,6 +234,16 @@ class StructuredOutputManager:
         grammar: StructuredOutputGrammar,
         tokens: Sequence[int],
     ) -> ValidationResult:
+        """
+        Validate and accept tokens into a grammar.
+
+        Args:
+            grammar: The grammar instance to update.
+            tokens: The sequence of tokens to accept.
+
+        Returns:
+            A ValidationResult indicating success or failure.
+        """
         if grammar.is_terminated():
             return ValidationResult(
                 is_valid=False,
@@ -211,14 +258,20 @@ class StructuredOutputManager:
                 is_valid=True,
                 accepted_prefix_length=len(tokens),
             )
-        else:
-            return ValidationResult(
-                is_valid=False,
-                accepted_prefix_length=valid_prefix_len,
-                error_message=f"Rejected at token {valid_prefix_len}",
-            )
+
+        return ValidationResult(
+            is_valid=False,
+            accepted_prefix_length=valid_prefix_len,
+            error_message=f"Rejected at token {valid_prefix_len}",
+        )
 
     def get_stats(self) -> Dict[str, Any]:
+        """
+        Get global manager statistics.
+
+        Returns:
+            Dictionary containing manager and backend stats.
+        """
         stats = {
             "total_requests": self._total_requests,
             "cache_hits": self._cache_hits,
@@ -229,17 +282,19 @@ class StructuredOutputManager:
         }
 
         for name, backend in self._backends.items():
+            b_stats = backend.get_stats()
             stats["backends"][name] = {
-                "grammars_compiled": backend.stats.grammars_compiled,
+                "grammars_compiled": b_stats.grammars_compiled,
                 "avg_compile_time_ms": (
-                    backend.stats.total_compile_time_ms / backend.stats.grammars_compiled
-                    if backend.stats.grammars_compiled > 0
+                    b_stats.total_compile_time_ms / b_stats.grammars_compiled
+                    if b_stats.grammars_compiled > 0
                     else 0.0
                 ),
             }
         return stats
 
     def shutdown(self) -> None:
+        """Shutdown the manager and its workers."""
         if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
@@ -257,6 +312,15 @@ class SimpleBackend(StructuredOutputBackend):
         tokenizer_decode: Optional[Callable[[List[int]], str]] = None,
         token_strings: Optional[Dict[int, str]] = None,
     ):
+        """
+        Initialize SimpleBackend.
+
+        Args:
+            vocab_size: Vocabulary size.
+            tokenizer_encode: Encoding function.
+            tokenizer_decode: Decoding function.
+            token_strings: Token string mapping.
+        """
         super().__init__(vocab_size, tokenizer_encode, tokenizer_decode)
         self._token_strings = token_strings or {}
 
@@ -265,6 +329,16 @@ class SimpleBackend(StructuredOutputBackend):
         grammar_spec: GrammarSpec,
         request_id: Optional[str] = None,
     ) -> StructuredOutputGrammar:
+        """
+        Compile a grammar.
+
+        Args:
+            grammar_spec: Specification.
+            request_id: Optional ID.
+
+        Returns:
+            A compiled grammar instance.
+        """
         if grammar_spec.grammar_type == GrammarType.REGEX:
             return SimpleRegexGrammar(
                 grammar_spec=grammar_spec,
@@ -272,7 +346,8 @@ class SimpleBackend(StructuredOutputBackend):
                 request_id=request_id,
                 token_strings=self._token_strings,
             )
-        elif grammar_spec.grammar_type == GrammarType.CHOICE:
+
+        if grammar_spec.grammar_type == GrammarType.CHOICE:
             return ChoiceGrammar(
                 grammar_spec=grammar_spec,
                 vocab_size=self.vocab_size,
@@ -280,8 +355,9 @@ class SimpleBackend(StructuredOutputBackend):
                 token_strings=self._token_strings,
                 encode_fn=self.tokenizer_encode,
             )
-        else:
-            raise ValueError(f"Unsupported grammar type: {grammar_spec.grammar_type}")
+
+        raise ValueError(f"Unsupported grammar type: {grammar_spec.grammar_type}")
 
     def get_supported_types(self) -> List[GrammarType]:
+        """Get supported types."""
         return [GrammarType.REGEX, GrammarType.CHOICE]

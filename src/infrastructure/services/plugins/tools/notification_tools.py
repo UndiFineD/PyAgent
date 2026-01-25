@@ -52,7 +52,7 @@ def send_slack_notification(webhook_url: str, message: str) -> bool:
 
         return True
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logging.error(f"Failed to send Slack notification: {e}")
         cm.update_status("slack_webhook", False)
         return False
@@ -80,7 +80,7 @@ def send_discord_notification(webhook_url: str, message: str) -> bool:
             recorder.record_interaction("Discord", "Webhook", f"Notification to {webhook_url}", message)
 
         return True
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logging.error(f"Failed to send Discord notification: {e}")
         cm.update_status("discord_webhook", False)
         return False

@@ -58,7 +58,8 @@ class PullRequestAgent(BaseAgent):
             try:
                 meta = {"phase": 108, "type": "git_pr", "timestamp": time.time()}
                 self.recorder.record_interaction("pra", "git", action, result, meta=meta)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
     @as_tool
@@ -87,7 +88,7 @@ class PullRequestAgent(BaseAgent):
             res = "\n".join(report)
             self._record_pr_event("diff_summary", {"branch": branch}, res)
             return res
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             err = f"Error analyzing git diff: {e}"
             self._record_pr_event("diff_error", {"branch": branch}, err)
             return err
@@ -102,7 +103,7 @@ class PullRequestAgent(BaseAgent):
             if result.returncode != 0:
                 return f"Git history unavailable: {result.stderr}"
             return f"## 📜 Recent Git History\n\n```text\n{result.stdout}\n```"
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error reading git history: {e}"
 
     @as_tool
@@ -111,7 +112,7 @@ class PullRequestAgent(BaseAgent):
         try:
             subprocess.check_output(["git", "checkout", "-b", branch_name], text=True)
             return f"Successfully created and switched to branch `{branch_name}`."
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error creating branch: {e}"
 
     @as_tool
@@ -121,7 +122,7 @@ class PullRequestAgent(BaseAgent):
             subprocess.check_output(["git", "add", "."], text=True)
             subprocess.check_output(["git", "commit", "-m", message], text=True)
             return f"Changes staged and committed with message: '{message}'"
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error committing changes: {e}"
 
     @as_tool
@@ -154,7 +155,7 @@ class PullRequestAgent(BaseAgent):
             res = "\n".join(description)
             self._record_pr_event("pr_description", {"branch": branch}, res)
             return res
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             err = f"Error generating PR description: {e}"
             self._record_pr_event("pr_desc_error", {"branch": branch}, err)
             return err
@@ -176,7 +177,7 @@ class PullRequestAgent(BaseAgent):
                 "\n**Verdict**: Ready for commit.",
             ]
             return "\n".join(findings)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error during review: {e}"
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

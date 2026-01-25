@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # -*- coding: utf-8 -*-
 """Test classes from test_agent_test_utils.py - core module."""
 
@@ -108,7 +122,7 @@ class TestFixtureHelpers(unittest.TestCase):
     def test_create_temp_file(self) -> None:
         """Test creating temporary file."""
         temp_file: str = os.path.join(self.temp_dir, "test.txt")
-        with open(temp_file, "w") as f:
+        with open(temp_file, 'w', encoding='utf-8') as f:
             f.write("test content")
 
         self.assertTrue(os.path.exists(temp_file))
@@ -219,7 +233,7 @@ class TestContextManagers(unittest.TestCase):
         try:
             with patch.object(object, '__init__', side_effect=Exception("Error")):
                 pass
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             pass
         finally:
             cleanup_called = True
@@ -366,7 +380,7 @@ class TestExceptionHandling(unittest.TestCase):
         try:
             result: int = safe_operation()
             self.assertEqual(result, 42)
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.fail("Should not raise")
 
     def test_multiple_exception_types(self) -> None:

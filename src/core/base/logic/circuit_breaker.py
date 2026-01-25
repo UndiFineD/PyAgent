@@ -86,7 +86,7 @@ class CircuitBreaker:
             "consecutive_successes_needed": self.consecutive_successes_needed,
         }
 
-    def _get_current_timeout(self) -> float:
+    def get_current_timeout(self) -> float:
         """Calculates current timeout using ResilienceCore math."""
         return self.resilience_core.calculate_backoff(
             self.failure_count,
@@ -135,7 +135,7 @@ class CircuitBreaker:
                 self.success_count = 1
                 self._export_to_otel(old_state, self.state)
                 return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug("CircuitBreaker '%s': Probe failed: %s", self.name, e)
 
         return False
@@ -161,7 +161,7 @@ class CircuitBreaker:
             result = func(*args, **kwargs)
             self.on_success()
             return result
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.on_failure()
             raise
 

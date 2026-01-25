@@ -51,7 +51,6 @@ class GrammarEngine(ABC):
     @abstractmethod
     def build_fsm(self, spec: str) -> FSMTransitionTable:
         """Build FSM from specification string."""
-        pass
 
     def get_tokens_for_chars(self, chars: Set[str]) -> Set[int]:
         """Get token IDs that start with any of the given characters."""

@@ -258,7 +258,7 @@ class AsyncMicrobatcher(Generic[T, R]):
                 if not item.future.done():
                     item.future.set_result(result)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Fail all futures
             for item in batch:
                 if not item.future.done():
@@ -374,7 +374,7 @@ class SyncMicrobatcher(Generic[T, R]):
             for (_, event, result_holder), result in zip(batch, results):
                 result_holder.append(result)
                 event.set()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             for _, event, result_holder in batch:
                 result_holder.extend([None, e])
                 event.set()

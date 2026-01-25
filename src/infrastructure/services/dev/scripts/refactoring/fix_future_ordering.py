@@ -59,7 +59,7 @@ def fix_future_ordering(directory: str) -> None:
 
                             with open(path, "w", encoding="utf-8") as f:
                                 f.write("\n".join(lines) + "\n")
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error processing {path}: {e}")
 
 

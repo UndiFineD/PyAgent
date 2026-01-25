@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#!/usr/bin/env python3
 """
 Quick Token Generation Speed Test for PyAgent
 
@@ -51,7 +65,7 @@ def measure_token_speed(agent, prompt: str, label: str = "Test") -> dict:
             # Try calling the agent directly
             output = str(agent)
             print("⚠️  Using fallback - agent may not support expected methods")
-    except Exception as e:
+    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
         duration = time.perf_counter() - start
         print(f"❌ Generation failed: {e}")
         return {
@@ -110,7 +124,7 @@ def main():
         print("✅ Agent initialized successfully")
         print(f"   Backend: {getattr(agent, 'backend', 'unknown')}")
         print(f"   Model: {getattr(agent, 'model', 'unknown')}")
-    except Exception as e:
+    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"❌ Failed to initialize agent: {e}")
         return
 
@@ -184,7 +198,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n\n⚠️  Test interrupted by user")
         sys.exit(130)
-    except Exception as e:
+    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"\n\n❌ Test failed with error: {e}")
         import traceback
         traceback.print_exc()

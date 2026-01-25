@@ -291,7 +291,7 @@ class JSONToolParser(ToolParser):
                         arguments_delta=json.dumps(current_call.get("arguments", {})),
                         is_complete=self.tool_call_end in current_text,
                     )
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
         return None
@@ -467,7 +467,7 @@ class ToolParserManager:
                     raise TypeError(f"{class_name} is not a ToolParser subclass")
                 cls._parsers[name] = parser_cls  # Cache it
                 return parser_cls
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 raise ImportError(f"Failed to load parser '{name}': {e}") from e
 
         raise KeyError(f"Tool parser '{name}' not found")

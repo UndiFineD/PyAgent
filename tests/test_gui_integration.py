@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -12,54 +14,104 @@
 
 """Integration tests for the PyAgent GUI application."""
 
+import json
+import logging
+import os
+import tkinter as tk
 import unittest
+<<<<<<< HEAD:tests/test_gui_integration.py
 from unittest.mock import MagicMock, patch
 import tkinter as tk
 import os
 import json
 from src.classes.gui.MainApp import PyAgentGUI
 from src.classes.gui.SessionManager import SessionManager
+=======
+from unittest.mock import patch
+
+from src.interface.ui.gui.main_app import PyAgentGUI
+
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
 
 class TestGUIIntegration(unittest.TestCase):
+    """Integration test suite for the GUI application."""
+
     @classmethod
+<<<<<<< HEAD:tests/test_gui_integration.py
     def setUpClass(cls):
+=======
+    def setUpClass(cls) -> None:
+        """Set up the GUI environment."""
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         try:
             cls.root = tk.Tk()
             cls.root.withdraw()
             cls._tk_available = True
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Skipping GUI tests: Tkinter not available: {e}")
             cls._tk_available = False
 
     @classmethod
+<<<<<<< HEAD:tests/test_gui_integration.py
     def tearDownClass(cls):
         if cls._tk_available:
             cls.root.destroy()
 
     def setUp(self):
+=======
+    def tearDownClass(cls) -> None:
+        """Clean up the GUI root."""
+        if cls._tk_available:
+            cls.root.destroy()
+
+    def setUp(self) -> None:
+        """Set up test case."""
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         if not self._tk_available:
             self.skipTest("Tkinter not available in this environment")
         self.app = PyAgentGUI(self.root)
 
+<<<<<<< HEAD:tests/test_gui_integration.py
     def test_app_initialization(self):
+=======
+    def test_app_initialization(self) -> None:
+        """Test that the application initializes correctly."""
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         self.assertIn("PyAgent Control Center", self.app.root.title())
         self.assertTrue(self.app.theme_manager.is_dark_mode)
         self.assertEqual(self.app.project_root_var.get(), os.getcwd())
 
+<<<<<<< HEAD:tests/test_gui_integration.py
     def test_theme_toggle(self):
         initial_mode = self.app.theme_manager.is_dark_mode
+=======
+    def test_theme_toggle(self) -> None:
+        """Test toggling the theme between light and dark modes."""
+        initial_mode: bool = self.app.theme_manager.is_dark_mode
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         self.app.theme_manager.toggle_theme()
         self.assertNotEqual(initial_mode, self.app.theme_manager.is_dark_mode)
         self.app.theme_manager.toggle_theme()
         self.assertEqual(initial_mode, self.app.theme_manager.is_dark_mode)
 
+<<<<<<< HEAD:tests/test_gui_integration.py
     def test_add_agent_column(self):
         initial_count = len(self.app.agent_manager.agent_columns)
+=======
+    def test_add_agent_column(self) -> None:
+        """Test adding a new agent column to the GUI."""
+        initial_count: int = len(self.app.agent_manager.agent_columns)
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         self.app.add_agent_column("TestAgent")
         self.assertEqual(len(self.app.agent_manager.agent_columns), initial_count + 1)
         self.assertEqual(self.app.agent_manager.agent_columns[-1].agent_name, "TestAgent")
 
+<<<<<<< HEAD:tests/test_gui_integration.py
     def test_session_manager_save_load(self):
+=======
+    def test_session_manager_save_load(self) -> None:
+        """Test saving and loading a session configuration."""
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         # Mock file dialogs
         test_session_file = "test_session.json"
         session_data = {

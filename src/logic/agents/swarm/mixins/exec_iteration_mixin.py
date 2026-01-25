@@ -72,7 +72,7 @@ class ExecIterationMixin:
 
                 try:
                     changes_made = self._perform_iteration(code_file)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Error in _perform_iteration for {code_file}: {e}")
                     try:
                         sql = getattr(
@@ -87,7 +87,7 @@ class ExecIterationMixin:
                                 f"Iteration failed: {str(e)}",
                                 False,
                             )
-                    except Exception:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         pass
                     changes_made = False
 
@@ -109,7 +109,7 @@ class ExecIterationMixin:
             if hasattr(self, "shutdown_handler"):
                 self.shutdown_handler.mark_completed(code_file)
 
-        except Exception as global_e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.critical(f"Global failure processing {code_file}: {global_e}", exc_info=True)
         finally:
             if hasattr(self, "lock_manager"):

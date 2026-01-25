@@ -151,7 +151,7 @@ class ComprehensiveProfileAnalyzer:
             norm_file = os.path.normpath(filename)
             norm_src = os.path.normpath(self.src_path)
             return norm_file.startswith(norm_src)
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     def _clean_filename(self, filename: str) -> str:
@@ -159,7 +159,7 @@ class ComprehensiveProfileAnalyzer:
         try:
             rel = os.path.relpath(filename, self.project_root)
             return rel.replace(os.sep, ".").replace(".py", "")
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return filename
 
     def analyze(self) -> dict:
@@ -391,7 +391,7 @@ if __name__ == "__main__":
         run_self_improvement_main()
     except KeyboardInterrupt:
         print("\n⚠️ Interrupted by user")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"\n❌ Error: {e}")
         raise
     finally:

@@ -27,7 +27,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
-from src.core.base.common.telemetry_core import Metric, MetricType
+from src.core.base.common.telemetry_core import Metric
 
 # Try to import rust_core
 try:
@@ -42,6 +42,7 @@ except ImportError:
 
 
 class AlertSeverity(Enum):
+    """Severity levels for observability alerts."""
     CRITICAL = 5
     HIGH = 4
     MEDIUM = 3
@@ -51,6 +52,7 @@ class AlertSeverity(Enum):
 
 @dataclass
 class Alert:
+    """Represents an observability alert."""
     id: str
     metric_name: str
     current_value: float
@@ -62,11 +64,14 @@ class Alert:
 
 @dataclass
 class Threshold:
+    """Defines a threshold for a metric."""
     metric_name: str
     min_value: float | None = None
     max_value: float | None = None
     severity: AlertSeverity | None = None
     message: str = ""
+    operator: str | None = None
+    value: float | None = None
 
 
 @dataclass
@@ -202,6 +207,9 @@ class StreamingProtocol(Enum):
     """Protocols for real-time stats streaming."""
 
     WEBSOCKET = "websocket"
+    SSE = "server_sent_events"
+    GRPC = "grpc"
+    MQTT = "mqtt"
 
 
 @dataclass
@@ -210,14 +218,13 @@ class StreamingConfig:
 
     protocol: StreamingProtocol
     endpoint: str
-    SSE = "server_sent_events"
-
-    GRPC = "grpc"
-    MQTT = "mqtt"
+    port: int = 8080
+    buffer_size: int = 1000
 
 
 @dataclass
 class AgentMetric:
+    """Represents a metric captured from an agent operation."""
     agent_name: str
     operation: str
     duration_ms: float
@@ -494,6 +501,7 @@ class ThresholdAlert:
 
 @dataclass
 class DerivedMetric:
+    """A metric derived from other metrics via a formula."""
     name: str
     dependencies: list[str]
     formula: str
