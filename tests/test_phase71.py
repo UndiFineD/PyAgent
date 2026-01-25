@@ -14,6 +14,13 @@
 """
 Test Phase71 module.
 """
+<<<<<<< HEAD:tests/test_phase71.py
+=======
+
+import unittest
+from pathlib import Path
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/phases/test_phase71.py
 
 import unittest
 import os

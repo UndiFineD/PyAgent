@@ -32,10 +32,14 @@ class AuthManager:
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, name: str = "AuthManager") -> None:
 =======
     def __init__(self, name: str = "AuthManager"):
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+    def __init__(self, name: str = "AuthManager"):
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         from src.core.base.common.auth_core import AuthCore
         self._core = AuthCore(name=name)
         self._config: Optional[Any] = None

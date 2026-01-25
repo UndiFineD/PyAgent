@@ -106,10 +106,14 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
                 findings.append(finding)
             return findings
 <<<<<<< HEAD
+<<<<<<< HEAD
         except (ValueError, TypeError, AttributeError):
 =======
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             return []
 
     def generate_simple_fix(self, issue_type: str, content: str) -> Optional[str]:
@@ -135,14 +139,20 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         if issue_type == "Robustness Issue":
             return re.sub(
 <<<<<<< HEAD
+<<<<<<< HEAD
                 r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught(\s*)(#.*)?$",
                 r"\1except Exception as e:  # pylint: disable=broad-exception-caught\2\3",
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught
                     (\s*)(#.*)?$",
                 r"\1except Exception as e:  # pylint: disable=broad-exception-caught
                     \2\3",
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 content,
                 flags=re.MULTILINE,
             )

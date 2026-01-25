@@ -1144,16 +1144,22 @@ class TestReportExporting:
         data = {"title": "Report", "items": [1, 2, 3]}
         json_file = tmp_path / "report.json"
 <<<<<<< HEAD
+<<<<<<< HEAD
         with open(json_file, 'w') as f:
             json.dump(data, f)
         
         with open(json_file, 'r') as f:
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(data, f)
 
         with open(json_file, 'r', encoding='utf-8') as f:
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             restored = json.load(f)
         assert restored["title"] == "Report"
 

@@ -53,9 +53,12 @@ for r_dir in root_dirs:
                         print(f'Cleaned up VERSION in {file_path}')
                         count += 1
 <<<<<<< HEAD
+<<<<<<< HEAD
                 except Exception as e:
                     print(f'Error processing {file_path}: {e}')
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error processing {file_path}: {e}")
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)

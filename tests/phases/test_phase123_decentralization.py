@@ -85,8 +85,11 @@ class TestPhase123Decentralization(unittest.TestCase):
     def test_distributed_logging(self) -> None:
         log_file = os.path.join(self.test_dir, "logging_agent.py")
 <<<<<<< HEAD
+<<<<<<< HEAD
         with open(log_file, "w") as f: f.write("#")
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         with open(log_file, 'w', encoding='utf-8') as f:
             f.write("#")
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
@@ -115,8 +118,11 @@ class TestPhase123Decentralization(unittest.TestCase):
     def test_did_sovereign_identity(self) -> None:
         id_file = os.path.join(self.test_dir, "identity_agent.py")
 <<<<<<< HEAD
+<<<<<<< HEAD
         with open(id_file, "w") as f: f.write("#")
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         with open(id_file, 'w', encoding='utf-8') as f:
             f.write("#")
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)

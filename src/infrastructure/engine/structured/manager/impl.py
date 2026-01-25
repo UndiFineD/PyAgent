@@ -137,7 +137,10 @@ class ChoiceGrammar(StructuredOutputGrammar):
     ) -> None:
 =======
     ):
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         """
         Initialize ChoiceGrammar.
 

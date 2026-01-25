@@ -63,4 +63,7 @@
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768944697.724371}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768945569.908562}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1769296025.0320115}
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)

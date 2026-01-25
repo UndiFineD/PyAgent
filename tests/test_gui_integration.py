@@ -20,6 +20,7 @@ import os
 import tkinter as tk
 import unittest
 <<<<<<< HEAD:tests/test_gui_integration.py
+<<<<<<< HEAD:tests/test_gui_integration.py
 from unittest.mock import MagicMock, patch
 import tkinter as tk
 import os
@@ -27,6 +28,8 @@ import json
 from src.classes.gui.MainApp import PyAgentGUI
 from src.classes.gui.SessionManager import SessionManager
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
 from unittest.mock import patch
 
 from src.interface.ui.gui.main_app import PyAgentGUI
@@ -42,7 +45,10 @@ class TestGUIIntegration(unittest.TestCase):
 =======
     def setUpClass(cls) -> None:
         """Set up the GUI environment."""
+<<<<<<< HEAD:tests/test_gui_integration.py
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         try:
             cls.root = tk.Tk()
             cls.root.withdraw()
@@ -66,7 +72,10 @@ class TestGUIIntegration(unittest.TestCase):
 
     def setUp(self) -> None:
         """Set up test case."""
+<<<<<<< HEAD:tests/test_gui_integration.py
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         if not self._tk_available:
             self.skipTest("Tkinter not available in this environment")
         self.app = PyAgentGUI(self.root)
@@ -76,7 +85,10 @@ class TestGUIIntegration(unittest.TestCase):
 =======
     def test_app_initialization(self) -> None:
         """Test that the application initializes correctly."""
+<<<<<<< HEAD:tests/test_gui_integration.py
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         self.assertIn("PyAgent Control Center", self.app.root.title())
         self.assertTrue(self.app.theme_manager.is_dark_mode)
         self.assertEqual(self.app.project_root_var.get(), os.getcwd())
@@ -111,7 +123,10 @@ class TestGUIIntegration(unittest.TestCase):
 =======
     def test_session_manager_save_load(self) -> None:
         """Test saving and loading a session configuration."""
+<<<<<<< HEAD:tests/test_gui_integration.py
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/integration/test_gui_integration.py
         # Mock file dialogs
         test_session_file = "test_session.json"
         session_data = {

@@ -1,5 +1,8 @@
 <<<<<<< HEAD:test_resilience.py
+<<<<<<< HEAD:test_resilience.py
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/unit/infrastructure/test_resilience.py
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

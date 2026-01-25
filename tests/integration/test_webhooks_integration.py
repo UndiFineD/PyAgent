@@ -11,6 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+<<<<<<< HEAD
+=======
+
+"""Integration tests for agent webhooks."""
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
 """Integration tests for agent webhooks."""
 import importlib.util

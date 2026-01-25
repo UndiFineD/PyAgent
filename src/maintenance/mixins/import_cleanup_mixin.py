@@ -13,19 +13,27 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import os
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+import os
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 import re
 import logging
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 logger: logging.Logger = logging.getLogger(__name__)
 =======
 logger = logging.getLogger(__name__)
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+logger = logging.getLogger(__name__)
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
 class ImportCleanupMixin:
     """Provides utilities for resolving and fixing Python imports after refactors."""
@@ -38,26 +46,36 @@ class ImportCleanupMixin:
         name_map = {}
         for d in dirs:
 <<<<<<< HEAD
+<<<<<<< HEAD
             dp: Path = root_dir / d
 =======
             dp = root_dir / d
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+            dp = root_dir / d
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             if not dp.exists():
                 continue
             for p in dp.rglob("*"):
                 if p.name == "__init__.py":
                     continue
 <<<<<<< HEAD
+<<<<<<< HEAD
                 parent: str = str(p.parent.resolve()).lower()
                 name: str = p.stem if not p.is_dir() else p.name
                 # Remove underscores/dashes for fuzzy matching if needed
                 low: str = name.replace("_", "").replace("-", "").lower()
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 parent = str(p.parent.resolve()).lower()
                 name = p.stem if not p.is_dir() else p.name
                 # Remove underscores/dashes for fuzzy matching if needed
                 low = name.replace("_", "").replace("-", "").lower()
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 name_map[(parent, low)] = name
         return name_map
 
@@ -71,6 +89,7 @@ class ImportCleanupMixin:
     ) -> str:
         """Resolves a module string to its correct casing and path."""
 <<<<<<< HEAD
+<<<<<<< HEAD
         parts: List[str] = mod_str.split(".")
         if mod_str.startswith("."):
             # Relative import
@@ -78,23 +97,32 @@ class ImportCleanupMixin:
             dots: int = len(m.group(1))
             rel_parts: List[str] = parts[dots-1:]
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         parts = mod_str.split(".")
         if mod_str.startswith("."):
             # Relative import
             m = re.match(r"^(\.+)", mod_str)
             dots = len(m.group(1))
             rel_parts = parts[dots-1:]
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             if rel_parts and rel_parts[0].startswith("."):
                 rel_parts[0] = rel_parts[0].lstrip(".")
             if rel_parts and not rel_parts[0]:
                 rel_parts.pop(0)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             curr: Path = current_file.parent.resolve()
 =======
             curr = current_file.parent.resolve()
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+            curr = current_file.parent.resolve()
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             for _ in range(dots - 1):
                 curr = curr.parent
 
@@ -116,10 +144,14 @@ class ImportCleanupMixin:
                 if curr_path is None:
                     # Look for root/part
 <<<<<<< HEAD
+<<<<<<< HEAD
                     low: str = p.lower()
 =======
                     low = p.lower()
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+                    low = p.lower()
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                     for d in search_dirs:
                         if d.lower() == low:
                             curr_path = root_dir / d
@@ -131,6 +163,7 @@ class ImportCleanupMixin:
                         return mod_str  # External module
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 low: str = p.replace("_", "").replace("-", "").lower()
                 key: Tuple[str] = (str(curr_path).lower(), low)
                 if key in name_map:
@@ -138,18 +171,24 @@ class ImportCleanupMixin:
                     res.append(real)
                     curr_path: Path = curr_path / real
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 low = p.replace("_", "").replace("-", "").lower()
                 key = (str(curr_path).lower(), low)
                 if key in name_map:
                     real = name_map[key]
                     res.append(real)
                     curr_path = curr_path / real
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
                 else:
                     res.extend(parts[i:])
                     break
             return ".".join(res)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def fix_imports_in_file(self, file_path: Path, name_map: dict[tuple[str, str], str], root_dir: Path, search_dirs: list[str]) -> bool:
         """Updates imports in a file to match the actual filesystem casing/naming."""
@@ -165,6 +204,8 @@ class ImportCleanupMixin:
             new_content: str = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
             new_content: str = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
 =======
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
     def fix_imports_in_file(self, file_path: Path, name_map: Dict, root_dir: Path, search_dirs: List[str]) -> bool:
         """Updates imports in a file to match the actual filesystem casing/naming."""
         try:
@@ -178,7 +219,10 @@ class ImportCleanupMixin:
             # Regex for 'import ...' and 'from ... import ...'
             new_content = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
             new_content = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
+<<<<<<< HEAD
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+>>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
             if new_content != content:
                 file_path.write_text(new_content, encoding="utf-8")
