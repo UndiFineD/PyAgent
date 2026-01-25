@@ -13,8 +13,13 @@ Computationally intensive tasks are delegated to a high-throughput **Rust FFI br
 - **Fast Diffs & Patching**: Native Myers diff engine for high-speed code modification and transactional integrity.
 
 ### 🐝 Swarm-Mixin Architecture
-PyAgent avoids monolithic design by utilizing a **Synaptic Modularization** pattern. Agents are composed of specialized mixins:
-- **ReflectionMixin**: Enables autonomous self-critique and logic verification.
+PyAgent avoids monolithic design by utilizing a **Synaptic Modularization** pattern. Agents are composed of specialized mixins and categorized into functional swarms:
+- **Specialized Agents**:
+  - **Quantum Scaling Coder**: Optimizes code for extreme performance and scalability.
+  - **Legal Audit**: Ensures compliance and legal safety in autonomous operations.
+  - **Operational Cost**: Monitored resource utilization and token efficiency.
+- **Mixins**:
+  - **ReflectionMixin**: Enables autonomous self-critique and logic verification.
 - **KnowledgeMixin**: Accesses the "Knowledge Trinity" (Structured, Semantic, and Relational memory).
 - **IdentityMixin**: Decouples agent identity from implementation, enabling anonymous peer-to-peer transport.
 - **PersistenceMixin**: Manages atomic state serialization and binary shard snapshots (msgpack/blake3).
@@ -38,7 +43,7 @@ Fully integrated with **vLLM** and custom inference kernels:
 
 | Core Layer | Path | Description |
 | :--- | :--- | :--- |
-| **Swarm** | `src/logic/agents/` | Specialized agents (Coder, Analyst, Architect, etc.) |
+| **Swarm** | `src/logic/agents/` | Specialized agents (Coder, Analyst, **Quantum Scaling Coder**, etc.) |
 | **Logic** | `src/logic/` | Shared reasoning cores and metrics engines |
 | **Inference** | `src/inference/` | vLLM connectors, streaming, and decoding constraints |
 | **Core** | `src/core/base/` | Mixins, state managers, and transactional FS |
