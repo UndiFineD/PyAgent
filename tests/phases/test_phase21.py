@@ -15,14 +15,15 @@
 Test Phase21 module.
 """
 
-import pytest
 from pathlib import Path
+import pytest
 
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 @pytest.mark.asyncio
 async def test_phase21() -> None:
+    """Verify World Model and Speciation functionality."""
     print("--- Phase 21 Verification: World Model & Speciation ---")
     workspace_root = Path(__file__).resolve().parents[2]
     fleet = FleetManager(str(workspace_root))
@@ -47,7 +48,7 @@ async def test_phase21() -> None:
     niche = "quantum scaling"
     result = await fleet.speciation.evolve_specialized_agent(base_agent, niche)
 
-    expected_file = Path("src\logic\agents\specialized\quantumscaling_coder_agent.py")
+    expected_file = Path("src/logic/agents/specialized/quantum_scaling_coder_agent.py")
     generated_test = (
         Path("tests/specialists") / f"test_{expected_file.stem.lower()}_UNIT.py"
     )

@@ -444,20 +444,21 @@ def cudagraph_context(mode: CUDAGraphMode = CUDAGraphMode.NONE, descriptor: Opti
 
 
 def get_cudagraph_sizes(
-    capture_sizes: Optional[List[int]], _max_num_reqs: int, max_num_tokens: int, mode: CUDAGraphMode
+    capture_sizes: Optional[List[int]], max_num_reqs: int, max_num_tokens: int, mode: CUDAGraphMode
 ) -> List[int]:
     """
     Compute CUDA graph capture sizes.
 
     Args:
         capture_sizes: Explicit sizes to capture
-        max_num_reqs: Maximum number of requests
+        max_num_reqs: Maximum number of requests (currently unused)
         max_num_tokens: Maximum number of tokens
         mode: CUDA graph mode
 
     Returns:
         List of sizes to capture graphs for
     """
+    # pylint: disable=unused-argument
     if mode == CUDAGraphMode.NONE:
         return []
 

@@ -20,8 +20,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from src.interface.slash_commands.core import (CommandResult, ProcessedPrompt,
-                                               SlashCommands)
+from .core import CommandResult, ProcessedPrompt, SlashCommands
 
 # ============================================================================
 # Default Instance

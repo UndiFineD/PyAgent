@@ -70,7 +70,7 @@ class BaselineManager:
 
         baseline = TestBaseline(name=name, values=values, version=version)
 
-        with open(self._get_path(name, encoding='utf-8'), "w") as f:
+        with open(self._get_path(name), "w", encoding='utf-8') as f:
             json.dump(
                 {
                     "name": baseline.name,

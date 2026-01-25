@@ -42,7 +42,7 @@ class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.shard_dir = Path("data/memory/agent_store/memory_shards")
+        self.shard_dir = Path(self._workspace_root) / "data/memory/agent_store/memory_shards"
         self.shard_dir.mkdir(parents=True, exist_ok=True)
         self.active_shard: str = "global"
         self._system_prompt = (

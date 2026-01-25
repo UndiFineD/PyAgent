@@ -22,8 +22,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from src.interface.slash_commands.core import (CommandDefinition,
-                                               CommandHandler, CommandRegistry)
+from .core import CommandDefinition, CommandHandler, CommandRegistry
 
 # ============================================================================
 # Global Registry

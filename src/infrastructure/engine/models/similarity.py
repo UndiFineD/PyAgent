@@ -47,9 +47,11 @@ class EmbeddingSimilarityService:
         if text in self._cache:
             return self._cache[text]
 
-        # Simulation: Generate a pseudo-random embedding based on text hash
+        # Simulation: Generate a deterministic pseudo-random embedding based on text
         # In real scenario, this would call a model.
-        np.random.seed(hash(text) % (2**32))
+        import zlib
+        seed = zlib.adler32(text.encode()) & 0xFFFFFFFF
+        np.random.seed(seed)
         embedding = np.random.randn(384).astype(np.float32)
         # Normalize
         embedding /= np.linalg.norm(embedding)

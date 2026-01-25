@@ -26,6 +26,7 @@ from src.core.base.lifecycle.version import SDK_VERSION
 
 
 def test_community_loading_workflow() -> None:
+    """Test the complete workflow for loading community plugins."""
     print(f"--- Testing Community Plugin Workflow (SDK {SDK_VERSION}) ---")
     workspace = Path(".").resolve()
 
@@ -33,6 +34,7 @@ def test_community_loading_workflow() -> None:
     agents = AgentRegistry.get_agent_map(workspace)
 
     print("Checking FutureAgent (v3.0)...")
+    # pylint: disable=protected-access
     is_in_manifest = "FutureAgent" in agents._manifest_configs
     print(f"FutureAgent in manifest? {is_in_manifest} (Expect: False)")
 
@@ -51,7 +53,7 @@ def test_community_loading_workflow() -> None:
     agents.registry_configs["HealTest"] = (
         "src.logic.agents.development.coder_agent",
         "CoderAgent",
-        "src\coder\agents\CoderAgent.py",
+        "src/coder/agents/CoderAgent.py",
     )
 
     # Trigger self-healing try_reload
@@ -65,4 +67,6 @@ def test_community_loading_workflow() -> None:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
+    test_community_loading_workflow()
+
     test_community_loading_workflow()

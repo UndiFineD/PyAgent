@@ -143,7 +143,7 @@ class CircuitBreaker:
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Execute function through circuit breaker."""
         if self.state == "OPEN":
-            current_timeout = self._get_current_timeout()
+            current_timeout = self.get_current_timeout()
             if time.time() - self.last_failure_time > current_timeout:
                 old_state = self.state
                 self.state = "HALF_OPEN"

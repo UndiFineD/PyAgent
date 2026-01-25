@@ -19,8 +19,8 @@ DateTime commands - date, time, datetime, uptime.
 import time
 from datetime import datetime, timezone
 
-from src.interface.slash_commands.core import CommandContext, CommandResult
-from src.interface.slash_commands.registry import register
+from ..core import CommandContext, CommandResult
+from ..registry import register
 
 # Track start time for uptime
 _start_time = time.time()

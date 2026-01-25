@@ -16,13 +16,13 @@
 """Test classes for stats formatting and aggregation - UNIT module."""
 
 from __future__ import annotations
-from typing import Any
-import unittest
-from typing import List, Dict
+
 import json
+import tempfile
+import unittest
 from datetime import datetime
 from pathlib import Path
-import tempfile
+from typing import Any, Dict, List
 
 
 class TestTrendAnalysis(unittest.TestCase):
@@ -342,8 +342,7 @@ class TestValidation(unittest.TestCase):
         """Test detecting anomalies."""
         values: List[int] = [100, 105, 103, 102, 200]  # Last value is anomaly
         mean: float = sum(values) / len(values)
-        variance: float = sum((x - mean) ** 2 for x in values) / len(values)
-        variance**0.5
+        _variance: float = sum((x - mean) ** 2 for x in values) / len(values)
 
         # The last value (200) is significantly higher than mean
         assert values[-1] > mean * 1.5  # Obvious anomaly
@@ -503,15 +502,11 @@ class TestPathLibUsage(unittest.TestCase):
 
     def test_use_pathlib_for_paths(self) -> None:
         """Test using pathlib instead of strings."""
-        from pathlib import Path
-
         path = Path("test.py")
         assert path.suffix == ".py"
 
     def test_pathlib_operations(self) -> None:
         """Test pathlib path operations."""
-        from pathlib import Path
-
         paths: List[Path] = [Path("a.py"), Path("b.py"), Path("c.txt")]
         py_files: List[Path] = [p for p in paths if p.suffix == ".py"]
 
@@ -519,13 +514,11 @@ class TestPathLibUsage(unittest.TestCase):
 
     def test_pathlib_glob_patterns(self) -> None:
         """Test using pathlib glob patterns."""
-        from pathlib import Path
-
         # Simulated file system
         files: List[Path] = [
-            Path("src \ main.py"),
-            Path("src \ utils.py"),
-            Path("tests \ test.py"),
+            Path("src/main.py"),
+            Path("src/utils.py"),
+            Path("tests/test.py"),
         ]
         py_files: List[Path] = [f for f in files if f.suffix == ".py"]
 
