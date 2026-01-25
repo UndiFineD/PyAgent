@@ -15,16 +15,17 @@
 Test Phase25 module.
 """
 
-import pytest
 import asyncio
 from pathlib import Path
 
+import pytest
+
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-import time
 
 
 @pytest.mark.asyncio
 async def test_phase25() -> None:
+    """Verify Phase 25 functionality."""
     print("--- Phase 25 Verification: Quantum Entanglement & Reality Anchoring ---")
     workspace_root = Path(__file__).resolve().parents[2]
     fleet = FleetManager(str(workspace_root))
@@ -54,7 +55,7 @@ async def test_phase25() -> None:
     print("\n[2/2] Testing Reality Anchor (Claim Verification)...")
     claim = "The PyAgent framework supports distributed quantum state mirroring."
 
-    sources = ["src\orchestration\EntanglementOrchestrator.py"]
+    sources = ["src/orchestration/EntanglementOrchestrator.py"]
 
     verification = await fleet.reality_anchor.verify_claim(claim, sources)
 
@@ -68,4 +69,5 @@ async def test_phase25() -> None:
 
 
 if __name__ == "__main__":
+    asyncio.run(test_phase25())
     test_phase25()

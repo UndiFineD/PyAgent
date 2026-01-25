@@ -151,7 +151,7 @@ class TestDeepSeekReasoningParser:
 
         # Reset should work
         parser.reset()
-        assert parser._state == ParseState.IDLE
+        assert parser.state == ParseState.IDLE
 
 
 class TestQwenReasoningParser:

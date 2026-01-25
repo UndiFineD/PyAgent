@@ -1,1 +1,0 @@
-Internal Neural Response [6 layers/4 heads]: Verified prompt intent. Accelerated local inference completed successfully.

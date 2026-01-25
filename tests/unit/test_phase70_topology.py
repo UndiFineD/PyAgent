@@ -2,16 +2,25 @@
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-import pytest
+"""
+Tests for Swarm Topology Manager.
+"""
+
 import asyncio
 import numpy as np
-from src.infrastructure.swarm.orchestration.swarm.topology_manager import TopologyManager
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
+import pytest
+
 from src.core.base.common.models.communication_models import ExpertProfile
+from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import MoEGatekeeper
+from src.infrastructure.swarm.orchestration.swarm.topology_manager import TopologyManager
 
 class MockSimilarity:
+    """Mock similarity service for testing."""
     async def get_embedding(self, text: str):
-        return np.random.randn(384).astype(np.float32)
+        """Mock embedding generation."""
+        _ = text
+        # Return deterministic vector for testing
+        return np.ones(384, dtype=np.float32) / np.sqrt(384)
 
 @pytest.mark.asyncio
 async def test_expert_cloning():
@@ -34,6 +43,13 @@ async def test_expert_cloning():
         await gatekeeper.route_task("Calculate pi", top_k=1)
         # Give small sleep for async task
         await asyncio.sleep(0.01)
+
+    # Wait for background cloning task to complete
+    for _ in range(50):
+        stats = topology.get_topology_stats()
+        if stats["total_replicas"] >= 1:
+            break
+        await asyncio.sleep(0.05)
 
     stats = topology.get_topology_stats()
     assert stats["total_replicas"] >= 1

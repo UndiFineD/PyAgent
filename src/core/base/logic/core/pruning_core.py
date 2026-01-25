@@ -21,6 +21,8 @@ Core logic for Synaptic Pruning and Knowledge Decay.
 from src.core.base.common.pruning_core import (
     PruningCore as StandardPruningCore, SynapticWeight)
 
+__all__ = ["PruningCore", "SynapticWeight"]
+
 
 class PruningCore(StandardPruningCore):
     """

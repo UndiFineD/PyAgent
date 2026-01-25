@@ -70,16 +70,18 @@ class LazyAgentMap(dict):
     def _scan_workspace_for_agents(self) -> list[str]:
         """Performs the I/O-bound scanning of the workspace."""
         subdirs = [
+            "src/logic/agents/specialized",
+            "src/logic/agents/compliance",
+            "src/logic/agents/documentation",
+            "src/logic/agents/analysis",
+            "src/logic/agents/multimodal",
             "src/logic/agents/cognitive",
             "src/logic/agents/development",
             "src/logic/agents/infrastructure",
+            "src/logic/agents/intelligence",
             "src/logic/agents/security",
             "src/logic/agents/swarm",
             "src/logic/agents/system",
-            "src/logic/agents/specialized",
-            "src/logic/agents/intelligence",
-            "src/logic/agents/compliance",
-            "src/logic/agents/documentation",
             "plugins",
         ]
         found_paths = []
@@ -194,10 +196,19 @@ class LazyAgentMap(dict):
         return len(self.keys())
 
     def items(self) -> list[tuple[str, Any]]:
+        # pylint: disable=consider-using-dict-items
         return [(k, self[k]) for k in self.keys()]
 
     def values(self) -> list[Any]:
+        # pylint: disable=consider-using-dict-items
         return [self[k] for k in self.keys()]
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Safe access with lazy-loading support."""
+        try:
+            return self[key]
+        except (KeyError, Exception):  # pylint: disable=broad-exception-caught
+            return default
 
     def __contains__(self, key: Any) -> bool:
         if super().__contains__(key):
@@ -213,10 +224,10 @@ class LazyAgentMap(dict):
 
         # Case-insensitive check (Phase 104)
         k_norm = str(key).lower().replace("_", "")
-        for d_key in self._discovered_configs:
+        for d_key, _ in self._discovered_configs.items():
             if d_key.lower().replace("_", "") == k_norm:
                 return True
-        for d_key in self.registry_configs:
+        for d_key, _ in self.registry_configs.items():
             if d_key.lower().replace("_", "") == k_norm:
                 return True
 
@@ -335,12 +346,6 @@ class LazyAgentMap(dict):
                 logging.debug(f"Registered tools for {key}")
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Failed to register tools for {key}: {e}")
-
-    def get(self, key: str, default: Any = None) -> Any:
-        try:
-            return self[key]
-        except KeyError:
-            return default
 
     def update(self, other: dict[str, Any]) -> None:
         # Allow manual overrides or additions (like SignalBus)

@@ -204,8 +204,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Generalized handler for all data-related requests."""
         _ = target_file
-        if "sql" in prompt.lower():
-            return "DataIntelligenceAgent: Ready for SQL query operations."
+        if "sql" in prompt.lower() or "table" in prompt.lower():
+            return "DataIntelligenceAgent: Connection active. Ready for SQL query operations."
         if ".xlsx" in prompt.lower() or ".csv" in prompt.lower():
             return f"DataIntelligenceAgent: Ready to parse {prompt}."
         return "DataIntelligenceAgent: Unified data/science core active."

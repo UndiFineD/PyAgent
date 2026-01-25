@@ -68,7 +68,9 @@ class TestStructuredOutputManager:
 
     def test_manager_initialization(self):
         """Test StructuredOutputManager initialization."""
-        from src.infrastructure.engine.structured import structured_output_manager
+        from src.infrastructure.engine.structured.structured_output_manager import (
+            StructuredOutputManager,
+        )
 
         manager = StructuredOutputManager(vocab_size=32000)
 
@@ -331,7 +333,7 @@ class TestSpeculativeDecodingV2:
 
     def test_ngram_proposer(self):
         """Test NgramProposer."""
-        from src.infrastructure.engine.speculative import ngram_proposer
+        from src.infrastructure.engine.speculative.decoder.proposers import NgramProposer
 
         proposer = NgramProposer(
             vocab_size=1000,

@@ -100,7 +100,7 @@ class DocGenAgent(BaseAgent):
         for file_path, content in self.doc_registry.items():
             rel_path = os.path.relpath(file_path, self.workspace_path)
             doc_filename = rel_path.replace(os.sep, "_").replace(".py", ".md")
-            with open(os.path.join(output_dir, doc_filename, encoding="utf-8"), "w", encoding="utf-8") as f:
+            with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:
                 f.write(content)
 
         return len(self.doc_registry)

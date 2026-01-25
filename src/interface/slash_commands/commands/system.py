@@ -16,8 +16,8 @@
 System commands - stats, memory, health, CPU, disk.
 """
 
-from src.interface.slash_commands.core import CommandContext, CommandResult
-from src.interface.slash_commands.registry import register
+from ..core import CommandContext, CommandResult
+from ..registry import register
 
 
 @register(
