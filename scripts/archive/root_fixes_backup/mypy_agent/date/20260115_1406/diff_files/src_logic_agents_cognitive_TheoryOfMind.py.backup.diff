@@ -1,0 +1,15 @@
+diff --git a/src/logic/agents/cognitive/TheoryOfMind.py b/src/logic/agents/cognitive/TheoryOfMind.py
+index 7eaf818..d1a6a66 100644
+--- a/src/logic/agents/cognitive/TheoryOfMind.py
++++ b/src/logic/agents/cognitive/TheoryOfMind.py
+@@ -22,8 +22,8 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Any, List
+-from src.logic.cognitive.TheoryOfMindCore import TheoryOfMindCore
++from typing import Any
++from src.logic.agents.cognitive.TheoryOfMindCore import TheoryOfMindCore
+ 
+ __version__ = VERSION
+ 

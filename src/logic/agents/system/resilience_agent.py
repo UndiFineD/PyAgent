@@ -54,13 +54,13 @@ class ResilienceAgent(BaseAgent):
         self.connectivity = ConnectivityManager(work_root)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
-    def _record(self, event_type: str, details: Any) -> None:
+    def _archive_resilience_event(self, event_type: str, details: Any) -> None:
         """Archiving resilience events for fleet learning."""
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}
                 self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"ResilienceManager: Recording failed: {e}")
 
     @as_tool
@@ -70,7 +70,7 @@ class ResilienceAgent(BaseAgent):
         """
         logging.warning(f"ResilienceManager: Triggering failover from {source_node} to {target_node}")
         # Simulated failover logic
-        self._record("failover", {"from": source_node, "to": target_node, "status": "success"})
+        self._archive_resilience_event("failover", {"from": source_node, "to": target_node, "status": "success"})
         return True
 
     @as_tool

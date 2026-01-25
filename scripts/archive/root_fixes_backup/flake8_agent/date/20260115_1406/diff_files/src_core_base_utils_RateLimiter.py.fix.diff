@@ -1,0 +1,35 @@
+diff --git a/src/core/base/utils/RateLimiter.py b/src/core/base/utils/RateLimiter.py
+index 3c57bb4..7fdddbd 100644
+--- a/src/core/base/utils/RateLimiter.py
++++ b/src/core/base/utils/RateLimiter.py
+@@ -23,12 +23,22 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.models import RateLimitConfig
+-from typing import List, Optional, Dict, Any
++from typing import Any
+ import threading
+ import time
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class RateLimiter:
+     """Rate limiter for API calls using token bucket algorithm.
+ 
+@@ -114,4 +124,4 @@ class RateLimiter:
+                 "requests_last_minute": len(self._request_timestamps),
+                 "requests_per_second": self.config.requests_per_second,
+                 "burst_size": self.config.burst_size,
+-            }
+\ No newline at end of file
++            }

@@ -87,7 +87,7 @@ class FleetConsensusManager:
                     if asyncio.iscoroutine(res):
                         res = loop.run_until_complete(res)
                     proposals[agent_name] = res
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Fleet: Agent {agent_name} failed to provide consensus proposal: {e}")
 
         if not proposals:
@@ -127,7 +127,7 @@ class FleetConsensusManager:
                         },
                     )
                 )
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"FleetConsensus: Failed to trigger federated broadcast: {e}")
 
         return result

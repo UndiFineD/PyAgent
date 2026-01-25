@@ -182,7 +182,7 @@ class MultiprocExecutor(Executor):
                             execution_time_ns=end_time - start_time,
                         )
                     )
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     end_time = time.time_ns()
                     result_queue.put(
                         ResultMessage(
@@ -195,7 +195,7 @@ class MultiprocExecutor(Executor):
                         )
                     )
 
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 with contextlib.suppress(Exception):
                     # Worker loop error - try to continue
                     pass
@@ -229,7 +229,7 @@ class MultiprocExecutor(Executor):
 
             except queue.Empty:
                 continue
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def _monitor_workers(self) -> None:

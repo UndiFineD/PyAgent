@@ -21,7 +21,7 @@ Choice-based grammar engine.
 from __future__ import annotations
 
 import json
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from .base import GrammarEngine
 from .models import FSMTransitionTable
@@ -31,14 +31,6 @@ class ChoiceGrammar(GrammarEngine):
     """
     Grammar engine for fixed choice selection.
     """
-
-    def __init__(
-        self,
-        vocab_size: int,
-        token_strings: Optional[Dict[int, str]] = None,
-        eos_token_id: Optional[int] = None,
-    ):
-        super().__init__(vocab_size, token_strings, eos_token_id)
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
         """Build FSM from choice list (JSON array)."""

@@ -42,7 +42,7 @@ except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # noqa: F401
+    import rust_core  # pylint: disable=unused-import
 
     HAS_RUST = True
 except ImportError:
@@ -196,7 +196,6 @@ class LogitsProcessor(ABC):
 
         Raise ValueError for invalid parameters.
         """
-        pass
 
     @abstractmethod
     def apply(self, logits: Any) -> Any:
@@ -238,7 +237,6 @@ class LogitsProcessor(ABC):
 
     def reset(self) -> None:
         """Reset processor state."""
-        pass
 
 
 class MinPLogitsProcessor(LogitsProcessor):
@@ -253,7 +251,7 @@ class MinPLogitsProcessor(LogitsProcessor):
         self,
         max_num_reqs: int,
         device: str = "cpu",
-        is_pin_memory: bool = False,
+        _is_pin_memory: bool = False,
     ):
         self.max_num_reqs = max_num_reqs
         self.device = device
@@ -371,7 +369,7 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         self,
         max_num_reqs: int,
         device: str = "cpu",
-        is_pin_memory: bool = False,
+        _is_pin_memory: bool = False,
     ):
         self.max_num_reqs = max_num_reqs
         self.device = device

@@ -60,7 +60,7 @@ class BasePooler(ABC):
     @abstractmethod
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         """Pool hidden states to fixed representation."""
-        pass
+        raise NotImplementedError("Subclasses must implement pool()")
 
     def normalize(self, embeddings: np.ndarray) -> np.ndarray:
         """L2 normalize embeddings."""

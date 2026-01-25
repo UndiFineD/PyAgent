@@ -42,7 +42,8 @@ class ShardCore(BaseCore):
                 return rc.calculate_shard_id_rust(  # pylint: disable=no-member
                     key, shard_count
                 )  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         # Fallback to simple hash-based sharding

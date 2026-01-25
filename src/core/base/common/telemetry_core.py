@@ -53,6 +53,8 @@ class Metric:
     metric_type: MetricType = MetricType.GAUGE
     timestamp: float = field(default_factory=time.time)
     tags: Dict[str, str] = field(default_factory=dict)
+    namespace: str = "default"
+    unit: str = ""
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
     def __iter__(self) -> Any:
@@ -99,7 +101,7 @@ class TelemetryCore(BaseCore):
                     window_seconds,
                     time.time(),
                 )
-            except Exception as err:  # pylint: disable=broad-exception-caught
+            except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug("Rust calculate_rollups failed, falling back: %s", err)
 
         now = time.time()

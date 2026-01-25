@@ -17,7 +17,7 @@ Observability package.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

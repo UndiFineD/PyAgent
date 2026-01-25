@@ -1,0 +1,36 @@
+diff --git a/src/core/base/utils/FileLockManager.py b/src/core/base/utils/FileLockManager.py
+index b3cb42a..c4dbff0 100644
+--- a/src/core/base/utils/FileLockManager.py
++++ b/src/core/base/utils/FileLockManager.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from src.core.base.utils.FileLock import FileLock
+ from src.core.base.models import LockType
+ from pathlib import Path
+-from typing import Optional, Dict
+ import logging
+ import os
+ import threading
+@@ -33,6 +32,16 @@ import time
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class FileLockManager:
+     """Manages file locks to prevent concurrent modifications.
+ 
+@@ -135,4 +144,4 @@ class FileLockManager:
+         ]
+         for path in expired:
+             logging.debug(f"Cleaning up expired lock on {path}")
+-            del self.locks[path]
+\ No newline at end of file
++            del self.locks[path]

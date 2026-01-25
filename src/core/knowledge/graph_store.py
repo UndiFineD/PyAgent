@@ -50,29 +50,36 @@ class GraphKnowledgeStore(KnowledgeStore):
         shard_dir.mkdir(exist_ok=True, parents=True)
         return shard_dir / f"{node_id}.json"
 
-    def store(self, node: str, target: Any, relationship: str = "related_to") -> bool:
-        path = self._get_node_path(node)
+    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
+        path = self._get_node_path(key)
 
         # Use memory_core.retrieve_knowledge logic or standardized load_json
+        # pylint: disable=protected-access
         data = self._memory_core._storage.load_json(path)
         if not data:
-            data = {"id": node, "edges": []}
+            data = {"id": key, "edges": []}
 
-        data["edges"].append({"to": target, "type": relationship})
+        relationship = "related_to"
+        if metadata and isinstance(metadata, dict):
+            relationship = metadata.get("relationship", "related_to")
+
+        data["edges"].append({"to": value, "type": relationship})
 
         # Atomic write via storage core
+        # pylint: disable=protected-access
         self._memory_core._storage.save_json(path, data)
         return True
 
-    def retrieve(self, node: str, limit: int = 5) -> list[Any]:
-        path = self._get_node_path(node)
+    def retrieve(self, query: Any, limit: int = 5) -> list[Any]:
+        path = self._get_node_path(str(query))
+        # pylint: disable=protected-access
         data = self._memory_core._storage.load_json(path)
         if data:
             return data.get("edges", [])[:limit]
         return []
 
-    def delete(self, node: str) -> bool:
-        path = self._get_node_path(node)
+    def delete(self, key: str) -> bool:
+        path = self._get_node_path(key)
         if path.exists():
             path.unlink()
             return True

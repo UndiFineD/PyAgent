@@ -47,6 +47,7 @@ class ScalingCore(StandardScalingCore):
         window_size: int = 10,
         backoff_seconds: int = 30,
     ) -> None:
+        super().__init__()
         self.scale_threshold = scale_threshold
         self.window_size = window_size
         self.backoff_seconds = backoff_seconds
@@ -81,7 +82,7 @@ class ScalingCore(StandardScalingCore):
                 cpu = metrics.get("cpu", [])
                 mem = metrics.get("mem", [])
                 return rc.calculate_weighted_load_rust(latency, cpu, mem)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         # Weights: Latency 60%, CPU 30%, MEM 10%
@@ -118,4 +119,5 @@ class ScalingCore(StandardScalingCore):
         return sum(recent) / len(recent) if recent else 0.0
 
     def get_avg_latency(self, key: str) -> float:
+        """Helper to get average latency for a specific workflow."""
         return self.get_avg(key, "latency")

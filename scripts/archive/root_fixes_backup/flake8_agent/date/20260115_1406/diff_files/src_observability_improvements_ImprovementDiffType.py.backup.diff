@@ -1,0 +1,21 @@
+diff --git a/src/observability/improvements/ImprovementDiffType.py b/src/observability/improvements/ImprovementDiffType.py
+index 97beaca..4ed489e 100644
+--- a/src/observability/improvements/ImprovementDiffType.py
++++ b/src/observability/improvements/ImprovementDiffType.py
+@@ -26,9 +26,14 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ImprovementDiffType(Enum):
+     """Types of improvement differences between branches."""
+     ADDED = "added"      # Improvement exists only in target branch
+     REMOVED = "removed"  # Improvement exists only in source branch
+     MODIFIED = "modified"  # Improvement exists in both but changed
+-    UNCHANGED = "unchanged"  # Improvement is identical in both
+\ No newline at end of file
++    UNCHANGED = "unchanged"  # Improvement is identical in both

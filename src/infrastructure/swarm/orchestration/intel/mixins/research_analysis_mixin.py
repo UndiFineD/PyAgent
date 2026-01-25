@@ -59,7 +59,7 @@ class ResearchAnalysisMixin:
                                 content = f.read()
                                 if "Copilot CLI" in content and "deprecated" in content:
                                     lessons.append("Identified GitHub Copilot CLI deprecation pattern in Shard 220.")
-                        except Exception:
+                        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                             continue
 
         # If no shards found, simulate ingestion of Shard 220 manually for Phase 317 parity

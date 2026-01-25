@@ -249,8 +249,8 @@ class CUDAGraphWrapper:
         with self._lock:
             if batch_descriptor in self.entries:
                 return self._replay(batch_descriptor, *args, **kwargs)
-            else:
-                return self._capture(batch_descriptor, *args, **kwargs)
+
+            return self._capture(batch_descriptor, *args, **kwargs)
 
     def _capture(self, descriptor: BatchDescriptor, *args: Any, **kwargs: Any) -> Any:
         """Capture a new CUDA graph."""
@@ -298,7 +298,7 @@ class CUDAGraphWrapper:
 
         return output
 
-    def _replay(self, descriptor: BatchDescriptor, *args: Any, **kwargs: Any) -> Any:
+    def _replay(self, descriptor: BatchDescriptor, *args: Any, **_kwargs: Any) -> Any:
         """Replay a cached CUDA graph."""
         entry = self.entries[descriptor]
 
@@ -444,7 +444,7 @@ def cudagraph_context(mode: CUDAGraphMode = CUDAGraphMode.NONE, descriptor: Opti
 
 
 def get_cudagraph_sizes(
-    capture_sizes: Optional[List[int]], max_num_reqs: int, max_num_tokens: int, mode: CUDAGraphMode
+    capture_sizes: Optional[List[int]], _max_num_reqs: int, max_num_tokens: int, mode: CUDAGraphMode
 ) -> List[int]:
     """
     Compute CUDA graph capture sizes.

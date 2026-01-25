@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/TrendAnalyzer.py b/src/observability/errors/TrendAnalyzer.py
+index ca53f7d..4eb8ad2 100644
+--- a/src/observability/errors/TrendAnalyzer.py
++++ b/src/observability/errors/TrendAnalyzer.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from .TrendData import TrendData
+ from .TrendDirection import TrendDirection
+ from datetime import datetime
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 

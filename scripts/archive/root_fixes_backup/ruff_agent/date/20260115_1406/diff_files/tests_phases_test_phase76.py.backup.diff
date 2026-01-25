@@ -1,0 +1,10 @@
+diff --git a/tests/phases/test_phase76.py b/tests/phases/test_phase76.py
+index 4fae98e..51e90b2 100644
+--- a/tests/phases/test_phase76.py
++++ b/tests/phases/test_phase76.py
+@@ -1,4 +1,5 @@
+ import unittest
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+ class TestPhase76(unittest.TestCase):

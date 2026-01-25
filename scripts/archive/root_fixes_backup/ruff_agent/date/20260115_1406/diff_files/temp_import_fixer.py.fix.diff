@@ -1,0 +1,11 @@
+diff --git a/temp/import_fixer.py b/temp/import_fixer.py
+index 3e5e673..2ea8e98 100644
+--- a/temp/import_fixer.py
++++ b/temp/import_fixer.py
+@@ -1,6 +1,5 @@
+ import os
+ import re
+-import sys
+ 
+ # Get absolute path to src
+ workspace_root = os.path.dirname(os.path.abspath(__file__))

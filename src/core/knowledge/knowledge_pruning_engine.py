@@ -43,8 +43,6 @@ class KnowledgePruningEngine:
 
     def log_access(self, element_id: str) -> None:
         """Records an access event to an element and updates timestamps."""
-        import time
-
         if element_id not in self.access_logs:
             self.access_logs[element_id] = {"count": 0, "first_seen": time.time()}
 
@@ -57,7 +55,6 @@ class KnowledgePruningEngine:
         Strength = (Access Count) * exp(-decay_constant * (Current Time - Last Access))
         """
         import math
-        import time
 
         log = self.access_logs.get(element_id)
         if not log:
@@ -101,12 +98,6 @@ class KnowledgePruningEngine:
                     self.access_logs[element_id]["count"] = 0
                     self.access_logs[element_id]["last_access"] = time.time()
 
-        # 2. Prune Graph store for orphans (independent search)
-        for node in list(self.engine.graph.nodes.keys()):
-            if node not in self.engine.graph.nodes or not self.engine.graph.nodes[node]:
-                self.engine.graph.delete(node)
-                pruned_report["graph"].append(node)
-
         logging.info(
             "KnowledgePruningEngine: Pruning complete. Removed %d BTree items, %d Graph nodes, Compressed %d items.",
             len(pruned_report["btree"]),
@@ -117,7 +108,6 @@ class KnowledgePruningEngine:
 
     def decay_weights(self, factor: float = 0.8) -> None:
         """Simulates temporal decay of knowledge. Call periodically."""
-        for key in self.access_logs:
-            # Note: access_logs[key] is a dict, but this legacy logic assumed it was a value.
-            # We'll update the 'count' inside the dict.
-            self.access_logs[key]["count"] = int(self.access_logs[key]["count"] * factor)
+        for log in self.access_logs.values():
+            # access_logs[key] is a dict, we'll update the 'count' inside the dict.
+            log["count"] = int(log["count"] * factor)

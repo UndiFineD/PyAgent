@@ -31,16 +31,19 @@ from .models import FSMTransitionTable
 # Handle sre_parse deprecation in Python 3.11+
 if sys.version_info >= (3, 11):
     try:
+        # pylint: disable=deprecated-module,ungrouped-imports
         import re._constants as _sre_constants
         import re._parser as _sre_parse
     except ImportError:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=DeprecationWarning)
+            # pylint: disable=deprecated-module,ungrouped-imports
             import sre_constants as _sre_constants  # type: ignore
             import sre_parse as _sre_parse  # type: ignore
 else:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=DeprecationWarning)
+        # pylint: disable=deprecated-module,ungrouped-imports
         import sre_constants as _sre_constants  # type: ignore
         import sre_parse as _sre_parse  # type: ignore
 
@@ -90,73 +93,70 @@ class RegexGrammar(GrammarEngine):
         state_counter = [1]
         accepting = set()
 
-        def process_pattern(pattern, start_state: int) -> Set[int]:
-            end_states = {start_state}
-            for op, av in pattern:
-                new_end_states = set()
-                for state in end_states:
-                    if state not in nfa:
-                        nfa[state] = {}
+        def _process_item(op, av, state: int) -> Set[int]:
+            new_end_states = set()
+            if state not in nfa:
+                nfa[state] = {}
 
-                    if op == _LITERAL:
-                        char = chr(av)
-                        new_state = state_counter[0]
-                        state_counter[0] += 1
+            if op == _LITERAL:
+                char = chr(av)
+                new_state = state_counter[0]
+                state_counter[0] += 1
+                if char not in nfa[state]:
+                    nfa[state][char] = set()
+                nfa[state][char].add(new_state)
+                new_end_states.add(new_state)
+            elif op == _ANY:
+                new_state = state_counter[0]
+                state_counter[0] += 1
+                for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ":
+                    if c not in nfa[state]:
+                        nfa[state][c] = set()
+                    nfa[state][c].add(new_state)
+                new_end_states.add(new_state)
+            elif op == _IN:
+                new_state = state_counter[0]
+                state_counter[0] += 1
+                for item_op, item_av in av:
+                    if item_op == _LITERAL:
+                        char = chr(item_av)
                         if char not in nfa[state]:
                             nfa[state][char] = set()
                         nfa[state][char].add(new_state)
-                        new_end_states.add(new_state)
-                    # (Other ops: ANY, IN, SUBPATTERN, REPEAT... matching the original logic)
-                    elif op == _ANY:
-                        new_state = state_counter[0]
-                        state_counter[0] += 1
-                        for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ":
-                            if c not in nfa[state]:
-                                nfa[state][c] = set()
-                            nfa[state][c].add(new_state)
-                        new_end_states.add(new_state)
-                    elif op == _IN:
-                        new_state = state_counter[0]
-                        state_counter[0] += 1
-                        for item_op, item_av in av:
-                            if item_op == _LITERAL:
-                                char = chr(item_av)
-                                if char not in nfa[state]:
-                                    nfa[state][char] = set()
-                                nfa[state][char].add(new_state)
-                            elif item_op == _RANGE:
-                                for code in range(item_av[0], item_av[1] + 1):
-                                    char = chr(code)
-                                    if char not in nfa[state]:
-                                        nfa[state][char] = set()
-                                    nfa[state][char].add(new_state)
-                        new_end_states.add(new_state)
-                    elif op == _SUBPATTERN:
-                        _, _, _, subpattern = av
-                        sub_end = process_pattern(subpattern, state)
-                        new_end_states.update(sub_end)
-                    elif op == _MAX_REPEAT or op == _MIN_REPEAT:
-                        min_count, max_count, subpattern = av
-                        current_states = {state}
-                        for _ in range(min(min_count, 10)):
-                            next_states = set()
-                            for s in current_states:
-                                ends = process_pattern(subpattern, s)
-                                next_states.update(ends)
-                            current_states = next_states
-                        if max_count > min_count or max_count == _MAXREPEAT:
-                            for s in current_states:
-                                loop_ends = process_pattern(subpattern, s)
-                                for end in loop_ends:
-                                    for char, targets in nfa.get(s, {}).items():
-                                        if char not in nfa.get(end, {}):
-                                            if end not in nfa:
-                                                nfa[end] = {}
-                                            nfa[end][char] = targets.copy()
-                        new_end_states.update(current_states)
-                    else:
-                        new_end_states.add(state)
-                end_states = new_end_states if new_end_states else end_states
+                    elif item_op == _RANGE:
+                        for code in range(item_av[0], item_av[1] + 1):
+                            char = chr(code)
+                            if char not in nfa[state]:
+                                nfa[state][char] = set()
+                            nfa[state][char].add(new_state)
+                new_end_states.add(new_state)
+            elif op == _SUBPATTERN:
+                _, _, _, subpattern = av
+                sub_end = process_pattern(subpattern, state)
+                new_end_states.update(sub_end)
+            elif op in (_MAX_REPEAT, _MIN_REPEAT):
+                min_count, max_count, subpattern = av
+                current_states = {state}
+                for _ in range(min(min_count, 10)):
+                    next_states = set()
+                    for s in current_states:
+                        ends = process_pattern(subpattern, s)
+                        next_states.update(ends)
+                    current_states = next_states
+                if max_count > min_count or max_count == _MAXREPEAT:
+                    self._apply_repeat_loop(nfa, current_states, subpattern, process_pattern)
+                new_end_states.update(current_states)
+            else:
+                new_end_states.add(state)
+            return new_end_states
+
+        def process_pattern(pattern, start_state: int) -> Set[int]:
+            end_states = {start_state}
+            for op, av in pattern:
+                new_total_end_states = set()
+                for state in end_states:
+                    new_total_end_states.update(_process_item(op, av, state))
+                end_states = new_total_end_states if new_total_end_states else end_states
             return end_states
 
         final_states = process_pattern(parsed, 0)
@@ -206,6 +206,19 @@ class RegexGrammar(GrammarEngine):
             for char, to_state in transitions.items():
                 fsm.add_transition(from_state, char, to_state)
         return fsm
+
+    def _apply_repeat_loop(self, nfa, current_states, subpattern, process_pattern_fn):
+        """Apply repeat loop transitions to NFA."""
+        for s in current_states:
+            loop_ends = process_pattern_fn(subpattern, s)
+            for end in loop_ends:
+                s_transitions = nfa.get(s, {})
+                if end not in nfa:
+                    nfa[end] = {}
+                end_transitions = nfa[end]
+                for char, targets in s_transitions.items():
+                    if char not in end_transitions:
+                        end_transitions[char] = targets.copy()
 
     def _build_simple_fsm(self, spec: str) -> FSMTransitionTable:
         """Build simple FSM for literal pattern matching."""

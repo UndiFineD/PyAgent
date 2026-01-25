@@ -105,6 +105,6 @@ class ToolRegistry:
 
         if inspect.iscoroutinefunction(tool):
             return await tool(**filtered_kwargs)
-        else:
-            loop = asyncio.get_running_loop()
-            return await loop.run_in_executor(None, lambda: tool(**filtered_kwargs))
+
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, lambda: tool(**filtered_kwargs))

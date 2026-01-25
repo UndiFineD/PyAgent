@@ -1,0 +1,22 @@
+diff --git a/src/observability/reports/ReportType.py b/src/observability/reports/ReportType.py
+index c84aa0b..8a0d065 100644
+--- a/src/observability/reports/ReportType.py
++++ b/src/observability/reports/ReportType.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReportType(Enum):
+     """Type of report to generate."""
+ 
+     DESCRIPTION = "description"
+     ERRORS = "errors"
+     IMPROVEMENTS = "improvements"
+-    SUMMARY = "summary"
+\ No newline at end of file
++    SUMMARY = "summary"

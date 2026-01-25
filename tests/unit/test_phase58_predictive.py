@@ -1,3 +1,7 @@
+
+"""
+Test Phase58 Predictive module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 58: Predictive Workspace & Pre-allocation

@@ -1,0 +1,28 @@
+diff --git a/src/core/base/types/ReviewFinding.py b/src/core/base/types/ReviewFinding.py
+index 5a6da43..af06358 100644
+--- a/src/core/base/types/ReviewFinding.py
++++ b/src/core/base/types/ReviewFinding.py
+@@ -27,6 +27,16 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ReviewFinding:
+     """A finding from automated code review.
+@@ -44,4 +54,4 @@ class ReviewFinding:
+     line_number: int
+     severity: int
+     suggestion: str
+-    auto_fixable: bool = False
+\ No newline at end of file
++    auto_fixable: bool = False

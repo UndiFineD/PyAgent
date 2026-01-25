@@ -49,7 +49,7 @@ def full_reset() -> None:
         os.makedirs(os.path.dirname(manifest_path), exist_ok=True)
         import yaml
 
-        with open(manifest_path, "w") as f:
+        with open(manifest_path, 'w', encoding='utf-8') as f:
             yaml.dump(default_manifest, f)
 
     manifest = core.parse_manifest(manifest_path)

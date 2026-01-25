@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ReportSearchEngine.py b/src/observability/reports/ReportSearchEngine.py
+index bc5166a..af1db8a 100644
+--- a/src/observability/reports/ReportSearchEngine.py
++++ b/src/observability/reports/ReportSearchEngine.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportSearchResult import ReportSearchResult
+ from .ReportType import ReportType
+-from typing import Dict, List, Tuple
+ import logging
+ import re
+ 

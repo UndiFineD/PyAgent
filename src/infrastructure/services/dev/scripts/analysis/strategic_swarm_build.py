@@ -110,7 +110,7 @@ def main() -> None:
             print("✅ Insight integrated into Collective Intelligence.")
         else:
             print("⚠️ External consultation returned no content. Continuing with local synthesis.")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"⚠️ External consult skipped (likely missing API key): {e}")
 
     # 4. Synthesize Intelligence

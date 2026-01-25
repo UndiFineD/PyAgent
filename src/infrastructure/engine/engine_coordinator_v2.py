@@ -30,6 +30,9 @@ logger = logging.getLogger(__name__)
 
 
 class EngineState(Enum):
+    """
+    Possible states for the EngineCoordinator.
+    """
     STARTING = 0
     RUNNING = 1
     COOLDOWN = 2

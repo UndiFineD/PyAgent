@@ -195,7 +195,7 @@ class OrchestrationMixin:
                     if asyncio.iscoroutine(res):
                         return await res
                     return res
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning("Fleet delegation failed for %s: %s", agent_type, e)
 
         # 2. Dynamic Import Fallback (via AgentRegistry)
@@ -222,7 +222,7 @@ class OrchestrationMixin:
                     return await res
                 return res
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Registry delegation failed for %s: %s", agent_type, e)
             return f"Error: Registry lookup of {agent_type} failed. {str(e)}"
 

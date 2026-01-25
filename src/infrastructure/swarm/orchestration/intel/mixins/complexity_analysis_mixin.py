@@ -45,7 +45,7 @@ class ComplexityAnalysisMixin:
                         comp = rc.calculate_cyclomatic_complexity(content)
                         if comp > 25:
                             targets.append({"file": rel_path, "complexity": comp, "type": "Complexity Issue"})
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.debug(f"Complexity scan failed for {rel_path}: {e}")
 
         # Sort by complexity descending

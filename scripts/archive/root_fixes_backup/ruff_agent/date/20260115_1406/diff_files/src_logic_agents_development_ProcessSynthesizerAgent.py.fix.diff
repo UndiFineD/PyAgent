@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/development/ProcessSynthesizerAgent.py b/src/logic/agents/development/ProcessSynthesizerAgent.py
+index c766a7f..7a145f4 100644
+--- a/src/logic/agents/development/ProcessSynthesizerAgent.py
++++ b/src/logic/agents/development/ProcessSynthesizerAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#!/usr/bin/env python3
 """Unit tests for the SDK V2.2 components."""
 
 import logging
@@ -21,7 +35,7 @@ def test_v2_2_plugin_loading() -> None:
         response = mock_agent.run("Hello World")
         print(f"Mock Agent Response: {response}")
         assert "MOCK-CORE-V1" in response
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"FAILED to load Mock Agent: {e}")
 
     # 2. Test Mock Orchestrator loading (Lazy via OrchestratorRegistry)
@@ -33,7 +47,7 @@ def test_v2_2_plugin_loading() -> None:
         ritual = mock_orc.coordinate_mock_ritual("Alpha Phase")
         print(f"Orchestrator Ritual Result: {ritual}")
         assert "ritual" in ritual.lower()
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"FAILED to load Mock Orchestrator: {e}")
 
     # 3. Test Version Gatekeeping (FutureAgent should fail if we didn't bump enough, but it requires 3.0.0)

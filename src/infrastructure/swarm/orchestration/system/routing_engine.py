@@ -24,7 +24,7 @@ from src.core.base.common.routing_core import \
     RoutingCore as StandardRoutingCore
 
 # Assuming BackendHandlers should be imported or mocked if not found
-from .backend_handlers import BackendHandlers
+from src.infrastructure.compute.backend.runner_backends import BackendHandlers
 
 
 class RoutingEngine(StandardRoutingCore):

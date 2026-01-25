@@ -52,7 +52,7 @@ class SearchMeshCore:
         if HAS_RUST:
             try:
                 return rust_core.aggregate_search_results(raw_results, self.weights)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         master_list: list[dict[str, Any]] = []

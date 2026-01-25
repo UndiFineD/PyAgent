@@ -391,7 +391,7 @@ class PriorityQueue(Generic[T]):
         self,
         item: T,
         priority: float = 0.0,
-        timeout: Optional[float] = None,
+        _timeout: Optional[float] = None,
     ) -> bool:
         """
         Put an item with priority.

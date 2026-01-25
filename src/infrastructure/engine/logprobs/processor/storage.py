@@ -47,19 +47,23 @@ class FlatLogprobs:
 
     @property
     def num_tokens(self) -> int:
+        """Get number of tokens."""
         return len(self.token_ids)
 
     @property
     def top_k(self) -> int:
+        """Get number of top-k entries per token."""
         if len(self.top_k_token_ids.shape) == 2:
             return self.top_k_token_ids.shape[1]
         return 0
 
     @property
     def memory_bytes(self) -> int:
+        """Estimate memory usage in bytes."""
         return self.token_ids.nbytes + self.logprobs.nbytes + self.top_k_token_ids.nbytes + self.top_k_logprobs.nbytes
 
     def slice(self, start: int, end: int) -> "FlatLogprobs":
+        """Slice the logprobs."""
         return FlatLogprobs(
             self.token_ids[start:end],
             self.logprobs[start:end],
@@ -68,6 +72,7 @@ class FlatLogprobs:
         )
 
     def append(self, other: "FlatLogprobs") -> "FlatLogprobs":
+        """Concatenate with another FlatLogprobs instance."""
         return FlatLogprobs(
             np.concatenate([self.token_ids, other.token_ids]),
             np.concatenate([self.logprobs, other.logprobs]),
@@ -85,6 +90,7 @@ class FlatLogprobs:
 
     @classmethod
     def empty(cls, top_k: int = 5) -> "FlatLogprobs":
+        """Create an empty FlatLogprobs instance."""
         return cls(
             np.array([], dtype=np.int32),
             np.array([], dtype=np.float32),
@@ -94,6 +100,7 @@ class FlatLogprobs:
 
     @classmethod
     def from_entries(cls, entries: Sequence[LogprobEntry], top_k: int = 5) -> "FlatLogprobs":
+        """Create from a sequence of LogprobEntry objects."""
         n = len(entries)
         token_ids = np.zeros(n, dtype=np.int32)
         logprobs = np.zeros(n, dtype=np.float32)
@@ -109,6 +116,7 @@ class FlatLogprobs:
         return cls(token_ids, logprobs, top_k_ids, top_k_lps)
 
     def to_entries(self, tokenizer: Optional[Any] = None) -> List[LogprobEntry]:
+        """Convert back to list of LogprobEntry objects."""
         entries = []
         for i in range(self.num_tokens):
             top_logprobs = []
@@ -124,12 +132,14 @@ class FlatLogprobs:
         return entries
 
     def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:
+        """Decode token ID to string if possible."""
         if tokenizer:
             with contextlib.suppress(AttributeError, ValueError, RuntimeError):
                 return tokenizer.decode([tid])
         return f"<{tid}>"
 
     def entropy_per_token(self) -> np.ndarray:
+        """Compute Shannon entropy for each token distribution."""
         max_lps = np.max(self.top_k_logprobs, axis=1, keepdims=True)
         exp_lps = np.exp(self.top_k_logprobs - max_lps)
         probs = exp_lps / np.sum(exp_lps, axis=1, keepdims=True)

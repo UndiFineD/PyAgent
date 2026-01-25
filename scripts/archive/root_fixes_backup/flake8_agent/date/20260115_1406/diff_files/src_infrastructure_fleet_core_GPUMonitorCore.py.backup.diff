@@ -1,0 +1,49 @@
+diff --git a/src/infrastructure/fleet/core/GPUMonitorCore.py b/src/infrastructure/fleet/core/GPUMonitorCore.py
+index f9f3395..966974a 100644
+--- a/src/infrastructure/fleet/core/GPUMonitorCore.py
++++ b/src/infrastructure/fleet/core/GPUMonitorCore.py
+@@ -14,7 +14,11 @@
+ 
+ from __future__ import annotations
+ from dataclasses import dataclass
+-from typing import List, Optional
++
++
++
++
++
+ 
+ @dataclass(frozen=True)
+ class GPUMetrics:
+@@ -34,6 +38,11 @@ class GPUMetrics:
+     def vram_percent(self) -> float:
+         return (self.vram_used / self.vram_total) * 100 if self.vram_total > 0 else 0.0
+ 
++
++
++
++
++
+ class GPUMonitorCore:
+     """
+     Pure logic for GPU health and pressure calculation.
+@@ -57,10 +66,10 @@ class GPUMonitorCore:
+         """
+         if not metrics:
+             return None
+-        
++
+         # Sort by utilization first, then by free VRAM (descending)
+         sorted_gpus = sorted(
+-            metrics, 
++            metrics,
+             key=lambda m: (m.utilization_gpu, -m.vram_free)
+         )
+         return sorted_gpus[0].index
+@@ -74,4 +83,4 @@ class GPUMonitorCore:
+             return True
+         if metrics.vram_percent >= vram_threshold_percent:
+             return True
+-        return False
+\ No newline at end of file
++        return False

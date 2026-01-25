@@ -1,0 +1,43 @@
+diff --git a/src/interface/ui/gui/AppMenu.py b/src/interface/ui/gui/AppMenu.py
+index e0d2622..9f15bac 100644
+--- a/src/interface/ui/gui/AppMenu.py
++++ b/src/interface/ui/gui/AppMenu.py
+@@ -32,6 +32,11 @@ from .Constants import BMAD_AGENTS
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class AppMenu:
+     """Handles the creation and command routing for the application menu bar."""
+     def __init__(self, master, callbacks) -> None:
+@@ -51,16 +56,16 @@ class AppMenu:
+         file_menu.add_separator()
+         file_menu.add_command(label="Exit", command=self.callbacks.get("exit"))
+         self.menubar.add_cascade(label="File", menu=file_menu)
+-        
++
+         # View Menu
+         view_menu = tk.Menu(self.menubar, tearoff=0)
+         view_menu.add_command(label="Toggle Theme", command=self.callbacks.get("toggle_theme"))
+         self.menubar.add_cascade(label="View", menu=view_menu)
+-        
++
+         # Agents Menu
+         agents_menu = tk.Menu(self.menubar, tearoff=0)
+         for atype in BMAD_AGENTS:
+-            agents_menu.add_command(label=f"Add {atype} Agent", 
++            agents_menu.add_command(label=f"Add {atype} Agent",
+                                    command=lambda t=atype: self.callbacks.get("add_agent")(t))
+         agents_menu.add_separator()
+         agents_menu.add_command(label="Add Custom Agent...", command=self.callbacks.get("add_custom"))
+@@ -75,4 +80,4 @@ class AppMenu:
+         for track in BMAD_TRACKS.keys():
+             tracks_menu.add_command(label=track, command=lambda t=track: self.callbacks.get("set_track")(t))
+         bmad_menu.add_cascade(label="Methodology Tracks", menu=tracks_menu)
+-        self.menubar.add_cascade(label="BMAD", menu=bmad_menu)
+\ No newline at end of file
++        self.menubar.add_cascade(label="BMAD", menu=bmad_menu)

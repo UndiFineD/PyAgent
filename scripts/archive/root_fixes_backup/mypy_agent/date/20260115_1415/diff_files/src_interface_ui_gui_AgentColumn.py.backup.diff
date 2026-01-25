@@ -1,0 +1,20 @@
+diff --git a/src/interface/ui/gui/AgentColumn.py b/src/interface/ui/gui/AgentColumn.py
+index e33a398..13c872b 100644
+--- a/src/interface/ui/gui/AgentColumn.py
++++ b/src/interface/ui/gui/AgentColumn.py
+@@ -28,7 +28,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import tkinter as tk
+ from tkinter import ttk, messagebox
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -246,4 +246,4 @@ class AgentColumn:
+         self.run_btn.config(state=tk.NORMAL)
+         self.stop_btn.config(state=tk.DISABLED)
+         self.progress.stop()
+-        self.progress.pack_forget()
+\ No newline at end of file
++        self.progress.pack_forget()

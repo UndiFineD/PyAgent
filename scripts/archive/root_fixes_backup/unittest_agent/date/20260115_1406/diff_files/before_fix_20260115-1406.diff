@@ -1,0 +1,9 @@
+diff --git a/.gitignore b/.gitignore
+index a6edb627..f1783e07 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -56,3 +56,4 @@ chroma.sqlite3
+ *.agent_knowledge_index.json
+ *.db
+ data/
++fixes/

@@ -217,7 +217,7 @@ def normalize_ip(address: str) -> str:
     """Normalize an IP address to standard form."""
     if is_valid_ipv4_address(address):
         return str(ipaddress.IPv4Address(address))
-    elif is_valid_ipv6_address(address):
+    if is_valid_ipv6_address(address):
         return str(ipaddress.IPv6Address(address))
     return address
 
@@ -598,6 +598,7 @@ def get_primary_interface() -> str | None:
                 ["ip", "route", "get", "8.8.8.8"],
                 capture_output=True,
                 text=True,
+                check=False,
             )
             for part in result.stdout.split():
                 if part.startswith("dev"):

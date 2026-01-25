@@ -1,0 +1,39 @@
+diff --git a/src/core/base/core/ErrorMappingCore.py b/src/core/base/core/ErrorMappingCore.py
+index 785e040..147315b 100644
+--- a/src/core/base/core/ErrorMappingCore.py
++++ b/src/core/base/core/ErrorMappingCore.py
+@@ -13,7 +13,11 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
+-from typing import Dict
++
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None
+ 
+ class ErrorMappingCore:
+     """
+@@ -53,11 +57,21 @@ class ErrorMappingCore:
+     @classmethod
+     def get_code(cls, exception_name: str) -> str:
+         """Returns the standardized PA-xxxx code for a given exception name."""
++        if rc:
++            try:
++                return rc.get_error_code(exception_name)
++            except Exception:
++                pass
+         return cls.ERROR_CODES.get(exception_name, "PA-0000")
+ 
+     @classmethod
+     def get_troubleshooting_link(cls, error_code: str) -> str:
+         """Generates a documentation link for the specific error code."""
++        if rc:
++            try:
++                return rc.get_error_documentation_link(error_code)
++            except Exception:
++                pass
+         return f"https://docs.pyagent.ai/errors/{error_code}"
+ 
+     @classmethod

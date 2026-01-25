@@ -370,7 +370,7 @@ class IntelligentRouter:
             try:
                 is_healthy = await provider.health_check()
                 logger.debug(f"Health check {name}: {is_healthy}")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Health check failed for {name}: {e}")
 
     def get_provider_stats(self) -> Dict[str, Dict[str, Any]]:

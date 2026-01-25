@@ -22,8 +22,8 @@ Fcfs.py module.
 from collections import deque
 from typing import Iterator, Set, TypeVar
 
-from ..base import RequestQueue
-from ..models import QueuedRequest
+from src.infrastructure.engine.request_queue.base import RequestQueue
+from src.infrastructure.engine.request_queue.models import QueuedRequest
 
 T = TypeVar("T", bound=QueuedRequest)
 
@@ -53,10 +53,10 @@ class FCFSQueue(deque, RequestQueue):
         """Add request to front of queue."""
         self.appendleft(request)
 
-    def remove(self, request: T) -> bool:
+    def remove(self, value: T) -> bool:
         """Remove a specific request."""
         try:
-            deque.remove(self, request)
+            deque.remove(self, value)
             return True
         except ValueError:
             return False

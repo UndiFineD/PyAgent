@@ -80,9 +80,11 @@ def get_hash_function(algorithm: HashAlgorithm) -> Callable[[bytes], bytes]:
     """Get hash function for the specified algorithm."""
     if algorithm == HashAlgorithm.SHA256:
         return lambda data: hashlib.sha256(data).digest()
-    elif algorithm == HashAlgorithm.MD5:
+
+    if algorithm == HashAlgorithm.MD5:
         return lambda data: hashlib.md5(data).digest()
-    elif algorithm == HashAlgorithm.XXHASH:
+
+    if algorithm == HashAlgorithm.XXHASH:
         try:
             import xxhash
 
@@ -90,8 +92,8 @@ def get_hash_function(algorithm: HashAlgorithm) -> Callable[[bytes], bytes]:
         except ImportError:
             logger.warning("xxhash not available, falling back to SHA256")
             return lambda data: hashlib.sha256(data).digest()
-    else:
-        return lambda data: hashlib.sha256(data).digest()
+
+    return lambda data: hashlib.sha256(data).digest()
 
 
 def hash_block_tokens(
@@ -330,7 +332,7 @@ class PrefixCacheManager:
         """
         for block_id in block_ids:
             # Find block by ID
-            for hash_value, block in self._blocks.items():
+            for block in self._blocks.values():
                 if block.block_id == block_id:
                     block.ref_count = max(0, block.ref_count - 1)
                     break

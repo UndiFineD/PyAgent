@@ -55,7 +55,7 @@ class SpeculativeTree:
     ) -> int:
         """Add a token to the tree, return its index."""
         depth = 0
-        if parent_idx >= 0 and parent_idx < len(self.tokens):
+        if 0 <= parent_idx < len(self.tokens):
             depth = self.tokens[parent_idx].depth + 1
 
         self.max_depth = max(self.max_depth, depth)
@@ -73,7 +73,7 @@ class SpeculativeTree:
     def get_path_to_root(self, idx: int) -> List[int]:
         """Get path from token to root (reversed)."""
         path = []
-        while idx >= 0 and idx < len(self.tokens):
+        while 0 <= idx < len(self.tokens):
             path.append(self.tokens[idx].token_id)
             idx = self.tokens[idx].parent_idx
         return path[::-1]

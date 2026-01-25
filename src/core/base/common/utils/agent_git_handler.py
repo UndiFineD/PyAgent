@@ -62,7 +62,7 @@ class AgentGitHandler:
             res = self.shell.execute(["git", "commit", "-m", message], check=True)
             logging.info("Successfully committed changes: %s", message)
             self._record(f"commit: {message}", "success", {"files": files})
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Error during git commit: %s", e)
             self._record(f"commit: {message}", f"error: {str(e)}")
 
@@ -74,6 +74,6 @@ class AgentGitHandler:
             self.shell.execute(["git", "checkout", "-b", branch_name], check=True)
             logging.info(f"Created branch: {branch_name}")
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to create branch {branch_name}: {e}")
             return False

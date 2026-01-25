@@ -17,6 +17,8 @@
 Mamba Operations - Causal Convolution and Selective Scan.
 """
 
+# pylint: disable=invalid-name, too-many-function-args
+
 from __future__ import annotations
 
 import math

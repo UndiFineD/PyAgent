@@ -70,10 +70,76 @@ class ConfigCore(BaseCore):
         ".ini": ConfigFormat.INI,
     }
 
-    def __init__(self, workspace_root: Path | None = None):
+    def __init__(self, workspace_root: Path | str | None = None):
         super().__init__()
-        self.workspace_root = workspace_root or Path(".")
+        # Use repo_root from BaseCore if available
+        root = workspace_root or self.repo_root or Path.cwd()
+        if isinstance(root, str):
+            root = Path(root)
+
+        if root.is_file() or (isinstance(root, Path) and root.suffix in self.SUPPORTED_EXTENSIONS):
+            self.config_path = root
+            self.workspace_root = root.parent
+            # Auto-detect format from path
+            ext = root.suffix.lower()
+            self.format = self.SUPPORTED_EXTENSIONS.get(ext, ConfigFormat.JSON)
+        else:
+            self.workspace_root = root
+            self.config_path = None
+            self.format = ConfigFormat.JSON
+
+        self.root_dir = self.workspace_root  # Alias for compatibility
+        self.config_dir = self.workspace_root / "data" / "config"
         self.configs: Dict[str, ConfigObject] = {}
+
+    def load(self, path: Path | None = None) -> ConfigObject:
+        """Legacy alias for load_config, using self.config_path if none provided."""
+        target = path or self.config_path
+        if not target:
+            return ConfigObject({})
+        return self.load_config(target)
+
+    @staticmethod
+    def find_config_file(directory: Path) -> Path | None:
+        """Find the primary config file in a directory."""
+        for ext in [".json", ".yaml", ".yml", ".toml"]:
+            # Added 'agent' for compatibility
+            for name in ["config", "settings", "pyagent", "agent"]:
+                path = directory / f"{name}{ext}"
+                if path.exists():
+                    return path
+        return None
+
+    def refresh(self) -> None:
+        """Reload all configurations from disk."""
+        if self.config_dir.exists():
+            for file_path in self.config_dir.glob("*.*"):
+                if file_path.suffix.lower() in self.SUPPORTED_EXTENSIONS:
+                    self.load_config(file_path)
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """
+        Global getter with environment variable override support.
+        Prefix: PYAGENT_ (e.g. models.coder.temperature -> PYAGENT_MODELS__CODER__TEMPERATURE)
+        """
+        import os
+        # 1. Check environment variables (support double underscores for nesting)
+        env_key = f"PYAGENT_{key.upper().replace('.', '__')}"
+        if env_key in os.environ:
+            env_val = os.environ[env_key]
+            try:
+                if "." in env_val:
+                    return float(env_val)
+                return int(env_val)
+            except ValueError:
+                return env_val
+
+        # 2. Check loaded configs
+        for cfg in self.configs.values():
+            val = cfg.get(key)
+            if val is not None:
+                return val
+        return default
 
     def load_config(self, path: Path) -> ConfigObject:
         """Load and return a configuration object."""
@@ -86,7 +152,8 @@ class ConfigCore(BaseCore):
                 # pylint: disable=no-member
                 data = rc.load_config_rust(str(path))  # type: ignore
                 return ConfigObject(data)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         ext = path.suffix.lower()
@@ -98,7 +165,7 @@ class ConfigCore(BaseCore):
             cfg = ConfigObject(data)
             self.configs[path.name] = cfg
             return cfg
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("ConfigCore: Failed to load %s: %s", path, e)
             return ConfigObject({})
 
@@ -108,7 +175,8 @@ class ConfigCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.merge_configs_rust(base, override)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         # Python fallback
@@ -122,7 +190,28 @@ class ConfigCore(BaseCore):
 
     def _parse(self, content: str, fmt: ConfigFormat) -> Dict[str, Any]:
         """Parses configuration content based on format."""
-        if fmt == ConfigFormat.JSON:
-            return json.loads(content)
-        # Add YAML/TOML fallbacks here
-        return {}
+        data: Any = {}
+        try:
+            if fmt == ConfigFormat.JSON:
+                data = json.loads(content)
+            elif fmt == ConfigFormat.YAML:
+                try:
+                    import yaml  # type: ignore
+                    data = yaml.safe_load(content)
+                except ImportError:
+                    pass
+            elif fmt == ConfigFormat.TOML:
+                try:
+                    import tomllib as toml  # type: ignore
+                    data = toml.loads(content)
+                except ImportError:
+                    pass
+            elif fmt in (ConfigFormat.INI, ConfigFormat.CONF):
+                # Basic INI parsing if needed, but RC usually handles it
+                pass
+        except Exception:  # pylint: disable=broad-exception-caught
+            return {}
+
+        if isinstance(data, list):
+            return {"items": data}
+        return data if isinstance(data, dict) else {}

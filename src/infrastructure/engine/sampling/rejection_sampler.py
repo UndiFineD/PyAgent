@@ -315,13 +315,13 @@ class RejectionSampler:
 
         if self.config.strategy == RejectionStrategy.STANDARD:
             return min(1.0, ratio)
-        elif self.config.strategy == RejectionStrategy.STRICT:
+        if self.config.strategy == RejectionStrategy.STRICT:
             # More strict: require higher ratio
             return min(1.0, ratio * 0.9)
-        elif self.config.strategy == RejectionStrategy.LENIENT:
+        if self.config.strategy == RejectionStrategy.LENIENT:
             # More lenient: boost acceptance
             return min(1.0, ratio * 1.1)
-        elif self.config.strategy == RejectionStrategy.ADAPTIVE:
+        if self.config.strategy == RejectionStrategy.ADAPTIVE:
             # Adapt based on running stats
             if self.stats.acceptance_rate < self.config.min_acceptance_ratio:
                 return min(1.0, ratio * 1.2)  # Be more lenient
@@ -652,10 +652,9 @@ def create_rejection_sampler(
 
     if batch_optimized:
         return BatchRejectionSampler(config)
-    elif streaming:
+    if streaming:
         return StreamingRejectionSampler(config)
-    else:
-        return RejectionSampler(config)
+    return RejectionSampler(config)
 
 
 __all__ = [

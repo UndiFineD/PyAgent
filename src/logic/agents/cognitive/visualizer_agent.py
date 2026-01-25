@@ -140,7 +140,7 @@ class VisualizerAgent(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(workflow_data, f, indent=2)
             temp_path.replace(output_path)
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if temp_path.exists():
                 temp_path.unlink()
             raise

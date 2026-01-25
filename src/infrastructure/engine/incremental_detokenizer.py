@@ -116,27 +116,26 @@ class IncrementalDetokenizer(ABC):
         """Get output token IDs (excluding prompt)."""
         return self.token_ids
 
-    def update(self, new_token_ids: List[int], stop_terminated: bool) -> Optional[str]:
+    def update(self, new_token_ids: List[int], _stop_terminated: bool) -> Optional[str]:
         """
         Update with new token IDs.
 
         Args:
             new_token_ids: New token IDs to process
-            stop_terminated: Whether stop condition was hit
+            _stop_terminated: Whether stop condition was hit
 
         Returns:
             Matched stop string if found, None otherwise
         """
         self.token_ids.extend(new_token_ids)
-        return None
 
-    def get_next_output_text(self, finished: bool, delta: bool) -> str:
+    def get_next_output_text(self, _finished: bool, _delta: bool) -> str:
         """
         Get output text.
 
         Args:
-            finished: Whether generation is finished
-            delta: If True, return only new text since last call
+            _finished: Whether generation is finished
+            _delta: If True, return only new text since last call
 
         Returns:
             Output text (full or delta)
@@ -169,11 +168,10 @@ class IncrementalDetokenizer(ABC):
 class NoOpDetokenizer(IncrementalDetokenizer):
     """No-op detokenizer when tokenizer is not available."""
 
-    def update(self, new_token_ids: List[int], stop_terminated: bool) -> Optional[str]:
+    def update(self, new_token_ids: List[int], _stop_terminated: bool) -> Optional[str]:
         self.token_ids.extend(new_token_ids)
-        return None
 
-    def get_next_output_text(self, finished: bool, delta: bool) -> str:
+    def get_next_output_text(self, _finished: bool, _delta: bool) -> str:
         return ""
 
 
@@ -305,7 +303,8 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
                 for tid, tok in tokenizer.get_added_tokens_decoder().items():
                     content = getattr(tok, "content", str(tok))
                     self.added_token_ids[tid] = content
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         # Prime with prompt tokens
@@ -346,7 +345,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         except (OverflowError, TypeError) as e:
             logger.warning(f"Invalid token id {next_token_id}: {e}")
             return None
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if str(e).startswith(INVALID_PREFIX_ERR_MSG):
                 logger.warning(f"Invalid prefix in request {self.request_id}, resetting")
                 # Reset decode state
@@ -395,7 +394,8 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
                     prompt_token_ids[-INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET - 2 :],
                     skip_special_tokens=self.skip_special_tokens,
                 )
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 self.tokens = [""] * min(INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET + 2, len(prompt_token_ids))
         else:
             self.tokens = []
@@ -430,7 +430,8 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
             )
             if isinstance(new_tokens, str):
                 new_tokens = [new_tokens]
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             new_tokens = [""]
 
         # Handle None tokens
@@ -444,7 +445,8 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         try:
             prefix_text = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset : self.read_offset])
             new_text = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset :])
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return ""
 
         # Check for incomplete UTF-8

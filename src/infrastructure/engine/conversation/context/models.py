@@ -70,6 +70,7 @@ class TokenMetrics:
 
     @property
     def total_tokens(self) -> int:
+        """Get the total number of tokens."""
         return self.input_tokens + self.output_tokens
 
     @property
@@ -88,6 +89,7 @@ class TokenMetrics:
         )
 
     def to_dict(self) -> Dict[str, int]:
+        """Convert metrics to dictionary."""
         return {
             "input_tokens": self.input_tokens,
             "output_tokens": self.output_tokens,
@@ -133,6 +135,7 @@ class ConversationTurn:
         return msg
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert turn to dictionary."""
         return {
             "id": self.id,
             "type": self.type.value,
@@ -158,12 +161,14 @@ class ToolExecution:
 
     @property
     def duration_ms(self) -> float:
+        """Get execution duration in milliseconds."""
         if self.start_time and self.end_time:
             return (self.end_time - self.start_time) * 1000
         return 0.0
 
     @property
     def is_complete(self) -> bool:
+        """Check if execution is finished."""
         return self.status in ("completed", "failed")
 
 
@@ -183,6 +188,7 @@ class ContextConfig:
     summarize_threshold: int = 50
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert configuration to dictionary."""
         return {
             "max_turns": self.max_turns,
             "max_tokens": self.max_tokens,
@@ -204,6 +210,7 @@ class ContextSnapshot:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert snapshot to dictionary."""
         return {
             "context_id": self.context_id,
             "timestamp": self.timestamp,

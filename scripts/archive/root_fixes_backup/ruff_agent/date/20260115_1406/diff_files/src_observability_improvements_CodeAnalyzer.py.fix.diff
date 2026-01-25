@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/CodeAnalyzer.py b/src/observability/improvements/CodeAnalyzer.py
+index ed10ea5..d415142 100644
+--- a/src/observability/improvements/CodeAnalyzer.py
++++ b/src/observability/improvements/CodeAnalyzer.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+-from typing import List
+ 
+ __version__ = VERSION
+ 

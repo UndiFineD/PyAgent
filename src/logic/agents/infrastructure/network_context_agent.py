@@ -29,6 +29,7 @@ from src.logic.agents.cognitive.context.engines.graph_context_engine import \
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class NetworkContextAgent(BaseAgent):
     """Scans the codebase to build a graph of imports and class hierarchies."""
 
@@ -93,7 +94,7 @@ class NetworkContextAgent(BaseAgent):
                             # (Heuristic: search matching class names)
                             self.engine.add_edge(cls_id, f"base:{base}", "inherits")
 
-            except Exception as e:
+            except (IOError, OSError, AttributeError, RuntimeError) as e:
                 logging.error(f"Scan error for {p}: {e}")
 
         self.engine.save(str(self.graph_file))
@@ -104,7 +105,7 @@ class NetworkContextAgent(BaseAgent):
         self.engine.load(str(self.graph_file))
         rel_path = os.path.relpath(file_path, self.file_path.parent)
 
-        impacted_nodes = self.engine.get_transitive_neighbors(rel_path, depth=3)
+        impacted_nodes = self.engine.get_impact_radius(rel_path, max_depth=3)
 
         report = [f"## Impact Analysis for {rel_path}"]
         if not impacted_nodes:

@@ -71,7 +71,7 @@ def check_server() -> bool:
         conn_manager.update_status("AgentAPIServer", available)
 
         return available
-    except requests.exceptions.RequestException:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         conn_manager.update_status("AgentAPIServer", False)
         return False
 
@@ -126,7 +126,7 @@ def list_agents() -> None:
             recorder.record_lesson("cli_list_agents", {"count": len(agents)})
         else:
             console.print(f"[red]Error fetching agents: {response.text}[/red]")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         console.print(f"[red]Connection failed: {e}[/red]")
 
 
@@ -175,7 +175,7 @@ def run_task(agent_id: str, task: str) -> None:
                 console.print(f"[red]Error: {data.get('message', 'Unknown error')}[/red]")
                 recorder.record_lesson("cli_task_error", {"error": data.get("message")})
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             console.print(f"[red]Connection failed: {e}[/red]")
             recorder.record_lesson("cli_task_network_failure", {"exception": str(e)})
 
@@ -221,7 +221,7 @@ def main() -> None:
             status_text += f"LB Interface Diversity: {', '.join(lb_stats.get('interface_diversity', []))}"
 
             console.print(Panel(status_text, title="System Status", border_style="blue"))
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             console.print(f"[red]Could not retrieve status: {e}[/red]")
     else:
         parser.print_help()

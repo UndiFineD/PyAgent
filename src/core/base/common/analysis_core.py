@@ -41,7 +41,8 @@ class AnalysisCore:
             try:
                 # pylint: disable=no-member
                 return rc.calculate_complexity_rust(source)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         # Fallback to simple count of control flow keywords
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
@@ -61,7 +62,8 @@ class AnalysisCore:
                     return rc.get_imports_rust(content)  # type: ignore
                 # pylint: disable=no-member
                 return rc.get_imports_rust(source_or_path)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         try:
@@ -69,7 +71,8 @@ class AnalysisCore:
                 tree = ast.parse(source_or_path.read_text(encoding="utf-8"), feature_version=(3, 11))
             else:
                 tree = ast.parse(source_or_path, feature_version=(3, 11))
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return []
 
         imports: List[str] = []

@@ -27,21 +27,21 @@ from src.interface.slash_commands.core import (CommandResult, ProcessedPrompt,
 # Default Instance
 # ============================================================================
 
-_default_slash_commands: SlashCommands | None = None
+_DEFAULT_SLASH_COMMANDS: SlashCommands | None = None
 
 
 def get_slash_commands() -> SlashCommands:
     """Get the default SlashCommands instance."""
-    global _default_slash_commands
-    if _default_slash_commands is None:
-        _default_slash_commands = SlashCommands()
-    return _default_slash_commands
+    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
+    if _DEFAULT_SLASH_COMMANDS is None:
+        _DEFAULT_SLASH_COMMANDS = SlashCommands()
+    return _DEFAULT_SLASH_COMMANDS
 
 
 def reset_slash_commands() -> None:
     """Reset the default instance (for testing)."""
-    global _default_slash_commands
-    _default_slash_commands = None
+    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
+    _DEFAULT_SLASH_COMMANDS = None
 
 
 # ============================================================================

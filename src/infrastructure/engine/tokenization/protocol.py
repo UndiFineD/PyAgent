@@ -30,22 +30,18 @@ class TokenizerProtocol(Protocol):
     @property
     def vocab_size(self) -> int:
         """Size of the vocabulary."""
-        ...
 
     @property
     def bos_token_id(self) -> Optional[int]:
         """Beginning of sequence token ID."""
-        ...
 
     @property
     def eos_token_id(self) -> Optional[int]:
         """End of sequence token ID."""
-        ...
 
     @property
     def pad_token_id(self) -> Optional[int]:
         """Padding token ID."""
-        ...
 
     def encode(
         self,
@@ -53,7 +49,6 @@ class TokenizerProtocol(Protocol):
         add_special_tokens: bool = True,
     ) -> List[int]:
         """Encode text to token IDs."""
-        ...
 
     def decode(
         self,
@@ -61,7 +56,6 @@ class TokenizerProtocol(Protocol):
         skip_special_tokens: bool = True,
     ) -> str:
         """Decode token IDs to text."""
-        ...
 
     def batch_encode(
         self,
@@ -69,4 +63,3 @@ class TokenizerProtocol(Protocol):
         add_special_tokens: bool = True,
     ) -> List[List[int]]:
         """Batch encode multiple texts."""
-        ...

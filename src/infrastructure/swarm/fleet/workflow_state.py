@@ -37,12 +37,15 @@ class WorkflowState:
     errors: list[str] = field(default_factory=list)
 
     def set(self, key: str, value: Any) -> None:
+        """Sets a workflow variable."""
         self.variables[key] = value
 
     def get(self, key: str, default: Any = None) -> Any:
+        """Retrieves a workflow variable."""
         return self.variables.get(key, default)
 
     def add_history(self, agent: str, action: str, result: str) -> None:
+        """Appends an entry to the execution history."""
         self.history.append(
             {
                 "agent": agent,

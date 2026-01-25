@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/backend/LLMClient.py b/src/infrastructure/backend/LLMClient.py
+index 85ff36f..25856bf 100644
+--- a/src/infrastructure/backend/LLMClient.py
++++ b/src/infrastructure/backend/LLMClient.py
+@@ -26,7 +26,7 @@ import logging
+ import time
+ import os
+ from pathlib import Path
+-from typing import Any, Dict, Optional
++from typing import Any
+ from .LocalContextRecorder import LocalContextRecorder
+ from src.core.base.ConnectivityManager import ConnectivityManager
+ from src.infrastructure.backend.core.PoolingCore import PoolingCore
+@@ -264,4 +264,4 @@ class LLMClient:
+ 
+         return result
+ 
+-__version__ = VERSION
+\ No newline at end of file
++__version__ = VERSION

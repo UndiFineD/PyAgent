@@ -23,6 +23,7 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
+    """Types of classification supported by the agent."""
     SINGLE_LABEL = "single_label"
     MULTI_LABEL = "multi_label"
     HIERARCHICAL = "hierarchical"
@@ -49,6 +50,7 @@ class Taxonomy:
     descriptions: Dict[str, str] = field(default_factory=dict)
 
 
+# pylint: disable=too-many-ancestors
 class ClassificationAgent(BaseAgent):
     """
     Agent specializing in classifying text, code, or images into predefined categories.
@@ -88,6 +90,7 @@ class ClassificationAgent(BaseAgent):
         }
 
     @as_tool
+    # pylint: disable=too-many-positional-arguments
     async def classify(
         self,
         content: str,
@@ -139,7 +142,7 @@ class ClassificationAgent(BaseAgent):
                 )
 
                 return data
-        except Exception as e:
+        except (json.JSONDecodeError, AttributeError, TypeError, IndexError) as e:
             logging.debug(f"ClassificationAgent: Parse error: {e}")
 
         return {"category": "unknown", "confidence": 0.0, "raw": res}
@@ -270,7 +273,7 @@ class ClassificationAgent(BaseAgent):
         )
 
     def _build_hierarchical_prompt(
-        self, content: str, categories: List[str], hierarchy: Dict[str, List[str]], descriptions: Dict[str, str]
+        self, content: str, categories: List[str], hierarchy: Dict[str, List[str]], _descriptions: Dict[str, str]
     ) -> str:
         hier_str = "\n".join([f"- {parent} -> {', '.join(children)}" for parent, children in hierarchy.items()])
         return (

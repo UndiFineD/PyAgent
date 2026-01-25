@@ -62,7 +62,7 @@ def main() -> None:
 
             sys.stdout.write(json.dumps(response) + "\n")
             sys.stdout.flush()
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             break
 
 

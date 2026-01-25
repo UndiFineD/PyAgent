@@ -70,7 +70,7 @@ class SelfHealingOrchestrator:
                     self.core.timeout_seconds = 10.0  # More aggressive during heavy dev
                     self.core.max_errors = 2
                     logging.info("Self-Healing: Strategic overrides applied for Phase 50 TALON.")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Self-Healing: Failed to load overrides: {e}")
 
     @property

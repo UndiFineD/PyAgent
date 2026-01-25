@@ -56,7 +56,7 @@ class ReportCacheManager:
             try:
                 data = json.loads(self.cache_file.read_text())
                 self._cache = data.get("cache", {})
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logging.warning(f"Failed to load cache: {e}")
 
     def _save_cache(self) -> None:
@@ -65,7 +65,7 @@ class ReportCacheManager:
         try:
             data: dict[str, Any] = {"cache": self._cache}
             self.cache_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logging.warning(f"Failed to save cache: {e}")
 
     def get(self, file_path: str, content_hash: str) -> str | None:

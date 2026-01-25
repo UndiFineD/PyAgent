@@ -43,7 +43,7 @@ ENV COMPONENT={component}
 CMD ["python", "src\agent_remote.py"]
 """
         file_path = self.deployment_dir / f"Dockerfile.{component}"
-        with open(file_path, "w") as f:
+        with open(file_path, 'w', encoding='utf-8') as f:
             f.write(dockerfile_content)
         return str(file_path)
 
@@ -60,8 +60,9 @@ services:
     environment:
       - NODE_TYPE=MASTER
 """
+        agent_nodes = []
         for i in range(num_replicas):
-            compose_content += f"""
+            node_block = f"""
   agent_node_{i}:
     build:
       context: ..
@@ -70,8 +71,11 @@ services:
       - NODE_TYPE=WORKER
       - MASTER_URL=http://fleet_master:8000
 """
+            agent_nodes.append(node_block)
+
+        compose_content += "".join(agent_nodes)
         file_path = self.deployment_dir / "docker-compose.yaml"
-        with open(file_path, "w") as f:
+        with open(file_path, 'w', encoding='utf-8') as f:
             f.write(compose_content)
         return str(file_path)
 

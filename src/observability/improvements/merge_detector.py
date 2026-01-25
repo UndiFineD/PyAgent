@@ -80,7 +80,7 @@ class MergeDetector:
                     )
                     for src_id, tgt_id, score, reason in rust_results
                 ]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass  # Fall back to Python
 
         # Python fallback

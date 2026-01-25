@@ -1,0 +1,28 @@
+diff --git a/src/infrastructure/dev/test_utils/AssertionHelpers.py b/src/infrastructure/dev/test_utils/AssertionHelpers.py
+index e40477b..66b4619 100644
+--- a/src/infrastructure/dev/test_utils/AssertionHelpers.py
++++ b/src/infrastructure/dev/test_utils/AssertionHelpers.py
+@@ -29,6 +29,16 @@ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class AssertionHelpers:
+     """Helper functions for common assertions in tests."""
+ 
+@@ -95,4 +105,4 @@ class AssertionHelpers:
+             if isinstance(e, exception_type):
+                 assert message in str(e), f"Exception message '{str(e)}' does not contain '{message}'"
+                 return True
+-            raise
+\ No newline at end of file
++            raise

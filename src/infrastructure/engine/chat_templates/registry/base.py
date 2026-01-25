@@ -32,6 +32,7 @@ class ChatTemplate(ABC):
 
     @property
     def template_type(self) -> TemplateType:
+        """Get the type of the template."""
         return self.config.template_type
 
     @property
@@ -45,7 +46,6 @@ class ChatTemplate(ABC):
     @abstractmethod
     def get_template_string(self) -> str:
         """Get the template string."""
-        ...
 
     @abstractmethod
     def render(
@@ -54,7 +54,6 @@ class ChatTemplate(ABC):
         options: Optional[RenderOptions] = None,
     ) -> str:
         """Render messages using the template."""
-        ...
 
     def get_info(self) -> TemplateInfo:
         """Get template information."""

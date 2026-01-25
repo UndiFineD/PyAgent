@@ -37,25 +37,25 @@ class BaseTokenizer(ABC):
     @abstractmethod
     def vocab_size(self) -> int:
         """Size of the vocabulary."""
-        pass
+        raise NotImplementedError("Subclasses must implement vocab_size")
 
     @property
     @abstractmethod
     def bos_token_id(self) -> Optional[int]:
         """Beginning of sequence token ID."""
-        pass
+        raise NotImplementedError("Subclasses must implement bos_token_id")
 
     @property
     @abstractmethod
     def eos_token_id(self) -> Optional[int]:
         """End of sequence token ID."""
-        pass
+        raise NotImplementedError("Subclasses must implement eos_token_id")
 
     @property
     @abstractmethod
     def pad_token_id(self) -> Optional[int]:
         """Padding token ID."""
-        pass
+        raise NotImplementedError("Subclasses must implement pad_token_id")
 
     @abstractmethod
     def encode(
@@ -64,7 +64,7 @@ class BaseTokenizer(ABC):
         add_special_tokens: bool = True,
     ) -> List[int]:
         """Encode text to token IDs."""
-        pass
+        raise NotImplementedError("Subclasses must implement encode()")
 
     @abstractmethod
     def decode(
@@ -73,7 +73,7 @@ class BaseTokenizer(ABC):
         skip_special_tokens: bool = True,
     ) -> str:
         """Decode token IDs to text."""
-        pass
+        raise NotImplementedError("Subclasses must implement decode()")
 
     def batch_encode(
         self,
@@ -98,6 +98,7 @@ class BaseTokenizer(ABC):
         return_offsets: bool = False,
     ) -> TokenizeResult:
         """Full tokenization with metadata."""
+        _ = return_offsets  # Not supported by base implementation
         input_ids = self.encode(text, add_special_tokens)
         return TokenizeResult(
             input_ids=input_ids,

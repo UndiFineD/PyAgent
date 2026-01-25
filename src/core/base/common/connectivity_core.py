@@ -41,8 +41,8 @@ class ConnectivityCore(BaseCore):
     Handles low-level host networking and high-level agent communication.
     """
 
-    def __init__(self, name: str = "ConnectivityCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
+    def __init__(self, name: str = "ConnectivityCore", repo_root: Optional[str] = None) -> None:
+        super().__init__(name=name, repo_root=repo_root)
         self.connections: Dict[str, Any] = {}
 
     # --- Agent-to-Agent Logic ---
@@ -56,7 +56,7 @@ class ConnectivityCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.establish_native_connection(target_agent, protocol)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust establishment failed: %s. Falling back.", e)
 
         logger.info("ConnectivityCore: Establishing %s connection to %s", protocol, target_agent)
@@ -69,7 +69,7 @@ class ConnectivityCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.transfer_binary_payload(target_agent, payload)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust payload transfer failed: %s. Falling back.", e)
 
         # Python fallback logic
@@ -88,7 +88,8 @@ class ConnectivityCore(BaseCore):
         try:
             with urllib.request.urlopen(target_url, timeout=2) as response:
                 return response.status == 200
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return False
 
     # --- Network Utilities (formerly NetworkCore) ---
@@ -108,7 +109,8 @@ class ConnectivityCore(BaseCore):
             with socket.socket(af, socket.SOCK_DGRAM) as s:
                 s.connect(target)
                 return s.getsockname()[0]
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return "127.0.0.1"
 
     @staticmethod

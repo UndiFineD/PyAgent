@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/fleet/ScalingCore.py b/src/infrastructure/fleet/ScalingCore.py
+index 0c50af8..a199f5b 100644
+--- a/src/infrastructure/fleet/ScalingCore.py
++++ b/src/infrastructure/fleet/ScalingCore.py
+@@ -26,7 +26,6 @@ Pure logic for computing moving averages, resource mapping, and anti-flapping sc
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 

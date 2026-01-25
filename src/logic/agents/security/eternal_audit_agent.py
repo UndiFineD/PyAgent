@@ -66,7 +66,7 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Finds the last hash in the audit trail to maintain the chain."""
         if os.path.exists(self.current_shard):
             try:
-                with open(self.current_shard, "rb") as f:
+                with open(self.current_shard, 'rb') as f:
                     f.seek(-min(1024, os.path.getsize(self.current_shard)), 2)  # Go to end
                     last_line = f.readlines()[-1].decode("utf-8")
                     last_entry = json.loads(last_line)

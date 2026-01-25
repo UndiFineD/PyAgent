@@ -1,0 +1,81 @@
+diff --git a/src/logic/agents/cognitive/context/engines/SemanticSearchEngine.py b/src/logic/agents/cognitive/context/engines/SemanticSearchEngine.py
+index b845b4f..7e5a394 100644
+--- a/src/logic/agents/cognitive/context/engines/SemanticSearchEngine.py
++++ b/src/logic/agents/cognitive/context/engines/SemanticSearchEngine.py
+@@ -24,11 +24,21 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.utils.SearchAlgorithm import SearchAlgorithm
+ from src.logic.agents.cognitive.context.models.SemanticSearchResult import SemanticSearchResult
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import logging
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class SemanticSearchEngine:
+     """Performs semantic code search using embeddings.
+ 
+@@ -60,16 +70,16 @@ class SemanticSearchEngine:
+             try:
+                 import chromadb
+                 from chromadb.utils import embedding_functions
+-                
++
+                 if self.persist_directory:
+                     self._client = chromadb.PersistentClient(path=self.persist_directory)
+                 else:
+                     self._client = chromadb.EphemeralClient()
+-                
++
+                 emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+                     model_name="all-MiniLM-L6-v2"
+                 )
+-                
++
+                 self._collection = self._client.get_or_create_collection(
+                     name="pyagent_code",
+                     embedding_function=emb_fn,
+@@ -109,7 +119,7 @@ class SemanticSearchEngine:
+         """
+         # Update documents storage
+         self.documents[file_path] = content
+-        
++
+         collection = self._get_collection()
+         if collection:
+             # Upsert into Chroma
+@@ -142,7 +152,7 @@ class SemanticSearchEngine:
+                     query_texts=[query],
+                     n_results=10
+                 )
+-                
++
+                 if results and 'documents' in results and results['documents']:
+                     for i in range(len(results['ids'][0])):
+                         file_path = results['ids'][0][i]
+@@ -152,7 +162,7 @@ class SemanticSearchEngine:
+                         # Score: 1.0 - distance
+                         distance = results['distances'][0][i] if 'distances' in results else 0.5
+                         score = max(0.0, min(1.0, 1.0 - distance))
+-                        
++
+                         self.results.append(SemanticSearchResult(
+                             file_path=file_path,
+                             content_snippet=content[:200], # Longer snippet for semantic
+@@ -177,4 +187,4 @@ class SemanticSearchEngine:
+                 similarity_score=min(score, 1.0)
+             ))
+ 
+-        return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
+\ No newline at end of file
++        return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)

@@ -79,9 +79,11 @@ class TextPrompt:
 
     @property
     def type(self) -> PromptType:
+        """Get prompt type."""
         return PromptType.TEXT
 
     def __len__(self) -> int:
+        """Get length of prompt."""
         return len(self.prompt)
 
 
@@ -96,9 +98,11 @@ class TokensPrompt:
 
     @property
     def type(self) -> PromptType:
+        """Get the prompt type."""
         return PromptType.TOKENS
 
     def __len__(self) -> int:
+        """Return the number of tokens."""
         return len(self.prompt_token_ids)
 
 
@@ -111,9 +115,11 @@ class EmbedsPrompt:
 
     @property
     def type(self) -> PromptType:
+        """Get the prompt type."""
         return PromptType.EMBEDS
 
     def __len__(self) -> int:
+        """Return the sequence length of the embeddings."""
         return self.prompt_embeds.shape[0]
 
 
@@ -126,6 +132,7 @@ class EncoderDecoderPrompt:
 
     @property
     def type(self) -> PromptType:
+        """Get the prompt type."""
         return PromptType.ENCODER_DECODER
 
 
@@ -140,6 +147,7 @@ class ChatMessage:
     tool_call_id: Optional[str] = None  # For tool responses
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert message to dictionary."""
         result = {"role": self.role, "content": self.content}
         if self.name:
             result["name"] = self.name
@@ -159,9 +167,11 @@ class ChatPrompt:
 
     @property
     def type(self) -> PromptType:
+        """Get prompt type."""
         return PromptType.CHAT
 
     def __len__(self) -> int:
+        """Get total character length of messages."""
         return sum(len(m.content) for m in self.messages)
 
 
@@ -203,6 +213,7 @@ class ProcessedInput:
 
     @property
     def length(self) -> int:
+        """Get best-effort length (tokens if available, else chars)."""
         if self.token_ids:
             return len(self.token_ids)
         return len(self.prompt)
@@ -246,14 +257,14 @@ class PromptTemplate:
     }
 
     @classmethod
-    def get_template(cls, format: InputFormat) -> Dict[str, str]:
+    def get_template(cls, input_format: InputFormat) -> Dict[str, str]:
         """Get template for format."""
         templates = {
             InputFormat.CHATML: cls.CHATML,
             InputFormat.LLAMA: cls.LLAMA3,
             InputFormat.ANTHROPIC: cls.ANTHROPIC,
         }
-        return templates.get(format, cls.CHATML)
+        return templates.get(input_format, cls.CHATML)
 
 
 # =============================================================================
@@ -278,16 +289,15 @@ class PromptValidator:
         """Validate prompt, return (is_valid, error_message)."""
         if isinstance(prompt, TextPrompt):
             return self._validate_text(prompt)
-        elif isinstance(prompt, TokensPrompt):
+        if isinstance(prompt, TokensPrompt):
             return self._validate_tokens(prompt)
-        elif isinstance(prompt, EmbedsPrompt):
+        if isinstance(prompt, EmbedsPrompt):
             return self._validate_embeds(prompt)
-        elif isinstance(prompt, ChatPrompt):
+        if isinstance(prompt, ChatPrompt):
             return self._validate_chat(prompt)
-        elif isinstance(prompt, EncoderDecoderPrompt):
+        if isinstance(prompt, EncoderDecoderPrompt):
             return self._validate_encoder_decoder(prompt)
-        else:
-            return False, f"Unknown prompt type: {type(prompt)}"
+        return False, f"Unknown prompt type: {type(prompt)}"
 
     def _validate_text(self, prompt: TextPrompt) -> Tuple[bool, Optional[str]]:
         if not self.allow_empty and not prompt.prompt.strip():
@@ -354,12 +364,12 @@ class ConversationLinearizer:
 
     def __init__(
         self,
-        format: InputFormat = InputFormat.CHATML,
+        input_format: InputFormat = InputFormat.CHATML,
         add_generation_prompt: bool = True,
     ):
-        self.format = format
+        self.format = input_format
         self.add_generation_prompt = add_generation_prompt
-        self.template = PromptTemplate.get_template(format)
+        self.template = PromptTemplate.get_template(input_format)
 
     def linearize(self, chat: ChatPrompt) -> str:
         """Convert chat to linear prompt string."""
@@ -428,7 +438,7 @@ class InputPreprocessor:
         self.estimate_chars_per_token = estimate_chars_per_token
 
         self.validator = PromptValidator(max_length=max_length)
-        self.linearizer = ConversationLinearizer(format=default_format)
+        self.linearizer = ConversationLinearizer(input_format=default_format)
 
         # Statistics
         self._stats = {
@@ -587,11 +597,11 @@ class InputPreprocessor:
         """Auto-detect chat format from text."""
         if "<|im_start|>" in text:
             return InputFormat.CHATML
-        elif "<|start_header_id|>" in text:
+        if "<|start_header_id|>" in text:
             return InputFormat.LLAMA
-        elif "[INST]" in text:
+        if "[INST]" in text:
             return InputFormat.RAW  # Mistral
-        elif "\n\nHuman:" in text:
+        if "\n\nHuman:" in text:
             return InputFormat.ANTHROPIC
         return InputFormat.RAW
 
@@ -614,35 +624,38 @@ def parse_prompt(prompt: Union[str, List[int], np.ndarray, Dict, List[Dict]]) ->
     if isinstance(prompt, str):
         return TextPrompt(prompt=prompt)
 
-    elif isinstance(prompt, list):
+    if isinstance(prompt, list):
         if not prompt:
             return TextPrompt(prompt="")
 
         # Check if list of ints (tokens) or dicts (messages)
         if isinstance(prompt[0], int):
             return TokensPrompt(prompt_token_ids=prompt)
-        elif isinstance(prompt[0], dict):
+
+        if isinstance(prompt[0], dict):
             # Chat messages
             messages = [ChatMessage(role=m.get("role", "user"), content=m.get("content", "")) for m in prompt]
             return ChatPrompt(messages=messages)
 
-    elif isinstance(prompt, np.ndarray):
+    if isinstance(prompt, np.ndarray):
         if prompt.ndim == 1:
             # Token IDs as array
             return TokensPrompt(prompt_token_ids=prompt.tolist())
-        else:
-            # Embeddings
-            return EmbedsPrompt(prompt_embeds=prompt)
 
-    elif isinstance(prompt, dict):
+        # Embeddings
+        return EmbedsPrompt(prompt_embeds=prompt)
+
+    if isinstance(prompt, dict):
         if "messages" in prompt:
             messages = [
                 ChatMessage(role=m.get("role", "user"), content=m.get("content", "")) for m in prompt["messages"]
             ]
             return ChatPrompt(messages=messages, system_prompt=prompt.get("system"))
-        elif "prompt" in prompt:
+
+        if "prompt" in prompt:
             return TextPrompt(prompt=prompt["prompt"])
-        elif "token_ids" in prompt:
+
+        if "token_ids" in prompt:
             return TokensPrompt(prompt_token_ids=prompt["token_ids"])
 
     raise ValueError(f"Cannot parse prompt of type {type(prompt)}")

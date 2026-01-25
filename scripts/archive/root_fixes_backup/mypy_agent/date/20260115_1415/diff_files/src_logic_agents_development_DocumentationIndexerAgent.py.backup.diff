@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/development/DocumentationIndexerAgent.py b/src/logic/agents/development/DocumentationIndexerAgent.py
+index 20db4bf..a4d3d03 100644
+--- a/src/logic/agents/development/DocumentationIndexerAgent.py
++++ b/src/logic/agents/development/DocumentationIndexerAgent.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.BaseAgent import BaseAgent
+ from pathlib import Path
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 
+@@ -68,4 +67,4 @@ class DocumentationIndexerAgent(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
+-    main()
+\ No newline at end of file
++    main()

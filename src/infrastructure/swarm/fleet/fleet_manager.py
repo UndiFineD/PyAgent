@@ -72,7 +72,7 @@ class FleetManager(
     FleetDiscoveryMixin,
     FleetDelegationMixin,
     FleetUpdateMixin,
-):
+):  # pylint: disable=too-many-ancestors
     """
     The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
     agents to complete complex workflows, manages resource scaling, and ensures
@@ -96,7 +96,7 @@ class FleetManager(
         self.init_update_service(interval_seconds=900)
 
         # Capability Hints for Lazy Loading (Core Agents)
-        self._capability_hints = {
+        self.capability_hints = {
             "articulate": "LinguisticAgent",
             "reason": "ReasoningAgent",
             "code": "CoderAgent",

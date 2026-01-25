@@ -1,0 +1,41 @@
+diff --git a/src/infrastructure/fleet/SchemaManager.py b/src/infrastructure/fleet/SchemaManager.py
+index a2dd9ae..97337f7 100644
+--- a/src/infrastructure/fleet/SchemaManager.py
++++ b/src/infrastructure/fleet/SchemaManager.py
+@@ -23,13 +23,18 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SchemaManager:
+     """Discovers and caches database schemas across the fleet."""
+-    
++
+     def __init__(self) -> None:
+         self.schemas: dict[str, dict[str, Any]] = {} # db_path -> schema_map
+ 
+@@ -42,7 +47,7 @@ class SchemaManager:
+         """Generates a schema summary for an agent's system prompt."""
+         if db_id not in self.schemas:
+             return "No schema information available."
+-        
++
+         summary = [f"Database: {db_id}"]
+         for table, cols in self.schemas[db_id].items():
+             summary.append(f"- Table: {table} (Columns: {', '.join(cols)})")
+@@ -50,4 +55,4 @@ class SchemaManager:
+ 
+     def list_known_databases(self) -> list[str]:
+         """Returns IDs of all registered databases."""
+-        return list(self.schemas.keys())
+\ No newline at end of file
++        return list(self.schemas.keys())

@@ -57,7 +57,7 @@ def uncomment_lines(root_dir: str) -> None:
                         with open(filepath, "w", encoding="utf-8") as f:
                             f.write(new_content)
                         print(f"Fixed: {filepath}")
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error fixing {filepath}: {e}")
 
 

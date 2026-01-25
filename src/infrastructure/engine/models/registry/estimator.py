@@ -29,6 +29,7 @@ class VRAMEstimator:
 
     @classmethod
     def estimate(cls, info: ModelInfo, ctx: int = 4096, batch: int = 1, dtype: str = "float16") -> VRAMEstimate:
+        """Estimate VRAM requirements for a model with specific parameters."""
         bpp = (
             1
             if info.quantization == QuantizationType.INT8

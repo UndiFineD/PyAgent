@@ -1,0 +1,38 @@
+diff --git a/tests/unit/test_utils/test_test_utils_UNIT.py b/tests/unit/test_utils/test_test_utils_UNIT.py
+index d5cc7e9..e850af3 100644
+--- a/tests/unit/test_utils/test_test_utils_UNIT.py
++++ b/tests/unit/test_utils/test_test_utils_UNIT.py
+@@ -2,24 +2,11 @@
+ """Test classes from test_agent_test_utils.py - core module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Never, Optional, Callable, Tuple, Set, Union
+-from unittest.case import _AssertRaisesContext
+-from unittest.mock import AsyncMock, MagicMock, Mock, patch, call, ANY
+-import time
++from typing import Any, List
+ import json
+-from datetime import datetime
+ import pytest
+-import logging
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -305,7 +292,6 @@ class TestTestDataGenerator:
+ 
+     def test_generate_json(self, utils_module: Any) -> None:
+         """Test generating JSON."""
+-        import json
+         TestDataGenerator = utils_module.TestDataGenerator
+         gen = TestDataGenerator()
+ 

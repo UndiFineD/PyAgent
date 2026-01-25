@@ -1,0 +1,12 @@
+diff --git a/tests/unit/core/test_knowledge_graph.py b/tests/unit/core/test_knowledge_graph.py
+index 268738f..4be34c2 100644
+--- a/tests/unit/core/test_knowledge_graph.py
++++ b/tests/unit/core/test_knowledge_graph.py
+@@ -2,7 +2,6 @@
+ from typing import List
+ from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+ from pathlib import Path
+-import os
+ import logging
+ 
+ def test_knowledge_graph() -> None:

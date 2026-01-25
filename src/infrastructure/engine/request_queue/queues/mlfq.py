@@ -23,8 +23,8 @@ import time
 from collections import deque
 from typing import Dict, Iterator, List, TypeVar
 
-from ..base import RequestQueue
-from ..models import QueuedRequest
+from src.infrastructure.engine.request_queue.base import RequestQueue
+from src.infrastructure.engine.request_queue.models import QueuedRequest
 
 T = TypeVar("T", bound=QueuedRequest)
 
@@ -61,7 +61,7 @@ class MLFQueue(RequestQueue):
         """Pop from highest non-empty priority level."""
         self._maybe_age_requests()
 
-        for level, queue in enumerate(self._levels):
+        for queue in self._levels:
             if queue:
                 request = queue.popleft()
                 self._total_requests -= 1
@@ -82,14 +82,14 @@ class MLFQueue(RequestQueue):
         self._levels[level].appendleft(request)
         self._total_requests += 1
 
-    def remove(self, request: T) -> bool:
+    def remove(self, value: T) -> bool:
         """Remove specific request."""
-        level = self._request_levels.get(request.request_id)
+        level = self._request_levels.get(value.request_id)
         if level is not None:
             try:
-                self._levels[level].remove(request)
-                del self._request_levels[request.request_id]
-                del self._request_runtime[request.request_id]
+                self._levels[level].remove(value)
+                del self._request_levels[value.request_id]
+                del self._request_runtime[value.request_id]
                 self._total_requests -= 1
                 return True
             except ValueError:

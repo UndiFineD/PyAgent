@@ -108,7 +108,7 @@ class ExternalImporter:
                 else:
                     logging.error(f"GitHub API Error: {response.status_code} - {response.text}")
                     break
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"GitHub API Exception: {e}")
             self.conn_mgr.update_status("github_api", False)
             # Fallback to simulated if offline or error
@@ -179,7 +179,7 @@ class ExternalImporter:
                     all_issues = response.json().get("issues", [])
                 else:
                     logging.error(f"JIRA API Error: {response.status_code} - {response.text}")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"JIRA API Exception: {e}")
 
         if not all_issues:

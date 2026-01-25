@@ -24,6 +24,7 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
+    """Supported consensus and voting methodologies."""
     MAJORITY = "majority"
     WEIGHTED = "weighted"
     RANKED_CHOICE = "ranked_choice"
@@ -34,6 +35,7 @@ class VotingMethod(Enum):
 
 
 class VoteStatus(Enum):
+    """Current state of a voting session."""
     PENDING = "pending"
     ACTIVE = "active"
     COMPLETED = "completed"
@@ -68,6 +70,7 @@ class VotingSession:
     created_at: float = field(default_factory=time.time)
 
 
+# pylint: disable=too-many-ancestors
 class VotingAgent(BaseAgent):
     """
     Agent specializing in evaluation and consensus.
@@ -107,6 +110,7 @@ class VotingAgent(BaseAgent):
         }
 
     @as_tool
+    # pylint: disable=too-many-positional-arguments
     async def cast_vote(
         self,
         session_id: str,
@@ -162,7 +166,7 @@ class VotingAgent(BaseAgent):
         analysis = await self.improve_content(prompt)
 
         llm_analysis = {"raw": analysis}
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
             match = re.search(r"(\{[\s\S]*\})", analysis)
             if match:
                 llm_analysis = json.loads(match.group(1))
@@ -253,7 +257,7 @@ class VotingAgent(BaseAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))

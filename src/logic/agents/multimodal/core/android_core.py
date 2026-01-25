@@ -86,7 +86,7 @@ class AndroidCore:
                 "error": "adb binary not found in PATH",
                 "command": cmd_str,
             }
-        except Exception as e:
+        except (AttributeError, RuntimeError, TypeError, subprocess.SubprocessError) as e:
             result = {
                 "success": False,
                 "output": "",

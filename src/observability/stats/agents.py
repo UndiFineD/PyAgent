@@ -89,7 +89,7 @@ class ReportingAgent(BaseAgent):
     """Observer agent that generates executive dashboards and reports."""
 
     def __init__(self, fleet: Any) -> None:
-        super().__init__("Reporting", "Expert report generation and dashboarding.")
+        super().__init__(agent_name="Reporting")
         self.fleet = fleet
 
     async def generate_dashboard(self) -> str:

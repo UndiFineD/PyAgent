@@ -24,6 +24,7 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
+    """Possible statuses for a webhook delivery."""
     SUCCESS = "success"
     FAILED = "failed"
     TIMEOUT = "timeout"
@@ -56,6 +57,7 @@ class StreamEvent:
     correlation_id: Optional[str] = None
 
 
+# pylint: disable=too-many-ancestors
 class StreamAgent(BaseAgent):
     """
     Agent specializing in streaming data injection and extraction.
@@ -75,7 +77,8 @@ class StreamAgent(BaseAgent):
         )
 
     @as_tool
-    async def register_webhook(
+    # pylint: disable=too-many-positional-arguments
+    async def register_external_webhook(
         self,
         name: str,
         url: str,
@@ -85,7 +88,7 @@ class StreamAgent(BaseAgent):
         max_retries: int = 3,
         schema: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """Registers a webhook endpoint for later use."""
+        """Registers an external automation webhook (n8n, etc.)."""
         config = WebhookConfig(
             url=url,
             name=name,
@@ -146,7 +149,7 @@ class StreamAgent(BaseAgent):
                 last_error = "timeout"
             except requests.ConnectionError:
                 last_error = "connection_error"
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_error = str(e)
 
             if attempt < max_retries - 1:
@@ -159,29 +162,29 @@ class StreamAgent(BaseAgent):
         """Parses complex stream data into a structured schema."""
         if extract_type == "json":
             return self._extract_json(raw_stream)
-        elif extract_type == "csv":
+        if extract_type == "csv":
             return self._extract_csv(raw_stream)
-        elif extract_type == "xml":
+        if extract_type == "xml":
             return self._extract_xml(raw_stream)
-        else:
-            # Auto-detect and use LLM for complex extraction
-            prompt = (
-                f"Extract key entities and variables from this stream data:\n\n"
-                f"{raw_stream[:2000]}\n\n"
-                "Output structured JSON with:\n"
-                "- 'entities': list of named entities found\n"
-                "- 'variables': key-value pairs of variables\n"
-                "- 'format': detected data format\n"
-                "- 'schema': inferred schema"
-            )
-            res = await self.improve_content(prompt)
 
-            with contextlib.suppress(Exception):
-                match = re.search(r"(\{[\s\S]*\})", res)
-                if match:
-                    return json.loads(match.group(1))
+        # Auto-detect and use LLM for complex extraction
+        prompt = (
+            f"Extract key entities and variables from this stream data:\n\n"
+            f"{raw_stream[:2000]}\n\n"
+            "Output structured JSON with:\n"
+            "- 'entities': list of named entities found\n"
+            "- 'variables': key-value pairs of variables\n"
+            "- 'format': detected data format\n"
+            "- 'schema': inferred schema"
+        )
+        res = await self.improve_content(prompt)
 
-            return {"raw": res, "format": "unknown"}
+        with contextlib.suppress(ValueError, TypeError, AttributeError, json.JSONDecodeError, KeyError):
+            match = re.search(r"(\{[\s\S]*\})", res)
+            if match:
+                return json.loads(match.group(1))
+
+        return {"raw": res, "format": "unknown"}
 
     @as_tool
     async def transform_data(
@@ -198,24 +201,29 @@ class StreamAgent(BaseAgent):
         # Apply filters
         if filters:
             for filter_expr in filters:
-                # Simple filter expressions like "age > 18"
-                try:
-                    # Parse filter (simplified)
-                    parts = filter_expr.split()
-                    if len(parts) == 3:
-                        field, op, val = parts
-                        field_val = result.get(field)
-                        if field_val is not None:
-                            if op == ">" and not (float(field_val) > float(val)):
-                                result["_filtered_out"] = True
-                            elif op == "<" and not (float(field_val) < float(val)):
-                                result["_filtered_out"] = True
-                            elif op == "==" and str(field_val) != val:
-                                result["_filtered_out"] = True
-                except Exception:
-                    pass
+                self._apply_filter(result, filter_expr)
 
         return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}
+
+    def _apply_filter(self, result: Dict[str, Any], filter_expr: str) -> None:
+        """Helper to apply a single filter to result - reduces nesting."""
+        try:
+            parts = filter_expr.split()
+            if len(parts) != 3:
+                return
+            fld, op, val = parts
+            field_val = result.get(fld)
+            if field_val is None:
+                return
+
+            if op == ">" and float(field_val) <= float(val):
+                result["_filtered_out"] = True
+            elif op == "<" and float(field_val) >= float(val):
+                result["_filtered_out"] = True
+            elif op == "==" and str(field_val) != val:
+                result["_filtered_out"] = True
+        except (ValueError, TypeError, AttributeError):
+            pass
 
     @as_tool
     async def buffer_event(self, event_type: str, payload: Dict[str, Any], source: str = "manual") -> Dict[str, Any]:

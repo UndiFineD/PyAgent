@@ -90,8 +90,8 @@ class SpeculativeVerifier:
     ) -> VerificationResult:
         """Standard speculative sampling verification."""
         target_probs = []
-        for i in range(len(target_logits)):
-            logits = target_logits[i] / self.temperature
+        for logits_raw in target_logits:
+            logits = logits_raw / self.temperature
             probs = np.exp(logits - np.max(logits))
             target_probs.append(probs / np.sum(probs))
 

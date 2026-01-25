@@ -1,0 +1,13 @@
+diff --git a/src/core/modules/SignalModule.py b/src/core/modules/SignalModule.py
+index d94c493..f6d4f5d 100644
+--- a/src/core/modules/SignalModule.py
++++ b/src/core/modules/SignalModule.py
+@@ -13,7 +13,7 @@
+ 
+ from __future__ import annotations
+ from datetime import datetime
+-from typing import Any, Dict, List
++from typing import Any
+ from src.core.base.modules import BaseModule
+ 
+ class SignalModule(BaseModule):

@@ -211,7 +211,7 @@ class RetryStrategy:
                 self._stats.successful_attempts += 1
                 return result
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_exception = e
                 self._stats.last_error = str(e)
 
@@ -265,7 +265,7 @@ class RetryStrategy:
                 self._stats.successful_attempts += 1
                 return result
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_exception = e
                 self._stats.last_error = str(e)
 

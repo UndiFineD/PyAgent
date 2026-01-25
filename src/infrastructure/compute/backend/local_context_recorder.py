@@ -103,13 +103,13 @@ class LocalContextRecorder(ContextRecorderInterface):
                 if isinstance(obj, (int, float, str, bool, type(None))):
                     return obj
                 return str(obj)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 return f"<unserializable {type(obj).__name__}>"
 
         try:
             if self.use_compression:
                 line = (json.dumps(record, default=_safe_serialize) + "\n").encode("utf-8")
-                with gzip.open(log_file, "ab") as f:
+                with gzip.open(log_file, 'ab') as f:
                     f.write(line)
             else:
                 line_str = json.dumps(record, default=_safe_serialize) + "\n"
@@ -119,7 +119,7 @@ class LocalContextRecorder(ContextRecorderInterface):
             # Update a centralized index for fast semantic lookup in the future (Phase 106)
             self._update_index(prompt_hash, str(log_file.name))
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to record interaction to shard {shard_id}: {e}")
 
     def record_lesson(self, tag: str, data: dict[str, Any]) -> None:
@@ -139,5 +139,5 @@ class LocalContextRecorder(ContextRecorderInterface):
             # Atomic append for the index
             with open(index_file, "a", encoding="utf-8") as f:
                 f.write(f"{prompt_hash}:{filename}\n")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to update shard index: {e}")

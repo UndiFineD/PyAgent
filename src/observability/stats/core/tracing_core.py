@@ -38,7 +38,7 @@ class TracingCore:
         if rc:
             try:
                 return rc.create_span_context(trace_id, span_id)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         return {"trace_id": trace_id, "span_id": span_id, "version": "OTel-1.1"}
 
@@ -49,7 +49,7 @@ class TracingCore:
         if rc:
             try:
                 return rc.calculate_latency_breakdown(total_time, network_time)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         thinking_time = total_time - network_time
         return {

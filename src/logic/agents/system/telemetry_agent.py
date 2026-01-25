@@ -49,13 +49,13 @@ class TelemetryAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
         self.logger = StructuredLogger(agent_id="TelemetryAgent")
 
-    def _record(self, event_type: str, data: dict[str, Any]) -> None:
+    def _archive_telemetry_event(self, event_type: str, data: dict[str, Any]) -> None:
         """Harvest telemetry logic for future self-improvement."""
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "telemetry", "timestamp": time.time()}
                 self.recorder.record_interaction("telemetry", "broadcast", event_type, json.dumps(data), meta=meta)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def log_event(self, event_type: str, source: str, data: dict[str, Any]) -> None:
@@ -73,11 +73,11 @@ class TelemetryAgent(BaseAgent):
                 # requests.post(f"{self.api_url}/telemetry/log", json=event, timeout=0.1)
                 # self.connectivity.update_status("telemetry_server", True)
                 pass
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # self.connectivity.update_status("telemetry_server", False)
                 pass
 
-        self._record(event_type, data)
+        self._archive_telemetry_event(event_type, data)
         self.log_buffer.append(event)
         if len(self.log_buffer) > 100:
             self.log_buffer.pop(0)

@@ -55,7 +55,7 @@ class RegistryOverlay:
                 data = json.load(f)
                 self.overrides = data.get("agents", {})
                 logging.info(f"RegistryOverlay: Loaded {len(self.overrides)} overrides from {self.overlay_path}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"RegistryOverlay: Failed to load overlay: {e}")
 
     def get_agent_config(self, agent_id: str, default: tuple[str, str, Any]) -> tuple[str, str, Any]:
@@ -80,5 +80,5 @@ class RegistryOverlay:
         try:
             with open(self.overlay_path, "w", encoding="utf-8") as f:
                 json.dump({"agents": self.overrides}, f, indent=4)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"RegistryOverlay: Failed to save overlay: {e}")

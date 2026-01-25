@@ -61,7 +61,7 @@ def cmd_tokens(ctx: CommandContext) -> CommandResult:
     aliases=["id", "guid"],
     category="utility",
 )
-def cmd_uuid(ctx: CommandContext) -> CommandResult:
+def cmd_uuid(_ctx: CommandContext) -> CommandResult:
     """Generate a new UUID."""
     new_uuid = str(uuid_module.uuid4())
     return CommandResult.ok(

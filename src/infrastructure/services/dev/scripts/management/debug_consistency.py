@@ -41,7 +41,7 @@ def main() -> None:
                         if "self._record(" in content and "def _record(" not in content:
                             findings.append(path)
 
-                except Exception:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     pass
 
     print("\n".join(findings))

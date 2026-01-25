@@ -23,6 +23,7 @@ __version__ = VERSION
 
 
 class DesignPhase(Enum):
+    """Phases of the architectural design process."""
     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"
     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"
     CONCEPT_GENERATION = "Concept Generation"
@@ -33,10 +34,12 @@ class DesignPhase(Enum):
 
 
 class DesignExpertise(Enum):
+    """Levels of expertise for the architectural agent."""
     NOVICE = "novice"
     EXPERT = "expert"
 
 
+# pylint: disable=too-many-ancestors
 class ArchitecturalDesignAgent(BaseAgent):
     """
     Agent specializing in hierarchical architectural design workflows.
@@ -156,21 +159,6 @@ class ArchitecturalDesignAgent(BaseAgent):
         self.design_state["spatial_concept"] = final_concept
         self.current_phase = DesignPhase.CONCEPT_GENERATION
         return {"phase": self.current_phase.value, "concept": final_concept, "critique": critique}
-
-        refinement_prompt = (
-            f"Refine the following concept: '{concept}' based on this critique: '{critique}'. "
-            "Produce the final optimized GAAD concept."
-        )
-        final_concept = await self.run_subagent("generator: refining concept", refinement_prompt)
-
-        self.design_state["concepts"].append(final_concept)
-        self.current_phase = DesignPhase.CONCEPT_GENERATION
-        return {
-            "phase": self.current_phase.value,
-            "initial_concept": concept,
-            "internal_critique": critique,
-            "final_optimized_concept": final_concept,
-        }
 
     @as_tool
     async def iterative_visual_refinement(self, visual_feedback: str) -> Dict[str, Any]:

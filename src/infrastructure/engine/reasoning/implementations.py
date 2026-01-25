@@ -59,64 +59,64 @@ class DeepSeekReasoningParser(ReasoningParser):
         position = 0
 
         for token in token_stream:
-            self._buffer += token
+            self.buffer += token
             position += len(token)
 
             while True:
-                if self._state == ParseState.IDLE:
-                    idx = self._buffer.find(self.start_marker)
+                if self.state == ParseState.IDLE:
+                    idx = self.buffer.find(self.start_marker)
                     if idx == -1:
-                        if len(self._buffer) > len(self.start_marker):
-                            emit = self._buffer[: -len(self.start_marker)]
+                        if len(self.buffer) > len(self.start_marker):
+                            emit = self.buffer[: -len(self.start_marker)]
                             content_buffer.append(emit)
-                            self._buffer = self._buffer[-len(self.start_marker) :]
+                            self.buffer = self.buffer[-len(self.start_marker) :]
                             yield (emit, False)
                         break
-                    else:
-                        if idx > 0:
-                            emit = self._buffer[:idx]
-                            content_buffer.append(emit)
-                            yield (emit, False)
-                        self._buffer = self._buffer[idx + len(self.start_marker) :]
-                        self._state = ParseState.IN_THINK
-                        current_block_start = position - len(self._buffer)
 
-                elif self._state == ParseState.IN_THINK:
-                    idx = self._buffer.find(self.end_marker)
+                    if idx > 0:
+                        emit = self.buffer[:idx]
+                        content_buffer.append(emit)
+                        yield (emit, False)
+                    self.buffer = self.buffer[idx + len(self.start_marker) :]
+                    self.state = ParseState.IN_THINK
+                    current_block_start = position - len(self.buffer)
+
+                elif self.state == ParseState.IN_THINK:
+                    idx = self.buffer.find(self.end_marker)
                     if idx == -1:
-                        if len(self._buffer) > len(self.end_marker):
-                            emit = self._buffer[: -len(self.end_marker)]
+                        if len(self.buffer) > len(self.end_marker):
+                            emit = self.buffer[: -len(self.end_marker)]
                             thinking_buffer.append(emit)
-                            self._buffer = self._buffer[-len(self.end_marker) :]
+                            self.buffer = self.buffer[-len(self.end_marker) :]
                             yield (emit, True)
                         break
-                    else:
-                        thinking_content = self._buffer[:idx]
-                        thinking_buffer.append(thinking_content)
-                        yield (thinking_content, True)
 
-                        block = ThinkingBlock(
-                            content="".join(thinking_buffer).strip(),
-                            start_position=current_block_start,
-                            end_position=position,
-                            model_format=self.reasoning_format,
-                        )
-                        self._thinking_blocks.append(block)
-                        thinking_buffer = []
+                    thinking_content = self.buffer[:idx]
+                    thinking_buffer.append(thinking_content)
+                    yield (thinking_content, True)
 
-                        self._buffer = self._buffer[idx + len(self.end_marker) :]
-                        self._state = ParseState.IDLE
+                    block = ThinkingBlock(
+                        content="".join(thinking_buffer).strip(),
+                        start_position=current_block_start,
+                        end_position=position,
+                        model_format=self.reasoning_format,
+                    )
+                    self.thinking_blocks.append(block)
+                    thinking_buffer = []
 
-        if self._buffer:
-            if self._state == ParseState.IN_THINK:
-                thinking_buffer.append(self._buffer)
+                    self.buffer = self.buffer[idx + len(self.end_marker) :]
+                    self.state = ParseState.IDLE
+
+        if self.buffer:
+            if self.state == ParseState.IN_THINK:
+                thinking_buffer.append(self.buffer)
             else:
-                content_buffer.append(self._buffer)
-                yield (self._buffer, False)
+                content_buffer.append(self.buffer)
+                yield (self.buffer, False)
 
         return ParseResult(
             content="".join(content_buffer).strip(),
-            thinking_blocks=self._thinking_blocks,
+            thinking_blocks=self.thinking_blocks,
             raw_text="".join(content_buffer) + "".join(thinking_buffer),
             tokens_processed=position,
         )
@@ -163,7 +163,7 @@ class QwenReasoningParser(ReasoningParser):
                 continue
             yield (token, is_thinking)
 
-        return ParseResult(content="", thinking_blocks=deepseek._thinking_blocks, raw_text="")
+        return ParseResult(content="", thinking_blocks=deepseek.thinking_blocks, raw_text="")
 
 
 class GenericReasoningParser(ReasoningParser):
@@ -196,27 +196,27 @@ class GenericReasoningParser(ReasoningParser):
         thinking = []
         position = 0
         for token in token_stream:
-            self._buffer += token
+            self.buffer += token
             position += len(token)
-            if self._state == ParseState.IDLE:
-                if self.start_marker in self._buffer:
-                    idx = self._buffer.find(self.start_marker)
+            if self.state == ParseState.IDLE:
+                if self.start_marker in self.buffer:
+                    idx = self.buffer.find(self.start_marker)
                     if idx > 0:
-                        emit = self._buffer[:idx]
+                        emit = self.buffer[:idx]
                         content.append(emit)
                         yield (emit, False)
-                    self._buffer = self._buffer[idx + len(self.start_marker) :]
-                    self._state = ParseState.IN_THINK
+                    self.buffer = self.buffer[idx + len(self.start_marker) :]
+                    self.state = ParseState.IN_THINK
                     self._current_block_start = position
-                elif len(self._buffer) > len(self.start_marker) * 2:
-                    emit = self._buffer[: -len(self.start_marker)]
+                elif len(self.buffer) > len(self.start_marker) * 2:
+                    emit = self.buffer[: -len(self.start_marker)]
                     content.append(emit)
                     yield (emit, False)
-                    self._buffer = self._buffer[-len(self.start_marker) :]
-            elif self._state == ParseState.IN_THINK:
-                if self.end_marker in self._buffer:
-                    idx = self._buffer.find(self.end_marker)
-                    think_content = self._buffer[:idx]
+                    self.buffer = self.buffer[-len(self.start_marker) :]
+            elif self.state == ParseState.IN_THINK:
+                if self.end_marker in self.buffer:
+                    idx = self.buffer.find(self.end_marker)
+                    think_content = self.buffer[:idx]
                     thinking.append(think_content)
                     yield (think_content, True)
                     block = ThinkingBlock(
@@ -225,30 +225,32 @@ class GenericReasoningParser(ReasoningParser):
                         end_position=position,
                         model_format=self.reasoning_format,
                     )
-                    self._thinking_blocks.append(block)
+                    self.thinking_blocks.append(block)
                     thinking = []
-                    self._buffer = self._buffer[idx + len(self.end_marker) :]
-                    self._state = ParseState.IDLE
-                elif len(self._buffer) > len(self.end_marker) * 2:
-                    emit = self._buffer[: -len(self.end_marker)]
+                    self.buffer = self.buffer[idx + len(self.end_marker) :]
+                    self.state = ParseState.IDLE
+                elif len(self.buffer) > len(self.end_marker) * 2:
+                    emit = self.buffer[: -len(self.end_marker)]
                     thinking.append(emit)
                     yield (emit, True)
-                    self._buffer = self._buffer[-len(self.end_marker) :]
-        if self._buffer:
-            if self._state == ParseState.IN_THINK:
-                thinking.append(self._buffer)
+                    self.buffer = self.buffer[-len(self.end_marker) :]
+        if self.buffer:
+            if self.state == ParseState.IN_THINK:
+                thinking.append(self.buffer)
             else:
-                content.append(self._buffer)
-                yield (self._buffer, False)
+                content.append(self.buffer)
+                yield (self.buffer, False)
         return ParseResult(
             content="".join(content).strip(),
-            thinking_blocks=self._thinking_blocks,
+            thinking_blocks=self.thinking_blocks,
             raw_text="".join(content) + "".join(thinking),
             tokens_processed=position,
         )
 
 
 class OpenAIToolParser(ToolParser):
+    """Parser for OpenAI-style tool calls."""
+
     def __init__(self, strict: bool = False):
         super().__init__(ToolCallFormat.OPENAI, strict)
         self._function_pattern = re.compile(r'"function_call"\s*:\s*\{[^}]+\}', re.DOTALL)
@@ -293,6 +295,8 @@ class OpenAIToolParser(ToolParser):
 
 
 class HermesToolParser(ToolParser):
+    """Parser for Hermes-style tool calls."""
+
     def __init__(self, strict: bool = False):
         super().__init__(ToolCallFormat.HERMES, strict)
         self._pattern = re.compile(r"<tool_call>\s*(.*?)\s*</tool_call>", re.DOTALL)

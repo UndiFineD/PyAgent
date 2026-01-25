@@ -37,7 +37,8 @@ class TimeCore:
             try:
                 ts = rc.get_utc_timestamp_rust()  # pylint: disable=no-member
                 return datetime.fromtimestamp(ts, tz=timezone.utc)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return datetime.now(timezone.utc)
 
@@ -47,7 +48,8 @@ class TimeCore:
         if rc and hasattr(rc, "get_utc_timestamp_rust"):
             try:
                 return float(rc.get_utc_timestamp_rust())  # pylint: disable=no-member
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return time.time()
 

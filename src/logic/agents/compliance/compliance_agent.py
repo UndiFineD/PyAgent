@@ -33,6 +33,7 @@ except ImportError:
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class ComplianceAgent(BaseAgent):
     """Shell agent for continuous compliance and regulatory auditing.
     Coordinates fleet-wide scans and reports violations to the security layer.

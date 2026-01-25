@@ -69,7 +69,7 @@ class TelemetryManager:
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
 
@@ -140,7 +140,7 @@ async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
             )
         )
         return {"status": "success", "result": result}
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         return {"status": "error", "message": str(e)}
 
 

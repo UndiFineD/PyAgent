@@ -30,7 +30,7 @@ class OrchestratorResultsMixin:
 
                 logging.info("Self-Improvement: Optimizing relational metadata indices...")
                 self.fleet.sql_metadata.optimize_db()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Post-cycle evaluation or optimization failed: {e}")
         return lessons
 

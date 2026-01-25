@@ -1,0 +1,13 @@
+diff --git a/src/observability/improvements/EffortEstimator.py b/src/observability/improvements/EffortEstimator.py
+index 2eb2ff2..cae0914 100644
+--- a/src/observability/improvements/EffortEstimator.py
++++ b/src/observability/improvements/EffortEstimator.py
+@@ -26,7 +26,7 @@ from .EffortEstimate import EffortEstimate
+ from .EffortEstimateResult import EffortEstimateResult
+ from .Improvement import Improvement
+ from .ImprovementCategory import ImprovementCategory
+-from typing import Any, Dict, List
++from typing import Any
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/dev/test_utils/__init__.py b/src/infrastructure/dev/test_utils/__init__.py
+index 58da76b..05a04c9 100644
+--- a/src/infrastructure/dev/test_utils/__init__.py
++++ b/src/infrastructure/dev/test_utils/__init__.py
+@@ -80,4 +80,4 @@ from .TestSnapshot import TestSnapshot as TestSnapshot
+ from .TestStatus import TestStatus as TestStatus
+ from .TestTimer import TestTimer as TestTimer
+ 
+-__version__ = VERSION
+\ No newline at end of file
++__version__ = VERSION

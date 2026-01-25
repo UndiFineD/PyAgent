@@ -45,7 +45,7 @@ def run_diagnostic():
             print(f"  - {name}")
         if len(agents._discovered_configs) > 10:
             print(f"  ... and {len(agents._discovered_configs) - 10} more.")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"Error loading AgentRegistry: {e}")
 
     # Check Orchestrators
@@ -60,7 +60,7 @@ def run_diagnostic():
         print(f"Discovered {len(orchestrators._configs)} orchestrator configurations.")
         for name in list(orchestrators._configs.keys()):
             print(f"  - {name}")
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"Error loading OrchestratorRegistry: {e}")
 
 

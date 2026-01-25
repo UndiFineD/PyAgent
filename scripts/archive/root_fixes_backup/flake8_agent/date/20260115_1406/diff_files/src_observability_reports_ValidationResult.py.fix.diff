@@ -1,0 +1,32 @@
+diff --git a/src/observability/reports/ValidationResult.py b/src/observability/reports/ValidationResult.py
+index 82973f1..7224c49 100644
+--- a/src/observability/reports/ValidationResult.py
++++ b/src/observability/reports/ValidationResult.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ValidationResult:
+     """Result of report validation.
+@@ -40,4 +49,4 @@ class ValidationResult:
+     valid: bool
+     errors: list[str] = field(default_factory=list)  # type: ignore[assignment]
+     warnings: list[str] = field(default_factory=list)  # type: ignore[assignment]
+-    checksum: str = ""
+\ No newline at end of file
++    checksum: str = ""

@@ -58,6 +58,7 @@ class ArchitectureDetector:
 
     @classmethod
     def detect_from_config(cls, config: Dict[str, Any]) -> ModelArchitecture:
+        """Detect model architecture from configuration dictionary."""
         architectures = config.get("architectures", [])
         for arch_name in architectures:
             if arch_name in cls.CONFIG_KEYS:
@@ -70,6 +71,7 @@ class ArchitectureDetector:
 
     @classmethod
     def detect_from_name(cls, model_name: str) -> ModelArchitecture:
+        """Detect model architecture from model name string."""
         n_lower = model_name.lower()
         for p, arch in cls.ARCHITECTURE_PATTERNS.items():
             if p in n_lower:
@@ -78,6 +80,7 @@ class ArchitectureDetector:
 
     @classmethod
     def detect_capabilities(cls, arch: ModelArchitecture, config: Optional[Dict[str, Any]] = None) -> ModelCapability:
+        """Detect model capabilities based on architecture and config."""
         vision_archs = {
             ModelArchitecture.LLAVA,
             ModelArchitecture.LLAVA_NEXT,

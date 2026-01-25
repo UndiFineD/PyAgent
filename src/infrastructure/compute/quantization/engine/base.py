@@ -41,11 +41,11 @@ class Quantizer(ABC):
         self,
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
-        pass
+        """Converts a floating-point weight matrix into a quantized representation."""
 
     @abstractmethod
     def dequantize(
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-        pass
+        """Restores a float matrix from the quantized representation."""

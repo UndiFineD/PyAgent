@@ -1,0 +1,42 @@
+diff --git a/src/logic/agents/swarm/core/AuctionCore.py b/src/logic/agents/swarm/core/AuctionCore.py
+index a54c836..37f5842 100644
+--- a/src/logic/agents/swarm/core/AuctionCore.py
++++ b/src/logic/agents/swarm/core/AuctionCore.py
+@@ -6,7 +6,13 @@ Implements the VCG auction model for truthful bidding.
+ 
+ from typing import List, Dict, Any
+ 
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None
++
+ class AuctionCore:
++    """Core logic for VCG-based resource auctions in the swarm economy."""
+     @staticmethod
+     def calculate_vcg_auction(bids: list[dict[str, Any]], slots: int) -> list[dict[str, Any]]:
+         """
+@@ -15,6 +21,11 @@ class AuctionCore:
+         Price paid by winner i = The negative externality they impose on others.
+         (Simplified: Winner i pays the bid of the first loser).
+         """
++        if rc:
++            try:
++                return rc.calculate_vcg_auction(bids, slots)
++            except Exception:
++                pass
+         if not bids:
+             return []
+             
+@@ -36,5 +47,10 @@ class AuctionCore:
+         """
+         Checks if a request exceeds the per-agent quota (default 20%).
+         """
++        if rc:
++            try:
++                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)
++            except Exception:
++                pass
+         quota = total_available * quota_percent
+         return agent_vram_request <= quota
+\ No newline at end of file

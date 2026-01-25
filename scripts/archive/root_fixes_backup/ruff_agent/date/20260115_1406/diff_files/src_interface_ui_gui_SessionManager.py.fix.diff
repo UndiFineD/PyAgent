@@ -1,0 +1,13 @@
+diff --git a/src/interface/ui/gui/SessionManager.py b/src/interface/ui/gui/SessionManager.py
+index a64ad82..3dd3e1b 100644
+--- a/src/interface/ui/gui/SessionManager.py
++++ b/src/interface/ui/gui/SessionManager.py
+@@ -27,7 +27,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import json
+-from typing import Any, Optional
++from typing import Any
+ from tkinter import filedialog, messagebox
+ 
+ __version__ = VERSION

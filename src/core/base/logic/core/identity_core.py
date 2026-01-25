@@ -19,8 +19,8 @@ Core logic for Agent Identity.
 
 from __future__ import annotations
 
-from src.core.base.common.identity_core import \
-    IdentityCore as StandardIdentityCore
+from src.core.base.common.identity_core import (
+    IdentityCore as StandardIdentityCore, AgentIdentity)
 
 
 class IdentityCore(StandardIdentityCore):

@@ -22,7 +22,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .base_core import BaseCore
 from .models import AgentHealthCheck, HealthStatus
@@ -38,10 +38,11 @@ class HealthCore(BaseCore):
     Authoritative engine for health checks across the swarm.
     """
 
-    def __init__(self, workspace_root: Optional[Path] = None) -> None:
-        super().__init__()
-        self.workspace_root = workspace_root or Path.cwd()
+    def __init__(self, workspace_root: Optional[Union[str, Path]] = None) -> None:
+        super().__init__(repo_root=workspace_root)
+        self.workspace_root = self.repo_root
         self.results: Dict[str, AgentHealthCheck] = {}
+        self._metrics = {"total_requests": 0, "success_count": 0, "failure_count": 0}
 
     def check_git(self) -> AgentHealthCheck:
         """Check if git is installed and responsive."""
@@ -79,8 +80,49 @@ class HealthCore(BaseCore):
         now = time.time()
         return [name for name, last_seen in agent_heartbeats.items() if (now - last_seen) > 30.0]
 
+    def record_request(self, agent_id: str, success: bool) -> None:
+        """Record a request for health tracking."""
+        self._metrics["total_requests"] += 1
+        if success:
+            self._metrics["success_count"] += 1
+        else:
+            self._metrics["failure_count"] += 1
+
+        if agent_id not in self.results:
+            self.results[agent_id] = AgentHealthCheck(
+                agent_name=agent_id,
+                status=HealthStatus.HEALTHY if success else HealthStatus.UNHEALTHY,
+                details={"success_count": 0, "failure_count": 0},
+            )
+
+        details = self.results[agent_id].details
+        if success:
+            details["success_count"] += 1
+        else:
+            details["failure_count"] += 1
+
+    def get_metrics(self) -> Dict[str, Any]:
+        """Retrieve aggregated health metrics."""
+        total = self._metrics["total_requests"]
+        return {
+            "total_requests": total,
+            "success_count": self._metrics["success_count"],
+            "failure_count": self._metrics["failure_count"],
+            "error_rate": self._metrics["failure_count"] / total if total > 0 else 0.0,
+        }
+
     def run_all(self) -> Dict[str, AgentHealthCheck]:
         """Execute all registers health checks."""
         self.results["python"] = self.check_python()
         self.results["git"] = self.check_git()
+
+        # Phase 42 Integration: Also check for core agent scripts if they exist
+        for agent in ["coder", "researcher", "architect"]:
+            agent_file = self.workspace_root / "src" / f"agent_{agent}.py"
+            status = HealthStatus.HEALTHY if agent_file.exists() else HealthStatus.UNHEALTHY
+            self.results[agent] = AgentHealthCheck(
+                agent_name=agent,
+                status=status,
+                details={"path": str(agent_file)}
+            )
         return self.results

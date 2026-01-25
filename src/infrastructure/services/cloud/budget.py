@@ -277,5 +277,5 @@ class BudgetManager:
         if self._alert_callback:
             try:
                 self._alert_callback(alert)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Alert callback failed: {e}")

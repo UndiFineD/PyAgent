@@ -1,0 +1,25 @@
+diff --git a/src/infrastructure/dev/test_utils/ResourceHandle.py b/src/infrastructure/dev/test_utils/ResourceHandle.py
+index e2e1d47..e92f3e4 100644
+--- a/src/infrastructure/dev/test_utils/ResourceHandle.py
++++ b/src/infrastructure/dev/test_utils/ResourceHandle.py
+@@ -26,8 +26,18 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass(frozen=True)
+ class ResourceHandle:
+     """A handle representing an acquired resource from ResourcePool."""
+ 
+-    name: str
+\ No newline at end of file
++    name: str

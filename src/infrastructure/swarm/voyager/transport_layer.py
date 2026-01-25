@@ -64,7 +64,7 @@ class VoyagerTransport:
                 except (zmq.ContextTerminated, zmq.ZMQError, asyncio.CancelledError):
                     self.running = False
                     break
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     if self.running:
                         logger.error(f"Voyager: Transport server error: {e}")
                     await asyncio.sleep(1)
@@ -92,10 +92,10 @@ class VoyagerTransport:
             if await dealer.poll(timeout):
                 _, resp_bytes = await dealer.recv_multipart()
                 return msgpack.unpackb(resp_bytes, raw=False)
-            else:
-                logger.warning(f"Voyager: Timeout waiting for response from {target}")
-                return None
-        except Exception as e:
+
+            logger.warning(f"Voyager: Timeout waiting for response from {target}")
+            return None
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Voyager: Failed to send to {target}: {e}")
             return None
         finally:

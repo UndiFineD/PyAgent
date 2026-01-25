@@ -1,0 +1,235 @@
+diff --git a/src/core/base/managers/SystemManagers.py b/src/core/base/managers/SystemManagers.py
+index 05cf631..60ed581 100644
+--- a/src/core/base/managers/SystemManagers.py
++++ b/src/core/base/managers/SystemManagers.py
+@@ -29,7 +29,7 @@ import time
+ import subprocess
+ from dataclasses import dataclass, field
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from collections.abc import Callable
+ from src.core.base.models import (
+     FilePriority, FilePriorityConfig, AgentEvent, ConfigProfile, HealthStatus,
+@@ -44,9 +44,14 @@ except ImportError:
+ 
+ __version__ = VERSION
+ 
+-# Phase 108: Multi-Agent Logic Harvesting. 
++# Phase 108: Multi-Agent Logic Harvesting.
+ # Intelligence operations are recorded via record_interaction in Agent classes.
+ 
++
++
++
++
++
+ class FilePriorityManager:
+     """Manager for file priority and request ordering."""
+     def __init__(self, config: FilePriorityConfig | None = None) -> None:
+@@ -55,10 +60,25 @@ class FilePriorityManager:
+             ".py": FilePriority.HIGH, ".js": FilePriority.HIGH, ".ts": FilePriority.HIGH,
+             ".md": FilePriority.NORMAL, ".json": FilePriority.LOW, ".txt": FilePriority.LOW,
+         }
++
++
++
++
++
+     def set_pattern_priority(self, pattern: str, priority: FilePriority) -> None:
+         self.config.path_patterns[pattern] = priority
++
++
++
++
++
+     def set_extension_priority(self, extension: str, priority: FilePriority) -> None:
+         self.config.extension_priorities[extension] = priority
++
++
++
++
++
+     def get_priority(self, path: Path) -> FilePriority:
+         import fnmatch
+         path_str = str(path)
+@@ -71,15 +91,30 @@ class FilePriorityManager:
+         if ext in self._default_extensions:
+             return self._default_extensions[ext]
+         return self.config.default_priority
++
++
++
++
++
+     def sort_by_priority(self, paths: list[Path]) -> list[Path]:
+         return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)
++
++
++
++
++
+     def filter_by_priority(self, paths: list[Path], min_priority: FilePriority = FilePriority.LOW) -> list[Path]:
+         return [p for p in paths if self.get_priority(p).value >= min_priority.value]
+ 
++
++
++
++
++
+ @dataclass
+ class ResponseCache:
+     """
+-    Caches responses based on prompts. 
++    Caches responses based on prompts.
+     Supports Prompt Caching (Phase 128) by identifying prefix reusable contexts.
+     """
+     cache_dir: Path
+@@ -95,14 +130,14 @@ class ResponseCache:
+     def set(self, prompt: str, response: str) -> None:
+         key = self._get_cache_key(prompt)
+         self.cache_data[key] = response
+-        
++
+         # Support prefix caching: Index the first 500 chars (approx. context window prefix)
+         if len(prompt) > 500:
+             prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
+             self.prefix_map[prefix_key] = key
+ 
+         (self.cache_dir / f"{key}.json").write_text(json.dumps({
+-            "prompt": prompt, 
++            "prompt": prompt,
+             "response": response,
+             "timestamp": "2026-01-11"
+         }))
+@@ -111,20 +146,25 @@ class ResponseCache:
+         key = self._get_cache_key(prompt)
+         if key in self.cache_data:
+             return self.cache_data[key]
+-        
++
+         # Check prefix map for partial hits (simulation of provider-side prompt caching)
+         if len(prompt) > 500:
+             prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
+             if prefix_key in self.prefix_map:
+                 logging.info("ResponseCache: Prompt Prefix hit - internal cache redirection triggered.")
+                 # We still want the full key for safety, but this flags reuse potential
+-        
++
+         cache_file = self.cache_dir / f"{key}.json"
+         if cache_file.exists():
+             data = json.loads(cache_file.read_text())
+             self.cache_data[key] = data["response"]
+             return data["response"]
+         return None
++
++
++
++
++
+     def invalidate(self, prompt: str) -> None:
+         key = self._get_cache_key(prompt)
+         self.cache_data.pop(key, None)
+@@ -132,31 +172,61 @@ class ResponseCache:
+         if cache_file.exists():
+             cache_file.unlink()
+ 
++
++
++
++
++
+ @dataclass
+ class StatePersistence:
+     """Persists agent state to disk."""
+     state_file: Path
+     backup: bool = False
+     backup_count: int = 0
++
++
++
++
++
+     def save(self, state: dict[str, Any]) -> None:
+         if self.backup and self.state_file.exists():
+             self.state_file.rename(self.state_file.parent / f"{self.state_file.stem}.{self.backup_count}.bak")
+             self.backup_count += 1
+         self.state_file.parent.mkdir(parents=True, exist_ok=True)
+         self.state_file.write_text(json.dumps(state))
++
++
++
++
++
+     def load(self, default: dict[str, Any] | None = None) -> dict[str, Any]:
+         if self.state_file.exists():
+             return json.loads(self.state_file.read_text())
+         return default or {}
+ 
++
++
++
++
++
+ @dataclass
+ class EventManager:
+     """Manages agent events."""
+     handlers: dict[AgentEvent, list[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
++
++
++
++
++
+     def on(self, event: AgentEvent, handler: Callable[..., None]) -> None:
+         if event not in self.handlers:
+             self.handlers[event] = []
+         self.handlers[event].append(handler)
++
++
++
++
++
+     def emit(self, event: AgentEvent, data: Any = None) -> None:
+         if event in self.handlers:
+             for handler in self.handlers[event]:
+@@ -165,6 +235,11 @@ class EventManager:
+                 else:
+                     handler()
+ 
++
++
++
++
++
+ class HealthChecker:
+     """Performs health checks on agent components."""
+ 
+@@ -271,9 +346,14 @@ class HealthChecker:
+             self.run_all_checks()
+         return all(r.status == HealthStatus.HEALTHY for r in self.results.values())
+ 
++
++
++
++
++
+ class ProfileManager:
+     """Manages configuration profiles and execution profiles."""
+-    
++
+     def __init__(self) -> None:
+         self._profiles: dict[str, ExecutionProfile] = {}
+         self.profiles: dict[str, ConfigProfile] = {} # Stub compatibility
+@@ -342,10 +422,10 @@ class ProfileManager:
+         active_p = self.active
+         if not active_p or not hasattr(active_p, 'settings'):
+             return default
+-        
++
+         if key in active_p.settings:
+             return active_p.settings[key]
+-            
++
+         if hasattr(active_p, 'parent') and active_p.parent and active_p.parent in self.profiles:
+             parent = self.profiles[active_p.parent]
+             if key in parent.settings:

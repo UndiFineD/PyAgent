@@ -73,7 +73,7 @@ class LoRAAdapter:
                 self._load_time_ms,
             )
             return True
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._status = AdapterStatus.ERROR
             return False
 
@@ -89,7 +89,7 @@ class LoRAAdapter:
         from safetensors import safe_open
 
         w = LoRAWeights()
-        with safe_open(str(path), framework="numpy") as f:
+        with safe_open(str(path, encoding='utf-8'), framework="numpy") as f:
             for key in f.keys():
                 m = self._extract_module(key)
                 if ".lora_A." in key.lower():

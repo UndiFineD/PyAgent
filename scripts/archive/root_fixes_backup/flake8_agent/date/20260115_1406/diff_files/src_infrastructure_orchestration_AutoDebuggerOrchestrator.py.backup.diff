@@ -1,0 +1,118 @@
+diff --git a/src/infrastructure/orchestration/AutoDebuggerOrchestrator.py b/src/infrastructure/orchestration/AutoDebuggerOrchestrator.py
+index 347c630..0a968e7 100644
+--- a/src/infrastructure/orchestration/AutoDebuggerOrchestrator.py
++++ b/src/infrastructure/orchestration/AutoDebuggerOrchestrator.py
+@@ -29,13 +29,18 @@ import logging
+ import os
+ import sys
+ import subprocess
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.logic.agents.security.ImmuneSystemAgent import ImmuneSystemAgent
+ from src.logic.agents.development.CoderAgent import CoderAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class AutoDebuggerOrchestrator:
+     """Orchestrates recursive self-debugging and code repair."""
+ 
+@@ -45,15 +50,15 @@ class AutoDebuggerOrchestrator:
+         # Note: We use the actual source paths if we can find them, otherwise relative
+         immune_path = os.path.join(self.workspace_root, "src/logic/agents/security/ImmuneSystemAgent.py")
+         coder_path = os.path.join(self.workspace_root, "src/logic/agents/development/CoderAgent.py")
+-        
++
+         self.immune_system = ImmuneSystemAgent(immune_path)
+         self.coder = CoderAgent(coder_path)
+         self.repair_history: list[dict[str, Any]] = []
+ 
+     @as_tool
+-    def validate_and_repair(self, file_path: str) -> dict[str, Any]:
++    async def validate_and_repair(self, file_path: str) -> dict[str, Any]:
+         """Validates a file and attempts automatic repair if it fails syntax check.
+-        
++
+         Args:
+             file_path: The absolute path to the file to check.
+         """
+@@ -61,7 +66,7 @@ class AutoDebuggerOrchestrator:
+             return {"status": "error", "message": f"File not found: {file_path}"}
+ 
+         logging.info(f"AutoDebugger: Validating {file_path}")
+-        
++
+         # 1. Syntax Check using python -m py_compile
+         try:
+             subprocess.run([sys.executable, "-m", "py_compile", file_path], check=True, capture_output=True, text=True)
+@@ -69,7 +74,7 @@ class AutoDebuggerOrchestrator:
+         except subprocess.CalledProcessError as e:
+             error_msg = e.stderr or e.stdout
+             logging.warning(f"AutoDebugger: Syntax error detected in {file_path}: {error_msg}")
+-            
++
+             # 2. Safety Scan with ImmuneSystemAgent
+             threat_scan = self.immune_system.scan_for_injections(error_msg)
+             logging.debug(f"AutoDebugger: Safety scan result: {threat_scan}")
+@@ -92,13 +97,13 @@ class AutoDebuggerOrchestrator:
+                 f"```\n{error_msg}\n```\n"
+                 f"Fix the syntax error while preserving the original logic. Content:\n\n{content}"
+             )
+-            
++
+             # Use CoderAgent to perform the fix
+             # coder.improve_content(prompt) handles the actual update and self-validation
+             from pathlib import Path
+             self.coder.file_path = Path(file_path) # Target the coder to the broken file
+-            self.coder.improve_content(repair_prompt)
+-            
++            await self.coder.improve_content(repair_prompt)
++
+             repair_record = {
+                 "file": file_path,
+                 "error": error_msg,
+@@ -106,7 +111,7 @@ class AutoDebuggerOrchestrator:
+                 "timestamp": "now" # In real implementation we'd use datetime
+             }
+             self.repair_history.append(repair_record)
+-            
++
+             return {
+                 "status": "repaired",
+                 "message": f"AutoDebugger: Successfully repaired {file_path}",
+@@ -122,21 +127,26 @@ class AutoDebuggerOrchestrator:
+             for file in files:
+                 if file.endswith(".py"):
+                     python_files.append(os.path.join(root, file))
+-        
++
+         results = []
+         for pf in python_files:
+             res = self.validate_and_repair(pf)
+             if res["status"] != "success":
+                 results.append(f"{pf}: {res['status']} - {res['message']}")
+-        
++
+         if not results:
+             return "Fleet self-audit complete. No issues found."
+         return "Fleet self-audit complete. Issues found:\n" + "\n".join(results)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     logging.basicConfig(level=logging.INFO)
+     orchestrator = AutoDebuggerOrchestrator()
+     if len(sys.argv) > 1:
+         print(orchestrator.validate_and_repair(sys.argv[1]))
+     else:
+-        print(orchestrator.run_fleet_self_audit())
+\ No newline at end of file
++        print(orchestrator.run_fleet_self_audit())

@@ -1,0 +1,5 @@
+{
+    "module_path": "plugins.test_sandbox",
+    "class_name": "testsandbox",
+    "permissions": ["write:temp", "read:src"]
+}

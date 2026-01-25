@@ -1,0 +1,26 @@
+diff --git a/src/infrastructure/dev/test_utils/TestResult.py b/src/infrastructure/dev/test_utils/TestResult.py
+index 58ef5d9..865538d 100644
+--- a/src/infrastructure/dev/test_utils/TestResult.py
++++ b/src/infrastructure/dev/test_utils/TestResult.py
+@@ -24,14 +24,12 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TestStatus import TestStatus
+ from dataclasses import dataclass, field
+-from typing import Optional
+ import time
+ 
+ __version__ = VERSION
+ 
+ @dataclass
+ class TestResult:
+-    __test__ = False
+     """Result of a test execution.
+ 
+     Attributes:
+@@ -48,4 +46,5 @@ class TestResult:
+     duration_ms: float = 0.0
+     error_message: str | None = None
+     assertions_count: int = 0
++    __test__ = False
+     timestamp: float = field(default_factory=time.time)
+\ No newline at end of file

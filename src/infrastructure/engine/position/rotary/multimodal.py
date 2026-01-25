@@ -23,6 +23,8 @@ from .config import RoPEConfig
 
 if HAS_TORCH:
     import torch
+else:
+    torch = None  # pylint: disable=invalid-name
 
 
 class MRotaryEmbedding(RotaryEmbeddingBase):

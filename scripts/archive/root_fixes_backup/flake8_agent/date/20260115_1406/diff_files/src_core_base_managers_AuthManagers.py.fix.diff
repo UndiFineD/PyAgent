@@ -1,0 +1,48 @@
+diff --git a/src/core/base/managers/AuthManagers.py b/src/core/base/managers/AuthManagers.py
+index e901a1e..c570b01 100644
+--- a/src/core/base/managers/AuthManagers.py
++++ b/src/core/base/managers/AuthManagers.py
+@@ -22,11 +22,20 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ from dataclasses import dataclass, field
+-from typing import Dict, Optional
+ from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class AuthenticationManager:
+     """Manager for authentication methods."""
+ 
+@@ -77,11 +86,21 @@ class AuthenticationManager:
+         if self.config.method == AuthMethod.BEARER_TOKEN:
+             return bool(self.config.token)
+         if self.config.method == AuthMethod.BASIC_AUTH:
++
++
++
++
++
+             return bool(self.config.username and self.config.password)
+         if self.config.method == AuthMethod.OAUTH2:
+             return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
+         return True
+ 
++
++
++
++
++
+ @dataclass
+ class AuthManager:
+     """Manages authentication."""

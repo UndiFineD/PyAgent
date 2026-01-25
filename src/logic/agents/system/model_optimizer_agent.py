@@ -49,16 +49,17 @@ class ModelOptimizerAgent(BaseAgent):
         self,
         model_size_gb: float,
         available_vram_gb: float,
-        hardware_features: list[str] = [],
+        hardware_features: list[str] | None = None,
     ) -> dict[str, Any]:
         """Calculates the best optimization strategy based on hardware constraints."""
+        features = hardware_features or []
         if self.recorder:
             self.recorder.record_lesson(
                 "model_optimization_request",
                 {
                     "size": model_size_gb,
                     "vram": available_vram_gb,
-                    "hw": hardware_features,
+                    "hw": features,
                 },
             )
 
@@ -180,7 +181,7 @@ output = model.generate(
 print(model.tokenizer.decode(output.sequences[0]))
 """
 
-    def improve_content(self, task_description: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Suggests an optimization plan for a specific model deployment task."""
         # Simple parser for "model size" and "vram" in text if provided
         # For now, return a generic recommendation
@@ -204,5 +205,9 @@ print(model.tokenizer.decode(output.sequences[0]))
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(ModelOptimizerAgent)
+    main = create_main_function(
+        ModelOptimizerAgent,
+        description="Optimizer Agent for model inference and quantization.",
+        context_help="Manage model loading strategies and inference performance."
+    )
     main()

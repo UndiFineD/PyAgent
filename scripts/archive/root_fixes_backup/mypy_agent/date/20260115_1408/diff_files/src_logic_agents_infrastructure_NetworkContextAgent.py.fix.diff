@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/infrastructure/NetworkContextAgent.py b/src/logic/agents/infrastructure/NetworkContextAgent.py
+index 6fac93d..ab5e82d 100644
+--- a/src/logic/agents/infrastructure/NetworkContextAgent.py
++++ b/src/logic/agents/infrastructure/NetworkContextAgent.py
+@@ -117,4 +117,4 @@ class NetworkContextAgent(BaseAgent):
+                 node_type = meta.get("type", "unknown")
+                 report.append(f"- **{node}** ({node_type})")
+                 
+-        return "\n".join(report)
+\ No newline at end of file
++        return "\n".join(report)

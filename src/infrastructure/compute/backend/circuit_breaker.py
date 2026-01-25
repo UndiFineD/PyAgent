@@ -61,25 +61,29 @@ class CircuitBreaker:
         )
 
     def is_open(self) -> bool:
+        """Checks if the circuit is currently open."""
         if self.impl.state == "OPEN":
             # Check if recovery timeout has passed (Lazy evaluation)
             if self.impl.last_failure_time:
                 import time
 
-                current_timeout = self.impl._get_current_timeout()
+                current_timeout = self.impl.get_current_timeout()
                 if time.time() - self.impl.last_failure_time > current_timeout:
                     return False
         return self.impl.state == "OPEN"
 
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
+        """Executes the function if the circuit is closed."""
         return self.impl.call(func, *args, **kwargs)
 
     def on_success(self) -> None:
+        """Records a successful call."""
         self.impl.on_success()
         self.state = self.impl.state
         self.failure_count = self.impl.failure_count
 
     def on_failure(self) -> None:
+        """Records a failed call."""
         self.impl.on_failure()
         self.state = self.impl.state
         self.failure_count = self.impl.failure_count

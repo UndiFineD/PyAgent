@@ -1,6 +1,6 @@
 import unittest
 import os
-from src.logic.agents.specialized.quantumscaling_coder_agent import quantumscalingCoderAgent
+from src.logic.agents.specialized.quantumscalingCoderAgent import quantumscalingCoderAgent
 from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 

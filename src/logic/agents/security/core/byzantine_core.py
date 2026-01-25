@@ -39,7 +39,7 @@ class ByzantineCore:
         if rc:
             try:  # type: ignore[attr-defined]
                 return rc.calculate_agreement_score(votes)  # type: ignore[attr-defined]
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
         if not votes:
             return 0.0
@@ -65,7 +65,7 @@ class ByzantineCore:
         if rc:
             try:
                 return rc.select_committee(agents_reliability, min_size)  # type: ignore[attr-defined]
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
         eligible = [(name, score) for name, score in agents_reliability.items() if score > 0.7]
         # Sort by reliability descending
@@ -92,13 +92,11 @@ class ByzantineCore:
         if rc:
             try:
                 return rc.get_required_quorum(change_type)  # type: ignore[attr-defined]
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
         if change_type in ["infrastructure", "security", "core"]:
             return 0.8
-        elif change_type in ["documentation", "examples", "comments"]:
-            return 0.5
-        return 0.67
+        return 0.5 if change_type in ["documentation", "examples", "comments"] else 0.67
 
     def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:
         """Returns IDs of agents whose votes deviated from consensus."""

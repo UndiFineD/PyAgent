@@ -42,12 +42,12 @@ class DraftModelWrapper(ABC):
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
     ) -> DraftOutput:
         """Run draft model forward pass."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_hidden_size(self) -> int:
         """Get hidden state size."""
-        pass
+        raise NotImplementedError
 
 
 class SimpleDraftModel(DraftModelWrapper):

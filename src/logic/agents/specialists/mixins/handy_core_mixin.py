@@ -17,15 +17,16 @@ if TYPE_CHECKING:
 class HandyCoreMixin:
     """Mixin for core recording and evaluation logic in HandyAgent."""
 
-    def _record(self: HandyAgent, tool_name: str, input: Any, output: str) -> None:
+    def _record(self: HandyAgent, tool_name: str, input_data: Any, output: str) -> None:
         """Archiving shell interaction for fleet intelligence."""
         if self.recorder:
             try:
-                meta = {"phase": 108, "type": "shell", "timestamp": time.time()}
-                self.recorder.record_interaction("handy", "bash", str(input), output, meta=meta)
-            except Exception:
+                meta = {"phase": 108, "type": "shell", "timestamp": time.time(), "tool": tool_name}
+                self.recorder.record_interaction("handy", "bash", str(input_data), output, meta=meta)
+            except (AttributeError, RuntimeError, TypeError):
                 pass
 
     def improve_content(self: HandyAgent, prompt: str) -> str:
         """Evaluates a terminal-oriented request."""
+        _ = prompt  # Mark as used
         return "Handy Agent active. Ready for shell operations."

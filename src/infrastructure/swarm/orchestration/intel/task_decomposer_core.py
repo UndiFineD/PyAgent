@@ -56,7 +56,7 @@ class TaskDecomposerCore:
             try:
                 # Use Rust implementation for high-speed heuristic planning
                 return rc.generate_heuristic_plan(request)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         request_lower = request.lower()

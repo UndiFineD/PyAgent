@@ -93,11 +93,11 @@ class ShardingOrchestrator:
         for a in agents:
             features.append([self._agent_vram.get(a, 0), agent_interaction_scores[a]])
 
-        X = np.array(features)
-        X_scaled = StandardScaler().fit_transform(X)
+        input_data = np.array(features)
+        scaled_data = StandardScaler().fit_transform(input_data)
 
         # DBSCAN: eps determines distance, min_samples determines cluster density
-        db = DBSCAN(eps=0.5, min_samples=2).fit(X_scaled)
+        db = DBSCAN(eps=0.5, min_samples=2).fit(scaled_data)
         labels = db.labels_
 
         new_mapping: dict[str, list[str]] = {}
@@ -127,12 +127,13 @@ class ShardingOrchestrator:
     def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
         """Saves shard mappings to the workspace configuration."""
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.shard_mapping_path, "w") as f:
+        with open(self.shard_mapping_path, 'w', encoding='utf-8') as f:
             json.dump(mapping, f, indent=4)
 
     def load_mapping(self) -> dict[str, list[str]]:
+        """Loads shard mappings from the workspace configuration."""
         if self.shard_mapping_path.exists():
-            with open(self.shard_mapping_path) as f:
+            with open(self.shard_mapping_path, encoding='utf-8') as f:
                 return json.load(f)
         return {}
 

@@ -19,76 +19,49 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
-from .core_enums import (AgentEvent, AuthMethod, FilePriority,
+from .core_enums import (AuthMethod, FilePriority,
                          SerializationFormat)
+from ._factories import (
+    _empty_agent_event_handlers, _empty_dict_str_any,
+    _empty_dict_str_callable_any_any, _empty_dict_str_configprofile,
+    _empty_dict_str_filepriority, _empty_dict_str_float,
+    _empty_dict_str_health_checks, _empty_dict_str_int,
+    _empty_dict_str_modelconfig, _empty_dict_str_quality_criteria,
+    _empty_dict_str_str, _empty_list_dict_str_any, _empty_list_float,
+    _empty_list_int, _empty_list_str, _empty_routes_list)
+
+__all__ = [
+    "CacheEntry",
+    "AuthConfig",
+    "ConfigProfile",
+    "SerializationConfig",
+    "FilePriorityConfig",
+    "ValidationRule",
+    "ExecutionCondition",
+    "DiffResult",
+    "ModelConfig",
+    "EventHook",
+    "_empty_agent_event_handlers",
+    "_empty_dict_str_any",
+    "_empty_dict_str_callable_any_any",
+    "_empty_dict_str_configprofile",
+    "_empty_dict_str_filepriority",
+    "_empty_dict_str_float",
+    "_empty_dict_str_health_checks",
+    "_empty_dict_str_int",
+    "_empty_dict_str_modelconfig",
+    "_empty_dict_str_quality_criteria",
+    "_empty_dict_str_str",
+    "_empty_list_dict_str_any",
+    "_empty_list_float",
+    "_empty_list_int",
+    "_empty_list_str",
+    "_empty_routes_list",
+]
 
 # ========== Utility Functions ==========
-
-
-def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
-    return {}
-
-
-def _empty_list_str() -> list[str]:
-    return []
-
-
-def _empty_list_int() -> list[int]:
-    return []
-
-
-def _empty_list_float() -> list[float]:
-    return []
-
-
-def _empty_list_dict_str_any() -> list[dict[str, Any]]:
-    return []
-
-
-def _empty_dict_str_float() -> dict[str, float]:
-    return {}
-
-
-def _empty_dict_str_any() -> dict[str, Any]:
-    return {}
-
-
-def _empty_dict_str_int() -> dict[str, int]:
-    return {}
-
-
-def _empty_dict_str_str() -> dict[str, str]:
-    return {}
-
-
-def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
-    return {}
-
-
-def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
-    return {}
-
-
-def _empty_dict_str_health_checks() -> dict[str, Callable[[], dict[str, Any]]]:
-    return {}
-
-
-def _empty_dict_str_configprofile() -> dict[str, ConfigProfile]:
-    return {}
-
-
-def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:
-    return []
-
-
-def _empty_dict_str_filepriority() -> dict[str, FilePriority]:
-    return {}
-
-
-def _empty_dict_str_modelconfig() -> dict[str, ModelConfig]:
-    return {}
 
 
 # ========== Dataclasses ==========
@@ -159,12 +132,17 @@ class ValidationRule:
     validator: Callable[[str, Path], bool] | None = None
     required: bool = False
     file_pattern: str = ""  # Alias for backward compatibility
+    error_message: str = "" # Alias for backward compatibility
 
     def __post_init__(self) -> None:
         if not self.pattern and self.file_pattern:
             self.pattern = self.file_pattern
         if not self.file_pattern and self.pattern:
             self.file_pattern = self.pattern
+        if not self.message and self.error_message:
+            self.message = self.error_message
+        if not self.error_message and self.message:
+            self.error_message = self.message
 
 
 @dataclass(slots=True)
@@ -195,9 +173,10 @@ class ConfigProfile:
 class DiffResult:
     """Result of a diff operation."""
 
-    file_path: Path
-    original_content: str
-    modified_content: str
+    file_path: Optional[Path | str] = None
+    original_content: str = ""
+    modified_content: str = ""
+    diff_text: str = ""
     diff_lines: list[str] = field(default_factory=_empty_list_str)
     additions: int = 0
     deletions: int = 0

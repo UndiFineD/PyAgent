@@ -34,7 +34,7 @@ except ImportError:
     torch = None
 
 try:
-    import numpy as np
+    import numpy as np  # pylint: disable=unused-import
 
     NUMPY_AVAILABLE = True
 except ImportError:

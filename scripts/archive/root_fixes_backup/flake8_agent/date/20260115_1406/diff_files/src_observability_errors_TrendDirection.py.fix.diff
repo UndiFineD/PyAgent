@@ -1,0 +1,26 @@
+diff --git a/src/observability/errors/TrendDirection.py b/src/observability/errors/TrendDirection.py
+index 503b446..8607cb0 100644
+--- a/src/observability/errors/TrendDirection.py
++++ b/src/observability/errors/TrendDirection.py
+@@ -26,9 +26,19 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class TrendDirection(Enum):
+     """Trend direction indicators."""
+     INCREASING = "increasing"
+     DECREASING = "decreasing"
+     STABLE = "stable"
+-    VOLATILE = "volatile"
+\ No newline at end of file
++    VOLATILE = "volatile"

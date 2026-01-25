@@ -83,7 +83,7 @@ class ConnectionManager:
         for connection in self.active_connections:
             try:
                 await connection.send_json(payload)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Connection might be dead
                 pass
 
@@ -103,7 +103,7 @@ async def get_health() -> dict[str, Any]:
 
     try:
         return health_checker.check()
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
 
 
@@ -132,7 +132,7 @@ async def get_logs(limit: int = 100) -> list[str]:
         with open(AGENT_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
             return [line.strip() for line in lines[-limit:]]
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
 
 
@@ -150,7 +150,7 @@ async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
             for line in lines[-limit:]:
                 if line.strip():
                     thoughts.append(json.loads(line))
-    except (json.JSONDecodeError, Exception) as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         raise HTTPException(status_code=500, detail=f"Error parsing thoughts: {str(e)}")
 
     return thoughts[::-1]  # Newest first
@@ -197,7 +197,7 @@ async def websocket_telemetry(websocket: WebSocket) -> None:
             await manager.broadcast({"event": "telemetry_echo", "data": data})
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         manager.disconnect(websocket)
         logging.error(f"WebSocket error: {e}")
 

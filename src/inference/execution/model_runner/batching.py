@@ -81,7 +81,7 @@ class BatchedAsyncRunner:
                 if not future.done():
                     future.set_result(output)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             for future in futures:
                 if not future.done():
                     error_output = ModelOutput(request_id="error", error=str(e))

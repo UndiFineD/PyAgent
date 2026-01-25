@@ -1,0 +1,31 @@
+diff --git a/src/logic/agents/system/core/EntropyCore.py b/src/logic/agents/system/core/EntropyCore.py
+index 8ad8c78..6f44e1e 100644
+--- a/src/logic/agents/system/core/EntropyCore.py
++++ b/src/logic/agents/system/core/EntropyCore.py
+@@ -8,12 +8,19 @@ import os
+ import ast
+ 
+ class EntropyCore:
++    """Core logic for calculating code complexity and entropy."""
+     @staticmethod
+     def calculate_cyclomatic_complexity(code: str) -> int:
+         """
+         Estimates cyclomatic complexity based on AST nodes.
+         CC = E - N + 2P (approximate using decision points)
+         """
++        try:
++            import rust_core
++            return rust_core.calculate_cyclomatic_complexity(code)  # type: ignore[attr-defined]
++        except (ImportError, AttributeError):
++            pass
++
+         try:
+             tree = ast.parse(code)
+         except SyntaxError:
+@@ -64,4 +71,4 @@ class EntropyCore:
+             "avg_complexity": sum(m['complexity'] for m in all_metrics) / count,
+             "max_complexity": max(m['complexity'] for m in all_metrics),
+             "file_count": count
+-        }
+\ No newline at end of file
++        }

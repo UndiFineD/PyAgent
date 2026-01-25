@@ -57,26 +57,31 @@ class ResilientStub:
         logging.error(f"STUB ACTIVE: Component '{name}' failed to load. Reason: {error}")
 
     def __getattr__(self, name: str) -> Callable:
-        def _stub_method(*args: Any, **kwargs: Any) -> str:
+        def _stub_method(*_args: Any, **_kwargs: Any) -> str:
             msg = f"Cannot call '{name}' on component '{self._name}': it failed to load. Error: {self._error}"
             logging.error(msg)
             return f"ERROR: {msg}"
 
         return _stub_method
 
-    def __call__(self, *args: Any, **kwargs: Any) -> str:
+    def __call__(self, *_args: Any, **_kwargs: Any) -> str:
+        """Fallback for direct invocation."""
         msg = f"Cannot invoke component '{self._name}': it failed to load. Error: {self._error}"
         logging.error(msg)
         return f"ERROR: {msg}"
 
     def get_status(self) -> dict[str, Any]:
+        """Returns the failure status of the component."""
         return {"status": "failed_to_load", "error": self._error, "name": self._name}
 
-    def execute_task(self, task: str) -> str:
+    def execute_task(self, _task: str) -> str:
+        """Stub for task execution."""
         return f"ERROR: Component '{self._name}' failed to load. {self._error}"
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, _prompt: str) -> str:
+        """Stub for content improvement."""
         return f"ERROR: Component '{self._name}' failed to load. {self._error}"
 
-    def calculate_metrics(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
+    def calculate_metrics(self, *_args: Any, **_kwargs: Any) -> dict[str, Any]:
+        """Stub for metrics calculation."""
         return {}

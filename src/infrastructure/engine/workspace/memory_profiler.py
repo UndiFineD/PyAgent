@@ -50,11 +50,10 @@ class MemoryProfiler:
                 stats = rc.memory_profile_rust()
                 usage = stats.get("current_usage", 0)
                 frag = stats.get("fragmentation", 0.0)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug(f"Rust profiling failed: {e}")
 
-        if usage > self.peak_memory:
-            self.peak_memory = usage
+        self.peak_memory = max(self.peak_memory, usage)
 
         snapshot = {
             "timestamp": time.time() - self.start_time,

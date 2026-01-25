@@ -1,0 +1,23 @@
+diff --git a/src/infrastructure/backend/StripWhitespaceTransformer.py b/src/infrastructure/backend/StripWhitespaceTransformer.py
+index 43b72fc..53a7cc6 100644
+--- a/src/infrastructure/backend/StripWhitespaceTransformer.py
++++ b/src/infrastructure/backend/StripWhitespaceTransformer.py
+@@ -26,6 +26,11 @@ from .ResponseTransformerBase import ResponseTransformerBase
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class StripWhitespaceTransformer(ResponseTransformerBase):
+     """Transformer that strips whitespace."""
+ 
+@@ -35,4 +40,4 @@ class StripWhitespaceTransformer(ResponseTransformerBase):
+ 
+     def get_name(self) -> str:
+         """Get transformer name."""
+-        return "strip_whitespace"
+\ No newline at end of file
++        return "strip_whitespace"

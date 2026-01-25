@@ -195,7 +195,7 @@ class TokenGenerationBenchmark:
                 streaming=False,
             )
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             duration = time.perf_counter() - start_time
             return TokenGenMetrics(
                 test_name=test_name,
@@ -262,7 +262,7 @@ class TokenGenerationBenchmark:
                 streaming=True,
             )
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             duration = time.perf_counter() - start_time
             return TokenGenMetrics(
                 test_name=test_name,
@@ -322,7 +322,7 @@ class TokenGenerationBenchmark:
                 batch_size=len(prompts),
             )
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             duration = time.perf_counter() - start_time
             return TokenGenMetrics(
                 test_name=test_name,
@@ -365,7 +365,7 @@ class TokenGenerationBenchmark:
                 )
                 results.append(metric)
                 self._print_metric(metric)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 print(f"❌ Streaming test failed: {e}")
 
         self.results.extend(results)
@@ -524,7 +524,7 @@ class TokenGenerationBenchmark:
             "results": [r.to_dict() for r in self.results],
         }
 
-        with open(output_path, "w") as f:
+        with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(results_dict, f, indent=2)
 
         print(f"\n💾 Results saved to: {output_path}")
@@ -544,7 +544,7 @@ class TokenGenerationBenchmark:
             print(f"⚠️  Baseline file not found: {baseline_file}")
             return {}
 
-        with open(baseline_file) as f:
+        with open(baseline_file, encoding='utf-8') as f:
             baseline_data = json.load(f)
 
         baseline_results = [TokenGenMetrics(**r) for r in baseline_data.get("results", [])]
@@ -694,7 +694,7 @@ async def test_save_and_load_results(benchmark, test_agent, tmp_path):
     assert saved_path.exists()
 
     # Load and verify
-    with open(saved_path) as f:
+    with open(saved_path, encoding='utf-8') as f:
         data = json.load(f)
 
     assert "results" in data
@@ -727,7 +727,7 @@ if __name__ == "__main__":
         else:
             print("❌ PyAgent not available. Cannot run benchmarks.")
             sys.exit(1)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"❌ Failed to create agent: {e}")
         sys.exit(1)
 
@@ -753,7 +753,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n⚠️  Benchmark interrupted by user.")
         sys.exit(130)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"\n❌ Benchmark failed: {e}")
         import traceback
         traceback.print_exc()

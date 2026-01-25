@@ -26,6 +26,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class UiArchitectAgent(BaseAgent):
     """
     Phase 54: UI Architect Agent.

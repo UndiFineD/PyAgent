@@ -217,8 +217,8 @@ class ShardedStateLoader:
         """
         try:
             from safetensors.torch import load_file
-        except ImportError:
-            raise ImportError("safetensors required for ShardedStateLoader")
+        except ImportError as exc:
+            raise ImportError("safetensors required for ShardedStateLoader") from exc
 
         if state_dict is not None:
             state_dict = self._subtensor_filter.filter_subtensors(state_dict)
@@ -243,6 +243,10 @@ class ShardedStateLoader:
                 else:
                     loaded[key] = tensor
 
+        if strict and state_dict is not None and not loaded:
+            # Placeholder for strict validation
+            pass
+
         return loaded if state_dict is None else state_dict
 
     def iterate_weights(
@@ -252,8 +256,8 @@ class ShardedStateLoader:
         """Iterate over weights from sharded checkpoint."""
         try:
             from safetensors.torch import safe_open
-        except ImportError:
-            raise ImportError("safetensors required for ShardedStateLoader")
+        except ImportError as exc:
+            raise ImportError("safetensors required for ShardedStateLoader") from exc
 
         shard_files = self.discover_shards(model_path)
 

@@ -20,6 +20,7 @@ __version__ = VERSION
 
 
 class RegressionType(Enum):
+    """Supported regression model types."""
     LINEAR = "linear"
     POLYNOMIAL = "polynomial"
     EXPONENTIAL = "exponential"
@@ -38,6 +39,7 @@ class RegressionResult:
     residuals: List[float]
 
 
+# pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
     """
     Agent specializing in predicting continuous values and analyzing relationships
@@ -347,8 +349,7 @@ class RegressionAgent(BaseAgent):
 
     def _moving_average(self, history: List[float], steps: int, window: int = 3) -> Dict[str, Any]:
         """Moving average prediction."""
-        if len(history) < window:
-            window = len(history)
+        window = min(window, len(history))
 
         last_avg = sum(history[-window:]) / window
         predictions = [last_avg] * steps

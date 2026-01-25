@@ -1,0 +1,27 @@
+diff --git a/src/observability/errors/ErrorBudgetManager.py b/src/observability/errors/ErrorBudgetManager.py
+index ea30aa1..32f1b1b 100644
+--- a/src/observability/errors/ErrorBudgetManager.py
++++ b/src/observability/errors/ErrorBudgetManager.py
+@@ -24,10 +24,14 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ErrorBudget import ErrorBudget
+ from datetime import datetime, timedelta
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ErrorBudgetManager:
+     """Manages error budgets for SLO tracking.
+ 
+@@ -115,4 +119,4 @@ class ErrorBudgetManager:
+         if name not in self.budgets:
+             return True
+         budget = self.budgets[name]
+-        return budget.consumed >= budget.total_budget
+\ No newline at end of file
++        return budget.consumed >= budget.total_budget

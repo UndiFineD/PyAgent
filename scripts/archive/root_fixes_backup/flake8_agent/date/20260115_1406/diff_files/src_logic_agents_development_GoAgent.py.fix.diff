@@ -1,0 +1,47 @@
+diff --git a/src/logic/agents/development/GoAgent.py b/src/logic/agents/development/GoAgent.py
+index 56117f7..1fda63b 100644
+--- a/src/logic/agents/development/GoAgent.py
++++ b/src/logic/agents/development/GoAgent.py
+@@ -27,9 +27,19 @@ from src.core.base.utilities import create_main_function
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class GoAgent(CoderAgent):
+     """Agent for Go code improvement and auditing."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._language = "go"
+@@ -38,11 +48,21 @@ class GoAgent(CoderAgent):
+             "Focus on concurrency patterns (goroutines, channels), "
+             "effective error handling, interface design, and idiomatic Go project structure. "
+             "Follow 'Effective Go' principles."
++
++
++
++
++
+         )
+ 
+     def _get_default_content(self) -> str:
+         return "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, Go!\")\n}\n"
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(GoAgent, "Go Agent", "Path to Go file (.go)")
+     main()

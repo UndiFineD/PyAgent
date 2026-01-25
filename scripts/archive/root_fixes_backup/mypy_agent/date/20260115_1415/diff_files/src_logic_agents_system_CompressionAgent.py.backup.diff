@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/system/CompressionAgent.py b/src/logic/agents/system/CompressionAgent.py
+index 89e8b3c..b06c903 100644
+--- a/src/logic/agents/system/CompressionAgent.py
++++ b/src/logic/agents/system/CompressionAgent.py
+@@ -26,7 +26,6 @@ and minimizing token usage for long-running sub-swarm dialogues.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -74,4 +73,4 @@ class CompressionAgent(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(CompressionAgent, "Compression Agent", "Token efficiency and summarization optimizer")
+-    main()
+\ No newline at end of file
++    main()

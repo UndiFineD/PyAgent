@@ -1,0 +1,27 @@
+diff --git a/src/logic/agents/cognitive/context/utils/BranchComparer.py b/src/logic/agents/cognitive/context/utils/BranchComparer.py
+index 6aad414..7bff91a 100644
+--- a/src/logic/agents/cognitive/context/utils/BranchComparer.py
++++ b/src/logic/agents/cognitive/context/utils/BranchComparer.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.BranchComparison import BranchComparison
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class BranchComparer:
+     """Compares context across git branches.
+ 
+@@ -96,4 +100,4 @@ class BranchComparer:
+             modified_files=modified
+         )
+         self._last_comparison = comparison
+-        return comparison
+\ No newline at end of file
++        return comparison

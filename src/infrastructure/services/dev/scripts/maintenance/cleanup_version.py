@@ -52,7 +52,7 @@ for r_dir in root_dirs:
                             f.writelines(new_lines)
                         print(f"Cleaned up VERSION in {file_path}")
                         count += 1
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error processing {file_path}: {e}")
 
 print(f"Finished. Total files cleaned: {count}")

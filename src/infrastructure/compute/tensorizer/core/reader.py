@@ -46,12 +46,14 @@ class LoadProgress:
 
     @property
     def tensor_progress(self) -> float:
+        """Returns the fraction of total tensors loaded (0.0 to 1.0)."""
         if self.total_tensors == 0:
             return 0.0
         return self.loaded_tensors / self.total_tensors
 
     @property
     def byte_progress(self) -> float:
+        """Returns the fraction of total bytes loaded (0.0 to 1.0)."""
         if self.total_bytes == 0:
             return 0.0
         return self.loaded_bytes / self.total_bytes
@@ -88,7 +90,7 @@ class TensorizerReader:
 
     def open(self) -> None:
         """Open file for reading."""
-        self._file = open(self.path, "rb")
+        self._file = open(self.path, 'rb')
 
         if self.config.use_mmap:
             self._mmap = mmap.mmap(

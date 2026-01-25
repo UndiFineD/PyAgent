@@ -58,6 +58,7 @@ SAFE_MATH_NAMESPACE = {
 }
 
 
+# pylint: disable=too-many-ancestors
 class MathAgent(BaseAgent):
     """
     Agent specializing in symbolic math, numerical computation, and logical proofs.
@@ -93,11 +94,11 @@ class MathAgent(BaseAgent):
                 pass
 
             # Python safe eval fallback
-            result = eval(sanitized, SAFE_MATH_NAMESPACE)
+            result = eval(sanitized, SAFE_MATH_NAMESPACE)  # pylint: disable=eval-used
             self._record_calculation(expression, result, "python")
             return {"expression": expression, "result": result, "status": "success", "engine": "python"}
 
-        except Exception as e:
+        except (ArithmeticError, ValueError, SyntaxError, TypeError, RuntimeError) as e:
             logging.debug(f"MathAgent: Direct evaluation failed: {e}")
             # Fallback to LLM reasoning for complex/symbolic math
             return await self._llm_solve(expression)
@@ -165,16 +166,19 @@ class MathAgent(BaseAgent):
                 for m in matrices[1:]:
                     result = np.dot(result, np.array(m))
                 return {"operation": operation, "result": result.tolist(), "status": "success"}
-            elif operation == "determinant" and matrices:
+
+            if operation == "determinant" and matrices:
                 det = np.linalg.det(np.array(matrices[0]))
                 return {"operation": operation, "result": det, "status": "success"}
-            elif operation == "inverse" and matrices:
+
+            if operation == "inverse" and matrices:
                 inv = np.linalg.inv(np.array(matrices[0]))
                 return {"operation": operation, "result": inv.tolist(), "status": "success"}
-            elif operation == "eigenvalues" and matrices:
+
+            if operation == "eigenvalues" and matrices:
                 eigenvalues = np.linalg.eigvals(np.array(matrices[0]))
                 return {"operation": operation, "result": eigenvalues.tolist(), "status": "success"}
-        except Exception as e:
+        except (ImportError, ValueError, TypeError, AttributeError, RuntimeError) as e:
             return {"operation": operation, "error": str(e), "status": "failed"}
 
         return {"operation": operation, "status": "unsupported"}

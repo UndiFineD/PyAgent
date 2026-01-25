@@ -130,7 +130,7 @@ class SyncHTTPMixin:
             total_size = int(r.headers.get("content-length", 0)) or None
             downloaded = 0
 
-            with save_path.open("wb") as f:
+            with save_path.open("wb", encoding='utf-8') as f:
                 for chunk in r.iter_content(chunk_size=chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)

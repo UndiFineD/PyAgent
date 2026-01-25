@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/AccessibilityIssue.py b/src/core/base/types/AccessibilityIssue.py
+index ce4f7fe..9f3d386 100644
+--- a/src/core/base/types/AccessibilityIssue.py
++++ b/src/core/base/types/AccessibilityIssue.py
+@@ -26,10 +26,19 @@ from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
+ from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
+ from src.core.base.types.WCAGLevel import WCAGLevel
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class AccessibilityIssue:
+     """An accessibility issue found in UI code.
+@@ -53,4 +62,4 @@ class AccessibilityIssue:
+     element: str
+     line_number: int | None = None
+     suggested_fix: str | None = None
+-    auto_fixable: bool = False
+\ No newline at end of file
++    auto_fixable: bool = False

@@ -54,7 +54,7 @@ class IPCMultiModalCache(MultiModalCache):
         try:
             if not self._index_path.parent.exists():
                 self._index_path.parent.mkdir(parents=True, exist_ok=True)
-            self._index_path.write_text("{}")
+            self._index_path.write_text("{}", encoding="utf-8")
         except (IOError, OSError):
             # Fallback if /tmp is not writable
             pass

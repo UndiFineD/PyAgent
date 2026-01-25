@@ -24,6 +24,7 @@ from src.logic.agents.development.coder_agent import CoderAgent
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class SvgAgent(CoderAgent):
     """Agent for generating and optimizing 2D SVG vector graphics."""
 

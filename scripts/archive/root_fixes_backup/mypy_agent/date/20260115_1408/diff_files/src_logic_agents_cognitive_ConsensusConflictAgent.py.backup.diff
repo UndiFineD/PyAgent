@@ -1,0 +1,38 @@
+diff --git a/src/logic/agents/cognitive/ConsensusConflictAgent.py b/src/logic/agents/cognitive/ConsensusConflictAgent.py
+index 8f73d14..5c021fe 100644
+--- a/src/logic/agents/cognitive/ConsensusConflictAgent.py
++++ b/src/logic/agents/cognitive/ConsensusConflictAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -31,7 +31,7 @@ class ConsensusConflictAgent:
+     """
+     def __init__(self, workspace_path: str) -> None:
+         self.workspace_path = workspace_path
+-        self.active_disputes = {} # dispute_id -> {options, votes, status}
++        self.active_disputes: dict[Any, Any] = {} # dispute_id -> {options, votes, status}
+ 
+     def initiate_dispute(self, dispute_id: str, context: str, options: list[str]) -> dict[str, Any]:
+         """Starts a new consensus round for a disagreement."""
+@@ -69,7 +69,7 @@ class ConsensusConflictAgent:
+         if not dispute["votes"]:
+             return {"status": "error", "message": "No votes cast"}
+             
+-        vote_counts = {}
++        vote_counts: dict[Any, Any] = {}
+         for vote in dispute["votes"].values():
+             choice = vote["choice"]
+             vote_counts[choice] = vote_counts.get(choice, 0) + 1
+@@ -92,4 +92,4 @@ class ConsensusConflictAgent:
+             "total_disputes": len(self.active_disputes),
+             "resolved_disputes": len([d for d in self.active_disputes.values() if d["status"] == "resolved"]),
+             "pending_disputes": len([d for d in self.active_disputes.values() if d["status"] == "voting"])
+-        }
+\ No newline at end of file
++        }

@@ -38,11 +38,19 @@ class TemplateCore(BaseCore):
     def __init__(self):
         """Initialize the template registry."""
         super().__init__()
-        self.templates: Dict[str, str] = {}
+        self.templates: Dict[str, str] = {
+            "python_full": "Python code template: [code]",
+            "improvement": "Suggested improvement: [description]",
+            "report": "Analysis report for [file]: [content]"
+        }
 
     def register_template(self, name: str, content: str) -> None:
         """Adds a new template to the registry."""
         self.templates[name] = content
+
+    def get_template(self, name: str) -> str | None:
+        """Retrieves a template by name."""
+        return self.templates.get(name)
 
     def apply_template(self, name: str, context: Dict[str, Any]) -> str:
         """Applies context variables to a template."""

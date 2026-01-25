@@ -1,0 +1,45 @@
+diff --git a/tests/unit/test_utils/test_test_utils_PERFORMANCE.py b/tests/unit/test_utils/test_test_utils_PERFORMANCE.py
+index eb942e4..c2dbf89 100644
+--- a/tests/unit/test_utils/test_test_utils_PERFORMANCE.py
++++ b/tests/unit/test_utils/test_test_utils_PERFORMANCE.py
+@@ -2,23 +2,10 @@
+ """Test classes from test_agent_test_utils.py - performance module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
++from typing import Any, Dict
+ import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -66,7 +53,6 @@ class TestPerformanceTracker:
+ 
+     def test_track_execution(self, utils_module: Any) -> None:
+         """Test tracking execution time."""
+-        import time
+         PerformanceTracker = utils_module.PerformanceTracker
+         tracker = PerformanceTracker()
+ 
+@@ -104,7 +90,6 @@ class TestTestTimingAndBenchmarkingUtilities:
+     def test_timer_measures_duration(self, utils_module: Any) -> None:
+         """Test timer measures execution duration."""
+         TestTimer = utils_module.TestTimer
+-        import time
+ 
+         timer = TestTimer()
+         timer.start()

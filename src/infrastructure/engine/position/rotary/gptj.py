@@ -43,7 +43,7 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
         """Compute inverse frequencies."""
         if HAS_TORCH:
             return 1.0 / (self.base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
-        elif HAS_NUMPY:
+        if HAS_NUMPY:
             return 1.0 / (self.base ** (np.arange(0, self.rotary_dim, 2, dtype=np.float32) / self.rotary_dim))
         raise RuntimeError("No numerical backend available")
 
@@ -56,7 +56,7 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
             cos_cache = torch.cos(freqs).repeat_interleave(2, dim=-1)
             sin_cache = torch.sin(freqs).repeat_interleave(2, dim=-1)
             return cos_cache, sin_cache
-        elif HAS_NUMPY:
+        if HAS_NUMPY:
             t = np.arange(max_len, dtype=np.float32)
             freqs = np.outer(t, self.inv_freq)
             cos_cache = np.repeat(np.cos(freqs), 2, axis=-1)

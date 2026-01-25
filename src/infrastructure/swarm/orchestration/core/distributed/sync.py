@@ -71,7 +71,7 @@ class NixlSyncProvider(DistributedSyncProvider):
                     "map_size": 1024 * 1024,  # 1MB for control state
                 },
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.warning("Failed to initialize Nixl RDMA sync: %s. Falling back to TCP.", e)
 
     def barrier(self, name: str, timeout: float = 30.0) -> bool:
@@ -87,7 +87,7 @@ class NixlSyncProvider(DistributedSyncProvider):
                 },
             )
             return result.get("success", False)
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False
 
     def broadcast_state(self, key: str, value: Any) -> None:

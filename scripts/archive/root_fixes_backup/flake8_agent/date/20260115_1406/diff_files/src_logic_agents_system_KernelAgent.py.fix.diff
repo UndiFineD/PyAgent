@@ -1,0 +1,82 @@
+diff --git a/src/logic/agents/system/KernelAgent.py b/src/logic/agents/system/KernelAgent.py
+index 9fc84bd..960224c 100644
+--- a/src/logic/agents/system/KernelAgent.py
++++ b/src/logic/agents/system/KernelAgent.py
+@@ -30,7 +30,6 @@ import json
+ import shutil
+ import platform
+ import logging
+-import subprocess
+ import asyncio
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+@@ -38,9 +37,19 @@ from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class KernelAgent(BaseAgent):
+     """Interacts directly with the host OS to manage environments and perform diagnostics."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self.security_guard = SecurityGuardAgent(file_path + ".audit")
+@@ -64,7 +73,7 @@ class KernelAgent(BaseAgent):
+                 "env_vars": list(os.environ.keys())[:10]  # First 10 for brevity
+             }
+             return json.dumps(info, indent=2)
+-            
++
+         return await asyncio.to_thread(get_info)
+ 
+     @as_tool
+@@ -82,7 +91,7 @@ class KernelAgent(BaseAgent):
+         High-risk commands require 'force=True' as a HITL gate.
+         """
+         logging.warning(f"KernelAgent auditing shell command: {command}")
+-        
++
+         # Security Audit (HITL Gate)
+         risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
+         if risk_level == "HIGH" and not force:
+@@ -99,25 +108,25 @@ class KernelAgent(BaseAgent):
+                 stdout=asyncio.subprocess.PIPE,
+                 stderr=asyncio.subprocess.PIPE
+             )
+-            
++
+             try:
+                 stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=30)
+                 output = f"STDOUT:\n{stdout.decode()}\n"
+                 if stderr:
+                     output += f"STDERR:\n{stderr.decode()}\n"
+-                
++
+                 # Intelligence Harvesting (Phase 108)
+                 if hasattr(self, 'recorder') and self.recorder:
+                     self.recorder.record_lesson("kernel_shell_exec", {"command": command, "exit_code": proc.returncode})
+-                    
++
+                 return output
+-            except asyncio.TimeoutExpired:
++            except asyncio.TimeoutExpired:  # type: ignore[attr-defined]
+                 proc.kill()
+                 await proc.wait()
+                 if hasattr(self, 'recorder') and self.recorder:
+                     self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
+                 return "Error: Command timed out after 30 seconds."
+-                
++
+         except Exception as e:
+             if hasattr(self, 'recorder') and self.recorder:
+                 self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})

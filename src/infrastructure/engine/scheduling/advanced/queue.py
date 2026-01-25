@@ -58,7 +58,7 @@ class PriorityRequestQueue:
         """Add request to queue."""
         with self._lock:
             self._sequence += 1
-            request._sequence = self._sequence
+            request.sequence = self._sequence
 
             priority_score = self._get_priority_score(request)
             deadline = request.deadline if request.deadline else float("inf")

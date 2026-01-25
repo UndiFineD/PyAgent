@@ -366,7 +366,7 @@ class EnvConfig:
             if isinstance(attr, EnvVar):
                 try:
                     result[attr.name] = attr.get()
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     result[attr.name] = f"<error: {e}>"
         return result
 
@@ -388,7 +388,7 @@ class EnvConfig:
                         if isinstance(getattr(cls, n, None), EnvVar) and getattr(cls, n).name == meta.name
                     ][0],
                 )
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 value = "<error>"
 
             # Mask secrets

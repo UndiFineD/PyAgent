@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/swarm/ResourceForecastingAgent.py b/src/logic/agents/swarm/ResourceForecastingAgent.py
+index 7a85134..cd7c9fc 100644
+--- a/src/logic/agents/swarm/ResourceForecastingAgent.py
++++ b/src/logic/agents/swarm/ResourceForecastingAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION

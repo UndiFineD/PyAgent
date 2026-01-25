@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/EntanglementOrchestrator.py b/src/infrastructure/orchestration/EntanglementOrchestrator.py
+index 7e3c66c..8d29ea4 100644
+--- a/src/infrastructure/orchestration/EntanglementOrchestrator.py
++++ b/src/infrastructure/orchestration/EntanglementOrchestrator.py
+@@ -22,7 +22,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import threading
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

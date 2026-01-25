@@ -1,0 +1,13 @@
+diff --git a/src/observability/reports/AuditLogger.py b/src/observability/reports/AuditLogger.py
+index 717cdab..11e3389 100644
+--- a/src/observability/reports/AuditLogger.py
++++ b/src/observability/reports/AuditLogger.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .AuditAction import AuditAction
+ from .AuditEntry import AuditEntry
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import logging
+ import time
+ 
