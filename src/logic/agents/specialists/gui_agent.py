@@ -23,6 +23,7 @@ __version__ = VERSION
 
 
 class Framework(Enum):
+    """Supported GUI frameworks."""
     REACT = "react"
     VUE = "vue"
     SVELTE = "svelte"
@@ -35,6 +36,7 @@ class Framework(Enum):
 
 
 class ElementType(Enum):
+    """Common UI element types."""
     BUTTON = "button"
     INPUT = "input"
     TEXT = "text"
@@ -68,6 +70,7 @@ class UIAction:
     parameters: Dict[str, Any] = field(default_factory=dict)
 
 
+# pylint: disable=too-many-ancestors
 class GUIAgent(BaseAgent):
     """
     Agent specializing in interacting with and designing GUIs.
@@ -85,6 +88,7 @@ class GUIAgent(BaseAgent):
         )
 
     @as_tool
+    # pylint: disable=too-many-positional-arguments
     async def design_layout(
         self,
         framework: str,
@@ -123,7 +127,7 @@ class GUIAgent(BaseAgent):
         }
 
     @as_tool
-    async def interpret_ui_structure(self, ui_dump: str, format: str = "auto") -> Dict[str, Any]:
+    async def interpret_ui_structure(self, ui_dump: str, _format: str = "auto") -> Dict[str, Any]:
         """Analyzes a UI hierarchy (e.g., XML/JSON from Android or Web)."""
         prompt = (
             "Analyze this UI hierarchy and identify interactive elements:\n\n"
@@ -158,7 +162,7 @@ class GUIAgent(BaseAgent):
                     self._element_cache[ui_elem.id] = ui_elem
 
                 return data
-        except Exception as e:
+        except (json.JSONDecodeError, AttributeError, TypeError, ValueError, KeyError) as e:
             logging.debug(f"GUIAgent: Parse error: {e}")
 
         return {"raw": res}
@@ -193,7 +197,7 @@ class GUIAgent(BaseAgent):
                     )
 
                 return data
-        except Exception:
+        except (json.JSONDecodeError, AttributeError, TypeError, ValueError, KeyError):
             pass
 
         return {"raw": res}

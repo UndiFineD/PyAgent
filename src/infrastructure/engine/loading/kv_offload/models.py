@@ -48,6 +48,7 @@ class LoadStoreSpec:
 
     @property
     def num_blocks(self) -> int:
+        """Get number of blocks in specification."""
         return len(self.block_hashes)
 
 

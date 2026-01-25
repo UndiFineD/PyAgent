@@ -19,6 +19,8 @@ vLLM Pattern: vllm/model_executor/layers/mamba/mamba_utils.py
 Utility functions for Mamba computation.
 """
 
+# pylint: disable=invalid-name
+
 from __future__ import annotations
 
 import math
@@ -329,7 +331,7 @@ def parallel_scan(
     Returns:
         Scan output [batch, seq_len, dim]
     """
-    batch_size, seq_len, dim = gates.shape
+    _, seq_len, _ = gates.shape
 
     if seq_len <= 1:
         return values.copy()
@@ -356,8 +358,8 @@ def parallel_scan(
 def init_A_log(
     d_inner: int,
     ssm_state_size: int,
-    dt_min: float = 0.001,
-    dt_max: float = 0.1,
+    _dt_min: float = 0.001,
+    _dt_max: float = 0.1,
 ) -> np.ndarray:
     """
     Initialize A_log parameter for Mamba.

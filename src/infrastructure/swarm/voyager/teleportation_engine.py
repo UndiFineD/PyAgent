@@ -62,7 +62,7 @@ class TeleportationEngine:
             state = msgpack.unpackb(decompressed, raw=False)
             logger.info(f"Teleportation: Restored agent state for {state.get('name')}")
             return state
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Teleportation: Failed to restore state: {e}")
             return {}
 

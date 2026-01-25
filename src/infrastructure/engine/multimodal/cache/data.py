@@ -73,6 +73,7 @@ class CacheStats:
 
     @property
     def hit_rate(self) -> float:
+        """Calculate the cache hit rate (0.0 to 1.0)."""
         total = self.hits + self.misses
         return self.hits / total if total > 0 else 0.0
 
@@ -88,4 +89,5 @@ class PlaceholderRange:
 
     @property
     def length(self) -> int:
+        """Calculate the length of the tokens range."""
         return self.end - self.start

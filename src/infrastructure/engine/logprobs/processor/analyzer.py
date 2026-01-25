@@ -33,6 +33,7 @@ class LogprobsAnalyzer:
     def rank_token_importance(
         logprobs: Union[FlatLogprobs, List[LogprobEntry]], threshold: float = -5.0
     ) -> List[Tuple[int, float]]:
+        """Rank tokens by their importance (based on logprob threshold)."""
         lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
         importance = -lps
         positions = np.where(lps < threshold)[0]
@@ -42,6 +43,7 @@ class LogprobsAnalyzer:
 
     @staticmethod
     def compute_confidence(logprobs: Union[FlatLogprobs, List[LogprobEntry]], method: str = "mean") -> float:
+        """Compute aggregate confidence across token sequence."""
         lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
         if not lps.size:
             return 0.0
@@ -63,6 +65,7 @@ class LogprobsAnalyzer:
 
     @staticmethod
     def detect_anomalies(logprobs: Union[FlatLogprobs, List[LogprobEntry]], z_threshold: float = 2.5) -> List[int]:
+        """Detect anomalous tokens based on statistical distribution."""
         lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
         if len(lps) < 3:
             return []
@@ -73,6 +76,7 @@ class LogprobsAnalyzer:
 
     @staticmethod
     def compute_calibration(logprobs: Union[FlatLogprobs, List[LogprobEntry]], num_bins: int = 10) -> Dict[str, Any]:
+        """Compute calibration metrics for confidence scores."""
         lps_source = (
             logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.probability for e in logprobs])
         )

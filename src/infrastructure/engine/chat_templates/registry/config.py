@@ -210,6 +210,7 @@ class TemplateConfig:
     multimodal_tokens: Dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert configuration to dictionary."""
         return {
             "template_type": self.template_type.value,
             "template_string": self.template_string,
@@ -232,6 +233,7 @@ class TemplateInfo:
     supports_multimodal: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert info to dictionary."""
         return {
             "name": self.name,
             "template_type": self.template_type.value,
@@ -255,6 +257,7 @@ class RenderOptions:
     audio_placeholder: str = "<audio>"
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert options to dictionary."""
         return {
             "add_generation_prompt": self.add_generation_prompt,
             "add_special_tokens": self.add_special_tokens,

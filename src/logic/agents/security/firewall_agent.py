@@ -66,7 +66,7 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
             logging.error(f"[FirewallAgent] Failed to load whitelist: {e}")
         return []
 
-    async def _analyze_thought(self, event: dict[str, Any]) -> None:
+    async def _analyze_thought(self, event: dict[str, Any]) -> None:  # pylint: disable=too-many-return-statements
         """Inform the fleet and perform security analysis on the thought."""
         data = event.get("data", {})
         agent_name = data.get("agent", "Unknown")

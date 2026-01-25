@@ -59,7 +59,7 @@ def curate_dependencies() -> None:
                         # Ignore internal imports
                         if not (src_dir / module).exists() and not (src_dir / (module + ".py")).exists():
                             imported_modules.add(module)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             print(f"Error reading {py_file}: {e}")
 
     # 2. Read requirements files
@@ -67,7 +67,7 @@ def curate_dependencies() -> None:
     req_path = workspace_root / "requirements"
     if req_path.exists():
         for req_file in req_path.glob("*.txt"):
-            with open(req_file, "r") as f:
+            with open(req_file, 'r', encoding='utf-8') as f:
                 for line in f:
                     match = re.match(r"^([a-zA-Z0-9_\-]+)", line.strip())
                     if match:

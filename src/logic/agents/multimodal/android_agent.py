@@ -34,6 +34,7 @@ from src.logic.agents.multimodal.core.android_core import AndroidCore
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class AndroidAgent(BaseAgent):
     """
     Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
@@ -54,7 +55,7 @@ class AndroidAgent(BaseAgent):
         work_root = getattr(self, "_workspace_root", None)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
-    def _record(self, action: str, details: str) -> None:
+    def _record_android_action(self, action: str, details: str) -> None:
         """Record mobile automation logic for the collective intelligence pool."""
         if self.recorder:
             try:
@@ -64,7 +65,7 @@ class AndroidAgent(BaseAgent):
                     "timestamp": time.time(),
                 }
                 self.recorder.record_interaction("android", "local_device", action, details, meta=meta)
-            except Exception as e:
+            except (AttributeError, RuntimeError, TypeError, IOError) as e:
                 logging.error(f"AndroidAgent: Recording error: {e}")
 
     @as_tool

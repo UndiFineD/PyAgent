@@ -46,6 +46,7 @@ class AgentStore:
         }
 
     def list_templates(self) -> dict[str, dict[str, Any]]:
+        """Returns all available agent blueprints in the store."""
         return self.templates
 
     def purchase_template(self, agent_id: str, template_name: str, economy: Any) -> dict[str, Any] | None:

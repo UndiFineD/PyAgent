@@ -53,7 +53,7 @@ class AuthCore(BaseCore):
     """
 
     def __init__(self, name: str = "AuthCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
+        super().__init__(name=name, repo_root=root_path)
         self.token_cache: Dict[str, str] = {}
 
     # --- Internal Agent-to-Agent Auth ---
@@ -64,7 +64,8 @@ class AuthCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_challenge(agent_id)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         seed = f"{agent_id}_{time.time()}_{hashlib.sha256(str(time.time()).encode()).hexdigest()}"
         return hashlib.sha256(seed.encode()).hexdigest()
@@ -75,7 +76,8 @@ class AuthCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_auth_proof(challenge, secret_key)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
 
@@ -85,10 +87,15 @@ class AuthCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.verify_auth_proof(challenge, proof, expected_secret_hash)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         return proof == hashlib.sha512(f"{challenge}:{expected_secret_hash}".encode()).hexdigest()
+
+    def is_proof_expired(self, proof_time: float, ttl: float) -> bool:
+        """Checks if an authentication proof has expired based on TTL."""
+        return (time.time() - proof_time) > ttl
 
     # --- External API Auth ---
 
@@ -99,7 +106,7 @@ class AuthCore(BaseCore):
 
         if method == AuthMethod.API_KEY:
             headers["X-API-Key"] = config.api_key
-        elif method == AuthMethod.BEARER_TOKEN:
+        elif method in (AuthMethod.TOKEN, AuthMethod.BEARER_TOKEN):
             headers["Authorization"] = f"Bearer {config.token}"
         elif method == AuthMethod.BASIC_AUTH:
             credentials = f"{config.username}:{config.password}"

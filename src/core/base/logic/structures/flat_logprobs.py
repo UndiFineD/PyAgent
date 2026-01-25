@@ -81,16 +81,16 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
     ranks: list[int | None] = field(default_factory=list)
     decoded_tokens: list[str | None] = field(default_factory=list)
 
-    def append(self, logprobs_one_position: LogprobsOnePosition | None) -> None:
+    def append(self, value: LogprobsOnePosition | None) -> None:
         """
         Append logprobs for the next position.
 
         Args:
-            logprobs_one_position: Dict of token_id -> Logprob, or None
+            value: Dict of token_id -> Logprob, or None
         """
         self.start_indices.append(len(self.logprobs))
-        if logprobs_one_position:
-            for token_id, logprob in logprobs_one_position.items():
+        if value:
+            for token_id, logprob in value.items():
                 self.token_ids.append(token_id)
                 self.logprobs.append(logprob.logprob)
                 self.ranks.append(logprob.rank)
@@ -124,10 +124,10 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
             self.decoded_tokens.append(decoded_token)
         self.end_indices.append(len(self.logprobs))
 
-    def extend(self, logprobs_multi_positions: Iterable[LogprobsOnePosition | None]) -> None:
+    def extend(self, values: Iterable[LogprobsOnePosition | None]) -> None:
         """Extend with logprobs for multiple positions."""
-        for logprobs_one_position in logprobs_multi_positions:
-            self.append(logprobs_one_position)
+        for value in values:
+            self.append(value)
 
     def __len__(self) -> int:
         """Get number of positions stored."""
@@ -164,7 +164,7 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
                 )
                 for i in range(self.start_indices[index], self.end_indices[index])
             }
-        elif isinstance(index, slice):
+        if isinstance(index, slice):
             # Get the actual indices
             indices = range(*index.indices(len(self)))
             if not indices:
@@ -184,8 +184,8 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
                 ranks=self.ranks[min_idx:max_idx],
                 decoded_tokens=self.decoded_tokens[min_idx:max_idx],
             )
-        else:
-            raise TypeError(f"Invalid index type: {type(index)}")
+
+        raise TypeError(f"Invalid index type: {type(index)}")
 
     def __setitem__(self, index: int, value: Any) -> None:
         """Setting items is not supported."""

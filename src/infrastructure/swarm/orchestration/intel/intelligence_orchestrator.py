@@ -71,7 +71,7 @@ class IntelligenceOrchestrator:
         if hasattr(self.fleet_manager, "sql_metadata"):
             try:
                 sql_lessons = self.fleet_manager.sql_metadata.get_intelligence_summary()[:5]
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug(f"Intelligence: Failed to fetch SQL lessons: {e}")
 
         insights = self.core.filter_relevant_insights(self.insight_pool, limit=20)
@@ -107,7 +107,7 @@ class IntelligenceOrchestrator:
                         category="Collective Intelligence",
                     )
                 return self.patterns
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Intelligence: AI Synthesis failed: {e}")
 
         return []

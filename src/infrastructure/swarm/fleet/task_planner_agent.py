@@ -99,8 +99,9 @@ class TaskPlannerAgent(BaseAgent):
 
         return plan
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Analyze a request and output the planning report."""
+        _ = target_file
         plan = self.create_plan(prompt)
         report = [
             f"# Execution Plan for: {prompt}",

@@ -17,6 +17,8 @@
 Hybrid Mamba Mixer - Combining SSM with Attention.
 """
 
+# pylint: disable=invalid-name
+
 from __future__ import annotations
 
 import math

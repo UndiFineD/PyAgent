@@ -95,7 +95,7 @@ class NotificationManager:
         for callback in self.callbacks:
             try:
                 callback(event_name, event_data)
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Callback failed: {e}")
 
     def _send_webhooks(self, event_name: str, event_data: dict[str, Any]) -> None:
@@ -116,7 +116,7 @@ class NotificationManager:
                     response = session.post(url, json=payload, timeout=5)
                     response.raise_for_status()
                     self._update_status(url, True)
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Webhook failed for {url}: {e}")
                 self._update_status(url, False)
                 if self.recorder:

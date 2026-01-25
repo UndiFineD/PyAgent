@@ -84,7 +84,7 @@ class NaiveAttentionBackend(AttentionBackend[None]):
             raise RuntimeError("PyTorch required for NaiveAttentionBackend")
 
         # Get dimensions
-        batch_seq, num_heads, head_dim = query.shape
+        _, num_heads, head_dim = query.shape
         _, num_kv_heads, _ = key.shape
 
         if scale is None:

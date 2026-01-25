@@ -32,7 +32,6 @@ class TokenizerLike(Protocol):
 
     def encode(self, text: str, **kwargs) -> List[int]:
         """Encode text to token IDs."""
-        ...
 
     def decode(
         self,
@@ -41,31 +40,26 @@ class TokenizerLike(Protocol):
         **kwargs,
     ) -> str:
         """Decode token IDs to text."""
-        ...
 
     def convert_ids_to_tokens(
         self,
         ids: Union[int, List[int]],
     ) -> Union[str, List[str]]:
         """Convert token IDs to token strings."""
-        ...
 
     def convert_tokens_to_ids(
         self,
         tokens: Union[str, List[str]],
     ) -> Union[int, List[int]]:
         """Convert token strings to token IDs."""
-        ...
 
     @property
     def vocab(self) -> Dict[str, int]:
         """Get the vocabulary mapping."""
-        ...
 
     @property
     def eos_token_id(self) -> Optional[int]:
         """Get the end-of-sequence token ID."""
-        ...
 
 
 @dataclass

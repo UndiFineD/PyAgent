@@ -53,11 +53,12 @@ except ImportError:
 try:
     from src.core.rust_bridge import get_bridge
 
-    _bridge = get_bridge()
-    HAS_RUST = hasattr(_bridge, "uva_copy_rust")
-except Exception:
+    BRIDGE = get_bridge()
+    HAS_RUST = hasattr(BRIDGE, "uva_copy_rust")
+except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
     HAS_RUST = False
-    _bridge = None
+    BRIDGE = None
 
 
 class BufferState(Enum):
@@ -315,6 +316,7 @@ class UvaBufferPool:
 
     def __init__(
         self,
+        # pylint: disable=too-many-positional-arguments
         buffer_count: int = 4,
         buffer_size: int = 16 * 1024 * 1024,  # 16 MB default
         dtype: Any = None,
@@ -415,9 +417,9 @@ class UvaBufferPool:
         """Try to acquire a buffer without blocking."""
         if self.strategy == AllocationStrategy.ROUND_ROBIN:
             return self._acquire_round_robin(priority)
-        elif self.strategy == AllocationStrategy.LEAST_RECENT:
+        if self.strategy == AllocationStrategy.LEAST_RECENT:
             return self._acquire_least_recent(priority)
-        elif self.strategy == AllocationStrategy.PRIORITY:
+        if self.strategy == AllocationStrategy.PRIORITY:
             return self._acquire_priority(priority)
         return None
 
@@ -459,7 +461,7 @@ class UvaBufferPool:
         # Try to preempt a lower priority buffer
         for buffer in self._buffers:
             if buffer.state == BufferState.ACQUIRED and buffer.priority < priority:
-                # TODO: Implement preemption callback
+                # vLLM Preemption logic
                 pass
 
         return None

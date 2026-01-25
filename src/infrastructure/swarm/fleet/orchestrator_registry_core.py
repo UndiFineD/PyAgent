@@ -113,7 +113,7 @@ class OrchestratorRegistryCore:
         if _RUST_ACCEL:
             try:
                 return to_snake_case_rust(name)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         # Python fallback
         import re
@@ -157,5 +157,5 @@ class OrchestratorRegistryCore:
             if p_parts[0] < r_parts[0]:
                 return False
             return p_parts[1] >= r_parts[1]
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return True

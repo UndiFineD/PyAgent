@@ -73,7 +73,7 @@ class InterleavingOrchestrator:
                     res = f"[DEFERRED] {phase} process"
                 else:
                     res = loop.run_until_complete(coro)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 coro.close()
                 res = f"[ERROR] {phase} process"
 

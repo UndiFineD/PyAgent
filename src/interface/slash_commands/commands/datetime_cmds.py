@@ -33,7 +33,7 @@ _start_time = time.time()
     aliases=["dt", "now"],
     category="datetime",
 )
-def cmd_datetime(ctx: CommandContext) -> CommandResult:
+def cmd_datetime(_ctx: CommandContext) -> CommandResult:
     """Get current date and time in UTC."""
     now = datetime.now(timezone.utc)
     local_now = datetime.now()
@@ -55,7 +55,7 @@ def cmd_datetime(ctx: CommandContext) -> CommandResult:
     usage="/date",
     category="datetime",
 )
-def cmd_date(ctx: CommandContext) -> CommandResult:
+def cmd_date(_ctx: CommandContext) -> CommandResult:
     """Get current date."""
     now = datetime.now(timezone.utc)
     return CommandResult.ok(
@@ -70,7 +70,7 @@ def cmd_date(ctx: CommandContext) -> CommandResult:
     usage="/time",
     category="datetime",
 )
-def cmd_time(ctx: CommandContext) -> CommandResult:
+def cmd_time(_ctx: CommandContext) -> CommandResult:
     """Get current time."""
     now = datetime.now(timezone.utc)
     return CommandResult.ok(
@@ -86,7 +86,7 @@ def cmd_time(ctx: CommandContext) -> CommandResult:
     aliases=["up"],
     category="datetime",
 )
-def cmd_uptime(ctx: CommandContext) -> CommandResult:
+def cmd_uptime(_ctx: CommandContext) -> CommandResult:
     """Get process uptime."""
     uptime_seconds = time.time() - _start_time
 
@@ -121,7 +121,7 @@ def cmd_uptime(ctx: CommandContext) -> CommandResult:
     aliases=["ts", "epoch"],
     category="datetime",
 )
-def cmd_timestamp(ctx: CommandContext) -> CommandResult:
+def cmd_timestamp(_ctx: CommandContext) -> CommandResult:
     """Get current Unix timestamp."""
     now = time.time()
     return CommandResult.ok(

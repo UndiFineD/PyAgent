@@ -37,6 +37,7 @@ class BlockTable:
         self.free_blocks = set(range(self.num_blocks))
 
     def allocate_block(self, seq_id: int) -> int:
+        """Allocate a block for a sequence."""
         if not self.free_blocks:
             raise RuntimeError("No free blocks available")
         block_idx = self.free_blocks.pop()
@@ -46,6 +47,7 @@ class BlockTable:
         return block_idx
 
     def free_sequence(self, seq_id: int) -> list[int]:
+        """Free all blocks allocated to a sequence."""
         if seq_id not in self.block_tables:
             return []
         freed = self.block_tables.pop(seq_id)
@@ -53,13 +55,16 @@ class BlockTable:
         return freed
 
     def get_block_table(self, seq_id: int) -> list[int]:
+        """Get the block table for a sequence."""
         return self.block_tables.get(seq_id, [])
 
     def num_allocated_blocks(self, seq_id: int) -> int:
+        """Get the number of blocks allocated to a sequence."""
         return len(self.block_tables.get(seq_id, []))
 
     @property
     def num_free_blocks(self) -> int:
+        """Get the number of available free blocks."""
         return len(self.free_blocks)
 
 
@@ -71,6 +76,7 @@ class SlotMapping:
     slots: np.ndarray = field(default_factory=lambda: np.array([], dtype=np.int64))
 
     def compute_slot(self, block_idx: int, offset: int) -> int:
+        """Compute global slot index."""
         return block_idx * self.block_size + offset
 
     def decode_slot(self, slot: int) -> tuple[int, int]:
@@ -78,6 +84,7 @@ class SlotMapping:
         return divmod(slot, self.block_size)
 
     def map_sequence_slots(self, block_table: list[int], seq_len: int) -> np.ndarray:
+        """Map sequence to slots."""
         slots = np.zeros(seq_len, dtype=np.int64)
         for i in range(seq_len):
             block_idx = i // self.block_size
@@ -107,6 +114,7 @@ class PagedKVCache:
         self.value_cache = np.zeros(shape, dtype=self.dtype)
 
     def write(self, key: np.ndarray, value: np.ndarray, slot_mapping: np.ndarray) -> None:
+        """Write K/V to cache."""
         for i, slot in enumerate(slot_mapping):
             if slot < 0:
                 continue
@@ -115,6 +123,7 @@ class PagedKVCache:
             self.value_cache[block_idx, offset] = value[i]
 
     def read_blocks(self, block_table: list[int], seq_len: int) -> tuple[np.ndarray, np.ndarray]:
+        """Read K/V blocks."""
         keys = np.zeros((seq_len, self.num_kv_heads, self.head_size), dtype=self.dtype)
         values = np.zeros((seq_len, self.num_kv_heads, self.head_size), dtype=self.dtype)
         for i in range(seq_len):
@@ -126,6 +135,7 @@ class PagedKVCache:
         return keys, values
 
     def get_memory_usage(self) -> int:
+        """Get memory usage."""
         if self.key_cache is not None and self.value_cache is not None:
             return self.key_cache.nbytes + self.value_cache.nbytes
         return 0
@@ -146,16 +156,19 @@ class AttentionMetadata:
 
     @property
     def num_seqs(self) -> int:
+        """Get the number of sequences in the batch."""
         return len(self.seq_lens)
 
     @property
     def total_tokens(self) -> int:
+        """Get the total number of tokens across all sequences."""
         return int(np.sum(self.seq_lens))
 
     @classmethod
     def from_seq_lens(
         cls, seq_lens: Sequence[int], block_tables: list[list[int]], block_size: int, max_blocks_per_seq: int
     ) -> "AttentionMetadata":
+        """Factory method to create AttentionMetadata from sequence lengths and block tables."""
         seq_lens_arr = np.array(seq_lens, dtype=np.int32)
         query_start_loc = np.zeros(len(seq_lens) + 1, dtype=np.int32)
         query_start_loc[1:] = np.cumsum(seq_lens_arr)

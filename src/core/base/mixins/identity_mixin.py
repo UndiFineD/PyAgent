@@ -61,7 +61,9 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
                         asyncio.create_task(signals.emit("agent_capability_registration", payload))
                     else:
                         loop.run_until_complete(signals.emit("agent_capability_registration", payload))
-                except Exception:  # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                     pass
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             pass

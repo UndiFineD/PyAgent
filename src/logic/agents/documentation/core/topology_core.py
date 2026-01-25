@@ -36,7 +36,7 @@ class TopologyCore:
         if HAS_RUST:
             try:
                 return rust_core.generate_mermaid_graph(nodes, edges, direction)  # type: ignore[attr-defined]
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
 
         lines = [f"graph {direction}"]
@@ -72,7 +72,7 @@ class TopologyCore:
             try:
                 # type: ignore[attr-defined]
                 return rust_core.filter_active_topology_relationships(all_deps, focus_list)
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
 
         filtered = {}

@@ -44,13 +44,13 @@ from src.infrastructure.engine.scheduling.chunked_prefill.types import (
     PrefillChunk)
 
 # Try to import Rust accelerations
-HAS_RUST = False
+has_rust = False
 _bridge = None
 with contextlib.suppress(Exception):
     from src.core.rust_bridge import get_bridge
 
     _bridge = get_bridge()
-    HAS_RUST = hasattr(_bridge, "chunk_boundaries_rust")
+    has_rust = hasattr(_bridge, "chunk_boundaries_rust")
 
 
 T = TypeVar("T")
@@ -119,7 +119,7 @@ class ChunkedPrefillManager:
             List of (start_idx, end_idx) tuples
         """
         # Use Rust acceleration if available
-        if HAS_RUST and _bridge is not None:
+        if has_rust and _bridge is not None:
             with contextlib.suppress(Exception):
                 return _bridge.chunk_boundaries_rust(
                     total_tokens,
@@ -392,8 +392,7 @@ class ChunkedPrefillManager:
 
             chunks = list(request.chunks)
 
-        for chunk in chunks:
-            yield chunk
+        yield from chunks
 
     def get_next_chunk(self, request_id: str) -> Optional[PrefillChunk]:
         """Get next pending chunk for a request.

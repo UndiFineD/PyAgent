@@ -58,7 +58,7 @@ class LocalizationCore:
             try:
                 # Rust implementation expects regex patterns
                 return rust_core.detect_cultural_issues(text, self.cultural_red_flags)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         issues = []

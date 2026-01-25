@@ -28,7 +28,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-class SecurityScannerAgent(BaseAgent):
+class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Scans code for security vulnerabilities.
 
     Identifies common security issues and provides remediation guidance.
@@ -142,7 +142,7 @@ class SecurityScannerAgent(BaseAgent):
                 "Source Scan",
                 f"Detected {len(self.vulnerabilities)} vulnerabilities.",
             )
-        except Exception:
+        except (ImportError, AttributeError):
             pass
 
         return self.vulnerabilities

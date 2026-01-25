@@ -22,6 +22,7 @@ __version__ = VERSION
 
 
 class ReasoningStrategy(Enum):
+    """Strategies for deep reasoning and logical deduction."""
     CHAIN_OF_THOUGHT = "cot"
     TREE_OF_THOUGHT = "tot"
     SELF_CONSISTENCY = "sc"
@@ -41,6 +42,7 @@ class ThoughtNode:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+# pylint: disable=too-many-ancestors
 class ReasoningAgent(BaseAgent):
     """
     Agent specializing in long-context reasoning, recursive chain-of-thought,

@@ -85,7 +85,7 @@ class IdiomExtractorAgent(BaseAgent):
                                 elif ":param" in content:
                                     idioms["docstring_style"] = "reStructuredText"
 
-                    except Exception as e:  # pylint: disable=broad-exception-caught
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.warning(f"Error reading {file}: {e}")
 
         # Deduplicate and sort

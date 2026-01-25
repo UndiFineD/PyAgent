@@ -178,7 +178,7 @@ class AWSBedrockConnector(CloudProviderBase):
             elif error_code == "AccessDeniedException":
                 raise AuthenticationError(str(e), provider=self.name)
             raise CloudProviderError(f"Bedrock error: {str(e)}", provider=self.name)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             raise CloudProviderError(f"Unexpected error: {str(e)}", provider=self.name)
 
     async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
@@ -207,7 +207,7 @@ class AWSBedrockConnector(CloudProviderBase):
                     text = self._extract_text_from_chunk(chunk, request.model)
                     if text:
                         yield text
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Bedrock streaming error: {str(e)}")
             raise CloudProviderError(f"Streaming failed: {str(e)}", provider=self.name)
 
@@ -259,7 +259,7 @@ class AWSBedrockConnector(CloudProviderBase):
                 await client.list_foundation_models(byOutputModality="TEXT")
                 self._is_healthy = True
                 return True
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Bedrock health check failed: {str(e)}")
             self._is_healthy = False
             self._last_error = str(e)

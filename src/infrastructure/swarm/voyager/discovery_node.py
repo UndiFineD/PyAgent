@@ -28,18 +28,21 @@ class VoyagerPeerListener(ServiceListener):
         self.loop = loop
 
     def add_service(self, zc: Any, type_: str, name: str) -> None:
+        """Called by Zeroconf when a new service is discovered."""
         asyncio.run_coroutine_threadsafe(self._async_add_service(zc, type_, name), self.loop)
 
     async def _async_add_service(self, zc: Any, type_: str, name: str) -> None:
+        """Asynchronously retrieves service info and notifies the callback."""
         info = await zc.async_get_service_info(type_, name)
         if info:
             logger.info(f"Voyager: Discovered peer {name} at {info.parsed_addresses()}")
             self.callback(info)
 
     def update_service(self, zc: Any, type_: str, name: str) -> None:
-        pass
+        """Called by Zeroconf when a service is updated (not used)."""
 
     def remove_service(self, zc: Any, type_: str, name: str) -> None:
+        """Called by Zeroconf when a service is removed from the network."""
         logger.info(f"Voyager: Peer {name} removed from network.")
 
 
@@ -65,14 +68,15 @@ class DiscoveryNode:
         self.local_ip = self._get_local_ip()
 
     def _get_local_ip(self) -> str:
-        IP = "127.0.0.1"
+        """Returns the local IPv4 address of the node."""
+        ip_address = "127.0.0.1"
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         with contextlib.suppress(Exception):
             # doesn't even have to be reachable
             s.connect(("10.255.255.255", 1))
-            IP = s.getsockname()[0]
+            ip_address = s.getsockname()[0]
         s.close()
-        return IP
+        return ip_address
 
     async def start_advertising(self):
         """Broadcasts this node to the local network."""
@@ -110,6 +114,7 @@ class DiscoveryNode:
         )
 
     def _peer_discovered(self, info: ServiceInfo):
+        """Internal callback for when a peer is discovered via Zeroconf."""
         if info.name not in self.peers:
             self.peers[info.name] = info
             logger.info(f"Voyager: Peer Registry updated. Total peers: {len(self.peers)}")
@@ -168,6 +173,7 @@ if __name__ == "__main__":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
     async def run_test():
+        """Manual test runner for discovery node."""
         node = DiscoveryNode()
         try:
             await node.start_advertising()

@@ -20,6 +20,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class VisionAgent(BaseAgent):
     """
     Agent specializing in image description, OCR, diagram analysis,
@@ -182,6 +183,7 @@ class VisionAgent(BaseAgent):
 
         return {"target_objects": target_objects, "detections": result, "status": "success"}
 
+    # pylint: disable=too-many-return-statements
     async def _resolve_image_source(self, source: str) -> Optional[str]:
         """Resolves various image sources to base64."""
         if not source:
@@ -195,9 +197,9 @@ class VisionAgent(BaseAgent):
         path = Path(source)
         if path.exists() and path.is_file():
             try:
-                with open(path, "rb") as f:
+                with open(path, 'rb') as f:
                     return base64.b64encode(f.read()).decode("utf-8")
-            except Exception as e:
+            except (IOError, OSError, AttributeError) as e:
                 logging.error(f"VisionAgent: Failed to read file {source}: {e}")
                 return None
 
@@ -209,7 +211,7 @@ class VisionAgent(BaseAgent):
                 response = requests.get(source, timeout=10)
                 if response.status_code == 200:
                     return base64.b64encode(response.content).decode("utf-8")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"VisionAgent: Failed to fetch URL {source}: {e}")
                 return None
 

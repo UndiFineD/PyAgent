@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 Integration Tests: ZMQ Transport & Neural Synapse
 
@@ -5,14 +19,23 @@ Refactored from temp/verify_zmq_synapse.py into proper pytest format.
 Tests Phase 319 ZMQ transport and synaptic fire functionality.
 """
 
-import pytest
 import asyncio
 import sys
+
+import pytest
+
+
+# Phase 319: Set Windows event loop policy for ZMQ compatibility
+if sys.platform == 'win32':
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    except Exception:  # pylint: disable=broad-exception-caught
+        pass
 
 
 # Skip all tests if ZMQ not available
 try:
-    import zmq
+    import zmq  # pylint: disable=unused-import
     HAS_ZMQ = True
 except ImportError:
     HAS_ZMQ = False
@@ -60,18 +83,21 @@ class TestRemoteNeuralSynapse:
     async def test_synapse_start_stop(self):
         """Test synapse can start and stop."""
         try:
-            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            async with asyncio.timeout(30):
+                from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
 
-            fleet = MockFleet("test-fleet")
-            synapse = RemoteNeuralSynapse(fleet, transport_port=5561)
+                fleet = MockFleet("test-fleet")
+                synapse = RemoteNeuralSynapse(fleet, transport_port=5561)
 
-            await synapse.start()
-            await synapse.stop()
+                await synapse.start()
+                await synapse.stop()
 
-            assert True  # If no exception, success
+                assert True  # If no exception, success
         except ImportError:
             pytest.skip("RemoteNeuralSynapse not available")
-        except Exception as e:
+        except asyncio.TimeoutError:
+            pytest.fail("Synapse start/stop timed out after 30 seconds")
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if "Address already in use" in str(e):
                 pytest.skip("Port already in use")
             raise
@@ -106,37 +132,40 @@ class TestP2PCommunication:
     async def test_ping_pong(self):
         """Test P2P ping/pong communication."""
         try:
-            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            async with asyncio.timeout(30):
+                from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
 
-            # Setup two nodes
-            fleet_a = MockFleet("Fleet-A")
-            synapse_a = RemoteNeuralSynapse(fleet_a, transport_port=5562)
+                # Setup two nodes
+                fleet_a = MockFleet("Fleet-A")
+                synapse_a = RemoteNeuralSynapse(fleet_a, transport_port=5562)
 
-            fleet_b = MockFleet("Fleet-B")
-            synapse_b = RemoteNeuralSynapse(fleet_b, transport_port=5563)
+                fleet_b = MockFleet("Fleet-B")
+                synapse_b = RemoteNeuralSynapse(fleet_b, transport_port=5563)
 
-            try:
-                await synapse_a.start()
-                await synapse_b.start()
+                try:
+                    await synapse_a.start()
+                    await synapse_b.start()
 
-                # Test ping from B to A
-                if hasattr(synapse_b, 'transport') and hasattr(synapse_b.transport, 'send_to_peer'):
-                    response = await synapse_b.transport.send_to_peer(
-                        "127.0.0.1",
-                        5562,
-                        {"type": "ping", "sender_id": "Fleet-B"}
-                    )
+                    # Test ping from B to A
+                    if hasattr(synapse_b, 'transport') and hasattr(synapse_b.transport, 'send_to_peer'):
+                        response = await synapse_b.transport.send_to_peer(
+                            "127.0.0.1",
+                            5562,
+                            {"type": "ping", "sender_id": "Fleet-B"}
+                        )
 
-                    if response:
-                        assert response.get("status") == "pong"
-                else:
-                    pytest.skip("Transport ping not available")
-            finally:
-                await synapse_a.stop()
-                await synapse_b.stop()
+                        if response:
+                            assert response.get("status") == "pong"
+                    else:
+                        pytest.skip("Transport ping not available")
+                finally:
+                    await synapse_a.stop()
+                    await synapse_b.stop()
+        except asyncio.TimeoutError:
+            pytest.fail("Ping/pong timed out after 30 seconds")
         except ImportError:
             pytest.skip("RemoteNeuralSynapse not available")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             error_msg = str(e)
             if "Address already in use" in error_msg:
                 pytest.skip("Port already in use")
@@ -150,37 +179,40 @@ class TestP2PCommunication:
     async def test_agent_teleportation(self):
         """Test agent teleportation between nodes."""
         try:
-            from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
+            async with asyncio.timeout(30):
+                from src.infrastructure.swarm.voyager.remote_neural_synapse import RemoteNeuralSynapse
 
-            fleet_a = MockFleet("Fleet-A")
-            synapse_a = RemoteNeuralSynapse(fleet_a, transport_port=5564)
+                fleet_a = MockFleet("Fleet-A")
+                synapse_a = RemoteNeuralSynapse(fleet_a, transport_port=5564)
 
-            fleet_b = MockFleet("Fleet-B")
-            synapse_b = RemoteNeuralSynapse(fleet_b, transport_port=5565)
+                fleet_b = MockFleet("Fleet-B")
+                synapse_b = RemoteNeuralSynapse(fleet_b, transport_port=5565)
 
-            try:
-                await synapse_a.start()
-                await synapse_b.start()
+                try:
+                    await synapse_a.start()
+                    await synapse_b.start()
 
-                agent = MockAgent("Recon-Agent-01")
+                    agent = MockAgent("Recon-Agent-01")
 
-                if hasattr(synapse_b, 'teleport_agent_to_peer'):
-                    success = await synapse_b.teleport_agent_to_peer(
-                        agent,
-                        "127.0.0.1",
-                        5564
-                    )
+                    if hasattr(synapse_b, 'teleport_agent_to_peer'):
+                        success = await synapse_b.teleport_agent_to_peer(
+                            agent,
+                            "127.0.0.1",
+                            5564
+                        )
 
-                    # Teleportation should succeed or fail gracefully
-                    assert isinstance(success, bool)
-                else:
-                    pytest.skip("Teleportation not available")
-            finally:
-                await synapse_a.stop()
-                await synapse_b.stop()
+                        # Teleportation should succeed or fail gracefully
+                        assert isinstance(success, bool)
+                    else:
+                        pytest.skip("Teleportation not available")
+                finally:
+                    await synapse_a.stop()
+                    await synapse_b.stop()
+        except asyncio.TimeoutError:
+            pytest.fail("Agent teleportation timed out after 30 seconds")
         except ImportError:
             pytest.skip("RemoteNeuralSynapse not available")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             error_msg = str(e)
             if "Address already in use" in error_msg:
                 pytest.skip("Port already in use")

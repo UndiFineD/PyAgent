@@ -79,7 +79,7 @@ class ExternalAIRecorderAgent(BaseAgent):
             with open(self.archive_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry) + "\n")
             return f"Successfully recorded interaction from {external_ai_name}. Local knowledge enriched."
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error recording interaction: {e}"
 
     @as_tool
@@ -88,7 +88,7 @@ class ExternalAIRecorderAgent(BaseAgent):
 
         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return "Local knowledge base is thriving with data from external AI sessions."
 
 

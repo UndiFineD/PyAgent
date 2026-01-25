@@ -63,7 +63,7 @@ class VersionGate:
 
             # Patch check
             return curr_parts[2] >= req_parts[2]
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"VersionGate: Failed to parse version '{current}' or '{required}': {e}")
             # Fail safe: if we can't parse, assume it's legacy (compatible)
             return True

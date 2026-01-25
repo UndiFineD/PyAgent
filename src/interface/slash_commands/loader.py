@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 # Track loaded modules
 _loaded_modules: set[str] = set()
-_commands_loaded = False
+_COMMANDS_LOADED = False
 
 
 def get_commands_dir() -> Path:
@@ -78,7 +78,7 @@ def load_module(module_name: str) -> bool:
     except ImportError as e:
         print(f"Warning: Failed to load command module '{module_name}': {e}")
         return False
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"Warning: Error loading command module '{module_name}': {e}")
         return False
 
@@ -114,10 +114,12 @@ def load_commands(registry: "CommandRegistry | None" = None) -> int:
     Returns:
         Number of modules loaded
     """
-    global _commands_loaded
+    global _COMMANDS_LOADED  # pylint: disable=global-statement
 
-    if _commands_loaded:
+    if _COMMANDS_LOADED:
         return len(_loaded_modules)
+
+    _ = registry  # Explicitly mark as unused
 
     modules = discover_command_modules()
     loaded = 0
@@ -126,7 +128,7 @@ def load_commands(registry: "CommandRegistry | None" = None) -> int:
         if load_module(module_name):
             loaded += 1
 
-    _commands_loaded = True
+    _COMMANDS_LOADED = True
     return loaded
 
 
@@ -137,11 +139,11 @@ def reload_commands() -> int:
     Returns:
         Number of modules reloaded
     """
-    global _commands_loaded
+    global _COMMANDS_LOADED  # pylint: disable=global-statement
 
     # Clear loaded state
     _loaded_modules.clear()
-    _commands_loaded = False
+    _COMMANDS_LOADED = False
 
     # Reload
     return load_commands()

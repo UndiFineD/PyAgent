@@ -57,7 +57,7 @@ class DiscoveryOrchestrator:
 
             # Start advertising in a background thread to not block fleet init
             threading.Thread(target=self.start_advertising, daemon=True).start()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Discovery: Initialization failed: {e}")
 
     def _on_failure(self, error: Exception) -> None:
@@ -88,7 +88,7 @@ class DiscoveryOrchestrator:
             ip = s.getsockname()[0]
             s.close()
             return ip
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return "127.0.0.1"
 
     def start_advertising(self, port: int = 8000) -> None:
@@ -134,7 +134,7 @@ class DiscoveryOrchestrator:
             self._is_advertising = True
             self._failure_count = 0  # Reset on success
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Discovery: Failed to register service: {e}")
             self._on_failure(e)
 
@@ -171,7 +171,7 @@ class FleetServiceListener(ServiceListener):
 
         try:
             info = zc.get_service_info(type_, name)
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Zeroconf instance loop might be stopping, already stopped, or other transient issue (Phase 123)
             return
 
@@ -208,5 +208,5 @@ class FleetServiceListener(ServiceListener):
         # Register the remote node in the fleet
         try:
             self.fleet.register_remote_node(url, agents, version)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Discovery: Failed to register remote node {url}: {e}")

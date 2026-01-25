@@ -46,7 +46,7 @@ def fix_escapes(target_dirs: list[str]):
                         if new_content != content:
                             path.write_text(new_content, encoding="utf-8")
                             print(f"Fixed: {path.relative_to(workspace_root)}")
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         print(f"Failed to process {file}: {e}")
 
 

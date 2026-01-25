@@ -83,7 +83,7 @@ class ResponsesAPIServer:
             )
             if config.store and self.enable_store:
                 await self.store.save(response)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.exception(f"Error creating response: {e}")
             response.fail(str(e))
         return response
@@ -113,7 +113,7 @@ class ResponsesAPIServer:
                 )
                 if config.store and self.enable_store:
                     await self.store.save(response)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.exception(f"Streaming error: {e}")
                 await handler.fail(str(e))
 

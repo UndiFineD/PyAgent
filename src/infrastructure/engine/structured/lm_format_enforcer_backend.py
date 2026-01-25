@@ -46,7 +46,7 @@ except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # noqa: F401
+    import rust_core  # pylint: disable=unused-import
 
     HAS_RUST = True
 except ImportError:
@@ -97,9 +97,9 @@ class DFATransition:
             # Character class
             pattern = self.char_class
             return bool(re.match(f"^{pattern}$", char))
-        else:
-            # Literal match
-            return char == self.char_class
+
+        # Literal match
+        return char == self.char_class
 
 
 class CompiledDFA:
@@ -241,9 +241,9 @@ class RegexMatchState:
             if dfa.matches(new_text):
                 self.is_complete = True
             return True
-        else:
-            self.has_failed = True
-            return False
+
+        self.has_failed = True
+        return False
 
     def reset(self) -> None:
         """Reset state."""
@@ -408,12 +408,12 @@ class LMFormatEnforcerBackend:
 
             return "".join(parts)
 
-        elif schema_type == "array":
+        if schema_type == "array":
             items_schema = schema.get("items", {"type": "string"})
             item_pattern = self._schema_obj_to_regex(items_schema)
             return rf"\[(?:{item_pattern}(?:,\s*{item_pattern})*)?\]"
 
-        elif schema_type == "string":
+        if schema_type == "string":
             if "enum" in schema:
                 options = "|".join(rf'"{re.escape(opt)}"' for opt in schema["enum"])
                 return rf"(?:{options})"
@@ -421,16 +421,16 @@ class LMFormatEnforcerBackend:
                 return rf'"{schema["pattern"]}"'
             return r'"[^"]*"'
 
-        elif schema_type == "integer":
+        if schema_type == "integer":
             return r"-?\d+"
 
-        elif schema_type == "number":
+        if schema_type == "number":
             return r"-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?"
 
-        elif schema_type == "boolean":
+        if schema_type == "boolean":
             return r"(?:true|false)"
 
-        elif schema_type == "null":
+        if schema_type == "null":
             return r"null"
 
         return r".*"

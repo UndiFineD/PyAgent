@@ -63,7 +63,7 @@ class DocGenCore:
 
             return md_content
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error extracting docs: {str(e)}"
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:

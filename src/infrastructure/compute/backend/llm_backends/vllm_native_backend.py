@@ -60,6 +60,6 @@ class VllmNativeBackend(LLMBackend):
                     latency_s=latency,
                 )
             return result
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"vLLM Native Engine unavailable: {e}")
             return ""

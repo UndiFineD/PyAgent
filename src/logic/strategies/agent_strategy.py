@@ -54,4 +54,4 @@ class AgentStrategy(ABC):
         Returns:
             The final generated content.
         """
-        pass
+        ...

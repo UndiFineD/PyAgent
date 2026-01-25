@@ -64,10 +64,10 @@ class ModalTeleportationOrchestrator:
                     coro.close()
                     return f"[DEFERRED] Teleportation to {target_modality}"
                 return loop.run_until_complete(coro)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 coro.close()
                 return f"[ERROR] Teleportation to {target_modality}"
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Teleportation failed: {e}")
             return f"Error: Could not teleport from {source_modality} to {target_modality}."
 

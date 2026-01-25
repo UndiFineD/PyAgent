@@ -72,7 +72,7 @@ class VllmBackend(LLMBackend):
             self._record("vllm", model, prompt, content, system_prompt=system_prompt, latency_s=latency)
             self._update_status("vllm", True)
             return content
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Lowered logging level for fallback-friendly behavior (Phase 123)
             logging.debug(f"vLLM call failed: {e}")
             self._update_status("vllm", False)

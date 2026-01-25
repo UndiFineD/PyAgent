@@ -76,6 +76,7 @@ class PromptConfig:
     normalize_unicode: bool = True
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert config to dictionary."""
         return {
             "prompt": self.prompt,
             "messages": self.messages,
@@ -98,6 +99,7 @@ class TruncationResult:
 
     @property
     def truncation_ratio(self) -> float:
+        """Calculate ratio of removed tokens to original tokens."""
         if self.original_tokens == 0:
             return 0.0
         return self.removed_tokens / self.original_tokens
@@ -121,6 +123,7 @@ class RenderResult:
 
     @property
     def is_multimodal(self) -> bool:
+        """Check if result contains multimodal data."""
         return bool(self.image_positions or self.audio_positions)
 
 
@@ -142,4 +145,5 @@ class MultimodalInput:
     video: List[Dict[str, Any]] = field(default_factory=list)
 
     def is_empty(self) -> bool:
+        """Check if input is empty."""
         return not (self.images or self.audio or self.video)

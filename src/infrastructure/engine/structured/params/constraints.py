@@ -32,11 +32,17 @@ class OutputConstraint:
     constraint_type: ConstraintType = ConstraintType.INCLUDE
     priority: int = 0
 
-    def validate(self, text: str) -> bool:
+    def validate(self, _text: str) -> bool:
         """Validate text against constraint."""
         return True
 
     def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert to dictionary.
+
+        Returns:
+            Dictionary with constraint type and priority.
+        """
         return {
             "constraint_type": self.constraint_type.name,
             "priority": self.priority,
@@ -86,7 +92,7 @@ class JsonSchemaConstraint(OutputConstraint):
 
             return True
 
-        elif schema_type == "array":
+        if schema_type == "array":
             if not isinstance(data, list):
                 return False
 
@@ -98,19 +104,19 @@ class JsonSchemaConstraint(OutputConstraint):
 
             return True
 
-        elif schema_type == "string":
+        if schema_type == "string":
             return isinstance(data, str)
 
-        elif schema_type == "number":
+        if schema_type == "number":
             return isinstance(data, (int, float))
 
-        elif schema_type == "integer":
+        if schema_type == "integer":
             return isinstance(data, int)
 
-        elif schema_type == "boolean":
+        if schema_type == "boolean":
             return isinstance(data, bool)
 
-        elif schema_type == "null":
+        if schema_type == "null":
             return data is None
 
         return True
@@ -187,13 +193,14 @@ class RegexConstraint(OutputConstraint):
             self._compiled = re.compile(self.pattern, self.flags)
 
     def validate(self, text: str) -> bool:
+        """Validate text against regex."""
         if self._compiled is None:
             return True
 
         if self.constraint_type == ConstraintType.INCLUDE:
             return bool(self._compiled.match(text))
-        else:
-            return not bool(self._compiled.match(text))
+
+        return not bool(self._compiled.match(text))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -258,15 +265,15 @@ class TypeConstraint(OutputConstraint):
             # Parse type annotation
             if self.type_annotation == "str":
                 return isinstance(value, str)
-            elif self.type_annotation == "int":
+            if self.type_annotation == "int":
                 return isinstance(value, int)
-            elif self.type_annotation == "float":
+            if self.type_annotation == "float":
                 return isinstance(value, (int, float))
-            elif self.type_annotation == "bool":
+            if self.type_annotation == "bool":
                 return isinstance(value, bool)
-            elif self.type_annotation.startswith("List["):
+            if self.type_annotation.startswith("List["):
                 return isinstance(value, list)
-            elif self.type_annotation.startswith("Dict["):
+            if self.type_annotation.startswith("Dict["):
                 return isinstance(value, dict)
 
             return True

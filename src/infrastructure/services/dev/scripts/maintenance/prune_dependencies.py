@@ -191,7 +191,7 @@ def prune_requirements() -> None:
         lines = []
         changed = False
 
-        with open(req_file, "r") as f:
+        with open(req_file, 'r', encoding='utf-8') as f:
             for line in f:
                 content = line.strip()
 
@@ -211,7 +211,7 @@ def prune_requirements() -> None:
                     lines.append(line)
 
         if changed:
-            with open(req_file, "w") as f:
+            with open(req_file, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
             print(f"  - Saved changes to {req_file}")
 

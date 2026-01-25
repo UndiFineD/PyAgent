@@ -72,11 +72,11 @@ class StructuredOutputConfig:
         """Get the primary constraint object."""
         if self.json_schema:
             return JsonSchemaConstraint(schema=self.json_schema)
-        elif self.regex:
+        if self.regex:
             return RegexConstraint(pattern=self.regex)
-        elif self.choices:
+        if self.choices:
             return ChoiceConstraint(choices=self.choices)
-        elif self.grammar:
+        if self.grammar:
             return GrammarConstraint(
                 grammar=self.grammar,
                 grammar_type=self.grammar_type,
@@ -99,6 +99,12 @@ class StructuredOutputConfig:
         return constraints
 
     def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert configuration to dictionary.
+
+        Returns:
+            Dictionary containing configuration parameters.
+        """
         return {
             "output_type": self.output_type.name,
             "json_schema": self.json_schema,
@@ -140,8 +146,10 @@ class ValidationResult:
 
     @property
     def has_errors(self) -> bool:
+        """Check if result has errors."""
         return bool(self.errors)
 
     @property
     def has_warnings(self) -> bool:
+        """Check if result has warnings."""
         return bool(self.warnings)

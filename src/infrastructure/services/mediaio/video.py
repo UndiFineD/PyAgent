@@ -126,7 +126,7 @@ class VideoLoader(MediaLoader):
                             th, tw = config.target_size
                             pixels = frame.flatten().astype(np.float32).tolist()
                             resized = rc.image_resize_rust(pixels, h, w, c, th, tw)
-                            frame = np.array(resized, dtype=np.float32).reshape(th, tw, c)
+                            frame = np.array(resized, dtype=np.float32).reshape((th, tw, c))
                         else:
                             frame = self._cv2.resize(frame, config.target_size, interpolation=self._cv2.INTER_LINEAR)
                     frames.append(frame)
@@ -141,11 +141,11 @@ class VideoLoader(MediaLoader):
                     # Flatten and normalize via Rust
                     flat = frames_arr.flatten().tolist()
                     normed = rc.normalize_pixels_rust(flat, c, list(config.mean), list(config.std))
-                    frames_arr = np.array(normed, dtype=np.float32).reshape(n, h, w, c)
+                    frames_arr = np.array(normed, dtype=np.float32).reshape((n, h, w, c))
                 else:
                     frames_arr = frames_arr / 255.0
-                    mean = np.array(config.mean, dtype=np.float32).reshape(1, 1, 1, 3)
-                    std = np.array(config.std, dtype=np.float32).reshape(1, 1, 1, 3)
+                    mean = np.array(config.mean, dtype=np.float32).reshape((1, 1, 1, 3))
+                    std = np.array(config.std, dtype=np.float32).reshape((1, 1, 1, 3))
                     frames_arr = (frames_arr - mean) / std
 
             metadata = MediaMetadata(

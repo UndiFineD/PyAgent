@@ -74,7 +74,7 @@ class FlakinessDetector:
             try:
                 test_fn()
                 passes += 1
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 failures += 1
                 msg = str(e)
                 if msg not in failure_messages:

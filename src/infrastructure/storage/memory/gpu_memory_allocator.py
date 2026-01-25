@@ -252,7 +252,7 @@ class CuMemAllocator:
             for cb in self._allocation_callbacks:
                 try:
                     cb(primary_id, size_bytes)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error(f"Allocation callback error: {e}")
 
             return primary_id
@@ -306,7 +306,7 @@ class CuMemAllocator:
         for cb in self._allocation_callbacks:
             try:
                 cb(best_region_id, size_bytes)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Allocation callback error: {e}")
 
         return best_region_id
@@ -347,7 +347,7 @@ class CuMemAllocator:
             for cb in self._deallocation_callbacks:
                 try:
                     cb(region_id, size_bytes)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error(f"Deallocation callback error: {e}")
 
             return True
@@ -493,7 +493,7 @@ class CuMemAllocator:
             for cb in self._pressure_callbacks:
                 try:
                     cb(event)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error(f"Pressure callback error: {e}")
 
     def defragment(self) -> int:

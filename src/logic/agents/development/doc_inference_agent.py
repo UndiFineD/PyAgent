@@ -73,7 +73,7 @@ class DocInferenceAgent(BaseAgent):
             for page in reader.pages:
                 text += page.extract_text() + "\n"
             return text
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error parsing PDF: {str(e)}"
 
     @as_tool

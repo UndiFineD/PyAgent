@@ -28,7 +28,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-class SecurityAuditAgent(BaseAgent):
+class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """
     Scans the workspace for potential security risks including hardcoded secrets,
     vulnerable patterns, and insecure file permissions.
@@ -59,7 +59,7 @@ class SecurityAuditAgent(BaseAgent):
 
                 # Scan for hardcoded secrets
                 secret_findings = scan_hardcoded_secrets_rust(content)
-                for pattern_name, line_num in secret_findings:
+                for pattern_name, _ in secret_findings:
                     findings.append(
                         {
                             "file": file_path,
@@ -147,7 +147,7 @@ class SecurityAuditAgent(BaseAgent):
                             }
                         )
 
-        except Exception as e:
+        except (IOError, UnicodeDecodeError) as e:
             findings.append(
                 {
                     "file": file_path,

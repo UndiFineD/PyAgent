@@ -1,3 +1,7 @@
+
+"""
+Test Phase60 Async Spec module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 60: Speculative Async Output Pipeline

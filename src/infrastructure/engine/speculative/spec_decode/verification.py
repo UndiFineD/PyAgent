@@ -48,19 +48,22 @@ class VerificationResult:
 
     @property
     def all_accepted(self) -> bool:
+        """Return True if all proposed tokens in this result were accepted."""
         return all(self.acceptance_mask) if self.acceptance_mask else False
 
     @property
     def acceptance_rate(self) -> float:
+        """Calculate the ratio of accepted to total proposed tokens in this result."""
         if not self.acceptance_mask:
             return 0.0
         return sum(self.acceptance_mask) / len(self.acceptance_mask)
 
 
 class SpecDecodeVerifier:
-    """Verifier for speculative decoding."""
+    """Verifier for speculative decoding using various sampling strategies."""
 
     def __init__(self, config: SpecDecodeConfig):
+        """Initialize verifier with configuration."""
         self.config = config
         self.strategy = config.strategy
         self.policy = config.policy
@@ -73,6 +76,7 @@ class SpecDecodeVerifier:
     def verify(
         self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
+        """Perform token verification for a single request."""
         metadata.verification_start_time = time.perf_counter()
         if self.strategy == VerificationStrategy.TYPICAL_ACCEPTANCE:
             result = self._verify_typical_acceptance(metadata, draft_logprobs, target_logprobs)
@@ -88,6 +92,7 @@ class SpecDecodeVerifier:
     def _verify_rejection_sampling(
         self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
+        """Verify tokens using standard rejection sampling."""
         if HAS_RUST and hasattr(rust_core, "spec_decode_verify_rejection_rust"):
             accepted, mask = getattr(rust_core, "spec_decode_verify_rejection_rust")(
                 metadata.draft_token_ids, draft_logprobs, target_logprobs, self.sampling_eps
@@ -123,6 +128,7 @@ class SpecDecodeVerifier:
     def _verify_typical_acceptance(
         self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
+        """Verify tokens using entropy-weighted typical acceptance."""
         import random
 
         accepted, mask = [], []
@@ -151,6 +157,7 @@ class SpecDecodeVerifier:
         draft_logprobs: list[list[float]],
         target_logprobs: list[list[float]],
     ) -> VerificationResult:
+        """Verify a speculative tree and return the best path."""
         best_path_idx, best_accepted, best_tokens, best_mask = -1, 0, [], []
         for path_idx in range(tree_metadata.num_paths):
             path_tokens = tree_metadata.get_path_tokens(path_idx)
@@ -170,6 +177,7 @@ class SpecDecodeVerifier:
         return VerificationResult(accepted_tokens=best_tokens, num_accepted=best_accepted, acceptance_mask=best_mask)
 
     def get_overall_acceptance_rate(self) -> float:
+        """Return the global acceptance rate across all verification calls."""
         with self._lock:
             return self._total_accepted / self._total_proposed if self._total_proposed > 0 else 0.0
 
@@ -178,6 +186,7 @@ class BatchVerifier:
     """Batch verification for multiple requests."""
 
     def __init__(self, verifier: SpecDecodeVerifier):
+        """Initialize batch verifier."""
         self.verifier = verifier
 
     def verify_batch(
@@ -186,6 +195,7 @@ class BatchVerifier:
         draft_logprobs_list: list[list[float]],
         target_logprobs_list: list[list[float]],
     ) -> list[VerificationResult]:
+        """Verify tokens for a batch of requests."""
         return [
             self.verifier.verify(metadata, draft_lp, target_lp)
             for metadata, draft_lp, target_lp in zip(metadata_list, draft_logprobs_list, target_logprobs_list)
@@ -193,14 +203,16 @@ class BatchVerifier:
 
 
 class StreamingVerifier:
-    """Streaming verification as tokens arrive."""
+    """Streaming verification for interactive token-by-token processing."""
 
     def __init__(self, config: SpecDecodeConfig):
+        """Initialize streaming verifier."""
         self.config = config
         self._accepted = []
         self._lock = threading.Lock()
 
     def add_token(self, token: int, draft_logprob: float, target_logprob: float) -> bool | None:
+        """Add and verify a single token."""
         import random
 
         with self._lock:
@@ -211,9 +223,11 @@ class StreamingVerifier:
             return False
 
     def get_accepted(self) -> list[int]:
+        """Retrieve list of accepted tokens."""
         with self._lock:
             return list(self._accepted)
 
     def reset(self) -> None:
+        """Clear the current accepted sequence."""
         with self._lock:
             self._accepted.clear()

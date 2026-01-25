@@ -174,7 +174,7 @@ class WorkerProcess:
                         response = worker.process(request)
                         response.latency_ms = (time.time() - start) * 1000
                         worker._total_processed += 1
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         response = ResponseMessage(
                             request_id=request.request_id,
                             error=str(e),

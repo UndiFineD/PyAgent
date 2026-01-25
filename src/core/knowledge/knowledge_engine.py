@@ -102,10 +102,10 @@ class KnowledgeEngine:
         # Delegate to specialized stores which now use MemoryCore backend
         if mode == "vector":
             return self.vector.store(key, content, kwargs.get("metadata"))
-        elif mode == "btree":
+        if mode == "btree":
             return self.btree.store(key, content, kwargs.get("metadata"))
-        elif mode == "graph":
-            return self.graph.store(content, kwargs.get("target"), kwargs.get("relationship", "related_to"))
+        if mode == "graph":
+            return self.graph.store(key, content, {"relationship": kwargs.get("relationship", "related_to")})
 
         # General store via MemoryCore if mode is generic
         return self._memory_core.store_knowledge(self.agent_id, key, content, mode)
@@ -116,9 +116,9 @@ class KnowledgeEngine:
 
         if mode == "vector":
             return self.vector.retrieve(query, limit)
-        elif mode == "btree":
+        if mode == "btree":
             return self.btree.retrieve(query, limit)
-        elif mode == "graph":
+        if mode == "graph":
             return self.graph.retrieve(query, limit)
 
         # Fallback to general MemoryCore retrieval
@@ -128,9 +128,9 @@ class KnowledgeEngine:
         """Standardized deletion across modes."""
         if mode == "vector":
             return self.vector.delete(key)
-        elif mode == "btree":
+        if mode == "btree":
             return self.btree.delete(key)
-        elif mode == "graph":
+        if mode == "graph":
             return self.graph.delete(key)
 
         return self._memory_core.delete_knowledge(self.agent_id, key, mode)

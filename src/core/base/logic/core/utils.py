@@ -31,12 +31,16 @@ except ImportError:
 class UtilsCore:
     """Core utility logic for deduplication and configuration merging."""
 
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+
     def deduplicate_entries(self, entries: List[str]) -> List[str]:
         """Deduplicate string entries while preserving order."""
         if rc:
             try:
                 return rc.deduplicate_entries(entries)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         seen = set()
         result = []
@@ -66,7 +70,8 @@ class UtilsCore:
         if rc:
             try:
                 return rc.generate_cache_key(prompt, context)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         combined = f"{prompt}:{context}"
         return hashlib.sha256(combined.encode()).hexdigest()

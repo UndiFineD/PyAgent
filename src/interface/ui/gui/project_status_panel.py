@@ -51,7 +51,7 @@ class ProjectStatusPanel:
         """Polls the status file and updates the UI."""
         if self.status_file.exists():
             try:
-                with open(self.status_file) as f:
+                with open(self.status_file, encoding='utf-8') as f:
                     data = json.load(f)
 
                 goal = data.get("active_project", "None") or "None"
@@ -73,7 +73,7 @@ class ProjectStatusPanel:
                     file = step.get("file", "unknown")
                     self.steps_text.insert(tk.END, f"[{i + 1}/{total}] {status:10} | {agent} -> {file}\n")
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self.steps_text.delete("1.0", tk.END)
                 self.steps_text.insert(tk.END, f"Error reading status: {e}")
 

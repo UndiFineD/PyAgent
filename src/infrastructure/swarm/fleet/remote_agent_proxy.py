@@ -78,7 +78,7 @@ class RemoteAgentProxy(BaseAgent):
             self._update_node_status(True)
             self._record_interaction(tool_name, payload, result)
             return result
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Error calling remote agent: {e}")
             self._update_node_status(False)
             return f"Error calling remote agent: {e}"
@@ -107,7 +107,7 @@ class RemoteAgentProxy(BaseAgent):
             result = BinaryTransport.unpack(response.content, compressed=compress)
             self._update_node_status(True)
             return result.get("result")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Error in remote binary call: {e}")
             self._update_node_status(False)
             return None
@@ -120,14 +120,15 @@ class RemoteAgentProxy(BaseAgent):
 
             recorder = LocalContextRecorder()
             recorder.record_interaction(
-                agent_name=f"remote_{self.agent_name}",
-                tool_name=tool_name,
-                payload=payload,
-                response=response,
+                provider=f"remote_{self.agent_name}",
+                model=tool_name,
+                prompt=str(payload),
+                result=response,
+                meta={"remote_call": True}
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"Failed to record remote interaction: {e}")
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Proxies the improvement request to the remote agent."""
-        return self.call_remote_tool("improve_content", prompt=prompt)
+        return self.call_remote_tool("improve_content", prompt=prompt, target_file=target_file)

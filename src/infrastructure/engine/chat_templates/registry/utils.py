@@ -28,24 +28,24 @@ from .resolver import TemplateResolver
 
 logger = logging.getLogger(__name__)
 
-_default_registry: Optional[ChatTemplateRegistry] = None
-_default_resolver: Optional[TemplateResolver] = None
+_DEFAULT_REGISTRY: Optional[ChatTemplateRegistry] = None
+_DEFAULT_RESOLVER: Optional[TemplateResolver] = None
 
 
 def _get_registry() -> ChatTemplateRegistry:
     """Get default registry."""
-    global _default_registry
-    if _default_registry is None:
-        _default_registry = ChatTemplateRegistry()
-    return _default_registry
+    global _DEFAULT_REGISTRY  # pylint: disable=global-statement
+    if _DEFAULT_REGISTRY is None:
+        _DEFAULT_REGISTRY = ChatTemplateRegistry()
+    return _DEFAULT_REGISTRY
 
 
 def _get_resolver() -> TemplateResolver:
     """Get default resolver."""
-    global _default_resolver
-    if _default_resolver is None:
-        _default_resolver = TemplateResolver()
-    return _default_resolver
+    global _DEFAULT_RESOLVER  # pylint: disable=global-statement
+    if _DEFAULT_RESOLVER is None:
+        _DEFAULT_RESOLVER = TemplateResolver()
+    return _DEFAULT_RESOLVER
 
 
 def register_template(

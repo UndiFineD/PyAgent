@@ -24,6 +24,7 @@ __version__ = VERSION
 
 
 class EssayStyle(Enum):
+    """Essay style options."""
     ACADEMIC = "academic"
     PROFESSIONAL = "professional"
     TECHNICAL = "technical"
@@ -33,6 +34,7 @@ class EssayStyle(Enum):
 
 
 class EssayLength(Enum):
+    """Essay length options."""
     SHORT = "short"  # ~500 words
     MEDIUM = "medium"  # ~1000 words
     LONG = "long"  # ~2000 words
@@ -60,6 +62,7 @@ class EssayOutline:
     sources: List[Source]
 
 
+# pylint: disable=too-many-ancestors
 class WebSearchEssayAgent(SearchAgent):
     """
     Agent that researches complex subjects via web search and
@@ -79,6 +82,7 @@ class WebSearchEssayAgent(SearchAgent):
         )
 
     @as_tool
+    # pylint: disable=too-many-positional-arguments
     async def write_essay(
         self,
         subject: str,
@@ -175,7 +179,7 @@ class WebSearchEssayAgent(SearchAgent):
                 synthesis = json.loads(match.group(1))
             else:
                 synthesis = {"raw": res}
-        except Exception:
+        except (ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
             synthesis = {"raw": res}
 
         return {
@@ -201,7 +205,7 @@ class WebSearchEssayAgent(SearchAgent):
 
         # Search for verification
         search_query = f"fact check {claim}"
-        search_data = self._search_duckduckgo(search_query)
+        search_data = self._search_duckduckgo(search_query, max_results=5)
 
         prompt = (
             f"Claim to fact-check: {claim}\n\n"
@@ -216,7 +220,7 @@ class WebSearchEssayAgent(SearchAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
@@ -230,7 +234,7 @@ class WebSearchEssayAgent(SearchAgent):
         all_findings = []
         for perspective in perspectives:
             query = f"{topic} {perspective}"
-            data = self._search_duckduckgo(query)
+            data = self._search_duckduckgo(query, max_results=3)
             all_findings.append({"perspective": perspective, "findings": data})
 
         prompt = (
@@ -247,7 +251,7 @@ class WebSearchEssayAgent(SearchAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
@@ -277,13 +281,13 @@ class WebSearchEssayAgent(SearchAgent):
         sources = []
         for query in queries:
             try:
-                data = self._search_duckduckgo(query)
+                data = self._search_duckduckgo(query, max_results=5)
                 # Parse search results into sources
                 source = Source(
                     title=f"Search: {query}", url="duckduckgo.com", snippet=data[:500] if data else "", relevance=0.8
                 )
                 sources.append(source)
-            except Exception as e:
+            except (RuntimeError, ValueError, AttributeError) as e:
                 logging.debug(f"Search failed for query '{query}': {e}")
 
         self._research_cache[subject] = sources
@@ -313,7 +317,7 @@ class WebSearchEssayAgent(SearchAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))

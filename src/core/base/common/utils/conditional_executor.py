@@ -21,8 +21,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from src.core.base.common.models.base_models import ExecutionCondition
-from src.core.base.lifecycle.version import VERSION
+from ..models.base_models import ExecutionCondition
+from ...lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -111,7 +111,8 @@ class ConditionalExecutor:
             condition = self._conditions[cond_name]
             try:
                 results.append(condition.check(file_path, content))
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 results.append(False)
 
         if not results:

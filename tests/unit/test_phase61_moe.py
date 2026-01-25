@@ -1,3 +1,7 @@
+
+"""
+Test Phase61 Moe module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Tests for Phase 61: Cross-Model MoE Orchestration

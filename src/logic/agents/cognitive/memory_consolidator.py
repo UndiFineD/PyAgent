@@ -81,7 +81,7 @@ class MemoryConsolidator(BaseAgent):
             try:
                 with open(self.long_term_memory_file, encoding="utf-8") as f:
                     return json.load(f)
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to load memory: {e}")
         return []
 
@@ -92,11 +92,12 @@ class MemoryConsolidator(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(memory, f, indent=2)
             temp_path.replace(self.long_term_memory_file)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception:  # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"Failed to save memory atomically: {e}")
             raise

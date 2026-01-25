@@ -104,7 +104,7 @@ def bulk_replace(
                 results[str(path)] = True
             else:
                 results[str(path)] = False
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("BulkReplace: Failed to process %s: %s", path, e)
 
     return results
@@ -164,7 +164,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                                 "timestamp_ms": int(time.time() * 1000),
                             },
                         )
-                    except Exception as e:  # pylint: disable=broad-exception-caught
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.debug("Failed to record tool interaction: %s", e)
 
                 return result
@@ -198,7 +198,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                                 "timestamp_ms": int(time.time() * 1000),
                             },
                         )
-                    except Exception as e:  # pylint: disable=broad-exception-caught
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.debug("Failed to record tool interaction: %s", e)
 
                 return result

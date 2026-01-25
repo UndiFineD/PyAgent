@@ -49,6 +49,15 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         self._token_strings = token_strings or {}
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
+        """
+        Accept tokens and update regex state.
+
+        Args:
+            tokens: Token IDs to accept.
+
+        Returns:
+            True if all tokens are valid for the regex.
+        """
         for token_id in tokens:
             token_str = self._token_strings.get(token_id, "")
             new_text = self._generated_text + token_str
@@ -66,11 +75,21 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         return True
 
     def _is_partial_match(self, text: str) -> bool:
+        """Check if text is a partial match for the regex."""
         with contextlib.suppress(Exception):
             return self._pattern.match(text) is not None
         return False
 
     def validate_tokens(self, tokens: Sequence[int]) -> int:
+        """
+        Validate tokens against the regex without updating state.
+
+        Args:
+            tokens: Token IDs to validate.
+
+        Returns:
+            Number of valid tokens.
+        """
         temp_text = self._generated_text
 
         for i, token_id in enumerate(tokens):
@@ -85,9 +104,22 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         return len(tokens)
 
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
+        """
+        Fill bitmask (not implemented efficiently for simple regex).
+
+        Args:
+            bitmask: Bitmask to fill.
+            batch_index: Batch index.
+        """
         bitmask[batch_index, :] = True
 
     def get_allowed_tokens(self) -> List[int]:
+        """
+        Get allowed tokens (not implemented efficiently for simple regex).
+
+        Returns:
+            List of all token IDs.
+        """
         return list(range(self.vocab_size))
 
 
@@ -102,6 +134,16 @@ class ChoiceGrammar(StructuredOutputGrammar):
         token_strings: Optional[Dict[int, str]] = None,
         encode_fn: Optional[Callable[[str], List[int]]] = None,
     ):
+        """
+        Initialize ChoiceGrammar.
+
+        Args:
+            grammar_spec: Grammar specification.
+            vocab_size: Vocabulary size.
+            request_id: Request ID.
+            token_strings: Mapping from token IDs to strings.
+            encode_fn: Function to encode text to tokens.
+        """
         super().__init__(grammar_spec, vocab_size, request_id)
 
         self._choices: List[str] = json.loads(grammar_spec.spec)
@@ -113,6 +155,15 @@ class ChoiceGrammar(StructuredOutputGrammar):
         self._allowed_tokens_cache: Dict[str, set] = {}
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
+        """
+        Accept tokens and update valid choices.
+
+        Args:
+            tokens: Token IDs to accept.
+
+        Returns:
+            True if all tokens are valid prefixes of some choice.
+        """
         for token_id in tokens:
             token_str = self._token_strings.get(token_id, "")
             new_text = self._generated_text + token_str
@@ -133,6 +184,15 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return True
 
     def validate_tokens(self, tokens: Sequence[int]) -> int:
+        """
+        Validate tokens against choices without updating state.
+
+        Args:
+            tokens: Token IDs to validate.
+
+        Returns:
+            Number of valid tokens.
+        """
         temp_text = self._generated_text
         temp_valid = list(self._valid_choices)
 
@@ -150,6 +210,13 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return len(tokens)
 
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
+        """
+        Fill a bitmask with allowed tokens for identifying choices.
+
+        Args:
+            bitmask: Bitmask to fill.
+            batch_index: Index in the batch.
+        """
         allowed = self._compute_allowed_tokens()
         bitmask[batch_index, :] = False
         for token_id in allowed:
@@ -157,9 +224,16 @@ class ChoiceGrammar(StructuredOutputGrammar):
                 bitmask[batch_index, token_id] = True
 
     def get_allowed_tokens(self) -> List[int]:
+        """
+        Get the list of allowed token IDs.
+
+        Returns:
+            List of allowed token IDs.
+        """
         return list(self._compute_allowed_tokens())
 
     def _compute_allowed_tokens(self) -> set:
+        """Compute allowed tokens based on valid choices."""
         cache_key = self._generated_text
         if cache_key in self._allowed_tokens_cache:
             return self._allowed_tokens_cache[cache_key]
@@ -176,6 +250,12 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return allowed
 
     def rollback(self, num_tokens: int) -> None:
+        """
+        Roll back the grammar state.
+
+        Args:
+            num_tokens: Number of tokens to roll back.
+        """
         for _ in range(min(num_tokens, len(self._state_history))):
             if self._state_history:
                 self._generated_text, self._valid_choices = self._state_history.pop()

@@ -122,7 +122,7 @@ class BackendHandlers:
                 logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")
         except subprocess.TimeoutExpired:
             logging.warning("Codex CLI timed out")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Codex CLI error: {e}")
         return None
 
@@ -144,7 +144,7 @@ class BackendHandlers:
             if result.returncode == 0 and stdout:
                 logging.info("Copilot CLI backend succeeded")
                 return stdout
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Copilot CLI error: {e}")
         return None
 
@@ -172,7 +172,7 @@ class BackendHandlers:
             )
             if result.returncode == 0 and result.stdout:
                 return result.stdout.strip()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"gh copilot failed: {e}")
         return None
 
@@ -202,7 +202,7 @@ class BackendHandlers:
                         token = path.read_text(encoding="utf-8").strip()
                         if token:
                             break
-                    except Exception:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         continue
 
         if not token:
@@ -233,7 +233,7 @@ class BackendHandlers:
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Lowered logging level for fallback-friendly behavior (Phase 123)
             logging.debug(f"GitHub Models error: {e}")
             return None
@@ -274,6 +274,6 @@ class BackendHandlers:
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"OpenAI API error: {e}")
             return None

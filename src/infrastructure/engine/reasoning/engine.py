@@ -80,6 +80,7 @@ class ReasoningEngine:
         }
 
     def parse(self, text: str) -> ParseResult:
+        """Parse text for reasoning and tool calls."""
         start_time = time.time()
         content = text
         thinking_blocks = []
@@ -113,21 +114,23 @@ class ReasoningEngine:
     def parse_streaming(
         self, token_stream: Iterator[str]
     ) -> Generator[Tuple[str, bool, Optional[ToolCall]], None, ParseResult]:
+        """Parse streaming tokens for reasoning and tool calls."""
         buffer = ""
         for token in token_stream:
             buffer += token
             is_thinking = False
             tool_call = None
             if self._reasoning_parser:
-                if self._reasoning_parser._state == ParseState.IN_THINK:
+                if self._reasoning_parser.state == ParseState.IN_THINK:
                     is_thinking = True
                 elif self._reasoning_parser.start_marker in buffer:
-                    self._reasoning_parser._state = ParseState.IN_THINK
+                    self._reasoning_parser.state = ParseState.IN_THINK
                     is_thinking = True
             yield (token, is_thinking, tool_call)
         return self.parse(buffer)
 
     def detect_format(self, text: str) -> ReasoningFormat:
+        """Detect reasoning format from text."""
         if "<think>" in text and "</think>" in text:
             return ReasoningFormat.DEEPSEEK_R1
         if "<thinking>" in text:
@@ -139,6 +142,7 @@ class ReasoningEngine:
         return ReasoningFormat.NONE
 
     def score_reasoning(self, block: ThinkingBlock) -> float:
+        """Score reasoning block quality."""
         score = 0.0
         content = block.content
         if len(content) > 100:
@@ -160,6 +164,7 @@ class ReasoningEngine:
         return min(score, 1.0)
 
     def visualize_reasoning(self, result: ParseResult) -> str:
+        """Generate text visualization of reasoning chain."""
         lines = ["=" * 60, "REASONING CHAIN VISUALIZATION", "=" * 60]
         for i, block in enumerate(result.thinking_blocks):
             lines.append(f"\n📝 Thinking Block {i + 1}")
@@ -178,9 +183,11 @@ class ReasoningEngine:
         return "\n".join(lines)
 
     def get_stats(self) -> Dict[str, int]:
+        """Get reasoning engine stats."""
         return self._stats.copy()
 
     def reset(self) -> None:
+        """Reset reasoning engine state."""
         if self._reasoning_parser:
             self._reasoning_parser.reset()
         if self._tool_parser:
@@ -192,6 +199,7 @@ class ReasoningEngine:
 def create_reasoning_engine(
     model_name: str = "", enable_thinking: bool = True, tool_format: ToolCallFormat = ToolCallFormat.NONE
 ) -> ReasoningEngine:
+    """Create a reasoning engine based on model name."""
     reasoning_format = ReasoningFormat.GENERIC
     model_lower = model_name.lower()
     if "deepseek" in model_lower or "r1" in model_lower:
@@ -207,6 +215,7 @@ def create_reasoning_engine(
 
 
 def create_tool_parser(format_type: ToolCallFormat = ToolCallFormat.OPENAI, strict: bool = False) -> ToolParser:
+    """Create a tool parser for specified format."""
     parsers = {ToolCallFormat.OPENAI: OpenAIToolParser, ToolCallFormat.HERMES: HermesToolParser}
     parser_cls = parsers.get(format_type, OpenAIToolParser)
     return parser_cls(strict=strict)

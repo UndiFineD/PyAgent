@@ -119,7 +119,7 @@ class LoraManager:
             logger.info("Activated LoRA adapter: %s (%.1fms)", name, adapter.load_time_ms)
             return True
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             adapter.state = AdapterState.ERROR
             logger.error("Failed to activate adapter %s: %s", name, e)
             return False

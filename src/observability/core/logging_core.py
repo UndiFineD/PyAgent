@@ -51,7 +51,7 @@ class LoggingCore:
         if HAS_RUST and not self._has_custom_patterns:
             try:
                 return rust_core.mask_sensitive_logs(text)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         result = text

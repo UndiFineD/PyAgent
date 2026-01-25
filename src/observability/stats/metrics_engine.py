@@ -235,7 +235,7 @@ class ObservabilityEngine:
         try:
             data = [asdict(m) for m in self.metrics]
             self.telemetry_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to save telemetry: {e}")
 
     def load(self) -> None:
@@ -245,7 +245,7 @@ class ObservabilityEngine:
                 data = json.loads(self.telemetry_file.read_text())
 
                 self.metrics = [AgentMetric(**m) for m in data]
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to load telemetry: {e}")
                 self.metrics = []
 

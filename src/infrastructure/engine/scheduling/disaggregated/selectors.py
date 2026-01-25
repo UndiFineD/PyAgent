@@ -36,7 +36,7 @@ class InstanceSelector(ABC):
         request: ScheduledRequest,
     ) -> Optional[InstanceInfo]:
         """Select an instance for the request."""
-        ...
+        raise NotImplementedError
 
 
 class RoundRobinSelector(InstanceSelector):

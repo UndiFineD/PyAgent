@@ -151,7 +151,7 @@ def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None
         agent_instance.process_file(file_path)
         logging.info("[worker] Completed %s", file_path.name)
         return file_path
-    except Exception as e:  # pylint: disable=broad-exception-caught
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logging.error("[worker] Failed: %s", e)
         return None
 

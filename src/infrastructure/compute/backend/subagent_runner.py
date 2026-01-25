@@ -31,11 +31,11 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-from .disk_cache import DiskCache
-from .llm_client import LLMClient
-from .local_context_recorder import LocalContextRecorder
-from .subagent_core import SubagentCore
-from .subagent_status import SubagentStatus
+from src.infrastructure.compute.backend.disk_cache import DiskCache
+from src.infrastructure.compute.backend.llm_client import LLMClient
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+from src.infrastructure.compute.backend.subagent_core import SubagentCore
+from src.infrastructure.compute.backend.subagent_status import SubagentStatus
 
 __version__ = VERSION
 

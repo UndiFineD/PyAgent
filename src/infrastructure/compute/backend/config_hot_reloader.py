@@ -66,7 +66,7 @@ class ConfigHotReloader:
                 for callback in self._callbacks:
                     try:
                         callback(key, value)
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.warning(f"Config callback error: {e}")
 
     def get_config(self, key: str, default: Any = None) -> Any:

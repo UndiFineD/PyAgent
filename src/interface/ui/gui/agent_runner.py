@@ -115,7 +115,7 @@ class AgentRunner:
                 logger.info("Agent execution completed successfully.")
                 if "set_status" in self.callbacks:
                     self.callbacks["set_status"](f"{agent_type} agent finished.")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Agent Failure: {str(e)}")
             finally:
                 column.on_finish()

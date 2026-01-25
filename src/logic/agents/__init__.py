@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION
 
 from .swarm.orchestrator_agent import OrchestratorAgent as Agent  # noqa: F401
 

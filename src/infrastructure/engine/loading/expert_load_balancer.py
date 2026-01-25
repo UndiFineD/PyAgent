@@ -40,7 +40,7 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 if TYPE_CHECKING:
     pass
@@ -82,16 +82,19 @@ class EplbMetrics:
 
     @property
     def num_layers(self) -> int:
+        """Get number of layers."""
         return len(self.physical_to_logical)
 
     @property
     def num_physical_experts(self) -> int:
+        """Get number of physical experts."""
         if self.physical_to_logical:
             return len(self.physical_to_logical[0])
         return 0
 
     @property
     def num_logical_experts(self) -> int:
+        """Get number of logical experts."""
         if self.logical_replica_count:
             return len(self.logical_replica_count[0])
         return 0
@@ -156,7 +159,7 @@ class AbstractEplbPolicy(ABC):
         Returns:
             ExpertMapping with phy2log, log2phy, and replica counts
         """
-        pass
+        raise NotImplementedError("rebalance_experts must be implemented by subclass")
 
 
 class DefaultEplbPolicy(AbstractEplbPolicy):
@@ -180,8 +183,8 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         """
         try:
             import numpy as np
-        except ImportError:
-            raise ImportError("numpy required for DefaultEplbPolicy")
+        except ImportError as exc:
+            raise ImportError("numpy required for DefaultEplbPolicy") from exc
 
         # Handle torch tensors
         if hasattr(weight, "cpu"):
@@ -195,7 +198,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
 
         if groups_per_pack == 1:
             # Simple case: each group is its own pack
-            pack_index = [[i for i in range(num_groups)] for _ in range(num_layers)]
+            pack_index = [list(range(num_groups)) for _ in range(num_layers)]
             rank_in_pack = [[0] * num_groups for _ in range(num_layers)]
             return pack_index, rank_in_pack
 
@@ -241,8 +244,8 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         """
         try:
             import numpy as np
-        except ImportError:
-            raise ImportError("numpy required for DefaultEplbPolicy")
+        except ImportError as exc:
+            raise ImportError("numpy required for DefaultEplbPolicy") from exc
 
         if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
@@ -283,8 +286,8 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         """Rebalance experts using balanced packing and replication."""
         try:
             import numpy as np
-        except ImportError:
-            raise ImportError("numpy required for DefaultEplbPolicy")
+        except ImportError as exc:
+            raise ImportError("numpy required for DefaultEplbPolicy") from exc
 
         if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
@@ -335,8 +338,8 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
         """Rebalance with locality awareness."""
         try:
             import numpy as np
-        except ImportError:
-            raise ImportError("numpy required for LocalityAwarePolicy")
+        except ImportError as exc:
+            raise ImportError("numpy required for LocalityAwarePolicy") from exc
 
         if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
@@ -344,9 +347,6 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
             weight_np = np.asarray(weight)
 
         num_layers, num_logical = weight_np.shape
-
-        # Group experts by load for node assignment
-        pack_index, _ = DefaultEplbPolicy.balanced_packing(weight, num_nodes)
 
         # Assign experts to nodes, then within-node balancing
         phy_to_log, _, log_count = DefaultEplbPolicy.replicate_experts(weight, num_replicas)
@@ -460,8 +460,8 @@ class ExpertLoadBalancer:
         """
         try:
             import numpy as np
-        except ImportError:
-            raise ImportError("numpy required for rebalancing")
+        except ImportError as exc:
+            raise ImportError("numpy required for rebalancing") from exc
 
         if weight is None:
             # Aggregate from logical expert loads
@@ -502,6 +502,14 @@ class ExpertLoadBalancer:
     def mapping(self) -> Optional[ExpertMapping]:
         """Current expert mapping."""
         return self._mapping
+
+    def get_stats(self) -> Dict[str, Any]:
+        """Get load balancing statistics."""
+        return {
+            "num_layers": self.num_layers,
+            "num_logical": self.num_logical,
+            "num_physical": self.num_physical,
+        }
 
 
 class AsyncExpertRebalancer:
@@ -570,8 +578,10 @@ class AsyncExpertRebalancer:
                         self._last_rebalance = time.time()
 
                 time.sleep(1.0)  # Check every second
-            except Exception:
-                pass  # Log and continue
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
+                # Background thread should not crash
+                pass
 
     def get_pending_mapping(self) -> Optional[ExpertMapping]:
         """Get and clear pending mapping."""

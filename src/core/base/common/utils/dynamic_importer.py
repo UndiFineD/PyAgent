@@ -99,7 +99,7 @@ def import_from_path(
 
     try:
         spec.loader.exec_module(module)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         if add_to_sys_modules and module_name in sys.modules:
             del sys.modules[module_name]
         raise ImportError(f"Failed to execute module {file_path}: {e}") from e

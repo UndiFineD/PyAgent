@@ -115,7 +115,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
                     prompt=f"As Supervisor, I need you to address: {goal}",
                 )
                 results.append(f"[{agent_type}]: {result[:150]}...")
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 results.append(f"[{agent_type}]: FAILED - {e}")
 
         return f"Supervisor results for '{goal}':\n\n" + "\n".join(results)

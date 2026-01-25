@@ -105,7 +105,7 @@ class VllmNativeEngine:
 
                 self._llm = LLM(**kwargs)
                 return True
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error("Failed to start Native vLLM Engine: %s", e)
                 self.enabled = False
                 return False
@@ -171,7 +171,7 @@ class VllmNativeEngine:
             if outputs:
                 return outputs[0].outputs[0].text
             return ""
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Native vLLM generation failed: %s", e)
             return ""
 

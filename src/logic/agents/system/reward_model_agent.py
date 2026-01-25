@@ -81,7 +81,7 @@ class RewardModelAgent(BaseAgent):
             if match:
                 data = json.loads(match.group(1))
                 return data
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"RewardModel: Failed to parse ranking: {e}")
 
         # Fallback heuristic ranking
@@ -98,9 +98,9 @@ class RewardModelAgent(BaseAgent):
         ranking = sorted(scores, key=scores.get, reverse=True)
         return {"ranking": ranking, "scores": scores}
 
-    async def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Standard AI-powered evaluation."""
-        return await super().improve_content(input_text)
+        return await super().improve_content(prompt, target_file)
 
 
 if __name__ == "__main__":

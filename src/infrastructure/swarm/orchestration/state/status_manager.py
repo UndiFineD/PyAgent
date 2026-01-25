@@ -92,10 +92,10 @@ class StatusManager:
     def _read(self) -> dict[str, Any]:
         if not self.status_file.exists():
             self.clear_status()
-        with open(self.status_file) as f:
+        with open(self.status_file, encoding='utf-8') as f:
             return json.load(f)
 
     def _write(self, data: dict[str, Any]) -> None:
         self.status_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.status_file, "w") as f:
+        with open(self.status_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4)

@@ -167,8 +167,8 @@ class ContextAgent(
                     f"```\n{source_code}\n```\n\n"
                     "Based on the source code above, provide a comprehensive description."
                 )
-                return super().improve_content(enhanced_prompt)
+                return await super().improve_content(enhanced_prompt)
             except (OSError, UnicodeDecodeError):
                 pass
 
-        return super().improve_content(prompt)
+        return await super().improve_content(prompt)

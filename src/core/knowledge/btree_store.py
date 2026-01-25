@@ -64,6 +64,7 @@ class BTreeKnowledgeStore(KnowledgeStore):
 
         # Use Standardized infrastructure for directory management
         shard_dir = self.storage_path / tier1 / tier2
+        # pylint: disable=protected-access
         self._memory_core._fs.ensure_directory(shard_dir)
         db_path = shard_dir / "shard.db"
 
@@ -93,7 +94,7 @@ class BTreeKnowledgeStore(KnowledgeStore):
         self._sync_multimodal(key, value, clean_metadata)
         return True
 
-    def _sync_multimodal(self, key: str, value: Any, metadata: dict[str, Any]) -> None:
+    def _sync_multimodal(self, key: str, _value: Any, _metadata: dict[str, Any]) -> None:
         logging.debug(f"BTreeStore: Synced {key} to Multi-Modal Trinity.")
 
     def _apply_privacy_filter(self, metadata: dict[str, Any]) -> dict[str, Any]:

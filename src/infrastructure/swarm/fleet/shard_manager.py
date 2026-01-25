@@ -27,6 +27,7 @@ class ShardManager(StandardShardCore):
     """Facade for ShardCore."""
 
     def __init__(self, workspace_root: str):
+        super().__init__()
         self.workspace_root = Path(workspace_root)
         self.shards: dict[str, set[str]] = {}  # Shard name to agent names
         self.agent_to_shard: dict[str, str] = {}

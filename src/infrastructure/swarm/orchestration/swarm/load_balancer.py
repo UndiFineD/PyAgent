@@ -107,7 +107,7 @@ class SwarmLoadBalancer:
                 await self.migration_engine.migrate_shard(context_id, shard_idx, target_rank)
                 # After one migration, re-sort or break to avoid over-filling a cool rank in one pass
                 break
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to migrate shard during load balancing: {e}")
 
     def _get_shards_on_rank(self, rank_id: int) -> List[tuple]:

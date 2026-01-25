@@ -82,7 +82,7 @@ class GeminiConnector(CloudProviderBase):
         start_time = time.perf_counter()
 
         if not self._api_key:
-            raise AuthenticationError("Gemini API key is required.")
+            raise AuthenticationError("Gemini API key is required.", provider="Gemini")
 
         gemini_contents = []
         for msg in request.messages:
@@ -103,13 +103,22 @@ class GeminiConnector(CloudProviderBase):
         async with httpx.AsyncClient(timeout=60.0) as client:
             try:
                 response = await client.post(url, json=payload)
-            except Exception as e:
-                raise CloudProviderError(f"Gemini connection failed: {e}")
+            except httpx.HTTPError as e:
+                raise CloudProviderError(
+                    f"Gemini connection failed: {e}",
+                    provider="Google Gemini"
+                ) from e
 
             if response.status_code == 429:
-                raise RateLimitError("Gemini API rate limit exceeded.")
+                raise RateLimitError(
+                    "Gemini API rate limit exceeded.",
+                    provider="Google Gemini"
+                )
             elif response.status_code != 200:
-                raise CloudProviderError(f"Gemini API error ({response.status_code}): {response.text}")
+                raise CloudProviderError(
+                    f"Gemini API error ({response.status_code}): {response.text}",
+                    provider="Google Gemini"
+                )
 
             data = response.json()
             try:
@@ -131,7 +140,7 @@ class GeminiConnector(CloudProviderBase):
                     raw_response=data,
                 )
             except (KeyError, IndexError) as e:
-                raise CloudProviderError(f"Failed to parse Gemini response: {e}")
+                raise CloudProviderError(f"Failed to parse Gemini response: {e}", provider="Google Gemini")
 
     async def stream(self, request: InferenceRequest) -> AsyncIterator[InferenceResponse]:
         import json
@@ -139,7 +148,7 @@ class GeminiConnector(CloudProviderBase):
         import httpx
 
         if not self._api_key:
-            raise AuthenticationError("Gemini API key is required.")
+            raise AuthenticationError("Gemini API key is required.", provider="Gemini")
 
         gemini_contents = []
         for msg in request.messages:
@@ -162,7 +171,10 @@ class GeminiConnector(CloudProviderBase):
         async with httpx.AsyncClient(timeout=60.0) as client:
             async with client.stream("POST", url, json=payload) as response:
                 if response.status_code != 200:
-                    raise CloudProviderError(f"Gemini streaming error ({response.status_code})")
+                    raise CloudProviderError(
+                        f"Gemini streaming error ({response.status_code})",
+                        provider="Google Gemini"
+                    )
 
                 async for line in response.aiter_lines():
                     if line.startswith("data: "):

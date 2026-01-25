@@ -54,7 +54,7 @@ class RetryHTTPMixin:
                         continue
                     r.raise_for_status()
                     return r.json()
-            except requests.RequestException as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_error = e
                 if attempt < self.max_retries:
                     logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}")

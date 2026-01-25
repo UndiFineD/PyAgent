@@ -93,7 +93,7 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 finished=data.get("finished", True),
                 metrics=data.get("metrics", {}),
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"ZMQ error: {e}")
             self._pending[request_id] = EngineOutput(request_id=request_id, error=str(e))
 

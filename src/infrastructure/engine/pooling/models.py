@@ -92,6 +92,7 @@ class PoolingResult:
 
     @property
     def shape(self) -> Tuple[int, ...]:
+        """Get the shape of the resulting embeddings array."""
         return self.embeddings.shape
 
     @property

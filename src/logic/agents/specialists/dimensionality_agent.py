@@ -34,6 +34,7 @@ except ImportError:
 
 
 class ReductionMethod(Enum):
+    """Supported dimensionality reduction methods."""
     PCA = "pca"
     TSNE = "tsne"
     UMAP = "umap"
@@ -53,6 +54,7 @@ class EmbeddingStats:
     norm: float
 
 
+# pylint: disable=too-many-ancestors
 class DimensionalityAgent(BaseAgent):
     """
     Agent specializing in simplifying complex datasets and high-dimensional spaces.
@@ -134,7 +136,7 @@ class DimensionalityAgent(BaseAgent):
 
     @as_tool
     async def find_principal_concepts(
-        self, text_list: List[str], n_concepts: int = 5, include_weights: bool = True
+        self, text_list: List[str], n_concepts: int = 5, _include_weights: bool = True
     ) -> Dict[str, Any]:
         """Identifies the 'principal components' (top concepts) of a text corpus."""
         texts_preview = "\n".join([f"- {t[:200]}..." if len(t) > 200 else f"- {t}" for t in text_list[:20]])
@@ -179,7 +181,7 @@ class DimensionalityAgent(BaseAgent):
                 result = rust_core.compute_embedding_stats_rust(embedding)
                 if result:
                     return result
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass  # Fall through to Python implementation
 
         mean = sum(embedding) / n
@@ -221,7 +223,7 @@ class DimensionalityAgent(BaseAgent):
                 result = rust_core.kmeans_cluster_rust(embeddings, n_clusters, 3)
                 if result:
                     return result
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass  # Fall through to Python implementation
 
         dim = len(embeddings[0])
@@ -268,7 +270,7 @@ class DimensionalityAgent(BaseAgent):
                 result = rust_core.compute_similarity_matrix_rust(embeddings, top_k)
                 if result:
                     return result
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass  # Fall through to Python implementation
 
         # Compute norms
@@ -308,7 +310,7 @@ class DimensionalityAgent(BaseAgent):
                 result = rust_core.pca_reduce_rust(embedding, target_dim)
                 if result is not None:
                     return result
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
 
         # Sort by absolute value and keep top components
@@ -327,7 +329,7 @@ class DimensionalityAgent(BaseAgent):
                 result = rust_core.random_projection_rust(embedding, target_dim, 42)
                 if result is not None:
                     return result
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass
 
         import random

@@ -133,7 +133,7 @@ class CommandParser:
 
         try:
             return defn.handler(ctx)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.exception("Failed to execute command /%s", command)
             return CommandResult.fail(str(e))
 
@@ -164,7 +164,7 @@ class CommandParser:
             if defn:
                 try:
                     result = defn.handler(ctx)
-                except Exception as e:  # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.exception("Error in command handler for /%s", cmd.command)
                     result = CommandResult.fail(str(e))
             else:

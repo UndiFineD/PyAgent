@@ -15,9 +15,11 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite
+from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite  # pylint: disable=wrong-import-position
+
 
 async def main():
+    """Main entry point for the benchmarking CLI."""
     suite = BenchmarkSuite()
 
     # 1. Tokenization Benchmarks
@@ -51,13 +53,13 @@ async def main():
 
     # 3. Agent Performance (if BenchmarkAgent is available)
     try:
-        from src.logic.agents.development.benchmark_agent import BenchmarkAgent
+        from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
         # Note: We need a valid path or mock for Agent initialization
         # For simplicity in this CLI, we only run if we can easily init
         print("\n🚀 Running Agent Generation Benchmark...")
         agent = BenchmarkAgent("scripts/benchmark_agent.py")
         await suite.benchmark_agent_performance(agent, "Hello, tell me about yourself", label="BenchmarkAgent")
-    except Exception as e:
+    except (ImportError, RuntimeError, AttributeError) as e:
         print(f"\n⚠️  Skipping Agent benchmark: {e}")
 
     # Output results

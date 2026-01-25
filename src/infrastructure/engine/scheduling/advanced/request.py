@@ -75,7 +75,7 @@ class ScheduledRequest:
     saved_state: Optional[Any] = None  # KV cache state, etc.
 
     # Internal
-    _sequence: int = field(default=0, repr=False)
+    sequence: int = field(default=0, repr=False)
 
     def __post_init__(self) -> None:
         """Initialize metrics."""

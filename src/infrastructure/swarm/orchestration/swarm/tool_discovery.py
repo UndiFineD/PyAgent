@@ -64,7 +64,7 @@ class AutonomousToolDiscovery:
                         "desc": tool["desc"],
                         "embedding": emb,
                     }
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to index tools for MCP server {server}: {e}")
 
     async def find_external_tool(self, task_prompt: str, threshold: float = 0.7) -> Optional[Dict[str, Any]]:

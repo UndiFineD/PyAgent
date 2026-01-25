@@ -61,26 +61,31 @@ class TiktokenTokenizer(BaseTokenizer):
                         self._encoding = tiktoken.encoding_for_model(model_name)
                     except KeyError:
                         self._encoding = tiktoken.get_encoding("cl100k_base")
-        except ImportError:
-            raise ImportError("tiktoken package required for Tiktoken tokenizer")
+        except ImportError as exc:
+            raise ImportError("tiktoken package required for Tiktoken tokenizer") from exc
 
     @property
     def vocab_size(self) -> int:
+        """Get the vocabulary size of the encoding."""
         return self._encoding.n_vocab
 
     @property
     def bos_token_id(self) -> Optional[int]:
+        """Get the beginning of sequence token ID (not applicable for Tiktoken)."""
         return None
 
     @property
     def eos_token_id(self) -> Optional[int]:
+        """Get the end of sequence token ID."""
         try:
             return self._encoding.encode("<|endoftext|>", allowed_special={"<|endoftext|>"})[0]
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return None
 
     @property
     def pad_token_id(self) -> Optional[int]:
+        """Get the padding token ID (not applicable for Tiktoken)."""
         return None
 
     def encode(
@@ -88,6 +93,8 @@ class TiktokenTokenizer(BaseTokenizer):
         text: str,
         add_special_tokens: bool = True,
     ) -> List[int]:
+        """Encode text to token IDs."""
+        _ = add_special_tokens  # Tiktoken handles special tokens via allowed_special
         return self._encoding.encode(text)
 
     def decode(
@@ -102,7 +109,10 @@ class TiktokenTokenizer(BaseTokenizer):
         texts: List[str],
         add_special_tokens: bool = True,
     ) -> List[List[int]]:
+        """Encode a batch of texts to token IDs."""
+        _ = add_special_tokens
         return self._encoding.encode_batch(texts)
 
     def estimate_tokens(self, text: str) -> int:
+        """Estimate the number of tokens in the text without full encoding."""
         return len(self._encoding.encode(text))

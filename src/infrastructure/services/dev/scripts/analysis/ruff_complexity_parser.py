@@ -32,7 +32,7 @@ def parse_ruff_complexity(json_file: str, threshold: int = 25):
     try:
         with open(json_file, "r", encoding="utf-8") as f:
             data = json.load(f)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"Error reading JSON: {e}")
         return
 

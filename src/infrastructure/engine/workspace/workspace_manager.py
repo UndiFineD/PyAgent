@@ -40,6 +40,7 @@ class WorkspaceManager:
 
     _instance: Optional["WorkspaceManager"] = None
     _lock = threading.Lock()
+    _initialized: bool = False
 
     def __new__(cls, *args, **kwargs):
         with cls._lock:
@@ -67,7 +68,7 @@ class WorkspaceManager:
             try:
                 self._handle = rc.workspace_init_rust(self.total_size)
                 logger.info(f"Initialized Rust workspace of {size_mb}MB")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to initialize Rust workspace: {e}")
                 self._handle = None
         else:
@@ -100,7 +101,7 @@ class WorkspaceManager:
                 if ptr:
                     # Logic to wrap pointer in memoryview or similar
                     pass
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug(f"Rust allocation fallback: {e}")
 
         # Standard memory allocation

@@ -28,7 +28,7 @@ def lmstudio_chat(
     prompt: str,
     model: str = "",
     system_prompt: str = "You are a helpful assistant.",
-    **kwargs,
+    **_kwargs,
 ) -> str:
     """Convenience function for quick LM Studio chat."""
     try:
@@ -41,7 +41,7 @@ def lmstudio_chat(
         result = llm.respond(chat)
         return str(result)
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logger.error(f"lmstudio_chat error: {e}")
         return ""
 
@@ -62,7 +62,7 @@ def lmstudio_stream(
         for fragment in llm.respond_stream(chat):
             yield str(fragment)
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logger.error(f"lmstudio_stream error: {e}")
 
 
@@ -85,6 +85,6 @@ async def lmstudio_chat_async(
             result = await llm.respond(chat)
             return str(result)
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logger.error(f"lmstudio_chat_async error: {e}")
         return ""

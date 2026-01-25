@@ -62,11 +62,12 @@ except ImportError:
 try:
     from src.core.rust_bridge import get_bridge
 
-    _bridge = get_bridge()
-    HAS_RUST = hasattr(_bridge, "batch_write_indices_rust")
-except Exception:
+    BRIDGE = get_bridge()
+    HAS_RUST = hasattr(BRIDGE, "batch_write_indices_rust")
+except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
     HAS_RUST = False
-    _bridge = None
+    BRIDGE = None
 
 
 class WritePolicy(Enum):
@@ -142,6 +143,7 @@ class StagedBatchWriter:
 
     def __init__(
         self,
+        # pylint: disable=too-many-positional-arguments
         target: Optional[Any] = None,
         initial_capacity: int = 1024,
         max_capacity: int = 1024 * 1024,
@@ -328,16 +330,16 @@ class StagedBatchWriter:
         if self.policy == WritePolicy.LAST_WRITE_WINS:
             return max(writes, key=lambda w: w.timestamp).value
 
-        elif self.policy == WritePolicy.FIRST_WRITE_WINS:
+        if self.policy == WritePolicy.FIRST_WRITE_WINS:
             return min(writes, key=lambda w: w.timestamp).value
 
-        elif self.policy == WritePolicy.AGGREGATE_SUM:
+        if self.policy == WritePolicy.AGGREGATE_SUM:
             return sum(w.value for w in writes)
 
-        elif self.policy == WritePolicy.AGGREGATE_MAX:
+        if self.policy == WritePolicy.AGGREGATE_MAX:
             return max(w.value for w in writes)
 
-        elif self.policy == WritePolicy.AGGREGATE_MIN:
+        if self.policy == WritePolicy.AGGREGATE_MIN:
             return min(w.value for w in writes)
 
         return writes[-1].value
@@ -442,7 +444,7 @@ class StagedBatchWriter:
             indices_ptr,
             values_ptr,
             n_writes: tl.constexpr,
-            BLOCK_SIZE: tl.constexpr,
+            BLOCK_SIZE: tl.constexpr,  # pylint: disable=invalid-name
         ):
             pid = tl.program_id(0)
             offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
@@ -581,10 +583,11 @@ def coalesce_write_indices(
 
     Uses Rust acceleration if available.
     """
-    if HAS_RUST and _bridge is not None:
+    if HAS_RUST and BRIDGE is not None:
         try:
-            return _bridge.coalesce_writes_rust(indices, block_size)
-        except Exception:
+            return BRIDGE.coalesce_writes_rust(indices, block_size)
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             pass
 
     # Python fallback

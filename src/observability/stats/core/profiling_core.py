@@ -77,7 +77,7 @@ class ProfilingCore:
                     for s in stats
                 ]
                 return rc.identify_bottlenecks(stats_list, threshold_ms)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
 

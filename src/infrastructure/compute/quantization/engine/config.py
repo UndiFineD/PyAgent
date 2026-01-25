@@ -56,6 +56,7 @@ class QuantConfig:
         self._validate()
 
     def _validate(self):
+        """Internal validation of config parameters."""
         if self.bits not in (4, 8):
             raise ValueError(f"bits must be 4 or 8, got {self.bits}")
         if self.group_size < -1 or self.group_size == 0:
@@ -65,16 +66,19 @@ class QuantConfig:
 
     @property
     def pack_factor(self) -> int:
+        """Returns number of values packed into a 32-bit integer."""
         return 32 // self.bits
 
     @property
     def qmin(self) -> int:
+        """Minimum representable value for the bit-width."""
         if self.symmetric:
             return -(1 << (self.bits - 1))
         return 0
 
     @property
     def qmax(self) -> int:
+        """Maximum representable value for the bit-width."""
         if self.symmetric:
             return (1 << (self.bits - 1)) - 1
         return (1 << self.bits) - 1

@@ -40,7 +40,8 @@ class ConvergenceCore(BaseCore):
                 # Use Rust for high-throughput health checking
                 # pylint: disable=no-member
                 return rc.verify_fleet_health(agent_reports)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         healthy_count = sum(1 for status in agent_reports.values() if status)

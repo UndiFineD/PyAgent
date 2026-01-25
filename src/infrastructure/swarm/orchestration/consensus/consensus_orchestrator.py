@@ -108,7 +108,7 @@ class ConsensusOrchestrator:
                         "weight": self.reputation_scores.get(agent_name, 0.5),
                     }
                 )
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Agent {agent_name} failed to propose: {e}")
         return proposals
 
@@ -147,7 +147,7 @@ class ConsensusOrchestrator:
                         refined = loop.run_until_complete(coro)
 
                     new_proposals.append({"agent": p["agent"], "content": refined, "weight": p["weight"]})
-                except Exception:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     new_proposals.append(p)
             current_proposals = new_proposals
         return current_proposals

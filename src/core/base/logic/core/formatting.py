@@ -13,6 +13,9 @@ except ImportError:
 class FormattingCore:
     """Handles logic for normalizing and diffing content."""
 
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+
     def fix_markdown(self, content: str) -> str:
         """Pure logic to normalize markdown content."""
         lines = content.splitlines()
@@ -29,7 +32,8 @@ class FormattingCore:
             try:
                 # pylint: disable=no-member
                 return rc.normalize_response(response)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         normalized = response.strip().replace("\r\n", "\n")
         return " ".join(normalized.split())
@@ -41,7 +45,8 @@ class FormattingCore:
                 # pylint: disable=no-member
                 diff_text, _, _ = rc.generate_unified_diff_rust(old_content, new_content, filename, 3)
                 return diff_text
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         old_lines = old_content.splitlines(keepends=True)

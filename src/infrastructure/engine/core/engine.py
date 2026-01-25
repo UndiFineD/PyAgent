@@ -58,7 +58,7 @@ class EngineCore:
         self._total_steps = 0
         self._total_requests = 0
 
-    def add_request(self, request: Request, request_wave: int = 0) -> None:
+    def add_request(self, request: Request, _request_wave: int = 0) -> None:
         """Add a request to be processed."""
         self.scheduler.add_request(request)
         self._total_requests += 1
@@ -85,7 +85,7 @@ class EngineCore:
         """Context manager for detailed error logging."""
         try:
             yield
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(
                 "Error during model execution. "
                 f"Scheduled {len(scheduler_output.scheduled_requests)} requests, "
@@ -171,7 +171,6 @@ class EngineCore:
 
     def post_step(self, model_executed: bool = True) -> None:
         """Post-step hook for cleanup."""
-        pass
 
     def shutdown(self) -> None:
         """Shutdown the engine."""
@@ -179,7 +178,6 @@ class EngineCore:
 
     def profile(self, is_start: bool = True) -> None:
         """Start or stop profiling."""
-        pass
 
     def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""

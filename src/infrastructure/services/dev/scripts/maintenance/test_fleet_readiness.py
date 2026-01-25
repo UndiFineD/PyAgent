@@ -41,7 +41,7 @@ def test_imports():
         print("SUCCESS: HandyAgent instantiated.")
 
         return True
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"FAILURE: Error during instantiation: {e}")
         import traceback
 

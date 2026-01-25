@@ -30,6 +30,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class NetworkArchSearchAgent(BaseAgent):
     """
     Agent specializing in Neural Architecture Search (NAS).
@@ -63,7 +64,7 @@ class NetworkArchSearchAgent(BaseAgent):
         response = await self.think(prompt)
         try:
             return json.loads(response)
-        except Exception:
+        except (json.JSONDecodeError, TypeError, AttributeError):
             return {
                 "architecture_type": "LoRA",
                 "rank": 8,

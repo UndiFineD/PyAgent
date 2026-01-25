@@ -69,7 +69,7 @@ class ProbabilisticExecutionOrchestrator:
                     res = loop.run_until_complete(coro)
                 results.append(res)
                 logging.info(f"Variation {i + 1} completed.")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Variation {i + 1} failed: {e}")
 
         if not results:
@@ -106,7 +106,7 @@ class ProbabilisticExecutionOrchestrator:
                     if score > highest_score:
                         highest_score = score
                         best_result = res
-                except Exception:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     continue
 
             if best_result is not None:

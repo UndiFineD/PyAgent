@@ -36,6 +36,7 @@ class TokenizerRegistry:
 
     _instance: Optional["TokenizerRegistry"] = None
     _lock = threading.Lock()
+    _initialized: bool = False
 
     def __new__(cls) -> "TokenizerRegistry":
         if cls._instance is None:
@@ -76,12 +77,11 @@ class TokenizerRegistry:
         """Create tokenizer based on backend."""
         if config.backend == TokenizerBackend.HUGGINGFACE:
             return HuggingFaceTokenizer(config)
-        elif config.backend == TokenizerBackend.TIKTOKEN:
+        if config.backend == TokenizerBackend.TIKTOKEN:
             return TiktokenTokenizer(config)
-        elif config.backend == TokenizerBackend.MISTRAL:
+        if config.backend == TokenizerBackend.MISTRAL:
             return MistralTokenizer(config)
-        else:
-            return self._auto_create(config)
+        return self._auto_create(config)
 
     def _auto_create(self, config: TokenizerConfig) -> BaseTokenizer:
         """Auto-detect and create appropriate tokenizer."""
@@ -95,9 +95,11 @@ class TokenizerRegistry:
         return HuggingFaceTokenizer(config)
 
     def clear_cache(self):
+        """Clear the internal tokenizer cache."""
         with self._cache_lock:
             self._cache.clear()
 
     def get_stats(self) -> Dict[str, int]:
+        """Get cache performance statistics."""
         with self._cache_lock:
             return {**self._stats, "cached": len(self._cache), "max_cached": self._max_cached}

@@ -65,7 +65,7 @@ class UniprocExecutor(Executor):
                 raise ValueError(f"Unknown function: {func_name}")
             result = self._functions[func_name](*args, **kwargs)
             future.set_result(result)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             future.set_exception(e)
 
         return future

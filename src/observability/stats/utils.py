@@ -73,7 +73,7 @@ def main() -> None:
         if args.export:
             agent.export_stats("stats_output", args.export)
         if args.baseline:
-            with open(args.baseline) as baseline_file:
+            with open(args.baseline, encoding='utf-8') as baseline_file:
                 baseline_stats = json.load(baseline_file)
             agent.generate_comparison_report(baseline_stats)
         agent.report_stats(output_format=args.format)
@@ -84,6 +84,6 @@ def main() -> None:
     except ValueError as e:
         logging.error(str(e))
         sys.exit(1)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logging.error(f"Unexpected error: {str(e)}")
         sys.exit(1)

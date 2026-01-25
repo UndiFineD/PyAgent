@@ -85,7 +85,7 @@ class LatentSignalBus:
         try:
             decoded_json = base64.b64decode(vector).decode()
             return json.loads(decoded_json)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"LatentSignalBus: Decompression failed: {e}")
             return None
 

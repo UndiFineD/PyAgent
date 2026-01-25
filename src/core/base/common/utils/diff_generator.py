@@ -20,4 +20,3 @@ Manager for diff generation.
 from src.core.base.common.diff_core import DiffCore as DiffGenerator
 
 __all__ = ["DiffGenerator"]
-

@@ -78,7 +78,7 @@ class OrchestratorCore(AgentCore):
             # Mocking usage of a rust function if it existed or using a generic one
             try:
                 return rc.score_efficiency(float(files_modified), files_processed)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         if files_processed == 0:

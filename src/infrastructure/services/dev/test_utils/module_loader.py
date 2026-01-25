@@ -35,23 +35,24 @@ class ModuleLoader:
     """Handles dynamic loading of agent modules and sys.path management."""
 
     def __init__(self, agent_dir: Path | None = None) -> None:
-        """Initialize with agent directory (defaults to src)."""
-        # Search for 'src' folder by going up
+        """Initialize with project root (containing src)."""
+        # Search for project root by looking for 'src' folder
         current = Path(__file__).resolve()
-        src_found = None
+        root_found = None
         for parent in current.parents:
-            if (parent / "src").is_dir():
-                src_found = parent / "src"
+            if (parent / "src").is_dir() and (parent / "tests").is_dir():
+                root_found = parent
                 break
-        self.agent_dir = agent_dir or src_found or current.parents[2]
+        self.agent_dir = agent_dir or root_found or current.parents[5]
+        self.src_dir = self.agent_dir / "src"
 
     @contextmanager
     def agent_dir_on_path(self) -> Iterator[None]:
-        """Temporarily add the agent directory to sys.path."""
+        """Temporarily add the project root to sys.path."""
         old_sys_path = list(sys.path)
-        sys_path_str = str(self.agent_dir)
-        if sys_path_str not in sys.path:
-            sys.path.insert(0, sys_path_str)
+        path_str = str(self.agent_dir)
+        if path_str not in sys.path:
+            sys.path.insert(0, path_str)
         try:
             yield
         finally:
@@ -95,7 +96,7 @@ class ModuleLoader:
 
         try:
             return self.load_module_from_path(module_name, path)
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Clean up if execution fails
             sys.modules.pop(module_name, None)
             raise

@@ -65,16 +65,15 @@ class ConfigAgent(BaseAgent):
             return "❌ `config/models.yaml` not found."
 
         try:
-            with open(config_path) as f:
+            with open(config_path, encoding='utf-8') as f:
                 data = yaml.safe_load(f)
 
             # Simple structure check
             if "models" in data and isinstance(data["models"], list):
                 return f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
-            else:
-                return "❌ `models.yaml` has invalid structure (missing 'models' list)."
-        except Exception as e:
+            return "❌ `models.yaml` has invalid structure (missing 'models' list)."
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"❌ Error parsing `models.yaml`: {e}"
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()

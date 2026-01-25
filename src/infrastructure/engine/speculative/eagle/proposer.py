@@ -82,8 +82,8 @@ class EagleProposer:
 
         if self.use_tree_attention:
             return self._propose_tree(input_ids, positions, hidden_states, max_proposals)
-        else:
-            return self._propose_sequential(input_ids, positions, hidden_states, max_proposals)
+
+        return self._propose_sequential(input_ids, positions, hidden_states, max_proposals)
 
     def _propose_sequential(
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None, num_proposals: int
@@ -227,9 +227,9 @@ class EagleProposer:
         extrapolated = []
         for step in range(num_steps):
             new_state = []
-            for i in range(len(last)):
-                delta = last[i] - prev[i]
-                new_state.append(last[i] + delta * (step + 1))
+            for i, val_last in enumerate(last):
+                delta = val_last - prev[i]
+                new_state.append(val_last + delta * (step + 1))
             extrapolated.append(new_state)
         return extrapolated
 

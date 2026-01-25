@@ -45,17 +45,16 @@ def create_request_queue(
     """
     if policy == SchedulingPolicy.FCFS:
         return FCFSQueue()
-    elif policy == SchedulingPolicy.PRIORITY:
+    if policy == SchedulingPolicy.PRIORITY:
         return PriorityQueue()
-    elif policy == SchedulingPolicy.DEADLINE:
+    if policy == SchedulingPolicy.DEADLINE:
         return DeadlineQueue()
-    elif policy == SchedulingPolicy.FAIR:
+    if policy == SchedulingPolicy.FAIR:
         return FairQueue(default_weight=kwargs.get("default_weight", 1.0))
-    elif policy == SchedulingPolicy.MLFQ:
+    if policy == SchedulingPolicy.MLFQ:
         return MLFQueue(
             num_levels=kwargs.get("num_levels", 4),
             quantum_ms=kwargs.get("quantum_ms", 100.0),
             aging_interval_ms=kwargs.get("aging_interval_ms", 1000.0),
         )
-    else:
-        return FCFSQueue()
+    return FCFSQueue()

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,7 +49,8 @@ class EmergencyEventLog:
                 content = self.log_path.read_text(encoding="utf-8")
                 self.buffer.extend(content.splitlines())
 
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
     def record_action(self, action: str, details: str) -> None:
@@ -58,7 +60,7 @@ class EmergencyEventLog:
         self.buffer.append(event)
         try:
             self._fs.atomic_write(self.log_path, "\n".join(self.buffer))
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
 
 
@@ -145,6 +147,6 @@ class AgentStateManager:
 
         try:
             return json.loads(state_path.read_text(encoding="utf-8"))
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Failed to load state: {e}")
             return None

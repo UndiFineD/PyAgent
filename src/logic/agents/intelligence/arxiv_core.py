@@ -70,7 +70,7 @@ class ArxivCore:
 
             target_path.write_bytes(response.content)
             return target_path
-        except (requests.RequestException, IOError) as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to download Arxiv paper: {e}")
             return None
 
@@ -80,7 +80,7 @@ class ArxivCore:
             return "File not found."
 
         try:
-            doc = fitz.open(str(pdf_path))
+            doc = fitz.open(str(pdf_path, encoding='utf-8'))
             text = ""
             for page in doc:
                 text += page.get_text()

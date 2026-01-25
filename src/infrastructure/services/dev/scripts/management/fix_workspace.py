@@ -94,7 +94,7 @@ for root_dir in ["src", "tests"]:
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(new_content)
                         updated_count += 1
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error in {path}: {e}")
 
 # CircuitBreaker fix

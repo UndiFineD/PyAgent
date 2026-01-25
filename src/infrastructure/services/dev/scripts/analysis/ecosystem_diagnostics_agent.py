@@ -43,7 +43,7 @@ class EcosystemDiagnosticsAgent:
             try:
                 with open(py_file, "r", encoding="utf-8") as f:
                     ast.parse(f.read())
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 errors.append(f"{py_file}: {e}")
         self.results["syntax_errors"] = errors
         if not errors:
@@ -68,7 +68,7 @@ class EcosystemDiagnosticsAgent:
 
             free_gb = usage.free / (1024**3)
             self.results["disk_space"] = f"Free: {free_gb:.1f} GB / {total_gb:.1f} GB"
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.results["disk_space"] = "Unknown (Error reading disk info)"
 
     def summarize(self) -> None:

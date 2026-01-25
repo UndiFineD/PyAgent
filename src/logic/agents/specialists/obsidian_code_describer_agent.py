@@ -24,6 +24,7 @@ __version__ = VERSION
 
 
 class NoteType(Enum):
+    """Types of notes in the Obsidian vault."""
     FILE = "file"
     CLASS = "class"
     FUNCTION = "function"
@@ -55,6 +56,7 @@ class VaultNote:
     wikilinks: Set[str] = field(default_factory=set)
 
 
+# pylint: disable=too-many-ancestors
 class ObsidianCodeDescriberAgent(BaseAgent):
     """
     Agent specializing in describing code and generating markdown files
@@ -74,6 +76,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         )
 
     @as_tool
+    # pylint: disable=too-many-positional-arguments
     async def describe_file_to_vault(
         self,
         target_file: str,
@@ -152,7 +155,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                     include_functions=False,  # Only top-level for bulk
                 )
                 results.append({"file": str(file_path), "success": result.get("success")})
-            except Exception as e:
+            except (AttributeError, RuntimeError, TypeError, IOError) as e:
                 results.append({"file": str(file_path), "success": False, "error": str(e)})
 
         # Generate index note
@@ -230,7 +233,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 existing_fm.update(frontmatter_updates)
                 new_fm = yaml.dump(existing_fm, default_flow_style=False)
                 new_content = f"---\n{new_fm}---\n" + content[fm_match.end() :]
-            except Exception:
+            except (yaml.YAMLError, AttributeError, TypeError, KeyError):
                 return {"success": False, "error": "Failed to parse YAML"}
         else:
             # Add new frontmatter
