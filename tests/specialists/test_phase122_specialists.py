@@ -16,7 +16,7 @@ import sys
 import os
 import unittest
 import asyncio
-from unittest.mock import patch
+from unittest.mock import patch, AsyncMock
 from pathlib import Path
 
 # Add project root to sys.path
@@ -57,10 +57,7 @@ class TestPhase122Specialists(unittest.TestCase):
         self.assertTrue(len(data["nodes"]) > 0)
         self.assertTrue(len(data["links"]) > 0)
 
-    from unittest.mock import patch, AsyncMock
-    import asyncio
-
-    @patch("src.core.base.lifecycle.base_agent.BaseAgent.think", new_callable=AsyncMock)
+    @patch("src.logic.agents.security.immune_system_agent.ImmuneSystemAgent.think", new_callable=AsyncMock)
     def test_immune_system_patching(self, mock_think) -> None:
         """Test that ImmuneSystemAgent can propose a patch via LLM."""
         mock_think.return_value = "FIXED_CODE_HERE"

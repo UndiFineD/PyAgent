@@ -39,9 +39,9 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.proposals_dir = Path("data/memory/agent_store/governance/proposals")
+        self.proposals_dir = Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"
         self.proposals_dir.mkdir(parents=True, exist_ok=True)
-        self.policies_path = Path("data/memory/agent_store/governance/policies.json")
+        self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/governance/policies.json"
         self._system_prompt = (
             "You are the Governance Agent. Your role is to oversee the democratic processes "
             "of the fleet. You manage proposals for resource allocation, task prioritization, "

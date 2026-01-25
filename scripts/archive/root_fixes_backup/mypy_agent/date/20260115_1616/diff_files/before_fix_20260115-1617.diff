@@ -81302,7 +81302,7 @@ index 91ed9abd..6e91c151 100644
      niche = "quantum scaling"
      result = fleet.speciation.evolve_specialized_agent(base_agent, niche)
  
-     expected_file = Path("src/logic/agents/specialized/quantumscalingCoderAgent.py")
+     expected_file = Path("src/logic/agents/specialized/QuantumScalingCoderAgent.py")
 -    generated_test = Path("tests/specialists") / f"test_{expected_file.stem.lower()}_UNIT.py"
 +    generated_test = (
 +        Path("tests/specialists") / f"test_{expected_file.stem.lower()}_UNIT.py"

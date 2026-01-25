@@ -29,7 +29,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.core.base.common.base_managers import HealthChecker
+from src.core.base.logic.managers import HealthChecker
 from src.core.base.lifecycle.version import VERSION
 
 # Internal Imports
@@ -69,10 +69,12 @@ class ConnectionManager:
         self.active_connections: list[WebSocket] = []
 
     async def connect(self, websocket: WebSocket) -> None:
+        """Accept and register a new WebSocket connection."""
         await websocket.accept()
         self.active_connections.append(websocket)
 
     def disconnect(self, websocket: WebSocket) -> None:
+        """Unregister a disconnected WebSocket."""
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
 
@@ -103,8 +105,8 @@ async def get_health() -> dict[str, Any]:
 
     try:
         return health_checker.check()
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}") from e
 
 
 @app.get("/api/status")
@@ -132,8 +134,8 @@ async def get_logs(limit: int = 100) -> list[str]:
         with open(AGENT_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
             return [line.strip() for line in lines[-limit:]]
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}") from e
 
 
 @app.get("/api/thoughts")
@@ -150,8 +152,8 @@ async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
             for line in lines[-limit:]:
                 if line.strip():
                     thoughts.append(json.loads(line))
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        raise HTTPException(status_code=500, detail=f"Error parsing thoughts: {str(e)}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise HTTPException(status_code=500, detail=f"Error parsing thoughts: {str(e)}") from e
 
     return thoughts[::-1]  # Newest first
 

@@ -16,7 +16,7 @@ index 5bcd439..42f377b 100644
      result = fleet.speciation.evolve_specialized_agent(base_agent, niche)
      
 -    expected_file = Path("src/specialized/asynciothreadingCoderAgent.py")
-+    expected_file = Path("src/logic/agents/specialized/quantumscalingCoderAgent.py")
++    expected_file = Path("src/logic/agents/specialized/QuantumScalingCoderAgent.py")
 +    generated_test = Path("tests/specialists") / f"test_{expected_file.stem.lower()}_UNIT.py"
 +    
      if expected_file.exists():

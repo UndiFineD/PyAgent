@@ -38,9 +38,9 @@ class GraphMemoryAgent(
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.beads_dir = Path(".beads")
+        self.beads_dir = Path(self._workspace_root) / ".beads"
         self.beads_dir.mkdir(exist_ok=True)
-        self.graph_store_path = Path("data/memory/agent_store/knowledge_graph.json")
+        self.graph_store_path = Path(self._workspace_root) / "data/memory/agent_store/knowledge_graph.json"
         # MIRIX 6-component memory categories
         self.memory_store = {
             "core": {},  # Human/Persona identities

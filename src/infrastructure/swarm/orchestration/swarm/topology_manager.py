@@ -30,8 +30,10 @@ class TopologyManager:
     def record_usage(self, agent_id: str):
         """Increments usage counter and triggers cloning if threshold met."""
         self.request_counts[agent_id] = self.request_counts.get(agent_id, 0) + 1
+        logger.debug(f"TopologyManager: Usage for {agent_id} is {self.request_counts[agent_id]}")
 
         if self.request_counts[agent_id] >= self.clone_threshold:
+            logger.info(f"TopologyManager: Triggering clone for {agent_id}")
             asyncio.create_task(self.clone_expert(agent_id))
             self.request_counts[agent_id] = 0  # Reset counter after cloning
 

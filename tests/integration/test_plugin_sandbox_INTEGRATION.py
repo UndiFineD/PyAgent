@@ -24,6 +24,8 @@ from pathlib import Path
 from src.core.base.logic.managers.plugin_manager import PluginManager
 
 class TestPluginSandboxIntegration(unittest.TestCase):
+    """Integration tests for plugin sandboxing."""
+
     def setUp(self):
         logging.basicConfig(level=logging.ERROR)
         self.workspace = Path(".").resolve()
@@ -47,7 +49,7 @@ class TestPluginSandboxIntegration(unittest.TestCase):
 
             # Simulated execution
             # Current implementation of test_sandbox just returns True
-            res_src = plugin.run(Path("src\core\base\base_agent.py"), {})
+            res_src = plugin.run(Path("src/core/base/base_agent.py"), {})
             self.assertTrue(res_src)
 
             res_temp = plugin.run(Path("temp/test.txt"), {})

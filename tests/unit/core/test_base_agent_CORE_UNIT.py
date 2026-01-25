@@ -15,10 +15,12 @@
 # -*- coding: utf-8 -*-
 """Test classes from test_base_agent.py - Core Logic Focus."""
 
+# pylint: disable=invalid-name,protected-access,unused-argument
+
 from __future__ import annotations
+from pathlib import Path
 from typing import Any
 import pytest
-from pathlib import Path
 
 # Import from src
 
@@ -92,7 +94,7 @@ class TestCoreDataclasses:
 class TestLogicComponents:
     """Tests for pure logic components like EventManager and HealthChecker metrics."""
 
-    def test_event_manager_basic(self, base_agent_module: Any) -> None:
+    def test_event_manager_basic(self) -> None:
         """Test basic event management."""
         from src.core.base.logic.managers.system_managers import EventManager, AgentEvent
 
@@ -104,7 +106,7 @@ class TestLogicComponents:
 
         assert "started" in calls
 
-    def test_event_multiple_handlers(self, base_agent_module: Any) -> None:
+    def test_event_multiple_handlers(self) -> None:
         """Test multiple handlers for same event."""
         from src.core.base.logic.managers.system_managers import EventManager, AgentEvent
 
@@ -117,14 +119,14 @@ class TestLogicComponents:
 
         assert len(results) == 2
 
-    def test_event_with_data(self, base_agent_module: Any) -> None:
+    def test_event_with_data(self) -> None:
         """Test events with data payload."""
         from src.core.base.logic.managers.system_managers import EventManager, AgentEvent
 
         manager = EventManager()
         received: list[dict[str, Any]] = []
 
-        manager.on(AgentEvent.ERROR, lambda data: received.append(data))
+        manager.on(AgentEvent.ERROR, received.append)
         manager.emit(AgentEvent.ERROR, {"message": "test error"})
 
         assert received[0]["message"] == "test error"
@@ -146,6 +148,7 @@ class TestAgentRegistry:
         registry = AgentRegistry()
 
         class MockAgent:
+            """Simple mock agent for testing registry."""
             agent_name = "test-agent"
 
         agent = MockAgent()
@@ -157,10 +160,10 @@ class TestAgentRegistry:
 class TestRequestBatcher:
     """Tests for core RequestBatcher."""
 
-    def test_batcher_add(self, base_agent_module: Any) -> None:
+    def test_batcher_add(self) -> None:
         """Test adding items to batcher."""
         from src.core.base.logic.managers.batch_managers import RequestBatcher
-        from src.core.base.lifecycle.base_agent import BatchRequest
+        from src.core.base.common.models.communication_models import BatchRequest
 
         batcher = RequestBatcher(batch_size=2)
 
@@ -175,7 +178,7 @@ class TestRequestBatcher:
 class TestSerializationManager:
     """Tests for SerializationManager."""
 
-    def test_serialization_basic(self, base_agent_module: Any) -> None:
+    def test_serialization_basic(self) -> None:
         """Test basic serialization."""
         from src.core.base.logic.managers.processor_managers import SerializationManager
 
@@ -191,7 +194,7 @@ class TestSerializationManager:
 class TestFilePriorityManager:
     """Tests for FilePriorityManager."""
 
-    def test_priority_calculation(self, base_agent_module: Any) -> None:
+    def test_priority_calculation(self) -> None:
         """Test calculating file priority."""
         from src.core.base.logic.managers.system_managers import FilePriorityManager
 
@@ -199,7 +202,7 @@ class TestFilePriorityManager:
 
         # High priority for important files
         p1 = manager.get_priority(Path("README.md"))
-        p2 = manager.get_priority(Path("src\core\base\agent_core.py"))
+        p2 = manager.get_priority(Path("src/core/base/agent_core.py"))
         p3 = manager.get_priority(Path("temp/debug.log"))
 
         assert p1.value >= p3.value
@@ -264,7 +267,7 @@ class TestPromptVersioningAndABTesting:
         assert v1.version == "1.0.0"
         assert v1.active
 
-    def test_ab_test_variant_selection(self, base_agent_module: Any) -> None:
+    def test_ab_test_variant_selection(self) -> None:
         """Test A/B test variant selection."""
         from src.core.base.logic.managers.orchestration_managers import ABTest
 
@@ -326,14 +329,14 @@ class TestAgentCompositionPatterns:
 class TestAgentConfigurationProfiles:
     """Tests for agent configuration profiles."""
 
-    def test_profile_creation(self, base_agent_module: Any) -> None:
+    def test_profile_creation(self) -> None:
         """Test creating configuration profiles."""
-        ConfigProfile = base_agent_module.ConfigProfile
+        from src.core.base.common.models.base_models import ConfigProfile
         profile = ConfigProfile(name="production", settings={"timeout": 30})
         assert profile.name == "production"
         assert profile.settings["timeout"] == 30
 
-    def test_health_metrics_collection(self, base_agent_module: Any) -> None:
+    def test_health_metrics_collection(self) -> None:
         """Test health metrics calculation logic."""
         from src.core.base.logic.managers.system_managers import HealthChecker
 
@@ -347,10 +350,10 @@ class TestAgentConfigurationProfiles:
         assert metrics["total_requests"] == 6
         assert metrics["error_rate"] == pytest.approx(1 / 6)
 
-    def test_config_profile_inheritance(self, base_agent_module: Any) -> None:
+    def test_config_profile_inheritance(self) -> None:
         """Test profile inheritance logic."""
         from src.core.base.logic.managers.system_managers import ProfileManager
-        from src.core.base.lifecycle.base_agent import ConfigProfile
+        from src.core.base.common.models.base_models import ConfigProfile
 
         manager = ProfileManager()
         base = ConfigProfile("base", {"timeout": 30, "retries": 3})

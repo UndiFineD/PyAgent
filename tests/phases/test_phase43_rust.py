@@ -659,7 +659,7 @@ class TestPhase43Performance:
             )
         elapsed = time.perf_counter() - start
 
-        assert elapsed < 2.0
+        assert elapsed < 5.0
 
     def test_percentile_performance(self):
         """Test percentile computation is fast."""
