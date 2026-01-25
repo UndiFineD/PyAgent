@@ -65,7 +65,7 @@ class SignalCore(BaseCore):
                     for callback in self._subscribers[stype]:
                         try:
                             callback(payload, sender)
-                        except Exception as err:  # pylint: disable=broad-exception-caught
+                        except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
                             logger.error("SignalCore: Callback failed: %s", err)
                 self._queue.task_done()
             except queue.Empty:

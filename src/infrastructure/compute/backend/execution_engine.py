@@ -15,6 +15,8 @@
 
 """Multi-backend execution engine with fallback and caching capabilities."""
 
+# pylint: disable=protected-access
+
 from __future__ import annotations
 
 import sys
@@ -126,12 +128,12 @@ def llm_chat_via_github_models(
     )
 
 
-def llm_chat_via_ollama(prompt: str) -> str | None:
+def llm_chat_via_ollama(_prompt: str) -> str | None:
     """Call local Ollama endpoint (Phase 112 placeholder)."""
     return None
 
 
-def llm_chat_via_copilot_cli(prompt: str) -> str | None:
+def llm_chat_via_copilot_cli(_prompt: str) -> str | None:
     """Call Copilot CLI endpoint (Phase 112 placeholder)."""
     return None
 

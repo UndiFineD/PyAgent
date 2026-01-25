@@ -85,5 +85,5 @@ class MapBuilderMixin:
                         self.graph[func_id] = set()
                     self.graph[module_id].add(func_id)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to parse {file_path}: {e}")

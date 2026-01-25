@@ -55,7 +55,7 @@ class InterFleetBridgeOrchestrator:
 
             self.is_active = True
             logger.info("Voyager: Constellation synchronization and transport server active.")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Voyager: Failed to start constellation sync: {e}")
 
     def broadcast_signal(self, signal_name: str, payload: Dict[str, Any] = None) -> None:

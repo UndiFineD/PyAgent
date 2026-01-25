@@ -102,7 +102,7 @@ class EntropyCore:
                     "max_complexity": max_complexity,
                     "file_count": count,
                 }
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         count = len(all_metrics)

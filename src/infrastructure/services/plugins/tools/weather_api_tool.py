@@ -44,6 +44,6 @@ class Weather_APITool:
             response = requests.request("GET", url, json=kwargs, timeout=30)
             response.raise_for_status()
             return response.json()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Tool get_weather failed: {e}")
             return {"error": str(e), "path": "/weather", "method": "GET"}

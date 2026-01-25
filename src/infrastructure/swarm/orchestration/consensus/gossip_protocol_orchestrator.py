@@ -95,7 +95,7 @@ class GossipProtocolOrchestrator:
                 await self._synchronize_with_peer(target_peer)
             except asyncio.CancelledError:
                 break
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Gossip loop error: {e}")
 
     async def _synchronize_with_peer(self, peer_name: str) -> None:

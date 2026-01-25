@@ -60,7 +60,7 @@ class StatsFederation:
                 if isinstance(data, dict):
                     source.metrics.update({k: float(v) for k, v in data.items() if isinstance(v, (int, float))})
                     return source.metrics
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Sync failed for {name}: {e}")
         return {}
 

@@ -57,7 +57,7 @@ class AgentVerifier:
         if rc:
             try:
                 return rc.calculate_anchoring_fallback(result, context_text)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         context_words = set(context_text.lower().split())
@@ -111,7 +111,7 @@ class AgentVerifier:
         if rc:
             try:
                 return rc.check_latent_reasoning(content, 0.1)
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         non_ascii = [c for c in content if ord(c) > 127]

@@ -236,7 +236,7 @@ class EagleProposer(DrafterBase):
                 import ast
 
                 self.tree_choices = ast.literal_eval(tree_str)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Failed to parse tree structure: {e}")
                 self.tree_choices = [(i,) for i in range(self.num_speculative_tokens)]
         else:

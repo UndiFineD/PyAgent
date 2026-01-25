@@ -320,7 +320,8 @@ class CorrelationAnalyzer:
 
         # Rust-accelerated O(N²) pairwise correlation
         with contextlib.suppress(ImportError, Exception):
-            from rust_core import find_strong_correlations_rust
+            from rust_core import \
+                find_strong_correlations_rust  # pylint: disable=no-name-in-module
 
             metric_values = [self._metric_history[k] for k in keys]
             rust_results = find_strong_correlations_rust(metric_values, threshold)

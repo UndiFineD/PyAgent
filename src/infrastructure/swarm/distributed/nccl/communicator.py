@@ -129,7 +129,7 @@ class NCCLCommunicator:
         for attempt in range(self.config.max_retries + 1):
             try:
                 return fn()
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_error = e
                 self._stats.errors += 1
 
@@ -175,7 +175,7 @@ class NCCLCommunicator:
             return None
 
         reduce_op = self._map_reduce_op(op)
-        is_avg = op == ReduceOp.AVG or op == "avg"
+        is_avg = op in (ReduceOp.AVG, "avg")
 
         def do_reduce():
             with self._timed_op("all_reduce", tensor):
@@ -463,7 +463,7 @@ class CustomAllReduce:
             try:
                 self._custom_all_reduce(tensor, op)
                 return
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Custom all-reduce failed, falling back to NCCL: {e}")
                 self._fallback_count += 1
 

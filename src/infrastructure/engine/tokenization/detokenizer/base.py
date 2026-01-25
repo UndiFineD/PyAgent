@@ -76,7 +76,7 @@ class IncrementalDetokenizer(ABC):
         read_offset: int,
     ) -> Tuple[str, int, int]:
         """Decode tokens to text with offset tracking."""
-        pass
+        raise NotImplementedError("Subclasses must implement _decode_tokens()")
 
     def update(
         self,

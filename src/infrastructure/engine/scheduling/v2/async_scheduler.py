@@ -74,7 +74,7 @@ class AsyncSchedulerV2:
             try:
                 # Optimized metadata update
                 rc.async_schedule_update_rust(output.get_seq_ids())
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug(f"Rust schedule update fallback: {e}")
 
         # 4. Cleanup old outputs

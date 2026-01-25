@@ -33,7 +33,7 @@ from __future__ import annotations
 
 from typing import Any, List
 
-from src.core.base.lifecycle.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 from src.infrastructure.lazy import (get_arc_offload_manager,
                                      get_eagle_proposer,
@@ -43,6 +43,7 @@ from src.infrastructure.lazy import (get_arc_offload_manager,
 
 __version__ = VERSION
 
+# pylint: disable=undefined-all-variable
 __all__ = [
     "EagleProposer",
     "ARCOffloadManager",
@@ -63,46 +64,46 @@ __all__ = [
 
 # Registry of expensive modules for lazy loading
 # Maps attribute name -> (module_path, attribute_name)
-_LAZY_MODULES = ModuleLazyLoader(
-    {
-        "EagleProposer": (
-            "src.infrastructure.engine.speculative.eagle_proposer",
-            "EagleProposer",
-        ),
-        "ARCOffloadManager": (
-            "src.infrastructure.storage.kv_transfer.arc_offload_manager",
-            "ARCOffloadManager",
-        ),
-        "ToolParserRegistry": (
-            "src.infrastructure.services.tools.tool_parser_framework",
-            "ToolParserRegistry",
-        ),
-        "ReasoningEngine": (
-            "src.infrastructure.engine.reasoning.reasoning_engine",
-            "ReasoningEngine",
-        ),
-        "PagedAttentionEngine": (
-            "src.infrastructure.engine.attention.paged_attention_engine",
-            "PagedAttentionEngine",
-        ),
-        "KVzapPruner": (
-            "src.infrastructure.storage.kv_transfer.k_vzap",
-            "KVzapPruner",
-        ),
-        "SynapticLink": (
-            "src.infrastructure.storage.kv_transfer.latent_link",
-            "SynapticLink",
-        ),
-        "STEMManager": (
-            "src.infrastructure.engine.stem_scaling",
-            "STEMManager",
-        ),
-        "TableCacheManager": (
-            "src.infrastructure.services.tools.table_cache",
-            "TableCacheManager",
-        ),
-    }
-)
+_LAZY_REGISTRY = {
+    "EagleProposer": (
+        "src.infrastructure.engine.speculative.eagle_proposer",
+        "EagleProposer",
+    ),
+    "ARCOffloadManager": (
+        "src.infrastructure.storage.kv_transfer.arc_offload_manager",
+        "ARCOffloadManager",
+    ),
+    "ToolParserRegistry": (
+        "src.infrastructure.services.tools.tool_parser_framework",
+        "ToolParserRegistry",
+    ),
+    "ReasoningEngine": (
+        "src.infrastructure.engine.reasoning.reasoning_engine",
+        "ReasoningEngine",
+    ),
+    "PagedAttentionEngine": (
+        "src.infrastructure.engine.attention.paged_attention_engine",
+        "PagedAttentionEngine",
+    ),
+    "KVzapPruner": (
+        "src.infrastructure.storage.kv_transfer.k_vzap",
+        "KVzapPruner",
+    ),
+    "SynapticLink": (
+        "src.infrastructure.storage.kv_transfer.latent_link",
+        "SynapticLink",
+    ),
+    "STEMManager": (
+        "src.infrastructure.engine.stem_scaling",
+        "STEMManager",
+    ),
+    "TableCacheManager": (
+        "src.infrastructure.services.tools.table_cache",
+        "TableCacheManager",
+    ),
+}
+
+_LAZY_MODULES = ModuleLazyLoader(_LAZY_REGISTRY)
 
 
 def __getattr__(name: str) -> Any:
@@ -121,7 +122,7 @@ def __getattr__(name: str) -> Any:
     Raises:
         AttributeError: If the attribute is not found in lazy modules.
     """
-    if name in _LAZY_MODULES:
+    if name in _LAZY_REGISTRY:
         return _LAZY_MODULES.load(name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
@@ -138,7 +139,7 @@ def __dir__() -> List[str]:
     # Get regular module attributes
     module_attrs = list(globals().keys())
     # Add lazy-loaded module names
-    lazy_names = _LAZY_MODULES.available_names()
+    lazy_names = list(_LAZY_REGISTRY.keys())
     # Combine and filter private names
     all_names = set(module_attrs) | set(lazy_names)
     return [name for name in all_names if not name.startswith("_")]

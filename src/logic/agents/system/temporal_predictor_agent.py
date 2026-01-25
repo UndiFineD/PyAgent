@@ -57,7 +57,7 @@ class TemporalPredictorAgent(BaseAgent):
         try:
             with open(self.history_file, encoding="utf-8") as f:
                 return json.load(f)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"TemporalPredictor: Failed to load history: {e}")
             return []
 
@@ -66,7 +66,7 @@ class TemporalPredictorAgent(BaseAgent):
         try:
             with open(self.history_file, "w", encoding="utf-8") as f:
                 json.dump(history, f, indent=2)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"TemporalPredictor: Failed to save history: {e}")
 
     @as_tool
@@ -129,7 +129,7 @@ class TemporalPredictorAgent(BaseAgent):
 
         return "No immediate preemptive actions required. System state is nominal."
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """General predictive guidance."""
         return "Temporal analysis active. I am forecasting system stability and bottleneck risks."
 

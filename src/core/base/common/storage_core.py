@@ -46,7 +46,7 @@ class StorageCore:
         try:
             with open(p, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to load JSON from %s: %s", p, e)
             return default
 
@@ -65,7 +65,7 @@ class StorageCore:
 
             with open(p, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=indent)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to save JSON to %s: %s", p, e)
 
     @staticmethod
@@ -77,7 +77,7 @@ class StorageCore:
         try:
             with open(p, "r", encoding="utf-8") as f:
                 return yaml.safe_load(f)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to load YAML from %s: %s", p, e)
             return default
 
@@ -89,7 +89,7 @@ class StorageCore:
             p.parent.mkdir(parents=True, exist_ok=True)
             with open(p, "w", encoding="utf-8") as f:
                 yaml.dump(data, f, default_flow_style=False)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to save YAML to %s: %s", p, e)
 
     @staticmethod

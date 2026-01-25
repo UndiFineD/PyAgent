@@ -126,7 +126,7 @@ class AsyncHTTPMixin:
             total_size = int(r.headers.get("content-length", 0)) or None
             downloaded = 0
 
-            with save_path.open("wb") as f:
+            with save_path.open("wb", encoding='utf-8') as f:
                 async for chunk in r.content.iter_chunked(chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)

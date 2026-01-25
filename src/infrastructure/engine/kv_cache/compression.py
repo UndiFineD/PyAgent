@@ -48,7 +48,7 @@ class AdaptiveSwarmCompressor:
 
         stats = {"scaled_down": 0}
 
-        for context_id, shards in self.shard_manager.context_registry.items():
+        for _, shards in self.shard_manager.context_registry.items():
             for shard in shards:
                 if not shard.is_cached:
                     continue
@@ -88,7 +88,7 @@ class AdaptiveSwarmCompressor:
         now = time.time()
         stats = {"compressed": 0, "evicted": 0, "kept": 0}
 
-        for context_id, shards in self.shard_manager.context_registry.items():
+        for _, shards in self.shard_manager.context_registry.items():
             for shard in shards:
                 idle_time = now - shard.last_access
 

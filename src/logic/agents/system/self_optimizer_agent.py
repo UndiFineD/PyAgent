@@ -86,10 +86,10 @@ class SelfOptimizerAgent(BaseAgent):
                     report.append("")
 
             return "\n".join(report)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error analyzing roadmap: {e}"
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Analyze and optimize."""
         roadmap = self.analyze_roadmap()
 

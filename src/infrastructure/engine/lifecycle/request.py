@@ -82,9 +82,9 @@ class Request:
 
     def __post_init__(self):
         """Record creation event."""
-        self._record_event(RequestEventType.CREATED)
+        self.record_event(RequestEventType.CREATED)
 
-    def _record_event(
+    def record_event(
         self,
         event_type: RequestEventType,
         details: Optional[Dict[str, Any]] = None,

@@ -46,7 +46,7 @@ def create_json_constraint(
 
 def create_regex_constraint(
     pattern: str,
-    flags: int = 0,
+    _flags: int = 0,
 ) -> StructuredOutputConfig:
     """Create a regex constraint configuration."""
     return StructuredOutputConfig(

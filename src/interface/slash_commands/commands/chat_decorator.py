@@ -629,7 +629,7 @@ def cmd_chat_preview(ctx: CommandContext) -> CommandResult:
             "How do I read a file?",
             (
                 "You can use the open() function with a context manager:\n\n"
-                "with open('file.txt', 'r') as f:\n    content = f.read()"
+                "with open('file.txt', 'r', encoding='utf-8') as f:\n    content = f.read()"
             ),
         ),
     ]
@@ -665,7 +665,7 @@ def cmd_chat_preview(ctx: CommandContext) -> CommandResult:
     # Code block
     parts.append(
         _format_message(
-            "with open('example.txt', 'r') as f:\n    print(f.read())",
+            "with open('example.txt', 'r', encoding='utf-8') as f:\n    print(f.read())",
             "code",
             language="python",
             theme=theme,

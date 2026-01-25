@@ -45,7 +45,7 @@ class DiskCache(StandardCacheCore):
         """Ensure the cache directory exists."""
         try:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to create cache directory {self.cache_dir}: {e}")
 
     def _get_file_path(self, key: str) -> Path:
@@ -63,7 +63,7 @@ class DiskCache(StandardCacheCore):
         data = {"key": key, "value": value, "timestamp": time.time()}
         try:
             file_path.write_text(json.dumps(data), encoding="utf-8")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Failed to write cache file {file_path}: {e}")
 
     def get(self, key: str) -> str | None:
@@ -89,12 +89,12 @@ class DiskCache(StandardCacheCore):
                     logging.debug(f"Cache entry {key} expired")
                     try:
                         file_path.unlink()
-                    except Exception:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.debug(f"Failed to unlink expired cache file {file_path}")
                     return None
 
             return data.get("value")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Failed to read cache file {file_path}: {e}")
             return None
 
@@ -104,5 +104,5 @@ class DiskCache(StandardCacheCore):
             for file_path in self.cache_dir.glob("*.json"):
                 file_path.unlink()
             logging.debug(f"Cleared disk cache at {self.cache_dir}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to clear disk cache: {e}")

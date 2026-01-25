@@ -51,15 +51,18 @@ class AttentionBackendRegistry:
         """Singleton pattern."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance._init_registry()
         return cls._instance
 
-    def _init_registry(self) -> None:
+    def __init__(self) -> None:
         """Initialize the registry with default backends."""
+        if hasattr(self, "_initialized"):
+            return
+
         self._backends: dict[str, type[AttentionBackend]] = {}
         self._active_backend: AttentionBackend | None = None
         self._fallback_chain: list[str] = []
         self._hot_swap_enabled: bool = True
+        self._initialized: bool = True
 
         # Register default backends
         self.register(NaiveAttentionBackend)

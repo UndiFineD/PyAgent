@@ -69,7 +69,7 @@ class IncrementalProcessor:
                     self._apply_state_data(data)
                     logging.info("Migrated incremental state from %s to CBOR", json_state)
                     return
-                except Exception as e:  # pylint: disable=broad-exception-caught
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.warning("Failed to migrate from JSON: %s", e)
             return
 
@@ -77,7 +77,7 @@ class IncrementalProcessor:
             data = cbor2.loads(self.state_file.read_bytes())
             self._apply_state_data(data)
             logging.info("Loaded incremental state (CBOR/BLAKE3) from %s", self.state_file)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to load state with CBOR: %s", e)
 
     def _apply_state_data(self, data: dict[str, Any]) -> None:
@@ -101,7 +101,7 @@ class IncrementalProcessor:
             # cbor2.dumps returns bytes
             self.state_file.write_bytes(cbor2.dumps(data))
             logging.debug("Saved incremental state using CBOR to %s", self.state_file)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to save state: %s", e)
 
     def _compute_file_hash(self, file_path: Path) -> str:
@@ -109,12 +109,12 @@ class IncrementalProcessor:
         try:
             # pylint: disable=not-callable
             hasher = blake3.blake3()
-            with open(file_path, "rb") as f:
+            with open(file_path, 'rb', encoding='utf-8') as f:
                 # Read in 64KB chunks to prevent memory spikes
                 while chunk := f.read(65536):
                     hasher.update(chunk)
             return hasher.hexdigest()
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug("Hash calculation failed for %s: %s", file_path, e)
             return ""
 
@@ -201,7 +201,8 @@ class IncrementalProcessor:
                     new_hash = self._compute_file_hash(file_path)
                     if new_hash != self.state.file_hashes.get(path_str, ""):
                         changed.append(file_path)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 changed.append(file_path)
 
         logging.info("Incremental: %d/%d files changed", len(changed), len(files))

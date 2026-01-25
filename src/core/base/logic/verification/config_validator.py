@@ -33,7 +33,7 @@ class ConfigValidator:
                     orphans.append(agent_id)
                     logging.error(f"ConfigValidator: Orphaned agent reference detected: {agent_id}")
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"ConfigValidator: Failed to validate shard mapping: {e}")
 
         return orphans

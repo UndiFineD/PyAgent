@@ -68,7 +68,7 @@ class BaseCore(Loadable, Saveable, Component):
             else:
                 self._storage.save_json(save_path, self._state)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)
             return False
 

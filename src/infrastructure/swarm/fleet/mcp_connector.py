@@ -57,7 +57,7 @@ class MCPConnector:
         """Launches the MCP server process."""
         try:
             logging.info(f"Starting MCP server '{self.name}' with command: {' '.join(self.command)}")
-            self.process = subprocess.Popen(
+            self.process = subprocess.Popen(  # pylint: disable=consider-using-with
                 self.command,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
@@ -69,7 +69,7 @@ class MCPConnector:
             self.is_running = True
             # Start a thread to read stderr for logging
             threading.Thread(target=self._read_stderr, daemon=True).start()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to start MCP server {self.name}: {e}")
             self.is_running = False
 
@@ -80,16 +80,16 @@ class MCPConnector:
         for line in self.process.stderr:
             logging.warning(f"[MCP:{self.name}:ERR] {line.strip()}")
 
-    def call(self, method: str, params: dict[str, Any], timeout: int = 30) -> dict[str, Any]:
+    def call(self, method: str, params: dict[str, Any], _timeout: int = 30) -> dict[str, Any]:
         """Sends a JSON-RPC request and waits for the response."""
         if not self.is_running or not self.process or not self.process.stdin:
             return {"error": "MCP server not running"}
 
         with self._lock:
             self.request_id += 1
-            id = self.request_id
+            req_id = self.request_id
 
-        request = {"jsonrpc": "2.0", "id": id, "method": method, "params": params}
+        request = {"jsonrpc": "2.0", "id": req_id, "method": method, "params": params}
 
         try:
             self.process.stdin.write(json.dumps(request) + "\n")
@@ -105,15 +105,15 @@ class MCPConnector:
                 return {"error": "No response from MCP server"}
 
             response = json.loads(line)
-            if response.get("id") == id:
+            if response.get("id") == req_id:
                 return response
-            else:
-                return {
-                    "error": f"ID mismatch: expected {id}, got {response.get('id')}",
-                    "raw": response,
-                }
 
-        except Exception as e:
+            return {
+                "error": f"ID mismatch: expected {id}, got {response.get('id')}",
+                "raw": response,
+            }
+
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Error calling MCP server {self.name}: {e}")
             return {"error": str(e)}
 

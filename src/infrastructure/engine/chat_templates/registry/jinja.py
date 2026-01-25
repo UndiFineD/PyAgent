@@ -40,7 +40,7 @@ class JinjaTemplate(ChatTemplate):
             return self.config.template_string
 
         if self.config.template_path:
-            with open(self.config.template_path) as f:
+            with open(self.config.template_path, "r", encoding="utf-8") as f:
                 return f.read()
 
         # Use builtin
@@ -109,7 +109,7 @@ class JinjaTemplate(ChatTemplate):
 
                 return result
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Template rendering error: {e}")
                 return self._fallback_render(filtered, options)
 

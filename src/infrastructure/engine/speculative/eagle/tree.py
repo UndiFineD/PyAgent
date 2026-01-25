@@ -170,7 +170,7 @@ class TalonTreeBuilder:
         heappush(frontier, (-0.0, tree.root))
 
         while tree.num_nodes < self.budget and frontier:
-            neg_score, current_node = heappop(frontier)
+            _, current_node = heappop(frontier)
 
             if current_node.depth >= self.max_depth:
                 continue

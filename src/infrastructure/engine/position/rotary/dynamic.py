@@ -48,7 +48,7 @@ class XDRotaryEmbedding(RotaryEmbeddingBase):
         base = base or self.base
         if HAS_TORCH:
             return 1.0 / (base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
-        elif HAS_NUMPY:
+        if HAS_NUMPY:
             return 1.0 / (base ** (np.arange(0, self.rotary_dim, 2, dtype=np.float32) / self.rotary_dim))
         raise RuntimeError("No numerical backend available")
 
@@ -73,7 +73,7 @@ class XDRotaryEmbedding(RotaryEmbeddingBase):
             t = torch.arange(max_len, dtype=torch.float32)
             freqs = torch.outer(t, self.inv_freq)
             return torch.cos(freqs), torch.sin(freqs)
-        elif HAS_NUMPY:
+        if HAS_NUMPY:
             t = np.arange(max_len, dtype=np.float32)
             freqs = np.outer(t, self.inv_freq)
             return np.cos(freqs), np.sin(freqs)

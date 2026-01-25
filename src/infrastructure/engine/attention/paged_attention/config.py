@@ -45,6 +45,7 @@ class AttentionConfig:
     kv_cache_dtype: KVCacheDtype = KVCacheDtype.AUTO
 
     def __post_init__(self):
+        """Standardize configuration after initialization."""
         if self.num_kv_heads == 0:
             self.num_kv_heads = self.num_heads
         if self.scale is None:
@@ -52,12 +53,15 @@ class AttentionConfig:
 
     @property
     def num_queries_per_kv(self) -> int:
+        """Get number of query heads per KV head."""
         return self.num_heads // self.num_kv_heads
 
     @property
     def is_gqa(self) -> bool:
+        """Check if configuration is Grouped Query Attention."""
         return self.num_heads != self.num_kv_heads
 
     @property
     def is_mqa(self) -> bool:
+        """Check if configuration is Multi-Query Attention."""
         return self.num_kv_heads == 1 and self.num_heads > 1

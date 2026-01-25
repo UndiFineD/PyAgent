@@ -86,7 +86,7 @@ class AgentCommunicationBus:
                 except (zmq.ContextTerminated, zmq.ZMQError, asyncio.CancelledError):
                     self._running = False
                     break
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     if self._running:
                         logging.error(f"AgentBus Error: {e}")
                         await asyncio.sleep(0.1)

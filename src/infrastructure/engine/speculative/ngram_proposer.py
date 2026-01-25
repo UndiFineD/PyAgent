@@ -259,8 +259,8 @@ class NgramProposer:
         # Use multi-threading for large batches
         if total_tokens >= self.num_tokens_threshold and num_requests > 1:
             return self._batch_propose_parallel(batch_token_ids, batch_request_ids)
-        else:
-            return self._batch_propose_sequential(batch_token_ids, batch_request_ids)
+
+        return self._batch_propose_sequential(batch_token_ids, batch_request_ids)
 
     def _batch_propose_sequential(
         self, batch_token_ids: list[list[int]], batch_request_ids: list[str] | None

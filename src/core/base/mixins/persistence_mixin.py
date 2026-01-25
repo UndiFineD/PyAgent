@@ -57,7 +57,8 @@ class PersistenceMixin:
         for hook in hooks:
             try:
                 hook(data)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
     def generate_diff(self) -> str:
@@ -80,7 +81,8 @@ class PersistenceMixin:
 
         try:
             self.previous_content = getattr(self, "file_path").read_text(encoding="utf-8")
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             self.previous_content = ""
         return self.previous_content
 
@@ -105,7 +107,7 @@ class PersistenceMixin:
 
         try:
             return self._fs.atomic_write(file_path, content_to_write)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("File write failed: %s", e)
             return False
 

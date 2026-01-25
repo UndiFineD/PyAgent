@@ -25,17 +25,19 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
+from src.core.base.common.models import HealthStatus
+
+try:
+    from src.infrastructure.swarm.fleet.version_gate import VersionGate
+except ImportError:
+    VersionGate = None
+
 from .base_core import BaseCore
 
 try:
     import docker
 except ImportError:
     docker = None
-
-try:
-    from src.infrastructure.swarm.fleet.version_gate import VersionGate
-except ImportError:
-    VersionGate = None
 
 if TYPE_CHECKING:
     pass
@@ -85,28 +87,84 @@ class PluginCore(BaseCore):
     def discover(self) -> List[str]:
         """Scans manifest and directory for compatible plugins."""
         discovered = []
+
+        # 1. Load from central manifest if it exists
         if self.registry_path.exists():
             try:
                 with open(self.registry_path, encoding="utf-8") as f:
                     data = json.load(f)
                     for key, raw_meta in data.items():
-                        try:
-                            if isinstance(raw_meta, list):
-                                meta = PluginMetadata(
-                                    module_path=raw_meta[0],
-                                    class_name=raw_meta[1],
-                                    needs_fleet=raw_meta[2] if len(raw_meta) > 2 else True,
-                                    min_sdk_version=raw_meta[3] if len(raw_meta) > 3 else "1.0.0",
-                                )
-                            else:
-                                meta = PluginMetadata(**raw_meta)
-                            self.loaded_meta[key] = meta
+                        self._register_plugin_meta(key, raw_meta)
+                        if key in self.loaded_meta:
                             discovered.append(key)
-                        except (TypeError, ValueError, KeyError) as e:
-                            self.logger.warning("Skipping malformed plugin meta '%s': %s", key, e)
             except (json.JSONDecodeError, OSError) as e:
                 self.logger.error("Failed to load plugin manifest: %s", e)
-        return discovered
+
+        # 2. Scan subdirectories for auto-discovery (Phase 109)
+        for item in self.plugins_dir.iterdir():
+            if not item.is_dir() or item.name.startswith(("_", ".")):
+                continue
+
+            if item.name in self.loaded_meta:
+                continue  # Already registered via manifest
+
+            # Check if it looks like a plugin (has __init__.py)
+            if not (item / "__init__.py").exists():
+                continue
+
+            # Look for local metadata
+            meta_path = item / "manifest.json"
+            plugin_json = item / "plugin.json"
+
+            if meta_path.exists() or plugin_json.exists():
+                target = meta_path if meta_path.exists() else plugin_json
+                try:
+                    with open(target, encoding="utf-8") as f:
+                        raw_meta = json.load(f)
+                        self._register_plugin_meta(item.name, raw_meta)
+                        discovered.append(item.name)
+                except (json.JSONDecodeError, OSError) as e:
+                    self.logger.warning("Failed to load plugin meta in %s: %s", item.name, e)
+                continue
+
+            # Heuristic discovery for simple plugins
+            # Assume class name is PascalCase of folder name or 'Plugin'
+            class_name = item.name.replace("_", " ").title().replace(" ", "")
+            # Try to see if it has permissions.json
+            perms = []
+            perms_file = item / "permissions.json"
+            if perms_file.exists():
+                try:
+                    with open(perms_file, encoding="utf-8") as f:
+                        perms = json.load(f)
+                except (json.JSONDecodeError, OSError):
+                    pass
+
+            raw_meta = {
+                "module_path": f"plugins.{item.name}",
+                "class_name": class_name,
+                "permissions": perms
+            }
+            self._register_plugin_meta(item.name, raw_meta)
+            discovered.append(item.name)
+
+        return list(set(discovered))
+
+    def _register_plugin_meta(self, key: str, raw_meta: Any) -> None:
+        """Helper to register plugin metadata from raw dict or list."""
+        try:
+            if isinstance(raw_meta, list):
+                meta = PluginMetadata(
+                    module_path=raw_meta[0],
+                    class_name=raw_meta[1],
+                    needs_fleet=raw_meta[2] if len(raw_meta) > 2 else True,
+                    min_sdk_version=raw_meta[3] if len(raw_meta) > 3 else "1.0.0",
+                )
+            else:
+                meta = PluginMetadata(**raw_meta)
+            self.loaded_meta[key] = meta
+        except (TypeError, ValueError, KeyError) as e:
+            self.logger.warning("Skipping malformed plugin meta '%s': %s", key, e)
 
     def validate_version(self, required_version: str, current_version: str) -> bool:
         """Centralized semantic version gatekeeper."""
@@ -138,7 +196,7 @@ class PluginCore(BaseCore):
             # Health check immediately after setup
             if hasattr(instance, "health_check"):
                 health = instance.health_check()
-                if hasattr(health, "status") and health.status != "healthy":
+                if hasattr(health, "status") and health.status != HealthStatus.HEALTHY:
                     self.logger.error("Plugin '%s' failed health check", plugin_name)
                     return None
 

@@ -211,7 +211,7 @@ class BmadManager:
                 for line in result.splitlines():
                     if line.endswith(".py") or line.endswith(".md"):
                         targets.append(os.path.join(root, line))
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 messagebox.showerror("Git Error", f"Failed to get git changes: {e}")
                 return []
         elif mode == "selected":

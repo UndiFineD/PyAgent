@@ -38,7 +38,6 @@ class Resettable(Protocol):
 
     def reset(self) -> None:
         """Reset object state for reuse."""
-        ...
 
 
 @dataclass
@@ -102,6 +101,7 @@ class ObjectPool(Generic[T]):
 
     def __init__(
         self,
+        # pylint: disable=too-many-positional-arguments
         factory: Callable[[], T],
         reset: Optional[Callable[[T], None]] = None,
         validator: Optional[Callable[[T], bool]] = None,
@@ -172,7 +172,8 @@ class ObjectPool(Generic[T]):
                 if self._reset:
                     try:
                         self._reset(obj)
-                    except Exception:
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                         self._stats.discarded += 1
                         continue
 
@@ -478,45 +479,48 @@ class PooledContextManager(Generic[T]):
 
 
 # Global pools for common use cases
-_list_pool: Optional[ObjectPool[list]] = None
-_dict_pool: Optional[ObjectPool[dict]] = None
-_set_pool: Optional[ObjectPool[set]] = None
+_LIST_POOL: Optional[ObjectPool[list]] = None
+_DICT_POOL: Optional[ObjectPool[dict]] = None
+_SET_POOL: Optional[ObjectPool[set]] = None
 
 
 def get_list_pool(max_size: int = 1000) -> ObjectPool[list]:
     """Get global list pool."""
-    global _list_pool
-    if _list_pool is None:
-        _list_pool = ObjectPool(
+    # pylint: disable=global-statement
+    global _LIST_POOL
+    if _LIST_POOL is None:
+        _LIST_POOL = ObjectPool(
             factory=list,
             reset=lambda x: x.clear(),
             max_size=max_size,
         )
-    return _list_pool
+    return _LIST_POOL
 
 
 def get_dict_pool(max_size: int = 1000) -> ObjectPool[dict]:
     """Get global dict pool."""
-    global _dict_pool
-    if _dict_pool is None:
-        _dict_pool = ObjectPool(
+    # pylint: disable=global-statement
+    global _DICT_POOL
+    if _DICT_POOL is None:
+        _DICT_POOL = ObjectPool(
             factory=dict,
             reset=lambda x: x.clear(),
             max_size=max_size,
         )
-    return _dict_pool
+    return _DICT_POOL
 
 
 def get_set_pool(max_size: int = 1000) -> ObjectPool[set]:
     """Get global set pool."""
-    global _set_pool
-    if _set_pool is None:
-        _set_pool = ObjectPool(
+    # pylint: disable=global-statement
+    global _SET_POOL
+    if _SET_POOL is None:
+        _SET_POOL = ObjectPool(
             factory=set,
             reset=lambda x: x.clear(),
             max_size=max_size,
         )
-    return _set_pool
+    return _SET_POOL
 
 
 @contextmanager

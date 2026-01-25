@@ -34,6 +34,7 @@ from src.logic.agents.specialists.mixins.handy_terminal_mixin import \
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreMixin):
     """Provides a terminal-native interface for the agent to interact with the OS."""
 

@@ -181,7 +181,7 @@ class BaseAgent(
 
             self._notify_webhooks("agent_complete", {"status": "success", "result": result})
             return result
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._notify_webhooks("agent_error", {"error": str(e)})
             return f"Error: {e}"
 
@@ -197,7 +197,8 @@ class BaseAgent(
         for url in self._webhooks:
             try:
                 requests.post(url, json=payload, timeout=5)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
     async def run_async(self, prompt: str) -> str:
@@ -270,7 +271,7 @@ class BaseAgent(
                 return result
             return self._get_fallback_response()
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Think execution failed: %s", e)
             return f"Error encountered during agent reasoning: {str(e)}"
 
@@ -320,7 +321,7 @@ class BaseAgent(
                     )
                 elif hasattr(self.recorder, "record"):
                     self.recorder.record(prompt, result)
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug("BaseAgent: Failed to record interaction: %s", e)
 
     def verify_self(self, result: str) -> tuple[bool, str]:

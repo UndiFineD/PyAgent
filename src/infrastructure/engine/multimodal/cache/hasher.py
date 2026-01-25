@@ -67,17 +67,17 @@ class MultiModalHasher:
     def hash_bytes(self, data: bytes) -> str:
         """Hash raw bytes."""
         if self.algorithm == HashAlgorithm.BLAKE3 and HAS_BLAKE3:
+            # pylint: disable=not-callable
             return blake3.blake3(data).hexdigest()
-        elif self.algorithm == HashAlgorithm.SHA256:
+        if self.algorithm == HashAlgorithm.SHA256:
             return hashlib.sha256(data).hexdigest()
-        elif self.algorithm == HashAlgorithm.XXHASH:
+        if self.algorithm == HashAlgorithm.XXHASH:
             # Simple xxHash-like implementation
             h = 0
-            for i, byte in enumerate(data):
+            for byte in data:
                 h = (h * 31 + byte) & 0xFFFFFFFFFFFFFFFF
             return format(h, "016x")
-        else:
-            return hashlib.sha256(data).hexdigest()
+        return hashlib.sha256(data).hexdigest()
 
     def hash_image(self, image_data: Union[bytes, Any]) -> MediaHash:
         """Hash image content."""
@@ -133,7 +133,7 @@ class MultiModalHasher:
 
         # Load image
         if isinstance(image_data, bytes):
-            img = Image.open(io.BytesIO(image_data))
+            img = Image.open(io.BytesIO(image_data, encoding='utf-8'))
         elif isinstance(image_data, Image.Image):
             img = image_data
         else:

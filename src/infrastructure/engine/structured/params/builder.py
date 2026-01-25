@@ -50,7 +50,7 @@ class ConstraintBuilder:
         self._config.json_object = True
         return self
 
-    def regex(self, pattern: str, flags: int = 0) -> "ConstraintBuilder":
+    def regex(self, pattern: str, _flags: int = 0) -> "ConstraintBuilder":
         """Add regex constraint."""
         self._config.regex = pattern
         self._config.output_type = StructuredOutputType.REGEX
@@ -59,7 +59,7 @@ class ConstraintBuilder:
     def choices(
         self,
         options: List[str],
-        case_sensitive: bool = True,
+        _case_sensitive: bool = True,
     ) -> "ConstraintBuilder":
         """Add choice constraint."""
         self._config.choices = options

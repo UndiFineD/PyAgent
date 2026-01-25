@@ -176,14 +176,13 @@ class PoolingStates:
         """Finalize and return pooled output."""
         if self.strategy == PoolingStrategy.MEAN:
             return self.sum_hidden / max(self.token_count, 1)
-        elif self.strategy == PoolingStrategy.MAX:
+        if self.strategy == PoolingStrategy.MAX:
             return self.max_hidden
-        elif self.strategy in (PoolingStrategy.FIRST, PoolingStrategy.LAST, PoolingStrategy.CLS):
+        if self.strategy in (PoolingStrategy.FIRST, PoolingStrategy.LAST, PoolingStrategy.CLS):
             return self.sum_hidden
-        elif self.strategy == PoolingStrategy.ATTENTION_WEIGHTED:
+        if self.strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             return self.sum_hidden / max(self.attention_sum, 1e-9)
-        else:
-            raise ValueError(f"Unknown strategy: {self.strategy}")
+        raise ValueError(f"Unknown strategy: {self.strategy}")
 
 
 @dataclass
@@ -281,7 +280,7 @@ class Pooler(ABC):
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
         """Pool hidden states according to metadata."""
-        pass
+        raise NotImplementedError("Subclasses must implement pool()")
 
 
 class MeanPooler(Pooler):
@@ -378,14 +377,13 @@ class PoolerFactory:
         """Create a pooler for the given strategy."""
         if strategy == PoolingStrategy.MEAN:
             return MeanPooler()
-        elif strategy == PoolingStrategy.MAX:
+        if strategy == PoolingStrategy.MAX:
             return MaxPooler()
-        elif strategy in (PoolingStrategy.LAST, PoolingStrategy.FIRST, PoolingStrategy.CLS):
+        if strategy in (PoolingStrategy.LAST, PoolingStrategy.FIRST, PoolingStrategy.CLS):
             return LastTokenPooler()
-        elif strategy == PoolingStrategy.ATTENTION_WEIGHTED:
+        if strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             return AttentionWeightedPooler()
-        else:
-            raise ValueError(f"Unknown pooling strategy: {strategy}")
+        raise ValueError(f"Unknown pooling strategy: {strategy}")
 
 
 @dataclass
@@ -403,6 +401,7 @@ class PoolerOutput:
 
     @property
     def batch_size(self) -> int:
+        """Get the number of sequences in the batch."""
         return len(self.embeddings)
 
     def to_numpy(self) -> np.ndarray:

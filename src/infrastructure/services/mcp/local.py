@@ -95,7 +95,7 @@ class LocalMCPServer(MCPToolServer):
                 result=result,
                 duration_ms=(time.time() - start_time) * 1000,
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return ToolResult(
                 call_id=call.id,
                 name=call.name,

@@ -71,6 +71,7 @@ class SpecDecodeMetadataV2:
         self.cu_num_sampled_tokens = cu_sampled
 
     def build_logits_indices(self) -> None:
+        """Build indices mapping for gathering target and bonus logits."""
         if HAS_RUST and hasattr(rust_core, "spec_decode_build_logits_indices_rust"):
             self.target_logits_indices, self.bonus_logits_indices, self.logits_indices = getattr(
                 rust_core, "spec_decode_build_logits_indices_rust"
@@ -83,27 +84,32 @@ class SpecDecodeMetadataV2:
         self.logits_indices = list(range(num_tokens + batch_size))
 
     def record_acceptance(self, accepted: list[bool]) -> None:
+        """Record Boolean mask of accepted tokens."""
         self.accepted_mask = accepted
         self.acceptance_count = sum(accepted)
 
     def get_acceptance_rate(self) -> float:
+        """Calculate the ratio of accepted tokens to total proposed tokens."""
         if not self.accepted_mask:
             return 0.0
         return self.acceptance_count / len(self.accepted_mask)
 
     def get_verification_latency(self) -> float:
+        """Calculate time taken for verification in seconds."""
         if self.verification_end_time > 0:
             return self.verification_end_time - self.verification_start_time
         return 0.0
 
     @classmethod
     def make_dummy(cls, draft_token_ids: list[list[int]]) -> SpecDecodeMetadataV2:
+        """Create placeholder metadata for testing."""
         flattened = [t for tokens in draft_token_ids for t in tokens]
         num_draft = [len(tokens) for tokens in draft_token_ids]
         return cls(draft_token_ids=flattened, num_draft_tokens=num_draft)
 
     @classmethod
     def from_proposals(cls, proposals: list[list[int]]) -> SpecDecodeMetadataV2:
+        """Create metadata from a list of draft token sequences."""
         flattened = []
         num_draft = []
         for proposal in proposals:
@@ -128,6 +134,7 @@ class TreeVerificationMetadata:
     best_path_index: int = -1
 
     def get_path_tokens(self, path_index: int) -> list[int]:
+        """Retrieve token sequence for a specific tree path."""
         if path_index < 0 or path_index >= self.num_paths:
             return []
         start = self.path_start_indices[path_index]
@@ -135,12 +142,14 @@ class TreeVerificationMetadata:
         return self.tree_token_ids[start : start + length]
 
     def get_best_path(self) -> list[int]:
+        """Get the longest verified token sequence from the tree."""
         if self.best_path_index >= 0:
             return self.get_path_tokens(self.best_path_index)
         return []
 
     @classmethod
     def from_tree(cls, tree_tokens: list[list[int]], tree_parents: list[list[int]]) -> TreeVerificationMetadata:
+        """Construct verification metadata from tree paths and parent pointers."""
         flat_tokens, flat_parents, flat_depths = [], [], []
         path_lengths, path_starts = [], []
         current_pos = 0
@@ -167,6 +176,7 @@ class SpecDecodeMetadataFactory:
 
     @staticmethod
     def create_simple(draft_tokens: list[int], num_requests: int = 1) -> SpecDecodeMetadataV2:
+        """Create simple linear speculative metadata."""
         tokens_per_request = len(draft_tokens) // max(1, num_requests)
         num_draft = [tokens_per_request] * num_requests
         remaining = len(draft_tokens) - tokens_per_request * num_requests
@@ -176,6 +186,7 @@ class SpecDecodeMetadataFactory:
 
     @staticmethod
     def create_tree(tree_paths: list[list[int]]) -> tuple[SpecDecodeMetadataV2, TreeVerificationMetadata]:
+        """Create tree-based speculative metadata."""
         flat_tokens = [t for path in tree_paths for t in path]
         num_draft = [len(path) for path in tree_paths]
         basic = SpecDecodeMetadataV2(draft_token_ids=flat_tokens, num_draft_tokens=num_draft)

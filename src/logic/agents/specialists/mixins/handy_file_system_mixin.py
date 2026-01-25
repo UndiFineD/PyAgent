@@ -29,13 +29,12 @@ class HandyFileSystemMixin:
                 result = subprocess.check_output(["fd", query, path], text=True)
             elif shutil.which("git"):
                 # git ls-files | grep required shell or manual piping
-                # Added # nosec to suppress security warning for git/grep chain as it is manually piped
-                p1 = subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE)  # nosec
-                result = subprocess.check_output(["grep", query], stdin=p1.stdout, text=True)  # nosec
-                p1.stdout.close()
+                # Using 'with' for resource allocation
+                with subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE) as p1:  # nosec
+                    result = subprocess.check_output(["grep", query], stdin=p1.stdout, text=True)  # nosec
             else:
                 result = subprocess.check_output(["find", path, "-name", f"*{query}*"], text=True)
 
             return f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```"
-        except Exception as e:
+        except (subprocess.SubprocessError, IOError, OSError) as e:
             return f"Search failed: {e}"

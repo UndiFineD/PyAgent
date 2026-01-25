@@ -147,7 +147,7 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 return f"ERROR: Content blocked for safety: {', '.join(injections)}"
 
             return text
-        except (requests.RequestException, IOError, ValueError) as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error fetching {url}: {e}"
 
     @as_tool

@@ -22,6 +22,8 @@ logger = StructuredLogger(__name__)
 
 @dataclass
 class PeerInfo:
+    """Discovery metadata for a peer agent on the LAN."""
+
     agent_id: str
     ip: str
     port: int
@@ -31,6 +33,7 @@ class PeerInfo:
     latency: float = 0.0
 
     def to_dict(self) -> Dict[str, Any]:
+        """Serializes peer info to a dictionary."""
         return asdict(self)
 
 
@@ -59,9 +62,12 @@ class LANDiscovery:
 
         # Local IP detection (lazy)
         self._local_ip = None
+        self._listen_thread: Optional[threading.Thread] = None
+        self._announce_thread: Optional[threading.Thread] = None
 
     @property
     def local_ip(self) -> str:
+        """Lazily identifies and returns the local IPv4 address."""
         if not self._local_ip:
             self._local_ip = get_ip()
         return self._local_ip
@@ -116,8 +122,8 @@ class LANDiscovery:
         try:
             msg = self._create_message("ANNOUNCE")
             sock.sendto(msg, (self.BROADCAST_ADDR, self.DISCOVERY_PORT))
-        except Exception as e:
-            logger.error(f"LANDiscovery: Initial announcement failed: {e}")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            logger.error(f"LANDiscovery: Initial announcement failed: {exc}")
 
         while self._running:
             try:
@@ -129,8 +135,8 @@ class LANDiscovery:
                 if self.registry:
                     self._sync_registry(sock)
 
-            except Exception as e:
-                logger.debug(f"LANDiscovery: Background loop error: {e}")
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                logger.debug(f"LANDiscovery: Background loop error: {exc}")
 
             time.sleep(30)  # Announce every 30 seconds
 
@@ -150,17 +156,17 @@ class LANDiscovery:
         try:
             # Bind to all interfaces on DISCOVERY_PORT
             sock.bind(("", self.DISCOVERY_PORT))
-        except Exception as e:
-            logger.error(f"LANDiscovery: Failed to bind to port {self.DISCOVERY_PORT}: {e}")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            logger.error(f"LANDiscovery: Failed to bind to port {self.DISCOVERY_PORT}: {exc}")
             return
 
         while self._running:
             try:
                 data, addr = sock.recvfrom(65535)
                 self._handle_packet(data, addr)
-            except Exception as e:
+            except Exception as exc:  # pylint: disable=broad-exception-caught
                 if self._running:
-                    logger.debug(f"LANDiscovery: Listen loop error: {e}")
+                    logger.debug(f"LANDiscovery: Listen loop error: {exc}")
 
     def _handle_packet(self, data: bytes, addr: tuple):
         try:
@@ -198,7 +204,7 @@ class LANDiscovery:
             msg_type = payload.get("type")
 
             # 2. Registration
-            self._update_peer(payload)
+            self.update_peer(payload)
 
             # 3. Message Handling
             if msg_type == "ANNOUNCE":
@@ -218,12 +224,13 @@ class LANDiscovery:
 
             elif msg_type == "SYNC":
                 for peer_data in payload.get("peers", []):
-                    self._update_peer(peer_data)
+                    self.update_peer(peer_data)
 
-        except Exception:
-            logger.debug(f"LANDiscovery: Malformed packet from {addr}")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            logger.debug(f"LANDiscovery: Malformed packet from {addr}: {exc}")
 
-    def _update_peer(self, data: Dict[str, Any]):
+    def update_peer(self, data: Dict[str, Any]):
+        """Registers or updates a peer in the local registry."""
         agent_id = data.get("agent_id")
         if not agent_id or agent_id == self.agent_id:
             return

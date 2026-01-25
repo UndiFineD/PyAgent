@@ -83,11 +83,11 @@ class StructuredLogger:
         logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
 
         try:
-            with open(self.log_file, "rb") as f_in:
-                with gzip.open(compressed_file, "wb") as f_out:
+            with open(self.log_file, 'rb') as f_in:
+                with gzip.open(compressed_file, 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
             self._fs.delete(self.log_file)  # Delete original
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"StructuredLogger compression failed: {e}")
 
     def _mask_sensitive(self, text: str) -> str:
@@ -127,7 +127,7 @@ class StructuredLogger:
                 try:
                     with open(self.log_file, "a", encoding="utf-8") as f:
                         f.write(entry_json + "\n")
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"StructuredLogger failed to write: {e}")
                 return
 
@@ -152,20 +152,25 @@ class StructuredLogger:
         try:
             with open(self.log_file, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry) + "\n")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"StructuredLogger failed to write: {e}")
 
     def info(self, message: str, **kwargs: Any) -> None:
+        """Log an info message."""
         self.log("info", message, **kwargs)
 
     def error(self, message: str, **kwargs: Any) -> None:
+        """Log an error message."""
         self.log("error", message, **kwargs)
 
     def warning(self, message: str, **kwargs: Any) -> None:
+        """Log a warning message."""
         self.log("warning", message, **kwargs)
 
     def debug(self, message: str, **kwargs: Any) -> None:
+        """Log a debug message."""
         self.log("debug", message, **kwargs)
 
     def success(self, message: str, **kwargs: Any) -> None:
+        """Log a success message."""
         self.log("success", message, **kwargs)

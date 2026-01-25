@@ -1,3 +1,7 @@
+
+"""
+Test Phase51 Multimodal module.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Unit tests for Phase 51: Multimedia & Attention.

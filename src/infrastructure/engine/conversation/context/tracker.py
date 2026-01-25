@@ -37,14 +37,17 @@ class TurnTracker:
 
     @property
     def turns(self) -> List[ConversationTurn]:
+        """Return the list of conversation turns."""
         return self._turns
 
     @property
     def turn_count(self) -> int:
+        """Return the total number of turns."""
         return len(self._turns)
 
     @property
     def total_tokens(self) -> TokenMetrics:
+        """Return the total token metrics for all turns."""
         return self._total_tokens
 
     def add_turn(
@@ -67,17 +70,21 @@ class TurnTracker:
             metadata=metadata or {},
         )
 
-        self._turns.append(turn)
-        self._turn_index[turn_id] = turn
-
-        if tokens:
-            self._total_tokens = self._total_tokens.add(tokens)
-
-        # Link to parent
-        if parent_id and parent_id in self._turn_index:
-            self._turn_index[parent_id].child_ids.append(turn_id)
+        self.append_turn(turn)
 
         return turn
+
+    def append_turn(self, turn: ConversationTurn) -> None:
+        """Append an existing turn to the conversation."""
+        self._turns.append(turn)
+        self._turn_index[turn.id] = turn
+
+        if turn.tokens:
+            self._total_tokens = self._total_tokens.add(turn.tokens)
+
+        # Link to parent
+        if turn.parent_id and turn.parent_id in self._turn_index:
+            self._turn_index[turn.parent_id].child_ids.append(turn.id)
 
     def get_turn(self, turn_id: str) -> Optional[ConversationTurn]:
         """Get turn by ID."""

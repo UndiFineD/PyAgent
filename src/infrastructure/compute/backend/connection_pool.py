@@ -60,7 +60,7 @@ class ConnectionPool:
         if self.cache_file and self.cache_file.exists():
             try:
                 self.status_cache = json.loads(self.cache_file.read_text())
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Failed to load backend status cache: {e}")
 
     def _save_status_cache(self) -> None:
@@ -68,7 +68,7 @@ class ConnectionPool:
             try:
                 self.cache_file.parent.mkdir(parents=True, exist_ok=True)
                 self.cache_file.write_text(json.dumps(self.status_cache))
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def is_backend_working(self, backend: str) -> bool:

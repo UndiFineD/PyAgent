@@ -126,7 +126,7 @@ class ShellExecutor:
             except subprocess.TimeoutExpired as e:
                 logging.warning("Timeout (attempt %s/%s)", attempt + 1, max_retries)
                 last_error = e
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error("Execution failure: %s", e)
                 last_error = e
 

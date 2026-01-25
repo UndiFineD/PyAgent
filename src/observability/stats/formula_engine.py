@@ -68,7 +68,7 @@ class FormulaEngineCore(FormulaCore):
 
             # Use base class evaluate if possible
             return self.evaluate(formula.replace("{", "").replace("}", ""), substituted_vars)
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return 0.0
 
     def validate_logic(self, formula: str) -> Dict[str, Any]:
@@ -84,7 +84,7 @@ class FormulaEngineCore(FormulaCore):
 
             ast.parse(test_formula, mode="eval")
             return {"is_valid": True, "error": None}
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return {"is_valid": False, "error": str(e)}
 
 
@@ -106,7 +106,7 @@ class FormulaEngine:
         formula = self.formulas.get(formula_or_name, formula_or_name)
         try:
             return self.core.calculate_logic(formula, variables)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Formula calculation failed: {e}")
             return 0.0
 

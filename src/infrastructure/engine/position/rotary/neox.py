@@ -42,7 +42,7 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
         """Compute inverse frequencies."""
         if HAS_TORCH:
             return 1.0 / (self.base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
-        elif HAS_NUMPY:
+        if HAS_NUMPY:
             return 1.0 / (self.base ** (np.arange(0, self.rotary_dim, 2, axis=0) / self.rotary_dim))
         raise RuntimeError("No numerical backend available")
 
@@ -54,7 +54,7 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
             # NeoX style expects [cos, cos] and [sin, sin] for symmetry
             emb = torch.cat((freqs, freqs), dim=-1)
             return torch.cos(emb), torch.sin(emb)
-        elif HAS_NUMPY:
+        if HAS_NUMPY:
             t = np.arange(max_len, dtype=np.float32)
             freqs = np.outer(t, self.inv_freq)
             emb = np.concatenate((freqs, freqs), axis=-1)
@@ -70,10 +70,9 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
         """Apply NeoX style rotary embeddings."""
         if HAS_TORCH and isinstance(positions, torch.Tensor):
             return self._forward_torch(positions, query, key)
-        elif HAS_NUMPY:
+        if HAS_NUMPY:
             return self._forward_numpy(positions, query, key)
-        else:
-            raise RuntimeError("No numerical backend available")
+        raise RuntimeError("No numerical backend available")
 
     def _forward_torch(
         self,

@@ -83,7 +83,7 @@ class Scheduler(ABC):
 
     def update_from_output(
         self,
-        scheduler_output: SchedulerOutput,
+        _scheduler_output: SchedulerOutput,
         model_output: ModelRunnerOutput,
     ) -> Dict[int, EngineCoreOutputs]:
         """Update scheduler state from model output."""

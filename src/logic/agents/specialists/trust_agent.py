@@ -24,6 +24,7 @@ __version__ = VERSION
 
 
 class Mood(Enum):
+    """Possible emotional moods for the interaction."""
     JOYFUL = "joyful"
     CONTENT = "content"
     NEUTRAL = "neutral"
@@ -33,6 +34,7 @@ class Mood(Enum):
 
 
 class TrustLevel(Enum):
+    """Ordinal levels of trust based on scores."""
     HIGH = "high"  # 0.8-1.0
     MEDIUM = "medium"  # 0.5-0.8
     LOW = "low"  # 0.2-0.5
@@ -60,6 +62,7 @@ class TrustMetrics:
     history: List[Dict[str, Any]] = field(default_factory=list)
 
 
+# pylint: disable=too-many-ancestors
 class TrustAgent(BaseAgent):
     """
     Agent specializing in human-agent alignment, mood detection,
@@ -80,20 +83,23 @@ class TrustAgent(BaseAgent):
 
     @property
     def trust_score(self) -> float:
+        """Current overall trust score (0.0 to 1.0)."""
         return self.trust_metrics.trust_score
 
     @property
     def mood(self) -> str:
+        """String representation of current mood."""
         return self.emotional_state.mood.value
 
     @property
     def trust_level(self) -> TrustLevel:
+        """Calculated trust level based on score."""
         score = self.trust_score
         if score >= 0.8:
             return TrustLevel.HIGH
-        elif score >= 0.5:
+        if score >= 0.5:
             return TrustLevel.MEDIUM
-        elif score >= 0.2:
+        if score >= 0.2:
             return TrustLevel.LOW
         return TrustLevel.CRITICAL
 
@@ -141,7 +147,7 @@ class TrustAgent(BaseAgent):
                     "current_mood": self.mood,
                     "trust_level": self.trust_level.value,
                 }
-        except Exception as e:
+        except (json.JSONDecodeError, AttributeError, TypeError, ValueError) as e:
             logging.debug(f"TrustAgent: Parse error: {e}")
 
         return {"error": "parsing_failed", "raw": res}

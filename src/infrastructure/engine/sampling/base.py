@@ -68,7 +68,6 @@ class Sampler(ABC):
         """
         Transform or filter logits.
         """
-        pass
 
     def sample(
         self,

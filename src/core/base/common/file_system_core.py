@@ -62,7 +62,7 @@ class FileSystemCore:
                 # pylint: disable=no-member
                 files = rc.discover_files_rust(str(root), patterns, ignore or [])  # type: ignore
                 return [Path(f) for f in files]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self.logger.warning("Rust directory walking failed: %s", e)
 
         found = []
@@ -122,7 +122,7 @@ class FileSystemCore:
             os.replace(tmp_path, p)
             return True
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Atomic write failed for %s: %s", p, e)
             return False
         finally:
@@ -134,7 +134,7 @@ class FileSystemCore:
         try:
             shutil.copy2(src, dst)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to copy %s to %s: %s", src, dst, e)
             return False
 
@@ -143,7 +143,7 @@ class FileSystemCore:
         try:
             shutil.move(str(src), str(dst))
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to move %s to %s: %s", src, dst, e)
             return False
 
@@ -156,7 +156,7 @@ class FileSystemCore:
             else:
                 p.unlink(missing_ok=True)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to delete %s: %s", p, e)
             return False
 
@@ -181,10 +181,10 @@ class FileSystemCore:
             return None
         try:
             sha256_hash = hashlib.sha256()
-            with open(p, "rb") as f:
+            with open(p, 'rb', encoding='utf-8') as f:
                 for byte_block in iter(lambda: f.read(4096), b""):
                     sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to calculate hash for %s: %s", p, e)
             return None

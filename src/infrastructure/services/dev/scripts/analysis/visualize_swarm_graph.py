@@ -107,7 +107,7 @@ def main() -> None:
     mermaid_str = generate_swarm_graph(output_format="mermaid")
 
     output_path = Path("docs/SWARM_GRAPH.md")
-    with open(output_path, "w") as f:
+    with open(output_path, 'w', encoding='utf-8') as f:
         f.write("# Swarm Social Topology\n\n")
         f.write("```mermaid\n")
         f.write(mermaid_str)

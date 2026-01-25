@@ -113,17 +113,14 @@ class BufferPool(ABC):
     @abstractmethod
     def allocate(self, spec: BufferSpec) -> Any:
         """Allocate a buffer."""
-        pass
 
     @abstractmethod
     def release(self, tensor: Any) -> None:
         """Release a buffer."""
-        pass
 
     @abstractmethod
     def clear(self) -> None:
         """Clear all buffers."""
-        pass
 
 
 class SimpleBufferPool(BufferPool):
@@ -377,10 +374,10 @@ class HierarchicalBufferPool(BufferPool):
         """Allocate from appropriate tier."""
         if spec.device == "cuda":
             return self._gpu_pool.allocate(spec)
-        elif spec.pinned:
+        if spec.pinned:
             return self._pinned_pool.allocate(spec)
-        else:
-            return self._cpu_pool.allocate(spec)
+
+        return self._cpu_pool.allocate(spec)
 
     def release(self, tensor: Any) -> None:
         """Release to appropriate pool."""
@@ -464,5 +461,5 @@ def create_input_buffer_manager(
 
     if use_predictive:
         return PredictiveBufferManager(pool=pool, max_batch_size=max_batch_size, max_seq_len=max_seq_len)
-    else:
-        return InputBufferManager(pool=pool, max_batch_size=max_batch_size, max_seq_len=max_seq_len)
+
+    return InputBufferManager(pool=pool, max_batch_size=max_batch_size, max_seq_len=max_seq_len)

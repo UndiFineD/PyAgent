@@ -59,9 +59,10 @@ class ConnectivityManager:
         if self._conn_status_file and self._conn_status_file.exists():
             try:
                 # pylint: disable=unspecified-encoding
-                with open(self._conn_status_file, "r") as f:
+                with open(self._conn_status_file, 'r', encoding='utf-8') as f:
                     return json.load(f)
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 return {}
         return {}
 
@@ -72,9 +73,9 @@ class ConnectivityManager:
                 os.makedirs(self._conn_status_file.parent, exist_ok=True)
                 self._cache["__preferred__"] = self._preferred_cache
                 # pylint: disable=unspecified-encoding
-                with open(self._conn_status_file, "w") as f:
+                with open(self._conn_status_file, 'w', encoding='utf-8') as f:
                     json.dump(self._cache, f)
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error("ConnectivityManager: Failed to save status: %s", e)
 
     def get_preferred_endpoint(self, group: str) -> str | None:
@@ -166,7 +167,7 @@ class ConnectivityManager:
             result = func(*args, **kwargs)
             self.update_status(endpoint_id, True)
             return result
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("ConnectivityManager: Endpoint '%s' failed: %s", endpoint_id, e)
             self.update_status(endpoint_id, False)
             raise e

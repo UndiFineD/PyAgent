@@ -89,7 +89,7 @@ class AssertionHelpers:
         try:
             fn(*args)
             raise AssertionError(f"Expected {exception_type.__name__} but no exception was raised")
-        except BaseException as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if isinstance(e, exception_type):
                 assert message in str(e), f"Exception message '{str(e)}' does not contain '{message}'"
                 return True

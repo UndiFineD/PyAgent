@@ -55,7 +55,7 @@ class SecurityScannerMixin:
                     vulnerabilities.append(vuln)
                     if hasattr(self, "_record_finding"):
                         self._record_finding(issue_type.value, severity, desc)
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError):
                 pass  # Fall back to Python
             else:
                 # Skip Python fallback if Rust succeeded

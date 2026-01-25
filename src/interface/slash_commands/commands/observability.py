@@ -27,7 +27,7 @@ from src.interface.slash_commands.registry import register
     aliases=["caches"],
     category="observability",
 )
-def cmd_cache(ctx: CommandContext) -> CommandResult:
+def cmd_cache(_ctx: CommandContext) -> CommandResult:
     """Get cache statistics."""
     cache_stats = {}
 
@@ -58,7 +58,7 @@ def cmd_cache(ctx: CommandContext) -> CommandResult:
     aliases=["metrics"],
     category="observability",
 )
-def cmd_counters(ctx: CommandContext) -> CommandResult:
+def cmd_counters(_ctx: CommandContext) -> CommandResult:
     """Get structured counter statistics."""
     # This would typically access global counter instances
     # For now, show available counter types
@@ -77,7 +77,7 @@ def cmd_counters(ctx: CommandContext) -> CommandResult:
     aliases=["usage"],
     category="observability",
 )
-def cmd_telemetry(ctx: CommandContext) -> CommandResult:
+def cmd_telemetry(_ctx: CommandContext) -> CommandResult:
     """Get telemetry/usage information."""
     try:
         from src.observability.telemetry.usage_message import (
@@ -110,7 +110,7 @@ def cmd_telemetry(ctx: CommandContext) -> CommandResult:
     aliases=["logstats"],
     category="observability",
 )
-def cmd_logs(ctx: CommandContext) -> CommandResult:
+def cmd_logs(_ctx: CommandContext) -> CommandResult:
     """Get log deduplication statistics."""
     try:
         from src.observability.logging.enhanced_logger import \

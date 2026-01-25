@@ -76,7 +76,9 @@ class ExperimentOrchestrator(BaseAgent):
         eid: str = data.get("experiment_id", "unknown")
         logging.info(f"Experiment Logged: {eid}")
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Experimentation content optimization (stub)."""
+        _ = prompt, target_file
         return "Experimentation is the bridge to AGI efficiency."
 
 

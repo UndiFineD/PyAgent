@@ -49,7 +49,7 @@ class ConfigHygieneCore:
                         return False, f"Missing required field: {req}"
 
             return True, "Validation successful."
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return False, str(e)
 
     @staticmethod

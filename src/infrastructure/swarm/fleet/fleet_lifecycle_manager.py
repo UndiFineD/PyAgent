@@ -91,7 +91,7 @@ class FleetLifecycleManager:
             try:
                 agent.register_tools(self.fleet.registry)
                 logging.debug(f"Fleet: Registered tools for agent '{name}'")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Fleet: Failed to register tools for agent '{name}': {e}")
 
         self.fleet.agents[name] = agent

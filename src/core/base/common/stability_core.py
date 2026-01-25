@@ -50,8 +50,8 @@ class StabilityCore(BaseCore):
     Inherits from BaseCore for lifecycle and persistence.
     """
 
-    def __init__(self, name: str = "StabilityCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
+    def __init__(self, name: str = "StabilityCore", repo_root: Optional[str] = None) -> None:
+        super().__init__(name=name, repo_root=repo_root)
         self.timeout_seconds: float = 30.0
         self.max_errors: int = 5
         self.health_registry: Dict[str, HealthStatus] = {}

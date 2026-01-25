@@ -38,8 +38,8 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
     ):
         super().__init__(config)
         self.target_size = target_size
-        self.mean = np.array(mean).reshape(1, 1, 3)
-        self.std = np.array(std).reshape(1, 1, 3)
+        self.mean = np.array(mean).reshape((1, 1, 3))
+        self.std = np.array(std).reshape((1, 1, 3))
         self.patch_size = patch_size
 
     def process(

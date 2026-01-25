@@ -33,6 +33,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+# pylint: disable=too-many-ancestors
 class QuantumShardOrchestrator(BaseAgent):
     """
     Simulates distributed quantum-sharded state management.
@@ -57,14 +58,14 @@ class QuantumShardOrchestrator(BaseAgent):
         try:
             current_field: dict[str, Any] = {}
             if self.state_file.exists():
-                with open(self.state_file) as f:
+                with open(self.state_file, encoding='utf-8') as f:
                     content = f.read()
                     if content:
                         current_field = json.loads(content)
 
             current_field.update(self.shared_state)
 
-            with open(self.state_file, "w") as f:
+            with open(self.state_file, 'w', encoding='utf-8') as f:
                 json.dump(current_field, f, indent=4)
         except (IOError, json.JSONDecodeError) as e:
             logging.error(f"QuantumShard: Sync failed: {e}")
@@ -83,7 +84,7 @@ class QuantumShardOrchestrator(BaseAgent):
         """Collapses the quantum state to measure the current value of a key."""
         if self.state_file.exists():
             try:
-                with open(self.state_file) as f:
+                with open(self.state_file, encoding='utf-8') as f:
                     data = json.load(f)
                     return data.get(key)
             except (IOError, json.JSONDecodeError):
@@ -91,7 +92,9 @@ class QuantumShardOrchestrator(BaseAgent):
 
         return self.shared_state.get(key)
 
-    def improve_content(self, input_text: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        """Synchronizes and improves content based on quantum state."""
+        _ = prompt, target_file
         return f"Shard {self.shard_id} active. State coherency: 99.9%."
 
 

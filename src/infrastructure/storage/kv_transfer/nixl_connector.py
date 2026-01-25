@@ -113,7 +113,7 @@ class NixlConnector(KVConnectorBase):
             # Start completion thread
             self._completion_thread = threading.Thread(target=self._poll_loop, daemon=True)
             self._completion_thread.start()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to initialize Nixl RDMA: {e}")
 
     def _poll_loop(self):
@@ -173,7 +173,7 @@ class NixlConnector(KVConnectorBase):
             with self._lock:
                 self.active_transfers.add(transfer_id)
             return True
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Nixl transfer failed: {e}")
             return False
 
@@ -188,7 +188,7 @@ class NixlConnector(KVConnectorBase):
                         self.active_transfers.remove(tx_id)
                         finished_ids.append(tx_id)
             return finished_ids
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return []
 
     # ==============================

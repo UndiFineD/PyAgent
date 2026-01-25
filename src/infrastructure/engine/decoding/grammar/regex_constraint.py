@@ -80,7 +80,8 @@ class RegexGrammar(StructuredOutputGrammar):
                     self._token_to_chars.append(list(s.encode("utf-8")))
 
                 self._has_fsm = True
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 self._has_fsm = False
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
@@ -96,7 +97,7 @@ class RegexGrammar(StructuredOutputGrammar):
                     token_bytes = token_str.encode("utf-8")
                     temp_state = self._fsm_state
                     for b in token_bytes:
-                        if temp_state >= 0 and temp_state < len(self._transitions):
+                        if 0 <= temp_state < len(self._transitions):
                             temp_state = self._transitions[temp_state][b]
                         else:
                             temp_state = -1
@@ -133,7 +134,8 @@ class RegexGrammar(StructuredOutputGrammar):
                 if self._regex.match(text[:i]):
                     return True
             return not text
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return False
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
@@ -194,7 +196,8 @@ class RegexGrammar(StructuredOutputGrammar):
                 # pylint: disable=no-member
                 mask = rc.fill_token_bitmask_rust(self._fsm_state, self._transitions, self._token_to_chars)
                 return {i for i, allowed in enumerate(mask) if allowed}
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         valid: Set[int] = set()

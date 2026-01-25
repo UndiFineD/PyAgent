@@ -126,7 +126,7 @@ class ProjectExplorer:
                 node = self.tree.insert(parent, "end", text=item, values=[abspath], open=False)
                 if is_dir:
                     self.tree.insert(node, "end")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Error populating tree: {e}")
 
     def on_tree_open(self, event: tk.Event) -> None:

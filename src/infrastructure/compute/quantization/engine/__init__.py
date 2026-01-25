@@ -20,11 +20,12 @@ from .awq import AWQQuantizer  # noqa: F401
 from .base import Quantizer  # noqa: F401
 from .config import QuantConfig, QuantScheme, QuantStrategy  # noqa: F401
 from .gptq import GPTQQuantizer  # noqa: F401
+from .factory import quantize_tensor  # noqa: F401
 from .layer import DequantizedLinear  # noqa: F401
 from .linear import LinearQuantizer  # noqa: F401
 from .tensor import QuantizedTensor  # noqa: F401
 from .utils import (compute_scales_minmax, get_quantization_error, pack_int4,  # noqa: F401
-                    quantize_tensor, unpack_int4)
+                    unpack_int4)
 
 __all__ = [
     "QuantScheme",

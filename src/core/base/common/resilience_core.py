@@ -143,7 +143,8 @@ class ResilienceCore(BaseCore):
                 return rc.calculate_backoff(  # pylint: disable=no-member
                     failure_count, threshold, base_timeout, multiplier, max_timeout
                 )
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         if failure_count < threshold:
@@ -169,7 +170,8 @@ class ResilienceCore(BaseCore):
                 return rc.should_attempt_recovery(  # pylint: disable=no-member
                     last_failure_time, current_time, timeout
                 )
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
         return (current_time - last_failure_time) > timeout
 
@@ -194,7 +196,8 @@ class ResilienceCore(BaseCore):
                         failure_count,
                         failure_threshold,
                     )
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         if current_state == "CLOSED":

@@ -21,7 +21,10 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .improvement_manager import ImprovementManager
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -29,7 +32,6 @@ from src.core.base.lifecycle.version import VERSION
 from .effort_estimate import EffortEstimate
 from .improvement import Improvement
 from .improvement_category import ImprovementCategory
-from .improvement_manager import ImprovementManager
 from .improvement_priority import ImprovementPriority
 from .improvement_status import ImprovementStatus
 from .improvement_template import ImprovementTemplate
@@ -50,6 +52,7 @@ class ImprovementsAgent(BaseAgent):
         self._check_associated_file()
 
         # Improvement management delegated to ImprovementManager
+        from .improvement_manager import ImprovementManager
         self.manager = ImprovementManager(base_file_path=str(self.file_path))
         self._analytics: dict[str, Any] = {}
 

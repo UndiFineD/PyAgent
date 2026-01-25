@@ -20,15 +20,15 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional, Tuple
 
 try:
-    import torch  # noqa: F401
-    import torch.nn as torch_nn  # noqa: F401
+    import torch  # pylint: disable=unused-import
+    import torch.nn as torch_nn  # pylint: disable=unused-import
 
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
 
 try:
-    import numpy as np  # noqa: F401
+    import numpy as np  # pylint: disable=unused-import
 
     HAS_NUMPY = True
 except ImportError:
@@ -59,7 +59,7 @@ class RotaryEmbeddingBase(ABC):
         key: Any,
     ) -> Tuple[Any, Any]:
         """Core implementation of the rotation."""
-        pass
+        raise NotImplementedError("Subclasses must implement forward_native()")
 
     def forward(
         self,
@@ -69,6 +69,7 @@ class RotaryEmbeddingBase(ABC):
         use_cuda: bool = True,
     ) -> Tuple[Any, Any]:
         """Apply rotary embeddings with optional hardware acceleration."""
+        _ = use_cuda  # Unused for generic wrapper
         # Generic wrapper that handles framework dispatch
         return self.forward_native(positions, query, key)
 
@@ -81,4 +82,4 @@ class RotaryEmbeddingBase(ABC):
     @abstractmethod
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
         """Compute the cos/sin cache for the given length."""
-        pass
+        raise NotImplementedError("Subclasses must implement _compute_cos_sin_cache()")

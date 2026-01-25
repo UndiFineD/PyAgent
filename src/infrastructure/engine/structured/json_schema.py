@@ -62,20 +62,19 @@ class JsonSchemaGrammar(GrammarEngine):
 
         if schema_type == "object":
             return self._build_object_fsm(schema)
-        elif schema_type == "array":
+        if schema_type == "array":
             return self._build_array_fsm(schema)
-        elif schema_type == "string":
+        if schema_type == "string":
             return self._build_string_fsm(schema)
-        elif schema_type == "number" or schema_type == "integer":
+        if schema_type in ("number", "integer"):
             return self._build_number_fsm(schema)
-        elif schema_type == "boolean":
+        if schema_type == "boolean":
             return self._build_boolean_fsm()
-        elif schema_type == "null":
+        if schema_type == "null":
             return self._build_null_fsm()
-        else:
-            return self._build_generic_json_fsm()
+        return self._build_generic_json_fsm()
 
-    def _build_object_fsm(self, schema: Dict) -> FSMTransitionTable:
+    def _build_object_fsm(self, _schema: Dict) -> FSMTransitionTable:
         """Build FSM for JSON object."""
         fsm = FSMTransitionTable(num_states=7, initial_state=0, accepting_states=frozenset({6}))
         fsm.add_transition(0, "{", 1)
@@ -96,7 +95,7 @@ class JsonSchemaGrammar(GrammarEngine):
         fsm.add_transition(5, " ", 5)
         return fsm
 
-    def _build_array_fsm(self, schema: Dict) -> FSMTransitionTable:
+    def _build_array_fsm(self, _schema: Dict) -> FSMTransitionTable:
         """Build FSM for JSON array."""
         fsm = FSMTransitionTable(num_states=4, initial_state=0, accepting_states=frozenset({3}))
         fsm.add_transition(0, "[", 1)
@@ -110,7 +109,7 @@ class JsonSchemaGrammar(GrammarEngine):
         fsm.add_transition(2, " ", 2)
         return fsm
 
-    def _build_string_fsm(self, schema: Dict) -> FSMTransitionTable:
+    def _build_string_fsm(self, _schema: Dict) -> FSMTransitionTable:
         """Build FSM for JSON string."""
         fsm = FSMTransitionTable(num_states=3, initial_state=0, accepting_states=frozenset({2}))
         fsm.add_transition(0, '"', 1)
@@ -125,7 +124,7 @@ class JsonSchemaGrammar(GrammarEngine):
                 fsm.add_transition(1, c, 1)
         return fsm
 
-    def _build_number_fsm(self, schema: Dict) -> FSMTransitionTable:
+    def _build_number_fsm(self, _schema: Dict) -> FSMTransitionTable:
         """Build FSM for JSON number."""
         fsm = FSMTransitionTable(num_states=4, initial_state=0, accepting_states=frozenset({1, 2, 3}))
         fsm.add_transition(0, "-", 0)

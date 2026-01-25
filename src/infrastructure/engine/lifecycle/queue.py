@@ -58,7 +58,7 @@ class RequestQueue:
                 raise ValueError(f"Request {request.request_id} already exists")
             self._requests[request.request_id] = request
             self._waiting.append(request.request_id)
-            request._record_event(RequestEventType.QUEUED)
+            request.record_event(RequestEventType.QUEUED)
 
     def get_request(self, request_id: str) -> Optional[Request]:
         """Get a request by ID."""

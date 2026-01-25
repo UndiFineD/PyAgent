@@ -453,7 +453,7 @@ class SlashCommands:
 
         try:
             return defn.handler(ctx)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return CommandResult.fail(str(e))
 
     def process(
@@ -492,7 +492,7 @@ class SlashCommands:
             if defn:
                 try:
                     result = defn.handler(ctx)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     result = CommandResult.fail(str(e))
             else:
                 result = CommandResult.fail(f"Unknown command: {cmd.command}")

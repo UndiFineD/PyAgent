@@ -66,7 +66,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
             if hasattr(self.tokenizer, "all_special_ids"):
                 self._special_token_ids = set(self.tokenizer.all_special_ids)
             elif hasattr(self.tokenizer, "special_tokens_map"):
-                for name, token in self.tokenizer.special_tokens_map.items():
+                for token in self.tokenizer.special_tokens_map.values():
                     if isinstance(token, str):
                         tid = self.tokenizer.convert_tokens_to_ids(token)
                         if isinstance(tid, int):

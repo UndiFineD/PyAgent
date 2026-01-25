@@ -134,11 +134,11 @@ class CloudExporter:
                 tag_str = f"{{{tags}}}" if tags else ""
                 lines.append(f"{m.name}{tag_str} {m.value}")
 
-            with open(metrics_file, "a") as f:
+            with open(metrics_file, 'a', encoding='utf-8') as f:
                 f.write("\n".join(lines) + "\n")
 
             logging.info(f"Prometheus export: Appended {len(lines)} metrics to {metrics_file}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Prometheus export failed: {e}")
 
     def _export_generic(self) -> None:

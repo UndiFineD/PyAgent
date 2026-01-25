@@ -76,6 +76,7 @@ class ProcessorStats:
 
     @property
     def mask_ratio(self) -> float:
+        """Get the ratio of tokens masked to tokens processed."""
         if self.tokens_processed == 0:
             return 0.0
         return self.tokens_masked / self.tokens_processed
@@ -115,7 +116,6 @@ class LogitProcessor(ABC):
         Returns:
             Modified logits [batch_size, vocab_size].
         """
-        pass
 
     def enable(self) -> None:
         """Enable the processor."""

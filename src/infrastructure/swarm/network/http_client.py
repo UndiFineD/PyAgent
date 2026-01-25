@@ -34,15 +34,11 @@ class HTTPClient(HTTPConnection):
     Alias for HTTPConnection with sync-focused interface.
     """
 
-    pass
-
 
 class AsyncHTTPClient(HTTPConnection):
     """
     Alias for HTTPConnection with async-focused interface.
     """
-
-    pass
 
 
 class RetryableHTTPClient(HTTPConnection, RetryHTTPMixin):

@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#!/usr/bin/env python3
 """
 Direct Token Generation Speed Test
 
@@ -71,7 +85,7 @@ def binary_search(arr, target):
 
         print(f"{name:<12} {tokens:<10} {avg_time_us:<15.2f} {chars_per_token:<15.2f}")
 
-except Exception as e:
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     print(f"❌ Tokenization test failed: {e}")
     import traceback
     traceback.print_exc()
@@ -120,7 +134,7 @@ try:
 except ImportError as e:
     print(f"⚠️  Rust core not available: {e}")
     print("   Token estimation will use Python fallback")
-except Exception as e:
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     print(f"❌ Rust test failed: {e}")
     import traceback
     traceback.print_exc()
@@ -160,7 +174,7 @@ try:
     print("   2. Set API keys in environment")
     print("   3. Run the full benchmark suite")
 
-except Exception as e:
+except Exception:  # pylint: disable=broad-exception-caught, unused-variable
     print(f"❌ Simulation failed: {e}")
     import traceback
     traceback.print_exc()

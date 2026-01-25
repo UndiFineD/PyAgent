@@ -54,9 +54,11 @@ class BeamHypothesis:
 
     @property
     def length(self) -> int:
+        """Get the length of the hypothesis."""
         return len(self.token_ids)
 
     def normalized_score(self, length_penalty: float = 1.0) -> float:
+        """Get the score normalized by length."""
         if self.length == 0:
             return self.score
         if HAS_RUST:
@@ -64,6 +66,7 @@ class BeamHypothesis:
         return self.score / (self.length**length_penalty)
 
     def extend(self, token_id: int, log_prob: float) -> "BeamHypothesis":
+        """Extend hypothesis with a new token."""
         return BeamHypothesis(
             token_ids=self.token_ids + [token_id],
             score=self.score + log_prob,
@@ -71,6 +74,7 @@ class BeamHypothesis:
         )
 
     def finish(self) -> "BeamHypothesis":
+        """Mark the hypothesis as finished."""
         return BeamHypothesis(
             token_ids=self.token_ids,
             score=self.score,
@@ -82,11 +86,13 @@ class BeamSearchSampler(Sampler):
     """Beam search sampler."""
 
     def __init__(self, config: Optional[BeamSearchConfig] = None):
+        """Initialize beam search."""
         self.config = config or BeamSearchConfig()
         self._beams: List[BeamHypothesis] = []
         self._finished_beams: List[BeamHypothesis] = []
 
     def reset(self) -> None:
+        """Reset beam search state."""
         self._beams = [BeamHypothesis()]
         self._finished_beams = []
 
@@ -96,6 +102,7 @@ class BeamSearchSampler(Sampler):
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
+        """Process logits."""
         return logits
 
     def step(
@@ -103,6 +110,7 @@ class BeamSearchSampler(Sampler):
         logits: np.ndarray,
         eos_token_id: Optional[int] = None,
     ) -> List[BeamHypothesis]:
+        """Perform one beam search step."""
         if not self._beams:
             self.reset()
         log_probs = _log_softmax(logits)
@@ -129,12 +137,14 @@ class BeamSearchSampler(Sampler):
         return self._beams
 
     def get_best_hypothesis(self) -> Optional[BeamHypothesis]:
+        """Get the highest scoring hypothesis."""
         all_beams = self._finished_beams + self._beams
         if not all_beams:
             return None
         return sorted(all_beams, key=lambda b: b.normalized_score(self.config.length_penalty), reverse=True)[0]
 
     def is_finished(self) -> bool:
+        """Check if beam search is finished."""
         if self.config.early_stopping:
             return all(b.finished for b in self._beams)
         return len(self._finished_beams) >= self.config.beam_width

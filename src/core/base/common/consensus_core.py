@@ -35,8 +35,8 @@ class ConsensusCore(BaseCore):
     Supports weighted voting and tie-breaking.
     """
 
-    def __init__(self, name: str = "ConsensusCore", root_path: Optional[str] = None) -> None:
-        super().__init__(name=name, root_path=root_path)
+    def __init__(self, name: str = "ConsensusCore", repo_root: Optional[str] = None) -> None:
+        super().__init__(name=name, repo_root=repo_root)
 
     def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
         """Determines the winning proposal based on voting rules."""
@@ -44,7 +44,8 @@ class ConsensusCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_consensus_winner(proposals, weights)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 pass
 
         if not proposals:

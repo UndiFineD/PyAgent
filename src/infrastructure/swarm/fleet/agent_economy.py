@@ -87,6 +87,7 @@ class AgentEconomy:
         return hashlib.sha256(block_string).hexdigest()
 
     def get_balance(self, agent_id: str) -> float:
+        """Retrieves the current credit balance of an agent."""
         return self.balances.get(agent_id, 1000.0)  # Default starting credits
 
     def transfer_credits(self, sender: str, receiver: str, amount: float, reason: str) -> bool:

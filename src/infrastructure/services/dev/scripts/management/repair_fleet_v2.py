@@ -89,7 +89,7 @@ def repair() -> None:
 
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(content)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error repairing {path}: {e}")
 
 

@@ -96,7 +96,7 @@ class SubagentCore:
                 logging.info("Attempting local NeuralTransformer inference...")
                 response = rust_core.generate_neural_response(full_prompt)
                 return response
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug(f"Neural backend failed: {e}")
                 return None
 
@@ -193,7 +193,7 @@ class SubagentCore:
                 self.runner._metrics["total_latency_ms"] += latency_ms
                 return result
             return ""
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.runner._metrics["errors"] += 1
             logging.error(f"GitHub Models call failed: {e}")
             raise

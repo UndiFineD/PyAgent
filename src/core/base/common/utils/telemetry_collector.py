@@ -83,7 +83,7 @@ class TelemetryCollector:
 
         try:
             yield context
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             context.add_event("exception", {"message": str(e)})
             raise
         finally:

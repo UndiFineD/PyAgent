@@ -81,19 +81,19 @@ class FleetExecutionCore:
             # Phase 152: Transition core logic to async
             technical_report = await self.fleet.structured_orchestrator.execute_task(task)
             res = self.fleet.linguist.articulate_results(technical_report, task)
-            await self.fleet._record_success(task, res, current_model)
+            await self.fleet.record_success(task, res, current_model)
             return res
-        except Exception as e:
-            await self.fleet._record_failure(task, str(e), current_model)
-            logging.error(f"Fleet failure: {e}")
-            fallback_model = self.fleet.fallback_engine.get_fallback_model(current_model, str(e))
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            await self.fleet.record_failure(task, str(exc), current_model)
+            logging.error(f"Fleet failure: {exc}")
+            fallback_model = self.fleet.fallback_engine.get_fallback_model(current_model, str(exc))
             if fallback_model and fallback_model != current_model:
                 logging.warning(f"Self-Healing: Retrying with fallback model {fallback_model}...")
                 try:
                     technical_report = await self.fleet.structured_orchestrator.execute_task(task)
                     return self.fleet.linguist.articulate_results(technical_report, task)
-                except Exception as e2:
-                    logging.critical(f"Self-Healing: Fallback also failed: {e2}")
+                except Exception as inner_exc:  # pylint: disable=broad-exception-caught
+                    logging.critical(f"Self-Healing: Fallback also failed: {inner_exc}")
             raise
         finally:
             if task_id in self.fleet.active_tasks:
@@ -204,9 +204,9 @@ class FleetExecutionCore:
 
         if success:
             return f"### Results from {agent_name} ({action_name})\n{res}\n"
-        else:
-            self.fleet.state.errors.append(f"{agent_name}.{action_name}: {error_msg}")
-            return f"### Error from {agent_name}\n{error_msg}\n"
+
+        self.fleet.state.errors.append(f"{agent_name}.{action_name}: {error_msg}")
+        return f"### Error from {agent_name}\n{error_msg}\n"
 
     async def _execute_with_retry(
         self, agent, action_fn, args, workflow_id, priority, trace_id, start_time
@@ -228,8 +228,8 @@ class FleetExecutionCore:
 
         while not success and attempts <= max_retries:
             attempts += 1
-            if hasattr(agent, "_check_preemption"):
-                await agent._check_preemption()
+            if hasattr(agent, "check_preemption"):
+                await agent.check_preemption()
 
             action_signature = f"{agent_name}.{action_name}({args})"
             if self.fleet.action_history.count(action_signature) >= 3:
@@ -262,18 +262,18 @@ class FleetExecutionCore:
                     self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=True)
 
                 token_info = getattr(agent, "_last_token_usage", {"input": 0, "output": 0, "model": current_model})
-                await self.fleet._record_success(
+                await self.fleet.record_success(
                     res, workflow_id, agent_name, action_name, args, token_info, trace_id, start_time
                 )
                 self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
                 success = True
-            except Exception as e:
-                error_msg = str(e)
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                error_msg = str(exc)
                 if self.fleet.rl_selector:
                     self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=False)
 
                 if attempts <= max_retries:
-                    await self.fleet._record_failure(f"{agent_name}.{action_name}", error_msg, "unknown")
+                    await self.fleet.record_failure(f"{agent_name}.{action_name}", error_msg, "unknown")
                     await asyncio.sleep(1.0)
                     continue
 

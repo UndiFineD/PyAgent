@@ -38,7 +38,7 @@ def replace_in_file(filepath: str) -> None:
 
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(new_content)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"Skipping {filepath}: {e}")
 
 

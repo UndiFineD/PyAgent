@@ -153,6 +153,7 @@ class AttentionMetadata:
 
     @property
     def total_tokens(self) -> int:
+        """Get total tokens (prefill + decode)."""
         return self.num_prefill_tokens + self.num_decode_tokens
 
 
@@ -170,18 +171,18 @@ class AttentionKernel(ABC):
         v_cache: Optional[Any] = None,
     ) -> Any:  # torch.Tensor
         """Execute attention forward pass."""
-        ...
 
     @abstractmethod
     def supports_context_length(self, context_len: int) -> bool:
         """Check if kernel supports given context length."""
-        ...
 
+
+_paged_attention_kernel = None
 
 if HAS_TRITON and HAS_TORCH:
 
     @triton.jit
-    def _paged_attention_kernel(
+    def _paged_attention_kernel(  # pylint: disable=function-redefined, unused-argument, invalid-name
         output_ptr,
         query_ptr,
         k_cache_ptr,
@@ -377,15 +378,14 @@ class NaiveAttention(AttentionKernel):
         """Execute naive attention."""
         if HAS_TORCH:
             return self._forward_torch(query, key, value, metadata)
-        else:
-            return self._forward_numpy(query, key, value, metadata)
+        return self._forward_numpy(query, key, value, metadata)
 
     def _forward_torch(
         self,
         query: "torch.Tensor",
         key: "torch.Tensor",
         value: "torch.Tensor",
-        metadata: AttentionMetadata,
+        _metadata: AttentionMetadata,
     ) -> "torch.Tensor":
         """PyTorch implementation."""
         # Standard attention computation
@@ -399,7 +399,7 @@ class NaiveAttention(AttentionKernel):
         query: Any,
         key: Any,
         value: Any,
-        metadata: AttentionMetadata,
+        _metadata: AttentionMetadata,
     ) -> Any:
         """NumPy fallback implementation."""
         import numpy as np
@@ -436,7 +436,7 @@ class SlidingWindowAttention(AttentionKernel):
         if not HAS_TORCH:
             raise RuntimeError("PyTorch required for sliding window attention")
 
-        batch, num_heads, seq_len, head_dim = query.shape
+        _, _, seq_len, _ = query.shape
 
         # Create sliding window mask
         causal_mask = torch.ones(seq_len, seq_len, device=query.device, dtype=torch.bool)
@@ -612,7 +612,7 @@ class TritonAttentionOps:
         key: Any,
         value: Any,
         seq_lens: List[int],
-        causal: bool = True,
+        _causal: bool = True,
     ) -> Any:
         """Compute attention for prefill phase.
 

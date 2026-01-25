@@ -120,6 +120,7 @@ class DecodeOnlyWorker:
 
     def _schedule_kv_prefetch_rust(self, seq_metadata: Any) -> List[int]:
         """Rust-accelerated heuristic for prefetching KV blocks from remote."""
+        _ = seq_metadata
         # return RustBridge.schedule_kv_prefetch_rust(seq_metadata)
         return []
 

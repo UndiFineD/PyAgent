@@ -149,7 +149,6 @@ class BaseSampler(ABC):
         config: SamplingConfig,
     ) -> NDArray[np.int32]:
         """Sample from logits."""
-        ...
 
     @abstractmethod
     def apply_top_k(
@@ -158,7 +157,6 @@ class BaseSampler(ABC):
         k: int,
     ) -> NDArray[np.float32]:
         """Apply top-k filtering."""
-        ...
 
     @abstractmethod
     def apply_top_p(
@@ -167,7 +165,6 @@ class BaseSampler(ABC):
         p: float,
     ) -> NDArray[np.float32]:
         """Apply top-p (nucleus) filtering."""
-        ...
 
 
 class TopKTopPSampler:
@@ -256,15 +253,15 @@ class TopKTopPSampler:
 
         # Apply top-k
         if k > 0:
-            logits = self._apply_top_k(logits, k)
+            logits = self.apply_top_k(logits, k)
 
         # Apply top-p
         if p < 1.0:
-            logits = self._apply_top_p(logits, p)
+            logits = self.apply_top_p(logits, p)
 
         return logits
 
-    def _apply_top_k(
+    def apply_top_k(
         self,
         logits: NDArray[np.float32],
         k: int,
@@ -289,7 +286,7 @@ class TopKTopPSampler:
 
         return result
 
-    def _apply_top_p(
+    def apply_top_p(
         self,
         logits: NDArray[np.float32],
         p: float,
@@ -456,11 +453,11 @@ class TopKTopPSampler:
             progress = min(1.0, step / max_steps)
             return t0 - (t0 - t_min) * progress
 
-        elif self.config.temperature_schedule == TemperatureSchedule.COSINE:
+        if self.config.temperature_schedule == TemperatureSchedule.COSINE:
             progress = min(1.0, step / max_steps)
             return t_min + (t0 - t_min) * (1 + math.cos(math.pi * progress)) / 2
 
-        elif self.config.temperature_schedule == TemperatureSchedule.ADAPTIVE:
+        if self.config.temperature_schedule == TemperatureSchedule.ADAPTIVE:
             if len(self.state.entropy_history) < 5:
                 return t0
             avg_entropy = np.mean(self.state.entropy_history[-10:])
@@ -650,9 +647,9 @@ def apply_top_k_top_p(
         logits = logits[np.newaxis, :]
 
     if k is not None and k > 0:
-        logits = sampler._apply_top_k(logits, k)
+        logits = sampler.apply_top_k(logits, k)
     if p is not None and p < 1.0:
-        logits = sampler._apply_top_p(logits, p)
+        logits = sampler.apply_top_p(logits, p)
 
     if squeeze:
         return logits[0]

@@ -129,7 +129,7 @@ def process_directory(directory: str) -> None:
 
                     with open(filepath, "w", encoding="utf-8") as f:
                         f.writelines(new_lines)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error processing {filepath}: {e}")
 
 
@@ -148,5 +148,5 @@ if __name__ == "__main__":
                 new_lines = fix_header(lines, filename=f)
                 with open(filepath, "w", encoding="utf-8") as file_handle:
                     file_handle.writelines(new_lines)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             print(f"Error processing {filepath}: {e}")

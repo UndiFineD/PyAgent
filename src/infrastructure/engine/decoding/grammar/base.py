@@ -150,7 +150,6 @@ class StructuredOutputGrammar(ABC):
         Returns:
             True if all tokens were accepted, False otherwise.
         """
-        ...
 
     @abstractmethod
     def validate_tokens(self, tokens: List[int]) -> List[int]:
@@ -162,7 +161,6 @@ class StructuredOutputGrammar(ABC):
         Returns:
             Prefix of tokens that are valid.
         """
-        ...
 
     @abstractmethod
     def rollback(self, num_tokens: int) -> None:
@@ -173,7 +171,6 @@ class StructuredOutputGrammar(ABC):
         Args:
             num_tokens: Number of tokens to roll back.
         """
-        ...
 
     @abstractmethod
     def fill_bitmask(self, bitmask: np.ndarray, idx: int) -> None:
@@ -183,7 +180,6 @@ class StructuredOutputGrammar(ABC):
             bitmask: 2D boolean array [batch_size, vocab_size].
             idx: Batch index to fill.
         """
-        ...
 
     @abstractmethod
     def get_valid_tokens(self) -> Set[int]:
@@ -192,7 +188,6 @@ class StructuredOutputGrammar(ABC):
         Returns:
             Set of token IDs that are valid next tokens.
         """
-        ...
 
     @abstractmethod
     def is_terminated(self) -> bool:
@@ -201,12 +196,10 @@ class StructuredOutputGrammar(ABC):
         Returns:
             True if generation should stop.
         """
-        ...
 
     @abstractmethod
     def reset(self) -> None:
         """Reset grammar to initial state."""
-        ...
 
     @property
     def num_processed_tokens(self) -> int:

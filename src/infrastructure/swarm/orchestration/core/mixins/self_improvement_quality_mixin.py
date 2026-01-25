@@ -45,7 +45,7 @@ class SelfImprovementQualityMixin:
                             "file": file_path_rel,
                         }
                     ]
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         return []
 
@@ -85,7 +85,7 @@ class SelfImprovementQualityMixin:
                         "details": [n.name for n in untyped_nodes],
                     }
                 )
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             # Simple line-based fallback for broken syntax
             untyped_count = content.count("def ") - content.count("->")
             if untyped_count > 0:
@@ -102,11 +102,13 @@ class SelfImprovementQualityMixin:
         """General quality and performance checks."""
         findings = []
         # Robustness: Bare except
-        if re.search(r"^\s*except:\s*(#.*)?$", content, re.MULTILINE):
+        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught
+            \s*(#.*)?$", content, re.MULTILINE):
             findings.append(
                 {
                     "type": "Robustness Issue",
-                    "message": "Bare 'except:' caught. Use 'except Exception:' or specific errors.",
+                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught
+' or specific errors.",
                     "file": file_path_rel,
                 }
             )

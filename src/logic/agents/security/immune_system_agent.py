@@ -31,7 +31,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-class ImmuneSystemAgent(BaseAgent):
+class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Detects and mitigates security threats and prompt injections across the swarm."""
 
     def __init__(self, path: str) -> None:
@@ -89,7 +89,7 @@ class ImmuneSystemAgent(BaseAgent):
                 scan_injections_rust  # type: ignore[attr-defined]
 
             rust_findings = scan_injections_rust(input_text)
-            for idx, matched in rust_findings:
+            for idx, _ in rust_findings:
                 if idx < len(self.injection_patterns):
                     findings.append(f"Matched pattern: {self.injection_patterns[idx]}")
         except (ImportError, AttributeError):
@@ -168,8 +168,9 @@ class ImmuneSystemAgent(BaseAgent):
 
         return f"### Autonomous Security Patch Proposal\n\n{patch}"
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """General threat mitigation strategy."""
+        _ = (prompt, target_file)
         return "The digital immune system is active. All node telemetry is within normal bounds."
 
 

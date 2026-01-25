@@ -100,7 +100,7 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
                     finding["line"] = line_num
                 findings.append(finding)
             return findings
-        except Exception:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return []
 
     def generate_simple_fix(self, issue_type: str, content: str) -> Optional[str]:
@@ -115,14 +115,16 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
                     fixed_content, _ = result
                     return fixed_content
                 return None
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass  # Fall through to Python path
 
         # Python fallback
         if issue_type == "Robustness Issue":
             return re.sub(
-                r"^(\s*)except:(\s*)(#.*)?$",
-                r"\1except Exception:\2\3",
+                r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught
+                    (\s*)(#.*)?$",
+                r"\1except Exception as e:  # pylint: disable=broad-exception-caught
+                    \2\3",
                 content,
                 flags=re.MULTILINE,
             )

@@ -62,7 +62,7 @@ async def test_swarm_audit_trail_flow():
 
     # Check persistence
     assert os.path.exists(storage_path)
-    with open(storage_path, "r") as f:
+    with open(storage_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
         assert len(lines) >= 2
 

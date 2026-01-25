@@ -129,11 +129,11 @@ class LazyAgentMap(dict):
         for m_path in manifest_paths:
             if m_path.exists():
                 try:
-                    with open(m_path) as f:
+                    with open(m_path, encoding='utf-8') as f:
                         data = json.load(f)
                         configs: dict[str, tuple[str, str, str | None]] = self.core.parse_manifest(data)
                         manifest_configs.update(configs)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Failed to load plugin manifest {m_path}: {e}")
         return manifest_configs
 
@@ -147,7 +147,7 @@ class LazyAgentMap(dict):
                 if not isinstance(instance, ResilientStub):
                     logging.info(f"Self-Healing: {key} successfully reloaded.")
                     return True
-            except Exception:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         return False
 
@@ -280,7 +280,7 @@ class LazyAgentMap(dict):
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
             return stub
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to lazy-load agent {key} from {module_path}: {e}")
             return None
 
@@ -290,7 +290,7 @@ class LazyAgentMap(dict):
             instance = MCPAgent(class_name)
             self._instances[key] = instance
             return instance
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to start MCP Agent {key}: {e}")
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
@@ -333,7 +333,7 @@ class LazyAgentMap(dict):
             try:
                 instance.register_tools(self.fleet.registry)
                 logging.debug(f"Registered tools for {key}")
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Failed to register tools for {key}: {e}")
 
     def get(self, key: str, default: Any = None) -> Any:

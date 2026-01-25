@@ -121,7 +121,7 @@ class GracefulShutdown:
                 "start_time": self.state.start_time,
             }
             self.state_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Failed to save shutdown state: %s", e)
 
     def load_resume_state(self) -> ShutdownState | None:
@@ -147,7 +147,7 @@ class GracefulShutdown:
                 "Loaded resume state: %s completed, %s pending", len(state.completed_files), len(state.pending_files)
             )
             return state
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to load resume state: %s", e)
             return None
 

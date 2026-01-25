@@ -57,7 +57,14 @@ class CopilotCliBackend(LLMBackend):
             # We use 'shell' type because suggest works best with it,
             # though it's still far from a full LLM.
             cmd = ["gh", "copilot", "suggest", "-t", "shell", safe_prompt]
-            process = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_s, encoding="utf-8")
+            process = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=timeout_s,
+                encoding="utf-8",
+                check=False,
+            )
             latency = time.time() - start_t
 
             if process.returncode == 0:
@@ -79,19 +86,19 @@ class CopilotCliBackend(LLMBackend):
                 )
                 self._update_status("copilot_cli", True)
                 return content
-            else:
-                logging.debug(f"Copilot CLI error: {process.stderr}")
-                self._update_status("copilot_cli", False)
-                self._record(
-                    "copilot_cli",
-                    model,
-                    safe_prompt,
-                    f"ERROR: {process.stderr}",
-                    system_prompt=system_prompt,
-                    latency_s=latency,
-                )
-                return ""
-        except Exception as e:
+
+            logging.debug(f"Copilot CLI error: {process.stderr}")
+            self._update_status("copilot_cli", False)
+            self._record(
+                "copilot_cli",
+                model,
+                safe_prompt,
+                f"ERROR: {process.stderr}",
+                system_prompt=system_prompt,
+                latency_s=latency,
+            )
+            return ""
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             latency = time.time() - start_t
             logging.error(f"Failed to call Copilot CLI: {e}")
             self._update_status("copilot_cli", False)

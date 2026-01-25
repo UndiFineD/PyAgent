@@ -65,13 +65,13 @@ def create_detokenizer(
             spaces_between_special_tokens=spaces_between_special_tokens,
             stop_checker=stop_checker,
         )
-    else:
-        return SlowIncrementalDetokenizer(
-            tokenizer,
-            skip_special_tokens=skip_special_tokens,
-            spaces_between_special_tokens=spaces_between_special_tokens,
-            stop_checker=stop_checker,
-        )
+
+    return SlowIncrementalDetokenizer(
+        tokenizer,
+        skip_special_tokens=skip_special_tokens,
+        spaces_between_special_tokens=spaces_between_special_tokens,
+        stop_checker=stop_checker,
+    )
 
 
 def detokenize_incrementally(

@@ -114,8 +114,8 @@ class MetricsCore(BaseCore):
     Authoritative engine for agent metrics collection and performance analysis.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
         self._metrics = AgentMetrics()
         self.records: List[MetricRecord] = []
         self.start_times: Dict[str, float] = {}
@@ -187,7 +187,7 @@ class MetricsCore(BaseCore):
                     grouped[r.name].append(r.value)
                 # pylint: disable=no-member
                 return rc.aggregate_metrics_rust(grouped)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug("Rust metrics aggregation failed: %s", e)
 
         # Python fallback
@@ -209,7 +209,7 @@ class MetricsCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.rolling_avg_rust(values, window)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.debug("Rust rolling average failed: %s", e)
 
         # Python fallback

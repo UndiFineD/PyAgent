@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # -*- coding: utf-8 -*-
 """Shell test classes for observability reports - Managers and IO logic."""
 
@@ -1124,10 +1138,10 @@ class TestReportExporting:
         """Test exporting JSON file."""
         data = {"title": "Report", "items": [1, 2, 3]}
         json_file = tmp_path / "report.json"
-        with open(json_file, "w") as f:
+        with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(data, f)
 
-        with open(json_file, "r") as f:
+        with open(json_file, 'r', encoding='utf-8') as f:
             restored = json.load(f)
         assert restored["title"] == "Report"
 

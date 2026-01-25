@@ -353,7 +353,7 @@ class MultiThreadWeightLoader(WeightLoader):
                         self._stats.total_tensors += len(state_dict)
 
                     yield from state_dict.items()
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     file_path = futures[future]
                     raise RuntimeError(f"Failed to load {file_path}: {e}") from e
 

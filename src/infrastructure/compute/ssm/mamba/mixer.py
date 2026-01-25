@@ -17,6 +17,8 @@
 Mamba Mixer - Implementation of Mamba-1 and Mamba-2 mixer layers.
 """
 
+# pylint: disable=invalid-name
+
 from __future__ import annotations
 
 import math
@@ -104,7 +106,7 @@ class MambaMixer:
         state: MambaState | None = None,
     ) -> MambaOutput:
         """Forward pass through Mamba mixer."""
-        batch_size, seq_len, _ = hidden_states.shape
+        batch_size, _, _ = hidden_states.shape
         if state is None:
             state = MambaState.zeros(batch_size, self.config, hidden_states.dtype)
 
@@ -112,12 +114,12 @@ class MambaMixer:
         if self.in_proj_bias is not None:
             projected = projected + self.in_proj_bias
 
-        x, gate = np.split(projected, 2, axis=-1)
+        x, gate = np.split(projected, 2, axis=-1)  # pylint: disable=unbalanced-tuple-unpacking
         x_conv, new_conv_state = self.conv1d.forward(x, state.conv_state)
         x_conv = self._silu(x_conv)
 
         x_dbl = x_conv @ self.x_proj_weight.T
-        dt, B, C = np.split(
+        dt, B, C = np.split(  # pylint: disable=unbalanced-tuple-unpacking
             x_dbl,
             [self.config.dt_rank, self.config.dt_rank + self.config.ssm_state_size],
             axis=-1,
@@ -129,7 +131,11 @@ class MambaMixer:
             C = self._rms_norm(C, self.c_layernorm_weight)
 
         dt = dt @ self.dt_proj_weight.T + self.dt_proj_bias
-        dt = F.softplus(torch.from_numpy(dt)).numpy() if HAS_TORCH else np.log1p(np.exp(dt))
+        if HAS_TORCH and F is not None:
+            # pylint: disable=not-callable
+            dt = F.softplus(torch.from_numpy(dt)).numpy()
+        else:
+            dt = np.log1p(np.exp(dt))
 
         ssm_out, new_ssm_state = self.ssm.forward(x_conv, dt, B, C, state.ssm_state)
 
@@ -153,12 +159,12 @@ class MambaMixer:
         if self.in_proj_bias is not None:
             projected = projected + self.in_proj_bias
 
-        x, gate = np.split(projected, 2, axis=-1)
+        x, gate = np.split(projected, 2, axis=-1)  # pylint: disable=unbalanced-tuple-unpacking
         x_conv, new_conv_state = self.conv1d.update(x, state.conv_state)
         x_conv = self._silu(x_conv)
 
         x_dbl = x_conv @ self.x_proj_weight.T
-        dt, B, C = np.split(
+        dt, B, C = np.split(  # pylint: disable=unbalanced-tuple-unpacking
             x_dbl,
             [self.config.dt_rank, self.config.dt_rank + self.config.ssm_state_size],
             axis=-1,

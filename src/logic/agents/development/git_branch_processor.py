@@ -103,7 +103,7 @@ class GitBranchProcessor:
 
             return files
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Error getting branch changes: {e}")
             return []
 
@@ -119,7 +119,8 @@ class GitBranchProcessor:
                 check=False,
             )
             return result.stdout.strip() if result.returncode == 0 else None
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return None
 
     def list_branches(self, pattern: str | None = None) -> list[str]:
@@ -150,5 +151,6 @@ class GitBranchProcessor:
 
             return branches
 
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
             return []

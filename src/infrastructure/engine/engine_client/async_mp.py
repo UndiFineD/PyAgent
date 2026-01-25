@@ -76,7 +76,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
             except asyncio.CancelledError:
                 break
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Busy loop error: {e}")
 
     async def _output_handler(self) -> None:
@@ -94,7 +94,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 continue
             except asyncio.CancelledError:
                 break
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Output handler error: {e}")
 
     def send_request(self, request: SchedulerOutput) -> str:

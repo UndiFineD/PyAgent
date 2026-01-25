@@ -52,22 +52,32 @@ class ConversationContext(ABC):
 
     @property
     def state(self) -> ContextState:
+        """Get the current state of the context."""
         return self._state
 
     @property
+    def last_activity(self) -> float:
+        """Get the timestamp of the last activity."""
+        return self._last_activity
+
+    @property
     def turns(self) -> List[ConversationTurn]:
+        """Get all turns in this conversation."""
         return self._turn_tracker.turns
 
     @property
     def turn_count(self) -> int:
+        """Get the total number of turns."""
         return self._turn_tracker.turn_count
 
     @property
     def total_tokens(self) -> TokenMetrics:
+        """Get aggregate token metrics for all turns."""
         return self._turn_tracker.total_tokens
 
     @property
     def is_active(self) -> bool:
+        """Check if the context is currently active."""
         return self._state in (
             ContextState.ACTIVE,
             ContextState.WAITING_INPUT,
@@ -181,11 +191,19 @@ class ConversationContext(ABC):
         ctx._metadata = snapshot.metadata
 
         for turn in snapshot.turns:
-            ctx._turn_tracker._turns.append(turn)
-            ctx._turn_tracker._turn_index[turn.id] = turn
+            ctx._turn_tracker.append_turn(turn)
 
-        ctx._turn_tracker._total_tokens = snapshot.total_tokens
+        ctx._turn_tracker._total_tokens = snapshot.total_tokens  # pylint: disable=protected-access
         return ctx
+
+    def import_turns(self, turns: List[ConversationTurn], deduplicate: bool = True) -> None:
+        """Import turns from another context."""
+        seen_ids = {t.id for t in self.turns} if deduplicate else set()
+        for turn in turns:
+            if deduplicate and turn.id in seen_ids:
+                continue
+            self._turn_tracker.append_turn(turn)
+        self._update_activity()
 
     def _update_activity(self) -> None:
         """Update last activity timestamp."""
@@ -194,7 +212,6 @@ class ConversationContext(ABC):
     @abstractmethod
     async def cleanup(self) -> None:
         """Cleanup resources."""
-        ...
 
 
 class AgenticContext(ConversationContext):
@@ -214,10 +231,12 @@ class AgenticContext(ConversationContext):
 
     @property
     def tool_orchestrator(self) -> ToolOrchestrator:
+        """Return the tool orchestrator instance."""
         return self._tool_orchestrator
 
     @property
     def has_pending_tools(self) -> bool:
+        """Check if there are pending tool executions."""
         return self._tool_orchestrator.has_pending
 
     def queue_tool_calls(

@@ -105,12 +105,12 @@ class QuantumMemoryAgent(BaseAgent):
         """Exports the current compressed context as a JSON Knowledge Graph."""
 
         filepath = self.context_cache_dir / "knowledge_graph.json"
-        with open(filepath, "w") as f:
+        with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(self.active_context_blocks, f, indent=2)
 
         return f"Knowledge Graph exported to {filepath}"
 
-    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """General memory optimization logic."""
         return "I am optimizing the local memory pool. Memory fragments are being quantized for retrieval efficiency."
 

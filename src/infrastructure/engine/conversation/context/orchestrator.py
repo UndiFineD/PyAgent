@@ -42,10 +42,12 @@ class ToolOrchestrator:
 
     @property
     def pending_count(self) -> int:
+        """Return the number of pending tool executions."""
         return len(self._pending)
 
     @property
     def has_pending(self) -> bool:
+        """Check if there are any pending tool executions."""
         return self.pending_count > 0
 
     def queue_tool_call(
@@ -70,8 +72,8 @@ class ToolOrchestrator:
 
         if self.config.tool_policy == ToolExecutionPolicy.PARALLEL:
             return await self._execute_parallel()
-        else:
-            return await self._execute_sequential()
+
+        return await self._execute_sequential()
 
     async def _execute_sequential(self) -> List[ToolExecution]:
         """Execute tools sequentially."""
@@ -119,7 +121,7 @@ class ToolOrchestrator:
             execution.error = "Tool execution timed out"
             execution.status = "failed"
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             execution.error = str(e)
             execution.status = "failed"
 
@@ -133,8 +135,8 @@ class ToolOrchestrator:
                 self.tool_handler(execution.tool_name, execution.arguments),
                 timeout=self.config.tool_timeout_seconds,
             )
-        else:
-            return self.tool_handler(execution.tool_name, execution.arguments)
+
+        return self.tool_handler(execution.tool_name, execution.arguments)
 
     def get_results(self) -> List[ToolExecution]:
         """Get completed tool executions."""

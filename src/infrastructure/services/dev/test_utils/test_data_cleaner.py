@@ -121,7 +121,7 @@ class TestDataCleaner:
             try:
                 callback()
                 cleaned += 1
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Cleanup callback failed: {e}")
 
         self._cleanup_done = True
