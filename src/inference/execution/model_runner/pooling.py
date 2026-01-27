@@ -32,7 +32,7 @@ class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
     Reduces allocation overhead by reusing output objects.
     """
 
-    def __init__(self, pool_size: int = 100):
+    def __init__(self, pool_size: int = 100) -> None:
         self._pool: queue.Queue[T] = queue.Queue(maxsize=pool_size)
         self._factory: Optional[Callable[[], T]] = None
         self._allocated = 0

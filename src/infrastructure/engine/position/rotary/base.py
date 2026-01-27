@@ -40,7 +40,7 @@ from .config import RoPEConfig
 class RotaryEmbeddingBase(ABC):
     """Base class for all RoPE implementations."""
 
-    def __init__(self, config: RoPEConfig):
+    def __init__(self, config: RoPEConfig) -> None:
         self.config = config
         self.head_dim = config.head_dim
         self.rotary_dim = config.rotary_dim

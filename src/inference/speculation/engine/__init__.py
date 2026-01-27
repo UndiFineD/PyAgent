@@ -16,6 +16,10 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative decoding engine components."""
 
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
 from .base import DrafterBase  # noqa: F401
 from .config import SpecMethod, SpeculativeConfig  # noqa: F401
 from .engine import SpeculativeEngine, create_speculative_decoder  # noqa: F401

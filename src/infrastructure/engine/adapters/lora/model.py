@@ -41,7 +41,7 @@ class LoRAModel:
     layers: dict[str, LoRALayerWeights] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def add_layer(self, layer: LoRALayerWeights):
+    def add_layer(self, layer: LoRALayerWeights) -> None:
         """Add a layer to the model."""
         self.layers[layer.module_name] = layer
 

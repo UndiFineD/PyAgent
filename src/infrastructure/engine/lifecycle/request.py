@@ -80,7 +80,7 @@ class Request:
     kv_transfer_params: Optional[Dict[str, Any]] = None
     priority: int = 0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Record creation event."""
         self.record_event(RequestEventType.CREATED)
 

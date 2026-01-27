@@ -32,7 +32,7 @@ class BaseCore(Loadable, Saveable, Component):
     Handles standard I/O, naming, and versioning.
     """
 
-    def __init__(self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None):
+    def __init__(self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None) -> None:
         self.name = name or self.__class__.__name__
         self.version = VERSION
         self.workspace = WorkspaceCore(root_dir=repo_root)

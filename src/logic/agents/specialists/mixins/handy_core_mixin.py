@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 """
 Handy core mixin.py module.

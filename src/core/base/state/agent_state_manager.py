@@ -50,7 +50,6 @@ class EmergencyEventLog:
                 self.buffer.extend(content.splitlines())
 
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
                 pass
 
     def record_action(self, action: str, details: str) -> None:
@@ -70,19 +69,93 @@ class EmergencyEventLog:
 EMERGENCY_LOG = EmergencyEventLog()
 
 
+class StateDriftDetector:
+    """
+    Phase 336: Validates pre/post execution state to detect corruption.
+    """
+    def __init__(self, target_files: list[Path]) -> None:
+        self.snapshots: dict[Path, str] = {}
+        self.target_files = target_files
+
+    def snapshot(self) -> None:
+        """Capture hash of current files."""
+        import hashlib
+        for p in self.target_files:
+            if p.exists():
+                self.snapshots[p] = hashlib.sha256(p.read_bytes()).hexdigest()
+
+    def detect_drift(self) -> list[str]:
+        """Check if files changed unexpectedly (if used for monitoring invalid changes)."""
+        # Logic depends on usage. For StateTransaction, we expect changes.
+        # But this can be used to verify that *only* the intended files changed,
+        # or that the changes match some criteria.
+        # For now, we implement a basic corruption check (empty files).
+        drift_warnings = []
+        for p in self.target_files:
+            if p.exists() and p.stat().st_size == 0:
+                drift_warnings.append(f"Corruption: File {p} is empty after operation.")
+        return drift_warnings
+
+
+class StructuredErrorValidator:
+    """
+    Phase 336: Validates and classifies errors to prevent 'Unknown failure' states.
+    Captures diagnostic metadata for swarm intelligence.
+    """
+
+    def __init__(self) -> None:
+        self.logger = logging.getLogger("StructuredErrorValidator")
+
+    def capture_failure(self, context_id: str, error: BaseException, traceback_obj: Any) -> dict[str, Any]:
+        """
+        Classify error and return structured metadata.
+        """
+        import traceback
+
+        error_type = type(error).__name__
+        stack_trace = "".join(traceback.format_tb(traceback_obj)) if traceback_obj else str(error)
+
+        classification = "SystemError"
+        if isinstance(error, RecursionError):
+            classification = "RecursionLimitExceeded"
+        elif isinstance(error, ValueError):
+            classification = "DataValidationError"
+        elif isinstance(error, IOError):
+            classification = "IOInfrastructureError"
+        elif isinstance(error, ImportError):
+            classification = "DependencyError"
+
+        report = {
+            "error_type": error_type,
+            "classification": classification,
+            "message": str(error),
+            "context_id": context_id,
+            "timestamp": time.time(),
+            "stack_trace_snippet": stack_trace[-1000:] if stack_trace else "",
+            "full_stack_trace": stack_trace
+        }
+
+        self.logger.error(f"Swarm Failure Captured [{classification}]: {error_type} in {context_id}")
+        return report
+
+
 class StateTransaction:
     """Phase 267: Transactional context manager for agent file operations."""
 
-    def __init__(self, target_files: list[Path]) -> None:
+    def __init__(self, target_files: list[Path], run_tests: bool = False) -> None:
         self.target_files = target_files
+        self.run_tests = run_tests
 
         self.backups: dict[Path, Path] = {}
         self.temp_dir = Path("temp/transactions")
         self._fs = FileSystemCore()
         self._fs.ensure_directory(self.temp_dir)
         self.id = f"tx_{int(time.time() * 1000)}"
+        # Phase 336: Drift Detection
+        self.drift_detector = StateDriftDetector(target_files)
 
     def __enter__(self) -> StateTransaction:
+        self.drift_detector.snapshot()
         for file in self.target_files:
             if file.exists():
                 backup_path = self.temp_dir / f"{file.name}_{self.id}.bak"
@@ -91,11 +164,106 @@ class StateTransaction:
         logging.info(f"Transaction {self.id} started. {len(self.backups)} files backed up.")
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        """Exit context with validation and commit/rollback logic."""
+        validator = StructuredErrorValidator()
+
         if exc_type is not None:
+            validator.capture_failure(self.id, exc_val, exc_tb)
             self.rollback()
         else:
-            self.commit()
+            try:
+                self.validate()
+                self.commit()
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                import sys
+                logging.error(f"Transaction validation failed: {e}")
+                validator.capture_failure(self.id, e, sys.exc_info()[2])
+                self.rollback()
+                raise e
+
+    def validate(self) -> None:
+        """Phase 280: Validate Python files before commit (AST Check, Immutable Test Check, Drift)."""
+        import ast
+
+        # Drift/Corruption Check
+        warnings = self.drift_detector.detect_drift()
+        for w in warnings:
+            logging.error(f"Transaction Drift Warning: {w}")
+            # We treat file corruption (empty files) as a hard failure
+            raise ValueError(w)
+
+        # Phase 336: Immutable Test Suite Protection
+
+        # We explicitly block modification of core testing infrastructure by self-improving agents.
+        protected_paths = [
+            # Core fixtures
+            "tests/conftest.py",
+            # Base test cases
+            "tests/base_test_case.py",
+            # Critical core tests
+            "tests/unit/core/",
+        ]
+
+        for file in self.target_files:
+            # Check for immutable violations
+            resolved = file.resolve()
+            str_path = str(resolved).replace("\\", "/")  # normalize
+            for protected in protected_paths:
+                if protected in str_path and file.exists():
+                    # Calculate checksum or just fail if it's being modified within a generated transaction
+                    # For now, we assume if it's in target_files, it's intended to be modified.
+                    # We check if content actually changed.
+                    if file in self.backups:
+                        orig_content = self.backups[file].read_bytes()
+                        new_content = file.read_bytes()
+                        if orig_content != new_content:
+                            msg = ("Security Violation: Attempted modification of "
+                                   f"immutable test infrastructure: {file}")
+                            logging.critical(msg)
+                            raise PermissionError(msg)
+
+            if file.exists() and file.suffix == ".py":
+                try:
+                    content = file.read_text(encoding="utf-8")
+                    ast.parse(content)
+                except SyntaxError as e:
+                    logging.error(f"Validation failed for {file}: {e}")
+                    raise ValueError(f"Generated code has syntax errors: {e}") from e
+
+        if self.run_tests:
+            self._run_associated_tests()
+
+    def _run_associated_tests(self) -> None:
+        """Run associated tests for modified files."""
+        import subprocess
+        for file in self.target_files:
+            if not file.exists() or file.suffix != ".py":
+                continue
+
+            # Simple heuristic: run the file if it is a test, or try to find a test
+            test_targets = []
+            if file.name.startswith("test_") or "tests" in file.parts:
+                test_targets.append(file)
+
+            # Add more heuristics if needed (e.g. src/foo.py -> tests/unit/test_foo.py)
+
+            for test_path in test_targets:
+                try:
+                    # Run pytest on the target
+                    subprocess.run(
+                        ["python", "-m", "pytest", str(test_path), "--tb=short"],
+                        check=True,
+                        capture_output=True,
+                        timeout=30
+                    )
+                except subprocess.CalledProcessError as e:
+                    err_msg = e.stderr.decode() if e.stderr else 'Unknown error'
+                    logging.error(f"Pre-commit test failure for {test_path}: {err_msg}")
+                    raise ValueError(f"Verification tests failed for {file.name}") from e
+                except subprocess.TimeoutExpired as e:
+                    logging.error(f"Pre-commit test timeout for {test_path}")
+                    raise ValueError(f"Verification tests timed out for {file.name}") from e
 
     def commit(self) -> None:
         """Discard backups after successful transaction."""

@@ -80,14 +80,29 @@ class DiscoveryNode:
 
     async def start_advertising(self):
         """Broadcasts this node to the local network."""
+        import os
+        import platform
+
         if self.aiozc is None:
             self.aiozc = AsyncZeroconf(ip_version=IPVersion.V4Only)
+
+        # Basic resource detection for Voyager Synergy (Phase 4.0)
+        cpu_cores = str(os.cpu_count() or 1)
+        ram_gb = "8.0" # Default
+        try:
+             import psutil
+             ram_gb = f"{psutil.virtual_memory().total / (1024**3):.1f}"
+        except ImportError:
+             pass
 
         desc = {
             "version": VERSION,
             "node_id": self.node_id,
             "transport_port": str(self.transport_port),
             "status": "Online",
+            "cpu_cores": cpu_cores,
+            "ram_gb": ram_gb,
+            "os": platform.system(),
         }
 
         self.info = ServiceInfo(

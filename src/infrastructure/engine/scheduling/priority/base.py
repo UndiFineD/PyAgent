@@ -46,7 +46,7 @@ class PriorityScheduler:
         workers: int = 4,
         max_queue_size: int = 10000,
         enable_work_stealing: bool = True,
-    ):
+    ) -> None:
         """
         Initialize scheduler.
 
@@ -217,7 +217,7 @@ class PriorityScheduler:
         error_container: List[Exception] = []
         completed = threading.Event()
 
-        def wrapper():
+        def wrapper() -> None:
             try:
                 result_container.append(func())
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable

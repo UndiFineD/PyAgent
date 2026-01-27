@@ -33,7 +33,7 @@ class LockCore(BaseCore):
     Supports both file-based advisory locks and in-memory swarm locks.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.active_locks: Dict[str, float] = {}
         self.shared_counts: Dict[str, int] = {}

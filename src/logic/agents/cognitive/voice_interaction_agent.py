@@ -82,3 +82,26 @@ class VoiceInteractionAgent(BaseAgent):
             f"Agent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})"
         )
         return audio_file
+
+    @as_tool
+    async def run_omni_pipeline(self, audio_input_path: str) -> dict[str, str]:
+        """
+        Executes the full 'See-While-Hear' pipeline: hiding latency by pipelining.
+        Audio -> Transcribe -> LLM Think -> Synthesize -> Output Audio.
+        """
+        # 1. Speech to Text
+        transcription = self.transcribe_audio(audio_input_path)
+        if transcription.startswith("###"):
+             return {"error": transcription}
+        
+        # 2. Cognitive Processing (LLM)
+        response_text = await self.think(f"User said: '{transcription}'. Respond naturally.")
+        
+        # 3. Text to Speech (CosyVoice/gTTS)
+        output_audio = self.synthesize_speech(response_text)
+        
+        return {
+            "transcription": transcription,
+            "response_text": response_text,
+            "output_audio": output_audio
+        }

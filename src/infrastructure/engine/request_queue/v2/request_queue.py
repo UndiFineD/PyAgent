@@ -22,7 +22,7 @@ import logging
 import time
 from typing import Any, Dict, List, Tuple
 
-from ...scheduling.advanced.config import RequestPriority
+from src.infrastructure.engine.scheduling.advanced.config import RequestPriority
 
 try:
     import rust_core as rc
@@ -38,12 +38,12 @@ class RequestQueueV2:
     Uses deadline-aware scheduling and fair-share policies.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._waiting: List[Tuple[float, int, Any]] = []  # (priority_score, timestamp, request)
         self._running: Dict[int, Any] = {}
         self._counter = 0
 
-    def add_request(self, request: Any):
+    def add_request(self, request: Any) -> None:
         """
         Calculates priority and adds request to the waiting queue.
         Uses Rust for high-speed priority calculation if available.

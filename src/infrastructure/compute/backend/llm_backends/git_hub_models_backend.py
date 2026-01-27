@@ -161,7 +161,7 @@ class GitHubModelsBackend(LLMBackend):
                             )
                         elif res.returncode != 0:
                             logging.error(
-                                "GitHub Models: 'gh auth token' failed. Manual 'gh auth login' may be required."
+                                "GitHub Models: 'gh auth token' failed. Run 'gh auth login' in your local terminal to refresh credentials."
                             )
                         else:
                             logging.warning(

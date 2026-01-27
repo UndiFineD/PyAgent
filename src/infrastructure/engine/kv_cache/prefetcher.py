@@ -37,7 +37,7 @@ class ContextPrefetcher:
 
     def __init__(
         self, shard_manager: ContextShardManager, compressor: AdaptiveSwarmCompressor, lookahead_shards: int = 2
-    ):
+    ) -> None:
         self.shard_manager = shard_manager
         self.compressor = compressor
         self.lookahead_shards = lookahead_shards
@@ -45,7 +45,7 @@ class ContextPrefetcher:
         self.access_history: Dict[str, Deque[int]] = {}
         self.history_size = 10
 
-    def record_access(self, context_id: str, token_index: int):
+    def record_access(self, context_id: str, token_index: int) -> None:
         """
         Records a context access and triggers predictive prefetching.
         """
@@ -65,7 +65,7 @@ class ContextPrefetcher:
                 # Reverse sequential (rare but possible in some attention patterns)
                 self._prefetch_sequential(context_id, token_index, direction=-1)
 
-    def _prefetch_sequential(self, context_id: str, current_token: int, direction: int = 1):
+    def _prefetch_sequential(self, context_id: str, current_token: int, direction: int = 1) -> None:
         """
         Predicts and warms up the next few shards in the sequence.
         """

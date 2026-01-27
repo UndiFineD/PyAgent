@@ -32,7 +32,7 @@ from .storage import FlatLogprobs
 class LogprobsProcessor:
     """Process and extract logprobs from model outputs."""
 
-    def __init__(self, top_k: int = 5, output_format: LogprobFormat = LogprobFormat.FLAT):
+    def __init__(self, top_k: int = 5, output_format: LogprobFormat = LogprobFormat.FLAT) -> None:
         self.top_k = top_k
         self.output_format = output_format
 
@@ -98,7 +98,7 @@ class LogprobsProcessor:
 class StreamingLogprobs:
     """Streaming logprobs accumulator."""
 
-    def __init__(self, top_k: int = 5, max_tokens: int = 4096):
+    def __init__(self, top_k: int = 5, max_tokens: int = 4096) -> None:
         self.top_k = top_k
         self.max_tokens = max_tokens
         self._token_ids = np.zeros(max_tokens, dtype=np.int32)
@@ -132,7 +132,7 @@ class StreamingLogprobs:
         logprob: float,
         top_k_ids: Optional[np.ndarray] = None,
         top_k_logprobs: Optional[np.ndarray] = None,
-    ):
+    ) -> None:
         """Append a new token to the stream."""
         with self._lock:
             if self._position >= self.max_tokens:
@@ -147,7 +147,7 @@ class StreamingLogprobs:
             self._sum_logprobs += logprob
             self._position += 1
 
-    def add_from_logits(self, logits: np.ndarray, token_id: int):
+    def add_from_logits(self, logits: np.ndarray, token_id: int) -> None:
         """Add a token from raw logits."""
         max_logits = np.max(logits)
         shifted = logits - max_logits
@@ -160,7 +160,7 @@ class StreamingLogprobs:
 
         self.add_token(token_id, float(lp), indices, lps)
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset the accumulator."""
         with self._lock:
             self._position = 0

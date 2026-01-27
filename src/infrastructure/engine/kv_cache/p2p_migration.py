@@ -24,7 +24,7 @@ class P2PMigrationEngine:
     Optimizes for proximity and load.
     """
 
-    def __init__(self, shard_manager: ContextShardManager):
+    def __init__(self, shard_manager: ContextShardManager) -> None:
         self.shard_manager = shard_manager
         self.migration_history: List[Dict[str, Any]] = []
 

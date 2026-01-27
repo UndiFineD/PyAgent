@@ -18,6 +18,67 @@ use walkdir::WalkDir;
 use glob::Pattern;
 use std::fs;
 use std::io::Write;
+use pyo3::types::{PyList, PyDict, PyTuple, PyBool};
+use serde_json::{Value, Number, Map};
+
+fn py_to_json(obj: &Bound<'_, PyAny>) -> PyResult<Value> {
+    if obj.is_none() {
+        return Ok(Value::Null);
+    }
+    // Check specific types manually or via downcast
+    if obj.is_instance_of::<PyBool>() {
+        return Ok(Value::Bool(obj.extract::<bool>()?));
+    }
+    if let Ok(s) = obj.extract::<String>() {
+        return Ok(Value::String(s));
+    }
+    if let Ok(i) = obj.extract::<i64>() {
+        return Ok(Value::Number(Number::from(i)));
+    }
+    if let Ok(f) = obj.extract::<f64>() {
+         if let Some(n) = Number::from_f64(f) {
+            return Ok(Value::Number(n));
+        }
+        return Ok(Value::Null); // Handle NaN/Infinity
+    }
+    if let Ok(l) = obj.downcast::<PyList>() {
+        let mut vec = Vec::new();
+        for item in l.iter() {
+            vec.push(py_to_json(&item)?);
+        }
+        return Ok(Value::Array(vec));
+    }
+    if let Ok(t) = obj.downcast::<PyTuple>() {
+        let mut vec = Vec::new();
+        for item in t.iter() {
+            vec.push(py_to_json(&item)?);
+        }
+        return Ok(Value::Array(vec));
+    }
+    if let Ok(d) = obj.downcast::<PyDict>() {
+        let mut map = Map::new();
+        for (k, v) in d.iter() {
+            let key_str = k.extract::<String>().unwrap_or_else(|_| k.to_string());
+            map.insert(key_str, py_to_json(&v)?);
+        }
+        return Ok(Value::Object(map));
+    }
+    
+    // Fallback: convert to string
+    Ok(Value::String(obj.to_string()))
+}
+
+/// Serialize to JSON using Rust (StorageCore Support).
+#[pyfunction]
+pub fn to_json_rust(data: &Bound<'_, PyAny>, indent: Option<usize>) -> PyResult<String> {
+    let value = py_to_json(data)?;
+    let s = if indent.is_some() {
+        serde_json::to_string_pretty(&value).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?
+    } else {
+        serde_json::to_string(&value).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?
+    };
+    Ok(s)
+}
 
 /// Atomic save for JSON/YAML files (StorageCore Support).
 /// Ensures transactional speed and safety when writing large state files.
@@ -101,5 +162,6 @@ pub fn discover_files_rust(
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(discover_files_rust, m)?)?;
     m.add_function(wrap_pyfunction!(save_json_atomic_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
     Ok(())
 }

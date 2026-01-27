@@ -114,6 +114,16 @@ class FormulaCore:
         Returns:
             Computed float result.
         """
+        # Phase 40: Rust Acceleration
+        if rc and hasattr(rc, "evaluate_formula"):
+            try:
+                # Type cast variables to ensure f64 compatibility
+                safe_vars = {k: float(v) for k, v in variables.items()}
+                return float(rc.evaluate_formula(expression, safe_vars))
+            except Exception as e:
+                # Fallback to Python if Rust fails or panic occurs
+                logger.debug("Rust formula evaluation failed (used fallback): %s", e)
+
         try:
             # Handle potential format-style strings
             if "{" in expression and "}" in expression:

@@ -9,6 +9,12 @@ __pycache__/
 .github/
 .pytest_cache/
 .venv/
+.ollama/
+.Stream-Omni/
+.code_puppy/
+.FastFlowLM/
+.external/
+
 
 # Files
 .DS_Store

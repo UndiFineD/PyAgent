@@ -44,7 +44,7 @@ class StopChecker:
         stop_token_ids: Optional[Set[int]] = None,
         eos_token_id: Optional[int] = None,
         include_stop_string_in_output: bool = False,
-    ):
+    ) -> None:
         self.stop_strings = stop_strings or []
         self.stop_token_ids = stop_token_ids or set()
         self.eos_token_id = eos_token_id

@@ -124,7 +124,7 @@ class BadWordsProcessorV2(LogitsProcessor):
         device: str = "cpu",
         penalty_mode: BadWordsPenaltyMode = BadWordsPenaltyMode.HARD,
         soft_penalty: float = -100.0,
-    ):
+    ) -> None:
         self.max_num_reqs = max_num_reqs
         self.device = device
         self.penalty_mode = penalty_mode
@@ -352,7 +352,7 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
         device: str = "cpu",
         penalty_mode: BadWordsPenaltyMode = BadWordsPenaltyMode.HARD,
         max_wildcards: int = 3,
-    ):
+    ) -> None:
         super().__init__(max_num_reqs, device, penalty_mode)
         self.max_wildcards = max_wildcards
         self._wildcard_patterns: Dict[int, List[Tuple[List[int], int]]] = {}

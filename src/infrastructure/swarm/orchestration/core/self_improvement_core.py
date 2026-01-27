@@ -121,10 +121,8 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         # Python fallback
         if issue_type == "Robustness Issue":
             return re.sub(
-                r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught
-                    (\s*)(#.*)?$",
-                r"\1except Exception as e:  # pylint: disable=broad-exception-caught
-                    \2\3",
+                r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught(\s*)(#.*)?$",
+                r"\1except Exception as e:  # pylint: disable=broad-exception-caught\2\3",
                 content,
                 flags=re.MULTILINE,
             )

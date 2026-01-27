@@ -38,7 +38,7 @@ R = TypeVar("R")
 class EngineCoreClientBase(ABC, Generic[T, R]):
     """Base class for engine core clients."""
 
-    def __init__(self, config: EngineClientConfig):
+    def __init__(self, config: EngineClientConfig) -> None:
         self.config = config
         self._running = False
         self._request_counter = 0

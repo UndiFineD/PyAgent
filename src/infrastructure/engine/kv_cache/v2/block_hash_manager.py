@@ -35,7 +35,7 @@ class BlockHashManager:
     Supports high-speed hashing using Rust backend.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.hash_to_block: Dict[str, int] = {}
         self.block_to_hash: Dict[int, str] = {}
 
@@ -50,7 +50,7 @@ class BlockHashManager:
         token_str = ",".join(map(str, tokens)).encode("utf-8")
         return hashlib.sha256(token_str).hexdigest()
 
-    def register_block(self, block_id: int, tokens: List[int]):
+    def register_block(self, block_id: int, tokens: List[int]) -> None:
         """Registers a physical block with its token hash."""
         h = self.compute_hash(tokens)
         self.hash_to_block[h] = block_id
@@ -62,7 +62,7 @@ class BlockHashManager:
         h = self.compute_hash(tokens)
         return self.hash_to_block.get(h)
 
-    def invalidate_block(self, block_id: int):
+    def invalidate_block(self, block_id: int) -> None:
         """Removes a block from the hash registry."""
         if block_id in self.block_to_hash:
             h = self.block_to_hash.pop(block_id)

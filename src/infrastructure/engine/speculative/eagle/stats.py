@@ -27,7 +27,7 @@ from collections import deque
 class AcceptanceStats:
     """Track acceptance statistics for adaptive speculation."""
 
-    def __init__(self, window_size: int = 100):
+    def __init__(self, window_size: int = 100) -> None:
         self.window_size = window_size
         self._history: deque[float] = deque(maxlen=window_size)
         self._position_history: dict[int, deque[bool]] = {}

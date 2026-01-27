@@ -48,13 +48,13 @@ class ContextShardManager:
     Prevents context replication bottleneck.
     """
 
-    def __init__(self, block_size: int = 1024, redundancy_factor: int = 1):
+    def __init__(self, block_size: int = 1024, redundancy_factor: int = 1) -> None:
         self.block_size = block_size
         self.redundancy_factor = redundancy_factor
         self.context_registry: Dict[str, List[ContextShard]] = {}
         self.dead_ranks: set[int] = set()
 
-    def mark_rank_dead(self, rank_id: int):
+    def mark_rank_dead(self, rank_id: int) -> None:
         """Phase 75: Simulates hardware failure."""
         self.dead_ranks.add(rank_id)
         logger.warning(f"Rank {rank_id} marked as DEAD. Triggering failover lookup.")
@@ -140,7 +140,7 @@ class ContextShardManager:
                 return shard.rank_id
         return None
 
-    def delete_context(self, context_id: str):
+    def delete_context(self, context_id: str) -> bool:
         """Phase 80: Explicitly removes a context and its shards from the registry."""
         if context_id in self.context_registry:
             num_shards = len(self.context_registry[context_id])

@@ -33,7 +33,7 @@ from .params import SamplingParams, SamplingState
 class SamplingPipeline:
     """Composable pipeline of samplers."""
 
-    def __init__(self, samplers: Optional[List[Sampler]] = None):
+    def __init__(self, samplers: Optional[List[Sampler]] = None) -> None:
         """Initialize the sampling pipeline."""
         self.samplers = samplers or []
 

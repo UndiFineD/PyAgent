@@ -33,18 +33,18 @@ class AdaptiveSwarmCompressor:
     Balances between speed (uncompressed) and VRAM capacity (compressed).
     """
 
-    def __init__(self, shard_manager: ContextShardManager, idle_threshold_sec: float = 60.0):
+    def __init__(self, shard_manager: ContextShardManager, idle_threshold_sec: float = 60.0) -> None:
         self.shard_manager = shard_manager
         self.idle_threshold_sec = idle_threshold_sec
         self.bit_depth_map = {"float16": 16, "fp8": 8, "int4": 4, "int2": 2}
 
-    async def apply_pressure_quantization(self, vram_pressure: float):
+    async def apply_pressure_quantization(self, vram_pressure: float) -> Dict[str, int]:
         """
         Phase 76: Dynamic compression based on VRAM pressure (0.0 to 1.0).
         Aggressively reduces bit-depth as pressure increases.
         """
         if vram_pressure < 0.5:
-            return  # Normal operation
+            return {}  # Normal operation
 
         stats = {"scaled_down": 0}
 
@@ -110,7 +110,7 @@ class AdaptiveSwarmCompressor:
 
         return stats
 
-    def touch_shard(self, context_id: str, token_index: int):
+    def touch_shard(self, context_id: str, token_index: int) -> None:
         """Updates last_access and restores precision if needed."""
         shards = self.shard_manager.context_registry.get(context_id, [])
         for shard in shards:

@@ -29,7 +29,7 @@ from .models import TokenizerConfig, TokenizeResult, TokenizerInfo
 class BaseTokenizer(ABC):
     """Abstract base class for tokenizers."""
 
-    def __init__(self, config: TokenizerConfig):
+    def __init__(self, config: TokenizerConfig) -> None:
         self.config = config
         self._info: Optional[TokenizerInfo] = None
 

@@ -47,7 +47,7 @@ class DisaggregatedScheduler:
         SchedulingPolicy.HASH_BASED: HashSelector,
     }
 
-    def __init__(self, config: DCPConfig):
+    def __init__(self, config: DCPConfig) -> None:
         """Initialize the scheduler.
 
         Args:

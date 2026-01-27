@@ -34,7 +34,7 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
     are rotated together.
     """
 
-    def __init__(self, config: RoPEConfig):
+    def __init__(self, config: RoPEConfig) -> None:
         config.is_neox_style = False
         super().__init__(config)
         self.inv_freq = self._compute_inv_freq()

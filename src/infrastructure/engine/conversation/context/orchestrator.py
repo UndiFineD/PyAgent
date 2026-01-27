@@ -34,7 +34,7 @@ class ToolOrchestrator:
         self,
         config: Optional[ContextConfig] = None,
         tool_handler: Optional[Callable] = None,
-    ):
+    ) -> None:
         self.config = config or ContextConfig()
         self.tool_handler = tool_handler
         self._pending: Dict[str, ToolExecution] = {}

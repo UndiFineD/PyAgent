@@ -41,7 +41,7 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     Blocking request/response pattern.
     """
 
-    def __init__(self, config: EngineClientConfig):
+    def __init__(self, config: EngineClientConfig) -> None:
         super().__init__(config)
         self._context: Optional[zmq.Context] = None
         self._socket: Optional[zmq.Socket] = None

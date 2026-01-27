@@ -35,7 +35,7 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         mean: Tuple[float, ...] = (0.485, 0.456, 0.406),
         std: Tuple[float, ...] = (0.229, 0.224, 0.225),
         patch_size: int = 14,
-    ):
+    ) -> None:
         super().__init__(config)
         self.target_size = target_size
         self.mean = np.array(mean).reshape((1, 1, 3))

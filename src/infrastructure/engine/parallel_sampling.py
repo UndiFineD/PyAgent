@@ -261,7 +261,7 @@ class ParallelSamplingManager:
     """
 
     # Active parent requests
-    parent_requests: Dict[str, ParentRequest] = field(default_factory=dict)
+    active_parents: Dict[str, ParentRequest] = field(default_factory=dict)
 
     # Child to parent mapping
     child_to_parent: Dict[str, str] = field(default_factory=dict)
@@ -280,7 +280,7 @@ class ParallelSamplingManager:
             request_id=request_id,
             sampling_params=sampling_params,
         )
-        self.parent_requests[request_id] = parent
+        self.active_parents[request_id] = parent
         self.total_parents += 1
         return parent
 
@@ -316,7 +316,7 @@ class ParallelSamplingManager:
         if parent_id is None:
             return None
 
-        parent = self.parent_requests.get(parent_id)
+        parent = self.active_parents.get(parent_id)
         if parent is None:
             return None
 
@@ -324,7 +324,7 @@ class ParallelSamplingManager:
 
     def finish_parent(self, parent_id: str) -> Optional[ParentRequest]:
         """Mark parent as finished and clean up."""
-        parent = self.parent_requests.pop(parent_id, None)
+        parent = self.active_parents.pop(parent_id, None)
 
         if parent is not None:
             # Clean up child mappings
@@ -335,7 +335,7 @@ class ParallelSamplingManager:
 
     def get_parent(self, request_id: str) -> Optional[ParentRequest]:
         """Get parent request by ID."""
-        return self.parent_requests.get(request_id)
+        return self.active_parents.get(request_id)
 
     def is_child_request(self, request_id: str) -> bool:
         """Check if request is a child."""

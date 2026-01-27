@@ -185,7 +185,7 @@ class PrefixCacheManager:
         max_blocks: int = 1000,
         hash_algorithm: HashAlgorithm = HashAlgorithm.SHA256,
         enable_eviction: bool = True,
-    ):
+    ) -> None:
         self.block_size = block_size
         self.max_blocks = max_blocks
         self.hash_algorithm = hash_algorithm

@@ -16,10 +16,16 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Implementations of various speculative decoding proposers."""
 
+# pylint: disable=invalid-name
+
 import logging
 import time
 from contextlib import suppress
 from typing import Any, Dict, List, Optional, Tuple
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
 
 from .base import DrafterBase
 from .config import SpecMethod, SpeculativeConfig
@@ -29,23 +35,25 @@ logger = logging.getLogger(__name__)
 
 # Try to import numpy for efficient array operations
 NUMPY_AVAILABLE = False
-np = None
+_np = None  # pylint: disable=invalid-name
 with suppress(ImportError):
-    import numpy as np
+    import numpy as _np  # pylint: disable=invalid-name, reimported
 
     NUMPY_AVAILABLE = True
 
 # Try to import numba for JIT acceleration
 NUMBA_AVAILABLE = False
-jit = njit = prange = None
+_jit = _njit = _prange = None  # pylint: disable=invalid-name
 with suppress(ImportError):
+    from numba import jit as _jit, njit as _njit, prange as _prange  # pylint: disable=invalid-name, unused-import
+
     NUMBA_AVAILABLE = True
 
 
 class NgramProposer(DrafterBase):
     """N-gram based draft token proposer."""
 
-    def __init__(self, config: SpeculativeConfig):
+    def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self.min_n = config.prompt_lookup_min
         self.max_n = config.prompt_lookup_max
@@ -54,8 +62,8 @@ class NgramProposer(DrafterBase):
         # Pre-allocated arrays for Numba
         if NUMPY_AVAILABLE:
             max_seqs = 1024
-            self.valid_ngram_draft = np.zeros((max_seqs, self.k), dtype=np.int32)
-            self.valid_ngram_num_drafts = np.zeros(max_seqs, dtype=np.int32)
+            self.valid_ngram_draft = _np.zeros((max_seqs, self.k), dtype=_np.int32)
+            self.valid_ngram_num_drafts = _np.zeros(max_seqs, dtype=_np.int32)
 
         # Warm up JIT if available
         if NUMBA_AVAILABLE and NUMPY_AVAILABLE:
@@ -63,7 +71,7 @@ class NgramProposer(DrafterBase):
 
     def _warmup_jit(self) -> None:
         """Warm up Numba JIT compilation."""
-        dummy_tokens = np.zeros((1, 100), dtype=np.int32)
+        dummy_tokens = _np.zeros((1, 100), dtype=_np.int32)
         self._find_ngram_match_single(dummy_tokens[0], self.min_n, self.max_n, self.k)
 
     def propose(
@@ -78,14 +86,14 @@ class NgramProposer(DrafterBase):
         draft_token_ids: List[List[int]] = []
         num_proposed: List[int] = []
 
-        for i, tokens in enumerate(input_ids):
+        for _, tokens in enumerate(input_ids):
             if not tokens:
                 draft_token_ids.append([])
                 num_proposed.append(0)
                 continue
 
             if NUMPY_AVAILABLE:
-                token_array = np.array(tokens, dtype=np.int32)
+                token_array = _np.array(tokens, dtype=_np.int32)
                 drafts = self._find_ngram_match_single(token_array, self.min_n, self.max_n, self.k)
             else:
                 drafts = self._find_ngram_match_python(tokens, self.min_n, self.max_n, self.k)
@@ -111,11 +119,11 @@ class NgramProposer(DrafterBase):
     ) -> "np.ndarray":
         """Find longest matching n-gram and return following tokens."""
         if not NUMPY_AVAILABLE:
-            return np.array([], dtype=np.int32)
+            return _np.array([], dtype=_np.int32)
 
         num_tokens = len(tokens)
         if num_tokens < min_n + 1:
-            return np.array([], dtype=np.int32)
+            return _np.array([], dtype=_np.int32)
 
         suffix_start = max(0, num_tokens - max_n)
         suffix = tokens[suffix_start:num_tokens]
@@ -124,12 +132,12 @@ class NgramProposer(DrafterBase):
             pattern = suffix[-n:]
             search_end = num_tokens - n
             for pos in range(search_end - 1, -1, -1):
-                if np.array_equal(tokens[pos : pos + n], pattern):
+                if _np.array_equal(tokens[pos : pos + n], pattern):
                     match_end = pos + n
                     draft_end = min(match_end + k, num_tokens)
                     return tokens[match_end:draft_end].copy()
 
-        return np.array([], dtype=np.int32)
+        return _np.array([], dtype=_np.int32)
 
     def _find_ngram_match_python(
         self,
@@ -161,7 +169,7 @@ class NgramProposer(DrafterBase):
 class SuffixProposer(DrafterBase):
     """Suffix-based draft token proposer."""
 
-    def __init__(self, config: SpeculativeConfig):
+    def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self._suffix_table: Dict[Tuple[int, ...], List[int]] = {}
         self._frequency: Dict[Tuple[int, ...], int] = {}
@@ -221,7 +229,7 @@ class SuffixProposer(DrafterBase):
 class EagleProposer(DrafterBase):
     """EAGLE tree-based draft token proposer."""
 
-    def __init__(self, config: SpeculativeConfig):
+    def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self.tree_choices: List[Tuple[int, ...]] = []
         self._parse_tree_structure()
@@ -242,8 +250,9 @@ class EagleProposer(DrafterBase):
         else:
             self.tree_choices = [(i,) for i in range(self.num_speculative_tokens)]
 
-    def load_model(self, target_model: Any = None, **kwargs: Any) -> None:
+    def load_model(self, *args: Any, **kwargs: Any) -> None:
         """Load the EAGLE draft model."""
+        _ = (args, kwargs)  # Use args and kwargs
         logger.info("EAGLE model loading (placeholder)")
         self.hidden_size = 4096
 
@@ -255,6 +264,8 @@ class EagleProposer(DrafterBase):
         **kwargs: Any,
     ) -> DraftProposal:
         """Propose draft tokens using EAGLE model."""
+        # Unused arguments: positions, hidden_states, kwargs
+        _ = (positions, hidden_states, kwargs)
         start_time = time.perf_counter()
 
         draft_token_ids: List[List[int]] = []
@@ -284,7 +295,7 @@ class EagleProposer(DrafterBase):
 class HybridDrafter(DrafterBase):
     """Hybrid drafter combining multiple speculation methods."""
 
-    def __init__(self, config: SpeculativeConfig):
+    def __init__(self, config: SpeculativeConfig) -> None:
         super().__init__(config)
         self.ngram_drafter = NgramProposer(config)
         self.eagle_drafter: Optional[EagleProposer] = None

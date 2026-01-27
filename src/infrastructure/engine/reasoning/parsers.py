@@ -31,7 +31,7 @@ class ReasoningParser(ABC):
         reasoning_format: ReasoningFormat = ReasoningFormat.GENERIC,
         start_marker: str = "<think>",
         end_marker: str = "</think>",
-    ):
+    ) -> None:
         self.reasoning_format = reasoning_format
         self.start_marker = start_marker
         self.end_marker = end_marker
@@ -65,7 +65,7 @@ class ToolParser(ABC):
         self,
         tool_format: ToolCallFormat = ToolCallFormat.OPENAI,
         strict: bool = False,
-    ):
+    ) -> None:
         self.tool_format = tool_format
         self.strict = strict
         self._tool_call_counter = 0

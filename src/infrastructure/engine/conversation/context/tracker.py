@@ -29,7 +29,7 @@ from .models import ContextConfig, ConversationTurn, TokenMetrics, TurnType
 class TurnTracker:
     """Track conversation turns and token usage."""
 
-    def __init__(self, config: Optional[ContextConfig] = None):
+    def __init__(self, config: Optional[ContextConfig] = None) -> None:
         self.config = config or ContextConfig()
         self._turns: List[ConversationTurn] = []
         self._total_tokens = TokenMetrics()

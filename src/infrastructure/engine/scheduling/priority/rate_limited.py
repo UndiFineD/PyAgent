@@ -40,7 +40,7 @@ class RateLimitedScheduler:
         self,
         rates: Optional[Dict[TaskPriority, float]] = None,
         workers: int = 4,
-    ):
+    ) -> None:
         """
         Initialize rate-limited scheduler.
 
@@ -76,7 +76,8 @@ class RateLimitedScheduler:
             wait_time = max(0, last + min_interval - now)
 
             if wait_time > 0:
-                time.sleep(wait_time)
+                # Use Event wait to be non-interruptive to signals in some environments
+                threading.Event().wait(wait_time)
 
             self._last_execution[priority] = time.monotonic()
 

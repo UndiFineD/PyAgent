@@ -106,7 +106,7 @@ class IncrementalDetokenizer(ABC):
     and stop strings efficiently.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.token_ids: List[int] = []
         self.output_text: str = ""
         self._last_output_text_offset: int = 0
@@ -180,7 +180,7 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
     Base class with common functionality for incremental detokenizers.
     """
 
-    def __init__(self, request: Any):
+    def __init__(self, request: Any) -> None:
         super().__init__()
 
         # Extract sampling params
@@ -271,7 +271,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
     Requires tokenizers >= 0.21.1 for DecodeStream support.
     """
 
-    def __init__(self, tokenizer: Any, request: Any):
+    def __init__(self, tokenizer: Any, request: Any) -> None:
         super().__init__(request)
 
         self.tokenizer_wrapper = tokenizer
@@ -378,7 +378,7 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
     Compatible with all tokenizers but slower than FastIncrementalDetokenizer.
     """
 
-    def __init__(self, tokenizer: Any, request: Any):
+    def __init__(self, tokenizer: Any, request: Any) -> None:
         super().__init__(request)
 
         self.tokenizer = tokenizer

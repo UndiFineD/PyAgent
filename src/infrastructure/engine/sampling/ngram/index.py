@@ -35,7 +35,7 @@ class SuffixIndex:
     using hash-based suffix indexing.
     """
 
-    def __init__(self, max_n: int = 4):
+    def __init__(self, max_n: int = 4) -> None:
         self.max_n = max_n
         # Map from n-gram tuple to list of positions
         self._index: dict[int, dict[tuple[int, ...], list[int]]] = {n: {} for n in range(1, max_n + 1)}
@@ -111,7 +111,7 @@ class SuffixTreeProposer:
         self,
         num_speculative_tokens: int = 5,
         max_edit_distance: int = 0,
-    ):
+    ) -> None:
         self.num_speculative_tokens = num_speculative_tokens
         self.max_edit_distance = max_edit_distance
         self._tree: dict[int, Any] = {}

@@ -148,7 +148,7 @@ class StreamManager:
         num_compute_streams: int = 2,
         num_comm_streams: int = 2,
         use_high_priority: bool = False,
-    ):
+    ) -> None:
         """Initialize stream manager.
 
         Args:
@@ -268,7 +268,7 @@ class MicroBatchContext(Generic[T]):
         adaptive: bool = True,
         min_micro_batch: int = 1,
         max_micro_batch: int = 64,
-    ):
+    ) -> None:
         """Initialize micro-batch context.
 
         Args:

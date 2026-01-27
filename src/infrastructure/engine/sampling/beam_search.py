@@ -85,7 +85,7 @@ class BeamHypothesis:
 class BeamSearchSampler(Sampler):
     """Beam search sampler."""
 
-    def __init__(self, config: Optional[BeamSearchConfig] = None):
+    def __init__(self, config: Optional[BeamSearchConfig] = None) -> None:
         """Initialize beam search."""
         self.config = config or BeamSearchConfig()
         self._beams: List[BeamHypothesis] = []

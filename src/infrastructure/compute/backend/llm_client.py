@@ -186,10 +186,10 @@ class LLMClient:
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.",
-        model: str = "gh-extension",
+        model: str = "copilot-cli",
         **kwargs,
     ) -> str:
-        """Calls the GitHub Copilot CLI extension (gh copilot)."""
+        """Calls the GitHub Copilot CLI (copilot)."""
         return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)
 
     def llm_chat_via_lmstudio(
@@ -221,7 +221,7 @@ class LLMClient:
         prompt: str,
         system_prompt: str = "You are a helpful assistant.",
         preference: str = "local",
-        local_model: str = "tinyllama:latest",
+        local_model: str = "",
         external_model: str = "Meta-Llama-3.1-8B-Instruct",
     ) -> str:
         """

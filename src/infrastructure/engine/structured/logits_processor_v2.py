@@ -71,7 +71,7 @@ class SamplingParams:
     bad_words: Optional[List[List[int]]] = None
     stop_token_ids: Optional[List[int]] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.logit_bias is None:
             self.logit_bias = {}
         if self.bad_words is None:
@@ -120,7 +120,7 @@ class BatchUpdate:
 class BatchUpdateBuilder:
     """Builder for constructing BatchUpdate objects."""
 
-    def __init__(self, batch_size: int = 0):
+    def __init__(self, batch_size: int = 0) -> None:
         self.batch_size = batch_size
         self._removed: List[RemovedRequest] = []
         self._added: List[AddedRequest] = []
@@ -252,7 +252,7 @@ class MinPLogitsProcessor(LogitsProcessor):
         max_num_reqs: int,
         device: str = "cpu",
         _is_pin_memory: bool = False,
-    ):
+    ) -> None:
         self.max_num_reqs = max_num_reqs
         self.device = device
         self.min_p_count = 0
@@ -370,7 +370,7 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         max_num_reqs: int,
         device: str = "cpu",
         _is_pin_memory: bool = False,
-    ):
+    ) -> None:
         self.max_num_reqs = max_num_reqs
         self.device = device
 
@@ -471,7 +471,7 @@ class CompositeLogitsProcessor(LogitsProcessor):
     with optimized execution order.
     """
 
-    def __init__(self, processors: List[LogitsProcessor]):
+    def __init__(self, processors: List[LogitsProcessor]) -> None:
         self.processors = processors
         self._argmax_invariant: Optional[bool] = None
 

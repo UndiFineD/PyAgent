@@ -39,7 +39,7 @@ class QuantizedMultimediaEngine:
     Accelerates multimodal data processing using low-bit quantization.
     """
 
-    def __init__(self, mode: str = "FP8"):
+    def __init__(self, mode: str = "FP8") -> None:
         self.mode = mode
         self.loader = TensorRTLoader()
         logger.info(f"Quantized Engine initialized in {mode} mode.")

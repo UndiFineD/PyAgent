@@ -38,7 +38,7 @@ class RequestQueue:
         finished: Set of finished request IDs (recent)
     """
 
-    def __init__(self, max_finished_history: int = 1000):
+    def __init__(self, max_finished_history: int = 1000) -> None:
         """
         Initialize the request queue.
 
@@ -48,22 +48,22 @@ class RequestQueue:
         self._lock = threading.RLock()
         self._waiting: deque = deque()
         self._running: Set[str] = set()
-        self._requests: Dict[str, Request] = {}
+        self._request_map: Dict[str, Request] = {}
         self._finished: deque = deque(maxlen=max_finished_history)
 
     def add_request(self, request: Request) -> None:
         """Add a new request to the waiting queue."""
         with self._lock:
-            if request.request_id in self._requests:
+            if request.request_id in self._request_map:
                 raise ValueError(f"Request {request.request_id} already exists")
-            self._requests[request.request_id] = request
+            self._request_map[request.request_id] = request
             self._waiting.append(request.request_id)
             request.record_event(RequestEventType.QUEUED)
 
     def get_request(self, request_id: str) -> Optional[Request]:
         """Get a request by ID."""
         with self._lock:
-            return self._requests.get(request_id)
+            return self._request_map.get(request_id)
 
     def schedule_next(self, n: int = 1) -> List[Request]:
         """
@@ -76,7 +76,7 @@ class RequestQueue:
         with self._lock:
             while len(scheduled) < n and self._waiting:
                 request_id = self._waiting.popleft()
-                request = self._requests.get(request_id)
+                request = self._request_map.get(request_id)
                 if request and not request.is_finished():
                     request.start_running()
                     self._running.add(request_id)
@@ -91,7 +91,7 @@ class RequestQueue:
     ) -> Optional[Request]:
         """Mark a request as finished."""
         with self._lock:
-            request = self._requests.get(request_id)
+            request = self._request_map.get(request_id)
             if request is None:
                 return None
 
@@ -103,7 +103,7 @@ class RequestQueue:
     def abort_request(self, request_id: str) -> Optional[Request]:
         """Abort a request."""
         with self._lock:
-            request = self._requests.get(request_id)
+            request = self._request_map.get(request_id)
             if request is None:
                 return None
 
@@ -131,7 +131,7 @@ class RequestQueue:
     def preempt_request(self, request_id: str) -> Optional[Request]:
         """Preempt a running request back to waiting."""
         with self._lock:
-            request = self._requests.get(request_id)
+            request = self._request_map.get(request_id)
             if request is None or not request.is_running():
                 return None
 
@@ -161,12 +161,12 @@ class RequestQueue:
     def get_waiting_requests(self) -> List[Request]:
         """Get all waiting requests (ordered)."""
         with self._lock:
-            return [self._requests[rid] for rid in self._waiting if rid in self._requests]
+            return [self._request_map[rid] for rid in self._waiting if rid in self._request_map]
 
     def get_running_requests(self) -> List[Request]:
         """Get all running requests."""
         with self._lock:
-            return [self._requests[rid] for rid in self._running if rid in self._requests]
+            return [self._request_map[rid] for rid in self._running if rid in self._request_map]
 
     def cleanup_finished(self, older_than_seconds: float = 3600.0) -> int:
         """
@@ -175,18 +175,18 @@ class RequestQueue:
         Returns:
             Number of requests removed
         """
-        import time
+        import time as _time
 
-        cutoff = time.time() - older_than_seconds
+        cutoff = _time.time() - older_than_seconds
         removed = 0
         with self._lock:
             to_remove = []
             for request_id in self._finished:
-                request = self._requests.get(request_id)
+                request = self._request_map.get(request_id)
                 if request and request.finished_time and request.finished_time < cutoff:
                     to_remove.append(request_id)
 
             for request_id in to_remove:
-                del self._requests[request_id]
+                del self._request_map[request_id]
                 removed += 1
         return removed

@@ -38,6 +38,9 @@ Every Python file should have the following header once:
 - **Naming**:
   - **Modules**: Always use `snake_case` for filenames (e.g., `coder_agent.py`, `identity_mixin.py`).
   - **Classes**: Always use `PascalCase` (e.g., `CoderAgent`).
+  - **Specific Naming Rules**:
+    - `QuantumScalingCoderAgent` must be in `quantum_scaling_coder_agent.py`.
+    - Tests for it must be in `tests/specialists/test_quantum_scaling_coder_agent.py`.
   - **Variables/Methods**: Use `snake_case`.
 - **Imports**: Modules should be imported using their `snake_case` filenames, even on Windows.
 - **Concurrency**: Use `asyncio` for all I/O, network requests, and subprocess execution.

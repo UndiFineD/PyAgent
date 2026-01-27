@@ -46,7 +46,7 @@ class GrammarCompiler:
         self,
         vocab_size: int,
         token_to_string: Callable[[int], str],
-    ):
+    ) -> None:
         self.vocab_size = vocab_size
         self.token_to_string = token_to_string
 
@@ -118,7 +118,7 @@ class StructuredOutputManager:
         self,
         vocab_size: int,
         token_to_string: Callable[[int], str],
-    ):
+    ) -> None:
         self.compiler = GrammarCompiler(vocab_size, token_to_string)
         self._grammars: Dict[str, StructuredOutputGrammar] = {}
 

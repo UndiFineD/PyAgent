@@ -33,7 +33,7 @@ class BlockTable:
     block_tables: dict[int, list[int]] = field(default_factory=dict)
     free_blocks: set[int] = field(default_factory=set)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.free_blocks = set(range(self.num_blocks))
 
     def allocate_block(self, seq_id: int) -> int:
@@ -108,7 +108,7 @@ class PagedKVCache:
     key_cache: np.ndarray | None = field(default=None, repr=False)
     value_cache: np.ndarray | None = field(default=None, repr=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         shape = (self.num_blocks, self.block_size, self.num_kv_heads, self.head_size)
         self.key_cache = np.zeros(shape, dtype=self.dtype)
         self.value_cache = np.zeros(shape, dtype=self.dtype)

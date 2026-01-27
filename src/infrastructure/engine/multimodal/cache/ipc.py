@@ -36,7 +36,7 @@ class IPCMultiModalCache(MultiModalCache):
         max_entries: int = 10000,
         hasher: Optional[Any] = None,
         create: bool = True,
-    ):
+    ) -> None:
         super().__init__(max_size_bytes, max_entries, hasher)
         self.name = name
         self._local_cache = MemoryMultiModalCache(max_size_bytes, max_entries, hasher)

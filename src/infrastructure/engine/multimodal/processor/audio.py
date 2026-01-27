@@ -35,7 +35,7 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         max_length_seconds: float = 30.0,
         feature_size: int = 80,  # Mel bins
         hop_length: int = 160,
-    ):
+    ) -> None:
         super().__init__(config)
         self.target_sample_rate = target_sample_rate
         self.max_length_seconds = max_length_seconds

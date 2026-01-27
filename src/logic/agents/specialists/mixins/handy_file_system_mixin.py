@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 """
 Handy file system mixin.py module.
