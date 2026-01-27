@@ -178,7 +178,7 @@ class ShardedStateLoader:
         pattern: Optional[ShardPattern] = None,
         rank: int = 0,
         world_size: int = 1,
-    ):
+    ) -> None:
         self.pattern = pattern or ShardPattern()
         self.rank = rank
         self.world_size = world_size
@@ -280,7 +280,7 @@ class IncrementalShardLoader:
         base_loader: ShardedStateLoader,
         memory_budget_mb: float = 2048.0,
         cache_size: int = 3,  # Number of shards to keep in cache
-    ):
+    ) -> None:
         self.base_loader = base_loader
         self.memory_budget_bytes = int(memory_budget_mb * 1024 * 1024)
         self.cache_size = cache_size
@@ -354,7 +354,7 @@ class AsyncShardLoader:
         base_loader: ShardedStateLoader,
         prefetch_count: int = 2,
         max_workers: int = 2,
-    ):
+    ) -> None:
         self.base_loader = base_loader
         self.prefetch_count = prefetch_count
         self.max_workers = max_workers

@@ -41,7 +41,7 @@ class KnowledgeCore(BaseCore):
     Uses Adler-32 or MD5 based sharding.
     """
 
-    def __init__(self, shard_count: int = 1024, base_path: Optional[Path] = None):
+    def __init__(self, shard_count: int = 1024, base_path: Optional[Path] = None) -> None:
         super().__init__()
         self.shard_count = shard_count
         self.base_path = base_path

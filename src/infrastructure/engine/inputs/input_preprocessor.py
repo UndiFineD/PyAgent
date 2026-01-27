@@ -280,7 +280,7 @@ class PromptValidator:
         max_length: int = 8192,
         allow_empty: bool = False,
         require_user_message: bool = True,
-    ):
+    ) -> None:
         self.max_length = max_length
         self.allow_empty = allow_empty
         self.require_user_message = require_user_message
@@ -367,7 +367,7 @@ class ConversationLinearizer:
         input_format: InputFormat = InputFormat.CHATML,
         add_generation_prompt: bool = True,
         **kwargs: Any,
-    ):
+    ) -> None:
         self.format = kwargs.get("format", input_format)
         self.add_generation_prompt = add_generation_prompt
         self.template = PromptTemplate.get_template(self.format)
@@ -431,7 +431,7 @@ class InputPreprocessor:
         max_length: int = 8192,
         truncation: bool = True,
         estimate_chars_per_token: float = 4.0,
-    ):
+    ) -> None:
         self.tokenizer = tokenizer
         self.default_format = default_format
         self.max_length = max_length

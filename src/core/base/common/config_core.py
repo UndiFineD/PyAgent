@@ -36,7 +36,7 @@ except ImportError:
 class ConfigObject:  # pylint: disable=too-few-public-methods
     """A dictionary wrapper that allows dot-notation access."""
 
-    def __init__(self, data: Dict[str, Any]):
+    def __init__(self, data: Dict[str, Any]) -> None:
         for key, value in data.items():
             if isinstance(value, dict):
                 setattr(self, key, ConfigObject(value))
@@ -70,7 +70,7 @@ class ConfigCore(BaseCore):
         ".ini": ConfigFormat.INI,
     }
 
-    def __init__(self, workspace_root: Path | str | None = None):
+    def __init__(self, workspace_root: Path | str | None = None) -> None:
         super().__init__()
         # Use repo_root from BaseCore if available
         root = workspace_root or self.repo_root or Path.cwd()

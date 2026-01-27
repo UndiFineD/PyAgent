@@ -122,6 +122,7 @@ class SubagentRunner:
 
     @property
     def requests(self) -> bool:
+        """Get the requests session or flag."""
         return self._requests
 
     @requests.setter
@@ -132,6 +133,7 @@ class SubagentRunner:
 
     @property
     def llm_client(self) -> LLMClient:
+        """Get the LLM client instance."""
         return self._llm_client
 
     @llm_client.setter
@@ -271,6 +273,11 @@ class SubagentRunner:
     def llm_chat_via_vllm(self, *args, **kwargs) -> str:
         """Proxy to LLMClient."""
         return self.llm_client.llm_chat_via_vllm(*args, **kwargs)
+
+    def llm_chat_via_copilot_cli(self, *args, **kwargs) -> str:
+        """Proxy to LLMClient."""
+        return self.llm_client.llm_chat_via_copilot_cli(*args, **kwargs)
+
 
     def get_backend_status(self) -> dict[str, Any]:
         """Return diagnostic snapshot of backend availability."""

@@ -1,0 +1,78 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "pyagent"
+version = "4.4.0"
+description = "Autonomous Multi-Agent Swarm Framework"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "PyAgent Team", email = "core@pyagent.dev" }
+]
+keywords = ["ai", "agents", "swarm", "llm", "automation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "aiofiles>=25.1.0",
+    "aiohttp>=3.13.3",
+    "anthropic>=0.71.0",
+    "cryptography>=46.0.3",
+    "fastapi>=0.128.0",
+    "httpx>=0.28.1",
+    "loguru>=0.7.3",
+    "numpy>=1.26.0",
+    "openai>=1.60.0",
+    "pandas>=2.2.0",
+    "psutil>=6.1.1",
+    "pydantic>=2.10.0",
+    "pyzmq>=26.2.0",
+    "requests>=2.32.0",
+    "rich>=13.9.4",
+    "scikit-learn>=1.6.0",
+    "scipy>=1.15.0",
+    "SQLAlchemy>=2.0.0",
+    "tenacity>=9.0.0",
+    "tiktoken>=0.8.0",
+    "torch>=2.5.0", # Optional, but good to list
+    "tqdm>=4.67.0",
+    "websockets>=14.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "mypy",
+    "pylint",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+]
+rust = [
+    "maturin>=1.7.0",
+]
+
+[tool.uv]
+# Optimization for 'uv' package manager
+cache-keys = [{ file = "requirements/base.txt" }]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --asyncio-mode=strict"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

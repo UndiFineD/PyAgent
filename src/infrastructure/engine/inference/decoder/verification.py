@@ -35,7 +35,7 @@ class TreeSpeculator:
         self,
         num_speculative_tokens: int = 5,
         tree_width: int = 2,
-    ):
+    ) -> None:
         self.num_speculative_tokens = num_speculative_tokens
         self.tree_width = tree_width
 

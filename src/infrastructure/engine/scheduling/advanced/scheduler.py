@@ -30,7 +30,7 @@ from .request import ScheduledRequest
 class AdvancedRequestScheduler:
     """Advanced request scheduler with priority and preemption."""
 
-    def __init__(self, config: Optional[SchedulerConfig] = None):
+    def __init__(self, config: Optional[SchedulerConfig] = None) -> None:
         """Initialize scheduler."""
         self.config = config or SchedulerConfig()
 

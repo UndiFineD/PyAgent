@@ -124,6 +124,63 @@ pub fn rolling_avg(values: Vec<f64>, window: usize) -> Vec<f64> {
     rolling_avg_rust(values, window)
 }
 
+/// Calculate Pearson correlation coefficient (Common/Stats).
+#[pyfunction]
+pub fn calculate_pearson_correlation(x: Vec<f64>, y: Vec<f64>) -> PyResult<f64> {
+    if x.len() != y.len() || x.is_empty() {
+        return Ok(0.0);
+    }
+    let n = x.len() as f64;
+    let sum_x: f64 = x.iter().sum();
+    let sum_y: f64 = y.iter().sum();
+    let sum_x2: f64 = x.iter().map(|&v| v * v).sum();
+    let sum_y2: f64 = y.iter().map(|&v| v * v).sum();
+    let sum_xy: f64 = x.iter().zip(&y).map(|(&a, &b)| a * b).sum();
+
+    let numerator = n * sum_xy - sum_x * sum_y;
+    let denominator = ((n * sum_x2 - sum_x * sum_x) * (n * sum_y2 - sum_y * sum_y)).sqrt();
+
+    if denominator.abs() < 1e-10 {
+        Ok(0.0)
+    } else {
+        Ok(numerator / denominator)
+    }
+}
+
+/// Simple Linear Regression prediction (Common/Stats).
+#[pyfunction]
+pub fn predict_linear(x: Vec<f64>, steps: usize) -> PyResult<Vec<f64>> {
+    if x.len() < 2 {
+        if let Some(&last) = x.last() {
+            return Ok(vec![last; steps]);
+        }
+        return Ok(vec![0.0; steps]);
+    }
+    let n = x.len() as f64;
+    let indices: Vec<f64> = (0..x.len()).map(|i| i as f64).collect();
+    
+    let sum_x: f64 = indices.iter().sum();
+    let sum_y: f64 = x.iter().sum();
+    let sum_xy: f64 = indices.iter().zip(&x).map(|(i, val)| i * val).sum();
+    let sum_x2: f64 = indices.iter().map(|i| i * i).sum();
+
+    let denominator = n * sum_x2 - sum_x * sum_x;
+    if denominator.abs() < 1e-10 {
+        let last = *x.last().unwrap_or(&0.0);
+        return Ok(vec![last; steps]);
+    }
+
+    let slope = (n * sum_xy - sum_x * sum_y) / denominator;
+    let intercept = (sum_y - slope * sum_x) / n;
+
+    let mut predictions = Vec::with_capacity(steps);
+    for i in 0..steps {
+        let next_x = (x.len() + i) as f64;
+        predictions.push(slope * next_x + intercept);
+    }
+    Ok(predictions)
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(aggregate_metrics_rust, m)?)?;
     m.add_function(wrap_pyfunction!(rolling_avg_rust, m)?)?;
@@ -132,5 +189,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(percentiles, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_metrics, m)?)?;
     m.add_function(wrap_pyfunction!(rolling_avg, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_pearson_correlation, m)?)?;
+    m.add_function(wrap_pyfunction!(predict_linear, m)?)?;
     Ok(())
 }

@@ -23,7 +23,7 @@ from .config import ModelRunnerOutput, SchedulerOutput
 class MockExecutor(Executor):
     """Mock executor for testing."""
 
-    def __init__(self, tokens_per_step: int = 1):
+    def __init__(self, tokens_per_step: int = 1) -> None:
         self.tokens_per_step = tokens_per_step
 
     def execute_model(

@@ -27,7 +27,7 @@ from .config import (EngineCoreOutput, EngineCoreOutputs, FinishReason,
 class Scheduler(ABC):
     """Abstract scheduler interface."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.waiting: List[Request] = []
         self.running: List[Request] = []
         self.requests: Dict[str, Request] = {}

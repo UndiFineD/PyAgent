@@ -27,7 +27,7 @@ class TensorRTLoader:
     Supports FP8, INT8, and FP16 quantization paths.
     """
 
-    def __init__(self, workspace_root: Optional[str] = None):
+    def __init__(self, workspace_root: Optional[str] = None) -> None:
         self.workspace_root = Path(workspace_root or os.getcwd())
         self.engine_dir = self.workspace_root / "data" / "forge" / "tensorrt"
         self.engine_dir.mkdir(parents=True, exist_ok=True)
@@ -81,7 +81,7 @@ class TensorRTLoader:
         # Simulated packing logic
         return {"video_processed": video_frames * 0.5, "audio_processed": audio_samples * 0.5}
 
-    def close(self):
+    def close(self) -> None:
         """Releases all hardware resources."""
         self.active_engines.clear()
         self.logger.info("TensorRT resources released.")

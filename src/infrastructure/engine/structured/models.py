@@ -61,7 +61,7 @@ class FSMTransitionTable:
     # Allowed characters per state (for bitmask generation)
     allowed_chars: Dict[int, Set[str]] = field(default_factory=dict)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.transition_table is None:
             # Default: 256 ASCII characters
             self.transition_table = np.full((self.num_states, 256), -1, dtype=np.int32)
@@ -99,7 +99,7 @@ class TokenMask:
     vocab_size: int
     mask: np.ndarray = field(default=None)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.mask is None:
             self.mask = np.ones(self.vocab_size, dtype=np.bool_)
 

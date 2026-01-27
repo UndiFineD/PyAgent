@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 """
 Accessibility core mixin.py module.

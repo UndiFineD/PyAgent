@@ -48,7 +48,7 @@ class SpeculativeVerifier:
 
     def __init__(
         self, vocab_size: int, method: AcceptanceMethod = AcceptanceMethod.SPECULATIVE, temperature: float = 1.0
-    ):
+    ) -> None:
         self.vocab_size = vocab_size
         self.method = method
         self.temperature = temperature

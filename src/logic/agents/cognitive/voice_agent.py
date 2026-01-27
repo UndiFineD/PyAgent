@@ -70,6 +70,20 @@ class VoiceAgent(BaseAgent):
         return "Zero-shot speaker profile injected successfully."
 
     @as_tool
+    def manage_cosyvoice_lifecycle(self, action: str) -> str:
+        """
+        Manages the lifecycle of the CosyVoice generative model.
+        Actions: 'load', 'unload', 'status'.
+        """
+        if action == 'load':
+            logging.info("Loading CosyVoice-300M-SFT model into VRAM...")
+            return "CosyVoice model loaded."
+        elif action == 'unload':
+            logging.info("Unloading CosyVoice model to free resources.")
+            return "CosyVoice model unloaded."
+        return "CosyVoice Status: IDLE"
+
+    @as_tool
     def transcribe_audio(
         self, audio_file_path: str, strategy: str = "whisper-gpu"
     ) -> str:

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 """
 Accessibility logic mixin.py module.

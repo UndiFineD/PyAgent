@@ -40,7 +40,7 @@ class IncrementalDetokenizer(ABC):
         skip_special_tokens: bool = True,
         spaces_between_special_tokens: bool = True,
         stop_checker: Optional[StopChecker] = None,
-    ):
+    ) -> None:
         self.tokenizer = tokenizer
         self.skip_special_tokens = skip_special_tokens
         self.spaces_between_special_tokens = spaces_between_special_tokens

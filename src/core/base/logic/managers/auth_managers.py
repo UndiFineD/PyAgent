@@ -31,7 +31,7 @@ class AuthManager:
     Facade for authentication and authorization.
     """
 
-    def __init__(self, name: str = "AuthManager"):
+    def __init__(self, name: str = "AuthManager") -> None:
         from src.core.base.common.auth_core import AuthCore
         self._core = AuthCore(name=name)
         self._config: Optional[Any] = None

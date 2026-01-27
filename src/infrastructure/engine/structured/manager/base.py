@@ -37,7 +37,7 @@ class StructuredOutputGrammar(ABC):
         grammar_spec: GrammarSpec,
         vocab_size: int,
         request_id: Optional[str] = None,
-    ):
+    ) -> None:
         self.grammar_spec = grammar_spec
         self.vocab_size = vocab_size
         self.request_id = request_id
@@ -132,7 +132,7 @@ class StructuredOutputBackend(ABC):
         vocab_size: int,
         tokenizer_encode: Optional[Callable[[str], List[int]]] = None,
         tokenizer_decode: Optional[Callable[[List[int]], str]] = None,
-    ):
+    ) -> None:
         """
         Initialize the backend.
 

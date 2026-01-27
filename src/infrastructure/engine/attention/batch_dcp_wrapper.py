@@ -241,7 +241,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         self,
         config: DCPPlanConfig,
         attention_fn: Optional[Callable] = None,
-    ):
+    ) -> None:
         """Initialize prefill wrapper.
 
         Args:
@@ -385,7 +385,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         self,
         config: DCPPlanConfig,
         attention_fn: Optional[Callable] = None,
-    ):
+    ) -> None:
         """Initialize decode wrapper.
 
         Args:
@@ -540,7 +540,7 @@ class UnifiedBatchWrapper:
     Beyond vLLM: Single interface for heterogeneous batches.
     """
 
-    def __init__(self, config: DCPPlanConfig):
+    def __init__(self, config: DCPPlanConfig) -> None:
         """Initialize unified wrapper.
 
         Args:

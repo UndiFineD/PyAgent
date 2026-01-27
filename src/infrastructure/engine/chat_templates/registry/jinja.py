@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class JinjaTemplate(ChatTemplate):
     """Jinja2-based chat template."""
 
-    def __init__(self, config: TemplateConfig):
+    def __init__(self, config: TemplateConfig) -> None:
         super().__init__(config)
         self._template = None
         self._env = None
@@ -49,7 +49,7 @@ class JinjaTemplate(ChatTemplate):
 
         return BUILTIN_TEMPLATES[TemplateType.CHATML]
 
-    def _get_env(self):
+    def _get_env(self) -> Any:
         """Get Jinja environment."""
         if self._env is None:
             try:
@@ -72,7 +72,7 @@ class JinjaTemplate(ChatTemplate):
 
         return self._env
 
-    def _get_template(self):
+    def _get_template(self) -> Any:
         """Get compiled Jinja template."""
         if self._template is None:
             env = self._get_env()

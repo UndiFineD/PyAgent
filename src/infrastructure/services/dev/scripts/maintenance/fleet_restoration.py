@@ -47,8 +47,8 @@ def restoration() -> None:
 
                     content = re.sub(r"(try:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
                     content = re.sub(r"(except [\w.]+ as \w+:)\n(\s*)#", r"\1\n\2pass\n\2#", content)
-                    content = re.sub(r"(except Exception as e:  # pylint: disable=broad-exception-caught
-                        \s*)\n(\s*)#", r"\1\n\2pass\n\2#", content)
+                    content = re.sub(r"(except Exception as e:  # pylint: disable=broad-exception-caught"
+                                     r"\s*)\n(\s*)#", r"\1\n\2pass\n\2#", content)
 
                     # 3. Fix f-string break in CodeGenerator.py
                     if "CodeGenerator.py" in path:

@@ -18,7 +18,6 @@ Optimizes execution by slicing larger batches into hardware-aligned segments.
 """
 
 import logging
-import time
 from typing import Any, Dict, List
 
 try:
@@ -35,7 +34,7 @@ class UBatchingUtils:
     Essential for 120fps synchronized multimodal pipelines.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._stats: Dict[str, Any] = {"total_slices": 0, "avg_slice_size": 0.0, "sync_count": 0}
 
     @staticmethod
@@ -58,7 +57,7 @@ class UBatchingUtils:
         return [slice_size] * (total_tokens // slice_size)
 
     @staticmethod
-    def coordinate_threads(thread_id: int, total_threads: int):
+    def coordinate_threads(thread_id: int, total_threads: int) -> None:
         """
         Ensures strict thread ordering for DBO access within a UBatch.
         """
@@ -66,7 +65,8 @@ class UBatchingUtils:
             rc.ubatch_thread_wait_rust(thread_id, total_threads)
         else:
             # Emulated wait
-            time.sleep(0.001 * (thread_id / total_threads))
+            import threading
+            threading.Event().wait(0.001 * (thread_id / total_threads))
 
     def get_ubatch_metrics(self) -> Dict[str, Any]:
         """Returns micro-batching performance metrics."""

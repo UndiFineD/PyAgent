@@ -44,12 +44,50 @@ class CascadeContext:
     root_task_id: str | None = None
 
     parent_agent_id: str | None = None
+    agent_lineage: list[str] = field(default_factory=_empty_list_str)
 
     cascade_depth: int = 0
     max_depth: int = 10
+    depth_limit: int = 10  # Alias for max_depth to enforce strict recursion boundaries (Phase 259)
+    timeout: float = 300.0  # Phase 336: Execution timeout in seconds
+
+    # Phase 275: Failure lineage tracking (Autonomic Healing)
+    failure_history: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
+    metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+
+    def __post_init__(self) -> None:
+        """Ensure depth_limit syncs with max_depth if not explicitly set."""
+        if self.depth_limit != self.max_depth:
+            # If max_depth was set but depth_limit default was used, sync them.
+            # Ideally we favor the stricter limit.
+            self.depth_limit = min(self.depth_limit, self.max_depth)
+            self.max_depth = self.depth_limit
+
+        # Validation on initialization (Phase 336)
+        if self.cascade_depth > self.depth_limit:
+            raise RecursionError(
+                f"Cascade Context Initialized with Depth {self.cascade_depth} > Limit {self.depth_limit}"
+            )
 
     def next_level(self, agent_id: str) -> CascadeContext:
         """Create a child context for the next level of delegation."""
+        # Phase 336: Strict enforcement of recursion limits
+        if self.cascade_depth >= self.depth_limit:
+            raise RecursionError(
+                f"Cascade Depth Limit Reached ({self.depth_limit}). "
+                f"Agent {agent_id} cannot delegate further."
+            )
+
+        # Circular Dependency Check (Phase 336)
+        if agent_id in self.agent_lineage:
+            # Allow limited self-delegation if needed, but for now strict:
+            raise RecursionError(
+                f"Circular Dependency Detected: Agent {agent_id} is already in lineage: {self.agent_lineage}"
+            )
+
+        new_lineage = self.agent_lineage.copy()
+        new_lineage.append(agent_id)
+
         return CascadeContext(
             task_id=str(uuid.uuid4()),
             tenant_id=self.tenant_id,
@@ -57,13 +95,59 @@ class CascadeContext:
             correlation_id=self.correlation_id,
             root_task_id=self.root_task_id or self.task_id,
             parent_agent_id=agent_id,
+            agent_lineage=new_lineage,
             cascade_depth=self.cascade_depth + 1,
             max_depth=self.max_depth,
+            depth_limit=self.depth_limit,
+            timeout=self.timeout, # Propagate timeout
+            failure_history=self.failure_history.copy(),  # Propagate failures
+            metadata=self.metadata.copy(),
         )
+
+    def log_failure(
+        self,
+        stage: str,
+        error: str,
+        details: dict[str, Any] | None = None,
+        stack_trace: str | None = None,
+    ) -> None:
+        """Log a failure in the current context lineage."""
+        try:
+            val = str(error)
+
+            # Circuit Breaker: If too many failures in lineage, halt to prevent log spam/cascades
+            failure_threshold = 20
+            if len(self.failure_history) >= failure_threshold:
+                if len(self.failure_history) == failure_threshold:
+                    # Only log the breaker trip once
+                    self.failure_history.append({
+                        "timestamp": time.time(),
+                        "stage": "circuit_breaker",
+                        "error": "CircuitBreaker: Failure Limit Exceeded. Stopping log propagation.",
+                        "depth": self.cascade_depth
+                    })
+                return
+
+            entry = {
+                "timestamp": time.time(),
+                "stage": stage,
+                "error": val,
+                "details": details or {},
+                "depth": self.cascade_depth,
+                "agent": self.parent_agent_id,
+                "stack_trace": stack_trace,
+                "task_id": self.task_id,
+                "root_task_id": self.root_task_id,
+            }
+            self.failure_history.append(entry)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Fallback for logging failure
+            print(f"CRITICAL: Failed to log failure in CascadeContext: {e}")
+
 
     def is_bursting(self) -> bool:
         """Check if recursion depth limit reached."""
-        return self.cascade_depth >= self.max_depth
+        return self.cascade_depth >= self.depth_limit
 
 
 @dataclass(slots=True)

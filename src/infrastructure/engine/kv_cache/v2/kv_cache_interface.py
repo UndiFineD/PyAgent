@@ -22,7 +22,7 @@ from typing import List, Optional
 
 import torch
 
-from .block_table import BlockTableV2
+from src.infrastructure.engine.kv_cache.v2.block_table import BlockTableV2
 
 try:
     import rust_core as rc
@@ -38,7 +38,7 @@ class KVCacheInterfaceV2:
     Supports dynamic block allocation and multi-GPU synchronization.
     """
 
-    def __init__(self, num_layers: int, num_heads: int, head_size: int, num_blocks: int, block_size: int = 16):
+    def __init__(self, num_layers: int, num_heads: int, head_size: int, num_blocks: int, block_size: int = 16) -> None:
         self.num_layers = num_layers
         self.num_heads = num_heads
         self.head_size = head_size
@@ -52,7 +52,7 @@ class KVCacheInterfaceV2:
 
         logger.info(f"KVCacheInterfaceV2 created: {num_layers} layers, {num_heads} heads, {num_blocks} blocks")
 
-    def initialize_storage(self, device: str = "cuda", dtype: torch.dtype = torch.float16):
+    def initialize_storage(self, device: str = "cuda", dtype: torch.dtype = torch.float16) -> None:
         """Allocates the physical KV tensors on the specified device."""
         shape = (self.block_table.num_blocks, self.num_layers, self.num_heads, self.block_size, self.head_size)
         self.k_cache = torch.zeros(shape, device=device, dtype=dtype)
@@ -71,7 +71,7 @@ class KVCacheInterfaceV2:
         blocks = self.block_table.allocate(seq_id, num_required)
         return len(blocks) > 0
 
-    def sync_multi_gpu(self, rank: int, world_size: int):
+    def sync_multi_gpu(self, rank: int, world_size: int) -> None:
         """
         Synchronizes block tables across multiple GPUs for distributed inference.
         """
@@ -80,7 +80,7 @@ class KVCacheInterfaceV2:
         else:
             logger.debug(f"Multi-GPU sync simulated for rank {rank}")
 
-    def purge(self):
+    def purge(self) -> None:
         """Clears all cached data and resets metadata."""
         self.block_table.free_blocks = list(range(self.block_table.num_blocks))
         self.block_table.mapping.clear()

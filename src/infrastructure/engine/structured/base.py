@@ -36,7 +36,7 @@ class GrammarEngine(ABC):
         vocab_size: int,
         token_strings: Optional[Dict[int, str]] = None,
         eos_token_id: Optional[int] = None,
-    ):
+    ) -> None:
         self.vocab_size = vocab_size
         self.token_strings = token_strings or {}
         self.eos_token_id = eos_token_id

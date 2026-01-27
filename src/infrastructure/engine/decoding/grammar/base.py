@@ -80,7 +80,7 @@ class StructuredOutputsParams:
     _backend: Optional[str] = field(default=None, repr=False)
     _backend_was_auto: bool = field(default=False, repr=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate that only one constraint is set."""
         constraints = [
             self.json is not None,

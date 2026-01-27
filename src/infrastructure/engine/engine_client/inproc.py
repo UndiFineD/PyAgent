@@ -42,7 +42,7 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
     def __init__(
         self, config: EngineClientConfig, engine_core: Optional[Callable[[SchedulerOutput], EngineOutput]] = None
-    ):
+    ) -> None:
         super().__init__(config)
         self._engine_core = engine_core
         self._pending: dict[str, asyncio.Future[EngineOutput]] = {}

@@ -51,7 +51,7 @@ class StorageCore:
             return default
 
     @staticmethod
-    def save_json(path: Union[str, Path], data: Any, indent: int = 4):
+    def save_json(path: Union[str, Path], data: Any, indent: int = 4) -> None:
         """Safely save data to a JSON file, creating directories if needed."""
         p = Path(path)
         try:
@@ -82,7 +82,7 @@ class StorageCore:
             return default
 
     @staticmethod
-    def save_yaml(path: Union[str, Path], data: Any):
+    def save_yaml(path: Union[str, Path], data: Any) -> None:
         """Safely save data to a YAML file, creating directories if needed."""
         p = Path(path)
         try:
@@ -95,6 +95,13 @@ class StorageCore:
     @staticmethod
     def to_json(data: Any, indent: int = 4) -> str:
         """Convert data to a JSON formatted string."""
+        if rc and hasattr(rc, "to_json_rust"):
+            try:
+                # Assuming rc.to_json_rust returns a string
+                return rc.to_json_rust(data, indent)
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                logger.warning("Rust to_json failed, falling back to Python: %s", e)
+
         return json.dumps(data, indent=indent)
 
     @staticmethod

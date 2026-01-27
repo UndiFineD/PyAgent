@@ -35,12 +35,12 @@ class MemoryProfiler:
     Integrates with Rust for high-throughput allocation tracking.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.snapshots: List[Dict[str, Any]] = []
         self.peak_memory = 0
         self.start_time = time.time()
 
-    def take_snapshot(self, label: str = "auto"):
+    def take_snapshot(self, label: str = "auto") -> Dict[str, Any]:
         """Captures current memory state and fragmentation metrics."""
         usage = 0
         frag = 0.0
@@ -76,7 +76,7 @@ class MemoryProfiler:
             "snapshot_count": len(self.snapshots),
         }
 
-    def reset(self):
+    def reset(self) -> None:
         """Clears profiler history."""
         self.snapshots.clear()
         self.peak_memory = 0

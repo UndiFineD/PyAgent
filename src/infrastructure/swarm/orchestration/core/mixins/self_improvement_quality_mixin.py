@@ -102,13 +102,11 @@ class SelfImprovementQualityMixin:
         """General quality and performance checks."""
         findings = []
         # Robustness: Bare except
-        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught
-            \s*(#.*)?$", content, re.MULTILINE):
+        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$", content, re.MULTILINE):
             findings.append(
                 {
                     "type": "Robustness Issue",
-                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught
-' or specific errors.",
+                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.",
                     "file": file_path_rel,
                 }
             )

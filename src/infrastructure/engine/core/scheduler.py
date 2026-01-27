@@ -23,7 +23,7 @@ from .config import RequestStatus, SchedulerOutput
 class SimpleScheduler(Scheduler):
     """Simple FCFS scheduler implementation."""
 
-    def __init__(self, max_batch_size: int = 32, max_tokens: int = 4096):
+    def __init__(self, max_batch_size: int = 32, max_tokens: int = 4096) -> None:
         super().__init__()
         self.max_batch_size = max_batch_size
         self.max_tokens = max_tokens

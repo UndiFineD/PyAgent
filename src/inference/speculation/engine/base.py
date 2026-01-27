@@ -19,6 +19,10 @@
 from abc import ABC, abstractmethod
 from typing import Any, List, Optional
 
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
 from .config import SpeculativeConfig
 from .proposals import DraftProposal, SpecDecodingMetrics
 
@@ -26,7 +30,7 @@ from .proposals import DraftProposal, SpecDecodingMetrics
 class DrafterBase(ABC):
     """Abstract base class for draft token proposers."""
 
-    def __init__(self, config: SpeculativeConfig):
+    def __init__(self, config: SpeculativeConfig) -> None:
         self.config = config
         self.num_speculative_tokens = config.num_speculative_tokens
         self.metrics = SpecDecodingMetrics()
@@ -39,11 +43,10 @@ class DrafterBase(ABC):
         **kwargs: Any,
     ) -> DraftProposal:
         """Propose draft tokens for a batch of requests."""
-        ...
 
     def load_model(self, *args: Any, **kwargs: Any) -> None:
         """Load any required models."""
-        pass
+        # Optional implementation for derived classes
 
     def reset_metrics(self) -> None:
         """Reset performance metrics."""

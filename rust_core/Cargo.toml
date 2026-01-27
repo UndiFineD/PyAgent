@@ -23,6 +23,7 @@ ndarray = { version = "0.15", features = ["rayon"] }
 md-5 = "0.10"
 rand_distr = "0.4"
 rayon = "1.8"
+base64 = "0.22.1"
 
 [features]
 amd_npu = []

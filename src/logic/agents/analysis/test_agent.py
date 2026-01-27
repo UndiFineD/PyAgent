@@ -72,7 +72,20 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             return "\n".join(report)
         except (subprocess.SubprocessError, RuntimeError, OSError) as e:
-            return f"Error running tests: {e}"
+            import traceback
+            tb = traceback.format_exc()
+
+            # Phase 275: Log failure to context lineage if available
+            if hasattr(self, "context") and self.context:
+                self.context.log_failure(
+                    stage="test_execution",
+                    error=str(e),
+                    details={"path": path},
+                    stack_trace=tb
+                )
+
+            logging.error(f"TestAgent execution failed: {e}\n{tb}")
+            return f"Error running tests: {e}\nTraceback:\n{tb}"
 
     @as_tool
     def run_file_tests(self, file_path: str) -> str:

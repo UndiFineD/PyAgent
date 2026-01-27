@@ -145,7 +145,7 @@ class PenaltyEngine:
     - Context-aware strength
     """
 
-    def __init__(self, config: PenaltyConfig | None = None):
+    def __init__(self, config: PenaltyConfig | None = None) -> None:
         self.config = config or PenaltyConfig()
         self.state = PenaltyState()
         self._bad_words: set[int] = set()

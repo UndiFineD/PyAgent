@@ -118,7 +118,7 @@ def __getattr__(name: str) -> Any:
     """Lazy load attributes."""
     return _loader.load(name)
 
-def __dir__():
+def __dir__() -> list[str]:
     """Return available names."""
     return list(globals().keys()) + _loader.available_names()
 

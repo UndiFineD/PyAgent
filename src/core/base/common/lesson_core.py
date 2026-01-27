@@ -49,7 +49,7 @@ class LessonCore(BaseCore):
     Inherits from BaseCore for standardized persistence.
     """
 
-    def __init__(self, persistence_path: Optional[str] = None, repo_root: Optional[str] = None):
+    def __init__(self, persistence_path: Optional[str] = None, repo_root: Optional[str] = None) -> None:
         super().__init__(name="Lesson", repo_root=repo_root)
         self.known_failures: Set[str] = set()
         self.lessons: List[Lesson] = []

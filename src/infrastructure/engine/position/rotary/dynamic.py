@@ -33,7 +33,7 @@ class XDRotaryEmbedding(RotaryEmbeddingBase):
     Implements dynamic NTK-aware scaling for extended context lengths.
     """
 
-    def __init__(self, config: RoPEConfig):
+    def __init__(self, config: RoPEConfig) -> None:
         super().__init__(config)
         self.scaling_factor = config.scaling_factor
         self.original_max_position = config.original_max_position

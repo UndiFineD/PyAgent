@@ -148,7 +148,7 @@ class OutputProcessorOutput:
 class RequestOutputCollector:
     """Queue for collecting request outputs."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._queue: asyncio.Queue = asyncio.Queue()
 
     def put(self, output: RequestOutput) -> None:
@@ -184,7 +184,7 @@ class RequestState:
         queue: Optional[RequestOutputCollector] = None,
         log_stats: bool = False,
         stream_interval: int = 1,
-    ):
+    ) -> None:
         self.request_id = request_id
         self.prompt = prompt
         self.prompt_token_ids = prompt_token_ids or []
@@ -312,7 +312,7 @@ class RequestState:
 class LoRARequestStates:
     """Track LoRA request states."""
 
-    def __init__(self, log_stats: bool = False):
+    def __init__(self, log_stats: bool = False) -> None:
         self.log_stats = log_stats
         self.active_loras: Dict[int, Set[str]] = defaultdict(set)
         self.lora_stats: Dict[int, Dict[str, Any]] = {}
@@ -346,7 +346,7 @@ class OutputProcessor:
         tokenizer: Any = None,
         log_stats: bool = False,
         stream_interval: int = 1,
-    ):
+    ) -> None:
         self.tokenizer = tokenizer
         self.log_stats = log_stats
         self.stream_interval = stream_interval
@@ -524,7 +524,7 @@ class OutputProcessor:
 class IterationStats:
     """Statistics for a single iteration."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.num_prompt_tokens: int = 0
         self.num_generation_tokens: int = 0
         self.num_requests: int = 0

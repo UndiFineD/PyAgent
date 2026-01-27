@@ -36,14 +36,14 @@ class WorkspaceCore:
     _ignore_cache_time: Dict[str, float] = {}
     _initialized: bool = False
 
-    def __new__(cls, root_dir: Optional[Union[str, Path]] = None):
+    def __new__(cls, root_dir: Optional[Union[str, Path]] = None) -> "WorkspaceCore":
         """Singleton pattern for workspace core."""
         if cls._instance is None:
             cls._instance = super(WorkspaceCore, cls).__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self, root_dir: Optional[Union[str, Path]] = None):
+    def __init__(self, root_dir: Optional[Union[str, Path]] = None) -> None:
         """Initialize the workspace root and logger."""
         if self._initialized:
             return

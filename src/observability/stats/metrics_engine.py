@@ -20,6 +20,11 @@ from .metrics_core import ModelFallbackCore, TokenCostCore
 from .observability_core import AgentMetric, ObservabilityCore
 
 try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
+try:
     import psutil
 except ImportError:
     psutil = None
@@ -148,6 +153,43 @@ class ObservabilityEngine:
         otel_span_id = self._otel_spans.pop(trace_id, None)
         if otel_span_id:
             self.otel.end_span(otel_span_id, status=status, attributes=metadata)
+
+    def consolidate_telemetry(self) -> dict[str, float]:
+        """Aggregate metrics using Rust high-throughput engine."""
+        aggregated_results: dict[str, float] = {}
+
+        if rc and hasattr(rc, "aggregate_metrics_rust"):
+            # Prepare data for Rust: HashMap<String, Vec<f64>>
+            # We aggregate duration_ms by "agent:operation" key
+            data_map: dict[str, list[float]] = {}
+
+            for m in self.metrics:
+                key = f"{m.agent_name}:{m.operation}"
+                if key not in data_map:
+                    data_map[key] = []
+                data_map[key].append(m.duration_ms)
+
+            try:
+                # Rust returns averaged metrics
+                # pylint: disable=no-member
+                aggregated_results = rc.aggregate_metrics_rust(data_map)  # type: ignore
+                return aggregated_results
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                logger.warning("Rust metric aggregation failed: %s", e)
+
+        # Fallback Python aggregation (simple average)
+        counts: dict[str, int] = {}
+        sums: dict[str, float] = {}
+        for m in self.metrics:
+            key = f"{m.agent_name}:{m.operation}"
+            counts[key] = counts.get(key, 0) + 1
+            sums[key] = sums.get(key, 0.0) + m.duration_ms
+
+        for key, total in sums.items():
+            if counts[key] > 0:
+                aggregated_results[key] = total / counts[key]
+
+        return aggregated_results
 
         # Calculate cost
         cost = self.cost_engine.calculate_cost(model, input_tokens, output_tokens)

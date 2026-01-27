@@ -48,6 +48,7 @@ class SwarmInsight:
     timestamp: float = field(default_factory=lambda: datetime.now().timestamp())
 
     def format_for_pool(self) -> str:
+        """Format the insight for the synthesis prompt."""
         return f"- {self.agent} ({self.confidence:.2f}): {self.insight}"
 
 
@@ -58,7 +59,15 @@ class IntelligenceCore:
         self.workspace_root = workspace_root
 
     def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
-        """Filters and converts raw insight dictionaries into SwarmInsight objects."""
+        """Filters relevant insights from the pool.
+
+        Args:
+            pool: list of insight dictionaries.
+            limit: maximum number of insights to return.
+
+        Returns:
+            List of SwarmInsight objects.
+        """
         if rc:
             try:
                 # Optimized sort and truncate in Rust
@@ -80,7 +89,15 @@ class IntelligenceCore:
         return insights
 
     def generate_synthesis_prompt(self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]) -> str:
-        """Constructs a prompt for AI synthesis from collected insights."""
+        """Constructs a prompt for AI synthesis from collected insights.
+
+        Args:
+            insights: List of SwarmInsight objects.
+            sql_lessons: List of SQL lesson dictionaries.
+
+        Returns:
+            A prompt string for the AI.
+        """
         lines = [i.format_for_pool() for i in insights]
         for lesson in sql_lessons:
             lines.append(f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})")
@@ -92,8 +109,16 @@ class IntelligenceCore:
         )
 
     def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[str]:
-        """Filters raw AI output to ensure patterns are technically relevant."""
+        """Filters raw AI output to ensure patterns are technically relevant.
+
+        Args:
+            raw_patterns: List of raw pattern strings from the AI.
+
+        Returns:
+            List of filtered, actionable pattern strings.
+        """
         valid_patterns = []
+        unknown_failures = []
         keywords = [
             "error",
             "failure",
@@ -104,6 +129,11 @@ class IntelligenceCore:
             "logic",
             "refactor",
             "quantum",
+            "recursive_loop",
+            "shard_parallelization",
+            "test_infrastructure",
+            "unknown",
+            "improvement",
         ]
 
         for p in raw_patterns:
@@ -114,5 +144,17 @@ class IntelligenceCore:
             # Heuristic: must contain a technical keyword or be long enough
             if any(k in p_clean.lower() for k in keywords) or len(p_clean) > 40:
                 valid_patterns.append(p_clean)
+            else:
+                # Phase 336: Pattern Obsolescence Detection
+                unknown_failures.append(p_clean)
+
+        # Phase 336: Surface unknown patterns for investigation if they are significant
+        if unknown_failures:
+            # Check for semantic clusters of unknown failures (in a real scenario we'd use embeddings)
+            # For now, simply log them as "Unclassified/Emergent"
+            valid_patterns.append(
+                f"[Unclassified Patterns Detected]: Found {len(unknown_failures)} patterns that did not match "
+                "known failure taxonomies. Investigate for emergent behaviors."
+            )
 
         return valid_patterns

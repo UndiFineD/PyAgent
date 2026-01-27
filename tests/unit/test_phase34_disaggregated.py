@@ -27,12 +27,6 @@ Tests for:
 - Rust accelerations (12 functions)
 """
 
-import asyncio
-import math
-import time
-from typing import Dict, List, Optional, Tuple
-from unittest.mock import MagicMock, patch
-
 import pytest
 
 
@@ -80,13 +74,13 @@ class TestKVTransferConnector:
 
         # Producer role
         config = KVTransferConfig(kv_role=KVConnectorRole.PRODUCER)
-        assert config.is_producer == True
-        assert config.is_consumer == False
+        assert config.is_producer is True
+        assert config.is_consumer is False
 
         # Consumer role
         config = KVTransferConfig(kv_role=KVConnectorRole.CONSUMER)
-        assert config.is_producer == False
-        assert config.is_consumer == True
+        assert config.is_producer is False
+        assert config.is_consumer is True
 
     def test_kv_connector_metadata(self):
         """Test KVConnectorMetadata creation."""
@@ -188,6 +182,7 @@ class TestRotaryEmbeddingEngine:
         rope = NeoxRotaryEmbedding(config)
 
         # Verify the cache can be computed
+        # pylint: disable=protected-access
         cos, sin = rope._compute_cos_sin_cache(64)
         assert cos is not None
         assert sin is not None
@@ -210,7 +205,7 @@ class TestRotaryEmbeddingEngine:
             query = torch.randn(1, 4, 8, 64)
             key = torch.randn(1, 4, 8, 64)
 
-            q_out, k_out = rope.forward_native(positions, query, key)
+            q_out, _ = rope.forward_native(positions, query, key)
             assert q_out.shape == query.shape
         except ImportError:
             # PyTorch not available, just verify creation
@@ -229,7 +224,6 @@ class TestRotaryEmbeddingEngine:
             assert rope is not None
         except RuntimeError as e:
             if "PyTorch" in str(e):
-                import pytest
                 pytest.skip("MRotaryEmbedding requires PyTorch")
             raise
 
@@ -297,10 +291,10 @@ class TestSpeculativeEngine:
         from src.inference.speculation import SpeculativeConfig, SpecMethod
 
         ngram_config = SpeculativeConfig(method=SpecMethod.NGRAM)
-        assert ngram_config.use_eagle() == False
+        assert ngram_config.use_eagle() is False
 
         eagle_config = SpeculativeConfig(method=SpecMethod.EAGLE)
-        assert eagle_config.use_eagle() == True
+        assert eagle_config.use_eagle() is True
 
     def test_draft_proposal_creation(self):
         """Test DraftProposal dataclass."""
@@ -475,7 +469,7 @@ class TestDisaggregatedScheduler:
         from src.infrastructure.engine.scheduling import DCPConfig
 
         config = DCPConfig()
-        assert config.enabled == False
+        assert config.enabled is False
         assert config.kv_connector == "NixlConnector"
 
     def test_kv_transfer_params(self):
@@ -490,7 +484,7 @@ class TestDisaggregatedScheduler:
         )
 
         d = params.to_dict()
-        assert d["do_remote_prefill"] == True
+        assert d["do_remote_prefill"] is True
         assert d["remote_host"] == "gpu-node-1"
         assert d["remote_block_ids"] == [0, 1, 2]
 
@@ -508,7 +502,7 @@ class TestDisaggregatedScheduler:
             max_tokens=100,
         )
         assert request.request_id == "req_001"
-        assert request.prefill_complete == False
+        assert request.prefill_complete is False
 
     def test_round_robin_selector(self):
         """Test RoundRobinSelector instance selection."""
@@ -600,7 +594,7 @@ class TestDisaggregatedScheduler:
         instance, params = scheduler.schedule_prefill(request)
         assert instance is not None
         assert instance.role == InstanceRole.PREFILL
-        assert params.do_remote_decode == True
+        assert params.do_remote_decode is True
 
     def test_schedule_decode(self):
         """Test decode scheduling after prefill."""
@@ -634,7 +628,7 @@ class TestDisaggregatedScheduler:
 
         assert instance is not None
         assert instance.role == InstanceRole.DECODE
-        assert params.do_remote_prefill == True
+        assert params.do_remote_prefill is True
 
     def test_proxy_orchestrator(self):
         """Test ProxyOrchestrator request flow."""
@@ -726,7 +720,7 @@ class TestTritonAttentionOps:
             is_prefill=True,
         )
         assert len(metadata.seq_lens) == 3
-        assert metadata.is_prefill == True
+        assert metadata.is_prefill is True
 
     def test_naive_attention_forward(self):
         """Test NaiveAttention creation and config."""
@@ -743,8 +737,8 @@ class TestTritonAttentionOps:
         assert kernel.scale == pytest.approx(1.0 / (32 ** 0.5))
 
         # Verify supports_context_length always returns True
-        assert kernel.supports_context_length(1000) == True
-        assert kernel.supports_context_length(100000) == True
+        assert kernel.supports_context_length(1000) is True
+        assert kernel.supports_context_length(100000) is True
 
     def test_sliding_window_attention(self):
         """Test SlidingWindowAttention kernel."""
@@ -786,6 +780,7 @@ class TestTritonAttentionOps:
         ops = TritonAttentionOps(config)
 
         # Should have initialized a kernel
+        # pylint: disable=protected-access
         assert ops._kernel is not None
 
     def test_create_attention_ops_factory(self):
@@ -840,8 +835,8 @@ class TestBatchDCPWrapper:
             phase=BatchPhase.PREFILL,
             num_requests=10,
         )
-        assert metadata.is_prefill == True
-        assert metadata.is_decode == False
+        assert metadata.is_prefill is True
+        assert metadata.is_decode is False
 
     def test_dcp_plan_config(self):
         """Test DCPPlanConfig defaults."""
@@ -948,7 +943,7 @@ class TestBatchDCPWrapper:
             BatchRequest("r2", [4], 1, num_computed_tokens=10),  # Decode
         ]
 
-        result = wrapper.process_batch(requests, {"hidden_states": None})
+        _ = wrapper.process_batch(requests, {"hidden_states": None})
 
         # Should have both prefill and decode results
         stats = wrapper.get_stats()
@@ -975,17 +970,19 @@ class TestBatchDCPWrapper:
 # =============================================================================
 
 
-@pytest.fixture
-def rust_core():
+@pytest.fixture(name="rust_core_module")
+def fixture_rust_core():
     """Fixture to load rust_core module."""
     try:
         import rust_core
+
         # Check if new Phase 34 functions exist
-        if not hasattr(rust_core, 'rotary_embedding_kernel_rust'):
+        if not hasattr(rust_core, "rotary_embedding_kernel_rust"):
             pytest.skip("rust_core needs rebuild for Phase 34 functions")
         return rust_core
     except ImportError:
         pytest.skip("rust_core not available")
+    return None
 
 
 class TestRustPhase34Accelerations:
@@ -995,8 +992,9 @@ class TestRustPhase34Accelerations:
     Run: cd rust_core && maturin develop --release
     """
 
-    def test_rotary_embedding_kernel_rust(self, rust_core):
+    def test_rotary_embedding_kernel_rust(self, rust_core_module):
         """Test rotary_embedding_kernel_rust."""
+        rust_core = rust_core_module
         positions = [0, 1, 2, 3]
         dim = 64
 
@@ -1006,8 +1004,9 @@ class TestRustPhase34Accelerations:
         assert len(sin_table) == len(positions)
         assert len(cos_table[0]) == dim
 
-    def test_mrope_section_indices_rust(self, rust_core):
+    def test_mrope_section_indices_rust(self, rust_core_module):
         """Test mrope_section_indices_rust for multimodal RoPE."""
+        rust_core = rust_core_module
         temporal, height, width = rust_core.mrope_section_indices_rust(
             dim=64,
             temporal_sections=2,
@@ -1019,8 +1018,9 @@ class TestRustPhase34Accelerations:
         total_indices = len(temporal) + len(height) + len(width)
         assert total_indices > 0
 
-    def test_dynamic_ntk_alpha_rust(self, rust_core):
+    def test_dynamic_ntk_alpha_rust(self, rust_core_module):
         """Test dynamic_ntk_alpha_rust for extended context."""
+        rust_core = rust_core_module
         # Within original length - no scaling
         base = rust_core.dynamic_ntk_alpha_rust(4096, 4096, 10000.0, "linear")
         assert base == 10000.0
@@ -1033,8 +1033,9 @@ class TestRustPhase34Accelerations:
         yarn_scaled = rust_core.dynamic_ntk_alpha_rust(8192, 4096, 10000.0, "yarn")
         assert yarn_scaled > 10000.0
 
-    def test_ngram_propose_rust(self, rust_core):
+    def test_ngram_propose_rust(self, rust_core_module):
         """Test ngram_propose_rust for speculative decoding."""
+        rust_core = rust_core_module
         tokens = [1, 2, 3, 4, 1, 2, 3, 5, 1, 2, 3, 6]
 
         # Build index first
@@ -1051,8 +1052,9 @@ class TestRustPhase34Accelerations:
         # Should find continuations (4, 5, or 6)
         assert isinstance(proposals, list)
 
-    def test_eagle_tree_expand_rust(self, rust_core):
+    def test_eagle_tree_expand_rust(self, rust_core_module):
         """Test eagle_tree_expand_rust for tree speculation."""
+        rust_core = rust_core_module
         draft_tokens = [[100, 200], [150, 250]]
         tree_indices = rust_core.eagle_tree_expand_rust(
             draft_tokens,
@@ -1064,8 +1066,9 @@ class TestRustPhase34Accelerations:
         assert isinstance(tree_indices, list)
         assert len(tree_indices) > 0
 
-    def test_kv_transfer_metadata_rust(self, rust_core):
+    def test_kv_transfer_metadata_rust(self, rust_core_module):
         """Test kv_transfer_metadata_rust for disaggregated serving."""
+        rust_core = rust_core_module
         metadata = rust_core.kv_transfer_metadata_rust(
             "req_001",
             [0, 1, 2, 3],
@@ -1079,8 +1082,9 @@ class TestRustPhase34Accelerations:
         assert metadata["num_blocks"] == "4"
         assert "kv_bytes" in metadata
 
-    def test_verify_draft_tokens_batch_rust(self, rust_core):
+    def test_verify_draft_tokens_batch_rust(self, rust_core_module):
         """Test verify_draft_tokens_batch_rust."""
+        rust_core = rust_core_module
         draft_tokens = [100, 200, 300]
         target_logits = [
             [0.0] * 100 + [5.0] + [0.0] * 899,  # High prob for 100
@@ -1099,8 +1103,9 @@ class TestRustPhase34Accelerations:
         assert accepted_count >= 0
         assert len(mask) == 3
 
-    def test_block_table_lookup_rust(self, rust_core):
+    def test_block_table_lookup_rust(self, rust_core_module):
         """Test block_table_lookup_rust for paged attention."""
+        rust_core = rust_core_module
         block_table = [
             [10, 20, 30],  # Sequence 0
             [40, 50, 60],  # Sequence 1
@@ -1133,7 +1138,7 @@ class TestRustPhase34Accelerations:
 
         assert backend in [0, 1, 2, 3]
         assert "gqa_ratio" in config
-        assert config["gqa_ratio"] == 4
+        assert int(config["gqa_ratio"]) == 4
 
     def test_dcp_group_coordinate_rust(self, rust_core):
         """Test dcp_group_coordinate_rust for group formation."""
@@ -1216,8 +1221,8 @@ class TestPhase34Integration:
         request = ScheduledRequest("req_int_001", "Integration test", 100)
 
         # Schedule through pipeline
-        prefill_instance, prefill_params = scheduler.schedule_prefill(request)
-        assert prefill_params.do_remote_decode == True
+        _prefill_instance, prefill_params = scheduler.schedule_prefill(request)
+        assert prefill_params.do_remote_decode is True
 
     def test_speculation_with_rope(self):
         """Test speculative decoding with RoPE integration."""
@@ -1250,7 +1255,7 @@ class TestPhase34Integration:
 
         # Configure attention
         attn_config = AttentionConfig(num_heads=8, head_dim=64)
-        attn_ops = TritonAttentionOps(attn_config)
+        _attn_ops = TritonAttentionOps(attn_config)
 
         # Configure batch wrapper
         dcp_config = DCPPlanConfig()

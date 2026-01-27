@@ -55,7 +55,7 @@ class SchedulerOutput:
     timestamp: float = field(default_factory=time.time)
     placeholder_ids: Set[int] = field(default_factory=set)
 
-    def add_sequence(self, seq: ScheduledSequence):
+    def add_sequence(self, seq: ScheduledSequence) -> None:
         """Adds a sequence to the current batch."""
         self.scheduled_seqs.append(seq)
 

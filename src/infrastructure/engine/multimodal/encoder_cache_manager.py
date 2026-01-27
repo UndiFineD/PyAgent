@@ -173,7 +173,7 @@ class EncoderCacheManager:
     - Prefetching support
     """
 
-    def __init__(self, config: CacheConfig | None = None):
+    def __init__(self, config: CacheConfig | None = None) -> None:
         self.config = config or CacheConfig()
         self.stats = CacheStats()
 
@@ -535,7 +535,7 @@ class MultiTierEncoderCache:
         memory_config: CacheConfig | None = None,
         disk_path: str | None = None,
         remote_url: str | None = None,
-    ):
+    ) -> None:
         self.memory_cache = EncoderCacheManager(memory_config)
         self.disk_path = disk_path
         self.remote_url = remote_url

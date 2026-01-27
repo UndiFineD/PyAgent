@@ -35,7 +35,7 @@ class TemplateCore(BaseCore):
     Supports variable substitution using {{variable}} or [variable] syntax.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the template registry."""
         super().__init__()
         self.templates: Dict[str, str] = {

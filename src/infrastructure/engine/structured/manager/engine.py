@@ -41,7 +41,7 @@ class StructuredOutputManager:
         cache_size: int = 1000,
         num_compile_workers: int = 4,
         enable_async: bool = True,
-    ):
+    ) -> None:
         self.vocab_size = vocab_size
         self.max_batch_size = max_batch_size
         self.cache_size = cache_size
@@ -311,7 +311,7 @@ class SimpleBackend(StructuredOutputBackend):
         tokenizer_encode: Optional[Callable[[str], List[int]]] = None,
         tokenizer_decode: Optional[Callable[[List[int]], str]] = None,
         token_strings: Optional[Dict[int, str]] = None,
-    ):
+    ) -> None:
         """
         Initialize SimpleBackend.
 

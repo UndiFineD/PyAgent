@@ -188,7 +188,7 @@ class RegexConstraint(OutputConstraint):
     flags: int = 0
     _compiled: Optional[Pattern] = field(default=None, repr=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.pattern and self._compiled is None:
             self._compiled = re.compile(self.pattern, self.flags)
 

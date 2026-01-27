@@ -42,7 +42,7 @@ class EagleProposer:
     EAGLE-style speculative decoding proposer.
     """
 
-    def __init__(self, config: EagleConfig, draft_model: DraftModelWrapper | None = None):
+    def __init__(self, config: EagleConfig, draft_model: DraftModelWrapper | None = None) -> None:
         self.config = config
         self.draft_model = draft_model or SimpleDraftModel(hidden_size=config.hidden_size)
         self.method = config.method
@@ -303,7 +303,7 @@ class EagleProposerFactory:
 class AsyncEagleProposer:
     """Async wrapper for EAGLE proposer."""
 
-    def __init__(self, proposer: EagleProposer):
+    def __init__(self, proposer: EagleProposer) -> None:
         self.proposer = proposer
         self._lock = threading.Lock()
 

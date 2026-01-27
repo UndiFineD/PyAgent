@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 """
 Web search essay agent.py module.

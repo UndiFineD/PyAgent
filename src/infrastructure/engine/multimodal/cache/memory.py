@@ -36,7 +36,7 @@ class MemoryMultiModalCache(MultiModalCache):
         max_size_bytes: int = 1024 * 1024 * 1024,
         max_entries: int = 10000,
         hasher: Optional[Any] = None,
-    ):
+    ) -> None:
         super().__init__(max_size_bytes, max_entries, hasher)
         self._cache: OrderedDict[str, CacheEntry] = OrderedDict()
         self._current_size = 0
@@ -130,7 +130,7 @@ class PerceptualCache(MemoryMultiModalCache):
         max_size_bytes: int = 1024 * 1024 * 1024,
         max_entries: int = 10000,
         similarity_threshold: float = 0.9,
-    ):
+    ) -> None:
         super().__init__(max_size_bytes, max_entries)
         self.similarity_threshold = similarity_threshold
         self._perceptual_index: Dict[str, List[str]] = {}
@@ -182,7 +182,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
         max_size_bytes: int = 1024 * 1024 * 1024,
         max_entries: int = 10000,
         max_prefetch_queue: int = 100,
-    ):
+    ) -> None:
         super().__init__(max_size_bytes, max_entries)
         self.max_prefetch_queue = max_prefetch_queue
         self._prefetch_queue: List[Tuple[MediaHash, Callable, float]] = []
