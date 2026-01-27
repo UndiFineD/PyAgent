@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+<<<<<<< HEAD
 <<<<<<< HEAD:tests/unit/observability/test_reports_LEGACY.py
 
 from typing import Any
@@ -31,3 +32,5 @@ def test_sha256_text(report_module: Any) -> None:
     assert _sha256_text(text) == expected
 =======
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.):tests/unit/__init__.py
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)

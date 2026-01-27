@@ -36,6 +36,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
+<<<<<<< HEAD
 <<<<<<< HEAD:tests/unit/test_utils/test_test_utils_COMPREHENSIVE_UNIT.py
 try:
     from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
@@ -50,13 +51,18 @@ except ImportError:
         def __exit__(self, *args) -> str: 
             sys.path.remove(str(AGENT_DIR))
 =======
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 from tests.utils.agent_test_utils import (
     AGENT_DIR,
     agent_sys_path,
     load_module_from_path,
     agent_dir_on_path,
 )
+<<<<<<< HEAD
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.):tests/unit/infrastructure/services/dev/test_utils/test_test_utils_comprehensive_unit.py
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 # Import from src if needed
 

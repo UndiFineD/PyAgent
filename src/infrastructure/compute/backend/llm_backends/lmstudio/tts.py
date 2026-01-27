@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Module: tts
 Text-to-speech backend integration for LMStudio in PyAgent infrastructure.
@@ -33,6 +34,8 @@ def speak(text: str) -> Any:  # pylint: disable=missing-function-docstring
 # Register the plugin
 # lm_studio.add_plugin(MyLMPlugin)  # Placeholder
 =======
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 import torch
 from transformers import AutoModelForSpeechGeneration, AutoTokenizer
 
@@ -60,4 +63,7 @@ def speak(text):
 
 # Register the plugin
 lm_studio.add_plugin(MyLMPlugin)
+<<<<<<< HEAD
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)

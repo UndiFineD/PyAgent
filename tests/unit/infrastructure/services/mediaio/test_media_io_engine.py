@@ -26,7 +26,11 @@ import numpy as np
 from pathlib import Path
 from typing import List
 
+<<<<<<< HEAD
 from src.infrastructure.mediaio import (
+=======
+from src.infrastructure.services.mediaio import (
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
     MediaType,
     ImageFormat,
     VideoFormat,

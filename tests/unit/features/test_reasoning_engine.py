@@ -23,7 +23,11 @@ import pytest
 import asyncio
 from typing import List
 
+<<<<<<< HEAD
 from src.infrastructure.reasoning import (
+=======
+from src.infrastructure.engine.reasoning import (
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
     ReasoningFormat,
     ToolCallFormat,
     ParseState,

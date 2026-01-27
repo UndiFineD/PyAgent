@@ -12,11 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 import asyncio
 import logging
 from pathlib import Path
 from src.infrastructure.orchestration.swarm.DirectorAgent import DirectorAgent
 
+=======
+import pytest
+import asyncio
+import logging
+from pathlib import Path
+from src.infrastructure.swarm.orchestration.swarm.director_agent import DirectorAgent
+
+@pytest.mark.asyncio
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 async def test_status_update():
     # Setup a mock improvements file
     test_file = Path("docs/prompt/test_improvements.md")

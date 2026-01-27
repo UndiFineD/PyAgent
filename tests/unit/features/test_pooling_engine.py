@@ -23,7 +23,11 @@ import pytest
 import numpy as np
 from typing import List
 
+<<<<<<< HEAD
 from src.infrastructure.pooling.PoolingEngine import (
+=======
+from src.infrastructure.engine.pooling.pooling_engine import (
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
     PoolingTask,
     PoolingStrategy,
     PoolingConfig,

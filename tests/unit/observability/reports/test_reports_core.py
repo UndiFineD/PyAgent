@@ -25,6 +25,7 @@ from datetime import datetime
 import pytest
 import logging
 from pathlib import Path
+<<<<<<< HEAD
 <<<<<<< HEAD:tests/unit/observability/test_reports_CORE.py
 import sys
 import os
@@ -38,6 +39,37 @@ except ImportError:
 # Import from src if needed
 =======
 import pytest
+=======
+import pytest
+
+from src.observability.reports import (
+    ReportType,
+    ReportFormat,
+    SeverityLevel,
+    IssueCategory,
+    CodeIssue,
+    ReportMetadata,
+    ReportTemplate,
+    ReportCache,
+    ReportComparison,
+    FilterCriteria,
+    SubscriptionFrequency,
+    PermissionLevel,
+    ExportFormat,
+    LocaleCode,
+    AuditAction,
+    ReportSubscription,
+    ArchivedReport,
+    ReportAnnotation,
+    ReportSearchResult,
+    ReportMetric,
+    ReportPermission,
+    AuditEntry,
+    LocalizedString,
+    ValidationResult,
+    AggregatedReport,
+)
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 from src.observability.reports import (
     ReportType,
@@ -192,6 +224,7 @@ class TestReportTemplateDataclass:
 
     def test_creation_with_defaults(self) -> None:
         """Test creating ReportTemplate with defaults."""
+<<<<<<< HEAD
 <<<<<<< HEAD:tests/unit/observability/test_reports_CORE.py
         ReportTemplate = report_module.ReportTemplate
 
@@ -200,6 +233,8 @@ class TestReportTemplateDataclass:
             sections=["description", "errors"]
         )
 =======
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
         template = ReportTemplate(name="default", sections=["description", "errors"])
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.):tests/unit/observability/reports/test_reports_core.py
         assert template.name == "default"
@@ -348,6 +383,7 @@ class TestReportSubscriptionDataclass:
 
     def test_creation_minimal(self) -> None:
         """Test creating with minimal fields."""
+<<<<<<< HEAD
 <<<<<<< HEAD:tests/unit/observability/test_reports_CORE.py
         ReportSubscription = report_module.ReportSubscription
 
@@ -356,6 +392,8 @@ class TestReportSubscriptionDataclass:
             email="user@example.com"
         )
 =======
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
         sub = ReportSubscription(subscriber_id="user1", email="user@example.com")
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.):tests/unit/observability/reports/test_reports_core.py
         assert sub.subscriber_id == "user1"

@@ -108,6 +108,7 @@ def agent_sandbox():
         yield temp_path
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.fixture
 def agent_registry():
     """Provides a central AgentRegistry for test use."""
@@ -134,3 +135,5 @@ def isolation_cleanup():
 
 =======
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)

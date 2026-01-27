@@ -13,6 +13,7 @@
 # limitations under the License.
 
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 """Test classes from test_generate_agent_reports.py - core module."""
 
 from __future__ import annotations
@@ -2240,6 +2241,18 @@ class TestReportPermissionManagement:
 
 =======
 >>>>>>> 0777c397c (phase 320)
+=======
+"""Unit tests for report formatting and generation logic."""
+
+from __future__ import annotations
+import unittest
+from typing import List, Dict
+import json
+from datetime import datetime
+from pathlib import Path
+import pytest
+
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 class TestReportGeneration(unittest.TestCase):
     """Tests for basic report generation."""
@@ -2251,7 +2264,10 @@ class TestReportGeneration(unittest.TestCase):
             "timestamp": datetime.now().isoformat(),
             "version": "1.0",
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
         assert report["title"] == "Test Report"
         assert report["version"] == "1.0"
 
@@ -2265,6 +2281,7 @@ class TestReportGeneration(unittest.TestCase):
                 "recommendations": "Recommendations content",
             },
         }
+<<<<<<< HEAD
 
         assert len(report["sections"]) == 3
         assert "summary" in report["sections"]
@@ -2297,6 +2314,9 @@ class TestReportGeneration(unittest.TestCase):
         assert report["data"]["total_items"] == 100
         assert report["data"]["processed"] + report["data"]["errors"] == 100
 
+=======
+        assert len(report["sections"]) == 3
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestMarkdownReportFormatting(unittest.TestCase):
@@ -2306,6 +2326,7 @@ class TestMarkdownReportFormatting(unittest.TestCase):
         """Test formatting markdown header."""
         title = "Report Title"
         markdown: str = f"# {title}\n\n"
+<<<<<<< HEAD
 
         assert "# " in markdown
         assert title in markdown
@@ -2326,12 +2347,18 @@ Content 2
         assert "Section 1" in markdown
         assert "Section 2" in markdown
 
+=======
+        assert "# " in markdown
+        assert title in markdown
+
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
     def test_format_markdown_table(self) -> None:
         """Test formatting markdown table."""
         data = [
             {"name": "Item 1", "count": 10},
             {"name": "Item 2", "count": 20},
         ]
+<<<<<<< HEAD
 
         markdown = "| Name | Count |\n|---|---|\n"
         for row in data:
@@ -2358,12 +2385,21 @@ Content 2
         assert code in markdown
 
 
+=======
+        markdown = "| Name | Count |\n|---|---|\n"
+        for row in data:
+            markdown += f"| {row['name']} | {row['count']} |\n"
+        assert "| Name | Count |" in markdown
+        assert "| Item 1 | 10 |" in markdown
+
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 class TestHTMLReportFormatting(unittest.TestCase):
     """Tests for HTML report formatting."""
 
     def test_format_html_basic(self) -> None:
         """Test formatting basic HTML."""
+<<<<<<< HEAD
         html = """
 <html>
 <head><title>Report</title></head>
@@ -2426,12 +2462,19 @@ Content
         assert 'width=device-width' in html
 
 
+=======
+        html = "<html><body><h1>Title</h1></body></html>"
+        assert "<html>" in html
+        assert "<h1>" in html
+
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 class TestJSONReportFormatting(unittest.TestCase):
     """Tests for JSON report formatting."""
 
     def test_format_json_basic(self) -> None:
         """Test formatting basic JSON."""
+<<<<<<< HEAD
         data = {
             "title": "Report",
             "timestamp": "2025-12-16",
@@ -2482,12 +2525,20 @@ class TestJSONReportFormatting(unittest.TestCase):
         assert len(pretty_json) > len(compact_json)
 
 
+=======
+        data = {"title": "Report", "items": [1, 2, 3]}
+        json_str: str = json.dumps(data)
+        restored = json.loads(json_str)
+        assert restored["title"] == "Report"
+
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 class TestCSVReportFormatting(unittest.TestCase):
     """Tests for CSV report formatting."""
 
     def test_format_csv_basic(self) -> None:
         """Test formatting basic CSV."""
+<<<<<<< HEAD
         headers: List[str] = ["Name", "Count", "Status"]
         rows: List[List[str]] = [
             ["Item 1", "10", "Done"],
@@ -2526,6 +2577,12 @@ class TestCSVReportFormatting(unittest.TestCase):
         assert csv.startswith("#")
         assert "Name,Value" in csv
 
+=======
+        headers: List[str] = ["Name", "Count"]
+        rows: List[List[str]] = [["Item 1", "10"]]
+        csv_content = ",".join(headers) + "\n" + ",".join(rows[0])
+        assert "Name,Count" in csv_content
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestReportTemplates(unittest.TestCase):
@@ -2533,6 +2590,7 @@ class TestReportTemplates(unittest.TestCase):
 
     def test_template_substitution(self) -> None:
         """Test template substitution."""
+<<<<<<< HEAD
         template = "Report for {project} generated on {date}"
 
         report: str = template.format(project="MyApp", date="2025-12-16")
@@ -2570,6 +2628,11 @@ class TestReportTemplates(unittest.TestCase):
         result: str = base_template.format(title=title, content=content)
         assert "### Section" in result
 
+=======
+        template = "Report for {project}"
+        report: str = template.format(project="MyApp")
+        assert report == "Report for MyApp"
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestMetricsCollection(unittest.TestCase):
@@ -2578,6 +2641,7 @@ class TestMetricsCollection(unittest.TestCase):
     def test_collect_count_metrics(self) -> None:
         """Test collecting count metrics."""
         items: List[int] = [1, 2, 3, 4, 5]
+<<<<<<< HEAD
 
         metrics = {
             "total_items": len(items),
@@ -2846,11 +2910,16 @@ class TestReportRefactoring(unittest.TestCase):
         self.assertIn('markdown', ReportGeneratorFactory._generators)
         self.assertIn('json', ReportGeneratorFactory._generators)
 
+=======
+        metrics = {"total_items": len(items)}
+        assert metrics["total_items"] == 5
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestMultipleFormatSupport(unittest.TestCase):
     """Test support for generating reports in multiple formats."""
 
+<<<<<<< HEAD
     def test_html_report_generation(self) -> None:
         """Test HTML report generation with styling."""
         html_content = """<!DOCTYPE html>
@@ -2939,6 +3008,12 @@ class TestMultipleFormatSupport(unittest.TestCase):
             }
             self.assertEqual(format_map.get(detected), expected_format)
 
+=======
+    def test_markdown_report_generation(self) -> None:
+        """Test markdown report generation."""
+        markdown_report = "# Agent Report\n## Summary\n- Total Files: 150"
+        assert "# Agent Report" in markdown_report
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestIncrementalGeneration(unittest.TestCase):
@@ -2946,6 +3021,7 @@ class TestIncrementalGeneration(unittest.TestCase):
 
     def test_track_changed_files(self) -> None:
         """Test tracking which files have changed."""
+<<<<<<< HEAD
         baseline_files = {
             'agent.py': {'hash': 'abc123', 'mtime': 1000},
             'base_agent/entrypoint.py': {'hash': 'def456', 'mtime': 1001}
@@ -3065,6 +3141,12 @@ class TestReportCaching(unittest.TestCase):
 
         self.assertEqual(cache_entry['hash'], new_hash)
 
+=======
+        baseline = {"a.py": "h1"}
+        current = {"a.py": "h2"}
+        changed = [f for f in current if current[f] != baseline.get(f)]
+        assert "a.py" in changed
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestReportCustomization(unittest.TestCase):
@@ -3072,6 +3154,7 @@ class TestReportCustomization(unittest.TestCase):
 
     def test_user_selectable_sections(self) -> None:
         """Test user-customizable report sections."""
+<<<<<<< HEAD
         available_sections: Dict[str, bool] = {
             'summary': True,
             'metrics': True,
@@ -3139,11 +3222,18 @@ class TestReportCustomization(unittest.TestCase):
 
         self.assertEqual(len(high_value_metrics), 2)
 
+=======
+        available: Dict[str, bool] = {"summary": True, "trends": False}
+        selected = [s for s, inc in available.items() if inc]
+        assert "summary" in selected
+        assert "trends" not in selected
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestVisualReportGeneration(unittest.TestCase):
     """Test generation of visual reports with graphs and charts."""
 
+<<<<<<< HEAD
     def test_matplotlib_line_chart_generation(self) -> None:
         """Test generating line charts with matplotlib."""
         chart_config = {
@@ -3206,11 +3296,18 @@ class TestVisualReportGeneration(unittest.TestCase):
             filepath: str = f"/reports/chart.{fmt}"
             self.assertTrue(filepath.endswith(f".{fmt}"))
 
+=======
+    def test_chart_config(self) -> None:
+        """Test chart configuration object."""
+        config = {"type": "line", "title": "Trend"}
+        assert config["type"] == "line"
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestExecutiveSummary(unittest.TestCase):
     """Test executive summary generation."""
 
+<<<<<<< HEAD
     def test_generate_key_metrics_summary(self) -> None:
         """Test generating summary of key metrics."""
         metrics = {
@@ -3347,11 +3444,20 @@ class TestCrossFileAnalysis(unittest.TestCase):
 
         self.assertEqual(len(high_coupling), 1)
 
+=======
+    def test_generate_summary(self) -> None:
+        """Test generating summary text."""
+        metrics = {"files": 150, "coverage": 85.5}
+        summary = f"Files: {metrics['files']}, Coverage: {metrics['coverage']}%"
+        assert "150" in summary
+        assert "85.5" in summary
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestTechnicalDebt(unittest.TestCase):
     """Test technical debt quantification and reporting."""
 
+<<<<<<< HEAD
     def test_debt_scoring_algorithm(self) -> None:
         """Test calculating technical debt score."""
         debt_factors: Dict[str, Dict[str, float]] = {
@@ -3394,11 +3500,19 @@ class TestTechnicalDebt(unittest.TestCase):
 
         self.assertEqual(weeks_to_zero, 20)
 
+=======
+    def test_debt_scoring(self) -> None:
+        """Test calculating debt score."""
+        factors = {"complexity": 0.3, "duplication": 0.2}
+        score = sum(factors.values())
+        assert score > 0
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
 
 class TestRecommendationGeneration(unittest.TestCase):
     """Test generating actionable recommendations."""
 
+<<<<<<< HEAD
 <<<<<<< HEAD:tests/unit/observability/test_reports_UNIT.py
     def test_coverage_improvement_recommendations(self) -> None:
         """Test generating recommendations for coverage improvement."""
@@ -3649,6 +3763,8 @@ class TestTeamLevelReporting(unittest.TestCase):
 
 
 =======
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
     def test_coverage_recommendations(self) -> None:
         """Test generating recommendations."""
         uncovered = ["agent.py"]
@@ -3657,4 +3773,7 @@ class TestTeamLevelReporting(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+<<<<<<< HEAD
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.):tests/unit/observability/reports/test_reports_unit.py
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)

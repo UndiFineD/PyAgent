@@ -25,7 +25,11 @@ import asyncio
 import numpy as np
 from typing import List
 
+<<<<<<< HEAD
 from src.infrastructure.multimodal.MultiModalCache import (
+=======
+from src.infrastructure.engine.multimodal.multi_modal_cache import (
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
     MediaType,
     CacheBackend,
     HashAlgorithm,

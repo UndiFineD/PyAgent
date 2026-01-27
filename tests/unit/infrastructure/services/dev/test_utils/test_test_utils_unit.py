@@ -16,6 +16,7 @@
 """Test classes from test_agent_test_utils.py - core module."""
 
 from __future__ import annotations
+<<<<<<< HEAD
 import unittest
 from typing import Any, List, Dict, Never, Optional, Callable, Tuple, Set, Union
 from unittest.case import _AssertRaisesContext
@@ -50,16 +51,32 @@ except ImportError:
         def __exit__(self, *args) -> str: 
             sys.path.remove(str(AGENT_DIR))
 =======
+=======
+from typing import Any, List
+import json
+import pytest
+from pathlib import Path
+import sys
+
+# Try to import test utilities
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 from tests.utils.agent_test_utils import (
     AGENT_DIR,
     agent_sys_path,
     load_module_from_path,
     agent_dir_on_path,
 )
+<<<<<<< HEAD
 >>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.):tests/unit/infrastructure/services/dev/test_utils/test_test_utils_unit.py
 
 # Import from src if needed
 
+=======
+
+# Import from src if needed
+
+
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestTestStatusEnum:
     """Tests for TestStatus enum."""
 
@@ -73,7 +90,10 @@ class TestTestStatusEnum:
         assert TestStatus.PENDING.value == "pending"
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestMockResponseTypeEnum:
     """Tests for MockResponseType enum."""
 
@@ -85,7 +105,10 @@ class TestMockResponseTypeEnum:
         assert MockResponseType.TIMEOUT.value == "timeout"
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestIsolationLevelEnum:
     """Tests for IsolationLevel enum."""
 
@@ -98,7 +121,10 @@ class TestIsolationLevelEnum:
         assert "SANDBOX" in members
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestTestDataTypeEnum:
     """Tests for TestDataType enum."""
 
@@ -115,7 +141,10 @@ class TestTestDataTypeEnum:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestTestFixtureDataclass:
     """Tests for TestFixture dataclass."""
 
@@ -128,7 +157,10 @@ class TestTestFixtureDataclass:
         assert fixture.setup_fn is None
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestMockResponseDataclass:
     """Tests for MockResponse dataclass."""
 
@@ -143,7 +175,10 @@ class TestMockResponseDataclass:
         assert response.latency_ms == 100
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestTestResultDataclass:
     """Tests for TestResult dataclass."""
 
@@ -162,7 +197,10 @@ class TestTestResultDataclass:
         assert result.duration_ms == 150.5
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestTestSnapshotDataclass:
     """Tests for TestSnapshot dataclass."""
 
@@ -180,7 +218,10 @@ class TestTestSnapshotDataclass:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestMockAIBackend:
     """Tests for MockAIBackend class."""
 
@@ -249,7 +290,10 @@ class TestMockAIBackend:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestFixtureGenerator:
     """Tests for FixtureGenerator class."""
 
@@ -259,7 +303,13 @@ class TestFixtureGenerator:
         gen = FixtureGenerator(base_dir=tmp_path)
         assert gen.base_dir == tmp_path
 
+<<<<<<< HEAD
     def test_create_python_file_fixture(self, utils_module: Any, tmp_path: Path) -> None:
+=======
+    def test_create_python_file_fixture(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
         """Test creating Python file fixture."""
         FixtureGenerator = utils_module.FixtureGenerator
         gen = FixtureGenerator(base_dir=tmp_path)
@@ -281,10 +331,20 @@ class TestFixtureGenerator:
         FixtureGenerator = utils_module.FixtureGenerator
         gen = FixtureGenerator(base_dir=tmp_path)
 
+<<<<<<< HEAD
         fixture = gen.create_directory_fixture("test_dir", {
             "file1.py": "content1",
             "file2.py": "content2",
         })
+=======
+        fixture = gen.create_directory_fixture(
+            "test_dir",
+            {
+                "file1.py": "content1",
+                "file2.py": "content2",
+            },
+        )
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 
         path = fixture.setup_fn()
         assert path.exists()
@@ -296,7 +356,10 @@ class TestFixtureGenerator:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestTestDataGenerator:
     """Tests for TestDataGenerator class."""
 
@@ -328,7 +391,10 @@ class TestTestDataGenerator:
 
     def test_generate_json(self, utils_module: Any) -> None:
         """Test generating JSON."""
+<<<<<<< HEAD
         import json
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
         TestDataGenerator = utils_module.TestDataGenerator
         gen = TestDataGenerator()
 
@@ -342,7 +408,10 @@ class TestTestDataGenerator:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestFileSystemIsolator:
     """Tests for FileSystemIsolator class."""
 
@@ -373,7 +442,10 @@ class TestFileSystemIsolator:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestSnapshotManager:
     """Tests for SnapshotManager class."""
 
@@ -394,7 +466,13 @@ class TestSnapshotManager:
         assert loaded is not None
         assert loaded.content == "content"
 
+<<<<<<< HEAD
     def test_assert_match_creates_snapshot(self, utils_module: Any, tmp_path: Path) -> None:
+=======
+    def test_assert_match_creates_snapshot(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
         """Test assert_match creates snapshot if missing."""
         SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)
@@ -405,7 +483,13 @@ class TestSnapshotManager:
         loaded = mgr.load_snapshot("new_snapshot")
         assert loaded.content == "content"
 
+<<<<<<< HEAD
     def test_assert_match_detects_mismatch(self, utils_module: Any, tmp_path: Path) -> None:
+=======
+    def test_assert_match_detects_mismatch(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
         """Test assert_match detects mismatch."""
         SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)
@@ -421,7 +505,10 @@ class TestSnapshotManager:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestTestResultAggregator:
     """Tests for TestResultAggregator class."""
 
@@ -479,7 +566,10 @@ class TestTestResultAggregator:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestAgentAssertions:
     """Tests for AgentAssertions class."""
 
@@ -530,7 +620,10 @@ class TestAgentAssertions:
 # =============================================================================
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 class TestMockSystemResponseGeneration:
     """Tests for mock backend response generation."""
 
@@ -538,6 +631,7 @@ class TestMockSystemResponseGeneration:
         """Test mock response with custom content."""
         MockAIBackend = utils_module.MockAIBackend
         MockResponse = utils_module.MockResponse
+<<<<<<< HEAD
 
         mock = MockAIBackend()
         custom_response = MockResponse(
@@ -2203,3 +2297,5 @@ class TestReporting(unittest.TestCase):
 
 
 
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)

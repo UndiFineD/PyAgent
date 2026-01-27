@@ -22,7 +22,11 @@ Tests for InputPreprocessor - unified prompt processing.
 import pytest
 from typing import List, Dict
 
+<<<<<<< HEAD
 from src.infrastructure.inputs import (
+=======
+from src.infrastructure.engine.inputs import (
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
     PromptType,
     InputFormat,
     TextPrompt,

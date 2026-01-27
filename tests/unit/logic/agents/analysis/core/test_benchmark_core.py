@@ -17,11 +17,14 @@
 Tests performance calculation logic before Rust conversion.
 """
 
+<<<<<<< HEAD
 <<<<<<< HEAD:tests/unit/test_benchmark_core.py
 import pytest
 from hypothesis import given, strategies as st
 from src.logic.agents.development.core.BenchmarkCore import BenchmarkCore, BenchmarkResult
 =======
+=======
+>>>>>>> 558c5bd8f (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 from hypothesis import given, strategies as st, settings, HealthCheck
 from src.logic.agents.analysis.core.benchmark_core import (
     BenchmarkCore,
