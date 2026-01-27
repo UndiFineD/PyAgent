@@ -116,3 +116,6 @@
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 1769513737.6090357}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1769514471.258529}
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 1769514739.6824157}
+{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1769529438.9759617}
+{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1769529612.1856074}
+{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1769529882.8443644}
