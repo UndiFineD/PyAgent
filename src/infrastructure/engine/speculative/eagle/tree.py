@@ -145,7 +145,7 @@ class TalonTreeBuilder:
 
     def __init__(
         self, budget: int = 64, max_depth: int = 10, confidence_threshold: float = 0.1, branching_factor: int = 4
-    ):
+    ) -> None:
         self.budget = budget
         self.max_depth = max_depth
         self.confidence_threshold = confidence_threshold

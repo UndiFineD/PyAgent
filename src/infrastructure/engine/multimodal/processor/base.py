@@ -144,7 +144,7 @@ class BaseMultiModalProcessor(ABC, Generic[T]):
 
     modality: ModalityType
 
-    def __init__(self, config: Optional[MultiModalConfig] = None):
+    def __init__(self, config: Optional[MultiModalConfig] = None) -> None:
         self.config = config or MultiModalConfig()
 
     @abstractmethod

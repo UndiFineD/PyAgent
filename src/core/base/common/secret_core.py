@@ -36,7 +36,7 @@ class SecretCore(BaseCore):
     Provides masking logic for logs and validation for naming.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.mask_patterns: List[re.Pattern] = [
             re.compile(r"(api_key=)([a-zA-Z0-9\-_]{5,})"),

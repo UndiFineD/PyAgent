@@ -29,7 +29,7 @@ from .registry import ChatTemplateRegistry
 class TemplateResolver:
     """Advanced template resolution with caching."""
 
-    def __init__(self, registry: Optional[ChatTemplateRegistry] = None):
+    def __init__(self, registry: Optional[ChatTemplateRegistry] = None) -> None:
         self.registry = registry or ChatTemplateRegistry()
         self._cache: Dict[str, ChatTemplate] = {}
         self._lock = threading.Lock()

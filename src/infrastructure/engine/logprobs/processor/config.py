@@ -93,7 +93,7 @@ def compute_perplexity(logprobs: Sequence[float]) -> float:
 class PromptLogprobs:
     """Logprobs for prompt tokens."""
 
-    def __init__(self, token_ids: List[int], tokens: List[str], logprobs: List[float]):
+    def __init__(self, token_ids: List[int], tokens: List[str], logprobs: List[float]) -> None:
         self.token_ids = token_ids
         self.tokens = tokens
         self.logprobs = logprobs
@@ -137,7 +137,7 @@ class SampleLogprobs:
         """Iterate over entries."""
         return iter(self.entries)
 
-    def append(self, entry: LogprobEntry):
+    def append(self, entry: LogprobEntry) -> None:
         """Append new logprob entry."""
         self.entries.append(entry)
 

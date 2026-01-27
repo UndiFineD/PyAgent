@@ -39,7 +39,7 @@ class MultiModalCache(ABC):
         max_size_bytes: int = 1024 * 1024 * 1024,  # 1GB
         max_entries: int = 10000,
         hasher: Optional[MultiModalHasher] = None,
-    ):
+    ) -> None:
         self.max_size_bytes = max_size_bytes
         self.max_entries = max_entries
         self.hasher = hasher or MultiModalHasher()

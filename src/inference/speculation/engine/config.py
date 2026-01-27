@@ -20,6 +20,10 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional
 
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
 
 class SpecMethod(Enum):
     """Speculative decoding method types."""

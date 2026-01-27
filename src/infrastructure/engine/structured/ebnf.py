@@ -38,7 +38,7 @@ class EBNFGrammar(GrammarEngine):
         vocab_size: int,
         token_strings: Optional[Dict[int, str]] = None,
         eos_token_id: Optional[int] = None,
-    ):
+    ) -> None:
         super().__init__(vocab_size, token_strings, eos_token_id)
         self._rule_cache: Dict[str, FSMTransitionTable] = {}
 

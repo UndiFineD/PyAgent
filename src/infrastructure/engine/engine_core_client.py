@@ -142,7 +142,7 @@ class InprocClient(EngineCoreClient):
         self,
         config: Optional[ClientConfig] = None,
         engine_core: Optional[EngineCore] = None,
-    ):
+    ) -> None:
         self.config = config or ClientConfig()
 
         if engine_core is not None:
@@ -211,7 +211,7 @@ class SyncMPClient(EngineCoreClient):
     def __init__(
         self,
         config: Optional[ClientConfig] = None,
-    ):
+    ) -> None:
         self.config = config or ClientConfig()
 
         # Create engine in this process
@@ -309,7 +309,7 @@ class AsyncMPClient(EngineCoreClient):
     def __init__(
         self,
         config: Optional[ClientConfig] = None,
-    ):
+    ) -> None:
         self.config = config or ClientConfig()
         self.config.async_mode = True
 

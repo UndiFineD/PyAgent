@@ -37,7 +37,7 @@ class FlatLogprobs:
     top_k_logprobs: np.ndarray
     _token_strs: Optional[List[str]] = field(default=None, repr=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         assert len(self.token_ids.shape) == 1
         assert len(self.logprobs.shape) == 1
         assert self.token_ids.shape[0] == self.logprobs.shape[0]

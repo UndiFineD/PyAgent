@@ -28,7 +28,7 @@ from collections import deque
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import (Any, Callable, Dict, Generic, List, Optional, Protocol,
+from typing import (Any, Callable, Dict, Generic, Iterator, List, Optional, Protocol,
                     Set, TypeVar, runtime_checkable)
 
 T = TypeVar("T")
@@ -163,7 +163,7 @@ class ConnectionPool(Generic[T]):
         acquire_timeout_seconds: float = 30.0,
         health_check_interval: float = 30.0,
         validate_on_acquire: bool = True,
-    ):
+    ) -> None:
         """
         Initialize connection pool.
 
@@ -380,7 +380,7 @@ class ConnectionPool(Generic[T]):
             self._available.notify()
 
     @contextmanager
-    def connection(self, timeout: Optional[float] = None):
+    def connection(self, timeout: Optional[float] = None) -> Iterator[T]:
         """
         Context manager for acquiring a connection.
 
@@ -479,7 +479,7 @@ class AsyncConnectionPool(Generic[T]):
         min_size: int = 1,
         max_size: int = 10,
         acquire_timeout: float = 30.0,
-    ):
+    ) -> None:
         """Initialize async connection pool."""
         import asyncio
 
@@ -540,7 +540,7 @@ class PooledConnectionManager(Generic[T]):
     Context manager wrapper that auto-releases connection.
     """
 
-    def __init__(self, pool: ConnectionPool[T], connection: T):
+    def __init__(self, pool: ConnectionPool[T], connection: T) -> None:
         """Initialize with pool and connection."""
         self._pool = pool
         self._connection = connection
@@ -564,7 +564,7 @@ class MultiHostPool(Generic[T]):
         hosts: List[str],
         factory: Callable[[str], T],
         connections_per_host: int = 5,
-    ):
+    ) -> None:
         """
         Initialize multi-host pool.
 
@@ -607,7 +607,7 @@ class MultiHostPool(Generic[T]):
         self._pools[host].release(connection)
 
     @contextmanager
-    def connection(self, host: Optional[str] = None):
+    def connection(self, host: Optional[str] = None) -> Iterator[T]:
         """Get connection with auto-release."""
         h, conn = self.acquire(host)
         try:

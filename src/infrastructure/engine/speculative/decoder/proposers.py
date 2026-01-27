@@ -55,7 +55,7 @@ class ProposerStats:
 class SpeculativeProposer(ABC):
     """Abstract base class for speculative token proposers."""
 
-    def __init__(self, vocab_size: int, max_speculation_depth: int = 5):
+    def __init__(self, vocab_size: int, max_speculation_depth: int = 5) -> None:
         self.vocab_size = vocab_size
         self.max_speculation_depth = max_speculation_depth
         self.stats = ProposerStats()
@@ -89,13 +89,20 @@ class SpeculativeProposer(ABC):
 class NgramProposer(SpeculativeProposer):
     """N-gram based speculative proposer."""
 
-    def __init__(self, vocab_size: int, max_speculation_depth: int = 5, ngram_order: int = 4, min_count: int = 1):
+    def __init__(
+        self,
+        vocab_size: int,
+        max_speculation_depth: int = 5,
+        ngram_order: int = 4,
+        min_count: int = 1
+    ) -> None:
+        """Initialize NgramProposer."""
         super().__init__(vocab_size, max_speculation_depth)
         self.ngram_order = ngram_order
         self.min_count = min_count
         self._ngram_tables = {n: {} for n in range(1, ngram_order + 1)}
 
-    def _update_ngrams(self, tokens: List[int]):
+    def _update_ngrams(self, tokens: List[int]) -> None:
         """Update ngram tables with newly seen tokens."""
         for n in range(1, self.ngram_order + 1):
             table = self._ngram_tables[n]
@@ -132,7 +139,7 @@ class NgramProposer(SpeculativeProposer):
 
         tree = SpeculativeTree(root_position=len(tokens))
 
-        def expand_node(parent_idx: int, context: List[int], depth: int):
+        def expand_node(parent_idx: int, context: List[int], depth: int) -> None:
             if depth >= self.max_speculation_depth:
                 return
 
@@ -150,7 +157,7 @@ class NgramProposer(SpeculativeProposer):
         self.stats.proposal_time_ms += (time.perf_counter() - start) * 1000
         return tree
 
-    def update(self, accepted_tokens: List[int], rejected_at: int):
+    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
         """Update statistics."""
         self.stats.tokens_accepted += len(accepted_tokens)
 
@@ -158,7 +165,14 @@ class NgramProposer(SpeculativeProposer):
 class MedusaProposer(SpeculativeProposer):
     """Medusa-style multi-head prediction proposer."""
 
-    def __init__(self, vocab_size: int, max_speculation_depth: int = 5, num_heads: int = 4, top_k_per_head: int = 5):
+    def __init__(
+        self,
+        vocab_size: int,
+        max_speculation_depth: int = 5,
+        num_heads: int = 4,
+        top_k_per_head: int = 5
+    ) -> None:
+        """Initialize MedusaProposer."""
         super().__init__(vocab_size, max_speculation_depth)
         self.num_heads = min(num_heads, max_speculation_depth)
         self.top_k_per_head = top_k_per_head
@@ -198,6 +212,6 @@ class MedusaProposer(SpeculativeProposer):
         self.stats.proposal_time_ms += (time.perf_counter() - start) * 1000
         return tree
 
-    def update(self, accepted_tokens: List[int], rejected_at: int):
+    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
         """Update statistics."""
         self.stats.tokens_accepted += len(accepted_tokens)

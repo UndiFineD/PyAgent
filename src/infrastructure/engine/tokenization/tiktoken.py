@@ -39,12 +39,12 @@ class TiktokenTokenizer(BaseTokenizer):
         "text-embedding-3-large": "cl100k_base",
     }
 
-    def __init__(self, config: TokenizerConfig):
+    def __init__(self, config: TokenizerConfig) -> None:
         super().__init__(config)
         self._encoding = None
         self._load_tokenizer()
 
-    def _load_tokenizer(self):
+    def _load_tokenizer(self) -> None:
         """Load tiktoken encoding."""
         try:
             import tiktoken

@@ -35,7 +35,7 @@ class ProxyOrchestrator:
     Acts as a high-level API for disaggregated prefill-decode serving.
     """
 
-    def __init__(self, scheduler: DisaggregatedScheduler):
+    def __init__(self, scheduler: DisaggregatedScheduler) -> None:
         self.scheduler = scheduler
 
     def create_request(self, prompt: str, max_tokens: int = 128, request_id: Optional[str] = None) -> ScheduledRequest:

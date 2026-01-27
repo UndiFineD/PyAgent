@@ -46,7 +46,7 @@ class IdentityCore(BaseCore):
     Handles cryptographic verification and agent-ID generation.
     """
 
-    def __init__(self, agent_type: str = "generic", repo_root: Optional[str] = None):
+    def __init__(self, agent_type: str = "generic", repo_root: Optional[str] = None) -> None:
         super().__init__(name=f"Identity-{agent_type}", repo_root=repo_root)
         self.agent_type = agent_type
         self.sdk_version = SDK_VERSION

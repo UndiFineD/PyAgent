@@ -32,6 +32,17 @@ except ImportError:
 __version__ = VERSION
 
 
+class FailureType:
+    """Enumeration of swarm failure types."""
+    SYNTAX_ERROR = "fix_syntax"
+    DEPENDENCY_ERROR = "install_dependency"
+    CONFIG_ERROR = "check_config"
+    API_MISMATCH = "verify_api_compatibility"
+    STATE_CORRUPTION = "fix_state_corruption"
+    CONTEXT_LOSS = "restore_context"
+    UNKNOWN = "manual_review"
+
+
 class SelfHealingEngineCore:
     """
     Pure logic for self-healing analysis.
@@ -54,16 +65,21 @@ class SelfHealingEngineCore:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
-        strategy = "manual_review"
+        strategy = FailureType.UNKNOWN
 
         if "SyntaxError" in tb:
-            strategy = "fix_syntax"
+            strategy = FailureType.SYNTAX_ERROR
         elif "ImportError" in tb:
-            strategy = "install_dependency"
+            strategy = FailureType.DEPENDENCY_ERROR
         elif "KeyError" in tb:
-            strategy = "check_config"
+            strategy = FailureType.CONFIG_ERROR
         elif "AttributeError" in tb:
-            strategy = "verify_api_compatibility"
+            strategy = FailureType.API_MISMATCH
+        # Phase 336: New taxonomy
+        elif "Empty File" in error_msg or "Corruption" in error_msg:
+            strategy = FailureType.STATE_CORRUPTION
+        elif "Context" in error_msg or "Task ID" in error_msg:
+            strategy = FailureType.CONTEXT_LOSS
 
         return {
             "agent": agent_name,

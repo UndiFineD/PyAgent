@@ -49,7 +49,7 @@ class NgramProposer:
     likely continuations without running a draft model.
     """
 
-    def __init__(self, config: NgramConfig | None = None):
+    def __init__(self, config: NgramConfig | None = None) -> None:
         self.config = config or NgramConfig()
         self.stats = ProposalStats()
         self._suffix_index = SuffixIndex(self.config.max_n) if self.config.use_suffix_tree else None
@@ -229,7 +229,7 @@ class AdaptiveNgramProposer(NgramProposer):
     Adaptive n-gram proposer that adjusts parameters based on performance.
     """
 
-    def __init__(self, config: NgramConfig | None = None):
+    def __init__(self, config: NgramConfig | None = None) -> None:
         super().__init__(config)
         self._acceptance_history: list[float] = []
         self._adaptive_n: int = self.config.max_n

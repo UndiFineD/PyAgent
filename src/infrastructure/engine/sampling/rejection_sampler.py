@@ -189,7 +189,7 @@ class RejectionSampler:
     - Position-aware acceptance statistics
     """
 
-    def __init__(self, config: RejectionConfig | None = None):
+    def __init__(self, config: RejectionConfig | None = None) -> None:
         self.config = config or RejectionConfig()
         self.stats = AcceptanceStats()
         self._prob_cache: dict[tuple[int, ...], NDArray[np.float32]] = {}
@@ -418,7 +418,7 @@ class StreamingRejectionSampler(RejectionSampler):
     enabling early termination and lower latency.
     """
 
-    def __init__(self, config: RejectionConfig | None = None):
+    def __init__(self, config: RejectionConfig | None = None) -> None:
         if config is None:
             config = RejectionConfig(streaming_mode=True)
         super().__init__(config)
@@ -538,7 +538,7 @@ class BatchRejectionSampler:
     memory-efficient probability handling, parallel verification.
     """
 
-    def __init__(self, config: RejectionConfig | None = None):
+    def __init__(self, config: RejectionConfig | None = None) -> None:
         self.config = config or RejectionConfig()
         self.stats = AcceptanceStats()
 

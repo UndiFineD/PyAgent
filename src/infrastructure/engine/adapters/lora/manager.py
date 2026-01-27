@@ -40,7 +40,7 @@ class LoRAManager:
         self,
         registry: LoRARegistry | None = None,
         default_config: LoRAConfig | None = None,
-    ):
+    ) -> None:
         """Initialize LoRA manager."""
         self.registry = registry or LoRARegistry()
         self.default_config = default_config or LoRAConfig()
@@ -85,7 +85,7 @@ class LoRAManager:
         self,
         request_id: int,
         model_id: str | None,
-    ):
+    ) -> None:
         """Set adapter for a request."""
         if model_id is None:
             self._active_adapters.pop(request_id, None)
@@ -96,7 +96,7 @@ class LoRAManager:
         """Get adapter for a request."""
         return self._active_adapters.get(request_id)
 
-    def clear_request(self, request_id: int):
+    def clear_request(self, request_id: int) -> None:
         """Clear request's adapter binding."""
         self._active_adapters.pop(request_id, None)
 

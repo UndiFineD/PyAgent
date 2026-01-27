@@ -49,7 +49,7 @@ class DPAsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     - Hierarchical DP with locality awareness
     """
 
-    def __init__(self, config: EngineClientConfig):
+    def __init__(self, config: EngineClientConfig) -> None:
         super().__init__(config)
         self._workers: list[WorkerInfo] = []
         self._worker_clients: dict[int, AsyncMPClient] = {}

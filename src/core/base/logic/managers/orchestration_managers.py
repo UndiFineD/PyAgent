@@ -29,7 +29,7 @@ class AgentComposer:
     Facade for composing complex multi-agent workflows.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         from src.core.base.common.orchestration_core import OrchestrationCore
         self._core = OrchestrationCore()
 
@@ -43,7 +43,7 @@ class ModelSelector:
     Facade for selecting models for specific tasks.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         from src.core.base.common.model_selector_core import ModelSelectorCore
         self._core = ModelSelectorCore()
 

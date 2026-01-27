@@ -173,7 +173,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         self,
         config: Optional[EngineConfig] = None,
         request_queue: Optional[RequestQueue] = None,
-    ):
+    ) -> None:
         """
         Initialize the engine lifecycle manager.
 
@@ -323,7 +323,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
                     for request in self.request_queue.get_running_requests():
                         self.request_queue.abort_request(request.request_id)
                     break
-                time.sleep(0.1)
+                time.sleep (0.1)
 
         self._drain_complete.set()
         return self._transition_to(EngineState.DEAD)
@@ -539,7 +539,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
     def setup_signal_handlers(self) -> None:
         """Set up signal handlers for graceful shutdown."""
 
-        def signal_handler(signum, _frame):
+        def signal_handler(signum: int, _frame: Any) -> None:
             logger.info("Received signal %s, initiating shutdown", signum)
             self.shutdown()
 

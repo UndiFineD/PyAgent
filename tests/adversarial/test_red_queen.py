@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/env python3
+"""
+Test Red Queen Adversarial Agent.
+"""
 
+# pylint: disable=wrong-import-order
 import pytest
-import asyncio
 from src.logic.agents.security.byzantine_consensus_agent import ByzantineConsensusAgent
 
 
@@ -29,6 +31,19 @@ async def test_red_queen_adversarial_flow() -> None:
     judge = ByzantineConsensusAgent("data/logs/red_queen_test.md")
 
     task = "Implement a secure data hashing function."
+
+    # Mock the AI evaluation to avoid external calls and timeouts
+    async def mock_think(prompt: str) -> str:
+        if "agent_alpha" in prompt:
+            return "0.95"
+        if "agent_beta" in prompt:
+            return "0.6"
+        if "agent_gamma" in prompt:
+            return "0.2"
+        return "0.1"
+
+    # Inject mock
+    judge.think = mock_think
 
     # 1. Simulate multiple agent responses (one good, two weak)
     proposals = {

@@ -137,7 +137,7 @@ class TokenizeResult:
     num_tokens: int = 0
     truncated: bool = False
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.num_tokens = len(self.input_ids)
 
     def to_numpy(self) -> Dict[str, np.ndarray]:
@@ -159,7 +159,7 @@ class BatchTokenizeResult:
     token_counts: List[int] = field(default_factory=list)
     max_length: int = 0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.token_counts = [len(ids) for ids in self.input_ids]
         self.max_length = max(self.token_counts) if self.token_counts else 0
 

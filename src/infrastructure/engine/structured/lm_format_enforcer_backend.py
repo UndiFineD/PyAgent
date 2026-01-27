@@ -75,7 +75,7 @@ class DFAState:
     state_type: DFAStateType
     is_final: bool = False
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.state_id, self.state_type, self.is_final))
 
 
@@ -109,7 +109,7 @@ class CompiledDFA:
     Provides efficient string matching via state transitions.
     """
 
-    def __init__(self, pattern: str):
+    def __init__(self, pattern: str) -> None:
         self.pattern = pattern
         self.states: Dict[int, DFAState] = {}
         self.transitions: Dict[int, List[DFATransition]] = {}
@@ -174,7 +174,7 @@ class TokenVocabulary:
     Maps tokens to IDs and provides fast prefix matching.
     """
 
-    def __init__(self, tokenizer: Any):
+    def __init__(self, tokenizer: Any) -> None:
         self.tokenizer = tokenizer
         self._token_to_id: Dict[str, int] = {}
         self._id_to_token: Dict[int, str] = {}
@@ -264,7 +264,7 @@ class CompiledEnforcer:
         self,
         pattern: str,
         vocab: TokenVocabulary,
-    ):
+    ) -> None:
         self.pattern = pattern
         self.vocab = vocab
         self.dfa = CompiledDFA(pattern)
@@ -331,7 +331,7 @@ class LMFormatEnforcerBackend:
         tokenizer: Any,
         vocab_size: Optional[int] = None,
         max_cache_size: int = 1000,
-    ):
+    ) -> None:
         self.tokenizer = tokenizer
         self.vocab = TokenVocabulary(tokenizer)
         self.vocab_size = vocab_size or self.vocab.vocab_size
@@ -491,7 +491,7 @@ class FormatEnforcerGrammar:
         self,
         enforcer: CompiledEnforcer,
         state: Optional[RegexMatchState] = None,
-    ):
+    ) -> None:
         self.enforcer = enforcer
         self.state = state or enforcer.create_state()
 
@@ -526,7 +526,7 @@ class CompositeEnforcer:
     Matches if any sub-pattern matches (OR composition).
     """
 
-    def __init__(self, enforcers: List[CompiledEnforcer]):
+    def __init__(self, enforcers: List[CompiledEnforcer]) -> None:
         self.enforcers = enforcers
         self._states: List[RegexMatchState] = []
 

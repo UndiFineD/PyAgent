@@ -77,7 +77,7 @@ class StatePersistence:
 class FilePriorityManager:
     """Manages file priorities. (Facade)"""
 
-    def __init__(self, config: Any = None):
+    def __init__(self, config: Any = None) -> None:
         from src.core.base.common.priority_core import PriorityCore
         self._core = PriorityCore(config)
 
@@ -90,7 +90,7 @@ class FilePriorityManager:
 class HealthChecker:
     """Checks system health. (Facade)"""
 
-    def __init__(self, workspace_root: Path | None = None, repo_root: Path | None = None):
+    def __init__(self, workspace_root: Path | None = None, repo_root: Path | None = None) -> None:
         from src.core.base.common.health_core import HealthCore
         self.workspace_root = workspace_root or repo_root
         self.repo_root = self.workspace_root  # Legacy alias
@@ -152,7 +152,7 @@ class HealthChecker:
 class ProfileManager:
     """Manages execution profiles. (Facade)"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         from src.core.base.common.profile_core import ProfileCore
         self._core = ProfileCore()
         self._profiles = self._core.profiles
@@ -191,7 +191,7 @@ class ProfileManager:
 class ResponseCache:
     """Caches responses. (Facade)"""
 
-    def __init__(self, cache_dir: Path | None = None):
+    def __init__(self, cache_dir: Path | None = None) -> None:
         from src.core.base.common.cache_core import CacheCore
         self._core = CacheCore(cache_dir)
 

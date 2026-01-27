@@ -55,7 +55,7 @@ class PruningCore(BaseCore):
     Handles weight calculations and pruning decisions across the swarm.
     """
 
-    def __init__(self, name: str = "Pruning", repo_root: Optional[str] = None):
+    def __init__(self, name: str = "Pruning", repo_root: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=repo_root)
         self.weights: Dict[str, SynapticWeight] = {}
         self.interaction_history: List[tuple[str, str, float]] = []

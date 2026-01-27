@@ -61,7 +61,7 @@ class Request:  # pylint: disable=too-many-instance-attributes
     cache_salt: Optional[str] = None
     trace_headers: Optional[Dict[str, str]] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.num_tokens = len(self.prompt_token_ids)
 
     def get_finished_reason(self) -> Optional[FinishReason]:

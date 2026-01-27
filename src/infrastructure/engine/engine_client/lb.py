@@ -41,7 +41,7 @@ class P2CLoadBalancer:
     3. Tie-break by latency
     """
 
-    def __init__(self, workers: list[WorkerInfo], sample_size: int = 2):
+    def __init__(self, workers: list[WorkerInfo], sample_size: int = 2) -> None:
         self.workers = workers
         self.sample_size = min(sample_size, len(workers))
         self._lock = threading.Lock()

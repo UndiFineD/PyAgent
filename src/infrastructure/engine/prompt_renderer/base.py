@@ -37,7 +37,7 @@ class PromptRenderer(ABC):
         self,
         tokenizer: Optional[Any] = None,
         max_model_tokens: int = 4096,
-    ):
+    ) -> None:
         self.tokenizer = tokenizer
         self.max_model_tokens = max_model_tokens
 

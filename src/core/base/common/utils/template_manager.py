@@ -27,7 +27,7 @@ from src.core.base.common.template_core import TemplateCore
 class Template:
     """Legacy template object wrapper."""
 
-    def __init__(self, content: str, name: str = ""):
+    def __init__(self, content: str, name: str = "") -> None:
         self.content = content
         self.name = name
         self.agents = ["coder", "researcher", "reviewer"]  # Default agents for testing
@@ -39,7 +39,7 @@ class Template:
 class TemplateManager:
     """Manages agent templates and prompt construction."""
 
-    def __init__(self, core: TemplateCore | None = None):
+    def __init__(self, core: TemplateCore | None = None) -> None:
         self._core = core or TemplateCore()
         self._templates = self._core.templates
 

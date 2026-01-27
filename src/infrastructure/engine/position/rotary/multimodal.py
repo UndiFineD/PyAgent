@@ -36,7 +36,7 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
     - Width (spatial x)
     """
 
-    def __init__(self, config: RoPEConfig):
+    def __init__(self, config: RoPEConfig) -> None:
         super().__init__(config)
         self.mrope_sections = config.mrope_sections or [8, 8, 8]
         assert len(self.mrope_sections) == 3, "Need 3 sections: temporal, height, width"

@@ -25,7 +25,7 @@ from typing import Any, Dict, Optional
 class LockProxy:
     """A proxy object for a held lock."""
 
-    def __init__(self, lock_id: str, lock_type: Any):
+    def __init__(self, lock_id: str, lock_type: Any) -> None:
         self.lock_id = lock_id
         self.lock_type = lock_type
 
@@ -36,7 +36,7 @@ class FileLockManager:
     Delegates to LockCore for the underlying synchronization logic.
     """
 
-    def __init__(self, core: Optional[Any] = None):
+    def __init__(self, core: Optional[Any] = None) -> None:
         from src.core.base.common.lock_core import LockCore
         self._core = core or LockCore()
         self.lock_timeout = 300.0

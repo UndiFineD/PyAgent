@@ -62,7 +62,7 @@ class VerificationResult:
 class SpecDecodeVerifier:
     """Verifier for speculative decoding using various sampling strategies."""
 
-    def __init__(self, config: SpecDecodeConfig):
+    def __init__(self, config: SpecDecodeConfig) -> None:
         """Initialize verifier with configuration."""
         self.config = config
         self.strategy = config.strategy
@@ -185,7 +185,7 @@ class SpecDecodeVerifier:
 class BatchVerifier:
     """Batch verification for multiple requests."""
 
-    def __init__(self, verifier: SpecDecodeVerifier):
+    def __init__(self, verifier: SpecDecodeVerifier) -> None:
         """Initialize batch verifier."""
         self.verifier = verifier
 
@@ -205,7 +205,7 @@ class BatchVerifier:
 class StreamingVerifier:
     """Streaming verification for interactive token-by-token processing."""
 
-    def __init__(self, config: SpecDecodeConfig):
+    def __init__(self, config: SpecDecodeConfig) -> None:
         """Initialize streaming verifier."""
         self.config = config
         self._accepted = []

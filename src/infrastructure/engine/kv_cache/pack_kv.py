@@ -44,7 +44,7 @@ class PackKVManager(SingleTypeKVCacheManager):
         # But if physical blocks are fixed-size, we track compressed groups.
         return ceil(num_tokens / self.spec.block_size)
 
-    def set_compression_metadata(self, block_id: int, scale: float, min_val: float, permutation: List[int]):
+    def set_compression_metadata(self, block_id: int, scale: float, min_val: float, permutation: List[int]) -> None:
         """Store metadata required for register-level decompression."""
         self.compression_metadata[block_id] = {"scale": scale, "min": min_val, "permutation": permutation}
 

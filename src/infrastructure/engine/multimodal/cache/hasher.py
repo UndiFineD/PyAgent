@@ -56,7 +56,7 @@ class MultiModalHasher:
         self,
         algorithm: HashAlgorithm = HashAlgorithm.BLAKE3,
         perceptual_size: Tuple[int, int] = (8, 8),
-    ):
+    ) -> None:
         self.algorithm = algorithm
         self.perceptual_size = perceptual_size
 

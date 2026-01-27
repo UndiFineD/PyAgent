@@ -33,7 +33,7 @@ class PredictiveWorkspace:
     Reduces allocation latency in high-throughput streaming scenarios.
     """
 
-    def __init__(self, workspace_manager: Any, window_size: int = 50):
+    def __init__(self, workspace_manager: Any, window_size: int = 50) -> None:
         self.workspace = workspace_manager
         self.history = deque(maxlen=window_size)
         self.pre_allocated_buffers: Dict[int, List[memoryview]] = {}
@@ -43,7 +43,7 @@ class PredictiveWorkspace:
         self.cache_hits = 0
         self.cache_misses = 0
 
-    def record_allocation(self, size: int):
+    def record_allocation(self, size: int) -> None:
         """Records a successful allocation to refine future predictions."""
         self.history.append(size)
 
@@ -60,7 +60,7 @@ class PredictiveWorkspace:
         avg_size = np.average(self.history, weights=weights)
         return int(avg_size * self.prediction_margin)
 
-    async def pre_warm_buffers(self, sizes: List[int]):
+    async def pre_warm_buffers(self, sizes: List[int]) -> None:
         """
         Pre-allocates buffers of specific sizes into the warm pool.
         """

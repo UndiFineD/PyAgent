@@ -40,7 +40,7 @@ class RotaryEmbeddingEngine:
         RoPEVariant.XDROPE: XDRotaryEmbedding,
     }
 
-    def __init__(self, config: Optional[RoPEConfig] = None):
+    def __init__(self, config: Optional[RoPEConfig] = None) -> None:
         """Initialize the RoPE engine."""
         self.config = config or RoPEConfig()
         self._embeddings: Dict[RoPEVariant, RotaryEmbeddingBase] = {}

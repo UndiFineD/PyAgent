@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 class MultiModalRegistry:
     """Central registry for multimodal processors."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._processors: Dict[ModalityType, BaseMultiModalProcessor] = {}
         self._default_config = MultiModalConfig()
 

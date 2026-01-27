@@ -46,7 +46,7 @@ class TokenizerRegistry:
                     cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self, max_cached: int = 16):
+    def __init__(self, max_cached: int = 16) -> None:
         if self._initialized:
             return
         self._cache: OrderedDict[int, BaseTokenizer] = OrderedDict()
@@ -94,7 +94,7 @@ class TokenizerRegistry:
             return MistralTokenizer(config)
         return HuggingFaceTokenizer(config)
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear the internal tokenizer cache."""
         with self._cache_lock:
             self._cache.clear()

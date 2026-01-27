@@ -27,11 +27,13 @@ class ExpertiseMixin:
     Mixin for agents that participate in Cross-Model MoE.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.expertise_profile: Optional[ExpertProfile] = None
 
-    def declare_expertise(self, domains: List[str], performance_score: float = 1.0, model_family: str = "unknown"):
+    def declare_expertise(
+        self, domains: List[str], performance_score: float = 1.0, model_family: str = "unknown"
+    ) -> None:
         """
         Registers the agent's expertise profile.
         """

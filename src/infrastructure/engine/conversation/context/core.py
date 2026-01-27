@@ -41,7 +41,7 @@ class ConversationContext(ABC):
         self,
         context_id: Optional[str] = None,
         config: Optional[ContextConfig] = None,
-    ):
+    ) -> None:
         self.context_id = context_id or f"ctx_{uuid.uuid4().hex[:16]}"
         self.config = config or ContextConfig()
         self._state = ContextState.ACTIVE
@@ -224,7 +224,7 @@ class AgenticContext(ConversationContext):
         context_id: Optional[str] = None,
         config: Optional[ContextConfig] = None,
         tool_handler: Optional[Callable] = None,
-    ):
+    ) -> None:
         super().__init__(context_id, config)
         self._tool_orchestrator = ToolOrchestrator(config, tool_handler)
         self._max_iterations = 10

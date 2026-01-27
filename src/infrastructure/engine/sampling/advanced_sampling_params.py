@@ -118,7 +118,7 @@ class SamplingParams:
     skip_special_tokens: bool = True
     spaces_between_special_tokens: bool = True
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate parameters."""
         if self.temperature < 0:
             raise ValueError("temperature must be >= 0")
@@ -241,7 +241,7 @@ class AdvancedSamplingParams(SamplingParams):
 class LogitBiasBuilder:
     """Builder for complex logit bias configurations."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._biases: Dict[int, float] = {}
 
     def add_bias(self, token_id: int, bias: float) -> "LogitBiasBuilder":
@@ -290,7 +290,7 @@ class BadWordsProcessor:
         bad_words: Optional[List[str]] = None,
         bad_words_ids: Optional[List[List[int]]] = None,
         tokenizer: Optional[Any] = None,
-    ):
+    ) -> None:
         self.bad_words = bad_words or []
         self.bad_words_ids = bad_words_ids or []
         self.tokenizer = tokenizer
@@ -340,7 +340,7 @@ class TokenWhitelistProcessor:
     Useful for constrained generation (e.g., JSON, code).
     """
 
-    def __init__(self, allowed_token_ids: List[int]):
+    def __init__(self, allowed_token_ids: List[int]) -> None:
         self.allowed_set = set(allowed_token_ids)
         self.mask = None
 
@@ -378,7 +378,7 @@ class MirostatSampler:
         tau: float = 5.0,  # Target surprise
         eta: float = 0.1,  # Learning rate
         mode: int = 2,  # 1 or 2
-    ):
+    ) -> None:
         self.tau = tau
         self.eta = eta
         self.mode = mode
@@ -458,7 +458,7 @@ class SamplingEngine:
     - Adaptive sampling
     """
 
-    def __init__(self, params: Union[SamplingParams, AdvancedSamplingParams]):
+    def __init__(self, params: Union[SamplingParams, AdvancedSamplingParams]) -> None:
         self.params = params
         self._step = 0
         self._mirostat: Optional[MirostatSampler] = None
@@ -562,7 +562,7 @@ class SamplingEngine:
         self._step += 1
         return token_id, float(probs[token_id])
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset sampling state."""
         self._step = 0
         if self._mirostat:

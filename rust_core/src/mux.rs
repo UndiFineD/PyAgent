@@ -31,9 +31,11 @@ pub struct ModalityPacket {
 #[pymethods]
 impl ModalityPacket {
     #[new]
-    pub fn new(channel_id: String, modality_type: String, timestamp: f64, payload: Vec<u8>) -> Self {
+    pub fn new(channel_id: PyObject, modality_type: String, timestamp: f64, payload: Vec<u8>, _py: Python<'_>) -> Self {
+        let channel_id_str = channel_id.to_string();
+        
         ModalityPacket {
-            channel_id,
+            channel_id: channel_id_str,
             modality_type,
             timestamp,
             payload,

@@ -35,7 +35,7 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         num_frames: int = 8,
         target_size: Tuple[int, int] = (224, 224),
         patch_size: int = 14,
-    ):
+    ) -> None:
         super().__init__(config)
         self.num_frames = num_frames
         self.target_size = target_size

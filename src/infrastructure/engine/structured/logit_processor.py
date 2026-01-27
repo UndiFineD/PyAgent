@@ -95,7 +95,7 @@ class LogitProcessor(ABC):
     enabling constrained generation, bias injection, and token filtering.
     """
 
-    def __init__(self, vocab_size: int):
+    def __init__(self, vocab_size: int) -> None:
         self.vocab_size = vocab_size
         self.stats = ProcessorStats()
         self._enabled = True
@@ -161,7 +161,7 @@ class ConstrainedLogitProcessor(LogitProcessor):
         vocab_size: int,
         allowed_tokens_fn: Callable[[np.ndarray], Set[int]],
         mask_value: float = float("-inf"),
-    ):
+    ) -> None:
         """
         Initialize constrained processor.
 
@@ -229,7 +229,7 @@ class BitmaskLogitProcessor(LogitProcessor):
         vocab_size: int,
         bitmask_fn: Callable[[np.ndarray, np.ndarray], None],
         mask_value: float = float("-inf"),
-    ):
+    ) -> None:
         """
         Initialize bitmask processor.
 
@@ -318,7 +318,7 @@ class BiasLogitProcessor(LogitProcessor):
         self,
         vocab_size: int,
         biases: Optional[List[LogitBias]] = None,
-    ):
+    ) -> None:
         super().__init__(vocab_size)
         self._biases: Dict[int, LogitBias] = {}
 
@@ -410,7 +410,7 @@ class CompositeLogitProcessor(LogitProcessor):
         self,
         vocab_size: int,
         processors: Optional[List[LogitProcessor]] = None,
-    ):
+    ) -> None:
         super().__init__(vocab_size)
         self._processors: List[LogitProcessor] = processors or []
 
@@ -474,7 +474,7 @@ class CompositeLogitProcessor(LogitProcessor):
 class TemperatureProcessor(LogitProcessor):
     """Apply temperature scaling to logits."""
 
-    def __init__(self, vocab_size: int, temperature: float = 1.0):
+    def __init__(self, vocab_size: int, temperature: float = 1.0) -> None:
         super().__init__(vocab_size)
         self.temperature = temperature
 
@@ -495,7 +495,7 @@ class TemperatureProcessor(LogitProcessor):
 class TopKProcessor(LogitProcessor):
     """Apply top-k filtering to logits."""
 
-    def __init__(self, vocab_size: int, k: int = 50):
+    def __init__(self, vocab_size: int, k: int = 50) -> None:
         super().__init__(vocab_size)
         self.k = k
 
@@ -528,7 +528,7 @@ class TopKProcessor(LogitProcessor):
 class TopPProcessor(LogitProcessor):
     """Apply top-p (nucleus) filtering to logits."""
 
-    def __init__(self, vocab_size: int, p: float = 0.9):
+    def __init__(self, vocab_size: int, p: float = 0.9) -> None:
         super().__init__(vocab_size)
         self.p = p
 
@@ -575,7 +575,7 @@ class RepetitionPenaltyProcessor(LogitProcessor):
         vocab_size: int,
         penalty: float = 1.2,
         window_size: int = 64,
-    ):
+    ) -> None:
         super().__init__(vocab_size)
         self.penalty = penalty
         self.window_size = window_size

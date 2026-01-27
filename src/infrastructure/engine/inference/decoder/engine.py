@@ -36,7 +36,7 @@ class SpeculativeDecoder:
     Coordinates proposer and verifier for accelerated inference.
     """
 
-    def __init__(self, config: SpeculativeConfig):
+    def __init__(self, config: SpeculativeConfig) -> None:
         self.config = config
         self.metrics = SpecDecodingMetrics.new(config.num_speculative_tokens)
 

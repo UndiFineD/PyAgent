@@ -27,7 +27,7 @@ class StructuredOutputValidator:
     Validate structured output against constraints.
     """
 
-    def __init__(self, config: StructuredOutputConfig):
+    def __init__(self, config: StructuredOutputConfig) -> None:
         self.config = config
         self._constraints = config.get_all_constraints()
 

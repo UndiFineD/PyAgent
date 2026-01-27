@@ -19,6 +19,7 @@ from __future__ import annotations
 import collections.abc
 import logging
 import subprocess
+import time
 import types
 from pathlib import Path
 from typing import Any
@@ -143,6 +144,7 @@ class BaseAgent(
         self.recorder = kwargs.get("recorder")
         self.logger = logging.getLogger(self.__class__.__name__)
         self._system_prompt: str = "You are a helpful AI assistant."
+        self.status_cache: dict[str, float] = {}
 
     def _run_command(self, cmd: list[str], timeout: int = 120) -> subprocess.CompletedProcess[str]:
         """Run a shell command."""
@@ -193,13 +195,24 @@ class BaseAgent(
         if not HAS_REQUESTS or requests is None:
             return
 
+        # Resilience: Check status cache (TTL 15m)
+        now = time.time()
+        # Initialize if missing
+        if not hasattr(self, "status_cache"):
+            self.status_cache = {}
+
         payload = {"event": event, "data": data, "agent": self.agent_name}
         for url in self._webhooks:
+            # Skip if recently failed (simple circuit breaker)
+            if self.status_cache.get(url, 0) > now:
+                continue
+
             try:
                 requests.post(url, json=payload, timeout=5)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+                # Backoff for 15 minutes on failure
+                self.status_cache[url] = now + 900
+                # pylint: disable=broad-exception-caught
 
     async def run_async(self, prompt: str) -> str:
         """Main execution entry point (formerly run)."""

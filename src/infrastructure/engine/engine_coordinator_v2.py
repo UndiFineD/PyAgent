@@ -46,12 +46,12 @@ class EngineCoordinator:
     Integrates with Rust for high-throughput state transitions.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.state = EngineState.STOPPED
         self._error_count = 0
         self._max_errors = 5
 
-    def transition_to(self, new_state: EngineState):
+    def transition_to(self, new_state: EngineState) -> None:
         """
         Transitions the engine to a new state with safety checks.
         """
@@ -63,7 +63,7 @@ class EngineCoordinator:
         self.state = new_state
         logger.info(f"Engine transitioned from {old_state.name} to {new_state.name}")
 
-    async def handle_error(self, error_msg: str):
+    async def handle_error(self, error_msg: str) -> bool:
         """
         Self-healing logic for engine errors.
         """
@@ -80,7 +80,7 @@ class EngineCoordinator:
         self.transition_to(EngineState.RUNNING)
         return True
 
-    def reset_stats(self):
+    def reset_stats(self) -> None:
         """Resets coordinator statistics."""
         self._error_count = 0
         if self.state == EngineState.ERROR:

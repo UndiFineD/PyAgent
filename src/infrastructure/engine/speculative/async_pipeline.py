@@ -33,7 +33,7 @@ class SpeculativeAsyncPipeline:
     Utilizes speculative swarm to 'guess' next tokens and correct them asynchronously.
     """
 
-    def __init__(self, orchestrator: Any):
+    def __init__(self, orchestrator: Any) -> None:
         self.orchestrator = orchestrator
         self.stream_history: List[str] = []
 

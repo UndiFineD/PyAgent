@@ -38,7 +38,7 @@ from collections import deque
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Optional
+from typing import Any, Iterator, Optional
 
 # Try to import torch for GPU operations
 try:
@@ -153,7 +153,7 @@ class PooledStream:
             self.stream.wait_event(event)
 
     @contextmanager
-    def context(self):
+    def context(self) -> Iterator["PooledStream"]:
         """Context manager for stream operations."""
         if self.stream is not None:
             with torch.cuda.stream(self.stream):
@@ -210,7 +210,7 @@ class EventPool:
     Events are expensive to create, so pooling them improves performance.
     """
 
-    def __init__(self, initial_size: int = 16, max_size: int = 256):
+    def __init__(self, initial_size: int = 16, max_size: int = 256) -> None:
         """Initialize event pool.
 
         Args:
@@ -264,7 +264,7 @@ class EventPool:
             self._free.append(event)
 
     @contextmanager
-    def event_context(self):
+    def event_context(self) -> Iterator[Optional[PooledEvent]]:
         """Context manager for event acquisition."""
         event = self.acquire()
         try:
@@ -300,7 +300,7 @@ class CudaStreamPool:
         high_priority_streams: int = 1,
         event_pool_size: int = 32,
         enable_affinity: bool = True,
-    ):
+    ) -> None:
         """Initialize stream pool.
 
         Args:
@@ -492,7 +492,7 @@ class CudaStreamPool:
                 self._free_high.append(stream)
 
     @contextmanager
-    def compute_context(self, affinity_key: Optional[str] = None):
+    def compute_context(self, affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
         """Context manager for compute stream."""
         stream = self.acquire_compute(affinity_key)
         if stream is None:
@@ -506,7 +506,7 @@ class CudaStreamPool:
             self.release(stream)
 
     @contextmanager
-    def comm_context(self, affinity_key: Optional[str] = None):
+    def comm_context(self, affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
         """Context manager for communication stream."""
         stream = self.acquire_comm(affinity_key)
         if stream is None:
@@ -520,7 +520,7 @@ class CudaStreamPool:
             self.release(stream)
 
     @contextmanager
-    def high_priority_context(self):
+    def high_priority_context(self) -> Iterator[Optional[PooledStream]]:
         """Context manager for high-priority stream."""
         stream = self.acquire_high_priority()
         if stream is None:
@@ -542,7 +542,7 @@ class CudaStreamPool:
         self._event_pool.release(event)
 
     @contextmanager
-    def event_context(self):
+    def event_context(self) -> Iterator[Optional[PooledEvent]]:
         """Context manager for event acquisition."""
         with self._event_pool.event_context() as event:
             yield event
@@ -637,7 +637,7 @@ def reset_global_pool() -> None:
 
 # Convenience functions
 @contextmanager
-def compute_stream(affinity_key: Optional[str] = None):
+def compute_stream(affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
     """Get a compute stream from the global pool."""
     pool = get_global_stream_pool()
     with pool.compute_context(affinity_key) as stream:
@@ -645,7 +645,7 @@ def compute_stream(affinity_key: Optional[str] = None):
 
 
 @contextmanager
-def comm_stream(affinity_key: Optional[str] = None):
+def comm_stream(affinity_key: Optional[str] = None) -> Iterator[Optional[PooledStream]]:
     """Get a communication stream from the global pool."""
     pool = get_global_stream_pool()
     with pool.comm_context(affinity_key) as stream:
@@ -653,7 +653,7 @@ def comm_stream(affinity_key: Optional[str] = None):
 
 
 @contextmanager
-def high_priority_stream():
+def high_priority_stream() -> Iterator[Optional[PooledStream]]:
     """Get a high-priority stream from the global pool."""
     pool = get_global_stream_pool()
     with pool.high_priority_context() as stream:

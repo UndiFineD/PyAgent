@@ -44,7 +44,7 @@ class AttentionConfig:
     alibi_slopes: NDArray[np.float32] | None = None
     kv_cache_dtype: KVCacheDtype = KVCacheDtype.AUTO
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Standardize configuration after initialization."""
         if self.num_kv_heads == 0:
             self.num_kv_heads = self.num_heads

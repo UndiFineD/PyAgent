@@ -48,10 +48,10 @@ class LoRAConfig:
     bias: str = "none"
     modules_to_save: set[str] = field(default_factory=set)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._validate()
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate configuration."""
         if self.rank <= 0:
             raise ValueError(f"rank must be positive, got {self.rank}")

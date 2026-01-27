@@ -38,7 +38,7 @@ class DiffCore(BaseCore):
     Supports unified diff format and structured JSON diffs.
     """
 
-    def __init__(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED, context_lines: int = 3):
+    def __init__(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED, context_lines: int = 3) -> None:
         super().__init__()
         self.output_format = output_format
         self.context_lines = context_lines

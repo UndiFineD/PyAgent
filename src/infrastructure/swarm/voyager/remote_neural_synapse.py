@@ -69,6 +69,37 @@ class RemoteNeuralSynapse:
         elif msg_type == "ping":
             return {"status": "pong", "version": "Phase-319"}
 
+        elif msg_type == "task_offload":
+            task_desc = message.get("task", "")
+            sender = message.get("sender_id", "unknown")
+            logger.info(f"Synapse: Received offloaded task from {sender}: {task_desc[:50]}...")
+            
+            if hasattr(self.fleet_manager, "execute_reliable_task"):
+                try:
+                    # Execute locally (Task Preemption / Synergy)
+                    result = await self.fleet_manager.execute_reliable_task(task_desc)
+                    return {"status": "success", "result": result}
+                except Exception as e:
+                    logger.error(f"Synapse: Execution failed: {e}")
+                    return {"status": "error", "message": str(e)}
+            else:
+                 return {"status": "error", "message": "FleetManager capability missing."}
+
+        elif msg_type == "memory_query":
+            # Phase 4.0: Federated Memory Query
+            query = message.get("query", "")
+            agent_id = message.get("target_agent", "swarm_shared")
+            sender = message.get("sender_id", "unknown")
+            logger.info(f"Synapse: Processing federated memory query from {sender}: '{query}'")
+            
+            from src.core.base.common.memory_core import MemoryCore
+            try:
+                results = MemoryCore().retrieve_knowledge(agent_id, query, mode="semantic", limit=3)
+                return {"status": "success", "results": results}
+            except Exception as e:
+                logger.error(f"Synapse: Memory query failed: {e}")
+                return {"status": "error", "message": str(e)}
+
         return {"status": "error", "message": "Unsupported synapse type."}
 
     async def teleport_agent_to_peer(self, agent: Any, peer_address: str, transport_port: int) -> bool:

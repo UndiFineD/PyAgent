@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Multimodal buffer management."""
+
+from typing import List
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
+
+class TemporalModalityBuffer:
+    """
+    Rolling buffer for multimodal sequences (Short-term memory).
+    Stores recent frames/audio to allow temporal reasoning.
+    """
+
+    def __init__(self, max_size: int = 10) -> None:
+        self.max_size = max_size
+        self.frames: List[bytes] = []
+        self.timestamps: List[float] = []
+
+    def push(self, frame: bytes, timestamp: float) -> None:
+        """Add a frame and timestamp to the buffer."""
+        self.frames.append(frame)
+        self.timestamps.append(timestamp)
+        if len(self.frames) > self.max_size:
+            self.frames.pop(0)
+            self.timestamps.pop(0)
+
+    def get_dynamics(self) -> float:
+        """Calculate how much change is happening in this buffer."""
+        if rc and hasattr(rc, "calculate_temporal_entropy_rust"):
+            return rc.calculate_temporal_entropy_rust([list(f) for f in self.frames])
+        return 0.0

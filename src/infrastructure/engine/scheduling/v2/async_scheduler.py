@@ -21,8 +21,8 @@ import logging
 import time
 from typing import Any, Dict, List
 
-from ...request_queue.v2.request_queue import RequestQueueV2
-from .scheduler_output import ScheduledSequence, SchedulerOutput
+from src.infrastructure.engine.request_queue.v2.request_queue import RequestQueueV2
+from src.infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput
 
 try:
     import rust_core as rc
@@ -38,7 +38,7 @@ class AsyncSchedulerV2:
     Part of Phase 54 Engine Evolution.
     """
 
-    def __init__(self, max_batched_tokens: int = 4096):
+    def __init__(self, max_batched_tokens: int = 4096) -> None:
         self.max_batched_tokens = max_batched_tokens
         self.request_queue = RequestQueueV2()
         self.active_outputs: Dict[float, SchedulerOutput] = {}
@@ -89,7 +89,7 @@ class AsyncSchedulerV2:
 
         return output
 
-    def add_request(self, request: Any):
+    def add_request(self, request: Any) -> None:
         """Pass-through to the priority queue."""
         self.request_queue.add_request(request)
 
