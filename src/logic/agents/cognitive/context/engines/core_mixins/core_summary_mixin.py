@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 """
 Core summary mixin for cognitive agents.
@@ -22,6 +23,8 @@ Core summary mixin for cognitive agents.
 """
 =======
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 
 """
 Core summary mixin for cognitive agents.

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Multimodal Logic Implementation
 ================================
@@ -41,6 +42,9 @@ Copyright 2026 PyAgent Authors. Licensed under the Apache License, Version 2.0.
 =======
 """Multimodal logic implementation."""
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+"""Multimodal logic implementation."""
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 
 import logging
 import math
@@ -553,13 +557,17 @@ class MultimodalCore(BaseCore):
         Orchestrate multimodal inputs for model ingestion.
         Converts media references into aligned sequence embeddings (Stream-Omni style).
 <<<<<<< HEAD
+<<<<<<< HEAD
         Refactored for clarity and reduced complexity.
 =======
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         """
         processed = {
             "text": "",
             "media": [],
+<<<<<<< HEAD
 <<<<<<< HEAD
             "aligned_embeddings": [],
         }
@@ -616,6 +624,8 @@ class MultimodalCore(BaseCore):
         processed["aligned_embeddings"].append(aligned)
         processed["text"] += f"<{m_type.capitalize()}_{m_id}>"
 =======
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
             "aligned_embeddings": [],  # List of (dim, sequence)
         }
 
@@ -643,4 +653,7 @@ class MultimodalCore(BaseCore):
                 processed["text"] += f"<{m_type.capitalize()}_{m_id}>"
 
         return processed
+<<<<<<< HEAD
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)

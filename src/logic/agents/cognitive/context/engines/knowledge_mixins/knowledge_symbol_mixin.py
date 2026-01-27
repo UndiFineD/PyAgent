@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 """
 Knowledge symbol mixin for symbol extraction logic.
@@ -22,6 +23,8 @@ Knowledge symbol mixin for symbol extraction logic.
 """
 =======
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 
 """
 Knowledge symbol mixin for symbol extraction logic.

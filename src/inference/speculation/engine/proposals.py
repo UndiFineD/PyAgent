@@ -90,8 +90,11 @@ class SpecDecodingMetrics:
     @property
     def acceptance_rate(self) -> float:
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.num_draft_tokens == 0:
 =======
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         """Calculate the acceptance rate of draft tokens."""
         if not self.num_draft_tokens:
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)

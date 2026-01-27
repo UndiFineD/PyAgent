@@ -39,6 +39,7 @@ class ContextManager:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, default_config: Optional[ContextConfig] = None) -> None:
 =======
     def __init__(self, default_config: Optional[ContextConfig] = None):
@@ -49,6 +50,9 @@ class ContextManager:
 =======
     def __init__(self, default_config: Optional[ContextConfig] = None) -> None:
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+    def __init__(self, default_config: Optional[ContextConfig] = None) -> None:
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         """Initialize the context manager."""
         self._contexts: Dict[str, ConversationContext] = {}
         self._default_config = default_config or ContextConfig()

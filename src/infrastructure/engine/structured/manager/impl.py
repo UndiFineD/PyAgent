@@ -135,6 +135,7 @@ class ChoiceGrammar(StructuredOutputGrammar):
         encode_fn: Optional[Callable[[str], List[int]]] = None,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ) -> None:
 =======
     ):
@@ -145,6 +146,9 @@ class ChoiceGrammar(StructuredOutputGrammar):
 =======
     ) -> None:
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+    ) -> None:
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         """
         Initialize ChoiceGrammar.
 

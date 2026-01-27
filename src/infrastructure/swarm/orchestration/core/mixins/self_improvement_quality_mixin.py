@@ -105,6 +105,7 @@ class SelfImprovementQualityMixin:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$", content, re.MULTILINE):
             findings.append(
                 {
@@ -135,6 +136,13 @@ class SelfImprovementQualityMixin:
                     "type": "Robustness Issue",
                     "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.",
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$", content, re.MULTILINE):
+            findings.append(
+                {
+                    "type": "Robustness Issue",
+                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.",
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
                     "file": file_path_rel,
                 }
             )

@@ -37,8 +37,11 @@ use std::io::Write;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 use pyo3::types::{PyList, PyDict, PyTuple, PyBool};
 use serde_json::{Value, Number, Map};
 
@@ -101,12 +104,15 @@ pub fn to_json_rust(data: &Bound<'_, PyAny>, indent: Option<usize>) -> PyResult<
     Ok(s)
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 
 /// Atomic save for JSON/YAML files (StorageCore Support).
 /// Ensures transactional speed and safety when writing large state files.
@@ -193,6 +199,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -201,5 +208,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 =======
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+    m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
     Ok(())
 }

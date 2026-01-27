@@ -25,8 +25,11 @@ def restore_except_as_e(root_dir):
         root_dir: The root directory to search in.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     target = "except Exception as e:  # pylint: disable=broad-exception-caught"
 =======
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
     target = "except Exception:  # pylint: disable=broad-exception-caught"
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
     replacement = "except Exception as e:  # pylint: disable=broad-exception-caught"

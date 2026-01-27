@@ -19,8 +19,11 @@ Test Red Queen Adversarial Agent.
 # pylint: disable=wrong-import-order
 import pytest
 <<<<<<< HEAD
+<<<<<<< HEAD
 from src.logic.agents.security.ByzantineConsensusAgent import ByzantineConsensusAgent
 =======
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 from src.logic.agents.security.byzantine_consensus_agent import ByzantineConsensusAgent
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
@@ -50,7 +53,10 @@ def test_red_queen_adversarial_flow() -> None:
     # Inject mock
     judge.think = mock_think
 
+<<<<<<< HEAD
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
     # 1. Simulate multiple agent responses (one good, two weak)
     proposals = {
         "agent_alpha": "import hashlib\ndef hash_data(data):\n    return hashlib.sha256(data.encode()).hexdigest()",

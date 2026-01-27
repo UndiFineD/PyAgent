@@ -34,6 +34,7 @@ impl ModalityPacket {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     pub fn new(channel_id: PyObject, modality_type: String, timestamp: f64, payload: Vec<u8>, _py: Python<'_>) -> Self {
         let channel_id_str = channel_id.to_string();
         
@@ -56,6 +57,13 @@ impl ModalityPacket {
         ModalityPacket {
             channel_id: channel_id_str,
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+    pub fn new(channel_id: PyObject, modality_type: String, timestamp: f64, payload: Vec<u8>, _py: Python<'_>) -> Self {
+        let channel_id_str = channel_id.to_string();
+        
+        ModalityPacket {
+            channel_id: channel_id_str,
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
             modality_type,
             timestamp,
             payload,

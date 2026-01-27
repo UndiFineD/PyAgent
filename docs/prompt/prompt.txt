@@ -91,7 +91,6 @@ to become the best streaming ai out there (120fps DVD-channel capability).
 # This file (docs/prompt/prompt.txt) is the primary source for swarm-level prompting logic.
 # Priority: CRITICAL | Status: PHASE 91 - LIQUIDITY & CACHE INVALIDATION 🚧 PLANNING
 # Rust Functions: 680 | Test Coverage: ~4500+ tests passing
-@focus: ["src.infrastructure.swarm.orchestration", "src.infrastructure.liquidity", "rust_core/src"]
 
 ---
 

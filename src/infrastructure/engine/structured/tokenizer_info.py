@@ -56,26 +56,36 @@ class TokenizerInfo:
         """Create TokenizerInfo from a HuggingFace tokenizer."""
         vocab_dict = tokenizer.get_vocab()
 <<<<<<< HEAD
+<<<<<<< HEAD
         actual_vocab_size: int = vocab_size or len(vocab_dict)
 
         # Build encoded vocab maintaining tokenizer's indexing
         encoded_vocab: list[str] = [""] * actual_vocab_size
 =======
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         actual_vocab_size = vocab_size or len(vocab_dict)
 
         # Build encoded vocab maintaining tokenizer's indexing
         encoded_vocab = [""] * actual_vocab_size
+<<<<<<< HEAD
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         for token, idx in vocab_dict.items():
             if idx < actual_vocab_size:
                 encoded_vocab[idx] = token
 
         # Detect vocab type
 <<<<<<< HEAD
+<<<<<<< HEAD
         vocab_type: VocabType = cls._detect_vocab_type(tokenizer)
 =======
         vocab_type = cls._detect_vocab_type(tokenizer)
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+        vocab_type = cls._detect_vocab_type(tokenizer)
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 
         # Get stop token IDs
         stop_token_ids = []
@@ -84,10 +94,14 @@ class TokenizerInfo:
 
         # Detect add_prefix_space
 <<<<<<< HEAD
+<<<<<<< HEAD
         add_prefix_space: Any | bool = getattr(tokenizer, "add_prefix_space", True)
 =======
         add_prefix_space = getattr(tokenizer, "add_prefix_space", True)
 >>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+        add_prefix_space = getattr(tokenizer, "add_prefix_space", True)
+>>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 
         return cls(
             encoded_vocab=tuple(encoded_vocab),
