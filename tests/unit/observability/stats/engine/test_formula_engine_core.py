@@ -37,6 +37,7 @@ pytestmark = pytest.mark.skipif(
     op=st.sampled_from(["+", "-", "*"]),
 )
 def test_calculate_logic_basic_ops(a: float, b: float, op: str) -> None:
+    """Test basic arithmetic operations logic."""
     core = FormulaEngineCore()
 
     formula = f"{{a}}{op}{{b}}"
@@ -62,6 +63,7 @@ def test_calculate_logic_basic_ops(a: float, b: float, op: str) -> None:
     )
 )
 def test_calculate_logic_avg(values: list[float]) -> None:
+    """Test average calculation logic."""
     core = FormulaEngineCore()
     result = core.calculate_logic("AVG({values})", {"values": values})
     expected = sum(values) / len(values)
@@ -69,6 +71,7 @@ def test_calculate_logic_avg(values: list[float]) -> None:
 
 
 def test_validate_logic_rejects_invalid_sequences() -> None:
+    """Test validation logic rejects invalid token sequences."""
     core = FormulaEngineCore()
     res = core.validate_logic("1 + *** 2")
     assert res["is_valid"] is False
@@ -76,6 +79,7 @@ def test_validate_logic_rejects_invalid_sequences() -> None:
 
 
 def test_validate_logic_accepts_basic_formula() -> None:
+    """Test validation logic accepts basic well-formed formulas."""
     core = FormulaEngineCore()
     res = core.validate_logic("{a}+{b}*2")
     assert res["is_valid"] is True

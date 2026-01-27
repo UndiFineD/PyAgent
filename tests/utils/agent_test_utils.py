@@ -45,9 +45,11 @@ AGENT_DIR = _loader.agent_dir
 load_module_from_path = _loader.load_module_from_path
 
 def agent_dir_on_path():
+    """Context manager to ensure agent directory is on sys.path."""
     return _loader.agent_dir_on_path()
 
 def agent_sys_path():
+    """Context manager for adding agent directory to sys.path temporarily."""
     return _loader.agent_sys_path()
 
 # Add the load_agent_module helper which is often used in conftest.py
