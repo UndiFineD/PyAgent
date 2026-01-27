@@ -40,10 +40,12 @@ load_module_from_path = _loader.load_module_from_path
 
 
 def agent_dir_on_path():
+    """Context manager to ensure agent directory is on sys.path."""
     return _loader.agent_dir_on_path()
 
 
 def agent_sys_path():
+    """Context manager for adding agent directory to sys.path temporarily."""
     return _loader.agent_sys_path()
 
 
