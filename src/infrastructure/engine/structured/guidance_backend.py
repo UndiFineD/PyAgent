@@ -108,7 +108,7 @@ class GuidanceTemplate:
         """Get template cache key."""
         return self._cache_key
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._parse_template()
         self._cache_key = self._compute_cache_key()
 
@@ -167,7 +167,7 @@ class GuidanceState:
     Tracks current position in template and variable values.
     """
 
-    def __init__(self, template: GuidanceTemplate):
+    def __init__(self, template: GuidanceTemplate) -> None:
         self.template = template
         self.segment_index = 0
         self.variable_values: Dict[str, str] = {}
@@ -237,7 +237,7 @@ class CompiledGuidanceProgram:
         self,
         template: GuidanceTemplate,
         vocab_size: int,
-    ):
+    ) -> None:
         self.template = template
         self.vocab_size = vocab_size
         self._state: Optional[GuidanceState] = None
@@ -273,7 +273,7 @@ class GuidanceGrammar:
         program: "CompiledGuidanceProgram",
         tokenizer: Any,
         state: Optional[GuidanceState] = None,
-    ):
+    ) -> None:
         self.program = program
         self.tokenizer = tokenizer
         self.state = state or program.create_state()
@@ -328,7 +328,7 @@ class GuidanceBackend:
         tokenizer: Any,
         vocab_size: Optional[int] = None,
         max_cache_size: int = 1000,
-    ):
+    ) -> None:
         self.tokenizer = tokenizer
         self.vocab_size = vocab_size or self._get_vocab_size(tokenizer)
         self.max_cache_size = max_cache_size

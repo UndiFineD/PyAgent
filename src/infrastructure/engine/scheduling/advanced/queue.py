@@ -28,7 +28,7 @@ from .request import ScheduledRequest
 class PriorityRequestQueue:
     """Heap-based priority queue for inference requests."""
 
-    def __init__(self, enable_starvation_prevention: bool = True):
+    def __init__(self, enable_starvation_prevention: bool = True) -> None:
         """Initialize priority queue."""
         self.enable_starvation_prevention = enable_starvation_prevention
         self._heap: list[tuple[float, float, float, int, ScheduledRequest]] = []

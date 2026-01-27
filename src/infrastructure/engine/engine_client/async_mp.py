@@ -40,7 +40,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     Non-blocking request submission with async output retrieval.
     """
 
-    def __init__(self, config: EngineClientConfig):
+    def __init__(self, config: EngineClientConfig) -> None:
         super().__init__(config)
         self._request_queue: asyncio.Queue[tuple[str, SchedulerOutput]] = asyncio.Queue()
         self._output_queue: asyncio.Queue[EngineOutput] = asyncio.Queue()

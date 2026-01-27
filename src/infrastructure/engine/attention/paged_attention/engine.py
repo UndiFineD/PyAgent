@@ -30,7 +30,7 @@ class PagedAttentionEngine:
     """
     Engine for managing paged KV cache and executing paged attention operations.
     """
-    def __init__(self, config: AttentionConfig, num_blocks: int = 1024):
+    def __init__(self, config: AttentionConfig, num_blocks: int = 1024) -> None:
         """Initializes the paged attention engine."""
         self.config = config
         self.block_table = BlockTable(num_blocks, config.block_size)

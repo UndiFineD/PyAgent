@@ -30,7 +30,7 @@ class ConstraintBuilder:
     Fluent builder for structured output constraints.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._config = StructuredOutputConfig()
         self._constraints: List[OutputConstraint] = []
 

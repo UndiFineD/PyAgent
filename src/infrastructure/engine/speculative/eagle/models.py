@@ -53,7 +53,7 @@ class DraftModelWrapper(ABC):
 class SimpleDraftModel(DraftModelWrapper):
     """Simple mock draft model for testing."""
 
-    def __init__(self, vocab_size: int = 32000, hidden_size: int = 4096):
+    def __init__(self, vocab_size: int = 32000, hidden_size: int = 4096) -> None:
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
 

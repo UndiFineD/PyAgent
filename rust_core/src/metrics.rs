@@ -126,6 +126,9 @@ pub fn rolling_avg(values: Vec<f64>, window: usize) -> Vec<f64> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 /// Calculate Pearson correlation coefficient (Common/Stats).
 #[pyfunction]
 pub fn calculate_pearson_correlation(x: Vec<f64>, y: Vec<f64>) -> PyResult<f64> {
@@ -183,10 +186,13 @@ pub fn predict_linear(x: Vec<f64>, steps: usize) -> PyResult<Vec<f64>> {
     Ok(predictions)
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(aggregate_metrics_rust, m)?)?;
     m.add_function(wrap_pyfunction!(rolling_avg_rust, m)?)?;
@@ -197,11 +203,16 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(rolling_avg, m)?)?;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     m.add_function(wrap_pyfunction!(calculate_pearson_correlation, m)?)?;
     m.add_function(wrap_pyfunction!(predict_linear, m)?)?;
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+    m.add_function(wrap_pyfunction!(calculate_pearson_correlation, m)?)?;
+    m.add_function(wrap_pyfunction!(predict_linear, m)?)?;
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
     Ok(())
 }

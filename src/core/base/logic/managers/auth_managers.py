@@ -33,6 +33,7 @@ class AuthManager:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, name: str = "AuthManager") -> None:
 =======
     def __init__(self, name: str = "AuthManager"):
@@ -40,6 +41,9 @@ class AuthManager:
 =======
     def __init__(self, name: str = "AuthManager"):
 >>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+    def __init__(self, name: str = "AuthManager") -> None:
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
         from src.core.base.common.auth_core import AuthCore
         self._core = AuthCore(name=name)
         self._config: Optional[Any] = None

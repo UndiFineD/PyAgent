@@ -49,15 +49,24 @@ class LintResult(TypedDict):
 class LinterCore:
     """Core logic for Python Linter analysis."""
 
+<<<<<<< HEAD
     def __init__(self) -> None:
         self.logger: logging.Logger = logging.getLogger(__name__)
+=======
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
     def run_ruff(self, file_path: str) -> list[LintIssue]:
         """Runs ruff and returns issues."""
         issues: list[LintIssue] = []
         try:
             # --output-format json
+<<<<<<< HEAD
             process: subprocess.CompletedProcess[str] = subprocess.run(
+=======
+            process = subprocess.run(
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
                 ["ruff", "check", "--output-format=json", file_path],
                 capture_output=True,
                 text=True,
@@ -81,7 +90,11 @@ class LinterCore:
                     self.logger.warning("Failed to parse ruff output")
         except FileNotFoundError:
             self.logger.warning("ruff executable not found")
+<<<<<<< HEAD
         except (subprocess.SubprocessError, OSError, ValueError) as e:
+=======
+        except Exception as e:  # pylint: disable=broad-exception-caught
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             self.logger.error(f"Error running ruff: {e}")
 
         return issues
@@ -91,7 +104,11 @@ class LinterCore:
         issues: list[LintIssue] = []
         try:
             # -f json
+<<<<<<< HEAD
             process: subprocess.CompletedProcess[str] = subprocess.run(
+=======
+            process = subprocess.run(
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
                 ["pylint", "-f", "json", file_path],
                 capture_output=True,
                 text=True,
@@ -115,7 +132,11 @@ class LinterCore:
                     self.logger.warning("Failed to parse pylint output")
         except FileNotFoundError:
             self.logger.warning("pylint executable not found")
+<<<<<<< HEAD
         except (subprocess.SubprocessError, OSError, ValueError) as e:
+=======
+        except Exception as e:  # pylint: disable=broad-exception-caught
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             self.logger.error(f"Error running pylint: {e}")
 
         return issues
@@ -125,7 +146,11 @@ class LinterCore:
         issues: list[LintIssue] = []
         try:
             # flake8 default output: file:line:col: code message
+<<<<<<< HEAD
             process: subprocess.CompletedProcess[str] = subprocess.run(
+=======
+            process = subprocess.run(
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
                 ["flake8", "--format=default", file_path],
                 capture_output=True,
                 text=True,
@@ -140,10 +165,17 @@ class LinterCore:
                             # filename = parts[0]
                             lineno = int(parts[1])
                             col = int(parts[2])
+<<<<<<< HEAD
                             rest: str = parts[3].strip()
                             code_msg: list[str] = rest.split(" ", 1)
                             code: str = code_msg[0]
                             msg: str = code_msg[1] if len(code_msg) > 1 else ""
+=======
+                            rest = parts[3].strip()
+                            code_msg = rest.split(" ", 1)
+                            code = code_msg[0]
+                            msg = code_msg[1] if len(code_msg) > 1 else ""
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
                             issues.append({
                                 "file": file_path,
@@ -159,7 +191,11 @@ class LinterCore:
 
         except FileNotFoundError:
             self.logger.warning("flake8 executable not found")
+<<<<<<< HEAD
         except (subprocess.SubprocessError, OSError, ValueError) as e:
+=======
+        except Exception as e:  # pylint: disable=broad-exception-caught
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             self.logger.error(f"Error running flake8: {e}")
 
         return issues

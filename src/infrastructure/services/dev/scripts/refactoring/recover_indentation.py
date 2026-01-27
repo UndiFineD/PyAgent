@@ -72,7 +72,11 @@ def fix_broken_indentation(root_dir):
             if modified:
                 p.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
                 print(f"Fixed indentation in {p}")
+<<<<<<< HEAD
         except (IOError, OSError, UnicodeDecodeError) as e:
+=======
+        except Exception as e:  # pylint: disable=broad-exception-caught
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             print(f"Error fixing {p}: {e}")
 
 if __name__ == "__main__":

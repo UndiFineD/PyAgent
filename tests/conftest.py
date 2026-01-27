@@ -17,11 +17,80 @@
 """Pytest configuration for PyAgent tests."""
 >>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
+<<<<<<< HEAD
 """Pytest configuration for PyAgent tests."""
 import pytest
 import tempfile
 from pathlib import Path
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry
+=======
+import types
+import tempfile
+from pathlib import Path
+import pytest
+from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.logic.circuit_breaker import CircuitBreaker
+from src.core.base.logic.agent_plugin_base import AgentPluginBase
+from src.core.base.common.models.core_enums import HealthStatus
+
+
+@pytest.fixture
+def agent_module():
+    """Provides a mock module with Agent and CircuitBreaker classes."""
+    mod = types.SimpleNamespace()
+    mod.Agent = BaseAgent
+
+    mod.CircuitBreaker = CircuitBreaker
+    mod.AgentPluginBase = AgentPluginBase
+    mod.HealthStatus = HealthStatus
+    return mod
+
+
+@pytest.fixture
+def agent_backend_module():
+    """Provides backend infrastructure classes."""
+    mod = types.SimpleNamespace()
+    # Lazy imports to avoid circular dependencies or import errors if modules are broken
+
+    try:
+        from src.infrastructure.compute.backend.request_queue import RequestQueue
+        from src.infrastructure.compute.backend.request_batcher import RequestBatcher
+        from src.infrastructure.compute.backend.request_priority import RequestPriority
+        from src.infrastructure.compute.backend.system_health_monitor import SystemHealthMonitor
+
+        from src.infrastructure.compute.backend.load_balancer import LoadBalancer
+        from src.infrastructure.compute.backend.request_tracer import RequestTracer
+
+        from src.infrastructure.compute.backend.audit_logger import AuditLogger
+
+        mod.RequestQueue = RequestQueue
+
+        mod.RequestBatcher = RequestBatcher
+        mod.RequestPriority = RequestPriority
+        mod.SystemHealthMonitor = SystemHealthMonitor
+        mod.LoadBalancer = LoadBalancer
+        mod.RequestTracer = RequestTracer
+        mod.AuditLogger = AuditLogger
+    except ImportError:
+        pass
+    return mod
+
+
+@pytest.fixture
+def base_agent_module():
+    """Provides core base agent classes including BatchManagers."""
+    mod = types.SimpleNamespace()
+    try:
+        from src.core.base.logic.managers.batch_managers import BatchRequest, RequestBatcher
+
+        mod.BatchRequest = BatchRequest
+        mod.RequestBatcher = RequestBatcher
+    except ImportError:
+        pass
+    return mod
+
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
 @pytest.fixture
 def agent_sandbox():
@@ -43,3 +112,22 @@ def agent_registry():
     """Provides a central AgentRegistry for test use."""
     workspace_root = Path(__file__).parent.parent
     return AgentRegistry.get_agent_map(workspace_root)
+
+
+@pytest.fixture(autouse=True)
+def isolation_cleanup():
+    """
+    Enforce isolation between tests (Phase 280).
+    Resets global caches and static states to prevent cross-test contamination.
+    """
+    # Reset SubagentRunner command cache
+    try:
+        from src.infrastructure.compute.backend.subagent_runner import SubagentRunner
+
+        # pylint: disable=protected-access
+        SubagentRunner._command_cache.clear()
+    except ImportError:
+        pass
+
+    yield
+

@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+<<<<<<< HEAD
 
 """
 Core partition mixin for shard management.
@@ -19,6 +20,8 @@ Core partition mixin for shard management.
 """
 Core partition mixin for shard management.
 """
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
 """
 Core partition mixin for shard management.

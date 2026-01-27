@@ -57,8 +57,8 @@ class PersistenceMixin:
         for hook in hooks:
             try:
                 hook(data)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
+                # Hooks should not crash the agent
                 pass
 
     def generate_diff(self) -> str:
@@ -81,8 +81,7 @@ class PersistenceMixin:
 
         try:
             self.previous_content = getattr(self, "file_path").read_text(encoding="utf-8")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             self.previous_content = ""
         return self.previous_content
 
@@ -106,7 +105,13 @@ class PersistenceMixin:
             return self._write_dry_run_diff()
 
         try:
-            return self._fs.atomic_write(file_path, content_to_write)
+            # Phase 267: Transactional Safety
+            from src.core.base.state.agent_state_manager import StateTransaction
+
+            # Use transactional wrapper for safety and potential validation
+            with StateTransaction([file_path], run_tests=False):
+                self._fs.atomic_write(file_path, content_to_write)
+            return True
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("File write failed: %s", e)
             return False

@@ -24,7 +24,11 @@ def restore_except_as_e(root_dir):
     Args:
         root_dir: The root directory to search in.
     """
+<<<<<<< HEAD
     target = "except Exception as e:  # pylint: disable=broad-exception-caught"
+=======
+    target = "except Exception:  # pylint: disable=broad-exception-caught"
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
     replacement = "except Exception as e:  # pylint: disable=broad-exception-caught"
     root = Path(root_dir)
     for p in root.rglob("*.py"):

@@ -34,7 +34,7 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
     This is the standard implementation used in Llama, Mistral, and others.
     """
 
-    def __init__(self, config: RoPEConfig):
+    def __init__(self, config: RoPEConfig) -> None:
         super().__init__(config)
         self.inv_freq = self._compute_inv_freq()
 

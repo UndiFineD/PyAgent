@@ -35,7 +35,7 @@ class BufferRecycler:
     Essential for high-frequency 120fps streaming operations.
     """
 
-    def __init__(self, size_classes: Optional[List[int]] = None):
+    def __init__(self, size_classes: Optional[List[int]] = None) -> None:
         # Default size classes: 4KB, 64KB, 1MB, 16MB
         self.size_classes = size_classes or [4096, 65536, 1048576, 16777216]
         self._pools: Dict[int, collections.deque] = {sc: collections.deque() for sc in self.size_classes}
@@ -66,7 +66,7 @@ class BufferRecycler:
 
         return bytearray(target_size)
 
-    def release(self, buffer: bytearray):
+    def release(self, buffer: bytearray) -> None:
         """
         Releases a buffer back into the appropriate pool.
         """

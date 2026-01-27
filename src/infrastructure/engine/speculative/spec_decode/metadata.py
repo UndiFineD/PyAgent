@@ -46,7 +46,7 @@ class SpecDecodeMetadataV2:
     verification_start_time: float = 0.0
     verification_end_time: float = 0.0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.max_spec_len:
             self.max_spec_len = max(self.num_draft_tokens) if self.num_draft_tokens else 0
         if not self.cu_num_draft_tokens:

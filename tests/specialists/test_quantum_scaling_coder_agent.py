@@ -23,22 +23,16 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 class TestQuantumScalingCoderAgent(unittest.TestCase):
-    """
-    Test suite for the QuantumScalingCoderAgent class.
-    """
+    """Test suite for QuantumScalingCoderAgent."""
 
     def setUp(self) -> None:
-        """
-        Set up the test case.
-        """
         self.agent = QuantumScalingCoderAgent("dummy_path.py")
 
     def test_initialization(self) -> None:
-        """
-        Test that the agent initializes correctly.
-        """
+        """Test proper initialization of the agent."""
         self.assertIsNotNone(self.agent)
         self.assertIn("QuantumScalingCoderAgent", self.agent.__class__.__name__)
+        self.assertEqual(self.agent.version, VERSION)
 
 if __name__ == "__main__":
     unittest.main()

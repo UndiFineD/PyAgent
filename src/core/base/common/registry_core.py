@@ -35,7 +35,7 @@ class RegistryCore(BaseCore, Generic[T]):
     Standardizes registration, lookup, and lifecycle management.
     """
 
-    def __init__(self, name: str = "generic"):
+    def __init__(self, name: str = "generic") -> None:
         BaseCore.__init__(self, name=name)
         self._items: Dict[str, T] = {}
         self._hooks: Dict[str, List[Callable[[str, T], None]]] = {"on_register": [], "on_unregister": []}
@@ -57,7 +57,7 @@ class RegistryCore(BaseCore, Generic[T]):
             if u in adj:
                 adj[u].append(v)
 
-        def has_cycle(v):
+        def has_cycle(v) -> bool:
             visited.add(v)
             path.add(v)
             for neighbor in adj.get(v, []):

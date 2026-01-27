@@ -39,7 +39,7 @@ class MemoryBackend(OffloadingBackend):
         capacity_blocks: int,
         block_size: int = 4096,
         medium: str = "cpu",
-    ):
+    ) -> None:
         self._capacity = capacity_blocks
         self._block_size = block_size
         self._medium = medium

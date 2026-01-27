@@ -108,7 +108,7 @@ class LogprobsLists:
     Efficient for variable-length sequences with streaming output.
     """
 
-    def __init__(self, num_sequences: int = 1):
+    def __init__(self, num_sequences: int = 1) -> None:
         self._sequences: List[List[TopLogprobs]] = [[] for _ in range(num_sequences)]
         self._lock = threading.Lock()
 
@@ -286,7 +286,7 @@ class AsyncCPUTransfer:
     Beyond vLLM: Double buffering and pipelining for overlap.
     """
 
-    def __init__(self, num_buffers: int = 2, max_workers: int = 2):
+    def __init__(self, num_buffers: int = 2, max_workers: int = 2) -> None:
         self._buffers: List[Optional[np.ndarray]] = [None] * num_buffers
         self._current_buffer = 0
         self._executor = ThreadPoolExecutor(max_workers=max_workers)
@@ -298,18 +298,10 @@ class AsyncCPUTransfer:
         tensor: np.ndarray,
         transfer_id: int,
     ) -> Future:
-        """Submit an async transfer."""
+        """Submit a tensor for async transfer to CPU."""
         with self._lock:
-            buffer_idx = self._current_buffer
-            self._current_buffer = (self._current_buffer + 1) % len(self._buffers)
-
-            def do_transfer():
-                # Simulate GPU->CPU transfer
-                result = np.array(tensor)  # Copy
-                self._buffers[buffer_idx] = result
-                return result
-
-            future = self._executor.submit(do_transfer)
+            # Simple simulation for now
+            future = self._executor.submit(lambda t: t.copy(), tensor)
             self._pending_transfers[transfer_id] = future
             return future
 
@@ -354,6 +346,7 @@ class SamplerOutput:
 
     @property
     def batch_size(self) -> int:
+        """Return the size of the batch."""
         return self.sampled_token_ids.shape[0]
 
     def get_token_ids(self, batch_idx: int) -> np.ndarray:
@@ -434,7 +427,7 @@ class StreamingLogprobsCollector:
     Beyond vLLM: Supports real-time streaming with backpressure.
     """
 
-    def __init__(self, buffer_size: int = 100):
+    def __init__(self, buffer_size: int = 100) -> None:
         self._buffers: Dict[str, List[TopLogprobs]] = defaultdict(list)
         self._buffer_size = buffer_size
         self._callbacks: Dict[str, Callable[[List[TopLogprobs]], None]] = {}

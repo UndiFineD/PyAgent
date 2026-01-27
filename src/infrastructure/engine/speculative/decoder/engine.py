@@ -36,7 +36,7 @@ class SpeculativeDecoder:
         proposer: SpeculativeProposer,
         verifier: Optional[SpeculativeVerifier] = None,
         max_speculation_depth: int = 5,
-    ):
+    ) -> None:
         self.vocab_size = vocab_size
         self.proposer = proposer
         self.verifier = verifier or SpeculativeVerifier(vocab_size)

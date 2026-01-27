@@ -28,7 +28,7 @@ from .parsers import ReasoningParser, ToolParser
 class DeepSeekReasoningParser(ReasoningParser):
     """Parser for DeepSeek R1-style <think>...</think> blocks."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(reasoning_format=ReasoningFormat.DEEPSEEK_R1, start_marker="<think>", end_marker="</think>")
         self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)
 
@@ -125,7 +125,7 @@ class DeepSeekReasoningParser(ReasoningParser):
 class QwenReasoningParser(ReasoningParser):
     """Parser for Qwen3-style reasoning with enable_thinking flag."""
 
-    def __init__(self, enable_thinking: bool = True):
+    def __init__(self, enable_thinking: bool = True) -> None:
         super().__init__(reasoning_format=ReasoningFormat.QWEN3, start_marker="<think>", end_marker="</think>")
         self.enable_thinking = enable_thinking
         self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)
@@ -169,7 +169,7 @@ class QwenReasoningParser(ReasoningParser):
 class GenericReasoningParser(ReasoningParser):
     """Configurable parser for any reasoning format."""
 
-    def __init__(self, start_marker: str = "<think>", end_marker: str = "</think>", nested: bool = False):
+    def __init__(self, start_marker: str = "<think>", end_marker: str = "</think>", nested: bool = False) -> None:
         super().__init__(reasoning_format=ReasoningFormat.GENERIC, start_marker=start_marker, end_marker=end_marker)
         self.nested = nested
         self._pattern = re.compile(re.escape(start_marker) + r"(.*?)" + re.escape(end_marker), re.DOTALL)
@@ -251,7 +251,7 @@ class GenericReasoningParser(ReasoningParser):
 class OpenAIToolParser(ToolParser):
     """Parser for OpenAI-style tool calls."""
 
-    def __init__(self, strict: bool = False):
+    def __init__(self, strict: bool = False) -> None:
         super().__init__(ToolCallFormat.OPENAI, strict)
         self._function_pattern = re.compile(r'"function_call"\s*:\s*\{[^}]+\}', re.DOTALL)
 
@@ -297,7 +297,7 @@ class OpenAIToolParser(ToolParser):
 class HermesToolParser(ToolParser):
     """Parser for Hermes-style tool calls."""
 
-    def __init__(self, strict: bool = False):
+    def __init__(self, strict: bool = False) -> None:
         super().__init__(ToolCallFormat.HERMES, strict)
         self._pattern = re.compile(r"<tool_call>\s*(.*?)\s*</tool_call>", re.DOTALL)
 

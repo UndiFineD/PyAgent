@@ -16,13 +16,19 @@
 
 from __future__ import annotations
 
+<<<<<<< HEAD
 import json
 
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 import requests
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+<<<<<<< HEAD
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
 __version__ = VERSION
 
@@ -35,6 +41,7 @@ class FlmConnectorAgent(BaseAgent):
         super().__init__(file_path)
         self.endpoint = endpoint
         self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM."
+<<<<<<< HEAD
         self._firewall = ReverseProxyFirewall()
 
     def check_availability(self) -> bool:
@@ -46,11 +53,24 @@ class FlmConnectorAgent(BaseAgent):
             response = self._firewall.get(health_url, timeout=2)
             return response.status_code == 200
         except (requests.RequestException, ConnectionError, TimeoutError) as e:
+=======
+
+    def check_availability(self) -> bool:
+        """Checks if the local FastFlowLM service is reachable."""
+        try:
+            # Assuming FastFlowLM has a health endpoint similar to standard inference servers
+            response = requests.get(f"{self.endpoint}/health", timeout=2)
+            return response.status_code == 200
+        except Exception:  # pylint: disable=broad-exception-caught
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             return False
 
     def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:
         """Runs a local inference request on the NPU."""
+<<<<<<< HEAD
         # Using firewall check implicitly via the request below, but explicit check provides better error message
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
         if not self.check_availability():
             return "Error: FastFlowLM service not reachable at " + self.endpoint
 
@@ -58,18 +78,30 @@ class FlmConnectorAgent(BaseAgent):
         payload = {"model": model, "prompt": prompt, "max_tokens": 1024, "temperature": 0.7}
 
         try:
+<<<<<<< HEAD
             # Use firewall for POST request
             response = self._firewall.post(f"{self.endpoint}/v1/completions", json=payload, timeout=30)
+=======
+            response = requests.post(f"{self.endpoint}/v1/completions", json=payload, timeout=30)
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             if response.status_code == 200:
                 # Assuming standard OpenAI response format
                 response_json = response.json()
                 if "choices" in response_json and len(response_json["choices"]) > 0:
+<<<<<<< HEAD
                     return response_json["choices"][0].get("text", "")
+=======
+                     return response_json["choices"][0].get("text", "")
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
                 return ""
             
             return f"Error: FastFlowLM returned status {response.status_code}"
 
+<<<<<<< HEAD
         except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:
+=======
+        except Exception as e:  # pylint: disable=broad-exception-caught
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             return f"Exception during NPU inference: {e}"
 
 

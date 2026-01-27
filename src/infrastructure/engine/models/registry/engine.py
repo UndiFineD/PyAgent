@@ -44,7 +44,7 @@ class ModelRegistry:
                     cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         if getattr(self, "_initialized", False):
             return
         self._architectures: Dict[ModelArchitecture, ArchitectureSpec] = {}
@@ -53,7 +53,7 @@ class ModelRegistry:
         self._register_defaults()
         self._initialized = True
 
-    def _register_defaults(self):
+    def _register_defaults(self) -> None:
         for arch in [ModelArchitecture.LLAMA, ModelArchitecture.MISTRAL, ModelArchitecture.QWEN2]:
             self.register(
                 ArchitectureSpec(
@@ -63,7 +63,7 @@ class ModelRegistry:
                 )
             )
 
-    def register(self, spec: ArchitectureSpec):
+    def register(self, spec: ArchitectureSpec) -> None:
         """Register a new model architecture specification."""
         self._architectures[spec.architecture] = spec
 
@@ -98,7 +98,7 @@ class ModelRegistry:
     def _load_config(self, name: str) -> Optional[Dict[str, Any]]:
         """Load configuration from local path or Hugging Face Hub."""
         if os.path.isdir(name) and (Path(name) / "config.json").exists():
-            with open(Path(name, encoding='utf-8') / "config.json", mode="r", encoding="utf-8") as f:
+            with open(Path(name) / "config.json", mode="r", encoding="utf-8") as f:
                 return json.load(f)
         try:
             from huggingface_hub import hf_hub_download

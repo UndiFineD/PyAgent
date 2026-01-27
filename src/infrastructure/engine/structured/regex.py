@@ -69,7 +69,7 @@ class RegexGrammar(GrammarEngine):
         vocab_size: int,
         token_strings: Optional[Dict[int, str]] = None,
         eos_token_id: Optional[int] = None,
-    ):
+    ) -> None:
         super().__init__(vocab_size, token_strings, eos_token_id)
         self._compiled_cache: Dict[str, FSMTransitionTable] = {}
 
@@ -207,7 +207,7 @@ class RegexGrammar(GrammarEngine):
                 fsm.add_transition(from_state, char, to_state)
         return fsm
 
-    def _apply_repeat_loop(self, nfa, current_states, subpattern, process_pattern_fn):
+    def _apply_repeat_loop(self, nfa, current_states, subpattern, process_pattern_fn) -> None:
         """Apply repeat loop transitions to NFA."""
         for s in current_states:
             loop_ends = process_pattern_fn(subpattern, s)

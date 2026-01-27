@@ -43,7 +43,7 @@ class FileSystemCore:
     Provides atomic writes, locking, and standardized backup logic.
     """
 
-    def __init__(self, lock_manager: Optional[FileLockManager] = None):
+    def __init__(self, lock_manager: Optional[FileLockManager] = None) -> None:
         self.logger = logging.getLogger("pyagent.fs")
         self.lock_manager = lock_manager or FileLockManager()
         self.storage = StorageCore()

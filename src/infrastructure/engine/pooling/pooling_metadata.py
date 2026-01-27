@@ -338,7 +338,7 @@ class LastTokenPooler(Pooler):
 class AttentionWeightedPooler(Pooler):
     """Attention-weighted pooling implementation."""
 
-    def __init__(self, attention_head_idx: int = 0):
+    def __init__(self, attention_head_idx: int = 0) -> None:
         self.attention_head_idx = attention_head_idx
 
     def pool(
@@ -425,7 +425,7 @@ class ChunkedPoolingManager:
         hidden_dim: int,
         max_chunk_size: int = 2048,
         strategy: PoolingStrategy = PoolingStrategy.MEAN,
-    ):
+    ) -> None:
         self.hidden_dim = hidden_dim
         self.max_chunk_size = max_chunk_size
         self.strategy = strategy

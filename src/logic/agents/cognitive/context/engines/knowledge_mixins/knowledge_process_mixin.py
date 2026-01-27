@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+<<<<<<< HEAD
 
 """
 Knowledge process mixin for content analysis.
@@ -19,6 +20,8 @@ Knowledge process mixin for content analysis.
 """
 Knowledge process mixin for content analysis.
 """
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
 """
 Knowledge process mixin for content analysis.

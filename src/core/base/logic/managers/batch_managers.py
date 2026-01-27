@@ -37,7 +37,7 @@ class RequestBatcher:
     Core batch processing logic is now in src.core.base.common.batch_core.
     """
 
-    def __init__(self, batch_size: int = 10):
+    def __init__(self, batch_size: int = 10) -> None:
         from src.core.base.common.batch_core import BatchCore
         self._core: BatchCore = BatchCore(batch_size=batch_size)
 

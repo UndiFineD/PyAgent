@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 """
 Scaling agent.py module.
@@ -28,6 +29,7 @@ class ProviderType(Enum):
     AZURE = "azure"
     OLLAMA = "ollama"
     VLLM = "vllm"
+    FASTFLOWLM = "fastflowlm"
 
 
 class ScalingStrategy(Enum):
@@ -77,10 +79,30 @@ class ScalingAgent(BaseAgent):
             ProviderType.LOCAL: ProviderMetrics(ProviderType.LOCAL, capacity=5, cost_per_token=0.0),
             ProviderType.GITHUB: ProviderMetrics(ProviderType.GITHUB, capacity=50, cost_per_token=0.0),
             ProviderType.AZURE: ProviderMetrics(ProviderType.AZURE, capacity=100, cost_per_token=0.002),
-            ProviderType.OLLAMA: ProviderMetrics(ProviderType.OLLAMA, capacity=3, cost_per_token=0.0),
+            ProviderType.OLLAMA: ProviderMetrics(
+                ProviderType.OLLAMA, 
+                capacity=self._detect_ollama_capacity(), 
+                cost_per_token=0.0
+            ),
+            ProviderType.FASTFLOWLM: ProviderMetrics(ProviderType.FASTFLOWLM, capacity=10, cost_per_token=0.0),
         }
         self._scaling_history: List[ScalingDecision] = []
         self._current_strategy = ScalingStrategy.LATENCY_WEIGHTED
+
+    def _detect_ollama_capacity(self) -> int:
+        """
+        Dynamically estimates Ollama concurrency capacity based on system VRAM.
+        Heuristic: 1 slot per 8GB VRAM for 7B models, or default to 3.
+        """
+        try:
+            import psutil
+            # Simplified heuristic using system RAM if GPU info unavailable
+            # Assuming 4GB per concurrent 7B quant stream
+            total_ram_gb = psutil.virtual_memory().total / (1024**3)
+            estimated_slots = int(total_ram_gb // 8) 
+            return max(1, estimated_slots)
+        except ImportError:
+            return 3  # Safe default
         self._system_prompt = (
             "You are the Scaling Agent. You optimize swarm density and manage "
             "compute resources across multiple providers (GitHub, Azure, Local, Ollama). "

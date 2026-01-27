@@ -29,7 +29,7 @@ class ExecutionPipeline:
     Beyond vLLM: Overlap data preparation with execution.
     """
 
-    def __init__(self, depth: int = 2):
+    def __init__(self, depth: int = 2) -> None:
         self.depth = depth
         self._stages: list[asyncio.Queue[SchedulerOutput]] = [asyncio.Queue(maxsize=depth) for _ in range(2)]
         self._prefetch_stage = self._stages[0]

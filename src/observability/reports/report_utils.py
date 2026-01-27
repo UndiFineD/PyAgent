@@ -99,6 +99,38 @@ def _placeholder_test_note(path: Path, source: str) -> str | None:
     return None
 
 
+def export_to_html(content: str, title: str = "PyAgent Report") -> str:
+    """Convert markdown content to a full HTML document."""
+    try:
+        import markdown
+    except ImportError:
+        return f"<pre>{content}</pre>"
+
+    html_body = markdown.markdown(content, extensions=["extra", "codehilite"])
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <style>
+        body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 2rem; color: #333; }}
+        pre {{ background: #f4f4f4; padding: 1rem; border-radius: 4px; overflow-x: auto; }}
+        code {{ font-family: 'Consolas', 'Monaco', monospace; background: #f4f4f4; padding: 0.2rem 0.4rem; border-radius: 3px; }}
+        h1, h2, h3 {{ color: #2c3e50; }}
+        table {{ border-collapse: collapse; width: 100%; margin: 1rem 0; }}
+        th, td {{ border: 1px solid #ddd; padding: 0.5rem; text-align: left; }}
+        th {{ background-color: #f8f9fa; }}
+        blockquote {{ border-left: 4px solid #ddd; padding-left: 1rem; margin-left: 0; color: #666; }}
+    </style>
+</head>
+<body>
+{html_body}
+</body>
+</html>"""
+
+
 def _rel(path: Path) -> str:
     """Get relative path string for display."""
     return _workspace.get_relative_path(path)

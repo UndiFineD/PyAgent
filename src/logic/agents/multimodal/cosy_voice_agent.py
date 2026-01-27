@@ -22,7 +22,11 @@ from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass
+<<<<<<< HEAD
 from typing import Optional
+=======
+from typing import Optional, Dict
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -60,6 +64,7 @@ class CosyVoiceAgent(BaseAgent):
         self._system_prompt = "You are the CosyVoice Orchestrator. You manage speech generation lifecycles."
 
     @as_tool
+<<<<<<< HEAD
     async def load_model(self) -> str:
         """Loads the CosyVoice model into memory (if not already loaded)."""
         if self._model:
@@ -71,6 +76,23 @@ class CosyVoiceAgent(BaseAgent):
         self._model = "CosyVoice-300M-Loaded-Mock"
         self._last_used = time.time()
         return f"CosyVoice model loaded successfully on {self.config.device}."
+=======
+    def load_model(self) -> str:
+        """Loads the CosyVoice model into memory (if not already loaded)."""
+        if self._model:
+            return "CosyVoice model already loaded."
+        
+        logger.info(f"Loading CosyVoice model from {self.config.model_path} on {self.config.device}...")
+        try:
+            # Simulation of model loading
+            time.sleep(1) # Simulate I/O
+            self._model = "CosyVoice-300M-Loaded-Mock"
+            self._last_used = time.time()
+            return f"CosyVoice model loaded successfully on {self.config.device}."
+        except Exception as e:
+            logger.error(f"Failed to load CosyVoice: {e}")
+            return f"Error loading model: {e}"
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
     @as_tool
     def unload_model(self) -> str:
@@ -81,7 +103,11 @@ class CosyVoiceAgent(BaseAgent):
         self._model = None
         if torch and torch.cuda.is_available():
             torch.cuda.empty_cache()
+<<<<<<< HEAD
         
+=======
+            
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
         logger.info("CosyVoice model unloaded.")
         return "CosyVoice model unloaded successfully."
 
@@ -103,12 +129,20 @@ class CosyVoiceAgent(BaseAgent):
         # Simulate inference
         return f"Generated audio for '{text}' using {mode} mode (Simulated)"
 
+<<<<<<< HEAD
     def check_idle_timeout(self, timeout_seconds: int = 300) -> bool:
+=======
+    def check_idle_timeout(self, timeout_seconds: int = 300):
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
         """Checks if the model has been idle and unloads it if necessary."""
         if self._model and (time.time() - self._last_used) > timeout_seconds:
             logger.info(f"CosyVoice model idle for >{timeout_seconds}s. Unloading...")
             self.unload_model()
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(CosyVoiceAgent, "CosyVoice Orchestrator", "Speech generation logs")

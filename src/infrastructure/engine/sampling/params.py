@@ -61,7 +61,7 @@ class SamplingParams:
     ignore_eos: bool = False
     logprobs: Optional[int] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate parameters."""
         if self.temperature < 0:
             raise ValueError("temperature must be non-negative")
@@ -116,7 +116,7 @@ class SamplingState:
     # Random state for reproducibility
     rng: Optional[np.random.Generator] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize random generator if not provided."""
         if self.rng is None:
             self.rng = np.random.default_rng()

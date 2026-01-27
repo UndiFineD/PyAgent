@@ -35,13 +35,13 @@ class PlatformCore:
 
     _instance: Optional["PlatformCore"] = None
 
-    def __new__(cls):
+    def __new__(cls) -> "PlatformCore":
         if cls._instance is None:
             cls._instance = super(PlatformCore, cls).__new__(cls)
             cls._instance._initialize()
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Attributes are initialized in _initialize for singleton consistency
         self.system: str = ""
         self.release: str = ""
@@ -51,7 +51,7 @@ class PlatformCore:
         self._is_linux: bool = False
         self._is_darwin: bool = False
 
-    def _initialize(self):
+    def _initialize(self) -> None:
         """Initializes platform attributes."""
         self.system = platform.system()
         self.release = platform.release()

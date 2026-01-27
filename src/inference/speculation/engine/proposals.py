@@ -19,6 +19,10 @@
 from dataclasses import dataclass, field
 from typing import Any, List, Optional
 
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
 from .config import SpecMethod
 
 
@@ -85,7 +89,12 @@ class SpecDecodingMetrics:
 
     @property
     def acceptance_rate(self) -> float:
+<<<<<<< HEAD
         if self.num_draft_tokens == 0:
+=======
+        """Calculate the acceptance rate of draft tokens."""
+        if not self.num_draft_tokens:
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
             return 0.0
         return self.num_accepted_tokens / self.num_draft_tokens
 

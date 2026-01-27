@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 """
 Multimodal Logic Implementation
 ================================
@@ -37,6 +38,9 @@ Dependencies:
 
 Copyright 2026 PyAgent Authors. Licensed under the Apache License, Version 2.0.
 """
+=======
+"""Multimodal logic implementation."""
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
 import logging
 import math
@@ -548,11 +552,15 @@ class MultimodalCore(BaseCore):
         """
         Orchestrate multimodal inputs for model ingestion.
         Converts media references into aligned sequence embeddings (Stream-Omni style).
+<<<<<<< HEAD
         Refactored for clarity and reduced complexity.
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
         """
         processed = {
             "text": "",
             "media": [],
+<<<<<<< HEAD
             "aligned_embeddings": [],
         }
 
@@ -607,3 +615,32 @@ class MultimodalCore(BaseCore):
 
         processed["aligned_embeddings"].append(aligned)
         processed["text"] += f"<{m_type.capitalize()}_{m_id}>"
+=======
+            "aligned_embeddings": [],  # List of (dim, sequence)
+        }
+
+        for item in inputs:
+            itype = item.get("type")
+            if itype == "text":
+                processed["text"] += item.get("content", "")
+            elif itype == "media":
+                m_type = item.get("modality", "image")
+                m_id = item.get("id")
+
+                # Logic: Resolve embedding from storage and project it
+                # For now, we simulate the alignment step
+                processed["media"].append(item)
+
+                # Mock embedding for demonstration of the alignment logic
+                mock_emb = [0.1] * 4096
+                mock_weights = [0.01] * (4096 * 4096)
+
+                # Apply Rust-accelerated projection
+                aligned = self.project_alignment(mock_emb, mock_weights)
+                processed["aligned_embeddings"].append(aligned)
+
+                # Insert token placeholder in text
+                processed["text"] += f"<{m_type.capitalize()}_{m_id}>"
+
+        return processed
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)

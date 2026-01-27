@@ -54,7 +54,7 @@ class ErrorMappingCore(BaseCore):
         "EnvVarMissing": "PA-5002",
     }
 
-    def __init__(self, repo_root: Optional[str] = None):
+    def __init__(self, repo_root: Optional[str] = None) -> None:
         super().__init__(name="ErrorMapping", repo_root=repo_root)
 
     @classmethod

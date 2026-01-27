@@ -178,7 +178,7 @@ class TopKTopPSampler:
     - Multi-backend support
     """
 
-    def __init__(self, config: SamplingConfig | None = None):
+    def __init__(self, config: SamplingConfig | None = None) -> None:
         self.config = config or SamplingConfig()
         self.state = SamplingState(current_temperature=self.config.temperature)
         self._rng = np.random.default_rng(self.config.seed)
@@ -487,7 +487,7 @@ class BatchTopKTopPSampler:
     sampling parameters efficiently.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._default_sampler = TopKTopPSampler()
 
     def sample_batch(
@@ -534,7 +534,7 @@ class GumbelSoftmaxSampler:
     optimization scenarios.
     """
 
-    def __init__(self, temperature: float = 1.0, hard: bool = False):
+    def __init__(self, temperature: float = 1.0, hard: bool = False) -> None:
         self.temperature = temperature
         self.hard = hard
 

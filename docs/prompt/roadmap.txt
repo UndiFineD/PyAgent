@@ -1,56 +1,6 @@
-# PyAgent Strategic Roadmap
-# Generated: January 22, 2026
-# Version: 4.0.0 (Phase 90 - The Swarm Singularity)
-# Goal: "Become the most efficient distributed streaming AI in the world"
+# PyAgent Development Roadmap (Strategic & Tactical)
 
-================================================================================
-## EXECUTIVE SUMMARY
-================================================================================
-
-PyAgent has achieved the transition from a single-node agent system into a massive, 
-self-optimizing "Swarm Evolution" architecture. With the completion of Phase 90, 
-the platform now supports 1M+ token context sharding, multi-tenancy, decentralized 
-consensus, and autonomous meta-optimization.
-
-Current Status: 680+ Rust functions | 90 phases complete (1-90) | ~240 Python modules
-Production Ready: Multi-tenant, P2P Migration, Raft Consensus, Federated Tuning.
-
-================================================================================
-## PHASE 51 - 90 IMPLEMENTATION SUMMARY ✅ COMPLETE
-================================================================================
-
-### Swarm Evolution & Meta-Learning (Phases 71-90)
-- [COMPLETED] Multi-Tenant Isolation: Cryptographic context gating (Phase 71).
-- [COMPLETED] P2P Shard Migration: RDMA-simulated memory transfer (Phase 72).
-- [COMPLETED] Swarm Raft Consensus: Decentralized state agreement (Phase 73).
-- [COMPLETED] Heterogeneous Routing: H100/BitNet hardware-aware MoE (Phase 74).
-- [COMPLETED] Fault Tolerance: N+1 Shard Mirroring & Failover (Phase 75).
-- [COMPLETED] Dynamic Quantization: FP16 -> INT2 adaptive scaling (Phase 76).
-- [COMPLETED] Grid Telemetry: Prometheus/Grafana swarm instrumentation (Phase 77).
-- [COMPLETED] Swarm LoRA Merging: Decentralized P2P weight averaging (Phase 79).
-- [COMPLETED] Fleet Cleanup: Autonomous "Zombie" agent pruning (Phase 80).
-- [COMPLETED] Load Balancing: Hot-node detection and auto-rebalancing (Phase 81).
-- [COMPLETED] Trace Synthesis: Global wisdom extraction from logs (Phase 82).
-- [COMPLETED] Reward Modeling: Historical merit-based expert routing (Phase 83).
-- [COMPLETED] Knowledge Bridge: Anonymized cross-tenant learning (Phase 84).
-- [COMPLETED] Swarm Deduplication: Semantic 'Join' for inflight queries (Phase 86).
-- [COMPLETED] Tool Discovery: Autonomous MCP server indexing (Phase 87).
-- [COMPLETED] Semantic Hashing: LSH-based O(1) context retrieval (Phase 88).
-- [COMPLETED] Context Distillation: High-fidelity landmark compression (Phase 89).
-- [COMPLETED] Meta-Optimizer: Federated hyperparameter self-tuning (Phase 90).
-
-### Infrastructure & Inference (Phases 51-70)
-- [COMPLETED] 120fps Multimedia: MultiChannelMUX & Quantized Engines (Phase 51).
-- [COMPLETED] Workspace DBOs: High-speed shared memory buffers (Phase 52).
-- [COMPLETED] KV V2 Hierarchy: Hybrid block tables for long-context (Phase 53).
-- [COMPLETED] Multi-Node DP: Distributed ZMQ-based shards (Phase 55).
-- [COMPLETED] Predictive Workspace: Speculative pre-allocation (Phase 58).
-- [COMPLETED] Locality Optimization: Network-aware rank placement (Phase 59).
-- [COMPLETED] Swarm Auditing: Decision trails and decision logic (Phase 69).
-
-================================================================================
-## NEAR-TERM: THE SCALE SINGULARITY (PHASES 91-100)
-================================================================================
+## 🌌 High-Level Strategy: The Scale Singularity (Phases 91-100)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -132,22 +82,52 @@ Production Ready: Multi-tenant, P2P Migration, Raft Consensus, Federated Tuning.
 - **Throughput**: 10,000+ tokens/sec aggregate swarm throughput.
 - **Self-Healing**: 99.9% uptime during node failures using Raft + Mirroring.
 
+---
 
-================================================================================
-## CHANGELOG
-================================================================================
+## 🛠️ Tactical Execution Plan (Actionable Items)
 
-2026-01-22: Version 4.0.0 (Swarm Singularity Update)
-- Completed Phases 71-90 (Swarm Evolution Roadmap).
-- Consolidated all completed infrastructure phases (51-70).
-- Defined Near-Term Roadmap (Phases 91-100) for scale singularity.
-- Updated Technology Stack to include LSH, Raft, and Federated Tuning.
+### 🧹 Technical Debt & Codebase Health
+- [x] **Recursive Scanning**: Implement recursive directory scanning for report aggregation in `report_generator.py`. (Verified: `rglob` is utilized)
+- [x] **Majority Timeout**: Implement "Wait-for-Majority" timeout in `byzantine_consensus_agent.py`. (Implemented)
+- [x] **Recursion Safety**: Add `depth_limit` to `CascadeContext` in `communication_models.py` to prevent infinite swarm loops. (Implemented)
+- [x] **HTML Export**: Add support for HTML export in `report_utils.py`. (Implemented)
+- [x] **Cleanup**: Remove `debug_final_scan.py` before production release. (Implemented)
+- [x] **Standardization**: Ensure all new agents follow the `QuantumScalingCoderAgent` documentation and license standards. (Implemented via fix_standards_all.py)
 
-2026-01-19: Initial roadmap creation (Post Phase 47)
-- Added Phase 48-50 near-term plan
-- Added cloud integration strategy
-- Added self-improvement automation plan
-- Added refactoring priorities
-- Added research integration workflow
+### 🚀 Performance Engineering (Rust & NPU)
+*Refer to [docs/RUST_ACCELERATION.md](c:/DEV/PyAgent/docs/RUST_ACCELERATION.md)*
+- [x] **Formula Evaluation**: Migrate `FormulaCore.evaluate` (AST parsing) to Rust. (Implemented via `rust_core::utils::evaluate_formula`)
+- [x] **Bulk I/O Optimization**: Migrate `StorageCore.to_json` to Rust serialization to prevent event loop blocking. (Implemented via `rust_core::fs::to_json_rust`)
+- [x] **Import Analysis**: Optimize `AnalysisCore.get_imports` with Rust for large-scale codebase scans. (Implemented via `rust_core::analysis::get_imports_rust`)
+- [x] **Telemetry Consolidation**: Implement high-throughput aggregation in `MetricsEngine` using Rust. (Implemented)
+- [x] **Ryzen AI NPU Support**: Integrate `.FastFlowLM` as a compute provider in `ScalingAgent` to unlock AMD XDNA2 NPUs. (Implemented)
+- [x] **FLM Connector**: Create `FlmConnectorAgent` to interface with FastFlowLM's local server. (Implemented)
 
-================================================================================
+### 🌐 Distributed Systems (Voyager)
+*Refer to [docs/proxima_voyager.md](c:/DEV/PyAgent/docs/proxima_voyager.md)*
+- [x] **P2P Transport (Voyager Phase 2.0)**: Implement encrypted binary message bus using `ZeroMQ` + AES-GCM. (Implemented)
+- [x] **Byzantine Consensus (Voyager Phase 3.0)**: Mature the multi-surgeon BFT implementation. (Implemented & Tested)
+- [x] **Cross-Machine Synergy (Voyager Phase 4.0)**: Enable resource sharing and task preemption across distinct network nodes. (Implemented in `InterFleetBridgeOrchestrator`)
+- [x] **Federated Memory**: Implement sharded "Experience Buffers" across the constellation. (Implemented via `query_federated_memory`)
+
+### 🧪 Testing & Validation
+- [x] **Adversarial Suite**: Expand `tests/adversarial/` to cover new BFT consensus edge cases. (Implemented)
+- [x] **Benchmark Convergence**: Maintain the 3,996+ test passing rate across all acceleration migrations. (Verified critical paths: Phase 41, 42, 43, Voice, Quantum)
+- [x] **Quantum Optimization Benchmarking**: Create regression tests for `QuantumScalingCoderAgent` optimizations. (Implemented in `tests/performance/test_quantum_benchmarks.py`)
+
+### 👁️ Multimodal & Ecosystem
+- [x] **Stream-Omni Pipeline**: Implement `speech_to_token` -> `LLM` -> `token_to_speech` flow ("See-While-Hear"). (Implemented in `VoiceInteractionAgent.run_omni_pipeline`)
+- [x] **CosyVoice Orchestration**: Add lifecycle management for Speech generation. (Implemented in `VoiceAgent.manage_cosyvoice_lifecycle`)
+- [x] **Unified Provider List**: Port `models.dev` integration (65+ providers) from `.code_puppy`. (Implemented in `src/core/base/common/models_registry.py`)
+- [x] **CLI Upgrade**: Evaluate TUI architecture for richer console interaction. (Prototype in `src/interface/ui/cli/tui_launcher.py`)
+- [x] **Dependency Speed**: Migrate to `uv` for instant environment activation. (Added pyproject.toml configuration)
+
+### 🦙 Ollama & Edge Intelligence
+- [x] **Async Migration**: Refactor `OllamaConnectorAgent` to use `httpx` for non-blocking AsyncIO compatible with the swarm event loop.
+- [x] **Chat API Upgrade**: Transition from `/api/generate` to `/api/chat` to support conversation history and system messages.
+- [x] **JSON Schema Validation**: Implement full JSON Schema support in `format` parameter (not just "json") for robust structured outputs.
+- [x] **Reasoning Engine**: Integrate support for the `think` parameter and parse `<think>` tags from models like DeepSeek-R1.
+- [x] **OpenAI SDK Unification**: Refactor `OllamaConnectorAgent` to use the standard `openai` Python client via `base_url` for protocol consistency.
+- [x] **Code Infill (FIM)**: Add `suffix` parameter support to `OllamaConnectorAgent` for Fill-In-The-Middle code completion capabilities.
+- [x] **Code Consolidation**: Investigate `src.infrastructure.backend` usage in `run_fleet_self_improvement.py` and unify Ollama client logic.
+- [x] **Dynamic Capacity**: Update `ScalingAgent` to dynamically detect Ollama VRAM capacity instead of hardcoding `capacity=3`.

@@ -140,6 +140,7 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
             return re.sub(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught(\s*)(#.*)?$",
                 r"\1except Exception as e:  # pylint: disable=broad-exception-caught\2\3",
 =======
@@ -153,6 +154,10 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
 >>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 =======
 >>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
+=======
+                r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught(\s*)(#.*)?$",
+                r"\1except Exception as e:  # pylint: disable=broad-exception-caught\2\3",
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
                 content,
                 flags=re.MULTILINE,
             )

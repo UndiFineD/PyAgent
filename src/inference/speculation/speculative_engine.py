@@ -16,6 +16,10 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative Decoding Engine - Facade pattern for backward compatibility."""
 
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
 from .engine import (DrafterBase, DraftProposal, EagleProposer, HybridDrafter,
                      NgramProposer, SpecDecodingMetrics, SpecMethod,
                      SpeculativeConfig, SpeculativeEngine, SuffixProposer,

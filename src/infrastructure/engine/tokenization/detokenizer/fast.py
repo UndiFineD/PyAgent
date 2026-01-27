@@ -49,7 +49,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
         skip_special_tokens: bool = True,
         spaces_between_special_tokens: bool = True,
         stop_checker: Optional[StopChecker] = None,
-    ):
+    ) -> None:
         super().__init__(
             tokenizer,
             skip_special_tokens,

@@ -34,7 +34,7 @@ class EngineCoreProc(EngineCore):
         executor: Optional[Executor] = None,
         log_stats: bool = True,
         engine_index: int = 0,
-    ):
+    ) -> None:
         super().__init__(scheduler, executor, log_stats)
         self.engine_index = engine_index
         self.engines_running = False

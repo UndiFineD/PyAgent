@@ -14,11 +14,15 @@
 use pyo3::prelude::*;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 use regex::Regex;
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+use regex::Regex;
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 
 /// Calculate cyclomatic complexity (Common/Analysis).
 /// Fast branching-keyword-based calculation during agent linting.
@@ -34,6 +38,9 @@ pub fn calculate_complexity_rust(code: &str) -> PyResult<i32> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 /// Alias for complexity calculation (Common/Analysis).
 #[pyfunction]
 pub fn calculate_cyclomatic_complexity(code: &str) -> PyResult<i32> {
@@ -78,6 +85,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_complexity_rust, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_cyclomatic_complexity, m)?)?;
     m.add_function(wrap_pyfunction!(get_imports_rust, m)?)?;
+<<<<<<< HEAD
 =======
 /// Register analysis functions in the rust_core module.
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -88,5 +96,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_complexity_rust, m)?)?;
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
     Ok(())
 }

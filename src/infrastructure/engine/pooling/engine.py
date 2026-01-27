@@ -49,7 +49,7 @@ class PoolingEngine:
         PoolingStrategy.STEP: StepPooler,
     }
 
-    def __init__(self, config: Optional[PoolingConfig] = None, **kwargs):
+    def __init__(self, config: Optional[PoolingConfig] = None, **kwargs) -> None:
         self.config = config or PoolingConfig()
         # Phase 125: Handle legacy/test pass-through parameters
         if "strategy" in kwargs:

@@ -19,6 +19,9 @@ Inspired by Stream-Omni (ICTNLP).
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
 from .multimodal_buffer import TemporalModalityBuffer
 from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
 # Re-export modules to maintain backward compatibility
@@ -34,6 +37,7 @@ __all__ = [
     "MultimodalCore",
     "MultimodalStreamSession",
 ]
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
@@ -843,3 +847,5 @@ class MultimodalStreamSession:
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
 >>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
+=======
+>>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)

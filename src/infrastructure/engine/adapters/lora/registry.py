@@ -35,7 +35,7 @@ class LoRAModelEntry:
     last_access: float
     access_count: int = 0
 
-    def touch(self):
+    def touch(self) -> None:
         """Update access time and count."""
         self.last_access = time.time()
         self.access_count += 1
@@ -48,7 +48,7 @@ class LoRARegistry:
         self,
         max_memory_bytes: int = 1024 * 1024 * 1024,  # 1GB
         max_models: int = 16,
-    ):
+    ) -> None:
         """Initialize registry."""
         self.max_memory_bytes = max_memory_bytes
         self.max_models = max_models
@@ -100,7 +100,7 @@ class LoRARegistry:
         self._current_memory -= entry.model.get_memory_bytes()
         return True
 
-    def _evict_lru(self):
+    def _evict_lru(self) -> None:
         """Evict least recently used model."""
         if not self._models:
             return

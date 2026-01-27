@@ -32,7 +32,7 @@ from .registry import TokenizerRegistry
 class TokenizerPool:
     """Thread-safe pool of tokenizers."""
 
-    def __init__(self, config: TokenizerConfig, pool_size: int = 4):
+    def __init__(self, config: TokenizerConfig, pool_size: int = 4) -> None:
         self.config = config
         self.pool_size = pool_size
         self._pool: List[BaseTokenizer] = []
@@ -42,7 +42,7 @@ class TokenizerPool:
         self._current: Optional[BaseTokenizer] = None
         self._init_pool()
 
-    def _init_pool(self):
+    def _init_pool(self) -> None:
         """Initialize the tokenizer pool."""
         registry = TokenizerRegistry()
         for _ in range(self.pool_size):
@@ -67,7 +67,7 @@ class TokenizerPool:
                 else:
                     self._condition.wait()
 
-    def release(self, tokenizer: BaseTokenizer):
+    def release(self, tokenizer: BaseTokenizer) -> None:
         """Release a tokenizer back into the pool."""
         with self._condition:
             for i, t in enumerate(self._pool):
@@ -83,5 +83,5 @@ class TokenizerPool:
         self._current = tokenizer
         return tokenizer
 
-    def __exit__(self, *args):
+    def __exit__(self, *args) -> None:
         self.release(self._current)

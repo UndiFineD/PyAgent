@@ -29,6 +29,8 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
         self._suspended: bool = False
+        # Phase 259: Context lineage tracking
+        self.context: Any = None
 
     def get_capabilities(self) -> list[str]:
         """Return the agent capabilities."""

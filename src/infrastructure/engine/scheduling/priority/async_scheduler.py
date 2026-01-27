@@ -34,7 +34,7 @@ class AsyncPriorityScheduler:
     Async priority scheduler for coroutine-based workloads.
     """
 
-    def __init__(self, max_concurrent: int = 100):
+    def __init__(self, max_concurrent: int = 100) -> None:
         """
         Initialize async scheduler.
 

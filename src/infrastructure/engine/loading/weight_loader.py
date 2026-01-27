@@ -128,7 +128,7 @@ class AtomicWriter:
         filepath: Union[str, Path],
         mode: str = "wb",
         encoding: Optional[str] = None,
-    ):
+    ) -> None:
         self.filepath = Path(filepath)
         self.mode = mode
         self.encoding = encoding
@@ -237,7 +237,7 @@ class SafetensorsLoader(WeightLoader):
     vLLM Pattern: safetensors_weights_iterator
     """
 
-    def __init__(self, strategy: str = "lazy"):
+    def __init__(self, strategy: str = "lazy") -> None:
         """
         Initialize loader.
 
@@ -303,7 +303,7 @@ class MultiThreadWeightLoader(WeightLoader):
         max_workers: int = 4,
         adaptive_workers: bool = True,
         min_file_size_per_worker: int = 100 * 1024 * 1024,  # 100MB
-    ):
+    ) -> None:
         self.max_workers = max_workers
         self.adaptive_workers = adaptive_workers
         self.min_file_size_per_worker = min_file_size_per_worker
@@ -377,7 +377,7 @@ class FastSafetensorsLoader(WeightLoader):
     Uses fastsafetensors library for direct GPU loading with GDS support.
     """
 
-    def __init__(self, use_gds: bool = True):
+    def __init__(self, use_gds: bool = True) -> None:
         self.use_gds = use_gds
         self._gds_available = True
 
@@ -443,7 +443,7 @@ class StreamingWeightLoader(WeightLoader):
         memory_budget_mb: float = 1024.0,
         prefetch_count: int = 2,
         priority_weights: Optional[list[str]] = None,
-    ):
+    ) -> None:
         self.memory_budget_bytes = int(memory_budget_mb * 1024 * 1024)
         self.prefetch_count = prefetch_count
         self.priority_weights = set(priority_weights or [])

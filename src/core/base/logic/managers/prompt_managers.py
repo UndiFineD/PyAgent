@@ -29,7 +29,7 @@ class PromptTemplateManager:
     Facade for managing prompt templates.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         from src.core.base.common.prompt_core import PromptCore
         self._core = PromptCore()
 
@@ -47,7 +47,7 @@ class PromptVersionManager:
     Facade for managing prompt versions.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         from src.core.base.common.prompt_core import PromptCore
         self._core = PromptCore()
 

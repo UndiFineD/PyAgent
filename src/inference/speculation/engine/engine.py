@@ -19,6 +19,10 @@
 import logging
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
 from .base import DrafterBase
 from .config import SpecMethod, SpeculativeConfig
 from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult
@@ -40,7 +44,7 @@ class SpeculativeEngine:
         SpecMethod.HYBRID: HybridDrafter,
     }
 
-    def __init__(self, config: Optional[SpeculativeConfig] = None):
+    def __init__(self, config: Optional[SpeculativeConfig] = None) -> None:
         """Initialize the speculative engine."""
         self.config = config or SpeculativeConfig()
         self.drafter = self._create_drafter()

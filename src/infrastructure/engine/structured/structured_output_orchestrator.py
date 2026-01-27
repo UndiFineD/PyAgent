@@ -153,7 +153,7 @@ class BackendWrapper:
         self,
         backend: BackendProtocol,
         backend_type: StructuredOutputBackendType,
-    ):
+    ) -> None:
         self.backend = backend
         self.backend_type = backend_type
         self._lock = threading.Lock()
@@ -227,7 +227,7 @@ class CompiledGrammarHandle:
         grammar: GrammarProtocol,
         backend_type: StructuredOutputBackendType,
         constraint: ConstraintSpec,
-    ):
+    ) -> None:
         self.grammar = grammar
         self.backend_type = backend_type
         self.constraint = constraint
@@ -285,7 +285,7 @@ class StructuredOutputOrchestrator:
         self,
         tokenizer: Any,
         config: Optional[OrchestratorConfig] = None,
-    ):
+    ) -> None:
         self.tokenizer = tokenizer
         self.config = config or OrchestratorConfig()
 
@@ -495,7 +495,7 @@ class BatchProcessor:
         orchestrator: StructuredOutputOrchestrator,
         batch_size: int,
         vocab_size: int,
-    ):
+    ) -> None:
         self.orchestrator = orchestrator
         self.batch_size = batch_size
         self.vocab_size = vocab_size

@@ -30,6 +30,9 @@ logger = logging.getLogger(__name__)
 
 
 class QuantizationMode(Enum):
+    """
+    Supported quantization modes.
+    """
     FP16 = "fp16"
     FP8 = "fp8"
     INT8 = "int8"
@@ -44,12 +47,12 @@ class QuantizationManager:
     Integrates with rust_core for fast bit-unpacking and scale application.
     """
 
-    def __init__(self, initial_mode: QuantizationMode = QuantizationMode.FP16):
+    def __init__(self, initial_mode: QuantizationMode = QuantizationMode.FP16) -> None:
         self.current_mode = initial_mode
         self.supported_modes: List[QuantizationMode] = [QuantizationMode.FP16]
         self._detect_hardware_support()
 
-    def _detect_hardware_support(self):
+    def _detect_hardware_support(self) -> None:
         """Detects available quantization support on current HW."""
         # Simulation for Phase 56/57
         self.supported_modes.append(QuantizationMode.FP8)
@@ -86,7 +89,7 @@ class QuantizationManager:
 
         return tensor  # Fallback: return as is
 
-    def switch_mode(self, new_mode: QuantizationMode):
+    def switch_mode(self, new_mode: QuantizationMode) -> bool:
         """Dynamic hot-switching of quantization mode."""
         if new_mode in self.supported_modes:
             logger.info(f"QuantizationManager: Switching from {self.current_mode.value} to {new_mode.value}")

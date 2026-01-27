@@ -34,13 +34,21 @@ from typing import Any
 # ruff: noqa: E402
 
 # Ensure the project root is in PYTHONPATH before importing from src
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
+# Phase 335: Support for custom Copilot CLI paths
+COPILOT_PATH = r"C:\DEV\copilot-cli"
+if os.path.exists(COPILOT_PATH) and COPILOT_PATH not in os.environ["PATH"]:
+    os.environ["PATH"] = COPILOT_PATH + os.pathsep + os.environ["PATH"]
+    logging.info(f"Augmented PATH with {COPILOT_PATH}")
+
+# pylint: disable=wrong-import-position
 from src.core.base.lifecycle.version import VERSION  # noqa: E402
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: E402
 from src.observability.structured_logger import StructuredLogger  # noqa: E402
+# pylint: enable=wrong-import-position
 
 
 # Phase 317: Specialized helpers to reduce complexity
@@ -112,7 +120,7 @@ class IntelligenceHarvester:
 
     def harvest(self) -> list[dict[str, Any]]:
         """Harvests insights from multiple external backends."""
-        from src.infrastructure import backend as ai
+        from src.infrastructure.compute.backend import execution_engine as ai
 
         prompt = "Provide 3 high-level architectural or security recommendations for a Python-based AI Agent fleet."
         lessons = []
@@ -194,6 +202,7 @@ try:
 
     load_dotenv()
 except ImportError:
+    # dotenv is optional
     pass
 
 __version__ = VERSION
@@ -228,10 +237,8 @@ def run_cycle(
 
     # 3. Report Results
     logger.info(
-        " - Scanned: %s, Issues: %s, Fixed: %s",
-        combined_stats["files_scanned"],
-        combined_stats["issues_found"],
-        combined_stats["fixes_applied"],
+        f" - Scanned: {combined_stats['files_scanned']}, Issues: {combined_stats['issues_found']}, "
+        f"Fixed: {combined_stats['fixes_applied']}"
     )
 
     _report_remaining_debt(
@@ -254,15 +261,21 @@ def consult_external_models(fleet, broken_items, prompt_path=None, model_name=No
     """
     Placeholder for federated learning consultation (Phase 112).
     """
+    # pylint: disable=unused-argument
     print("\n[Intelligence] Consulting external federated models for remaining debt...")
     if broken_items:
         print(f" - Analyzed {len(broken_items)} debt clusters.")
+        for item in broken_items:
+            print(f"   * File: {item['file']}")
+            for issue in item["remaining_issues"]:
+                print(f"     - {issue.get('type', 'Unknown')}: {issue.get('message', '')}")
     print(" - Federated consensus reached: Continue localized refactoring.")
 
 
 def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
     """Filters and summarizes issues that were not fixed."""
     broken_items = []
+    # Clean up whitespace
     for detail in stats["details"]:
         unfixed = [i for i in detail["issues"] if not i.get("fixed")]
         if unfixed:
@@ -321,8 +334,60 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
             print(f"\n[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
+            for idx, pattern in enumerate(new_patterns, 1):
+                print(f"  {idx}. {pattern}")
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"\n[Intelligence] Synthesis skipped: {e}")
+
+
+def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[str, Any]], model_name: str) -> None:
+    """
+    Constructs a prompt with cycle findings and attempts to solve remaining issues
+    via autonomous reasoning or external LLM consultation.
+    """
+    if not broken_items:
+        return
+
+    print("\n[Autonomous Solver] Attempting to resolve remaining technical debt...")
+
+    # Construct the context prompt
+    context_prompt = "The following technical debt issues remain after the initial improvement cycle:\n\n"
+    for item in broken_items:
+        context_prompt += f"File: {item['file']}\n"
+        for issue in item["remaining_issues"]:
+            context_prompt += f"- {issue.get('type')}: {issue.get('message')}\n"
+        context_prompt += "\n"
+
+    context_prompt += (
+        "Analyze these specific issues. Provide a concrete Python code snippet or "
+        "architectural change that resolves the pattern causing these warnings. "
+        "Focus on the root cause (e.g., missing type hints, unsafe IO pattern, recursion depth)."
+    )
+
+    # Attempt to solve via Fleet Intelligence (External LLM)
+    try:
+        from src.infrastructure.compute.backend import execution_engine as ai
+
+        print(" - Querying external intelligence for solution patterns...")
+        # Use available heavy model
+        solution = ai.llm_chat_via_github_models(context_prompt, model=model_name)
+
+        if solution:
+            print("\n[Autonomous Solver] Proposed Solution:")
+            print("-" * 40)
+            print(solution.strip())
+            print("-" * 40)
+
+            # Record this lesson
+            fleet.intelligence.contribute_insight(
+                agent_name="AutonomousSolver",
+                insight=f"Proposed fix for debt cluster: {solution[:100]}...",
+                confidence=0.9
+            )
+            print(" - Solution pattern recorded to collective knowledge.")
+
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        print(f" - Autonomous solving failed: {e}")
 
 
 def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: list[str], broken_items: list) -> None:
@@ -398,9 +463,13 @@ def _report_remaining_debt(
 
     # 4. Intelligence and Synthesis
     consult_external_models(fleet, broken_items, prompt_path=prompt_path, model_name=model_name)
+
+    # 5. Autonomous Problem Solving
+    _attempt_autonomous_solutions(fleet, broken_items, model_name)
+
     _synthesize_collective_knowledge(fleet)
 
-    # 5. Maintenance: Pruning
+    # 6. Maintenance: Pruning
     _prune_verified_directives(prompt_path, root, target_dirs, broken_items)
 
     duration = time.time() - start_time
@@ -456,6 +525,7 @@ def _cycle_throttle(delay: int, root: str, target_dirs: list[str], use_watcher: 
 
 
 def main() -> None:
+    """Entry point for the fleet self-improvement loop."""
     parser = argparse.ArgumentParser(description="PyAgent Fleet Self-Improvement Loop")
     parser.add_argument("--cycles", "-c", type=int, default=1)
     parser.add_argument("--delay", "-d", type=int, default=60)
