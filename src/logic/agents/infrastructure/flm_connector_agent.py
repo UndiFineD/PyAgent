@@ -16,10 +16,9 @@
 
 from __future__ import annotations
 
-import requests
-
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 __version__ = VERSION
 
@@ -32,18 +31,22 @@ class FlmConnectorAgent(BaseAgent):
         super().__init__(file_path)
         self.endpoint = endpoint
         self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM."
+        self._firewall = ReverseProxyFirewall()
 
     def check_availability(self) -> bool:
-        """Checks if the local FastFlowLM service is reachable."""
+        """Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall."""
+        health_url = f"{self.endpoint}/health"
+        
         try:
-            # Assuming FastFlowLM has a health endpoint similar to standard inference servers
-            response = requests.get(f"{self.endpoint}/health", timeout=2)
+            # Firewall handles caching, retries, and recording status
+            response = self._firewall.get(health_url, timeout=2)
             return response.status_code == 200
         except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:
         """Runs a local inference request on the NPU."""
+        # Using firewall check implicitly via the request below, but explicit check provides better error message
         if not self.check_availability():
             return "Error: FastFlowLM service not reachable at " + self.endpoint
 
@@ -51,7 +54,8 @@ class FlmConnectorAgent(BaseAgent):
         payload = {"model": model, "prompt": prompt, "max_tokens": 1024, "temperature": 0.7}
 
         try:
-            response = requests.post(f"{self.endpoint}/v1/completions", json=payload, timeout=30)
+            # Use firewall for POST request
+            response = self._firewall.post(f"{self.endpoint}/v1/completions", json=payload, timeout=30)
             if response.status_code == 200:
                 # Assuming standard OpenAI response format
                 response_json = response.json()

@@ -206,10 +206,11 @@ class VisionAgent(BaseAgent):
 
         # URL
         if source.startswith(("http://", "https://")):
-            try:
-                import requests
+            from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
-                response = requests.get(source, timeout=10)
+            firewall = ReverseProxyFirewall()
+            try:
+                response = firewall.get(source, timeout=10)
                 if response.status_code == 200:
                     return base64.b64encode(response.content).decode("utf-8")
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable

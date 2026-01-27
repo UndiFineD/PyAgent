@@ -29,6 +29,7 @@ from typing import Any
 
 from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.models.core_enums import FailureClassification
 
 __version__ = VERSION
 
@@ -68,6 +69,127 @@ class EmergencyEventLog:
 
 EMERGENCY_LOG = EmergencyEventLog()
 
+class AgentCircuitBreaker:
+    """
+    Phase 336: Circuit breaker for autonomous agents to prevent cascading failures.
+    Tracks failure rates and halts operations if threshold is exceeded.
+    """
+
+    def __init__(self, agent_id: str, failure_threshold: float = 0.5, window_size: int = 10) -> None:
+        self.agent_id = agent_id
+        self.threshold = failure_threshold
+        self.window = collections.deque(maxlen=window_size)
+        self._state_file = Path(f"data/agent_cache/{agent_id}_cb.json")
+        self._load()
+
+    def _load(self) -> None:
+        """Load circuit breaker state."""
+        if self._state_file.exists():
+            try:
+                data = json.loads(self._state_file.read_text(encoding="utf-8"))
+                self.window.extend(data.get("history", []))
+            except Exception: # pylint: disable=broad-except
+                pass
+
+    def _save(self) -> None:
+        """Persist circuit breaker state."""
+        try:
+            self._state_file.parent.mkdir(parents=True, exist_ok=True)
+            FileSystemCore().atomic_write(
+                self._state_file, 
+                json.dumps({"history": list(self.window)})
+            )
+        except Exception: # pylint: disable=broad-except
+            pass
+
+    def record_result(self, success: bool) -> None:
+        """Record a success (True) or failure (False)."""
+        self.window.append(1 if success else 0)
+        self._save()
+
+    @property
+    def failure_rate(self) -> float:
+        """Calculate current failure rate."""
+        if not self.window:
+            return 0.0
+        failures = self.window.count(0)
+        return failures / len(self.window)
+
+    def is_open(self) -> bool:
+        """Check if circuit breaker is open (halt operations)."""
+        # Only check if we have enough data (at least 5 samples)
+        if len(self.window) < 5:
+            return False
+        return self.failure_rate > self.threshold
+
+    def reset(self) -> None:
+        """Reset the circuit breaker."""
+        self.window.clear()
+        self._save()
+
+
+class AgentCheckpointManager:
+    """
+    Phase 336: Manages agent state snapshots and restoration.
+    Provides logic to rollback agent memory layer and file system changes atomically.
+    """
+
+    def __init__(self, agent_id: str, workspace_root: Path) -> None:
+        self.agent_id = agent_id
+        self.checkpoint_dir = workspace_root / "data" / "checkpoints" / agent_id
+        self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
+        self._fs = FileSystemCore()
+
+    def create_checkpoint(self, state_data: dict[str, Any], associated_files: list[Path] | None = None) -> str:
+        """
+        Creates a snapshot of agent state and optionally backups associated files.
+        Returns: Checkpoint ID
+        """
+        checkpoint_id = f"cp_{int(time.time())}_{self.agent_id}"
+        cp_path = self.checkpoint_dir / checkpoint_id
+        cp_path.mkdir(exist_ok=True)
+
+        # Save State Data
+        self._fs.atomic_write(cp_path / "state.json", json.dumps(state_data, indent=2))
+
+        # Backup Files
+        if associated_files:
+            file_manifest = {}
+            for file_path in associated_files:
+                if file_path.exists():
+                    backup_name = f"{file_path.name}.bak"
+                    self._fs.safe_copy(file_path, cp_path / backup_name)
+                    file_manifest[str(file_path)] = backup_name
+            
+            self._fs.atomic_write(cp_path / "files.json", json.dumps(file_manifest))
+
+        return checkpoint_id
+
+    def restore_checkpoint(self, checkpoint_id: str) -> dict[str, Any]:
+        """
+        Restores agent state and files from a checkpoint.
+        """
+        cp_path = self.checkpoint_dir / checkpoint_id
+        if not cp_path.exists():
+            raise FileNotFoundError(f"Checkpoint {checkpoint_id} not found")
+
+        # Restore Files
+        file_manifest_path = cp_path / "files.json"
+        if file_manifest_path.exists():
+            manifest = json.loads(file_manifest_path.read_text(encoding="utf-8"))
+            for original_path_str, backup_name in manifest.items():
+                original_path = Path(original_path_str)
+                backup_file = cp_path / backup_name
+                if backup_file.exists():
+                    self._fs.safe_copy(backup_file, original_path)
+                    logging.info(f"Restored file {original_path} from checkpoint {checkpoint_id}")
+
+        # Restore State
+        state_path = cp_path / "state.json"
+        if state_path.exists():
+            return json.loads(state_path.read_text(encoding="utf-8"))
+        
+        return {}
 
 class StateDriftDetector:
     """
@@ -115,15 +237,25 @@ class StructuredErrorValidator:
         error_type = type(error).__name__
         stack_trace = "".join(traceback.format_tb(traceback_obj)) if traceback_obj else str(error)
 
-        classification = "SystemError"
+        # Phase 336: Enhanced Taxonomy Mapping
+        classification = FailureClassification.UNKNOWN.value  # Default
+        
         if isinstance(error, RecursionError):
-            classification = "RecursionLimitExceeded"
+            classification = FailureClassification.RECURSION_LIMIT.value
         elif isinstance(error, ValueError):
-            classification = "DataValidationError"
+             # Check if it's a validation error
+             if "validation" in str(error).lower():
+                 classification = FailureClassification.STATE_CORRUPTION.value
+             else:
+                classification = FailureClassification.AI_ERROR.value 
         elif isinstance(error, IOError):
-            classification = "IOInfrastructureError"
+            classification = FailureClassification.STATE_CORRUPTION.value
         elif isinstance(error, ImportError):
-            classification = "DependencyError"
+            classification = FailureClassification.STATE_CORRUPTION.value
+        elif isinstance(error, MemoryError):
+            classification = FailureClassification.RESOURCE_EXHAUSTION.value
+        elif isinstance(error, ConnectionError):
+            classification = FailureClassification.NETWORK_FAILURE.value
 
         report = {
             "error_type": error_type,
