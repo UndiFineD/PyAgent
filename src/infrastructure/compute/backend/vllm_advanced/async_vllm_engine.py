@@ -179,7 +179,7 @@ class AsyncVllmEngine:
         self.config = config or AsyncEngineConfig()
         self._engine: Optional[AsyncLLMEngine] = None
         self._running = False
-        self._requests: Dict[str, AsyncRequestHandle] = {}
+        self._req_tracker: Dict[str, AsyncRequestHandle] = {}
         self._lock = asyncio.Lock()
         self._stats = {
             "total_requests": 0,
@@ -233,7 +233,7 @@ class AsyncVllmEngine:
         """Stop the async engine."""
         if self._engine:
             # Abort all pending requests
-            for request_id in list(self._requests.keys()):
+            for request_id in list(self._req_tracker.keys()):
                 await self.abort_request(request_id)
 
             self._engine = None
@@ -284,7 +284,7 @@ class AsyncVllmEngine:
         )
 
         async with self._lock:
-            self._requests[request_id] = handle
+            self._req_tracker[request_id] = handle
             self._stats["total_requests"] += 1
 
         try:
@@ -343,12 +343,12 @@ class AsyncVllmEngine:
         finally:
             # Clean up old requests
             async with self._lock:
-                if len(self._requests) > 1000:
+                if len(self._req_tracker) > 1000:
                     # Remove oldest completed requests
-                    completed = [(k, v) for k, v in self._requests.items() if v.is_finished]
+                    completed = [(k, v) for k, v in self._req_tracker.items() if v.is_finished]
                     completed.sort(key=lambda x: x[1].completed_at or 0)
                     for k, _ in completed[:500]:
-                        del self._requests[k]
+                        del self._req_tracker[k]
 
     async def generate_batch(
         self,
@@ -405,7 +405,7 @@ class AsyncVllmEngine:
         )
 
         async with self._lock:
-            self._requests[request_id] = handle
+            self._req_tracker[request_id] = handle
             self._stats["total_requests"] += 1
 
         try:
@@ -448,10 +448,10 @@ class AsyncVllmEngine:
     async def abort_request(self, request_id: str) -> bool:
         """Abort a running request."""
         async with self._lock:
-            if request_id not in self._requests:
+            if request_id not in self._req_tracker:
                 return False
 
-            handle = self._requests[request_id]
+            handle = self._req_tracker[request_id]
             if handle.is_finished:
                 return False
 
@@ -469,13 +469,13 @@ class AsyncVllmEngine:
 
     def get_request(self, request_id: str) -> Optional[AsyncRequestHandle]:
         """Get request handle by ID."""
-        return self._requests.get(request_id)
+        return self._req_tracker.get(request_id)
 
     def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""
         return {
             **self._stats,
-            "active_requests": len([r for r in self._requests.values() if not r.is_finished]),
+            "active_requests": len([r for r in self._req_tracker.values() if not r.is_finished]),
             "is_running": self.is_running,
         }
 

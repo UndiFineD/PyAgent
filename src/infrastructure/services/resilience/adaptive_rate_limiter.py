@@ -34,6 +34,8 @@ import time
 from dataclasses import dataclass
 from typing import Callable, Generic, ParamSpec, TypeVar
 
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+
 P = ParamSpec("P")
 R = TypeVar("R")
 K = TypeVar("K")
@@ -330,6 +332,7 @@ class AdaptiveRateLimiter:
         recovery_rate: float = 1.1,
         reduction_rate: float = 0.5,
         window_seconds: float = 10.0,
+        name: str = "default_limiter",
     ) -> None:
         """
         Initialize adaptive rate limiter.
@@ -342,7 +345,9 @@ class AdaptiveRateLimiter:
             recovery_rate: Multiplier for rate recovery (>1.0)
             reduction_rate: Multiplier for rate reduction (<1.0)
             window_seconds: Window for measuring error rate
+            name: Identifier for connectivity checks
         """
+        self._name = name
         self._base_rate = base_rate
         self._min_rate = min_rate
         self._max_rate = max_rate if max_rate is not None else base_rate * 2
@@ -398,6 +403,11 @@ class AdaptiveRateLimiter:
 
     def acquire(self, block: bool = False) -> bool:
         """Acquire permission to proceed."""
+        # Phase 336: Connectivity Check
+        # Check if endpoint is known to be down
+        if not ConnectivityManager().is_endpoint_available(self._name):
+            return False
+
         with self._lock:
             self._update_rate()
             self._window_requests += 1

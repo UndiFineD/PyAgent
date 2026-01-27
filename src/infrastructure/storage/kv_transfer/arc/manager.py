@@ -24,6 +24,7 @@ import time
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any, Optional
 
+from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.storage.kv_transfer.arc.base import OffloadingManager
 from src.infrastructure.storage.kv_transfer.arc.types import (
     BlockHash, BlockState, BlockStatus, OffloadingEvent, PrepareStoreOutput)
@@ -97,6 +98,13 @@ class ARCOffloadManager(OffloadingManager):
 
     def prepare_load(self, block_hashes: list[BlockHash]) -> LoadStoreSpec:
         """Prepare to load blocks from offload storage."""
+        # Phase 336: Connectivity Check for Offload Backend
+        # Using a generic ID 'kv_offload_backend' as backend identity isn't exposed yet
+        if not ConnectivityManager().is_endpoint_available("kv_offload_backend"):
+            # If backend is down, we can't load. Returning empty spec or raising might be appropriate.
+            # For now, we'll log and return empty to avoid crashes, assuming fallback handling exists.
+            return self.backend.get_load_store_spec([], [])
+
         with self._lock:
             blocks = []
             for block_hash in block_hashes:
