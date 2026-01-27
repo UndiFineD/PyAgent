@@ -34,7 +34,6 @@ import tempfile
 from pathlib import Path
 >>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 import pytest
-from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.logic.circuit_breaker import CircuitBreaker
 from src.core.base.logic.agent_plugin_base import AgentPluginBase
@@ -46,7 +45,6 @@ def agent_module():
     """Provides a mock module with Agent and CircuitBreaker classes."""
     mod = types.SimpleNamespace()
     mod.Agent = BaseAgent
-
     mod.CircuitBreaker = CircuitBreaker
     mod.AgentPluginBase = AgentPluginBase
     mod.HealthStatus = HealthStatus
@@ -57,21 +55,17 @@ def agent_module():
 def agent_backend_module():
     """Provides backend infrastructure classes."""
     mod = types.SimpleNamespace()
-    # Lazy imports to avoid circular dependencies or import errors if modules are broken
-
+    # Lazy imports to avoid circular dependencies
     try:
         from src.infrastructure.compute.backend.request_queue import RequestQueue
         from src.infrastructure.compute.backend.request_batcher import RequestBatcher
         from src.infrastructure.compute.backend.request_priority import RequestPriority
         from src.infrastructure.compute.backend.system_health_monitor import SystemHealthMonitor
-
         from src.infrastructure.compute.backend.load_balancer import LoadBalancer
         from src.infrastructure.compute.backend.request_tracer import RequestTracer
-
         from src.infrastructure.compute.backend.audit_logger import AuditLogger
 
         mod.RequestQueue = RequestQueue
-
         mod.RequestBatcher = RequestBatcher
         mod.RequestPriority = RequestPriority
         mod.SystemHealthMonitor = SystemHealthMonitor
@@ -113,6 +107,7 @@ def agent_sandbox():
         
         yield temp_path
 
+<<<<<<< HEAD
 @pytest.fixture
 def agent_registry():
     """Provides a central AgentRegistry for test use."""
@@ -137,3 +132,5 @@ def isolation_cleanup():
 
     yield
 
+=======
+>>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)

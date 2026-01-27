@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 
 """
 Debug Engine Hints v2: Utility for checking missing type hints in __init__ methods.
 """
+=======
+>>>>>>> 6b596bef0 (Refactor: Massive test suite migration and reorganization. Legacy tests verified and moved to tests/unit/phases and tests/unit/features. Deleted tests-old.)
 #!/usr/bin/env python3
 import ast
 import os
