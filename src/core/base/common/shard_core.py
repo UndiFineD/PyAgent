@@ -52,3 +52,27 @@ class ShardCore(BaseCore):
         h = hashlib.md5(key.encode()).digest()
         seed = int.from_bytes(h[:8], "big")
         return seed % shard_count
+
+    def verify_integrity(self) -> bool:
+        """
+        Verifies that shard calculation is deterministic and functional.
+        Acts as a circuit breaker for shard-dependent operations.
+        """
+        try:
+            # Test Vector: "test_key" with 10 shards should reliably map to 5
+            # (MD5 of test_key -> ... % 10) - value depends on implementation but must be consistent
+            test_key = "test_key"
+            shard_count = 10
+            
+            id1 = self.calculate_shard_id(test_key, shard_count)
+            id2 = self.calculate_shard_id(test_key, shard_count)
+            
+            if id1 != id2:
+                return False
+                
+            if not isinstance(id1, int) or id1 < 0 or id1 >= shard_count:
+                return False
+                
+            return True
+        except Exception:  # pylint: disable=broad-exception-caught
+            return False

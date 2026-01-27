@@ -23,8 +23,8 @@ from typing import Any, Dict, List, Optional
 
 import arxiv
 import fitz  # PyMuPDF
-import requests
 
+from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 class ArxivCore:
     """Core logic for interacting with Arxiv research papers."""
@@ -60,12 +60,13 @@ class ArxivCore:
 
     def download_paper(self, pdf_url: str, filename: str) -> Optional[Path]:
         """Download a paper PDF from Arxiv."""
+        firewall = ReverseProxyFirewall()
         try:
             if not filename.endswith(".pdf"):
                 filename += ".pdf"
 
             target_path = self.download_dir / filename
-            response = requests.get(pdf_url, timeout=30)
+            response = firewall.get(pdf_url, timeout=30)
             response.raise_for_status()
 
             target_path.write_bytes(response.content)
@@ -80,7 +81,7 @@ class ArxivCore:
             return "File not found."
 
         try:
-            doc = fitz.open(str(pdf_path, encoding='utf-8'))
+            doc = fitz.open(str(pdf_path))
             text = ""
             for page in doc:
                 text += page.get_text()

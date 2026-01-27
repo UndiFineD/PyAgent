@@ -85,7 +85,7 @@ class ChunkedPrefillManager:
         # Context recording placeholder to satisfy intelligence analysis
         self.context_tracker = {"recorded": True}
 
-        self._active_requests: dict[str, ChunkedRequest] = {}
+        self._active_chunk_reqs: dict[str, ChunkedRequest] = {}
         self._chunks: dict[str, PrefillChunk] = {}
         self._pending_chunks: list[str] = []  # Ordered by priority
         self._lock = threading.Lock()
@@ -221,7 +221,7 @@ class ChunkedPrefillManager:
                 chunks=chunks,
                 priority=priority,
             )
-            self._active_requests[request_id] = request
+            self._active_chunk_reqs[request_id] = request
 
             for chunk in chunks:
                 self._chunks[chunk.chunk_id] = chunk
@@ -355,7 +355,7 @@ class ChunkedPrefillManager:
             self._total_tokens_processed += chunk.size
 
             # Check if request is complete
-            request = self._active_requests.get(chunk.request_id)
+            request = self._active_chunk_reqs.get(chunk.request_id)
             if request is not None and request.is_complete:
                 request.completed_at = time.time()
 
@@ -390,7 +390,7 @@ class ChunkedPrefillManager:
             Chunks in order
         """
         with self._lock:
-            request = self._active_requests.get(request_id)
+            request = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return
 
@@ -408,7 +408,7 @@ class ChunkedPrefillManager:
             Next pending chunk or None
         """
         with self._lock:
-            request = self._active_requests.get(request_id)
+            request = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return None
             return request.next_chunk
@@ -428,7 +428,7 @@ class ChunkedPrefillManager:
             Merged output or None if request not complete
         """
         with self._lock:
-            request = self._active_requests.get(request_id)
+            request = self._active_chunk_reqs.get(request_id)
             if request is None or not request.is_complete:
                 return None
 
@@ -459,7 +459,7 @@ class ChunkedPrefillManager:
             List of KV caches in order
         """
         with self._lock:
-            request = self._active_requests.get(request_id)
+            request = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return []
 
@@ -475,7 +475,7 @@ class ChunkedPrefillManager:
             True if cancelled successfully
         """
         with self._lock:
-            request = self._active_requests.get(request_id)
+            request = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return False
 
@@ -497,7 +497,7 @@ class ChunkedPrefillManager:
             True if cleaned up
         """
         with self._lock:
-            request = self._active_requests.pop(request_id, None)
+            request = self._active_chunk_reqs.pop(request_id, None)
             if request is None:
                 return False
 
@@ -518,7 +518,7 @@ class ChunkedPrefillManager:
             Progress dictionary
         """
         with self._lock:
-            request = self._active_requests.get(request_id)
+            request = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return {"error": "Request not found"}
 
@@ -537,7 +537,7 @@ class ChunkedPrefillManager:
         """Get manager statistics."""
         with self._lock:
             return {
-                "active_requests": len(self._active_requests),
+                "active_requests": len(self._active_chunk_reqs),
                 "pending_chunks": len(self._pending_chunks),
                 "total_chunks_created": self._total_chunks_created,
                 "total_chunks_completed": self._total_chunks_completed,

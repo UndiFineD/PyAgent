@@ -31,8 +31,10 @@ try:
 except ImportError:
     requests = None
     HAS_REQUESTS = False
-
-from src.core.base.common.models import CacheEntry, EventType, PromptTemplate
+    
+import traceback
+from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.common.models import CacheEntry, EventType, PromptTemplate, FailureClassification
 from src.core.base.execution.shell_executor import ShellExecutor
 from src.core.base.lifecycle.agent_core import BaseCore
 from src.core.base.lifecycle.base_agent_core import BaseAgentCore
@@ -145,6 +147,9 @@ class BaseAgent(
         self.logger = logging.getLogger(self.__class__.__name__)
         self._system_prompt: str = "You are a helpful AI assistant."
         self.status_cache: dict[str, float] = {}
+        
+        # Context for task lineage
+        self.context: CascadeContext | None = kwargs.get("context", None)
 
     def _run_command(self, cmd: list[str], timeout: int = 120) -> subprocess.CompletedProcess[str]:
         """Run a shell command."""
@@ -184,8 +189,22 @@ class BaseAgent(
             self._notify_webhooks("agent_complete", {"status": "success", "result": result})
             return result
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self._notify_webhooks("agent_error", {"error": str(e)})
-            return f"Error: {e}"
+            f_type = self._classify_exception(e)
+            
+            # Telemetry Capture (Swarm Intelligence Fix)
+            if hasattr(self, "context") and self.context:
+                try:
+                    self.context.log_failure(
+                        stage=f"{self.__class__.__name__}.run",
+                        error=str(e),
+                        stack_trace=traceback.format_exc(),
+                        failure_type=f_type
+                    )
+                except Exception:
+                    pass
+
+            self._notify_webhooks("agent_error", {"error": str(e), "failure_type": f_type})
+            return f"Error: {e} (Type: {f_type})"
 
     def _notify_webhooks(self, event: str, data: dict[str, Any]) -> None:
         """Helper to notify registered webhooks."""
@@ -213,6 +232,25 @@ class BaseAgent(
                 # Backoff for 15 minutes on failure
                 self.status_cache[url] = now + 900
                 # pylint: disable=broad-exception-caught
+
+    def _classify_exception(self, e: Exception) -> str:
+        """
+        Classify exception into FailureClassification enum.
+        Phase 336: Standardized failure taxonomy implementation.
+        """
+        exc_str = str(e).lower()
+        if isinstance(e, RecursionError) or "recursion" in exc_str:
+            return FailureClassification.RECURSION_LIMIT.value
+        if isinstance(e, MemoryError) or "memory" in exc_str:
+            return FailureClassification.RESOURCE_EXHAUSTION.value
+        if "connection" in exc_str or "timeout" in exc_str:
+            return FailureClassification.NETWORK_FAILURE.value
+        if "shard" in exc_str:
+            return FailureClassification.SHARD_CORRUPTION.value
+        if hasattr(FailureClassification, "AI_ERROR") and "hallucination" in exc_str:
+            return FailureClassification.AI_ERROR.value
+            
+        return FailureClassification.UNKNOWN.value
 
     async def run_async(self, prompt: str) -> str:
         """Main execution entry point (formerly run)."""
@@ -285,8 +323,23 @@ class BaseAgent(
             return self._get_fallback_response()
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error("Think execution failed: %s", e)
-            return f"Error encountered during agent reasoning: {str(e)}"
+            f_type = self._classify_exception(e)
+            logging.error("Think execution failed: %s (Type: %s)", e, f_type)
+            
+            # Telemetry Capture (Swarm Intelligence Fix)
+            if self.context:
+                try:
+                    self.context.log_failure(
+                        stage=f"{self.__class__.__name__}.think",
+                        error=str(e),
+                        stack_trace=traceback.format_exc(),
+                        failure_type=f_type,
+                        details={"prompt_preview": prompt[:100]}
+                    )
+                except Exception as telemetry_err:
+                     logging.error(f"Failed to log failure to CascadeContext: {telemetry_err}")
+
+            return f"Error encountered during agent reasoning: {str(e)} (Type: {f_type})"
 
     def get_model(self) -> str:
         """Get the current model name."""

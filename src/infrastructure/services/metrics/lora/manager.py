@@ -24,6 +24,7 @@ import threading
 import time
 from typing import Dict, List, Optional, Tuple
 
+from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
                                                             LoRALoadState,
                                                             LoRARequestState,
@@ -81,6 +82,14 @@ class LoRAStatsManager:
 
     def start_loading(self, adapter_id: str) -> None:
         """Mark adapter as loading."""
+        # Phase 336: Connectivity Check
+        if not ConnectivityManager().is_endpoint_available(adapter_id):
+            logger.warning(f"LoRAStatsManager: Skipping load for {adapter_id} - endpoint unavailable")
+            with self._lock:
+                if adapter_id in self._adapters:
+                    self._adapters[adapter_id].load_state = LoRALoadState.FAILED
+            return
+
         with self._lock:
             if adapter_id in self._adapters:
                 adapter = self._adapters[adapter_id]
