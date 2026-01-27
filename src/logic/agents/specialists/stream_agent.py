@@ -108,13 +108,15 @@ class StreamAgent(BaseAgent):
         self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
     ) -> Dict[str, Any]:
         """Sends data to an n8n webhook with retry logic and validation."""
-        import requests
+        from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
         # Get config if named webhook
         config = self._webhooks.get(webhook_name) if webhook_name else None
         if config:
             webhook_url = config.url
-
+        
+        firewall = ReverseProxyFirewall()
+        
         # Schema validation
         if validate_schema and config and config.schema:
             validation = self._validate_schema(data, config.schema)
@@ -129,10 +131,10 @@ class StreamAgent(BaseAgent):
         last_error = None
         for attempt in range(max_retries):
             try:
-                response = requests.post(webhook_url, json=data, headers=headers, timeout=timeout)
+                response = firewall.post(webhook_url, json=data, headers=headers, timeout=timeout)
 
                 status = WebhookStatus.SUCCESS if response.status_code in (200, 201, 202) else WebhookStatus.FAILED
-
+                
                 result = {
                     "success": status == WebhookStatus.SUCCESS,
                     "status_code": response.status_code,
@@ -146,10 +148,6 @@ class StreamAgent(BaseAgent):
                 if status == WebhookStatus.SUCCESS:
                     return result
 
-            except requests.Timeout:
-                last_error = "timeout"
-            except requests.ConnectionError:
-                last_error = "connection_error"
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 last_error = str(e)
 

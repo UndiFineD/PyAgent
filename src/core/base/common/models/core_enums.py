@@ -49,6 +49,20 @@ class ResponseQuality(Enum):
     INVALID = 1
 
 
+class FailureClassification(Enum):
+    """Phase 336: Structured failure taxonomy for collective intelligence."""
+    AI_ERROR = "ai_error"
+    NETWORK_FAILURE = "network_failure"
+    STATE_CORRUPTION = "state_corruption"
+    RESOURCE_EXHAUSTION = "resource_exhaustion"
+    TEST_INFRASTRUCTURE = "test_infrastructure"
+    RECURSION_LIMIT = "recursion_limit"
+    SHARD_CORRUPTION = "shard_corruption"
+    DISTRIBUTED_STATE_ERROR = "distributed_state_error"
+    RECURSIVE_IMPROVEMENT = "recursive_improvement"
+    UNKNOWN = "unknown"
+
+
 class EventType(Enum):
     """Agent event types for hooks."""
 

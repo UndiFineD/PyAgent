@@ -38,9 +38,9 @@ if TYPE_CHECKING:
                                        TelemetrySpan)
     from .core_enums import (AgentEvent, AgentExecutionState, AgentPriority,
                              AgentState, AgentType, AuthMethod, ConfigFormat,
-                             DiffOutputFormat, EventType, FilePriority,
-                             HealthStatus, InputType, LockType, MessageRole,
-                             RateLimitStrategy, ResponseQuality,
+                             DiffOutputFormat, EventType, FailureClassification,
+                             FilePriority, HealthStatus, InputType, LockType,
+                             MessageRole, RateLimitStrategy, ResponseQuality,
                              SerializationFormat)
     from .fleet_models import (HealthCheckResult, IncrementalState,
                                RateLimitConfig, ShutdownState, TokenBudget)
@@ -56,6 +56,7 @@ _LAZY_REGISTRY = {
     "ConfigFormat": ("src.core.base.common.models.core_enums", "ConfigFormat"),
     "DiffOutputFormat": ("src.core.base.common.models.core_enums", "DiffOutputFormat"),
     "EventType": ("src.core.base.common.models.core_enums", "EventType"),
+    "FailureClassification": ("src.core.base.common.models.core_enums", "FailureClassification"),
     "FilePriority": ("src.core.base.common.models.core_enums", "FilePriority"),
     "HealthStatus": ("src.core.base.common.models.core_enums", "HealthStatus"),
     "InputType": ("src.core.base.common.models.core_enums", "InputType"),

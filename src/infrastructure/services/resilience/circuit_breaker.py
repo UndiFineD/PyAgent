@@ -37,6 +37,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Callable, ParamSpec, TypeVar
 
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+
 P = ParamSpec("P")
 R = TypeVar("R")
 T = TypeVar("T")
@@ -225,6 +227,11 @@ class CircuitBreaker:
 
     def _should_allow_request(self) -> bool:
         """Check if request should be allowed."""
+        # Phase 336: Global Connectivity Check (15m TTL)
+        # Prevents attempts if the endpoint is known to be dead globally
+        if not ConnectivityManager().is_endpoint_available(self._name):
+            return False
+
         with self._lock:
             self._check_state_transition()
 
@@ -248,6 +255,10 @@ class CircuitBreaker:
             self._stats.successful_calls += 1
             self._stats.last_success_time = time.monotonic()
             self._stats.consecutive_successes += 1
+            
+            # Phase 336: Update global connectivity status
+            ConnectivityManager().update_status(self._name, True)
+
             self._stats.consecutive_failures = 0
 
             if self._state == CircuitState.HALF_OPEN:
@@ -263,6 +274,9 @@ class CircuitBreaker:
             self._stats.last_failure_time = time.monotonic()
             self._stats.consecutive_failures += 1
             self._stats.consecutive_successes = 0
+
+            # Phase 336: Update global connectivity status
+            ConnectivityManager().update_status(self._name, False)
 
             if self._state == CircuitState.HALF_OPEN:
                 # Any failure in half-open reopens circuit
