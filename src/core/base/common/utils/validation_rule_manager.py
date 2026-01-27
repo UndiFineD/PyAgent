@@ -14,7 +14,7 @@ from src.core.base.common.models import ValidationRule
 
 class ValidationRuleManager:
     """Manages validation rules for agent content."""
-    def __init__(self, core: ValidationCore | None = None):
+    def __init__(self, core: ValidationCore | None = None) -> None:
         self._core = core or ValidationCore()
         self._rules: dict[str, Any] = {}
         self.rules = self._rules

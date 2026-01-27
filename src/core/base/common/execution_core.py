@@ -41,7 +41,7 @@ class ExecutionCore(BaseCore):
     Supports ThreadPool, ProcessPool, and native Rust-based async scheduling.
     """
 
-    def __init__(self, max_workers: int = 4):
+    def __init__(self, max_workers: int = 4) -> None:
         super().__init__()
         self.max_workers = max_workers
         self._thread_pool = ThreadPoolExecutor(max_workers=max_workers)

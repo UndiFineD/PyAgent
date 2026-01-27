@@ -37,7 +37,10 @@ class LMStudioConfig:
     connect_timeout: float = 10.0
 
     # Model settings
-    default_model: str = ""  # Empty means use any loaded model
+    default_model: str = field(
+        # Empty means use any loaded model
+        default_factory=lambda: os.environ.get("LMSTUDIO_MODEL", "lfm2.5-1.2b")
+    )
     auto_load: bool = True  # Auto-load model if not loaded
 
     # Prediction settings

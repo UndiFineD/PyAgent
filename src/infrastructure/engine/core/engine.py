@@ -20,7 +20,7 @@ import logging
 import queue
 import time
 from contextlib import contextmanager
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from .base import Executor, Scheduler
 from .config import EngineCoreOutputs, Request, SchedulerOutput
@@ -43,7 +43,7 @@ class EngineCore:
         scheduler: Optional[Scheduler] = None,
         executor: Optional[Executor] = None,
         log_stats: bool = True,
-    ):
+    ) -> None:
         self.scheduler = scheduler or SimpleScheduler()
         self.executor = executor or MockExecutor()
         self.log_stats = log_stats
@@ -81,7 +81,7 @@ class EngineCore:
                 break
 
     @contextmanager
-    def log_error_detail(self, scheduler_output: SchedulerOutput):
+    def log_error_detail(self, scheduler_output: SchedulerOutput) -> Iterator[None]:
         """Context manager for detailed error logging."""
         try:
             yield
@@ -95,7 +95,7 @@ class EngineCore:
             raise
 
     @contextmanager
-    def log_iteration_details(self, scheduler_output: SchedulerOutput):
+    def log_iteration_details(self, scheduler_output: SchedulerOutput) -> Iterator[None]:
         """Context manager for iteration logging."""
         start_time = time.time()
         yield

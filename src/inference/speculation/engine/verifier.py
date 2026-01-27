@@ -20,13 +20,17 @@ import random
 import time
 from typing import Any, List, Optional
 
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
+
 from .proposals import VerificationResult
 
 
 class TokenVerifier:
     """Verifies draft tokens against target model outputs."""
 
-    def __init__(self, method: str = "rejection_sampler"):
+    def __init__(self, method: str = "rejection_sampler") -> None:
         self.method = method
 
     def verify(
@@ -36,6 +40,7 @@ class TokenVerifier:
         draft_logprobs: Optional[Any] = None,
     ) -> VerificationResult:
         """Verify draft tokens against target model outputs."""
+        _ = (target_logprobs, draft_logprobs)
         start_time = time.perf_counter()
 
         num_accepted: List[int] = []
@@ -44,7 +49,7 @@ class TokenVerifier:
         total_proposed = 0
         total_accepted = 0
 
-        for i, drafts in enumerate(draft_tokens):
+        for _, drafts in enumerate(draft_tokens):
             if not drafts:
                 num_accepted.append(0)
                 accepted_token_ids.append([])
@@ -52,7 +57,7 @@ class TokenVerifier:
 
             # Verify each draft token
             accepted = []
-            for j, draft_token in enumerate(drafts):
+            for _, draft_token in enumerate(drafts):
                 # Placeholder: In production, this would check target_logprobs
                 if random.random() < 0.7:
                     accepted.append(draft_token)

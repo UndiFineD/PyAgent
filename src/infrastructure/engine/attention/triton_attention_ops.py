@@ -291,7 +291,7 @@ class TritonPagedAttention(AttentionKernel):
     Implements efficient paged attention using Triton JIT compilation.
     """
 
-    def __init__(self, config: AttentionConfig):
+    def __init__(self, config: AttentionConfig) -> None:
         self.config = config
         self.scale = 1.0 / math.sqrt(config.head_dim)
 
@@ -362,7 +362,7 @@ class TritonPagedAttention(AttentionKernel):
 class NaiveAttention(AttentionKernel):
     """Reference implementation of attention (CPU/GPU compatible)."""
 
-    def __init__(self, config: AttentionConfig):
+    def __init__(self, config: AttentionConfig) -> None:
         self.config = config
         self.scale = 1.0 / math.sqrt(config.head_dim)
 
@@ -418,7 +418,7 @@ class NaiveAttention(AttentionKernel):
 class SlidingWindowAttention(AttentionKernel):
     """Sliding window attention for efficient long-context handling."""
 
-    def __init__(self, config: AttentionConfig):
+    def __init__(self, config: AttentionConfig) -> None:
         self.config = config
         self.scale = 1.0 / math.sqrt(config.head_dim)
         self.window_size = config.sliding_window_size
@@ -489,7 +489,7 @@ class TritonAttentionOps:
         AttentionBackend.NAIVE: NaiveAttention,
     }
 
-    def __init__(self, config: AttentionConfig):
+    def __init__(self, config: AttentionConfig) -> None:
         """Initialize attention operations.
 
         Args:

@@ -43,17 +43,17 @@ class MemoryCore:
 
     _instance: Optional["MemoryCore"] = None
 
-    def __new__(cls):
+    def __new__(cls) -> "MemoryCore":
         if cls._instance is None:
             cls._instance = super(MemoryCore, cls).__new__(cls)
             cls._instance._initialize()
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Already initialized via _initialize in __new__
         pass
 
-    def _initialize(self):
+    def _initialize(self) -> None:
         # pylint: disable=attribute-defined-outside-init
         self._fs = FileSystemCore()
         self._storage = StorageCore()

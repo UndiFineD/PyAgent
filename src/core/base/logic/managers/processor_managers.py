@@ -31,7 +31,7 @@ class MultimodalProcessor:
     Facade for multimodal input processing.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         from src.core.base.common.processor_core import ProcessorCore
         self._core = ProcessorCore()
 
@@ -45,7 +45,7 @@ class SerializationManager:
     Facade for object serialization.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         from src.core.base.common.serialization_core import SerializationCore
         self._core = SerializationCore()
 

@@ -46,7 +46,7 @@ class JSONSchemaGrammar(StructuredOutputGrammar):
     _token_history: List[int] = field(default_factory=list, init=False)
     _terminated: bool = field(default=False, init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Compile JSON schema to regex pattern."""
         self._pattern = self._schema_to_regex(self.schema)
         self._regex = re.compile(self._pattern)

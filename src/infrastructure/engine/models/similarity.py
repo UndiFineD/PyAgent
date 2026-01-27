@@ -35,7 +35,7 @@ class EmbeddingSimilarityService:
     Handles similarity calculations for speculative verification.
     """
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2") -> None:
         self.model_name = model_name
         self._cache: dict[str, np.ndarray] = {}
 

@@ -59,7 +59,7 @@ class RegexGrammar(StructuredOutputGrammar):
     _accepting: Set[int] = field(default_factory=set, init=False)
     _token_to_chars: List[List[int]] = field(default_factory=list, init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Compile regex pattern and build transition table."""
         self._regex = re.compile(self.pattern)
 
@@ -243,7 +243,7 @@ class ChoiceGrammar(StructuredOutputGrammar):
     _active_choices: Set[int] = field(default_factory=set, init=False)
     _matched_choice: Optional[int] = field(default=None, init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize active choice set."""
         self._active_choices = set(range(len(self.choices)))
 

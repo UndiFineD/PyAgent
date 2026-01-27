@@ -82,7 +82,7 @@ class SearchCore(BaseCore):
         # Simple Python cosine similarity fallback
         import math  # pylint: disable=import-outside-toplevel
 
-        def cosine_sim(v1, v2):
+        def cosine_sim(v1, v2) -> float:
             dot = sum(a * b for a, b in zip(v1, v2))
             mag1 = math.sqrt(sum(a * a for a in v1))
             mag2 = math.sqrt(sum(a * a for a in v2))

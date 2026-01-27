@@ -386,7 +386,7 @@ class ExpertLoadBalancer:
         num_nodes: int = 1,
         policy: Optional[AbstractEplbPolicy] = None,
         window_size: int = 100,
-    ):
+    ) -> None:
         self.num_layers = num_layers
         self.num_logical = num_logical_experts
         self.num_physical = num_physical_experts
@@ -524,7 +524,7 @@ class AsyncExpertRebalancer:
         balancer: ExpertLoadBalancer,
         rebalance_interval: float = 60.0,
         load_threshold: float = 2.0,  # Rebalance if max/min load ratio exceeds
-    ):
+    ) -> None:
         self.balancer = balancer
         self.rebalance_interval = rebalance_interval
         self.load_threshold = load_threshold
@@ -534,16 +534,19 @@ class AsyncExpertRebalancer:
         self._last_rebalance = 0.0
         self._pending_mapping: Optional[ExpertMapping] = None
         self._lock = threading.Lock()
+        self._stop_event = threading.Event()
 
     def start(self) -> None:
         """Start background rebalancing."""
         self._running = True
+        self._stop_event.clear()
         self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self._executor.submit(self._rebalance_loop)
 
     def stop(self) -> None:
         """Stop background rebalancing."""
         self._running = False
+        self._stop_event.set()
         if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
@@ -569,7 +572,7 @@ class AsyncExpertRebalancer:
 
     def _rebalance_loop(self) -> None:
         """Background rebalancing loop."""
-        while self._running:
+        while self._running and not self._stop_event.is_set():
             try:
                 if self._should_rebalance():
                     mapping = self.balancer.rebalance()
@@ -577,7 +580,8 @@ class AsyncExpertRebalancer:
                         self._pending_mapping = mapping
                         self._last_rebalance = time.time()
 
-                time.sleep(1.0)  # Check every second
+                if self._stop_event.wait(timeout=1.0):  # Check every second or exit immediately
+                    break
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 # Background thread should not crash

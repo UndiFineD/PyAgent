@@ -48,6 +48,7 @@ class ValidationCore(BaseCore):
 
     def add_rule(self, rule: ValidationRule) -> None:
         """Register a new validation rule."""
+        print(f"DEBUG: Adding rule {rule.name}")
         self._rules[rule.name] = rule
 
     def register_rule(self, name: str, rule: ValidationRule | dict[str, Any]) -> None:
@@ -83,16 +84,17 @@ class ValidationCore(BaseCore):
             actual_content = file_path
             actual_path = Path("manual_input")
 
+        results = []
+
         if rc and hasattr(rc, "validate_content_rust"):
             try:
                 # Passing rule patterns to Rust for bulk processing
                 resp = rc.validate_content_rust(str(actual_path), actual_content, list(self._rules.keys()))
-                return resp  # pylint: disable=no-member
+                results.extend(resp)  # pylint: disable=no-member
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 
-        results = []
         for rule in self._rules.values():
             # Check if path matches rule pattern or if it's a manual rule match
             is_match = (fnmatch.fnmatch(actual_path.name, rule.file_pattern) or

@@ -41,7 +41,7 @@ class GitCore(BaseCore):
     If rc is available, delegates to native libgit2 hooks for speed.
     """
 
-    def __init__(self, repo_root: Path, no_git: bool = False):
+    def __init__(self, repo_root: Path, no_git: bool = False) -> None:
         super().__init__()
         self.repo_root = repo_root
         self.no_git = no_git

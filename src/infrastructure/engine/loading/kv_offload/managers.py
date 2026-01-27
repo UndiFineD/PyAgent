@@ -50,7 +50,7 @@ class LRUOffloadingManager(OffloadingManager):
         self,
         backend: OffloadingBackend,
         enable_events: bool = False,
-    ):
+    ) -> None:
         self.backend = backend
         self.blocks: OrderedDict[BlockHash, BlockStatus] = OrderedDict()
         self.events: Optional[List[OffloadingEvent]] = [] if enable_events else None
@@ -192,7 +192,7 @@ class ARCOffloadingManager(OffloadingManager):
         self,
         backend: OffloadingBackend,
         enable_events: bool = False,
-    ):
+    ) -> None:
         self.backend = backend
         self.target_t1_size: float = 0.0
 
@@ -420,7 +420,7 @@ class TieredOffloadManager(OffloadingManager):
         self,
         backends: List[OffloadingBackend],
         enable_events: bool = False,
-    ):
+    ) -> None:
         self.backends = backends
         self.managers = [LRUOffloadingManager(backend, enable_events) for backend in backends]
         self.events: Optional[List[OffloadingEvent]] = [] if enable_events else None

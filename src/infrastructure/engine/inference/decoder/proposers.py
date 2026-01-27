@@ -57,7 +57,7 @@ class NgramProposer:
         self,
         prompt_lookup_min: int = 3,
         prompt_lookup_max: int = 5,
-    ):
+    ) -> None:
         self.prompt_lookup_min = prompt_lookup_min
         self.prompt_lookup_max = prompt_lookup_max
 
@@ -145,7 +145,7 @@ class SuffixNode:
 
     __slots__ = ("children", "count", "continuations")
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.children: dict[int, SuffixNode] = {}
         self.count: int = 0
         self.continuations: dict[int, int] = {}  # token -> frequency
@@ -165,7 +165,7 @@ class SuffixProposer:
         max_cached_requests: int = 10000,
         max_spec_factor: float = 1.0,
         min_token_prob: float = 0.1,
-    ):
+    ) -> None:
         self.max_tree_depth = max_tree_depth
         self.max_cached_requests = max_cached_requests
         self.max_spec_factor = max_spec_factor

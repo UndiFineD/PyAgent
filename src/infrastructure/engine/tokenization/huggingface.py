@@ -29,12 +29,12 @@ from .models import TokenizerBackend, TokenizerConfig, TokenizerInfo
 class HuggingFaceTokenizer(BaseTokenizer):
     """HuggingFace transformers tokenizer wrapper."""
 
-    def __init__(self, config: TokenizerConfig):
+    def __init__(self, config: TokenizerConfig) -> None:
         super().__init__(config)
         self._tokenizer = None
         self._load_tokenizer()
 
-    def _load_tokenizer(self):
+    def _load_tokenizer(self) -> None:
         """Load the HuggingFace tokenizer."""
         try:
             from transformers import AutoTokenizer

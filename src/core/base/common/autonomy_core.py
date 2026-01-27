@@ -30,7 +30,7 @@ class AutonomyCore(BaseCore):
     Provides logic for identifying blind spots and calculating evolution sleep intervals.
     """
 
-    def __init__(self, agent_id: str, repo_root: Optional[str] = None):
+    def __init__(self, agent_id: str, repo_root: Optional[str] = None) -> None:
         super().__init__(name=f"Autonomy-{agent_id}", repo_root=repo_root)
         self.agent_id = agent_id
         self.performance_history: List[float] = []

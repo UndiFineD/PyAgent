@@ -39,7 +39,7 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         vocab_size: int,
         request_id: Optional[str] = None,
         token_strings: Optional[Dict[int, str]] = None,
-    ):
+    ) -> None:
         super().__init__(grammar_spec, vocab_size, request_id)
 
         import re
@@ -133,7 +133,7 @@ class ChoiceGrammar(StructuredOutputGrammar):
         request_id: Optional[str] = None,
         token_strings: Optional[Dict[int, str]] = None,
         encode_fn: Optional[Callable[[str], List[int]]] = None,
-    ):
+    ) -> None:
         """
         Initialize ChoiceGrammar.
 

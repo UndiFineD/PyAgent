@@ -43,25 +43,35 @@ class OllamaBackend(LLMBackend):
             return ""
 
         import os
+        from openai import OpenAI
 
         base_url = kwargs.get("base_url") or os.environ.get("DV_OLLAMA_BASE_URL") or "http://localhost:11434"
-        url = base_url.rstrip("/") + "/api/generate"
-        payload = {
-            "model": model,
-            "system": system_prompt,
-            "prompt": prompt,
-            "stream": False,
-        }
+        # Ensure base_url ends with /v1 for openai client compatibility if needed, 
+        # but Ollama usually listens at root. OpenAI client expects base_url.
+        # However, for Ollama via OpenAI client, we usually point to http://localhost:11434/v1
+        
+        # Check if user provided a full path or just host
+        api_base = base_url
+        if not api_base.endswith("/v1"):
+             api_base = f"{api_base.rstrip('/')}/v1"
 
-        timeout_s = kwargs.get("timeout_s", 120)
+        client = OpenAI(base_url=api_base, api_key="ollama")
+
         import time
-
         start_t = time.time()
 
         try:
-            response = self.session.post(url, json=payload, timeout=timeout_s)
-            response.raise_for_status()
-            content = response.json().get("response", "")
+            # Unifying with Agent logic: Use Chat Completions
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ],
+                stream=False
+            )
+            content = response.choices[0].message.content or ""
+            
             latency = time.time() - start_t
             self._record("ollama", model, prompt, content, system_prompt=system_prompt, latency_s=latency)
             self._update_status("ollama", True)

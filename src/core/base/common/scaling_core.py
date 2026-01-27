@@ -36,7 +36,7 @@ class ScalingCore(BaseCore):
     Optimized for high-frequency resource monitoring.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.load_history: List[float] = []
 

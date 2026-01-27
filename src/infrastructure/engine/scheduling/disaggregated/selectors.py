@@ -42,7 +42,7 @@ class InstanceSelector(ABC):
 class RoundRobinSelector(InstanceSelector):
     """Round-robin instance selection."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._counter = 0
 
     def select(

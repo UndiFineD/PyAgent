@@ -80,7 +80,7 @@ class NgramCache:
     Stores n-grams with their positions for fast lookup.
     """
 
-    def __init__(self, max_n: int = 4, max_entries: int = 10000):
+    def __init__(self, max_n: int = 4, max_entries: int = 10000) -> None:
         self.max_n = max_n
         self.max_entries = max_entries
         # ngram tuple -> list of positions
@@ -135,7 +135,7 @@ class NgramProposer:
     following tokens as draft candidates.
     """
 
-    def __init__(self, config: NgramConfig):
+    def __init__(self, config: NgramConfig) -> None:
         self.config = config
         self.min_n = config.min_n
         self.max_n = config.max_n
@@ -373,7 +373,7 @@ class WeightedNgramProposer(NgramProposer):
     Tracks n-gram occurrences and weights matches by frequency.
     """
 
-    def __init__(self, config: NgramConfig, decay_factor: float = 0.9):
+    def __init__(self, config: NgramConfig, decay_factor: float = 0.9) -> None:
         super().__init__(config)
         self.decay_factor = decay_factor
         # ngram -> (count, last_position)
@@ -396,7 +396,7 @@ class PromptLookupProposer:
     that are likely to continue in generation.
     """
 
-    def __init__(self, min_lookup_len: int = 3, max_lookup_len: int = 10, num_speculative_tokens: int = 5):
+    def __init__(self, min_lookup_len: int = 3, max_lookup_len: int = 10, num_speculative_tokens: int = 5) -> None:
         self.min_len = min_lookup_len
         self.max_len = max_lookup_len
         self.k = num_speculative_tokens
@@ -445,7 +445,7 @@ class HybridNgramProposer:
     Falls back to fuzzy matching when exact matching fails.
     """
 
-    def __init__(self, config: NgramConfig):
+    def __init__(self, config: NgramConfig) -> None:
         self.exact_proposer = NgramProposer(config)
         self.weighted_proposer = WeightedNgramProposer(config)
         self.prompt_lookup = PromptLookupProposer(

@@ -42,14 +42,14 @@ class WorkspaceManager:
     _lock = threading.Lock()
     _initialized: bool = False
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs) -> "WorkspaceManager":
         with cls._lock:
             if cls._instance is None:
                 cls._instance = super(WorkspaceManager, cls).__new__(cls)
                 cls._instance._initialized = False
             return cls._instance
 
-    def __init__(self, size_mb: int = 2048):
+    def __init__(self, size_mb: int = 2048) -> None:
         if self._initialized:
             return
 
@@ -110,7 +110,7 @@ class WorkspaceManager:
         self.allocated += size
         return memoryview(buf)
 
-    def register_dvd_channel(self, channel_id: int, buffer_size: int = 8192):
+    def register_dvd_channel(self, channel_id: int, buffer_size: int = 8192) -> bool:
         """
         Registers a high-speed 120fps DVD-like channel.
         Channels are synchronized to the global inference clock.
@@ -124,7 +124,7 @@ class WorkspaceManager:
                 return True
             return False
 
-    def global_sync_beat(self):
+    def global_sync_beat(self) -> None:
         """
         Sends a synchronization beat across all active 120fps channels.
         Target jitter: < 1.0ms.
@@ -146,7 +146,7 @@ class WorkspaceManager:
             return 0.0
         return (self.allocated / self.total_size) * 100.0
 
-    def purge(self):
+    def purge(self) -> None:
         """Clears all allocations and resets the workspace."""
         with self._lock:
             self._workspaces.clear()

@@ -123,6 +123,99 @@ class InterFleetBridgeOrchestrator:
         payload = {"type": signal_type, "data": data, "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")}
         return await self.synapse.transport.send_to_peer(peer_ip, peer_port, payload)
 
+    def find_best_offload_target(self, required_cpu: int, required_ram: float) -> Optional[tuple[str, int]]:
+        """
+        Voyager Phase 4.0: Finds the best peer node for task offloading based on resources.
+        Returns (ip, port) or None.
+        """
+        peers = self.discovery_node.get_active_peers()
+        best_peer = None
+        max_score = -1.0
+
+        for peer in peers:
+            props = peer.get("properties", {})
+            try:
+                # Parse resources sent as strings
+                peer_cpu = float(props.get("cpu_cores", "1"))
+                peer_ram = float(props.get("ram_gb", "4.0"))
+
+                # Check constraints
+                if peer_cpu >= required_cpu and peer_ram >= required_ram:
+                    # Simple scoring: prefer most RAM
+                    score = peer_ram
+                    if score > max_score:
+                        max_score = score
+                        addrs = peer.get("addresses", [])
+                        port = int(props.get("transport_port", "5555"))
+                        if addrs:
+                            best_peer = (addrs[0], port)
+            except (ValueError, TypeError):
+                continue
+        
+        return best_peer
+
+    async def offload_task(self, task_description: str, required_cpu: int = 1, required_ram: float = 2.0) -> Optional[Dict[str, Any]]:
+        """
+        Attempts to offload a task to a capable peer in the constellation.
+        """
+        target = self.find_best_offload_target(required_cpu, required_ram)
+        if not target:
+            logger.warning(f"Voyager: No suitable peer found for task offload (CPU:{required_cpu}, RAM:{required_ram})")
+            return None
+
+        peer_ip, peer_port = target
+        logger.info(f"Voyager: Offloading task to peer at {peer_ip}:{peer_port}")
+
+        payload = {
+            "type": "task_offload",
+            "task": task_description,
+            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
+            "requirements": {"cpu": required_cpu, "ram": required_ram}
+        }
+
+        # Send via Synapse
+        return await self.synapse.transport.send_to_peer(peer_ip, peer_port, payload)
+
+    async def query_federated_memory(self, query: str, limit_per_peer: int = 3) -> List[Dict[str, Any]]:
+        """
+        Broadcasting query to the 'Experience Buffers' of the entire constellation.
+        Returns aggregated list of results.
+        """
+        peers = self.discovery_node.get_active_peers()
+        logger.info(f"Voyager: Querying federated memory across {len(peers)} peers: '{query}'")
+
+        payload = {
+            "type": "memory_query",
+            "query": query,
+            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
+             "limit": limit_per_peer
+        }
+
+        tasks = []
+        for peer in peers:
+            addrs = peer.get("addresses", [])
+            if not addrs:
+                continue
+            addr = addrs[0]
+            port = int(peer["properties"].get("transport_port", "5555"))
+            tasks.append(self.synapse.transport.send_to_peer(addr, port, payload))
+
+        if not tasks:
+            return []
+
+        # Gather results with timeout
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        aggregated = []
+        
+        for res in results:
+            if isinstance(res, dict) and res.get("status") == "success":
+                items = res.get("results", [])
+                aggregated.extend(items)
+            elif isinstance(res, Exception):
+                logger.debug(f"Voyager: Peer query failed: {res}")
+
+        return aggregated
+
     async def broadcast_task(self, task_description: str, metadata: Optional[Dict[str, Any]] = None):
         """Broadcasts a task opportunity to all discovered peers."""
         peers = self.get_known_peers()

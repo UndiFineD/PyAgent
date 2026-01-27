@@ -30,7 +30,7 @@ class ConvergenceCore(BaseCore):
     Handles 'Full Fleet Sync' summaries and health verification.
     """
 
-    def __init__(self, workspace_root: Optional[str] = None):
+    def __init__(self, workspace_root: Optional[str] = None) -> None:
         super().__init__(name="Convergence", repo_root=workspace_root)
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:

@@ -12,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Test DP Multi-Node.
+"""
+
 import pytest
-import asyncio
 from src.infrastructure.swarm.distributed.v2.dp_coordinator import DPCoordinatorV2
-from src.infrastructure.swarm.distributed.v2.dp_engine_sync import DPEngineSync, SyncState
+from src.infrastructure.swarm.distributed.v2.dp_engine_sync import DPEngineSync
 from src.infrastructure.swarm.distributed.v2.multi_node_executor import MultiNodeExecutor
 from src.infrastructure.swarm.distributed.v2.load_balancer_client import LoadBalancerClient
 
@@ -57,8 +60,9 @@ def test_multi_node_executor_split():
 
     splits = executor.coordinate_tp_split(shape)
     assert len(splits) == 2
-    assert splits[0] == (1, 12, 2048)
-    assert splits[1] == (1, 12, 2048)
+    # Rust implementation returns lists in the dict values, verify value content regardless of container type
+    assert list(splits[0]) == [1, 12, 2048]
+    assert list(splits[1]) == [1, 12, 2048]
 
 def test_load_balancer_p2c():
     """Test Power of Two Choices load balancing selection."""

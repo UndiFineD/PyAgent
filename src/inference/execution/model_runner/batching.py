@@ -30,7 +30,7 @@ class BatchedAsyncRunner:
     Beyond vLLM: Automatic micro-batching for efficiency.
     """
 
-    def __init__(self, runner: AsyncModelRunner, max_batch_size: int = 32, batch_timeout_ms: float = 5.0):
+    def __init__(self, runner: AsyncModelRunner, max_batch_size: int = 32, batch_timeout_ms: float = 5.0) -> None:
         self._runner = runner
         self._max_batch_size = max_batch_size
         self._batch_timeout_ms = batch_timeout_ms
@@ -44,7 +44,7 @@ class BatchedAsyncRunner:
 
     async def submit(self, model_input: ModelInput) -> asyncio.Future[ModelOutput]:
         """Submit input for batched execution."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         future: asyncio.Future[ModelOutput] = loop.create_future()
 
         async with self._lock:
@@ -104,7 +104,7 @@ class BatchedAsyncRunner:
 
     def start(self) -> None:
         """Start batching loop."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         self._batch_task = loop.create_task(self.run_batch_loop())
 
     async def stop(self) -> None:

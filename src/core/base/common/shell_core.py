@@ -41,7 +41,7 @@ class ShellResult:
     duration: float
     success: bool = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         # success is True if returncode is 0
         object.__setattr__(self, "success", self.returncode == 0)
 
@@ -55,7 +55,7 @@ class ShellCore:
     Provides consistent logging, error handling, and environmental setup.
     """
 
-    def __init__(self, repo_root: Optional[Union[str, Path]] = None):
+    def __init__(self, repo_root: Optional[Union[str, Path]] = None) -> None:
         if repo_root:
             self.repo_root = Path(repo_root)
         else:

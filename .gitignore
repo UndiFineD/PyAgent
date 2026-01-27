@@ -1,5 +1,10 @@
 # Virtual Environment
 .venv/
+.ollama/
+.Stream-Omni/ 
+.code_puppy/
+.FastFlowLM/
+.external/
 venv/
 ENV/
 env/

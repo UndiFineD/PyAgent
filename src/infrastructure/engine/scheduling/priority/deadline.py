@@ -38,7 +38,7 @@ class DeadlineScheduler:
     Always executes the task with the nearest deadline first.
     """
 
-    def __init__(self, workers: int = 4):
+    def __init__(self, workers: int = 4) -> None:
         """Initialize EDF scheduler."""
         self._workers = workers
         self._queue: List[Tuple[float, int, ScheduledTask]] = []

@@ -28,7 +28,7 @@ from src.core.base.common.cache_core import CacheCore
 class ResultCache:
     """Caches results of agent operations."""
 
-    def __init__(self, core: CacheCore | None = None):
+    def __init__(self, core: CacheCore | None = None) -> None:
         self._core = core or CacheCore(Path("data/agent_cache"))
         self._memory_cache: dict[str, Any] = {}
 

@@ -2,7 +2,6 @@
 # This file (docs/prompt/prompt.txt) is the primary source for swarm-level prompting logic.
 # Priority: CRITICAL | Status: PHASE 91 - LIQUIDITY & CACHE INVALIDATION 🚧 PLANNING
 # Rust Functions: 680 | Test Coverage: ~4500+ tests passing
-@focus: ["src.infrastructure.swarm.orchestration", "src.infrastructure.liquidity", "rust_core/src"]
 
 ---
 
@@ -245,7 +244,6 @@
 ---
 
 ## Phase 39: Next Priority (PLANNED)
-@focus: ["src/infrastructure/serialization"]
 
 ### Planned Patterns
 - Tensorizer Integration: Fast serialized weight loading
@@ -272,7 +270,6 @@
 
 
 ### 34. Phase 34: Disaggregated Inference & Advanced RoPE (NEW)
-@focus: ["src/infrastructure/kv_transfer", "src/infrastructure/position", "src/inference/speculation", "src/infrastructure/attention", "rust_core/src"]
 
 #### vLLM v1 Patterns Analyzed (from GitHub searches)
 - KV Transfer Connectors: P2pNcclConnector, NixlConnector, MooncakeConnector, MoRIIOConnector
@@ -546,11 +543,6 @@
 - [ ] UBatchProcessor implementation  
 - [ ] CudagraphDispatcher implementation
 - [ ] TorchCompileIntegration implementation
-- [x] InputType parity (Time, Commandshell, Hardware, etc.)
-- [x] IA3 scaling implementation (Rust + Python)
-- [x] TensorRT stubs for 120fps video/audio pipeline
-- [x] AudioLoader Rust acceleration
-- [x] VideoLoader Rust acceleration & TensorRT path
 - [ ] Phase 51: Advanced Attention (FlashInfer)
 - [ ] Phase 52: Multi-GPU TP/PP
 
@@ -705,3 +697,5 @@ It’s the closest thing to “LoRA but fast enough for 120 fps”.
 - [ ] move files from `.agent_cache` to `data\agent_cache` and remove `.agent_cache` directory
 - [ ] move files from `.hypothesis` to `data\hypothesis` and remove `.hypothesis` directory
 - [ ] 
+
+read .external\downloads.txt

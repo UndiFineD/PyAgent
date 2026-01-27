@@ -21,11 +21,11 @@ class StructuralAnalysisMixin:
 
     def check_versioning(self: SelfImprovementAnalysis) -> dict[str, str] | None:
         """Checks if the mandatory Version.py gatekeeper exists."""
-        version_file = os.path.join(self.workspace_root, "src/core/base/version.py")
+        version_file = os.path.join(self.workspace_root, "src/core/base/lifecycle/version.py")
         if not os.path.exists(version_file):
             return {
                 "type": "Versioning Issue",
-                "message": "Missing src/core/base/Version.py gatekeeper. Project standardization required.",
+                "message": "Missing src/core/base/lifecycle/version.py gatekeeper. Project standardization required.",
             }
         return None
 

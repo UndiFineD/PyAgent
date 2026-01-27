@@ -37,7 +37,7 @@ class BlockTableV2:
     Integrates with context parallelism and prefix caching.
     """
 
-    def __init__(self, num_blocks: int, block_size: int = 16):
+    def __init__(self, num_blocks: int, block_size: int = 16) -> None:
         self.num_blocks = num_blocks
         self.block_size = block_size  # Default block size
         self.free_blocks = deque(range(num_blocks))
@@ -76,7 +76,7 @@ class BlockTableV2:
             return 0.0
         return ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100.0
 
-    def free(self, seq_id: int):
+    def free(self, seq_id: int) -> None:
         """Releases blocks associated with a sequence."""
         if seq_id in self.mapping:
             blocks = self.mapping.pop(seq_id)
@@ -86,7 +86,7 @@ class BlockTableV2:
                     self.free_blocks.append(block)
             logger.debug(f"Freed blocks for sequence {seq_id}")
 
-    def update_hybrid_mapping(self, block_id: int, new_size: int):
+    def update_hybrid_mapping(self, block_id: int, new_size: int) -> None:
         """
         Updates the size of a specific block for hybrid configurations.
         Used for adaptive granularity in Phase 53.

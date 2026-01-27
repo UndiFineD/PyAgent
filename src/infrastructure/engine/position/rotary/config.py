@@ -64,7 +64,7 @@ class RoPEConfig:
     # Variant
     variant: RoPEVariant = RoPEVariant.NEOX
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.rotary_dim is None:
             self.rotary_dim = self.head_dim
         if self.original_max_position is None:

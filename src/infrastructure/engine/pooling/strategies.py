@@ -45,7 +45,7 @@ __all__ = [
 class BasePooler(ABC):
     """Abstract base for pooling operations."""
 
-    def __init__(self, config: PoolingConfig):
+    def __init__(self, config: PoolingConfig) -> None:
         self.config = config
 
     def pool_and_process(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
@@ -123,7 +123,7 @@ class MaxPooler(BasePooler):
 class AttentionPooler(BasePooler):
     """Attention-weighted pooling."""
 
-    def __init__(self, config: PoolingConfig, hidden_dim: int = 768):
+    def __init__(self, config: PoolingConfig, hidden_dim: int = 768) -> None:
         super().__init__(config)
         self.hidden_dim = hidden_dim
         self.query = np.random.randn(hidden_dim).astype(np.float32) / math.sqrt(hidden_dim)
@@ -142,7 +142,7 @@ class AttentionPooler(BasePooler):
 class WeightedMeanPooler(BasePooler):
     """IDF-weighted mean pooling."""
 
-    def __init__(self, config: PoolingConfig, token_weights: Optional[Dict[int, float]] = None):
+    def __init__(self, config: PoolingConfig, token_weights: Optional[Dict[int, float]] = None) -> None:
         super().__init__(config)
         self.token_weights = token_weights or {}
         self.default_weight = 1.0
@@ -174,7 +174,7 @@ class MatryoshkaPooler(BasePooler):
     Allows for truncate-able embeddings.
     """
 
-    def __init__(self, config: PoolingConfig, supported_dims: Optional[list[int]] = None):
+    def __init__(self, config: PoolingConfig, supported_dims: Optional[list[int]] = None) -> None:
         super().__init__(config)
         self.supported_dims = supported_dims or [64, 128, 256, 512, 768, 1024]
         self.fallback_pooler = MeanPooler(config)
@@ -193,7 +193,7 @@ class MultiVectorPooler(BasePooler):
     Pooler that preserves multiple vectors per sequence (e.g., ColBERT style).
     """
 
-    def __init__(self, config: PoolingConfig, compression_dim: Optional[int] = None):
+    def __init__(self, config: PoolingConfig, compression_dim: Optional[int] = None) -> None:
         super().__init__(config)
         self.compression_dim = compression_dim
 
@@ -217,7 +217,7 @@ class StepPooler(BasePooler):
     Pooler that extracts specific 'step' tokens (e.g., for Chain of Thought).
     """
 
-    def __init__(self, config: PoolingConfig, step_token_ids: Optional[list[int]] = None):
+    def __init__(self, config: PoolingConfig, step_token_ids: Optional[list[int]] = None) -> None:
         super().__init__(config)
         self.step_token_ids = step_token_ids or []
 

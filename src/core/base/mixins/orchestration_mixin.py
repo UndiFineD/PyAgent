@@ -180,12 +180,27 @@ class OrchestrationMixin:
         """
         logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__, agent_type, target_file)
 
+        # Prepare context for delegation (Phase 259)
+        next_context = None
+        if hasattr(self, "context") and self.context:
+            try:
+                if hasattr(self.context, "next_level"):
+                    next_context = self.context.next_level(self.__class__.__name__)
+                else:
+                    next_context = self.context
+            except Exception as e: # pylint: disable=broad-exception-caught
+                logging.warning("Failed to propagate context: %s", e)
+
         # 1. Attempt delegation via Fleet Manager (if attached)
         if hasattr(self, "fleet") and getattr(self, "fleet"):
             try:
                 # FleetManager.agents is a LazyAgentMap
                 if agent_type in getattr(self, "fleet").agents:
                     sub_agent = getattr(self, "fleet").agents[agent_type]
+
+                    # Propagate context
+                    if next_context and hasattr(sub_agent, "context"):
+                        sub_agent.context = next_context
 
                     # Log the delegation event
                     self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
@@ -213,6 +228,10 @@ class OrchestrationMixin:
 
             if agent_type in agent_map:
                 sub_agent = agent_map[agent_type]
+
+                # Propagate context
+                if next_context and hasattr(sub_agent, "context"):
+                    sub_agent.context = next_context
 
                 self.log_distributed("INFO", f"Delegated to registry agent: {agent_type}", target=target_file)
 

@@ -56,7 +56,7 @@ class Muxer:
     Supports "DVD-style" separate streams for video, audio, and text.
     """
 
-    def __init__(self, target_fps: float = 120.0):
+    def __init__(self, target_fps: float = 120.0) -> None:
         self.target_fps = target_fps
         self.channels: Dict[str, ModalityChannel] = {}
         self.active = False
@@ -73,7 +73,7 @@ class Muxer:
         ]
         return self.mux(packets)
 
-    def add_channel(self, name: str, m_type: str, fps: Optional[float] = None):
+    def add_channel(self, name: str, m_type: str, fps: Optional[float] = None) -> None:
         """Register a new modality channel."""
         self.channels[name] = ModalityChannel(name=name, modality_type=m_type, fps=fps or self.target_fps)
         logger.info(f"Registered channel: {name} ({m_type}) at {fps or self.target_fps} fps")

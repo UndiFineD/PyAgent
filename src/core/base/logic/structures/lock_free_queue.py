@@ -82,7 +82,7 @@ class MPMCQueue(Generic[T]):
         value = queue.get()
     """
 
-    def __init__(self, capacity: int = 1000):
+    def __init__(self, capacity: int = 1000) -> None:
         """
         Initialize queue.
 
@@ -276,7 +276,7 @@ class SPSCQueue(Generic[T]):
     WARNING: Only safe with exactly one producer and one consumer thread!
     """
 
-    def __init__(self, capacity: int = 1024):
+    def __init__(self, capacity: int = 1024) -> None:
         """
         Initialize SPSC queue.
 
@@ -373,7 +373,7 @@ class PriorityQueue(Generic[T]):
     Maintains FIFO order for items with equal priority.
     """
 
-    def __init__(self, capacity: int = 10000):
+    def __init__(self, capacity: int = 10000) -> None:
         """
         Initialize priority queue.
 
@@ -490,7 +490,7 @@ class WorkStealingDeque(Generic[T]):
     Thieves steal from head (FIFO to get older tasks).
     """
 
-    def __init__(self, capacity: int = 1024):
+    def __init__(self, capacity: int = 1024) -> None:
         """Initialize work-stealing deque."""
         self._capacity = capacity
         self._buffer: deque[T] = deque()
@@ -577,7 +577,7 @@ class BatchingQueue(Generic[T]):
         batch_size: int = 32,
         batch_timeout: float = 0.01,
         max_pending: int = 10000,
-    ):
+    ) -> None:
         """
         Initialize batching queue.
 

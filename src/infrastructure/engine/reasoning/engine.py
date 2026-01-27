@@ -52,7 +52,7 @@ class ReasoningEngine:
         enable_thinking: bool = True,
         cache_thoughts: bool = False,
         max_cached_thoughts: int = 1000,
-    ):
+    ) -> None:
         self.reasoning_format = reasoning_format
         self.tool_format = tool_format
         self.enable_thinking = enable_thinking

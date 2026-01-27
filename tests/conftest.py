@@ -14,10 +14,10 @@
 
 """Pytest configuration for PyAgent tests."""
 
-import pytest
-import tempfile
 import types
+import tempfile
 from pathlib import Path
+import pytest
 from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.logic.circuit_breaker import CircuitBreaker
@@ -102,3 +102,22 @@ def agent_registry():
     """Provides a central AgentRegistry for test use."""
     workspace_root = Path(__file__).parent.parent
     return AgentRegistry.get_agent_map(workspace_root)
+
+
+@pytest.fixture(autouse=True)
+def isolation_cleanup():
+    """
+    Enforce isolation between tests (Phase 280).
+    Resets global caches and static states to prevent cross-test contamination.
+    """
+    # Reset SubagentRunner command cache
+    try:
+        from src.infrastructure.compute.backend.subagent_runner import SubagentRunner
+
+        # pylint: disable=protected-access
+        SubagentRunner._command_cache.clear()
+    except ImportError:
+        pass
+
+    yield
+
