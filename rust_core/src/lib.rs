@@ -13,6 +13,7 @@
 
 use pyo3::prelude::*;
 
+
 mod agents;
 mod base;
 mod stats;
@@ -43,6 +44,15 @@ mod attention;
 mod workspace;
 mod scheduling;
 mod distributed;
+mod infrastructure {
+    pub mod services {
+        pub mod dev {
+            pub mod scripts {
+                pub mod run_fleet_self_improvement_rust;
+            }
+        }
+    }
+}
 
 /// A Python module implemented in Rust.
 #[pymodule]
@@ -78,6 +88,7 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     workspace::register(m)?;
     scheduling::register(m)?;
     distributed::register(m)?;
-
+    // Register the new fleet self-improvement module
+    infrastructure::services::dev::scripts::run_fleet_self_improvement_rust::register_fleet_self_improvement(m)?;
     Ok(())
 }
