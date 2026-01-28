@@ -78,9 +78,6 @@ def load_module(module_name: str) -> bool:
     except ImportError as e:
         print(f"Warning: Failed to load command module '{module_name}': {e}")
         return False
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        print(f"Warning: Error loading command module '{module_name}': {e}")
-        return False
 
 
 def unload_module(module_name: str) -> bool:

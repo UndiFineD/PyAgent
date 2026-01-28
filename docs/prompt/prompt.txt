@@ -362,7 +362,6 @@
 - ✅ Target achieved: 6 Python modules + 12 Rust functions (Phase 34 COMPLETE)
 
 ### 35. Phase 35: Async Execution & Advanced Caching ✅ COMPLETE (95 passed, 2 skipped)
-@focus: ["src/infrastructure/engine", "src/infrastructure/cache", "src/infrastructure/memory", "src/inference/execution", "src/infrastructure/parallel", "rust_core/src"]
 
 #### vLLM v1 Patterns Analyzed (from GitHub searches)
 - EngineCoreClient hierarchy: InprocClient, SyncMPClient, AsyncMPClient, DPAsyncMPClient
@@ -451,7 +450,6 @@
 ---
 
 ### 36. Phase 36: CUDA Graph & Compilation (NEW - PRIORITY)
-@focus: ["src/infrastructure/cuda", "src/infrastructure/compilation", "rust_core/src"]
 
 #### vLLM Patterns to Implement
 

@@ -104,30 +104,8 @@ class CircuitBreakerError(Exception):
 
 
 class CircuitBreaker:
-    def __call__(self, func):
-        """Allow CircuitBreaker to be used as a decorator."""
-        def wrapper(*args, **kwargs):
-            return self.call(func, *args, **kwargs)
-        return wrapper
-    """
-    Thread-safe circuit breaker for protecting against cascading failures.
+    """Thread-safe circuit breaker for protecting against cascading failures in services."""
 
-    Example:
-        >>> breaker = CircuitBreaker(
-        ...     failure_threshold=5,
-        ...     recovery_timeout=30.0,
-        ...     half_open_max_calls=3,
-        ... )
-        >>>
-        >>> @breaker
-        ... def call_external_service():
-        ...     return requests.get("http://api.example.com")
-        >>>
-        >>> try:
-        ...     result = call_external_service()
-        ... except CircuitBreakerError as e:
-        ...     print(f"Circuit open, retry after {e.retry_after}s")
-    """
 
     def __init__(
         self,
@@ -337,23 +315,10 @@ class CircuitBreaker:
         return max(0.0, remaining)
 
     def call(self, func: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
+        """Execute a function through the circuit breaker."""
         # Always check for state transition before allowing request
         with self._lock:
             self._check_state_transition()
-        """
-        Execute a function through the circuit breaker.
-
-        Args:
-            func: Function to call
-            *args: Positional arguments
-            **kwargs: Keyword arguments
-
-        Returns:
-            Function result
-
-        Raises:
-            CircuitBreakerError: If circuit is open
-        """
         if not self._should_allow_request():
             self._stats.rejected_calls += 1
             raise CircuitBreakerError(
@@ -379,12 +344,10 @@ class CircuitBreaker:
         *args: P.args,
         **kwargs: P.kwargs,
     ) -> Any:
+        """Execute an async function through the circuit breaker."""
         # Always check for state transition before allowing request
         with self._lock:
             self._check_state_transition()
-        """
-        Execute an async function through the circuit breaker.
-        """
         if not self._should_allow_request():
             self._stats.rejected_calls += 1
             raise CircuitBreakerError(
@@ -396,9 +359,6 @@ class CircuitBreaker:
             result = await func(*args, **kwargs)
             self._record_success()
             return result
-        except self._excluded_exceptions:
-            self._record_success()
-            raise
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self._record_failure()
             raise

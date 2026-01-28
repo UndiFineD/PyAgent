@@ -14,7 +14,7 @@ from src.core.base.lifecycle.version import is_gate_open
 class OrchestratorCycleMixin:
     """Methods for managing the improvement cycle and gates."""
 
-    def run_improvement_cycle(self, target_dir: str = "src") -> dict[str, Any]:
+    def run_improvement_cycle(self, target_dir: str = "src", allow_triton_check: bool = True) -> dict[str, Any]:
         """Runs a full scan and fix cycle across the specified directory."""
         if not self._check_gate_stability():
             return {"error": "Stability gate closed - system requires manual stabilization"}
@@ -29,7 +29,7 @@ class OrchestratorCycleMixin:
             "details": [],
         }
 
-        debt_records: list[tuple[str, str, str, int, float]] = self._scan_and_repair_files(target_dir, results)
+        debt_records: list[tuple[str, str, str, int, float]] = self._scan_and_repair_files(target_dir, results, allow_triton_check=allow_triton_check)
         self._record_debt_to_sql(debt_records)
         self._log_results(results)
 

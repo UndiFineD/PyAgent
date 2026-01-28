@@ -71,7 +71,7 @@ class KVzapPruner:
         self.surrogate = KVzapSurrogate(config)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.surrogate.to(self.device)
-        self.surrogate.eval()
+        self.surrogate.eval()  # This is a model method, not Python eval; safe to keep
 
     def get_importance_scores(self, hidden_states: torch.Tensor) -> torch.Tensor:
         """Calculate importance scores for each token/head."""
