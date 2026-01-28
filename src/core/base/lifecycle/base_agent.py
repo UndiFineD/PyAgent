@@ -31,7 +31,7 @@ try:
 except ImportError:
     requests = None
     HAS_REQUESTS = False
-    
+
 import traceback
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.common.models import CacheEntry, EventType, PromptTemplate, FailureClassification
@@ -147,7 +147,7 @@ class BaseAgent(
         self.logger = logging.getLogger(self.__class__.__name__)
         self._system_prompt: str = "You are a helpful AI assistant."
         self.status_cache: dict[str, float] = {}
-        
+
         # Context for task lineage
         self.context: CascadeContext | None = kwargs.get("context", None)
 
@@ -174,23 +174,20 @@ class BaseAgent(
         import asyncio  # pylint: disable=import-outside-toplevel
 
         try:
-            # Check if there is an existing event loop
+            # Check if there is an existing running event loop (Python 3.7+)
             try:
-                loop = asyncio.get_event_loop()
-            except RuntimeError:
-                loop = None
-
-            if loop and loop.is_running():
+                asyncio.get_running_loop()
                 # For compatibility in nested async
                 result = "Async loop already running"
-            else:
+            except RuntimeError:
+                # No running loop, safe to use asyncio.run
                 result = asyncio.run(self.run_async(prompt))
 
             self._notify_webhooks("agent_complete", {"status": "success", "result": result})
             return result
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             f_type = self._classify_exception(e)
-            
+
             # Telemetry Capture (Swarm Intelligence Fix)
             if hasattr(self, "context") and self.context:
                 try:
@@ -249,7 +246,7 @@ class BaseAgent(
             return FailureClassification.SHARD_CORRUPTION.value
         if hasattr(FailureClassification, "AI_ERROR") and "hallucination" in exc_str:
             return FailureClassification.AI_ERROR.value
-            
+
         return FailureClassification.UNKNOWN.value
 
     async def run_async(self, prompt: str) -> str:
@@ -325,7 +322,7 @@ class BaseAgent(
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             f_type = self._classify_exception(e)
             logging.error("Think execution failed: %s (Type: %s)", e, f_type)
-            
+
             # Telemetry Capture (Swarm Intelligence Fix)
             if self.context:
                 try:
@@ -337,7 +334,7 @@ class BaseAgent(
                         details={"prompt_preview": prompt[:100]}
                     )
                 except Exception as telemetry_err:
-                     logging.error(f"Failed to log failure to CascadeContext: {telemetry_err}")
+                    logging.error(f"Failed to log failure to CascadeContext: {telemetry_err}")
 
             return f"Error encountered during agent reasoning: {str(e)} (Type: {f_type})"
 

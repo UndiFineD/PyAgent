@@ -149,6 +149,10 @@ class AsyncRequestHandle:
 
 
 class AsyncVllmEngine:
+    @property
+    def _requests(self):
+        """Alias for test compatibility (legacy)."""
+        return self._req_tracker
     """
     High-throughput async vLLM engine for PyAgent.
 

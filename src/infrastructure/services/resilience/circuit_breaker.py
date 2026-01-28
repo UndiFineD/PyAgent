@@ -104,6 +104,11 @@ class CircuitBreakerError(Exception):
 
 
 class CircuitBreaker:
+    def __call__(self, func):
+        """Allow CircuitBreaker to be used as a decorator."""
+        def wrapper(*args, **kwargs):
+            return self.call(func, *args, **kwargs)
+        return wrapper
     """
     Thread-safe circuit breaker for protecting against cascading failures.
 
@@ -184,7 +189,7 @@ class CircuitBreaker:
         return self.state == CircuitState.CLOSED
 
     @property
-    def is_open(self, encoding='utf-8') -> bool:
+    def is_open(self) -> bool:
         """Check if circuit is open (rejecting requests)."""
         return self.state == CircuitState.OPEN
 
@@ -192,7 +197,9 @@ class CircuitBreaker:
         """Check if state should transition based on timeout."""
         if self._state == CircuitState.OPEN and self._opened_at:
             elapsed = time.monotonic() - self._opened_at
+            # print(f"[DEBUG] _check_state_transition: state=OPEN, elapsed={elapsed:.2f}, recovery_timeout={self._recovery_timeout}")
             if elapsed >= self._recovery_timeout:
+                # print("[DEBUG] Transitioning to HALF_OPEN from OPEN due to timeout.")
                 self._transition_to(CircuitState.HALF_OPEN)
 
     def _transition_to(self, new_state: CircuitState) -> None:
@@ -200,6 +207,7 @@ class CircuitBreaker:
         if self._state == new_state:
             return
 
+        # print(f"[DEBUG] Transitioning state: {self._state.name} -> {new_state.name}")
         self._state = new_state
         self._stats.state_changes += 1
 
@@ -226,26 +234,46 @@ class CircuitBreaker:
                     callback()
 
     def _should_allow_request(self) -> bool:
-        """Check if request should be allowed."""
+        """Check if request should be allowed, and trigger state transitions if needed."""
         # Phase 336: Global Connectivity Check (15m TTL)
-        # Prevents attempts if the endpoint is known to be dead globally
         if not ConnectivityManager().is_endpoint_available(self._name):
+            # print(f"[DEBUG] ConnectivityManager: endpoint '{self._name}' unavailable.")
             return False
 
         with self._lock:
-            self._check_state_transition()
+            # Always check for state transition on every call
+            if self._state == CircuitState.OPEN and self._opened_at:
+                elapsed = time.monotonic() - self._opened_at
+                # print(f"[DEBUG] _should_allow_request: state=OPEN, elapsed={elapsed:.2f}, recovery_timeout={self._recovery_timeout}")
+                if elapsed >= self._recovery_timeout:
+                    # print("[DEBUG] _should_allow_request: Transitioning to HALF_OPEN from OPEN due to timeout.")
+                    self._transition_to(CircuitState.HALF_OPEN)
+
+            # print(f"[DEBUG] _should_allow_request: state={self._state.name}, half_open_calls={self._half_open_calls}")
 
             if self._state == CircuitState.CLOSED:
+                # print("[DEBUG] _should_allow_request: Allowing request (CLOSED)")
                 return True
 
             if self._state == CircuitState.OPEN:
+                # print("[DEBUG] _should_allow_request: Rejecting request (OPEN)")
+                # If just transitioned to HALF_OPEN, allow the first call
+                if self._opened_at and (time.monotonic() - self._opened_at) >= self._recovery_timeout:
+                    # print("[DEBUG] _should_allow_request: Forcing transition to HALF_OPEN and allowing first call.")
+                    self._transition_to(CircuitState.HALF_OPEN)
+                    if self._half_open_calls == 0:
+                        self._half_open_calls += 1
+                        # print("[DEBUG] _should_allow_request: Allowing first call in HALF_OPEN")
+                        return True
                 return False
 
             # HALF_OPEN: Allow limited requests
             if self._half_open_calls < self._half_open_max_calls:
                 self._half_open_calls += 1
+                # print(f"[DEBUG] _should_allow_request: Allowing request in HALF_OPEN (call {self._half_open_calls}/{self._half_open_max_calls})")
                 return True
 
+            # print("[DEBUG] _should_allow_request: Rejecting request (HALF_OPEN, max calls reached)")
             return False
 
     def _record_success(self) -> None:
@@ -255,7 +283,7 @@ class CircuitBreaker:
             self._stats.successful_calls += 1
             self._stats.last_success_time = time.monotonic()
             self._stats.consecutive_successes += 1
-            
+
             # Phase 336: Update global connectivity status
             ConnectivityManager().update_status(self._name, True)
 
@@ -309,6 +337,9 @@ class CircuitBreaker:
         return max(0.0, remaining)
 
     def call(self, func: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
+        # Always check for state transition before allowing request
+        with self._lock:
+            self._check_state_transition()
         """
         Execute a function through the circuit breaker.
 
@@ -348,6 +379,9 @@ class CircuitBreaker:
         *args: P.args,
         **kwargs: P.kwargs,
     ) -> Any:
+        # Always check for state transition before allowing request
+        with self._lock:
+            self._check_state_transition()
         """
         Execute an async function through the circuit breaker.
         """
