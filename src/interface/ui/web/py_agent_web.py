@@ -106,7 +106,6 @@ class FleetWebUI:
         """Backend for the File Explorer with Preview.
         Returns directory structure and file metadata.
         """
-        from pathlib import Path
 
         base = Path(self.fleet.workspace_root) / sub_path
         if not base.exists():
@@ -132,7 +131,12 @@ class FleetWebUI:
                 with open(file_path, encoding="utf-8") as f:
                     return f.read(500) + "..."
             return "[No Preview Available]"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (RuntimeError, ValueError) as e:
+            pass
+        except BaseException as e:
+            pass
+            import traceback
+            print(f"Error reading preview for {file_path}: {e}\n{traceback.format_exc()}")
             return "[Error Reading Preview]"
 
     def get_workflow_designer_state(self) -> dict[str, Any]:

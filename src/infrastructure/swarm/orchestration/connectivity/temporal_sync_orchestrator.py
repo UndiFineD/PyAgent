@@ -28,7 +28,7 @@ class TemporalSyncOrchestrator:
     Standardized placeholder for future re-implementation.
     """
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *_args, **_kwargs) -> None:
         self.version = VERSION
         import time
 
@@ -56,13 +56,13 @@ class TemporalSyncOrchestrator:
         self.sprint_mode = mode
         logging.info(f"TemporalSync: Sprint mode set to {mode}")
 
-    def sync_wait(self, duration: float) -> None:
+    async def sync_wait(self, duration: float) -> None:
         """Waits for a duration, adjusted by metabolism."""
-        import time
+        import asyncio
 
         # In sprint mode, we wait less (simulated acceleration)
         actual_wait = duration / (2.0 if self.sprint_mode else 1.0)
-        time.sleep(actual_wait)
+        await asyncio.sleep(actual_wait)
 
     def get_current_meta(self) -> dict[str, Any]:
         """Returns the current temporal metadata."""

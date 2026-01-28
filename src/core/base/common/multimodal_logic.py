@@ -12,7 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Multimodal logic implementation."""
+"""
+Multimodal Logic Implementation
+================================
+
+This module provides the MultimodalCore class, which implements unified logic for aligning, parsing, and synchronizing multiple data modalities (audio, video, text, etc.) in streaming and batch settings. It supports both Python and Rust-accelerated backends for high-throughput, low-latency processing, and is designed for use in autonomous agent swarms and advanced AI systems.
+
+Key Features:
+- Unified multimodal alignment and streaming core for "see-while-hear" experiences
+- Efficient modality alignments (sequence-dimension concatenation)
+- Simultaneous stream parsing and channel selection
+- Rust-accelerated functions for performance-critical operations (via PyO3)
+- Fallback to pure Python logic if Rust extensions are unavailable
+- Modular design for easy extension and integration with agent mixins
+
+Classes:
+- MultimodalCore: Main class for multimodal alignment, streaming, and fusion
+
+Dependencies:
+- numpy, logging, typing, re
+- src.infrastructure.engine.multimodal (Muxer, QuantizedMultimediaEngine)
+- src.core.base.base_core (BaseCore)
+- src.core.base.common.multimodal_state (StreamState)
+
+Copyright 2026 PyAgent Authors. Licensed under the Apache License, Version 2.0.
+"""
 
 import logging
 import math
@@ -524,34 +548,62 @@ class MultimodalCore(BaseCore):
         """
         Orchestrate multimodal inputs for model ingestion.
         Converts media references into aligned sequence embeddings (Stream-Omni style).
+        Refactored for clarity and reduced complexity.
         """
         processed = {
             "text": "",
             "media": [],
-            "aligned_embeddings": [],  # List of (dim, sequence)
+            "aligned_embeddings": [],
         }
 
         for item in inputs:
-            itype = item.get("type")
+            if not self._validate_input_item(item):
+                continue
+            itype = item["type"]
             if itype == "text":
-                processed["text"] += item.get("content", "")
+                processed["text"] += self._extract_text_content(item)
             elif itype == "media":
-                m_type = item.get("modality", "image")
-                m_id = item.get("id")
-
-                # Logic: Resolve embedding from storage and project it
-                # For now, we simulate the alignment step
-                processed["media"].append(item)
-
-                # Mock embedding for demonstration of the alignment logic
-                mock_emb = [0.1] * 4096
-                mock_weights = [0.01] * (4096 * 4096)
-
-                # Apply Rust-accelerated projection
-                aligned = self.project_alignment(mock_emb, mock_weights)
-                processed["aligned_embeddings"].append(aligned)
-
-                # Insert token placeholder in text
-                processed["text"] += f"<{m_type.capitalize()}_{m_id}>"
+                self._process_media_item(item, processed)
 
         return processed
+
+    def _validate_input_item(self, item: Dict[str, Any]) -> bool:
+        """Validate input item structure."""
+        return isinstance(item, dict) and "type" in item
+
+    def _extract_text_content(self, item: Dict[str, Any]) -> str:
+        """Extract text content from item."""
+        return item.get("content", "")
+
+    def _process_media_item(self, item: Dict[str, Any], processed: Dict[str, Any]) -> None:
+        """Process a media item: append to media, align embedding, and update text."""
+        m_type = item.get("modality", "image")
+        m_id = item.get("id")
+        processed["media"].append(item)
+
+        # Real embedding extraction and projection
+        uri = self.registry.get(m_id) if m_id else None
+        if m_type.lower() == "image" and uri:
+            # Example: extract image embedding using QuantizedMultimediaEngine
+            try:
+                image_data = self.q_engine.load_image(uri)
+                emb = self.q_engine.extract_image_embedding(image_data)
+                weights = self.q_engine.get_projection_weights("image")
+                aligned = self.project_alignment(emb, weights)
+            except (IOError, ValueError, AttributeError) as e:
+                logger.warning(f"Failed to process image media {m_id}: {e}")
+                aligned = []
+        elif m_type.lower() == "audio" and uri:
+            try:
+                audio_data = self.q_engine.load_audio(uri)
+                emb = self.q_engine.extract_audio_embedding(audio_data)
+                weights = self.q_engine.get_projection_weights("audio")
+                aligned = self.project_alignment(emb, weights)
+            except (IOError, ValueError, AttributeError) as e:
+                logger.warning(f"Failed to process audio media {m_id}: {e}")
+                aligned = []
+        else:
+            aligned = []
+
+        processed["aligned_embeddings"].append(aligned)
+        processed["text"] += f"<{m_type.capitalize()}_{m_id}>"

@@ -36,6 +36,7 @@ Author: PyAgent Phase 20
 from __future__ import annotations
 
 import contextlib
+import time  # noqa: F401  # pylint: disable=unused-import,reimported
 import ipaddress
 import logging
 import os
@@ -373,10 +374,7 @@ def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: fl
     Returns:
         True if port became available, False if timeout.
     """
-    import time
-
     deadline = time.monotonic() + timeout
-
     while time.monotonic() < deadline:
         if is_port_open(host, port, timeout=min(poll_interval, 0.5)):
             return True

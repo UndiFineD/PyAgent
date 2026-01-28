@@ -18,7 +18,7 @@ Provides a rich interactive console experience using 'rich.layout'.
 """
 
 import time
-import sys
+# ...existing code...
 from rich.console import Console
 from rich.layout import Layout
 from rich.panel import Panel
@@ -41,12 +41,14 @@ class PyAgentTUI:
         )
 
     def generate_header(self) -> Panel:
+        """Generates the header panel with the current timestamp."""
         return Panel(
             f"PyAgent Swarm Orchestrator v4.4.0 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             style="bold white on blue",
         )
 
     def generate_swarm_status(self) -> Panel:
+        """Generates the swarm status panel with current node statuses."""
         table = Table(expand=True)
         table.add_column("Node", style="cyan")
         table.add_column("Status", style="green")
@@ -60,6 +62,7 @@ class PyAgentTUI:
         return Panel(table, title="Swarm Typology")
 
     def generate_logs(self) -> Panel:
+        """Generates the logs panel with simulated log entries."""
         # Simulated logs
         logs = [
             "[INFO] Consensus reached on Block #4921",
@@ -71,9 +74,11 @@ class PyAgentTUI:
         return Panel("\n".join(logs), title="Live Event Log", style="white on black")
 
     def generate_footer(self) -> Panel:
+        """Generates the footer panel with exit instructions."""
         return Panel("Press Ctrl+C to exit | [b]h[/b]elp | [b]q[/b]uit", style="dim")
 
-    def run(self):
+    async def run(self):
+        """Runs the TUI application in a live loop."""
         with Live(self.layout, refresh_per_second=4, screen=True):
             try:
                 while True:
@@ -81,7 +86,8 @@ class PyAgentTUI:
                     self.layout["swarm_status"].update(self.generate_swarm_status())
                     self.layout["logs"].update(self.generate_logs())
                     self.layout["footer"].update(self.generate_footer())
-                    time.sleep(0.25)
+                    import asyncio
+                    await asyncio.sleep(0.25)
             except KeyboardInterrupt:
                 pass
 

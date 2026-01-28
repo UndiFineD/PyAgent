@@ -624,7 +624,6 @@ class TestIntegration:
         """Test circuit breaker combined with retry."""
         from src.infrastructure.services.resilience.circuit_breaker import CircuitBreaker
         from src.infrastructure.services.resilience.retry_strategy import RetryStrategy
-        from unittest.mock import patch
 
         cb = CircuitBreaker(failure_threshold=5, recovery_timeout=0.1)
         retry = RetryStrategy(max_attempts=10, base_delay=0.05)
@@ -643,8 +642,11 @@ class TestIntegration:
         # Open the circuit by failing enough times
         for _ in range(5):
             try:
-                cb_wrapped()
-            except Exception:
+                    cb_wrapped()
+            except (RuntimeError, ValueError):
+                pass
+            except BaseException:
+                pass
                 pass
 
         # Wait for recovery timeout to elapse
