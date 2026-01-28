@@ -185,10 +185,8 @@ class BaseAgent(
 
             self._notify_webhooks("agent_complete", {"status": "success", "result": result})
             return result
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except RuntimeError as e:
             f_type = self._classify_exception(e)
-
-            # Telemetry Capture (Swarm Intelligence Fix)
             if hasattr(self, "context") and self.context:
                 try:
                     self.context.log_failure(
@@ -197,9 +195,8 @@ class BaseAgent(
                         stack_trace=traceback.format_exc(),
                         failure_type=f_type
                     )
-                except Exception:
+                except (RuntimeError, ValueError):
                     pass
-
             self._notify_webhooks("agent_error", {"error": str(e), "failure_type": f_type})
             return f"Error: {e} (Type: {f_type})"
 
@@ -344,35 +341,32 @@ class BaseAgent(
 
     def __enter__(self) -> BaseAgent:
         """Enter context."""
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: types.TracebackType | None,
-    ) -> None:
-        """Exit context and cleanup."""
-        _ = (exc_type, exc_val, exc_tb)
-
-    def calculate_anchoring_strength(self, result: str) -> float:
-        """Calculate thematic anchoring for the result."""
-        return self.agent_logic_core.calculate_anchoring_strength(result, getattr(self, "context_pool", {}))
-
-    # pylint: disable=too-many-arguments, too-many-positional-arguments
-    def _record(
-        self,
-        prompt: str,
-        result: str,
-        provider: str = "Internal",
-        model: str = "AgentLogic",
-        meta: dict[str, Any] | None = None,
-    ) -> None:
-        """Helper to record diagnostic or telemetry events to the fleet recorder."""
-        if hasattr(self, "recorder") and self.recorder:
+        try:
+            # Check if there is an existing running event loop (Python 3.7+)
             try:
-                res_str = result
-                if isinstance(result, (dict, list)):
+                asyncio.get_running_loop()
+                # For compatibility in nested async
+                result = "Async loop already running"
+            except RuntimeError:
+                # No running loop, safe to use asyncio.run
+                result = asyncio.run(self.run_async(prompt))
+
+            self._notify_webhooks("agent_complete", {"status": "success", "result": result})
+            return result
+        except RuntimeError as e:
+            f_type = self._classify_exception(e)
+            if hasattr(self, "context") and self.context:
+                try:
+                    self.context.log_failure(
+                        stage=f"{self.__class__.__name__}.run",
+                        error=str(e),
+                        stack_trace=traceback.format_exc(),
+                        failure_type=f_type
+                    )
+                except (RuntimeError, ValueError):
+                    pass
+            self._notify_webhooks("agent_error", {"error": str(e), "failure_type": f_type})
+            return f"Error: {e} (Type: {f_type})"
                     import json  # pylint: disable=import-outside-toplevel
 
                     res_str = json.dumps(result)

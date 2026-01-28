@@ -105,15 +105,7 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
                     finding["line"] = line_num
                 findings.append(finding)
             return findings
-<<<<<<< HEAD
-<<<<<<< HEAD
         except (ValueError, TypeError, AttributeError):
-=======
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
             return []
 
     def generate_simple_fix(self, issue_type: str, content: str) -> Optional[str]:
@@ -121,48 +113,14 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         Applies non-AI assisted simple fixes using Rust if available.
         """
         if _RUST_ACCEL and rc is not None:
-<<<<<<< HEAD
             result = rc.generate_simple_fix(issue_type, content)
             return result if result is not None else None
-=======
-            try:
-                result = rc.apply_simple_fixes_rust(content)
-                if result:
-                    fixed_content, _ = result
-                    return fixed_content
-                return None
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                pass  # Fall through to Python path
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
 
         # Python fallback
         if issue_type == "Robustness Issue":
             return re.sub(
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
                 r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught(\s*)(#.*)?$",
                 r"\1except Exception as e:  # pylint: disable=broad-exception-caught\2\3",
-=======
-=======
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-                r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught
-                    (\s*)(#.*)?$",
-                r"\1except Exception as e:  # pylint: disable=broad-exception-caught
-                    \2\3",
-<<<<<<< HEAD
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-                r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught(\s*)(#.*)?$",
-                r"\1except Exception as e:  # pylint: disable=broad-exception-caught\2\3",
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
-                r"^(\s*)except Exception as e:  # pylint: disable=broad-exception-caught(\s*)(#.*)?$",
-                r"\1except Exception as e:  # pylint: disable=broad-exception-caught\2\3",
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
                 content,
                 flags=re.MULTILINE,
             )

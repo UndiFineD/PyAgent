@@ -147,62 +147,14 @@ class AsyncRequestHandle:
             return self.generated_tokens / (latency / 1000)
         return None
 
-
 class AsyncVllmEngine:
+    """
+    AsyncVllmEngine provides high-throughput async inference for PyAgent using vLLM.
+    """
     @property
     def _requests(self):
         """Alias for test compatibility (legacy)."""
         return self._req_tracker
-    """
-    High-throughput async vLLM engine for PyAgent.
-
-    Provides:
-    - Concurrent request handling
-    - Request tracking and cancellation
-    - Automatic batching via vLLM scheduler
-    - Streaming support via async iterators
-
-    Example:
-        engine = AsyncVllmEngine(AsyncEngineConfig(model="meta-llama/Llama-3-8B"))
-        await engine.start()
-
-        # Single request
-        result = await engine.generate("What is AI?")
-
-        # Concurrent requests
-        handles = await engine.generate_batch(["Q1", "Q2", "Q3"])
-
-        # Streaming
-        async for token in engine.generate_stream("Tell me a story"):
-            print(token, end="", flush=True)
-    """
-
-    _instance: Optional["AsyncVllmEngine"] = None
-
-    def __init__(self, config: Optional[AsyncEngineConfig] = None):
-        self.config = config or AsyncEngineConfig()
-        self._engine: Optional[AsyncLLMEngine] = None
-        self._running = False
-        self._req_tracker: Dict[str, AsyncRequestHandle] = {}
-        self._lock = asyncio.Lock()
-        self._stats = {
-            "total_requests": 0,
-            "completed_requests": 0,
-            "failed_requests": 0,
-            "total_tokens": 0,
-        }
-
-    @classmethod
-    def get_instance(cls, config: Optional[AsyncEngineConfig] = None) -> "AsyncVllmEngine":
-        """Get singleton instance."""
-        if cls._instance is None:
-            cls._instance = AsyncVllmEngine(config)
-        return cls._instance
-
-    @property
-    def is_available(self) -> bool:
-        """Check if vLLM async engine is available."""
-        return HAS_ASYNC_VLLM
 
     @property
     def is_running(self) -> bool:

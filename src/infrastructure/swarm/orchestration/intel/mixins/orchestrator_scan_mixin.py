@@ -15,7 +15,7 @@ class OrchestratorScanMixin:
     """Methods for scanning files and analyzing contents."""
 
     def _scan_and_repair_files(
-        self, target_dir: str, results: dict[str, Any]
+        self, target_dir: str, results: dict[str, Any], allow_triton_check: bool = True
     ) -> list[tuple[str, str, str, int, float]]:
         """Iterates through files, analyzes them, and applies fixes."""
         debt_records: list[tuple[str, str, str, int, float]] = []
@@ -34,7 +34,7 @@ class OrchestratorScanMixin:
                 if file.endswith(".py"):
                     file_path = os.path.join(root, file)
                     results["files_scanned"] += 1
-                    file_issues = self._analyze_and_fix(file_path)
+                    file_issues = self._analyze_and_fix(file_path, allow_triton_check=allow_triton_check)
 
                     if file_issues:
                         results["issues_found"] += len(file_issues)
@@ -63,7 +63,7 @@ class OrchestratorScanMixin:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to bulk record debt to SQL: {e}")
 
-    def _analyze_and_fix(self, file_path: str) -> list[dict[str, Any]]:
+    def _analyze_and_fix(self, file_path: str, allow_triton_check: bool = True) -> list[dict[str, Any]]:
         """Uses specialized assistant classes to analyze and fix a file."""
         # 0. Delegate Analysis tasks
         versioning_issue = self.analysis.check_versioning()
@@ -77,7 +77,7 @@ class OrchestratorScanMixin:
             return []
 
         rel_path = os.path.relpath(file_path, self.workspace_root)
-        findings = self.core.analyze_content(content, rel_path)
+        findings = self.core.analyze_content(content, rel_path, allow_triton_check=allow_triton_check)
 
         # 1. Structural and Hive Analysis
         self.analysis.add_structural_findings(findings, file_path, rel_path, content)

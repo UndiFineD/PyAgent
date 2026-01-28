@@ -69,9 +69,13 @@ def check_server() -> bool:
         response = session.get(f"{API_BASE_URL}/", timeout=2)
         available = response.status_code == 200
         conn_manager.update_status("AgentAPIServer", available)
-
         return available
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except (RuntimeError, ValueError) as e:
+        pass
+    except BaseException as e:
+        pass
+        import traceback
+        print(f"Error checking API server availability: {e}\n{traceback.format_exc()}")
         conn_manager.update_status("AgentAPIServer", False)
         return False
 
