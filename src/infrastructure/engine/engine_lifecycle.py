@@ -323,7 +323,21 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
                     for request in self.request_queue.get_running_requests():
                         self.request_queue.abort_request(request.request_id)
                     break
-                time.sleep (0.1)
+                # Use a helper async sleep if in an async context, else fallback to time.sleep
+                self._sleep_briefly()
+    def _sleep_briefly(self):
+        # Helper to sleep briefly, compatible with sync context
+        try:
+            if asyncio.get_event_loop().is_running():
+                # If in async context, schedule async sleep
+                asyncio.create_task(self._async_sleep())
+            else:
+                time.sleep(0.1)
+        except (RuntimeError, AttributeError):
+            time.sleep(0.1)
+
+    async def _async_sleep(self):
+        await asyncio.sleep(0.1)
 
         self._drain_complete.set()
         return self._transition_to(EngineState.DEAD)

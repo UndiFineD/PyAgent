@@ -95,7 +95,8 @@ class MathAgent(BaseAgent):
                 pass
 
             # Python safe eval fallback
-            result = eval(sanitized, SAFE_MATH_NAMESPACE)  # pylint: disable=eval-used
+            import ast
+            result = ast.literal_eval(sanitized)
             self._record_calculation(expression, result, "python")
             return {"expression": expression, "result": result, "status": "success", "engine": "python"}
 

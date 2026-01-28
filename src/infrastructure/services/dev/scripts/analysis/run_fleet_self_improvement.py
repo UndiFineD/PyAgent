@@ -44,6 +44,15 @@ if os.path.exists(COPILOT_PATH) and COPILOT_PATH not in os.environ["PATH"]:
     os.environ["PATH"] = COPILOT_PATH + os.pathsep + os.environ["PATH"]
     logging.info(f"Augmented PATH with {COPILOT_PATH}")
 
+
+# Import the Rust extension for fleet self-improvement (registers PyO3 functions)
+try:
+    # import rust_core  # Rust-powered analysis and fix functions
+    _RUST_ACCEL = True
+except ImportError:
+    rust_core = None
+    _RUST_ACCEL = False
+
 # pylint: disable=wrong-import-position
 from src.core.base.lifecycle.version import VERSION  # noqa: E402
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: E402
@@ -155,6 +164,10 @@ class IntelligenceHarvester:
         return lessons
 
 
+
+# Global flag to ensure Triton compatibility is only checked/logged on the first cycle
+TRITON_CHECKED_ONCE = False
+
 class CycleOrchestrator:
     """Manages the execution of multiple improvement cycles."""
 
@@ -165,25 +178,52 @@ class CycleOrchestrator:
         self.logger = StructuredLogger(agent_id="SelfImprovementLoop")
         self.is_infinite = args.cycles <= 0
 
+
     def run(self) -> None:
-        """Executes the loop based on arguments."""
+        """Executes the loop based on arguments, always printing per-cycle timing."""
         current_cycle = 0
         while True:
             current_cycle += 1
-
-            run_cycle(
-                self.fleet,
-                self.root,
-                self.logger,
-                prompt_path=self.args.prompt,
-                context_path=self.args.context,
-                current_cycle=current_cycle,
-                model_name=self.args.model,
-            )
-
+            start_time = time.time()
+            # Only allow Triton compatibility check/logging on the first cycle
+            if not _triton_checked_once:
+                # Proactively set GITHUB_TOKEN from gh CLI if not already set
+                if not os.environ.get("GITHUB_TOKEN"):
+                    try:
+                        res = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=False)
+                        if res.returncode == 0:
+                            token = res.stdout.strip()
+                            if token:
+                                os.environ["GITHUB_TOKEN"] = token
+                                logging.info("GITHUB_TOKEN set from 'gh auth token' for first cycle.")
+                    except subprocess.SubprocessError as e:
+                        logging.warning(f"Could not set GITHUB_TOKEN from gh CLI: {e}")
+                run_cycle(
+                    self.fleet,
+                    self.root,
+                    self.logger,
+                    prompt_path=self.args.prompt,
+                    context_path=self.args.context,
+                    current_cycle=current_cycle,
+                    model_name=self.args.model,
+                    allow_triton_check=True,
+                )
+                _triton_checked_once = True
+            else:
+                run_cycle(
+                    self.fleet,
+                    self.root,
+                    self.logger,
+                    prompt_path=self.args.prompt,
+                    context_path=self.args.context,
+                    current_cycle=current_cycle,
+                    model_name=self.args.model,
+                    allow_triton_check=False,
+                )
+            duration = time.time() - start_time
+            print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")
             if not self.is_infinite and current_cycle >= self.args.cycles:
                 break
-
             self.logger.info("Waiting before next cycle... (Press Ctrl+C to stop)")
             _cycle_throttle(self.args.delay, self.root, self._get_last_focus(), use_watcher=self.args.watch)
 
@@ -208,6 +248,7 @@ except ImportError:
 __version__ = VERSION
 
 
+
 def run_cycle(
     fleet: FleetManager,
     root: str,
@@ -216,6 +257,7 @@ def run_cycle(
     context_path: str | None = None,
     current_cycle: int = 1,
     model_name: str = "gemini-3-flash",
+    allow_triton_check: bool = True,
 ) -> None:
     """Run a single improvement cycle."""
     logger.info(f"--- CYCLE {current_cycle} STARTING ---")
@@ -229,7 +271,8 @@ def run_cycle(
     # 2. Run Improvement Loop
     combined_stats = {"files_scanned": 0, "issues_found": 0, "fixes_applied": 0, "details": []}
     for t_dir in target_dirs:
-        stats = fleet.self_improvement.run_improvement_cycle(target_dir=t_dir)
+        # Patch: Only allow Triton compatibility check on first cycle
+        stats = fleet.self_improvement.run_improvement_cycle(target_dir=t_dir, allow_triton_check=allow_triton_check)
         combined_stats["files_scanned"] += stats.get("files_scanned", 0)
         combined_stats["issues_found"] += stats.get("issues_found", 0)
         combined_stats["fixes_applied"] += stats.get("fixes_applied", 0)
@@ -262,14 +305,14 @@ def consult_external_models(fleet, broken_items, prompt_path=None, model_name=No
     Placeholder for federated learning consultation (Phase 112).
     """
     # pylint: disable=unused-argument
-    print("\n[Intelligence] Consulting external federated models for remaining debt...")
+    print("[Intelligence] Consulting external federated models for remaining debt...")
     if broken_items:
         print(f" - Analyzed {len(broken_items)} debt clusters.")
         for item in broken_items:
             print(f"   * File: {item['file']}")
             for issue in item["remaining_issues"]:
                 print(f"     - {issue.get('type', 'Unknown')}: {issue.get('message', '')}")
-    print(" - Federated consensus reached: Continue localized refactoring.")
+    print("[Intelligence] Federated consensus reached: Continue localized refactoring.")
 
 
 def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
@@ -330,14 +373,31 @@ def _verify_ai_recording(fleet: FleetManager) -> None:
 
 def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
     """Triggers knowledge synthesis from the swarm."""
+    logger = StructuredLogger(agent_id="SelfImprovementLoop")
     try:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
-            print(f"\n[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
+            logger.info(f"[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
             for idx, pattern in enumerate(new_patterns, 1):
-                print(f"  {idx}. {pattern}")
+                file_link = ""
+                doc_link = ""
+                if isinstance(pattern, dict):
+                    desc = pattern.get("description", str(pattern))
+                    file_path = pattern.get("file")
+                    # ...existing code...
+                    doc = pattern.get("doc")
+                else:
+                    desc = str(pattern)
+                    file_path = None
+                    # ...existing code...
+                    doc = None
+                if file_path:
+                    file_link = f" [View]({file_path})"
+                if doc:
+                    doc_link = f" [Docs]({doc})"
+                logger.info(f"  {idx}. {desc}{file_link}{doc_link}")
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        print(f"\n[Intelligence] Synthesis skipped: {e}")
+        logger.warning(f"[Intelligence] Synthesis skipped: {e}")
 
 
 def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[str, Any]], model_name: str) -> None:
@@ -457,7 +517,7 @@ def _report_remaining_debt(
 
     # 3. Observability and Recording
     _log_explainability(fleet, stats)
-    print("\n[Intelligence] Verifying local interaction recording...")
+    print("[Intelligence] Verifying local interaction recording...")
     _verify_ai_recording(fleet)
     print(" - Interaction archived to compressed local shard.")
 

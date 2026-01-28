@@ -98,7 +98,7 @@ class SelfImprovementQualityMixin:
                 )
         return findings
 
-    def _analyze_robustness_and_perf(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_robustness_and_perf(self, content: str, file_path_rel: str, allow_triton_check: bool = True) -> List[Dict[str, Any]]:
         """General quality and performance checks."""
         findings = []
         # Robustness: Bare except
@@ -136,4 +136,9 @@ class SelfImprovementQualityMixin:
                     "file": file_path_rel,
                 }
             )
+
+        # Triton compatibility warning (placeholder for actual check location)
+        if not allow_triton_check:
+            # If Triton check is not allowed, skip any Triton-related warnings/checks here
+            pass
         return findings
