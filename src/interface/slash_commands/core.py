@@ -453,7 +453,9 @@ class SlashCommands:
 
         try:
             return defn.handler(ctx)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-except
+            import traceback
+            print(f"Unexpected error in command handler: {e}\n{traceback.format_exc()}")
             return CommandResult.fail(str(e))
 
     def process(
@@ -492,7 +494,9 @@ class SlashCommands:
             if defn:
                 try:
                     result = defn.handler(ctx)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:  # pylint: disable=broad-except
+                    import traceback
+                    print(f"Unexpected error in command handler: {e}\n{traceback.format_exc()}")
                     result = CommandResult.fail(str(e))
             else:
                 result = CommandResult.fail(f"Unknown command: {cmd.command}")

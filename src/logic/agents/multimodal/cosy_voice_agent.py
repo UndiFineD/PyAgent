@@ -22,7 +22,7 @@ from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass
-from typing import Optional, Dict
+from typing import Optional
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
@@ -60,21 +60,17 @@ class CosyVoiceAgent(BaseAgent):
         self._system_prompt = "You are the CosyVoice Orchestrator. You manage speech generation lifecycles."
 
     @as_tool
-    def load_model(self) -> str:
+    async def load_model(self) -> str:
         """Loads the CosyVoice model into memory (if not already loaded)."""
         if self._model:
             return "CosyVoice model already loaded."
-        
         logger.info(f"Loading CosyVoice model from {self.config.model_path} on {self.config.device}...")
-        try:
-            # Simulation of model loading
-            time.sleep(1) # Simulate I/O
-            self._model = "CosyVoice-300M-Loaded-Mock"
-            self._last_used = time.time()
-            return f"CosyVoice model loaded successfully on {self.config.device}."
-        except Exception as e:
-            logger.error(f"Failed to load CosyVoice: {e}")
-            return f"Error loading model: {e}"
+        # Simulation of model loading
+        import asyncio
+        await asyncio.sleep(1) # Simulate I/O
+        self._model = "CosyVoice-300M-Loaded-Mock"
+        self._last_used = time.time()
+        return f"CosyVoice model loaded successfully on {self.config.device}."
 
     @as_tool
     def unload_model(self) -> str:
@@ -85,7 +81,7 @@ class CosyVoiceAgent(BaseAgent):
         self._model = None
         if torch and torch.cuda.is_available():
             torch.cuda.empty_cache()
-            
+        
         logger.info("CosyVoice model unloaded.")
         return "CosyVoice model unloaded successfully."
 
@@ -112,7 +108,7 @@ class CosyVoiceAgent(BaseAgent):
         if self._model and (time.time() - self._last_used) > timeout_seconds:
             logger.info(f"CosyVoice model idle for >{timeout_seconds}s. Unloading...")
             self.unload_model()
-
+        
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(CosyVoiceAgent, "CosyVoice Orchestrator", "Speech generation logs")
