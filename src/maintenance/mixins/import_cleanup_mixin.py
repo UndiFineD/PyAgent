@@ -18,7 +18,7 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 class ImportCleanupMixin:
     """Provides utilities for resolving and fixing Python imports after refactors."""
@@ -30,16 +30,16 @@ class ImportCleanupMixin:
         """
         name_map = {}
         for d in dirs:
-            dp = root_dir / d
+            dp: Path = root_dir / d
             if not dp.exists():
                 continue
             for p in dp.rglob("*"):
                 if p.name == "__init__.py":
                     continue
-                parent = str(p.parent.resolve()).lower()
-                name = p.stem if not p.is_dir() else p.name
+                parent: str = str(p.parent.resolve()).lower()
+                name: str = p.stem if not p.is_dir() else p.name
                 # Remove underscores/dashes for fuzzy matching if needed
-                low = name.replace("_", "").replace("-", "").lower()
+                low: str = name.replace("_", "").replace("-", "").lower()
                 name_map[(parent, low)] = name
         return name_map
 
@@ -52,18 +52,18 @@ class ImportCleanupMixin:
         search_dirs: List[str]
     ) -> str:
         """Resolves a module string to its correct casing and path."""
-        parts = mod_str.split(".")
+        parts: List[str] = mod_str.split(".")
         if mod_str.startswith("."):
             # Relative import
-            m = re.match(r"^(\.+)", mod_str)
-            dots = len(m.group(1))
-            rel_parts = parts[dots-1:]
+            m: re.Match[str] | None = re.match(r"^(\.+)", mod_str)
+            dots: int = len(m.group(1))
+            rel_parts: List[str] = parts[dots-1:]
             if rel_parts and rel_parts[0].startswith("."):
                 rel_parts[0] = rel_parts[0].lstrip(".")
             if rel_parts and not rel_parts[0]:
                 rel_parts.pop(0)
 
-            curr = current_file.parent.resolve()
+            curr: Path = current_file.parent.resolve()
             for _ in range(dots - 1):
                 curr = curr.parent
 
@@ -84,7 +84,7 @@ class ImportCleanupMixin:
             for i, p in enumerate(parts):
                 if curr_path is None:
                     # Look for root/part
-                    low = p.lower()
+                    low: str = p.lower()
                     for d in search_dirs:
                         if d.lower() == low:
                             curr_path = root_dir / d
@@ -95,30 +95,30 @@ class ImportCleanupMixin:
                     else:
                         return mod_str  # External module
 
-                low = p.replace("_", "").replace("-", "").lower()
-                key = (str(curr_path).lower(), low)
+                low: str = p.replace("_", "").replace("-", "").lower()
+                key: Tuple[str] = (str(curr_path).lower(), low)
                 if key in name_map:
-                    real = name_map[key]
+                    real: str = name_map[key]
                     res.append(real)
-                    curr_path = curr_path / real
+                    curr_path: Path = curr_path / real
                 else:
                     res.extend(parts[i:])
                     break
             return ".".join(res)
 
-    def fix_imports_in_file(self, file_path: Path, name_map: Dict, root_dir: Path, search_dirs: List[str]) -> bool:
+    def fix_imports_in_file(self, file_path: Path, name_map: dict[tuple[str, str], str], root_dir: Path, search_dirs: list[str]) -> bool:
         """Updates imports in a file to match the actual filesystem casing/naming."""
         try:
-            content = file_path.read_text(encoding="utf-8")
+            content: str = file_path.read_text(encoding="utf-8")
 
-            def replacer(match):
+            def replacer(match) -> str:
                 mod = match.group(2)
-                resolved = self.resolve_module_path(mod, file_path, name_map, root_dir, search_dirs)
+                resolved: str = self.resolve_module_path(mod, file_path, name_map, root_dir, search_dirs)
                 return f"{match.group(1)}{resolved}"
 
             # Regex for 'import ...' and 'from ... import ...'
-            new_content = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
-            new_content = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
+            new_content: str = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
+            new_content: str = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
 
             if new_content != content:
                 file_path.write_text(new_content, encoding="utf-8")

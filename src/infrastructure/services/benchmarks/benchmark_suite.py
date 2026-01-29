@@ -37,8 +37,8 @@ from src.infrastructure.services.benchmarks.models import BenchmarkResult
 class BenchmarkSuite:
     """Unified suite for running performance benchmarks on PyAgent components."""
 
-    def __init__(self, logger: Optional[logging.Logger] = None):
-        self.logger = logger or logging.getLogger(__name__)
+    def __init__(self, logger: Optional[logging.Logger] = None) -> None:
+        self.logger: logging.Logger = logger or logging.getLogger(__name__)
         self.results: List[BenchmarkResult] = []
 
     def benchmark_tokenization(
@@ -52,11 +52,11 @@ class BenchmarkSuite:
             # Warm-up
             estimate_token_count(text)
 
-            start = time.perf_counter()
+            start: float = time.perf_counter()
             tokens = 0
             for _ in range(iterations):
-                tokens = estimate_token_count(text)
-            duration = time.perf_counter() - start
+                tokens: int = estimate_token_count(text)
+            duration: float = time.perf_counter() - start
 
             res = BenchmarkResult(
                 name=f"Python Tokenization: {name}",
@@ -76,11 +76,11 @@ class BenchmarkSuite:
                 # Warm-up Rust
                 rc.estimate_tokens_rust(text)
 
-                start_rust = time.perf_counter()
+                start_rust: float = time.perf_counter()
                 rust_tokens = 0
                 for _ in range(iterations):
                     rust_tokens = rc.estimate_tokens_rust(text)
-                duration_rust = time.perf_counter() - start_rust
+                duration_rust: float = time.perf_counter() - start_rust
 
                 res_rust = BenchmarkResult(
                     name=f"Rust Tokenization: {name}",
@@ -104,11 +104,11 @@ class BenchmarkSuite:
         """Benchmarks an agent's generation performance."""
         self.logger.info(f"Benchmarking agent {label} using method {method_name}")
 
-        input_tokens = estimate_token_count(prompt)
-        start = time.perf_counter()
+        input_tokens: int = estimate_token_count(prompt)
+        start: float = time.perf_counter()
 
         try:
-            method = getattr(agent, method_name, None)
+            method: Any | None = getattr(agent, method_name, None)
             if not method and hasattr(agent, "improve_content"):
                 method = agent.improve_content
 
@@ -121,10 +121,10 @@ class BenchmarkSuite:
             else:
                 output = method(prompt)
 
-            duration = time.perf_counter() - start
+            duration: float = time.perf_counter() - start
 
-            output_tokens = estimate_token_count(str(output))
-            total_tokens = input_tokens + output_tokens
+            output_tokens: int = estimate_token_count(str(output))
+            total_tokens: int = input_tokens + output_tokens
 
             res = BenchmarkResult(
                 name=label,
@@ -135,7 +135,7 @@ class BenchmarkSuite:
                 metrics={"output_length": len(str(output))},
             )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            duration = time.perf_counter() - start
+            duration: float = time.perf_counter() - start
             res = BenchmarkResult(name=label, duration=duration, success=False, error=str(e))
             self.logger.error(f"Agent benchmark failed: {e}")
 
@@ -151,24 +151,24 @@ class BenchmarkSuite:
         """Runs a sustained throughput test for token estimation."""
         self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")
 
-        start_time = time.perf_counter()
+        start_time: float = time.perf_counter()
         iterations = 0
         total_tokens = 0
         text_index = 0
 
         while (time.perf_counter() - start_time) < duration_seconds:
-            text = test_texts[text_index]
-            tokens = estimate_token_count(text)
+            text: str = test_texts[text_index]
+            tokens: int = estimate_token_count(text)
 
             iterations += 1
             total_tokens += tokens
-            text_index = (text_index + 1) % len(test_texts)
+            text_index: int = (text_index + 1) % len(test_texts)
 
             if progress_callback:
-                elapsed = time.perf_counter() - start_time
+                elapsed: float = time.perf_counter() - start_time
                 progress_callback(elapsed, iterations, total_tokens)
 
-        actual_duration = time.perf_counter() - start_time
+        actual_duration: float = time.perf_counter() - start_time
 
         res = BenchmarkResult(
             name=f"Sustained Throughput ({duration_seconds}s)",
@@ -180,7 +180,7 @@ class BenchmarkSuite:
         self.results.append(res)
         return res
 
-    def print_summary(self):
+    def print_summary(self) -> None:
         """Prints a formatted summary of all benchmark results."""
         if not self.results:
             print("\nEmpty benchmark suite results.")

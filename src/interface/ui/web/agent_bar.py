@@ -15,19 +15,19 @@ class AgentBar:
     Integrates with the 120fps DVD-channel MUXer.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.status = "IDLE"
-        self.active_channels = ["TEXT", "AUDIO", "VIDEO"]
+        self.active_channels: list[str] = ["TEXT", "AUDIO", "VIDEO"]
         self.throughput_fps = 0.0
         self.latency_ms = 0.0
         self.sync_offset_ms = 0.0
 
-    def update_metrics(self, fps: float, latency: float, sync: float):
+    def update_metrics(self, fps: float, latency: float, sync: float) -> None:
         """Updates the real-time performance metrics."""
-        self.throughput_fps = fps
-        self.latency_ms = latency
-        self.sync_offset_ms = sync
-        self.status = "ACTIVE" if fps > 0 else "IDLE"
+        self.throughput_fps: float = fps
+        self.latency_ms: float = latency
+        self.sync_offset_ms: float = sync
+        self.status: str = "ACTIVE" if fps > 0 else "IDLE"
 
     def render_props(self) -> Dict[str, Any]:
         """Returns properties for React/Vue front-end rendering."""

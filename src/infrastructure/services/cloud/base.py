@@ -106,7 +106,7 @@ class CloudProviderBase(ABC):
                 ...
     """
 
-    def __init__(self, api_key: Optional[str] = None, **config):
+    def __init__(self, api_key: Optional[str] = None, **config) -> None:
         """
         Initialize the cloud provider.
 
@@ -114,7 +114,7 @@ class CloudProviderBase(ABC):
             api_key: API key for authentication (can also use env vars).
             **config: Additional provider-specific configuration.
         """
-        self._api_key = api_key
+        self._api_key: str | None = api_key
         self._config = config
         self._is_healthy = True
         self._last_error: Optional[str] = None
@@ -199,11 +199,11 @@ class CloudProviderBase(ABC):
         """Check if this provider supports the given model."""
         return model in self.available_models
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
         """Async context manager entry."""
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
         """Async context manager exit - cleanup resources."""
         pass
 
@@ -211,22 +211,22 @@ class CloudProviderBase(ABC):
 class CloudProviderError(Exception):
     """Base exception for cloud provider errors."""
 
-    def __init__(self, message: str, provider: str, retriable: bool = False):
+    def __init__(self, message: str, provider: str, retriable: bool = False) -> None:
         super().__init__(message)
-        self.provider = provider
-        self.retriable = retriable
+        self.provider: str = provider
+        self.retriable: bool = retriable
 
 
 class RateLimitError(CloudProviderError):
     """Raised when rate limits are exceeded."""
 
-    def __init__(self, message: str, provider: str, retry_after: Optional[float] = None):
+    def __init__(self, message: str, provider: str, retry_after: Optional[float] = None) -> None:
         super().__init__(message, provider, retriable=True)
-        self.retry_after = retry_after
+        self.retry_after: float | None = retry_after
 
 
 class AuthenticationError(CloudProviderError):
     """Raised when authentication fails."""
 
-    def __init__(self, message: str, provider: str):
+    def __init__(self, message: str, provider: str) -> None:
         super().__init__(message, provider, retriable=False)

@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 class EmbeddingLoader:
     """Load embeddings from various formats."""
 
-    ENCODINGS = {
+    ENCODINGS: Dict[str, Tuple[str | int]] = {
         "float32": ("f", 4),
         "float16": ("e", 2),
         "bfloat16": ("e", 2),
@@ -52,16 +52,16 @@ class EmbeddingLoader:
             raise ValueError(f"Unknown encoding: {encoding}")
 
         format_char, byte_size = cls.ENCODINGS[encoding]
-        decoded = base64.b64decode(data)
-        num_floats = len(decoded) // byte_size
-        values = struct.unpack(f"{num_floats}{format_char}", decoded)
+        decoded: bytes = base64.b64decode(data)
+        num_floats: int = len(decoded) // byte_size
+        values: Tuple[Any] = struct.unpack(f"{num_floats}{format_char}", decoded)
 
         dim = int(len(values) ** 0.5)
         if dim * dim != len(values):
             return EmbeddingInput(embeddings=[list(values)])
 
         embeddings = []
-        for i in range(0, len(values), dim):
+        for i: int in range(0, len(values), dim):
             embeddings.append(list(values[i : i + dim]))
 
         return EmbeddingInput(embeddings=embeddings, encoding=encoding)
@@ -69,8 +69,8 @@ class EmbeddingLoader:
     @classmethod
     def load_file(cls, path: str, encoding: str = "float32") -> EmbeddingInput:
         """Load embeddings from file."""
-        with open(path, 'rb', encoding='utf-8') as f:
-            data = base64.b64encode(f.read()).decode()
+        with open(path, 'rb', encoding='utf-8') as f: base64.IO[Any]:
+            data: str = base64.b64encode(f.read()).decode()
         return cls.load_base64(data, encoding)
 
     @classmethod
@@ -86,8 +86,8 @@ class EmbeddingLoader:
             raise ValueError(f"Unknown encoding: {encoding}")
 
         format_char, _ = cls.ENCODINGS[encoding]
-        flat = [v for emb in embeddings for v in emb]
-        packed = struct.pack(f"{len(flat)}{format_char}", *flat)
+        flat: List[float] = [v for emb: List[float] in embeddings for v: float in emb]
+        packed: bytes = struct.pack(f"{len(flat)}{format_char}", *flat)
         return base64.b64encode(packed).decode()
 
 

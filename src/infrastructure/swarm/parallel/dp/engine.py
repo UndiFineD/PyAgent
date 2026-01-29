@@ -20,6 +20,7 @@ Engine core processor for data parallel coordination.
 
 from __future__ import annotations
 
+from _thread import RLock
 import logging
 import threading
 import time
@@ -32,7 +33,7 @@ from src.infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
                                                         WorkerHealth,
                                                         WorkerState)
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class DPEngineCoreProc:
@@ -40,8 +41,8 @@ class DPEngineCoreProc:
     Data Parallel engine core processor.
     """
 
-    def __init__(self, config: DPConfig):
-        self.config = config
+    def __init__(self, config: DPConfig) -> None:
+        self.config: DPConfig = config
 
         # Step tracking
         self._step_counter = 0
@@ -70,7 +71,7 @@ class DPEngineCoreProc:
             self._step_barrier = threading.Barrier(self.config.dp_size)
             self._wave_barrier = threading.Barrier(self.config.dp_size)
 
-        self._lock = threading.RLock()
+        self._lock: RLock = threading.RLock()
 
         logger.info(f"DPEngineCoreProc initialized: rank={config.dp_rank}, size={config.dp_size}")
 
@@ -80,7 +81,7 @@ class DPEngineCoreProc:
             locality_group = 0
             for group_idx, group in enumerate(self.config.locality_groups):
                 if i in group:
-                    locality_group = group_idx
+                    locality_group: int = group_idx
                     break
 
             self._workers[i] = WorkerState(worker_id=i, dp_rank=i % self.config.dp_size, locality_group=locality_group)
@@ -89,7 +90,7 @@ class DPEngineCoreProc:
         """Begin a new step."""
         with self._lock:
             self._step_counter += 1
-            self._step_request_count = num_requests
+            self._step_request_count: int = num_requests
 
             step = StepState(step_id=self._step_counter, wave_id=self._wave_id, request_count=num_requests)
             self._current_step = step
@@ -101,7 +102,7 @@ class DPEngineCoreProc:
             if self._current_step is None:
                 return None
 
-            step = self._current_step
+            step: StepState = self._current_step
             step.end_time = time.time()
             if self._current_wave:
                 self._current_wave.completed_steps += 1
@@ -134,7 +135,7 @@ class DPEngineCoreProc:
             if self._current_wave is None:
                 return None
 
-            wave = self._current_wave
+            wave: WaveState = self._current_wave
             wave.end_time = time.time()
             self._wave_history.append(wave)
             self._current_wave = None
@@ -149,9 +150,9 @@ class DPEngineCoreProc:
         """Select worker for request assignment."""
         return self._load_balancer.select_worker(locality_group)
 
-    def assign_request(self, request_id: str) -> int:
+    def assign_request(self, _request_id: str) -> int:
         """Assign request to a worker. Returns worker ID."""
-        worker = self.select_worker()
+        worker: WorkerState = self.select_worker()
         worker.pending_requests += 1
         return worker.worker_id
 
@@ -161,7 +162,7 @@ class DPEngineCoreProc:
             if worker_id not in self._workers:
                 return
 
-            worker = self._workers[worker_id]
+            worker: WorkerState = self._workers[worker_id]
             worker.pending_requests = max(0, worker.pending_requests - 1)
             worker.total_processed += 1
             worker.update_latency(latency_ms)
@@ -206,9 +207,9 @@ class DPEngineCoreProc:
     def get_metrics(self) -> dict[str, Any]:
         """Get coordinator metrics."""
         with self._lock:
-            total_pending = sum(w.pending_requests for w in self._workers.values())
-            total_processed = sum(w.total_processed for w in self._workers.values())
-            healthy_count = len(self.get_healthy_workers())
+            total_pending: int = sum(w.pending_requests for w in self._workers.values())
+            total_processed: int = sum(w.total_processed for w in self._workers.values())
+            healthy_count: int = len(self.get_healthy_workers())
 
             return {
                 "dp_rank": self.config.dp_rank,

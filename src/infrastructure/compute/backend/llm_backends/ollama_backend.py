@@ -38,46 +38,33 @@ class OllamaBackend(LLMBackend):
         system_prompt: str = "You are a helpful assistant.",
         **kwargs,
     ) -> str:
-        if not self._is_working("ollama"):
-            logging.debug("Ollama skipped due to connection cache.")
-            return ""
-
-        import os
-        from openai import OpenAI
-
-        base_url = kwargs.get("base_url") or os.environ.get("DV_OLLAMA_BASE_URL") or "http://localhost:11434"
-        # Ensure base_url ends with /v1 for openai client compatibility if needed, 
-        # but Ollama usually listens at root. OpenAI client expects base_url.
-        # However, for Ollama via OpenAI client, we usually point to http://localhost:11434/v1
-        
-        # Check if user provided a full path or just host
-        api_base = base_url
-        if not api_base.endswith("/v1"):
-             api_base = f"{api_base.rstrip('/')}/v1"
-
-        client = OpenAI(base_url=api_base, api_key="ollama")
-
+        # Map 'tinyllama' to 'tinyllama:latest' to match Ollama's model tag
+        if model == "tinyllama":
+            model = "tinyllama:latest"
         import time
         start_t = time.time()
-
+        print(f"[OllamaBackend] Called with model: {model}\nPrompt: {prompt[:80]}{'...' if len(prompt) > 80 else ''}")
         try:
-            # Unifying with Agent logic: Use Chat Completions
-            response = client.chat.completions.create(
+            from ollama import chat as ollama_chat
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+            print(f"[OllamaBackend] Sending to ollama: model={model}, messages={messages}")
+            response = ollama_chat(
                 model=model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ],
-                stream=False
+                messages=messages,
             )
-            content = response.choices[0].message.content or ""
-            
+            print(f"[OllamaBackend] Ollama raw response: {response}")
+            content = response.message.content if hasattr(response, "message") and hasattr(response.message, "content") else str(response)
             latency = time.time() - start_t
+            print(f"[OllamaBackend] Ollama content: {content}")
             self._record("ollama", model, prompt, content, system_prompt=system_prompt, latency_s=latency)
             self._update_status("ollama", True)
             return content
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            # Lowered logging level for fallback-friendly behavior (Phase 123)
+        except Exception as e:
+            import traceback
+            print(f"[OllamaBackend] ERROR: {e}\n{traceback.format_exc()}")
             logging.debug(f"Ollama call failed: {e}")
             self._update_status("ollama", False)
             self._record(
@@ -88,4 +75,4 @@ class OllamaBackend(LLMBackend):
                 system_prompt=system_prompt,
                 latency_s=time.time() - start_t,
             )
-            return ""
+            return "[OllamaBackend] ERROR: " + str(e)

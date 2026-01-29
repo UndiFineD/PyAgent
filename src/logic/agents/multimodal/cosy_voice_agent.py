@@ -103,7 +103,7 @@ class CosyVoiceAgent(BaseAgent):
         # Simulate inference
         return f"Generated audio for '{text}' using {mode} mode (Simulated)"
 
-    def check_idle_timeout(self, timeout_seconds: int = 300):
+    def check_idle_timeout(self, timeout_seconds: int = 300) -> bool:
         """Checks if the model has been idle and unloads it if necessary."""
         if self._model and (time.time() - self._last_used) > timeout_seconds:
             logger.info(f"CosyVoice model idle for >{timeout_seconds}s. Unloading...")

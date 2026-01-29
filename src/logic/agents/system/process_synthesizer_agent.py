@@ -23,7 +23,8 @@
 # limitations under the License.
 
 """
-Process synthesizer agent.py module.
+ProcessSynthesizerAgent: System agent for synthesizing and managing process flows within the PyAgent swarm.
+Implements orchestration logic for dynamic process creation, adaptation, and optimization.
 """
 
 

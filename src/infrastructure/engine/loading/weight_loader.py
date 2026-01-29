@@ -36,6 +36,7 @@ vLLM Patterns:
 
 from __future__ import annotations
 
+from _thread import LockType
 import concurrent.futures
 import hashlib
 import os
@@ -48,7 +49,11 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, BinaryIO, Generator, Optional, Union
+from typing import TYPE_CHECKING, Any, BinaryIO, Dict, Generator, Optional, Union
+
+from torch._tensor import Tensor
+
+from torch._C._distributed_c10d import ProcessGroup
 
 if TYPE_CHECKING:
     pass
@@ -130,15 +135,15 @@ class AtomicWriter:
         encoding: Optional[str] = None,
     ) -> None:
         self.filepath = Path(filepath)
-        self.mode = mode
-        self.encoding = encoding
+        self.mode: str = mode
+        self.encoding: str | None = encoding
         self.temp_fd: Optional[int] = None
         self.temp_path: Optional[str] = None
         self.temp_file: Optional[BinaryIO] = None
 
     def __enter__(self) -> BinaryIO:
         # Create temp file in same directory for atomic replace
-        temp_dir = self.filepath.parent
+        temp_dir: Path = self.filepath.parent
         temp_dir.mkdir(parents=True, exist_ok=True)
 
         self.temp_fd, self.temp_path = tempfile.mkstemp(dir=str(temp_dir))
@@ -178,26 +183,37 @@ def atomic_writer(
 def detect_weight_format(file_path: Union[str, Path]) -> WeightFormat:
     """Detect weight file format from extension and magic bytes."""
     path = Path(file_path)
-    suffix = path.suffix.lower()
+    suffix: str = path.suffix.lower()
 
-    format_map = {
-        ".safetensors": WeightFormat.SAFETENSORS,
-        ".bin": WeightFormat.PYTORCH,
-        ".pt": WeightFormat.PYTORCH,
-        ".pth": WeightFormat.PYTORCH,
-        ".npy": WeightFormat.NUMPY,
-        ".gguf": WeightFormat.GGUF,
-        ".tensors": WeightFormat.TENSORIZER,
-    }
-
-    return format_map.get(suffix, WeightFormat.UNKNOWN)
-
-
+    if suffix == ".safetensors":
+        return WeightFormat.SAFETENSORS
+    elif suffix == ".bin":
+        return WeightFormat.PYTORCH
+    elif suffix == ".pth":
+        return WeightFormat.PYTORCH
+    elif suffix == ".pt":
+        return WeightFormat.PYTORCH
+    elif suffix == ".npy":
+        return WeightFormat.NUMPY
+    elif suffix == ".gguf":
+        return WeightFormat.GGUF
+    else:
+        # Try to detect from magic bytes
+        try:
+            with open(path, "rb") as f:
+                header = f.read(8)
+                if header.startswith(b"GGUF"):
+                    return WeightFormat.GGUF
+                elif b"safetensors" in header:
+                    return WeightFormat.SAFETENSORS
+        except (OSError, IOError):
+            pass
+        return WeightFormat.UNKNOWN
 def get_file_lock_path(model_name_or_path: str, cache_dir: Optional[str] = None) -> str:
     """Generate a lock file path for model downloads."""
-    lock_dir = cache_dir or tempfile.gettempdir()
-    model_name = str(model_name_or_path).replace("/", "-")
-    hash_name = hashlib.sha256(model_name.encode()).hexdigest()[:16]
+    lock_dir: str = cache_dir or tempfile.gettempdir()
+    model_name: str = str(model_name_or_path).replace("/", "-")
+    hash_name: str = hashlib.sha256(model_name.encode()).hexdigest()[:16]
     return os.path.join(lock_dir, f"{hash_name}_{model_name}.lock")
 
 
@@ -244,7 +260,7 @@ class SafetensorsLoader(WeightLoader):
         Args:
             strategy: "lazy" (memory efficient) or "eager" (faster for small models)
         """
-        self.strategy = strategy
+        self.strategy: str = strategy
 
     def iterate_weights(
         self,
@@ -259,7 +275,7 @@ class SafetensorsLoader(WeightLoader):
 
         for file_path in file_paths:
             if self.strategy == "eager":
-                state_dict = load_file(file_path, device=device)
+                state_dict: Dict[str, Tensor] = load_file(file_path, device=device)
                 yield from state_dict.items()
             else:
                 # Lazy loading - only load tensors as needed
@@ -304,11 +320,11 @@ class MultiThreadWeightLoader(WeightLoader):
         adaptive_workers: bool = True,
         min_file_size_per_worker: int = 100 * 1024 * 1024,  # 100MB
     ) -> None:
-        self.max_workers = max_workers
-        self.adaptive_workers = adaptive_workers
-        self.min_file_size_per_worker = min_file_size_per_worker
+        self.max_workers: int = max_workers
+        self.adaptive_workers: bool = adaptive_workers
+        self.min_file_size_per_worker: int = min_file_size_per_worker
         self._stats = LoadStats()
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
     def _get_optimal_workers(self, file_paths: list[str]) -> int:
         """Calculate optimal number of workers based on file characteristics."""
@@ -318,8 +334,8 @@ class MultiThreadWeightLoader(WeightLoader):
         if not file_paths:
             return 1  # Minimum 1 worker even for empty list
 
-        total_size = sum(os.path.getsize(f) for f in file_paths if os.path.exists(f))
-        optimal = max(1, total_size // self.min_file_size_per_worker)
+        total_size: int = sum(os.path.getsize(f) for f in file_paths if os.path.exists(f))
+        optimal: int = max(1, total_size // self.min_file_size_per_worker)
         return max(1, min(optimal, self.max_workers, len(file_paths)))
 
     def _load_file(self, file_path: str, device: str = "cpu") -> dict[str, Any]:
@@ -339,22 +355,22 @@ class MultiThreadWeightLoader(WeightLoader):
         device: str = "cpu",
     ) -> Generator[tuple[str, Any], None, None]:
         """Iterate weights using thread pool."""
-        num_workers = self._get_optimal_workers(file_paths)
-        start_time = time.perf_counter()
+        num_workers: int = self._get_optimal_workers(file_paths)
+        start_time: float = time.perf_counter()
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
-            futures = {executor.submit(self._load_file, f, device): f for f in file_paths}
+            futures: dict[Future[dict[str, Any]], str] = {executor.submit(self._load_file, f, device): f for f in file_paths}
 
             for future in concurrent.futures.as_completed(futures):
                 try:
-                    state_dict = future.result()
+                    state_dict: dict[str, Any] = future.result()
                     with self._lock:
                         self._stats.files_loaded += 1
                         self._stats.total_tensors += len(state_dict)
 
                     yield from state_dict.items()
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    file_path = futures[future]
+                    file_path: str = futures[future]
                     raise RuntimeError(f"Failed to load {file_path}: {e}") from e
 
         self._stats.load_time_seconds = time.perf_counter() - start_time
@@ -378,7 +394,7 @@ class FastSafetensorsLoader(WeightLoader):
     """
 
     def __init__(self, use_gds: bool = True) -> None:
-        self.use_gds = use_gds
+        self.use_gds: bool = use_gds
         self._gds_available = True
 
     def iterate_weights(
@@ -398,14 +414,14 @@ class FastSafetensorsLoader(WeightLoader):
         import torch
 
         if torch.distributed.is_initialized():
-            pg = torch.distributed.group.WORLD
-            rank = torch.distributed.get_rank()
+            pg: ProcessGroup | None = torch.distributed.group.WORLD
+            rank: int = torch.distributed.get_rank()
         else:
             pg = None
             rank = 0
 
         device_obj = torch.device(device)
-        nogds = not self.use_gds or not self._gds_available
+        nogds: bool = not self.use_gds or not self._gds_available
 
         for file_path in file_paths:
             try:
@@ -445,8 +461,8 @@ class StreamingWeightLoader(WeightLoader):
         priority_weights: Optional[list[str]] = None,
     ) -> None:
         self.memory_budget_bytes = int(memory_budget_mb * 1024 * 1024)
-        self.prefetch_count = prefetch_count
-        self.priority_weights = set(priority_weights or [])
+        self.prefetch_count: int = prefetch_count
+        self.priority_weights: set[str] = set(priority_weights or [])
         self._prefetch_executor: Optional[concurrent.futures.ThreadPoolExecutor] = None
         self._prefetch_queue: dict[str, concurrent.futures.Future] = {}
 
@@ -486,7 +502,7 @@ class StreamingWeightLoader(WeightLoader):
 
                 for name in weight_names:
                     tensor = f.get_tensor(name)
-                    tensor_size = self._get_tensor_size(tensor)
+                    tensor_size: int = self._get_tensor_size(tensor)
 
                     # Check memory budget
                     if current_batch_size + tensor_size > self.memory_budget_bytes:
@@ -554,7 +570,7 @@ def filter_shared_tensors(tensors: dict[str, Any]) -> dict[str, Any]:
     for key, tensor in tensors.items():
         if hasattr(tensor, "data_ptr"):
             ptr = tensor.data_ptr()
-            keys = storage_to_keys[ptr]
+            keys: list[str] = storage_to_keys[ptr]
             # Keep only the first key alphabetically
             if key == min(keys):
                 result[key] = tensor

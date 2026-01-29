@@ -24,7 +24,7 @@ from src.core.base.lifecycle.version import VERSION
 from .locale_code import LocaleCode
 from .localized_string import LocalizedString
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 class ReportLocalizer:
@@ -46,14 +46,14 @@ class ReportLocalizer:
         """
 
         self.strings: dict[str, LocalizedString] = {}
-        self.current_locale = locale
+        self.current_locale: LocaleCode = locale
         self._init_defaults()
         logging.debug(f"ReportLocalizer initialized with {locale.value}")
 
     def _init_defaults(self) -> None:
         """Initialize default strings."""
 
-        defaults = {
+        defaults: dict[str, dict[str, str]] = {
             "report.description": {"en-US": "Description", "de-DE": "Beschreibung"},
             "report.errors": {"en-US": "Errors", "de-DE": "Fehler"},
             "report.improvements": {"en-US": "Improvements", "de-DE": "Verbesserungen"},
@@ -71,7 +71,7 @@ class ReportLocalizer:
             translations: Locale to text mapping.
         """
 
-        default = translations.get("en-US", list(translations.values())[0] if translations else "")
+        default: str = translations.get("en-US", list(translations.values())[0] if translations else "")
         self.strings[key] = LocalizedString(key=key, translations=translations, default=default)
 
     def get(self, key: str, locale: LocaleCode | None = None) -> str:
@@ -83,10 +83,10 @@ class ReportLocalizer:
             Localized text.
         """
 
-        loc = locale or self.current_locale
+        loc: LocaleCode = locale or self.current_locale
         if key not in self.strings:
             return key
-        string = self.strings[key]
+        string: LocalizedString = self.strings[key]
         return string.translations.get(loc.value, string.default)
 
     def set_locale(self, locale: LocaleCode) -> None:
@@ -95,4 +95,4 @@ class ReportLocalizer:
             locale: New locale.
         """
 
-        self.current_locale = locale
+        self.current_locale: LocaleCode = locale

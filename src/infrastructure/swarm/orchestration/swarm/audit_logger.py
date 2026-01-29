@@ -34,7 +34,7 @@ class SwarmAuditLogger:
     Allows for post-hoc analysis of agent fleet behavior.
     """
 
-    def __init__(self, storage_path: str = "data/logs/swarm_audit.jsonl", log_to_file: bool = True):
+    def __init__(self, storage_path: str = "data/logs/swarm_audit.jsonl", log_to_file: bool = True) -> None:
         self.trails: Dict[str, List[SwarmAuditTrail]] = {}
         self.storage_path = storage_path
         self.log_to_file = log_to_file

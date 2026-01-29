@@ -30,7 +30,7 @@ class SemanticHasher:
     Allows O(1) or O(log N) lookup of semantically related context shards across ranks.
     """
 
-    def __init__(self, dimension: int = 384, num_bits: int = 16):
+    def __init__(self, dimension: int = 384, num_bits: int = 16) -> None:
         self.dimension = dimension
         self.num_bits = num_bits
         # Random projection matrix

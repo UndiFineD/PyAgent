@@ -38,9 +38,9 @@ class AWQQuantizer(Quantizer):
         self,
         config: QuantConfig,
         calibration_data: NDArray[np.float32] | None = None,
-    ):
+    ) -> None:
         super().__init__(config)
-        self.calibration_data = calibration_data
+        self.calibration_data: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] | None = calibration_data
         self._importance_cache: dict[tuple[int, ...], NDArray[np.float32]] = {}
 
     def quantize(
@@ -52,13 +52,13 @@ class AWQQuantizer(Quantizer):
         activations = activations if activations is not None else self.calibration_data
 
         if activations is not None:
-            importance = self._compute_importance(activations, weight)
+            importance: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self._compute_importance(activations, weight)
             scaled_weight = weight * importance
         else:
             scaled_weight = weight
 
         linear_quant = LinearQuantizer(self.config)
-        qtensor = linear_quant.quantize(scaled_weight)
+        qtensor: QuantizedTensor = linear_quant.quantize(scaled_weight)
 
         if activations is not None:
             self._importance_cache[weight.shape] = importance
@@ -70,7 +70,7 @@ class AWQQuantizer(Quantizer):
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
         """Dequantizes the tensor and reverses AWQ scaling if applicable."""
-        result = qtensor.dequantize()
+        result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = qtensor.dequantize()
         if qtensor.shape in self._importance_cache:
             importance = self._importance_cache[qtensor.shape]
             result = result / importance

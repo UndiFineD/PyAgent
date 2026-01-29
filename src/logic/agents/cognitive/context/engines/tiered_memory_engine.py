@@ -30,7 +30,7 @@ from typing import Any, List, Dict, Optional
 class TieredMemoryEngine:
     """Manages the 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and Knowledge."""
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """Initialize the tiered memory engine.
 
         Args:

@@ -27,7 +27,7 @@ from rich.table import Table
 from datetime import datetime
 
 class PyAgentTUI:
-    def __init__(self):
+    def __init__(self) -> None:
         self.console = Console()
         self.layout = Layout()
         self.layout.split(
@@ -64,7 +64,7 @@ class PyAgentTUI:
     def generate_logs(self) -> Panel:
         """Generates the logs panel with simulated log entries."""
         # Simulated logs
-        logs = [
+        logs: list[str] = [
             "[INFO] Consensus reached on Block #4921",
             "[WARN] Latency spike on vector_store_03 (450ms)",
             "[INFO] CosyVoice model loaded (300M)",
@@ -77,7 +77,7 @@ class PyAgentTUI:
         """Generates the footer panel with exit instructions."""
         return Panel("Press Ctrl+C to exit | [b]h[/b]elp | [b]q[/b]uit", style="dim")
 
-    async def run(self):
+    async def run(self) -> None:
         """Runs the TUI application in a live loop."""
         with Live(self.layout, refresh_per_second=4, screen=True):
             try:

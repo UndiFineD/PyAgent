@@ -23,7 +23,7 @@ from src.core.base.lifecycle.version import VERSION
 
 from .permission_level import PermissionLevel
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 @dataclass

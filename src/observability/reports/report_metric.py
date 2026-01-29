@@ -21,7 +21,7 @@ from dataclasses import dataclass
 
 from src.core.base.lifecycle.version import VERSION
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 @dataclass

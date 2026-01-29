@@ -19,10 +19,11 @@ Heterogeneous speculator.py module.
 import logging
 from typing import Any, List, Tuple
 
+from src.core.base.common.models.communication_models import ExpertProfile, MoERoutingDecision
 from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
     MoEGatekeeper
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class HeterogeneousSpeculator:
@@ -31,8 +32,8 @@ class HeterogeneousSpeculator:
     Pairs low-precision (FP8/INT4) fast experts with high-precision (FP16) verifiers.
     """
 
-    def __init__(self, gatekeeper: MoEGatekeeper):
-        self.gatekeeper = gatekeeper
+    def __init__(self, gatekeeper: MoEGatekeeper) -> None:
+        self.gatekeeper: MoEGatekeeper = gatekeeper
 
     def identify_speculative_pairs(self, domain: str) -> List[Tuple[str, str]]:
         """
@@ -40,13 +41,19 @@ class HeterogeneousSpeculator:
         Drafters: acceleration_type in ['fp8_bitnet', 'int4_quant']
         Verifiers: acceleration_type in ['h100_tensor', 'standard']
         """
-        experts = list(self.gatekeeper.experts.values())
+        experts: List[ExpertProfile] = list(self.gatekeeper.experts.values())
 
         # Filter by domain
-        domain_experts = [e for e in experts if domain in e.domains or "general" in e.domains]
+        domain_experts: List[ExpertProfile] = [e for e in experts if domain in e.domains or "general" in e.domains]
 
-        drafters = [e for e in domain_experts if e.acceleration_type in ["fp8_bitnet", "int4_quant"]]
-        verifiers = [e for e in domain_experts if e.acceleration_type in ["h100_tensor", "standard"]]
+        drafters: List[ExpertProfile] = [
+            e for e in domain_experts
+            if e.acceleration_type in ["fp8_bitnet", "int4_quant"]
+        ]
+        verifiers: List[ExpertProfile] = [
+            e for e in domain_experts
+            if e.acceleration_type in ["h100_tensor", "standard"]
+        ]
 
         pairs = []
         # Greedily pair top-performing drafters with top-performing verifiers
@@ -59,11 +66,11 @@ class HeterogeneousSpeculator:
         logger.info(f"[Phase 85] Heterogeneous pairs identified for domain '{domain}': {len(pairs)}")
         return pairs
 
-    async def execute_task(self, task: str, domain: str, orchestrator: Any):
+    async def execute_task(self, task: str, domain: str, _orchestrator: Any) -> MoERoutingDecision | dict[str, str]:
         """
         Convenience method to run a task through the swarm's speculative pipe.
         """
-        pairs = self.identify_speculative_pairs(domain)
+        pairs: List[Tuple[str]] = self.identify_speculative_pairs(domain)
         if not pairs:
             # Fallback to standard MoE routing
             logger.warning("No speculative pairs found, falling back to standard MoE.")

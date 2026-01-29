@@ -21,7 +21,7 @@ class TopologyManager:
     Monitors swarm health and automatically scales expert replicas.
     """
 
-    def __init__(self, gatekeeper: Any, clone_threshold: int = 100):
+    def __init__(self, gatekeeper: Any, clone_threshold: int = 100) -> None:
         self.gatekeeper = gatekeeper
         self.clone_threshold = clone_threshold
         self.request_counts: Dict[str, int] = {}

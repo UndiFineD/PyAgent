@@ -16,6 +16,10 @@
 
 from __future__ import annotations
 
+import json
+
+import requests
+
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
@@ -36,12 +40,12 @@ class FlmConnectorAgent(BaseAgent):
     def check_availability(self) -> bool:
         """Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall."""
         health_url = f"{self.endpoint}/health"
-        
+
         try:
             # Firewall handles caching, retries, and recording status
             response = self._firewall.get(health_url, timeout=2)
             return response.status_code == 200
-        except Exception:  # pylint: disable=broad-exception-caught
+        except (requests.RequestException, ConnectionError, TimeoutError) as e:
             return False
 
     def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:
@@ -60,12 +64,12 @@ class FlmConnectorAgent(BaseAgent):
                 # Assuming standard OpenAI response format
                 response_json = response.json()
                 if "choices" in response_json and len(response_json["choices"]) > 0:
-                     return response_json["choices"][0].get("text", "")
+                    return response_json["choices"][0].get("text", "")
                 return ""
             
             return f"Error: FastFlowLM returned status {response.status_code}"
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:
             return f"Exception during NPU inference: {e}"
 
 

@@ -17,6 +17,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+from _thread import LockType
 import heapq
 import threading
 import time
@@ -55,14 +56,14 @@ class PriorityScheduler:
             max_queue_size: Maximum pending tasks
             enable_work_stealing: Allow low-priority workers to steal high-priority tasks
         """
-        self._workers = workers
-        self._max_queue_size = max_queue_size
-        self._enable_work_stealing = enable_work_stealing
+        self._workers: int = workers
+        self._max_queue_size: int = max_queue_size
+        self._enable_work_stealing: bool = enable_work_stealing
 
         # Priority queues (one per priority level)
         self._queues: Dict[TaskPriority, List[ScheduledTask]] = {p: [] for p in TaskPriority}
 
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
         self._sequence = 0
         self._pending_count = 0
@@ -79,7 +80,7 @@ class PriorityScheduler:
         # Start worker threads
         self._worker_futures: List[Future] = []
         for i in range(workers):
-            f = self._executor.submit(self._worker_loop, i)
+            f: Future[None] = self._executor.submit(self._worker_loop, i)
             self._worker_futures.append(f)
 
     def submit(
@@ -93,15 +94,15 @@ class PriorityScheduler:
         """
         Submit a task for execution.
         """
-        now = time.monotonic()
+        now: float = time.monotonic()
 
         deadline = float("inf")
         if deadline_ms is not None:
-            deadline = now + deadline_ms / 1000.0
+            deadline: float = now + deadline_ms / 1000.0
 
         timeout = None
         if timeout_ms is not None:
-            timeout = timeout_ms / 1000.0
+            timeout: float = timeout_ms / 1000.0
 
         future: Future[R] = Future()
 
@@ -112,7 +113,7 @@ class PriorityScheduler:
 
             self._sequence += 1
 
-            task = ScheduledTask(
+            task: ScheduledTask[R] = ScheduledTask(
                 priority_value=priority.value,
                 deadline=deadline,
                 sequence=self._sequence,
@@ -169,8 +170,8 @@ class PriorityScheduler:
 
     def _execute_task(self, task: ScheduledTask) -> None:
         """Execute a single task."""
-        start_time = time.monotonic()
-        wait_time = (start_time - task.created_at) * 1000  # ms
+        start_time: float = time.monotonic()
+        wait_time: float = (start_time - task.created_at) * 1000  # ms
 
         task.state = TaskState.RUNNING
 
@@ -188,7 +189,7 @@ class PriorityScheduler:
                 task.future.set_result(result)
 
             # Update stats
-            exec_time = (time.monotonic() - start_time) * 1000
+            exec_time: float = (time.monotonic() - start_time) * 1000
             with self._lock:
                 self._stats.completed += 1
                 self._stats.total_wait_time_ms += wait_time

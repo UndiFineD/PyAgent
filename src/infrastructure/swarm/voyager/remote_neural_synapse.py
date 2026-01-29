@@ -22,7 +22,7 @@ class RemoteNeuralSynapse:
     Implements the transport layer for Voyager Phase 1.1 using ZMQ.
     """
 
-    def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None):
+    def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None) -> None:
         self.fleet_manager = fleet_manager
         self.engine = TeleportationEngine()
         self.transport = VoyagerTransport(port=transport_port)
@@ -30,13 +30,13 @@ class RemoteNeuralSynapse:
         self.active_transfers: List[str] = []
         self._server_task: Optional[asyncio.Task] = None
 
-    async def start(self):
+    async def start(self) -> None:
         """Starts the transport server to receive remote synaptic fires."""
         if self._server_task:
             return
         self._server_task = asyncio.create_task(self.transport.start_server(self._handle_incoming_synapse))
 
-    async def stop(self):
+    async def stop(self) -> None:
         """Stops the transport server."""
         self.transport.stop()
         if self._server_task:
@@ -55,10 +55,10 @@ class RemoteNeuralSynapse:
         logger.info(f"Synapse: Incoming {msg_type} from {message.get('sender_id', 'unknown')}")
 
         if msg_type == "teleport":
-            encoded_blob = message.get("agent_blob")
+            encoded_blob: Any | None = message.get("agent_blob")
             if encoded_blob:
-                blob = self.engine.decode_from_transport(encoded_blob)
-                state = self.engine.restore_agent_state(blob)
+                blob: bytes = self.engine.decode_from_transport(encoded_blob)
+                state: Dict[str, Any] = self.engine.restore_agent_state(blob)
 
                 # Logic to 'spawn' the agent in the local fleet
                 # if hasattr(self.fleet_manager, "assimilate_agent"):
@@ -94,7 +94,7 @@ class RemoteNeuralSynapse:
             
             from src.core.base.common.memory_core import MemoryCore
             try:
-                results = MemoryCore().retrieve_knowledge(agent_id, query, mode="semantic", limit=3)
+                results: List[Dict[str, Any]] = MemoryCore().retrieve_knowledge(agent_id, query, mode="semantic", limit=3)
                 return {"status": "success", "results": results}
             except Exception as e:
                 logger.error(f"Synapse: Memory query failed: {e}")
@@ -106,7 +106,7 @@ class RemoteNeuralSynapse:
         """
         Transmits an agent's neural state to a remote peer via ZMQ.
         """
-        blob = self.engine.capture_agent_state(agent)
+        blob: bytes = self.engine.capture_agent_state(agent)
         payload = {
             "type": "teleport",
             "agent_blob": self.engine.encode_for_transport(blob),
@@ -115,7 +115,7 @@ class RemoteNeuralSynapse:
 
         logger.info(f"Synapse: Firing synaptic teleport of {agent.name} to {peer_address}:{transport_port}...")
 
-        response = await self.transport.send_to_peer(peer_address, transport_port, payload)
+        response: Dict[str, Any] | None = await self.transport.send_to_peer(peer_address, transport_port, payload)
         if response and response.get("status") == "success":
             logger.info(f"Synapse: Teleportation confirmed by peer: {response.get('message')}")
             return True

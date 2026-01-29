@@ -38,7 +38,7 @@ class MultimodalMixin:
 
     def get_multimodal_instructions(self) -> str:
         """Returns the system instructions for the multimodal tag system."""
-        channels = ", ".join(self.multimodal_core.active_channels.keys())
+        channels: str = ", ".join(self.multimodal_core.active_channels.keys())
         return (
             "MODALITY PROTOCOL ENABLED.\n"
             "You can interleave modality tags in your output using the format <Type:Channel_ID>.\n"

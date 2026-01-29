@@ -52,10 +52,10 @@ class QuantConfig:
     zero_point: bool = False
     desc_act: bool = False
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._validate()
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Internal validation of config parameters."""
         if self.bits not in (4, 8):
             raise ValueError(f"bits must be 4 or 8, got {self.bits}")

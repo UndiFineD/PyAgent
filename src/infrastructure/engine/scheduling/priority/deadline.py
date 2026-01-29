@@ -19,6 +19,7 @@ Deadline.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+from _thread import LockType
 import heapq
 import threading
 import time
@@ -40,9 +41,9 @@ class DeadlineScheduler:
 
     def __init__(self, workers: int = 4) -> None:
         """Initialize EDF scheduler."""
-        self._workers = workers
+        self._workers: int = workers
         self._queue: List[Tuple[float, int, ScheduledTask]] = []
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
         self._sequence = 0
         self._running = True
@@ -73,15 +74,15 @@ class DeadlineScheduler:
         Returns:
             Future for result
         """
-        now = time.monotonic()
-        deadline = now + deadline_ms / 1000.0
+        now: float = time.monotonic()
+        deadline: float = now + deadline_ms / 1000.0
 
         future: Future[R] = Future()
 
         with self._not_empty:
             self._sequence += 1
 
-            task = ScheduledTask(
+            task: ScheduledTask[R] = ScheduledTask(
                 priority_value=0,
                 deadline=deadline,
                 sequence=self._sequence,

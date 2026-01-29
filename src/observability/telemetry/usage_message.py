@@ -34,17 +34,19 @@ from threading import Thread
 from typing import Any
 from uuid import uuid4
 
+from psutil import virtual_memory
+
 # ============================================================================
 # Constants and configuration
 # ============================================================================
 
-_CONFIG_HOME = os.environ.get("PYAGENT_CONFIG_ROOT", str(Path.home() / ".config" / "pyagent"))
-_USAGE_STATS_JSON_PATH = os.path.join(_CONFIG_HOME, "usage_stats.json")
-_DO_NOT_TRACK_PATH = os.path.join(_CONFIG_HOME, "do_not_track")
+_CONFIG_HOME: str = os.environ.get("PYAGENT_CONFIG_ROOT", str(Path.home() / ".config" / "pyagent"))
+_USAGE_STATS_JSON_PATH: str = os.path.join(_CONFIG_HOME, "usage_stats.json")
+_DO_NOT_TRACK_PATH: str = os.path.join(_CONFIG_HOME, "do_not_track")
 _USAGE_STATS_ENABLED: bool | None = None
 
 # Environment variables to collect
-_ENV_VARS_TO_COLLECT = [
+_ENV_VARS_TO_COLLECT: list[str] = [
     "PYAGENT_MODEL_BACKEND",
     "PYAGENT_LOG_LEVEL",
     "PYAGENT_FLEET_SIZE",
@@ -113,10 +115,10 @@ def is_usage_stats_enabled() -> bool:
     global _USAGE_STATS_ENABLED
 
     if _USAGE_STATS_ENABLED is None:
-        do_not_track = os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1"
-        generic_do_not_track = os.environ.get("DO_NOT_TRACK", "0") == "1"
-        no_usage_stats = os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1"
-        do_not_track_file = os.path.exists(_DO_NOT_TRACK_PATH)
+        do_not_track: bool = os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1"
+        generic_do_not_track: bool = os.environ.get("DO_NOT_TRACK", "0") == "1"
+        no_usage_stats: bool = os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1"
+        do_not_track_file: bool = os.path.exists(_DO_NOT_TRACK_PATH)
 
         _USAGE_STATS_ENABLED = not any(
             [
@@ -155,7 +157,7 @@ def detect_cloud_provider() -> str:
         Cloud provider name or "UNKNOWN"
     """
     # Check vendor files (Linux)
-    vendor_files = [
+    vendor_files: list[str] = [
         "/sys/class/dmi/id/product_version",
         "/sys/class/dmi/id/bios_vendor",
         "/sys/class/dmi/id/product_name",
@@ -163,7 +165,7 @@ def detect_cloud_provider() -> str:
         "/sys/class/dmi/id/sys_vendor",
     ]
 
-    cloud_identifiers = {
+    cloud_identifiers: dict[str, str] = {
         "amazon": "AWS",
         "microsoft corporation": "AZURE",
         "google": "GCP",
@@ -177,7 +179,7 @@ def detect_cloud_provider() -> str:
         try:
             if os.path.isfile(vendor_file):
                 with open(vendor_file, 'r', encoding='utf-8') as f:
-                    content = f.read().lower()
+                    content: str = f.read().lower()
                     for identifier, provider in cloud_identifiers.items():
                         if identifier in content:
                             return provider
@@ -185,7 +187,7 @@ def detect_cloud_provider() -> str:
             continue
 
     # Check environment variables
-    env_to_provider = {
+    env_to_provider: dict[str, str] = {
         "AWS_REGION": "AWS",
         "AWS_EXECUTION_ENV": "AWS",
         "AZURE_HTTP_USER_AGENT": "AZURE",
@@ -321,16 +323,16 @@ class UsageMessage:
         self.python_version = platform.python_version()
 
         # CPU
-        cpu_info = get_cpu_info()
+        cpu_info: dict[str, Any] = get_cpu_info()
         self.num_cpu = cpu_info.get("count")
         self.cpu_type = cpu_info.get("brand")
 
         # Memory
-        mem_info = get_memory_info()
+        mem_info: dict[str, int] = get_memory_info()
         self.total_memory = mem_info.get("total")
 
         # GPU
-        gpu_info = get_gpu_info()
+        gpu_info: dict[str, Any] = get_gpu_info()
         if gpu_info:
             self.gpu_count = gpu_info.get("count")
             self.gpu_type = gpu_info.get("name")
@@ -340,7 +342,7 @@ class UsageMessage:
         # Environment variables
         import json
 
-        env_data = {var: os.environ.get(var) for var in _ENV_VARS_TO_COLLECT if os.environ.get(var)}
+        env_data: dict[str, str | None] = {var: os.environ.get(var) for var in _ENV_VARS_TO_COLLECT if os.environ.get(var)}
         if env_data:
             self.env_var_json = json.dumps(env_data)
 
@@ -390,7 +392,7 @@ class UsageMessage:
         """Save usage stats to local file."""
         import json
 
-        data = self.to_dict()
+        data: dict[str, Any] = self.to_dict()
         data.update(extra_kvs)
         data.update(_GLOBAL_RUNTIME_DATA)
 

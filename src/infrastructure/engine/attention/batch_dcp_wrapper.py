@@ -1,3 +1,8 @@
+"""
+Module: batch_dcp_wrapper
+Implements batch DCP attention wrapper for PyAgent engine.
+"""
+
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,15 +136,13 @@ class BatchMetadata:
 
     @property
     def is_decode(self) -> bool:
-        """Check if phase is decode."""
-        return self.phase == BatchPhase.DECODE
-
 
 @dataclass
-class DCPPlanConfig:
-    """Configuration for DCP planning.
-
     Controls how batches are planned and executed.
+    """
+    Module: batch_dcp_wrapper
+    Batch DCP wrapper for attention mechanisms in PyAgent engine.
+    """
     """
 
     # Batch sizing

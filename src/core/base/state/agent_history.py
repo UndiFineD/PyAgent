@@ -36,11 +36,11 @@ class AgentConversationHistory:
 
     def add_message(self, role: str, content: str) -> None:
         """Add a message to conversation history."""
-        role_value = role.strip().lower()
+        role_value: str = role.strip().lower()
         try:
             role_enum = MessageRole(role_value)
         except ValueError:
-            role_enum = MessageRole.SYSTEM
+            role_enum: MessageRole = MessageRole.SYSTEM
         self._history.append(ConversationMessage(role=role_enum, content=content))
 
     def clear(self) -> None:
@@ -57,5 +57,5 @@ class AgentConversationHistory:
         if not self._history:
             return prompt
 
-        history_str = agent_logic_core.format_history_for_prompt(self._history)
+        history_str: list[dict[str, str]] = agent_logic_core.format_history_for_prompt(self._history)
         return core.build_prompt_with_history(prompt, history_str)

@@ -99,7 +99,7 @@ class CoreExpansionAgent(BaseAgent):
                     else:
                         name = getattr(dist, "name", "Unknown")
                     results.append(f"{name}=={dist.version}")
-                except Exception:  # pylint: disable=broad-exception-caught
+                except (AttributeError, KeyError, TypeError) as _e:
                     continue
             if results:
                 return results

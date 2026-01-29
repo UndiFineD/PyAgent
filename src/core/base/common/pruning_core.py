@@ -136,7 +136,7 @@ class PruningCore(BaseCore):
                 sync.weight = new_weight
                 sync.last_fired = time.time()
                 return new_weight
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 pass
 
         if success:
@@ -161,7 +161,7 @@ class PruningCore(BaseCore):
                 # Assuming Rust takes a dict or value
                 # pylint: disable=no-member
                 return rc.is_in_refractory_rust(sync.refractory_until)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 pass
         return time.time() < sync.refractory_until
 

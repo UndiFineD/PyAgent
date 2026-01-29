@@ -71,10 +71,10 @@ class RustProfiler:
 
     _instance = None
 
-    def __new__(cls):
+    def __new__(cls) -> RustProfiler:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance._stats: dict[str, RustFunctionStats] = {}
+            cls._instance._stats = {}
         return cls._instance
 
     def record_call(self, func_name: str, elapsed_ns: int) -> None:
@@ -96,19 +96,20 @@ try:
     class ProfiledRustCore:
         """Wrapper that profiles all rust_core function calls."""
 
-        def __getattr__(self, name: str):
+        def __getattr__(self, name: str) -> object:
             original = getattr(_original_rc, name)
 
             if callable(original):
 
                 @functools.wraps(original)
+
                 def profiled_func(*args, **kwargs):
-                    start = time.perf_counter_ns()
+                    start_time_ns = time.perf_counter_ns()
                     try:
                         return original(*args, **kwargs)
                     finally:
-                        elapsed = time.perf_counter_ns() - start
-                        rust_profiler.record_call(name, elapsed)
+                        elapsed_ns = time.perf_counter_ns() - start_time_ns
+                        rust_profiler.record_call(name, elapsed_ns)
 
                 return profiled_func
             return original
@@ -127,18 +128,18 @@ except ImportError:
 class ComprehensiveProfileAnalyzer:
     """Analyzes cProfile results and filters for src/ code."""
 
-    def __init__(self, src_path: str, project_root: str):
-        self.src_path = src_path
-        self.project_root = project_root
+    def __init__(self, src_dir: str, proj_root: str) -> None:
+        self._src_dir = src_dir
+        self._proj_root = proj_root
         self.profiler = cProfile.Profile()
         self._start_time = None
 
-    def start(self):
+    def start(self) -> None:
         """Start profiling."""
         self._start_time = time.time()
         self.profiler.enable()
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop profiling."""
         self.profiler.disable()
 
@@ -149,17 +150,19 @@ class ComprehensiveProfileAnalyzer:
         # Normalize path for comparison
         try:
             norm_file = os.path.normpath(filename)
-            norm_src = os.path.normpath(self.src_path)
+            norm_src = os.path.normpath(self._src_dir)
             return norm_file.startswith(norm_src)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (TypeError, AttributeError, ValueError):
+            # Defensive: filename or src_path may be None or malformed
             return False
 
     def _clean_filename(self, filename: str) -> str:
         """Convert full path to relative module-style path."""
         try:
-            rel = os.path.relpath(filename, self.project_root)
+            rel = os.path.relpath(filename, self._proj_root)
             return rel.replace(os.sep, ".").replace(".py", "")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (ValueError, TypeError):
+            # Defensive: filename/project_root may be malformed
             return filename
 
     def analyze(self) -> dict:
@@ -175,7 +178,7 @@ class ComprehensiveProfileAnalyzer:
         src_functions = []
         module_stats = defaultdict(lambda: {"call_count": 0, "total_time_s": 0.0, "functions": set()})
 
-        for (filename, line, func_name), (ncalls, totcalls, tottime, cumtime, callers) in raw_stats.items():
+        for (filename, _line, func_name), (ncalls, totcalls, tottime, cumtime, _callers) in raw_stats.items():
             if self._is_src_file(filename):
                 module = self._clean_filename(filename)
                 qualified_name = f"{module}.{func_name}"
@@ -349,7 +352,7 @@ from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement
     main as run_self_improvement_main  # noqa: E402
 
 
-def save_profile_report():
+def save_profile_report() -> None:
     """Save profiling report on exit."""
     analyzer.stop()
     report = analyzer.analyze()
@@ -391,9 +394,10 @@ if __name__ == "__main__":
         run_self_improvement_main()
     except KeyboardInterrupt:
         print("\n⚠️ Interrupted by user")
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception as e:
+        # Broad except is justified here to ensure all errors are logged and surfaced in profiling context
         print(f"\n❌ Error: {e}")
         raise
     finally:
-        elapsed = time.time() - start_time
-        print(f"\n⏱️ Total execution time: {elapsed:.2f} seconds")
+        elapsed_time = time.time() - start_time
+        print(f"\n⏱️ Total execution time: {elapsed_time:.2f} seconds")

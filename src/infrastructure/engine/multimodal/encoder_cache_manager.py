@@ -143,7 +143,7 @@ class CacheStats:
     @property
     def hit_rate(self) -> float:
         """Cache hit rate."""
-        total = self.hits + self.misses
+        total: int = self.hits + self.misses
         return self.hits / total if total > 0 else 0.0
 
     @property
@@ -174,7 +174,7 @@ class EncoderCacheManager:
     """
 
     def __init__(self, config: CacheConfig | None = None) -> None:
-        self.config = config or CacheConfig()
+        self.config: CacheConfig = config or CacheConfig()
         self.stats = CacheStats()
 
         # Main cache storage
@@ -207,7 +207,7 @@ class EncoderCacheManager:
         Returns:
             Cached data or None if not found
         """
-        entry = self._cache.get(key)
+        entry: CacheEntry | None = self._cache.get(key)
 
         if entry is None:
             self.stats.misses += 1
@@ -260,7 +260,7 @@ class EncoderCacheManager:
         """
         # Check for existing entry
         if key in self._cache:
-            entry = self._cache[key]
+            entry: CacheEntry = self._cache[key]
             entry.touch()
             if request_id:
                 entry.request_refs.add(request_id)
@@ -270,17 +270,17 @@ class EncoderCacheManager:
         if self.config.enable_dedup and content_hash:
             if content_hash in self._content_hashes:
                 # Return existing entry
-                existing_key = self._content_hashes[content_hash]
+                existing_key: str = self._content_hashes[content_hash]
                 if existing_key in self._cache:
                     self.stats.dedup_saves += 1
-                    entry = self._cache[existing_key]
+                    entry: CacheEntry = self._cache[existing_key]
                     entry.touch()
                     if request_id:
                         entry.request_refs.add(request_id)
                     return True
 
         # Calculate size
-        size_bytes = self._estimate_size(data)
+        size_bytes: int = self._estimate_size(data)
 
         # Evict if needed
         while self._should_evict(size_bytes):
@@ -334,11 +334,11 @@ class EncoderCacheManager:
         if request_id not in self._request_keys:
             return freed_keys
 
-        keys = self._request_keys.pop(request_id)
+        keys: set[str] = self._request_keys.pop(request_id)
 
         for key in keys:
             if key in self._cache:
-                entry = self._cache[key]
+                entry: CacheEntry = self._cache[key]
                 entry.request_refs.discard(request_id)
 
                 if not entry.is_referenced:
@@ -354,11 +354,11 @@ class EncoderCacheManager:
 
         # Python fallback
         if isinstance(data, np.ndarray):
-            content = data.tobytes()
+            content: bytes = data.tobytes()
         elif isinstance(data, (bytes, bytearray)):
             content = bytes(data)
         else:
-            content = str(data).encode()
+            content: bytes = str(data).encode()
 
         if self.config.hash_algorithm == "sha256":
             return hashlib.sha256(content).hexdigest()
@@ -386,18 +386,17 @@ class EncoderCacheManager:
                 try:
                     data = loader(key)
                     if data is not None:
-                        content_hash = self.compute_hash(data) if self.config.enable_dedup else None
+                        content_hash: str | None = self.compute_hash(data) if self.config.enable_dedup else None
                         self.put(key, data, content_hash=content_hash)
                         self.stats.prefetch_hits += 1
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
                     # Prefetch failures are non-critical
                     pass
 
     def evict_unreferenced(self) -> int:
         """Evict all unreferenced entries."""
         evicted = 0
-        keys_to_evict = [key for key, entry in self._cache.items() if not entry.is_referenced]
+        keys_to_evict: list[str] = [key for key, entry in self._cache.items() if not entry.is_referenced]
 
         for key in keys_to_evict:
             self._evict_entry(key)
@@ -439,7 +438,7 @@ class EncoderCacheManager:
             return False
 
         # Find eviction candidate
-        candidate_key = self._select_eviction_candidate()
+        candidate_key: str | None = self._select_eviction_candidate()
 
         if candidate_key is None:
             return False
@@ -450,12 +449,12 @@ class EncoderCacheManager:
     def _select_eviction_candidate(self) -> str | None:
         """Select entry to evict based on policy."""
         # Prefer unreferenced entries first
-        unreferenced = [(key, entry) for key, entry in self._cache.items() if not entry.is_referenced]
+        unreferenced: list[tuple[str, CacheEntry]] = [(key, entry) for key, entry in self._cache.items() if not entry.is_referenced]
 
         if unreferenced:
-            candidates = unreferenced
+            candidates: list[tuple[str, CacheEntry]] = unreferenced
         else:
-            candidates = list(self._cache.items())
+            candidates: list[tuple[str, CacheEntry]] = list(self._cache.items())
 
         if not candidates:
             return None
@@ -484,7 +483,7 @@ class EncoderCacheManager:
         if key not in self._cache:
             return
 
-        entry = self._cache.pop(key)
+        entry: CacheEntry = self._cache.pop(key)
         self._bytes_used -= entry.size_bytes
         self.stats.evictions += 1
 
@@ -537,20 +536,20 @@ class MultiTierEncoderCache:
         remote_url: str | None = None,
     ) -> None:
         self.memory_cache = EncoderCacheManager(memory_config)
-        self.disk_path = disk_path
-        self.remote_url = remote_url
+        self.disk_path: str | None = disk_path
+        self.remote_url: str | None = remote_url
         self._disk_index: dict[str, str] = {}  # key -> filename
 
     def get(self, key: str, request_id: str | None = None) -> Any | None:
         """Get from fastest available tier."""
         # Try memory first
-        data = self.memory_cache.get(key, request_id)
+        data: Any | None = self.memory_cache.get(key, request_id)
         if data is not None:
             return data
 
         # Try disk
         if self.disk_path and key in self._disk_index:
-            data = self._load_from_disk(key)
+            data: Any | None = self._load_from_disk(key)
             if data is not None:
                 # Promote to memory
                 self.memory_cache.put(key, data, request_id)
@@ -580,7 +579,7 @@ class MultiTierEncoderCache:
 
         import os
 
-        filepath = os.path.join(self.disk_path, self._disk_index[key])
+        filepath: str = os.path.join(self.disk_path, self._disk_index[key])
 
         if os.path.exists(filepath):
             try:
@@ -599,8 +598,8 @@ class MultiTierEncoderCache:
 
         os.makedirs(self.disk_path, exist_ok=True)
 
-        filename = f"{hashlib.md5(key.encode()).hexdigest()}.npy"
-        filepath = os.path.join(self.disk_path, filename)
+        filename: str = f"{hashlib.md5(key.encode()).hexdigest()}.npy"
+        filepath: str = os.path.join(self.disk_path, filename)
 
         try:
             np.save(filepath, data, allow_pickle=True)
@@ -629,7 +628,7 @@ def create_encoder_cache(
         enable_dedup: Enable content deduplication
         **kwargs: Additional config options
     """
-    eviction_map = {
+    eviction_map: dict[str, EvictionPolicy] = {
         "lru": EvictionPolicy.LRU,
         "lfu": EvictionPolicy.LFU,
         "fifo": EvictionPolicy.FIFO,
@@ -647,7 +646,7 @@ def create_encoder_cache(
     return EncoderCacheManager(config)
 
 
-__all__ = [
+__all__: list[str] = [
     "CacheTier",
     "EvictionPolicy",
     "CacheConfig",

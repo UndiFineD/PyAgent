@@ -236,15 +236,12 @@ class SubagentRunner:
         """Call a GitHub Models OpenAI-compatible chat endpoint with caching."""
         return self._core.llm_chat_via_github_models(prompt, model, **kwargs)
 
-    def _looks_like_command(self, text: str) -> bool:
-        """Helper to decide if a prompt is command-like."""
-        t = (text or "").strip()
-        if not t:
-            return False
-        if "\n" in t:
-            return False
-        if any(op in t for op in ("|", "&&", ";")):
-            return True
+    def _has_command_operators(self, text: str) -> bool:
+        """Check if text contains command operators."""
+        return any(op in text for op in ("|", "&&", ";"))
+
+    def _starts_with_command_prefix(self, text: str) -> bool:
+        """Check if text starts with common command prefixes."""
         starters = (
             "git ",
             "gh ",
@@ -260,7 +257,18 @@ class SubagentRunner:
             "Set-",
             "New-",
         )
-        return t.startswith(starters)
+        return text.startswith(starters)
+
+    def _looks_like_command(self, text: str) -> bool:
+        """Helper to decide if a prompt is command-like."""
+        t = (text or "").strip()
+        if not t:
+            return False
+        if "\n" in t:
+            return False
+        if self._has_command_operators(t):
+            return True
+        return self._starts_with_command_prefix(t)
 
     def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:
         """Run a subagent using available backends."""

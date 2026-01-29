@@ -89,6 +89,7 @@ class GuidedDecoder:
         }
 
     @classmethod
+    @classmethod
     def get_instance(cls, **kwargs) -> "GuidedDecoder":
         """Get singleton instance."""
         if cls._instance is None:
@@ -146,7 +147,7 @@ class GuidedDecoder:
         temperature: float = 0.7,
         max_tokens: int = 1024,
         system_prompt: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> str:
         """Generate with guided decoding configuration."""
         if not self._ensure_initialized():
@@ -181,6 +182,25 @@ class GuidedDecoder:
             logger.error("Guided generation failed: %s", e)
             return ""
 
+    def _prepare_json_system_prompt(self, system_prompt: Optional[str]) -> str:
+        """Prepare system prompt for JSON generation."""
+        json_instruction = "You must respond with valid JSON only. No explanations."
+        if system_prompt:
+            return f"{system_prompt}\n\n{json_instruction}"
+        return json_instruction
+
+    def _parse_json_result(self, result: str) -> Union[Dict[str, Any], str]:
+        """Parse JSON result if possible."""
+        if not result:
+            return result
+
+        try:
+            return json.loads(result)
+        except json.JSONDecodeError as e:
+            self._stats["validation_failures"] += 1
+            logger.warning("Failed to parse JSON output: %s", e)
+            return result
+
     def generate_json(
         self,
         prompt: str,
@@ -201,9 +221,7 @@ class GuidedDecoder:
         )
 
         # Add JSON instruction to system prompt
-        json_system = "You must respond with valid JSON only. No explanations."
-        if system_prompt:
-            json_system = f"{system_prompt}\n\n{json_system}"
+        json_system = self._prepare_json_system_prompt(system_prompt)
 
         result = self.generate(
             prompt,
@@ -216,13 +234,8 @@ class GuidedDecoder:
 
         self._stats["json_generations"] += 1
 
-        if parse and result:
-            try:
-                return json.loads(result)
-            except json.JSONDecodeError as e:
-                self._stats["validation_failures"] += 1
-                logger.warning("Failed to parse JSON output: %s", e)
-                return result
+        if parse:
+            return self._parse_json_result(result)
 
         return result
 

@@ -33,7 +33,7 @@ class ExecCommandMixin:
         return getattr(self, "command_handler").run_command(cmd, timeout, max_retries)
 
     @contextmanager
-    def _with_agent_env(self, agent_name: str):
+    def _with_agent_env(self, agent_name: str) -> dict:
         """Temporarily set environment variables for a specific agent."""
         with getattr(self, "command_handler").with_agent_env(agent_name):
             yield

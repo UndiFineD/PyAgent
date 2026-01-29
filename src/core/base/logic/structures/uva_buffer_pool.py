@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""UvaBufferPool - Zero-copy GPU transfers via Unified Virtual Addressing.
+"""
+UvaBufferPool - Zero-copy GPU transfers via Unified Virtual Addressing.
 
 This module implements UVA (Unified Virtual Addressing) buffer management
 for efficient CPU-GPU data transfers without intermediate copies.
@@ -411,7 +412,7 @@ class UvaBufferPool:
                 return None
 
             # Brief sleep before retry
-            time.sleep(0.001)
+            threading.Event().wait(0.001)
 
     def _try_acquire(self, priority: int) -> Optional[UvaBuffer]:
         """Try to acquire a buffer without blocking."""
@@ -543,21 +544,56 @@ class UvaBufferPool:
     def stats(self) -> dict[str, Any]:
         """Get pool statistics."""
         with self._lock:
-            total_allocs = sum(b.stats.allocations for b in self._buffers)
-            total_bytes = sum(b.stats.total_bytes_transferred for b in self._buffers)
-            total_time = sum(b.stats.total_transfer_time_ns for b in self._buffers)
+            buffer_stats = self._calculate_buffer_stats()
+            return self._format_stats(buffer_stats)
 
-            return {
-                "buffer_count": len(self._buffers),
-                "free_buffers": len(self._free_buffers),
-                "acquired_buffers": len(self._buffers) - len(self._free_buffers),
-                "total_allocations": total_allocs,
-                "total_bytes_transferred": total_bytes,
-                "total_transfer_time_ns": total_time,
-                "avg_transfer_time_ms": (total_time / total_allocs / 1_000_000) if total_allocs > 0 else 0,
-                "throughput_gbps": (total_bytes / (1024**3)) / (total_time / 1_000_000_000) if total_time > 0 else 0,
-                "contention_rate": self._contention_count / self._acquire_count if self._acquire_count > 0 else 0,
-            }
+    def _calculate_buffer_stats(self) -> dict[str, Any]:
+        """Calculate raw buffer statistics."""
+        total_allocs = sum(b.stats.allocations for b in self._buffers)
+        total_bytes = sum(b.stats.total_bytes_transferred for b in self._buffers)
+        total_time = sum(b.stats.total_transfer_time_ns for b in self._buffers)
+
+        return {
+            "total_allocs": total_allocs,
+            "total_bytes": total_bytes,
+            "total_time": total_time,
+        }
+
+    def _format_stats(self, buffer_stats: dict[str, Any]) -> dict[str, Any]:
+        """Format statistics into final dictionary."""
+        total_allocs = buffer_stats["total_allocs"]
+        total_bytes = buffer_stats["total_bytes"]
+        total_time = buffer_stats["total_time"]
+
+        return {
+            "buffer_count": len(self._buffers),
+            "free_buffers": len(self._free_buffers),
+            "acquired_buffers": len(self._buffers) - len(self._free_buffers),
+            "total_allocations": total_allocs,
+            "total_bytes_transferred": total_bytes,
+            "total_transfer_time_ns": total_time,
+            "avg_transfer_time_ms": self._calculate_avg_transfer_time(total_allocs, total_time),
+            "throughput_gbps": self._calculate_throughput(total_bytes, total_time),
+            "contention_rate": self._calculate_contention_rate(),
+        }
+
+    def _calculate_avg_transfer_time(self, total_allocs: int, total_time: int) -> float:
+        """Calculate average transfer time in milliseconds."""
+        if total_allocs > 0:
+            return total_time / total_allocs / 1_000_000
+        return 0.0
+
+    def _calculate_throughput(self, total_bytes: int, total_time: int) -> float:
+        """Calculate throughput in GB/s."""
+        if total_time > 0:
+            return (total_bytes / (1024**3)) / (total_time / 1_000_000_000)
+        return 0.0
+
+    def _calculate_contention_rate(self) -> float:
+        """Calculate buffer contention rate."""
+        if self._acquire_count > 0:
+            return self._contention_count / self._acquire_count
+        return 0.0
 
     def clear(self) -> None:
         """Clear all buffers and reset pool."""

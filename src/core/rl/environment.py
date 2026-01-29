@@ -12,7 +12,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from .action_space import ActionSpace, DiscreteActionSpace
+from src.core.rl.action_space import ActionSpace, DiscreteActionSpace
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class RLEnvironment(abc.ABC):
     Enhanced with episode management, wrappers, and vectorized support.
     """
 
-    def __init__(self, max_steps: int = 1000):
+    def __init__(self, max_steps: int = 1000) -> None:
         self.action_space: ActionSpace | None = None
         self.observation_space: Any = None
         self.state: Any = None
@@ -54,7 +54,7 @@ class RLEnvironment(abc.ABC):
         Resets the environment to an initial state.
         Returns: (observation, info)
         """
-        pass
+        pass  # pylint: disable=unnecessary-pass
 
     @abc.abstractmethod
     def step(self, action: Any) -> Tuple[Any, float, bool, bool, Dict[str, Any]]:
@@ -62,15 +62,15 @@ class RLEnvironment(abc.ABC):
         Executes an action in the environment.
         Returns: (observation, reward, terminated, truncated, info)
         """
-        pass
+        pass  # pylint: disable=unnecessary-pass
 
     def render(self, mode: str = "human") -> Optional[Any]:
         """Visualizes the current state."""
-        pass
+        pass  # pylint: disable=unnecessary-pass
 
     def close(self) -> None:
         """Clean up resources."""
-        pass
+        pass  # pylint: disable=unnecessary-pass
 
     def seed(self, seed: int) -> List[int]:
         """Sets the random seed."""
@@ -92,6 +92,7 @@ class RLEnvironment(abc.ABC):
         return reward
 
     def get_episode_stats(self) -> Dict[str, Any]:
+        """Get statistics for completed episodes."""
         return {
             "episode_count": self._episode_count,
             "avg_reward": sum(self._episode_rewards) / len(self._episode_rewards) if self._episode_rewards else 0.0,
@@ -108,7 +109,7 @@ class CodeImprovementEnvironment(RLEnvironment):
     Reward: Delta in code quality metrics.
     """
 
-    def __init__(self, initial_metrics: Dict[str, float] = None):
+    def __init__(self, initial_metrics: Dict[str, float] = None) -> None:
         super().__init__(max_steps=50)
         self.action_space = DiscreteActionSpace(5, ["refactor", "add_tests", "optimize", "document", "skip"])
         self.initial_metrics = initial_metrics or {"complexity": 50.0, "coverage": 0.5, "quality": 0.6}

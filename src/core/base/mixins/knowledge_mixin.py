@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: knowledge_mixin
+Provides knowledge and context management mixin for PyAgent agents.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +19,7 @@
 """Knowledge Mixin for BaseAgent."""
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 from src.core.base.common.memory_core import MemoryCore
 from src.core.base.logic.sharded_knowledge_core import ShardedKnowledgeCore
@@ -26,7 +30,7 @@ class KnowledgeMixin:
     """Handles knowledge engines, memory, sharded storage, and templates."""
 
     def __init__(self, agent_name: str, workspace_root: Path, **_kwargs: Any) -> None:
-        self.agent_name = agent_name
+        self.agent_name: str = agent_name
         self.memory_core = MemoryCore()
 
         # Legacy Knowledge Trinity support
@@ -38,9 +42,9 @@ class KnowledgeMixin:
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
 
-        self.sharded_knowledge = ShardedKnowledgeCore(base_path=workspace_root / "data/agents")
+        self.sharded_knowledge: ShardedKnowledgeCore = ShardedKnowledgeCore(base_path=workspace_root / "data/agents")
         self._local_global_context: Any = None
-        self._workspace_root = workspace_root
+        self._workspace_root: Path = workspace_root
         self._notes: list[str] = []
         self._prompt_templates: dict[str, Any] = {}
 
@@ -48,7 +52,7 @@ class KnowledgeMixin:
         self, task: str, content: str, success: bool, metadata: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """Creates and stores an episodic memory via MemoryCore."""
-        episode = self.memory_core.create_episode(
+        episode: Dict[str, Any] = self.memory_core.create_episode(
             agent_id=self.agent_name, task=task, content=content, success=success, metadata=metadata
         )
         self.memory_core.store_knowledge(
@@ -97,8 +101,8 @@ class KnowledgeMixin:
 
     def _build_prompt_with_history(self, prompt: str) -> str:
         """Build a prompt string including history."""
-        history = self.get_history()
-        history_text = "\n".join([f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}" for m in history])
+        history: list[Any] = self.get_history()
+        history_text: str = "\n".join([f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}" for m in history])
         return f"{history_text}\nUSER: {prompt}"
 
     @property

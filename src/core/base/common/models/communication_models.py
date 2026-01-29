@@ -1,4 +1,17 @@
+from __future__ import annotations
 #!/usr/bin/env python3
+from .core_enums import FilePriority, MessageRole, InputType
+from datetime import datetime
+from dataclasses import dataclass, field
+import time
+import uuid
+from pathlib import Path
+from typing import Any, Callable
+from .base_models import _empty_list_str, _empty_list_dict_str_any, _empty_dict_str_any
+"""
+Module: communication_models
+Defines context lineage and communication models for agent task attribution.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -10,209 +23,77 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""Models for agent communication, prompts, and tracing."""
-
-from __future__ import annotations
-
-import time
-import uuid
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime
-from pathlib import Path
-from typing import Any
-
-from .base_models import (_empty_dict_str_any, _empty_list_dict_str_any,
-                          _empty_list_str)
-from .core_enums import FilePriority, InputType, MessageRole, FailureClassification
 
 
 @dataclass(slots=True)
 class CascadeContext:
-    """
-    Context for recursive agent delegation (Phase 259/275).
-    Tracks depth and lineage to prevent infinite loops and provide tracing.
-    Includes tenant isolation for multi-tenant swarms (Phase 71).
-    """
+    """Context for tracking cascade operations and preventing infinite recursion."""
 
-    task_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    tenant_id: str = "default_tenant"
-    security_scope: list[str] = field(default_factory=_empty_list_str)
-    correlation_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    root_task_id: str | None = None
-
-    parent_agent_id: str | None = None
-    agent_lineage: list[str] = field(default_factory=_empty_list_str)
-
+    task_id: str
     cascade_depth: int = 0
-    max_depth: int = 10
-    depth_limit: int = 10  # Alias for max_depth to enforce strict recursion boundaries (Phase 259)
-    timeout: float = 300.0  # Phase 336: Execution timeout in seconds
-
-    # Phase 275: Failure lineage tracking (Autonomic Healing)
+    depth_limit: int = 10
     failure_history: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
-    metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
     def __post_init__(self) -> None:
-        """Ensure depth_limit syncs with max_depth if not explicitly set."""
-        if self.depth_limit != self.max_depth:
-            # If max_depth was set but depth_limit default was used, sync them.
-            # Ideally we favor the stricter limit.
-            self.depth_limit = min(self.depth_limit, self.max_depth)
-            self.max_depth = self.depth_limit
-
-        # Validation on initialization (Phase 336)
-        if self.cascade_depth > self.depth_limit:
-            raise RecursionError(
-                f"Cascade Context Initialized with Depth {self.cascade_depth} > Limit {self.depth_limit}"
-            )
-
-        # Validate failure history schema (Phase 336 - Swarm Fix)
-        self._validate_failure_history()
-
-    def _validate_failure_history(self) -> None:
-        """Validate integrity of failure history to prevent corruption from propagating."""
-        if not isinstance(self.failure_history, list):
-            # Reset if corrupted
-            self.failure_history = []
-            return
-
-        valid_history = []
-        for entry in self.failure_history:
-            if isinstance(entry, dict):
-                # Ensure critical keys exist
-                if "timestamp" not in entry:
-                    entry["timestamp"] = time.time()
-                if "error" not in entry:
-                    entry["error"] = "Unknown Error (Schema Violation)"
-                valid_history.append(entry)
-        
-        self.failure_history = valid_history
-
-
-    def next_level(self, agent_id: str) -> CascadeContext:
-        """Create a child context for the next level of delegation."""
-        # Phase 336: Strict enforcement of recursion limits
+        """Validate and normalize failure history after initialization."""
         if self.cascade_depth >= self.depth_limit:
-            raise RecursionError(
-                f"Cascade Depth Limit Reached ({self.depth_limit}). "
-                f"Agent {agent_id} cannot delegate further."
-            )
+            raise RecursionError(f"Recursion depth limit ({self.depth_limit}) exceeded at depth {self.cascade_depth}")
 
-        # Circular Dependency Check (Phase 336)
-        if agent_id in self.agent_lineage:
-            # Allow limited self-delegation if needed, but for now strict:
-            raise RecursionError(
-                f"Circular Dependency Detected: Agent {agent_id} is already in lineage: {self.agent_lineage}"
-            )
+        if self.failure_history:
+            # Filter out invalid entries and normalize
+            valid_history = []
+            for item in self.failure_history:
+                if isinstance(item, dict):
+                    # Ensure required fields
+                    if "error" not in item:
+                        item["error"] = "Unknown Error (Schema Violation)"
+                    if "timestamp" not in item:
+                        item["timestamp"] = time.time()
+                    if "failure_type" not in item:
+                        item["failure_type"] = "unknown"
+                    valid_history.append(item)
+                # Skip non-dict items silently
+            self.failure_history = valid_history
 
-        # Swarm Intelligence: Recursive Improvement Loop Detection
-        # Prevent agents from infinitely trying to 'improve' a failed improvement process.
-        recursive_loops = [
-            f for f in self.failure_history
-            if f.get("failure_type") == FailureClassification.RECURSIVE_IMPROVEMENT.value
-        ]
-        if len(recursive_loops) >= 2:
-            raise RecursionError(
-                f"Halting check: Agent {agent_id} blocked due to detected Recursive Improvement Loop in lineage."
-            )
+    def next_level(self, child_task_id: str) -> 'CascadeContext':
+        """Create a child context at the next cascade level."""
+        if self.is_bursting():
+            raise RecursionError("Recursive Improvement Loop Detected - Cascade depth limit reached")
 
-        new_lineage = self.agent_lineage.copy()
-        new_lineage.append(agent_id)
+        # Check for recursive improvement loops
+        recursive_improvements = sum(1 for entry in self.failure_history
+                                   if entry.get("failure_type") == "recursive_improvement")
+        if recursive_improvements >= 2:
+            raise RecursionError("Recursive Improvement Loop Detected - Multiple recursive improvement failures")
 
         return CascadeContext(
-            task_id=str(uuid.uuid4()),
-            tenant_id=self.tenant_id,
-            security_scope=self.security_scope.copy(),
-            correlation_id=self.correlation_id,
-            root_task_id=self.root_task_id or self.task_id,
-            parent_agent_id=agent_id,
-            agent_lineage=new_lineage,
+            task_id=child_task_id,
             cascade_depth=self.cascade_depth + 1,
-            max_depth=self.max_depth,
             depth_limit=self.depth_limit,
-            timeout=self.timeout, # Propagate timeout
-            failure_history=self.failure_history.copy(),  # Propagate failures
-            metadata=self.metadata.copy(),
+            failure_history=self.failure_history.copy()
         )
 
-    def log_failure(
-        self,
-        stage: str,
-        error: str,
-        details: dict[str, Any] | None = None,
-        stack_trace: str | None = None,
-        failure_type: str = "unknown",
-    ) -> None:
-        """Log a failure in the current context lineage."""
-        try:
-            val = str(error)
+    def log_failure(self, stage: str, error: str, failure_type: str = "unknown") -> None:
+        """Log a failure in the cascade context."""
+        entry = {
+            "stage": stage,
+            "error": error,
+            "failure_type": failure_type,
+            "timestamp": time.time()
+        }
 
-            # Phase 336: Detecting Rotating Failure Loops (Repeating Error)
-            # If the exact same error happens 3 times consecutively, it's likely a tight loop
-            # Check if previous 2 were the same as current
-            if len(self.failure_history) >= 2:
-                last_two = [f.get("error") for f in self.failure_history[-2:]]
-                if all(x == val for x in last_two):
-                     # Add one final entry indicating the break
-                     self.failure_history.append({
-                        "timestamp": time.time(),
-                        "stage": "circuit_breaker_repeating",
-                        "error": "CircuitBreaker: Exact Repeating Error Detected. Halting.",
-                        "depth": self.cascade_depth,
-                        "failure_type": "circuit_breaker_trip",
-                    })
-                     return
-
-            # Circuit Breaker: If too many failures in lineage, halt to prevent log spam/cascades
-            failure_threshold = 20
-            if len(self.failure_history) >= failure_threshold:
-                if len(self.failure_history) == failure_threshold:
-                    # Only log the breaker trip once
-                    self.failure_history.append({
-                        "timestamp": time.time(),
-                        "stage": "circuit_breaker",
-                        "error": "CircuitBreaker: Failure Limit Exceeded. Stopping log propagation.",
-                        "depth": self.cascade_depth,
-                        "failure_type": "circuit_breaker_trip",
-                    })
-                return
-
-            # Phase 336: Cross-Category Circuit Breaker
-            # Detect if we are spiraling through different failure types (Cascading Failure)
-            if len(self.failure_history) >= 5:
-                unique_types = {x.get("failure_type", "unknown") for x in self.failure_history}
-                # If we have failures across 4+ different categories (e.g. Test -> Shard -> Recursive -> AI)
-                # it indicates a systemic swarm collapse rather than a component fault.
-                if len(unique_types) >= 4:
-                     self.failure_history.append({
-                        "timestamp": time.time(),
-                        "stage": "circuit_breaker_cross_category",
-                        "error": "CircuitBreaker: Cross-Category Cascade Detected (Systemic Instability). Halting.",
-                        "depth": self.cascade_depth,
-                        "failure_type": "circuit_breaker_trip",
-                    })
-                     return
-
+        # Check for repeating errors (circuit breaker)
+        recent_errors = [e for e in self.failure_history[-2:] if e.get("error") == error and e.get("stage") == stage]
+        if len(recent_errors) >= 2:
+            # Replace the third occurrence with a circuit breaker
             entry = {
-                "timestamp": time.time(),
-                "stage": stage,
-                "error": val,
-                "details": details or {},
-                "depth": self.cascade_depth,
-                "agent": self.parent_agent_id,
-                "stack_trace": stack_trace,
-                "task_id": self.task_id,
-                "root_task_id": self.root_task_id,
-                "failure_type": failure_type,
+                "stage": "circuit_breaker_repeating",
+                "error": f"Exact Repeating Error: {error} (Circuit Breaker Triggered)",
+                "failure_type": "circuit_breaker",
+                "timestamp": time.time()
             }
-            self.failure_history.append(entry)
-        except Exception as e:  # pylint: disable=broad-exception-caught
-            # Fallback for logging failure
-            print(f"CRITICAL: Failed to log failure in CascadeContext: {e}")
 
+        self.failure_history.append(entry)
 
     def is_bursting(self) -> bool:
         """Check if recursion depth limit reached."""

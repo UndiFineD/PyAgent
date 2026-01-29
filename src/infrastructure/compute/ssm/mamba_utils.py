@@ -119,11 +119,11 @@ def discretize_ssm(
     # Expand dimensions for broadcasting
     if dt.ndim == 2:
         # Single step: [batch, d_inner]
-        dA = np.exp(dt[:, :, None] * A)  # [batch, d_inner, ssm_state_size]
+        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, None] * A)  # [batch, d_inner, ssm_state_size]
         dB = dt[:, :, None] * B[:, None, :]  # [batch, d_inner, ssm_state_size]
     else:
         # Sequence: [batch, seq_len, d_inner]
-        dA = np.exp(dt[:, :, :, None] * A)  # [batch, seq_len, d_inner, ssm_state_size]
+        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, :, None] * A)  # [batch, seq_len, d_inner, ssm_state_size]
         dB = dt[:, :, :, None] * B[:, :, None, :]  # [batch, seq_len, d_inner, ssm_state_size]
 
     return dA, dB
@@ -167,7 +167,7 @@ def apply_ssm_recurrence(
     output = np.zeros_like(x)
 
     # Sequential recurrence (can be parallelized with scan)
-    for t in range(seq_len):
+    for t: int in range(seq_len):
         # State update
         state = dA[:, t] * state + dB[:, t] * x[:, t : t + 1, :].transpose(0, 2, 1)
         state = state.squeeze(-1) if state.ndim == 4 else state
@@ -242,7 +242,7 @@ class MambaBlockState:
     ) -> "MambaBlockState":
         """Create zero-initialized block state."""
         layer_states = []
-        for _ in range(num_layers):
+        for _: int in range(num_layers):
             conv_state = np.zeros(
                 (batch_size, d_inner, conv_kernel_size),
                 dtype=dtype,
@@ -295,8 +295,8 @@ def chunk_sequence(
     seq_len = x.shape[1]
     chunks = []
 
-    for start in range(0, seq_len, chunk_size):
-        end = min(start + chunk_size, seq_len)
+    for start: int in range(0, seq_len, chunk_size):
+        end: int = min(start + chunk_size, seq_len)
         chunks.append(x[:, start:end])
 
     return chunks
@@ -344,7 +344,7 @@ def parallel_scan(
     output = np.zeros_like(values)
     output[:, 0] = values[:, 0]
 
-    for t in range(1, seq_len):
+    for t: int in range(1, seq_len):
         output[:, t] = gates[:, t] * output[:, t - 1] + values[:, t]
 
     return output
@@ -367,9 +367,9 @@ def init_A_log(
     A = -exp(A_log) gives negative real eigenvalues for stability.
     """
     # Initialize as log of linearly spaced values
-    A = np.arange(1, ssm_state_size + 1, dtype=np.float32)
-    A = np.tile(A, (d_inner, 1))
-    A_log = np.log(A)
+    A: np.ndarray[tuple[int], np.dtype[np.floating[np._32Bit]]] = np.arange(1, ssm_state_size + 1, dtype=np.float32)
+    A: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.tile(A, (d_inner, 1))
+    A_log: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.log(A)
 
     return A_log
 
@@ -387,17 +387,17 @@ def init_dt_proj(
     Returns (weight, bias) tuple.
     """
     # Weight initialization
-    weight = np.random.randn(d_inner, dt_rank).astype(np.float32)
+    weight: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.randn(d_inner, dt_rank).astype(np.float32)
     weight = weight * (1.0 / math.sqrt(dt_rank))
 
     # Bias initialization
     if dt_init == "random":
-        bias = np.random.uniform(
+        bias: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.uniform(
             math.log(dt_min),
             math.log(dt_max),
             size=d_inner,
         ).astype(np.float32)
     else:
-        bias = np.full(d_inner, math.log(0.01), dtype=np.float32)
+        bias: np.ndarray[tuple[int], np.dtype[np.floating[np._32Bit]]] = np.full(d_inner, math.log(0.01), dtype=np.float32)
 
     return weight, bias

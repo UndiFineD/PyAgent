@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: identity_mixin
+Provides identity and metadata mixin for PyAgent agents.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +18,8 @@
 
 """Identity Mixin for BaseAgent."""
 
+from asyncio import AbstractEventLoop
+from asyncio import AbstractEventLoop
 from typing import Any
 
 from src.core.base.common.models import AgentPriority
@@ -25,7 +31,7 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
 
     def __init__(self, **kwargs: Any) -> None:
         self.identity = IdentityCore(agent_type=self.__class__.__name__.lower().replace("agent", "") or "base")
-        self.agent_name = self.identity.agent_type
+        self.agent_name: str = self.identity.agent_type
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
         self._suspended: bool = False
@@ -54,9 +60,9 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
 
                 try:
                     try:
-                        loop = asyncio.get_running_loop()
+                        loop: AbstractEventLoop = asyncio.get_running_loop()
                     except RuntimeError:
-                        loop = asyncio.new_event_loop()
+                        loop: AbstractEventLoop = asyncio.new_event_loop()
                         asyncio.set_event_loop(loop)
 
                     if loop.is_running():
@@ -64,8 +70,8 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
                     else:
                         loop.run_until_complete(signals.emit("agent_capability_registration", payload))
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                    # pylint: disable=broad-exception-caught
                     pass
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            # pylint: disable=broad-exception-caught
             pass

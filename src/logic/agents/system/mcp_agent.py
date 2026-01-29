@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: mcp_agent
+Implements Model Context Protocol (MCP) agent logic for PyAgent core base.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,18 +30,25 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
+BaseAgent = None  # Will be imported locally to avoid circular import
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.mcp_connector import MCPConnector
 
 __version__ = VERSION
 
 
-class MCPAgent(BaseAgent):
+class MCPAgent:
     """Enables the fleet to discover and utilize external tools via the MCP protocol."""
 
     def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
+        global BaseAgent
+        if BaseAgent is None:
+            from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
+            BaseAgent = _BaseAgent
+        self._base = BaseAgent(file_path)
+
+    def __getattr__(self, name: str) -> object:
+        return getattr(self._base, name)
         self.workspace_root = Path(self.file_path).parent.parent.parent
         self.connectors: dict[str, MCPConnector] = {}
         self._system_prompt = (

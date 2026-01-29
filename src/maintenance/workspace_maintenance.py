@@ -27,12 +27,12 @@ from typing import List, Tuple
 from src.maintenance.mixins.pylint_fixer_mixin import PylintFixerMixin
 from src.maintenance.mixins.import_cleanup_mixin import ImportCleanupMixin
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
     """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
 
-    DEFAULT_EXCLUSIONS = {
+    DEFAULT_EXCLUSIONS: set[str] = {
         ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache", 
         ".ruff_cache", ".agent_cache", "target", "node_modules", 
         ".hypothesis", "__pycache__", "reports", "archive"
@@ -53,18 +53,18 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
 # limitations under the License.
 """
 
-    def __init__(self, workspace_root: str | Path = "."):
-        self.workspace_root = Path(workspace_root).resolve()
+    def __init__(self, workspace_root: str | Path = ".") -> None:
+        self.workspace_root: Path = Path(workspace_root).resolve()
 
     def _is_excluded(self, path: str | Path) -> bool:
         p = Path(path)
-        parts = p.parts
+        parts: Tuple[str] = p.parts
         for part in parts:
             if part in self.DEFAULT_EXCLUSIONS:
                 return True
         return False
 
-    def run_standard_cycle(self):
+    def run_standard_cycle(self) -> None:
         """Executes a standard maintenance cycle."""
         logger.info("Starting standard maintenance cycle...")
         self.apply_header_compliance()
@@ -79,9 +79,9 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
             if self._is_excluded(root):
                 continue
             for name in files:
-                path = Path(root) / name
+                path: Path = Path(root) / name
                 try:
-                    size = path.stat().st_size // 1024
+                    size: int = path.stat().st_size // 1024
                     if size > threshold_kb:
                         results.append((size, path.relative_to(self.workspace_root)))
                 except OSError:
@@ -109,12 +109,12 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
                 continue
             for file in files:
                 if file.endswith(".py"):
-                    path = Path(root) / file
+                    path: Path = Path(root) / file
                     try:
-                        content = path.read_text(encoding="utf-8")
+                        content: str = path.read_text(encoding="utf-8")
                         if "Copyright 2026 PyAgent Authors" not in content:
                             missing.append(path)
-                    except Exception:  # pylint: disable=broad-exception-caught
+                    except (IOError, OSError, UnicodeDecodeError) as _e:
                         continue
         return missing
 
@@ -127,99 +127,99 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
             for file in files:
                 if not file.endswith(".py"):
                     continue
-                path = Path(root) / file
+                path: Path = Path(root) / file
                 try:
-                    lines = path.read_text(encoding="utf-8").splitlines()
+                    lines: List[str] = path.read_text(encoding="utf-8").splitlines()
                     for i, line in enumerate(lines, 1):
                         if len(line) > max_len:
                             violations.append(f"{path.name}:{i}:{len(line)}")
-                except Exception:  # pylint: disable=broad-exception-caught
+                except (IOError, OSError, UnicodeDecodeError) as _e:
                     continue
         return violations
 
-    def fix_whitespace(self):
+    def fix_whitespace(self) -> None:
         """Removes trailing whitespace and tabs from all Python files."""
         for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
                 if file.endswith(".py"):
-                    path = Path(root) / file
+                    path: Path = Path(root) / file
                     try:
-                        content = path.read_text(encoding="utf-8")
-                        lines = content.splitlines()
-                        new_lines = [line.rstrip() for line in lines]
-                        new_content = "\n".join(new_lines)
+                        content: str = path.read_text(encoding="utf-8")
+                        lines: List[str] = content.splitlines()
+                        new_lines: List[str] = [line.rstrip() for line in lines]
+                        new_content: str = "\n".join(new_lines)
                         if not content.endswith("\n") and content != "":
                             # Keep newline at end of file if it had one, or add one if it didn't but had content
                             pass
                         # To match test expectations exactly:
-                        new_content = "\n".join(new_lines)
+                        new_content: str = "\n".join(new_lines)
                         if content.endswith("\n"):
                             new_content += "\n"
                         path.write_text(new_content, encoding="utf-8")
-                    except Exception:  # pylint: disable=broad-exception-caught
+                    except (IOError, OSError, UnicodeEncodeError) as _e:
                         continue
 
-    def apply_header_compliance(self):
+    def apply_header_compliance(self) -> None:
         """Ensures all Python files have the standard license header."""
         for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
                 if file.endswith(".py"):
-                    path = Path(root) / file
+                    path: Path = Path(root) / file
                     self._apply_file_header(path)
 
-    def _apply_file_header(self, path: Path):
+    def _apply_file_header(self, path: Path) -> None:
         try:
-            content = path.read_text(encoding="utf-8")
+            content: str = path.read_text(encoding="utf-8")
             if "Copyright 2026 PyAgent Authors" not in content:
                 # Strip existing shebang if any
                 if content.startswith("#!"):
-                    lines = content.splitlines()
-                    content = "\n".join(lines[1:])
+                    lines: List[str] = content.splitlines()
+                    content: str = "\n".join(lines[1:])
                 path.write_text(self.STANDARD_HEADER + "\n" + content, encoding="utf-8")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (IOError, OSError, UnicodeDecodeError, UnicodeEncodeError) as e:
             logger.error(f"Error applying header to {path}: {e}")
 
-    def apply_docstring_compliance(self):
+    def apply_docstring_compliance(self) -> None:
         """Ensures all Python files have a module docstring."""
         for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
                 if file.endswith(".py"):
-                    path = Path(root) / file
+                    path: Path = Path(root) / file
                     self._apply_docstring(path)
 
-    def _apply_docstring(self, path: Path):
+    def _apply_docstring(self, path: Path) -> None:
         try:
-            content = path.read_text(encoding="utf-8")
+            content: str = path.read_text(encoding="utf-8")
             if '"""' not in content and "'''" not in content:
                 # Add a simple docstring after header
-                lines = content.splitlines()
+                lines: List[str] = content.splitlines()
                 header_end = 0
                 for i, line in enumerate(lines):
                     if "limitations under the License." in line:
-                        header_end = i + 1
+                        header_end: int = i + 1
                         break
 
-                module_name = path.stem.replace("_", " ").title()
-                docstring = f'\n"""\n{module_name} module.\n"""\n'
-                new_content = "\n".join(lines[:header_end]) + docstring + "\n".join(lines[header_end:])
+                module_name: str = path.stem.replace("_", " ").title()
+                docstring: str = f'\n"""\n{module_name} module.\n"""\n'
+                new_content: str = "\n".join(lines[:header_end]) + docstring + "\n".join(lines[header_end:])
                 path.write_text(new_content, encoding="utf-8")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (IOError, OSError, UnicodeEncodeError) as e:
             logger.error(f"Error applying docstring to {path}: {e}")
 
-    def fix_pylint_violations(self):
+    def fix_pylint_violations(self) -> None:
         """Walks through the workspace and applies available Pylint fixes."""
         for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
                 if file.endswith(".py"):
-                    path = Path(root) / file
+                    path: Path = Path(root) / file
                     self.fix_unspecified_encoding(path)
                     self.fix_no_else_return(path)
                     self.fix_broad_exception(path)

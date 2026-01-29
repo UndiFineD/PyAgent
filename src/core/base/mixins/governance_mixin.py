@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: governance_mixin
+Provides governance and async control mixin for PyAgent agents.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,9 +57,9 @@ class GovernanceMixin:
         if self.__class__.__name__ == "FirewallAgent":
             return True
 
-        registry = getattr(self, "registry", None)
+        registry: Any | None = getattr(self, "registry", None)
         if not registry and hasattr(self, "fleet") and self.fleet:
-            registry = getattr(self.fleet, "signals", None)
+            registry: Any | None = getattr(self.fleet, "signals", None)
 
         if registry:
             try:

@@ -23,7 +23,7 @@ from .priority import (AsyncPriorityScheduler, DeadlineScheduler,
                        PriorityScheduler, RateLimitedScheduler, ScheduledTask,
                        TaskPriority, TaskState, TaskStats)
 
-__all__ = [
+__all__: list[str] = [
     "TaskPriority",
     "TaskState",
     "TaskStats",
