@@ -1,3 +1,7 @@
+"""
+Tools service package for PyAgent.
+Contains modules for tool management, parsing, and registry.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

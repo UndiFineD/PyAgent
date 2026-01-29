@@ -20,9 +20,9 @@ from __future__ import annotations
 import logging
 import os
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION  # pylint: disable=import-error
 
 from .runner_backends import BackendHandlers
 
@@ -44,35 +44,51 @@ class SubagentCore:
         use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true"
 
         cache_model = backend_env if backend_env != "auto" else "subagent_auto"
-        cache_key = self.runner._get_cache_key(f"{description}:{prompt}:{original_content}", cache_model)
+        cache_key = self.runner._get_cache_key(f"{description}:{prompt}:{original_content}", cache_model)  # pylint: disable=protected-access
 
         if use_cache:
-            if cache_key in self.runner._response_cache:
-                self.runner._metrics["cache_hits"] += 1
-                return self.runner._response_cache[cache_key]
+            if cache_key in self.runner._response_cache:  # pylint: disable=protected-access
+                self.runner._metrics["cache_hits"] += 1  # pylint: disable=protected-access
+                return self.runner._response_cache[cache_key]  # pylint: disable=protected-access
             cached_val = self.runner.disk_cache.get(cache_key)
             if cached_val:
-                self.runner._metrics["cache_hits"] += 1
-                self.runner._response_cache[cache_key] = cached_val
+                self.runner._metrics["cache_hits"] += 1  # pylint: disable=protected-access
+                self.runner._response_cache[cache_key] = cached_val  # pylint: disable=protected-access
                 return cached_val
 
         full_prompt = BackendHandlers.build_full_prompt(description, prompt, original_content)
-        repo_root = self.runner._resolve_repo_root()
+        res = self._select_and_try_backend(backend_env, full_prompt, prompt)
 
+        if res and use_cache:
+            self.runner._response_cache[cache_key] = res  # pylint: disable=protected-access
+            self.runner.disk_cache.set(cache_key, res)
+
+        if self.runner.recorder:
+            self.runner.recorder.record_interaction(
+                provider="SubagentRunner",
+                model=backend_env,
+                prompt=prompt,
+                result=res or "FAILED",
+            )
+
+        return res
+
+    def _create_backend_functions(self, full_prompt: str, original_prompt: str, repo_root: Any) -> dict[str, callable]:
+        """Create backend function mappings."""
         def _try_codex_cli() -> str | None:
-            if not self.runner._command_available("codex"):
+            if not self.runner._command_available("codex"):  # pylint: disable=protected-access
                 return None
             return BackendHandlers.try_codex_cli(full_prompt, repo_root)
 
         def _try_copilot_cli() -> str | None:
-            if not self.runner._command_available("copilot"):
+            if not self.runner._command_available("copilot"):  # pylint: disable=protected-access
                 return None
             return BackendHandlers.try_copilot_cli(full_prompt, repo_root)
 
         def _try_gh_copilot(allow_non_command: bool) -> str | None:
-            if not self.runner._command_available("gh"):
+            if not self.runner._command_available("gh"):  # pylint: disable=protected-access
                 return None
-            if not allow_non_command and not self.runner._looks_like_command(prompt):
+            if not allow_non_command and not self.runner._looks_like_command(original_prompt):  # pylint: disable=protected-access
                 return None
             return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
 
@@ -100,26 +116,16 @@ class SubagentCore:
                 logging.debug(f"Neural backend failed: {e}")
                 return None
 
-        res = None
-        if backend_env in {"codex", "codex-cli"}:
-            res = _try_codex_cli()
-        elif backend_env in {"vllm"}:
-            res = _try_vllm()
-        elif backend_env in {"ollama"}:
-            res = _try_ollama()
-        elif backend_env in {"neural", "rust", "local-neural"}:
-            res = _try_neural()
-        elif backend_env in {"copilot", "local", "copilot-cli"}:
-            res = _try_codex_cli() or _try_vllm() or _try_ollama() or _try_copilot_cli()
-        elif backend_env in {"gh", "gh-copilot"}:
-            res = _try_gh_copilot(allow_non_command=True)
-        elif backend_env in {"github-models", "github_models", "models"}:
-            res = _try_github_models()
-        elif backend_env in {"openai", "gpt", "localai", "huggingface"}:
-            res = _try_openai_api()
-        else:
-            # auto (default) logic
-            res = (
+        return {
+            "codex": _try_codex_cli,
+            "vllm": _try_vllm,
+            "ollama": _try_ollama,
+            "neural": _try_neural,
+            "copilot": lambda: _try_codex_cli() or _try_vllm() or _try_ollama() or _try_copilot_cli(),
+            "gh": lambda: _try_gh_copilot(allow_non_command=True),
+            "github_models": _try_github_models,
+            "openai": _try_openai_api,
+            "auto": lambda: (
                 _try_vllm()
                 or _try_ollama()
                 or _try_codex_cli()
@@ -128,21 +134,41 @@ class SubagentCore:
                 or _try_openai_api()
                 or _try_gh_copilot(allow_non_command=False)
                 or _try_neural()
-            )
+            ),
+        }
 
-        if res and use_cache:
-            self.runner._response_cache[cache_key] = res
-            self.runner.disk_cache.set(cache_key, res)
+    def _select_backend_by_env(self, backend_env: str, backends: dict[str, callable]) -> str | None:
+        """Select backend based on environment string."""
+        backend_mapping = {
+            "codex": "codex",
+            "codex-cli": "codex",
+            "vllm": "vllm",
+            "ollama": "ollama",
+            "neural": "neural",
+            "rust": "neural",
+            "local-neural": "neural",
+            "copilot": "copilot",
+            "local": "copilot",
+            "copilot-cli": "copilot",
+            "gh": "gh",
+            "gh-copilot": "gh",
+            "github-models": "github_models",
+            "github_models": "github_models",
+            "models": "github_models",
+            "openai": "openai",
+            "gpt": "openai",
+            "localai": "openai",
+            "huggingface": "openai",
+        }
 
-        if self.runner.recorder:
-            self.runner.recorder.record_interaction(
-                provider="SubagentRunner",
-                model=backend_env,
-                prompt=prompt,
-                result=res or "FAILED",
-            )
+        backend_key = backend_mapping.get(backend_env, "auto")
+        return backends[backend_key]()
 
-        return res
+    def _select_and_try_backend(self, backend_env: str, full_prompt: str, original_prompt: str) -> str | None:
+        """Select and attempt to use the appropriate backend based on environment configuration."""
+        repo_root = self.runner._resolve_repo_root()  # pylint: disable=protected-access
+        backends = self._create_backend_functions(full_prompt, original_prompt, repo_root)
+        return self._select_backend_by_env(backend_env, backends)
 
     def llm_chat_via_github_models(
         self,
@@ -158,18 +184,18 @@ class SubagentCore:
         validate_content: bool = True,
     ) -> str:
         """Call a GitHub Models OpenAI-compatible chat endpoint with caching."""
-        cache_key = self.runner._get_cache_key(prompt, model)
+        cache_key = self.runner._get_cache_key(prompt, model)  # pylint: disable=protected-access
         if use_cache:
-            if cache_key in self.runner._response_cache:
-                self.runner._metrics["cache_hits"] += 1
-                return self.runner._response_cache[cache_key]
+            if cache_key in self.runner._response_cache:  # pylint: disable=protected-access
+                self.runner._metrics["cache_hits"] += 1  # pylint: disable=protected-access
+                return self.runner._response_cache[cache_key]  # pylint: disable=protected-access
             cached_val = self.runner.disk_cache.get(cache_key)
             if cached_val:
-                self.runner._metrics["cache_hits"] += 1
-                self.runner._response_cache[cache_key] = cached_val
+                self.runner._metrics["cache_hits"] += 1  # pylint: disable=protected-access
+                self.runner._response_cache[cache_key] = cached_val  # pylint: disable=protected-access
                 return cached_val
 
-        self.runner._metrics["requests"] += 1
+        self.runner._metrics["requests"] += 1  # pylint: disable=protected-access
         start_time = time.time()
         try:
             result = self.runner.llm_client.llm_chat_via_github_models(
@@ -187,13 +213,13 @@ class SubagentCore:
                 if validate_content and not self.runner.validate_response_content(result):
                     logging.warning("Response validation failed")
                 if use_cache:
-                    self.runner._response_cache[cache_key] = result
+                    self.runner._response_cache[cache_key] = result  # pylint: disable=protected-access
                     self.runner.disk_cache.set(cache_key, result)
                 latency_ms = int((time.time() - start_time) * 1000)
-                self.runner._metrics["total_latency_ms"] += latency_ms
+                self.runner._metrics["total_latency_ms"] += latency_ms  # pylint: disable=protected-access
                 return result
             return ""
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.runner._metrics["errors"] += 1
+            self.runner._metrics["errors"] += 1  # pylint: disable=protected-access
             logging.error(f"GitHub Models call failed: {e}")
             raise

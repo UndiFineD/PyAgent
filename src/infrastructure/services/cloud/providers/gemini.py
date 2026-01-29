@@ -24,6 +24,16 @@ import os
 import time
 from typing import AsyncIterator, Dict, List, Optional
 
+from httpx import AsyncClient
+
+from httpx import Response
+
+from httpx import HTTPError
+
+from httpx import AsyncClient
+
+from httpx import Response
+
 from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
                     InferenceRequest, InferenceResponse, RateLimitError)
 
@@ -47,7 +57,7 @@ class GeminiConnector(CloudProviderBase):
     """
 
     # Pricing per 1M tokens (input/output) - approximate
-    PRICING = {
+    PRICING: Dict[str, Dict[str, float]] = {
         "gemini-pro": {"input": 0.50, "output": 1.50},
         "gemini-pro-vision": {"input": 0.50, "output": 1.50},
         "gemini-ultra": {"input": 7.00, "output": 21.00},
@@ -61,11 +71,11 @@ class GeminiConnector(CloudProviderBase):
         project_id: Optional[str] = None,
         location: str = "us-central1",
         **config,
-    ):
+    ) -> None:
         super().__init__(api_key=api_key, **config)
         self._api_key = api_key or os.getenv("GOOGLE_API_KEY")
-        self._project_id = project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
-        self._location = location
+        self._project_id: str | None = project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
+        self._location: str = location
         self._client = None
 
     @property
@@ -79,18 +89,18 @@ class GeminiConnector(CloudProviderBase):
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         import httpx
 
-        start_time = time.perf_counter()
+        start_time: float = time.perf_counter()
 
         if not self._api_key:
             raise AuthenticationError("Gemini API key is required.", provider="Gemini")
 
         gemini_contents = []
         for msg in request.messages:
-            role = "user" if msg["role"] == "user" else "model"
+            role: str = "user" if msg["role"] == "user" else "model"
             gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})
 
         base_url = "https://generativelanguage.googleapis.com/v1beta/models"
-        url = f"{base_url}/{request.model}:generateContent?key={self._api_key}"
+        url: str = f"{base_url}/{request.model}:generateContent?key={self._api_key}"
         payload = {
             "contents": gemini_contents,
             "generationConfig": {
@@ -102,7 +112,7 @@ class GeminiConnector(CloudProviderBase):
 
         async with httpx.AsyncClient(timeout=60.0) as client:
             try:
-                response = await client.post(url, json=payload)
+                response: Response = await client.post(url, json=payload)
             except httpx.HTTPError as e:
                 raise CloudProviderError(
                     f"Gemini connection failed: {e}",
@@ -123,10 +133,10 @@ class GeminiConnector(CloudProviderBase):
             data = response.json()
             try:
                 content = data["candidates"][0]["content"]["parts"][0]["text"]
-                prompt_tokens = len(str(payload)) // 4
-                comp_tokens = len(content) // 4
-                pricing = self.PRICING.get(request.model, self.PRICING["gemini-1.5-flash"])
-                cost = (prompt_tokens * pricing["input"] + comp_tokens * pricing["output"]) / 1_000_000
+                prompt_tokens: int = len(str(payload)) // 4
+                comp_tokens: int = len(content) // 4
+                pricing: Dict[str, float] = self.PRICING.get(request.model, self.PRICING["gemini-1.5-flash"])
+                cost: float = (prompt_tokens * pricing["input"] + comp_tokens * pricing["output"]) / 1_000_000
 
                 return InferenceResponse(
                     content=content,
@@ -152,11 +162,11 @@ class GeminiConnector(CloudProviderBase):
 
         gemini_contents = []
         for msg in request.messages:
-            role = "user" if msg["role"] == "user" else "model"
+            role: str = "user" if msg["role"] == "user" else "model"
             gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})
 
         base_url = "https://generativelanguage.googleapis.com/v1beta/models"
-        url = (
+        url: str = (
             f"{base_url}/{request.model}:streamGenerateContent"
             f"?alt=sse&key={self._api_key}"
         )
@@ -208,15 +218,15 @@ class GeminiConnector(CloudProviderBase):
         Returns:
             Estimated cost in USD.
         """
-        model = request.model
-        pricing = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
+        model: str = request.model
+        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
 
         # Rough estimate: assume 4 chars per token
-        input_tokens = sum(len(m.get("content", "")) for m in request.messages) // 4
-        output_tokens = request.max_tokens
+        input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4
+        output_tokens: int = request.max_tokens
 
-        input_cost = (input_tokens / 1_000_000) * pricing["input"]
-        output_cost = (output_tokens / 1_000_000) * pricing["output"]
+        input_cost: float = (input_tokens / 1_000_000) * pricing["input"]
+        output_cost: float = (output_tokens / 1_000_000) * pricing["output"]
 
         return input_cost + output_cost
 
@@ -230,7 +240,7 @@ class GeminiConnector(CloudProviderBase):
         # Gemini expects content parts, not OpenAI-style messages
         formatted = []
         for msg in messages:
-            role = msg.get("role", "user")
-            content = msg.get("content", "")
+            role: str = msg.get("role", "user")
+            content: str = msg.get("content", "")
             formatted.append(f"{role}: {content}")
         return "\n".join(formatted)

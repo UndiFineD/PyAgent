@@ -31,7 +31,7 @@ try:
 except ImportError:
     rc = None  # type: ignore[assignment]
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -51,7 +51,7 @@ class TokenCostCore:
     """
 
     # Model pricing (cost per 1M tokens)
-    MODEL_COSTS = {
+    MODEL_COSTS: Dict[str, Dict[str, float]] = {
         "gpt-4": {"input": 0.03, "output": 0.06},
         "gpt-4-turbo": {"input": 0.01, "output": 0.03},
         "gpt-3.5-turbo": {"input": 0.0005, "output": 0.0015},
@@ -91,19 +91,21 @@ class TokenCostCore:
                 )
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_token_cost failed: %s. Falling back to Python.", e)
+                import traceback
+                traceback.print_exc()
 
         # check cache
-        cache_key = (input_tokens, output_tokens, model)
+        cache_key: Tuple[int | str] = (input_tokens, output_tokens, model)
         if cache_key in self.cache:
             return self.cache[cache_key]
 
         # get pricing
-        pricing = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
+        pricing: Dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
 
         # calculate costs (convert from cost per 1M to per token)
-        input_cost = (input_tokens * pricing["input"]) / 1_000_000
-        output_cost = (output_tokens * pricing["output"]) / 1_000_000
-        total_cost = input_cost + output_cost
+        input_cost: float = (input_tokens * pricing["input"]) / 1_000_000
+        output_cost: float = (output_tokens * pricing["output"]) / 1_000_000
+        total_cost: float = input_cost + output_cost
 
         result = TokenCostResult(
             total_cost=total_cost,
@@ -125,7 +127,7 @@ class TokenCostCore:
         Returns:
             Dict with input and output cost per token
         """
-        pricing = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
+        pricing: Dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
         return {
             "input": pricing["input"] / 1_000_000,
             "output": pricing["output"] / 1_000_000,
@@ -137,7 +139,7 @@ class ModelFallbackCore:
 
     def __init__(self) -> None:
         """Initialize model fallback engine."""
-        self.model_capabilities = {
+        self.model_capabilities: Dict[str, Dict[str, float]] = {
             "gpt-4": {"speed": 0.5, "quality": 1.0, "cost": 0.1},
             "gpt-4-turbo": {"speed": 0.7, "quality": 0.95, "cost": 0.3},
             "gpt-3.5-turbo": {"speed": 0.9, "quality": 0.7, "cost": 0.8},
@@ -160,15 +162,17 @@ class ModelFallbackCore:
                 return rc.select_best_model(constraints)  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust select_best_model failed: %s. Falling back to Python.", e)
+                import traceback
+                traceback.print_exc()
 
-        max_cost = constraints.get("max_cost", 1.0)
-        required_speed = constraints.get("required_speed", 0.0)
-        required_quality = constraints.get("required_quality", 0.0)
+        max_cost: float = constraints.get("max_cost", 1.0)
+        required_speed: float = constraints.get("required_speed", 0.0)
+        required_quality: float = constraints.get("required_quality", 0.0)
 
         candidates = []
         for model, caps in self.model_capabilities.items():
             if caps["cost"] <= max_cost and caps["speed"] >= required_speed and caps["quality"] >= required_quality:
-                score = (caps["speed"] * 0.3) + (caps["quality"] * 0.5) + ((1 - caps["cost"]) * 0.2)
+                score: float = (caps["speed"] * 0.3) + (caps["quality"] * 0.5) + ((1 - caps["cost"]) * 0.2)
                 candidates.append((model, score))
 
         if not candidates:
@@ -191,8 +195,10 @@ class ModelFallbackCore:
                 return rc.get_fallback_chain(primary)  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust get_fallback_chain failed: %s. Falling back to Python.", e)
+                import traceback
+                traceback.print_exc()
 
-        fallback_chains = {
+        fallback_chains: Dict[str, List[str]] = {
             "gpt-4": ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"],
             "gpt-4-turbo": ["gpt-4", "gpt-3.5-turbo", "claude-3-sonnet"],
             "claude-3-opus": ["claude-3-sonnet", "gpt-4-turbo", "gemini-1.5-pro"],
@@ -214,7 +220,7 @@ class DerivedMetricCalculator:
             raise KeyError(f"Derived metric {metric_name} not found")
 
         metric_def = self.derived_metrics[metric_name]
-        formula = getattr(metric_def, "formula", metric_def) if not isinstance(metric_def, str) else metric_def
+        formula: Any | str = getattr(metric_def, "formula", metric_def) if not isinstance(metric_def, str) else metric_def
 
         return self.evaluate_formula(formula, context)
 
@@ -243,6 +249,8 @@ class DerivedMetricCalculator:
                 return rc.evaluate_formula(formula, values)  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust evaluate_formula failed: %s. Falling back to Python.", e)
+                import traceback
+                traceback.print_exc()
 
         return FormulaCore.evaluate(formula, values)
 
@@ -293,8 +301,8 @@ class StatsRollupCore:
                 return rc.calculate_median_rust(values)  # type: ignore[attr-defined]
         if not values:
             return 0.0
-        sorted_vals = sorted(values)
-        idx = len(sorted_vals) // 2
+        sorted_vals: List[float] = sorted(values)
+        idx: int = len(sorted_vals) // 2
         return sorted_vals[idx] if len(sorted_vals) % 2 == 1 else (sorted_vals[idx - 1] + sorted_vals[idx]) / 2
 
     def rollup_p95(self, values: List[float]) -> float:
@@ -305,10 +313,12 @@ class StatsRollupCore:
                 return rc.calculate_p95_rust(values)  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_p95_rust failed: %s. Falling back to Python.", e)
+                import traceback
+                traceback.print_exc()
 
         if not values or len(values) < 20:
             return self.rollup_max(values)
-        sorted_vals = sorted(values)
+        sorted_vals: List[float] = sorted(values)
         idx = int(len(sorted_vals) * 0.95)
         return sorted_vals[idx]
 
@@ -316,7 +326,7 @@ class StatsRollupCore:
         """Calculate 99th percentile (pure calculation)."""
         if not values or len(values) < 100:
             return self.rollup_max(values)
-        sorted_vals = sorted(values)
+        sorted_vals: List[float] = sorted(values)
         idx = int(len(sorted_vals) * 0.99)
         return sorted_vals[idx]
 
@@ -328,8 +338,8 @@ class StatsRollupCore:
                 return rc.calculate_stddev_rust(values)  # type: ignore[attr-defined]
         if len(values) < 2:
             return 0.0
-        mean = self.rollup_avg(values)
-        variance = sum((x - mean) ** 2 for x in values) / (len(values) - 1)
+        mean: float = self.rollup_avg(values)
+        variance: float = sum((x - mean) ** 2 for x in values) / (len(values) - 1)
         return math.sqrt(variance)
 
 
@@ -354,12 +364,12 @@ class CorrelationCore:
         if len(series1) != len(series2) or len(series1) < 2:
             return 0.0
 
-        mean1 = sum(series1) / len(series1)
-        mean2 = sum(series2) / len(series2)
+        mean1: float = sum(series1) / len(series1)
+        mean2: float = sum(series2) / len(series2)
 
-        numerator = sum((x - mean1) * (y - mean2) for x, y in zip(series1, series2))
-        denom1 = math.sqrt(sum((x - mean1) ** 2 for x in series1))
-        denom2 = math.sqrt(sum((y - mean2) ** 2 for y in series2))
+        numerator: float | int = sum((x - mean1) * (y - mean2) for x, y in zip(series1, series2))
+        denom1: float = math.sqrt(sum((x - mean1) ** 2 for x in series1))
+        denom2: float = math.sqrt(sum((y - mean2) ** 2 for y in series2))
 
         if denom1 == 0 or denom2 == 0:
             return 0.0
@@ -390,20 +400,22 @@ class ABTestCore:
                 )  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_statistical_significance failed: %s. Using Python fallback.", e)
+                import traceback
+                traceback.print_exc()
 
         if not control_values or not treatment_values:
             return {"p_value": 1.0, "t_statistic": 0.0, "effect_size": 0.0}
 
-        control_mean = sum(control_values) / len(control_values)
-        treatment_mean = sum(treatment_values) / len(treatment_values)
+        control_mean: float = sum(control_values) / len(control_values)
+        treatment_mean: float = sum(treatment_values) / len(treatment_values)
 
-        control_var = sum((x - control_mean) ** 2 for x in control_values) / len(control_values)
-        treatment_var = sum((x - treatment_mean) ** 2 for x in treatment_values) / len(treatment_values)
+        control_var: float = sum((x - control_mean) ** 2 for x in control_values) / len(control_values)
+        treatment_var: float = sum((x - treatment_mean) ** 2 for x in treatment_values) / len(treatment_values)
 
-        pooled_se = math.sqrt((control_var / len(control_values)) + (treatment_var / len(treatment_values)))
-        t_stat = (treatment_mean - control_mean) / pooled_se if pooled_se > 0 else 0
+        pooled_se: float = math.sqrt((control_var / len(control_values)) + (treatment_var / len(treatment_values)))
+        t_stat: float | int = (treatment_mean - control_mean) / pooled_se if pooled_se > 0 else 0
 
-        effect_size = (
+        effect_size: float | int = (
             (treatment_mean - control_mean) / math.sqrt(max(control_var, treatment_var))
             if max(control_var, treatment_var) > 0
             else 0
@@ -432,6 +444,8 @@ class ABTestCore:
                 return rc.calculate_sample_size(effect_size, alpha, power)  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust calculate_sample_size failed: %s. Falling back to Python.", e)
+                import traceback
+                traceback.print_exc()
 
         # Simplified formula: n = 2 * (z_alpha + z_beta)^2 / effect_size^2
         z_alpha = 1.96  # For alpha=0.05

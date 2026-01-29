@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         KVConnectorBase
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class DecodeOnlyWorker:
@@ -64,11 +64,11 @@ class DecodeOnlyWorker:
         model_config: Any,
         parallel_config: Any,
         kv_transfer_config: KVTransferConfig,
-    ):
-        self.worker_id = worker_id
+    ) -> None:
+        self.worker_id: str = worker_id
         self.model_config = model_config
         self.parallel_config = parallel_config
-        self.kv_transfer_config = kv_transfer_config
+        self.kv_transfer_config: KVTransferConfig = kv_transfer_config
 
         # Ensure role is set to CONSUMER
         self.kv_transfer_config.kv_role = KVConnectorRole.CONSUMER
@@ -89,7 +89,7 @@ class DecodeOnlyWorker:
 
         logger.info("DecodeOnlyWorker %s initialized.", worker_id)
 
-    def initialize(self):
+    def initialize(self) -> None:
         """Initialize components for decoding."""
         # Setup...
         self._is_active = True
@@ -135,7 +135,7 @@ class DecodeOnlyWorker:
             "cache_misses_remote": self.cache_misses_remote,
         }
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Gracefully shut down the decode worker."""
         self._is_active = False
         if self.kv_connector:

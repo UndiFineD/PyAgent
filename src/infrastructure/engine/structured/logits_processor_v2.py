@@ -28,11 +28,17 @@ Beyond vLLM innovations:
 - Processor hot-swapping
 """
 
+from _thread import LockType
 import threading
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Type
+
+from numpy import dtype, floating, ndarray
+from numpy._typing._nbit_base import _32Bit
+
+from numpy import dtype, ndarray
 
 try:
     import numpy as np  # noqa: F401
@@ -121,7 +127,7 @@ class BatchUpdateBuilder:
     """Builder for constructing BatchUpdate objects."""
 
     def __init__(self, batch_size: int = 0) -> None:
-        self.batch_size = batch_size
+        self.batch_size: int = batch_size
         self._removed: List[RemovedRequest] = []
         self._added: List[AddedRequest] = []
         self._moved: List[MovedRequest] = []
@@ -161,7 +167,7 @@ class BatchUpdateBuilder:
 
     def set_batch_size(self, size: int) -> "BatchUpdateBuilder":
         """Set batch size."""
-        self.batch_size = size
+        self.batch_size: int = size
         return self
 
     def build(self) -> BatchUpdate:
@@ -253,14 +259,14 @@ class MinPLogitsProcessor(LogitsProcessor):
         device: str = "cpu",
         _is_pin_memory: bool = False,
     ) -> None:
-        self.max_num_reqs = max_num_reqs
-        self.device = device
+        self.max_num_reqs: int = max_num_reqs
+        self.device: str = device
         self.min_p_count = 0
 
         if HAS_NUMPY:
-            self.min_p_cpu = np.zeros(max_num_reqs, dtype=np.float32)
+            self.min_p_cpu: ndarray[tuple[int], dtype[floating[_32Bit]]] = np.zeros(max_num_reqs, dtype=np.float32)
         else:
-            self.min_p_cpu = [0.0] * max_num_reqs
+            self.min_p_cpu: List[float] = [0.0] * max_num_reqs
 
         self.min_p: Optional[Any] = None
 
@@ -279,8 +285,8 @@ class MinPLogitsProcessor(LogitsProcessor):
 
         # Process added requests
         for index, params, _, _ in batch_update.added:
-            min_p = params.min_p
-            min_p_before = self.min_p_cpu[index]
+            min_p: float = params.min_p
+            min_p_before: Any | float = self.min_p_cpu[index]
             if min_p_before != min_p:
                 self.min_p_cpu[index] = min_p
                 if min_p and not min_p_before:
@@ -298,8 +304,8 @@ class MinPLogitsProcessor(LogitsProcessor):
 
             # Process moved requests
             for from_idx, to_idx, direction in batch_update.moved:
-                min_p_a = self.min_p_cpu[from_idx]
-                min_p_b = self.min_p_cpu[to_idx]
+                min_p_a: Any | float = self.min_p_cpu[from_idx]
+                min_p_b: Any | float = self.min_p_cpu[to_idx]
                 if min_p_a != min_p_b:
                     self.min_p_cpu[to_idx] = min_p_a
                     if direction == MoveDirectionality.SWAP:
@@ -332,7 +338,7 @@ class MinPLogitsProcessor(LogitsProcessor):
 
         # Compute thresholds
         batch_size = logits.shape[0]
-        min_p_vals = np.array(self.min_p_cpu[:batch_size]).reshape(-1, 1)
+        min_p_vals: ndarray[tuple[int, int], dtype[Any]] = np.array(self.min_p_cpu[:batch_size]).reshape(-1, 1)
         thresholds = max_probs * min_p_vals
 
         # Mask tokens below threshold
@@ -353,7 +359,7 @@ class MinPLogitsProcessor(LogitsProcessor):
         if HAS_NUMPY:
             self.min_p_cpu.fill(0)
         else:
-            self.min_p_cpu = [0.0] * self.max_num_reqs
+            self.min_p_cpu: List[float] = [0.0] * self.max_num_reqs
         self.min_p_count = 0
 
 
@@ -371,8 +377,8 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         device: str = "cpu",
         _is_pin_memory: bool = False,
     ) -> None:
-        self.max_num_reqs = max_num_reqs
-        self.device = device
+        self.max_num_reqs: int = max_num_reqs
+        self.device: str = device
 
         # Per-request logit biases
         self.biases: Dict[int, Dict[int, float]] = {}
@@ -410,8 +416,8 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
 
         # Process moved requests
         for from_idx, to_idx, direction in batch_update.moved:
-            bias_a = self.biases.get(from_idx)
-            bias_b = self.biases.get(to_idx)
+            bias_a: Dict[int, float] | None = self.biases.get(from_idx)
+            bias_b: Dict[int, float] | None = self.biases.get(to_idx)
 
             if bias_a is not None:
                 self.biases[to_idx] = bias_a
@@ -472,7 +478,7 @@ class CompositeLogitsProcessor(LogitsProcessor):
     """
 
     def __init__(self, processors: List[LogitsProcessor]) -> None:
-        self.processors = processors
+        self.processors: List[LogitsProcessor] = processors
         self._argmax_invariant: Optional[bool] = None
 
     def is_argmax_invariant(self) -> bool:
@@ -523,7 +529,7 @@ class LogitsProcessorRegistry:
     """
 
     _instance: Optional["LogitsProcessorRegistry"] = None
-    _lock = threading.Lock()
+    _lock: LockType = threading.Lock()
 
     def __new__(cls) -> "LogitsProcessorRegistry":
         if cls._instance is None:
@@ -574,7 +580,7 @@ class LogitsProcessorRegistry:
         return cls()
 
 
-__all__ = [
+__all__: List[str] = [
     "MoveDirectionality",
     "SamplingParams",
     "RemovedRequest",

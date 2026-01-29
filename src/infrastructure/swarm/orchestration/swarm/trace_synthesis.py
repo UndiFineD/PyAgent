@@ -32,7 +32,7 @@ class SwarmTraceSynthesizer:
     Analyzes historical expert pairings to optimize future MoE routing decisions.
     """
 
-    def __init__(self, audit_logger: SwarmAuditLogger):
+    def __init__(self, audit_logger: SwarmAuditLogger) -> None:
         self.audit_logger = audit_logger
         self.wisdom_cache: Dict[str, Any] = {}
 
@@ -45,7 +45,7 @@ class SwarmTraceSynthesizer:
         expert_counts = defaultdict(int)
         domain_success = defaultdict(list)
 
-        for task_id, trail_steps in self.audit_logger.trails.items():
+        for _task_id, trail_steps in self.audit_logger.trails.items():
             # We look for tasks where we have both a routing decision and a fusion result
             routing_data = None
             fusion_data = None
@@ -89,7 +89,7 @@ class SwarmTraceSynthesizer:
         logger.info(f"[Phase 82] Wisdom Synthesis Complete. Domain Baselines: {len(final_wisdom['domain_baselines'])}")
         return final_wisdom
 
-    def get_recommendation(self, domain: str) -> List[str]:
+    def get_recommendation(self, _domain: str) -> List[str]:
         """Returns recommended experts based on synthesized wisdom."""
         # Simple logic: pick experts with highest domain success or synergetic pairs
         return [expert for expert, _ in self.wisdom_cache.get("top_experts", [])]

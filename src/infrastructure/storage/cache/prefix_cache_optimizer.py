@@ -119,7 +119,7 @@ class PrefixTree:
     Beyond vLLM: O(log n) prefix matching vs linear scan.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._root = RadixTreeNode()
         self._size = 0
         self._lock = threading.RLock()
@@ -287,7 +287,7 @@ class PrefixCacheOptimizer:
     - Multi-tier caching (hot/warm/cold)
     """
 
-    def __init__(self, config: Optional[PrefixCacheConfig] = None):
+    def __init__(self, config: Optional[PrefixCacheConfig] = None) -> None:
         self.config = config or PrefixCacheConfig()
 
         # Radix tree for prefix lookup

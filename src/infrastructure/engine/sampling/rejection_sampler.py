@@ -150,7 +150,7 @@ class RejectionOutput:
     @property
     def all_tokens(self) -> list[int]:
         """All output tokens in order."""
-        tokens = self.accepted_tokens + self.recovered_tokens
+        tokens: list[int] = self.accepted_tokens + self.recovered_tokens
         if self.bonus_token is not None:
             tokens.append(self.bonus_token)
         return tokens
@@ -190,7 +190,7 @@ class RejectionSampler:
     """
 
     def __init__(self, config: RejectionConfig | None = None) -> None:
-        self.config = config or RejectionConfig()
+        self.config: RejectionConfig = config or RejectionConfig()
         self.stats = AcceptanceStats()
         self._prob_cache: dict[tuple[int, ...], NDArray[np.float32]] = {}
 
@@ -225,7 +225,7 @@ class RejectionSampler:
                 acceptance_mask=[],
             )
 
-        num_drafts = len(draft_tokens)
+        num_drafts: int = len(draft_tokens)
         if random_numbers is None:
             random_numbers = np.random.random(num_drafts + 1).astype(np.float32)
 
@@ -248,15 +248,15 @@ class RejectionSampler:
         recovered_tokens: list[int] = []
         acceptance_mask: list[bool] = []
 
-        num_drafts = len(draft_tokens)
-        first_rejection_idx = num_drafts  # Index of first rejection
+        num_drafts: int = len(draft_tokens)
+        first_rejection_idx: int = num_drafts  # Index of first rejection
 
         for i, token in enumerate(draft_tokens):
             p_target = target_probs[i, token]
             p_draft = draft_probs[i, token]
 
             # Compute acceptance probability based on strategy
-            accept_prob = self._compute_acceptance_prob(p_target, p_draft)
+            accept_prob: float = self._compute_acceptance_prob(p_target, p_draft)
 
             # Accept or reject
             if random_numbers[i] < accept_prob:
@@ -264,7 +264,7 @@ class RejectionSampler:
                 acceptance_mask.append(True)
                 self.stats.update_position(i, True)
             else:
-                first_rejection_idx = i
+                first_rejection_idx: int = i
                 acceptance_mask.append(False)
                 self.stats.update_position(i, False)
                 break
@@ -273,7 +273,7 @@ class RejectionSampler:
         if first_rejection_idx < num_drafts:
             if self.config.recovery_mode == RecoveryMode.RESAMPLE:
                 # Resample from adjusted distribution
-                recovered_token = self._resample_from_adjusted(
+                recovered_token: int | None = self._resample_from_adjusted(
                     target_probs[first_rejection_idx],
                     draft_probs[first_rejection_idx],
                     random_numbers[first_rejection_idx],
@@ -287,7 +287,7 @@ class RejectionSampler:
         # Bonus token if all accepted
         bonus_token = None
         if first_rejection_idx == num_drafts and bonus_probs is not None:
-            bonus_token = self._sample_bonus(bonus_probs, random_numbers[-1])
+            bonus_token: int = self._sample_bonus(bonus_probs, random_numbers[-1])
 
         # Update stats
         self.stats.update(
@@ -311,7 +311,7 @@ class RejectionSampler:
         if p_draft <= 0:
             return 1.0 if p_target > 0 else 0.0
 
-        ratio = p_target / p_draft
+        ratio: float = p_target / p_draft
 
         if self.config.strategy == RejectionStrategy.STANDARD:
             return min(1.0, ratio)
@@ -336,7 +336,7 @@ class RejectionSampler:
         random_number: float,
     ) -> int | None:
         """Resample from adjusted distribution max(0, p_target - p_draft)."""
-        adjusted = np.maximum(0, target_probs - draft_probs)
+        adjusted: np.ndarray[tuple[int, ...], np.dtype[Any]] = np.maximum(0, target_probs - draft_probs)
         adjusted_sum = adjusted.sum()
 
         if adjusted_sum <= 0:
@@ -347,12 +347,12 @@ class RejectionSampler:
         adjusted = adjusted / adjusted_sum
 
         # Sample
-        cumsum = np.cumsum(adjusted)
+        cumsum: np.ndarray[tuple[int, ...], np.dtype[Any]] = np.cumsum(adjusted)
         return int(np.searchsorted(cumsum, random_number))
 
     def _sample_bonus(self, probs: NDArray[np.float32], random_number: float) -> int:
         """Sample bonus token from target distribution."""
-        cumsum = np.cumsum(probs)
+        cumsum: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.cumsum(probs)
         return int(np.searchsorted(cumsum, random_number * cumsum[-1]))
 
     def _verify_rust(
@@ -446,13 +446,13 @@ class StreamingRejectionSampler(RejectionSampler):
         if random_number is None:
             random_number = np.random.random()
 
-        accept_prob = self._compute_acceptance_prob(target_prob, draft_prob)
-        accepted = random_number < accept_prob
+        accept_prob: float = self._compute_acceptance_prob(target_prob, draft_prob)
+        accepted: bool = random_number < accept_prob
 
         self._pending_tokens.append(token)
         self._pending_acceptance.append(accepted)
 
-        position = len(self._pending_tokens) - 1
+        position: int = len(self._pending_tokens) - 1
         self.stats.update_position(position, accepted)
 
         if not accepted:
@@ -475,7 +475,7 @@ class StreamingRejectionSampler(RejectionSampler):
             target_probs: Full target probs if recovery needed
             bonus_probs: Bonus token probs if all accepted
         """
-        accepted_tokens = [t for t, a in zip(self._pending_tokens, self._pending_acceptance) if a]
+        accepted_tokens: list[int] = [t for t, a in zip(self._pending_tokens, self._pending_acceptance) if a]
         recovered_tokens: list[int] = []
         bonus_token = None
 
@@ -486,7 +486,7 @@ class StreamingRejectionSampler(RejectionSampler):
                 and draft_probs is not None
                 and target_probs is not None
             ):
-                recovered = self._resample_from_adjusted(
+                recovered: int | None = self._resample_from_adjusted(
                     target_probs[self._first_rejection_idx],
                     draft_probs[self._first_rejection_idx],
                     np.random.random(),
@@ -497,7 +497,7 @@ class StreamingRejectionSampler(RejectionSampler):
                 recovered_tokens.append(int(np.argmax(target_probs[self._first_rejection_idx])))
         elif bonus_probs is not None:
             # All accepted, sample bonus
-            bonus_token = self._sample_bonus(bonus_probs, np.random.random())
+            bonus_token: int = self._sample_bonus(bonus_probs, np.random.random())
 
         # Update stats
         self.stats.update(
@@ -539,7 +539,7 @@ class BatchRejectionSampler:
     """
 
     def __init__(self, config: RejectionConfig | None = None) -> None:
-        self.config = config or RejectionConfig()
+        self.config: RejectionConfig = config or RejectionConfig()
         self.stats = AcceptanceStats()
 
     def batch_verify_vectorized(
@@ -557,7 +557,7 @@ class BatchRejectionSampler:
             (output_tokens, acceptance_mask, output_lens)
         """
         batch_size, max_spec_len = draft_tokens.shape
-        vocab_size = draft_probs.shape[-1]
+        vocab_size: int = draft_probs.shape[-1]
 
         # Use Rust if available
         if HAS_RUST and hasattr(rust_core, "batch_rejection_verify_rust"):
@@ -570,28 +570,28 @@ class BatchRejectionSampler:
             )
 
         # Python fallback
-        output_tokens = np.zeros((batch_size, max_spec_len + 1), dtype=np.int32)
-        acceptance_mask = np.zeros((batch_size, max_spec_len), dtype=np.bool_)
-        output_lens = np.zeros(batch_size, dtype=np.int32)
+        output_tokens: np.ndarray[tuple[int, int], np.dtype[np.signedinteger[np._32Bit]]] = np.zeros((batch_size, max_spec_len + 1), dtype=np.int32)
+        acceptance_mask: np.ndarray[tuple[int, int], np.dtype[np.bool[bool]]] = np.zeros((batch_size, max_spec_len), dtype=np.bool_)
+        output_lens: np.ndarray[tuple[int], np.dtype[np.signedinteger[np._32Bit]]] = np.zeros(batch_size, dtype=np.int32)
 
-        random_nums = np.random.random((batch_size, max_spec_len + 1)).astype(np.float32)
+        random_nums: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.random((batch_size, max_spec_len + 1)).astype(np.float32)
 
-        for b in range(batch_size):
+        for b: int in range(batch_size):
             seq_len = seq_lens[b]
             first_reject = seq_len
 
-            for i in range(seq_len):
+            for i: int in range(seq_len):
                 token = draft_tokens[b, i]
                 p_target = target_probs[b, i, token]
                 p_draft = draft_probs[b, i, token]
 
-                accept_prob = min(1.0, p_target / max(p_draft, 1e-10))
+                accept_prob: float = min(1.0, p_target / max(p_draft, 1e-10))
 
                 if random_nums[b, i] < accept_prob:
                     output_tokens[b, i] = token
                     acceptance_mask[b, i] = True
                 else:
-                    first_reject = i
+                    first_reject: int = i
                     # Resample from adjusted
                     adjusted = np.maximum(0, target_probs[b, i] - draft_probs[b, i])
                     adj_sum = adjusted.sum()
@@ -604,7 +604,7 @@ class BatchRejectionSampler:
 
             if first_reject == seq_len and bonus_probs is not None:
                 # All accepted, add bonus
-                cumsum = np.cumsum(bonus_probs[b])
+                cumsum: np.ndarray[tuple[int, ...], np.dtype[Any]] = np.cumsum(bonus_probs[b])
                 output_tokens[b, seq_len] = np.searchsorted(cumsum, random_nums[b, seq_len] * cumsum[-1])
                 output_lens[b] = seq_len + 1
             else:
@@ -631,13 +631,13 @@ def create_rejection_sampler(
         batch_optimized: Use batch sampler for high throughput
         **kwargs: Additional config options
     """
-    strategy_map = {
+    strategy_map: dict[str, RejectionStrategy] = {
         "standard": RejectionStrategy.STANDARD,
         "strict": RejectionStrategy.STRICT,
         "lenient": RejectionStrategy.LENIENT,
         "adaptive": RejectionStrategy.ADAPTIVE,
     }
-    recovery_map = {
+    recovery_map: dict[str, RecoveryMode] = {
         "resample": RecoveryMode.RESAMPLE,
         "truncate": RecoveryMode.TRUNCATE,
         "fallback": RecoveryMode.FALLBACK,
@@ -657,7 +657,7 @@ def create_rejection_sampler(
     return RejectionSampler(config)
 
 
-__all__ = [
+__all__: list[str] = [
     "RejectionStrategy",
     "RecoveryMode",
     "RejectionConfig",

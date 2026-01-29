@@ -29,6 +29,7 @@ Beyond vLLM:
 
 from __future__ import annotations
 
+from _thread import LockType
 import logging
 import threading
 from abc import ABC, abstractmethod
@@ -37,7 +38,9 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Set, Tuple, TypeVar
 
-logger = logging.getLogger(__name__)
+from torch import Tensor
+
+logger: logging.Logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
@@ -63,7 +66,7 @@ class BufferSpec:
     @property
     def size_bytes(self) -> int:
         """Calculate buffer size in bytes."""
-        dtype_sizes = {
+        dtype_sizes: Dict[str, int] = {
             "float32": 4,
             "float16": 2,
             "bfloat16": 2,
@@ -74,7 +77,7 @@ class BufferSpec:
             "bool": 1,
             "uint8": 1,
         }
-        dtype_size = dtype_sizes.get(self.dtype, 4)
+        dtype_size: int = dtype_sizes.get(self.dtype, 4)
         total_elements = 1
         for dim in self.shape:
             total_elements *= dim
@@ -126,11 +129,11 @@ class BufferPool(ABC):
 class SimpleBufferPool(BufferPool):
     """Simple buffer pool implementation."""
 
-    def __init__(self, max_buffers: int = 100):
-        self.max_buffers = max_buffers
+    def __init__(self, max_buffers: int = 100) -> None:
+        self.max_buffers: int = max_buffers
         self._buffers: Dict[BufferSpec, List[BufferEntry]] = defaultdict(list)
         self._tensor_to_entry: Dict[int, BufferEntry] = {}
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
     def allocate(self, spec: BufferSpec) -> Any:
         """Allocate or reuse a buffer."""
@@ -143,7 +146,7 @@ class SimpleBufferPool(BufferPool):
                     return entry.tensor
 
             # Check total count
-            total = sum(len(entries) for entries in self._buffers.values())
+            total: int = sum(len(entries) for entries in self._buffers.values())
             if total >= self.max_buffers:
                 # Evict oldest free buffer
                 self._evict_oldest()
@@ -168,9 +171,9 @@ class SimpleBufferPool(BufferPool):
             dtype = getattr(torch, spec.dtype)
 
             if spec.pinned and spec.device == "cpu":
-                tensor = torch.empty(spec.shape, dtype=dtype, pin_memory=True)
+                tensor: Tensor = torch.empty(spec.shape, dtype=dtype, pin_memory=True)
             else:
-                tensor = torch.empty(spec.shape, dtype=dtype, device=device)
+                tensor: Tensor = torch.empty(spec.shape, dtype=dtype, device=device)
 
             return tensor
         except ImportError:
@@ -199,7 +202,7 @@ class SimpleBufferPool(BufferPool):
     def release(self, tensor: Any) -> None:
         """Release tensor back to pool."""
         with self._lock:
-            tensor_id = id(tensor)
+            tensor_id: int = id(tensor)
             if tensor_id in self._tensor_to_entry:
                 self._tensor_to_entry[tensor_id].release()
 
@@ -246,7 +249,7 @@ class InputBufferManager:
         pool: Optional[BufferPool] = None,
         max_batch_size: int = 256,
         max_seq_len: int = 4096,
-    ):
+    ) -> None:
         """
         Initialize manager.
 
@@ -255,13 +258,13 @@ class InputBufferManager:
             max_batch_size: Maximum batch size
             max_seq_len: Maximum sequence length
         """
-        self.pool = pool or SimpleBufferPool()
-        self.max_batch_size = max_batch_size
-        self.max_seq_len = max_seq_len
+        self.pool: BufferPool | SimpleBufferPool = pool or SimpleBufferPool()
+        self.max_batch_size: int = max_batch_size
+        self.max_seq_len: int = max_seq_len
 
         # Pre-defined slots
         self._slots: Dict[str, InputSlot] = {}
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
         # Default slots
         self._init_default_slots()
@@ -316,7 +319,7 @@ class InputBufferManager:
         with self._lock:
             for name, data in inputs.items():
                 if name in self._slots:
-                    slot = self._slots[name]
+                    slot: InputSlot = self._slots[name]
 
                     if slot.is_static and slot.tensor is not None:
                         # Copy to static buffer (for CUDA graphs)
@@ -350,7 +353,7 @@ class InputBufferManager:
     def release_all(self) -> None:
         """Release all buffers."""
         with self._lock:
-            for slot in self._slots.values():
+            for slot: InputSlot in self._slots.values():
                 if slot.tensor is not None:
                     self.pool.release(slot.tensor)
             self._slots.clear()
@@ -365,7 +368,7 @@ class HierarchicalBufferPool(BufferPool):
     - Automatic promotion/demotion
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._gpu_pool = SimpleBufferPool()
         self._cpu_pool = SimpleBufferPool()
         self._pinned_pool = SimpleBufferPool()
@@ -402,7 +405,7 @@ class PredictiveBufferManager(InputBufferManager):
     - Pre-warms buffers based on patterns
     """
 
-    def __init__(self, **kwargs: Any):
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._size_history: List[int] = []
         self._prewarmed: Set[BufferSpec] = set()
@@ -419,19 +422,19 @@ class PredictiveBufferManager(InputBufferManager):
             return [self.max_batch_size]
 
         # Use recent sizes
-        recent = self._size_history[-100:]
+        recent: List[int] = self._size_history[-100:]
 
         # Return most common sizes
         from collections import Counter
 
-        counter = Counter(recent)
+        counter: Counter[int] = Counter(recent)
         return [size for size, _ in counter.most_common(n)]
 
     def prewarm(self) -> None:
         """Pre-warm predicted buffers."""
-        sizes = self.predict_next_sizes()
+        sizes: List[int] = self.predict_next_sizes()
 
-        for size in sizes:
+        for size: int in sizes:
             spec = BufferSpec(shape=(size,), dtype="int64", device="cuda")
 
             if spec not in self._prewarmed:

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: orchestration_mixin
+Provides orchestration and context propagation mixin for PyAgent agents.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +23,8 @@ import logging
 import sys
 from pathlib import Path
 from typing import Any
+
+from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap
 
 
 class OrchestrationMixin:
@@ -83,7 +89,7 @@ class OrchestrationMixin:
             logging_agent = getattr(self, "fleet").agents.get("Logging")
             if logging_agent:
                 try:
-                    loop = asyncio.get_running_loop()
+                    loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
                     loop.create_task(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
                 except RuntimeError:
                     asyncio.run(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
@@ -129,8 +135,8 @@ class OrchestrationMixin:
         elif hasattr(self, "file_path"):
             actual_path = getattr(self, "file_path")
 
-        description = f"Improve {actual_path.name}" if actual_path else "Improve content"
-        original = getattr(self, "previous_content", "")
+        description: str = f"Improve {actual_path.name}" if actual_path else "Improve content"
+        original: Any | str = getattr(self, "previous_content", "")
 
         curr_strategy = self.strategy
         if curr_strategy:
@@ -181,57 +187,79 @@ class OrchestrationMixin:
         logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__, agent_type, target_file)
 
         # Prepare context for delegation (Phase 259)
-        next_context = None
-        if hasattr(self, "context") and self.context:
-            try:
-                if hasattr(self.context, "next_level"):
-                    next_context = self.context.next_level(self.__class__.__name__)
-                else:
-                    next_context = self.context
-            except Exception as e: # pylint: disable=broad-exception-caught
-                logging.warning("Failed to propagate context: %s", e)
+        next_context = self._prepare_delegation_context()
 
-        # 1. Attempt delegation via Fleet Manager (if attached)
-        if hasattr(self, "fleet") and getattr(self, "fleet"):
-            try:
-                # FleetManager.agents is a LazyAgentMap
-                if agent_type in getattr(self, "fleet").agents:
-                    sub_agent = getattr(self, "fleet").agents[agent_type]
+        # Try fleet delegation first
+        result = await self._try_fleet_delegation(agent_type, prompt, target_file, next_context)
+        if result is not None:
+            return result
 
-                    # Propagate context
-                    if next_context and hasattr(sub_agent, "context"):
-                        sub_agent.context = next_context
+        # Fallback to registry delegation
+        result = await self._try_registry_delegation(agent_type, prompt, target_file, next_context)
+        if result is not None:
+            return result
 
-                    # Log the delegation event
-                    self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
+        return f"Error: Agent {agent_type} not found in system catalogs."
 
-                    # Execute with explicit target_file (Phase 317 thread-safety)
-                    res = sub_agent.improve_content(prompt, target_file=target_file)
-                    if asyncio.iscoroutine(res):
-                        return await res
-                    return res
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning("Fleet delegation failed for %s: %s", agent_type, e)
+    def _prepare_delegation_context(self) -> Any | None:
+        """Prepare context for delegation propagation."""
+        if not hasattr(self, "context") or not self.context:
+            return None
 
-        # 2. Dynamic Import Fallback (via AgentRegistry)
+        try:
+            if hasattr(self.context, "next_level"):
+                return self.context.next_level(self.__class__.__name__)
+            else:
+                return self.context
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning("Failed to propagate context: %s", e)
+            return None
+
+    async def _try_fleet_delegation(self, agent_type: str, prompt: str, target_file: str | None, context: Any | None) -> str | None:
+        """Attempt delegation via Fleet Manager."""
+        if not hasattr(self, "fleet") or not getattr(self, "fleet"):
+            return None
+
+        try:
+            # FleetManager.agents is a LazyAgentMap
+            if agent_type in getattr(self, "fleet").agents:
+                sub_agent = getattr(self, "fleet").agents[agent_type]
+
+                # Propagate context
+                if context and hasattr(sub_agent, "context"):
+                    sub_agent.context = context
+
+                # Log the delegation event
+                self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
+
+                # Execute with explicit target_file (Phase 317 thread-safety)
+                res = sub_agent.improve_content(prompt, target_file=target_file)
+                if asyncio.iscoroutine(res):
+                    return await res
+                return res
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.warning("Fleet delegation failed for %s: %s", agent_type, e)
+
+        return None
+
+    async def _try_registry_delegation(self, agent_type: str, prompt: str, target_file: str | None, context: Any | None) -> str | None:
+        """Attempt delegation via AgentRegistry fallback."""
         try:
             # pylint: disable=import-outside-toplevel
-            # pylint: disable=import-outside-toplevel
             from src.core.base.lifecycle.agent_core import BaseCore
-            from src.infrastructure.swarm.fleet.agent_registry import \
-                AgentRegistry
+            from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
 
-            ws_root = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
+            ws_root: Any | Path = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
 
             # Use the registry to get the agent map
-            agent_map = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))
+            agent_map: LazyAgentMap = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))
 
             if agent_type in agent_map:
                 sub_agent = agent_map[agent_type]
 
                 # Propagate context
-                if next_context and hasattr(sub_agent, "context"):
-                    sub_agent.context = next_context
+                if context and hasattr(sub_agent, "context"):
+                    sub_agent.context = context
 
                 self.log_distributed("INFO", f"Delegated to registry agent: {agent_type}", target=target_file)
 
@@ -245,4 +273,4 @@ class OrchestrationMixin:
             logging.error("Registry delegation failed for %s: %s", agent_type, e)
             return f"Error: Registry lookup of {agent_type} failed. {str(e)}"
 
-        return f"Error: Agent {agent_type} not found in system catalogs."
+        return None

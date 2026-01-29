@@ -50,7 +50,7 @@ class WeightOrchestrator(BaseAgent):
                 with open(self.weights_registry_path, encoding='utf-8') as f:
                     data = json.load(f)
                     self.active_adapters = data.get("active_adapters", {})
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except (IOError, OSError, json.JSONDecodeError, UnicodeDecodeError) as e:
                 logging.error(f"WeightOrchestrator: Failed to load registry: {e}")
 
     def _save_registry(self) -> bool:
@@ -58,7 +58,7 @@ class WeightOrchestrator(BaseAgent):
             self.weights_registry_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.weights_registry_path, 'w', encoding='utf-8') as f:
                 json.dump({"active_adapters": self.active_adapters}, f, indent=4)
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except (IOError, OSError, TypeError, UnicodeEncodeError) as e:
             logging.error(f"WeightOrchestrator: Failed to save registry: {e}")
 
     @as_tool

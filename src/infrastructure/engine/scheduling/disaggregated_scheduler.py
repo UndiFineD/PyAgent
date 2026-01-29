@@ -27,7 +27,7 @@ from .disaggregated import (DCPConfig, DisaggregatedScheduler, HashSelector,
                             SchedulerFactory, SchedulingPolicy,
                             create_dcp_scheduler)
 
-__all__ = [
+__all__: list[str] = [
     "InstanceRole",
     "SchedulingPolicy",
     "InstanceInfo",

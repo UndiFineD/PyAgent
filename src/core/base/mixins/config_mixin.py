@@ -16,6 +16,7 @@
 
 from typing import Any
 
+from src.core.base.common.config_core import ConfigCore
 from src.core.base.configuration.config_manager import config
 
 
@@ -23,7 +24,7 @@ class ConfigMixin:
     """Provides configuration access to agents."""
 
     @property
-    def config(self):
+    def config(self) -> ConfigCore:
         """Access the global configuration manager."""
         return config
 

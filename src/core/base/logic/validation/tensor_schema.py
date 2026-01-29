@@ -220,6 +220,21 @@ class TensorSchema:
         results = {}
         collected_bindings = dict(self.resolve_bindings)
 
+        # First pass: collect dimension bindings
+        self._collect_bindings(tensors, results, collected_bindings)
+
+        # Second pass: validate shapes
+        self._validate_shapes(tensors, results, collected_bindings)
+
+        return results
+
+    def _collect_bindings(
+        self,
+        tensors: dict[str, Any],
+        results: dict[str, tuple[int, ...]],
+        collected_bindings: dict[str, int]
+    ) -> None:
+        """Collect dimension bindings from tensors."""
         for name, tensor in tensors.items():
             if name not in self.fields:
                 continue
@@ -227,29 +242,41 @@ class TensorSchema:
             shape = self._get_shape(tensor)
             expected = self.fields[name]
 
-            # Collect dimension bindings
             if len(shape) == len(expected.dims):
-                for i, (actual, exp) in enumerate(zip(shape, expected.dims)):
-                    if isinstance(exp, str) and exp not in collected_bindings:
-                        collected_bindings[exp] = actual
-                    elif isinstance(exp, DynamicDim) and exp.name not in collected_bindings:
-                        collected_bindings[exp.name] = actual
+                self._extract_bindings(shape, expected, collected_bindings)
 
             results[name] = shape
 
-        # Validate shapes
+    def _extract_bindings(
+        self,
+        shape: tuple[int, ...],
+        expected: TensorShape,
+        collected_bindings: dict[str, int]
+    ) -> None:
+        """Extract dimension bindings from shape comparison."""
+        for actual, exp in zip(shape, expected.dims):
+            if isinstance(exp, str) and exp not in collected_bindings:
+                collected_bindings[exp] = actual
+            elif isinstance(exp, DynamicDim) and exp.name not in collected_bindings:
+                collected_bindings[exp.name] = actual
+
+    def _validate_shapes(
+        self,
+        tensors: dict[str, Any],
+        results: dict[str, tuple[int, ...]],
+        collected_bindings: dict[str, int]
+    ) -> None:
+        """Validate all tensor shapes against schema."""
         for name, tensor in tensors.items():
             if name not in self.fields:
                 continue
 
-            shape = self._get_shape(tensor)
+            shape = results[name]
             expected = self.fields[name]
 
             if not expected.matches(shape, **collected_bindings):
                 resolved = expected.resolve(**collected_bindings)
                 raise ValueError(f"Shape mismatch for '{name}': expected {resolved}, got {shape}")
-
-        return results
 
     def _get_shape(self, tensor: Any) -> tuple[int, ...]:
         """Get shape from tensor or nested structure."""

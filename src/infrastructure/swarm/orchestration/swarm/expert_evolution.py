@@ -33,7 +33,7 @@ class ExpertEvolutionService:
     Uses an exponential moving average (EMA) to prevent over-reacting to single failures.
     """
 
-    def __init__(self, gatekeeper: MoEGatekeeper, learning_rate: float = 0.1):
+    def __init__(self, gatekeeper: MoEGatekeeper, learning_rate: float = 0.1) -> None:
         self.gatekeeper = gatekeeper
         self.learning_rate = learning_rate
         # History of evaluations for tracking

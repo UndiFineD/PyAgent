@@ -41,7 +41,7 @@ class AsyncPriorityScheduler:
         Args:
             max_concurrent: Maximum concurrent tasks
         """
-        self._max_concurrent = max_concurrent
+        self._max_concurrent: int = max_concurrent
         self._semaphore = asyncio.Semaphore(max_concurrent)
 
         self._queues: Dict[TaskPriority, asyncio.PriorityQueue] = {}
@@ -67,19 +67,19 @@ class AsyncPriorityScheduler:
             Coroutine result
         """
         async with self._semaphore:
-            start = time.monotonic()
+            start: float = time.monotonic()
 
             timeout = None
             if deadline_ms:
-                timeout = deadline_ms / 1000.0
+                timeout: float = deadline_ms / 1000.0
 
             try:
                 if timeout:
-                    result = await asyncio.wait_for(coro, timeout=timeout)
+                    result: R = await asyncio.wait_for(coro, timeout=timeout)
                 else:
-                    result = await coro
+                    result: R = await coro
 
-                exec_time = (time.monotonic() - start) * 1000
+                exec_time: float = (time.monotonic() - start) * 1000
                 async with self._lock:
                     self._stats.completed += 1
                     self._stats.total_exec_time_ms += exec_time

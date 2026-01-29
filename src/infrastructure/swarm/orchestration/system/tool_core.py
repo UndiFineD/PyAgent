@@ -101,7 +101,7 @@ class ToolCore:
             try:
                 # type: ignore[attr-defined]
                 return rc.score_tool_relevance(metadata.name, metadata.description, query)
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except (AttributeError, TypeError, RuntimeError, OSError) as e:
                 logger.warning(f"Rust score_tool_relevance failed: {e}")
 
         query_lower = query.lower()

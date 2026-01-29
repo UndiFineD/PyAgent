@@ -48,7 +48,7 @@ def deduplicate_excepts(root_dir):
             if modified:
                 p.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
                 print(f"Deduplicated excepts in {p}")
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except (IOError, OSError, UnicodeDecodeError) as e:
             print(f"Error deduplicating {p}: {e}")
 
 if __name__ == "__main__":

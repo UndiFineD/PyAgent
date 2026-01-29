@@ -21,7 +21,10 @@
 import logging
 import time
 from contextlib import suppress
-from typing import Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+
+if TYPE_CHECKING:
+    import numpy as np
 
 from src.core.base.lifecycle.version import VERSION
 
@@ -125,19 +128,50 @@ class NgramProposer(DrafterBase):
         if num_tokens < min_n + 1:
             return _np.array([], dtype=_np.int32)
 
-        suffix_start = max(0, num_tokens - max_n)
-        suffix = tokens[suffix_start:num_tokens]
+        suffix = self._get_search_suffix(tokens, max_n)
+        return self._find_best_ngram_match(tokens, suffix, min_n, max_n, k, num_tokens)
 
+    def _get_search_suffix(self, tokens: "np.ndarray", max_n: int) -> "np.ndarray":
+        """Get the suffix of tokens to search for matches."""
+        num_tokens = len(tokens)
+        suffix_start = max(0, num_tokens - max_n)
+        return tokens[suffix_start:num_tokens]
+
+    def _find_best_ngram_match(
+        self,
+        tokens: "np.ndarray",
+        suffix: "np.ndarray",
+        min_n: int,
+        max_n: int,
+        k: int,
+        num_tokens: int,
+    ) -> "np.ndarray":
+        """Find the best n-gram match and return following tokens."""
         for n in range(min(max_n, len(suffix)), min_n - 1, -1):
             pattern = suffix[-n:]
-            search_end = num_tokens - n
-            for pos in range(search_end - 1, -1, -1):
-                if _np.array_equal(tokens[pos : pos + n], pattern):
-                    match_end = pos + n
-                    draft_end = min(match_end + k, num_tokens)
-                    return tokens[match_end:draft_end].copy()
+            match_pos = self._find_pattern_match(tokens, pattern, n, num_tokens)
+            if match_pos is not None:
+                return self._extract_draft_tokens(tokens, match_pos, n, k, num_tokens)
 
         return _np.array([], dtype=_np.int32)
+
+    def _find_pattern_match(
+        self, tokens: "np.ndarray", pattern: "np.ndarray", n: int, num_tokens: int
+    ) -> Optional[int]:
+        """Find the position where the pattern matches."""
+        search_end = num_tokens - n
+        for pos in range(search_end - 1, -1, -1):
+            if _np.array_equal(tokens[pos : pos + n], pattern):
+                return pos
+        return None
+
+    def _extract_draft_tokens(
+        self, tokens: "np.ndarray", match_pos: int, n: int, k: int, num_tokens: int
+    ) -> "np.ndarray":
+        """Extract draft tokens following the match."""
+        match_end = match_pos + n
+        draft_end = min(match_end + k, num_tokens)
+        return tokens[match_end:draft_end].copy()
 
     def _find_ngram_match_python(
         self,

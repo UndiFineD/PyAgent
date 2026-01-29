@@ -12,7 +12,7 @@ from typing import Any, Dict, List
 class SelfImprovementFixer:
     """Handles the application of patches and fixes identified during analysis."""
 
-    def __init__(self, ai: Any, core: Any, workspace_root: str):
+    def __init__(self, ai: Any, core: Any, workspace_root: str) -> None:
         self.ai = ai
         self.core = core
         self.workspace_root = workspace_root

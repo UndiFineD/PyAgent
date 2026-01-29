@@ -23,7 +23,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-__all__ = [
+from src.infrastructure.services.cloud.providers.azure import AzureAIConnector
+from src.infrastructure.services.cloud.providers.bedrock import AWSBedrockConnector
+from src.infrastructure.services.cloud.providers.gemini import GeminiConnector
+from src.infrastructure.services.cloud.providers.groq import GroqConnector
+
+__all__: list[str] = [
     "GeminiConnector",
     "AWSBedrockConnector",
     "GroqConnector",
@@ -31,7 +36,7 @@ __all__ = [
 ]
 
 
-def __getattr__(name: str):
+def __getattr__(name: str) -> type[GeminiConnector] | type[AWSBedrockConnector] | type[GroqConnector] | type[AzureAIConnector]:
     """Lazy load provider implementations."""
     if name == "GeminiConnector":
         from .gemini import GeminiConnector

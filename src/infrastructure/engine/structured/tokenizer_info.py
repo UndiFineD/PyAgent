@@ -55,16 +55,16 @@ class TokenizerInfo:
     ) -> "TokenizerInfo":
         """Create TokenizerInfo from a HuggingFace tokenizer."""
         vocab_dict = tokenizer.get_vocab()
-        actual_vocab_size = vocab_size or len(vocab_dict)
+        actual_vocab_size: int = vocab_size or len(vocab_dict)
 
         # Build encoded vocab maintaining tokenizer's indexing
-        encoded_vocab = [""] * actual_vocab_size
+        encoded_vocab: list[str] = [""] * actual_vocab_size
         for token, idx in vocab_dict.items():
             if idx < actual_vocab_size:
                 encoded_vocab[idx] = token
 
         # Detect vocab type
-        vocab_type = cls._detect_vocab_type(tokenizer)
+        vocab_type: VocabType = cls._detect_vocab_type(tokenizer)
 
         # Get stop token IDs
         stop_token_ids = []
@@ -72,7 +72,7 @@ class TokenizerInfo:
             stop_token_ids.append(tokenizer.eos_token_id)
 
         # Detect add_prefix_space
-        add_prefix_space = getattr(tokenizer, "add_prefix_space", True)
+        add_prefix_space: Any | bool = getattr(tokenizer, "add_prefix_space", True)
 
         return cls(
             encoded_vocab=tuple(encoded_vocab),

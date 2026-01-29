@@ -1,4 +1,8 @@
 
+"""
+Module: clean_shard_index
+Cleans and rebuilds the shard index for distributed storage in PyAgent.
+"""
 import os
 
 files_to_clean = [

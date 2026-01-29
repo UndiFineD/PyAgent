@@ -23,7 +23,8 @@
 # limitations under the License.
 
 """
-Telemetry agent.py module.
+TelemetryAgent: System agent for collecting, aggregating, and reporting telemetry data across the PyAgent swarm.
+Supports observability, monitoring, and health diagnostics.
 """
 
 

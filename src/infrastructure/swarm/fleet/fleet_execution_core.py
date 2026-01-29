@@ -83,7 +83,7 @@ class FleetExecutionCore:
             res = self.fleet.linguist.articulate_results(technical_report, task)
             await self.fleet.record_success(task, res, current_model)
             return res
-        except Exception as exc:  # pylint: disable=broad-exception-caught
+        except (RuntimeError, ValueError, ConnectionError, TimeoutError, OSError) as exc:
             await self.fleet.record_failure(task, str(exc), current_model)
             logging.error(f"Fleet failure: {exc}")
             fallback_model = self.fleet.fallback_engine.get_fallback_model(current_model, str(exc))
@@ -92,7 +92,7 @@ class FleetExecutionCore:
                 try:
                     technical_report = await self.fleet.structured_orchestrator.execute_task(task)
                     return self.fleet.linguist.articulate_results(technical_report, task)
-                except Exception as inner_exc:  # pylint: disable=broad-exception-caught
+                except (RuntimeError, ValueError, ConnectionError, TimeoutError, OSError) as inner_exc:
                     logging.critical(f"Self-Healing: Fallback also failed: {inner_exc}")
             raise
         finally:
@@ -281,12 +281,12 @@ class FleetExecutionCore:
                         )
                     else:
                         logging.warning("Fleet: Explainability agent not found.")
-                except Exception as e:  # pylint: disable=broad-exception-caught
+                except (AttributeError, ValueError, RuntimeError, OSError) as e:
                     logging.error(f"Fleet: Explainability trace failed: {e}")
 
                 self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
                 success = True
-            except Exception as exc:  # pylint: disable=broad-exception-caught
+            except (RuntimeError, ValueError, asyncio.CancelledError, asyncio.TimeoutError, OSError) as exc:
                 error_msg = str(exc)
                 if self.fleet.rl_selector:
                     self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=False)

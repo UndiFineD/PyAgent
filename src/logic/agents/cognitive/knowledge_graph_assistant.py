@@ -22,7 +22,7 @@ from typing import Set
 class KnowledgeGraphAssistant:
     """Handles backlinks, dependency tracking, and graph visualization."""
 
-    def __init__(self, workspace_root: str):
+    def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
     def get_impact_radius(self, query: str) -> Set[str]:

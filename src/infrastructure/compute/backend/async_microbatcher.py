@@ -206,15 +206,26 @@ class AsyncMicrobatcher(Generic[T, R]):
         deadline = time.time() + self._batch_wait_timeout_s
 
         # Wait for at least one item
-        try:
-            item = await asyncio.wait_for(
-                self._queue.get(), timeout=self._batch_wait_timeout_s if self._running else 0.1
-            )
-            batch.append(item)
-        except asyncio.TimeoutError:
+        if not await self._wait_for_first_item(batch, deadline):
             return batch
 
         # Collect more items until batch is full or timeout
+        await self._collect_remaining_items(batch, deadline)
+
+        return batch
+
+    async def _wait_for_first_item(self, batch: list[BatchItem[T, R]], deadline: float) -> bool:
+        """Wait for the first item in the batch."""
+        try:
+            timeout = self._batch_wait_timeout_s if self._running else 0.1
+            item = await asyncio.wait_for(self._queue.get(), timeout=timeout)
+            batch.append(item)
+            return True
+        except asyncio.TimeoutError:
+            return False
+
+    async def _collect_remaining_items(self, batch: list[BatchItem[T, R]], deadline: float) -> None:
+        """Collect remaining items to fill the batch."""
         while len(batch) < self._max_batch_size:
             remaining = deadline - time.time()
             if remaining <= 0:
@@ -226,43 +237,40 @@ class AsyncMicrobatcher(Generic[T, R]):
             except asyncio.TimeoutError:
                 break
 
-        return batch
-
     async def _process_batch(self, batch: list[BatchItem[T, R]]) -> None:
         """Process a batch of items and resolve their futures."""
         if not batch:
             return
 
-        # Update stats
         now = time.time()
-        batch_size = len(batch)
-
-        self._stats.total_items += batch_size
-        self._stats.total_batches += 1
-        if batch_size > self._stats.max_batch_size_seen:
-            self._stats.max_batch_size_seen = batch_size
-
-        # Calculate wait times
-        for item in batch:
-            wait_ms = (now - item.timestamp) * 1000
-            self._stats.total_wait_time_ms += wait_ms
-
-        # Extract data and process
+        self._update_stats(batch, now)
         data = [item.data for item in batch]
 
         try:
             results = await self._batch_fn(data)
-
-            # Resolve futures
-            for item, result in zip(batch, results):
-                if not item.future.done():
-                    item.future.set_result(result)
-
+            self._resolve_futures(batch, results)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            # Fail all futures
-            for item in batch:
-                if not item.future.done():
-                    item.future.set_exception(e)
+            self._fail_futures(batch, e)
+
+    def _update_stats(self, batch: list[BatchItem[T, R]], now: float) -> None:
+        batch_size = len(batch)
+        self._stats.total_items += batch_size
+        self._stats.total_batches += 1
+        if batch_size > self._stats.max_batch_size_seen:
+            self._stats.max_batch_size_seen = batch_size
+        for item in batch:
+            wait_ms = (now - item.timestamp) * 1000
+            self._stats.total_wait_time_ms += wait_ms
+
+    def _resolve_futures(self, batch: list[BatchItem[T, R]], results: list[R]) -> None:
+        for item, result in zip(batch, results):
+            if not item.future.done():
+                item.future.set_result(result)
+
+    def _fail_futures(self, batch: list[BatchItem[T, R]], exc: Exception) -> None:
+        for item in batch:
+            if not item.future.done():
+                item.future.set_exception(exc)
 
 
 class SyncMicrobatcher(Generic[T, R]):
@@ -361,23 +369,31 @@ class SyncMicrobatcher(Generic[T, R]):
         if not batch:
             return
 
+        self._update_stats(batch)
+        data = [item[0] for item in batch]
+
+        try:
+            results = self._batch_fn(data)
+            self._set_results(batch, results)
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            self._set_exceptions(batch, e)
+
+    def _update_stats(self, batch: list[tuple[T, threading.Event, list]]) -> None:
         batch_size = len(batch)
         self._stats.total_items += batch_size
         self._stats.total_batches += 1
         if batch_size > self._stats.max_batch_size_seen:
             self._stats.max_batch_size_seen = batch_size
 
-        data = [item[0] for item in batch]
+    def _set_results(self, batch: list[tuple[T, threading.Event, list]], results: list[R]) -> None:
+        for (_, event, result_holder), result in zip(batch, results):
+            result_holder.append(result)
+            event.set()
 
-        try:
-            results = self._batch_fn(data)
-            for (_, event, result_holder), result in zip(batch, results):
-                result_holder.append(result)
-                event.set()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            for _, event, result_holder in batch:
-                result_holder.extend([None, e])
-                event.set()
+    def _set_exceptions(self, batch: list[tuple[T, threading.Event, list]], exc: Exception) -> None:
+        for _, event, result_holder in batch:
+            result_holder.extend([None, exc])
+            event.set()
 
 
 __all__ = [

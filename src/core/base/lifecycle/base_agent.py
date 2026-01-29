@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: base_agent
+Principal agent interface for PyAgent, supporting mixin-based architecture.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +16,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""BaseAgent main class and core agent logic."""
-
 from __future__ import annotations
 
+import asyncio
 import collections.abc
 import logging
 import subprocess
 import time
-import types
+import traceback
 from pathlib import Path
 from typing import Any
 
@@ -32,7 +35,6 @@ except ImportError:
     requests = None
     HAS_REQUESTS = False
 
-import traceback
 from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.common.models import CacheEntry, EventType, PromptTemplate, FailureClassification
 from src.core.base.execution.shell_executor import ShellExecutor
@@ -145,11 +147,41 @@ class BaseAgent(
         self._model: str | None = kwargs.get("model")
         self.recorder = kwargs.get("recorder")
         self.logger = logging.getLogger(self.__class__.__name__)
-        self._system_prompt: str = "You are a helpful AI assistant."
+
+        # Load system prompt from file if available, otherwise use default
+        self._system_prompt: str = self._load_system_prompt()
+
         self.status_cache: dict[str, float] = {}
 
         # Context for task lineage
         self.context: CascadeContext | None = kwargs.get("context", None)
+
+    def _load_system_prompt(self) -> str:
+        """Load system prompt from file if available, otherwise use class-defined or minimal fallback."""
+        try:
+            # Primary: Try to load from data/agents/{agent_name}/prompt.txt
+            prompt_file = Path(self._workspace_root) / "data" / "agents" / self.agent_name / "prompt.txt"
+            if prompt_file.exists():
+                with open(prompt_file, 'r', encoding='utf-8') as f:
+                    content = f.read().strip()
+                    if content:
+                        if hasattr(self, 'logger') and self.logger:
+                            self.logger.info(f"Loaded system prompt from {prompt_file}")
+                        return content
+
+            # Secondary: Check if class has a _system_prompt attribute (agent-specific fallback)
+            class_prompt = getattr(self.__class__, '_system_prompt', None)
+            if class_prompt and class_prompt != "You are an AI.":
+                if hasattr(self, 'logger') and self.logger:
+                    self.logger.info(f"Using class-defined system prompt for {self.agent_name}")
+                return class_prompt
+
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            if hasattr(self, 'logger') and self.logger:
+                self.logger.warning(f"Failed to load system prompt for {self.agent_name}: {e}")
+
+        # Tertiary: Minimal fallback prompt
+        return "You are an AI."
 
     def _run_command(self, cmd: list[str], timeout: int = 120) -> subprocess.CompletedProcess[str]:
         """Run a shell command."""
@@ -171,7 +203,7 @@ class BaseAgent(
             self._notify_webhooks("agent_complete", {"status": "success"})
             return "No prompt provided."
 
-        import asyncio  # pylint: disable=import-outside-toplevel
+        # import asyncio  # pylint: disable=import-outside-toplevel
 
         try:
             # Check if there is an existing running event loop (Python 3.7+)
@@ -295,7 +327,7 @@ class BaseAgent(
             full_prompt += f"USER: {prompt}"
 
         # 3. Execution via Backend
-        import asyncio  # pylint: disable=import-outside-toplevel
+        # import asyncio  # pylint: disable=import-outside-toplevel
 
         try:
             # pylint: disable=import-outside-toplevel
@@ -349,7 +381,7 @@ class BaseAgent(
                 result = "Async loop already running"
             except RuntimeError:
                 # No running loop, safe to use asyncio.run
-                result = asyncio.run(self.run_async(prompt))
+                result = asyncio.run(self.run_async(self._system_prompt))
 
             self._notify_webhooks("agent_complete", {"status": "success", "result": result})
             return result
@@ -367,17 +399,19 @@ class BaseAgent(
                     pass
             self._notify_webhooks("agent_error", {"error": str(e), "failure_type": f_type})
             return f"Error: {e} (Type: {f_type})"
-                    import json  # pylint: disable=import-outside-toplevel
 
-                    res_str = json.dumps(result)
+        import json  # pylint: disable=import-outside-toplevel
+        res_str = json.dumps(result)
 
-                # Check for record_interaction or record
-                if hasattr(self.recorder, "record_interaction"):
-                    self.recorder.record_interaction(
-                        provider=provider, model=model, prompt=prompt, result=res_str, meta=meta
-                    )
-                elif hasattr(self.recorder, "record"):
-                    self.recorder.record(prompt, result)
+        # Check for record_interaction or record
+        if hasattr(self.recorder, "record_interaction"):
+            self.recorder.record_interaction(
+                provider="unknown", model=self._model, prompt=self._system_prompt, result=res_str, meta={}
+            )
+        elif hasattr(self.recorder, "record"):
+
+            try:
+                self.recorder.record(self._system_prompt, result)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug("BaseAgent: Failed to record interaction: %s", e)
 

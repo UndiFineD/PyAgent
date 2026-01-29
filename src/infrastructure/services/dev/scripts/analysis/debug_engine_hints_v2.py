@@ -1,3 +1,7 @@
+
+"""
+Debug Engine Hints v2: Utility for checking missing type hints in __init__ methods.
+"""
 #!/usr/bin/env python3
 import ast
 import os

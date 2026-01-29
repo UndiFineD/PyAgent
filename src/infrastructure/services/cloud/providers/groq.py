@@ -48,7 +48,7 @@ class GroqConnector(CloudProviderBase):
     """
 
     # Pricing per 1M tokens (input/output) - Groq pricing
-    PRICING = {
+    PRICING: Dict[str, Dict[str, float]] = {
         "llama-3.1-405b-reasoning": {"input": 0.00, "output": 0.00},  # Free tier
         "llama-3.1-70b-versatile": {"input": 0.59, "output": 0.79},
         "llama-3.1-8b-instant": {"input": 0.05, "output": 0.08},
@@ -66,7 +66,7 @@ class GroqConnector(CloudProviderBase):
         base_url: Optional[str] = None,
         timeout: float = 30.0,
         **config,
-    ):
+    ) -> None:
         """
         Initialize the Groq connector.
 
@@ -78,8 +78,8 @@ class GroqConnector(CloudProviderBase):
         """
         super().__init__(api_key=api_key, **config)
         self._api_key = api_key or os.getenv("GROQ_API_KEY")
-        self._base_url = base_url or self.BASE_URL
-        self._timeout = timeout
+        self._base_url: str = base_url or self.BASE_URL
+        self._timeout: float = timeout
 
         # TODO: Initialize Groq client (OpenAI-compatible)
         # from groq import AsyncGroq
@@ -124,7 +124,7 @@ class GroqConnector(CloudProviderBase):
         Returns:
             InferenceResponse with the generated content.
         """
-        start_time = time.perf_counter()
+        start_time: float = time.perf_counter()
 
         # TODO: Implement actual Groq API call
         # Groq uses OpenAI-compatible format
@@ -138,7 +138,7 @@ class GroqConnector(CloudProviderBase):
         # content = response.choices[0].message.content
         # usage = response.usage
 
-        latency_ms = (time.perf_counter() - start_time) * 1000
+        latency_ms: float = (time.perf_counter() - start_time) * 1000
 
         return InferenceResponse(
             content="[Groq response placeholder - implement API call]",
@@ -205,15 +205,15 @@ class GroqConnector(CloudProviderBase):
         Returns:
             Estimated cost in USD.
         """
-        model = request.model
-        pricing = self.PRICING.get(model, {"input": 0.5, "output": 0.5})
+        model: str = request.model
+        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 0.5, "output": 0.5})
 
         # Rough estimate: assume 4 chars per token
-        input_tokens = sum(len(m.get("content", "")) for m in request.messages) // 4
-        output_tokens = request.max_tokens
+        input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4
+        output_tokens: int = request.max_tokens
 
-        input_cost = (input_tokens / 1_000_000) * pricing["input"]
-        output_cost = (output_tokens / 1_000_000) * pricing["output"]
+        input_cost: float = (input_tokens / 1_000_000) * pricing["input"]
+        output_cost: float = (output_tokens / 1_000_000) * pricing["output"]
 
         return input_cost + output_cost
 

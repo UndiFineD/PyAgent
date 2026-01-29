@@ -23,7 +23,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from .audit_logger import SwarmAuditLogger
+from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class WeightedExpertFusion:
     - 'hierarchical_edit': Merges text segments (future integration for token-level).
     """
 
-    def __init__(self, similarity_service: Any = None, audit_logger: Optional[SwarmAuditLogger] = None):
+    def __init__(self, similarity_service: Any = None, audit_logger: Optional[SwarmAuditLogger] = None) -> None:
         self.similarity_service = similarity_service
         self.audit_logger = audit_logger
 

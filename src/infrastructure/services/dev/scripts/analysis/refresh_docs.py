@@ -1,3 +1,9 @@
+
+"""
+Documentation refresh and regeneration utility for PyAgent.
+Automatically regenerates project documentation based on current codebase state,
+including API docs, architecture diagrams, and status reports.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -10,12 +16,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""Documentation refresh and regeneration utility.
-
-Automatically regenerates project documentation based on current codebase state,
-including API docs, architecture diagrams, and status reports.
-"""
 
 from __future__ import annotations
 

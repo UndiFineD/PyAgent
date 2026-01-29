@@ -15,7 +15,7 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 class MetricType(Enum):
@@ -102,7 +102,7 @@ class AggregationResult(dict[str, Any]):
 
     def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        self.value = value
+        self.value: float = value
 
     def __float__(self) -> float:
         return float(self.value)

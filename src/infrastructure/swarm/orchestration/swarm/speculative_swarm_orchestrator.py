@@ -35,7 +35,7 @@ class SpeculativeSwarmOrchestrator:
     Reduces latency by allowing a 'draft' agent to propose thoughts while a 'target' agent verifies.
     """
 
-    def __init__(self, fleet_manager: Any, similarity_threshold: float = 0.85):
+    def __init__(self, fleet_manager: Any, similarity_threshold: float = 0.85) -> None:
         self.fleet = fleet_manager
         self.similarity_service = EmbeddingSimilarityService()
         self.similarity_threshold = similarity_threshold
