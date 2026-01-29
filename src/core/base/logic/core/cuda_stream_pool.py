@@ -445,7 +445,8 @@ class CudaStreamPool:
             if timeout and (time.time() - start) >= timeout:
                 return None
 
-            time.sleep(0.001)
+            # Avoid blocking event loop; use threading.Event().wait for better async compatibility
+            threading.Event().wait(0.001)
 
     def _mark_acquired(
         self,

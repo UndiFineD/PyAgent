@@ -35,7 +35,7 @@ class CrossModelMoEOrchestrator:
     Turns the entire agent fleet into a distributed MoE.
     """
 
-    def __init__(self, gatekeeper: MoEGatekeeper, fusion_engine: Optional[WeightedExpertFusion] = None):
+    def __init__(self, gatekeeper: MoEGatekeeper, fusion_engine: Optional[WeightedExpertFusion] = None) -> None:
         self.gatekeeper = gatekeeper
         self.fusion_engine = fusion_engine or WeightedExpertFusion()
         self.agent_registry: Dict[str, Any] = {}  # Map of agent_id to actual agent instances/stubs

@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""StagedBatchWriter - Batched GPU writes with Triton kernel support.
+"""
+StagedBatchWriter - Batched GPU writes with Triton kernel support.
 
 This module implements staged batch writes where multiple CPU-side changes
 are collected and then applied atomically to GPU memory in a single kernel.

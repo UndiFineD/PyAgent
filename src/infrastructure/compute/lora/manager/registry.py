@@ -18,6 +18,7 @@ Registry.py module.
 
 from __future__ import annotations
 
+from _thread import RLock
 import threading
 from collections import OrderedDict
 from typing import Any, Dict, List, Optional
@@ -29,11 +30,11 @@ from .config import LoRAConfig
 class LoRARegistry:
     """Registry for LoRA adapters with caching."""
 
-    def __init__(self, max_cached: int = 32):
+    def __init__(self, max_cached: int = 32) -> None:
         self._adapters: OrderedDict[str, LoRAAdapter] = OrderedDict()
-        self._max_cached = max_cached
-        self._lock = threading.RLock()
-        self._stats = {"loads": 0, "cache_hits": 0, "evictions": 0}
+        self._max_cached: int = max_cached
+        self._lock: RLock = threading.RLock()
+        self._stats: Dict[str, int] = {"loads": 0, "cache_hits": 0, "evictions": 0}
 
     def register(self, config: LoRAConfig) -> LoRAAdapter:
         with self._lock:

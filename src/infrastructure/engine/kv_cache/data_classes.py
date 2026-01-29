@@ -105,7 +105,7 @@ class KVCacheBlocks:
         return all(not group for group in self.blocks)
 
     @classmethod
-    def empty(cls, num_groups: int) -> "KVCacheBlocks":
+    def empty(cls: type["KVCacheBlocks"], num_groups: int) -> "KVCacheBlocks":
         """Create empty KVCacheBlocks."""
         return cls(tuple(() for _ in range(num_groups)))
 

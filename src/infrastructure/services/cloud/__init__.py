@@ -21,10 +21,10 @@ budget management, and health-aware failover.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 # Lazy imports for performance
-__all__ = [
+__all__: list[str] = [
     "CloudProviderBase",
     "InferenceRequest",
     "InferenceResponse",
@@ -36,7 +36,7 @@ __all__ = [
 ]
 
 
-def __getattr__(name: str):
+def __getattr__(name: str) -> Any:
     """Lazy load cloud components on first access."""
     if name in ("CloudProviderBase", "InferenceRequest", "InferenceResponse"):
         from .base import (CloudProviderBase, InferenceRequest,

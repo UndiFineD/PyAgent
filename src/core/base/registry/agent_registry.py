@@ -20,15 +20,13 @@ AgentRegistry: Central registry for all active agent instances.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from src.core.base.common.registry_core import RegistryCore
 from src.core.base.lifecycle.version import VERSION
 
-if TYPE_CHECKING:
-    from src.core.base.lifecycle.base_agent import BaseAgent
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 class AgentRegistry(RegistryCore["BaseAgent"]):
@@ -49,33 +47,56 @@ class AgentRegistry(RegistryCore["BaseAgent"]):
             super().__init__(name="AgentRegistry")
             self._initialized = True
 
-    def register_instance(self, agent: BaseAgent) -> bool:
+    def register_instance(self, agent) -> bool:
         """
         Register an agent instance using its internal agent_name.
-        Delegates to the underlying RegistryCore.register method.
+        Args:
+            agent: The agent instance to register.
+        Returns:
+            bool: True if registration succeeded, False otherwise.
         """
-        name = getattr(agent, "agent_name", str(id(agent)))
-        success = super().register(name, agent)
+        name: str = getattr(agent, "agent_name", str(id(agent)))
+        success: bool = super().register(name, agent)
         if success:
             logging.debug("Agent '%s' registered.", name)
         return success
 
     def unregister_instance(self, name: str) -> bool:
-        """Unregister an agent instance by name."""
+        """
+        Unregister an agent instance by name.
+        Args:
+            name (str): The name of the agent to unregister.
+        Returns:
+            bool: True if the agent was unregistered, False otherwise.
+        """
         success = super().unregister(name)
         if success:
             logging.debug("Agent '%s' unregistered.", name)
-        return success
+        return bool(success)
 
-    def get_agent(self, name: str) -> BaseAgent | None:
-        """Retrieve an agent by name."""
+    def get_agent(self, name: str) -> Any | None:
+        """
+        Retrieve an agent by name.
+        Args:
+            name (str): The name of the agent to retrieve.
+        Returns:
+            BaseAgent | None: The agent instance if found, else None.
+        """
         return self.get(name)
 
     def list_agents(self) -> list[str]:
-        """List names of all registered agents."""
+        """
+        List names of all registered agents.
+        Returns:
+            list[str]: List of registered agent names.
+        """
         return self.list_keys()
 
     @property
     def active_count(self) -> int:
-        """Return the number of active agents."""
+        """
+        Return the number of active agents.
+        Returns:
+            int: Number of active agents.
+        """
         return len(self._items)

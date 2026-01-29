@@ -42,7 +42,6 @@ class OllamaConnectorAgent(BaseAgent):
         super().__init__(file_path)
         self.endpoint = endpoint
         self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
-        
         # Initialize Async OpenAI Client for Ollama
         self.client = AsyncOpenAI(
             base_url=self.endpoint,
@@ -60,9 +59,9 @@ class OllamaConnectorAgent(BaseAgent):
             return False
 
     async def generate_local(
-        self, 
-        prompt: str, 
-        model: str = "llama3", 
+        self,
+        prompt: str,
+        model: str = "llama3",
         system: Optional[str] = None,
         suffix: Optional[str] = None,
         reasoning: bool = False,
@@ -106,7 +105,6 @@ class OllamaConnectorAgent(BaseAgent):
                     {"role": "system", "content": system or self._system_prompt},
                     {"role": "user", "content": prompt}
                 ]
-                
                 extra_args = {}
                 if json_schema:
                     # Ollama simple JSON mode or structured output if supported
@@ -119,7 +117,6 @@ class OllamaConnectorAgent(BaseAgent):
                     **extra_args
                 )
                 response_content = response.choices[0].message.content or ""
-                
                 # Phase 130: Reasoning Parsing (<think>)
                 if reasoning or "<think>" in response_content:
                     reasoning_match = re.search(r"<think>(.*?)</think>", response_content, re.DOTALL)
@@ -138,16 +135,15 @@ class OllamaConnectorAgent(BaseAgent):
             # Phase 120: Harvest intelligence/interaction to shards
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_interaction(
-                    provider="Ollama", 
-                    model=model, 
-                    prompt=prompt, 
+                    provider="Ollama",
+                    model=model,
+                    prompt=prompt,
                     result=response_content,
                     meta={"reasoning": reasoning_content}
                 )
-                
             return result_payload
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except (Exception, ConnectionError, TimeoutError, ValueError, KeyError) as e:  # pylint: disable=broad-exception-caught
             error_msg = f"Exception during local inference: {e}"
             logger.error(error_msg)
             return {"error": error_msg}

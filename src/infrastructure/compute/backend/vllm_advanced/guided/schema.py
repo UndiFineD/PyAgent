@@ -52,7 +52,7 @@ class JsonSchema:
         pattern: Optional[str] = None,
         items: Optional[Dict[str, Any]] = None,
         default: Optional[Any] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> "JsonSchema":
         """Add a property to the schema."""
         prop: Dict[str, Any] = {"type": prop_type}

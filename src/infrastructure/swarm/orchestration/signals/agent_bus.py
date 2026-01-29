@@ -125,7 +125,7 @@ if __name__ == "__main__":
         loop = asyncio.get_running_loop()
         stop_event = asyncio.Event()
 
-        def handle_stop():
+        def handle_stop() -> None:
             print("\nShutting down AgentBus...")
             bus.stop()
             stop_event.set()

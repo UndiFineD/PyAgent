@@ -204,40 +204,51 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         if not new_token_ids:
             return None
 
-        skipped_stop_token_id = None
+        processed_tokens = self._prepare_tokens_for_detokenization(new_token_ids, stop_terminated)
+        stop_check_offset = self._detokenize_tokens(processed_tokens)
+
+        if stop_terminated and not self.include_stop_str_in_output:
+            # Add back the skipped token to token_ids but not to output
+            self.token_ids.append(new_token_ids[-1])
+
+        return self._check_for_stop_strings(stop_check_offset)
+
+    def _prepare_tokens_for_detokenization(self, new_token_ids: List[int], stop_terminated: bool) -> List[int]:
+        """Prepare tokens for detokenization, handling stop termination."""
         if stop_terminated and not self.include_stop_str_in_output:
             # Skip last token from detokenization
-            skipped_stop_token_id = new_token_ids[-1]
-            new_token_ids = new_token_ids[:-1]
+            return new_token_ids[:-1]
+        return new_token_ids
 
-        # Detokenize
+    def _detokenize_tokens(self, token_ids: List[int]) -> int:
+        """Detokenize the given tokens and return stop check offset."""
         stop_check_offset = len(self.output_text)
-        for token_id in new_token_ids:
+        for token_id in token_ids:
             self.token_ids.append(token_id)
             self.output_text += self.decode_next(token_id)
 
             # Skip stop check for min_tokens
             if self.min_tokens and len(self.output_token_ids) <= self.min_tokens:
                 stop_check_offset = len(self.output_text)
+        return stop_check_offset
 
-        if skipped_stop_token_id is not None:
-            self.token_ids.append(skipped_stop_token_id)
+    def _check_for_stop_strings(self, stop_check_offset: int) -> Optional[str]:
+        """Check for stop strings and truncate output if needed."""
+        if not self.stop or len(self.output_token_ids) <= self.min_tokens:
+            return None
 
-        # Check stop strings
-        stop_string = None
-        if self.stop and len(self.output_token_ids) > self.min_tokens:
-            result = check_stop_strings(
-                output_text=self.output_text,
-                new_char_count=len(self.output_text) - stop_check_offset,
-                stop=self.stop,
-                include_in_output=self.include_stop_str_in_output,
-            )
-            if result is not None:
-                stop_string, truncate_to = result
-                if truncate_to != -1:
-                    self.output_text = self.output_text[:truncate_to]
-
-        return stop_string
+        result = check_stop_strings(
+            output_text=self.output_text,
+            new_char_count=len(self.output_text) - stop_check_offset,
+            stop=self.stop,
+            include_in_output=self.include_stop_str_in_output,
+        )
+        if result is not None:
+            stop_string, truncate_to = result
+            if truncate_to != -1:
+                self.output_text = self.output_text[:truncate_to]
+            return stop_string
+        return None
 
     @abstractmethod
     def decode_next(self, next_token_id: int) -> str:

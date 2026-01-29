@@ -29,7 +29,7 @@ try:
 except ImportError:
     rc = None
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class AsyncSchedulerV2:
@@ -39,7 +39,7 @@ class AsyncSchedulerV2:
     """
 
     def __init__(self, max_batched_tokens: int = 4096) -> None:
-        self.max_batched_tokens = max_batched_tokens
+        self.max_batched_tokens: int = max_batched_tokens
         self.request_queue = RequestQueueV2()
         self.active_outputs: Dict[float, SchedulerOutput] = {}
 
@@ -50,12 +50,12 @@ class AsyncSchedulerV2:
         """
         Performs an asynchronous scheduling step.
         """
-        start_time = time.perf_counter()
+        start_time: float = time.perf_counter()
 
         output = SchedulerOutput(max_num_batched_tokens=self.max_batched_tokens)
 
         # 1. Pop requests from queue
-        requests = self.request_queue.pop_next_batch(self.max_batched_tokens)
+        requests: List[Any] = self.request_queue.pop_next_batch(self.max_batched_tokens)
 
         # 2. Map to ScheduledSequence
         for req in requests:
@@ -78,11 +78,11 @@ class AsyncSchedulerV2:
                 logger.debug(f"Rust schedule update fallback: {e}")
 
         # 4. Cleanup old outputs
-        now = time.time()
+        now: float = time.time()
         self.active_outputs = {k: v for k, v in self.active_outputs.items() if now - k < 60.0}
         self.active_outputs[now] = output
 
-        latency = (time.perf_counter() - start_time) * 1000.0
+        latency: float = (time.perf_counter() - start_time) * 1000.0
         self.schedule_latency_ms.append(latency)
         if len(self.schedule_latency_ms) > 100:
             self.schedule_latency_ms.pop(0)

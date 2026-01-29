@@ -36,11 +36,11 @@ class RoutingEngine(StandardRoutingCore):
             return "federated_cluster"
 
         report = BackendHandlers.get_performance_report()
-        preferred = os.environ.get("DV_AGENT_BACKEND", "github_models")
+        preferred: str = os.environ.get("DV_AGENT_BACKEND", "github_models")
 
         if priority == "latency":
             # Select provider with lowest TTFT or highest TPS
-            best_provider = preferred
+            best_provider: str = preferred
             min_ttft = float("inf")
             for p, metrics in report.items():
                 if metrics["ttft"] < min_ttft:

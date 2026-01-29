@@ -16,7 +16,8 @@
 
 import pytest
 import time
-from src.core.base.common.models.communication_models import CascadeContext, FailureClassification
+from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.common.models import FailureClassification
 
 class TestCascadeContext:
     def test_initialization_defaults(self):

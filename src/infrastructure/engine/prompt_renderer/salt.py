@@ -54,5 +54,5 @@ class CacheSaltGenerator:
         if not components:
             return ""
 
-        salt_string = "|".join(components)
+        salt_string: str = "|".join(components)
         return hashlib.sha256(salt_string.encode()).hexdigest()[:16]

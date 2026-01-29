@@ -19,6 +19,7 @@ Rate limited.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+from _thread import LockType
 import threading
 import time
 from concurrent.futures import Future
@@ -48,7 +49,7 @@ class RateLimitedScheduler:
             rates: Tasks per second per priority level
             workers: Number of worker threads
         """
-        self._rates = rates or {
+        self._rates: Dict[TaskPriority, float] = rates or {
             TaskPriority.CRITICAL: float("inf"),
             TaskPriority.HIGH: 100.0,
             TaskPriority.NORMAL: 50.0,
@@ -56,10 +57,10 @@ class RateLimitedScheduler:
             TaskPriority.IDLE: 5.0,
         }
 
-        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p in TaskPriority}
+        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p: TaskPriority in TaskPriority}
 
         self._scheduler = PriorityScheduler(workers=workers)
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
     def submit(
         self,
@@ -67,13 +68,13 @@ class RateLimitedScheduler:
         priority: TaskPriority = TaskPriority.NORMAL,
     ) -> Future[R]:
         """Submit a rate-limited task."""
-        rate = self._rates.get(priority, 10.0)
-        min_interval = 1.0 / rate if rate < float("inf") else 0.0
+        rate: float = self._rates.get(priority, 10.0)
+        min_interval: float = 1.0 / rate if rate < float("inf") else 0.0
 
         with self._lock:
-            now = time.monotonic()
-            last = self._last_execution[priority]
-            wait_time = max(0, last + min_interval - now)
+            now: float = time.monotonic()
+            last: float = self._last_execution[priority]
+            wait_time: float = max(0, last + min_interval - now)
 
             if wait_time > 0:
                 # Use Event wait to be non-interruptive to signals in some environments

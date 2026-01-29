@@ -40,7 +40,7 @@ class RequestEvent:
 
     @classmethod
     def new_event(
-        cls,
+        cls: type["RequestEvent"],
         event_type: RequestEventType,
         timestamp: Optional[float] = None,
         details: Optional[Dict[str, Any]] = None,

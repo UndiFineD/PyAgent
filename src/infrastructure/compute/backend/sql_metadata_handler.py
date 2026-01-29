@@ -186,56 +186,74 @@ class SqlMetadataHandler:
                 results.append(dict(row))
         return results
 
+    def _get_shard_files(self) -> list[str]:
+        """Get list of shard files to index."""
+        return [f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")]
+
+    def _extract_shard_number(self, shard_file: str) -> int:
+        """Extract shard number from filename."""
+        try:
+            return int(shard_file.split("_")[-1].split(".")[0])
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            return 0
+
+    def _process_shard_file(self, cursor: sqlite3.Cursor, shard_file: str, shard_num: int) -> int:
+        """Process a single shard file and return number of interactions indexed."""
+        indexed_count = 0
+        shard_path = os.path.join(self.shards_dir, shard_file)
+
+        try:
+            with gzip.open(shard_path, "rt", encoding="utf-8") as f:
+                for line in f:
+                    data = json.loads(line)
+                    indexed_count += self._index_single_interaction(cursor, data, shard_num, indexed_count)
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.error(f"Failed to index shard {shard_file}: {e}")
+
+        return indexed_count
+
+    def _index_single_interaction(self, cursor: sqlite3.Cursor, data: dict[str, Any], shard_num: int, indexed_count: int) -> int:
+        """Index a single interaction from shard data."""
+        meta = data.get("meta", {})
+        i_id = meta.get("id", f"{shard_num}_{indexed_count}")
+
+        # Insert interaction metadata
+        cursor.execute(
+            """
+            INSERT OR REPLACE INTO interactions
+            (id, shard_id, timestamp, agent_name, task_type, success)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """,
+            (
+                i_id,
+                shard_num,
+                data.get("timestamp", 0),
+                meta.get("agent", "unknown"),
+                meta.get("type", "generic"),
+                1 if meta.get("status") == "success" else 0,
+            ),
+        )
+
+        # Insert tags if present
+        if "tags" in meta:
+            for tag in meta["tags"]:
+                cursor.execute(
+                    "INSERT OR IGNORE INTO metadata_tags VALUES (?, ?)",
+                    (i_id, tag),
+                )
+
+        return 1
+
     def index_shards(self) -> int:
         """Scans shards and populates the metadata DB."""
         indexed_count = 0
-        shard_files = [f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")]
+        shard_files = self._get_shard_files()
 
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             for shard_file in shard_files:
-                # shard_YYYYMM_000.jsonl.gz -> 000
-                try:
-                    shard_num = int(shard_file.split("_")[-1].split(".")[0])
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    shard_num = 0
-                shard_path = os.path.join(self.shards_dir, shard_file)
-
-                try:
-                    with gzip.open(shard_path, "rt", encoding="utf-8") as f:
-                        for line in f:
-                            data = json.loads(line)
-                            meta = data.get("meta", {})
-                            i_id = meta.get("id", f"{shard_num}_{indexed_count}")
-
-                            # Insert interaction metadata
-                            cursor.execute(
-                                """
-                                INSERT OR REPLACE INTO interactions
-                                (id, shard_id, timestamp, agent_name, task_type, success)
-                                VALUES (?, ?, ?, ?, ?, ?)
-                            """,
-                                (
-                                    i_id,
-                                    shard_num,
-                                    data.get("timestamp", 0),
-                                    meta.get("agent", "unknown"),
-                                    meta.get("type", "generic"),
-                                    1 if meta.get("status") == "success" else 0,
-                                ),
-                            )
-
-                            # Insert tags if present
-                            if "tags" in meta:
-                                for tag in meta["tags"]:
-                                    cursor.execute(
-                                        "INSERT OR IGNORE INTO metadata_tags VALUES (?, ?)",
-                                        (i_id, tag),
-                                    )
-
-                            indexed_count += 1
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    logging.error(f"Failed to index shard {shard_file}: {e}")
+                shard_num = self._extract_shard_number(shard_file)
+                indexed_count += self._process_shard_file(cursor, shard_file, shard_num)
             conn.commit()
         return indexed_count
 

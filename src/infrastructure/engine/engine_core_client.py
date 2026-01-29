@@ -243,36 +243,52 @@ class SyncMPClient(EngineCoreClient):
     def _run_engine_loop(self) -> None:
         """Background thread running the engine."""
         while not self._shutdown_flag.is_set():
-            # Process input requests
-            try:
-                request_type, data = self.input_queue.get(timeout=0.1)
-                self._handle_request(request_type, data)
-            except queue.Empty:
-                pass
+            self._process_input_requests()
+            self._step_engine_if_needed()
 
-            # Step if we have work
-            if self.engine_core.scheduler.has_requests():
-                outputs, model_executed = self.engine_core.step()
-                if outputs:
-                    for client_idx, engine_outputs in outputs.items():
-                        self.output_queue.put((client_idx, engine_outputs))
-                self.engine_core.post_step(model_executed)
+    def _process_input_requests(self) -> None:
+        """Process any pending input requests."""
+        try:
+            request_type, data = self.input_queue.get(timeout=0.1)
+            self._handle_request(request_type, data)
+        except queue.Empty:
+            pass
+
+    def _step_engine_if_needed(self) -> None:
+        """Step the engine if there are requests to process."""
+        if self.engine_core.scheduler.has_requests():
+            outputs, model_executed = self.engine_core.step()
+            if outputs:
+                for client_idx, engine_outputs in outputs.items():
+                    self.output_queue.put((client_idx, engine_outputs))
+            self.engine_core.post_step(model_executed)
 
     def _handle_request(self, request_type: RequestType, data: Any) -> None:
         """Handle incoming request."""
         if request_type == RequestType.ADD_REQUEST:
-            request = data
-            engine_request = Request(
-                request_id=request.request_id,
-                prompt_token_ids=request.prompt_token_ids or [],
-                sampling_params=request.sampling_params.__dict__ if request.sampling_params else None,
-                arrival_time=request.arrival_time,
-            )
-            self.engine_core.add_request(engine_request)
+            self._handle_add_request(data)
         elif request_type == RequestType.ABORT_REQUESTS:
-            self.engine_core.abort_requests(data)
+            self._handle_abort_requests(data)
         elif request_type == RequestType.SHUTDOWN:
-            self._shutdown_flag.set()
+            self._handle_shutdown()
+
+    def _handle_add_request(self, request: EngineCoreRequest) -> None:
+        """Handle add request."""
+        engine_request = Request(
+            request_id=request.request_id,
+            prompt_token_ids=request.prompt_token_ids or [],
+            sampling_params=request.sampling_params.__dict__ if request.sampling_params else None,
+            arrival_time=request.arrival_time,
+        )
+        self.engine_core.add_request(engine_request)
+
+    def _handle_abort_requests(self, request_ids: List[str]) -> None:
+        """Handle abort requests."""
+        self.engine_core.abort_requests(request_ids)
+
+    def _handle_shutdown(self) -> None:
+        """Handle shutdown request."""
+        self._shutdown_flag.set()
 
     def get_output(self) -> EngineCoreOutputs:
         """Get output from engine."""
@@ -327,20 +343,23 @@ class AsyncMPClient(EngineCoreClient):
 
     async def _process_outputs(self) -> None:
         """Background task to process outputs."""
-        loop = asyncio.get_event_loop()
         while not self._sync_client.is_shutdown:
             try:
-                # Non-blocking check
-                outputs = await loop.run_in_executor(
-                    None,
-                    lambda: self._sync_client.output_queue.get(timeout=0.1),
-                )
+                outputs = await self._get_next_output()
                 await self._output_queue.put(outputs)
             except queue.Empty:
                 await asyncio.sleep(0.01)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception as e:
+                logger.error("Unexpected error in output processing task: %s", e)
                 break
+
+    async def _get_next_output(self) -> tuple:
+        """Get next output from sync client."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(
+            None,
+            lambda: self._sync_client.output_queue.get(timeout=0.1),
+        )
 
     async def get_output_async(self) -> EngineCoreOutputs:
         """Get output from engine (async)."""

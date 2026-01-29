@@ -37,8 +37,8 @@ class TruncationManager:
         reserve_tokens: int = 0,
     ) -> Tuple[List[int], TruncationResult]:
         """Truncate token sequence to fit within limit."""
-        target_tokens = max_tokens - reserve_tokens
-        original_len = len(tokens)
+        target_tokens: int = max_tokens - reserve_tokens
+        original_len: int = len(tokens)
 
         if original_len <= target_tokens:
             return tokens, TruncationResult(
@@ -70,8 +70,8 @@ class TruncationManager:
 
     @classmethod
     def _truncate_left(cls, tokens: List[int], target: int, original: int) -> Tuple[List[int], TruncationResult]:
-        removed = original - target
-        truncated = tokens[removed:]
+        removed: int = original - target
+        truncated: List[int] = tokens[removed:]
         return truncated, TruncationResult(
             original_tokens=original,
             truncated_tokens=len(truncated),
@@ -82,8 +82,8 @@ class TruncationManager:
 
     @classmethod
     def _truncate_right(cls, tokens: List[int], target: int, original: int) -> Tuple[List[int], TruncationResult]:
-        truncated = tokens[:target]
-        removed = original - target
+        truncated: List[int] = tokens[:target]
+        removed: int = original - target
         return truncated, TruncationResult(
             original_tokens=original,
             truncated_tokens=len(truncated),
@@ -94,10 +94,10 @@ class TruncationManager:
 
     @classmethod
     def _truncate_middle(cls, tokens: List[int], target: int, original: int) -> Tuple[List[int], TruncationResult]:
-        keep_start = target // 2
-        keep_end = target - keep_start
-        truncated = tokens[:keep_start] + tokens[-keep_end:]
-        removed = original - target
+        keep_start: int = target // 2
+        keep_end: int = target - keep_start
+        truncated: List[int] = tokens[:keep_start] + tokens[-keep_end:]
+        removed: int = original - target
         return truncated, TruncationResult(
             original_tokens=original,
             truncated_tokens=len(truncated),

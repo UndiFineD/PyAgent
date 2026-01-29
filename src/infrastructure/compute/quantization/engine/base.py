@@ -33,8 +33,8 @@ if TYPE_CHECKING:
 class Quantizer(ABC):
     """Base class for quantization algorithms."""
 
-    def __init__(self, config: QuantConfig):
-        self.config = config
+    def __init__(self, config: QuantConfig) -> None:
+        self.config: QuantConfig = config
 
     @abstractmethod
     def quantize(

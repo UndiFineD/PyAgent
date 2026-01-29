@@ -209,7 +209,7 @@ class ConfigCore(BaseCore):
             elif fmt in (ConfigFormat.INI, ConfigFormat.CONF):
                 # Basic INI parsing if needed, but RC usually handles it
                 pass
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             return {}
 
         if isinstance(data, list):

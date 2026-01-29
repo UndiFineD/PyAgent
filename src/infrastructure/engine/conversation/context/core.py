@@ -48,7 +48,7 @@ class ConversationContext(ABC):
         self._created_at = time.time()
         self._last_activity = time.time()
         self._turn_tracker = TurnTracker(config)
-        self._metadata: Dict[str, Any] = {}
+        self._metadata: dict[str, Any] = {}
 
     @property
     def state(self) -> ContextState:
@@ -61,7 +61,7 @@ class ConversationContext(ABC):
         return self._last_activity
 
     @property
-    def turns(self) -> List[ConversationTurn]:
+    def turns(self) -> list[ConversationTurn]:
         """Get all turns in this conversation."""
         return self._turn_tracker.turns
 
@@ -116,7 +116,7 @@ class ConversationContext(ABC):
 
     def add_tool_call(
         self,
-        tool_calls: List[Dict[str, Any]],
+        tool_calls: list[dict[str, Any]],
         tokens: Optional[TokenMetrics] = None,
     ) -> ConversationTurn:
         """Add tool call."""
@@ -155,7 +155,7 @@ class ConversationContext(ABC):
         self,
         include_system: bool = True,
         include_reasoning: bool = False,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Get conversation as messages."""
         return self._turn_tracker.get_messages(include_system, include_reasoning)
 
@@ -196,7 +196,7 @@ class ConversationContext(ABC):
         ctx._turn_tracker._total_tokens = snapshot.total_tokens  # pylint: disable=protected-access
         return ctx
 
-    def import_turns(self, turns: List[ConversationTurn], deduplicate: bool = True) -> None:
+    def import_turns(self, turns: list[ConversationTurn], deduplicate: bool = True) -> None:
         """Import turns from another context."""
         seen_ids = {t.id for t in self.turns} if deduplicate else set()
         for turn in turns:
@@ -241,8 +241,8 @@ class AgenticContext(ConversationContext):
 
     def queue_tool_calls(
         self,
-        tool_calls: List[Dict[str, Any]],
-    ) -> List[ToolExecution]:
+        tool_calls: list[dict[str, Any]],
+    ) -> list[ToolExecution]:
         """Queue tool calls from assistant response."""
         executions = []
         for tc in tool_calls:
@@ -255,7 +255,7 @@ class AgenticContext(ConversationContext):
             executions.append(execution)
         return executions
 
-    async def execute_tools(self) -> List[ToolExecution]:
+    async def execute_tools(self) -> list[ToolExecution]:
         """Execute queued tool calls."""
         if not self.has_pending_tools:
             return []
@@ -284,7 +284,7 @@ class AgenticContext(ConversationContext):
     async def run_agent_loop(
         self,
         generate_fn: Callable,
-        initial_messages: Optional[List[Dict[str, Any]]] = None,
+        initial_messages: Optional[list[dict[str, Any]]] = None,
     ) -> str:
         """Run agentic loop until completion."""
         if initial_messages:

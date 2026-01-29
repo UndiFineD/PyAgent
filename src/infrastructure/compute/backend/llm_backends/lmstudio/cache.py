@@ -27,7 +27,7 @@ from .models import CachedModel
 class ModelCache:
     """Simple model cache with TTL."""
 
-    def __init__(self, ttl: float = 300.0):
+    def __init__(self, ttl: float = 300.0) -> None:
         self._cache: dict[str, CachedModel] = {}
         self._ttl = ttl
 

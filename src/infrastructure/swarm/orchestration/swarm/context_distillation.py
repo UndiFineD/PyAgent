@@ -30,7 +30,7 @@ class ContextDistiller:
     Enables ultra-fast P2P migration by sending only the most informative context summary.
     """
 
-    def __init__(self, target_reduction: float = 0.5):
+    def __init__(self, target_reduction: float = 0.5) -> None:
         self.target_reduction = target_reduction
 
     def distill_shard(

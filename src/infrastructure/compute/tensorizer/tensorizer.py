@@ -24,7 +24,7 @@ from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,
                    TensorMetadata, get_model_info, load_model, save_model)
 
 # Backward compatibility aliases
-__all__ = [
+__all__: list[str] = [
     "TensorizerConfig",
     "CompressionType",
     "TensorDtype",
@@ -38,11 +38,11 @@ __all__ = [
 ]
 
 
-def save_tensors(path, tensors, compression=CompressionType.NONE, verify=True):
+def save_tensors(path: str, tensors, compression=CompressionType.NONE, verify: bool = True) -> int:
     """Legacy alias for save_model."""
     return save_model(path, tensors, compression, verify)
 
 
-def load_tensors(path, parallel=True, verify=True):
+def load_tensors(path: str, parallel: bool = True, verify: bool = True):
     """Legacy alias for load_model."""
     return load_model(path, parallel, verify)

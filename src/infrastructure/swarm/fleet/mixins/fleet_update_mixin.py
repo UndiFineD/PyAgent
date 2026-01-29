@@ -38,7 +38,7 @@ class FleetUpdateMixin:
         while not getattr(self, "kill_switch", False):
             try:
                 self._run_git_pull()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (subprocess.SubprocessError, OSError, RuntimeError) as e:
                 logger.error(f"FleetUpdateMixin: Update check failed: {e}")
 
             # Sleep in small increments to respond faster to kill_switch
@@ -81,5 +81,5 @@ class FleetUpdateMixin:
 
         except FileNotFoundError:
             logger.error("FleetUpdateMixin: 'git' command not found. Cannot perform auto-update.")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (subprocess.SubprocessError, OSError, ValueError) as e:
             logger.error(f"FleetUpdateMixin: Unexpected error during git pull: {e}")

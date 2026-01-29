@@ -23,6 +23,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
+from matplotlib.pylab import Generator
 import numpy as np
 
 
@@ -135,5 +136,5 @@ class SamplingState:
     @classmethod
     def from_seed(cls, request_id: str, seed: Optional[int] = None) -> "SamplingState":
         """Create a state with a specific random seed."""
-        rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
+        rng: Generator = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
         return cls(request_id=request_id, rng=rng)

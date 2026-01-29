@@ -65,6 +65,10 @@ __all__ = [
 # Registry of expensive modules for lazy loading
 # Maps attribute name -> (module_path, attribute_name)
 _LAZY_REGISTRY = {
+    """
+    Module: infrastructure
+    PyAgent infrastructure package initialization.
+    """
     "EagleProposer": (
         "src.infrastructure.engine.speculative.eagle_proposer",
         "EagleProposer",

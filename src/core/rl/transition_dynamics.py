@@ -44,7 +44,7 @@ class TransitionDynamics:
     Supports empirical estimation, model learning, and uncertainty quantification.
     """
 
-    def __init__(self, smoothing: float = 0.1):
+    def __init__(self, smoothing: float = 0.1) -> None:
         # (state, action) -> StateActionStats
         self._stats: Dict[Tuple[Any, Any], StateActionStats] = {}
         # All observed states and actions
@@ -252,8 +252,7 @@ class TransitionDynamics:
         state = start_state
 
         for step in range(steps):
-            # Choose random action
-            action = random.choice(list(self._actions)) if self._actions else None
+            action = self._select_random_action()
             if action is None:
                 break
 
@@ -262,16 +261,24 @@ class TransitionDynamics:
                 break
 
             reward = self.predict_expected_reward(state, action)
-
-            trajectory.append(
-                TransitionRecord(
-                    state=state, action=action, next_state=next_state, reward=reward, done=False, timestamp=step
-                )
-            )
+            record = self._create_transition_record(state, action, next_state, reward, step)
+            trajectory.append(record)
 
             state = next_state
 
         return trajectory
+
+    def _select_random_action(self) -> Optional[Any]:
+        """Select a random action from available actions."""
+        return random.choice(list(self._actions)) if self._actions else None
+
+    def _create_transition_record(
+        self, state: Any, action: Any, next_state: Any, reward: float, step: int
+    ) -> TransitionRecord:
+        """Create a transition record for the trajectory."""
+        return TransitionRecord(
+            state=state, action=action, next_state=next_state, reward=reward, done=False, timestamp=step
+        )
 
     def get_stats_summary(self) -> Dict[str, Any]:
         """Returns a summary of the transition dynamics."""
