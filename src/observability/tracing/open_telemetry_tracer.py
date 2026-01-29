@@ -41,10 +41,18 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Any, Callable, Generator, ParamSpec, TypeVar
 
-logger = logging.getLogger(__name__)
+from opentelemetry.sdk.trace.export import SpanExporter
+
+from opentelemetry.trace.span import Span
+
+from opentelemetry.trace.span import Span
+
+from opentelemetry.trace.span import Span
+
+logger: logging.Logger = logging.getLogger(__name__)
 
 # Standard trace headers
-TRACE_HEADERS = ["traceparent", "tracestate"]
+TRACE_HEADERS: list[str] = ["traceparent", "tracestate"]
 
 # Track if OpenTelemetry is available
 _is_otel_imported = False
@@ -177,7 +185,7 @@ def init_tracer(
     trace_provider = TracerProvider()
 
     if otlp_traces_endpoint:
-        span_exporter = get_span_exporter(otlp_traces_endpoint)
+        span_exporter: SpanExporter = get_span_exporter(otlp_traces_endpoint)
         if use_batch_processor:
             trace_provider.add_span_processor(BatchSpanProcessor(span_exporter))
         else:
@@ -196,7 +204,7 @@ def get_span_exporter(endpoint: str) -> SpanExporter:
     if not is_otel_available():
         raise RuntimeError("OpenTelemetry is not available")
 
-    protocol = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_PROTOCOL, "grpc")
+    protocol: str = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_PROTOCOL, "grpc")
 
     if protocol == "grpc":
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
@@ -264,12 +272,12 @@ def extract_trace_headers(headers: Mapping[str, str]) -> dict[str, str]:
     """
     Extract only trace-related headers from a headers mapping.
     """
-    return {h: headers[h] for h in TRACE_HEADERS if h in headers}
+    return {h: headers[h] for h: str in TRACE_HEADERS if h in headers}
 
 
 def contains_trace_headers(headers: Mapping[str, str]) -> bool:
     """Check if headers contain trace context."""
-    return any(h in headers for h in TRACE_HEADERS)
+    return any(h in headers for h: str in TRACE_HEADERS)
 
 
 # ============================================================================
@@ -360,7 +368,7 @@ def traced(
     """
 
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
-        span_name = name or func.__name__
+        span_name: str = name or func.__name__
 
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
@@ -399,7 +407,7 @@ def add_span_attributes(attributes: dict[str, Any]) -> None:
     if not is_otel_available():
         return
 
-    span = get_current_span()
+    span: Span = get_current_span()
     if span and span.is_recording():
         for key, value in attributes.items():
             span.set_attribute(key, value)
@@ -417,7 +425,7 @@ def add_span_event(
     if not is_otel_available():
         return
 
-    span = get_current_span()
+    span: Span = get_current_span()
     if span and span.is_recording():
         span.add_event(name, attributes=attributes or {})
 
@@ -431,7 +439,7 @@ def record_exception(exception: Exception, escaped: bool = True) -> None:
     if not is_otel_available():
         return
 
-    span = get_current_span()
+    span: Span = get_current_span()
     if span and span.is_recording():
         span.record_exception(exception, escaped=escaped)
         span.set_status(Status(StatusCode.ERROR, str(exception)))
@@ -467,7 +475,7 @@ class SpanTiming:
 
     def checkpoint(self, name: str) -> float:
         """Record a timing checkpoint."""
-        elapsed = time.perf_counter() - self.start_time
+        elapsed: float = time.perf_counter() - self.start_time
         self.checkpoints[name] = elapsed
         return elapsed
 
@@ -477,7 +485,7 @@ class SpanTiming:
 
     def to_attributes(self, prefix: str = "") -> dict[str, float]:
         """Convert checkpoints to span attributes."""
-        result = {f"{prefix}total": self.elapsed()}
+        result: dict[str, float] = {f"{prefix}total": self.elapsed()}
         for name, elapsed in self.checkpoints.items():
             result[f"{prefix}{name}"] = elapsed
         return result
@@ -559,7 +567,7 @@ def get_null_tracer() -> NullTracer:
 # Exports
 # ============================================================================
 
-__all__ = [
+__all__: list[str] = [
     # Constants
     "TRACE_HEADERS",
     "SpanAttributes",

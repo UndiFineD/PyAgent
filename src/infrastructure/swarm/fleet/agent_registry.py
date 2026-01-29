@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
-from src.logic.agents.system.mcp_agent import MCPAgent
+MCPAgent = None  # Will be imported locally to avoid circular import
 
 from .agent_registry_core import AgentRegistryCore
 from .bootstrap_configs import BOOTSTRAP_AGENTS
@@ -35,8 +35,16 @@ from .resilient_stubs import ResilientStub
 if TYPE_CHECKING:
     from .fleet_manager import FleetManager
 
+
 # Import local version for gatekeeping
 __version__ = VERSION
+
+def get_mcp_agent(*args: Any, **kwargs: Any) -> Any:
+    global MCPAgent
+    if MCPAgent is None:
+        from src.logic.agents.system.mcp_agent import MCPAgent as _MCPAgent
+        MCPAgent = _MCPAgent
+    return MCPAgent(*args, **kwargs)
 
 
 class LazyAgentMap(dict):

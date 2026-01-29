@@ -29,7 +29,7 @@ from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 class ArxivCore:
     """Core logic for interacting with Arxiv research papers."""
 
-    def __init__(self, download_dir: str = "data/research"):
+    def __init__(self, download_dir: str = "data/research") -> None:
         self._workspace_root = os.getcwd()
         self.download_dir = Path(self._workspace_root) / download_dir
         self.download_dir.mkdir(parents=True, exist_ok=True)

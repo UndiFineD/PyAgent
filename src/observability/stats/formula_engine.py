@@ -39,7 +39,7 @@ class FormulaEngineCore(FormulaCore):
         # Check Rust acceleration first
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
-                float_vars = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
+                float_vars: Dict[str, float] = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
                 # Support both naming conventions
                 if hasattr(rc, "evaluate_formula"):
                     return rc.evaluate_formula(formula, float_vars)
@@ -48,9 +48,9 @@ class FormulaEngineCore(FormulaCore):
 
         # Handle simple AVG aggregate manually
         if "AVG(" in formula:
-            match = re.search(r"AVG\(\{(\w+)\}\)", formula)
+            match: re.Match[str] | None = re.search(r"AVG\(\{(\w+)\}\)", formula)
             if match:
-                var_name = match.group(1)
+                var_name: str | Any = match.group(1)
                 if var_name in variables:
                     values = variables[var_name]
                     if isinstance(values, list) and values:
@@ -59,7 +59,7 @@ class FormulaEngineCore(FormulaCore):
 
         try:
             # Substitute variables in format {var_name}
-            eval_formula = formula
+            eval_formula: str = formula
             substituted_vars = {}
             for var_name, var_value in variables.items():
                 if f"{{{var_name}}}" in eval_formula:
@@ -77,10 +77,10 @@ class FormulaEngineCore(FormulaCore):
             if any(seq in formula for seq in ["+++", "***", "---"]):
                 return {"is_valid": False, "error": "Invalid operator sequence"}
 
-            test_formula = formula
+            test_formula: str = formula
             vars_found: list[str] = re.findall(r"\{(\w+)\}", formula)
             for var in vars_found:
-                test_formula = test_formula.replace(f"{{{var}}}", "1")
+                test_formula: str = test_formula.replace(f"{{{var}}}", "1")
 
             ast.parse(test_formula, mode="eval")
             return {"is_valid": True, "error": None}
@@ -103,7 +103,7 @@ class FormulaEngine:
 
     def calculate(self, formula_or_name: str, variables: Dict[str, Any] | None = None) -> float:
         variables = variables or {}
-        formula = self.formulas.get(formula_or_name, formula_or_name)
+        formula: str = self.formulas.get(formula_or_name, formula_or_name)
         try:
             return self.core.calculate_logic(formula, variables)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -111,7 +111,7 @@ class FormulaEngine:
             return 0.0
 
     def validate(self, formula: str) -> FormulaValidation:
-        result = self.core.validate_logic(formula)
+        result: Dict[str, Any] = self.core.validate_logic(formula)
         return FormulaValidation(is_valid=result["is_valid"], error=result["error"])
 
     def validate_formula(self, formula: str) -> bool:

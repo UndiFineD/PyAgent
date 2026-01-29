@@ -21,7 +21,7 @@ import logging
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from .config import ModelInput, ModelOutput, RunnerState, SchedulerOutput
 from .pipeline import ExecutionPipeline
@@ -47,7 +47,7 @@ class AsyncModelRunner:
         model_forward_fn: Optional[Callable[[ModelInput], ModelOutput]] = None,
         num_workers: int = 1,
         enable_pipeline: bool = True,
-    ):
+    ) -> None:
         self._model_forward_fn = model_forward_fn
         self._state = RunnerState.IDLE
 
@@ -82,7 +82,7 @@ class AsyncModelRunner:
         """Set the model forward function."""
         self._model_forward_fn = fn
 
-    async def execute_model_async(self, scheduler_output: SchedulerOutput) -> list[ModelOutput]:
+    async def execute_model_async(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
         """
         Execute model on scheduled batch (async).
 
@@ -175,7 +175,7 @@ class AsyncModelRunner:
 
         return output
 
-    def execute_model_sync(self, scheduler_output: SchedulerOutput) -> list[ModelOutput]:
+    def execute_model_sync(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
         """Execute model synchronously."""
         outputs = []
 
@@ -245,7 +245,7 @@ class AsyncModelRunner:
 
         logger.info("AsyncModelRunner shutdown")
 
-    def get_metrics(self) -> dict[str, Any]:
+    def get_metrics(self) -> Dict[str, Any]:
         """Get runner metrics."""
         with self._lock:
             avg_latency = self._total_latency_ms / self._total_executions if self._total_executions else 0.0

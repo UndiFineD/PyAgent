@@ -113,7 +113,7 @@ class SpeculativeEngine:
         self.drafter.reset_metrics()
 
     @classmethod
-    def list_methods(cls) -> List[str]:
+    def list_methods(cls: type["SpeculativeEngine"]) -> List[str]:
         """List all available speculation methods."""
         return [m.name for m in SpecMethod]
 

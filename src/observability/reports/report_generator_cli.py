@@ -20,6 +20,7 @@ Report generator cli.py module.
 
 from __future__ import annotations
 
+from argparse import Namespace
 import sys
 from pathlib import Path
 
@@ -28,13 +29,13 @@ from src.observability.reports.export_format import ExportFormat
 from src.observability.reports.report_exporter import ReportExporter
 from src.observability.reports.report_generator import ReportGenerator
 
-root = Path(__file__).resolve().parents[2]
+root: Path = Path(__file__).resolve().parents[2]
 if str(root) not in sys.path:
     sys.path.append(str(root))
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 def _sha256_text(text: str) -> str:
@@ -51,10 +52,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate Agent Reports")
     parser.add_argument("--dir", default=".", help="Directory to scan")
     parser.add_argument("--output", default="reports", help="Output directory")
-    args = parser.parse_args()
+    args: Namespace = parser.parse_args()
 
     generator = ReportGenerator(args.dir)
-    report = generator.generate_full_report()
+    report: str = generator.generate_full_report()
 
     output_dir = Path(args.output)
 

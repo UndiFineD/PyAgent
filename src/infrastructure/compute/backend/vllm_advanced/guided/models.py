@@ -60,23 +60,42 @@ class GuidedConfig:
     whitespace_pattern: Optional[str] = None
     strict: bool = True  # Fail on constraint violations
 
-    def to_sampling_params_kwargs(self) -> Dict[str, Any]:
-        """Convert to kwargs for SamplingParams."""
-        kwargs = {}
-
+    def _add_json_kwargs(self, kwargs: Dict[str, Any]) -> None:
+        """Add JSON-related kwargs."""
         if self.mode == GuidedMode.JSON and self.json_schema:
             kwargs["guided_json"] = self.json_schema
         elif self.mode == GuidedMode.JSON_OBJECT:
             kwargs["guided_json"] = {}  # Empty schema = any valid JSON object
-        elif self.mode == GuidedMode.REGEX and self.regex_pattern:
+
+    def _add_regex_kwargs(self, kwargs: Dict[str, Any]) -> None:
+        """Add regex-related kwargs."""
+        if self.mode == GuidedMode.REGEX and self.regex_pattern:
             kwargs["guided_regex"] = self.regex_pattern
-        elif self.mode == GuidedMode.CHOICE and self.choices:
+
+    def _add_choice_kwargs(self, kwargs: Dict[str, Any]) -> None:
+        """Add choice-related kwargs."""
+        if self.mode == GuidedMode.CHOICE and self.choices:
             kwargs["guided_choice"] = self.choices
-        elif self.mode == GuidedMode.GRAMMAR and self.grammar:
+
+    def _add_grammar_kwargs(self, kwargs: Dict[str, Any]) -> None:
+        """Add grammar-related kwargs."""
+        if self.mode == GuidedMode.GRAMMAR and self.grammar:
             kwargs["guided_grammar"] = self.grammar
 
+    def _add_whitespace_kwargs(self, kwargs: Dict[str, Any]) -> None:
+        """Add whitespace pattern kwargs."""
         if self.whitespace_pattern:
             kwargs["guided_whitespace_pattern"] = self.whitespace_pattern
+
+    def to_sampling_params_kwargs(self) -> Dict[str, Any]:
+        """Convert to kwargs for SamplingParams."""
+        kwargs = {}
+
+        self._add_json_kwargs(kwargs)
+        self._add_regex_kwargs(kwargs)
+        self._add_choice_kwargs(kwargs)
+        self._add_grammar_kwargs(kwargs)
+        self._add_whitespace_kwargs(kwargs)
 
         return kwargs
 
@@ -106,7 +125,7 @@ class RegexPattern:
     PYTHON_VARIABLE = r"[a-z_][a-z0-9_]*"
     CLASS_NAME = r"[A-Z][a-zA-Z0-9]*"
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         # Validate regex
         try:
             re.compile(self.pattern)
@@ -162,7 +181,7 @@ class ChoiceConstraint:
     choices: List[str]
     case_sensitive: bool = True
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.choices:
             raise ValueError("At least one choice is required")
 

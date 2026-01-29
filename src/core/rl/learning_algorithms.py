@@ -27,7 +27,7 @@ class PolicyGradientBuffer:
     log_probs: List[float] = field(default_factory=list)
     values: List[float] = field(default_factory=list)
 
-    def clear(self):
+    def clear(self) -> None:
         self.states.clear()
         self.actions.clear()
         self.rewards.clear()

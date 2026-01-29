@@ -21,9 +21,12 @@ Regex-based grammar engine.
 from __future__ import annotations
 
 import contextlib
+from sre_constants import _NamedIntConstant
 import sys
 import warnings
 from typing import Dict, Optional, Set
+
+from re._constants import _NamedIntConstant
 
 from .base import GrammarEngine
 from .models import FSMTransitionTable
@@ -55,8 +58,8 @@ _RANGE = _sre_constants.RANGE
 _SUBPATTERN = _sre_constants.SUBPATTERN
 _MAX_REPEAT = _sre_constants.MAX_REPEAT
 _MIN_REPEAT = _sre_constants.MIN_REPEAT
-_MAXREPEAT = _sre_constants.MAXREPEAT
-_BRANCH = getattr(_sre_constants, "BRANCH", None)
+_MAXREPEAT: _NamedIntConstant | _NamedIntConstant = _sre_constants.MAXREPEAT
+_BRANCH: contextlib.Any | None = getattr(_sre_constants, "BRANCH", None)
 
 
 class RegexGrammar(GrammarEngine):
@@ -81,7 +84,7 @@ class RegexGrammar(GrammarEngine):
         with contextlib.suppress(Exception):
             parsed = _sre_parse.parse(spec)
             nfa = self._build_nfa(parsed)
-            dfa = self._nfa_to_dfa(nfa)
+            dfa: FSMTransitionTable = self._nfa_to_dfa(nfa)
             self._compiled_cache[spec] = dfa
             return dfa
 
@@ -90,7 +93,7 @@ class RegexGrammar(GrammarEngine):
     def _build_nfa(self, parsed) -> Dict:
         """Build NFA from parsed regex."""
         nfa: Dict[int, Dict[str, Set[int]]] = {0: {}}
-        state_counter = [1]
+        state_counter: list[int] = [1]
         accepting = set()
 
         def _process_item(op, av, state: int) -> Set[int]:
@@ -99,15 +102,15 @@ class RegexGrammar(GrammarEngine):
                 nfa[state] = {}
 
             if op == _LITERAL:
-                char = chr(av)
-                new_state = state_counter[0]
+                char: str = chr(av)
+                new_state: int = state_counter[0]
                 state_counter[0] += 1
                 if char not in nfa[state]:
                     nfa[state][char] = set()
                 nfa[state][char].add(new_state)
                 new_end_states.add(new_state)
             elif op == _ANY:
-                new_state = state_counter[0]
+                new_state: int = state_counter[0]
                 state_counter[0] += 1
                 for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ":
                     if c not in nfa[state]:
@@ -115,32 +118,32 @@ class RegexGrammar(GrammarEngine):
                     nfa[state][c].add(new_state)
                 new_end_states.add(new_state)
             elif op == _IN:
-                new_state = state_counter[0]
+                new_state: int = state_counter[0]
                 state_counter[0] += 1
                 for item_op, item_av in av:
                     if item_op == _LITERAL:
-                        char = chr(item_av)
+                        char: str = chr(item_av)
                         if char not in nfa[state]:
                             nfa[state][char] = set()
                         nfa[state][char].add(new_state)
                     elif item_op == _RANGE:
                         for code in range(item_av[0], item_av[1] + 1):
-                            char = chr(code)
+                            char: str = chr(code)
                             if char not in nfa[state]:
                                 nfa[state][char] = set()
                             nfa[state][char].add(new_state)
                 new_end_states.add(new_state)
             elif op == _SUBPATTERN:
                 _, _, _, subpattern = av
-                sub_end = process_pattern(subpattern, state)
+                sub_end: Set[int] = process_pattern(subpattern, state)
                 new_end_states.update(sub_end)
             elif op in (_MAX_REPEAT, _MIN_REPEAT):
                 min_count, max_count, subpattern = av
-                current_states = {state}
+                current_states: Set[int] = {state}
                 for _ in range(min(min_count, 10)):
                     next_states = set()
                     for s in current_states:
-                        ends = process_pattern(subpattern, s)
+                        ends: Set[int] = process_pattern(subpattern, s)
                         next_states.update(ends)
                     current_states = next_states
                 if max_count > min_count or max_count == _MAXREPEAT:
@@ -151,7 +154,7 @@ class RegexGrammar(GrammarEngine):
             return new_end_states
 
         def process_pattern(pattern, start_state: int) -> Set[int]:
-            end_states = {start_state}
+            end_states: Set[int] = {start_state}
             for op, av in pattern:
                 new_total_end_states = set()
                 for state in end_states:
@@ -159,7 +162,7 @@ class RegexGrammar(GrammarEngine):
                 end_states = new_total_end_states if new_total_end_states else end_states
             return end_states
 
-        final_states = process_pattern(parsed, 0)
+        final_states: Set[int] = process_pattern(parsed, 0)
         accepting.update(final_states)
         return {"nfa": nfa, "accepting": accepting, "initial": 0}
 

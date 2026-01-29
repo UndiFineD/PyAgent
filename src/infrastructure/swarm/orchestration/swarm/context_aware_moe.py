@@ -34,13 +34,13 @@ class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
     relevant context shards.
     """
 
-    def __init__(self, gatekeeper: Any, context_manager: ContextShardManager):
+    def __init__(self, gatekeeper: Any, context_manager: ContextShardManager) -> None:
         super().__init__(gatekeeper)
         self.context_manager = context_manager
         # Mapping of expert_id to their running DP-rank
         self.expert_rank_map: Dict[str, int] = {}
 
-    def register_expert_location(self, expert_id: str, rank_id: int):
+    def register_expert_location(self, expert_id: str, rank_id: int) -> None:
         self.expert_rank_map[expert_id] = rank_id
 
     async def execute_context_task(self, task: str, context_id: str, focus_token: int = 0) -> Any:

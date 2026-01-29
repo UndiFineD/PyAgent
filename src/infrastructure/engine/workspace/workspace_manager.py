@@ -17,6 +17,7 @@ High-performance memory workspace manager for Phase 52.
 Handles DBO (Distributed Byte Object) allocation and 120fps sync channels.
 """
 
+from _thread import LockType
 import logging
 import threading
 import time
@@ -29,7 +30,7 @@ try:
 except ImportError:
     rc = None
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class WorkspaceManager:
@@ -39,7 +40,7 @@ class WorkspaceManager:
     """
 
     _instance: Optional["WorkspaceManager"] = None
-    _lock = threading.Lock()
+    _lock: LockType = threading.Lock()
     _initialized: bool = False
 
     def __new__(cls, *args, **kwargs) -> "WorkspaceManager":
@@ -53,7 +54,7 @@ class WorkspaceManager:
         if self._initialized:
             return
 
-        self.total_size = size_mb * 1024 * 1024
+        self.total_size: int = size_mb * 1024 * 1024
         self.allocated = 0
         self._workspaces: Dict[str, Any] = {}
         self._channels: Dict[int, Any] = {}
@@ -61,7 +62,7 @@ class WorkspaceManager:
         self.predictive = PredictiveWorkspace(self)
 
         # Performance metrics
-        self.last_sync_time = time.time()
+        self.last_sync_time: float = time.time()
         self.sync_jitters: List[float] = []
 
         if rc and hasattr(rc, "workspace_init_rust"):
@@ -83,7 +84,7 @@ class WorkspaceManager:
         Uses Predictive buffer if available, otherwise allocates new.
         """
         # Phase 58: Check predictive buffer first
-        buffered = self.predictive.get_buffered_allocation(size)
+        buffered: memoryview[int] | None = self.predictive.get_buffered_allocation(size)
         if buffered:
             logger.debug(f"Workspace: Reusing pre-warmed buffer for {name}")
             return buffered
@@ -116,8 +117,8 @@ class WorkspaceManager:
         Channels are synchronized to the global inference clock.
         """
         with self._lock:
-            name = f"dvd_ch_{channel_id:04d}"
-            dbo = self.allocate_dbo(name, buffer_size)
+            name: str = f"dvd_ch_{channel_id:04d}"
+            dbo: memoryview[int] | None = self.allocate_dbo(name, buffer_size)
             if dbo:
                 self._channels[channel_id] = {"buffer": dbo, "name": name, "last_beat": time.time()}
                 logger.debug(f"Registered DVD-channel {channel_id} (DBO: {name})")
@@ -129,8 +130,8 @@ class WorkspaceManager:
         Sends a synchronization beat across all active 120fps channels.
         Target jitter: < 1.0ms.
         """
-        now = time.time()
-        jitter = (now - self.last_sync_time) - (1.0 / 120.0)
+        now: float = time.time()
+        jitter: float = (now - self.last_sync_time) - (1.0 / 120.0)
         self.sync_jitters.append(jitter)
         if len(self.sync_jitters) > 120:
             self.sync_jitters.pop(0)
@@ -138,7 +139,7 @@ class WorkspaceManager:
         if rc and hasattr(rc, "workspace_sync_beat_rust"):
             rc.workspace_sync_beat_rust(self._handle)
 
-        self.last_sync_time = now
+        self.last_sync_time: float = now
 
     def get_utilization(self) -> float:
         """Returns the current memory utilization percentage."""

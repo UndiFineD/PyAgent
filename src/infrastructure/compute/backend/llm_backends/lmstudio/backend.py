@@ -171,6 +171,62 @@ class LMStudioBackend(LLMBackend):
             logger.error(f"Failed to get model '{model}': {e}")
             raise
 
+    def _handle_chat_response(self, result: Any, start_time: float, model: str, prompt: str, system_prompt: str) -> str:
+        """Handle successful chat response and record metrics."""
+        elapsed = time.time() - start_time
+        response_text = str(result)
+
+        logger.debug(f"LM Studio response in {elapsed:.2f}s: {len(response_text)} chars")
+
+        self._record(
+            self.PROVIDER_ID,
+            model or "default",
+            prompt,
+            response_text,
+            system_prompt=system_prompt,
+        )
+        self._update_status(self.PROVIDER_ID, True)
+
+        return response_text
+
+    def _handle_model_not_found_error(self, e: "lmstudio.LMStudioModelNotFoundError", model: str, prompt: str, system_prompt: str) -> str:
+        """Handle model not found error."""
+        logger.warning(f"LM Studio model not found: {e}")
+        self._update_status(self.PROVIDER_ID, False)
+        self._record(
+            self.PROVIDER_ID,
+            model or "default",
+            prompt,
+            f"ERROR: Model not found - {e}",
+            system_prompt=system_prompt,
+        )
+        return ""
+
+    def _handle_timeout_error(self, e: "lmstudio.LMStudioTimeoutError") -> str:
+        """Handle timeout error."""
+        logger.warning(f"LM Studio timeout: {e}")
+        self._update_status(self.PROVIDER_ID, False)
+        return ""
+
+    def _handle_lmstudio_error(self, e: "lmstudio.LMStudioError", model: str, prompt: str, system_prompt: str) -> str:
+        """Handle general LM Studio error."""
+        logger.error(f"LM Studio error: {e}")
+        self._update_status(self.PROVIDER_ID, False)
+        self._record(
+            self.PROVIDER_ID,
+            model or "default",
+            prompt,
+            f"ERROR: {e}",
+            system_prompt=system_prompt,
+        )
+        return ""
+
+    def _handle_generic_error(self, e: Exception) -> str:
+        """Handle generic exceptions."""
+        logger.debug(f"LM Studio call failed: {e}")
+        self._update_status(self.PROVIDER_ID, False)
+        return ""
+
     def chat(
         self,
         prompt: str,
@@ -196,53 +252,16 @@ class LMStudioBackend(LLMBackend):
 
             start_time = time.time()
             result = llm.respond(chat, config=config)
-            elapsed = time.time() - start_time
-
-            response_text = str(result)
-
-            logger.debug(f"LM Studio response in {elapsed:.2f}s: {len(response_text)} chars")
-
-            self._record(
-                self.PROVIDER_ID,
-                model or "default",
-                prompt,
-                response_text,
-                system_prompt=system_prompt,
-            )
-            self._update_status(self.PROVIDER_ID, True)
-
-            return response_text
+            return self._handle_chat_response(result, start_time, model, prompt, system_prompt)
 
         except lmstudio.LMStudioModelNotFoundError as e:
-            logger.warning(f"LM Studio model not found: {e}")
-            self._update_status(self.PROVIDER_ID, False)
-            self._record(
-                self.PROVIDER_ID,
-                model or "default",
-                prompt,
-                f"ERROR: Model not found - {e}",
-                system_prompt=system_prompt,
-            )
-            return ""
+            return self._handle_model_not_found_error(e, model, prompt, system_prompt)
         except lmstudio.LMStudioTimeoutError as e:
-            logger.warning(f"LM Studio timeout: {e}")
-            self._update_status(self.PROVIDER_ID, False)
-            return ""
+            return self._handle_timeout_error(e)
         except lmstudio.LMStudioError as e:
-            logger.error(f"LM Studio error: {e}")
-            self._update_status(self.PROVIDER_ID, False)
-            self._record(
-                self.PROVIDER_ID,
-                model or "default",
-                prompt,
-                f"ERROR: {e}",
-                system_prompt=system_prompt,
-            )
-            return ""
+            return self._handle_lmstudio_error(e, model, prompt, system_prompt)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.debug(f"LM Studio call failed: {e}")
-            self._update_status(self.PROVIDER_ID, False)
-            return ""
+            return self._handle_generic_error(e)
 
     def chat_stream(
         self,

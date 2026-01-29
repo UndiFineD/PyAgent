@@ -39,25 +39,25 @@ class TensorMetadata:
     def to_bytes(self) -> bytes:
         """Serialize metadata to bytes."""
         # Name (length-prefixed)
-        name_bytes = self.name.encode("utf-8")
-        result = struct.pack("<I", len(name_bytes)) + name_bytes
+        name_bytes: bytes = self.name.encode("utf-8")
+        result: bytes = struct.pack("<I", len(name_bytes)) + name_bytes
 
         # Shape (length-prefixed array)
         result += struct.pack("<I", len(self.shape))
-        for dim in self.shape:
+        for dim: int in self.shape:
             result += struct.pack("<Q", dim)
 
         # Dtype
-        dtype_bytes = self.dtype.value.encode("utf-8")
+        dtype_bytes: bytes = self.dtype.value.encode("utf-8")
         result += struct.pack("<I", len(dtype_bytes)) + dtype_bytes
 
         # Offset, size, checksum
         result += struct.pack("<QQ", self.offset, self.size_bytes)
-        checksum_bytes = self.checksum.encode("utf-8")
+        checksum_bytes: bytes = self.checksum.encode("utf-8")
         result += struct.pack("<I", len(checksum_bytes)) + checksum_bytes
 
         # Compression
-        comp_bytes = self.compression.value.encode("utf-8")
+        comp_bytes: bytes = self.compression.value.encode("utf-8")
         result += struct.pack("<I", len(comp_bytes)) + comp_bytes
         result += struct.pack("<Q", self.compressed_size)
 
@@ -69,21 +69,21 @@ class TensorMetadata:
         # Name
         name_len = struct.unpack_from("<I", data, pos)[0]
         pos += 4
-        name = data[pos : pos + name_len].decode("utf-8")
+        name: str = data[pos : pos + name_len].decode("utf-8")
         pos += name_len
 
         # Shape
         shape_len = struct.unpack_from("<I", data, pos)[0]
         pos += 4
         shape = []
-        for _ in range(shape_len):
+        for _: int in range(shape_len):
             shape.append(struct.unpack_from("<Q", data, pos)[0])
             pos += 8
 
         # Dtype
         dtype_len = struct.unpack_from("<I", data, pos)[0]
         pos += 4
-        dtype_str = data[pos : pos + dtype_len].decode("utf-8")
+        dtype_str: str = data[pos : pos + dtype_len].decode("utf-8")
         pos += dtype_len
         dtype = TensorDtype(dtype_str)
 
@@ -92,13 +92,13 @@ class TensorMetadata:
         pos += 16
         checksum_len = struct.unpack_from("<I", data, pos)[0]
         pos += 4
-        checksum = data[pos : pos + checksum_len].decode("utf-8")
+        checksum: str = data[pos : pos + checksum_len].decode("utf-8")
         pos += checksum_len
 
         # Compression
         comp_len = struct.unpack_from("<I", data, pos)[0]
         pos += 4
-        comp_str = data[pos : pos + comp_len].decode("utf-8")
+        comp_str: str = data[pos : pos + comp_len].decode("utf-8")
         pos += comp_len
         compression = CompressionType(comp_str)
         compressed_size = struct.unpack_from("<Q", data, pos)[0]

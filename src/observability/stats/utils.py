@@ -81,9 +81,9 @@ def main() -> None:
         # Visualize only if requested and available
         with contextlib.suppress(ImportError):
             agent.visualize_stats()
+    except (OSError, json.JSONDecodeError) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        logging.error(f"Unexpected error: {str(e)}")
+        sys.exit(1)
     except ValueError as e:
         logging.error(str(e))
-        sys.exit(1)
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        logging.error(f"Unexpected error: {str(e)}")
         sys.exit(1)

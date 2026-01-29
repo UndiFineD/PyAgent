@@ -28,7 +28,7 @@ class P2PMigrationEngine:
         self.shard_manager = shard_manager
         self.migration_history: List[Dict[str, Any]] = []
 
-    async def migrate_shard(self, context_id: str, shard_index: int, target_rank: int):
+    async def migrate_shard(self, context_id: str, shard_index: int, target_rank: int) -> None:
         """
         Migrates a specific shard to a new node.
         Simulates an RDMA transfer by bypassing standard I/O waits.

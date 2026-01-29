@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+from __future__ import annotations
 
 """
 Orchestrator agent.py module.
 """
-# Copyright 2026 PyAgent Authors
+"""
+Module: orchestrator_agent
+Implements orchestration logic for PyAgent system agents.
+"""
 # Standardized OrchestratorAgent for Swarm Intelligence
-
-from __future__ import annotations
 
 import logging
 import time
@@ -14,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.execution.agent_command_handler import AgentCommandHandler
-from src.core.base.lifecycle.base_agent import BaseAgent
+BaseAgent = None  # Will be imported locally to avoid circular import
 from src.core.base.lifecycle.version import VERSION
 
 from .orchestrator_features import OrchestratorFeatures
@@ -22,7 +25,7 @@ from .orchestrator_features import OrchestratorFeatures
 __version__ = VERSION
 
 
-class OrchestratorAgent(BaseAgent, OrchestratorFeatures):  # pylint: disable=too-many-ancestors
+class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
     """
     Primary orchestrator for swarm agentic workflows.
     Combines core BaseAgent capabilities with specialized orchestrator features.
@@ -32,12 +35,16 @@ class OrchestratorAgent(BaseAgent, OrchestratorFeatures):  # pylint: disable=too
     """
 
     def __init__(self, file_path: str = ".", **kwargs: Any) -> None:
+        global BaseAgent
+        if BaseAgent is None:
+            from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
+            BaseAgent = _BaseAgent
         # Handle cases where repo_root is passed instead of file_path
         repo_root = kwargs.get("repo_root")
         if repo_root and (file_path == "." or not file_path):
             file_path = repo_root
-
-        super().__init__(str(file_path), **kwargs)
+        self._base = BaseAgent(str(file_path), **kwargs)
+        super().__init__()
 
         # Initialize legacy components expected by some integration tests
         self.command_handler = AgentCommandHandler(str(self._workspace_root))

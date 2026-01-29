@@ -1,3 +1,7 @@
+"""
+Module: triton_attention_ops
+Triton-based attention operations for PyAgent engine.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +45,33 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
-logger = logging.getLogger(__name__)
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+logger: logging.Logger = logging.getLogger(__name__)
 
 # Try importing PyTorch and Triton
 try:
@@ -211,7 +241,7 @@ if HAS_TRITON and HAS_TORCH:
         block_size: tl.constexpr,
         scale: tl.constexpr,
         BLOCK_D: tl.constexpr,
-    ):
+    ) -> None:
         """Triton kernel for paged attention decode.
 
         Inspired by vLLM's kernel_paged_attention_2d.
@@ -240,7 +270,7 @@ if HAS_TRITON and HAS_TORCH:
         # Process each block
         num_blocks = (context_len + block_size - 1) // block_size
 
-        for block_idx in range(num_blocks):
+        for block_idx: int in range(num_blocks):
             # Get physical block number from block table
             block_table_offset = batch_idx * stride_block_tables_batch
             phys_block = tl.load(block_tables_ptr + block_table_offset + block_idx * stride_block_tables_block)
@@ -249,7 +279,7 @@ if HAS_TRITON and HAS_TORCH:
             k_offset = phys_block * stride_k_cache_block + kv_head_idx * stride_k_cache_head
 
             # Compute attention scores for this block
-            for seq_pos in range(block_size):
+            for seq_pos: int in range(block_size):
                 abs_pos = block_idx * block_size + seq_pos
                 if abs_pos < context_len:
                     # Load key vector
@@ -292,8 +322,8 @@ class TritonPagedAttention(AttentionKernel):
     """
 
     def __init__(self, config: AttentionConfig) -> None:
-        self.config = config
-        self.scale = 1.0 / math.sqrt(config.head_dim)
+        self.config: AttentionConfig = config
+        self.scale: float = 1.0 / math.sqrt(config.head_dim)
 
     def forward(
         self,
@@ -311,14 +341,14 @@ class TritonPagedAttention(AttentionKernel):
         batch_size, num_heads, head_dim = query.shape
 
         # Allocate output
-        output = torch.empty_like(query)
+        output: Tensor = torch.empty_like(query)
 
         # Check for block tables
         if metadata.block_tables is None:
             raise ValueError("Block tables required for paged attention")
 
         # Launch kernel
-        grid = (batch_size, num_heads)
+        grid: tuple[int, int] = (batch_size, num_heads)
 
         _paged_attention_kernel[grid](
             output,
@@ -363,8 +393,8 @@ class NaiveAttention(AttentionKernel):
     """Reference implementation of attention (CPU/GPU compatible)."""
 
     def __init__(self, config: AttentionConfig) -> None:
-        self.config = config
-        self.scale = 1.0 / math.sqrt(config.head_dim)
+        self.config: AttentionConfig = config
+        self.scale: float = 1.0 / math.sqrt(config.head_dim)
 
     def forward(
         self,
@@ -389,9 +419,9 @@ class NaiveAttention(AttentionKernel):
     ) -> "torch.Tensor":
         """PyTorch implementation."""
         # Standard attention computation
-        scores = torch.matmul(query, key.transpose(-2, -1)) * self.scale
-        attn_weights = torch.softmax(scores, dim=-1)
-        output = torch.matmul(attn_weights, value)
+        scores: Tensor = torch.matmul(query, key.transpose(-2, -1)) * self.scale
+        attn_weights: Tensor = torch.softmax(scores, dim=-1)
+        output: Tensor = torch.matmul(attn_weights, value)
         return output
 
     def _forward_numpy(
@@ -419,9 +449,9 @@ class SlidingWindowAttention(AttentionKernel):
     """Sliding window attention for efficient long-context handling."""
 
     def __init__(self, config: AttentionConfig) -> None:
-        self.config = config
-        self.scale = 1.0 / math.sqrt(config.head_dim)
-        self.window_size = config.sliding_window_size
+        self.config: AttentionConfig = config
+        self.scale: float = 1.0 / math.sqrt(config.head_dim)
+        self.window_size: int = config.sliding_window_size
 
     def forward(
         self,
@@ -439,23 +469,23 @@ class SlidingWindowAttention(AttentionKernel):
         _, _, seq_len, _ = query.shape
 
         # Create sliding window mask
-        causal_mask = torch.ones(seq_len, seq_len, device=query.device, dtype=torch.bool)
-        causal_mask = torch.tril(causal_mask)
+        causal_mask: Tensor = torch.ones(seq_len, seq_len, device=query.device, dtype=torch.bool)
+        causal_mask: Tensor = torch.tril(causal_mask)
 
         # Apply sliding window
-        window_mask = torch.ones_like(causal_mask)
-        for i in range(seq_len):
-            start = max(0, i - self.window_size + 1)
+        window_mask: Tensor = torch.ones_like(causal_mask)
+        for i: int in range(seq_len):
+            start: int = max(0, i - self.window_size + 1)
             window_mask[i, :start] = 0
 
-        mask = causal_mask & window_mask
-        mask = mask.unsqueeze(0).unsqueeze(0)  # [1, 1, seq, seq]
+        mask: Tensor = causal_mask & window_mask
+        mask: Tensor = mask.unsqueeze(0).unsqueeze(0)  # [1, 1, seq, seq]
 
         # Compute attention
-        scores = torch.matmul(query, key.transpose(-2, -1)) * self.scale
-        scores = scores.masked_fill(~mask, float("-inf"))
-        attn_weights = torch.softmax(scores, dim=-1)
-        output = torch.matmul(attn_weights, value)
+        scores: Tensor = torch.matmul(query, key.transpose(-2, -1)) * self.scale
+        scores: Tensor = scores.masked_fill(~mask, float("-inf"))
+        attn_weights: Tensor = torch.softmax(scores, dim=-1)
+        output: Tensor = torch.matmul(attn_weights, value)
 
         return output
 
@@ -495,15 +525,15 @@ class TritonAttentionOps:
         Args:
             config: Attention configuration
         """
-        self.config = config
+        self.config: AttentionConfig = config
 
         # Select backend
-        backend = config.backend
+        backend: AttentionBackend = config.backend
         if backend == AttentionBackend.TRITON and not HAS_TRITON:
             logger.warning("Triton not available, falling back to naive attention")
-            backend = AttentionBackend.NAIVE
+            backend: AttentionBackend = AttentionBackend.NAIVE
 
-        kernel_cls = self._BACKEND_MAP.get(backend, NaiveAttention)
+        kernel_cls: type = self._BACKEND_MAP.get(backend, NaiveAttention)
         self._kernel = kernel_cls(config)
 
         # Sliding window kernel
@@ -575,16 +605,16 @@ class TritonAttentionOps:
         if not HAS_TORCH:
             raise RuntimeError("KV splits require PyTorch")
 
-        num_splits = self._kv_split.num_splits
-        max_context = metadata.max_decode_seq_len
-        split_size = (max_context + num_splits - 1) // num_splits
+        num_splits: int = self._kv_split.num_splits
+        max_context: int = metadata.max_decode_seq_len
+        split_size: int = (max_context + num_splits - 1) // num_splits
 
         # Collect split outputs
         split_outputs = []
 
-        for i in range(num_splits):
-            start_pos = i * split_size
-            end_pos = min((i + 1) * split_size, max_context)
+        for i: int in range(num_splits):
+            start_pos: int = i * split_size
+            end_pos: int = min((i + 1) * split_size, max_context)
 
             if start_pos >= max_context:
                 break

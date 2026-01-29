@@ -36,6 +36,11 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, Dict, List
 
+"""
+Module: pipeline_parallel_transfer
+Implements pipeline parallel transfer for distributed KV storage in PyAgent.
+"""
+
 from src.core.lazy_loader import LazyLoader
 
 if TYPE_CHECKING:
@@ -63,10 +68,6 @@ class PipelineParallelTransfer:
         self.pp_size = pp_size
         self.local_connector = local_connector
 
-        # Mapping of local layers to this stage
-        self.local_layers: List[int] = []
-
-        logger.info("PipelineParallelTransfer initialized for rank %d/%d", pp_rank, pp_size)
 
     def _calculate_pp_stage_mapping_rust(self, num_layers: int, pp_size: int) -> Dict[int, int]:
         """Rust-accelerated calculation of layer-to-stage distribution."""

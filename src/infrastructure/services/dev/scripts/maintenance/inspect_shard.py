@@ -1,4 +1,8 @@
 
+"""
+Module: inspect_shard
+Inspects and validates shard data for distributed storage in PyAgent.
+"""
 import gzip
 import json
 import sys

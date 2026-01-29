@@ -90,9 +90,7 @@ def get_eagle_proposer() -> Type["EagleProposer"]:
     """
     Lazily import and return the EagleProposer class.
 
-    EagleProposer implements EAGLE-style speculative decoding with tree
-    attention for faster inference. This is a large module (~710 lines)
-    with significant dependencies.
+    EagleProposer implements EAGLE-style speculative decoding with tree attention for faster inference. This is a large module (~710 lines) with significant dependencies.
 
     Returns:
         The EagleProposer class for instantiation.

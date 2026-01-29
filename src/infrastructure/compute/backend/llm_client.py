@@ -86,6 +86,16 @@ class LLMClient:
             "lmstudio": LMStudioBackend(self.session, self.connectivity, self.recorder),
         }
 
+    def _is_backend_disabled(self, backend_name: str) -> bool:
+        """Check if a backend is disabled via environment variables."""
+        disabled_backends = os.environ.get("DV_DISABLED_BACKENDS", "").strip()
+        if not disabled_backends:
+            return False
+        
+        # Split by comma and strip whitespace
+        disabled_list = [b.strip().lower() for b in disabled_backends.split(",")]
+        return backend_name.lower() in disabled_list
+
     def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "") -> str:
         """Central entry point for chat completion. Compresses prompt before sending."""
         # 1. Compress system prompt via Core
@@ -229,6 +239,14 @@ class LLMClient:
         'local' preference attempts Native vLLM, then remote vLLM/Ollama, then Copilot CLI.
         Implements Phase 108 Result Caching for extreme speed.
         """
+        # Ensure local_model has a default value if empty - read from environment for Ollama
+        if not local_model:
+            # Read from DV_OLLAMA_MODEL environment variable, default to tinyllama
+            env_model = os.environ.get("DV_OLLAMA_MODEL", "tinyllama").strip("'\"")
+            # Map 'tinyllama' to 'tinyllama:latest' to match Ollama's model tag
+            if env_model == "tinyllama":
+                env_model = "tinyllama:latest"
+            local_model = env_model
         # Phase 108: Check Result Cache First
         cache_key = self._get_cache_key(preference, local_model, prompt, system_prompt)
         if cache_key in self._result_cache:
@@ -241,11 +259,16 @@ class LLMClient:
         # Phase 317 robustness: If preferred is copilot_cli, we only use it if no other
         # local backends are available, as it's low-quality for code fixes.
         if preferred == "copilot_cli" and (
-            self.connectivity.is_endpoint_available("ollama")
-            or self.connectivity.is_endpoint_available("vllm")
-            or self.connectivity.is_endpoint_available("vllm_native")
+            (not self._is_backend_disabled("ollama") and self.connectivity.is_endpoint_available("ollama"))
+            or (not self._is_backend_disabled("vllm") and self.connectivity.is_endpoint_available("vllm"))
+            or (not self._is_backend_disabled("vllm_native") and self.connectivity.is_endpoint_available("vllm_native"))
         ):
             logging.debug("LLMClient: Skipping 'copilot_cli' preferred in favor of better local options.")
+            preferred = None
+
+        # Skip disabled backends
+        if preferred and self._is_backend_disabled(preferred):
+            logging.debug(f"LLMClient: Skipping disabled backend '{preferred}'.")
             preferred = None
 
         if preferred:
@@ -274,8 +297,10 @@ class LLMClient:
             "copilot_cli",
             "github_models",
         ]
-        if all(not self.connectivity.is_endpoint_available(b) for b in known_backends):
-            logging.info("LLMClient: All backends cached as offline. Forcing cache bypass for robustness.")
+        # Filter out disabled backends
+        available_backends = [b for b in known_backends if not self._is_backend_disabled(b)]
+        if all(not self.connectivity.is_endpoint_available(b) for b in available_backends):
+            logging.info("LLMClient: All available backends cached as offline. Forcing cache bypass for robustness.")
             force_retry = True
 
         result = ""
@@ -283,31 +308,36 @@ class LLMClient:
 
         if preference == "local":
             # 0. Try LM Studio (Highest Priority Local, Phase 21)
-            if force_retry or self.connectivity.is_endpoint_available("lmstudio"):
+            if (not self._is_backend_disabled("lmstudio") and
+                    (force_retry or self.connectivity.is_endpoint_available("lmstudio"))):
                 result = self.llm_chat_via_lmstudio(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
                     used_provider = "lmstudio"
 
             # 1. Try Native vLLM Library (High Performance Local, Phase 108)
-            if not result and (force_retry or self.connectivity.is_endpoint_available("vllm_native")):
+            if (not result and not self._is_backend_disabled("vllm_native") and
+                    (force_retry or self.connectivity.is_endpoint_available("vllm_native"))):
                 result = self.llm_chat_via_vllm_native(prompt, system_prompt=system_prompt, model=local_model)
                 if result:
                     used_provider = "vllm_native"
 
             # 2. Try vLLM Server (Remote/Docker)
-            if not result and (force_retry or self.connectivity.is_endpoint_available("vllm")):
+            if (not result and not self._is_backend_disabled("vllm") and
+                    (force_retry or self.connectivity.is_endpoint_available("vllm"))):
                 result = self.llm_chat_via_vllm(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
                     used_provider = "vllm"
 
             # 3. Try Ollama if vLLM failed
-            if not result and (force_retry or self.connectivity.is_endpoint_available("ollama")):
+            if (not result and not self._is_backend_disabled("ollama") and
+                    (force_retry or self.connectivity.is_endpoint_available("ollama"))):
                 result = self.llm_chat_via_ollama(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
                     used_provider = "ollama"
 
             # 3. Try Copilot CLI if local servers failed
-            if not result and (force_retry or self.connectivity.is_endpoint_available("copilot_cli")):
+            if (not result and not self._is_backend_disabled("copilot_cli") and
+                    (force_retry or self.connectivity.is_endpoint_available("copilot_cli"))):
                 result = self.llm_chat_via_copilot_cli(prompt, system_prompt=system_prompt)
                 if result:
                     used_provider = "copilot_cli"

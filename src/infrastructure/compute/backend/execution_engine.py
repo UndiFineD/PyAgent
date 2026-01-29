@@ -130,7 +130,12 @@ def llm_chat_via_github_models(
 
 def llm_chat_via_ollama(prompt: str, model: str = "llama3") -> str | None:
     """Call local Ollama endpoint."""
-    return _runner.llm_chat_via_ollama(prompt=prompt, model=model)
+    import os
+    env_model = os.environ.get("DV_OLLAMA_MODEL", "tinyllama").strip("'\"")
+    # Map 'tinyllama' to 'tinyllama:latest' if present, to match Ollama's model tag
+    if env_model == "tinyllama":
+        env_model = "tinyllama:latest"
+    return _runner.llm_chat_via_ollama(prompt=prompt, model=env_model)
 
 
 def llm_chat_via_copilot_cli(prompt: str) -> str | None:

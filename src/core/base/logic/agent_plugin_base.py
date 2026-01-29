@@ -26,7 +26,7 @@ from src.core.base.common.models import (AgentHealthCheck, AgentPriority,
                                          HealthStatus)
 from src.core.base.lifecycle.version import VERSION
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 class AgentPluginBase(ABC):
@@ -54,10 +54,10 @@ class AgentPluginBase(ABC):
             priority: Execution priority.
             config: Plugin - specific configuration.
         """
-        self.name = name
-        self.priority = priority
-        self.config = config or {}
-        self.logger = logging.getLogger(f"plugin.{name}")
+        self.name: str = name
+        self.priority: AgentPriority = priority
+        self.config: dict[str, Any] = config or {}
+        self.logger: logging.Logger = logging.getLogger(f"plugin.{name}")
 
     @abstractmethod
     def run(self, file_path: Path, context: dict[str, Any]) -> bool:

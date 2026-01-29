@@ -525,22 +525,44 @@ class SlidingWindowAggregator:
         count = len(values)
 
         if count == 0:
-            return {
-                "count": 0,
-                "window_seconds": self._window_seconds,
-            }
+            return self._get_empty_stats()
 
         values.sort()
+        return self._get_populated_stats(values, count)
+
+    def _get_empty_stats(self) -> dict:
+        """Get statistics when no values are present."""
+        return {
+            "count": 0,
+            "window_seconds": self._window_seconds,
+        }
+
+    def _get_populated_stats(self, values: list[float], count: int) -> dict:
+        """Get statistics when values are present."""
+        base_stats = self._calculate_basic_stats(values)
+        percentile_stats = self._calculate_percentiles(values, count)
 
         return {
-            "count": count,
+            **base_stats,
+            **percentile_stats,
             "window_seconds": self._window_seconds,
+        }
+
+    def _calculate_basic_stats(self, values: list[float]) -> dict:
+        """Calculate basic statistical measures."""
+        return {
+            "count": len(values),
             "sum": sum(values),
             "mean": statistics.mean(values),
             "min": values[0],
             "max": values[-1],
             "median": statistics.median(values),
-            "stdev": statistics.stdev(values) if count > 1 else 0.0,
+            "stdev": statistics.stdev(values) if len(values) > 1 else 0.0,
+        }
+
+    def _calculate_percentiles(self, values: list[float], count: int) -> dict:
+        """Calculate percentile statistics."""
+        return {
             "p50": values[int(count * 0.5)],
             "p90": values[int(count * 0.9)],
             "p95": values[int(count * 0.95)],

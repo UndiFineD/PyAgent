@@ -104,7 +104,7 @@ class ObjectiveConstraint:
 class ObjectiveTracker:
     """Manages high-level goals for the self-improving fleet."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.objectives: List[LearningObjective] = [
             LearningObjective(
                 name="Scalability",
@@ -220,25 +220,36 @@ class ObjectiveTracker:
         reward = 0.0
 
         # Progress reward
-        for obj in self.objectives:
-            if obj.target_metric in metrics:
-                old_progress = obj.progress
-                # Simulate update
-                temp_value = obj.current_value
-                obj.current_value = metrics[obj.target_metric]
-                new_progress = obj.progress
-                obj.current_value = temp_value  # Revert
-
-                # Reward for improvement
-                improvement = new_progress - old_progress
-                weight = self._objective_weights.get(obj.name, 0.0)
-                reward += weight * improvement * 10.0  # Scale factor
+        reward += self._calculate_progress_reward(metrics)
 
         # Penalty for constraint violations
         violations = self.check_constraints(metrics)
         reward -= len(violations) * 5.0
 
         return reward
+
+    def _calculate_progress_reward(self, metrics: Dict[str, float]) -> float:
+        """Calculate reward based on objective progress improvements."""
+        total_reward = 0.0
+
+        for obj in self.objectives:
+            if obj.target_metric in metrics:
+                improvement = self._calculate_single_objective_improvement(obj, metrics[obj.target_metric])
+                weight = self._objective_weights.get(obj.name, 0.0)
+                total_reward += weight * improvement * 10.0  # Scale factor
+
+        return total_reward
+
+    def _calculate_single_objective_improvement(self, obj: LearningObjective, new_value: float) -> float:
+        """Calculate improvement for a single objective."""
+        old_progress = obj.progress
+        # Simulate update
+        temp_value = obj.current_value
+        obj.current_value = new_value
+        new_progress = obj.progress
+        obj.current_value = temp_value  # Revert
+
+        return new_progress - old_progress
 
     def get_status_report(self) -> Dict[str, Any]:
         """Returns a comprehensive status report."""

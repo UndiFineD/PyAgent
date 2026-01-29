@@ -25,7 +25,7 @@ except ImportError:
     # pylint: disable=invalid-name
     class FastApiMCP:
         """Dummy FastApiMCP class for type checking when package is missing."""
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args: object, **kwargs: object) -> None:
             pass
 
 from src.core.base.lifecycle.version import VERSION

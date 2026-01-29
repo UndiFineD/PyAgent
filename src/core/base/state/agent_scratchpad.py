@@ -30,8 +30,8 @@ class AgentScratchpad:
 
     def take_note(self, note: str, agent_name: str = "UnknownAgent") -> str:
         """Record a persistent note into the internal scratchpad."""
-        timestamp = datetime.now().strftime("%H:%M:%S")
-        formatted_note = f"[{timestamp}] {note}"
+        timestamp: str = datetime.now().strftime("%H:%M:%S")
+        formatted_note: str = f"[{timestamp}] {note}"
         self._scratchpad.append(formatted_note)
         logging.info(f"Agent {agent_name} took a note: {note}")
         return f"Note recorded: {note}"

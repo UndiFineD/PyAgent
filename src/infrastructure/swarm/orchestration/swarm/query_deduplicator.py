@@ -24,7 +24,7 @@ from typing import Any, Dict, Optional
 from src.infrastructure.engine.models.similarity import \
     EmbeddingSimilarityService
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class SwarmQueryDeduplicator:
@@ -33,9 +33,9 @@ class SwarmQueryDeduplicator:
     If a similar query is already being processed, returns a 'Wait and Join' signal.
     """
 
-    def __init__(self, similarity_service: EmbeddingSimilarityService, threshold: float = 0.98):
-        self.similarity_service = similarity_service
-        self.threshold = threshold
+    def __init__(self, similarity_service: EmbeddingSimilarityService, threshold: float = 0.98) -> None:
+        self.similarity_service: EmbeddingSimilarityService = similarity_service
+        self.threshold: float = threshold
         # maps task_id -> {prompt, future, start_time}
         self.inflight_queries: Dict[str, Dict[str, Any]] = {}
         # maps hash(prompt) -> result (short-term cache)
@@ -47,14 +47,14 @@ class SwarmQueryDeduplicator:
         Returns the existing Future if found, otherwise registers and returns None.
         """
         # Exact match check (fast)
-        exact_hash = hash(prompt)
+        exact_hash: int = hash(prompt)
         if exact_hash in self.recent_results:
             logger.info(f"[Phase 86] Deduplicator: Exact hit for task {task_id}. Serving from recent results.")
             return self.recent_results[exact_hash]
 
         # Semantic check against inflight queries
         for inflight_id, data in self.inflight_queries.items():
-            similarity = await self.similarity_service.compute_similarity(prompt, data["prompt"])
+            similarity: float = await self.similarity_service.compute_similarity(prompt, data["prompt"])
             if similarity >= self.threshold:
                 logger.info(
                     f"[Phase 86] Deduplicator: Semantic collision ({similarity:.3f}). "
@@ -63,21 +63,21 @@ class SwarmQueryDeduplicator:
                 return data["future"]
 
         # No match found, register this query
-        loop = asyncio.get_running_loop()
-        future = loop.create_future()
+        loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
+        future: asyncio.Future[Any] = loop.create_future()
         self.inflight_queries[task_id] = {"prompt": prompt, "future": future, "start_time": time.time()}
         return None
 
-    def complete_query(self, task_id: str, result: Any):
+    def complete_query(self, task_id: str, result: Any) -> None:
         """Marks a query as done and notifies all joiners."""
         if task_id in self.inflight_queries:
-            data = self.inflight_queries.pop(task_id)
+            data: Dict[str, Any] = self.inflight_queries.pop(task_id)
             data["future"].set_result(result)
             # Cache for immediate future exact repeats
             self.recent_results[hash(data["prompt"])] = result
             logger.debug(f"[Phase 86] Deduplicator: Completed task {task_id} and notified joiners.")
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Prunes stale entries."""
         # Cleanup recent_results could be added here
         pass

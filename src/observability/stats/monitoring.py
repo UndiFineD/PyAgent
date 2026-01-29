@@ -13,6 +13,8 @@ import platform
 from pathlib import Path
 from typing import Any
 
+from psutil._common import sdiskusage
+
 try:
     import psutil
 
@@ -20,7 +22,7 @@ try:
 except ImportError:
     HAS_PSUTIL = False
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
@@ -28,7 +30,7 @@ class ResourceMonitor:
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.stats_file = self.workspace_root / ".system_stats.json"
+        self.stats_file: Path = self.workspace_root / ".system_stats.json"
 
     def get_current_stats(self) -> dict[str, Any]:
         stats = {
@@ -44,7 +46,7 @@ class ResourceMonitor:
         try:
             stats["cpu_usage_pct"] = psutil.cpu_percent(interval=None)
             stats["memory_usage_pct"] = psutil.virtual_memory().percent
-            disk = psutil.disk_usage(str(self.workspace_root))
+            disk: sdiskusage = psutil.disk_usage(str(self.workspace_root))
             stats["disk_free_gb"] = round(disk.free / (1024**3), 2)
             if stats["cpu_usage_pct"] > 90 or stats["memory_usage_pct"] > 90:
                 stats["status"] = "CRITICAL"
@@ -52,13 +54,13 @@ class ResourceMonitor:
                 stats["status"] = "WARNING"
             else:
                 stats["status"] = "HEALTHY"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (psutil.Error, OSError) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to gather resource stats: {e}")
             stats["status"] = "ERROR"
         return stats
 
     def get_market_multiplier(self) -> float:
-        stats = self.get_current_stats()
+        stats: dict[str, Any] = self.get_current_stats()
         mult = 1.0
         if stats["status"] == "CRITICAL":
             mult = 3.0

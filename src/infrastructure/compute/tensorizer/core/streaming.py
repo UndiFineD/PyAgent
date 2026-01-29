@@ -36,7 +36,7 @@ class StreamingTensorizerReader:
         self,
         path: Union[str, Path],
         config: Optional[TensorizerConfig] = None,
-    ):
+    ) -> None:
         self._reader = TensorizerReader(path, config)
         self._cache: Dict[str, np.ndarray] = {}
         self._cache_size_limit = 1024 * 1024 * 1024  # 1GB default
@@ -51,7 +51,7 @@ class StreamingTensorizerReader:
 
     def set_cache_limit(self, limit_bytes: int) -> None:
         """Set cache size limit in bytes."""
-        self._cache_size_limit = limit_bytes
+        self._cache_size_limit: int = limit_bytes
 
     def get(self, name: str) -> Optional[np.ndarray]:
         """Get tensor, loading if needed."""
@@ -66,11 +66,11 @@ class StreamingTensorizerReader:
 
     def _add_to_cache(self, name: str, tensor: np.ndarray) -> None:
         """Add tensor to cache with eviction."""
-        size = tensor.nbytes
+        size: int = tensor.nbytes
 
         # Evict if needed
         while self._cache and self._current_cache_size + size > self._cache_size_limit:
-            oldest = next(iter(self._cache))
+            oldest: str = next(iter(self._cache))
             self._current_cache_size -= self._cache[oldest].nbytes
             del self._cache[oldest]
 

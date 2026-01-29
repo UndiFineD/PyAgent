@@ -27,6 +27,8 @@ except ImportError:
 
 
 class DeduplicationCore:
+    """Core functionality for deduplicating items based on similarity."""
+
     @staticmethod
     def jaccard_similarity(s1: str, s2: str) -> float:
         """
@@ -35,7 +37,7 @@ class DeduplicationCore:
         if rc:
             try:
                 return rc.calculate_jaccard_similarity(s1, s2)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except (AttributeError, TypeError, RuntimeError, OSError) as _e:
                 pass
 
         set1 = set(s1.lower().split())
@@ -58,7 +60,7 @@ class DeduplicationCore:
                 messages = [item.get(key, "") for item in items]
                 unique_indices = rc.deduplicate_by_similarity(messages, threshold)  # type: ignore[attr-defined]
                 return [items[i] for i in unique_indices]
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except (AttributeError, TypeError, RuntimeError, OSError) as _e:
                 pass
 
         unique_items = []

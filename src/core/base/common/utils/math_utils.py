@@ -12,17 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
 """MathUtils - Centralized mathematical utilities with Rust acceleration.
 
 Inspired by vLLM's math_utils.py patterns for high-performance operations.
 
 Phase 17: vLLM Pattern Integration
+==================================
+
+This module provides mathematical utilities optimized for high-performance
+computing, with support for both Python and Rust-accelerated backends.
+
+Key features:
+- Vectorized operations for batch processing
+- Memory-efficient algorithms
+- Rust FFI integration for performance-critical paths
+- Compatible with PyTorch and NumPy tensors
 """
 
 from __future__ import annotations

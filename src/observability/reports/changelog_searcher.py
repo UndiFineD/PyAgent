@@ -84,7 +84,7 @@ class ChangelogSearcher:
                     for line_num, score, ctx in matches
                 ]
                 return results
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except (AttributeError, TypeError, RuntimeError, OSError) as _e:
                 pass  # Fall back to Python
 
         # Python fallback

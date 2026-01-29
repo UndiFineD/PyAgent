@@ -34,7 +34,7 @@ from .speculative_decoder import (  # noqa: F401
     SpeculativeTree, SpeculativeVerifier, VerificationResult,
     create_medusa_decoder, create_ngram_decoder)
 
-__all__ = [
+__all__: list[str] = [
     # Enums
     "ProposerType",
     "AcceptanceMethod",

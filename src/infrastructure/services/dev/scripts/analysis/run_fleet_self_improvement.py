@@ -20,6 +20,7 @@ Scans the workspace for issues, applies autonomous fixes, and harvests external 
 
 from __future__ import annotations
 
+
 import argparse
 import json
 import logging
@@ -30,33 +31,34 @@ import sys
 import time
 from pathlib import Path
 from typing import Any
-
 # ruff: noqa: E402
 
 # Ensure the project root is in PYTHONPATH before importing from src
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 # Phase 335: Support for custom Copilot CLI paths
-COPILOT_PATH = r"C:\DEV\copilot-cli"
-if os.path.exists(COPILOT_PATH) and COPILOT_PATH not in os.environ["PATH"]:
-    os.environ["PATH"] = COPILOT_PATH + os.pathsep + os.environ["PATH"]
-    logging.info(f"Augmented PATH with {COPILOT_PATH}")
+copilot_path = r"C:\DEV\copilot-cli"
+if os.path.exists(copilot_path) and copilot_path not in os.environ["PATH"]:
+    os.environ["PATH"] = copilot_path + os.pathsep + os.environ["PATH"]
+    logging.info(f"Augmented PATH with {copilot_path}")
 
 
 # Import the Rust extension for fleet self-improvement (registers PyO3 functions)
 try:
     # import rust_core  # Rust-powered analysis and fix functions
-    _RUST_ACCEL = True
+    rust_accel = True
 except ImportError:
     rust_core = None
-    _RUST_ACCEL = False
+    rust_accel = False
+
 
 # pylint: disable=wrong-import-position
 from src.core.base.lifecycle.version import VERSION  # noqa: E402
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: E402
 from src.observability.structured_logger import StructuredLogger  # noqa: E402
+from src.infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import PromptOptimizerAgent  # noqa: E402
 # pylint: enable=wrong-import-position
 
 
@@ -64,7 +66,7 @@ from src.observability.structured_logger import StructuredLogger  # noqa: E402
 class DirectiveParser:
     """Parses strategic directives from prompt and context files."""
 
-    def __init__(self, root: str, prompt_path: str | None, context_path: str | None):
+    def __init__(self, root: str, prompt_path: str | None, context_path: str | None) -> None:
         self.root = Path(root)
         self.prompt_path = prompt_path
         self.context_path = context_path
@@ -80,7 +82,7 @@ class DirectiveParser:
             if p_path.exists():
                 try:
                     self.strategic_note += "\n" + p_path.read_text(encoding="utf-8")
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (OSError, UnicodeDecodeError) as e:
                     logging.error(f" - Failed to load {directive_file}: {e}")
         return self.strategic_note
 
@@ -98,7 +100,7 @@ class DirectiveParser:
             try:
                 clean_focus = re.sub(r"[\s\n]+", " ", focus_val)
                 return json.loads(clean_focus.replace("'", '"'))
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (json.JSONDecodeError, ValueError):
                 inner = focus_val[1:-1].split(",")
                 return [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
         return [d.strip() for d in focus_val.split(",") if d.strip()]
@@ -116,23 +118,36 @@ class DirectiveParser:
             logging.info(f" - Executing Directive Command: {clean_cmd}")
             try:
                 subprocess.run(shlex.split(clean_cmd), cwd=str(self.root), check=False)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (OSError, subprocess.SubprocessError) as e:
                 logging.error(f"   - Command failed: {e}")
 
 
 class IntelligenceHarvester:
     """Orchestrates external intelligence harvesting."""
 
-    def __init__(self, fleet: FleetManager, model_name: str):
+    def __init__(self, fleet: FleetManager, model_name: str) -> None:
         self.fleet = fleet
         self.model_name = model_name
 
+
     def harvest(self) -> list[dict[str, Any]]:
-        """Harvests insights from multiple external backends."""
+        """Harvests insights from multiple external backends, with prompt optimization."""
         from src.infrastructure.compute.backend import execution_engine as ai
 
         prompt = "Provide 3 high-level architectural or security recommendations for a Python-based AI Agent fleet."
         lessons = []
+
+        # --- Prompt Optimizer Integration ---
+        optimizer = PromptOptimizerAgent()
+        ai.llm_chat_via_ollama = optimizer.wrap_agent_prompt(
+            ai.llm_chat_via_ollama, agent_name="Ollama"
+        )
+        ai.llm_chat_via_github_models = optimizer.wrap_agent_prompt(
+            ai.llm_chat_via_github_models, agent_name="GitHubModels"
+        )
+        ai.llm_chat_via_copilot_cli = optimizer.wrap_agent_prompt(
+            ai.llm_chat_via_copilot_cli, agent_name="CopilotCLI"
+        )
 
         # 1. Ollama (Local External)
         ollama_res = ai.llm_chat_via_ollama(prompt)
@@ -158,25 +173,26 @@ class IntelligenceHarvester:
                         insight=lesson["text"],
                         confidence=0.85,
                     )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug(f"Insight contribution failed: {e}")
+            except Exception:
+                # Broad except is justified here to avoid breaking the intelligence harvesting loop
+                logging.debug("Insight contribution failed.")
 
         return lessons
 
 
 
 # Global flag to ensure Triton compatibility is only checked/logged on the first cycle
-TRITON_CHECKED_ONCE = False
 
 class CycleOrchestrator:
     """Manages the execution of multiple improvement cycles."""
 
-    def __init__(self, fleet: FleetManager, args: argparse.Namespace):
+    def __init__(self, fleet: FleetManager, args: argparse.Namespace) -> None:
         self.fleet = fleet
         self.args = args
         self.root = os.getcwd()
         self.logger = StructuredLogger(agent_id="SelfImprovementLoop")
         self.is_infinite = args.cycles <= 0
+        self._triton_checked_once = False
 
 
     def run(self) -> None:
@@ -186,7 +202,7 @@ class CycleOrchestrator:
             current_cycle += 1
             start_time = time.time()
             # Only allow Triton compatibility check/logging on the first cycle
-            if not _triton_checked_once:
+            if not hasattr(self, '_triton_checked_once') or not self._triton_checked_once:
                 # Proactively set GITHUB_TOKEN from gh CLI if not already set
                 if not os.environ.get("GITHUB_TOKEN"):
                     try:
@@ -196,19 +212,18 @@ class CycleOrchestrator:
                             if token:
                                 os.environ["GITHUB_TOKEN"] = token
                                 logging.info("GITHUB_TOKEN set from 'gh auth token' for first cycle.")
-                    except subprocess.SubprocessError as e:
-                        logging.warning(f"Could not set GITHUB_TOKEN from gh CLI: {e}")
+                    except subprocess.SubprocessError:
+                        logging.warning("Could not set GITHUB_TOKEN from gh CLI.")
                 run_cycle(
                     self.fleet,
                     self.root,
                     self.logger,
                     prompt_path=self.args.prompt,
                     context_path=self.args.context,
-                    current_cycle=current_cycle,
                     model_name=self.args.model,
                     allow_triton_check=True,
                 )
-                _triton_checked_once = True
+                self._triton_checked_once = True
             else:
                 run_cycle(
                     self.fleet,
@@ -216,7 +231,6 @@ class CycleOrchestrator:
                     self.logger,
                     prompt_path=self.args.prompt,
                     context_path=self.args.context,
-                    current_cycle=current_cycle,
                     model_name=self.args.model,
                     allow_triton_check=False,
                 )
@@ -292,7 +306,6 @@ def run_cycle(
         target_dirs=target_dirs,
         prompt_path=prompt_path,
         model_name=model_name,
-        current_cycle=current_cycle,
     )
 
     # 4. Harvest External Intelligence
@@ -300,7 +313,13 @@ def run_cycle(
     harvester.harvest()
 
 
-def consult_external_models(fleet, broken_items, prompt_path=None, model_name=None):
+
+def consult_external_models(
+    fleet: Any,
+    broken_items: list[dict[str, Any]],
+    prompt_path: str | None = None,
+    model_name: str | None = None
+) -> None:
     """
     Placeholder for federated learning consultation (Phase 112).
     """
@@ -396,8 +415,9 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
                 if doc:
                     doc_link = f" [Docs]({doc})"
                 logger.info(f"  {idx}. {desc}{file_link}{doc_link}")
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        logger.warning(f"[Intelligence] Synthesis skipped: {e}")
+    except Exception:
+        # Broad except is justified here to ensure explainability logging never breaks the main loop
+        logger.warning("[Intelligence] Synthesis skipped.")
 
 
 def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[str, Any]], model_name: str) -> None:
@@ -446,11 +466,17 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
             )
             print(" - Solution pattern recorded to collective knowledge.")
 
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        print(f" - Autonomous solving failed: {e}")
+    except Exception:
+        # Broad except is justified here to ensure the main loop continues even if LLM call fails
+        print(" - Autonomous solving failed.")
 
 
-def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: list[str], broken_items: list) -> None:
+def _prune_verified_directives(
+    prompt_path: str | None,
+    root: str,
+    target_dirs: list[str],
+    broken_items: list[Any]
+) -> None:
     """Removes completed directives from the prompt file."""
     if not (prompt_path and not broken_items):
         return
@@ -496,10 +522,9 @@ def _report_remaining_debt(
     target_dirs: list[str],
     prompt_path: str | None = None,
     model_name: str | None = None,
-    current_cycle: int = 1,
 ) -> None:
     """Logs issues that were not autonomously fixed and performs maintenance."""
-    start_time = time.time()
+    # start_time = time.time()  # Unused variable removed
 
     # 1. Analyze and Log Unfixed Issues
     broken_items = _analyze_unfixed_issues(stats)
@@ -532,11 +557,15 @@ def _report_remaining_debt(
     # 6. Maintenance: Pruning
     _prune_verified_directives(prompt_path, root, target_dirs, broken_items)
 
-    duration = time.time() - start_time
-    print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")
+    # duration = time.time() - start_time  # Unused variable removed
 
 
-def _cycle_throttle(delay: int, root: str, target_dirs: list[str], use_watcher: bool = False) -> None:
+def _cycle_throttle(
+    delay: int,
+    root: str,
+    target_dirs: list[str],
+    use_watcher: bool = False
+) -> None:
     """
     Implement a controlled delay between improvement cycles.
     Uses 'watchfiles' for event-driven triggering if available and requested (Phase 147).
@@ -569,23 +598,21 @@ def _cycle_throttle(delay: int, root: str, target_dirs: list[str], use_watcher: 
                     print(" - [Watcher] Change detected. Triggering next cycle.")
                     return
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            # Fallback to simple wait if watchfiles is missing or fails
-            if not isinstance(e, ImportError):
-                logging.debug(f"Watcher failed: {e}")
-
-            if isinstance(e, ImportError):
-                print(" - [Watcher Fallback] 'watchfiles' package not found. Using time-based delay.")
-            else:
-                print(f" - [Watcher Fallback] Watcher error: {e}. Using time-based delay.")
+        except Exception:
+            # Broad except is justified here to ensure fallback to time-based delay always works
+            print(" - [Watcher Fallback] Watcher error. Using time-based delay.")
 
     print(f" - [Throttle] Waiting {delay}s for next cycle...")
     # Use threading.Event to avoid synchronous wait performance warnings
     threading.Event().wait(timeout=float(delay))
 
 
+
 def main() -> None:
-    """Entry point for the fleet self-improvement loop."""
+    """
+    Entry point for the fleet self-improvement loop.
+    Parses command-line arguments and launches the CycleOrchestrator.
+    """
     parser = argparse.ArgumentParser(description="PyAgent Fleet Self-Improvement Loop")
     parser.add_argument("--cycles", "-c", type=int, default=1)
     parser.add_argument("--delay", "-d", type=int, default=60)
@@ -594,15 +621,15 @@ def main() -> None:
     parser.add_argument("--context", "-t", type=str)
     parser.add_argument("--model", "-m", type=str, default="gemini-3-flash")
     parser.add_argument("--dry-run", action="store_true")
-    args = parser.parse_args()
+    args: argparse.Namespace = parser.parse_args()
 
-    fleet = FleetManager(os.getcwd())
+    fleet: FleetManager = FleetManager(os.getcwd())
     if args.dry_run:
         logging.info("Dry-run mode: Initialization successful.")
         sys.exit(0)
 
     try:
-        orchestrator = CycleOrchestrator(fleet, args)
+        orchestrator: CycleOrchestrator = CycleOrchestrator(fleet, args)
         orchestrator.run()
     except KeyboardInterrupt:
         logging.info("=== STOPPING SELF-IMPROVEMENT (User Interrupt) ===")

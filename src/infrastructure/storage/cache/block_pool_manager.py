@@ -71,14 +71,8 @@ class Block:
 
 @dataclass
 class BlockPoolConfig:
-    """Configuration for block pool."""
-
-    num_blocks: int = 1024
     block_size_bytes: int = 2 * 1024 * 1024  # 2MB default
     enable_prefix_caching: bool = True
-    eviction_policy: str = "arc"  # "lru" or "arc"
-    arc_p_initial: float = 0.5  # ARC balance parameter
-    min_free_blocks: int = 32
     max_cached_ratio: float = 0.5  # Max fraction of blocks in cached state
 
 

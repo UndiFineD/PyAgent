@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+"""
+Core logic for extracting and formatting documentation from Python source code.
+No file I/O or side effects; designed for type safety and Rust FFI compatibility.
+"""
 
 # You may obtain a copy of the License at
 #
