@@ -193,6 +193,8 @@ class CycleOrchestrator:
         self.logger = StructuredLogger(agent_id="SelfImprovementLoop")
         self.is_infinite = args.cycles <= 0
         self._triton_checked_once = False
+        # Stores normalized messages from the last completed cycle for stagnation detection
+        self._last_cycle_messages: list[str] | None = None
 
 
     def run(self) -> None:
@@ -214,7 +216,7 @@ class CycleOrchestrator:
                                 logging.info("GITHUB_TOKEN set from 'gh auth token' for first cycle.")
                     except subprocess.SubprocessError:
                         logging.warning("Could not set GITHUB_TOKEN from gh CLI.")
-                run_cycle(
+                result = run_cycle(
                     self.fleet,
                     self.root,
                     self.logger,
@@ -225,7 +227,7 @@ class CycleOrchestrator:
                 )
                 self._triton_checked_once = True
             else:
-                run_cycle(
+                result = run_cycle(
                     self.fleet,
                     self.root,
                     self.logger,
@@ -236,8 +238,21 @@ class CycleOrchestrator:
                 )
             duration = time.time() - start_time
             print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")
+            # Compare messages with previous cycle to detect stagnation.
+            # Only apply this early-cancel behavior when the user requested multiple cycles.
+            current_messages: list[str] = result.get("messages", []) if isinstance(result, dict) else []
+
+            if getattr(self.args, "cycles", 1) > 1 and current_cycle > 1:
+                if hasattr(self, "_last_cycle_messages") and self._last_cycle_messages == current_messages:
+                    self.logger.info("No new messages since previous cycle — cancelling remaining cycles.")
+                    break
+
+            # Save for next cycle comparison
+            self._last_cycle_messages = current_messages
+
             if not self.is_infinite and current_cycle >= self.args.cycles:
                 break
+
             self.logger.info("Waiting before next cycle... (Press Ctrl+C to stop)")
             _cycle_throttle(self.args.delay, self.root, self._get_last_focus(), use_watcher=self.args.watch)
 
@@ -272,8 +287,13 @@ def run_cycle(
     current_cycle: int = 1,
     model_name: str = "gemini-3-flash",
     allow_triton_check: bool = True,
-) -> None:
-    """Run a single improvement cycle."""
+) -> dict[str, Any]:
+    """Run a single improvement cycle and return a dict with per-cycle messages and stats.
+
+    Returns a dict with keys:
+      - "messages": list[str] normalized external intelligence messages
+      - "stats": combined_stats dictionary summarizing the run
+    """
     logger.info(f"--- CYCLE {current_cycle} STARTING ---")
 
     # 1. Parse Directives
@@ -310,8 +330,13 @@ def run_cycle(
 
     # 4. Harvest External Intelligence
     harvester = IntelligenceHarvester(fleet, model_name)
-    harvester.harvest()
+    lessons = harvester.harvest()
 
+    # Normalize messages for inter-cycle comparison
+    messages = [f"{l.get('provider')}:{l.get('text')}" for l in lessons if isinstance(l, dict) and l.get('text')]
+
+    # Return per-cycle information for orchestration decisions
+    return {"messages": messages, "stats": combined_stats}
 
 
 def consult_external_models(
