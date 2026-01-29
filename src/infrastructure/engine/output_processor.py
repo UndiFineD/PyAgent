@@ -30,7 +30,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Set
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class EventType(Enum):
@@ -185,14 +185,14 @@ class RequestState:
         log_stats: bool = False,
         stream_interval: int = 1,
     ) -> None:
-        self.request_id = request_id
-        self.prompt = prompt
-        self.prompt_token_ids = prompt_token_ids or []
-        self.sampling_params = sampling_params
-        self.arrival_time = arrival_time
-        self.queue = queue
-        self.log_stats = log_stats
-        self.stream_interval = stream_interval
+        self.request_id: str = request_id
+        self.prompt: str | None = prompt
+        self.prompt_token_ids: List[int] = prompt_token_ids or []
+        self.sampling_params: SamplingParams | None = sampling_params
+        self.arrival_time: float = arrival_time
+        self.queue: RequestOutputCollector | None = queue
+        self.log_stats: bool = log_stats
+        self.stream_interval: int = stream_interval
 
         # Output state
         self.output_token_ids: List[int] = []
@@ -218,7 +218,7 @@ class RequestState:
         _tokenizer: Any,
         request: EngineCoreRequest,
         prompt: Optional[str],
-        _parent_req: Optional[ParentRequest] = None,
+        _parent_req: Optional["ParentRequest"] = None,
         _request_index: int = 0,
         queue: Optional[RequestOutputCollector] = None,
         log_stats: bool = False,
@@ -247,7 +247,7 @@ class RequestState:
         finish_reason: Optional[str] = None,
     ) -> None:
         """Update state with new output."""
-        now = time.time()
+        now: float = time.time()
 
         if new_token_ids:
             if self.first_token_time is None:
@@ -275,10 +275,10 @@ class RequestState:
         """Get current output."""
         if delta:
             # Return only new tokens since last output
-            token_ids = self.output_token_ids[self._last_output_index :]
+            token_ids: List[int] = self.output_token_ids[self._last_output_index :]
             self._last_output_index = len(self.output_token_ids)
         else:
-            token_ids = self.output_token_ids.copy()
+            token_ids: List[int] = self.output_token_ids.copy()
 
         return RequestOutput(
             request_id=self.request_id,
@@ -313,7 +313,7 @@ class LoRARequestStates:
     """Track LoRA request states."""
 
     def __init__(self, log_stats: bool = False) -> None:
-        self.log_stats = log_stats
+        self.log_stats: bool = log_stats
         self.active_loras: Dict[int, Set[str]] = defaultdict(set)
         self.lora_stats: Dict[int, Dict[str, Any]] = {}
 
@@ -348,8 +348,8 @@ class OutputProcessor:
         stream_interval: int = 1,
     ) -> None:
         self.tokenizer = tokenizer
-        self.log_stats = log_stats
-        self.stream_interval = stream_interval
+        self.log_stats: bool = log_stats
+        self.stream_interval: int = stream_interval
 
         # Request states
         self.request_states: Dict[str, RequestState] = {}
@@ -392,12 +392,12 @@ class OutputProcessor:
         queue: Optional[RequestOutputCollector] = None,
     ) -> None:
         """Add a new request to track."""
-        request_id = request.request_id
+        request_id: str = request.request_id
 
         if request_id in self.request_states:
             raise ValueError(f"Request id {request_id} already running.")
 
-        state = RequestState.from_new_request(
+        state: RequestState = RequestState.from_new_request(
             _tokenizer=self.tokenizer,
             request=request,
             prompt=prompt,
@@ -437,7 +437,7 @@ class OutputProcessor:
 
         for request_id in request_ids:
             if request_id in self.request_states:
-                state = self.request_states[request_id]
+                state: RequestState = self.request_states[request_id]
                 state.add_event(EventType.ABORTED)
                 state.finished = True
                 state.finish_reason = "abort"
@@ -469,20 +469,20 @@ class OutputProcessor:
         2) Detokenizes if needed
         3) Creates and emits RequestOutput objects
         """
-        result = OutputProcessorOutput()
 
+        result = OutputProcessorOutput()
         for output in engine_core_outputs:
-            request_id = output.request_id
+            request_id: str = output.request_id
 
             if request_id not in self.request_states:
                 logger.warning(f"Unknown request {request_id} in output")
                 continue
 
-            state = self.request_states[request_id]
+            state: RequestState = self.request_states[request_id]
 
             # Update state with new tokens
             # Note: In real impl, we'd detokenize here
-            new_text = ""
+            new_text: str = ""
             if self.tokenizer and output.new_token_ids:
                 with contextlib.suppress(Exception):
                     new_text = self.tokenizer.decode(
@@ -498,7 +498,7 @@ class OutputProcessor:
 
             # Emit output if needed
             if state.should_emit_output() or state.finished:
-                request_output = state.get_output(delta=True)
+                request_output: RequestOutput = state.get_output(delta=True)
                 result.request_outputs.append(request_output)
 
                 # Send to queue if present
@@ -544,7 +544,7 @@ class IterationStats:
         }
 
 
-__all__ = [
+__all__: List[str] = [
     "EventType",
     "RequestEvent",
     "LoRARequest",

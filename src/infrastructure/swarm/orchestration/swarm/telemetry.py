@@ -19,7 +19,7 @@ class SwarmTelemetryService:
     Collects real-time statistics from swarm orchestration layers.
     """
 
-    def __init__(self, gatekeeper: Any, shard_manager: Any, topology_manager: Any):
+    def __init__(self, gatekeeper: Any, shard_manager: Any, topology_manager: Any) -> None:
         self.gatekeeper = gatekeeper
         self.shard_manager = shard_manager
         self.topology_manager = topology_manager

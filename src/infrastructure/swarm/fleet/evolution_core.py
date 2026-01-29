@@ -49,7 +49,7 @@ class {name}Agent(BaseAgent):
         super().__init__(path)
         self.name = "{name}"
 
-    def perform_specialized_task(self, *args, **kwargs):
+    def perform_specialized_task(self, *args: Any, **kwargs: Any) -> str:
         """Specialize this method based on: {capabilities}"""
         logging.info(f"Generated agent {name} performing task with args: {{args}}")
         return f"Result from generated agent {name} for task: {{capabilities}}"

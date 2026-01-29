@@ -23,6 +23,7 @@ Phase 17: vLLM Pattern Integration
 
 from __future__ import annotations
 
+from _thread import LockType
 import gc
 import os
 import threading
@@ -31,6 +32,8 @@ import tracemalloc
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Iterator, Optional
+
+from psutil._pswindows import pmem
 
 
 @dataclass
@@ -112,7 +115,7 @@ def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
         import psutil
 
         process = psutil.Process(os.getpid())
-        mem_info = process.memory_info()
+        mem_info: pmem = process.memory_info()
         snapshot.rss_mb = mem_info.rss / (1024 * 1024)
         snapshot.vms_mb = mem_info.vms / (1024 * 1024)
     except ImportError:
@@ -131,7 +134,7 @@ def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
             pass
 
     # GC stats
-    gc_counts = gc.get_count()
+    gc_counts: tuple[int, int, int] = gc.get_count()
     if len(gc_counts) >= 3:
         snapshot.gc_generation_0 = gc_counts[0]
         snapshot.gc_generation_1 = gc_counts[1]
@@ -152,8 +155,8 @@ class MemoryProfiler:
     """
 
     def __init__(self, name: str = "profile", include_gpu: bool = True) -> None:
-        self.name = name
-        self.include_gpu = include_gpu
+        self.name: str = name
+        self.include_gpu: bool = include_gpu
         self.start_snapshot: Optional[MemorySnapshot] = None
         self.end_snapshot: Optional[MemorySnapshot] = None
         self._start_trace = False
@@ -220,11 +223,11 @@ class GCDebugger:
     """
 
     def __init__(self, log_collections: bool = False) -> None:
-        self.log_collections = log_collections
+        self.log_collections: bool = log_collections
         self.collections: list[dict] = []
         self._original_callbacks: list = []
         self._running = False
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
         # Stats
         self.total_collections = 0
@@ -254,14 +257,14 @@ class GCDebugger:
         """Callback invoked by GC."""
         with self._lock:
             if phase == "start":
-                self._gc_start_time = time.time()
+                self._gc_start_time: float = time.time()
             elif phase == "stop":
-                elapsed_ms = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000
+                elapsed_ms: gc.Any | float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000
 
                 self.total_collections += 1
                 self.total_collected += info.get("collected", 0)
                 self.total_uncollectable += info.get("uncollectable", 0)
-                self.total_time_ms += elapsed_ms
+                self.total_time_ms: float | gc.Any += elapsed_ms
 
                 if self.log_collections:
                     collection_info = {
@@ -275,9 +278,9 @@ class GCDebugger:
 
     def force_collection(self, generation: int = 2) -> dict:
         """Force a garbage collection and return stats."""
-        start = time.time()
-        collected = gc.collect(generation)
-        elapsed_ms = (time.time() - start) * 1000
+        start: float = time.time()
+        collected: int = gc.collect(generation)
+        elapsed_ms: float = (time.time() - start) * 1000
 
         return {
             "generation": generation,
@@ -289,7 +292,7 @@ class GCDebugger:
         """Get the top N most common object types by count."""
         type_counts: dict[str, int] = {}
         for obj in gc.get_objects():
-            type_name = type(obj).__name__
+            type_name: str = type(obj).__name__
             type_counts[type_name] = type_counts.get(type_name, 0) + 1
 
         return sorted(type_counts.items(), key=lambda x: x[1], reverse=True)[:n]
@@ -337,8 +340,8 @@ def unfreeze_gc_heap() -> None:
 
 def gc_stats() -> dict:
     """Get current GC statistics."""
-    counts = gc.get_count()
-    thresholds = gc.get_threshold()
+    counts: tuple[int, int, int] = gc.get_count()
+    thresholds: tuple[int, int, int] = gc.get_threshold()
 
     return {
         "counts": {
@@ -356,7 +359,7 @@ def gc_stats() -> dict:
     }
 
 
-__all__ = [
+__all__: list[str] = [
     "MemorySnapshot",
     "MemoryProfiler",
     "GCDebugger",

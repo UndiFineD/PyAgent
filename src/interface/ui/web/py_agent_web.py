@@ -28,7 +28,7 @@ from src.core.base.lifecycle.version import VERSION
 
 from .agent_bar import AgentBar
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 class FleetWebUI:
@@ -40,7 +40,7 @@ class FleetWebUI:
         self.agent_bar = AgentBar()
         self._register_default_components()
 
-    def _register_default_components(self):
+    def _register_default_components(self) -> None:
         """Registers system default components."""
         self.register_generative_component(
             "AgentBar",
@@ -86,15 +86,15 @@ class FleetWebUI:
         if not workflow_state:
             return "graph TD\n  Empty[No Active Workflow]"
 
-        mermaid_lines = ["graph LR"]
+        mermaid_lines: list[str] = ["graph LR"]
         history = workflow_state.history
 
         last_node = "START"
         for i, entry in enumerate(history):
-            node_id = f"step_{i}_{entry['agent']}"
+            node_id: str = f"step_{i}_{entry['agent']}"
             mermaid_lines.append(f"  {last_node} --> {node_id}")
             mermaid_lines.append(f"  {node_id}[{entry['agent']}: {entry['action']}]")
-            last_node = node_id
+            last_node: str = node_id
 
         return "\n".join(mermaid_lines)
 
@@ -107,7 +107,7 @@ class FleetWebUI:
         Returns directory structure and file metadata.
         """
 
-        base = Path(self.fleet.workspace_root) / sub_path
+        base: Path = Path(self.fleet.workspace_root) / sub_path
         if not base.exists():
             return {"error": f"Path {sub_path} not found"}
 
@@ -131,10 +131,9 @@ class FleetWebUI:
                 with open(file_path, encoding="utf-8") as f:
                     return f.read(500) + "..."
             return "[No Preview Available]"
-        except (RuntimeError, ValueError) as e:
-            pass
-        except BaseException as e:
-            pass
+        except (RuntimeError, ValueError) as _e:
+            return "[Preview Error]"
+        except BaseException as e:  # pylint: disable=broad-exception-caught
             import traceback
             print(f"Error reading preview for {file_path}: {e}\n{traceback.format_exc()}")
             return "[Error Reading Preview]"
@@ -143,7 +142,7 @@ class FleetWebUI:
         """Returns the available nodes and signals for the Graphical Workflow Designer."""
         available_agents = []
         for name, agent in self.fleet.agents.items():
-            methods = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
+            methods: list[str] = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
             available_agents.append(
                 {
                     "name": name,

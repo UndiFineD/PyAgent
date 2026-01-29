@@ -31,7 +31,7 @@ class TenantKnowledgeBridge:
     Enables collective intelligence while preventing data leakage.
     """
 
-    def __init__(self, synthesizer: SwarmTraceSynthesizer):
+    def __init__(self, synthesizer: SwarmTraceSynthesizer) -> None:
         self.synthesizer = synthesizer
 
     def generate_anonymized_insights(self) -> Dict[str, Any]:
@@ -76,6 +76,6 @@ class TenantKnowledgeBridge:
         target_predictor.wisdom["expert_synergies"] = current_synergies
         # Recompute biases in the predictor (needs a method for that)
         if hasattr(target_predictor, "_precompute_biases"):
-            target_predictor.expert_biases = target_predictor._precompute_biases()
+            target_predictor.expert_biases = target_predictor._precompute_biases()  # pylint: disable=protected-access
 
         logger.info("[Phase 84] Applied global cross-tenant wisdom to reward predictor.")

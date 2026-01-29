@@ -56,11 +56,6 @@ from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
 if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         ForwardContext
-
-logger = logging.getLogger(__name__)
-
-
-class MooncakeTransferStatus(Enum):
     """Status of a Mooncake KV transfer operation."""
 
     PENDING = auto()

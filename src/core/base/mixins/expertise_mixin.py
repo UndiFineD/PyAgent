@@ -17,7 +17,7 @@ Expertise Mixin (Phase 61).
 Allows agents to declare their domains and performance metrics for MoE routing.
 """
 
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from src.core.base.common.models.communication_models import ExpertProfile
 
@@ -38,7 +38,7 @@ class ExpertiseMixin:
         Registers the agent's expertise profile.
         """
         # Note: agent_id should be available on the base agent
-        agent_id = getattr(self, "agent_id", "unknown_agent")
+        agent_id: Any | str = getattr(self, "agent_id", "unknown_agent")
 
         self.expertise_profile = ExpertProfile(
             agent_id=agent_id, domains=domains, performance_score=performance_score, model_family=model_family

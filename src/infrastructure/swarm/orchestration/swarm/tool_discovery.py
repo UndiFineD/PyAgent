@@ -31,7 +31,7 @@ class AutonomousToolDiscovery:
     Allows the swarm to 'learn' about new external APIs without manual registration.
     """
 
-    def __init__(self, mcp_agent: Any, similarity_service: EmbeddingSimilarityService):
+    def __init__(self, mcp_agent: Any, similarity_service: EmbeddingSimilarityService) -> None:
         self.mcp_agent = mcp_agent
         self.similarity_service = similarity_service
         # Cached tool descriptions and their embeddings
@@ -77,7 +77,7 @@ class AutonomousToolDiscovery:
         best_tool = None
         best_score = -1.0
 
-        for tool_id, data in self.tool_index.items():
+        for _tool_id, data in self.tool_index.items():
             score = await self.similarity_service.compute_similarity(task_emb, data["embedding"])
             if score > best_score:
                 best_score = score

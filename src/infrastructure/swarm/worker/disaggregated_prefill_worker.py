@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         KVConnectorBase
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class DisaggregatedPrefillWorker:
@@ -64,11 +64,11 @@ class DisaggregatedPrefillWorker:
         model_config: Any,
         parallel_config: Any,
         kv_transfer_config: KVTransferConfig,
-    ):
-        self.worker_id = worker_id
+    ) -> None:
+        self.worker_id: str = worker_id
         self.model_config = model_config
         self.parallel_config = parallel_config
-        self.kv_transfer_config = kv_transfer_config
+        self.kv_transfer_config: KVTransferConfig = kv_transfer_config
 
         # Ensure role is set to PRODUCER
         self.kv_transfer_config.kv_role = KVConnectorRole.PRODUCER
@@ -88,7 +88,7 @@ class DisaggregatedPrefillWorker:
 
         logger.info("DisaggregatedPrefillWorker %s initialized.", worker_id)
 
-    def initialize(self):
+    def initialize(self) -> None:
         """Initialize cache and connector components."""
         # Setup KV Cache Manager
         # self.cache_manager = KVCacheManager(...)
@@ -129,7 +129,7 @@ class DisaggregatedPrefillWorker:
         # return RustBridge.optimize_prefill_overlap_rust(batch_metadata)
         return batch_metadata
 
-    def handle_chunked_prefill(self, request: Any, chunk_size: int):
+    def handle_chunked_prefill(self, request: Any, chunk_size: int) -> None:
         """Handle massive prompts by breaking them into manageable chunks."""
         # For each chunk, compute and intermediate KV sync
 
@@ -144,7 +144,7 @@ class DisaggregatedPrefillWorker:
             "connector_health": self.kv_connector.get_health_report() if self.kv_connector else None,
         }
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Gracefully shut down the worker."""
         self._is_active = False
         if self.kv_connector:

@@ -55,15 +55,8 @@ class CompileMode(Enum):
 
 
 class CompileBackend(Enum):
-    """Compilation backend selection."""
-
-    INDUCTOR = "inductor"  # Default PyTorch inductor
-    CUDAGRAPHS = "cudagraphs"  # CUDA graph backend
     ONNXRT = "onnxrt"  # ONNX Runtime
     EAGER = "eager"  # No compilation (debug)
-    AOT_EAGER = "aot_eager"  # AOT without optimization
-
-
 @dataclass
 class CompileConfig:
     """Configuration for torch.compile integration."""

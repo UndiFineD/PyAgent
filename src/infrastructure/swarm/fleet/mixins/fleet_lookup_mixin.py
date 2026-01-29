@@ -77,7 +77,7 @@ class FleetLookupMixin:
                         return getattr(orchestrators, name)
                     except AttributeError:
                         pass
-            except Exception as exc:  # pylint: disable=broad-exception-caught
+            except (TypeError, KeyError, RuntimeError) as exc:
                 logging.debug(f"Fleet: Lazy-load error for orchestrator '{name}': {exc}")
 
         # 3. Try Agents
@@ -86,11 +86,11 @@ class FleetLookupMixin:
             try:
                 # LazyAgentMap implements __getitem__ with fallback logic
                 return agents[effective_name]
-            except Exception:  # pylint: disable=broad-exception-caught
+            except (KeyError, TypeError, AttributeError) as e:
                 if effective_name != name:
                     try:
                         return agents[name]
-                    except Exception:  # pylint: disable=broad-exception-caught
+                    except (KeyError, TypeError, AttributeError):
                         pass
 
         raise AttributeError(f"'FleetManager' object has no attribute '{name}'")

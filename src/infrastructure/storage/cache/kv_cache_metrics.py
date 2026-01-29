@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+Module: kv_cache_metrics
+Tracks and reports KV cache metrics for distributed inference in PyAgent.
+"""
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

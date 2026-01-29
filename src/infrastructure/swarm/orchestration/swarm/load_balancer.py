@@ -18,7 +18,7 @@ Load balancer.py module.
 
 import asyncio
 import logging
-from typing import List
+from typing import Any, Dict, List
 
 from src.infrastructure.engine.kv_cache.context_sharder import \
     ContextShardManager
@@ -26,7 +26,7 @@ from src.infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
 from src.infrastructure.swarm.orchestration.swarm.telemetry import \
     SwarmTelemetryService
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class SwarmLoadBalancer:
@@ -42,22 +42,22 @@ class SwarmLoadBalancer:
         migration_engine: P2PMigrationEngine,
         hot_threshold: float = 0.85,
         cool_threshold: float = 0.40,
-    ):
-        self.telemetry = telemetry
-        self.shard_manager = shard_manager
-        self.migration_engine = migration_engine
-        self.hot_threshold = hot_threshold
-        self.cool_threshold = cool_threshold
+    ) -> None:
+        self.telemetry: SwarmTelemetryService = telemetry
+        self.shard_manager: ContextShardManager = shard_manager
+        self.migration_engine: P2PMigrationEngine = migration_engine
+        self.hot_threshold: float = hot_threshold
+        self.cool_threshold: float = cool_threshold
         self.balancing_active = True
 
-    async def run_balancing_cycle(self):
+    async def run_balancing_cycle(self) -> None:
         """
         Executed periodically to check for imbalances and trigger P2P migrations.
         """
         if not self.balancing_active:
             return
 
-        metrics = self.telemetry.get_grid_metrics()
+        metrics: Dict[str, Any] = self.telemetry.get_grid_metrics()
 
         hot_ranks: List[int] = []
         cool_ranks: List[int] = []
@@ -88,7 +88,7 @@ class SwarmLoadBalancer:
                 continue
 
             # Pick the first available cool rank
-            target_rank = cool_ranks[0]
+            target_rank: int = cool_ranks[0]
 
             # Pick a shard to move (e.g., the first one)
             context_id, shard_idx = shards_on_hot_rank[0]
@@ -120,12 +120,12 @@ class SwarmLoadBalancer:
                     res.append((ctx_id, i))
         return res
 
-    async def start_loop(self, interval: float = 5.0):
+    async def start_loop(self, interval: float = 5.0) -> None:
         """Starts a background balancing loop."""
         while self.balancing_active:
             await self.run_balancing_cycle()
             await asyncio.sleep(interval)
 
-    def stop(self):
+    def stop(self) -> None:
         """Stops the balancing service."""
         self.balancing_active = False

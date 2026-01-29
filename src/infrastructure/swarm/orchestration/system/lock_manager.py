@@ -32,8 +32,8 @@ class LockManager:
     Provides async context manager support for resource locking.
     """
 
-    def __init__(self, core: Optional[LockCore] = None):
-        self._core = core or LockCore()
+    def __init__(self, core: Optional[LockCore] = None) -> None:
+        self._core: LockCore = core or LockCore()
         self._async_locks: Dict[str, asyncio.Lock] = {}
 
     @asynccontextmanager
@@ -58,7 +58,7 @@ class LockManager:
             if resource_id not in self._async_locks:
                 self._async_locks[resource_id] = asyncio.Lock()
 
-            lock = self._async_locks[resource_id]
+            lock: asyncio.Lock = self._async_locks[resource_id]
             try:
                 await asyncio.wait_for(lock.acquire(), timeout=timeout)
                 try:
@@ -69,7 +69,7 @@ class LockManager:
                 raise TimeoutError(f"Could not acquire memory lock for {resource_id} within {timeout}s") from exc
         else:
             # Fallback to LockCore for file locks, wrapped in async poll
-            start_time = asyncio.get_event_loop().time()
+            start_time: float = asyncio.get_event_loop().time()
             acquired = False
             while asyncio.get_event_loop().time() - start_time < timeout:
                 if self._core.acquire_lock(resource_id, timeout=0.1):

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: persistence_mixin
+Provides persistence and transactional safety mixin for PyAgent agents.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,13 +57,13 @@ class PersistenceMixin:
 
     def _trigger_event(self, event_type: EventType, data: dict[str, Any]) -> None:
         """Triggers local events and hooks."""
-        hooks = self._event_hooks.get(event_type, [])
+        hooks: List[Any] = self._event_hooks.get(event_type, [])
         for hook in hooks:
             try:
                 hook(data)
-            except Exception:  # pylint: disable=broad-exception-caught
-                # Hooks should not crash the agent
-                pass
+            except (AttributeError, TypeError, ValueError) as e:
+                # Log hook execution errors but don't crash the agent
+                logging.warning("Event hook execution failed: %s", e)
 
     def generate_diff(self) -> str:
         """Generate a unified diff between original and improved content."""
@@ -81,7 +85,7 @@ class PersistenceMixin:
 
         try:
             self.previous_content = getattr(self, "file_path").read_text(encoding="utf-8")
-        except Exception:  # pylint: disable=broad-exception-caught
+        except Exception as e:  # pylint: disable=broad-exception-caught
             self.previous_content = ""
         return self.previous_content
 
@@ -90,7 +94,7 @@ class PersistenceMixin:
         if not hasattr(self, "current_content") or not hasattr(self, "file_path"):
             return False
 
-        content_to_write = self.current_content
+        content_to_write: str = self.current_content
         file_path = getattr(self, "file_path")
         suffix = file_path.suffix.lower()
         if suffix in {".md", ".markdown"} or file_path.name.lower().endswith(".plan.md"):
@@ -118,7 +122,7 @@ class PersistenceMixin:
 
     def _write_dry_run_diff(self) -> bool:
         """Saves a diff for verification without modifying the file."""
-        diff = self.get_diff()
+        diff: str = self.get_diff()
         if not diff:
             return True
 
@@ -126,7 +130,7 @@ class PersistenceMixin:
         self._fs.ensure_directory(dry_run_dir)
         file_path = getattr(self, "file_path")
         safe_name = file_path.name.replace("/", "_").replace("\\", "_")
-        target = dry_run_dir / f"{safe_name}.diff"
+        target: Path = dry_run_dir / f"{safe_name}.diff"
         return self._fs.atomic_write(target, diff)
 
     def save_state(self) -> bool:

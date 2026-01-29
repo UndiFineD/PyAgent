@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 
+"""
+Module: metrics_engine
+Provides metrics calculation and analysis for PyAgent core base.
+"""
 """
 Metrics engine.py module.
 """
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
-
-from __future__ import annotations
 
 import json
 import logging
@@ -14,6 +17,10 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
+
+from src.observability.reports.grafana_generator import GrafanaDashboardGenerator
+
+from src.observability.stats.metrics_core import TokenCostResult
 
 # Import pure calculation cores
 from .metrics_core import ModelFallbackCore, TokenCostCore
@@ -37,9 +44,9 @@ except ImportError:
     GrafanaGenerator = None
 from src.core.base.lifecycle.version import VERSION
 
-__version__ = VERSION
+__version__: str = VERSION
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ObservabilityEngine:
@@ -53,7 +60,7 @@ class ObservabilityEngine:
         else:
             self.workspace_root = Path(".")
 
-        self.telemetry_file = self.workspace_root / ".agent_telemetry.json"
+        self.telemetry_file: Path = self.workspace_root / ".agent_telemetry.json"
         self.core = ObservabilityCore()
         self.metrics: list[AgentMetric] = []
         self._start_times: dict[str, float] = {}
@@ -76,15 +83,15 @@ class ObservabilityEngine:
         """
         # Noise Reduction: Only store significant events in the persistent log buffer.
         # Metrics are still recorded for everything.
-        important_types = [
+        important_types: list[str] = [
             "agent_failure",
             "security_alert",
             "workflow_error",
             "system_crash",
         ]
-        important_levels = ["ERROR", "WARNING", "CRITICAL"]
+        important_levels: list[str] = ["ERROR", "WARNING", "CRITICAL"]
 
-        should_log = level in important_levels or event_type in important_types
+        should_log: bool = level in important_levels or event_type in important_types
 
         if should_log:
             event = {
@@ -102,7 +109,7 @@ class ObservabilityEngine:
 
     def export_to_elk(self) -> str:
         """Simulates exporting log buffer to ELK stack."""
-        count = len(self.log_buffer)
+        count: int = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         json.dumps(self.log_buffer)
         self.log_buffer = []
@@ -118,7 +125,7 @@ class ObservabilityEngine:
         Triggers Grafana JSON dashboard generation (Phase 126).
         """
         if GrafanaGenerator:
-            generator = GrafanaGenerator(self.workspace_root / "deploy" / "grafana")
+            generator: GrafanaDashboardGenerator = GrafanaGenerator(self.workspace_root / "deploy" / "grafana")
             if shard_name:
                 return generator.generate_shard_obs(shard_name)
             return generator.generate_fleet_summary()
@@ -128,7 +135,7 @@ class ObservabilityEngine:
         """Start timing an operation."""
         self._start_times[trace_id] = time.time()
         # Also start OTel span and store its UUID
-        span_id = self.otel.start_span(trace_id)
+        span_id: str = self.otel.start_span(trace_id)
         self._otel_spans[trace_id] = span_id
 
     def end_trace(
@@ -147,10 +154,10 @@ class ObservabilityEngine:
             logging.warning(f"No start trace found for {trace_id}")
             return
 
-        duration = (time.time() - self._start_times.pop(trace_id)) * 1000
+        duration: float = (time.time() - self._start_times.pop(trace_id)) * 1000
 
         # End OTel span using the stored span_id
-        otel_span_id = self._otel_spans.pop(trace_id, None)
+        otel_span_id: str | None = self._otel_spans.pop(trace_id, None)
         if otel_span_id:
             self.otel.end_span(otel_span_id, status=status, attributes=metadata)
 
@@ -164,7 +171,7 @@ class ObservabilityEngine:
             data_map: dict[str, list[float]] = {}
 
             for m in self.metrics:
-                key = f"{m.agent_name}:{m.operation}"
+                key: str = f"{m.agent_name}:{m.operation}"
                 if key not in data_map:
                     data_map[key] = []
                 data_map[key].append(m.duration_ms)
@@ -174,14 +181,16 @@ class ObservabilityEngine:
                 # pylint: disable=no-member
                 aggregated_results = rc.aggregate_metrics_rust(data_map)  # type: ignore
                 return aggregated_results
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except (AttributeError, RuntimeError) as e:  # pylint: disable=broad-exception-caught
                 logger.warning("Rust metric aggregation failed: %s", e)
+                import traceback
+                traceback.print_exc()
 
         # Fallback Python aggregation (simple average)
         counts: dict[str, int] = {}
         sums: dict[str, float] = {}
         for m in self.metrics:
-            key = f"{m.agent_name}:{m.operation}"
+            key: str = f"{m.agent_name}:{m.operation}"
             counts[key] = counts.get(key, 0) + 1
             sums[key] = sums.get(key, 0.0) + m.duration_ms
 
@@ -190,29 +199,6 @@ class ObservabilityEngine:
                 aggregated_results[key] = total / counts[key]
 
         return aggregated_results
-
-        # Calculate cost
-        cost = self.cost_engine.calculate_cost(model, input_tokens, output_tokens)
-
-        metric = AgentMetric(
-            agent_name=agent_name,
-            operation=operation,
-            duration_ms=duration,
-            status=status,
-            token_count=input_tokens + output_tokens,
-            input_tokens=input_tokens,
-            output_tokens=output_tokens,
-            estimated_cost=cost,
-            model=model,
-            metadata=metadata or {},
-        )
-
-        self.core.process_metric(metric)
-        self.metrics.append(metric)  # Redundant but kept for display
-
-        # External exporters
-        self.prometheus.record_metric("agent_duration_ms", duration, {"agent": agent_name, "op": operation})
-        self.metrics_exporter.record_agent_call(agent_name, duration, status == "success")
 
         if len(self.metrics) > 1000:
             self.save()
@@ -253,7 +239,7 @@ class ObservabilityEngine:
             a["latency"] += m.duration_ms
             a["cost"] += m.estimated_cost
 
-        count = len(self.metrics)
+        count: int = len(self.metrics)
         summary = {
             "total_calls": count,
             "avg_latency_ms": round(total_latency / count, 2),
@@ -275,10 +261,12 @@ class ObservabilityEngine:
     def save(self) -> None:
         """Persist telemetry to disk."""
         try:
-            data = [asdict(m) for m in self.metrics]
+            data: list[dict[str, Any]] = [asdict(m) for m in self.metrics]
             self.telemetry_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (OSError, TypeError) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to save telemetry: {e}")
+            import traceback
+            traceback.print_exc()
 
     def load(self) -> None:
         """Load telemetry from disk."""
@@ -287,24 +275,26 @@ class ObservabilityEngine:
                 data = json.loads(self.telemetry_file.read_text())
 
                 self.metrics = [AgentMetric(**m) for m in data]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (json.JSONDecodeError, TypeError, ValueError) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to load telemetry: {e}")
+                import traceback
+                traceback.print_exc()
                 self.metrics = []
 
 
 class TokenCostEngine:
-    def __init__(self):
+    def __init__(self) -> None:
         self.core = TokenCostCore()
 
-    def calculate_cost(self, model, input_tokens=0, output_tokens=0):
-        res = self.core.calculate_cost(input_tokens, output_tokens, model)
+    def calculate_cost(self, model, input_tokens=0, output_tokens=0) -> float:
+        res: TokenCostResult = self.core.calculate_cost(input_tokens, output_tokens, model)
         return res.total_cost
 
 
 class ModelFallbackEngine:
-    def __init__(self, cost_engine=None):
+    def __init__(self, cost_engine=None) -> None:
         self.cost_engine = cost_engine
         self.core = ModelFallbackCore()
 
-    def get_fallback_model(self, current_model):
+    def get_fallback_model(self, current_model: str) -> str:
         return self.core.determine_next_model(current_model)

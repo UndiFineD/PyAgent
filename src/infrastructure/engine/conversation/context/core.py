@@ -61,15 +61,7 @@ class ConversationContext(ABC):
         return self._last_activity
 
     @property
-<<<<<<< HEAD
-<<<<<<< HEAD
     def turns(self) -> list[ConversationTurn]:
-=======
-    def turns(self) -> List[ConversationTurn]:
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-    def turns(self) -> List[ConversationTurn]:
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         """Get all turns in this conversation."""
         return self._turn_tracker.turns
 
@@ -204,15 +196,7 @@ class ConversationContext(ABC):
         ctx._turn_tracker._total_tokens = snapshot.total_tokens  # pylint: disable=protected-access
         return ctx
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     def import_turns(self, turns: list[ConversationTurn], deduplicate: bool = True) -> None:
-=======
-    def import_turns(self, turns: List[ConversationTurn], deduplicate: bool = True) -> None:
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-    def import_turns(self, turns: List[ConversationTurn], deduplicate: bool = True) -> None:
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
         """Import turns from another context."""
         seen_ids = {t.id for t in self.turns} if deduplicate else set()
         for turn in turns:

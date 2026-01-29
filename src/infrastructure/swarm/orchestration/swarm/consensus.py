@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class LogEntry:
+    """Represents a log entry in the consensus protocol."""
     index: int
     term: int
     command: Dict[str, Any]
@@ -29,7 +30,7 @@ class SwarmConsensus:
     Prevents configuration drift in large fleets.
     """
 
-    def __init__(self, node_id: str, peers: List[str]):
+    def __init__(self, node_id: str, peers: List[str]) -> None:
         self.node_id = node_id
         self.peers = peers
         self.term = 0
@@ -59,7 +60,7 @@ class SwarmConsensus:
             return True
         return False
 
-    async def _replicate_to_peer(self, peer: str, entry: LogEntry) -> bool:
+    async def _replicate_to_peer(self, _peer: str, _entry: LogEntry) -> bool:
         """Simulates RPC call to peer node."""
         await asyncio.sleep(0.01)  # Network latency
         return True
@@ -73,4 +74,5 @@ class SwarmConsensus:
         logger.info(f"Consensus committed change: {key} = {val} at index {entry.index}")
 
     def get_state(self, key: str) -> Any:
+        """Retrieves the current value for a key from the state machine."""
         return self.state_machine.get(key)

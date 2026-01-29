@@ -64,7 +64,7 @@ class PrefixCacheStats:
 
     @property
     def hit_rate(self) -> float:
-        total = self.num_hits + self.num_misses
+        total: int = self.num_hits + self.num_misses
         if total == 0:
             return 0.0
         return self.num_hits / total
@@ -103,7 +103,7 @@ class SpecDecodingStats:
     num_accepted_tokens: int = 0
     num_accepted_tokens_per_pos: list[int] = field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.num_accepted_tokens_per_pos:
             self.num_accepted_tokens_per_pos = [0] * self.num_spec_tokens
 
@@ -424,7 +424,7 @@ class SchedulerStats:
 
     def to_prometheus(self) -> str:
         """Export as Prometheus format."""
-        lines = [
+        lines: list[str] = [
             f"scheduler_running_requests {{}} {self.num_running_reqs}",
             f"scheduler_waiting_requests {{}} {self.num_waiting_reqs}",
             f"scheduler_step_counter {{}} {self.step_counter}",
@@ -448,8 +448,8 @@ class SchedulerStats:
 class SchedulerStatsCollector:
     """Collects and aggregates scheduler statistics over time."""
 
-    def __init__(self, window_size: int = 100):
-        self.window_size = window_size
+    def __init__(self, window_size: int = 100) -> None:
+        self.window_size: int = window_size
         self._history: list[SchedulerStats] = []
         self._current = SchedulerStats()
 
@@ -468,7 +468,7 @@ class SchedulerStatsCollector:
 
     def commit(self) -> SchedulerStats:
         """Commit current stats to history and reset."""
-        snapshot = self._current.clone()
+        snapshot: SchedulerStats = self._current.clone()
         self._history.append(snapshot)
 
         # Trim history
@@ -483,7 +483,7 @@ class SchedulerStatsCollector:
         if not self._history:
             return {}
 
-        n = len(self._history)
+        n: int = len(self._history)
         return {
             "avg_running_reqs": sum(s.num_running_reqs for s in self._history) / n,
             "avg_waiting_reqs": sum(s.num_waiting_reqs for s in self._history) / n,
@@ -493,7 +493,7 @@ class SchedulerStatsCollector:
 
     def drain_events(self) -> list[KVCacheEvictionEvent]:
         """Get and clear eviction events."""
-        events = list(self._current.kv_cache_eviction_events)
+        events: list[KVCacheEvictionEvent] = list(self._current.kv_cache_eviction_events)
         self._current.kv_cache_eviction_events.clear()
         return events
 

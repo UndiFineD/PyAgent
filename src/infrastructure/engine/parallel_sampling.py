@@ -14,6 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 """
+Module: parallel_sampling
+Implements parallel sampling strategies for distributed inference in PyAgent.
+"""
+"""
 Parallel Sampling - Multi-sample request handling (n > 1).
 
 Implements vLLM's ParallelSampling patterns with PyAgent enhancements:

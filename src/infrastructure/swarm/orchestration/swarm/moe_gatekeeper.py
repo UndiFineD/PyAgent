@@ -19,7 +19,7 @@ Routes tasks to specialized agents (experts) based on semantic similarity.
 
 import asyncio
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Coroutine, Dict, List, Optional
 
 import numpy as np
 
@@ -29,7 +29,7 @@ from src.infrastructure.engine.models.similarity import \
     EmbeddingSimilarityService
 from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class MoEGatekeeper:
@@ -44,23 +44,23 @@ class MoEGatekeeper:
         audit_logger: Optional[SwarmAuditLogger] = None,
         topology_manager: Optional[Any] = None,
         reward_predictor: Optional[Any] = None,
-    ):
-        self.similarity_service = similarity_service
-        self.audit_logger = audit_logger
-        self.topology_manager = topology_manager
-        self.reward_predictor = reward_predictor
+    ) -> None:
+        self.similarity_service: EmbeddingSimilarityService = similarity_service
+        self.audit_logger: SwarmAuditLogger | None = audit_logger
+        self.topology_manager: Any | None = topology_manager
+        self.reward_predictor: Any | None = reward_predictor
         self.experts: Dict[str, ExpertProfile] = {}
         self.routing_cache: Dict[str, MoERoutingDecision] = {}
         self.max_cache_size = 1000
 
-    def register_expert(self, profile: ExpertProfile):
+    def register_expert(self, profile: ExpertProfile) -> None:
         """Adds an expert to the routing table."""
         self.experts[profile.agent_id] = profile
         # Clear cache when expert list changes to ensure routing remains accurate
         self.routing_cache.clear()
         logger.info(f"Gatekeeper: Registered expert {profile.agent_id}. Cache cleared.")
 
-    def update_expert_performance(self, agent_id: str, new_score: float):
+    def update_expert_performance(self, agent_id: str, new_score: float) -> None:
         """Updates the performance score for a specific expert."""
         if agent_id in self.experts:
             self.experts[agent_id].performance_score = new_score
@@ -78,13 +78,13 @@ class MoEGatekeeper:
             raise ValueError("No experts registered in MoE Gatekeeper.")
 
         # Cache Lookup
-        cache_key = f"{task_prompt[:128]}_{top_k}"
+        cache_key: str = f"{task_prompt[:128]}_{top_k}"
         if cache_key in self.routing_cache:
             logger.debug(f"Gatekeeper: Cache hit for task '{task_prompt[:20]}...'")
-            decision = self.routing_cache[cache_key]
+            decision: MoERoutingDecision = self.routing_cache[cache_key]
         else:
             task_emb = await self.similarity_service.get_embedding(task_prompt)
-            decision = await self._compute_routing(task_prompt, task_emb, top_k)
+            decision: MoERoutingDecision = await self._compute_routing(task_prompt, task_emb, top_k)
 
             # Cache Update
             if len(self.routing_cache) < self.max_cache_size:
@@ -103,32 +103,32 @@ class MoEGatekeeper:
         """
         # In a real system, similarity_service.get_embeddings would handle batching
         # Here we simulate the parallel speedup
-        tasks = [self.route_task(p, top_k) for p in task_prompts]
+        tasks: List[Coroutine[Any, Any, MoERoutingDecision]] = [self.route_task(p, top_k) for p in task_prompts]
         return await asyncio.gather(*tasks)
 
     async def _compute_routing(self, prompt: str, task_emb: np.ndarray, top_k: int) -> MoERoutingDecision:
         """Internal logic for calculating weights."""
         scores = []
-        agent_ids = list(self.experts.keys())
+        agent_ids: List[str] = list(self.experts.keys())
 
         for agent_id in agent_ids:
-            profile = self.experts[agent_id]
+            profile: ExpertProfile = self.experts[agent_id]
             # Use specialization vector if available, otherwise fallback to domain keyword similarity simulation
-            expert_vec = np.array(profile.specialization_vector)
+            expert_vec: np.ndarray[tuple[int, ...], np.dtype[Any]] = np.array(profile.specialization_vector)
 
             if len(expert_vec) == 0:
                 # Mock a vector based on domains if empty
                 # Use a specific seed based on the domain string for deterministic testing
                 import zlib
-                seed = zlib.adler32(" ".join(profile.domains).encode()) & 0xFFFFFFFF
+                seed: int = zlib.adler32(" ".join(profile.domains).encode()) & 0xFFFFFFFF
                 np.random.seed(seed)
-                expert_vec = np.random.randn(384).astype(np.float32)
+                expert_vec: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.randn(384).astype(np.float32)
                 expert_vec /= np.linalg.norm(expert_vec)
                 profile.specialization_vector = expert_vec.tolist()
 
             similarity = float(np.dot(task_emb, expert_vec))
             # Phase 68 fix: Ensure similarity is non-negative before multiplying by performance
-            clamped_similarity = max(0.01, similarity)
+            clamped_similarity: float = max(0.01, similarity)
 
             # Phase 74: Heterogeneous Hardware Boosting
             # Prefer hardware-accelerated experts if the task is complex/large
@@ -136,7 +136,7 @@ class MoEGatekeeper:
             if profile.acceleration_type in ["fp8_bitnet", "h100_tensor"]:
                 hardware_multiplier = 1.2
 
-            final_score = clamped_similarity * profile.performance_score * hardware_multiplier
+            final_score: float = clamped_similarity * profile.performance_score * hardware_multiplier
 
             # Phase 83: Reward Predictor Tuning (RL Feedback)
             if self.reward_predictor:
@@ -146,10 +146,10 @@ class MoEGatekeeper:
 
         # Convert to numpy for sorting
         scores_arr = np.array(scores)
-        top_indices = np.argsort(scores_arr)[-top_k:][::-1]
+        top_indices: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(scores_arr)[-top_k:][::-1]
 
         selected_experts = [agent_ids[i] for i in top_indices]
-        weights = [float(scores_arr[i]) for i in top_indices]
+        weights: List[float] = [float(scores_arr[i]) for i in top_indices]
 
         # Softmax weights
         exp_weights = np.exp(weights - np.max(weights))

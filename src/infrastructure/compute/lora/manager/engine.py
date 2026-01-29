@@ -18,6 +18,7 @@ Engine.py module.
 
 from __future__ import annotations
 
+from _thread import LockType
 import threading
 from typing import Any, Dict, List, Optional
 
@@ -30,18 +31,18 @@ from .slot import LoRASlotManager
 class LoRAManager:
     """High-level LoRA management."""
 
-    def __init__(self, max_loras: int = 16, max_gpu_slots: int = 8, max_rank: int = 64):
-        self.max_loras = max_loras
-        self.max_rank = max_rank
+    def __init__(self, max_loras: int = 16, max_gpu_slots: int = 8, max_rank: int = 64) -> None:
+        self.max_loras: int = max_loras
+        self.max_rank: int = max_rank
         self._registry = LoRARegistry(max_cached=max_loras)
         self._slot_manager = LoRASlotManager(num_slots=max_gpu_slots)
         self._active_requests: Dict[str, LoRARequest] = {}
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
     def load_adapter(self, config: LoRAConfig) -> LoRAInfo:
         if config.rank > self.max_rank:
             raise ValueError(f"exceeds max_rank {self.max_rank}")
-        adapter = self._registry.register(config)
+        adapter: LoRAAdapter = self._registry.register(config)
         if adapter.info:
             return adapter.info
         raise RuntimeError(f"Failed to load {config.adapter_name}")
@@ -51,22 +52,22 @@ class LoRAManager:
         return self._registry.unregister(name)
 
     def add_request(self, request: LoRARequest) -> bool:
-        adapter = self._registry.get(request.adapter_name)
+        adapter: LoRAAdapter | None = self._registry.get(request.adapter_name)
         if not adapter:
             return False
-        mem = adapter.weights.memory_bytes if adapter.weights else 0
-        sid = self._slot_manager.allocate(request.adapter_name, mem)
+        mem: int = adapter.weights.memory_bytes if adapter.weights else 0
+        sid: int | None = self._slot_manager.allocate(request.adapter_name, mem)
         if sid is None:
             return False
         with self._lock:
             self._active_requests[request.request_id] = request
         return True
 
-    def remove_request(self, rid: str):
+    def remove_request(self, rid: str) -> None:
         with self._lock:
             if rid in self._active_requests:
-                req = self._active_requests.pop(rid)
-                if not any(r.adapter_name == req.adapter_name for r in self._active_requests.values()):
+                req: LoRARequest = self._active_requests.pop(rid)
+                if not any(r.adapter_name == req.adapter_name for r: LoRARequest in self._active_requests.values()):
                     self._slot_manager.release(req.adapter_name)
 
     def get_adapter(self, name: str) -> Optional[LoRAAdapter]:

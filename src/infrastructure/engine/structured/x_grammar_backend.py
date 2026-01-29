@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module: x_grammar_backend
+Implements X-Grammar backend for structured output in PyAgent engine.
+"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +32,8 @@ Beyond vLLM innovations:
 - Performance profiling and metrics
 """
 
+from _thread import LockType
+from asyncio import AbstractEventLoop
 import threading
 from typing import Any, Dict, List, Optional
 
@@ -70,19 +76,19 @@ class XGrammarBackend:
         cache_limit_mb: int = 100,
     ) -> None:
         self.tokenizer = tokenizer
-        self.vocab_size = vocab_size
-        self.disable_any_whitespace = disable_any_whitespace
-        self.num_speculative_tokens = num_speculative_tokens
+        self.vocab_size: int | None = vocab_size
+        self.disable_any_whitespace: bool = disable_any_whitespace
+        self.num_speculative_tokens: int = num_speculative_tokens
 
         # Create tokenizer info
-        self.tokenizer_info = TokenizerInfo.from_tokenizer(
+        self.tokenizer_info: TokenizerInfo = TokenizerInfo.from_tokenizer(
             tokenizer,
             vocab_size=vocab_size,
         )
 
         # Update vocab_size from tokenizer_info if not provided
         if self.vocab_size is None:
-            self.vocab_size = self.tokenizer_info.vocab_size
+            self.vocab_size: int = self.tokenizer_info.vocab_size
 
         # Create grammar compiler
         self.compiler = GrammarCompiler(
@@ -94,7 +100,7 @@ class XGrammarBackend:
 
         # Bitmask pool for reuse
         self._bitmask_pool: List["np.ndarray"] = []
-        self._pool_lock = threading.Lock()
+        self._pool_lock: LockType = threading.Lock()
 
     def compile_grammar(
         self,
@@ -103,24 +109,24 @@ class XGrammarBackend:
     ) -> XGrammarGrammar:
         """Compile grammar specification."""
         if grammar_type == GrammarType.JSON_SCHEMA:
-            ctx = self.compiler.compile_json_schema(
+            ctx: CompiledGrammar = self.compiler.compile_json_schema(
                 grammar_spec,
                 any_whitespace=not self.disable_any_whitespace,
             )
         elif grammar_type == GrammarType.JSON_OBJECT:
-            ctx = self.compiler.compile_json_schema(
+            ctx: CompiledGrammar = self.compiler.compile_json_schema(
                 '{"type": "object"}',
                 any_whitespace=not self.disable_any_whitespace,
             )
         elif grammar_type == GrammarType.REGEX:
-            ctx = self.compiler.compile_regex(grammar_spec)
+            ctx: CompiledGrammar = self.compiler.compile_regex(grammar_spec)
         elif grammar_type in (GrammarType.EBNF, GrammarType.LARK):
             # Convert Lark to EBNF if needed
             if grammar_type == GrammarType.LARK:
                 grammar_spec = self._convert_lark_to_ebnf(grammar_spec)
-            ctx = self.compiler.compile_grammar(grammar_spec)
+            ctx: CompiledGrammar = self.compiler.compile_grammar(grammar_spec)
         elif grammar_type == GrammarType.STRUCTURAL_TAG:
-            ctx = self.compiler.compile_structural_tag(grammar_spec)
+            ctx: CompiledGrammar = self.compiler.compile_structural_tag(grammar_spec)
         else:
             raise ValueError(f"Unsupported grammar type: {grammar_type}")
 
@@ -163,7 +169,7 @@ class XGrammarBackend:
 
     def get_stats(self) -> Dict[str, Any]:
         """Get backend statistics."""
-        stats = self.compiler.get_stats()
+        stats: Dict[str, Any] = self.compiler.get_stats()
         stats["vocab_size"] = self.vocab_size
         stats["num_speculative_tokens"] = self.num_speculative_tokens
         stats["bitmask_pool_size"] = len(self._bitmask_pool)
@@ -195,7 +201,7 @@ class AsyncXGrammarBackend(XGrammarBackend):
         """Async grammar compilation."""
         import asyncio
 
-        loop = asyncio.get_event_loop()
+        loop: AbstractEventLoop = asyncio.get_event_loop()
         return await loop.run_in_executor(
             self._compile_executor,
             self.compile_grammar,
@@ -204,7 +210,7 @@ class AsyncXGrammarBackend(XGrammarBackend):
         )
 
 
-__all__ = [
+__all__: List[str] = [
     "GrammarType",
     "VocabType",
     "TokenizerInfo",

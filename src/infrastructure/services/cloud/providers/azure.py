@@ -25,10 +25,14 @@ import os
 import time
 from typing import List, Optional
 
+from httpx import AsyncClient
+
+from httpx import Response
+
 from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
                     InferenceRequest, InferenceResponse, RateLimitError)
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class AzureAIConnector(CloudProviderBase):
@@ -42,7 +46,7 @@ class AzureAIConnector(CloudProviderBase):
     """
 
     # Pricing per 1M tokens (input/output) - approximate (Standard Azure Pay-As-Go)
-    PRICING = {
+    PRICING: dict[str, dict[str, float]] = {
         "gpt-4": {"input": 30.00, "output": 60.00},
         "gpt-4o": {"input": 5.00, "output": 15.00},
         "gpt-35-turbo": {"input": 0.50, "output": 1.50},
@@ -57,7 +61,7 @@ class AzureAIConnector(CloudProviderBase):
         endpoint: Optional[str] = None,
         api_version: str = "2024-02-01",
         **config,
-    ):
+    ) -> None:
         """
         Initialize Azure AI Connector.
 
@@ -69,8 +73,8 @@ class AzureAIConnector(CloudProviderBase):
         """
         super().__init__(api_key=api_key, **config)
         self._api_key = api_key or os.getenv("AZURE_AI_KEY")
-        self._endpoint = endpoint or os.getenv("AZURE_AI_ENDPOINT")
-        self._api_version = api_version
+        self._endpoint: str | None = endpoint or os.getenv("AZURE_AI_ENDPOINT")
+        self._api_version: str = api_version
 
     @property
     def name(self) -> str:
@@ -83,17 +87,17 @@ class AzureAIConnector(CloudProviderBase):
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         import httpx
 
-        start_time = time.perf_counter()
+        start_time: float = time.perf_counter()
 
         if not self._api_key or not self._endpoint:
             raise AuthenticationError("Azure AI API key and endpoint are required.")
 
         # Azure endpoints often use /v1/chat/completions for OpenAI compatibility
-        url = self._endpoint
+        url: str = self._endpoint
         if not url.endswith("/chat/completions"):
-            url = f"{self._endpoint.rstrip('/')}/v1/chat/completions"
+            url: str = f"{self._endpoint.rstrip('/')}/v1/chat/completions"
 
-        headers = {
+        headers: dict[str, str] = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self._api_key}" if not self._is_entra_token() else f"Bearer {self._api_key}",
             "api-key": self._api_key,  # Azure specific header
@@ -109,7 +113,7 @@ class AzureAIConnector(CloudProviderBase):
 
         async with httpx.AsyncClient(timeout=60.0) as client:
             try:
-                response = await client.post(url, json=payload, headers=headers)
+                response: Response = await client.post(url, json=payload, headers=headers)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 raise CloudProviderError(f"Azure AI connection failed: {e}")
 
@@ -126,8 +130,8 @@ class AzureAIConnector(CloudProviderBase):
             input_tokens = usage.get("prompt_tokens", len(str(request.messages)) // 4)
             output_tokens = usage.get("completion_tokens", len(content) // 4)
 
-            cost = self._calculate_cost(request.model, input_tokens, output_tokens)
-            latency = (time.perf_counter() - start_time) * 1000
+            cost: float = self._calculate_cost(request.model, input_tokens, output_tokens)
+            latency: float = (time.perf_counter() - start_time) * 1000
 
             return InferenceResponse(
                 content=content,
@@ -145,5 +149,5 @@ class AzureAIConnector(CloudProviderBase):
         return len(self._api_key) > 64  # Heuristic
 
     def _calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
-        pricing = self.PRICING.get(model, {"input": 1.0, "output": 1.0})
+        pricing: dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 1.0})
         return (input_tokens / 1_000_000 * pricing["input"]) + (output_tokens / 1_000_000 * pricing["output"])

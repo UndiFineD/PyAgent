@@ -27,7 +27,7 @@ import logging
 import os
 import time
 from dataclasses import dataclass, field
-from typing import AsyncIterator, Iterator, List, Optional, Protocol
+from typing import Any, AsyncIterator, Iterator, List, Optional, Protocol
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +110,7 @@ class TokenStreamIterator:
             print(token.text, end="", flush=True)
     """
 
-    def __init__(self, buffer_size: int = 100):
+    def __init__(self, buffer_size: int = 100) -> None:
         self._buffer: List[StreamToken] = []
         self._finished = False
         self._error: Optional[Exception] = None
@@ -229,7 +229,7 @@ class StreamingVllmEngine:
 
     _instance: Optional["StreamingVllmEngine"] = None
 
-    def __init__(self, config: Optional[StreamingConfig] = None):
+    def __init__(self, config: Optional[StreamingConfig] = None) -> None:
         self.config = config or StreamingConfig()
         self._llm: Optional[LLM] = None
         self._initialized = False
@@ -239,7 +239,7 @@ class StreamingVllmEngine:
         }
 
     @classmethod
-    def get_instance(cls, config: Optional[StreamingConfig] = None) -> "StreamingVllmEngine":
+    def get_instance(cls: type["StreamingVllmEngine"], config: Optional[StreamingConfig] = None) -> "StreamingVllmEngine":
         """Get singleton instance."""
         if cls._instance is None:
             cls._instance = StreamingVllmEngine(config)
@@ -250,36 +250,41 @@ class StreamingVllmEngine:
         """Check if vLLM is available."""
         return HAS_VLLM
 
-    def _ensure_initialized(self) -> bool:
-        """Lazily initialize the engine."""
-        if not HAS_VLLM:
-            logger.warning("vLLM not available for streaming")
-            return False
+    def _detect_device(self) -> str:
+        """Auto-detect the target device for vLLM."""
+        if "VLLM_TARGET_DEVICE" in os.environ:
+            return os.environ["VLLM_TARGET_DEVICE"]
 
-        if self._initialized and self._llm:
-            return True
+        if HAS_TORCH and torch.cuda.is_available():
+            device = "cuda"
+        else:
+            device = "cpu"
 
+        os.environ["VLLM_TARGET_DEVICE"] = device
+        return device
+
+    def _build_llm_kwargs(self, device: str) -> dict[str, Any]:
+        """Build kwargs for LLM initialization."""
+        kwargs = {
+            "model": self.config.model,
+            "trust_remote_code": self.config.trust_remote_code,
+        }
+
+        if device != "cpu":
+            kwargs["gpu_memory_utilization"] = self.config.gpu_memory_utilization
+            kwargs["tensor_parallel_size"] = self.config.tensor_parallel_size
+        else:
+            kwargs["device"] = "cpu"
+
+        return kwargs
+
+    def _initialize_llm(self) -> bool:
+        """Initialize the vLLM engine."""
         try:
-            # Auto-detect device
-            if "VLLM_TARGET_DEVICE" not in os.environ:
-                if HAS_TORCH and torch.cuda.is_available():
-                    os.environ["VLLM_TARGET_DEVICE"] = "cuda"
-                else:
-                    os.environ["VLLM_TARGET_DEVICE"] = "cpu"
-
+            device = self._detect_device()
             logger.info("Initializing StreamingVllmEngine: %s", self.config.model)
 
-            kwargs = {
-                "model": self.config.model,
-                "trust_remote_code": self.config.trust_remote_code,
-            }
-
-            if os.environ.get("VLLM_TARGET_DEVICE") != "cpu":
-                kwargs["gpu_memory_utilization"] = self.config.gpu_memory_utilization
-                kwargs["tensor_parallel_size"] = self.config.tensor_parallel_size
-            else:
-                kwargs["device"] = "cpu"
-
+            kwargs = self._build_llm_kwargs(device)
             self._llm = LLM(**kwargs)
             self._initialized = True
 
@@ -290,6 +295,17 @@ class StreamingVllmEngine:
             logger.error("Failed to initialize StreamingVllmEngine: %s", e)
             return False
 
+    def _ensure_initialized(self) -> bool:
+        """Lazily initialize the engine."""
+        if not HAS_VLLM:
+            logger.warning("vLLM not available for streaming")
+            return False
+
+        if self._initialized and self._llm:
+            return True
+
+        return self._initialize_llm()
+
     def generate_with_callback(
         self,
         prompt: str,
@@ -297,7 +313,7 @@ class StreamingVllmEngine:
         temperature: float = 0.7,
         max_tokens: int = 1024,
         system_prompt: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> str:
         """
         Generate with callback for each token.
@@ -358,7 +374,7 @@ class StreamingVllmEngine:
         temperature: float = 0.7,
         max_tokens: int = 1024,
         system_prompt: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> TokenStreamIterator:
         """
         Generate with async token stream.
@@ -391,7 +407,7 @@ class StreamingVllmEngine:
         temperature: float,
         max_tokens: int,
         system_prompt: Optional[str],
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Background task to generate and push to iterator."""
         try:
@@ -443,7 +459,7 @@ class StreamingVllmEngine:
         temperature: float = 0.7,
         max_tokens: int = 1024,
         system_prompt: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> Iterator[str]:
         """
         Generate with buffered token chunks.

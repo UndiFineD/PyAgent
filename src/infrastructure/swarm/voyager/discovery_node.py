@@ -23,9 +23,9 @@ logger = StructuredLogger(__name__)
 class VoyagerPeerListener(ServiceListener):
     """Listens for other PyAgent Voyager peers on the local network."""
 
-    def __init__(self, callback: Any, loop: asyncio.AbstractEventLoop):
+    def __init__(self, callback: Any, loop: asyncio.AbstractEventLoop) -> None:
         self.callback = callback
-        self.loop = loop
+        self.loop: asyncio.AbstractEventLoop = loop
 
     def add_service(self, zc: Any, type_: str, name: str) -> None:
         """Called by Zeroconf when a new service is discovered."""
@@ -54,18 +54,18 @@ class DiscoveryNode:
 
     SERVICE_TYPE = "_pyagentv._tcp.local."
 
-    def __init__(self, node_name: Optional[str] = None, port: int = 8000, transport_port: int = 5555):
-        self.node_id = str(uuid.uuid4())[:8]
-        self.node_name = node_name or f"PyAgent-{self.node_id}"
-        self.port = port
-        self.transport_port = transport_port
+    def __init__(self, node_name: Optional[str] = None, port: int = 8000, transport_port: int = 5555) -> None:
+        self.node_id: str = str(uuid.uuid4())[:8]
+        self.node_name: str = node_name or f"PyAgent-{self.node_id}"
+        self.port: int = port
+        self.transport_port: int = transport_port
         self.aiozc: Optional[AsyncZeroconf] = None
         self.peers: Dict[str, ServiceInfo] = {}
         self.info: Optional[ServiceInfo] = None
         self.browser: Optional[ServiceBrowser] = None
 
         # Local IP detection
-        self.local_ip = self._get_local_ip()
+        self.local_ip: str = self._get_local_ip()
 
     def _get_local_ip(self) -> str:
         """Returns the local IPv4 address of the node."""
@@ -78,7 +78,7 @@ class DiscoveryNode:
         s.close()
         return ip_address
 
-    async def start_advertising(self):
+    async def start_advertising(self) -> None:
         """Broadcasts this node to the local network."""
         import os
         import platform
@@ -91,11 +91,11 @@ class DiscoveryNode:
         ram_gb = "8.0" # Default
         try:
              import psutil
-             ram_gb = f"{psutil.virtual_memory().total / (1024**3):.1f}"
+             ram_gb: str = f"{psutil.virtual_memory().total / (1024**3):.1f}"
         except ImportError:
              pass
 
-        desc = {
+        desc: Dict[str, str] = {
             "version": VERSION,
             "node_id": self.node_id,
             "transport_port": str(self.transport_port),
@@ -117,24 +117,24 @@ class DiscoveryNode:
         logger.info(f"Voyager: Advertising node {self.node_name} at {self.local_ip}:{self.port}")
         await self.aiozc.zeroconf.async_register_service(self.info)
 
-    async def start_discovery(self):
+    async def start_discovery(self) -> None:
         """Starts browsing for other Voyager peers."""
         if self.aiozc is None:
             self.aiozc = AsyncZeroconf(ip_version=IPVersion.V4Only)
 
         logger.info("Voyager: Starting peer discovery browser...")
-        loop = asyncio.get_running_loop()
+        loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
         self.browser = ServiceBrowser(
             self.aiozc.zeroconf, self.SERVICE_TYPE, VoyagerPeerListener(self._peer_discovered, loop)
         )
 
-    def _peer_discovered(self, info: ServiceInfo):
+    def _peer_discovered(self, info: ServiceInfo) -> None:
         """Internal callback for when a peer is discovered via Zeroconf."""
         if info.name not in self.peers:
             self.peers[info.name] = info
             logger.info(f"Voyager: Peer Registry updated. Total peers: {len(self.peers)}")
 
-    async def stop(self):
+    async def stop(self) -> None:
         """Stops advertising and discovery."""
         if self.aiozc:
             if self.info:
@@ -166,15 +166,15 @@ class DiscoveryNode:
         This enables decentralized routing without hardcoded IPs.
         """
         for name, info in self.peers.items():
-            props = {
+            props: Dict[str | bytearray | memoryview[_I], str | bytearray | memoryview[_I] | None] = {
                 k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
                 for k, v in info.properties.items()
             }
 
             # Match by node_name, node_id, or mDNS service name
             if peer_name == props.get("node_id") or peer_name == name.split(".")[0] or peer_name in name:
-                addrs = info.parsed_addresses()
-                t_port = props.get("transport_port")
+                addrs: List[str] = info.parsed_addresses()
+                t_port: str | bytearray | memoryview[_I] | None = props.get("transport_port")
                 if addrs and t_port:
                     return (addrs[0], int(t_port))
 
@@ -187,7 +187,7 @@ if __name__ == "__main__":
     if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-    async def run_test():
+    async def run_test() -> None:
         """Manual test runner for discovery node."""
         node = DiscoveryNode()
         try:
@@ -196,7 +196,7 @@ if __name__ == "__main__":
             print("Discovery Node Active. Press Ctrl+C to stop.")
             while True:
                 await asyncio.sleep(5)
-                peers = node.get_active_peers()
+                peers: List[Dict[str, Any]] = node.get_active_peers()
                 if peers:
                     print(f"Found {len(peers)} peers: {[p['name'] for p in peers]}")
         except asyncio.CancelledError:

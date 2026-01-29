@@ -20,7 +20,7 @@ class FleetDecommissioner:
     Scans the swarm and performs resource cleanup.
     """
 
-    def __init__(self, gatekeeper: Any, shard_manager: Any, idle_timeout: float = 3600.0):
+    def __init__(self, gatekeeper: Any, shard_manager: Any, idle_timeout: float = 3600.0) -> None:
         self.gatekeeper = gatekeeper
         self.shard_manager = shard_manager
         self.idle_timeout = idle_timeout

@@ -40,9 +40,9 @@ class TensorizerWriter:
         self,
         path: Union[str, Path],
         config: Optional[TensorizerConfig] = None,
-    ):
+    ) -> None:
         self.path = Path(path)
-        self.config = config or TensorizerConfig()
+        self.config: TensorizerConfig = config or TensorizerConfig()
 
         self._file: Optional[BinaryIO] = None
         self._metadata: List[TensorMetadata] = []
@@ -81,10 +81,10 @@ class TensorizerWriter:
         self._file.write(struct.pack("<Q", 0))
 
         # Config info
-        comp_bytes = self.config.compression.value.encode("utf-8")
+        comp_bytes: bytes = self.config.compression.value.encode("utf-8")
         self._file.write(struct.pack("<I", len(comp_bytes)) + comp_bytes)
 
-        self._data_offset = self._file.tell()
+        self._data_offset: int = self._file.tell()
         self._header_written = True
 
     def _finalize(self) -> None:
@@ -93,14 +93,14 @@ class TensorizerWriter:
             return
 
         # Write metadata
-        metadata_offset = self._file.tell()
+        metadata_offset: int = self._file.tell()
 
         # Number of tensors
         self._file.write(struct.pack("<I", len(self._metadata)))
 
         # Each tensor's metadata
-        for meta in self._metadata:
-            meta_bytes = meta.to_bytes()
+        for meta: TensorMetadata in self._metadata:
+            meta_bytes: bytes = meta.to_bytes()
             self._file.write(struct.pack("<I", len(meta_bytes)))
             self._file.write(meta_bytes)
 
@@ -118,27 +118,27 @@ class TensorizerWriter:
             raise RuntimeError("Writer not opened")
 
         # Determine dtype
-        dtype = TensorDtype.FLOAT32
+        dtype: TensorDtype = TensorDtype.FLOAT32
         for td, (np_dtype, _) in DTYPE_MAP.items():
             if tensor.dtype == np_dtype:
-                dtype = td
+                dtype: TensorDtype = td
                 break
 
         # Serialize tensor data
-        tensor_bytes = tensor.tobytes()
+        tensor_bytes: bytes = tensor.tobytes()
 
         # Compute checksum
-        checksum = hashlib.sha256(tensor_bytes).hexdigest()[:16]
+        checksum: str = hashlib.sha256(tensor_bytes).hexdigest()[:16]
 
         # Compress if configured
-        compressed_bytes = compress_data(
+        compressed_bytes: bytes = compress_data(
             tensor_bytes,
             self.config.compression,
             self.config.compression_level,
         )
 
         # Record position
-        offset = self._file.tell()
+        offset: int = self._file.tell()
 
         # Write data
         self._file.write(compressed_bytes)
@@ -165,13 +165,13 @@ class TensorizerWriter:
     ) -> List[TensorMetadata]:
         """Write multiple tensors (a model) to the file."""
         results = []
-        total = len(tensors)
+        total: int = len(tensors)
 
         for i, (name, tensor) in enumerate(tensors.items()):
             if progress_callback:
                 progress_callback(name, i, total)
 
-            meta = self.write_tensor(name, tensor)
+            meta: TensorMetadata = self.write_tensor(name, tensor)
             results.append(meta)
 
         return results

@@ -18,6 +18,7 @@ Adapter.py module.
 
 from __future__ import annotations
 
+from io import TextIOWrapper
 import time
 from pathlib import Path
 from typing import Dict, Optional
@@ -31,11 +32,11 @@ from .weights import LoRAWeights
 class LoRAAdapter:
     """Represents a loaded LoRA adapter."""
 
-    def __init__(self, config: LoRAConfig):
-        self.config = config
+    def __init__(self, config: LoRAConfig) -> None:
+        self.config: LoRAConfig = config
         self.weights: Optional[LoRAWeights] = None
         self.info: Optional[LoRAInfo] = None
-        self._status = AdapterStatus.LOADING
+        self._status: AdapterStatus = AdapterStatus.LOADING
         self._load_time_ms = 0.0
 
     @property
@@ -47,7 +48,7 @@ class LoRAAdapter:
         return self._status
 
     def load(self) -> bool:
-        start = time.perf_counter()
+        start: float = time.perf_counter()
         try:
             path = Path(self.config.adapter_path)
             if path.is_dir():
@@ -59,8 +60,8 @@ class LoRAAdapter:
             else:
                 raise ValueError(f"Unsupported format: {path}")
 
-            self._load_time_ms = (time.perf_counter() - start) * 1000
-            self._status = AdapterStatus.READY
+            self._load_time_ms: float = (time.perf_counter() - start) * 1000
+            self._status: AdapterStatus = AdapterStatus.READY
             self.info = LoRAInfo(
                 self.config.adapter_name,
                 self.config.rank,
@@ -74,7 +75,7 @@ class LoRAAdapter:
             )
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self._status = AdapterStatus.ERROR
+            self._status: AdapterStatus = AdapterStatus.ERROR
             return False
 
     def _load_from_dir(self, path: Path) -> LoRAWeights:
@@ -91,7 +92,7 @@ class LoRAAdapter:
         w = LoRAWeights()
         with safe_open(str(path, encoding='utf-8'), framework="numpy") as f:
             for key in f.keys():
-                m = self._extract_module(key)
+                m: str = self._extract_module(key)
                 if ".lora_A." in key.lower():
                     w.lora_a[m] = f.get_tensor(key)
                 elif ".lora_B." in key.lower():
@@ -106,7 +107,7 @@ class LoRAAdapter:
         w = LoRAWeights()
         sd = torch.load(str(path), map_location="cpu")
         for key, t in sd.items():
-            m = self._extract_module(key)
+            m: str = self._extract_module(key)
             if ".lora_A." in key.lower():
                 w.lora_a[m] = t.numpy()
             elif ".lora_B." in key.lower():
@@ -128,7 +129,7 @@ class LoRAAdapter:
         if not self.weights or module_name not in self.weights.lora_a:
             return np.zeros_like(hidden_states)
         la, lb = self.weights.lora_a[module_name], self.weights.lora_b[module_name]
-        scale = self.weights.scales.get(module_name, self.config.computed_scaling)
+        scale: float = self.weights.scales.get(module_name, self.config.computed_scaling)
         return scale * (hidden_states @ la.T @ lb.T)
 
     def merge_into_weights(self, original_weights: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:

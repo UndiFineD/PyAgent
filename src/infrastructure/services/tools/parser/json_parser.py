@@ -47,7 +47,15 @@ class JsonToolParser(ToolParser):
 
         # Try to find JSON objects
         json_matches = extract_json_from_text(text)
+        self._process_json_matches(json_matches, result)
 
+        # Extract non-tool content
+        result.content = self._extract_content(text, json_matches)
+
+        return result
+
+    def _process_json_matches(self, json_matches: List[str], result: ToolParseResult) -> None:
+        """Process a list of JSON matches and add valid tool calls to the result."""
         for i, json_str in enumerate(json_matches):
             try:
                 data = json.loads(json_str)
@@ -56,11 +64,6 @@ class JsonToolParser(ToolParser):
                     result.tool_calls.append(tool_call)
             except json.JSONDecodeError as e:
                 result.errors.append(f"JSON parse error: {e}")
-
-        # Extract non-tool content
-        result.content = self._extract_content(text, json_matches)
-
-        return result
 
     def _parse_json_object(
         self,

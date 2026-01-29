@@ -32,7 +32,7 @@ class FederatedMetaOptimizer:
     to maximize fleet-wide throughput vs. accuracy (Pareto optimization).
     """
 
-    def __init__(self, telemetry: SwarmTelemetryService, initial_config: Dict[str, Any]):
+    def __init__(self, telemetry: SwarmTelemetryService, initial_config: Dict[str, Any]) -> None:
         self.telemetry = telemetry
         self.config = initial_config
         self.history: List[Dict[str, Any]] = []

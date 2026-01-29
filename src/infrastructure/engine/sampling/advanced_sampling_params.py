@@ -1,3 +1,7 @@
+"""
+Module: advanced_sampling_params
+Defines advanced sampling parameters for inference in PyAgent engine.
+"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -187,17 +191,17 @@ class AdvancedSamplingParams(SamplingParams):
 
         if step < self.temperature_warmup_steps:
             # Warmup phase
-            progress = step / max(self.temperature_warmup_steps, 1)
+            progress: float = step / max(self.temperature_warmup_steps, 1)
             return self.temperature_decay_target + progress * (self.temperature - self.temperature_decay_target)
 
-        effective_step = step - self.temperature_warmup_steps
-        decay_progress = min(effective_step / max(self.temperature_decay_steps, 1), 1.0)
+        effective_step: int = step - self.temperature_warmup_steps
+        decay_progress: float = min(effective_step / max(self.temperature_decay_steps, 1), 1.0)
 
         if self.temperature_schedule == TemperatureSchedule.LINEAR_DECAY:
             return self.temperature - decay_progress * (self.temperature - self.temperature_decay_target)
 
         if self.temperature_schedule == TemperatureSchedule.COSINE_DECAY:
-            cosine_factor = 0.5 * (1 + math.cos(math.pi * decay_progress))
+            cosine_factor: float = 0.5 * (1 + math.cos(math.pi * decay_progress))
             return self.temperature_decay_target + cosine_factor * (self.temperature - self.temperature_decay_target)
 
         if self.temperature_schedule == TemperatureSchedule.WARMUP_DECAY:
@@ -212,7 +216,7 @@ class AdvancedSamplingParams(SamplingParams):
 
         # Higher entropy -> larger k (more exploration)
         # Lower entropy -> smaller k (more exploitation)
-        normalized = min(entropy / self.entropy_threshold, 2.0)
+        normalized: float = min(entropy / self.entropy_threshold, 2.0)
         k = int(self.min_adaptive_k + normalized * (self.max_adaptive_k - self.min_adaptive_k))
         return max(self.min_adaptive_k, min(k, self.max_adaptive_k))
 
@@ -225,11 +229,11 @@ class AdvancedSamplingParams(SamplingParams):
             return 1.0  # No penalty beyond range
 
         # Apply decay
-        decay = self.repetition_penalty_decay**distance
+        decay: float = self.repetition_penalty_decay**distance
         if self.repetition_penalty_slope > 0:
             decay *= max(0, 1 - self.repetition_penalty_slope * distance)
 
-        penalty = 1.0 + (self.repetition_penalty - 1.0) * decay
+        penalty: float = 1.0 + (self.repetition_penalty - 1.0) * decay
         return max(1.0, penalty)
 
 
@@ -291,13 +295,13 @@ class BadWordsProcessor:
         bad_words_ids: Optional[List[List[int]]] = None,
         tokenizer: Optional[Any] = None,
     ) -> None:
-        self.bad_words = bad_words or []
-        self.bad_words_ids = bad_words_ids or []
-        self.tokenizer = tokenizer
+        self.bad_words: List[str] = bad_words or []
+        self.bad_words_ids: List[List[int]] = bad_words_ids or []
+        self.tokenizer: Any | None = tokenizer
 
         # Convert string bad words to token IDs
         if self.bad_words and self.tokenizer:
-            for word in self.bad_words:
+            for word: str in self.bad_words:
                 tokens = self.tokenizer.encode(word)
                 if isinstance(tokens, list) and tokens:
                     self.bad_words_ids.append(tokens)
@@ -306,15 +310,15 @@ class BadWordsProcessor:
         """Get tokens that should be banned given current context."""
         banned = set()
 
-        for bad_seq in self.bad_words_ids:
+        for bad_seq: List[int] in self.bad_words_ids:
             if len(bad_seq) == 1:
                 # Single token - always ban
                 banned.add(bad_seq[0])
             else:
                 # Multi-token - check if context matches prefix
-                seq_len = len(bad_seq)
+                seq_len: int = len(bad_seq)
                 if len(context_ids) >= seq_len - 1:
-                    context_suffix = context_ids[-(seq_len - 1) :]
+                    context_suffix: List[int] = context_ids[-(seq_len - 1) :]
                     if context_suffix == bad_seq[:-1]:
                         banned.add(bad_seq[-1])
 
@@ -322,7 +326,7 @@ class BadWordsProcessor:
 
     def apply_to_logits(self, logits: np.ndarray, context_ids: List[int]) -> np.ndarray:
         """Apply bad words masking to logits."""
-        banned = self.get_banned_tokens(context_ids)
+        banned: Set[int] = self.get_banned_tokens(context_ids)
         if banned:
             logits[list(banned)] = -float("inf")
         return logits
@@ -341,14 +345,14 @@ class TokenWhitelistProcessor:
     """
 
     def __init__(self, allowed_token_ids: List[int]) -> None:
-        self.allowed_set = set(allowed_token_ids)
+        self.allowed_set: Set[int] = set(allowed_token_ids)
         self.mask = None
 
     def build_mask(self, vocab_size: int) -> np.ndarray:
         """Build boolean mask for allowed tokens."""
         if self.mask is None or len(self.mask) != vocab_size:
-            self.mask = np.zeros(vocab_size, dtype=bool)
-            for tid in self.allowed_set:
+            self.mask: np.ndarray[Tuple[int], np.dtype[Any]] = np.zeros(vocab_size, dtype=bool)
+            for tid: int in self.allowed_set:
                 if 0 <= tid < vocab_size:
                     self.mask[tid] = True
         return self.mask
@@ -379,33 +383,33 @@ class MirostatSampler:
         eta: float = 0.1,  # Learning rate
         mode: int = 2,  # 1 or 2
     ) -> None:
-        self.tau = tau
-        self.eta = eta
-        self.mode = mode
-        self.mu = 2 * tau  # Initial estimate
+        self.tau: float = tau
+        self.eta: float = eta
+        self.mode: int = mode
+        self.mu: float = 2 * tau  # Initial estimate
 
     def sample(self, logits: np.ndarray) -> Tuple[int, float]:
         """Sample using mirostat algorithm."""
         # Compute probabilities
         logits = logits - logits.max()
-        probs = np.exp(logits)
+        probs: np.ndarray[Tuple[int], np.dtype[Any]] = np.exp(logits)
         probs = probs / probs.sum()
 
         # Sort by probability
-        sorted_indices = np.argsort(-probs)
+        sorted_indices: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(-probs)
         sorted_probs = probs[sorted_indices]
 
         if self.mode == 1:
             # Mirostat 1: Truncate based on estimated perplexity
-            k = max(1, int(np.exp(self.mu)))
-            k = min(k, len(sorted_probs))
+            k: int = max(1, int(np.exp(self.mu)))
+            k: int = min(k, len(sorted_probs))
 
             # Renormalize
             selected_probs = sorted_probs[:k]
             selected_probs = selected_probs / selected_probs.sum()
 
             # Sample
-            choice = np.random.choice(k, p=selected_probs)
+            choice: int = np.random.choice(k, p=selected_probs)
             token_id = sorted_indices[choice]
 
             # Update mu
@@ -418,8 +422,8 @@ class MirostatSampler:
             surprises = -np.log2(sorted_probs + 1e-10)
 
             # Find cutoff
-            k = np.searchsorted(surprises, self.mu)
-            k = max(1, min(k, len(sorted_probs)))
+            k: np.signedinteger[np._32Bit | np._64Bit] = np.searchsorted(surprises, self.mu)
+            k: np.signedinteger[np._32Bit | np._64Bit] | int = max(1, min(k, len(sorted_probs)))
 
             # Renormalize
             selected_probs = sorted_probs[:k]
@@ -427,7 +431,7 @@ class MirostatSampler:
 
             # Sample
             choice = np.random.choice(k, p=selected_probs)
-            token_id = sorted_indices[choice]
+            token_id: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = sorted_indices[choice]
 
             # Update mu
             surprise = -np.log2(probs[token_id])
@@ -459,7 +463,7 @@ class SamplingEngine:
     """
 
     def __init__(self, params: Union[SamplingParams, AdvancedSamplingParams]) -> None:
-        self.params = params
+        self.params: SamplingParams | AdvancedSamplingParams = params
         self._step = 0
         self._mirostat: Optional[MirostatSampler] = None
         self._bad_words: Optional[BadWordsProcessor] = None
@@ -502,26 +506,26 @@ class SamplingEngine:
 
         # Get temperature
         if isinstance(self.params, AdvancedSamplingParams):
-            temp = self.params.get_temperature(self._step)
+            temp: float = self.params.get_temperature(self._step)
         else:
-            temp = self.params.temperature
+            temp: float = self.params.temperature
 
         # Apply temperature
         if temp > 0:
             logits = logits / temp
 
         # Apply top-k
-        top_k = self.params.top_k
+        top_k: int = self.params.top_k
         if isinstance(self.params, AdvancedSamplingParams) and self.params.adaptive_top_k:
             # Compute entropy
             probs = np.exp(logits - logits.max())
             probs = probs / probs.sum()
             entropy = -np.sum(probs * np.log(probs + 1e-10))
-            top_k = self.params.get_adaptive_top_k(entropy)
+            top_k: int = self.params.get_adaptive_top_k(entropy)
 
         if top_k > 0:
-            indices = np.argsort(logits)[-top_k:]
-            mask = np.ones_like(logits, dtype=bool)
+            indices: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(logits)[-top_k:]
+            mask: np.ndarray[Tuple[int], np.dtype[Any]] = np.ones_like(logits, dtype=bool)
             mask[indices] = False
             logits[mask] = -float("inf")
 
@@ -529,11 +533,11 @@ class SamplingEngine:
         if self.params.top_p < 1.0:
             probs = np.exp(logits - logits.max())
             probs = probs / probs.sum()
-            sorted_indices = np.argsort(-probs)
-            cumsum = np.cumsum(probs[sorted_indices])
-            cutoff = np.searchsorted(cumsum, self.params.top_p) + 1
-            kept = sorted_indices[:cutoff]
-            mask = np.ones_like(logits, dtype=bool)
+            sorted_indices: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(-probs)
+            cumsum: np.ndarray[Tuple[int], np.dtype[Any]] = np.cumsum(probs[sorted_indices])
+            cutoff: np.signedinteger[np._32Bit | np._64Bit] = np.searchsorted(cumsum, self.params.top_p) + 1
+            kept: np.ndarray[Tuple[int], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = sorted_indices[:cutoff]
+            mask: np.ndarray[Tuple[int], np.dtype[Any]] = np.ones_like(logits, dtype=bool)
             mask[kept] = False
             logits[mask] = -float("inf")
 

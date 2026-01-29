@@ -32,15 +32,15 @@ class UsageQuotaManager:
         daily_limit: int | None = None,
         hourly_limit: int | None = None,
         config: dict[str, Any] | None = None,
-    ):
+    ) -> None:
         q_config = QuotaConfig(
             max_tokens=config.get("max_tokens") if config else None,
             max_time_seconds=config.get("max_time_seconds") if config else None,
             max_cycles=config.get("max_cycles") if config else None,
         )
         self._core = ResourceCore(q_config)
-        self.daily_limit = daily_limit
-        self.hourly_limit = hourly_limit
+        self.daily_limit: int | None = daily_limit
+        self.hourly_limit: int | None = hourly_limit
         self._requests: list[dict[str, Any]] = []
 
     def record_request(self, tokens: int = 1, cost: float = 0.0) -> None:

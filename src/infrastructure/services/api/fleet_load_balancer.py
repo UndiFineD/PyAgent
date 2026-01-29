@@ -27,7 +27,7 @@ from src.infrastructure.services.api.core.gateway_core import GatewayCore
 from src.infrastructure.swarm.fleet.core.load_balancer_core import (
     AgentMetrics, LoadBalancerCore)
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 class FleetLoadBalancer:
@@ -37,7 +37,7 @@ class FleetLoadBalancer:
     """
 
     def __init__(self, fleet) -> None:
-        self.fleet = fleet
+        self.fleet: Any = fleet
         self.gateway_core = GatewayCore()
         self.lb_core = LoadBalancerCore()
         self.request_queue: list[dict[str, Any]] = []
@@ -50,7 +50,7 @@ class FleetLoadBalancer:
         """
         logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
 
-        assigned_model = self.gateway_core.resolve_model_by_affinity(interface)
+        assigned_model: str = self.gateway_core.resolve_model_by_affinity(interface)
 
         # Simple simulation: If queue is large, increase latency or reject
         if len(self.request_queue) > 100:
@@ -68,5 +68,5 @@ class FleetLoadBalancer:
     def get_stats(self) -> dict[str, Any]:
         return {
             "queue_depth": len(self.request_queue),
-            "interface_diversity": list(set(r["interface"] for r in self.request_queue)),
+            "interface_diversity": list(set(r["interface"] for r: dict[str, Any] in self.request_queue)),
         }

@@ -38,6 +38,7 @@ class ExperienceReplayBuffer:
     position: int = 0
 
     def push(self, transition: Transition) -> None:
+        """Adds a transition to the buffer."""
         if len(self.buffer) < self.capacity:
             self.buffer.append(transition)
         else:
@@ -45,6 +46,7 @@ class ExperienceReplayBuffer:
         self.position = (self.position + 1) % self.capacity
 
     def sample(self, batch_size: int) -> List[Transition]:
+        """Randomly samples a batch of transitions."""
         return random.sample(self.buffer, min(batch_size, len(self.buffer)))
 
     def prioritized_sample(self, batch_size: int, alpha: float = 0.6) -> List[Transition]:
@@ -63,7 +65,7 @@ class MDP:
     Enhanced with value iteration, policy extraction, and model-based planning.
     """
 
-    def __init__(self, gamma: float = 0.99):
+    def __init__(self, gamma: float = 0.99) -> None:
         self.transitions: List[Transition] = []
         self.states: List[Any] = []
         self.actions: List[Any] = []
@@ -153,6 +155,7 @@ class MDP:
         return self.policy
 
     def get_reward_sum(self) -> float:
+        """Returns the sum of all rewards in transitions."""
         return sum(t.reward for t in self.transitions)
 
     def get_discounted_return(self) -> float:
@@ -163,6 +166,7 @@ class MDP:
         return total
 
     def to_dict(self) -> Dict[str, Any]:
+        """Returns a dictionary representation of the MDP."""
         return {
             "state_count": len(self.states),
             "action_count": len(self.actions),

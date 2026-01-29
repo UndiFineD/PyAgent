@@ -57,7 +57,7 @@ class VllmNativeEngine:
         self.enabled = HAS_VLLM
 
     @classmethod
-    def get_instance(cls, **kwargs) -> VllmNativeEngine:
+    def get_instance(cls: type["VllmNativeEngine"], **kwargs: Any) -> 'VllmNativeEngine':
         """Get the singleton instance of the native engine."""
         if cls._instance is None:
             cls._instance = VllmNativeEngine(**kwargs)
@@ -111,6 +111,49 @@ class VllmNativeEngine:
                 return False
         return True
 
+    def _format_prompt(self, prompt: str, system_prompt: str = "") -> str:
+        """Format the prompt with system prompt if provided."""
+        if system_prompt:
+            return f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:"
+        return prompt
+
+    def _build_sampling_params(
+        self,
+        temperature: float,
+        max_tokens: int,
+        guided_json: Optional[dict] = None,
+        guided_regex: Optional[str] = None,
+        guided_choice: Optional[list] = None,
+    ) -> "SamplingParams":
+        """Build sampling parameters with optional guided decoding."""
+        sampling_kwargs = {
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "top_p": 0.95,
+        }
+
+        if guided_json is not None:
+            sampling_kwargs["guided_json"] = guided_json
+        if guided_regex is not None:
+            sampling_kwargs["guided_regex"] = guided_regex
+        if guided_choice is not None:
+            sampling_kwargs["guided_choice"] = guided_choice
+
+        return SamplingParams(**sampling_kwargs)
+
+    def _build_generate_kwargs(self, lora_request: Optional[Any] = None) -> dict[str, Any]:
+        """Build generate kwargs with optional LoRA request."""
+        generate_kwargs = {}
+        if lora_request is not None:
+            generate_kwargs["lora_request"] = lora_request
+        return generate_kwargs
+
+    def _extract_generated_text(self, outputs: list) -> str:
+        """Extract the generated text from vLLM outputs."""
+        if outputs:
+            return outputs[0].outputs[0].text
+        return ""
+
     def generate(
         self,
         prompt: str,
@@ -142,35 +185,14 @@ class VllmNativeEngine:
             return ""
 
         try:
-            # Format according to chat templates if possible, or simple concat
-            full_prompt = f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:" if system_prompt else prompt
-
-            # Build sampling params with optional guided decoding
-            sampling_kwargs = {
-                "temperature": temperature,
-                "max_tokens": max_tokens,
-                "top_p": 0.95,
-            }
-
-            if guided_json is not None:
-                sampling_kwargs["guided_json"] = guided_json
-            if guided_regex is not None:
-                sampling_kwargs["guided_regex"] = guided_regex
-            if guided_choice is not None:
-                sampling_kwargs["guided_choice"] = guided_choice
-
-            sampling_params = SamplingParams(**sampling_kwargs)
-
-            # Build generate kwargs
-            generate_kwargs = {}
-            if lora_request is not None:
-                generate_kwargs["lora_request"] = lora_request
+            full_prompt = self._format_prompt(prompt, system_prompt)
+            sampling_params = self._build_sampling_params(
+                temperature, max_tokens, guided_json, guided_regex, guided_choice
+            )
+            generate_kwargs = self._build_generate_kwargs(lora_request)
 
             outputs = self._llm.generate([full_prompt], sampling_params, **generate_kwargs)
-
-            if outputs:
-                return outputs[0].outputs[0].text
-            return ""
+            return self._extract_generated_text(outputs)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Native vLLM generation failed: %s", e)
             return ""
@@ -199,7 +221,7 @@ class VllmNativeEngine:
     def generate_choice(
         self,
         prompt: str,
-        choices: list,
+        choices: list[str],
         system_prompt: str = "",
     ) -> str:
         """Generate output constrained to specific choices."""

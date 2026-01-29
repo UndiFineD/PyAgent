@@ -5,7 +5,7 @@ Agent verifier.py module.
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
-from typing import Any
+from typing import Any, Optional
 
 import numpy as np
 
@@ -14,14 +14,13 @@ try:
 except ImportError:
     rc = None
 
-
 class AgentVerifier:
     """Handles quality and anchoring verification of agent responses."""
 
-    _embedding_model = None
+    _embedding_model: Optional[Any] = None
 
     @classmethod
-    def _get_embedding_model(cls) -> Any:
+    def _get_embedding_model(cls) -> Optional[Any]:
         """Lazy loading of the embedding model for semantic anchoring (Phase 257)."""
         if cls._embedding_model is None:
             try:
@@ -86,12 +85,12 @@ class AgentVerifier:
         return True, "Verified"
 
     @staticmethod
-    def fact_check(code_snippet: str, agent_id: str) -> dict[str, Any]:
+    def fact_check() -> dict[str, Any]:
         """Cross-references generated code snippets against knowledge base."""
         return {"valid": True, "hallucinations": []}
 
     @staticmethod
-    def secondary_verify(result: str, primary_model: str) -> bool:
+    def secondary_verify() -> bool:
         """Performs a cross-model verification loop."""
         return True
 

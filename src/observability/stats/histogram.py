@@ -23,9 +23,11 @@ Goes beyond vLLM with production-grade metrics:
 
 Phase 18: Beyond vLLM - Advanced Metrics
 """
+# pylint: disable=protected-access
 
 from __future__ import annotations
 
+from _thread import LockType
 import math
 import threading
 from dataclasses import dataclass
@@ -76,39 +78,39 @@ class Histogram:
             num_buckets: Number of buckets
             logarithmic: Use logarithmic bucket spacing
         """
-        self._min_value = max(0.001, min_value)  # Avoid log(0)
-        self._max_value = max_value
-        self._num_buckets = num_buckets
-        self._logarithmic = logarithmic
+        self._min_value: float = max(0.001, min_value)  # Avoid log(0)
+        self._max_value: float = max_value
+        self._num_buckets: int = num_buckets
+        self._logarithmic: bool = logarithmic
 
-        self._buckets = self._create_buckets()
+        self._buckets: list[HistogramBucket] = self._create_buckets()
         self._count = 0
         self._sum = 0.0
         self._min = float("inf")
         self._max = float("-inf")
         self._underflow = 0
         self._overflow = 0
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
     def _create_buckets(self) -> list[HistogramBucket]:
         """Create bucket boundaries."""
         buckets = []
 
         if self._logarithmic:
-            log_min = math.log10(self._min_value)
-            log_max = math.log10(self._max_value)
-            log_step = (log_max - log_min) / self._num_buckets
+            log_min: float = math.log10(self._min_value)
+            log_max: float = math.log10(self._max_value)
+            log_step: float = (log_max - log_min) / self._num_buckets
 
             for i in range(self._num_buckets):
-                lower = 10 ** (log_min + i * log_step)
-                upper = 10 ** (log_min + (i + 1) * log_step)
+                lower: float = 10 ** (log_min + i * log_step)
+                upper: float = 10 ** (log_min + (i + 1) * log_step)
                 buckets.append(HistogramBucket(lower_bound=lower, upper_bound=upper))
         else:
-            step = (self._max_value - self._min_value) / self._num_buckets
+            step: float = (self._max_value - self._min_value) / self._num_buckets
 
             for i in range(self._num_buckets):
-                lower = self._min_value + i * step
-                upper = self._min_value + (i + 1) * step
+                lower: float = self._min_value + i * step
+                upper: float = self._min_value + (i + 1) * step
                 buckets.append(HistogramBucket(lower_bound=lower, upper_bound=upper))
 
         return buckets
@@ -121,9 +123,9 @@ class Histogram:
             return self._num_buckets  # Overflow
 
         if self._logarithmic:
-            log_min = math.log10(self._min_value)
-            log_max = math.log10(self._max_value)
-            log_val = math.log10(max(self._min_value, value))
+            log_min: float = math.log10(self._min_value)
+            log_max: float = math.log10(self._max_value)
+            log_val: float = math.log10(max(self._min_value, value))
 
             idx = int((log_val - log_min) / (log_max - log_min) * self._num_buckets)
         else:
@@ -145,7 +147,7 @@ class Histogram:
             self._min = min(self._min, value)
             self._max = max(self._max, value)
 
-            idx = self._find_bucket_index(value)
+            idx: int = self._find_bucket_index(value)
 
             if idx < 0:
                 self._underflow += count
@@ -168,8 +170,8 @@ class Histogram:
             if self._count == 0:
                 return 0.0
 
-            target = self._count * p / 100
-            cumulative = self._underflow
+            target: float = self._count * p / 100
+            cumulative: int = self._underflow
 
             if cumulative >= target and self._underflow > 0:
                 return self._min_value
@@ -294,8 +296,8 @@ class ExponentialHistogram:
             scale: Resolution (higher = more buckets)
             max_buckets: Maximum number of buckets
         """
-        self._scale = scale
-        self._max_buckets = max_buckets
+        self._scale: int = scale
+        self._max_buckets: int = max_buckets
         self._base = 2 ** (2**-scale)
 
         # Positive and negative buckets
@@ -307,7 +309,7 @@ class ExponentialHistogram:
         self._sum = 0.0
         self._min = float("inf")
         self._max = float("-inf")
-        self._lock = threading.Lock()
+        self._lock: LockType = threading.Lock()
 
     def _value_to_bucket(self, value: float) -> int:
         """Map value to bucket index."""
@@ -334,10 +336,10 @@ class ExponentialHistogram:
             if value == 0:
                 self._zero_count += 1
             elif value > 0:
-                idx = self._value_to_bucket(value)
+                idx: int = self._value_to_bucket(value)
                 self._positive[idx] = self._positive.get(idx, 0) + 1
             else:
-                idx = self._value_to_bucket(-value)
+                idx: int = self._value_to_bucket(-value)
                 self._negative[idx] = self._negative.get(idx, 0) + 1
 
     def percentile(self, p: float) -> float:
@@ -346,7 +348,7 @@ class ExponentialHistogram:
             if self._count == 0:
                 return 0.0
 
-            target = self._count * p / 100
+            target: float = self._count * p / 100
             cumulative = 0
 
             # Handle negatives
@@ -458,7 +460,7 @@ class SizeHistogram(Histogram):
         )
 
 
-__all__ = [
+__all__: list[str] = [
     "Histogram",
     "HistogramBucket",
     "ExponentialHistogram",
