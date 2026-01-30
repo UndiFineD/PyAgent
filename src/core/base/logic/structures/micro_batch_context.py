@@ -12,48 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-MicroBatchContext - Context manager for micro-batch execution state.
-
-Provides a robust interface for managing micro-batch execution, supporting context variables,
-batch state, and nested batch scopes. Useful for distributed and pipelined GPU workloads.
+Mock implementation of a micro-batch context manager for testing and development.
+Provides a simple interface for managing micro-batch execution state.
 """
 
-
-import threading
-from contextlib import contextmanager
-from typing import Any, Dict, Optional
+from typing import Optional
 
 class MicroBatchContext:
-    """
-    Context manager for micro-batch execution state.
-    Supports context variables, batch id, and nested batch scopes.
-    """
-    _local = threading.local()
-
-    def __init__(self, batch_id: Optional[int] = None, variables: Optional[Dict[str, Any]] = None):
+    """A mock context manager for micro-batch execution."""
+    def __init__(self, batch_id: Optional[int] = None):
         self.batch_id = batch_id
-        self.variables = variables or {}
-        self._prev_context = None
-
+        self.active = False
     def __enter__(self):
-        self._prev_context = getattr(self._local, 'current', None)
-        self._local.current = self
+        self.active = True
         return self
-
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self._local.current = self._prev_context
-
-    @classmethod
-    def current(cls) -> Optional["MicroBatchContext"]:
-        """Get the current active micro-batch context, if any."""
-        return getattr(cls._local, 'current', None)
-
-    def get(self, key: str, default: Any = None) -> Any:
-        return self.variables.get(key, default)
-
-    def set(self, key: str, value: Any) -> None:
-        self.variables[key] = value
+        self.active = False
 
 __all__ = ["MicroBatchContext"]
