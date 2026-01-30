@@ -8,6 +8,11 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
+
+"""
+CodeQualityAgent: Analyzes and improves code quality across Python, Rust, and JavaScript files in PyAgent.
+Provides linting, scoring, and automated code improvement for maintainability and standards compliance.
+"""
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.

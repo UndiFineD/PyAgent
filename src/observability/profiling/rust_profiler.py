@@ -20,12 +20,10 @@ Tracks call counts, execution time, and generates optimization reports.
 from __future__ import annotations
 
 from _thread import LockType
-from _thread import LockType
 from argparse import Namespace
 import ast
 import functools
-from io import TextIOWrapper
-from io import TextIOWrapper
+ 
 import json
 import re
 import threading
@@ -70,7 +68,7 @@ class RustProfiler:
     _lock: LockType = threading.Lock()
 
     # All known Rust functions (72 total as of Phase 13)
-    RUST_FUNCTIONS: list[str] = [
+    RUST_FUNCTIONS_LIST: list[str] = [
         # Security (8)
         "scan_code_vulnerabilities_rust",
         "scan_injections_rust",
@@ -201,8 +199,9 @@ class RustProfiler:
                     cls._instance._initialized = False
         return cls._instance
 
+    _initialized: bool = False
     def __init__(self) -> None:
-        if hasattr(self, '_initialized') and self._initialized:
+        if self._initialized:
             return
         self._initialized = True
         self._stats: dict[str, FunctionStats] = {}
@@ -211,7 +210,7 @@ class RustProfiler:
         self._stats_lock: LockType = threading.Lock()
 
         # Initialize stats for all known functions
-        for func_name in self.RUST_FUNCTIONS:
+        for func_name in self.RUST_FUNCTIONS_LIST:
             self._stats[func_name] = FunctionStats(name=func_name)
 
     @classmethod
@@ -230,13 +229,13 @@ class RustProfiler:
     def reset(self) -> None:
         """Reset all statistics."""
         with self._stats_lock:
-            for func_name in self._stats:
-                self._stats[func_name] = FunctionStats(name=func_name)
+            for stat_func_name in self._stats:
+                self._stats[stat_func_name] = FunctionStats(name=stat_func_name)
             self._source_locations.clear()
 
     def record_call(
         self,
-        func_name: str,
+        call_func_name: str,
         elapsed_ns: int,
         used_rust: bool = True,
         source_file: str | None = None,
@@ -247,10 +246,10 @@ class RustProfiler:
             return
 
         with self._stats_lock:
-            if func_name not in self._stats:
-                self._stats[func_name] = FunctionStats(name=func_name)
+            if call_func_name not in self._stats:
+                self._stats[call_func_name] = FunctionStats(name=call_func_name)
 
-            stats: FunctionStats = self._stats[func_name]
+            stats: FunctionStats = self._stats[call_func_name]
             stats.call_count += 1
             stats.total_time_ns += elapsed_ns
 
@@ -264,8 +263,8 @@ class RustProfiler:
 
             if source_file and source_line:
                 loc: tuple[str, int] = (source_file, source_line)
-                if loc not in self._source_locations[func_name]:
-                    self._source_locations[func_name].append(loc)
+                if loc not in self._source_locations[call_func_name]:
+                    self._source_locations[call_func_name].append(loc)
 
     def get_stats(self) -> dict[str, FunctionStats]:
         """Get copy of all statistics."""
@@ -296,12 +295,12 @@ class RustProfiler:
         by_calls: list[tuple[str, FunctionStats]] = sorted(called_funcs.items(), key=lambda x: x[1].call_count, reverse=True)
 
         total_calls: int = sum(s.call_count for s in called_funcs.values())
-        total_time_ms = sum(s.total_time_ms for s in called_funcs.values())
+        total_time_ms: float | int = sum(s.total_time_ms for s in called_funcs.values())
         total_fallbacks: int = sum(s.python_fallback_count for s in called_funcs.values())
 
         return {
             "summary": {
-                "total_rust_functions": len(self.RUST_FUNCTIONS),
+                "total_rust_functions": len(self.RUST_FUNCTIONS_LIST),
                 "functions_used": len(called_funcs),
                 "total_calls": total_calls,
                 "total_time_ms": round(total_time_ms, 2),
@@ -386,11 +385,11 @@ def profile_rust_call(func_name: str) -> Callable:
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*wrapper_args, **wrapper_kwargs):
             profiler: RustProfiler = RustProfiler.get_instance()
             start: int = time.perf_counter_ns()
             try:
-                result = func(*args, **kwargs)
+                result = func(*wrapper_args, **wrapper_kwargs)
                 elapsed: int = time.perf_counter_ns() - start
                 profiler.record_call(func_name, elapsed, used_rust=True)
                 return result
@@ -433,12 +432,12 @@ class RustUsageScanner:
 
         for node in ast.walk(tree):
             if isinstance(node, ast.Call):
-                func_name: str | None = self._get_call_name(node)
-                if func_name and func_name in self.profiler.RUST_FUNCTIONS:
-                    findings[func_name].append(node.lineno)
-                    self.usage_map[func_name].append((str(filepath), node.lineno))
+                call_func_name: str | None = self._get_call_name(node)
+                if call_func_name and call_func_name in self.profiler.RUST_FUNCTIONS_LIST:
+                    findings[call_func_name].append(node.lineno)
+                    self.usage_map[call_func_name].append((str(filepath), node.lineno))
             elif isinstance(node, ast.Attribute):
-                if node.attr in self.profiler.RUST_FUNCTIONS:
+                if node.attr in self.profiler.RUST_FUNCTIONS_LIST:
                     findings[node.attr].append(node.lineno)
                     self.usage_map[node.attr].append((str(filepath), node.lineno))
 
@@ -457,7 +456,7 @@ class RustUsageScanner:
         findings: dict[str, list[int]] = defaultdict(list)
         lines: list[str] = content.split("\n")
 
-        for func_name in self.profiler.RUST_FUNCTIONS:
+        for func_name in self.profiler.RUST_FUNCTIONS_LIST:
             pattern: str = rf"\b{re.escape(func_name)}\s*\("
             for i, line in enumerate(lines, 1):
                 if re.search(pattern, line):
@@ -516,7 +515,7 @@ class RustUsageScanner:
 
         # Find unused functions
         used_funcs: set[str] = set(all_usage.keys())
-        unused_funcs: set[str] = set(self.profiler.RUST_FUNCTIONS) - used_funcs
+        unused_funcs: set[str] = set(self.profiler.RUST_FUNCTIONS_LIST) - used_funcs
 
         return {
             "summary": {
@@ -554,13 +553,13 @@ def create_profiled_rust_core() -> None | "ProfiledRustCore":
         def __getattr__(self, name: str):
             original = getattr(rc, name)
 
-            if callable(original) and name in profiler.RUST_FUNCTIONS:
+            if callable(original) and name in profiler.RUST_FUNCTIONS_LIST:
 
                 @functools.wraps(original)
-                def profiled_func(*args, **kwargs) -> object:
+                def profiled_func(*profiled_args, **profiled_kwargs) -> object:
                     start: int = time.perf_counter_ns()
                     try:
-                        result: object = original(*args, **kwargs)
+                        result: object = original(*profiled_args, **profiled_kwargs)
                         elapsed: int = time.perf_counter_ns() - start
                         profiler.record_call(name, elapsed, used_rust=True)
                         return result
@@ -584,46 +583,46 @@ if __name__ == "__main__":
     parser.add_argument("--tests", default="tests", help="Tests directory to scan")
     parser.add_argument("--output", "-o", help="Output JSON file for report")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
-    args: Namespace = parser.parse_args()
+    main_args: Namespace = parser.parse_args()
 
     # Determine project root
     script_path: Path = Path(__file__).resolve()
     project_root: Path = script_path.parent.parent.parent.parent
 
-    src_dir = project_root / args.src
-    tests_dir = project_root / args.tests
+    main_src_dir = project_root / main_args.src
+    main_tests_dir = project_root / main_args.tests
 
-    print(f"🔍 Scanning {src_dir} and {tests_dir} for Rust function usage...")
+    print(f"🔍 Scanning {main_src_dir} and {main_tests_dir} for Rust function usage...")
 
-    scanner = RustUsageScanner()
-    report: dict[str, Any] = scanner.generate_report(src_dir, tests_dir)
+    main_scanner = RustUsageScanner()
+    main_report: dict[str, Any] = main_scanner.generate_report(main_src_dir, main_tests_dir)
 
     # Print summary
-    summary = report["summary"]
+    main_summary = main_report["summary"]
     print("\n📊 RUST USAGE SCAN RESULTS")
     print(f"{'=' * 50}")
-    print(f"Source files scanned:    {summary['src_files_scanned']}")
-    print(f"Source files with Rust:  {summary['src_files_with_rust']}")
-    print(f"Test files scanned:      {summary['test_files_scanned']}")
-    print(f"Test files with Rust:    {summary['test_files_with_rust']}")
-    print(f"Total Rust functions:    {summary['total_rust_functions']}")
-    print(f"Functions in use:        {summary['functions_in_use']}")
-    print(f"Functions unused:        {summary['functions_unused']}")
+    print(f"Source files scanned:    {main_summary['src_files_scanned']}")
+    print(f"Source files with Rust:  {main_summary['src_files_with_rust']}")
+    print(f"Test files scanned:      {main_summary['test_files_scanned']}")
+    print(f"Test files with Rust:    {main_summary['test_files_with_rust']}")
+    print(f"Total Rust functions:    {main_summary['total_rust_functions']}")
+    print(f"Functions in use:        {main_summary['functions_in_use']}")
+    print(f"Functions unused:        {main_summary['functions_unused']}")
 
     print("\n🏆 TOP 15 MOST USED FUNCTIONS")
     print(f"{'Function':<45} {'Usage':>8}")
     print(f"{'-' * 45} {'-' * 8}")
-    for func_name, count in report["top_used"][:15]:
-        print(f"{func_name:<45} {count:>8}")
+    for main_func_name, main_count in main_report["top_used"][:15]:
+        print(f"{main_func_name:<45} {main_count:>8}")
 
-    if args.verbose and report["unused_functions"]:
-        print(f"\n⚠️ UNUSED FUNCTIONS ({len(report['unused_functions'])})")
-        for func in report["unused_functions"]:
-            print(f"  - {func}")
+    if main_args.verbose and main_report["unused_functions"]:
+        print(f"\n⚠️ UNUSED FUNCTIONS ({len(main_report['unused_functions'])})")
+        for main_func in main_report["unused_functions"]:
+            print(f"  - {main_func}")
 
-    if args.output:
-        output_path = Path(args.output)
+    if main_args.output:
+        output_path = Path(main_args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(report, f, indent=2)
+        with open(output_path, "w", encoding="utf-8") as main_f:
+            json.dump(main_report, main_f, indent=2)
         print(f"\n💾 Report saved to {output_path}")

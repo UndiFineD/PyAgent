@@ -8,6 +8,11 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
+
+"""
+CodeQualityCore: Core logic for code quality analysis and scoring in PyAgent.
+Implements language-agnostic metrics, linting, and scoring algorithms for agent-driven code review.
+"""
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.

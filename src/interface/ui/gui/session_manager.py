@@ -36,7 +36,7 @@ class SessionManager:
     def __init__(self, default_filename="gui_session.json") -> None:
         self.default_filename: str = default_filename
 
-    def save_session(self, data) -> bool:
+    def save_session(self, data: dict) -> bool:
         """Saves session data to a JSON file."""
         filepath: str = filedialog.asksaveasfilename(
             initialfile=self.default_filename,

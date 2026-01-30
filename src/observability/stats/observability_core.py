@@ -254,12 +254,22 @@ class ObservabilityCore:
         if not self.metrics_history:
             return {"count": 0, "avg_duration": 0, "total_cost": 0}
 
-        total_duration = sum(m.duration_ms for m in self.metrics_history)
-        total_cost = sum(m.estimated_cost for m in self.metrics_history)
-        count = len(self.metrics_history)
+        total_duration: float | int = sum(m.duration_ms for m in self.metrics_history)
+        total_cost: float | int = sum(m.estimated_cost for m in self.metrics_history)
+        count: int = len(self.metrics_history)
 
-        # Breakdown by agent
-        by_agent = {}
+        by_agent = self._breakdown_by_agent()
+
+        return {
+            "total_count": count,
+            "avg_duration_ms": total_duration / count,
+            "total_cost_usd": round(total_cost, 6),
+            "agents": by_agent,
+        }
+
+    def _breakdown_by_agent(self) -> dict[str, dict[str, float]]:
+        """Helper to break down metrics by agent."""
+        by_agent: dict[str, dict[str, float]] = {}
         for m in self.metrics_history:
             if m.agent_name not in by_agent:
                 by_agent[m.agent_name] = {
@@ -270,13 +280,7 @@ class ObservabilityCore:
             stats = by_agent[m.agent_name]
             stats["count"] += 1
             stats["total_cost"] += m.estimated_cost
-
-        return {
-            "total_count": count,
-            "avg_duration_ms": total_duration / count,
-            "total_cost_usd": round(total_cost, 6),
-            "agents": by_agent,
-        }
+        return by_agent
 
     def filter_by_time(self, start_iso: str, end_iso: str) -> list[AgentMetric]:
         """Filters metrics within a time range."""
@@ -305,7 +309,7 @@ class ObservabilityCore:
 
         for name in agent_names:
             if name in stats and stats[name]["total"] > 0:
-                score = stats[name]["success"] / stats[name]["total"]
+                score: float = stats[name]["success"] / stats[name]["total"]
                 scores.append(score)
             else:
                 # Neutral default for new/unknown agents
@@ -323,11 +327,11 @@ class StatsCore:
         if len(history) < 2:
             return False, 0.0
 
-        values = [m.value for m in history]
-        mean = sum(values) / len(values)
-        variance = sum((x - mean) ** 2 for x in values) / len(values)
-        std = math.sqrt(variance) if variance > 0 else 0.001
-        z_score = abs((value - mean) / std)
+        values: list[float] = [m.value for m in history]
+        mean: float = sum(values) / len(values)
+        variance: float = sum((x - mean) ** 2 for x in values) / len(values)
+        std: float = math.sqrt(variance) if variance > 0 else 0.001
+        z_score: float = abs((value - mean) / std)
         return z_score > threshold_std, z_score
 
     @staticmethod
@@ -335,21 +339,21 @@ class StatsCore:
         """Simple linear forecasting for a metric."""
         if len(history) < 3:
             return []
-        values = [m.value for m in history]
+        values: list[float] = [m.value for m in history]
         # Rust-accelerated linear regression
         if HAS_RUST:
             with contextlib.suppress(Exception):
                 return rc.linear_forecast_rust(values, periods)  # type: ignore[attr-defined]
 
-        n = len(values)
-        x_mean = (n - 1) / 2
-        y_mean = sum(values) / n
-        numerator = sum((i - x_mean) * (values[i] - y_mean) for i in range(n))
-        denominator = sum((i - x_mean) ** 2 for i in range(n))
+        n: int = len(values)
+        x_mean: float = (n - 1) / 2
+        y_mean: float = sum(values) / n
+        numerator: float | int = sum((i - x_mean) * (values[i] - y_mean) for i in range(n))
+        denominator: float | int = sum((i - x_mean) ** 2 for i in range(n))
         if denominator == 0:
             return [y_mean] * periods
-        slope = numerator / denominator
-        intercept = y_mean - slope * x_mean
+        slope: float = numerator / denominator
+        intercept: float = y_mean - slope * x_mean
         return [slope * (n + i) + intercept for i in range(periods)]
 
     @staticmethod
@@ -357,7 +361,7 @@ class StatsCore:
         """Compress metric history."""
         if not metrics:
             return b""
-        data = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])
+        data: str = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])
         return zlib.compress(data.encode("utf-8"))
 
     @staticmethod
@@ -369,8 +373,8 @@ class StatsCore:
             logging.warning("matplotlib not available for visualization")
             return
 
-        labels = list(stats.keys())
-        values = list(stats.values())
+        labels: list[str] = list(stats.keys())
+        values: list[Any] = list(stats.values())
         plt.figure(figsize=(10, 6))
         plt.bar(labels, values, color="skyblue")
         plt.xlabel("Metrics")
@@ -384,11 +388,10 @@ class StatsCore:
     @staticmethod
     def compare_snapshots(s1: MetricSnapshot, s2: MetricSnapshot) -> dict[str, dict[str, float | int]]:
         """Compare two snapshots."""
-        comparison: dict[str, dict[str, float | int]] = {}
+        comparison = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
         for key in all_keys:
             v1 = s1.metrics.get(key, 0.0)
-
             v2 = s2.metrics.get(key, 0.0)
             comparison[key] = {
                 "snapshot1": v1,
@@ -402,16 +405,16 @@ class StatsCore:
     def apply_retention(metrics_dict: dict[str, list[Metric]], policies: dict[str, RetentionPolicy]) -> int:
         """Apply retention policies to metrics."""
         removed = 0
-        now = datetime.now()
+        now: datetime = datetime.now()
         for key, metrics in list(metrics_dict.items()):
-            namespace = metrics[0].namespace if metrics else "default"
-            policy = policies.get(key) or policies.get(namespace)
+            namespace: str = metrics[0].namespace if metrics else "default"
+            policy: RetentionPolicy | None = policies.get(key) or policies.get(namespace)
             if not policy:
                 continue
 
             if policy.max_age_days > 0:
-                cutoff = now - timedelta(days=policy.max_age_days)
-                orig = len(metrics)
+                cutoff: datetime = now - timedelta(days=policy.max_age_days)
+                orig: int = len(metrics)
                 metrics_dict[key] = [m for m in metrics if datetime.fromisoformat(m.timestamp) > cutoff]
                 removed += orig - len(metrics_dict[key])
 
@@ -425,7 +428,7 @@ class StatsNamespace:
     """Represents a namespace for metric isolation."""
 
     def __init__(self, name: str) -> None:
-        self.name = name
+        self.name: str = name
         self.metrics: dict[str, list[Metric]] = {}
         self.metric_values: dict[str, float] = {}  # Direct metric values for set_metric/get_metric
 

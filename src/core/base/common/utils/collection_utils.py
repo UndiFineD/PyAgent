@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,25 +14,11 @@
 # limitations under the License.
 
 """
-Collection Utilities Module - Phase 20: Production Infrastructure
-==================================================================
+collection_utils.py
 
-Helper functions and classes for working with collections.
-Inspired by vLLM's collection_utils.py pattern.
+Collection utilities for advanced data structure operations and transformations.
 
-Features:
-- LazyDict: Evaluates values only when accessed
-- chunk_list: Yield successive chunks from a list
-- flatten_2d_lists: Flatten nested lists
-- full_groupby: Group items without requiring sorted input
-- is_list_of: Type guard for homogeneous lists
-- as_list/as_iter: Convert iterables to lists/iterators
-- swap_dict_values: Swap values between two dictionary keys
-- deep_merge_dicts: Recursively merge dictionaries
-- invert_dict: Invert a dictionary (swap keys and values)
-- filter_none: Filter None values from collections
-
-Author: PyAgent Phase 20
+This module provides helper functions for manipulating and analyzing collections, supporting advanced workflows in the PyAgent system.
 """
 
 from __future__ import annotations
@@ -185,17 +172,23 @@ def is_list_of(
         >>> is_list_of(["a", "b"], int)
         False
     """
+    def _is_empty(val: object) -> bool:
+        return isinstance(val, list) and not val
+
+    def _check_first(val: list, typ: type[T] | tuple[type[T], ...]) -> bool:
+        return isinstance(val[0], typ)
+
+    def _check_all(val: list, typ: type[T] | tuple[type[T], ...]) -> bool:
+        return all(isinstance(v, typ) for v in val)
+
     if not isinstance(value, list):
         return False
-
-    if not value:  # Empty list
+    if _is_empty(value):
         return True
-
     if check == "first":
-        return isinstance(value[0], typ)
+        return _check_first(value, typ)
     if check == "all":
-        return all(isinstance(v, typ) for v in value)
-
+        return _check_all(value, typ)
     raise ValueError(f"Invalid check mode: {check}")
 
 

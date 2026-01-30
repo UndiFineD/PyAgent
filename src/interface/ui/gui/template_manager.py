@@ -92,7 +92,7 @@ class TemplateManager:
         return list(BMAD_TEMPLATES.keys())
 
     @staticmethod
-    def apply_template(text_widget, template_name) -> None:
+    def apply_template(text_widget: tk.Text, template_name: str) -> None:
         template: str = BMAD_TEMPLATES.get(template_name, "")
         if template:
             text_widget.delete("1.0", tk.END)

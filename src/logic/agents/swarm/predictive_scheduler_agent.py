@@ -8,9 +8,15 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
+
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+"""
+PredictiveSchedulerAgent: Swarm agent for forecasting workload, resource needs, and scheduling tasks across the PyAgent swarm.
+Implements predictive analytics and adaptive scheduling for optimal performance.
+"""
 
 # You may obtain a copy of the License at
 #
