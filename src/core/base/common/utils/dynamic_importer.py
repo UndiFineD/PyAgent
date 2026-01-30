@@ -36,6 +36,7 @@ Use Cases:
 from __future__ import annotations
 
 import importlib
+from importlib.machinery import ModuleSpec
 import importlib.util
 import logging
 import sys
@@ -43,7 +44,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, Generic, TypeVar
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 _T = TypeVar("_T")
 
@@ -88,14 +89,15 @@ def import_from_path(
     if file_path.suffix != ".py":
         raise ImportError(f"Expected .py file, got: {file_path}")
 
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    spec: ModuleSpec | None = importlib.util.spec_from_file_location(module_name, file_path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Could not create module spec for: {file_path}")
 
-    module = importlib.util.module_from_spec(spec)
+    module: ModuleType = importlib.util.module_from_spec(spec)
 
     if add_to_sys_modules:
         sys.modules[module_name] = module
+
 
     try:
         spec.loader.exec_module(module)
@@ -138,7 +140,7 @@ def resolve_obj_by_qualname(qualname: str) -> Any:
         >>> json_loads('{"a": 1}')
         {"a": 1}
     """
-    parts = qualname.rsplit(".", 1)
+    parts: list[str] = qualname.rsplit(".", 1)
 
     if len(parts) == 1:
         # Just a module name
@@ -148,13 +150,13 @@ def resolve_obj_by_qualname(qualname: str) -> Any:
 
     # Try importing the full path as a module first
     try:
-        module = importlib.import_module(qualname)
+        module: ModuleType = importlib.import_module(qualname)
         return module
     except ImportError:
         pass
 
     # Fall back to importing module and getting attribute
-    module = importlib.import_module(module_path)
+    module: ModuleType = importlib.import_module(module_path)
     return getattr(module, attr_name)
 
 
@@ -177,8 +179,9 @@ def resolve_obj_by_qualname_parts(
         >>> isinstance(cls(), cls)
         True
     """
-    module = importlib.import_module(module_path)
-    obj = module
+    module: ModuleType = importlib.import_module(module_path)
+    obj: ModuleType = module
+
 
     for attr_name in attr_path.split("."):
         obj = getattr(obj, attr_name)
@@ -211,13 +214,13 @@ class PlaceholderModule:
         install_hint: str | None = None,
         reason: str | None = None,
     ) -> None:
-        self._module_name = module_name
-        self._install_hint = install_hint
-        self._reason = reason
+        self._module_name: str = module_name
+        self._install_hint: str | None = install_hint
+        self._reason: str | None = reason
 
     def _raise_error(self) -> None:
         """Raise an informative error when the placeholder is accessed."""
-        msg = f"Module '{self._module_name}' is not available."
+        msg: str = f"Module '{self._module_name}' is not available."
 
         if self._reason:
             msg += f" Reason: {self._reason}"
@@ -365,10 +368,10 @@ class LazyModuleRegistry:
             return self._cache[name]
 
         if name not in self._registry:
-            available = ", ".join(sorted(self._registry.keys()))
+            available: str = ", ".join(sorted(self._registry.keys()))
             raise KeyError(f"Module '{name}' not registered. Available: {available}")
 
-        qualname = self._registry[name]
+        qualname: str = self._registry[name]
         obj = resolve_obj_by_qualname(qualname)
         self._cache[name] = obj
         logger.debug(f"Loaded lazy module: {name} = {qualname}")
@@ -455,8 +458,8 @@ class LazyAttribute(Generic[_T]):
     """
 
     def __init__(self, qualname: str, *, install_hint: str | None = None) -> None:
-        self._qualname = qualname
-        self._install_hint = install_hint
+        self._qualname: str = qualname
+        self._install_hint: str | None = install_hint
         self._cached: _T | None = None
 
     def __get__(self, obj: Any, objtype: type | None = None) -> _T:
@@ -467,7 +470,7 @@ class LazyAttribute(Generic[_T]):
             self._cached = resolve_obj_by_qualname(self._qualname)  # type: ignore
             return self._cached  # type: ignore
         except (ImportError, AttributeError) as e:
-            msg = f"Failed to import '{self._qualname}': {e}"
+            msg: str = f"Failed to import '{self._qualname}': {e}"
             if self._install_hint:
                 msg += f" Install with: {self._install_hint}"
             raise ImportError(msg) from e
@@ -550,7 +553,7 @@ def get_module_version(module_name: str) -> str | None:
         Version string if available, None otherwise.
     """
     try:
-        module = importlib.import_module(module_name)
+        module: ModuleType = importlib.import_module(module_name)
         return getattr(module, "__version__", None)
     except ImportError:
         return None
@@ -575,18 +578,19 @@ def require_module(
     Raises:
         ImportError: If module not available or version too low.
     """
+
     try:
-        module = importlib.import_module(module_name)
+        module: ModuleType = importlib.import_module(module_name)
     except ImportError as e:
-        msg = f"Required module '{module_name}' is not available."
+        msg: str = f"Required module '{module_name}' is not available."
         if install_hint:
             msg += f" Install with: {install_hint}"
         raise ImportError(msg) from e
 
     if min_version is not None:
-        version = getattr(module, "__version__", "0.0.0")
+        version: Any | str = getattr(module, "__version__", "0.0.0")
         if _compare_versions(version, min_version) < 0:
-            msg = f"Module '{module_name}' version {version} is too old. Minimum required: {min_version}."
+            msg: str = f"Module '{module_name}' version {version} is too old. Minimum required: {min_version}."
             if install_hint:
                 msg += f" Upgrade with: {install_hint}"
             raise ImportError(msg)
@@ -601,6 +605,7 @@ def _compare_versions(v1: str, v2: str) -> int:
     Returns:
         -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2.
     """
+
 
     def normalize(v: str) -> tuple[int, ...]:
         return tuple(int(x) for x in v.split(".")[:3])
@@ -618,7 +623,7 @@ def _compare_versions(v1: str, v2: str) -> int:
 # Exports
 # ============================================================================
 
-__all__ = [
+__all__: list[str] = [
     # Path-based import
     "import_from_path",
     # Qualified name resolution

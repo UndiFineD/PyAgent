@@ -350,11 +350,12 @@ def clear_dedup_cache() -> None:
 
 def get_dedup_cache_info() -> dict[str, Any]:
     """Get statistics about the deduplication caches."""
+    # cache_info() is a method of functools.lru_cache, not the logger function
     return {
-        "debug": _dedupe_debug.cache_info()._asdict(),
-        "info": _dedupe_info.cache_info()._asdict(),
-        "warning": _dedupe_warning.cache_info()._asdict(),
-        "error": _dedupe_error.cache_info()._asdict(),
+        "debug": _dedupe_debug.cache_info(),
+        "info": _dedupe_info.cache_info(),
+        "warning": _dedupe_warning.cache_info(),
+        "error": _dedupe_error.cache_info(),
     }
 
 
@@ -377,7 +378,7 @@ class EnhancedLogger(logging.Logger):
         scope: LogScope = "process",
     ) -> None:
         """Log debug message only once."""
-        ...
+        return None
 
     def info_once(
         self,
@@ -386,7 +387,7 @@ class EnhancedLogger(logging.Logger):
         scope: LogScope = "process",
     ) -> None:
         """Log info message only once."""
-        ...
+        return None
 
     def warning_once(
         self,
@@ -395,7 +396,7 @@ class EnhancedLogger(logging.Logger):
         scope: LogScope = "process",
     ) -> None:
         """Log warning message only once."""
-        ...
+        return None
 
     def error_once(
         self,
@@ -404,4 +405,4 @@ class EnhancedLogger(logging.Logger):
         scope: LogScope = "process",
     ) -> None:
         """Log error message only once."""
-        ...
+        return None

@@ -36,10 +36,10 @@ try:
 except ImportError:
     HAS_PSUTIL = False
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 # Model costs for TokenCostEngine
-MODEL_COSTS = {
+MODEL_COSTS: dict[str, dict[str, float]] = {
     "gpt-4o": {"input": 0.005, "output": 0.015, "total": 0.01},
     "gpt-4o-mini": {"input": 0.00015, "output": 0.0006, "total": 0.0004},
     "claude-3-5-sonnet": {"input": 0.003, "output": 0.015, "total": 0.009},
@@ -65,9 +65,11 @@ class ProfilingCore:
 
     def analyze_stats(self, pstats_obj: Any, limit: int = 10) -> list[ProfileStats]:
         """Convert pstats objects into a flat list of ProfileStats."""
-        results: list[Any] = []
-
         pstats_obj.sort_stats("cumulative")
+        return self._extract_profile_stats(pstats_obj, limit)
+
+    def _extract_profile_stats(self, pstats_obj: Any, limit: int) -> list[ProfileStats]:
+        results: list[ProfileStats] = []
         for func, (cc, _, _, ct, _) in pstats_obj.stats.items():
             if len(results) >= limit:
                 break
@@ -79,7 +81,6 @@ class ProfilingCore:
                     per_call=ct / cc if cc > 0 else 0,
                 )
             )
-
         return results
 
     def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
@@ -113,23 +114,32 @@ class StabilityCore:
 
         Uses Rust-accelerated logic if available.
         """
-        if RUST_AVAILABLE and hasattr(rc, "calculate_stability_score"):
-            with contextlib.suppress(Exception):
-                # Convert dataclass to dict for Rust bridge
-                metrics_dict = {
-                    "avg_error_rate": float(metrics.avg_error_rate),
-                    "total_token_out": int(metrics.total_token_out),
-                    "active_agent_count": int(metrics.active_agent_count),
-                    "latency_p95": float(metrics.latency_p95),
-                }
-                return rc.calculate_stability_score(metrics_dict, sae_anomalies)
+        if self._can_use_rust_stability():
+            result = self._try_rust_stability(metrics, sae_anomalies)
+            if result is not None:
+                return result
 
+        return self._calculate_stability_score_python(metrics, sae_anomalies)
+
+    def _can_use_rust_stability(self) -> bool:
+        return RUST_AVAILABLE and hasattr(rc, "calculate_stability_score")
+
+    def _try_rust_stability(self, metrics: FleetMetrics, sae_anomalies: int) -> float | None:
+        with contextlib.suppress(Exception):
+            metrics_dict = {
+                "avg_error_rate": float(metrics.avg_error_rate),
+                "total_token_out": int(metrics.total_token_out),
+                "active_agent_count": int(metrics.active_agent_count),
+                "latency_p95": float(metrics.latency_p95),
+            }
+            return rc.calculate_stability_score(metrics_dict, sae_anomalies)
+        return None
+
+    def _calculate_stability_score_python(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
         score = 1.0
-
         score -= metrics.avg_error_rate * 5.0
         score -= sae_anomalies * 0.05
-        latency_penalty = max(0.0, (metrics.latency_p95 - 2000) / 10000)
-
+        latency_penalty: float = max(0.0, (metrics.latency_p95 - 2000) / 10000)
         score -= latency_penalty
         return min(max(score, 0.0), 1.0)
 
@@ -147,8 +157,8 @@ class StabilityCore:
                 variance = rc.calculate_variance_rust(score_history)
                 return variance < 0.0001
 
-        avg = sum(score_history) / len(score_history)
-        variance = sum((x - avg) ** 2 for x in score_history) / len(score_history)
+        avg: float = sum(score_history) / len(score_history)
+        variance: float = sum((x - avg) ** 2 for x in score_history) / len(score_history)
         return variance < 0.0001
 
     def get_healing_threshold(self, stability_score: float) -> float:
@@ -167,7 +177,7 @@ class TracingCore:
 
     def calculate_latency_breakdown(self, total_time: float, network_time: float) -> dict[str, float]:
         """Calculate network vs thinking latency breakdown."""
-        thinking_time = total_time - network_time
+        thinking_time: float = total_time - network_time
         return {
             "total_latency_ms": total_time * 1000,
             "network_latency_ms": network_time * 1000,
@@ -207,7 +217,7 @@ class DerivedMetricCalculator:
 
     def calculate(self, name: str, metric_values: dict[str, float]) -> float | None:
         """Calculate the value of a derived metric."""
-        derived = self.derived_metrics.get(name)
+        derived: DerivedMetric | None = self.derived_metrics.get(name)
         if not derived:
             return None
         for dep in derived.dependencies:
@@ -217,14 +227,14 @@ class DerivedMetricCalculator:
         # Phase 14: Use Rust-accelerated formula evaluation if possible
         if RUST_AVAILABLE and hasattr(rc, "evaluate_formula"):
             # Ensure all values are floats for Rust
-            cast_values = {k: float(v) for k, v in metric_values.items()}
+            cast_values: dict[str, float] = {k: float(v) for k, v in metric_values.items()}
             with contextlib.suppress(Exception):
                 # The Rust version handles {dep} replacement internally
                 # pylint: disable=no-member
                 return float(rc.evaluate_formula(derived.formula, cast_values))
 
         try:
-            result = FormulaCore.evaluate(derived.formula, metric_values)
+            result: float = FormulaCore.evaluate(derived.formula, metric_values)
             self._cache[name] = result
             return result
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -252,21 +262,21 @@ class CorrelationAnalyzer:
             self._metric_history.get(metric_a, []),
             self._metric_history.get(metric_b, []),
         )
-        n = min(len(va), len(vb))
+        n: int = min(len(va), len(vb))
         if n < 3:
             return None
 
         va, vb = va[-n:], vb[-n:]
         ma, mb = sum(va) / n, sum(vb) / n
 
-        num = sum((va[i] - ma) * (vb[i] - mb) for i in range(n))
+        num: float | int = sum((va[i] - ma) * (vb[i] - mb) for i in range(n))
         da, db = (
             math.sqrt(sum((x - ma) ** 2 for x in va)),
             math.sqrt(sum((x - mb) ** 2 for x in vb)),
         )
         if da == 0 or db == 0:
             return None
-        corr = num / (da * db)
+        corr: float = num / (da * db)
         res = MetricCorrelation(
             metric_a=metric_a,
             metric_b=metric_b,
@@ -294,13 +304,13 @@ class FormulaEngineCore:
         if rc and "AVG(" not in formula:
             with contextlib.suppress(Exception):
                 # Convert variables to dict[str, float] for Rust (excludes list/complex types)
-                float_vars = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
+                float_vars: dict[str, float] = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
                 # pylint: disable=no-member
                 return rc.evaluate_formula(formula, float_vars)  # type: ignore[attr-defined]
 
         # Handle simple AVG aggregate manually if needed, or refine FormulaCore to handle it
         if "AVG(" in formula:
-            match = re.search(r"AVG\(\{(\w+)\}\)", formula)
+            match: re.Match[str] | None = re.search(r"AVG\(\{(\w+)\}\)", formula)
             if match and match.group(1) in variables:
                 vals = variables[match.group(1)]
                 if isinstance(vals, list) and vals:
@@ -310,7 +320,6 @@ class FormulaEngineCore:
         try:
             return FormulaCore.evaluate(formula, variables)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
             return 0.0
 
     def validate_logic(self, formula: str) -> dict[str, Any]:
@@ -320,9 +329,9 @@ class FormulaEngineCore:
                 return {"is_valid": False, "error": "Invalid operator sequence"}
 
             # Use FormulaCore evaluation style for validation or just parse
-            test_f = formula
+            test_f: str = formula
             for v in re.findall(r"\{(\w+)\}", formula):
-                test_f = test_f.replace(f"{{{v}}}", "1")
+                test_f: str = test_f.replace(f"{{{v}}}", "1")
             ast.parse(test_f, mode="eval")
 
             return {"is_valid": True, "error": None}
@@ -344,7 +353,7 @@ class FormulaEngine:
 
     def calculate(self, f_or_n: str, variables: dict[str, Any] | None = None) -> float:
         """Calculate a named formula or a raw expression."""
-        f = self.formulas.get(f_or_n, f_or_n)
+        f: str = self.formulas.get(f_or_n, f_or_n)
         return self.core.calculate_logic(f, variables or {})
 
 
@@ -353,8 +362,8 @@ class TokenCostCore:
 
     def compute_usd(self, model: str, in_t: int, out_t: int) -> float:
         """Compute USD cost based on model and token counts."""
-        mk = model.lower()
-        p = MODEL_COSTS.get(mk) or next(
+        mk: str = model.lower()
+        p: dict[str, float] = MODEL_COSTS.get(mk) or next(
             (v for k, v in MODEL_COSTS.items() if k != "default" and k in mk),
             MODEL_COSTS["default"],
         )
@@ -376,7 +385,7 @@ class ModelFallbackCore:
     """Logic for determining model fallback chains."""
 
     def __init__(self, chains: dict[str, list[str]] | None = None) -> None:
-        self.chains = chains or {
+        self.chains: dict[str, list[str]] = chains or {
             "high_performance": ["gpt-4o", "claude-3-5-sonnet", "gpt-4-turbo"],
             "balanced": ["claude-3-5-sonnet", "gpt-4o-mini", "gemini-1.5-pro"],
             "economy": ["gpt-4o-mini", "claude-3-haiku", "gemini-1.5-flash"],
@@ -395,7 +404,7 @@ class ModelFallbackEngine:
     """Service for handling model fallbacks."""
 
     def __init__(self, cost_engine: TokenCostEngine | None = None) -> None:
-        self.cost_engine = cost_engine
+        self.cost_engine: TokenCostEngine | None = cost_engine
         self.core = ModelFallbackCore()
 
     def get_fallback_model(self, current_model: str, _research: str = "") -> str | None:
@@ -417,13 +426,13 @@ class StatsRollupCalculator:
 
     def rollup(self, m: str, interval: str = "1h") -> list[float]:
         """Roll up points into averages per bucket."""
-        pts = self._points.get(m, [])
+        pts: list[tuple[float, float]] = self._points.get(m, [])
         if not pts:
             return []
-        unit = interval[-1]
-        amt = int(interval[:-1]) if interval[:-1].isdigit() else 1
-        mult = {"m": 60, "h": 3600, "d": 86400}.get(unit, 3600)
-        bucket = mult * amt
+        unit: str = interval[-1]
+        amt: int = int(interval[:-1]) if interval[:-1].isdigit() else 1
+        mult: int = {"m": 60, "h": 3600, "d": 86400}.get(unit, 3600)
+        bucket: int = mult * amt
 
         if rc:
             with contextlib.suppress(Exception):
@@ -446,7 +455,7 @@ class StatsForecaster:
         if len(hist) == 1:
             return [float(hist[0])] * periods
         last_val, prev_val = float(hist[-1]), float(hist[-2])
-        diff = last_val - prev_val
+        diff: float = last_val - prev_val
         return [last_val + diff * (i + 1) for i in range(periods)]
 
 
@@ -470,8 +479,8 @@ class ABComparator:
         if not ctrl or not treat:
             return ABSignificanceResult(1.0, False, 0.0)
         ma, mb = sum(ctrl) / len(ctrl), sum(treat) / len(treat)
-        eff = mb - ma
-        p = 0.01 if abs(eff) >= 1.0 else 0.5
+        eff: float = mb - ma
+        p: float = 0.01 if abs(eff) >= 1.0 else 0.5
         return ABSignificanceResult(p, p < alpha, eff)
 
 

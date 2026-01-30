@@ -22,7 +22,7 @@ import contextlib
 import logging
 import math
 from dataclasses import dataclass
-from typing import Any, Dict, List, Tuple
+from typing import Any, Tuple
 
 from src.core.base.common.formula_core import FormulaCore
 
@@ -51,7 +51,7 @@ class TokenCostCore:
     """
 
     # Model pricing (cost per 1M tokens)
-    MODEL_COSTS: Dict[str, Dict[str, float]] = {
+    MODEL_COSTS: dict[str, dict[str, float]] = {
         "gpt-4": {"input": 0.03, "output": 0.06},
         "gpt-4-turbo": {"input": 0.01, "output": 0.03},
         "gpt-3.5-turbo": {"input": 0.0005, "output": 0.0015},
@@ -64,7 +64,7 @@ class TokenCostCore:
 
     def __init__(self) -> None:
         """Initialize token cost calculator."""
-        self.cache: Dict[Tuple[int, int, str], TokenCostResult] = {}
+        self.cache: dict[Tuple[int, int, str], TokenCostResult] = {}
 
     def calculate_cost(self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo") -> TokenCostResult:
         """Calculate total cost for token usage (pure calculation).
@@ -100,7 +100,7 @@ class TokenCostCore:
             return self.cache[cache_key]
 
         # get pricing
-        pricing: Dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
+        pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
 
         # calculate costs (convert from cost per 1M to per token)
         input_cost: float = (input_tokens * pricing["input"]) / 1_000_000
@@ -118,7 +118,7 @@ class TokenCostCore:
         self.cache[cache_key] = result
         return result
 
-    def estimate_cost_per_token(self, model: str) -> Dict[str, float]:
+    def estimate_cost_per_token(self, model: str) -> dict[str, float]:
         """Estimate cost per single token (pure calculation).
 
         Args:
@@ -127,7 +127,7 @@ class TokenCostCore:
         Returns:
             Dict with input and output cost per token
         """
-        pricing: Dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
+        pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
         return {
             "input": pricing["input"] / 1_000_000,
             "output": pricing["output"] / 1_000_000,
@@ -139,7 +139,7 @@ class ModelFallbackCore:
 
     def __init__(self) -> None:
         """Initialize model fallback engine."""
-        self.model_capabilities: Dict[str, Dict[str, float]] = {
+        self.model_capabilities: dict[str, dict[str, float]] = {
             "gpt-4": {"speed": 0.5, "quality": 1.0, "cost": 0.1},
             "gpt-4-turbo": {"speed": 0.7, "quality": 0.95, "cost": 0.3},
             "gpt-3.5-turbo": {"speed": 0.9, "quality": 0.7, "cost": 0.8},
@@ -147,7 +147,7 @@ class ModelFallbackCore:
             "gemini-1.5-pro": {"speed": 0.8, "quality": 0.85, "cost": 0.4},
         }
 
-    def select_best_model(self, constraints: Dict[str, float]) -> str:
+    def select_best_model(self, constraints: dict[str, float]) -> str:
         """Select best model given constraints (pure logic).
 
         Args:
@@ -180,7 +180,7 @@ class ModelFallbackCore:
 
         return max(candidates, key=lambda x: x[1])[0]
 
-    def get_fallback_chain(self, primary: str) -> List[str]:
+    def get_fallback_chain(self, primary: str) -> list[str]:
         """Get fallback model chain (pure logic).
 
         Args:
@@ -198,7 +198,7 @@ class ModelFallbackCore:
                 import traceback
                 traceback.print_exc()
 
-        fallback_chains: Dict[str, List[str]] = {
+        fallback_chains: dict[str, list[str]] = {
             "gpt-4": ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"],
             "gpt-4-turbo": ["gpt-4", "gpt-3.5-turbo", "claude-3-sonnet"],
             "claude-3-opus": ["claude-3-sonnet", "gpt-4-turbo", "gemini-1.5-pro"],
@@ -212,7 +212,6 @@ class DerivedMetricCalculator:
 
     def __init__(self) -> None:
         """Initialize calculator."""
-        self.derived_metrics: dict[str, Any] = {}
 
     def calculate(self, metric_name: str, context: dict[str, float]) -> float:
         """Calculate derived metric value."""
@@ -241,7 +240,7 @@ class DerivedMetricCalculator:
         self.derived_metrics[name] = metric
         return metric
 
-    def evaluate_formula(self, formula: str, values: Dict[str, float]) -> float:
+    def evaluate_formula(self, formula: str, values: dict[str, float]) -> float:
         """Evaluate a formula with given values (pure calculation)."""
         if rc:
             try:
@@ -261,7 +260,7 @@ class StatsRollupCore:
     def __init__(self) -> None:
         """Initialize stats rollup."""
 
-    def rollup_sum(self, values: List[float]) -> float:
+    def rollup_sum(self, values: list[float]) -> float:
         """Calculate sum of values (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -269,7 +268,7 @@ class StatsRollupCore:
                 return rc.calculate_sum_rust(values)  # type: ignore[attr-defined]
         return sum(values) if values else 0.0
 
-    def rollup_avg(self, values: List[float]) -> float:
+    def rollup_avg(self, values: list[float]) -> float:
         """Calculate average (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -277,7 +276,7 @@ class StatsRollupCore:
                 return rc.calculate_avg_rust(values)  # type: ignore[attr-defined]
         return sum(values) / len(values) if values else 0.0
 
-    def rollup_min(self, values: List[float]) -> float:
+    def rollup_min(self, values: list[float]) -> float:
         """Calculate minimum (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -285,7 +284,7 @@ class StatsRollupCore:
                 return rc.calculate_min_rust(values)  # type: ignore[attr-defined]
         return min(values) if values else 0.0
 
-    def rollup_max(self, values: List[float]) -> float:
+    def rollup_max(self, values: list[float]) -> float:
         """Calculate maximum (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -293,7 +292,7 @@ class StatsRollupCore:
                 return rc.calculate_max_rust(values)  # type: ignore[attr-defined]
         return max(values) if values else 0.0
 
-    def rollup_p50(self, values: List[float]) -> float:
+    def rollup_p50(self, values: list[float]) -> float:
         """Calculate 50th percentile (median) (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -301,11 +300,11 @@ class StatsRollupCore:
                 return rc.calculate_median_rust(values)  # type: ignore[attr-defined]
         if not values:
             return 0.0
-        sorted_vals: List[float] = sorted(values)
+        sorted_vals: list[float] = sorted(values)
         idx: int = len(sorted_vals) // 2
         return sorted_vals[idx] if len(sorted_vals) % 2 == 1 else (sorted_vals[idx - 1] + sorted_vals[idx]) / 2
 
-    def rollup_p95(self, values: List[float]) -> float:
+    def rollup_p95(self, values: list[float]) -> float:
         """Calculate 95th percentile (pure calculation)."""
         if rc:
             try:
@@ -318,19 +317,19 @@ class StatsRollupCore:
 
         if not values or len(values) < 20:
             return self.rollup_max(values)
-        sorted_vals: List[float] = sorted(values)
+        sorted_vals: list[float] = sorted(values)
         idx = int(len(sorted_vals) * 0.95)
         return sorted_vals[idx]
 
-    def rollup_p99(self, values: List[float]) -> float:
+    def rollup_p99(self, values: list[float]) -> float:
         """Calculate 99th percentile (pure calculation)."""
         if not values or len(values) < 100:
             return self.rollup_max(values)
-        sorted_vals: List[float] = sorted(values)
+        sorted_vals: list[float] = sorted(values)
         idx = int(len(sorted_vals) * 0.99)
         return sorted_vals[idx]
 
-    def rollup_stddev(self, values: List[float]) -> float:
+    def rollup_stddev(self, values: list[float]) -> float:
         """Calculate standard deviation (pure calculation)."""
         if rc:
             with contextlib.suppress(Exception):
@@ -346,7 +345,7 @@ class StatsRollupCore:
 class CorrelationCore:
     """Pure correlation analysis (Rust-convertible)."""
 
-    def calculate_correlation(self, series1: List[float], series2: List[float]) -> float:
+    def calculate_correlation(self, series1: list[float], series2: list[float]) -> float:
         """Calculate Pearson correlation coefficient (pure calculation).
 
         Args:
@@ -380,7 +379,7 @@ class CorrelationCore:
 class ABTestCore:
     """Pure A/B testing calculations (Rust-convertible)."""
 
-    def calculate_significance(self, control_values: List[float], treatment_values: List[float]) -> Dict[str, float]:
+    def calculate_significance(self, control_values: list[float], treatment_values: list[float]) -> dict[str, float]:
         """Calculate statistical significance (pure calculation).
 
         Uses simplified t-test approach.

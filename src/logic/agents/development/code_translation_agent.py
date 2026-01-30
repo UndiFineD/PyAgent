@@ -23,7 +23,8 @@
 # limitations under the License.
 
 """
-Code translation agent.py module.
+CodeTranslationAgent: Agent for translating code between programming languages, frameworks, and paradigms in the PyAgent platform.
+Supports automated code migration, refactoring, and cross-language interoperability.
 """
 
 # pylint: disable=too-many-ancestors

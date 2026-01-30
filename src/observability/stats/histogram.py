@@ -142,19 +142,23 @@ class Histogram:
             count: Number of occurrences (default 1)
         """
         with self._lock:
-            self._count += count
-            self._sum += value * count
-            self._min = min(self._min, value)
-            self._max = max(self._max, value)
+            self._update_basic_stats(value, count)
+            self._add_to_bucket(value, count)
 
-            idx: int = self._find_bucket_index(value)
+    def _update_basic_stats(self, value: float, count: int) -> None:
+        self._count += count
+        self._sum += value * count
+        self._min = min(self._min, value)
+        self._max = max(self._max, value)
 
-            if idx < 0:
-                self._underflow += count
-            elif idx >= self._num_buckets:
-                self._overflow += count
-            else:
-                self._buckets[idx].count += count
+    def _add_to_bucket(self, value: float, count: int) -> None:
+        idx: int = self._find_bucket_index(value)
+        if idx < 0:
+            self._underflow += count
+        elif idx >= self._num_buckets:
+            self._overflow += count
+        else:
+            self._buckets[idx].count += count
 
     def percentile(self, p: float) -> float:
         """
@@ -169,19 +173,21 @@ class Histogram:
         with self._lock:
             if self._count == 0:
                 return 0.0
+            return self._calculate_percentile(p)
 
-            target: float = self._count * p / 100
-            cumulative: int = self._underflow
+    def _calculate_percentile(self, p: float) -> float:
+        target: float = self._count * p / 100
+        cumulative: int = self._underflow
 
-            if cumulative >= target and self._underflow > 0:
-                return self._min_value
+        if cumulative >= target and self._underflow > 0:
+            return self._min_value
 
-            for bucket in self._buckets:
-                cumulative += bucket.count
-                if cumulative >= target:
-                    return bucket.midpoint
+        for bucket in self._buckets:
+            cumulative += bucket.count
+            if cumulative >= target:
+                return bucket.midpoint
 
-            return self._max_value
+        return self._max_value
 
     def mean(self) -> float:
         """Get mean value."""

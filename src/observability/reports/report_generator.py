@@ -17,11 +17,13 @@
 
 from __future__ import annotations
 
+from argparse import Namespace
 import ast
 import hashlib
 import logging
 import os
 import re
+
 import sys
 import time
 from collections.abc import Iterable
@@ -34,7 +36,7 @@ from src.observability.structured_logger import StructuredLogger
 from .compile_result import CompileResult
 from .core.deduplication_core import DeduplicationCore
 
-__version__ = VERSION
+__version__: str = VERSION
 
 
 class ReportGenerator:
@@ -57,12 +59,12 @@ class ReportGenerator:
         if agent_dir:
             self.agent_dir = Path(agent_dir)
         else:
-            self.agent_dir = Path(__file__).resolve().parent.parent.parent
+            self.agent_dir: Path = Path(__file__).resolve().parent.parent.parent
 
         if output_dir:
             self.output_dir = Path(output_dir)
         else:
-            self.output_dir = self.agent_dir
+            self.output_dir: Path = self.agent_dir
 
         os.makedirs(self.output_dir, exist_ok=True)
         self.logger = StructuredLogger(agent_id="ReportGenerator")
@@ -72,34 +74,46 @@ class ReportGenerator:
         if self.recorder:
             self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
 
+
     def process_all_files(self) -> dict[str, Any]:
         """Process all .py files in agent_dir and generate reports."""
-        py_files = list(self.iter_agent_py_files())
+        py_files: list[Path] = list(self.iter_agent_py_files())
         if not py_files:
             logging.error(f"No .py files found under {self.agent_dir}")
             return {"count": 0, "skipped": 0, "errors": 0}
+        return self._process_files_and_count(py_files)
 
+    def _process_files_and_count(self, py_files: list[Path]) -> dict[str, Any]:
         count = 0
         skipped = 0
         errors_count = 0
         for py_path in py_files:
-            try:
-                if self.process_file(py_path):
-                    count += 1
-                else:
-                    skipped += 1
-            except (IOError, OSError, RuntimeError) as e:
-                logging.error(f"Error processing {py_path.name}: {e}")
+            result = self._process_single_file(py_path)
+            if result == "processed":
+                count += 1
+            elif result == "skipped":
+                skipped += 1
+            elif result == "error":
                 errors_count += 1
-
         logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
         return {"count": count, "skipped": skipped, "errors": errors_count}
 
+    def _process_single_file(self, py_path: Path) -> str:
+        """Helper to process a single file with error handling. Returns 'processed', 'skipped', or 'error'."""
+        try:
+            if self.process_file(py_path):
+                return "processed"
+            else:
+                return "skipped"
+        except (IOError, OSError, RuntimeError) as e:
+            logging.error(f"Error processing {py_path.name}: {e}")
+            return "error"
+
     def export_jsonl_report(self, items: list[dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
         """Exports report items to JSONL format (Phase 183)."""
-        output_path = self.output_dir / filename
+        output_path: Path = self.output_dir / filename
         # Deduplicate before export
-        unique_items = DeduplicationCore.deduplicate_items(items)
+        unique_items: list[dict[str, Any]] = DeduplicationCore.deduplicate_items(items)
         DeduplicationCore.export_to_jsonl(unique_items, str(output_path))
         self.logger.info(
             "Exported deduplicated items",
@@ -109,9 +123,9 @@ class ReportGenerator:
 
     def generate_full_report(self) -> str:
         """Generate a comprehensive project report including the dashboard grid."""
-        processed = self.process_all_files()
+        processed: dict[str, Any] = self.process_all_files()
 
-        lines = [
+        lines: list[str] = [
             "# 🚀 PyAgent Active Progress Dashboard",
             f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*",
             "",
@@ -136,7 +150,7 @@ class ReportGenerator:
     def render_3x3_grid(self) -> str:
         """Generate a 3x3 visual grid for project progress as requested in improvements.txt."""
         # Visual breakdown of project status across three key domains
-        grid = [
+        grid: list[str] = [
             "## 📊 BMAD Progress Grid",
             "",
             "| Planning | Advancement | Quality |",
@@ -150,38 +164,34 @@ class ReportGenerator:
 
     def process_file(self, py_path: Path) -> bool:
         """Process a single file. Returns True if processed, False if skipped."""
-        source = self._read_text(py_path)
-        current_sha = self._sha256_text(source)[:16]
-
-        # Generate a flattened relative path as stem to avoid collisions (e.g., __init__.py)
-        rel_path = py_path.relative_to(self.agent_dir)
-        stem = "_".join(rel_path.with_suffix("").parts)
-
-        # Incremental check
-        existing_sha = self._get_existing_sha(stem)
+        source: str = self._read_text(py_path)
+        current_sha: str = self._sha256_text(source)[:16]
+        rel_path: Path = py_path.relative_to(self.agent_dir)
+        stem: str = "_".join(rel_path.with_suffix("").parts)
+        existing_sha: str | None = self._get_existing_sha(stem)
         if existing_sha == current_sha:
             logging.debug(f"Skipping unchanged file: {py_path.name}")
             return False
-
         logging.info(f"Processing {py_path.name}...")
-        tree, parse_err = self._try_parse_python(source, str(py_path))
-        compile_result = self._compile_check(py_path)
+        return self._process_and_write_reports(py_path, source, stem)
 
+    def _process_and_write_reports(self, py_path: Path, source: str, stem: str) -> bool:
+        tree, parse_err = self._try_parse_python(source, str(py_path))
+        compile_result: CompileResult = self._compile_check(py_path)
         if tree is None:
-            description = (
+            description: str = (
                 f"# Description: `{py_path.name}`\n\n## Module purpose\n\n(Unable to parse file: {parse_err})\n"
             )
-            errors = self.render_errors(py_path, source, CompileResult(ok=False, error=str(parse_err)))
-            improvements = (
+            errors: str = self.render_errors(py_path, source, CompileResult(ok=False, error=str(parse_err)))
+            improvements: str = (
                 f"# Improvements: `{py_path.name}`\n\n"
                 "## Suggested improvements\n"
                 "- Fix the syntax errors first; then re-run report generation\n"
             )
         else:
-            description = self.render_description(py_path, source, tree)
-            errors = self.render_errors(py_path, source, compile_result)
-            improvements = self.render_improvements(py_path, source, tree)
-
+            description: str = self.render_description(py_path, source, tree)
+            errors: str = self.render_errors(py_path, source, compile_result)
+            improvements: str = self.render_improvements(py_path, source, tree)
         self._write_md(self.output_dir / f"{stem}.description.md", description)
         self._write_md(self.output_dir / f"{stem}.errors.md", errors)
         self._write_md(self.output_dir / f"{stem}.improvements.md", improvements)
@@ -194,9 +204,9 @@ class ReportGenerator:
     def render_description(self, py_path: Path, source: str, tree: ast.AST) -> str:
         """Generate description markdown from AST."""
         funcs, classes = self._find_top_level_defs(tree)
-        imports = self._find_imports(tree)
-        sha = self._sha256_text(source)[:16]
-        lines = [
+        imports: list[str] = self._find_imports(tree)
+        sha: str = self._sha256_text(source)[:16]
+        lines: list[str] = [
             f"# Description: `{py_path.name}`",
             "",
             "## Module purpose",
@@ -253,7 +263,7 @@ class ReportGenerator:
 
     def render_errors(self, py_path: Path, source: str, compile_result: CompileResult | str | None) -> str:
         """Generate errors report."""
-        lines = [
+        lines: list[str] = [
             f"# Errors: `{py_path.name}`",
             "",
             "## Scan scope",
@@ -265,9 +275,9 @@ class ReportGenerator:
         ]
         error_msg = None
         if isinstance(compile_result, str):
-            error_msg = compile_result
+            error_msg: str = compile_result
         elif isinstance(compile_result, CompileResult):
-            error_msg = compile_result.error
+            error_msg: str | None = compile_result.error
 
         if error_msg:
             lines.append("- `py_compile` equivalent: FAILED")
@@ -333,7 +343,7 @@ class ReportGenerator:
             suggestions.append("Consider using `logging` instead of `print` for controllable verbosity.")
 
         suggestions = sorted(list(set(suggestions)))
-        lines = [
+        lines: list[str] = [
             f"# Improvements: `{py_path.name}`",
             "",
             "## Suggested improvements",
@@ -371,7 +381,7 @@ class ReportGenerator:
                 for alias in node.names:
                     imports.append(alias.name)
             elif isinstance(node, ast.ImportFrom):
-                mod = node.module or ""
+                mod: str = node.module or ""
                 imports.append(mod)
         # De-dupe while preserving order
         seen: set[str] = set()
@@ -453,11 +463,11 @@ class ReportGenerator:
             return CompileResult(ok=False, error=e.stderr or e.stdout or str(e))
 
     def _get_existing_sha(self, stem: str) -> str | None:
-        desc_path = self.output_dir / f"{stem}.description.md"
+        desc_path: Path = self.output_dir / f"{stem}.description.md"
         if not desc_path.exists():
             return None
-        content = self._read_text(desc_path)
-        match = re.search(r"- SHA256\(source\): `([a-f0-9]+)", content)
+        content: str = self._read_text(desc_path)
+        match: re.Match[str] | None = re.search(r"- SHA256\(source\): `([a-f0-9]+)", content)
         return match.group(1) if match else None
 
     def _sha256_text(self, text: str) -> str:
@@ -492,12 +502,12 @@ if __name__ == "__main__":
         )
         parser.add_argument("--no-dashboard", action="store_true", help="Skip dashboard generation")
 
-        args = parser.parse_args()
+        args: Namespace = parser.parse_args()
 
         # Resolve paths relative to workspace root if possible
-        base_dir_main = Path(__file__).resolve().parent.parent.parent.parent
-        agent_dir_main = Path(args.src) if args.src else (base_dir_main / "src")
-        output_dir_main = Path(args.out) if args.out else (base_dir_main / "docs" / "autodoc")
+        base_dir_main: Path = Path(__file__).resolve().parent.parent.parent.parent
+        agent_dir_main: Path = Path(args.src) if args.src else (base_dir_main / "src")
+        output_dir_main: Path = Path(args.out) if args.out else (base_dir_main / "docs" / "autodoc")
 
         print("Starting autodoc generation...")
         print(f"Source: {agent_dir_main}")
@@ -506,7 +516,7 @@ if __name__ == "__main__":
         output_dir_main.mkdir(parents=True, exist_ok=True)
 
         generator = ReportGenerator(agent_dir=agent_dir_main, output_dir=output_dir_main)
-        results = generator.process_all_files()
+        results: dict[str, Any] = generator.process_all_files()
 
         print("Generation completed.")
         print(f"Files Processed: {results.get('count', 0)}")
@@ -514,8 +524,8 @@ if __name__ == "__main__":
         print(f"Errors: {results.get('errors', 0)}")
 
         if not args.no_dashboard:
-            dashboard_content = generator.generate_full_report()
-            dashboard_path = output_dir_main / "AUTODOC_DASHBOARD.md"
+            dashboard_content: str = generator.generate_full_report()
+            dashboard_path: Path = output_dir_main / "AUTODOC_DASHBOARD.md"
             dashboard_path.write_text(dashboard_content, encoding="utf-8")
             print(f"Dashboard generated at {dashboard_path}")
 
