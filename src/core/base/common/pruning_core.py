@@ -108,7 +108,8 @@ class PruningCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_decay_rust([current_weight], age_seconds / half_life)[0]  # type: ignore
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                logger.error("PruningCore: Rust calculate_decay_rust failed: %s", e)
                 pass
 
         return max(current_weight * math.exp(-math.log(2) * age_seconds / half_life), 0.05)
@@ -137,6 +138,7 @@ class PruningCore(BaseCore):
                 sync.last_fired = time.time()
                 return new_weight
             except Exception as e:  # pylint: disable=broad-exception-caught
+                logger.error("PruningCore: Rust update_weight_on_fire_rust failed: %s", e)
                 pass
 
         if success:
@@ -162,6 +164,7 @@ class PruningCore(BaseCore):
                 # pylint: disable=no-member
                 return rc.is_in_refractory_rust(sync.refractory_until)  # type: ignore
             except Exception as e:  # pylint: disable=broad-exception-caught
+                logger.error("PruningCore: Rust is_in_refractory_rust failed: %s", e)
                 pass
         return time.time() < sync.refractory_until
 

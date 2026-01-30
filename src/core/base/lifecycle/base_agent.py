@@ -178,7 +178,7 @@ class BaseAgent(
 
         except Exception as e:  # pylint: disable=broad-exception-caught
             if hasattr(self, 'logger') and self.logger:
-                self.logger.warning(f"Failed to load system prompt for {self.agent_name}: {e}")
+                self.logger.warning(f"[Robustness] Failed to load system prompt for {self.agent_name}: {e}", exc_info=True)
 
         # Tertiary: Minimal fallback prompt
         return "You are an AI."
@@ -257,7 +257,7 @@ class BaseAgent(
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Backoff for 15 minutes on failure
                 self.status_cache[url] = now + 900
-                # pylint: disable=broad-exception-caught
+                logging.warning(f"[Robustness] Failed to notify webhook {url}: {e}", exc_info=True)
 
     def _classify_exception(self, e: Exception) -> str:
         """
@@ -350,7 +350,7 @@ class BaseAgent(
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             f_type = self._classify_exception(e)
-            logging.error("Think execution failed: %s (Type: %s)", e, f_type)
+            logging.error("[Robustness] Think execution failed: %s (Type: %s)", e, f_type, exc_info=True)
 
             # Telemetry Capture (Swarm Intelligence Fix)
             if self.context:
@@ -362,8 +362,8 @@ class BaseAgent(
                         failure_type=f_type,
                         details={"prompt_preview": prompt[:100]}
                     )
-                except Exception as telemetry_err:
-                    logging.error(f"Failed to log failure to CascadeContext: {telemetry_err}")
+                except (RuntimeError, ValueError, TypeError, OSError) as telemetry_err:
+                    logging.error(f"[Robustness] Failed to log failure to CascadeContext: {telemetry_err}", exc_info=True)
 
             return f"Error encountered during agent reasoning: {str(e)} (Type: {f_type})"
 
@@ -413,7 +413,7 @@ class BaseAgent(
             try:
                 self.recorder.record(self._system_prompt, result)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug("BaseAgent: Failed to record interaction: %s", e)
+                logging.debug("[Robustness] BaseAgent: Failed to record interaction: %s", e, exc_info=True)
 
     def verify_self(self, result: str) -> tuple[bool, str]:
         """Verify the integrity of a generated result."""

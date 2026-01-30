@@ -177,9 +177,14 @@ class MetricsCore(BaseCore):
 
     def aggregate_summary(self) -> Dict[str, float]:
         """High-throughput aggregation of stored records."""
+        result = self._try_rust_aggregate()
+        if result is not None:
+            return result
+        return self._python_aggregate()
+
+    def _try_rust_aggregate(self) -> Optional[Dict[str, float]]:
         if rc:
             try:
-                # Group records by name
                 grouped: Dict[str, List[float]] = {}
                 for r in self.records:
                     if r.name not in grouped:
@@ -187,17 +192,17 @@ class MetricsCore(BaseCore):
                     grouped[r.name].append(r.value)
                 # pylint: disable=no-member
                 return rc.aggregate_metrics_rust(grouped)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logger.debug("Rust metrics aggregation failed: %s", e)
+        return None
 
-        # Python fallback
+    def _python_aggregate(self) -> Dict[str, float]:
         results = {}
         grouped_py: Dict[str, List[float]] = {}
         for rec in self.records:
             if rec.name not in grouped_py:
                 grouped_py[rec.name] = []
             grouped_py[rec.name].append(rec.value)
-
         for name, vals in grouped_py.items():
             results[name] = sum(vals) / len(vals)
         return results
@@ -205,14 +210,21 @@ class MetricsCore(BaseCore):
     def get_rolling_avg(self, metric_name: str, window: int = 10) -> List[float]:
         """Calculate rolling average for a specific metric."""
         values = [r.value for r in self.records if r.name == metric_name]
+        result = self._try_rust_rolling_avg(values, window)
+        if result is not None:
+            return result
+        return self._python_rolling_avg(values, window)
+
+    def _try_rust_rolling_avg(self, values: List[float], window: int) -> Optional[List[float]]:
         if rc:
             try:
                 # pylint: disable=no-member
                 return rc.rolling_avg_rust(values, window)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logger.debug("Rust rolling average failed: %s", e)
+        return None
 
-        # Python fallback
+    def _python_rolling_avg(self, values: List[float], window: int) -> List[float]:
         if not values:
             return []
         res = []
