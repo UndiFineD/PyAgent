@@ -1,3 +1,5 @@
+
+from __future__ import annotations
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
@@ -33,9 +35,6 @@ Doc gen agent.py module.
 """
 
 # pylint: disable=too-many-ancestors
-
-
-from __future__ import annotations
 
 import ast
 import os

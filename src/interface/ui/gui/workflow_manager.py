@@ -32,17 +32,21 @@ __version__ = VERSION
 class WorkflowManager:
     """Manages the lifecycle of a complex development workflow."""
 
-    def __init__(self, callbacks) -> None:
+    def __init__(self, callbacks: dict[str, Any]) -> None:
         self.callbacks: Any = callbacks
         self.current_step_index = 0
         self.workflow_active = False
+        self.phases: list[str] = []
+        self.targets: list[str] = []
 
-    def start_workflow(self, track_name, targets) -> None:
+    def start_workflow(self, track_name: str, targets: list[str]) -> None:
         """Starts a predefined workflow based on the track."""
         from .constants import BMAD_TRACKS
 
         track = BMAD_TRACKS.get(track_name)
         if not track:
+            self.phases = []
+            self.targets = []
             return
 
         self.phases = track["phases"]
@@ -74,7 +78,7 @@ class WorkflowManager:
                     f"--- BMAD {phase.upper()} PHASE ---\nExecute {phase} tasks for {target}.",
                 )
 
-    def get_agents_for_phase(self, phase) -> list[str]:
+    def get_agents_for_phase(self, phase: str) -> list[str]:
         """Returns a list of agent names needed for a specific phase."""
         mapping: dict[str, list[str]] = {
             "Analysis": ["Analyst", "PM"],

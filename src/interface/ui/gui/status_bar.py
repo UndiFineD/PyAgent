@@ -44,5 +44,5 @@ class StatusBar:
         )
         self.label.pack(side=tk.BOTTOM, fill=tk.X)
 
-    def set_status(self, message) -> None:
+    def set_status(self, message: str) -> None:
         self.status_var.set(message)

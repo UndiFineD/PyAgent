@@ -39,19 +39,20 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 # Phase 335: Support for custom Copilot CLI paths
-copilot_path = r"C:\DEV\copilot-cli"
-if os.path.exists(copilot_path) and copilot_path not in os.environ["PATH"]:
-    os.environ["PATH"] = copilot_path + os.pathsep + os.environ["PATH"]
-    logging.info(f"Augmented PATH with {copilot_path}")
+COPILOT_PATH = r"C:\DEV\copilot-cli"
+if os.path.exists(COPILOT_PATH) and COPILOT_PATH not in os.environ["PATH"]:
+    os.environ["PATH"] = COPILOT_PATH + os.pathsep + os.environ["PATH"]
+    logging.info(f"Augmented PATH with {COPILOT_PATH}")
 
 
 # Import the Rust extension for fleet self-improvement (registers PyO3 functions)
 try:
     # import rust_core  # Rust-powered analysis and fix functions
-    rust_accel = True
+    RUST_ACCEL = True
+    RUST_CORE = None
 except ImportError:
-    rust_core = None
-    rust_accel = False
+    RUST_CORE = None
+    RUST_ACCEL = False
 
 
 # pylint: disable=wrong-import-position

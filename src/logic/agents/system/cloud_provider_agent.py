@@ -8,22 +8,15 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
+
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 """
-Cloud provider agent.py module.
+CloudProviderAgent: System agent for managing cloud provider integrations, resource provisioning, and cloud orchestration within the PyAgent swarm.
+Supports multi-cloud, hybrid, and distributed cloud operations.
 """
 
 
@@ -46,7 +39,7 @@ class CloudProviderAgent(BaseAgent):
         self.supported_providers = ["aws", "azure", "gcp"]
         self.credentials: dict[str, bool] = {p: False for p in self.supported_providers}
 
-    def configure_provider(self, provider: str, credentials_mock: dict[str, str]) -> str:
+    def configure_provider(self, provider: str, credentials_mock: dict[str, str]) -> str:  # noqa: ARG002
         """Mocks the configuration of a cloud provider."""
         if self.recorder:
             self.recorder.record_lesson("cloud_provider_config", {"provider": provider})

@@ -36,7 +36,7 @@ from src.observability.stats.observability_core import (Alert, AlertSeverity,
                                                         StatsCore, Threshold)
 from src.observability.structured_logger import StructuredLogger
 
-__version__ = VERSION
+__version__: str = VERSION
 
 logger = StructuredLogger(__name__)
 
@@ -45,7 +45,7 @@ class StatsAgent:
     """Reports statistics on file update progress."""
 
     def __init__(self, files: list[str]) -> None:
-        self.files = [Path(f) for f in files]
+        self.files: list[Path] = [Path(f) for f in files]
         self.stats: dict[str, Any] = {}
         self._validate_files()
         # New features
@@ -53,7 +53,6 @@ class StatsAgent:
         self._custom_metrics: dict[str, Callable[[], float]] = {}
         self._snapshots: list[MetricSnapshot] = []
         self._thresholds: list[Threshold] = []
-        self._alerts: list[Alert] = []
         self._retention_policies: dict[str, RetentionPolicy] = {}
         self._anomaly_scores: dict[str, list[float]] = {}
         self._metric_history: dict[str, list[tuple[str, float]]] = {}
@@ -62,7 +61,7 @@ class StatsAgent:
         """Validate input files."""
         if not self.files:
             raise ValueError("No files provided")
-        invalid = [f for f in self.files if not f.exists()]
+        invalid: list[Path] = [f for f in self.files if not f.exists()]
         if invalid:
             logging.warning(f"Files not found: {', '.join(map(str, invalid))}")
             # Filter out invalid files
@@ -75,7 +74,7 @@ class StatsAgent:
         self,
         name: str,
         metric_type: MetricType = MetricType.GAUGE,
-        description: str = "",
+        description: str = "",  # noqa: ARG002
     ) -> Metric:
         """Register a custom metric type."""
         if name not in self._custom_metrics:
@@ -92,7 +91,7 @@ class StatsAgent:
         """Get a registered metric by name."""
         if name in self._custom_metrics:
             if name in self._metrics and self._metrics[name]:
-                value = self._metrics[name][-1].value
+                value: float = self._metrics[name][-1].value
             else:
                 value = 0.0
             return Metric(
@@ -109,7 +108,7 @@ class StatsAgent:
         for name in self._custom_metrics:
             if name in self._metrics and self._metrics[name]:
                 # Get the latest value for this metric
-                latest_metric = self._metrics[name][-1]
+                latest_metric: Metric = self._metrics[name][-1]
                 results[name] = latest_metric.value
         return results
 
@@ -124,7 +123,7 @@ class StatsAgent:
         """Add a metric value."""
         # Note: Core Metric doesn't support namespace natively.
         # We store it in tags for compatibility.
-        actual_tags = tags or {}
+        actual_tags: dict[str, str] = tags or {}
         if namespace != "default":
             actual_tags["namespace"] = namespace
 
@@ -150,7 +149,7 @@ class StatsAgent:
 
     def get_metric_history(self, name: str, limit: int = 100) -> list[Metric]:
         """Get metric history."""
-        metrics = self._metrics.get(name, [])
+        metrics: list[Metric] = self._metrics.get(name, [])
         return metrics[-limit:]
 
     # ========== Anomaly Detection ==========
@@ -158,12 +157,12 @@ class StatsAgent:
         self, metric_name: str, value: float | None = None, threshold_std: float = 2.0
     ) -> bool | tuple[bool, float]:
         """Detect if a value is anomalous using standard deviation."""
-        history = self._metrics.get(metric_name, [])
+        history: list[Metric] = self._metrics.get(metric_name, [])
         if value is None:
             if not history:
                 return False
-            val_to_check = history[-1].value
-            hist_to_check = history[:-1]
+            val_to_check: float = history[-1].value
+            hist_to_check: list[Metric] = history[:-1]
             is_anom, _ = StatsCore.detect_anomaly(hist_to_check, val_to_check, threshold_std)
             return is_anom
 
@@ -192,16 +191,7 @@ class StatsAgent:
         if severity is None:
             severity = AlertSeverity.MEDIUM
 
-        # Backwards compatible operator/value support.
-        # If caller used min/max thresholds, synthesize an operator/value pair
-        # so downstream alert rendering has a single numeric threshold.
-        if not operator:
-            if max_value is not None and value == 0.0:
-                operator = ">"
-                value = float(max_value)
-            elif min_value is not None and value == 0.0:
-                operator = "<"
-                value = float(min_value)
+        operator, value = self._legacy_operator_value_compat(operator, value, min_value, max_value)
         threshold = Threshold(
             metric_name=metric_name,
             min_value=min_value,
@@ -214,9 +204,26 @@ class StatsAgent:
         self._thresholds.append(threshold)
         return threshold
 
+    def _legacy_operator_value_compat(
+        self,
+        operator: str,
+        value: float,
+        min_value: float | None,
+        max_value: float | None,
+    ) -> tuple[str, float]:
+        """Helper for backwards compatible operator/value support."""
+        if not operator:
+            if max_value is not None and value == 0.0:
+                operator = ">"
+                value = float(max_value)
+            elif min_value is not None and value == 0.0:
+                operator = "<"
+                value = float(min_value)
+        return operator, value
+
     def remove_threshold(self, metric_name: str) -> bool:
         """Remove all thresholds for a metric."""
-        original_count = len(self._thresholds)
+        original_count: int = len(self._thresholds)
         self._thresholds = [t for t in self._thresholds if t.metric_name != metric_name]
         return len(self._thresholds) < original_count
 
@@ -249,7 +256,7 @@ class StatsAgent:
 
     def _create_alert(self, metric: Metric, threshold: Threshold) -> Alert:
         """Create an alert."""
-        threshold_value = threshold.value
+        threshold_value: float | None = threshold.value
         if threshold.max_value is not None:
             threshold_value = float(threshold.max_value)
         elif threshold.min_value is not None:
@@ -275,7 +282,7 @@ class StatsAgent:
 
     def clear_alerts(self) -> int:
         """Clear all alerts and return count."""
-        count = len(self._alerts)
+        count: int = len(self._alerts)
         self._alerts = []
         return count
 
@@ -305,8 +312,8 @@ class StatsAgent:
 
     def compare_snapshots(self, snapshot1_name: str, snapshot2_name: str) -> dict[str, dict[str, float | int]]:
         """Compare two snapshots."""
-        s1 = self.get_snapshot(snapshot1_name)
-        s2 = self.get_snapshot(snapshot2_name)
+        s1: MetricSnapshot | None = self.get_snapshot(snapshot1_name)
+        s2: MetricSnapshot | None = self.get_snapshot(snapshot2_name)
         if not s1 or not s2:
             return {}
         return StatsCore.compare_snapshots(s1, s2)
@@ -321,7 +328,7 @@ class StatsAgent:
         compression_after_days: int = 7,
     ) -> RetentionPolicy:
         """Add a retention policy."""
-        key = metric_name or namespace or ""
+        key: str = metric_name or namespace or ""
         policy = RetentionPolicy(
             metric_name=metric_name,
             namespace=namespace or "",
@@ -388,8 +395,8 @@ class StatsAgent:
             "tests": [],
         }
         for file_path in self.files:
-            base = file_path.stem
-            dir_path = file_path.parent
+            base: str = file_path.stem
+            dir_path: Path = file_path.parent
             if not (dir_path / f"{base}.description.md").exists():
                 missing["context"].append(str(file_path))
             if not (dir_path / f"{base}.changes.md").exists():
@@ -404,15 +411,15 @@ class StatsAgent:
 
     def calculate_stats(self) -> dict[str, int]:
         """Calculate statistics for each file."""
-        total_files = len(self.files)
+        total_files: int = len(self.files)
         files_with_context = 0
         files_with_changes = 0
         files_with_errors = 0
         files_with_improvements = 0
         files_with_tests = 0
         for file_path in self.files:
-            base = file_path.stem
-            dir_path = file_path.parent
+            base: str = file_path.stem
+            dir_path: Path = file_path.parent
             if (dir_path / f"{base}.description.md").exists():
                 files_with_context += 1
             if (dir_path / f"{base}.changes.md").exists():
@@ -437,9 +444,9 @@ class StatsAgent:
         """Compare current stats with previous run and calculate deltas."""
         deltas: dict[str, str] = {}
         for key, current_value in self.stats.items():
-            previous_value = previous_stats.get(key, 0)
+            previous_value: int = previous_stats.get(key, 0)
             delta = current_value - previous_value
-            percentage_change = (delta / previous_value * 100) if previous_value else 0
+            percentage_change: Any | int = (delta / previous_value * 100) if previous_value else 0
             deltas[key] = f"{delta:+} ({percentage_change:.1f}%)"
         return deltas
 
@@ -460,7 +467,7 @@ class StatsAgent:
                 with open(f"{output_path}.json", 'w', encoding='utf-8') as json_file:
                     json.dump(self.stats, json_file, indent=2)
             elif fmt == "csv":
-                with open(f"{output_path}.csv", "w", newline="") as csv_file:
+                with open(f"{output_path}.csv", "w", newline="", encoding="utf-8") as csv_file:
                     writer = csv.writer(csv_file)
                     writer.writerow(self.stats.keys())
                     writer.writerow(self.stats.values())
@@ -472,7 +479,6 @@ class StatsAgent:
                     html_file.write("</table></body></html>")
             elif fmt == "sqlite":
                 import sqlite3
-
                 conn = sqlite3.connect(f"{output_path}.db")
                 cursor = conn.cursor()
                 cursor.execute("CREATE TABLE IF NOT EXISTS stats (metric TEXT, value INTEGER)")
@@ -487,20 +493,20 @@ class StatsAgent:
         """Generate a comparison report between current and baseline stats."""
         comparison = {}
         for key, current_value in self.stats.items():
-            baseline_value = baseline_stats.get(key, 0)
+            baseline_value: int = baseline_stats.get(key, 0)
             comparison[key] = {
                 "current": current_value,
                 "baseline": baseline_value,
                 "difference": current_value - baseline_value,
             }
-        report = json.dumps(comparison, indent=2)
+        report: str = json.dumps(comparison, indent=2)
         logger.info(report)
         print(report)
 
     def report_stats(self, output_format: str = "text") -> None:
         """Print the statistics report."""
-        stats = self.calculate_stats()
-        total = stats["total_files"]
+        stats: dict[str, int] = self.calculate_stats()
+        total: int = stats["total_files"]
 
         if output_format == "json":
             logger.info(json.dumps(stats, indent=2))
@@ -508,7 +514,7 @@ class StatsAgent:
             import io
 
             output = io.StringIO()
-            writer = csv.writer(output)
+            writer: csv.Writer = csv.writer(output)
             writer.writerow(stats.keys())
             writer.writerow(stats.values())
             logger.info(output.getvalue())

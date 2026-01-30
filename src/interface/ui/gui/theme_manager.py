@@ -33,7 +33,7 @@ __version__ = VERSION
 class ThemeManager:
     """Handles switching between light and dark themes for the GUI."""
 
-    def __init__(self, root) -> None:
+    def __init__(self, root: tk.Tk) -> None:
         self.root: Any = root
         self.is_dark_mode = True
 
@@ -66,7 +66,7 @@ class ThemeManager:
         self.is_dark_mode: bool = not self.is_dark_mode
         self.apply_theme()
 
-    def refresh_widgets(self, parent) -> None:
+    def refresh_widgets(self, parent: tk.Misc) -> None:
         bg: str = "#2d2d2d" if self.is_dark_mode else "#f0f0f0"
         fg: str = "white" if self.is_dark_mode else "black"
         text_bg: str = "#1e1e1e" if self.is_dark_mode else "white"

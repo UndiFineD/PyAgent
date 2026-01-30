@@ -17,7 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""Interpretable Core for Sparse Autoencoder (SAE) logic bridges.
+
+"""
+InterpretableCore: Core logic for interpretable Sparse Autoencoder (SAE) bridges in PyAgent.
+Enables explainable AI, feature attribution, and transparent model reasoning for cognitive agents.
+"""
 
 This module simulates the decomposition of LLM activations into human-interpretable
 features, leveraging Rust for high-throughput vectorized operations.
