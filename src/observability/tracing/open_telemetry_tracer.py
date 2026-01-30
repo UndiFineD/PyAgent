@@ -16,16 +16,16 @@
 OpenTelemetry Tracing Module - Phase 20: Production Infrastructure
 ===================================================================
 
-Distributed tracing with OpenTelemetry integration.
-Inspired by vLLM's tracing.py pattern.
-
-Features:
-- SpanAttributes: Standard attribute names for LLM operations
-- Trace context extraction and propagation
+Distributed tracing with OpenTelemetry integration for PyAgent.
+This module provides:
+- Standardized span attribute names for LLM operations
+- Trace context extraction and propagation utilities
 - OTLP exporter support (gRPC and HTTP)
 - Graceful fallback when OpenTelemetry is not installed
 - Span context managers and decorators
 - Custom span processors
+
+This module is required for Phase 315 documentation parity.
 
 Author: PyAgent Phase 20
 """
@@ -41,13 +41,8 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Any, Callable, Generator, ParamSpec, TypeVar
 
+from opentelemetry.trace.span import Span
 from opentelemetry.sdk.trace.export import SpanExporter
-
-from opentelemetry.trace.span import Span
-
-from opentelemetry.trace.span import Span
-
-from opentelemetry.trace.span import Span
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -58,10 +53,8 @@ TRACE_HEADERS: list[str] = ["traceparent", "tracestate"]
 _is_otel_imported = False
 otel_import_error_traceback: str | None = None
 
-# Type stubs for when otel is not available
 Context = Any
 Tracer = Any
-Span = Any
 SpanKind = Any
 
 try:
@@ -71,8 +64,7 @@ try:
         OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
     from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.trace.export import (BatchSpanProcessor,
-                                                SimpleSpanProcessor,
-                                                SpanExporter)
+                                                SimpleSpanProcessor)
     from opentelemetry.trace import (Span, SpanKind, Status, StatusCode,
                                      Tracer, get_current_span,
                                      get_tracer_provider, set_tracer_provider)
@@ -272,18 +264,47 @@ def extract_trace_headers(headers: Mapping[str, str]) -> dict[str, str]:
     """
     Extract only trace-related headers from a headers mapping.
     """
-    return {h: headers[h] for h: str in TRACE_HEADERS if h in headers}
+    return {h: headers[h] for h in TRACE_HEADERS if h in headers}
 
 
 def contains_trace_headers(headers: Mapping[str, str]) -> bool:
     """Check if headers contain trace context."""
-    return any(h in headers for h: str in TRACE_HEADERS)
+    return any(h in headers for h in TRACE_HEADERS)
 
 
 # ============================================================================
 # Span Context Managers
 # ============================================================================
 
+
+
+def _select_tracer(tracer: Tracer | None) -> Tracer | None:
+    """Select the tracer to use, falling back to global if not provided."""
+    if tracer is not None:
+        return tracer
+    return get_tracer()
+
+def _start_span_context(
+    tracer: Tracer,
+    name: str,
+    kind: SpanKind | None,
+    attributes: dict[str, Any] | None,
+    context: Context | None,
+    record_exception: bool,
+    set_status_on_exception: bool,
+) -> Any:
+    """Start a span context with the given parameters."""
+    # Default to INTERNAL kind
+    if kind is None:
+        kind = SpanKind.INTERNAL
+    return tracer.start_as_current_span(
+        name,
+        kind=kind,
+        attributes=attributes,
+        context=context,
+        record_exception=record_exception,
+        set_status_on_exception=set_status_on_exception,
+    )
 
 @contextmanager
 def create_span(
@@ -321,24 +342,19 @@ def create_span(
         yield None
         return
 
-    if tracer is None:
-        tracer = get_tracer()
-
-    if tracer is None:
+    tracer_obj = _select_tracer(tracer)
+    if tracer_obj is None:
         yield None
         return
 
-    # Default to INTERNAL kind
-    if kind is None:
-        kind = SpanKind.INTERNAL
-
-    with tracer.start_as_current_span(
+    with _start_span_context(
+        tracer_obj,
         name,
-        kind=kind,
-        attributes=attributes,
-        context=context,
-        record_exception=record_exception,
-        set_status_on_exception=set_status_on_exception,
+        kind,
+        attributes,
+        context,
+        record_exception,
+        set_status_on_exception,
     ) as span:
         yield span
 
@@ -455,7 +471,7 @@ _log_tracing_disabled_once = False
 
 def log_tracing_disabled_warning() -> None:
     """Log a warning that tracing is disabled (only once)."""
-    global _log_tracing_disabled_once
+    # global _log_tracing_disabled_once  # noqa: PLW0603
     if not _log_tracing_disabled_once:
         logger.warning("Received a request with trace context but tracing is disabled")
         _log_tracing_disabled_once = True
@@ -551,10 +567,10 @@ class NullTracer:
     """A no-op tracer for testing or when tracing is disabled."""
 
     @contextmanager
-    def start_as_current_span(self, name: str, **kwargs: Any) -> Generator[NullSpan, None, None]:
+    def start_as_current_span(self, name: str, **kwargs: Any) -> Generator[NullSpan, None, None]:  # noqa: ARG002
         yield NullSpan()
 
-    def start_span(self, name: str, **kwargs: Any) -> NullSpan:
+    def start_span(self, name: str, **kwargs: Any) -> NullSpan:  # noqa: ARG002
         return NullSpan()
 
 

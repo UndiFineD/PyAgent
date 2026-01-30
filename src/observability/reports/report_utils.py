@@ -28,7 +28,7 @@ from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.common.workspace_core import WorkspaceCore
 from src.core.base.lifecycle.version import VERSION
 
-__version__ = VERSION
+__version__: str = VERSION
 
 # Constants used by helpers
 _workspace = WorkspaceCore()
@@ -48,7 +48,7 @@ def _is_pytest_test_file(path: Path) -> bool:
 
 def _looks_like_pytest_import_problem(path: Path) -> str | None:
     """Check if filename has characters that cause pytest import issues."""
-    name = path.name
+    name: str = path.name
 
     if not _is_pytest_test_file(path):
         return None
@@ -67,18 +67,18 @@ def _find_imports(tree: ast.AST) -> list[str]:
     # We keep this for compatibility if it's used elsewhere with a pre-parsed tree.
     imports: list[str] = []
 
-    for node in ast.walk(tree):
+    for node: ast.AST in ast.walk(tree):
         if isinstance(node, ast.Import):
-            for alias in node.names:
+            for alias: ast.alias in node.names:
                 imports.append(alias.name)
         elif isinstance(node, ast.ImportFrom):
-            mod = node.module or ""
+            mod: str = node.module or ""
             imports.append(mod)
     # De-dupe while preserving order
 
     seen: set[str] = set()
     out: list[str] = []
-    for item in imports:
+    for item: str in imports:
         if item not in seen:
             seen.add(item)
             out.append(item)
@@ -106,7 +106,7 @@ def export_to_html(content: str, title: str = "PyAgent Report") -> str:
     except ImportError:
         return f"<pre>{content}</pre>"
 
-    html_body = markdown.markdown(content, extensions=["extra", "codehilite"])
+    html_body: str = markdown.markdown(content, extensions=["extra", "codehilite"])
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -140,23 +140,23 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
     """Find potential issues via lightweight static analysis."""
     issues: list[str] = []
     # 1. Mutable defaults
-    for node in ast.walk(tree):
+    for node: ast.AST in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            for default in node.args.defaults:
+            for default: ast.expr in node.args.defaults:
                 if isinstance(default, (ast.List, ast.Dict, ast.Set)):
                     issues.append(f"Function `{node.name}` has a mutable default argument (list / dict / set).")
                     break  # One per function is enough
     # 2. Bare excepts
-    for node in ast.walk(tree):
+    for node: ast.AST in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler) and node.type is None:
             issues.append("Contains bare `except` clause.")
     # 3. Missing type hints
-    for node in ast.walk(tree):
+    for node: ast.AST in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
             # Check args
-            missing_arg_type = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
+            missing_arg_type: bool = any(arg.annotation is None for arg: ast.arg in node.args.args if arg.arg != "self")
             # Check return
-            missing_return_type = node.returns is None
+            missing_return_type: bool = node.returns is None
             if missing_arg_type or missing_return_type:
                 issues.append(f"Function `{node.name}` is missing type annotations.")
     # 4. TODOs

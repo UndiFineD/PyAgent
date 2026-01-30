@@ -17,12 +17,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""Local RAG Core for hyper-localized vector sharding.
 
-This module provides the logic for path-based routing, reranking, and
-context marker extraction in localized Retrieval-Augmented Generation.
 """
-
+LocalRAGCore: Provides hyper-localized Retrieval-Augmented Generation (RAG) logic for vector sharding in PyAgent.
+Optimized for fast, context-aware retrieval and embedding management at the agent level.
+"""
 from __future__ import annotations
 from dataclasses import dataclass
 
@@ -41,7 +40,6 @@ class RAGShard:
         document_count: Number of documents in this shard.
         last_updated: Timestamp of the last shard update.
     """
-
     path: str
     tags: list[str]
     document_count: int
@@ -57,7 +55,8 @@ class LocalRAGCore:
     def route_query_to_shards(
         self, query: str, query_path: str, available_shards: list[RAGShard]
     ) -> list[str]:
-        """Routes a query to the most relevant localized shards based on file path.
+        """
+        Routes a query to the most relevant localized shards based on file path.
 
         Args:
             query: The text query.
@@ -80,7 +79,8 @@ class LocalRAGCore:
     def calculate_rerank_score(
         self, original_score: float, path_proximity: int
     ) -> float:
-        """Boosts relevance score based on how close the source is to the active file.
+        """
+        Boosts relevance score based on how close the source is to the active file.
 
         Args:
             original_score: Base relevance score.
@@ -94,7 +94,8 @@ class LocalRAGCore:
         return original_score * (1.0 + boost)
 
     def extract_local_context_markers(self, content: str) -> list[str]:
-        """Identifies key symbols/imports to use as local context anchors.
+        """
+        Identifies key symbols/imports to use as local context anchors.
 
         Args:
             content: The file content to analyze.

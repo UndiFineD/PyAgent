@@ -115,15 +115,8 @@ class ToolParser(ABC):
     ) -> ExtractedToolCalls:
         """
         Extract tool calls from a complete model output.
-
-        Args:
-            model_output: The complete model-generated string
-            tools: Optional list of available tool definitions
-
-        Returns:
-            ExtractedToolCalls with parsed tool calls
         """
-        pass
+        ...
 
     @abstractmethod
     def extract_tool_calls_streaming(
@@ -137,19 +130,8 @@ class ToolParser(ABC):
     ) -> StreamingToolCallDelta | None:
         """
         Extract tool calls from streaming output.
-
-        Args:
-            previous_text: Text from previous iteration
-            current_text: Current accumulated text
-            delta_text: New text since last iteration
-            previous_token_ids: Token IDs from previous iteration
-            current_token_ids: Current token IDs
-            delta_token_ids: New token IDs
-
-        Returns:
-            StreamingToolCallDelta or None if no update
         """
-        pass
+        ...
 
     def reset(self) -> None:
         """Reset parser state for new request."""

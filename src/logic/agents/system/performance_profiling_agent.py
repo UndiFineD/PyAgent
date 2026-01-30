@@ -22,8 +22,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """
-Performance profiling agent.py module.
+PerformanceProfilingAgent: System agent for profiling and analyzing performance metrics within the PyAgent swarm.
+Enables performance diagnostics, benchmarking, and optimization recommendations.
 """
 
 

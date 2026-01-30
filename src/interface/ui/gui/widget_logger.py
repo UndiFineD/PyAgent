@@ -33,12 +33,12 @@ __version__ = VERSION
 class WidgetLogger(logging.Handler):
     """Logging handler that redirects formatted log records to a Tkinter Text widget."""
 
-    def __init__(self, widget, thread_id=None) -> None:
+    def __init__(self, widget: tk.Text, thread_id: int | None = None) -> None:
         super().__init__()
         self.widget: Any = widget
         self.thread_id = thread_id
 
-    def emit(self, record) -> None:
+    def emit(self, record: logging.LogRecord) -> None:
         # Filter by thread if ID is provided
         if self.thread_id and record.thread != self.thread_id:
             return

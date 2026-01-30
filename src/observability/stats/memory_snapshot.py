@@ -33,7 +33,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Iterator, Optional
 
-from psutil._pswindows import pmem
 
 
 @dataclass
@@ -65,7 +64,7 @@ class MemorySnapshot:
     gc_generation_2: int = 0
     gc_objects: int = 0
 
-    def delta(self, other: "MemorySnapshot") -> dict:
+    def delta(self, other: "MemorySnapshot") -> dict[str, float]:
         """Calculate memory change from another snapshot."""
         return {
             "python_current_delta_mb": self.python_current_mb - other.python_current_mb,
@@ -75,7 +74,7 @@ class MemorySnapshot:
             "elapsed_seconds": self.timestamp - other.timestamp,
         }
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, float | int]:
         return {
             "timestamp": self.timestamp,
             "python_current_mb": round(self.python_current_mb, 2),
@@ -103,45 +102,50 @@ def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
         MemorySnapshot with current memory state
     """
     snapshot = MemorySnapshot()
+    _capture_python_memory(snapshot)
+    _capture_system_memory(snapshot)
+    if include_gpu:
+        _capture_gpu_memory(snapshot)
+    _capture_gc_stats(snapshot)
+    return snapshot
 
-    # Python memory via tracemalloc
+
+def _capture_python_memory(snapshot: MemorySnapshot) -> None:
     if tracemalloc.is_tracing():
         current, peak = tracemalloc.get_traced_memory()
         snapshot.python_current_mb = current / (1024 * 1024)
         snapshot.python_peak_mb = peak / (1024 * 1024)
 
-    # System memory via psutil (if available)
+
+def _capture_system_memory(snapshot: MemorySnapshot) -> None:
     try:
         import psutil
-
         process = psutil.Process(os.getpid())
-        mem_info: pmem = process.memory_info()
+        mem_info = process.memory_info()  # type: ignore
         snapshot.rss_mb = mem_info.rss / (1024 * 1024)
         snapshot.vms_mb = mem_info.vms / (1024 * 1024)
     except ImportError:
         pass
 
-    # GPU memory via torch (if available)
-    if include_gpu:
-        try:
-            import torch
 
-            if torch.cuda.is_available():
-                snapshot.gpu_allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)
-                snapshot.gpu_reserved_mb = torch.cuda.memory_reserved() / (1024 * 1024)
-                snapshot.gpu_peak_mb = torch.cuda.max_memory_allocated() / (1024 * 1024)
-        except ImportError:
-            pass
+def _capture_gpu_memory(snapshot: MemorySnapshot) -> None:
+    try:
+        import torch
+        if torch.cuda.is_available():
+            snapshot.gpu_allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)
+            snapshot.gpu_reserved_mb = torch.cuda.memory_reserved() / (1024 * 1024)
+            snapshot.gpu_peak_mb = torch.cuda.max_memory_allocated() / (1024 * 1024)
+    except ImportError:
+        pass
 
-    # GC stats
+
+def _capture_gc_stats(snapshot: MemorySnapshot) -> None:
     gc_counts: tuple[int, int, int] = gc.get_count()
     if len(gc_counts) >= 3:
         snapshot.gc_generation_0 = gc_counts[0]
         snapshot.gc_generation_1 = gc_counts[1]
         snapshot.gc_generation_2 = gc_counts[2]
     snapshot.gc_objects = len(gc.get_objects())
-
-    return snapshot
 
 
 class MemoryProfiler:
@@ -227,7 +231,9 @@ class GCDebugger:
         self.collections: list[dict] = []
         self._original_callbacks: list = []
         self._running = False
+
         self._lock: LockType = threading.Lock()
+        self._gc_start_time = 0.0
 
         # Stats
         self.total_collections = 0
@@ -257,14 +263,14 @@ class GCDebugger:
         """Callback invoked by GC."""
         with self._lock:
             if phase == "start":
-                self._gc_start_time: float = time.time()
+                self._gc_start_time = time.time()
             elif phase == "stop":
                 elapsed_ms: gc.Any | float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000
 
                 self.total_collections += 1
                 self.total_collected += info.get("collected", 0)
                 self.total_uncollectable += info.get("uncollectable", 0)
-                self.total_time_ms: float | gc.Any += elapsed_ms
+                self.total_time_ms += elapsed_ms
 
                 if self.log_collections:
                     collection_info = {
@@ -338,7 +344,7 @@ def unfreeze_gc_heap() -> None:
     gc.unfreeze()
 
 
-def gc_stats() -> dict:
+def gc_stats() -> dict[str, object]:
     """Get current GC statistics."""
     counts: tuple[int, int, int] = gc.get_count()
     thresholds: tuple[int, int, int] = gc.get_threshold()
