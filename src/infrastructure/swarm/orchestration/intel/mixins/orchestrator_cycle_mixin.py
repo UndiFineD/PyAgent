@@ -45,7 +45,7 @@ class OrchestratorCycleMixin:
         """Verifies if the system is stable enough for autonomous changes."""
         from src.core.base.lifecycle.version import STABILITY_SCORE
 
-        if not is_gate_open(100, encoding='utf-8') or STABILITY_SCORE < 0.8:
+        if not is_gate_open(100) or STABILITY_SCORE < 0.8:
             logging.error(
                 f"Self-Improvement: System stability too low ({STABILITY_SCORE}) for autonomous code modification."
             )

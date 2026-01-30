@@ -74,7 +74,8 @@ class ResilienceCore(BaseCore):
                             wait,
                             e,
                         )
-                        time.sleep(wait)
+                        # TODO: Replace with event-driven or async wait for non-blocking retry if possible
+                        time.sleep(wait)  # Blocking sleep; consider using asyncio.sleep in async contexts
                         current_delay *= backoff
                 if last_exception:
                     raise last_exception

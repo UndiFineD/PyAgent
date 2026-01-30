@@ -70,7 +70,7 @@ class WorkspaceCore:
         """Resolve a path relative to the workspace root."""
         return self.root_dir.joinpath(*parts)
 
-    def get_relative_path(self, path: Union[str, Path]) -> str:
+    def get_relative_path(self, path: str | Path) -> str:
         """Standardize a path to a string relative to the workspace root."""
         p = Path(path)
         try:
@@ -80,7 +80,7 @@ class WorkspaceCore:
         except ValueError:
             return str(p).replace("\\", "/")
 
-    def is_ignored(self, file_path: Union[str, Path]) -> bool:
+    def is_ignored(self, file_path: str | Path) -> bool:
         """
         Check if a file path matches any patterns in .codeignore.
         """
@@ -104,7 +104,7 @@ class WorkspaceCore:
                 return True
         return False
 
-    def get_ignore_patterns(self) -> Set[str]:
+    def get_ignore_patterns(self) -> set[str]:
         """Load and parse ignore patterns from .codeignore with caching."""
         ignore_path = self.root_dir / ".codeignore"
         cache_key = str(ignore_path)
@@ -137,7 +137,7 @@ class WorkspaceCore:
             self.logger.warning("Failed to read .codeignore: %s", err)
             return set()
 
-    def list_files(self, relative_path: str = ".", pattern: str = "*") -> List[Path]:
+    def list_files(self, relative_path: str = ".", pattern: str = "*") -> list[Path]:
         """List files in a directory, respecting ignore rules."""
         target_dir = self.root_dir / relative_path
         if not target_dir.exists():

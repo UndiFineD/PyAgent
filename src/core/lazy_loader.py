@@ -216,28 +216,23 @@ class ModuleLazyLoader:
     def load(self, name: str) -> Any:
         """
         Load and return the requested attribute.
-
         Args:
             name: The name of the attribute to load.
-
         Returns:
             The loaded attribute.
-
         Raises:
             AttributeError: If the name is not in the registry.
         """
         if name in self._cache:
             return self._cache[name]
-
         if name not in self._registry:
             raise AttributeError(f"module has no attribute {name!r}")
-
         module_path, attr_name = self._registry[name]
-
-        # Handle relative imports if parent_module is set
         if self._parent_module and module_path.startswith("."):
             module_path = self._parent_module + module_path
+        return self._load_with_error_handling(name, module_path, attr_name)
 
+    def _load_with_error_handling(self, name: str, module_path: str, attr_name: str) -> Any:
         try:
             module = importlib.import_module(module_path)
             attr = getattr(module, attr_name)

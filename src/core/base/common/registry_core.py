@@ -15,7 +15,7 @@
 """Unified Registry core for all PyAgent components."""
 
 import logging
-from typing import Callable, Dict, Generic, List, Optional, Tuple, TypeVar
+from typing import Callable, Dict, Generic, List, TypeVar
 
 from .base_core import BaseCore
 
@@ -40,23 +40,28 @@ class RegistryCore(BaseCore, Generic[T]):
         self._items: Dict[str, T] = {}
         self._hooks: Dict[str, List[Callable[[str, T], None]]] = {"on_register": [], "on_unregister": []}
 
-    def detect_cycles(self, nodes: List[str], edges: List[Tuple[str, str]]) -> bool:
+    def detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool:
         """High-speed cycle detection for dependency graphs."""
-        if rc and hasattr(rc, "detect_cycles_rust"):  # pylint: disable=no-member
-            try:
-                return rc.detect_cycles_rust(nodes, edges)  # type: ignore # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+        result = self._try_rust_detect_cycles(nodes, edges)
+        if result is not None:
+            return result
+        return self._python_detect_cycles(nodes, edges)
 
-        # Simple DFS fallback
+    def _try_rust_detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool | None:
+        if rc and hasattr(rc, "detect_cycles_rust"):
+            try:
+                return rc.detect_cycles_rust(nodes, edges)  # type: ignore
+            except Exception:
+                pass
+        return None
+
+    def _python_detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool:
         visited = set()
         path = set()
         adj = {n: [] for n in nodes}
         for u, v in edges:
             if u in adj:
                 adj[u].append(v)
-
         def has_cycle(v) -> bool:
             visited.add(v)
             path.add(v)
@@ -68,30 +73,34 @@ class RegistryCore(BaseCore, Generic[T]):
                     return True
             path.remove(v)
             return False
-
         for node in nodes:
             if node not in visited:
                 if has_cycle(node):
                     return True
         return False
 
-    def topological_sort(self, nodes: List[str], edges: List[Tuple[str, str]]) -> List[str]:
+    def topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str]:
         """Rust-accelerated topological sort for agent task ordering."""
-        if rc and hasattr(rc, "topological_sort_rust"):  # pylint: disable=no-member
-            try:
-                return rc.topological_sort_rust(nodes, edges)  # type: ignore # pylint: disable=no-member
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+        result = self._try_rust_topological_sort(nodes, edges)
+        if result is not None:
+            return result
+        return self._python_topological_sort(nodes, edges)
 
-        # Simple Kahn's algorithm fallback
+    def _try_rust_topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str] | None:
+        if rc and hasattr(rc, "topological_sort_rust"):
+            try:
+                return rc.topological_sort_rust(nodes, edges)  # type: ignore
+            except Exception:
+                pass
+        return None
+
+    def _python_topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str]:
         in_degree = {n: 0 for n in nodes}
         adj = {n: [] for n in nodes}
         for u, v in edges:
             if u in adj and v in in_degree:
                 adj[u].append(v)
                 in_degree[v] += 1
-
         queue = [n for n in nodes if in_degree[n] == 0]
         sorted_nodes = []
         while queue:
@@ -101,10 +110,9 @@ class RegistryCore(BaseCore, Generic[T]):
                 in_degree[v] -= 1
                 if in_degree[v] == 0:
                     queue.append(v)
-
         return sorted_nodes if len(sorted_nodes) == len(nodes) else []
 
-    def register(self, key: str, item: Optional[T] = None) -> bool:
+    def register(self, key: str, item: T | None = None) -> bool:
         """Register an item with a specific key. Supports single-argument item registration."""
         from typing import cast
 
@@ -133,7 +141,7 @@ class RegistryCore(BaseCore, Generic[T]):
 
         return True
 
-    def unregister(self, key: str) -> Optional[T]:
+    def unregister(self, key: str) -> T | None:
         """Unregister an item and return it."""
         item = self._items.pop(key, None)
         if item:
@@ -144,15 +152,15 @@ class RegistryCore(BaseCore, Generic[T]):
                     logger.error("[%s] Registry hook 'on_unregister' failed for %s: %s", self.name, key, e)
         return item
 
-    def get(self, key: str) -> Optional[T]:
+    def get(self, key: str) -> T | None:
         """Retrieve an item by key."""
         return self._items.get(key)
 
-    def list_keys(self) -> List[str]:
+    def list_keys(self) -> list[str]:
         """List all registered keys."""
         return list(self._items.keys())
 
-    def list_items(self) -> List[T]:
+    def list_items(self) -> list[T]:
         """List all registered items."""
         return list(self._items.values())
 

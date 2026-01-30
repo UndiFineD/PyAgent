@@ -63,70 +63,69 @@ class RustBridge:
         if shard_count <= 0:
             logger.warning("RustBridge: shard_count must be positive, defaulting to 1024")
             shard_count = 1024
+        return RustBridge._calculate_shard_id_fallback(key, shard_count) if not RustBridge._can_use_rust('calculate_interaction_shard_md5') else RustBridge._try_rust_call('calculate_interaction_shard_md5', key, shard_count, fallback=lambda: RustBridge._calculate_shard_id_fallback(key, shard_count))
 
-        if not RUST_AVAILABLE or not hasattr(rc, "calculate_interaction_shard_md5"):
-            # Minimal fallback implementation if Rust is missing
-            import hashlib
-            h = hashlib.md5(key.encode()).digest()
-            seed = int.from_bytes(h[:8], "big")
-            return seed % shard_count
+    @staticmethod
+    def _calculate_shard_id_fallback(key: str, shard_count: int) -> int:
+        import hashlib
+        h = hashlib.md5(key.encode()).digest()
+        seed = int.from_bytes(h[:8], "big")
+        return seed % shard_count
+
+    @staticmethod
+    def _can_use_rust(attr: str) -> bool:
+        return RUST_AVAILABLE and hasattr(rc, attr)
+
+    @staticmethod
+    def _try_rust_call(attr: str, *args, fallback=None, **kwargs):
         try:
-            return rc.calculate_interaction_shard_md5(key, shard_count)  # type: ignore
+            return getattr(rc, attr)(*args, **kwargs)  # type: ignore
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"RustBridge: calculate_shard_id failed: {e}")
-            import hashlib
-            h = hashlib.md5(key.encode()).digest()
-            seed = int.from_bytes(h[:8], "big")
-            return seed % shard_count
+            logger.error(f"RustBridge: {attr} failed: {e}")
+            if fallback:
+                return fallback()
+            return None
 
     @staticmethod
     def bulk_replace(content: str, replacements: Dict[str, str]) -> str:
         """Audited parallel text replacement."""
         if not replacements:
             return content
+        return RustBridge._bulk_replace_fallback(content, replacements) if not RustBridge._can_use_rust('bulk_replace_rust') else RustBridge._try_rust_call('bulk_replace_rust', content, replacements, fallback=lambda: RustBridge._bulk_replace_fallback(content, replacements))
 
-        if not RUST_AVAILABLE or not hasattr(rc, "bulk_replace_rust"):
-            # Fallback
-            result = content
-            for old, new in replacements.items():
-                result = result.replace(old, new)
-            return result
-        try:
-            return rc.bulk_replace_rust(content, replacements)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"RustBridge: bulk_replace failed: {e}")
-            return content
+    @staticmethod
+    def _bulk_replace_fallback(content: str, replacements: Dict[str, str]) -> str:
+        result = content
+        for old, new in replacements.items():
+            result = result.replace(old, new)
+        return result
 
     @staticmethod
     def bulk_replace_files(file_paths: List[str], replacements: Dict[str, str]) -> Dict[str, bool]:
         """Audited parallel file modification."""
         if not file_paths or not replacements:
             return {p: False for p in file_paths} if file_paths else {}
+        return RustBridge._bulk_replace_files_fallback(file_paths, replacements) if not RustBridge._can_use_rust('bulk_replace_files_rust') else RustBridge._try_rust_call('bulk_replace_files_rust', file_paths, replacements, fallback=lambda: RustBridge._bulk_replace_files_fallback(file_paths, replacements))
 
-        if not RUST_AVAILABLE or not hasattr(rc, "bulk_replace_files_rust"):
-            results = {}
-            for path in file_paths:
-                try:
-                    with open(path, "r", encoding="utf-8") as f:
-                        text = f.read()
-                    changed = False
-                    for old, new in replacements.items():
-                        if old in text:
-                            text = text.replace(old, new)
-                            changed = True
-                    if changed:
-                        with open(path, "w", encoding="utf-8") as f:
-                            f.write(text)
-                    results[path] = changed
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                    results[path] = False
-            return results
-        try:
-            return rc.bulk_replace_files_rust(file_paths, replacements)  # type: ignore
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"RustBridge: bulk_replace_files failed: {e}")
-            return {p: False for p in file_paths}
+    @staticmethod
+    def _bulk_replace_files_fallback(file_paths: List[str], replacements: Dict[str, str]) -> Dict[str, bool]:
+        results = {}
+        for path in file_paths:
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    text = f.read()
+                changed = False
+                for old, new in replacements.items():
+                    if old in text:
+                        text = text.replace(old, new)
+                        changed = True
+                if changed:
+                    with open(path, "w", encoding="utf-8") as f:
+                        f.write(text)
+                results[path] = changed
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                results[path] = False
+        return results
 
     @staticmethod
     def chunk_boundaries_rust(*args, **kwargs) -> Any:

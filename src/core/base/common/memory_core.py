@@ -68,9 +68,9 @@ class MemoryCore:
         task: str,
         content: str,
         success: bool,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
         base_utility: float = 0.5,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Create a standardized episodic memory record.
         Hot path for Rust acceleration (utility scoring).
@@ -99,8 +99,8 @@ class MemoryCore:
         }
 
     def rank_memories(
-        self, memories: List[Dict[str, Any]], limit: int = 5, min_utility: float = 0.0
-    ) -> List[Dict[str, Any]]:
+        self, memories: list[dict[str, Any]], limit: int = 5, min_utility: float = 0.0
+    ) -> list[dict[str, Any]]:
         """
         Rank memories by utility score and recency.
         Hot path for Rust acceleration.
@@ -118,7 +118,7 @@ class MemoryCore:
         sorted_m = sorted(filtered, key=lambda x: (x.get("utility_score", 0.0), x.get("timestamp", "")), reverse=True)
         return sorted_m[:limit]
 
-    def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> List[Dict[str, str]]:
+    def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> list[dict[str, str]]:
         """Rust-accelerated graph traversal for complex memory retrieval."""
         if rc and hasattr(rc, "retrieve_memory_graph_rust"):
             try:

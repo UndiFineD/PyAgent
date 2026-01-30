@@ -145,41 +145,54 @@ class ConfigCore(BaseCore):
         """Load and return a configuration object."""
         if not path.exists():
             return ConfigObject({})
-
-        # Try Rust-accelerated fast loading for flat configs
-        if rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]:  # pylint: disable=no-member
-            try:
-                # pylint: disable=no-member
-                data = rc.load_config_rust(str(path))  # type: ignore
+        if self._can_use_rust_loader(path):
+            data = self._try_rust_load_config(path)
+            if data is not None:
                 return ConfigObject(data)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
-
         ext = path.suffix.lower()
         fmt = self.SUPPORTED_EXTENSIONS.get(ext, ConfigFormat.JSON)
+        return self._try_python_load_config(path, fmt)
 
+    def _can_use_rust_loader(self, path: Path) -> bool:
+        return rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]
+
+    def _try_rust_load_config(self, path: Path):
+        try:
+            return rc.load_config_rust(str(path))  # type: ignore
+        except Exception as e:
+            logging.error("ConfigCore: Rust load_config_rust failed for %s: %s", path, e)
+            return None
+
+    def _try_python_load_config(self, path: Path, fmt) -> ConfigObject:
         try:
             content = path.read_text()
             data = self._parse(content, fmt)
             cfg = ConfigObject(data)
             self.configs[path.name] = cfg
             return cfg
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error("ConfigCore: Failed to load %s: %s", path, e)
             return ConfigObject({})
 
     def merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
         """Deep merge two config dicts. Rust-accelerated for large trees."""
-        if rc and hasattr(rc, "merge_configs_rust"):  # pylint: disable=no-member
-            try:
-                # pylint: disable=no-member
-                return rc.merge_configs_rust(base, override)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+        if self._can_use_rust_merge():
+            merged = self._try_rust_merge_configs(base, override)
+            if merged is not None:
+                return merged
+        return self._python_merge_configs(base, override)
 
-        # Python fallback
+    def _can_use_rust_merge(self) -> bool:
+        return rc and hasattr(rc, "merge_configs_rust")
+
+    def _try_rust_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]):
+        try:
+            return rc.merge_configs_rust(base, override)  # type: ignore
+        except Exception as e:
+            logging.error("ConfigCore: Rust merge_configs_rust failed: %s", e)
+            return None
+
+    def _python_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
         merged = base.copy()
         for key, value in override.items():
             if isinstance(value, dict) and key in merged and isinstance(merged[key], dict):
@@ -192,26 +205,32 @@ class ConfigCore(BaseCore):
         """Parses configuration content based on format."""
         data: Any = {}
         try:
-            if fmt == ConfigFormat.JSON:
-                data = json.loads(content)
-            elif fmt == ConfigFormat.YAML:
-                try:
-                    import yaml  # type: ignore
-                    data = yaml.safe_load(content)
-                except ImportError:
-                    pass
-            elif fmt == ConfigFormat.TOML:
-                try:
-                    import tomllib as toml  # type: ignore
-                    data = toml.loads(content)
-                except ImportError:
-                    pass
-            elif fmt in (ConfigFormat.INI, ConfigFormat.CONF):
-                # Basic INI parsing if needed, but RC usually handles it
-                pass
-        except Exception as e:  # pylint: disable=broad-exception-caught
+            data = self._parse_by_format(content, fmt)
+        except Exception as e:
+            logging.error("ConfigCore: Failed to parse config content: %s", e)
             return {}
-
         if isinstance(data, list):
             return {"items": data}
         return data if isinstance(data, dict) else {}
+
+    def _parse_by_format(self, content: str, fmt: ConfigFormat) -> Any:
+        if fmt == ConfigFormat.JSON:
+            return json.loads(content)
+        elif fmt == ConfigFormat.YAML:
+            try:
+                import yaml  # type: ignore
+                return yaml.safe_load(content)
+            except ImportError:
+                logging.warning("ConfigCore: YAML import failed.")
+                return {}
+        elif fmt == ConfigFormat.TOML:
+            try:
+                import tomllib as toml  # type: ignore
+                return toml.loads(content)
+            except ImportError:
+                logging.warning("ConfigCore: TOML import failed.")
+                return {}
+        elif fmt in (ConfigFormat.INI, ConfigFormat.CONF):
+            # Basic INI parsing if needed, but RC usually handles it
+            return {}
+        return {}

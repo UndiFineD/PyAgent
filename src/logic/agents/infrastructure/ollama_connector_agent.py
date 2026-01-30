@@ -32,17 +32,50 @@ logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-many-ancestors
+
 class OllamaConnectorAgent(BaseAgent):
     """
-    Handles local inference requests via the Ollama API (OpenAI-compatible).
+    Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
+    Automatically detects and selects the fastest available Ollama instance on the network.
     """
 
-    def __init__(self, file_path: str, endpoint: str = "http://localhost:11434/v1") -> None:
+    OLLAMA_CANDIDATES = [
+        "http://192.168.88.251:11434/v1",  # Fastest network instance
+        "http://localhost:11434/v1",       # Local fallback
+    ]
+
+    def __init__(self, file_path: str, endpoint: Optional[str] = None) -> None:
         super().__init__(file_path)
-        self.endpoint = endpoint
+        self.endpoint = endpoint or None
         self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
-        # Initialize Async OpenAI Client for Ollama
+        self.client = None
+
+    async def _detect_fastest_endpoint(self) -> str:
+        """Detect and return the fastest available Ollama endpoint."""
+        candidates = self.OLLAMA_CANDIDATES if not self.endpoint else [self.endpoint]
+        latencies = {}
+        for url in candidates:
+            try:
+                async with httpx.AsyncClient(timeout=2.0) as client:
+                    resp = await client.get(url.replace("/v1", "/api/tags"))
+                    if resp.status_code == 200:
+                        latencies[url] = resp.elapsed.total_seconds()
+            except (httpx.HTTPError, httpx.TimeoutException, ConnectionError):
+                pass
+        if latencies:
+            best = min(latencies, key=latencies.get)
+            logger.info(f"OllamaConnectorAgent: Using fastest endpoint {best} (latency {latencies[best]:.3f}s)")
+            return best
+        # Fallback to first candidate
+        logger.warning("OllamaConnectorAgent: No network Ollama detected, using fallback endpoint.")
+        return candidates[-1]
+
+    async def _ensure_client(self):
+        if self.client is not None:
+            return
+        if not self.endpoint:
+            self.endpoint = await self._detect_fastest_endpoint()
         self.client = AsyncOpenAI(
             base_url=self.endpoint,
             api_key="ollama",  # Required but unused by Ollama
@@ -50,9 +83,9 @@ class OllamaConnectorAgent(BaseAgent):
         )
 
     async def check_availability(self) -> bool:
-        """Checks if the local Ollama service is reachable."""
+        """Checks if the Ollama service is reachable (auto-detects endpoint if needed)."""
+        await self._ensure_client()
         try:
-            # Simple models list check
             await self.client.models.list()
             return True
         except (OpenAIError, httpx.HTTPError):
@@ -151,6 +184,5 @@ class OllamaConnectorAgent(BaseAgent):
 
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
-
     main = create_main_function(OllamaConnectorAgent, "Ollama Edge Connector", "Edge Intelligence logs")
     main()

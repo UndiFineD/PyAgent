@@ -1,1045 +1,1063 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Strategic Improvement Directives (Phase 50)
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Priority: CRITICAL | Status: EVOLUTION PHASE 50 - TALON & AUTOMATION ✅ RESEARCH COMPLETE | 🚧 IMPLEMENTING
-# Rust Functions: 532 | Test Coverage: ~3064+ tests passing
-@focus: ["src/infrastructure/speculative_v2", "src/maintenance", "src/infrastructure/cloud"]
-=======
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-# This file (docs/prompt/prompt.txt) is the primary source for most prompting logic.
-# Priority: CRITICAL | Status: EVOLUTION PHASE 51 - MULTIMEDIA & ATTENTION 🚧 IMPLEMENTING
-# Rust Functions: 543 | Test Coverage: ~3085+ tests passing
-@focus: ["src.infrastructure.engine.multimodal", "src/maintenance", "rust_core/src"]
-<<<<<<< HEAD
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-
-## Quick Reference - Completed Phases
-
-### Core Infrastructure & vLLM Integration (Phases 1-51)
-| Phase | Focus | Modules | Rust | Tests |
-|-------|-------|---------|------|-------|
-| 1-16 | Core Foundational | ~20 | 100 | ~100 |
-| 17-47 | vLLM Core & Advanced | ~128| 413 | ~2800|
-| 48-50 | Cloud, TALON, Logic | 26 | 19 | ~150 |
-| 51 | Multimedia & Attention| 6 | 11 | ~25 |
-| **Total** | - | **~203** | **543** | **~3100** |
-
----
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-## Phase 50: TALON & Self-Improvement Automation ✅ RESEARCH | 🚧 IMPLEMENTING
-@location: ["src/infrastructure/speculative_v2", "src/maintenance"]
-=======
-## Phase 51: Multimedia & Attention 🚧 IMPLEMENTING
-@location: ["src.infrastructure.engine.multimodal", "rust_core/src"]
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-## Phase 51: Multimedia & Attention 🚧 IMPLEMENTING
-@location: ["src.infrastructure.engine.multimodal", "rust_core/src"]
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-
-### Active Work
-1. **120fps Multimodal I/O**:
-   - `mux.rs`: Binary Multiplexing (`0xDEADBEEF`) for Video/Audio/Text channels.
-   - `IA3 Scaling`: Zero-overhead inference tuning in `inference.rs` and `weights.py`.
-   - `TensorRTLoader`: HW-accelerated engine management for FP8 multimedia.
-2. **Attention Bridging**:
-   - `attention.rs`: Rust-native cross-modal attention kernels.
-   - Sequence alignment and coherence scoring in `QuantizedMultimediaEngine`.
-3. **Automated Research Cycle**:
-   - Arxiv synthesis loop in `SelfImprovementCoordinator`.
-   - Architectural mapping in `ArchitecturalDesignAgent`.
-
-## Phase 50: TALON & Self-Improvement Automation ✅ COMPLETE
-@location: ["src.infrastructure.engine.speculative", "src/maintenance"]
-
-### Implemented Work
-1. **TALON Implementation**: arXiv:2601.07353 integration.
-<<<<<<< HEAD
-<<<<<<< HEAD
-   - Confidence-aware pruning in `src/infrastructure/speculative_v2/eagle/Tree.py`.
-   - Adaptive tree depth based on verification stats.
-=======
-   - Confidence-aware pruning and adaptive tree depth.
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-   - Confidence-aware pruning and adaptive tree depth.
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-2. **Self-Improvement Automation**:
-   - Coordinator research synthesis loop (ArxivCore integration).
-   - Distributed Cloud Orchestration with budget pooling.
-
-## fixed prompt
-- delegate among multiple agents
-- our goal is to bring in all the improvements and research 
-to become the best streaming ai out there (120fps DVD-channel capability).
-- utilize IA3 scaling and TensorRT for multimodal throughput.
-- monitor docs\prompt\improvements.md for new insights.
-- research process: Automated synthesis of papers from https://arxiv.org/list/cs.AI/recent.
-- research workflow: Find (Arxiv) -> Summarize -> Map to Logic (Architect Agent) -> Implement & Test -> Update `improvements.md`.
-- monitor docs\prompt\roadmap.txt and documentation sync.
-- the idea is to utilize multiple machines in the local network or internet.
-- use Nixl and Mooncake for high-speed KV transfer between nodes.
-=======
-# Strategic Improvement Directives (Version 4.0.0)
-# This file (docs/prompt/prompt.txt) is the primary source for swarm-level prompting logic.
-# Priority: CRITICAL | Status: PHASE 91 - LIQUIDITY & CACHE INVALIDATION 🚧 PLANNING
-# Rust Functions: 680 | Test Coverage: ~4500+ tests passing
-
----
-
-## Phase 90: The Swarm Singularity ✅ COMPLETE
-@location: ["src.infrastructure.swarm.meta", "src.infrastructure.swarm.p2p"]
-
-### Implemented Work
-1. **Federated Meta-Optimizer**: Autonomous hyperparameter self-tuning based on grid telemetry.
-2. **Context Distillation**: Landmark-based KV-cache compression for high-speed P2P migration.
-3. **LSH Memory Sharding**: $O(1)$ semantic retrieval for 1M+ token contexts.
-4. **Query De-duplication**: Semantic joining of inflight tasks to minimize redundant reasoning.
-5. **Knowledge Bridge**: Cross-tenant anonymized learning synthesis.
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-
----
-
-## Active Work: Phase 91 - Swarm Liquidity 🚧 PLANNING
-@location: ["src.infrastructure.liquidity", "rust_core/src"]
-
-### Planned Objectives
-1. **Semantic Cache Invalidation**: Real-time purging of stale LSH buckets.
-2. **Neural Context Pruning**: Entropy-based attention mask pruning for VRAM efficiency.
-3. **RDMA State Sync**: Instantaneous swarm snapshots for fault-tolerant state agreement.
-
----
-
-## Completed Phases Summary
-
-<<<<<<< HEAD
-### Implemented Modules (Modular Package Structure)
-1. **MooncakeConnector.py** - Mooncake-style KV transfer protocol
-2. **NixlConnector.py** - NIXL high-performance connector
-3. **Disaggregated Workers** - Prefill and Decode specialized worker logic
-4. **Cloud Routing** - Gemini GCP and intelligent cloud budgeting
-
-### Modular Split Targets (Resolved)
-- ReasoningEngine.py -> src/infrastructure/reasoning/
-- EagleProposer.py -> src/infrastructure/speculative_v2/eagle/
-- SpecDecodeMetadataV2.py -> src/infrastructure/speculative_v2/spec_decode/
-- SlashCommands.py -> src/interface/commands/
-- StructuredOutputGrammar.py -> src/infrastructure/decoding/grammar/
-- KVCacheCoordinator.py -> src/infrastructure/engine/kv_cache/ (INTEGRATED)
-
-### Rust Accelerations (12 function stubs)
-- mooncake_buffer_reg_rust - Register buffer in Mooncake
-- mooncake_transfer_sync_rust - Synchronize transfer state
-- nixl_zero_copy_map_rust - Zero-copy memory mapping
-- nixl_rdma_send_rust - RDMA send primitive
-- worker_prefill_handoff_rust - Prefill to decode handoff
-- worker_decode_fetch_rust - Decode cache fetch
-- pp_transfer_sync_rust - Pipeline parallel sync
-- pp_buffer_swap_rust - Efficient buffer swapping
-- tp_shard_scatter_rust - Scatter KV shards across GPUs
-- tp_shard_gather_rust - Gather KV shards for decode
-- cloud_gemini_token_rust - Gemini-specific token hashing
-- cloud_cost_est_rust - Cloud inference cost estimation
-- block_table_predict_alloc_rust - Predictive allocation
-- block_table_defrag_rust - Block defragmentation
-- kv_offload_batch_transfer_rust - Batch KV transfer
-=======
-=======
-# Strategic Improvement Directives (Version 4.0.0)
-# This file (docs/prompt/prompt.txt) is the primary source for swarm-level prompting logic.
-# Priority: CRITICAL | Status: PHASE 91 - LIQUIDITY & CACHE INVALIDATION 🚧 PLANNING
-# Rust Functions: 680 | Test Coverage: ~4500+ tests passing
-
----
-
-## Phase 90: The Swarm Singularity ✅ COMPLETE
-@location: ["src.infrastructure.swarm.meta", "src.infrastructure.swarm.p2p"]
-
-### Implemented Work
-1. **Federated Meta-Optimizer**: Autonomous hyperparameter self-tuning based on grid telemetry.
-2. **Context Distillation**: Landmark-based KV-cache compression for high-speed P2P migration.
-3. **LSH Memory Sharding**: $O(1)$ semantic retrieval for 1M+ token contexts.
-4. **Query De-duplication**: Semantic joining of inflight tasks to minimize redundant reasoning.
-5. **Knowledge Bridge**: Cross-tenant anonymized learning synthesis.
-
----
-
-## Active Work: Phase 91 - Swarm Liquidity 🚧 PLANNING
-@location: ["src.infrastructure.liquidity", "rust_core/src"]
-
-### Planned Objectives
-1. **Semantic Cache Invalidation**: Real-time purging of stale LSH buckets.
-2. **Neural Context Pruning**: Entropy-based attention mask pruning for VRAM efficiency.
-3. **RDMA State Sync**: Instantaneous swarm snapshots for fault-tolerant state agreement.
-
----
-
-## Completed Phases Summary
-
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-| Phase | Focus | Modules | Rust | Tests |
-|-------|-------|---------|------|-------|
-| 1-50  | Core & TALON | ~195 | 532 | ~3100 |
-| 51-70 | Infrastructure| ~25  | 80  | ~800  |
-| 71-90 | Swarm Evolution| ~20 | 68  | ~600  |
-| **Total** | - | **~240** | **680** | **~4500** |
-<<<<<<< HEAD
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-
----
-
-## Core Directives
-- **Delegate among swarm members**: Utilize specialized experts for LSH, Raft, and Distillation.
-- **Swarm Liquidity**: Pursue zero-downtime re-sharding and rank mobility (RDMA logic).
-- **Collective Wisdom**: Use Global Trace Synthesis (Phase 82) to improve agent reasoning.
-- **MCP Discovery**: Dynamically index and utilize external tool servers via MCPToolDiscovery.
-- **Resource Ethics**: Use the Meta-Optimizer to balance VRAM pressure vs. inference accuracy.
-- **Transaction Integrity**: Ensure all swarm state changes follow `StateTransaction` protocol.
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-### Implemented Modules (6 Python)
-1. **RejectionSampler.py** - Speculative decoding verification (600 lines)
-   - RejectionStrategy: STANDARD, STRICT, LENIENT, ADAPTIVE
-   - Recovery sampling from adjusted distribution
-   - StreamingRejectionSampler for partial verification
-   - BatchRejectionSampler for multi-sequence
-
-2. **TopKTopPSampler.py** - Multi-variant nucleus sampling (650 lines)
-   - NucleusSamplingVariant: STANDARD, TYPICAL, ETA, EPSILON, MIN_P
-   - TemperatureSchedule: CONSTANT, LINEAR, COSINE, ADAPTIVE
-   - GumbelSoftmaxSampler for differentiable sampling
-   - BatchTopKTopPSampler with per-request parameters
-
-3. **PenaltyEngine.py** - Comprehensive penalty application (500 lines)
-   - PenaltyType: REPETITION, FREQUENCY, PRESENCE, NGRAM, POSITIONAL
-   - PenaltySchedule: CONSTANT, WARMUP, DECAY, ADAPTIVE
-   - BatchPenaltyEngine for batched application
-
-4. **NgramProposer.py** - N-gram token proposal (600 lines)
-   - MatchingStrategy: FIRST, LONGEST, RECENT, WEIGHTED
-   - AdaptiveNgramProposer with dynamic n-sizing
-   - SuffixTreeProposer for O(m) matching
-
-5. **EncoderCacheManager.py** - Multimodal encoder caching (550 lines)
-   - CacheTier: MEMORY, DISK, REMOTE
-   - MultiTierEncoderCache with tiered eviction
-   - Content-based deduplication via hashing
-
-6. **KVCacheMetrics.py** - Cache lifecycle metrics (550 lines)
-   - MetricType: ALLOCATION, ACCESS, EVICTION, UTILIZATION
-   - AlertLevel: INFO, WARNING, CRITICAL
-   - Anomaly detection with z-score thresholds
-
-### Rust Accelerations (12 functions)
-- rejection_sample_verify_rust - Speculative decoding verification
-- apply_top_k_rust, apply_top_p_rust - Logit filtering
-- batch_topk_topp_sample_rust - Batched sampling
-- batch_apply_penalties_rust - Penalty application
-- advanced_ngram_propose_rust - N-gram proposal
-- apply_typical_sampling_rust, apply_min_p_rust - Advanced sampling
-- gumbel_noise_rust - Gumbel noise generation
-- encoder_content_hash_rust, encoder_cache_lru_evict_rust - Encoder cache
-- kv_cache_metrics_aggregate_rust - Metrics aggregation
-
----
-
-## Phase 43: Engine Core, KV Cache & Request Queue ✅ COMPLETE
-@location: ["src/infrastructure/engine"]
-
-### Implemented Modules (4 Python)
-1. **KVCacheCoordinator.py** - Multi-group KV cache management (912 lines)
-   - CacheGroupType: FULL_ATTENTION, SLIDING_WINDOW, CROSS_ATTENTION, MLA_COMPRESSED, CHUNKED_LOCAL
-   - BlockHash with content-based prefix caching
-   - FreeBlockQueue for O(1) allocation/deallocation
-   - HierarchicalKVCacheCoordinator for per-layer coordination
-   - PredictiveKVCacheCoordinator with length prediction
-   - AsyncPrefetchCoordinator with background prefetching
-
-2. **RequestQueue.py** - Priority-based request scheduling (600 lines)
-   - 5 scheduling policies: FCFS, PRIORITY, DEADLINE, FAIR, MLFQ
-   - QueuedRequest with priority, deadline, client_id
-   - Multi-level feedback queue with aging
-   - RequestQueueManager for policy-based queue selection
-
-3. **ParallelSampling.py** - Multi-sequence sampling (550 lines)
-   - Seed generation for reproducibility
-   - Best-of-N ranking with length normalization
-   - Beam diversity penalties
-
-4. **IterationMetrics.py** - Per-iteration statistics (500 lines)
-   - Sliding window percentile computation
-   - Anomaly detection with z-score thresholds
-   - Trend analysis with linear regression
-
-### Rust Accelerations (16 functions)
-- compute_block_hashes_batched_rust - Batched block hash with chaining
-- calculate_blocks_needed_rust - Block count with sliding window
-- compute_block_eviction_order_rust - LRU eviction candidates
-- find_prefix_match_rust - Prefix cache hash lookup
-- sort_requests_by_priority_rust - Priority queue sorting
-- compute_fair_schedule_rust - Fair share scheduling
-- compute_deadline_priorities_rust - Deadline urgency calculation
-- generate_sample_seeds_rust - Reproducible seed generation
-- rank_completions_rust - Best-of-N ranking
-- compute_diversity_penalty_rust - Beam diversity calculation
-- compute_percentiles_rust - Fast sliding window percentiles
-- detect_anomalies_rust - Z-score anomaly detection
-- compute_cache_hit_rate_rust - Cache statistics
-- analyze_trend_rust - Linear regression trends
-- aggregate_iteration_stats_rust - Statistics aggregation
-
-### Beyond vLLM Innovations
-| Feature | PyAgent | vLLM |
-|---------|---------|------|
-| Cache Group Types | 5 types | 3 types |
-| Allocation Strategy | 3 strategies | 1 strategy |
-| Eviction Policy | LRU, ARC, PRIORITY | LRU only |
-| Hierarchical Cache | Per-layer | Global only |
-| Predictive Allocation | Yes | No |
-| Scheduling Policies | 5 policies | 2 policies |
-| MLFQ with Aging | Yes | No |
-| Anomaly Detection | Z-score | None |
-| Trend Analysis | Linear regression | None |
-
----
-
-## Phase 42: Platform, OpenAI API & Prompt Rendering ✅ COMPLETE
-@location: ["src/infrastructure/platform", "src/infrastructure/openai_api", "src/infrastructure/prompt_renderer", "src/infrastructure/mcp_tools", "src/infrastructure/conversation", "src/infrastructure/chat_templates"]
-
-### Implemented Modules (6 Python Infrastructure Packages)
-1. **PlatformInterface.py** - Multi-platform device abstraction (700 lines)
-   - Platform enum with CUDA, ROCm, TPU, XPU, Neuron, CPU support
-   - DeviceCapability for capability comparisons (8.0, 8.6, 9.0, etc.)
-   - MemoryInfo with total/free/used tracking and utilization
-   - PlatformRegistry for dynamic platform detection
-   - Quantization and attention backend selection per platform
-
-2. **ResponsesAPI.py** - Full OpenAI Responses API compatibility (1074 lines)
-   - Complete protocol models (Response, Message, ContentPart, etc.)
-   - SSE streaming with SSEEvent/SSEStream classes
-   - ResponseStore with InMemoryResponseStore implementation
-   - StreamingHandler for incremental content delivery
-   - ConversationBuilder for multi-turn context management
-
-3. **PromptRenderer** package - Prompt rendering infrastructure
-   - TruncationStrategy with NONE, AUTO, LEFT, RIGHT, MIDDLE, SMART
-   - RenderResult with text, tokens, cache_salt, truncation info
-   - ChatRenderer and CompletionRenderer implementations
-   - CacheSaltGenerator for prefix caching optimization
-
-4. **MCPTools** package - Model Context Protocol integration
-   - ToolSchema, ToolCall, ToolResult dataclasses
-   - MCPSession with SessionState management
-   - LocalMCPServer and SSEMCPServer implementations
-   - SchemaAdapter for OpenAI↔MCP format conversion
-
-5. **Conversation** package - Agentic conversation context
-   - AgenticContext with tool orchestration
-   - ContextManager for state machine transitions
-   - TokenMetrics tracking (input/output/cached/tool/reasoning)
-   - TurnTracker with ConversationTurn history
-
-6. **ChatTemplates** package - Template registry and rendering
-   - TemplateType enum (ChatML, Llama2/3, Mistral, Phi, Qwen, etc.)
-   - JinjaTemplate for custom template rendering
-   - ChatTemplateRegistry with builtin templates
-   - TemplateResolver for model→template mapping
-
-### Rust Accelerations (17 new functions, 439 total)
-- platform_fingerprint_rust, check_capability_rust
-- estimate_memory_footprint_rust for GPU memory estimation
-- parse_response_json_rust, parse_sse_event_rust, encode_sse_event_rust
-- render_simple_template_rust, detect_chat_template_rust
-- parse_mcp_tool_call_rust, validate_mcp_schema_rust
-- hash_conversation_context_rust, fast_token_count_rust
-- truncate_tokens_rust for context window management
-- generate_cache_salt_rust, aggregate_token_metrics_rust
-
-### Tests Created (163 tests, all passing)
-- test_phase42_platform.py (29 tests)
-- test_phase42_responses.py (26 tests)
-- test_phase42_prompt.py (23 tests)
-- test_phase42_mcp.py (20 tests)
-- test_phase42_conversation.py (20 tests)
-- test_phase42_templates.py (21 tests)
-- test_phase42_rust.py (24 tests)
-
----
-
-## Phase 41: Tokenizer Registry, Model Registry & LoRA ✅ COMPLETE
-@location: ["src/infrastructure/tokenizer", "src/infrastructure/models", "src/infrastructure/lora", "src/infrastructure/logprobs", "src/infrastructure/tools", "src/infrastructure/structured_output"]
-
-### Implemented Modules (6 Python, ~3600 lines)
-1. **TokenizerRegistry.py** - Multi-backend tokenization (700 lines)
-   - Protocol-based abstraction with backends (HF, Tiktoken, Mistral, SentencePiece)
-   - LRU caching with configurable max_cached_tokenizers
-   - TokenizerPool for concurrent tokenization with pool_size workers
-   - Fast token estimation and backend auto-detection
-2. **ModelRegistry.py** - Architecture management (650 lines)
-   - 40+ architecture registration (Llama, Mistral, Qwen2, Gemma2, Phi3, etc.)
-   - Capability detection (TEXT, VISION, AUDIO, TOOL_USE, EMBEDDING, MULTIMODAL)
-=======
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-   - VRAM estimation with context scaling and batch size considerations
-   - ArchitectureDetector for config-based and name-based detection
-3. **LoRAManager.py** - Adapter lifecycle management (600 lines)
-   - LoRA/QLoRA/DoRA/rsLoRA method support
-   - GPU slot allocation with LoRASlotManager
-   - Adapter composition with merge_adapters
-   - Hot-swapping and caching with LoRARegistry
-4. **LogprobsProcessor.py** - GC-optimized logprobs (550 lines)
-   - FlatLogprobs NumPy-based storage (GC-friendly)
-   - StreamingLogprobs for incremental processing
-   - LogprobsAnalyzer for perplexity, entropy, confidence metrics
-   - Anomaly detection with z-score thresholding
-5. **ToolParserFramework.py** - Model-specific tool parsing (600 lines)
-   - 5 parsers: Generic JSON, Hermes, Llama3, Mistral, Granite
-   - StreamingToolParser for incremental extraction
-   - ToolParserRegistry for model-based parser selection
-   - JSON extraction and validation utilities
-6. **StructuredOutputParams.py** - Unified output config (500 lines)
-   - StructuredOutputType: JSON_SCHEMA, REGEX, CHOICE, GRAMMAR, TYPE, COMPOSITE
-   - Multi-backend: AUTO, OUTLINES, LMFE, XGRAMMAR, PYAGENT
-   - ConstraintBuilder fluent API for composition
-   - StructuredOutputValidator for constraint validation
-
-### Rust Accelerators (18 functions)
-1. bpe_encode_fast_rust - BPE merge-based tokenization
-2. batch_estimate_tokens_rust - Batch token estimation
-3. tokenizer_cache_key_rust - LRU cache key hashing
-4. architecture_fingerprint_rust - Model config fingerprinting
-5. estimate_vram_bytes_rust - VRAM estimation (min/optimal)
-6. detect_architecture_rust - Architecture detection from config
-7. lora_scaling_rust - LoRA/rsLoRA scaling computation
-8. lora_delta_compute_rust - LoRA delta weight (B @ A)
-9. lora_adapter_hash_rust - Adapter caching hash
-10. log_softmax_stable_rust - Numerically stable log softmax
-11. extract_top_k_logprobs_rust - Top-k extraction
-12. compute_perplexity_rust - Perplexity computation
-13. compute_entropy_rust - Entropy computation
-14. batch_logprobs_rust - Batch logits → logprobs
-15. extract_json_positions_rust - JSON object position detection
-16. detect_tool_format_rust - Tool format detection (Hermes/Llama3/Mistral/Granite)
-17. parse_tool_arguments_rust - Tool argument parsing
-18. validate_json_schema_fast_rust - JSON schema validation
-
-### Beyond vLLM Innovations
-| Feature | vLLM | PyAgent Phase 41 |
-|---------|------|------------------|
-| Tokenizer Backend | HF only | HF, Tiktoken, Mistral, SentencePiece, Custom |
-| Tokenizer Caching | No | LRU with configurable size |
-| Tokenizer Pool | No | Concurrent pool with workers |
-| Model Registry | Static | 40+ architectures with capability flags |
-| VRAM Estimation | Basic | Context-scaled with batch size |
-| LoRA Methods | LoRA | LoRA, QLoRA, DoRA, rsLoRA |
-| LoRA Composition | No | Adapter merging and composition |
-| Logprobs Storage | Standard | GC-optimized FlatLogprobs NumPy |
-| Logprobs Analysis | Basic | Perplexity, entropy, confidence, anomaly |
-| Tool Parsers | OpenAI | JSON, Hermes, Llama3, Mistral, Granite |
-| Streaming Tools | Partial | Full streaming extraction |
-| Structured Output | Single | Multi-backend with fallback |
-| Constraint Composition | No | Fluent builder with chaining |
-
----
-
-## Phase 40: Reasoning, MultiModal Cache, Pooling, Input & Media IO ✅ COMPLETE
-@location: ["src/infrastructure/reasoning", "src/infrastructure/multimodal", "src/infrastructure/pooling", "src/infrastructure/inputs", "src/infrastructure/sampling", "src/infrastructure/mediaio"]
-
-### Implemented Modules (6 Python, ~3200 lines)
-1. **ReasoningEngine.py** - Unified thinking/tool extraction (750 lines)
-   - DeepSeek R1, Qwen3, Claude thinking token extraction
-   - OpenAI/Hermes tool call parsing with streaming support
-   - Configurable reasoning formats and partial parsing
-2. **MultiModalCache.py** - Content-aware multimodal caching (650 lines)
-   - Blake3/SHA256/perceptual hashing algorithms
-   - LRU in-memory cache with size limits
-   - IPC cross-process shared memory cache
-   - Prefetch support for predictive loading
-3. **PoolingEngine.py** - Unified embedding pooling (550 lines)
-   - Mean/CLS/Last/Max/Attention pooling strategies
-   - Matryoshka embeddings for dimension reduction
-   - ColBERT multi-vector token-level pooling
-   - Step pooling for sequence compression
-4. **InputPreprocessor.py** - Input processing pipeline (600 lines)
-   - Prompt type detection (TEXT, TOKENS, EMBEDS, CHAT)
-   - ChatML/Llama3/Mistral template conversion
-   - Validation and linearization of chat messages
-5. **AdvancedSamplingParams.py** - Extended sampling (600 lines)
-   - Temperature scheduling (constant, linear, cosine, adaptive)
-   - Mirostat v1/v2 sampling for perplexity control
-   - Bad words blocking and token whitelisting
-6. **MediaIOEngine.py** - Unified media loading (550 lines)
-   - Async image/video/audio loading with format detection
-   - Multiple resize modes (FIT, FILL, CROP, PAD)
-   - GPU decode support for accelerated loading
-
-### Rust Accelerators (17 functions)
-1. extract_thinking_blocks_rust - Block extraction
-2. parse_tool_calls_rust - Tool call JSON parsing
-3. classify_token_context_rust - Streaming classification
-4. blake3_hash_rust - Fast content hashing
-5. perceptual_hash_distance_rust - Similarity scoring
-6. lru_evict_candidates_rust - LRU eviction selection
-7. arc_cache_priority_rust - ARC cache priority
-8. mean_pool_rust - Mean pooling with mask
-9. cls_pool_rust - CLS token extraction
-10. last_token_pool_rust - Last token pooling
-11. matryoshka_truncate_rust - Dimension reduction
-12. attention_pool_rust - Attention-weighted pooling
-13. estimate_tokens_rust - Fast token estimation
-14. validate_chat_messages_rust - Message validation
-15. linearize_chat_rust - Multi-format linearization
-16. apply_temperature_schedule_rust - Scheduled temperature
-17. mirostat_sample_rust - Mirostat sampling
-
-### Beyond vLLM Innovations
-| Feature | vLLM | PyAgent Phase 40 |
-|---------|------|------------------|
-| Reasoning Extraction | DeepSeek R1 only | DeepSeek R1, Qwen3, Mistral, Claude, Generic |
-| Tool Parsing | OpenAI format | OpenAI, Hermes, Anthropic with streaming |
-| Cache Hashing | SHA256 | Blake3, SHA256, Perceptual similarity |
-| Cache Backend | In-memory only | LRU, IPC (shared memory), Prefetch |
-| Pooling | Mean, CLS | Mean, CLS, Last, Max, Attention, Weighted |
-| Matryoshka | Not supported | Full MRL dimension reduction |
-| Multi-vector | Not supported | ColBERT token-level pooling |
-| Input Templates | ChatML | ChatML, Llama3, Mistral, custom |
-| Temperature | Fixed | Constant, Linear, Cosine, Adaptive scheduling |
-| Mirostat | Not available | Mode 1 & 2 with entropy targeting |
-| Media Loading | Sync | Async with GPU decode acceleration |
-
----
-
-## Phase 39: Structured Output, Speculative v2 & Tensorizer ✅ COMPLETE
-@location: ["src/infrastructure/structured_output", "src/infrastructure/speculative_v2", "src/infrastructure/tensorizer"]
-
-### Implemented Modules (6 Python)
-1. **StructuredOutputManager.py** - Multi-backend grammar orchestration (600 lines)
-2. **GrammarEngine.py** - FSM-based grammar constraints (600 lines)
-3. **LogitProcessor.py** - Composable token processors (550 lines)
-4. **SpeculativeDecoder.py** - Tree-based speculation (600 lines)
-5. **Tensorizer.py** - Streaming model serialization (600 lines)
-6. **Package __init__.py files** - Exports for 3 packages
-
-### Rust Accelerators (12 functions)
-1. regex_to_fsm_rust - Regex → FSM state machine
-2. fill_token_bitmask_rust - Token constraint bitmasks
-3. validate_token_sequence_rust - FSM sequence validation
-4. json_schema_fsm_rust - JSON schema → FSM
-5. apply_grammar_mask_rust - Grammar logit masking
-6. batch_fill_bitmask_rust - Batch constraint generation
-7. build_speculation_tree_rust - N-gram tree construction
-8. verify_speculation_tree_rust - Tree verification
-9. extract_accepted_path_rust - Path extraction
-10. speculation_stats_rust - Statistics computation
-11. tensorizer_checksum_rust - SHA256 checksums
-12. pack_tensor_metadata_rust - Metadata serialization
-
-### Beyond vLLM Innovations
-- Multi-backend Grammar: Regex, JSON, EBNF, Lark, Custom
-- FSM Transition Table: NumPy-based O(1) lookups
-- Composite Processors: Chainable temperature/topk/topp/repetition
-- Tree Speculation: Multi-path speculation with pruning
-- N-gram Proposer: Suffix-based speculation
-- Medusa Integration: Multiple head speculation
-- Streaming Tensorizer: Async memory-efficient loading
-- Multi-compression: LZ4, ZSTD, Snappy support
-
----
-
-## Phase 38: FusedMoE, Mamba SSM & MLA ✅ COMPLETE
-@location: ["src/infrastructure/moe", "src/infrastructure/ssm"]
-
-### Implemented Modules (4 Python)
-1. **WeightLoader.py** - Multi-threaded weight loading, atomic writes
-2. **ShardedStateLoader.py** - Tensor-parallel checkpoint loading
-3. **KVOffloadManager.py** - LRU/ARC KV cache offloading
-4. **ExpertLoadBalancer.py** - Expert parallel load balancing
-
-### Rust Accelerators (9 functions)
-1. weight_hash_compute_rust - FNV-1a weight spec hashing
-2. validate_weight_shapes_rust - Shape consistency validation
-3. compute_shard_assignment_rust - TP shard assignment
-4. validate_shard_shapes_rust - Cross-shard validation
-5. compute_lru_eviction_rust - LRU eviction selection
-6. compute_arc_target_rust - ARC target adaptation
-7. compute_balanced_packing_rust - Expert bin-packing
-8. compute_expert_replication_rust - Hot expert replication
-9. compute_load_imbalance_rust - Load imbalance ratio
-
-### Beyond vLLM Innovations
-- FastSafetensorsLoader: GDS support for direct GPU loading
-- StreamingWeightLoader: Memory budget + priority weights
-- IncrementalShardLoader: LRU cache for shard reuse
-- AsyncShardLoader: Prefetch queue for async loading
-- TieredOffloadManager: Multi-backend tiering (CPU→NVMe→S3)
-- LocalityAwarePolicy: Network topology-aware EPLB
-- AsyncExpertRebalancer: Background rebalancing thread
-
----
-
-## Phase 39: Next Priority (PLANNED)
-
-### Planned Patterns
-- Tensorizer Integration: Fast serialized weight loading
-- Guided Decoding: JSON/regex-constrained generation
-- FlashMLA Sparse: Sparse attention patterns
-- Speculative Decoding v2: Tree-based speculation
-
----
-
-## Quality Gates
-- ✅ All Rust functions have unit tests
-- ✅ Stability Gate: 1.0 (Green)
-- ✅ No JSON log regressions
-- ✅ pytest parity tests passing
-
-## Exclusions
-- Do not modify docs/archive/
-- Skip Tier 1 optimization unless regression
-
-## Key Files Reference
-- docs/comparison_vllm.md - Full vLLM analysis
-- rust_core/src/inference.rs - Inference Rust functions
-- rust_core/src/lib.rs - PyO3 bindings (361+ functions)
-
-
-### 34. Phase 34: Disaggregated Inference & Advanced RoPE (NEW)
-
-#### vLLM v1 Patterns Analyzed (from GitHub searches)
-- KV Transfer Connectors: P2pNcclConnector, NixlConnector, MooncakeConnector, MoRIIOConnector
-- DecodeBenchConnector: Dummy KV cache filling for decode benchmarking
-- Disaggregated Prefill-Decode: Separate prefill/decode instances with KV transfer
-- RotaryEmbedding variants: MRoPE, XDRoPE, DualChunk, DeepseekScaling
-- EagleProposer: Tree-based speculation with EAGLE/EAGLE3 draft models
-- NgramProposer: N-gram based token prediction with Numba JIT
-- Triton Decode Attention: Grouped attention with KV splits
-- BatchDCPPrefillWrapper: DCP attention with all_gather operations
-
-#### Python Modules (6 new)
-1. `src/infrastructure/kv_transfer/KVTransferConnector.py` - Base connector framework
-   - KVConnectorRole enum (PRODUCER/CONSUMER/BOTH)
-   - KVTransferConfig dataclass (connector settings)
-   - KVConnectorBase ABC (interface for all connectors)
-   - register_kv_caches() cache registration
-   - start_load_kv()/wait_for_layer_load() async KV loading
-   - save_kv_layer() layer persistence
-   - get_num_new_matched_tokens() token matching for transfer
-   - BEYOND vLLM: Multi-backend support with fallback chain
-
-2. `src/infrastructure/scheduling/DisaggregatedScheduler.py` - Prefill-decode split
-   - DCPConfig dataclass (disaggregation settings)
-   - PrefillInstance/DecodeInstance management
-   - schedule_prefill()/schedule_decode() phase-specific scheduling
-   - kv_transfer_params() transfer metadata
-   - proxy_orchestrator() request routing
-   - BEYOND vLLM: Dynamic instance scaling based on load
-
-3. `src/infrastructure/position/RotaryEmbeddingEngine.py` - Unified RoPE
-   - RoPEVariant enum (NEOX/GPTJ/MROPE/XDROPE/DUAL_CHUNK/DEEPSEEK)
-   - RotaryEmbeddingBase common interface
-   - forward_native()/forward_cuda() backend dispatch
-   - MRotaryEmbedding multimodal sections (temporal/height/width)
-   - XDRotaryEmbedding dynamic NTK scaling
-   - DualChunkRotaryEmbedding dual chunk pattern
-   - BEYOND vLLM: Automatic variant detection from model config
-
-4. `src/inference/speculation/SpeculativeEngine.py` - Unified speculation
-   - SpecMethod enum (EAGLE/EAGLE3/NGRAM/MEDUSA/MTP)
-   - DrafterBase ABC drafter interface
-   - EagleProposer tree-based EAGLE speculation
-   - NgramProposer N-gram lookup with Numba
-   - propose()/verify()/accept_reject() verification flow
-   - speculative_token_tree parsing
-   - BEYOND vLLM: Hybrid drafter (EAGLE + N-gram fallback)
-
-5. `src/infrastructure/attention/TritonAttentionOps.py` - Fused Triton kernels
-   - kernel_paged_attention_2d chunked prefill + paged decode
-   - _decode_att_m_fwd/_decode_grouped_att_m_fwd decode attention
-   - _fwd_kernel_stage1/_fwd_kernel_stage2 two-stage decode
-   - KV split support for memory efficiency
-   - ALiBi slopes integration
-   - BEYOND vLLM: Dynamic block size selection
-
-6. `src/infrastructure/attention/BatchDCPWrapper.py` - DCP attention wrapper
-   - BatchDCPPrefillWrapper context + new tokens planning
-   - plan() set up prefill indices
-   - run() execute with DCP group all_gather
-   - cp_lse_ag_out_rs() LSE all-gather output reduce-scatter
-   - BEYOND vLLM: Mixed precision DCP (FP8 KV + BF16 compute)
-
-#### Rust Accelerations (12 new functions → 302+ total)
-- rotary_embedding_kernel_rust: Fast position encoding
-- mrope_section_indices_rust: Multimodal section calculation
-- dynamic_ntk_alpha_rust: NTK scaling factor computation
-- ngram_propose_rust: Parallel N-gram search
-- eagle_tree_expand_rust: Tree structure expansion
-- kv_transfer_metadata_rust: Transfer param encoding
-- verify_draft_tokens_rust: Fast draft verification
-- block_table_lookup_rust: Paged attention indices
-- triton_attention_dispatch_rust: Kernel parameter setup
-- dcp_group_coordinate_rust: DCP rank coordination
-- kv_connector_score_rust: Connector capability scoring
-- speculation_tree_parse_rust: Token tree parsing
-
-#### Tests
-- tests/phases/test_phase34_disaggregated.py (target: 60+ tests)
-
-#### Status
-- [COMPLETED] KVTransferConnector implementation
-- [COMPLETED] DisaggregatedScheduler implementation
-- [COMPLETED] RotaryEmbeddingEngine implementation
-- [COMPLETED] SpeculativeEngine implementation
-- [COMPLETED] TritonAttentionOps implementation
-- [COMPLETED] BatchDCPWrapper implementation
-- [COMPLETED] Rust accelerations (12 functions)
-- [COMPLETED] Unit tests (70 passed, 15 skipped)
-- ✅ Target achieved: 6 Python modules + 12 Rust functions (Phase 34 COMPLETE)
-
-### 35. Phase 35: Async Execution & Advanced Caching ✅ COMPLETE (95 passed, 2 skipped)
-
-#### vLLM v1 Patterns Analyzed (from GitHub searches)
-- EngineCoreClient hierarchy: InprocClient, SyncMPClient, AsyncMPClient, DPAsyncMPClient
-- EngineCoreProc.run_busy_loop(): Core async execution loop
-- BlockPool: LRU eviction with get_new_blocks()/free_blocks()/cache_blocks()/touch()
-- KVCacheManager.allocate_slots(): Prefix caching, get_computed_blocks()
-- SingleTypeKVCacheManager.find_longest_cache_hit(): Cache hit detection
-- CuMemAllocator: sleep()/wake_up() for GPU memory sharing
-- DPEngineCoreProc: step_counter, wave_id for DP coordination
-- DPLBAsyncMPClient: Power of Two Choices (P2C) load balancing
-- AsyncGPUPoolingModelRunnerOutput: Non-blocking model outputs
-
-#### Python Modules (6 new)
-1. `src/infrastructure/engine/AsyncEngineClient.py` - Multi-process async engine
-   - ClientMode enum (INPROC/SYNC_MP/ASYNC_MP/DP_ASYNC)
-   - EngineCoreClientBase ABC client interface
-   - InprocClient single-GPU in-process
-   - SyncMPClient ZMQ synchronous multi-process
-   - AsyncMPClient async with queue handlers
-   - DPAsyncMPClient DP load balancing (P2C algorithm)
-   - run_busy_loop() core execution loop
-   - get_output_async() non-blocking output retrieval
-   - BEYOND vLLM: Automatic client selection based on GPU topology
-
-2. `src/infrastructure/cache/BlockPoolManager.py` - Advanced KV block management
-   - BlockState enum (FREE/ALLOCATED/CACHED/PINNED)
-   - BlockPool class LRU eviction with metrics
-   - get_new_blocks()/free_blocks()/cache_blocks()/touch()
-   - cached_block_hash_to_block prefix cache hash map
-   - ARCPolicy Adaptive Replacement Cache policy
-   - KVCacheMetricsCollector eviction events, residency
-   - BEYOND vLLM: ARC eviction (adaptive frequency+recency)
-
-3. `src/infrastructure/memory/GPUMemoryAllocator.py` - GPU memory optimization
-   - MemoryState enum (ACTIVE/SLEEPING/SNAPSHOT)
-   - CuMemAllocator class custom CUDA allocation
-   - sleep()/wake_up() memory sharing
-   - use_memory_pool() context manager
-   - MemorySnapshot state capture/restore
-   - allocation_callback/deallocation_callback hooks
-   - BEYOND vLLM: Multi-GPU memory balancing
-
-4. `src/infrastructure/cache/PrefixCacheOptimizer.py` - Prefix cache hits
-   - PrefixCacheConfig dataclass settings
-   - PrefixTree class radix tree for prefix lookup
-   - find_longest_cache_hit() O(log n) prefix matching
-   - get_computed_blocks() return cached block IDs
-   - remove_skipped_blocks() cleanup unused
-   - update_prefix_state() state management
-   - BEYOND vLLM: Speculative prefix pre-warming
-
-5. `src/inference/execution/AsyncModelRunner.py` - Async model execution
-   - RunnerState enum (IDLE/EXECUTING/WAITING)
-   - AsyncGPUPoolingModelRunnerOutput pooled outputs
-   - execute_model_async() non-blocking forward
-   - _model_forward() actual computation
-   - output_future_pool result future management
-   - BEYOND vLLM: Pipelined async with overlap
-
-6. `src/infrastructure/parallel/DataParallelCoordinator.py` - DP coordination
-   - DPConfig dataclass parallel settings
-   - DPEngineCoreProc class DP rank management
-   - step_counter/step_request_count sync tracking
-   - wave_id/wave_complete() wave management
-   - P2CLoadBalancer Power of Two Choices algorithm
-   - select_worker() optimal worker selection
-   - BEYOND vLLM: Hierarchical DP with locality awareness
-
-#### Rust Accelerations (12 new functions → 314+ total)
-- block_pool_evict_lru_rust: Fast LRU eviction selection
-- arc_cache_balance_rust: ARC frequency/recency calculation
-- prefix_tree_lookup_rust: Radix tree prefix matching
-- block_hash_compute_rust: Fast block content hashing
-- gpu_memory_snapshot_rust: Memory state serialization
-- p2c_select_worker_rust: Power of Two Choices selection
-- step_counter_sync_rust: Atomic step synchronization
-- wave_id_barrier_rust: Wave coordination barrier
-- async_output_merge_rust: Merge async output futures
-- dp_rank_coordinate_rust: DP rank assignment
-- kv_metrics_aggregate_rust: Metrics aggregation
-- cache_hit_score_rust: Prefix cache hit scoring
-
-#### Tests
-- tests/phases/test_phase35_async_cache.py (95 passed, 2 skipped) ✅
-
----
-
-### 36. Phase 36: CUDA Graph & Compilation (NEW - PRIORITY)
-
-#### vLLM Patterns to Implement
-
-**1. CUDAGraphWrapper (vllm/compilation/cuda_graph.py)**
-- BatchDescriptor: Graph cache keys (num_tokens, num_reqs)
-- CUDAGraphEntry: Cached graph + output weak refs
-- Runtime modes: NONE/PIECEWISE/FULL
-- Capture/replay with input address validation
-
-**2. UBatchWrapper (vllm/v1/worker/gpu_ubatch_wrapper.py)**
-- Micro-batch splitting for graph efficiency
-- Thread-coordinated execution with barriers
-- DP metadata passing for data parallel
-
-**3. CudagraphDispatcher (vllm/v1/cudagraph_dispatcher.py)**
-- dispatch(): Runtime mode + descriptor selection
-- Relaxed key lookup: Fallback to larger graphs
-- Uniform decode: Special handling for decode batches
-
-**4. CompilerInterface (vllm/compilation/compiler_interface.py)**
-- InductorStandaloneAdaptor: torch.compile backend
-- Cache management: Compiled artifact persistence
-- Range compilation: Single-size or dynamic shapes
-
-**5. InputBatch (vllm/v1/worker/gpu/input_batch.py)**
-- Persistent GPU buffers for graph replay
-- Query start location tracking
-- Consistent padding for shapes
-
-#### Python Modules (6 new)
-
-1. `src/infrastructure/cuda/CUDAGraphManager.py` - CUDA graph management
-   - CUDAGraphMode enum (NONE/PIECEWISE/FULL)
-   - BatchDescriptor dataclass (num_tokens, num_reqs)
-   - CUDAGraphEntry (graph, output, input_addresses)
-   - CUDAGraphWrapper class with capture/replay
-   - validate_addresses() debug mode checking
-   - BEYOND vLLM: Adaptive capture based on hit patterns
-
-2. `src/infrastructure/cuda/UBatchProcessor.py` - Micro-batch processing
-   - UBatchContext dataclass
-   - UbatchMetadata (sliced inputs per micro-batch)
-   - UBatchWrapper class
-   - barrier_sync() thread coordination
-   - BEYOND vLLM: Dynamic ubatch sizing based on memory
-
-3. `src/infrastructure/cuda/CudagraphDispatcher.py` - Graph dispatch
-   - initialize_cudagraph_keys() pre-registration
-   - dispatch() → (CUDAGraphMode, BatchDescriptor)
-   - add_cudagraph_key() dynamic registration
-   - relaxed_key_lookup() fallback matching
-   - BEYOND vLLM: Predictive shape pre-warming
-
-4. `src/infrastructure/compilation/TorchCompileIntegration.py` - Compilation
-   - CompilerConfig dataclass
-   - CompilationCache with disk persistence
-   - @support_torch_compile decorator
-   - compile_graph() → compiled artifact
-   - BEYOND vLLM: Cross-run cache sharing
-
-5. `src/infrastructure/cuda/InputBufferManager.py` - Input staging
-   - InputBuffers (persistent GPU tensors)
-   - InputBatch (batch state management)
-   - make_dummy() warmup batch creation
-   - copy_inputs() input staging for graphs
-   - BEYOND vLLM: Async input staging pipeline
-
-6. `src/observability/stats/CompilationCounter.py` - Compilation metrics
-   - num_inductor_compiles counter
-   - num_cudagraph_captured counter
-   - compilation_times dict[shape, time]
-   - BEYOND vLLM: Cost tracking per compilation
-
-#### Rust Accelerations (8 new functions)
-- batch_descriptor_hash_rust: Fast batch key hashing
-- input_address_check_rust: Validate input addresses
-- ubatch_slice_compute_rust: Optimal micro-batch slicing
-- graph_pool_manage_rust: Pool ID management
-- warmup_shapes_select_rust: Select shapes for warmup
-- compile_cache_lookup_rust: Fast compiled cache search
-- padding_compute_rust: Optimal padding calculation
-- buffer_copy_async_rust: Async buffer staging
-
-#### Tests
-- tests/phases/test_phase36_cudagraph.py (target: 70+ tests)
-
-#### Status
-- [ ] CUDAGraphManager implementation
-- [ ] UBatchProcessor implementation  
-- [ ] CudagraphDispatcher implementation
-- [ ] TorchCompileIntegration implementation
-- [ ] Phase 51: Advanced Attention (FlashInfer)
-- [ ] Phase 52: Multi-GPU TP/PP
-
-## Quality Gates
-- ✅ All Rust-native implementations have matching unit tests in `rust_core/src/tests`.
-- ✅ Stability Gate: 1.0 (Green).
-- ✅ No regression in JSON log validity.
-- ✅ All 20 SelfImprovements verified via py_compile and import tests.
-- ✅ pytest rust_core parity tests: 5/5 passed.
-- ✅ Phase 16: 6 files enhanced with 12 new Rust hooks (100 total tracked).
-
-## Exclusions
-- Do not modify legacy files in `docs/archive/`.
-- Skip optimization for Tier 1 (Primitives) unless a regression is detected.
-
-
-
-we are doing input output of video, sound and text in separate dvd like channels, i need an aalternative to lora that supports 120 fps
-You’re building something very high‑throughput, Keimpe — 120 fps across video, audio, and text channels is far beyond what LoRA was ever designed for. LoRA is a parameter‑efficient fine‑tuning method, not a real‑time inference accelerator, so it becomes the bottleneck in ultra‑fast multimodal pipelines.
-
-For your use case, you need architectural‑level acceleration, not adapter‑level tuning.
-
-Below is a breakdown of the alternatives that actually can sustain 120 fps multimodal I/O.
-
-⚡ Alternatives to LoRA That Support Real‑Time 120 FPS Multimodal Processing
-🎯 1. TensorRT‑LLM / TensorRT‑Vision
-If you’re on NVIDIA hardware, this is the strongest option.
-
-Why it works for 120 fps
-Converts your model into highly optimized CUDA kernels
-
-Fuses attention + MLP ops
-
-Uses FP8/INT8 quantization without losing much quality
-
-Supports video, audio, and text pipelines
-
-Designed for real‑time inference (robotics, AV, XR)
-
-When to use
-You need maximum throughput
-
-You want to keep your model architecture but make it fast
-
-🎯 2. MoE (Mixture‑of‑Experts) Models
-MoE is a structural alternative to LoRA that activates only a small subset of the model per frame.
-
-Why it works for 120 fps
-Only 1–2 experts run per token/frame
-
-Massive reduction in compute
-
-Works extremely well for multimodal routing (video → vision experts, audio → audio experts)
-
-When to use
-You want scalability without sacrificing quality
-
-You need different “channels” for different modalities
-
-🎯 3. IA³ (Input–Activation–Attention Scaling)
-This is the closest thing to LoRA that does scale to high FPS.
-
-Why it works
-Adds only tiny scaling vectors
-
-Almost zero overhead
-
-Works well in multimodal transformers
-
-Much faster than LoRA at inference
-
-When to use
-You want LoRA‑like fine‑tuning but with no runtime slowdown
-
-🎯 4. Prefix Tuning / Prompt Tuning
-This is the lightest possible tuning method.
-
-Why it works
-Adds a few learned tokens
-
-No matrix multiplications added
-
-Zero latency overhead
-
-Works well when the base model is already strong
-
-When to use
-You need instant inference
-
-You don’t need deep model changes
-
-🎯 5. Full Quantized Fine‑Tuning (INT8 / FP8 / 4‑bit)
-Instead of LoRA, you fine‑tune the whole model but in a compressed format.
-
-Why it works
-Reduces memory bandwidth
-
-Speeds up attention layers
-
-Works well for video models (which are bandwidth‑bound)
-
-When to use
-You want maximum quality + speed
-
-You have enough GPU to train but need fast inference
-
-🎯 6. Distillation to a Smaller Multimodal Model
-This is the most robust long‑term solution.
-
-Why it works
-You train a smaller model to mimic a larger one
-
-The smaller model can easily hit 120 fps
-
-Works for video, audio, and text channels
-
-When to use
-You want a production‑ready, low‑latency model
-
-You can afford a training pipeline
-
-🧠 Which One Should You Use?
-Given your description:
-
-“input output of video, sound and text in separate DVD‑like channels at 120 fps”
-
-Your bottleneck is inference speed, not parameter count.
-
-Best practical setup:
-TensorRT + IA³ + Quantization
-TensorRT gives you the raw speed
-
-IA³ gives you tunability without overhead
-
-Quantization gives you bandwidth savings
-
-This combination is used in:
-
-real‑time robotics
-
-AR/VR systems
-
-autonomous vehicles
-
-high‑FPS multimodal agents
-
-It’s the closest thing to “LoRA but fast enough for 120 fps”.
-
-## orgaanise directories
-
-- [ ] move files from `.beads` to `data\beads` and remove `.beads` directory
-- [ ] move files from `.agent_cache` to `data\agent_cache` and remove `.agent_cache` directory
-- [ ] move files from `.hypothesis` to `data\hypothesis` and remove `.hypothesis` directory
-- [ ] 
-
-read .external\downloads.txt
+[Intelligence] Verifying local interaction recording...
+ - Interaction archived to compressed local shard.
+[Intelligence] Consulting external federated models for remaining debt...
+ - Analyzed 433 debt clusters.
+   * File: src\core\lazy_loader.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\core\rust_bridge.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+   * File: src\core\base\common\base_utilities.py
+     - Complexity Issue: Cyclomatic complexity is high (36). Consider breaking down functions.
+   * File: src\core\base\common\config_core.py
+     - Complexity Issue: Cyclomatic complexity is high (45). Consider breaking down functions.
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+   * File: src\core\base\common\error_mapping_core.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\common\file_system_core.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\core\base\common\formula_core.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\common\lock_core.py
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\core\base\common\memory_core.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\common\metrics_core.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+   * File: src\core\base\common\multimodal_logic.py
+     - Complexity Issue: Cyclomatic complexity is high (102). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\core\base\common\orchestration_core.py
+     - Complexity Issue: Cyclomatic complexity is high (28). Consider breaking down functions.
+   * File: src\core\base\common\platform_core.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\common\plugin_core.py
+     - Complexity Issue: Cyclomatic complexity is high (45). Consider breaking down functions.
+   * File: src\core\base\common\pruning_core.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+   * File: src\core\base\common\registry_core.py
+     - Complexity Issue: Cyclomatic complexity is high (39). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\common\resilience_core.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\core\base\common\shell_core.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\core\base\common\storage_core.py
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+   * File: src\core\base\common\time_core.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\common\validation_core.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\core\base\common\workspace_core.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\common\models\communication_models.py
+     - Complexity Issue: Cyclomatic complexity is high (35). Consider breaking down functions.
+   * File: src\core\base\common\types\typed_prompts.py
+     - Complexity Issue: Cyclomatic complexity is high (66). Consider breaking down functions.
+   * File: src\core\base\common\utils\collection_utils.py
+     - Complexity Issue: Cyclomatic complexity is high (62). Consider breaking down functions.
+   * File: src\core\base\common\utils\dynamic_importer.py
+     - Complexity Issue: Cyclomatic complexity is high (60). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\core\base\common\utils\func_utils.py
+     - Complexity Issue: Cyclomatic complexity is high (54). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Heuristically detected 4 functions missing type hints.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\core\base\common\utils\hash_registry.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\core\base\common\utils\lazy_loader.py
+     - Complexity Issue: Cyclomatic complexity is high (28). Consider breaking down functions.
+   * File: src\core\base\common\utils\math_utils.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\core\base\common\utils\jsontree\meta.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\core\base\execution\agent_command_handler.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\core\base\execution\shell_executor.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\lifecycle\agent_core.py
+     - Complexity Issue: Cyclomatic complexity is high (58). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\core\base\lifecycle\agent_update_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+   * File: src\core\base\lifecycle\base_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (53). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+   * File: src\core\base\lifecycle\base_agent_core.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\core\base\logic\connectivity_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\incremental_processor.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\core\base\logic\core\cuda_stream_pool.py
+     - Complexity Issue: Cyclomatic complexity is high (76). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\core\base\logic\core\micro_batch_context.py
+     - Complexity Issue: Cyclomatic complexity is high (65). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\math\batch_invariant_ops.py
+     - Complexity Issue: Cyclomatic complexity is high (45). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\parsers\tool_parser.py
+     - Complexity Issue: Cyclomatic complexity is high (49). Consider breaking down functions.
+     - Rust Readiness Task: Found 7 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\parsers\reasoning\registry.py
+     - Rust Readiness Task: Found 6 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\processing\logits_processor.py
+     - Complexity Issue: Cyclomatic complexity is high (66). Consider breaking down functions.
+     - Rust Readiness Task: Found 11 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\bloom_filter.py
+     - Complexity Issue: Cyclomatic complexity is high (46). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\cpu_gpu_buffer.py
+     - Complexity Issue: Cyclomatic complexity is high (35). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\cuda_stream_pool.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\flat_logprobs.py
+     - Complexity Issue: Cyclomatic complexity is high (50). Consider breaking down functions.
+   * File: src\core\base\logic\structures\immutable_collections.py
+     - Rust Readiness Task: Found 6 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\lock_free_queue.py
+     - Complexity Issue: Cyclomatic complexity is high (64). Consider breaking down functions.
+   * File: src\core\base\logic\structures\memory_arena.py
+     - Complexity Issue: Cyclomatic complexity is high (37). Consider breaking down functions.
+     - Rust Readiness Task: Found 8 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\micro_batch_context.py
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\object_pool.py
+     - Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+     - Rust Readiness Task: Found 13 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\registry.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\ring_buffer.py
+     - Complexity Issue: Cyclomatic complexity is high (50). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\staged_batch_writer.py
+     - Complexity Issue: Cyclomatic complexity is high (66). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\structures\uva_buffer_pool.py
+     - Complexity Issue: Cyclomatic complexity is high (89). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\validation\tensor_schema.py
+     - Complexity Issue: Cyclomatic complexity is high (52). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\verification\agent_verifier.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\logic\verification\mixins\workspace_auditor_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (35). Consider breaking down functions.
+   * File: src\core\base\mixins\orchestration_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (39). Consider breaking down functions.
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+   * File: src\core\base\mixins\persistence_mixin.py
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+   * File: src\core\base\registry\agent_registry.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\base\state\agent_state_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (75). Consider breaking down functions.
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\core\config\env_config.py
+     - Complexity Issue: Cyclomatic complexity is high (76). Consider breaking down functions.
+     - Rust Readiness Task: Found 7 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\core\rl\action_space.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\core\rl\learning_objectives.py
+     - Complexity Issue: Cyclomatic complexity is high (47). Consider breaking down functions.
+   * File: src\core\rl\transition_dynamics.py
+     - Complexity Issue: Cyclomatic complexity is high (43). Consider breaking down functions.
+   * File: src\inference\speculation\engine\proposers.py
+     - Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+   * File: src\infrastructure\lazy.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\__init__.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\compute\backend\async_microbatcher.py
+     - Complexity Issue: Cyclomatic complexity is high (48). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\llm_client.py
+     - Complexity Issue: Cyclomatic complexity is high (64). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\runner_backends.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\sql_metadata_handler.py
+     - Complexity Issue: Cyclomatic complexity is high (38). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\subagent_runner.py
+     - Complexity Issue: Cyclomatic complexity is high (36). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\vllm_native_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\llm_backends\lmstudio\backend.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\llm_backends\lmstudio\tts.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\backend\vllm_advanced\async_vllm_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (48). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\backend\vllm_advanced\streaming_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (58). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\vllm_advanced\guided\decoder.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\backend\vllm_advanced\guided\models.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+     - Rust Readiness Task: Found 10 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\backend\vllm_advanced\guided\schema.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\infrastructure\compute\backend\vllm_advanced\lora\manager.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\backend\vllm_advanced\lora\registry.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\compilation\torch_compile_integration.py
+     - Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\cuda\cudagraph_dispatcher.py
+     - Complexity Issue: Cyclomatic complexity is high (48). Consider breaking down functions.
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\cuda\cuda_graph_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (62). Consider breaking down functions.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\cuda\input_buffer_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (47). Consider breaking down functions.
+   * File: src\infrastructure\compute\cuda\u_batch_processor.py
+     - Complexity Issue: Cyclomatic complexity is high (59). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\lora\manager\adapter.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\infrastructure\compute\moe\expert_router.py
+     - Complexity Issue: Cyclomatic complexity is high (43). Consider breaking down functions.
+   * File: src\infrastructure\compute\ssm\mamba_utils.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\infrastructure\compute\ssm\mamba\config.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\tensorizer\tensorizer.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\compute\tensorizer\core\reader.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+   * File: src\infrastructure\compute\tensorizer\core\streaming.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\engine_core_client.py
+     - Complexity Issue: Cyclomatic complexity is high (35). Consider breaking down functions.
+   * File: src\infrastructure\engine\engine_lifecycle.py
+     - Complexity Issue: Cyclomatic complexity is high (56). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\engine\incremental_detokenizer.py
+     - Complexity Issue: Cyclomatic complexity is high (61). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\iteration_metrics.py
+     - Complexity Issue: Cyclomatic complexity is high (45). Consider breaking down functions.
+   * File: src\infrastructure\engine\output_processor.py
+     - Complexity Issue: Cyclomatic complexity is high (49). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\parallel_sampling.py
+     - Complexity Issue: Cyclomatic complexity is high (67). Consider breaking down functions.
+   * File: src\infrastructure\engine\prefix_cache_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (54). Consider breaking down functions.
+   * File: src\infrastructure\engine\adapters\lora\weights.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\attention\batch_dcp_wrapper.py
+     - Complexity Issue: Cyclomatic complexity is high (55). Consider breaking down functions.
+   * File: src\infrastructure\engine\attention\triton_attention_ops.py
+     - Complexity Issue: Cyclomatic complexity is high (51). Consider breaking down functions.
+   * File: src\infrastructure\engine\attention\backend\registry.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+   * File: src\infrastructure\engine\attention\paged_attention\storage.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\chat_templates\registry\config.py
+     - Complexity Issue: Cyclomatic complexity is high (106). Consider breaking down functions.
+   * File: src\infrastructure\engine\chat_templates\registry\registry.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\conversation\context\core.py
+     - Complexity Issue: Cyclomatic complexity is high (28). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\conversation\context\models.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\core\config.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\decoding\grammar\ebnf_grammar.py
+     - Complexity Issue: Cyclomatic complexity is high (35). Consider breaking down functions.
+   * File: src\infrastructure\engine\decoding\grammar\json_constraint.py
+     - Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+   * File: src\infrastructure\engine\decoding\grammar\regex_constraint.py
+     - Complexity Issue: Cyclomatic complexity is high (68). Consider breaking down functions.
+   * File: src\infrastructure\engine\decoding\grammar\registry.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+   * File: src\infrastructure\engine\inference\decoder\config.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\inference\decoder\proposers.py
+     - Complexity Issue: Cyclomatic complexity is high (52). Consider breaking down functions.
+   * File: src\infrastructure\engine\inputs\input_preprocessor.py
+     - Complexity Issue: Cyclomatic complexity is high (87). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\kv_cache\structural.py
+     - Complexity Issue: Cyclomatic complexity is high (36). Consider breaking down functions.
+   * File: src\infrastructure\engine\lifecycle\request.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\infrastructure\engine\loading\expert_load_balancer.py
+     - Complexity Issue: Cyclomatic complexity is high (105). Consider breaking down functions.
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\loading\sharded_state_loader.py
+     - Complexity Issue: Cyclomatic complexity is high (70). Consider breaking down functions.
+   * File: src\infrastructure\engine\loading\weight_loader.py
+     - Complexity Issue: Cyclomatic complexity is high (72). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\loading\kv_offload\managers.py
+     - Complexity Issue: Cyclomatic complexity is high (99). Consider breaking down functions.
+   * File: src\infrastructure\engine\logprobs\processor\storage.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\models\registry\detector.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\models\registry\engine.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\models\registry\estimator.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\multimodal\encoder_cache_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (100). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\multimodal\quantized_engine.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\multimodal\cache\memory.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\infrastructure\engine\multimodal\processor\registry.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\infrastructure\engine\outputs\logprobs_processor.py
+     - Complexity Issue: Cyclomatic complexity is high (57). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\pooling\connection_pool.py
+     - Complexity Issue: Cyclomatic complexity is high (52). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\pooling\pooling_metadata.py
+     - Complexity Issue: Cyclomatic complexity is high (61). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\position\rotary\engine.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\prompt_renderer\renderers.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+   * File: src\infrastructure\engine\prompt_renderer\salt.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\prompt_renderer\truncation.py
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\reasoning\engine.py
+     - Complexity Issue: Cyclomatic complexity is high (37). Consider breaking down functions.
+   * File: src\infrastructure\engine\reasoning\implementations.py
+     - Complexity Issue: Cyclomatic complexity is high (49). Consider breaking down functions.
+   * File: src\infrastructure\engine\sampling\advanced_sampling_params.py
+     - Complexity Issue: Cyclomatic complexity is high (70). Consider breaking down functions.
+   * File: src\infrastructure\engine\sampling\kernels.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+   * File: src\infrastructure\engine\sampling\params.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\sampling\penalty_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (72). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\sampling\rejection_sampler.py
+     - Complexity Issue: Cyclomatic complexity is high (83). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\sampling\top_k_top_p_sampler.py
+     - Complexity Issue: Cyclomatic complexity is high (61). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\sampling\ngram\accelerators.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\infrastructure\engine\sampling\ngram\index.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+   * File: src\infrastructure\engine\sampling\ngram\proposer.py
+     - Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+   * File: src\infrastructure\engine\scheduling\chunked_prefill_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (67). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\scheduling\advanced\scheduler.py
+     - Complexity Issue: Cyclomatic complexity is high (39). Consider breaking down functions.
+   * File: src\infrastructure\engine\scheduling\disaggregated\config.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\scheduling\disaggregated\scheduler.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\scheduling\priority\base.py
+     - Complexity Issue: Cyclomatic complexity is high (28). Consider breaking down functions.
+   * File: src\infrastructure\engine\speculative\ngram_proposer.py
+     - Complexity Issue: Cyclomatic complexity is high (73). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\speculative\__init__.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\speculative\decoder\proposers.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\engine\speculative\eagle\proposer.py
+     - Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+   * File: src\infrastructure\engine\speculative\eagle\tree.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\speculative\spec_decode\metadata.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\structured\bad_words_processor_v2.py
+     - Complexity Issue: Cyclomatic complexity is high (67). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\compiled_grammar.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\guidance_backend.py
+     - Complexity Issue: Cyclomatic complexity is high (54). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\json_schema.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\lm_format_enforcer_backend.py
+     - Complexity Issue: Cyclomatic complexity is high (59). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\logits_processor_v2.py
+     - Complexity Issue: Cyclomatic complexity is high (76). Consider breaking down functions.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\structured\logit_processor.py
+     - Complexity Issue: Cyclomatic complexity is high (66). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\regex.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\structured\structured_output_orchestrator.py
+     - Complexity Issue: Cyclomatic complexity is high (58). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\tokenizer_info.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\structured\__init__.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\engine\structured\manager\engine.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\manager\impl.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\params\config.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\structured\params\constraints.py
+     - Complexity Issue: Cyclomatic complexity is high (48). Consider breaking down functions.
+   * File: src\infrastructure\engine\tokenization\registry.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\workspace\workspace_manager.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\security\network\firewall.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\cloud\base.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\cloud\budget.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\services\cloud\routing.py
+     - Complexity Issue: Cyclomatic complexity is high (64). Consider breaking down functions.
+   * File: src\infrastructure\services\cloud\providers\bedrock.py
+     - Complexity Issue: Cyclomatic complexity is high (45). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\agent_tests\agents.py
+     - Complexity Issue: Cyclomatic complexity is high (112). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\agent_tests\optimization.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\agent_tests\testing_utils.py
+     - Complexity Issue: Cyclomatic complexity is high (51). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\agent_tests\test_generation.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\agent_tests\test_management.py
+     - Complexity Issue: Cyclomatic complexity is high (43). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\scripts\analysis\batch_docstring_formatter.py
+     - Complexity Issue: Cyclomatic complexity is high (77). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\analysis\bench_transformer.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\analysis\debug_engine_hints_v2.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\analysis\ruff_complexity_parser.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\analysis\run_benchmarks.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\analysis\run_fleet_self_improvement.py
+     - Complexity Issue: Cyclomatic complexity is high (104). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\scripts\analysis\run_profiled_self_improvement.py
+     - Complexity Issue: Cyclomatic complexity is high (43). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\analysis\run_profiler_suite.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\analysis\workspace_complexity_auditor.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\maintenance\final_fix.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\scripts\maintenance\fix_engine_hints.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\maintenance\inspect_shard.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\maintenance\test_copilot_backend.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\maintenance\test_fleet_readiness.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\maintenance\version.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\management\fix_docstring_escapes.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\management\fix_path_backslashes.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\refactoring\apply_basic_types.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\refactoring\deduplicate_excepts.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\refactoring\fix_headers.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\infrastructure\services\dev\scripts\refactoring\import_refactorer.py
+     - Rust Readiness Task: Found 6 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\refactoring\recover_indentation.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\scripts\refactoring\restore_except_as_e.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\dev\test_utils\test_result_aggregator.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\services\execution\async_output_handler.py
+     - Complexity Issue: Cyclomatic complexity is high (41). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\execution\cpu_gpu_buffer_pool.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\execution\cuda_graph_config.py
+     - Complexity Issue: Cyclomatic complexity is high (58). Consider breaking down functions.
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\execution\cuda_graph_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (74). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\execution\forward_context.py
+     - Complexity Issue: Cyclomatic complexity is high (43). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\execution\input_batch.py
+     - Complexity Issue: Cyclomatic complexity is high (47). Consider breaking down functions.
+     - Rust Readiness Task: Found 6 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\execution\batch\buffers.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\execution\batch\orchestrator.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\executor\multiproc\base.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\executor\multiproc\distributed.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\executor\multiproc\future.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\executor\multiproc\multiproc_logic.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\services\executor\multiproc\uniproc.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mcp\base.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mcp\local.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mcp\models.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mcp\registry.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mcp\sse.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mediaio\audio.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mediaio\engine.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mediaio\image.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\mediaio\video.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\metrics\caching_metrics.py
+     - Complexity Issue: Cyclomatic complexity is high (39). Consider breaking down functions.
+     - Rust Readiness Task: Found 6 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\metrics\prometheus_registry.py
+     - Complexity Issue: Cyclomatic complexity is high (53). Consider breaking down functions.
+     - Rust Readiness Task: Found 9 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\metrics\lora\lifecycle.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\metrics\lora\manager.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\services\openai_api\responses\models.py
+     - Complexity Issue: Cyclomatic complexity is high (43). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\openai_api\responses\server.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\openai_api\responses\store.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\openai_api\responses\streaming.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\platform\base.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\platform\cpu.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\platform\cuda.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\platform\registry.py
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\platform\rocm.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\platform\tpu.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\platform\xpu.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\plugins\broken_import_agent.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\plugins\future_agent.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\resilience\adaptive_rate_limiter.py
+     - Complexity Issue: Cyclomatic complexity is high (55). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\services\resilience\circuit_breaker.py
+     - Complexity Issue: Cyclomatic complexity is high (61). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\resilience\retry_strategy.py
+     - Complexity Issue: Cyclomatic complexity is high (36). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\services\simulation\hopper_sim.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\tools\table_cache.py
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\services\tools\tool_parser_framework.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\services\tools\parser\json_parser.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\services\tools\parser\llama3_parser.py
+     - Complexity Issue: Cyclomatic complexity is high (36). Consider breaking down functions.
+   * File: src\infrastructure\services\tools\registry\tool_registry.py
+     - Rust Readiness Task: Found 6 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\cache\block_pool_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (73). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\cache\kv_cache_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (61). Consider breaking down functions.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\cache\kv_cache_metrics.py
+     - Complexity Issue: Cyclomatic complexity is high (78). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\cache\prefix_cache.py
+     - Complexity Issue: Cyclomatic complexity is high (61). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\cache\prefix_cache_optimizer.py
+     - Complexity Issue: Cyclomatic complexity is high (67). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\block_table_v2.py
+     - Complexity Issue: Cyclomatic complexity is high (75). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 6 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\k_vzap.py
+     - Security Risk: Use of eval() is highly insecure. (Pattern: \beval\s*\()
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\latent_link.py
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\lru_offload_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (62). Consider breaking down functions.
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\mooncake_connector.py
+     - Complexity Issue: Cyclomatic complexity is high (46). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\storage\kv_transfer\nixl_connector.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\storage\kv_transfer\pipeline_parallel_transfer.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\tensor_parallel_transfer.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\arc\backend.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\arc\manager.py
+     - Complexity Issue: Cyclomatic complexity is high (64). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\storage\kv_transfer\connector\base.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\kv_transfer\connector\decode_bench.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\memory\gpu_memory_allocator.py
+     - Complexity Issue: Cyclomatic complexity is high (78). Consider breaking down functions.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\serialization\fast_serializer.py
+     - Complexity Issue: Cyclomatic complexity is high (55). Consider breaking down functions.
+     - Rust Readiness Task: Found 7 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\serialization\msg_spec_serializer.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\storage\serialization\zero_copy_serializer.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\nccl\communicator.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+     - Rust Readiness Task: Found 12 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\swarm\distributed\tp\coordinator.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\tp\group.py
+     - Complexity Issue: Cyclomatic complexity is high (39). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\tp\models.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\v2\dp_coordinator.py
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\v2\dp_engine_sync.py
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\v2\load_balancer_client.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\v2\locality_manager.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\distributed\v2\multi_node_executor.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\fleet\agent_economy.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\swarm\fleet\agent_registry.py
+     - Complexity Issue: Cyclomatic complexity is high (65). Consider breaking down functions.
+   * File: src\infrastructure\swarm\fleet\agent_registry_core.py
+     - Complexity Issue: Cyclomatic complexity is high (49). Consider breaking down functions.
+   * File: src\infrastructure\swarm\fleet\async_fleet_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (41). Consider breaking down functions.
+   * File: src\infrastructure\swarm\fleet\collaboration_marketplace.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\fleet\consciousness_registry.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\fleet\fleet_execution_core.py
+     - Complexity Issue: Cyclomatic complexity is high (37). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\fleet\fleet_routing_core.py
+     - Complexity Issue: Cyclomatic complexity is high (43). Consider breaking down functions.
+   * File: src\infrastructure\swarm\fleet\orchestrator_registry.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+   * File: src\infrastructure\swarm\fleet\orchestrator_registry_core.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+   * File: src\infrastructure\swarm\fleet\scaling_manager.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\fleet\shard_manager.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\fleet\mixins\fleet_discovery_mixin.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\fleet\mixins\fleet_update_mixin.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\swarm\network\lan_discovery.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+     - Rust Readiness Task: Found 9 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\swarm\network\network_utils.py
+     - Complexity Issue: Cyclomatic complexity is high (64). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\swarm\network\http\retry_logic.py
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\swarm\orchestration\connectivity\inter_fleet_bridge_orchestrator.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\core\self_improvement_core.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\swarm\orchestration\core\distributed\client.py
+     - Rust Readiness Task: Found 3 functions without complete type hints. Strong typing required for Rust port.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\swarm\orchestration\core\distributed\coordinator.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\core\distributed\executor.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\core\distributed\sync.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\core\distributed\worker.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\core\mixins\self_improvement_quality_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\infrastructure\swarm\orchestration\healing\self_healing_orchestrator.py
+     - Complexity Issue: Cyclomatic complexity is high (35). Consider breaking down functions.
+   * File: src\infrastructure\swarm\orchestration\intel\intelligence_core.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\infrastructure\swarm\orchestration\intel\self_improvement_analysis.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\intel\self_improvement_fixer.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\swarm\orchestration\intel\self_improvement_orchestrator.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\swarm\orchestration\intel\mixins\orchestrator_results_mixin.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\swarm\orchestration\swarm\audit_logger.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\consensus.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\cross_model_moe_orchestrator.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\expert_evolution.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\meta_optimizer.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\moe_gatekeeper.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\infrastructure\swarm\orchestration\swarm\reward_predictor.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\semantic_hashing.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\swarm_training.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\tenant_bridge.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\tool_discovery.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\swarm\topology_manager.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\orchestration\system\routing_engine.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\parallel\dp\engine.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\swarm\parallel\dp\hierarchical.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\swarm\voyager\discovery_node.py
+     - Complexity Issue: Cyclomatic complexity is high (28). Consider breaking down functions.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\infrastructure\swarm\worker\decode_only_worker.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\infrastructure\swarm\worker\disaggregated_prefill_worker.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\interface\commands\base.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\commands\parser.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+   * File: src\interface\commands\builtins\system_commands.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\interface\slash_commands\core.py
+     - Complexity Issue: Cyclomatic complexity is high (54). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\slash_commands\__init__.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\interface\slash_commands\commands\chat_decorator.py
+     - Complexity Issue: Cyclomatic complexity is high (41). Consider breaking down functions.
+   * File: src\interface\slash_commands\commands\__init__.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\interface\ui\gui\agent_dashboard.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\agent_manager.py
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\agent_runner.py
+     - Rust Readiness Task: Found 5 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\app_menu.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\bmad_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (38). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\configuration_manager.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\header_panel.py
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\main_app.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\project_explorer.py
+     - Complexity Issue: Cyclomatic complexity is high (28). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\project_status_panel.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\session_manager.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\gui\status_bar.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\interface\ui\web\py_agent_web.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\logic\agents\analysis\code_quality_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+   * File: src\logic\agents\analysis\code_quality_core.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\logic\agents\analysis\dependency_graph_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\logic\agents\cognitive\evolutionary_prompt_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+     - Robustness Issue: Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.
+   * File: src\logic\agents\cognitive\context\engines\global_context_core.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\cognitive\context\engines\semantic_search_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\logic\agents\cognitive\context\engines\tiered_memory_engine.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\cognitive\context\engines\mixins\context_data_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\logic\agents\cognitive\core\interpretable_core.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\cognitive\core\local_rag_core.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\cognitive\mixins\graph_mirix_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\logic\agents\cognitive\mixins\memory_query_mixin.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\cognitive\mixins\memory_storage_mixin.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\development\code_translation_agent.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\development\core\linter_core.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\logic\agents\development\mixins\coder_style_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\logic\agents\development\mixins\coder_validation_mixin.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\logic\agents\intelligence\data_intelligence_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\logic\agents\intelligence\core\synthesis_core.py
+     - Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\logic\agents\security\byzantine_consensus_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+   * File: src\logic\agents\security\security_audit_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+   * File: src\logic\agents\specialists\code_formatting_standards_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (177). Consider breaking down functions.
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\logic\agents\specialists\dimensionality_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (73). Consider breaking down functions.
+   * File: src\logic\agents\specialists\obsidian_code_describer_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+   * File: src\logic\agents\specialists\reasoning_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\logic\agents\specialists\regression_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (71). Consider breaking down functions.
+   * File: src\logic\agents\specialists\scaling_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (46). Consider breaking down functions.
+   * File: src\logic\agents\specialists\stream_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (50). Consider breaking down functions.
+   * File: src\logic\agents\specialists\voting_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (72). Consider breaking down functions.
+   * File: src\logic\agents\specialists\web_search_essay_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+   * File: src\logic\agents\specialists\mixins\handy_file_system_mixin.py
+     - Intelligence Gap: Component performs AI/IO or Shell operations without recording context to shards.
+   * File: src\logic\agents\specialized\legal_audit_agent.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\logic\agents\swarm\orchestrator_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (31). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\logic\agents\swarm\mixins\changes_entry_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (28). Consider breaking down functions.
+   * File: src\logic\agents\swarm\mixins\exec_iteration_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\logic\agents\system\model_optimizer_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+   * File: src\logic\agents\system\performance_profiling_agent.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\system\process_synthesizer_agent.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\logic\agents\system\self_healing_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\logic\agents\system\telemetry_agent.py
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+   * File: src\maintenance\self_improvement_coordinator.py
+     - Complexity Issue: Cyclomatic complexity is high (74). Consider breaking down functions.
+   * File: src\maintenance\workspace_maintenance.py
+     - Complexity Issue: Cyclomatic complexity is high (56). Consider breaking down functions.
+   * File: src\maintenance\mixins\import_cleanup_mixin.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\observability\errors\errors_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (83). Consider breaking down functions.
+   * File: src\observability\improvements\branch_comparer.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+   * File: src\observability\improvements\improvements_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (94). Consider breaking down functions.
+   * File: src\observability\improvements\improvement_manager.py
+     - Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\observability\improvements\progress_dashboard.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+   * File: src\observability\logging\enhanced_logger.py
+     - Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\observability\profiling\profile_decorators.py
+     - Performance Warning: Found active time.sleep() in non-test code. Possible blocking bottleneck.
+   * File: src\observability\profiling\rust_profiler.py
+     - Complexity Issue: Cyclomatic complexity is high (72). Consider breaking down functions.
+     - Rust Readiness Task: Found 4 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\observability\reports\report_generator.py
+     - Complexity Issue: Cyclomatic complexity is high (93). Consider breaking down functions.
+   * File: src\observability\reports\report_utils.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+   * File: src\observability\stats\alerting.py
+     - Complexity Issue: Cyclomatic complexity is high (30). Consider breaking down functions.
+   * File: src\observability\stats\analysis.py
+     - Complexity Issue: Cyclomatic complexity is high (81). Consider breaking down functions.
+   * File: src\observability\stats\cache_info.py
+     - Complexity Issue: Cyclomatic complexity is high (38). Consider breaking down functions.
+   * File: src\observability\stats\compilation_counter.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+   * File: src\observability\stats\histogram.py
+     - Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+   * File: src\observability\stats\memory_snapshot.py
+     - Complexity Issue: Cyclomatic complexity is high (27). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\observability\stats\metrics_core.py
+     - Complexity Issue: Cyclomatic complexity is high (50). Consider breaking down functions.
+   * File: src\observability\stats\metrics_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\observability\stats\observability_core.py
+     - Complexity Issue: Cyclomatic complexity is high (62). Consider breaking down functions.
+   * File: src\observability\stats\request_metrics.py
+     - Complexity Issue: Cyclomatic complexity is high (46). Consider breaking down functions.
+   * File: src\observability\stats\rollup_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (71). Consider breaking down functions.
+   * File: src\observability\stats\rust_bridge_profiler.py
+     - Rust Readiness Task: Found 1 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\observability\stats\scheduler_stats.py
+     - Complexity Issue: Cyclomatic complexity is high (37). Consider breaking down functions.
+     - Rust Readiness Task: Found 2 functions without complete type hints. Strong typing required for Rust port.
+   * File: src\observability\stats\stats_agent.py
+     - Complexity Issue: Cyclomatic complexity is high (90). Consider breaking down functions.
+   * File: src\observability\stats\storage_engine.py
+     - Complexity Issue: Cyclomatic complexity is high (36). Consider breaking down functions.
+   * File: src\observability\tracing\open_telemetry_tracer.py
+     - Complexity Issue: Cyclomatic complexity is high (58). Consider breaking down functions.
+     - Missing Docstring: Module-level docstring is missing. Documentation is required for Phase 315 parity.
+[Intelligence] Federated consensus reached: Continue localized refactoring.
+
+[Autonomous Solver] Attempting to resolve remaining technical debt...
+ - Querying external intelligence for solution patterns...
+INFO 01-30 15:47:56 [importing.py:68] Triton not installed or not compatible; certain GPU-related functions will not be available.
+[OllamaBackend] Called with model: tinyllama:latest
+Prompt: Analyze these swarm insights and relational lessons. Synthesize the top 3 high-l...
+[OllamaBackend] Sending to ollama: model=tinyllama:latest, messages=[{'role': 'system', 'content': 'You are a Swarm Intelligence Synthesizer. Be concise and technical.'}, {'role': 'user', 'content': "Analyze these swarm insights and relational lessons. Synthesize the top 3 high-level patterns or warnings:\n- RELATIONAL_LESSON: Intelligence Shard 32: Unknown failure (Category: Recursive Improvement)\n- RELATIONAL_LESSON: [OllamaBackend] ERROR: model 'llama2' not found (status code: 404) (Category: Collective Intelligence)\n- RELATIONAL_LESSON: unit_test failure in shard 29 (Agent: TestAgent) (Category: Failure Analysis)"}]
+[OllamaBackend] Ollama raw response: model='tinyllama:latest' created_at='2026-01-30T14:48:43.8215495Z' done=True done_reason='stop' total_duration=41161672700 load_duration=75489600 prompt_eval_count=190 prompt_eval_duration=3984313100 eval_count=646 eval_duration=36700627100 message=Message(role='assistant', content='1. Synthesizer Relationship Patterns:\n   - Swarm Insight 1: Intelligence Shard 32: Unknown failure (category: recursive improvement)\n    - Synthesizes the following patterns and warnings:\n      - Potential failure analysis: The swarm insight reveals a potential failure in the Intelligence Shard 32. It could mean that there is an issue with the model "llama2", which has not been found or found but cannot be used within the shard due to a 404 HTTP status code (unable to find requested resource).\n      - Recursive improvement: The swarm insight suggests that the Intelligence Shard 32 is performing recursive improvements, which are attempts to improve upon itself through learning from past data and making further decisions based on feedback. This can result in unforeseen issues or failures, as seen in Intelligence Shard 32\'s failure to find a model within the shard.\n      - Awareness: The swarm insight provides awareness of the potential failure identified in Intelligence Shard 32, allowing for effective response and mitigation measures.\n\n2. Relationship Analysis Patterns:\n   - Swarm Insight 2: Intelligence Shard 29: Unit test failure (category: collective intelligence)\n    - Synthesizes the following patterns and warnings:\n      - Potential failure analysis: The swarm insight identifies a potential failure in the Intelligence Shard 29. It could mean that one or more of the unit tests for the shard failed, leading to issues with the shard\'s collective intelligence.\n      - Recursive improvement: This pattern reveals that the Intelligence Shard 29 is performing recursive improvements, which can result in unforeseen issues or failures due to lack of feedback from other units within the shard.\n      - Awareness: The swarm insight provides awareness of the potential failure identified in Intelligence Shard 29, allowing for effective response and mitigation measures.\n\n3. Relationship Analysis Warnings:\n   - Swarm Insight 3: Intelligence Shard 32: Potential failure analysis (category: recurrence)\n    - Synthesizes the following patterns and warnings:\n      - Potential failure analysis: The swarm insight identifies a potential failure in the Intelligence Shard 32 due to the shard being in a state of repetitive improvement, which can result in unforeseen issues or failures.\n      - Recursive improvement: This pattern reveals that the Intelligence Shard 32 is performing recursive improvements, which could lead to unforeseen issues or failures due to feedback loops and over-reliance on past decisions.\n      - Awareness: The swarm insight provides awareness of the potential failure identified in Intelligence Shard 32, allowing for effective response and mitigation measures.', thinking=None, images=None, tool_name=None, tool_calls=None) logprobs=None
+[OllamaBackend] Ollama content: 1. Synthesizer Relationship Patterns:
+   - Swarm Insight 1: Intelligence Shard 32: Unknown failure (category: recursive improvement)
+    - Synthesizes the following patterns and warnings:
+      - Potential failure analysis: The swarm insight reveals a potential failure in the Intelligence Shard 32. It could mean that there is an issue with the model "llama2", which has not been found or found but cannot be used within the shard due to a 404 HTTP status code (unable to find requested resource).
+      - Recursive improvement: The swarm insight suggests that the Intelligence Shard 32 is performing recursive improvements, which are attempts to improve upon itself through learning from past data and making further decisions based on feedback. This can result in unforeseen issues or failures, as seen in Intelligence Shard 32's failure to find a model within the shard.
+      - Awareness: The swarm insight provides awareness of the potential failure identified in Intelligence Shard 32, allowing for effective response and mitigation measures.
+
+2. Relationship Analysis Patterns:
+   - Swarm Insight 2: Intelligence Shard 29: Unit test failure (category: collective intelligence)
+    - Synthesizes the following patterns and warnings:
+      - Potential failure analysis: The swarm insight identifies a potential failure in the Intelligence Shard 29. It could mean that one or more of the unit tests for the shard failed, leading to issues with the shard's collective intelligence.
+      - Recursive improvement: This pattern reveals that the Intelligence Shard 29 is performing recursive improvements, which can result in unforeseen issues or failures due to lack of feedback from other units within the shard.
+      - Awareness: The swarm insight provides awareness of the potential failure identified in Intelligence Shard 29, allowing for effective response and mitigation measures.
+
+3. Relationship Analysis Warnings:
+   - Swarm Insight 3: Intelligence Shard 32: Potential failure analysis (category: recurrence)
+    - Synthesizes the following patterns and warnings:
+      - Potential failure analysis: The swarm insight identifies a potential failure in the Intelligence Shard 32 due to the shard being in a state of repetitive improvement, which can result in unforeseen issues or failures.
+      - Recursive improvement: This pattern reveals that the Intelligence Shard 32 is performing recursive improvements, which could lead to unforeseen issues or failures due to feedback loops and over-reliance on past decisions.
+      - Awareness: The swarm insight provides awareness of the potential failure identified in Intelligence Shard 32, allowing for effective response and mitigation measures.
+[OllamaBackend] Called with model: tinyllama:latest
+Prompt: Please provide actionable, concise, and code-focused recommendations. If code is...
+[OllamaBackend] Sending to ollama: model=tinyllama:latest, messages=[{'role': 'system', 'content': 'You are a helpful assistant.'}, {'role': 'user', 'content': 'Please provide actionable, concise, and code-focused recommendations. If code is required, include a complete, minimal example. Reference best practices and standards where possible.\n\n[Prompt optimized for agent: Ollama]\n\nProvide 3 high-level architectural or security recommendations for a Python-based AI Agent fleet.'}]
+[OllamaBackend] Ollama raw response: model='tinyllama:latest' created_at='2026-01-30T14:49:02.3440684Z' done=True done_reason='stop' total_duration=18500482500 load_duration=45584100 prompt_eval_count=111 prompt_eval_duration=2248695200 eval_count=316 eval_duration=16004094500 message=Message(role='assistant', content='1. Utilize OpenCV and TensorFlow to perform object detection and pose estimation. Use pre-trained models, such as VGG16 and Inception v3, for image classification and head pose estimation, respectively. Additionally, integrate robust feature extraction algorithms like SVMs or NNs into the system to enhance accuracy.\n\n2. Implement secure communication protocols like HTTPS and TLS to ensure data privacy and security. Ensure all communication endpoints are properly authenticated with SSL/TLS certificates and proper encryption techniques implemented.\n\n3. Use best practices for data preprocessing, model hyperparameters tuning, and model optimization techniques like cross-validation and grid search. Consider using machine learning libraries such as scikit-learn or Keras to accelerate these processes, if necessary.\n\n4. Implement automatic scaling and load balancing mechanisms to ensure the system can handle varying workload volumes without overloading resources. Ensure that metrics are kept up-to-date and adjusted accordingly in response to changes in traffic. Use tools like HAProxy or Nginx to manage server load, if necessary.\n\nRecommendations for coding style, best practices, and standards are optional, but highly recommended. Certain best practices may include using modules like PyTorch or TensorFlow, adhering to Python coding conventions, and using appropriate naming conventions. Referencing established frameworks such as Pytorch or TensorFlow can also provide additional value for this task.', thinking=None, images=None, tool_name=None, tool_calls=None) logprobs=None
+[OllamaBackend] Ollama content: 1. Utilize OpenCV and TensorFlow to perform object detection and pose estimation. Use pre-trained models, such as VGG16 and Inception v3, for image classification and head pose estimation, respectively. Additionally, integrate robust feature extraction algorithms like SVMs or NNs into the system to enhance accuracy.
+
+2. Implement secure communication protocols like HTTPS and TLS to ensure data privacy and security. Ensure all communication endpoints are properly authenticated with SSL/TLS certificates and proper encryption techniques implemented.
+
+3. Use best practices for data preprocessing, model hyperparameters tuning, and model optimization techniques like cross-validation and grid search. Consider using machine learning libraries such as scikit-learn or Keras to accelerate these processes, if necessary.
+
+4. Implement automatic scaling and load balancing mechanisms to ensure the system can handle varying workload volumes without overloading resources. Ensure that metrics are kept up-to-date and adjusted accordingly in response to changes in traffic. Use tools like HAProxy or Nginx to manage server load, if necessary.
+
+Recommendations for coding style, best practices, and standards are optional, but highly recommended. Certain best practices may include using modules like PyTorch or TensorFlow, adhering to Python coding conventions, and using appropriate naming conventions. Referencing established frameworks such as Pytorch or TensorFlow can also provide additional value for this task.
+
+=== CYCLE 1 COMPLETE (Time spent: 99.39s) ===
