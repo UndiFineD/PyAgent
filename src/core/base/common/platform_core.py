@@ -76,7 +76,7 @@ class PlatformCore:
         """Returns True if the current OS is macOS."""
         return self._is_darwin
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get comprehensive platform information."""
         return {
             "os": self.system,
@@ -89,7 +89,7 @@ class PlatformCore:
             "pid": os.getpid(),
         }
 
-    def get_resource_usage(self) -> Dict[str, Any]:
+    def get_resource_usage(self) -> dict[str, Any]:
         """Basic resource usage without full psutil dependency requirement."""
         try:
             import psutil  # pylint: disable=import-outside-toplevel

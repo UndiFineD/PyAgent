@@ -19,11 +19,11 @@ from __future__ import annotations
 
 # PyAgent SDK Version Info (Core/Fleet Version)
 VERSION: str = "3.7.0"
-SDK_VERSION = "3.7.0"
-EVOLUTION_PHASE = 318
-STABILITY_SCORE = 1.000
-GOLDEN_MASTER_SEAL = True
-COMPATIBLE_CORE_VERSIONS = [
+SDK_VERSION: str = "3.7.0"
+EVOLUTION_PHASE: int = 318
+STABILITY_SCORE: float = 1.000
+GOLDEN_MASTER_SEAL: bool = True
+COMPATIBLE_CORE_VERSIONS: list[str] = [
     "3.6.0",
     "3.5.1",
     "3.5.0",
@@ -36,6 +36,14 @@ COMPATIBLE_CORE_VERSIONS = [
 ]
 
 
-def is_gate_open(required_phase: int, encoding='utf-8') -> bool:
-    """Gatekeeping: Returns True if the system maturity allows for the required phase."""
+def is_gate_open(required_phase: int) -> bool:
+    """
+    Gatekeeping: Returns True if the system maturity allows for the required phase.
+
+    Args:
+        required_phase: The minimum phase required for the gate to be open.
+
+    Returns:
+        bool: True if the current EVOLUTION_PHASE is greater than or equal to required_phase.
+    """
     return EVOLUTION_PHASE >= required_phase

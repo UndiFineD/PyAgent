@@ -65,45 +65,50 @@ class FormulaCore:
     @classmethod
     def compute_perplexity(cls, logprobs: Sequence[float]) -> float:
         """Compute perplexity from logprobs with Rust acceleration."""
-        if rc and hasattr(rc, "compute_perplexity_rust"):  # pylint: disable=no-member
-            try:
-                # pylint: disable=no-member
-                return rc.compute_perplexity_rust(logprobs)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
-
+        result = cls._try_rust_perplexity(logprobs)
+        if result is not None:
+            return result
         if not logprobs:
             return 0.0
         mean_logprob = sum(logprobs) / len(logprobs)
         return math.exp(-mean_logprob)
 
     @classmethod
+    def _try_rust_perplexity(cls, logprobs: Sequence[float]) -> float | None:
+        if rc and hasattr(rc, "compute_perplexity_rust"):
+            try:
+                return rc.compute_perplexity_rust(logprobs)  # type: ignore
+            except Exception as e:
+                logger.error("FormulaCore: Rust compute_perplexity_rust failed: %s", e)
+        return None
+
+    @classmethod
     def compute_entropy(cls, logprobs: Sequence[float]) -> float:
         """Compute entropy from logprobs (assuming they're top-k)."""
-        if rc and hasattr(rc, "compute_entropy_rust"):  # pylint: disable=no-member
-            try:
-                # pylint: disable=no-member
-                return rc.compute_entropy_rust(logprobs)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
-
+        result = cls._try_rust_entropy(logprobs)
+        if result is not None:
+            return result
         if not logprobs:
             return 0.0
-
         max_lp = max(logprobs)
         probs = [math.exp(lp - max_lp) for lp in logprobs]
         total = sum(probs)
-
         if total == 0:
             return 0.0
-
         normalized = [p / total for p in probs]
         return -sum(p * math.log(p) for p in normalized if p > 0)
 
     @classmethod
-    def evaluate(cls, expression: str, variables: Dict[str, float]) -> float:
+    def _try_rust_entropy(cls, logprobs: Sequence[float]) -> float | None:
+        if rc and hasattr(rc, "compute_entropy_rust"):
+            try:
+                return rc.compute_entropy_rust(logprobs)  # type: ignore
+            except Exception as e:
+                logger.error("FormulaCore: Rust compute_entropy_rust failed: %s", e)
+        return None
+
+    @classmethod
+    def evaluate(cls, expression: str, variables: dict[str, float]) -> float:
         """
         Evaluate a mathematical expression with variable substitution.
 
@@ -114,29 +119,31 @@ class FormulaCore:
         Returns:
             Computed float result.
         """
-        # Phase 40: Rust Acceleration
-        if rc and hasattr(rc, "evaluate_formula"):
-            try:
-                # Type cast variables to ensure f64 compatibility
-                safe_vars = {k: float(v) for k, v in variables.items()}
-                return float(rc.evaluate_formula(expression, safe_vars))
-            except Exception as e:
-                # Fallback to Python if Rust fails or panic occurs
-                logger.debug("Rust formula evaluation failed (used fallback): %s", e)
-
+        result = cls._try_rust_evaluate(expression, variables)
+        if result is not None:
+            return result
         try:
             # Handle potential format-style strings
             if "{" in expression and "}" in expression:
                 expression = expression.format(**variables)
-
             tree = ast.parse(expression, mode="eval")
             return cls._eval_node(tree.body, variables)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (KeyError, ValueError, TypeError, SyntaxError) as e:
             logger.error("Formula evaluation failed for '%s': %s", expression, e)
             raise
 
     @classmethod
-    def _eval_node(cls, node: ast.AST, variables: Dict[str, float]) -> float:
+    def _try_rust_evaluate(cls, expression: str, variables: dict[str, float]) -> float | None:
+        if rc and hasattr(rc, "evaluate_formula"):
+            try:
+                safe_vars = {k: float(v) for k, v in variables.items()}
+                return float(rc.evaluate_formula(expression, safe_vars))
+            except Exception as e:
+                logger.error("FormulaCore: Rust evaluate_formula failed: %s", e)
+        return None
+
+    @classmethod
+    def _eval_node(cls, node: ast.AST, variables: dict[str, float]) -> float:
         """Recursively evaluate AST nodes."""
         if isinstance(node, ast.Constant):
             return float(node.value)

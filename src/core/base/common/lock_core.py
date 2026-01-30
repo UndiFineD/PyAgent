@@ -60,7 +60,8 @@ class LockCore(BaseCore):
                 if lock_id not in self.active_locks and self.shared_counts.get(lock_id, 0) == 0:
                     self.active_locks[lock_id] = time.time()
                     return True
-            time.sleep(0.05)  # Shorter sleep for responsiveness
+            # TODO: Replace with event-driven wait/notify for better performance if possible
+            time.sleep(0.05)  # Short sleep for responsiveness; consider using threading.Condition or asyncio for async
         return False
 
     def release_lock(self, lock_id: str) -> None:

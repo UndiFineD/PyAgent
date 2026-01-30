@@ -9,25 +9,17 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
 # See the License for the specific language governing permissions and
-# limitations under the License.
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
 """
 InterpretableCore: Core logic for interpretable Sparse Autoencoder (SAE) bridges in PyAgent.
 Enables explainable AI, feature attribution, and transparent model reasoning for cognitive agents.
-"""
 
 This module simulates the decomposition of LLM activations into human-interpretable
 features, leveraging Rust for high-throughput vectorized operations.
 """
-
 from __future__ import annotations
+
 import logging
 from typing import Any
 
@@ -46,8 +38,7 @@ __version__ = VERSION
 
 
 class InterpretableCore:
-    """
-    InterpretableCore implements a logic-bridge for Sparse Autoencoders (SAE).
+    """InterpretableCore implements a logic-bridge for Sparse Autoencoders (SAE).
     It simulates the decomposition of LLM activations into human-interpretable features.
 
     Phase 14 Rust Optimizations:
@@ -116,9 +107,7 @@ class InterpretableCore:
         }
 
     def simulate_neural_trace(self, agent_name: str, decision: str) -> list[str]:
-        """
-        Generates a 'Neural Trace' trace-log explaining the logic path.
-        """
+        """Generates a 'Neural Trace' trace-log explaining the logic path."""
         trace = [
             f"Node: {agent_name} triggered by decision '{decision}'",
             "Activation: HIGH for 'Safety_Guardrail_7'",
