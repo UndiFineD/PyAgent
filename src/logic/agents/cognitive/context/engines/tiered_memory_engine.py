@@ -18,7 +18,6 @@
 # limitations under the License.
 
 
-
 """
 TieredMemoryEngine: Implements a MIRIX 6-tier memory engine utilizing ChromaDB for scalable, multi-level memory management in PyAgent.
 Supports hierarchical storage, retrieval, and promotion of agent memory fragments across short, mid, long, and archival tiers.
@@ -27,7 +26,8 @@ import logging
 from typing import Any, List, Dict, Optional
 
 class TieredMemoryEngine:
-    """Manages the 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and Knowledge."""
+    """Manages the 6 memory tiers: Core, Episodic, Semantic, 
+    Procedural, Resource, and Knowledge."""
 
     def __init__(self, db_path: str) -> None:
         """Initialize the tiered memory engine.
@@ -37,7 +37,8 @@ class TieredMemoryEngine:
         # ...existing code...
         self.db_path = db_path
         # Initialization logic for ChromaDB would be here
-
+        """
+        
     def record_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> None:
         """Persists a memory fragment into the specified tier.
 
@@ -76,7 +77,8 @@ class TieredMemoryEngine:
         _ = (documents, metadatas, ids)  # Mark as used
 
     def search_workspace(self, query: str, n_results: int = 3) -> List[Dict[str, Any]]:
-        """Performs semantic search across the workspace.
+        """
+        Performs semantic search across the workspace.
 
         Args:
             query: The search query.

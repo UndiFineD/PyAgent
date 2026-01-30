@@ -38,7 +38,7 @@ class SearchCore(BaseCore):
     Standardizes pattern matching, ranking, and context retrieval.
     """
 
-    def find_literal(self, query: str, root_dir: Path, file_pattern: str = "*") -> List[Dict[str, Any]]:
+    def find_literal(self, query: str, root_dir: Path, file_pattern: str = "*") -> list[dict[str, Any]]:
         """
         High-speed literal search.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
@@ -63,7 +63,7 @@ class SearchCore(BaseCore):
                 continue
         return results
 
-    def semantic_rank(self, query: str, documents: List[str]) -> List[int]:
+    def semantic_rank(self, query: str, documents: list[str]) -> list[int]:
         """Rank documents by semantic similarity to query."""
         if rc and hasattr(rc, "semantic_rank_rust"):  # pylint: disable=no-member
             try:
@@ -74,7 +74,7 @@ class SearchCore(BaseCore):
         # Fallback to simple keyword density (mock)
         return list(range(len(documents)))
 
-    def vector_search(self, query_vec: List[float], index: List[List[float]], top_k: int = 5) -> List[int]:
+    def vector_search(self, query_vec: list[float], index: list[list[float]], top_k: int = 5) -> list[int]:
         """Rust-accelerated vector search for RAG."""
         if rc and hasattr(rc, "vector_search_rust"):  # pylint: disable=no-member
             return rc.vector_search_rust(query_vec, index, top_k)  # pylint: disable=no-member
@@ -82,7 +82,7 @@ class SearchCore(BaseCore):
         # Simple Python cosine similarity fallback
         import math  # pylint: disable=import-outside-toplevel
 
-        def cosine_sim(v1, v2) -> float:
+        def cosine_sim(v1: list[float], v2: list[float]) -> float:
             dot = sum(a * b for a, b in zip(v1, v2))
             mag1 = math.sqrt(sum(a * a for a in v1))
             mag2 = math.sqrt(sum(a * a for a in v2))

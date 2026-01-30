@@ -45,7 +45,7 @@ class RustBridgeProfiler:
         self._is_active = True
         logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")
 
-    def _wrap_function(self, fn: Callable, fname: str) -> Callable:
+    def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
         """Wraps a function with nanosecond-precision timing."""
 
         def wrapper(*args, **kwargs):

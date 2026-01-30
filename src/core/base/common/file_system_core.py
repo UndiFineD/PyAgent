@@ -55,24 +55,29 @@ class FileSystemCore:
         """Discovers files matching patterns, respecting ignore list."""
         if patterns is None:
             patterns = ["*"]
-        # Use Rust-accelerated directory walking if available
-        if rc and hasattr(rc, "discover_files_rust"):  # pylint: disable=no-member
-            try:
-                # Map Python call to Rust name
-                # pylint: disable=no-member
-                files = rc.discover_files_rust(str(root), patterns, ignore or [])  # type: ignore
-                return [Path(f) for f in files]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                self.logger.warning("Rust directory walking failed: %s", e)
+        if self._can_use_rust_discover():
+            files = self._try_rust_discover_files(root, patterns, ignore)
+            if files is not None:
+                return files
+        return self._python_discover_files(root, patterns, ignore)
 
+    def _can_use_rust_discover(self) -> bool:
+        return rc and hasattr(rc, "discover_files_rust")
+
+    def _try_rust_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> Optional[List[Path]]:
+        try:
+            files = rc.discover_files_rust(str(root), patterns, ignore or [])  # type: ignore
+            return [Path(f) for f in files]
+        except Exception as e:
+            self.logger.warning("Rust directory walking failed: %s", e)
+            return None
+
+    def _python_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> List[Path]:
         found = []
         ignore_list = ignore or list(self._ignore_patterns)
-
         for path in root.rglob("*"):
             if path.is_dir():
                 continue
-
-            # Apply ignore patterns
             should_ignore = False
             for pat in ignore_list:
                 match_name = fnmatch.fnmatch(path.name, pat)
@@ -82,8 +87,6 @@ class FileSystemCore:
                     break
             if should_ignore:
                 continue
-
-            # Check match patterns
             for pat in patterns:
                 if fnmatch.fnmatch(path.name, pat):
                     found.append(path)
@@ -98,31 +101,25 @@ class FileSystemCore:
         Optional advisory locking.
         """
         p = Path(path)
-        lock = None
+        return self._atomic_write_with_lock(p, content, encoding, use_lock)
 
+    def _atomic_write_with_lock(self, p: Path, content: str, encoding: str, use_lock: bool) -> bool:
+        lock = None
         try:
             if use_lock:
                 lock = self.lock_manager.acquire_lock(p, LockType.EXCLUSIVE)
                 if not lock:
                     self.logger.error("Failed to acquire lock for atomic write: %s", p)
                     return False
-
-            # Ensure parent directory exists
             p.parent.mkdir(parents=True, exist_ok=True)
-
-            # Create temporary file in the same directory to ensure same filesystem (for os.rename)
             with tempfile.NamedTemporaryFile(
                 mode="w", dir=p.parent, delete=False, encoding=encoding, suffix=".tmp"
             ) as tmp_file:
                 tmp_file.write(content)
                 tmp_path = Path(tmp_file.name)
-
-            # Atomic rename (on POSIX)
-            # On Windows, os.replace replaces existing, os.rename might not
             os.replace(tmp_path, p)
             return True
-
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             self.logger.error("Atomic write failed for %s: %s", p, e)
             return False
         finally:

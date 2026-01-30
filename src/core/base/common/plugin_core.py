@@ -87,8 +87,13 @@ class PluginCore(BaseCore):
     def discover(self) -> List[str]:
         """Scans manifest and directory for compatible plugins."""
         discovered = []
+        discovered += self._load_manifest_plugins()
+        discovered += self._scan_plugin_directories()
+        return list(set(discovered))
 
-        # 1. Load from central manifest if it exists
+    def _load_manifest_plugins(self) -> List[str]:
+        """Load plugins from the central manifest file."""
+        discovered = []
         if self.registry_path.exists():
             try:
                 with open(self.registry_path, encoding="utf-8") as f:
@@ -99,56 +104,57 @@ class PluginCore(BaseCore):
                             discovered.append(key)
             except (json.JSONDecodeError, OSError) as e:
                 self.logger.error("Failed to load plugin manifest: %s", e)
+        return discovered
 
-        # 2. Scan subdirectories for auto-discovery (Phase 109)
+    def _scan_plugin_directories(self) -> List[str]:
+        """Scan plugin directories for auto-discovery and heuristics."""
+        discovered = []
         for item in self.plugins_dir.iterdir():
             if not item.is_dir() or item.name.startswith(("_", ".")):
                 continue
-
             if item.name in self.loaded_meta:
                 continue  # Already registered via manifest
-
-            # Check if it looks like a plugin (has __init__.py)
             if not (item / "__init__.py").exists():
                 continue
-
-            # Look for local metadata
             meta_path = item / "manifest.json"
             plugin_json = item / "plugin.json"
-
             if meta_path.exists() or plugin_json.exists():
-                target = meta_path if meta_path.exists() else plugin_json
-                try:
-                    with open(target, encoding="utf-8") as f:
-                        raw_meta = json.load(f)
-                        self._register_plugin_meta(item.name, raw_meta)
-                        discovered.append(item.name)
-                except (json.JSONDecodeError, OSError) as e:
-                    self.logger.warning("Failed to load plugin meta in %s: %s", item.name, e)
+                discovered += self._register_plugin_from_metadata_file(item, meta_path, plugin_json)
                 continue
+            discovered.append(self._register_heuristic_plugin(item))
+        return discovered
 
-            # Heuristic discovery for simple plugins
-            # Assume class name is PascalCase of folder name or 'Plugin'
-            class_name = item.name.replace("_", " ").title().replace(" ", "")
-            # Try to see if it has permissions.json
-            perms = []
-            perms_file = item / "permissions.json"
-            if perms_file.exists():
-                try:
-                    with open(perms_file, encoding="utf-8") as f:
-                        perms = json.load(f)
-                except (json.JSONDecodeError, OSError):
-                    pass
+    def _register_plugin_from_metadata_file(self, item: Path, meta_path: Path, plugin_json: Path) -> List[str]:
+        """Register plugin from manifest.json or plugin.json in the plugin directory."""
+        discovered = []
+        target = meta_path if meta_path.exists() else plugin_json
+        try:
+            with open(target, encoding="utf-8") as f:
+                raw_meta = json.load(f)
+                self._register_plugin_meta(item.name, raw_meta)
+                discovered.append(item.name)
+        except (json.JSONDecodeError, OSError) as e:
+            self.logger.warning("Failed to load plugin meta in %s: %s", item.name, e)
+        return discovered
 
-            raw_meta = {
-                "module_path": f"plugins.{item.name}",
-                "class_name": class_name,
-                "permissions": perms
-            }
-            self._register_plugin_meta(item.name, raw_meta)
-            discovered.append(item.name)
-
-        return list(set(discovered))
+    def _register_heuristic_plugin(self, item: Path) -> str:
+        """Register a plugin using heuristic discovery."""
+        class_name = item.name.replace("_", " ").title().replace(" ", "")
+        perms = []
+        perms_file = item / "permissions.json"
+        if perms_file.exists():
+            try:
+                with open(perms_file, encoding="utf-8") as f:
+                    perms = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                pass
+        raw_meta = {
+            "module_path": f"plugins.{item.name}",
+            "class_name": class_name,
+            "permissions": perms
+        }
+        self._register_plugin_meta(item.name, raw_meta)
+        return item.name
 
     def _register_plugin_meta(self, key: str, raw_meta: Any) -> None:
         """Helper to register plugin metadata from raw dict or list."""

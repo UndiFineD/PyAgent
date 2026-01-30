@@ -1,6 +1,25 @@
 
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
-Self improvement coordinator.py module.
+SelfImprovementCoordinator module.
+
+This module defines the SelfImprovementCoordinator class, which automates the monitoring,
+parsing, and implementation of improvements, healing, and research synthesis for the PyAgent fleet.
+It loads strategic directives from context.txt and prompt.txt, manages cloud and LAN peer discovery,
+and coordinates self-healing and research synthesis cycles.
 """
 # Copyright 2026 PyAgent Authors
 # SelfImprovementCoordinator: Automates the monitoring and implementation of improvements.
@@ -100,8 +119,17 @@ class SelfImprovementCoordinator:
 
         # 1. Discover local peers via LANDiscovery
         if self.discovery:
-            with self.discovery._lock:
-                for peer_id, info in self.discovery.registry.items():
+            # Accessing protected member _lock is discouraged; consider exposing via public API in LANDiscovery
+            lock = getattr(self.discovery, '_lock', None)
+            registry = getattr(self.discovery, 'registry', {})
+            if lock is not None:
+                with lock:
+                    for peer_id, info in registry.items():
+                        all_nodes.append(
+                            {"id": peer_id, "type": "lan_peer", "ip": info.ip, "port": info.port, "status": "online"}
+                        )
+            else:
+                for peer_id, info in registry.items():
                     all_nodes.append(
                         {"id": peer_id, "type": "lan_peer", "ip": info.ip, "port": info.port, "status": "online"}
                     )
@@ -112,18 +140,19 @@ class SelfImprovementCoordinator:
                 MCPServerRegistry
 
             registry = MCPServerRegistry()
-            for name, server in registry.servers.items():
+            for name in registry.servers:
                 all_nodes.append(
                     {
                         "id": name,
                         "type": "mcp_server",
-                        "status": "connected" if name in registry._sessions else "registered",
+                        # Accessing protected member _sessions is discouraged; consider exposing via public API in MCPServerRegistry
+                        "status": "connected" if hasattr(registry, '_sessions') and name in registry._sessions else "registered",
                     }
                 )
         except ImportError as e:
             self.logger.debug(f"MCPServerRegistry not available for discovery: {e}")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.error(f"Error during MCP server discovery from registry: {e}", exc_info=True)
+            self.logger.error(f"[Robustness] Error during MCP server discovery from registry: {e}", exc_info=True)
 
         # 3. Check persistent ConnectivityManager status
         try:
@@ -140,11 +169,11 @@ class SelfImprovementCoordinator:
                 except json.JSONDecodeError as jde:
                     self.logger.warning(f"Failed to parse connectivity_status.json: {jde}")
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    self.logger.error(f"Error reading/processing connectivity_status.json: {e}")
+                    self.logger.error(f"[Robustness] Error reading/processing connectivity_status.json: {e}", exc_info=True)
         except ImportError as e:
             self.logger.debug(f"ConnectivityManager not available for status check: {e}")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.error(f"Unexpected error in ConnectivityManager discovery block: {e}", exc_info=True)
+            self.logger.error(f"[Robustness] Unexpected error in ConnectivityManager discovery block: {e}", exc_info=True)
 
         self.logger.info(f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes.")
         return all_nodes
@@ -256,6 +285,17 @@ class SelfImprovementCoordinator:
         return results
 
     async def execute_remote_task(self, task: Dict[str, Any], target_peer: str) -> Dict[str, Any]:
+        """
+        Executes a remote task on the specified peer. (Not yet implemented)
+        Args:
+            task: The task to execute (currently unused).
+            target_peer: The peer to execute the task on.
+        Returns:
+            A dictionary with the result of the remote execution.
+        """
+        # TODO: Implement remote task execution logic
+        self.logger.info(f"execute_remote_task called for peer {target_peer}, but not implemented.")
+        return {"status": "not_implemented"}
         """
         Dispatches a healing or improvement task to a remote peer.
         This enables 'Distributed computing across local network'.
@@ -373,9 +413,7 @@ class SelfImprovementCoordinator:
         except ImportError as e:
             self.logger.warning(f"  -> [SKIP] Required agent not found: {e}")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            self.logger.error(f"  -> [ERROR] Failed to trigger agent: {e}")
-            import traceback
-            self.logger.error(traceback.format_exc())
+            self.logger.error(f"  -> [Robustness] Failed to trigger agent: {e}", exc_info=True)
 
 
 async def main() -> None:

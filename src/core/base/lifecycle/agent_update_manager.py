@@ -54,7 +54,7 @@ class AgentUpdateManager:
 
     def _check_gate(self) -> bool:
         """Internal version gate check."""
-        if not is_gate_open(self.min_gate_phase, encoding='utf-8'):
+        if not is_gate_open(self.min_gate_phase):
             logging.warning(
                 "AgentUpdateManager: Evolution Gate Closed. Required Phase: %s, Current: %s",
                 self.min_gate_phase,
@@ -122,7 +122,7 @@ class AgentUpdateManager:
             all_pending = self.core.parse_improvements_content(content)
             return self.core.score_improvement_items(all_pending)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning("AgentUpdateManager: Failed to read improvements: %s", e)
+            logging.warning("[Robustness] AgentUpdateManager: Failed to read improvements: %s", e, exc_info=True)
             return []
 
     def _mark_improvements_fixed(self, improvements_file: Path, fixed_items: list[str]) -> None:
@@ -134,7 +134,7 @@ class AgentUpdateManager:
             new_content = self.core.update_fixed_items(content, fixed_items)
             improvements_file.write_text(new_content, encoding="utf-8")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning("AgentUpdateManager: Failed to update improvements file: %s", e)
+            logging.warning("[Robustness] AgentUpdateManager: Failed to update improvements file: %s", e, exc_info=True)
 
     def _log_changes(self, changes_file: Path, fixed_items: list[str]) -> None:
         """Log fixed improvements to the changes file."""
@@ -146,7 +146,7 @@ class AgentUpdateManager:
             new_content = content.rstrip() + "\n\n" + new_entries + "\n"
             changes_file.write_text(new_content, encoding="utf-8")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning("AgentUpdateManager: Failed to update changes file: %s", e)
+            logging.warning("[Robustness] AgentUpdateManager: Failed to update changes file: %s", e, exc_info=True)
 
     def update_changelog_context_tests(self, code_file: Path) -> bool:
         """Update changelog, context, and tests for a file."""

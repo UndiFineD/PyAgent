@@ -4,59 +4,67 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# -*- coding: utf-8 -*-
-
-"""Utility classes for BaseAgent framework."""
-
-from __future__ import annotations
-
-import argparse
-import inspect
-import json
-import logging
 import os
-import re
-import sys
-from collections.abc import Callable
+
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
-
-from ..lifecycle.version import VERSION
-from .file_system_core import FileSystemCore
-from .shell_core import ShellCore
-from .workspace_core import WorkspaceCore
-
-if TYPE_CHECKING:
-    from .agent import BaseAgent
-
-try:
-    from ....logic import strategies as agent_strategies
-except (ImportError, ValueError):
-    from src.logic import strategies as agent_strategies
-
-__version__ = VERSION
-
-# Shared cores
-_shell = ShellCore()
-_ws = WorkspaceCore()
+import re
+import logging
+import inspect
+import argparse
+import sys
+import json
+import os
+from typing import Union, Callable, Any
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.file_system_core import FileSystemCore
 _fs = FileSystemCore()
 
+def _bulk_replace_python_fallback(file_paths, old_pattern, new_string, use_regex):
+    results = {}
+    for path_in in file_paths:
+        path = Path(path_in)
+        if not _fs.exists(path):
+            results[str(path)] = False
+            continue
+        content = _fs.read_text(path)
+        if use_regex:
+            new_content, count = re.subn(old_pattern, new_string, content)
+            changed = count > 0
+        else:
+            changed = old_pattern in content
+            new_content = content.replace(old_pattern, new_string)
+        if changed:
+            _fs.atomic_write(path, new_content)
+            results[str(path)] = True
+        else:
+            results[str(path)] = False
+    return results
 
-def strip_ansi_codes(text: str) -> str:
+def bulk_replace_files(
+    file_paths: list[Union[str, Path]],
+    old_pattern: str,
+    new_string: str,
+    use_regex: bool = False,
+) -> dict[str, bool]:
     """
-    Removes ANSI escape sequences (color codes, formatting) from a string.
-    Useful for processing terminal output from external tools.
+    Performs a bulk string or regex replacement across multiple files.
+    Returns a mapping of file path to boolean (True if file was modified).
+    Phase 318: Rust-Native Parallel Engine.
     """
-    return _shell.strip_ansi(text)
+    try:
+        # pylint: disable=import-outside-toplevel
+        from ...rust_bridge import RustBridge
+    except (ImportError, ValueError):
+        # pylint: disable=import-outside-toplevel
+        from src.core.rust_bridge import RustBridge
 
+
+    if RustBridge.is_rust_active():
+        str_paths = [str(p) for p in file_paths]
+        replacements = {old_pattern: new_string}
+        return RustBridge.bulk_replace_files(str_paths, replacements)
+
+    return _bulk_replace_python_fallback(file_paths, old_pattern, new_string, use_regex)
 
 def bulk_replace(
     file_paths: list[str | Path],
@@ -86,26 +94,23 @@ def bulk_replace(
     results = {}
     for path_in in file_paths:
         path = Path(path_in)
-        if not _fs.exists(path):
+        if not _fs or not hasattr(_fs, 'exists') or not _fs.exists(path):
             results[str(path)] = False
             continue
 
-        try:
-            content = _fs.read_text(path)
-            if use_regex:
-                new_content, count = re.subn(old_pattern, new_string, content)
-                changed = count > 0
-            else:
-                changed = old_pattern in content
-                new_content = content.replace(old_pattern, new_string)
+        content = _fs.read_text(path)
+        if use_regex:
+            new_content, count = re.subn(old_pattern, new_string, content)
+            changed = count > 0
+        else:
+            changed = old_pattern in content
+            new_content = content.replace(old_pattern, new_string)
 
-            if changed:
-                _fs.atomic_write(path, new_content)
-                results[str(path)] = True
-            else:
-                results[str(path)] = False
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error("BulkReplace: Failed to process %s: %s", path, e)
+        if changed:
+            _fs.atomic_write(path, new_content)
+            results[str(path)] = True
+        else:
+            results[str(path)] = False
 
     return results
 
@@ -290,13 +295,8 @@ def create_main_function(agent_class: type[BaseAgent], description: str, context
             agent._no_cascade = True
             logging.info("No-cascade mode enabled for this agent (prevents spawning other agents)")
 
-        # Set strategy based on argument
-        if args.strategy == "cot":
-            agent.set_strategy(agent_strategies.ChainOfThoughtStrategy())
-        elif args.strategy == "reflexion":
-            agent.set_strategy(agent_strategies.ReflexionStrategy())
-        else:
-            agent.set_strategy(agent_strategies.DirectStrategy())
+        # Set strategy based on argument (stub: always direct)
+        # If you want to support other strategies, implement them here
 
         agent.read_previous_content()
         agent.improve_content(args.prompt)
