@@ -12,22 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""MathUtils - Centralized mathematical utilities with Rust acceleration.
-
-Inspired by vLLM's math_utils.py patterns for high-performance operations.
-
-Phase 17: vLLM Pattern Integration
-==================================
-
-This module provides mathematical utilities optimized for high-performance
-computing, with support for both Python and Rust-accelerated backends.
-
-Key features:
-- Vectorized operations for batch processing
-- Memory-efficient algorithms
-- Rust FFI integration for performance-critical paths
-- Compatible with PyTorch and NumPy tensors
 """
+math_utils.py
+
+Mathematical utilities for numerical operations and statistical analysis.
+
+This module provides helper functions for mathematical computations, supporting advanced workflows in the PyAgent system.
+
 
 from __future__ import annotations
 
@@ -41,11 +32,8 @@ try:
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
-
-
 def cdiv(a: int, b: int) -> int:
-    """
-    Ceiling division without floating point.
+    """Ceiling division without floating point.
 
     Uses the identity: -(a // -b) == ceil(a / b)
     This is faster than (a + b - 1) // b and handles negative numbers correctly.

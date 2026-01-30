@@ -157,7 +157,14 @@ class CompilationCounter:
             duration: Compilation time
             backend: Compilation backend
         """
-        event = CompileEvent(
+        event = self._create_compile_event(function_id, shape, duration, backend)
+        with self._lock:
+            self._add_event(event)
+            self._total_compiles += 1
+            self._update_compile_stats(function_id, duration, shape)
+
+    def _create_compile_event(self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str) -> CompileEvent:
+        return CompileEvent(
             event_type=CompileEventType.COMPILE,
             timestamp=time.time(),
             function_id=function_id,
@@ -166,21 +173,25 @@ class CompilationCounter:
             backend=backend,
         )
 
-        with self._lock:
-            self._add_event(event)
-            self._total_compiles += 1
-
-            stats: FunctionStats = self._get_or_create_stats(function_id)
-            stats.compile_count += 1
-            stats.total_compile_time += duration
-            stats.shapes_seen.add(shape)
-            stats.last_compiled = time.time()
+    def _update_compile_stats(self, function_id: int, duration: float, shape: Tuple[int, ...]) -> None:
+        stats: FunctionStats = self._get_or_create_stats(function_id)
+        stats.compile_count += 1
+        stats.total_compile_time += duration
+        stats.shapes_seen.add(shape)
+        stats.last_compiled = time.time()
 
     def record_recompile(
         self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str = "inductor"
     ) -> None:
         """Record a recompilation event."""
-        event = CompileEvent(
+        event = self._create_recompile_event(function_id, shape, duration, backend)
+        with self._lock:
+            self._add_event(event)
+            self._total_recompiles += 1
+            self._update_recompile_stats(function_id, duration, shape)
+
+    def _create_recompile_event(self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str) -> CompileEvent:
+        return CompileEvent(
             event_type=CompileEventType.RECOMPILE,
             timestamp=time.time(),
             function_id=function_id,
@@ -189,14 +200,11 @@ class CompilationCounter:
             backend=backend,
         )
 
-        with self._lock:
-            self._add_event(event)
-            self._total_recompiles += 1
-
-            stats: FunctionStats = self._get_or_create_stats(function_id)
-            stats.recompile_count += 1
-            stats.total_compile_time += duration
-            stats.shapes_seen.add(shape)
+    def _update_recompile_stats(self, function_id: int, duration: float, shape: Tuple[int, ...]) -> None:
+        stats: FunctionStats = self._get_or_create_stats(function_id)
+        stats.recompile_count += 1
+        stats.total_compile_time += duration
+        stats.shapes_seen.add(shape)
 
     def record_cache_hit(self, function_id: int, shape: Tuple[int, ...]) -> None:
         """Record a cache hit."""
@@ -423,9 +431,9 @@ class TrendAnalyzer:
         if not self._compile_times:
             return {"min": 0, "max": 0, "avg": 0, "std": 0}
 
-        n: int = len(self._compile_times)
-        avg: float = sum(self._compile_times) / n
-        variance: float = sum((x - avg) ** 2 for x in self._compile_times) / n
+        n = len(self._compile_times)
+        avg = sum(self._compile_times) / n
+        variance = sum((x - avg) ** 2 for x in self._compile_times) / n
         std = variance**0.5
 
         return {"min": min(self._compile_times), "max": max(self._compile_times), "avg": avg, "std": std}

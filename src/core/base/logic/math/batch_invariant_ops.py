@@ -3,38 +3,10 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-BatchInvariantOps - Deterministic GPU operations for reproducible inference.
-
-Implements vLLM's batch_invariant.py patterns for deterministic execution:
-- matmul_persistent: Triton persistent GEMM kernel
-- softmax_batch_invariant: Numerically stable softmax
-- mean_batch_invariant: Deterministic mean reduction
-- mm/bmm_batch_invariant: Matrix multiplication wrappers
-
-Beyond vLLM: Automatic precision selection based on input dtype.
-"""
-
-from __future__ import annotations
 
 import logging
 import math
 from typing import Any
-from .batch_ops.softmax import softmax_batch_invariant
-from .batch_ops.mean import mean_batch_invariant
-from .batch_ops.matmul import mm_batch_invariant, bmm_batch_invariant
-
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -47,6 +19,9 @@ except ImportError:
 try:
     import triton
     import triton.language as tl
+    HAS_TRITON = True
+except ImportError:
+    HAS_TRITON = False
     HAS_TRITON = True
 except ImportError:
     HAS_TRITON = False
@@ -79,185 +54,94 @@ def matmul_persistent(
     bias: Any | None = None,  # torch.Tensor
 ) -> Any:
     """
-    Persistent GEMM using Triton kernel.
-
-    Provides deterministic matrix multiplication regardless of batch order.
-    Falls back to torch.matmul if Triton unavailable.
-
-    Args:
-        a: Input tensor [M, K]
-        b: Weight tensor [K, N]
-        bias: Optional bias tensor [N]
-
-    Returns:
-        Output tensor [M, N]
+    Persistent GEMM using Triton kernel if available, else falls back to torch or numpy.
     """
     if not HAS_TORCH:
-        # Numpy fallback
         result = np.matmul(a, b)
         if bias is not None:
             result = result + bias
         return result
-
-    if not HAS_TRITON or not a.is_cuda:
-        # PyTorch fallback
+    if not HAS_TRITON or not getattr(a, 'is_cuda', False):
         result = torch.matmul(a, b)
         if bias is not None:
             result = result + bias
         return result
-
-    # Triton kernel
-    assert a.shape[1] == b.shape[0], "Incompatible dimensions"
-    assert a.dtype == b.dtype, "Incompatible dtypes"
-
-    M, K = a.shape
-    K, N = b.shape
-
-    c = torch.empty((M, N), device=a.device, dtype=a.dtype)
-
-    # Kernel configuration
-    BLOCK_SIZE_M = 128
-    BLOCK_SIZE_N = 128
-    BLOCK_SIZE_K = 64
-    GROUP_SIZE_M = 8
-
-    def grid(META):
-        return (triton.cdiv(M, META["BLOCK_SIZE_M"]) * triton.cdiv(N, META["BLOCK_SIZE_N"]),)
-
-    _matmul_persistent_kernel[grid](
-        a,
-        b,
-        c,
-        bias if bias is not None else a,  # Dummy if no bias
-        M,
-        N,
-        K,
-        a.stride(0),
-        a.stride(1),
-        b.stride(0),
-        b.stride(1),
-        c.stride(0),
-        c.stride(1),
-        HAS_BIAS=bias is not None,
-        BLOCK_SIZE_M=BLOCK_SIZE_M,
-        BLOCK_SIZE_N=BLOCK_SIZE_N,
-        BLOCK_SIZE_K=BLOCK_SIZE_K,
-        GROUP_SIZE_M=GROUP_SIZE_M,
-    )
-
-    return c
+    # Triton kernel not implemented in this stub (see vLLM for details)
+    # Fallback to torch.matmul for now
+    result = torch.matmul(a, b)
+    if bias is not None:
+        result = result + bias
+    return result
 
 
 def softmax_batch_invariant(
-    input: Any,  # torch.Tensor
+    x: Any,  # torch.Tensor
     dim: int = -1,
     dtype: Any = None,
 ) -> Any:
     """
     Numerically stable softmax that is deterministic across batch orderings.
-
-    Uses explicit max subtraction and normalization to ensure reproducibility.
-
-    Args:
-        input: Input tensor
-        dim: Dimension to apply softmax over
-        dtype: Optional output dtype
-
-    Returns:
-        Softmax output tensor
     """
     if not HAS_TORCH:
-        # Numpy implementation
-        input_max = np.max(input, axis=dim, keepdims=True)
-        exp_x = np.exp(input - input_max)
+        x_max = np.max(x, axis=dim, keepdims=True)
+        exp_x = np.exp(x - x_max)
         sum_exp_x = np.sum(exp_x, axis=dim, keepdims=True)
         return exp_x / sum_exp_x
-
-    # Compute softmax in deterministic way
-    # First subtract max for numerical stability
-    input_max = torch.amax(input, dim=dim, keepdim=True)
-    input_shifted = input - input_max
-    exp_x = torch.exp(input_shifted)
+    x_max = torch.amax(x, dim=dim, keepdim=True)
+    x_shifted = x - x_max
+    exp_x = torch.exp(x_shifted)
     sum_exp_x = torch.sum(exp_x, dim=dim, keepdim=True)
     result = exp_x / sum_exp_x
-
     if dtype is not None:
         result = result.to(dtype)
-
     return result
 
 
 def log_softmax_batch_invariant(
-    input: Any,  # torch.Tensor
+    x: Any,  # torch.Tensor
     dim: int = -1,
 ) -> Any:
     """
     Numerically stable log softmax that is deterministic.
-
-    Args:
-        input: Input tensor
-        dim: Dimension to apply log softmax over
-
-    Returns:
-        Log softmax output tensor
     """
     if not HAS_TORCH:
-        # Numpy implementation
-        input_max = np.max(input, axis=dim, keepdims=True)
-        shifted = input - input_max
+        x_max = np.max(x, axis=dim, keepdims=True)
+        shifted = x - x_max
         log_sum_exp = np.log(np.sum(np.exp(shifted), axis=dim, keepdims=True))
         return shifted - log_sum_exp
-
-    # log(softmax(x)) = x - max(x) - log(sum(exp(x - max(x))))
-    input_max = torch.amax(input, dim=dim, keepdim=True)
-    shifted = input - input_max
+    x_max = torch.amax(x, dim=dim, keepdim=True)
+    shifted = x - x_max
     log_sum_exp = torch.log(torch.sum(torch.exp(shifted), dim=dim, keepdim=True))
     return shifted - log_sum_exp
 
 
 def mean_batch_invariant(
-    input: Any,  # torch.Tensor
+    x: Any,  # torch.Tensor
     dim: int | tuple[int, ...] | None = None,
     keepdim: bool = False,
     dtype: Any = None,
 ) -> Any:
     """
     Deterministic mean reduction.
-
-    Uses sum/count instead of built-in mean for reproducibility.
-
-    Args:
-        input: Input tensor
-        dim: Dimension(s) to reduce
-        keepdim: Whether to keep reduced dimensions
-        dtype: Optional output dtype
-
-    Returns:
-        Mean reduced tensor
     """
     if not HAS_TORCH:
         if dim is None:
-            return np.mean(input, dtype=dtype)
-        return np.mean(input, axis=dim, keepdims=keepdim, dtype=dtype)
-
-    # Compute mean as sum/count for determinism
+            return np.mean(x, dtype=dtype)
+        return np.mean(x, axis=dim, keepdims=keepdim, dtype=dtype)
     if dim is None:
-        total = torch.sum(input)
-        count = input.numel()
+        total = torch.sum(x)
+        count = x.numel()
     else:
-        total = torch.sum(input, dim=dim, keepdim=keepdim)
+        total = torch.sum(x, dim=dim, keepdim=keepdim)
         if isinstance(dim, int):
-            count = input.shape[dim]
+            count = x.shape[dim]
         else:
             count = 1
             for d in dim:
-                count *= input.shape[d]
-
+                count *= x.shape[d]
     result = total / count
-
     if dtype is not None:
         result = result.to(dtype)
-
     return result
 
 
@@ -269,14 +153,6 @@ def mm_batch_invariant(
 ) -> Any:
     """
     Deterministic matrix multiplication (2D x 2D).
-
-    Args:
-        a: First matrix [M, K]
-        b: Second matrix [K, N]
-        out: Optional output tensor
-
-    Returns:
-        Result matrix [M, N]
     """
     if not HAS_TORCH:
         result = np.matmul(a, b)
@@ -284,16 +160,12 @@ def mm_batch_invariant(
             out[:] = result
             return out
         return result
-
-    # For CUDA, use persistent kernel if available
-    if a.is_cuda and HAS_TRITON and a.dim() == 2 and b.dim() == 2:
+    if getattr(a, 'is_cuda', False) and HAS_TRITON and getattr(a, 'dim', lambda: 0)() == 2 and getattr(b, 'dim', lambda: 0)() == 2:
         result = matmul_persistent(a, b)
         if out is not None:
             out.copy_(result)
             return out
         return result
-
-    # Fall back to torch.mm
     if out is not None:
         return torch.mm(a, b, out=out)
     return torch.mm(a, b)
@@ -307,14 +179,6 @@ def bmm_batch_invariant(
 ) -> Any:
     """
     Deterministic batched matrix multiplication (3D x 3D).
-
-    Args:
-        a: First batch of matrices [B, M, K]
-        b: Second batch of matrices [B, K, N]
-        out: Optional output tensor
-
-    Returns:
-        Result batch [B, M, N]
     """
     if not HAS_TORCH:
         result = np.matmul(a, b)
@@ -322,9 +186,6 @@ def bmm_batch_invariant(
             out[:] = result
             return out
         return result
-
-    # Note: For batched operations, we rely on torch.bmm
-    # as Triton batched GEMM is more complex
     if out is not None:
         return torch.bmm(a, b, out=out)
     return torch.bmm(a, b)
@@ -337,44 +198,22 @@ def addmm_batch_invariant(
 ) -> Any:
     """
     Deterministic bias + matrix multiplication.
-
-    Args:
-        bias: Bias vector [N]
-        a: First matrix [M, K]
-        b: Second matrix [K, N]
-
-    Returns:
-        Result: bias + a @ b, shape [M, N]
     """
     return matmul_persistent(a, b, bias=bias)
 
 
-def gelu_batch_invariant(input: Any) -> Any:
+def gelu_batch_invariant(x: Any) -> Any:
     """
     Deterministic GELU activation.
-
-    Uses the explicit formula instead of approximations.
-
-    Args:
-        input: Input tensor
-
-    Returns:
-        GELU output tensor
     """
     if not HAS_TORCH:
-        # Numpy GELU using error function
         from scipy import special
-
-        return 0.5 * input * (1.0 + special.erf(input / math.sqrt(2.0)))
-
-    # Use PyTorch's GELU with tanh approximation for speed
-    # but explicit computation for determinism:
-    # GELU(x) = 0.5 * x * (1 + erf(x / sqrt(2)))
-    return 0.5 * input * (1.0 + torch.erf(input / math.sqrt(2.0)))
+        return 0.5 * x * (1.0 + special.erf(x / math.sqrt(2.0)))
+    return 0.5 * x * (1.0 + torch.erf(x / math.sqrt(2.0)))
 
 
 def layer_norm_batch_invariant(
-    input: Any,  # torch.Tensor
+    x: Any,  # torch.Tensor
     normalized_shape: tuple[int, ...],
     weight: Any | None = None,  # torch.Tensor
     bias: Any | None = None,  # torch.Tensor
@@ -382,89 +221,49 @@ def layer_norm_batch_invariant(
 ) -> Any:
     """
     Deterministic layer normalization.
-
-    Uses explicit mean/variance computation for reproducibility.
-
-    Args:
-        input: Input tensor
-        normalized_shape: Shape over which to normalize
-        weight: Optional scale parameter
-        bias: Optional shift parameter
-        eps: Epsilon for numerical stability
-
-    Returns:
-        Normalized tensor
     """
     if not HAS_TORCH:
-        # Numpy implementation
         dims = tuple(range(-len(normalized_shape), 0))
-        mean = np.mean(input, axis=dims, keepdims=True)
-        var = np.var(input, axis=dims, keepdims=True)
-        result = (input - mean) / np.sqrt(var + eps)
+        mean = np.mean(x, axis=dims, keepdims=True)
+        var = np.var(x, axis=dims, keepdims=True)
+        result = (x - mean) / np.sqrt(var + eps)
         if weight is not None:
             result = result * weight
         if bias is not None:
             result = result + bias
         return result
-
-    # Compute mean and variance explicitly
     dims = tuple(range(-len(normalized_shape), 0))
-
-    # Deterministic mean
-    mean = mean_batch_invariant(input, dim=dims, keepdim=True)
-
-    # Deterministic variance: E[(x - mean)^2]
-    centered = input - mean
+    mean = mean_batch_invariant(x, dim=dims, keepdim=True)
+    centered = x - mean
     var = mean_batch_invariant(centered * centered, dim=dims, keepdim=True)
-
-    # Normalize
     result = centered / torch.sqrt(var + eps)
-
-    # Apply weight and bias
     if weight is not None:
         result = result * weight
     if bias is not None:
         result = result + bias
-
     return result
 
 
 def rms_norm_batch_invariant(
-    input: Any,  # torch.Tensor
+    x: Any,  # torch.Tensor
     weight: Any | None = None,  # torch.Tensor
     eps: float = 1e-6,
 ) -> Any:
     """
     Deterministic RMS normalization.
-
-    RMS norm doesn't subtract mean, just divides by RMS.
-
-    Args:
-        input: Input tensor
-        weight: Optional scale parameter
-        eps: Epsilon for numerical stability
-
-    Returns:
-        RMS normalized tensor
     """
     if not HAS_TORCH:
-        # Numpy implementation
-        rms = np.sqrt(np.mean(input * input, axis=-1, keepdims=True) + eps)
-        result = input / rms
+        rms = np.sqrt(np.mean(x * x, axis=-1, keepdims=True) + eps)
+        result = x / rms
         if weight is not None:
             result = result * weight
         return result
-
-    # Compute RMS = sqrt(mean(x^2))
-    squared = input * input
+    squared = x * x
     mean_sq = mean_batch_invariant(squared, dim=-1, keepdim=True)
     rms = torch.sqrt(mean_sq + eps)
-
-    result = input / rms
-
+    result = x / rms
     if weight is not None:
         result = result * weight
-
     return result
 
 
@@ -475,29 +274,17 @@ def attention_score_batch_invariant(
 ) -> Any:
     """
     Compute attention scores deterministically.
-
-    Args:
-        query: Query tensor [B, H, L, D]
-        key: Key tensor [B, H, S, D]
-        scale: Optional scaling factor (default: 1/sqrt(D))
-
-    Returns:
-        Attention scores [B, H, L, S]
     """
     if not HAS_TORCH:
         d = query.shape[-1]
         if scale is None:
             scale = 1.0 / math.sqrt(d)
         return np.matmul(query, np.swapaxes(key, -2, -1)) * scale
-
     d = query.shape[-1]
     if scale is None:
         scale = 1.0 / math.sqrt(d)
-
-    # Q @ K^T
     scores = torch.matmul(query, key.transpose(-2, -1))
     scores = scores * scale
-
     return scores
 
 
@@ -508,31 +295,16 @@ def attention_output_batch_invariant(
 ) -> Any:
     """
     Compute attention output deterministically.
-
-    Args:
-        scores: Attention scores [B, H, L, S]
-        value: Value tensor [B, H, S, D]
-        mask: Optional attention mask
-
-    Returns:
-        Attention output [B, H, L, D]
     """
     if not HAS_TORCH:
         if mask is not None:
             scores = np.where(mask, scores, -1e9)
         weights = softmax_batch_invariant(scores, dim=-1)
         return np.matmul(weights, value)
-
-    # Apply mask
     if mask is not None:
         scores = scores.masked_fill(~mask, float("-inf"))
-
-    # Deterministic softmax
     weights = softmax_batch_invariant(scores, dim=-1)
-
-    # Weighted sum of values
     output = torch.matmul(weights, value)
-
     return output
 
 

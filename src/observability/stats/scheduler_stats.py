@@ -375,12 +375,21 @@ class SchedulerStats:
 
     def reset(self) -> None:
         """Reset all stats."""
+        self._reset_queue_state()
+        self._reset_caches()
+        self._reset_stats_components()
+
+    def _reset_queue_state(self) -> None:
         self.num_running_reqs = 0
         self.num_waiting_reqs = 0
         self.step_counter = 0
         self.kv_cache_usage = 0.0
+
+    def _reset_caches(self) -> None:
         self.prefix_cache_stats.reset()
         self.kv_cache_eviction_events.clear()
+
+    def _reset_stats_components(self) -> None:
         if self.spec_decoding_stats:
             self.spec_decoding_stats.reset()
         if self.perf_stats:
@@ -394,11 +403,17 @@ class SchedulerStats:
             step_counter=self.step_counter,
             current_wave=self.current_wave,
             kv_cache_usage=self.kv_cache_usage,
-            prefix_cache_stats=self.prefix_cache_stats.clone(),
-            spec_decoding_stats=self.spec_decoding_stats.clone() if self.spec_decoding_stats else None,
+            prefix_cache_stats=self._clone_prefix_cache_stats(),
+            spec_decoding_stats=self._clone_spec_decoding_stats(),
             cudagraph_stats=self.cudagraph_stats,
             perf_stats=self.perf_stats,
         )
+
+    def _clone_prefix_cache_stats(self) -> PrefixCacheStats:
+        return self.prefix_cache_stats.clone() if self.prefix_cache_stats else PrefixCacheStats()
+
+    def _clone_spec_decoding_stats(self) -> SpecDecodingStats | None:
+        return self.spec_decoding_stats.clone() if self.spec_decoding_stats else None
 
     def as_dict(self) -> dict[str, Any]:
         result = {
@@ -483,13 +498,18 @@ class SchedulerStatsCollector:
         if not self._history:
             return {}
 
-        n: int = len(self._history)
-        return {
-            "avg_running_reqs": sum(s.num_running_reqs for s in self._history) / n,
-            "avg_waiting_reqs": sum(s.num_waiting_reqs for s in self._history) / n,
-            "avg_kv_usage": sum(s.kv_cache_usage for s in self._history) / n,
-            "avg_prefix_hit_rate": sum(s.prefix_cache_stats.hit_rate for s in self._history) / n,
+        n = len(self._history)
+        avg_running_reqs = sum(s.num_running_reqs for s in self._history) / n
+        avg_waiting_reqs = sum(s.num_waiting_reqs for s in self._history) / n
+        avg_kv_usage = sum(s.kv_cache_usage for s in self._history) / n
+        avg_prefix_hit_rate = sum(s.prefix_cache_stats.hit_rate for s in self._history) / n
+        result = {
+            "avg_running_reqs": avg_running_reqs,
+            "avg_waiting_reqs": avg_waiting_reqs,
+            "avg_kv_usage": avg_kv_usage,
+            "avg_prefix_hit_rate": avg_prefix_hit_rate,
         }
+        return result
 
     def drain_events(self) -> list[KVCacheEvictionEvent]:
         """Get and clear eviction events."""

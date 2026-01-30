@@ -74,5 +74,5 @@ class ShardCore(BaseCore):
                 return False
                 
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             return False

@@ -8,9 +8,15 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
+
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+"""
+IdentityAgent: System agent for managing identity, authentication, and authorization across the PyAgent swarm.
+Handles user, agent, and service identity lifecycle and security policies.
+"""
 
 # You may obtain a copy of the License at
 #

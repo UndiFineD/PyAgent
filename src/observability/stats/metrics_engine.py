@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-
-"""
-Module: metrics_engine
-Provides metrics calculation and analysis for PyAgent core base.
-"""
-"""
-Metrics engine.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
+
 
 import json
 import logging
@@ -31,18 +24,9 @@ try:
 except ImportError:
     rc = None
 
-try:
-    import psutil
-except ImportError:
-    psutil = None
 from .exporters import MetricsExporter, OTelManager, PrometheusExporter
-
-try:
-    from src.observability.reports.grafana_generator import \
-        GrafanaDashboardGenerator as GrafanaGenerator
-except ImportError:
-    GrafanaGenerator = None
 from src.core.base.lifecycle.version import VERSION
+
 
 __version__: str = VERSION
 
@@ -124,12 +108,13 @@ class ObservabilityEngine:
         """
         Triggers Grafana JSON dashboard generation (Phase 126).
         """
-        if GrafanaGenerator:
-            generator: GrafanaDashboardGenerator = GrafanaGenerator(self.workspace_root / "deploy" / "grafana")
+        try:
+            generator = GrafanaDashboardGenerator(self.workspace_root / "deploy" / "grafana")
             if shard_name:
                 return generator.generate_shard_obs(shard_name)
             return generator.generate_fleet_summary()
-        return "Error: GrafanaGenerator not available."
+        except RuntimeError as e:
+            return f"Error: GrafanaDashboardGenerator not available: {e}"
 
     def start_trace(self, trace_id: str) -> None:
         """Start timing an operation."""
@@ -141,12 +126,12 @@ class ObservabilityEngine:
     def end_trace(
         self,
         trace_id: str,
-        agent_name: str,
-        operation: str,
+        agent_name: str,  # noqa: ARG002
+        operation: str,  # noqa: ARG002
         status: str = "success",
-        input_tokens: int = 0,
-        output_tokens: int = 0,
-        model: str = "unknown",
+        input_tokens: int = 0,  # noqa: ARG002
+        output_tokens: int = 0,  # noqa: ARG002
+        model: str = "unknown",  # noqa: ARG002
         metadata: dict[str, Any] | None = None,
     ) -> None:
         """End timing and record metric with cost estimation."""
@@ -154,7 +139,7 @@ class ObservabilityEngine:
             logging.warning(f"No start trace found for {trace_id}")
             return
 
-        duration: float = (time.time() - self._start_times.pop(trace_id)) * 1000
+        _duration: float = (time.time() - self._start_times.pop(trace_id)) * 1000  # noqa: F841
 
         # End OTel span using the stored span_id
         otel_span_id: str | None = self._otel_spans.pop(trace_id, None)
@@ -163,46 +148,38 @@ class ObservabilityEngine:
 
     def consolidate_telemetry(self) -> dict[str, float]:
         """Aggregate metrics using Rust high-throughput engine."""
-        aggregated_results: dict[str, float] = {}
-
         if rc and hasattr(rc, "aggregate_metrics_rust"):
-            # Prepare data for Rust: HashMap<String, Vec<f64>>
-            # We aggregate duration_ms by "agent:operation" key
-            data_map: dict[str, list[float]] = {}
-
-            for m in self.metrics:
-                key: str = f"{m.agent_name}:{m.operation}"
-                if key not in data_map:
-                    data_map[key] = []
-                data_map[key].append(m.duration_ms)
-
+            data_map = self._build_data_map()
             try:
-                # Rust returns averaged metrics
-                # pylint: disable=no-member
                 aggregated_results = rc.aggregate_metrics_rust(data_map)  # type: ignore
                 return aggregated_results
             except (AttributeError, RuntimeError) as e:  # pylint: disable=broad-exception-caught
                 logger.warning("Rust metric aggregation failed: %s", e)
                 import traceback
                 traceback.print_exc()
+        return self._python_aggregate_metrics()
 
-        # Fallback Python aggregation (simple average)
+    def _build_data_map(self) -> dict[str, list[float]]:
+        data_map: dict[str, list[float]] = {}
+        for m in self.metrics:
+            key = f"{m.agent_name}:{m.operation}"
+            if key not in data_map:
+                data_map[key] = []
+            data_map[key].append(m.duration_ms)
+        return data_map
+
+    def _python_aggregate_metrics(self) -> dict[str, float]:
         counts: dict[str, int] = {}
         sums: dict[str, float] = {}
         for m in self.metrics:
-            key: str = f"{m.agent_name}:{m.operation}"
+            key = f"{m.agent_name}:{m.operation}"
             counts[key] = counts.get(key, 0) + 1
             sums[key] = sums.get(key, 0.0) + m.duration_ms
-
+        aggregated_results: dict[str, float] = {}
         for key, total in sums.items():
             if counts[key] > 0:
                 aggregated_results[key] = total / counts[key]
-
         return aggregated_results
-
-        if len(self.metrics) > 1000:
-            self.save()
-            self.metrics = self.metrics[-500:]  # Prune memory
 
     def get_reliability_weights(self, agent_names: list[str]) -> list[float]:
         """Exposes core reliability logic for consensus protocols."""
@@ -222,41 +199,34 @@ class ObservabilityEngine:
         if not self.metrics:
             return {"status": "No data"}
 
-        total_latency = 0.0
-        success_count = 0
-        agents = {}
+        count = len(self.metrics)
+        total_latency = sum(m.duration_ms for m in self.metrics)
+        success_count = sum(1 for m in self.metrics if m.status == "success")
+        agent_stats = self._aggregate_agent_stats()
 
-        for m in self.metrics:
-            total_latency += m.duration_ms
-            if m.status == "success":
-                success_count += 1
-
-            if m.agent_name not in agents:
-                agents[m.agent_name] = {"calls": 0, "latency": 0.0, "cost": 0.0}
-
-            a = agents[m.agent_name]
-            a["calls"] += 1
-            a["latency"] += m.duration_ms
-            a["cost"] += m.estimated_cost
-
-        count: int = len(self.metrics)
         summary = {
             "total_calls": count,
             "avg_latency_ms": round(total_latency / count, 2),
             "success_rate": round(success_count / count * 100, 2),
             "total_tokens": sum(m.token_count for m in self.metrics),
             "total_cost_usd": round(sum(m.estimated_cost for m in self.metrics), 6),
-            "agents": {},
+            "agents": agent_stats,
         }
-
-        for name, data in agents.items():
-            summary["agents"][name] = {
-                "calls": data["calls"],
-                "avg_latency": round(data["latency"] / data["calls"], 2),
-                "total_cost": round(data["cost"], 6),
-            }
-
         return summary
+
+    def _aggregate_agent_stats(self) -> dict[str, dict[str, float]]:
+        agents: dict[str, dict[str, float]] = {}
+        for m in self.metrics:
+            if m.agent_name not in agents:
+                agents[m.agent_name] = {"calls": 0, "latency": 0.0, "cost": 0.0}
+            a = agents[m.agent_name]
+            a["calls"] += 1
+            a["latency"] += m.duration_ms
+            a["cost"] += m.estimated_cost
+        for _name, data in agents.items():
+            data["avg_latency"] = round(data["latency"] / data["calls"], 2) if data["calls"] else 0.0
+            data["total_cost"] = round(data["cost"], 6)
+        return agents
 
     def save(self) -> None:
         """Persist telemetry to disk."""
@@ -275,7 +245,7 @@ class ObservabilityEngine:
                 data = json.loads(self.telemetry_file.read_text())
 
                 self.metrics = [AgentMetric(**m) for m in data]
-            except (json.JSONDecodeError, TypeError, ValueError) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (json.JSONDecodeError, TypeError, ValueError) as e:
                 logging.error(f"Failed to load telemetry: {e}")
                 import traceback
                 traceback.print_exc()
@@ -286,7 +256,7 @@ class TokenCostEngine:
     def __init__(self) -> None:
         self.core = TokenCostCore()
 
-    def calculate_cost(self, model, input_tokens=0, output_tokens=0) -> float:
+    def calculate_cost(self, model: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
         res: TokenCostResult = self.core.calculate_cost(input_tokens, output_tokens, model)
         return res.total_cost
 

@@ -192,7 +192,7 @@ class RequestMetrics:
     @property
     def tokens_per_second(self) -> Optional[float]:
         """Token generation rate."""
-        gen_time = self.generation_time_ms
+        gen_time: float | None = self.generation_time_ms
         if gen_time and gen_time > 0 and self.tokens_generated > 0:
             return (self.tokens_generated / gen_time) * 1000
         return None
@@ -209,7 +209,7 @@ class RequestMetrics:
 
     def record_phase(self, phase_name: str, start_time: float, end_time: Optional[float] = None) -> None:
         """Record a custom timing phase."""
-        end = end_time or time.time()
+        end: float = end_time or time.time()
         self._phase_times[phase_name] = (end - start_time) * 1000
 
     def summary(self) -> dict:
@@ -274,7 +274,7 @@ class RequestMetricsAggregator:
 
     def clear(self) -> int:
         """Clear all metrics and return count cleared."""
-        count = len(self.metrics)
+        count: int = len(self.metrics)
         self.metrics.clear()
         return count
 
@@ -300,9 +300,9 @@ class RequestMetricsAggregator:
         """Calculate percentile from sorted values."""
         if not values:
             return 0.0
-        sorted_vals = sorted(values)
+        sorted_vals: list[float] = sorted(values)
         idx = int(len(sorted_vals) * p)
-        idx = min(idx, len(sorted_vals) - 1)
+        idx: int = min(idx, len(sorted_vals) - 1)
         return sorted_vals[idx]
 
     def latency_stats(self) -> dict:
@@ -315,22 +315,31 @@ class RequestMetricsAggregator:
             return {"error": "no_data"}
 
         return {
-            "total_time_ms": {
-                "mean": sum(total_times) / len(total_times),
-                "min": min(total_times),
-                "max": max(total_times),
-                "p50": self._percentile(total_times, 0.5),
-                "p95": self._percentile(total_times, 0.95),
-                "p99": self._percentile(total_times, 0.99),
-            },
-            "queue_time_ms": {
-                "mean": sum(queue_times) / len(queue_times) if queue_times else 0,
-                "max": max(queue_times) if queue_times else 0,
-            },
-            "time_to_first_token_ms": {
-                "mean": sum(ttft_times) / len(ttft_times) if ttft_times else 0,
-                "p95": self._percentile(ttft_times, 0.95) if ttft_times else 0,
-            },
+            "total_time_ms": self._total_time_stats(total_times),
+            "queue_time_ms": self._queue_time_stats(queue_times),
+            "time_to_first_token_ms": self._ttft_stats(ttft_times),
+        }
+
+    def _total_time_stats(self, total_times: list[float]) -> dict:
+        return {
+            "mean": sum(total_times) / len(total_times),
+            "min": min(total_times),
+            "max": max(total_times),
+            "p50": self._percentile(total_times, 0.5),
+            "p95": self._percentile(total_times, 0.95),
+            "p99": self._percentile(total_times, 0.99),
+        }
+
+    def _queue_time_stats(self, queue_times: list[float]) -> dict:
+        return {
+            "mean": sum(queue_times) / len(queue_times) if queue_times else 0,
+            "max": max(queue_times) if queue_times else 0,
+        }
+
+    def _ttft_stats(self, ttft_times: list[float]) -> dict:
+        return {
+            "mean": sum(ttft_times) / len(ttft_times) if ttft_times else 0,
+            "p95": self._percentile(ttft_times, 0.95) if ttft_times else 0,
         }
 
     def throughput_stats(self) -> dict:
@@ -341,24 +350,27 @@ class RequestMetricsAggregator:
 
         total_tokens = sum(m.tokens_generated for m in completed)
         total_input_tokens = sum(m.tokens_input for m in completed)
-
-        # Calculate time span
         start = min(m.arrival_time for m in completed)
         end = max(m.finished_time or m.arrival_time for m in completed)
         duration_s = max(0.001, end - start)
-
         tps_list = [m.tokens_per_second for m in completed if m.tokens_per_second]
 
         return {
             "total_requests": len(completed),
             "total_tokens_generated": total_tokens,
             "total_tokens_input": total_input_tokens,
-            "requests_per_second": len(completed) / duration_s,
-            "tokens_per_second": {
-                "mean": sum(tps_list) / len(tps_list) if tps_list else 0,
-                "max": max(tps_list) if tps_list else 0,
-            },
+            "requests_per_second": self._requests_per_second(len(completed), duration_s),
+            "tokens_per_second": self._tokens_per_second_stats(tps_list),
             "duration_seconds": duration_s,
+        }
+
+    def _requests_per_second(self, count: int, duration: float) -> float:
+        return count / duration if duration > 0 else 0.0
+
+    def _tokens_per_second_stats(self, tps_list: list[float]) -> dict:
+        return {
+            "mean": sum(tps_list) / len(tps_list) if tps_list else 0,
+            "max": max(tps_list) if tps_list else 0,
         }
 
     def summary(self) -> dict:
@@ -373,7 +385,7 @@ class RequestMetricsAggregator:
         }
 
 
-__all__ = [
+__all__: list[str] = [
     "RequestMetrics",
     "RequestMetricsAggregator",
     "RequestState",

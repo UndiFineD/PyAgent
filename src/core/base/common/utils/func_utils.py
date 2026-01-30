@@ -45,17 +45,10 @@ from typing import Any, ParamSpec, TypeVar
 
 logger = logging.getLogger(__name__)
 
-P = ParamSpec("P")
-T = TypeVar("T")
-F = TypeVar("F", bound=Callable[..., Any])
-
-
-# ============================================================================
-# Identity Function
-# ============================================================================
 
 
 def identity(value: T, **_kwargs: Any) -> T:
+"""
     """Returns the first provided value unchanged."""
     return value
 
@@ -483,6 +476,7 @@ def debounce(wait: float) -> Callable[[F], F]:
 # ============================================================================
 
 
+
 def retry_on_exception(
     exceptions: type[Exception] | tuple[type[Exception], ...],
     max_retries: int = 3,
@@ -500,27 +494,50 @@ def retry_on_exception(
         backoff: Multiplier for delay after each retry.
         on_retry: Optional callback called on each retry.
     """
+    import asyncio
+
+    def is_coroutine_function(fn: Callable) -> bool:
+        return asyncio.iscoroutinefunction(fn)
+
+    def sync_inner(fn: F, *args: Any, **kwargs: Any) -> Any:
+        current_delay = delay
+        for attempt in range(max_retries + 1):
+            try:
+                return fn(*args, **kwargs)
+            except exceptions as e:
+                if attempt >= max_retries:
+                    raise
+                if on_retry:
+                    on_retry(e, attempt + 1)
+                time.sleep(current_delay)
+                current_delay *= backoff
+        return None
+
+    async def async_inner(fn: F, *args: Any, **kwargs: Any) -> Any:
+        current_delay = delay
+        for attempt in range(max_retries + 1):
+            try:
+                return await fn(*args, **kwargs)
+            except exceptions as e:
+                if attempt >= max_retries:
+                    raise
+                if on_retry:
+                    on_retry(e, attempt + 1)
+                await asyncio.sleep(current_delay)
+                current_delay *= backoff
+        return None
 
     def wrapper(fn: F) -> F:
-        @wraps(fn)
-        def inner(*args: Any, **kwargs: Any) -> Any:
-            current_delay = delay
-
-            for attempt in range(max_retries + 1):
-                try:
-                    return fn(*args, **kwargs)
-                except exceptions as e:
-                    if attempt >= max_retries:
-                        raise
-                    if on_retry:
-                        on_retry(e, attempt + 1)
-                    time.sleep(current_delay)
-                    current_delay *= backoff
-
-            # For static analysis - loop always returns or raises
-            return None
-
-        return inner  # type: ignore
+        if is_coroutine_function(fn):
+            @wraps(fn)
+            async def wrapped_async(*args: Any, **kwargs: Any) -> Any:
+                return await async_inner(fn, *args, **kwargs)
+            return wrapped_async  # type: ignore
+        else:
+            @wraps(fn)
+            def wrapped_sync(*args: Any, **kwargs: Any) -> Any:
+                return sync_inner(fn, *args, **kwargs)
+            return wrapped_sync  # type: ignore
 
     return wrapper
 
@@ -569,9 +586,7 @@ def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
 
 
 def timed(fn: F) -> F:
-    """
-    Decorator that logs function execution time.
-    """
+    """Decorator that logs function execution time."""
 
     @wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
