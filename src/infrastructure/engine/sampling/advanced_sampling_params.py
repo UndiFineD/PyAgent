@@ -1,7 +1,3 @@
-"""
-Module: advanced_sampling_params
-Defines advanced sampling parameters for inference in PyAgent engine.
-"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -301,7 +297,7 @@ class BadWordsProcessor:
 
         # Convert string bad words to token IDs
         if self.bad_words and self.tokenizer:
-            for word: str in self.bad_words:
+            for word in self.bad_words:
                 tokens = self.tokenizer.encode(word)
                 if isinstance(tokens, list) and tokens:
                     self.bad_words_ids.append(tokens)
@@ -310,7 +306,7 @@ class BadWordsProcessor:
         """Get tokens that should be banned given current context."""
         banned = set()
 
-        for bad_seq: List[int] in self.bad_words_ids:
+        for bad_seq in self.bad_words_ids:
             if len(bad_seq) == 1:
                 # Single token - always ban
                 banned.add(bad_seq[0])
@@ -352,7 +348,7 @@ class TokenWhitelistProcessor:
         """Build boolean mask for allowed tokens."""
         if self.mask is None or len(self.mask) != vocab_size:
             self.mask: np.ndarray[Tuple[int], np.dtype[Any]] = np.zeros(vocab_size, dtype=bool)
-            for tid: int in self.allowed_set:
+            for tid in self.allowed_set:
                 if 0 <= tid < vocab_size:
                     self.mask[tid] = True
         return self.mask
