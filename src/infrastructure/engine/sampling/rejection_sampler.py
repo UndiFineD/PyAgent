@@ -576,11 +576,11 @@ class BatchRejectionSampler:
 
         random_nums: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.random.random((batch_size, max_spec_len + 1)).astype(np.float32)
 
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             seq_len = seq_lens[b]
             first_reject = seq_len
 
-            for i: int in range(seq_len):
+            for i in range(seq_len):
                 token = draft_tokens[b, i]
                 p_target = target_probs[b, i, token]
                 p_draft = draft_probs[b, i, token]
