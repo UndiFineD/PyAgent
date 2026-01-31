@@ -116,7 +116,39 @@ class RetryStrategy:
         retryable_exceptions: tuple[type[Exception], ...] = (Exception,),
         non_retryable_exceptions: tuple[type[Exception], ...] = (),
         on_retry: Callable[[int, Exception, float], None] | None = None,
+        *,
+        sleep_fn: Callable[[float], None] | None = None,
     ) -> None:
+        """
+        Initialize retry strategy.
+
+        Args:
+            max_attempts: Maximum number of attempts (including first)
+            base_delay: Base delay in seconds
+            max_delay: Maximum delay cap in seconds
+            exponential_base: Base for exponential backoff (default 2.0)
+            jitter: Type of jitter to apply
+            retryable_exceptions: Exceptions that trigger retry
+            non_retryable_exceptions: Exceptions that should not retry
+            on_retry: Callback(attempt, exception, delay) before each retry
+            sleep_fn: Optional blocking sleep function for sync retries (defaults to time.sleep).
+        """
+        self._max_attempts = max_attempts
+        self._base_delay = base_delay
+        self._max_delay = max_delay
+        self._exponential_base = exponential_base
+        self._jitter = jitter
+        self._retryable_exceptions = retryable_exceptions
+        self._non_retryable_exceptions = non_retryable_exceptions
+        self._on_retry = on_retry
+        self._stats = RetryStats()
+
+        # For decorrelated jitter
+        self._last_delay = base_delay
+
+        # Sleep function used by sync execute (injectable for testing/async compatibility)
+        import time as _time
+        self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
         """
         Initialize retry strategy.
 
@@ -237,7 +269,8 @@ class RetryStrategy:
                 if self._on_retry:
                     self._on_retry(attempt + 1, e, delay)
 
-                time.sleep(delay)
+                # Use injectable blocking sleep function for sync callers
+                self._sleep_fn(delay)
 
         # Should never reach here
         self._stats.failed_attempts += 1

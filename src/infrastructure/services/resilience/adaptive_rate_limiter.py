@@ -96,6 +96,8 @@ class TokenBucket:
         self,
         rate: float,
         capacity: float | None = None,
+        *,
+        sleep_fn: Callable[[float], None] | None = None,
     ) -> None:
         """
         Initialize token bucket.
@@ -103,7 +105,7 @@ class TokenBucket:
         Args:
             rate: Tokens per second (refill rate)
             capacity: Maximum tokens (burst capacity)
-                     Defaults to rate (1 second of burst)
+            sleep_fn: Optional blocking sleep function used when `block=True` (defaults to time.sleep)
         """
         self._rate = rate
         self._capacity = capacity if capacity is not None else rate
@@ -111,6 +113,9 @@ class TokenBucket:
         self._last_refill = time.monotonic()
         self._lock = threading.Lock()
         self._stats = RateLimiterStats()
+
+        import time as _time
+        self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
 
     @property
     def stats(self) -> RateLimiterStats:
@@ -161,7 +166,8 @@ class TokenBucket:
         # Blocking mode
         wait_time = self.time_to_available(tokens)
         self._stats.total_wait_time += wait_time
-        time.sleep(wait_time)
+        # Use injectable sleep function so blocking behavior can be tested or customized
+        self._sleep_fn(wait_time)
 
         with self._lock:
             self._refill()
