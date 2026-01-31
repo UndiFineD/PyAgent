@@ -1,0 +1,19 @@
+{
+  "shard_id": 2,
+  "worker": "worker-2",
+  "branch": "foreach/prompt3/worker-2/batch-1",
+  "assigned_files": [
+    "src/core/base/common/multimodal_logic.py",
+    "src/core/base/common/orchestration_core.py",
+    "src/core/base/common/platform_core.py",
+    "src/core/base/common/plugin_core.py",
+    "src/core/base/common/pruning_core.py",
+    "src/core/base/common/registry_core.py",
+    "src/core/base/common/resilience_core.py",
+    "src/core/base/common/shell_core.py",
+    "src/core/base/common/storage_core.py",
+    "src/core/base/common/time_core.py"
+  ],
+  "status": "assigned",
+  "notes": "Recommended priority: replace blocking sleeps, add docstrings and narrow exceptions."
+}
