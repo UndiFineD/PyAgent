@@ -12,28 +12,41 @@ more approachable for maintainers and auditors.
 
 from importlib import import_module
 
-MODULES_TO_CHECK = [
-    "src.core.lazy_loader",
-    "src.core.base.common.base_utilities",
-    "src.core.base.common.multimodal_logic",
-    "src.core.base.common.utils.dynamic_importer",
-    "src.core.base.common.utils.func_utils",
-    "src.core.base.common.utils.math_utils",
-    "src.core.base.lifecycle.agent_core",
-    "src.core.base.lifecycle.agent_update_manager",
-    "src.core.base.logic.core.cuda_stream_pool",
-    "src.core.base.logic.core.micro_batch_context",
-    "src.core.base.logic.structures.staged_batch_writer",
-    "src.core.base.logic.structures.uva_buffer_pool",
-    "src.infrastructure",
-    "src.infrastructure.lazy",
-    "src.infrastructure.engine.multimodal.encoder_cache_manager",
-    "src.infrastructure.compute.backend.async_microbatcher",
-    "src.infrastructure.compute.backend.llm_client",
-    "src.infrastructure.engine.sampling.penalty_engine",
-    "src.infrastructure.engine.sampling.rejection_sampler",
-    "src.core.base.common.utils.jsontree.meta",
-]
+from pathlib import Path
+from src.maintenance.docstring_auditor import generate_next_batch
+
+# If a generated batch file exists, use it. Otherwise fallback to a curated list.
+BATCH_FILE = Path("docs/prompt/next_docstring_batch.txt")
+if BATCH_FILE.exists():
+    with BATCH_FILE.open() as f:
+        MODULES_TO_CHECK = [line.strip() for line in f if line.strip()]
+else:
+    MODULES_TO_CHECK = [
+        "src.core.lazy_loader",
+        "src.core.base.common.base_utilities",
+        "src.core.base.common.multimodal_logic",
+        "src.core.base.common.utils.dynamic_importer",
+        "src.core.base.common.utils.func_utils",
+        "src.core.base.common.utils.math_utils",
+        "src.core.base.lifecycle.agent_core",
+        "src.core.base.lifecycle.agent_update_manager",
+        "src.core.base.logic.core.cuda_stream_pool",
+        "src.core.base.logic.core.micro_batch_context",
+        "src.core.base.logic.structures.staged_batch_writer",
+        "src.core.base.logic.structures.uva_buffer_pool",
+        "src.infrastructure",
+        "src.infrastructure.lazy",
+        "src.infrastructure.engine.multimodal.encoder_cache_manager",
+        "src.infrastructure.compute.backend.async_microbatcher",
+        "src.infrastructure.compute.backend.llm_client",
+        "src.infrastructure.engine.sampling.penalty_engine",
+        "src.infrastructure.engine.sampling.rejection_sampler",
+        "src.core.base.common.utils.jsontree.meta",
+    ]
+
+# Ensure next batch file exists for operators: generate if missing with default 20 entries
+if not BATCH_FILE.exists():
+    generate_next_batch("docs/prompt/prompt4.txt", BATCH_FILE, max_entries=20)
 
 
 def test_modules_have_docstrings():
