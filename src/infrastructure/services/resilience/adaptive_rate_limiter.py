@@ -161,7 +161,8 @@ class TokenBucket:
         # Blocking mode
         wait_time = self.time_to_available(tokens)
         self._stats.total_wait_time += wait_time
-        time.sleep(wait_time)
+        # Use injectable sleep function so blocking behavior can be tested or customized
+        self._sleep_fn(wait_time)
 
         with self._lock:
             self._refill()
