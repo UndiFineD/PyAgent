@@ -176,9 +176,14 @@ class BaseAgent(
                     self.logger.info(f"Using class-defined system prompt for {self.agent_name}")
                 return class_prompt
 
-        except Exception as e:  # pylint: disable=broad-exception-caught
+        except (OSError, ValueError, UnicodeError) as e:
             if hasattr(self, 'logger') and self.logger:
                 self.logger.warning(f"[Robustness] Failed to load system prompt for {self.agent_name}: {e}", exc_info=True)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Unexpected error: log and re-raise to avoid masking bugs
+            if hasattr(self, 'logger') and self.logger:
+                self.logger.exception(f"[Robustness] Unexpected error loading system prompt for {self.agent_name}")
+            raise
 
         # Tertiary: Minimal fallback prompt
         return "You are an AI."
@@ -254,10 +259,13 @@ class BaseAgent(
 
             try:
                 requests.post(url, json=payload, timeout=5)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                # Backoff for 15 minutes on failure
+            except requests.RequestException as e:
+                # Backoff for 15 minutes on failure (network/requests specific)
                 self.status_cache[url] = now + 900
                 logging.warning(f"[Robustness] Failed to notify webhook {url}: {e}", exc_info=True)
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # Unexpected errors should be logged fully but not mask other bugs
+                logging.exception(f"[Robustness] Unexpected error while notifying webhook {url}: {e}")
 
     def _classify_exception(self, e: Exception) -> str:
         """
@@ -348,14 +356,14 @@ class BaseAgent(
                 return result
             return self._get_fallback_response()
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (ImportError, RuntimeError, OSError, ValueError, TypeError) as e:
             f_type = self._classify_exception(e)
             logging.error("[Robustness] Think execution failed: %s (Type: %s)", e, f_type, exc_info=True)
 
             # Telemetry Capture (Swarm Intelligence Fix)
-            if self.context:
+            if getattr(self, "context", None):
                 try:
-                    self.context.log_failure(
+                    getattr(self, "context").log_failure(
                         stage=f"{self.__class__.__name__}.think",
                         error=str(e),
                         stack_trace=traceback.format_exc(),
@@ -366,6 +374,9 @@ class BaseAgent(
                     logging.error(f"[Robustness] Failed to log failure to CascadeContext: {telemetry_err}", exc_info=True)
 
             return f"Error encountered during agent reasoning: {str(e)} (Type: {f_type})"
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.exception("[Robustness] Unexpected error in think execution, re-raising")
+            raise
 
     def get_model(self) -> str:
         """Get the current model name."""
