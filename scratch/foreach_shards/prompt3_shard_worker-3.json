@@ -1,0 +1,19 @@
+{
+  "shard_id": 3,
+  "worker": "worker-3",
+  "branch": "foreach/prompt3/worker-3/batch-1",
+  "assigned_files": [
+    "src/core/base/common/validation_core.py",
+    "src/core/base/common/workspace_core.py",
+    "src/core/base/common/models/communication_models.py",
+    "src/core/base/common/types/typed_prompts.py",
+    "src/core/base/common/utils/collection_utils.py",
+    "src/core/base/common/utils/dynamic_importer.py",
+    "src/core/base/common/utils/func_utils.py",
+    "src/core/base/common/utils/hash_registry.py",
+    "src/core/base/common/utils/lazy_loader.py",
+    "src/core/base/common/utils/math_utils.py"
+  ],
+  "status": "assigned",
+  "notes": "Recommended priority: add module-level docstrings, reduce complexity and add type hints for Rust-readiness."
+}
