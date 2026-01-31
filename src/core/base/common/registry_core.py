@@ -51,8 +51,8 @@ class RegistryCore(BaseCore, Generic[T]):
         if rc and hasattr(rc, "detect_cycles_rust"):
             try:
                 return rc.detect_cycles_rust(nodes, edges)  # type: ignore
-            except Exception:
-                pass
+            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
+                logger.debug("RegistryCore: Rust detect_cycles_rust failed: %s", e)
         return None
 
     def _python_detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool:
@@ -90,8 +90,8 @@ class RegistryCore(BaseCore, Generic[T]):
         if rc and hasattr(rc, "topological_sort_rust"):
             try:
                 return rc.topological_sort_rust(nodes, edges)  # type: ignore
-            except Exception:
-                pass
+            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
+                logger.debug("RegistryCore: Rust topological_sort_rust failed: %s", e)
         return None
 
     def _python_topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str]:
@@ -136,7 +136,7 @@ class RegistryCore(BaseCore, Generic[T]):
         for hook in self._hooks["on_register"]:
             try:
                 hook(key, item)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (RuntimeError, AttributeError, TypeError, ValueError) as e:  # pragma: no cover - hook failure
                 logger.error("[%s] Registry hook 'on_register' failed for %s: %s", self.name, key, e)
 
         return True
@@ -148,7 +148,7 @@ class RegistryCore(BaseCore, Generic[T]):
             for hook in self._hooks["on_unregister"]:
                 try:
                     hook(key, item)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (RuntimeError, AttributeError, TypeError, ValueError) as e:  # pragma: no cover - hook failure
                     logger.error("[%s] Registry hook 'on_unregister' failed for %s: %s", self.name, key, e)
         return item
 
