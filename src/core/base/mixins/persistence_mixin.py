@@ -112,8 +112,19 @@ class PersistenceMixin:
             # Phase 267: Transactional Safety
             from src.core.base.state.agent_state_manager import StateTransaction
 
+            # Determine whether to run tests from agent config (default: True for safety)
+            run_tests = True
+            cfg = getattr(self, "_config", None)
+            try:
+                if isinstance(cfg, dict):
+                    run_tests = bool(cfg.get("enforce_tests", True))
+                else:
+                    run_tests = bool(getattr(cfg, "enforce_tests", True))
+            except Exception:
+                run_tests = True
+
             # Use transactional wrapper for safety and potential validation
-            with StateTransaction([file_path], run_tests=False):
+            with StateTransaction([file_path], run_tests=run_tests):
                 self._fs.atomic_write(file_path, content_to_write)
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
