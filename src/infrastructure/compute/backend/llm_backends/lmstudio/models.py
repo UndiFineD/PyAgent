@@ -24,29 +24,65 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
+def _parse_dv_base_url() -> tuple[str, int]:
+    """Parse DV_LMSTUDIO_BASE_URL into host and port (backwards compatible).
+
+    Returns a tuple (host, port). If DV_LMSTUDIO_BASE_URL is not set or cannot be
+    parsed, fallback to LMSTUDIO_HOST/LMSTUDIO_PORT or the defaults.
+    """
+    base = os.environ.get("DV_LMSTUDIO_BASE_URL")
+    if base:
+        try:
+            # Ensure scheme exists for urlparse to properly parse netloc
+            if not base.startswith("http://") and not base.startswith("https://"):
+                base = "http://" + base
+            from urllib.parse import urlparse
+
+            parsed = urlparse(base)
+            netloc = parsed.netloc
+            if not netloc:
+                return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))
+            if ":" in netloc:
+                host, port = netloc.split(":", 1)
+                return (host, int(port))
+            return (netloc, int(os.environ.get("LMSTUDIO_PORT", "1234")))
+        except Exception:
+            # Parsing failed; fall back to older env vars
+            pass
+    return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))
+
+
 @dataclass
 class LMStudioConfig:
-    """Configuration for LM Studio connection."""
+    """Configuration for LM Studio connection.
 
-    # Connection settings
-    host: str = field(default_factory=lambda: os.environ.get("LMSTUDIO_HOST", "localhost"))
-    port: int = field(default_factory=lambda: int(os.environ.get("LMSTUDIO_PORT", "1234")))
+    This config prefers the DV-prefixed environment variables used by the
+    higher-level orchestrator (`DV_LMSTUDIO_BASE_URL`, `DV_LMSTUDIO_MODEL`,
+    `DV_LMSTUDIO_MAX_CONTEXT`) but remains backwards-compatible with the
+    original `LMSTUDIO_HOST`, `LMSTUDIO_PORT`, and `LMSTUDIO_MODEL` variables.
+    """
+
+    # Connection settings - prefer DV_LMSTUDIO_BASE_URL when present
+    # Use runtime factories so tests can modify env before instantiation
+    host: str = field(default_factory=lambda: _parse_dv_base_url()[0])
+    port: int = field(default_factory=lambda: _parse_dv_base_url()[1])
 
     # Timeout settings
     timeout: float = 60.0
     connect_timeout: float = 10.0
 
-    # Model settings
+    # Model settings - prefer DV_LMSTUDIO_MODEL
     default_model: str = field(
-        # Empty means use any loaded model
-        default_factory=lambda: os.environ.get("LMSTUDIO_MODEL", "lfm2.5-1.2b")
+        default_factory=lambda: os.environ.get("DV_LMSTUDIO_MODEL", os.environ.get("LMSTUDIO_MODEL", "lfm2.5-1.2b"))
     )
     auto_load: bool = True  # Auto-load model if not loaded
 
     # Prediction settings
     temperature: float = 0.7
     max_tokens: int = 2048
-    top_p: float = 0.95
+
+    # Context window (new) - prefer DV_LMSTUDIO_MAX_CONTEXT
+    max_context: int = field(default_factory=lambda: int(os.environ.get("DV_LMSTUDIO_MAX_CONTEXT", os.environ.get("LMSTUDIO_MAX_CONTEXT", "4096"))))
 
     # Caching
     cache_models: bool = True
