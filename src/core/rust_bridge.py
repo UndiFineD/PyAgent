@@ -130,51 +130,37 @@ class RustBridge:
     @staticmethod
     def chunk_boundaries_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited chunk boundary calculation."""
-        if not RUST_AVAILABLE or not hasattr(rc, "chunk_boundaries_rust"):
-            return None
-        return rc.chunk_boundaries_rust(*args, **kwargs)  # type: ignore
+        return RustBridge._try_rust_call("chunk_boundaries_rust", *args, **kwargs)
 
     @staticmethod
     def stream_sync_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited stream synchronization."""
-        if not RUST_AVAILABLE or not hasattr(rc, "stream_sync_rust"):
-            return None
-        return rc.stream_sync_rust(*args, **kwargs)  # type: ignore
+        return RustBridge._try_rust_call("stream_sync_rust", *args, **kwargs)
 
     @staticmethod
     def uva_copy_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited UVA data copy."""
-        if not RUST_AVAILABLE or not hasattr(rc, "uva_copy_rust"):
-            return None
-        return rc.uva_copy_rust(*args, **kwargs)  # type: ignore
+        return RustBridge._try_rust_call("uva_copy_rust", *args, **kwargs)
 
     @staticmethod
     def batch_write_indices_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited batch index generation."""
-        if not RUST_AVAILABLE or not hasattr(rc, "batch_write_indices_rust"):
-            return None
-        return rc.batch_write_indices_rust(*args, **kwargs)  # type: ignore
+        return RustBridge._try_rust_call("batch_write_indices_rust", *args, **kwargs)
 
     @staticmethod
     def event_query_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited event query logic."""
-        if not RUST_AVAILABLE or not hasattr(rc, "event_query_rust"):
-            return None
-        return rc.event_query_rust(*args, **kwargs)  # type: ignore
+        return RustBridge._try_rust_call("event_query_rust", *args, **kwargs)
 
     @staticmethod
     def image_resize_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited image resizing."""
-        if not RUST_AVAILABLE or not hasattr(rc, "image_resize_rust"):
-            return None
-        return rc.image_resize_rust(*args, **kwargs)  # type: ignore
+        return RustBridge._try_rust_call("image_resize_rust", *args, **kwargs)
 
     @staticmethod
     def normalize_pixels_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited pixel normalization."""
-        if not RUST_AVAILABLE or not hasattr(rc, "normalize_pixels_rust"):
-            return None
-        return rc.normalize_pixels_rust(*args, **kwargs)  # type: ignore
+        return RustBridge._try_rust_call("normalize_pixels_rust", *args, **kwargs)
 
     @staticmethod
     def is_rust_active() -> bool:

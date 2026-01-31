@@ -43,13 +43,17 @@ from collections.abc import Callable, Mapping
 from functools import lru_cache, wraps
 from typing import Any, ParamSpec, TypeVar
 
+# Type variables used by utilities
+P = ParamSpec("P")
+T = TypeVar("T")
+F = TypeVar("F")
+
 logger = logging.getLogger(__name__)
 
 
 
 def identity(value: T, **_kwargs: Any) -> T:
-"""
-    """Returns the first provided value unchanged."""
+    """Return the first provided value unchanged."""
     return value
 
 
@@ -513,7 +517,8 @@ def retry_on_exception(
                 # Use injected sleep function to allow non-blocking alternatives
                 try:
                     sleep_fn(current_delay)
-                except Exception:
+                except Exception as err:  # pylint: disable=broad-exception-caught
+                    logger.debug("retry_on_exception: sleep_fn raised, falling back to time.sleep: %s", err)
                     time.sleep(current_delay)
                 current_delay *= backoff
         return None
