@@ -192,7 +192,7 @@ class MetricsCore(BaseCore):
                     grouped[r.name].append(r.value)
                 # pylint: disable=no-member
                 return rc.aggregate_metrics_rust(grouped)  # type: ignore
-            except Exception as e:
+            except (RuntimeError, AttributeError) as e:
                 logger.debug("Rust metrics aggregation failed: %s", e)
         return None
 
@@ -220,7 +220,7 @@ class MetricsCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.rolling_avg_rust(values, window)  # type: ignore
-            except Exception as e:
+            except (RuntimeError, AttributeError) as e:
                 logger.debug("Rust rolling average failed: %s", e)
         return None
 
