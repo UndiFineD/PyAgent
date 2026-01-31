@@ -150,6 +150,7 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         self,
         config: Optional[EngineConfig] = None,
         request_queue: Optional[RequestQueue] = None,
+        sleep_fn: Callable[[float], None] | None = None,
     ) -> None:
         """
         Initialize the engine lifecycle manager.
@@ -166,6 +167,15 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         self._lock = threading.RLock()
         self._shutdown_event = threading.Event()
         self._drain_complete = threading.Event()
+
+        # Sleep function; default to a threading.Event().wait-based implementation
+        if sleep_fn is None:
+            def _wait(t: float) -> None:
+                threading.Event().wait(t)
+
+            self._sleep_fn = _wait
+        else:
+            self._sleep_fn = sleep_fn
 
         # Sleep mode state
         self._sleep_level = 0
@@ -298,9 +308,11 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
                 # If in async context, schedule async sleep
                 asyncio.create_task(self._async_sleep())
             else:
-                time.sleep(0.1)
+                # Use configured sleep function to avoid blocking time.sleep in hot paths
+                self._sleep_fn(0.1)
         except (RuntimeError, AttributeError):
-            time.sleep(0.1)
+            # Fallback to configured sleep function
+            self._sleep_fn(0.1)
 
     async def _async_sleep(self) -> bool:
         await asyncio.sleep(0.1)
