@@ -1,0 +1,67 @@
+{
+  "manifest_id": "prompt3-dryrun-2026-01-31T12:00:00Z",
+  "source_file": "docs/prompt/prompt3.txt",
+  "task": "Apply fixes recommended by fleet analyzer: add module docstrings, narrow broad exceptions, replace blocking sleep, and add missing type hints for Rust readiness.",
+  "num_workers": 3,
+  "communication_channel": "recorder",
+  "conflict_strategy": "requeue",
+  "shard_lock_prefix": "foreach",
+  "created_by": "GitHub Copilot",
+  "created_at": "2026-01-31T12:00:00Z",
+  "shards": [
+    {
+      "id": 1,
+      "worker": "worker-1",
+      "branch": "foreach/prompt3/worker-1/batch-1",
+      "files": [
+        "src/core/lazy_loader.py",
+        "src/core/rust_bridge.py",
+        "src/core/base/common/base_utilities.py",
+        "src/core/base/common/config_core.py",
+        "src/core/base/common/error_mapping_core.py",
+        "src/core/base/common/formula_core.py",
+        "src/core/base/common/lock_core.py",
+        "src/core/base/common/memory_core.py",
+        "src/core/ba.github/agents/foreach.agent.md",
+        "src/core/base/common/metrics_core.py"
+      ],
+      "estimated_units": 10
+    },
+    {
+      "id": 2,
+      "worker": "worker-2",
+      "branch": "foreach/prompt3/worker-2/batch-1",
+      "files": [
+        "src/core/base/common/multimodal_logic.py",
+        "src/core/base/common/orchestration_core.py",
+        "src/core/base/common/platform_core.py",
+        "src/core/base/common/plugin_core.py",
+        "src/core/base/common/pruning_core.py",
+        "src/core/base/common/registry_core.py",
+        "src/core/base/common/resilience_core.py",
+        "src/core/base/common/shell_core.py",
+        "src/core/base/common/storage_core.py",
+        "src/core/base/common/time_core.py"
+      ],
+      "estimated_units": 10
+    },
+    {
+      "id": 3,
+      "worker": "worker-3",
+      "branch": "foreach/prompt3/worker-3/batch-1",
+      "files": [
+        "src/core/base/common/validation_core.py",
+        "src/core/base/common/workspace_core.py",
+        "src/core/base/common/models/communication_models.py",
+        "src/core/base/common/types/typed_prompts.py",
+        "src/core/base/common/utils/collection_utils.py",
+        "src/core/base/common/utils/dynamic_importer.py",
+        "src/core/base/common/utils/func_utils.py",
+        "src/core/base/common/utils/hash_registry.py",
+        "src/core/base/common/utils/lazy_loader.py",
+        "src/core/base/common/utils/math_utils.py"
+      ],
+      "estimated_units": 10
+    }
+  ]
+}
