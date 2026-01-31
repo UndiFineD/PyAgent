@@ -1,8 +1,3 @@
-"""
-Module: sharded_state_loader
-Handles sharded state loading for distributed model weights in PyAgent engine.
-"""
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -148,7 +143,7 @@ class SubtensorFilter:
 
         result: Dict[str, Any] = {}
 
-        for group: List[Tuple[str | Any]] in storage_groups.values():
+        for group in storage_groups.values():
             for k, t in group:
                 a, b = t.data_ptr(), get_end_ptr(t)
                 is_subtensor = False
@@ -227,7 +222,7 @@ class ShardedStateLoader:
         """
         try:
             from safetensors.torch import load_file
-        except ImportError as exc: ImportError:
+        except ImportError as exc:
             raise ImportError("safetensors required for ShardedStateLoader") from exc
 
         if state_dict is not None:
@@ -236,7 +231,7 @@ class ShardedStateLoader:
         shard_files: List[str] = self.discover_shards(model_path)
         loaded: Dict[str, Any] = {}
 
-        for shard_file: str in shard_files:
+        for shard_file in shard_files:
             shard_data: Dict[str, Tensor] = load_file(shard_file)
 
             for key, tensor in shard_data.items():
@@ -266,12 +261,12 @@ class ShardedStateLoader:
         """Iterate over weights from sharded checkpoint."""
         try:
             from safetensors.torch import safe_open
-        except ImportError as exc: ImportError:
+        except ImportError as exc:
             raise ImportError("safetensors required for ShardedStateLoader") from exc
 
         shard_files: List[str] = self.discover_shards(model_path)
 
-        for shard_file: str in shard_files:
+        for shard_file in shard_files:
             with safe_open(shard_file, framework="pt") as f:
                 for name in f.keys():
                     yield name, f.get_tensor(name)
@@ -343,7 +338,7 @@ class IncrementalShardLoader:
         """
         shard_files: List[str] = self.base_loader.discover_shards(model_path)
 
-        for shard_file: str in shard_files:
+        for shard_file in shard_files:
             shard_data: Dict[str, Any] = self.load_shard(shard_file)
 
             for key, tensor in shard_data.items():
@@ -387,7 +382,7 @@ class AsyncShardLoader:
         if self._executor is None:
             self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers)
 
-        for path: str in file_paths:
+        for path in file_paths:
             if path not in self._prefetch_futures:
                 self._prefetch_futures[path] = self._executor.submit(self._load_file, path)
 
@@ -434,10 +429,10 @@ class AsyncShardLoader:
         async def load_shard(path: str) -> Dict[str, Any]:
             return await loop.run_in_executor(None, self._load_file, path)
 
-        results: List[Dict[str, Any]] = await asyncio.gather(*[load_shard(f) for f: str in shard_files])
+        results: List[Dict[str, Any]] = await asyncio.gather(*[load_shard(f) for f in shard_files])
 
         merged = {}
-        for result: Dict[str, Any] in results:
+        for result in results:
             merged.update(result)
         return merged
 
@@ -453,7 +448,7 @@ def compute_shard_assignment_rust(
         return rust_core.compute_shard_assignment_rust(num_params, num_ranks, param_sizes)
 
     # Python fallback - simple round-robin
-    return [i % num_ranks for i: int in range(num_params)]
+    return [i % num_ranks for i in range(num_params)]
 
 
 def validate_shard_shapes_rust(
@@ -467,7 +462,7 @@ def validate_shard_shapes_rust(
 
     # Python fallback
     errors = []
-    for spec: Dict[str, Any] in shard_specs:
+    for spec in shard_specs:
         if "shard_dim" in spec and spec.get("num_shards", 1) != world_size:
             errors.append(
                 f"Shard count mismatch for {spec.get('name', 'unknown')}: "

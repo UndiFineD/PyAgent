@@ -57,6 +57,8 @@ class CompileMode(Enum):
 class CompileBackend(Enum):
     ONNXRT = "onnxrt"  # ONNX Runtime
     EAGER = "eager"  # No compilation (debug)
+    INDUCTOR = "inductor"  # In-ductor backend (default)
+
 @dataclass
 class CompileConfig:
     """Configuration for torch.compile integration."""
