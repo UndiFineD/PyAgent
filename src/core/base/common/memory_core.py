@@ -81,7 +81,7 @@ class MemoryCore:
                 return rc.create_episode_struct(  # type: ignore
                     agent_id, task, content, success, metadata or {}, base_utility
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (RuntimeError, AttributeError) as e:
                 logger.warning("Rust create_episode_struct failed: %s", e)
 
         # Python Fallback
@@ -109,7 +109,7 @@ class MemoryCore:
             try:
                 # pylint: disable=no-member
                 return rc.rank_memories_rust(memories, limit, min_utility)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (RuntimeError, AttributeError) as e:
                 logger.warning("Rust rank_memories_rust failed: %s", e)
 
         # Python Fallback
@@ -124,9 +124,8 @@ class MemoryCore:
             try:
                 # pylint: disable=no-member
                 return rc.retrieve_memory_graph_rust(root_id, depth)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust-side failures
+                logger.debug("Rust retrieve_memory_graph_rust failed: %s", e)
 
         # Simple Python fallback (stub)
         return [{"source": root_id, "target": "related_concept", "relation": "associated"}]
@@ -153,7 +152,7 @@ class MemoryCore:
             # Standardized I/O via StorageCore
             self._storage.save_json(file_path, content)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (OSError, TypeError, ValueError) as e:
             logger.error("Failed to store %s knowledge for %s: %s", mode, agent_id, e)
             return False
 
@@ -166,7 +165,10 @@ class MemoryCore:
             collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
             collection.add(documents=[str(content)], metadatas=[metadata] if metadata else [{}], ids=[key])
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except ImportError as e:
+            logger.warning("ChromaDB not available for semantic storage: %s", e)
+            return False
+        except (RuntimeError, OSError, ValueError) as e:  # pragma: no cover - external db errors
             logger.warning("ChromaDB storage failed for %s: %s", agent_id, e)
             return False
 
@@ -199,7 +201,7 @@ class MemoryCore:
             try:
                 # pylint: disable=no-member
                 return rc.semantic_search(agent_id, query, limit)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (RuntimeError, AttributeError) as e:
                 logger.warning("Rust semantic search failed: %s", e)
 
         try:
@@ -217,7 +219,10 @@ class MemoryCore:
             for i, doc in enumerate(docs):
                 output.append({"id": ids[i], "content": doc, "metadata": metas[i]})
             return output
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except ImportError as e:
+            logger.warning("ChromaDB not installed for semantic retrieval: %s", e)
+            return []
+        except (RuntimeError, OSError, ValueError) as e:  # pragma: no cover - external db errors
             logger.warning("ChromaDB retrieval failed for %s: %s", agent_id, e)
             return []
 
@@ -241,7 +246,7 @@ class MemoryCore:
             try:
                 file_path.unlink()
                 return True
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except OSError as e:
                 logger.error("Failed to delete %s knowledge: %s", mode, e)
         return False
 
