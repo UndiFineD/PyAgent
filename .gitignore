@@ -60,6 +60,9 @@ collection_log.txt
 !requirements.txt
 !prompt.txt
 
+# Scratch runtime artifacts (do not commit runtime manifests or shards)
+scratch/foreach_shards/
+
 # Rust
 rust_core/target/
 
