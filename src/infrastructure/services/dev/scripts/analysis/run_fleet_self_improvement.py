@@ -140,8 +140,9 @@ class IntelligenceHarvester:
 
         # --- Prompt Optimizer Integration ---
         optimizer = PromptOptimizerAgent()
-        ai.llm_chat_via_ollama = optimizer.wrap_agent_prompt(
-            ai.llm_chat_via_ollama, agent_name="Ollama"
+        # Prefer LMStudio as the primary local backend (configured via .env DV_LMSTUDIO_MODEL)
+        ai.llm_chat_via_lmstudio = optimizer.wrap_agent_prompt(
+            ai.llm_chat_via_lmstudio, agent_name="LMStudio"
         )
         ai.llm_chat_via_github_models = optimizer.wrap_agent_prompt(
             ai.llm_chat_via_github_models, agent_name="GitHubModels"
@@ -150,10 +151,10 @@ class IntelligenceHarvester:
             ai.llm_chat_via_copilot_cli, agent_name="CopilotCLI"
         )
 
-        # 1. Ollama (Local External)
-        ollama_res = ai.llm_chat_via_ollama(prompt)
-        if ollama_res:
-            lessons.append({"provider": "Ollama", "text": ollama_res})
+        # 1. LMStudio (Local External)
+        lmstudio_res = ai.llm_chat_via_lmstudio(prompt, model=os.environ.get("DV_LMSTUDIO_MODEL", ""))
+        if lmstudio_res:
+            lessons.append({"provider": "LMStudio", "text": lmstudio_res})
 
         # 2. GitHub Models (Global External)
         gemini_res = ai.llm_chat_via_github_models(prompt, model=self.model_name)
