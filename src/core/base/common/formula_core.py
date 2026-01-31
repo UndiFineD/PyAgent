@@ -191,10 +191,24 @@ class FormulaCore:
 
     @classmethod
     def _eval_call(cls, node: ast.Call, variables: dict[str, float]) -> float:
+        # Support simple function calls like sqrt(x) and module attribute calls like math.sqrt(x)
         if isinstance(node.func, ast.Name):
             func_name = node.func.id
-            if func_name in cls.FUNCTIONS:
-                args = [cls._eval_node(a, variables) for a in node.args]
+        elif isinstance(node.func, ast.Attribute) and isinstance(node.func.attr, str):
+            func_name = node.func.attr
+        else:
+            func_name = None
+
+        if func_name and func_name in cls.FUNCTIONS:
+            args = [cls._eval_node(a, variables) for a in node.args]
+            try:
                 return cls.FUNCTIONS[func_name](*args)
-        func_id = node.func.id if isinstance(node.func, ast.Name) else node.func
+            except TypeError as e:
+                raise TypeError(f"Error calling function {func_name}: {e}") from e
+
+        func_id = None
+        if isinstance(node.func, ast.Name):
+            func_id = node.func.id
+        elif isinstance(node.func, ast.Attribute):
+            func_id = f"{ast.dump(node.func)}"
         raise TypeError(f"Unsupported function: {func_id}")
