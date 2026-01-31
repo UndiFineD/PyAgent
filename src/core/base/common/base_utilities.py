@@ -4,6 +4,13 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
+"""Utilities used across base modules.
+
+Small, well-typed helper functions and decorators used by agents and tools.
+Focus on low-risk, testable behaviors: replacement helpers, logging setup,
+and tool wrappers that record interactions to the fleet recorder when present.
+"""
+
 import os
 
 from pathlib import Path
@@ -13,6 +20,7 @@ import inspect
 import argparse
 import sys
 import json
+import time
 from typing import Union, Callable, Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.file_system_core import FileSystemCore
@@ -108,13 +116,43 @@ def setup_logging(verbosity_arg: int = 0) -> None:
     )
 
 
+def _record_tool_execution(self: Any, func_name: str, args: tuple, kwargs: dict, result: Any) -> None:
+    """Record a tool execution to the fleet recorder if available.
+
+    Separated into a helper to keep the decorator logic small and testable.
+    Critical exceptions (KeyboardInterrupt, SystemExit) are re-raised.
+    """
+    try:
+        shard_result = str(result)
+        if len(shard_result) > 2000:
+            shard_result = shard_result[:2000] + "... [TRUNCATED]"
+
+        prompt_trace = f"TOOL_EXECUTION: {func_name}\nArgs: {args}\nKwargs: {kwargs}"
+
+        self.fleet.recorder.record_interaction(
+            provider="agent_tool",
+            model=self.__class__.__name__,
+            prompt=prompt_trace,
+            result=shard_result,
+            meta={
+                "tool": func_name,
+                "agent": self.__class__.__name__,
+                "timestamp_ms": int(time.time() * 1000),
+            },
+        )
+    except (RuntimeError, OSError, AttributeError, ValueError, TypeError) as e:
+        # Re-raise critical signals and otherwise log for debugging.
+        if isinstance(e, (KeyboardInterrupt, SystemExit)):
+            raise
+        logging.debug("_record_tool_execution failed: %s", e)
+
+
 def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     """Decorator to mark a method as a tool for the ToolRegistry.
     Automatically records tool interactions to the fleet context shards for autonomous learning.
     Can be used as @as_tool or @as_tool(priority=10).
     """
     # pylint: disable=import-outside-toplevel
-    import time
     from functools import wraps
 
     def decorator(func: Callable) -> Callable:
@@ -130,24 +168,10 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                 # Autonomous Logic Harvesting:
                 if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
                     try:
-                        shard_result = str(result)
-                        if len(shard_result) > 2000:
-                            shard_result = shard_result[:2000] + "... [TRUNCATED]"
-
-                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
-
-                        self.fleet.recorder.record_interaction(
-                            provider="agent_tool",
-                            model=self.__class__.__name__,
-                            prompt=prompt_trace,
-                            result=shard_result,
-                            meta={
-                                "tool": func.__name__,
-                                "agent": self.__class__.__name__,
-                                "timestamp_ms": int(time.time() * 1000),
-                            },
-                        )
+                        _record_tool_execution(self, func.__name__, args, kwargs, result)
                     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                        if isinstance(e, (KeyboardInterrupt, SystemExit)):
+                            raise
                         logging.debug("Failed to record tool interaction: %s", e)
 
                 return result
@@ -164,24 +188,10 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
                 # Autonomous Logic Harvesting:
                 if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
                     try:
-                        shard_result = str(result)
-                        if len(shard_result) > 2000:
-                            shard_result = shard_result[:2000] + "... [TRUNCATED]"
-
-                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
-
-                        self.fleet.recorder.record_interaction(
-                            provider="agent_tool",
-                            model=self.__class__.__name__,
-                            prompt=prompt_trace,
-                            result=shard_result,
-                            meta={
-                                "tool": func.__name__,
-                                "agent": self.__class__.__name__,
-                                "timestamp_ms": int(time.time() * 1000),
-                            },
-                        )
+                        _record_tool_execution(self, func.__name__, args, kwargs, result)
                     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                        if isinstance(e, (KeyboardInterrupt, SystemExit)):
+                            raise
                         logging.debug("Failed to record tool interaction: %s", e)
 
                 return result
