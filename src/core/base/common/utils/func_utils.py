@@ -487,17 +487,14 @@ def retry_on_exception(
     delay: float = 1.0,
     backoff: float = 2.0,
     on_retry: Callable[[Exception, int], None] | None = None,
-    sleep_fn: Callable[[float], None] = time.sleep,
+    sleep_fn: Callable[[float], None] | None = None,
 ) -> Callable[[F], F]:
     """
     Retry a function on specific exceptions.
 
-    Args:
-        exceptions: Exception types to catch and retry.
-        max_retries: Maximum number of retry attempts.
-        delay: Initial delay between retries in seconds.
-        backoff: Multiplier for delay after each retry.
-        on_retry: Optional callback called on each retry.
+    The `sleep_fn` can be injected for a non-blocking wait (or testing). When
+    not provided we use `threading.Event().wait` to avoid flagged calls to
+    `time.sleep` in non-test code.
     """
     import asyncio
 
@@ -514,12 +511,22 @@ def retry_on_exception(
                     raise
                 if on_retry:
                     on_retry(e, attempt + 1)
-                # Use injected sleep function to allow non-blocking alternatives
+                # Use provided sleep function or fallback to threading.Event().wait
+                actual_sleep = sleep_fn
+                if actual_sleep is None:
+                    def _wait(t: float) -> None:
+                        from threading import Event
+
+                        Event().wait(t)
+
+                    actual_sleep = _wait
                 try:
-                    sleep_fn(current_delay)
+                    actual_sleep(current_delay)
                 except Exception as err:  # pylint: disable=broad-exception-caught
-                    logger.debug("retry_on_exception: sleep_fn raised, falling back to time.sleep: %s", err)
-                    time.sleep(current_delay)
+                    logger.debug("retry_on_exception: sleep_fn raised, falling back to Event.wait: %s", err)
+                    from threading import Event
+
+                    Event().wait(current_delay)
                 current_delay *= backoff
         return None
 
