@@ -47,17 +47,32 @@ class TestLMStudioConfig:
         """Test default configuration values."""
         from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioConfig
 
-        config = LMStudioConfig()
-        assert config.host == "localhost"
-        assert config.port == 1234
-        assert config.timeout == 60.0
-        assert config.temperature == 0.7
-        assert config.max_tokens == 2048
+        # Ensure DV_* and LMSTUDIO_* vars do not influence default behavior for this test
+        dv_saved = {k: os.environ.pop(k, None) for k in ("DV_LMSTUDIO_BASE_URL", "DV_LMSTUDIO_MODEL", "DV_LMSTUDIO_MAX_CONTEXT")}
+        lm_saved = {k: os.environ.pop(k, None) for k in ("LMSTUDIO_HOST", "LMSTUDIO_PORT", "LMSTUDIO_MODEL")}
+        try:
+            config = LMStudioConfig()
+            assert config.host == "localhost"
+            assert config.port == 1234
+            assert config.timeout == 60.0
+            assert config.temperature == 0.7
+            assert config.max_tokens == 2048
+        finally:
+            # Restore any popped DV_* and LMSTUDIO_* environment variables
+            for k, v in dv_saved.items():
+                if v is not None:
+                    os.environ[k] = v
+            for k, v in lm_saved.items():
+                if v is not None:
+                    os.environ[k] = v
 
     def test_config_from_env(self):
         """Test configuration from environment variables."""
         from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioConfig
 
+        # Ensure DV_* and existing LMSTUDIO_* do not interfere with this env-based test
+        dv_saved = {k: os.environ.pop(k, None) for k in ("DV_LMSTUDIO_BASE_URL", "DV_LMSTUDIO_MODEL", "DV_LMSTUDIO_MAX_CONTEXT")}
+        lm_saved = {k: os.environ.pop(k, None) for k in ("LMSTUDIO_HOST", "LMSTUDIO_PORT", "LMSTUDIO_MODEL")}
         os.environ["LMSTUDIO_HOST"] = "192.168.1.100"
         os.environ["LMSTUDIO_PORT"] = "5000"
         try:
@@ -67,6 +82,30 @@ class TestLMStudioConfig:
         finally:
             del os.environ["LMSTUDIO_HOST"]
             del os.environ["LMSTUDIO_PORT"]
+            for k, v in dv_saved.items():
+                if v is not None:
+                    os.environ[k] = v
+            for k, v in lm_saved.items():
+                if v is not None:
+                    os.environ[k] = v
+
+    def test_config_from_dv_env(self):
+        """Test configuration when using DV_ prefixed environment variables."""
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioConfig
+
+        os.environ["DV_LMSTUDIO_BASE_URL"] = "http://192.168.88.251:1234/v1"
+        os.environ["DV_LMSTUDIO_MODEL"] = "zai-org/glm-4.7-flash"
+        os.environ["DV_LMSTUDIO_MAX_CONTEXT"] = "128000"
+        try:
+            config = LMStudioConfig()
+            assert config.host == "192.168.88.251"
+            assert config.port == 1234
+            assert config.default_model == "zai-org/glm-4.7-flash"
+            assert config.max_context == 128000
+        finally:
+            del os.environ["DV_LMSTUDIO_BASE_URL"]
+            del os.environ["DV_LMSTUDIO_MODEL"]
+            del os.environ["DV_LMSTUDIO_MAX_CONTEXT"]
 
     def test_api_host_property(self):
         """Test api_host property."""
