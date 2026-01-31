@@ -13,7 +13,6 @@ import inspect
 import argparse
 import sys
 import json
-import os
 from typing import Union, Callable, Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.file_system_core import FileSystemCore
@@ -90,29 +89,8 @@ def bulk_replace(
         replacements = {old_pattern: new_string}
         return RustBridge.bulk_replace_files(str_paths, replacements)
 
-    # 2. Python Fallback
-    results = {}
-    for path_in in file_paths:
-        path = Path(path_in)
-        if not _fs or not hasattr(_fs, 'exists') or not _fs.exists(path):
-            results[str(path)] = False
-            continue
-
-        content = _fs.read_text(path)
-        if use_regex:
-            new_content, count = re.subn(old_pattern, new_string, content)
-            changed = count > 0
-        else:
-            changed = old_pattern in content
-            new_content = content.replace(old_pattern, new_string)
-
-        if changed:
-            _fs.atomic_write(path, new_content)
-            results[str(path)] = True
-        else:
-            results[str(path)] = False
-
-    return results
+    # Use the existing python fallback implementation to avoid duplication
+    return _bulk_replace_python_fallback(file_paths, old_pattern, new_string, use_regex)
 
 
 def setup_logging(verbosity_arg: int = 0) -> None:
