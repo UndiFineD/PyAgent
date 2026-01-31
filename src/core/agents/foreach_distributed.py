@@ -16,7 +16,7 @@ import json
 import logging
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Callable
 
 from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.common.utils.file_lock_manager import FileLockManager
@@ -42,6 +42,8 @@ class Worker:
         worker_timeout: int = 60,
         shard_lock_prefix: str = "foreach",
         conflict_strategy: str = "requeue",
+        *,
+        sleep_fn: Callable[[float], None] | None = None,
     ) -> None:
         self.worker_id = worker_id
         self.scratch_dir = Path(scratch_dir)
@@ -52,6 +54,8 @@ class Worker:
         self.acquired_locks: List[str] = []
         self.shard_lock_prefix = shard_lock_prefix
         self.conflict_strategy = conflict_strategy
+        import time as _time
+        self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
 
     def _status_path(self) -> Path:
         return self.scratch_dir / f"{self.worker_id}.status.json"
@@ -139,7 +143,13 @@ class Worker:
             if ok:
                 return True
             attempt += 1
-            time.sleep(cur_delay)
+            # Use injectable, testable sleep function (non-blocking environments can provide a custom one)
+            try:
+                self._sleep_fn(cur_delay)
+            except Exception:
+                # As a last resort fall back to time.sleep
+                import time as _time
+                _time.sleep(cur_delay)
             cur_delay *= backoff
         self._write_status("claim_retries_failed", {"attempts": attempt})
         return False
@@ -185,6 +195,8 @@ class Coordinator:
         worker_timeout: int = 60,
         leader_ttl: int = 60,
         lock_manager: Optional[FileLockManager] = None,
+        *,
+        sleep_fn: Callable[[float], None] | None = None,
     ) -> None:
         self.manifest_path = Path(manifest_path)
         self.scratch_dir = Path(scratch_dir)
@@ -194,6 +206,8 @@ class Coordinator:
         self.worker_timeout = worker_timeout
         self.leader_ttl = leader_ttl
         self.lock_manager = lock_manager or FileLockManager()
+        import time as _time
+        self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
 
     def load_manifest(self) -> Dict[str, Any]:
         return json.loads(self.manifest_path.read_text())
@@ -324,7 +338,11 @@ class Coordinator:
 
             if all_done:
                 break
-            time.sleep(self.poll_interval)
+            try:
+                self._sleep_fn(self.poll_interval)
+            except Exception:
+                import time as _time
+                _time.sleep(self.poll_interval)
 
         # Finalize and write aggregated report
         report = {
