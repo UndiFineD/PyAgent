@@ -15,8 +15,9 @@ from __future__ import annotations
 import json
 import logging
 import time
+import asyncio
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Callable
+from typing import Any, Dict, List, Optional
 
 from src.core.base.common.file_system_core import FileSystemCore
 from src.core.base.common.utils.file_lock_manager import FileLockManager
@@ -42,8 +43,6 @@ class Worker:
         worker_timeout: int = 60,
         shard_lock_prefix: str = "foreach",
         conflict_strategy: str = "requeue",
-        *,
-        sleep_fn: Callable[[float], None] | None = None,
     ) -> None:
         self.worker_id = worker_id
         self.scratch_dir = Path(scratch_dir)
@@ -54,8 +53,6 @@ class Worker:
         self.acquired_locks: List[str] = []
         self.shard_lock_prefix = shard_lock_prefix
         self.conflict_strategy = conflict_strategy
-        import time as _time
-        self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
 
     def _status_path(self) -> Path:
         return self.scratch_dir / f"{self.worker_id}.status.json"
@@ -125,40 +122,35 @@ class Worker:
         self._write_status("locked", {"acquired": len(self.acquired_locks), "shard_id": shard.get("id")})
         return True
 
-    def claim_shard_with_retries(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.5, backoff: float = 2.0) -> bool:
-        """Attempt to claim a shard with retries and exponential backoff.
+    def claim_shard_with_retries(
+        self,
+        manifest_path: str | Path,
+        retries: int = 3,
+        delay: float = 0.1,
+        backoff: float = 2.0,
+        sleep_fn: Optional[callable] = None,
+    ) -> bool:
+        """Attempt to claim shard with retries and exponential backoff.
 
-        Returns True if the claim eventually succeeds.
+        `sleep_fn` may be injected for testability; it should accept seconds to
+        sleep. If omitted, falls back to `time.sleep`.
         """
+        sleep_fn = sleep_fn or time.sleep
         attempt = 0
-        cur_delay = delay
-        while attempt <= retries:
-            ok = False
-            try:
-                ok = self.claim_shard(manifest_path)
-            except Exception as e:
-                # transient error: log and retry
-                logger.debug("claim_shard attempt %d failed: %s", attempt + 1, e)
-                ok = False
+        cur_delay = float(delay)
+        while attempt < int(retries):
+            ok = self.claim_shard(manifest_path)
             if ok:
                 return True
             attempt += 1
-            # Use injectable, testable sleep function (non-blocking environments can provide a custom one)
-            try:
-                self._sleep_fn(cur_delay)
-            except Exception:
-                # As a last resort fall back to time.sleep
-                import time as _time
-                _time.sleep(cur_delay)
-            cur_delay *= backoff
-        self._write_status("claim_retries_failed", {"attempts": attempt})
+            sleep_fn(cur_delay)
+            cur_delay *= float(backoff)
         return False
 
-    async def claim_shard_async(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.5, backoff: float = 2.0) -> bool:
-        """Async wrapper for claim_shard_with_retries using thread executor."""
-        # Run CPU/IO bound blocking claim_shard_with_retries in thread pool
-        import asyncio
-        return await asyncio.to_thread(self.claim_shard_with_retries, manifest_path, retries, delay, backoff)
+    async def claim_shard_async(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.1) -> bool:
+        """Async wrapper that runs claim_shard_with_retries in a thread pool."""
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, self.claim_shard_with_retries, manifest_path, retries, delay)
 
     def release_locks(self) -> None:
         """Release any locks this worker holds."""
@@ -179,216 +171,123 @@ class Worker:
 
 
 class Coordinator:
-    """Simple Coordinator to assign shards, monitor workers, and attempt merges.
+    """A lightweight coordinator for staged Foreach runs.
 
-    This coordinator uses the manifest stored in `scratch/foreach_shards/` and
-    monitors worker status files to drive the distributed flow. It does not
-    perform any real git operations — merges are simulated by creating a
-    `.merge_result.json` artifact under the scratch directory for review.
+    The Coordinator reads a manifest describing shards and monitors worker
+    status files in a scratch area. It will detect stalled workers and emit
+    simple reassign markers, and will detect shard completion (status 'done')
+    and include a 'merge' hint in the aggregated report.
+
+    For safety, the Coordinator ensures that the manifest indicates tests
+    should be run for staged changes by setting `enforce_tests` to True by
+    default. Agents and Workers may consult this flag when choosing whether
+    to run focused tests before staging edits.
     """
 
     def __init__(
         self,
         manifest_path: str | Path,
         scratch_dir: str | Path = "scratch/foreach_shards",
-        poll_interval: float = 0.5,
-        worker_timeout: int = 60,
-        leader_ttl: int = 60,
-        lock_manager: Optional[FileLockManager] = None,
-        *,
-        sleep_fn: Callable[[float], None] | None = None,
+        poll_interval: float = 2.0,
+        worker_timeout: float = 600.0,
+        leader_ttl: float | None = None,
     ) -> None:
         self.manifest_path = Path(manifest_path)
         self.scratch_dir = Path(scratch_dir)
+        self.poll_interval = float(poll_interval)
+        self.worker_timeout = float(worker_timeout)
+        # leader_ttl defaults to worker_timeout when not supplied so tests may
+        # set worker_timeout to control leader leasing.
+        self.leader_ttl = float(leader_ttl) if leader_ttl is not None else float(self.worker_timeout)
         self._fs = FileSystemCore()
         self._fs.ensure_directory(self.scratch_dir)
-        self.poll_interval = poll_interval
-        self.worker_timeout = worker_timeout
-        self.leader_ttl = leader_ttl
-        self.lock_manager = lock_manager or FileLockManager()
-        import time as _time
-        self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
-
-    def load_manifest(self) -> Dict[str, Any]:
-        return json.loads(self.manifest_path.read_text())
-
-    def elect_leader(self, candidate_id: str) -> bool:
-        """Attempt to become the Coordinator leader.
-
-        Uses a short-lived lock to avoid races and writes the leader file with
-        a timestamp and TTL. Returns True if this coordinator becomes the leader.
-        """
-        leader_file = self.scratch_dir / "leader.json"
-        lock_id = "leader_election"
-        # Acquire a short lock to perform atomic leader check-and-set
-        acquired = self.lock_manager.acquire_lock(lock_id, timeout=5.0)
-        if not acquired:
-            return False
-        try:
-            now = time.time()
-            if leader_file.exists():
-                try:
-                    data = json.loads(leader_file.read_text())
-                    exp = data.get("timestamp", 0) + data.get("ttl", self.leader_ttl)
-                    if exp > now:
-                        # Existing leader still valid
-                        return data.get("leader") == candidate_id
-                except Exception:
-                    # Corrupted leader file; allow takeover
-                    pass
-            payload = {"leader": candidate_id, "timestamp": now, "ttl": self.leader_ttl}
-            self._fs.atomic_write(leader_file, json.dumps(payload, indent=2))
-            return True
-        finally:
-            self.lock_manager.release_lock(lock_id)
-
-    def get_current_leader(self) -> Optional[str]:
-        leader_file = self.scratch_dir / "leader.json"
-        if not leader_file.exists():
-            return None
-        try:
-            data = json.loads(leader_file.read_text())
-            exp = data.get("timestamp", 0) + data.get("ttl", self.leader_ttl)
-            if time.time() > exp:
-                return None
-            return data.get("leader")
-        except Exception:
-            return None
-
-    async def monitor_workers_and_merge_async(self, wait_for_completion: float = 10.0) -> Dict[str, Any]:
-        """Async wrapper for monitor_workers_and_merge using thread executor."""
-        import asyncio
-        return await asyncio.to_thread(self.monitor_workers_and_merge, wait_for_completion)
-
-    def persist_manifest(self, manifest: Dict[str, Any]) -> None:
-        self._fs.atomic_write(self.manifest_path, json.dumps(manifest, indent=2))
+        self._leader_file = self.scratch_dir / "leader.json"
 
     def assign_shards(self) -> Dict[str, Any]:
-        """Ensure each shard has a `worker` and `branch` assigned."""
-        manifest = self.load_manifest()
-        shards = manifest.get("shards", [])
-        next_worker = 1
-        for s in shards:
-            if not s.get("worker"):
-                s["worker"] = f"worker-{next_worker}"
-                s["branch"] = s.get("branch") or f"foreach/{self.manifest_path.stem}/worker-{next_worker}/batch-1"
-                next_worker = (next_worker % max(1, len(shards))) + 1
-        manifest["shards"] = shards
-        self.persist_manifest(manifest)
+        """Read and return the manifest, ensuring `enforce_tests` is set.
+
+        This method is intentionally idempotent and does not modify worker
+        assignments unless necessary.
+        """
+        content = self.manifest_path.read_text()
+        manifest = json.loads(content)
+        # Ensure enforce_tests flag is present and True by default
+        if "enforce_tests" not in manifest:
+            manifest["enforce_tests"] = True
         return manifest
 
-    def _worker_status_path(self, worker_id: str) -> Path:
-        return self.scratch_dir / f"{worker_id}.status.json"
+    def monitor_workers_and_merge(self, wait_for_completion: float = 30.0) -> Dict[str, Any]:
+        """Poll worker status files and return an aggregated report.
 
-    def monitor_workers_and_merge(self, wait_for_completion: float = 10.0) -> Dict[str, Any]:
-        """Monitor worker statuses until completion or timeout and attempt merges.
-
-        Returns an aggregated report containing per-shard outcomes and merge results.
+        wait_for_completion sets the maximum wall-clock time to wait for all
+        shards to reach a terminal state. The report includes a map
+        `shard_status` keyed by shard id describing outcomes.
         """
-        manifest = self.load_manifest()
-        shards = manifest.get("shards", [])
-        deadline = time.time() + wait_for_completion
-        shard_status: Dict[int, Dict[str, Any]] = {s.get("id"): {"status": "pending"} for s in shards}
+        manifest = self.assign_shards()
+        shards = {s.get("id"): s for s in manifest.get("shards", [])}
+        shard_status: Dict[int, Dict[str, Any]] = {}
 
-        # Keep track of last update times
-        last_updates: Dict[str, float] = {}
+        deadline = time.time() + float(wait_for_completion)
+        pending = set(shards.keys())
 
-        while time.time() < deadline:
-            all_done = True
-            for s in shards:
-                sid = s.get("id")
-                worker = s.get("worker")
-                status_path = self._worker_status_path(worker)
+        while pending and time.time() < deadline:
+            for sid in list(pending):
+                shard = shards[sid]
+                worker = shard.get("worker")
+                status_path = self.scratch_dir / f"{worker}.status.json"
                 if status_path.exists():
                     try:
-                        st = json.loads(status_path.read_text())
-                        last_updates[worker] = st.get("timestamp", time.time())
-                        cur_status = st.get("status")
-                        shard_status[sid]["status"] = cur_status
-                        shard_status[sid]["detail"] = st.get("detail", {})
-
-                        if cur_status == "locked":
-                            # Wait for worker to mark 'done'
-                            all_done = False
-                        elif cur_status in ("released", "done"):
-                            # Attempt a simulated merge for the completed shard
-                            merge_res = self._attempt_merge(s)
-                            shard_status[sid]["merge"] = merge_res
-                        elif cur_status in ("lock_failed", "timeout"):
-                            # Reassign according to conflict strategy
-                            shard_status[sid]["status"] = cur_status
-                            # Try to reassign to a different worker (simple round-robin)
-                            self._reassign_shard(manifest, s)
-                            shards = manifest.get("shards", [])
-                            all_done = False
-                        else:
-                            all_done = False
+                        data = json.loads(status_path.read_text())
+                        st = data.get("status")
+                        if st == "done":
+                            shard_status[sid] = {"status": "done", "merge": {"shard_id": sid}}
+                            pending.remove(sid)
+                        elif st == "locked":
+                            # still working; leave for next poll
+                            shard_status.setdefault(sid, {}).update({"status": "locked"})
+                        elif st == "lock_failed":
+                            shard_status[sid] = {"status": "lock_failed"}
+                            pending.remove(sid)
                     except Exception:
-                        all_done = False
+                        shard_status[sid] = {"status": "unknown"}
+                        pending.remove(sid)
                 else:
-                    # No status file yet; check worker liveness
-                    last = last_updates.get(worker, 0)
-                    if time.time() - last > self.worker_timeout:
-                        shard_status[sid]["status"] = "worker_stalled"
-                        self._reassign_shard(manifest, s)
-                        shards = manifest.get("shards", [])
-                        all_done = False
-                    else:
-                        all_done = False
-
-            if all_done:
-                break
+                    # no status file yet; defer until deadline
+                    pass
+            if pending and time.time() < deadline:
+                time.sleep(self.poll_interval)
+        # Any remaining pending shards are considered stalled
+        for sid in list(pending):
+            shard_status[sid] = {"status": "worker_stalled"}
+            # write a reassign marker for operators/telemetry
             try:
-                self._sleep_fn(self.poll_interval)
+                self._fs.atomic_write(self.scratch_dir / f"reassign_{sid}.json", json.dumps({"shard_id": sid}, indent=2))
             except Exception:
-                import time as _time
-                _time.sleep(self.poll_interval)
+                logger.debug("Failed to write reassign marker for shard %s", sid)
+        return {"manifest_id": manifest.get("manifest_id"), "shard_status": shard_status}
 
-        # Finalize and write aggregated report
-        report = {
-            "manifest": str(self.manifest_path),
-            "shard_status": shard_status,
-            "finished_at": time.time(),
-        }
-        rep_path = self.scratch_dir / f"{self.manifest_path.stem}_coordinator_report.json"
-        self._fs.atomic_write(rep_path, json.dumps(report, indent=2))
-        return report
+    def elect_leader(self, leader_name: str) -> bool:
+        """Attempt to acquire leadership for the given `leader_name`.
 
-    def _reassign_shard(self, manifest: Dict[str, Any], shard: Dict[str, Any]) -> None:
-        """Reassign a shard to the next available worker id.
-
-        This is a simple round-robin reassignment used in staged runs.
+        Returns True if leadership was acquired, False otherwise. Leadership is
+        represented by a simple file in the scratch area with an expiry time.
         """
-        shards = manifest.get("shards", [])
-        worker_ids = [s.get("worker") for s in shards if s.get("worker")]
-        if not worker_ids:
-            return
-        current = shard.get("worker")
+        now = time.time()
+        # If leader file exists and not expired, fail
+        if self._leader_file.exists():
+            try:
+                data = json.loads(self._leader_file.read_text())
+                expires = float(data.get("expires", 0))
+                if expires > now:
+                    return False
+            except Exception:
+                # Corrupt file: allow takeover
+                pass
+        # Acquire leadership by writing a new leader file
         try:
-            idx = worker_ids.index(current)
-            new_worker = worker_ids[(idx + 1) % len(worker_ids)]
-        except ValueError:
-            new_worker = worker_ids[0]
-        shard["worker"] = new_worker
-        # update status to requeued so workers can pick it up
-        self._fs.atomic_write(self.manifest_path, json.dumps(manifest, indent=2))
-        self._fs.atomic_write(self.scratch_dir / f"reassign_{shard.get('id')}.json", json.dumps({"reassigned_to": new_worker}, indent=2))
-
-    def _attempt_merge(self, shard: Dict[str, Any]) -> Dict[str, Any]:
-        """Simulate a merge attempt for the worker branch and write a merge result artifact."""
-        branch = shard.get("branch")
-        # In a real implementation, we would attempt a `git merge` and run CI; here
-        # we simulate success and write an artifact for manual review.
-        merge_artifact = {
-            "branch": branch,
-            "merged": True,
-            "notes": "Simulated merge - requires human review before actual merge",
-            "timestamp": time.time(),
-        }
-        out_path = self.scratch_dir / f"merge_result_{branch.replace('/', '_')}.json"
-        try:
-            self._fs.atomic_write(out_path, json.dumps(merge_artifact, indent=2))
-        except Exception as e:  # pragma: no cover - best-effort artifact
-            logger.debug("Failed to write merge artifact: %s", e)
-        return merge_artifact
+            payload = {"leader": leader_name, "expires": now + float(self.leader_ttl)}
+            self._fs.atomic_write(self._leader_file, json.dumps(payload, indent=2))
+            return True
+        except Exception:
+            return False
 
