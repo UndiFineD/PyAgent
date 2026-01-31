@@ -138,6 +138,35 @@ def llm_chat_via_ollama(prompt: str, model: str = "llama3") -> str | None:
     return _runner.llm_chat_via_ollama(prompt=prompt, model=env_model)
 
 
+def llm_chat_via_lmstudio(
+    prompt: str,
+    model: str = "",
+    system_prompt: str = "You are a helpful assistant.",
+    **kwargs,
+) -> str | None:
+    """Call LM Studio local inference server.
+
+    This is a compatibility wrapper that dispatches to the underlying runner if
+    available, or falls back to the higher-level LLMClient implementation. This
+    prevents AttributeError when modules expect a module-level function named
+    `llm_chat_via_lmstudio` on the execution engine.
+    """
+    try:
+        # Preferred path: SubagentRunner provides a direct implementation
+        return _runner.llm_chat_via_lmstudio(prompt=prompt, model=model, system_prompt=system_prompt, **kwargs)
+    except AttributeError:
+        # Fallback: use the LLMClient if the runner does not expose LM Studio
+        from src.infrastructure.compute.backend.llm_client import LLMClient
+
+        client = LLMClient(requests, workspace_root=str(root))
+        try:
+            return client.llm_chat_via_lmstudio(prompt=prompt, model=model, system_prompt=system_prompt, **kwargs)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Keep behavior tolerant: don't raise to caller, just return None on failure
+            logging.debug("LM Studio wrapper failed: %s", e)
+            return None
+
+
 def llm_chat_via_copilot_cli(prompt: str) -> str | None:
     """Call Copilot CLI endpoint."""
     return _runner.llm_chat_via_copilot_cli(prompt=prompt)
