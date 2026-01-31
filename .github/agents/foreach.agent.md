@@ -55,7 +55,7 @@ constraints:
   - Avoid performing network calls, external service queries, or running containers unless the user explicitly permits it.
   - When in doubt about a change that affects many files, create a short proposal and ask the user.
 
-behavior: |
+behavior:
   - Split the input file according to `mode`.
   - Validate inputs and honor `max_parallel` to avoid CI or rate-limit overload.
   - For each unit (line/paragraph):
@@ -65,10 +65,12 @@ behavior: |
     4. Apply the change locally using a transactional FS operation (use `StateTransaction` when modifying the repo).
     5. Run unit tests that touch modified areas (or a focused test subset). If test coverage is not available, run the repository's test subset configured for small changes.
 
-    - Note: The Coordinator will ensure `enforce_tests` is set to `true` by default for runs to encourage safe, test-driven changes. Agents may still override this behavior by explicitly setting `enforce_tests` in the manifest when the user has provided a clear exception.
+    - Note: 
+      The Coordinator will ensure `enforce_tests` is set to `true` by default for runs to encourage safe, test-driven changes. Agents may still override this behavior by explicitly setting `enforce_tests` in the manifest when the user has provided a clear exception.
 
-    6. If tests pass, stage and commit the change with a structured message: "foreach: <summary> — <file> — unit:<n>" including a short task id and batch id.
-    7. Group up to `batch_size` units into a single commit to minimize noise; keep commits coherent and limited to a single logical intent.
+    6. If tests pass, stage and commit the change with a structured message: 
+      "foreach: <summary> — <file> — unit:<n>" including a short task id and batch id.
+      7. Group up to `batch_size` units into a single commit to minimize noise; keep commits coherent and limited to a single logical intent.
     8. Use `branch_strategy` to control branch creation:
        - If `branch_strategy` is `'no_branch'` (default), do not create per-batch branches. Commit changes locally or to a temporary run branch and **do not** push or open PRs unless explicitly requested by the user.
        - If `branch_strategy` is `'single_branch'`, create a single run branch named `foreach/<task-slug>/run-<id>` and push commits there; open **one consolidated PR** only when the user requests it.
@@ -94,7 +96,7 @@ safety_checks:
   - External calls or heavy network tasks must be approved by the user explicitly; the agent will default to local/static transformations unless granted permission.
   - Max worker count and per-worker file limit: default `num_workers=4` and default per-worker file-change threshold is 50 — exceedance triggers human confirmation and a paused run.
 
-examples: |
+examples:
   - Add a module-level docstring to each file listed in `docs/prompt/prompt3.txt`:
     task: "Add a concise module-level docstring describing purpose, example usage, and copyright header." 
   - Add type annotations for functions flagged by the fleet analyzer:
@@ -102,7 +104,7 @@ examples: |
   - Replace blocking `time.sleep` calls in non-test code with condition-based or injectable sleep functions:
     task: "Replace busy-wait loop with `threading.Condition` wait or injectable `sleep_fn` and add tests." 
 
-reporting_and_communication: |
+reporting_and_communication:
   - For each batch, produce a short summary: #units processed, #files changed, tests run (pass/fail), per-worker metrics (files modified, commits, failures), and telemetry messages created. If any tests were created or modified as part of the run (allowed via `allow_test_modification`), include a detailed summary of the test changes, the test results before and after modification, and rationale. Include sample diffs, links to PRs/issues, and the shard manifest used for the run.
   - Coordinator must persist a manifest and aggregated telemetry to the local scratch area `scratch/foreach_shards/` for operator inspection. **Do not commit runtime artifacts or manifests to the repository**; ensure `scratch/foreach_shards/` is ignored by `.gitignore` and keep these artifacts local or upload them to an external artifact store when requested. Attach a short report to the PR (if one is created) describing any conflicts or reassignments.
   - Telemetry format: write one JSON object per unit (JSON Lines) to `scratch/foreach_shards/telemetry.jsonl`. Each entry should include at minimum: `unit_id`, `status`, `duration_seconds`, `file_changes` (list of paths), `test_results` (pass/fail or detailed), and a short `diff_snippet` (truncated). Aggregate files should also include run-level summary stats and per-worker metrics.
@@ -111,7 +113,7 @@ reporting_and_communication: |
   - Include a changelog note when a set of changes reasonably belong together; prefer adding a brief entry in `docs/CHANGES.md` or similar.
   - In case of wide-scale failures or merge conflicts, the Coordinator should create a draft PR and open a blocking issue titled `[foreach] Batch <id> failed — manual action required` containing diagnostic artifacts and suggested next steps.
 
-notes: |
+notes:
   - Use `StateTransaction` from `src/core/base/agent_state_manager.py` for transactional filesystem edits to allow safe rollback.
   - Prefer small, verifiable changes and unit tests over large refactors.
   - If the user requests an aggressive refactor across many files, propose an incremental plan and make a small demonstration change first.
