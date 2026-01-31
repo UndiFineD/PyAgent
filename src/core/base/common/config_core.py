@@ -156,21 +156,21 @@ class ConfigCore(BaseCore):
     def _can_use_rust_loader(self, path: Path) -> bool:
         return rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]
 
-    def _try_rust_load_config(self, path: Path):
+    def _try_rust_load_config(self, path: Path) -> dict[str, Any] | None:
         try:
             return rc.load_config_rust(str(path))  # type: ignore
-        except Exception as e:
+        except RuntimeError as e:
             logging.error("ConfigCore: Rust load_config_rust failed for %s: %s", path, e)
             return None
 
-    def _try_python_load_config(self, path: Path, fmt) -> ConfigObject:
+    def _try_python_load_config(self, path: Path, fmt: ConfigFormat) -> ConfigObject:
         try:
             content = path.read_text()
             data = self._parse(content, fmt)
             cfg = ConfigObject(data)
             self.configs[path.name] = cfg
             return cfg
-        except Exception as e:
+        except (OSError, ValueError) as e:
             logging.error("ConfigCore: Failed to load %s: %s", path, e)
             return ConfigObject({})
 
@@ -185,10 +185,10 @@ class ConfigCore(BaseCore):
     def _can_use_rust_merge(self) -> bool:
         return rc and hasattr(rc, "merge_configs_rust")
 
-    def _try_rust_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]):
+    def _try_rust_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any] | None:
         try:
             return rc.merge_configs_rust(base, override)  # type: ignore
-        except Exception as e:
+        except RuntimeError as e:
             logging.error("ConfigCore: Rust merge_configs_rust failed: %s", e)
             return None
 
@@ -206,7 +206,7 @@ class ConfigCore(BaseCore):
         data: Any = {}
         try:
             data = self._parse_by_format(content, fmt)
-        except Exception as e:
+        except (ValueError, TypeError, json.JSONDecodeError) as e:
             logging.error("ConfigCore: Failed to parse config content: %s", e)
             return {}
         if isinstance(data, list):

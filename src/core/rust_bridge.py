@@ -20,7 +20,7 @@ Provides centralized hub for all Rust FFI calls with graceful fallbacks.
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional, Callable
 
 try:
     import rust_core as rc
@@ -77,7 +77,7 @@ class RustBridge:
         return RUST_AVAILABLE and hasattr(rc, attr)
 
     @staticmethod
-    def _try_rust_call(attr: str, *args, fallback=None, **kwargs):
+    def _try_rust_call(attr: str, *args: Any, fallback: Optional[Callable[[], Any]] = None, **kwargs: Any) -> Any:
         try:
             return getattr(rc, attr)(*args, **kwargs)  # type: ignore
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -128,49 +128,49 @@ class RustBridge:
         return results
 
     @staticmethod
-    def chunk_boundaries_rust(*args, **kwargs) -> Any:
+    def chunk_boundaries_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited chunk boundary calculation."""
         if not RUST_AVAILABLE or not hasattr(rc, "chunk_boundaries_rust"):
             return None
         return rc.chunk_boundaries_rust(*args, **kwargs)  # type: ignore
 
     @staticmethod
-    def stream_sync_rust(*args, **kwargs) -> Any:
+    def stream_sync_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited stream synchronization."""
         if not RUST_AVAILABLE or not hasattr(rc, "stream_sync_rust"):
             return None
         return rc.stream_sync_rust(*args, **kwargs)  # type: ignore
 
     @staticmethod
-    def uva_copy_rust(*args, **kwargs) -> Any:
+    def uva_copy_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited UVA data copy."""
         if not RUST_AVAILABLE or not hasattr(rc, "uva_copy_rust"):
             return None
         return rc.uva_copy_rust(*args, **kwargs)  # type: ignore
 
     @staticmethod
-    def batch_write_indices_rust(*args, **kwargs) -> Any:
+    def batch_write_indices_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited batch index generation."""
         if not RUST_AVAILABLE or not hasattr(rc, "batch_write_indices_rust"):
             return None
         return rc.batch_write_indices_rust(*args, **kwargs)  # type: ignore
 
     @staticmethod
-    def event_query_rust(*args, **kwargs) -> Any:
+    def event_query_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited event query logic."""
         if not RUST_AVAILABLE or not hasattr(rc, "event_query_rust"):
             return None
         return rc.event_query_rust(*args, **kwargs)  # type: ignore
 
     @staticmethod
-    def image_resize_rust(*args, **kwargs) -> Any:
+    def image_resize_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited image resizing."""
         if not RUST_AVAILABLE or not hasattr(rc, "image_resize_rust"):
             return None
         return rc.image_resize_rust(*args, **kwargs)  # type: ignore
 
     @staticmethod
-    def normalize_pixels_rust(*args, **kwargs) -> Any:
+    def normalize_pixels_rust(*args: Any, **kwargs: Any) -> Any:
         """Audited pixel normalization."""
         if not RUST_AVAILABLE or not hasattr(rc, "normalize_pixels_rust"):
             return None

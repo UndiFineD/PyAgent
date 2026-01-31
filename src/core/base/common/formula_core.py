@@ -78,7 +78,7 @@ class FormulaCore:
         if rc and hasattr(rc, "compute_perplexity_rust"):
             try:
                 return rc.compute_perplexity_rust(logprobs)  # type: ignore
-            except Exception as e:
+            except RuntimeError as e:
                 logger.error("FormulaCore: Rust compute_perplexity_rust failed: %s", e)
         return None
 
@@ -103,7 +103,7 @@ class FormulaCore:
         if rc and hasattr(rc, "compute_entropy_rust"):
             try:
                 return rc.compute_entropy_rust(logprobs)  # type: ignore
-            except Exception as e:
+            except RuntimeError as e:
                 logger.error("FormulaCore: Rust compute_entropy_rust failed: %s", e)
         return None
 
@@ -138,7 +138,7 @@ class FormulaCore:
             try:
                 safe_vars = {k: float(v) for k, v in variables.items()}
                 return float(rc.evaluate_formula(expression, safe_vars))
-            except Exception as e:
+            except RuntimeError as e:
                 logger.error("FormulaCore: Rust evaluate_formula failed: %s", e)
         return None
 

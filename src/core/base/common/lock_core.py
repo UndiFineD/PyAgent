@@ -22,6 +22,7 @@ Handles local file locks and distributed swarm locks.
 """
 
 import time
+import threading
 from typing import Any, Dict
 
 from .base_core import BaseCore
@@ -37,6 +38,8 @@ class LockCore(BaseCore):
         super().__init__()
         self.active_locks: Dict[str, float] = {}
         self.shared_counts: Dict[str, int] = {}
+        # Use a condition to avoid busy-waiting and enable efficient notify/wait
+        self._cond = threading.Condition()
 
     def acquire_lock(self, lock_id: str, timeout: float = 10.0, lock_type: Any = None) -> bool:
         """Acquire a lock by ID. Supports SHARED and EXCLUSIVE."""
@@ -48,30 +51,38 @@ class LockCore(BaseCore):
             else:
                 is_shared = str(lock_type).upper() == "SHARED"
 
-        start_time = time.time()
-        while time.time() - start_time < timeout:
-            if is_shared:
-                # Shared lock can be acquired if no exclusive lock exists
-                if lock_id not in self.active_locks:
-                    self.shared_counts[lock_id] = self.shared_counts.get(lock_id, 0) + 1
-                    return True
-            else:
-                # Exclusive lock can be acquired if no lock exists (shared or exclusive)
-                if lock_id not in self.active_locks and self.shared_counts.get(lock_id, 0) == 0:
-                    self.active_locks[lock_id] = time.time()
-                    return True
-            # TODO: Replace with event-driven wait/notify for better performance if possible
-            time.sleep(0.05)  # Short sleep for responsiveness; consider using threading.Condition or asyncio for async
+        end_time = time.time() + timeout
+        with self._cond:
+            while time.time() < end_time:
+                if is_shared:
+                    # Shared lock can be acquired if no exclusive lock exists
+                    if lock_id not in self.active_locks:
+                        self.shared_counts[lock_id] = self.shared_counts.get(lock_id, 0) + 1
+                        return True
+                else:
+                    # Exclusive lock can be acquired if no lock exists (shared or exclusive)
+                    if lock_id not in self.active_locks and self.shared_counts.get(lock_id, 0) == 0:
+                        self.active_locks[lock_id] = time.time()
+                        return True
+
+                # Wait in a condition with a short timeout to yield CPU and allow notify
+                remaining = end_time - time.time()
+                wait_for = min(remaining, 0.05)
+                if wait_for > 0:
+                    self._cond.wait(timeout=wait_for)
         return False
 
     def release_lock(self, lock_id: str) -> None:
         """Release a held lock."""
-        if lock_id in self.active_locks:
-            self.active_locks.pop(lock_id)
-        elif lock_id in self.shared_counts:
-            self.shared_counts[lock_id] -= 1
-            if self.shared_counts[lock_id] <= 0:
-                self.shared_counts.pop(lock_id)
+        with self._cond:
+            if lock_id in self.active_locks:
+                self.active_locks.pop(lock_id)
+            elif lock_id in self.shared_counts:
+                self.shared_counts[lock_id] -= 1
+                if self.shared_counts[lock_id] <= 0:
+                    self.shared_counts.pop(lock_id)
+            # Notify waiters that the lock state changed
+            self._cond.notify_all()
 
     def is_locked(self, lock_id: str) -> bool:
         """Check if a resource is currently locked."""

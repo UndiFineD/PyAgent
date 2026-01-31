@@ -144,18 +144,65 @@ class ShellCore:
             except asyncio.TimeoutError:
                 process.kill()
                 await process.wait()
-                return ShellResult(cmd, -1, "", "Timeout expired", time.perf_counter() - start_time)
+                res = ShellResult(cmd, -1, "", "Timeout expired",
+                                  time.perf_counter() - start_time)
+                # Record the timeout event if recorder is available
+                try:
+                    if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                        prompt_trace = f"SHELL_EXECUTION_TIMEOUT: {' '.join(cmd)}"
+                        self.fleet.recorder.record_interaction(
+                            provider="shell",
+                            model="ShellCore",
+                            prompt=prompt_trace,
+                            result=str(res),
+                            meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},
+                        )
+                except Exception:
+                    self.logger.debug("Failed to record shell timeout interaction")
+                return res
 
-            return ShellResult(
+            duration = time.perf_counter() - start_time
+            res = ShellResult(
                 command=cmd,
                 returncode=process.returncode or 0,
                 stdout=stdout,
                 stderr=stderr,
-                duration=time.perf_counter() - start_time,
+                duration=duration,
             )
+            # Record the shell execution to fleet recorder if available
+            try:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    prompt_trace = f"SHELL_EXECUTION: {' '.join(cmd)}\nCWD: {working_dir}"
+                    result_text = res.stdout if res.stdout else res.stderr
+                    if len(result_text) > 2000:
+                        result_text = result_text[:2000] + "... [TRUNCATED]"
+                    self.fleet.recorder.record_interaction(
+                        provider="shell",
+                        model="ShellCore",
+                        prompt=prompt_trace,
+                        result=result_text,
+                        meta={"cmd": cmd, "cwd": str(working_dir), "duration": duration},
+                    )
+            except Exception:
+                self.logger.debug("Failed to record shell interaction")
+
+            return res
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to execute %s: %s", cmd[0], e)
+            # Try to record the failure event to the fleet recorder, if available
+            try:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    prompt_trace = f"SHELL_EXECUTION_ASYNC_ERROR: {' '.join(cmd)}\nCWD: {working_dir}"
+                    self.fleet.recorder.record_interaction(
+                        provider="shell",
+                        model="ShellCore",
+                        prompt=prompt_trace,
+                        result=str(e),
+                        meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},
+                    )
+            except Exception:
+                self.logger.debug("Failed to record shell async error interaction")
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
@@ -189,7 +236,7 @@ class ShellCore:
                     stderr=stderr,
                     duration=time.perf_counter() - start_time,
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except RuntimeError as e:  # pylint: disable=broad-exception-caught, unused-variable
                 self.logger.warning("Rust shell execution failed: %s", e)
 
         current_env = os.environ.copy()
@@ -222,15 +269,45 @@ class ShellCore:
             )
 
         except subprocess.TimeoutExpired as e:
-            return ShellResult(
+            res = ShellResult(
                 command=cmd,
                 returncode=-1,
                 stdout=e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or ""),
                 stderr=e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or ""),
                 duration=time.perf_counter() - start_time,
             )
+            # Record the timeout event to the fleet recorder if available
+            try:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    prompt_trace = f"SHELL_EXECUTION_TIMEOUT: {' '.join(cmd)}\nCWD: {working_dir}"
+                    result_text = (res.stdout or res.stderr)
+                    if len(result_text) > 2000:
+                        result_text = result_text[:2000] + "... [TRUNCATED]"
+                    self.fleet.recorder.record_interaction(
+                        provider="shell",
+                        model="ShellCore",
+                        prompt=prompt_trace,
+                        result=result_text,
+                        meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},
+                    )
+            except Exception:
+                self.logger.debug("Failed to record shell timeout interaction")
+            return res
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to execute %s: %s", cmd[0], e)
+            # Attempt to record the failure with the fleet recorder
+            try:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    prompt_trace = f"SHELL_EXECUTION_ERROR: {' '.join(cmd)}\nCWD: {working_dir}"
+                    self.fleet.recorder.record_interaction(
+                        provider="shell",
+                        model="ShellCore",
+                        prompt=prompt_trace,
+                        result=str(e),
+                        meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},
+                    )
+            except Exception:
+                self.logger.debug("Failed to record shell error interaction")
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
     def redact_command(self, cmd: List[str], sensitive_patterns: List[str]) -> List[str]:

@@ -19,7 +19,7 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.common.file_system_core import FileSystemCore
 _fs = FileSystemCore()
 
-def _bulk_replace_python_fallback(file_paths, old_pattern, new_string, use_regex):
+def _bulk_replace_python_fallback(file_paths: list[Union[str, Path]], old_pattern: str, new_string: str, use_regex: bool) -> dict[str, bool]:
     results = {}
     for path_in in file_paths:
         path = Path(path_in)
