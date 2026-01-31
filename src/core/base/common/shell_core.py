@@ -157,8 +157,8 @@ class ShellCore:
                             result=str(res),
                             meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},
                         )
-                except Exception:
-                    self.logger.debug("Failed to record shell timeout interaction")
+                except Exception as err:  # pylint: disable=broad-exception-caught
+                    self.logger.debug("Failed to record shell timeout interaction: %s", err)
                 return res
 
             duration = time.perf_counter() - start_time
@@ -183,8 +183,8 @@ class ShellCore:
                         result=result_text,
                         meta={"cmd": cmd, "cwd": str(working_dir), "duration": duration},
                     )
-            except Exception:
-                self.logger.debug("Failed to record shell interaction")
+            except Exception as err:  # pylint: disable=broad-exception-caught
+                self.logger.debug("Failed to record shell interaction: %s", err)
 
             return res
 
@@ -201,8 +201,8 @@ class ShellCore:
                         result=str(e),
                         meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},
                     )
-            except Exception:
-                self.logger.debug("Failed to record shell async error interaction")
+            except Exception as err:  # pylint: disable=broad-exception-caught
+                self.logger.debug("Failed to record shell async error interaction: %s", err)
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
@@ -290,8 +290,8 @@ class ShellCore:
                         result=result_text,
                         meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},
                     )
-            except Exception:
-                self.logger.debug("Failed to record shell timeout interaction")
+            except Exception as err:  # pylint: disable=broad-exception-caught
+                self.logger.debug("Failed to record shell timeout interaction: %s", err)
             return res
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to execute %s: %s", cmd[0], e)
@@ -306,8 +306,8 @@ class ShellCore:
                         result=str(e),
                         meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},
                     )
-            except Exception:
-                self.logger.debug("Failed to record shell error interaction")
+            except Exception as err:  # pylint: disable=broad-exception-caught
+                self.logger.debug("Failed to record shell error interaction: %s", err)
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
 
     def redact_command(self, cmd: List[str], sensitive_patterns: List[str]) -> List[str]:

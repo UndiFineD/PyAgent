@@ -144,37 +144,57 @@ class FormulaCore:
 
     @classmethod
     def _eval_node(cls, node: ast.AST, variables: dict[str, float]) -> float:
-        """Recursively evaluate AST nodes."""
+        """Recursively evaluate AST nodes using small specialized helpers."""
         if isinstance(node, ast.Constant):
-            return float(node.value)
+            return cls._eval_constant(node)
 
         if isinstance(node, ast.Name):
-            if node.id not in variables:
-                raise ValueError(f"Unknown variable: {node.id}")
-            return float(variables[node.id])
+            return cls._eval_name(node, variables)
 
         if isinstance(node, ast.BinOp):
-            left = cls._eval_node(node.left, variables)
-            right = cls._eval_node(node.right, variables)
-            op_type = type(node.op)
-            if op_type not in cls.OPERATORS:
-                raise TypeError(f"Unsupported binary operator: {op_type}")
-            return cls.OPERATORS[op_type](left, right)
+            return cls._eval_binop(node, variables)
 
         if isinstance(node, ast.UnaryOp):
-            operand = cls._eval_node(node.operand, variables)
-            op_type = type(node.op)
-            if op_type not in cls.OPERATORS:
-                raise TypeError(f"Unsupported unary operator: {op_type}")
-            return cls.OPERATORS[op_type](operand)
+            return cls._eval_unary(node, variables)
 
         if isinstance(node, ast.Call):
-            if isinstance(node.func, ast.Name):
-                func_name = node.func.id
-                if func_name in cls.FUNCTIONS:
-                    args = [cls._eval_node(a, variables) for a in node.args]
-                    return cls.FUNCTIONS[func_name](*args)
-            func_id = node.func.id if isinstance(node.func, ast.Name) else node.func
-            raise TypeError(f"Unsupported function: {func_id}")
+            return cls._eval_call(node, variables)
 
         raise TypeError(f"Unsupported AST node: {type(node)}")
+
+    @classmethod
+    def _eval_constant(cls, node: ast.Constant) -> float:
+        return float(node.value)
+
+    @classmethod
+    def _eval_name(cls, node: ast.Name, variables: dict[str, float]) -> float:
+        if node.id not in variables:
+            raise ValueError(f"Unknown variable: {node.id}")
+        return float(variables[node.id])
+
+    @classmethod
+    def _eval_binop(cls, node: ast.BinOp, variables: dict[str, float]) -> float:
+        left = cls._eval_node(node.left, variables)
+        right = cls._eval_node(node.right, variables)
+        op_type = type(node.op)
+        if op_type not in cls.OPERATORS:
+            raise TypeError(f"Unsupported binary operator: {op_type}")
+        return cls.OPERATORS[op_type](left, right)
+
+    @classmethod
+    def _eval_unary(cls, node: ast.UnaryOp, variables: dict[str, float]) -> float:
+        operand = cls._eval_node(node.operand, variables)
+        op_type = type(node.op)
+        if op_type not in cls.OPERATORS:
+            raise TypeError(f"Unsupported unary operator: {op_type}")
+        return cls.OPERATORS[op_type](operand)
+
+    @classmethod
+    def _eval_call(cls, node: ast.Call, variables: dict[str, float]) -> float:
+        if isinstance(node.func, ast.Name):
+            func_name = node.func.id
+            if func_name in cls.FUNCTIONS:
+                args = [cls._eval_node(a, variables) for a in node.args]
+                return cls.FUNCTIONS[func_name](*args)
+        func_id = node.func.id if isinstance(node.func, ast.Name) else node.func
+        raise TypeError(f"Unsupported function: {func_id}")
