@@ -108,7 +108,24 @@ class PullRequestAgent(BaseAgent):
 
     @as_tool
     def create_patch_branch(self, branch_name: str) -> str:
-        """Creates a new git branch for staging changes."""
+        """Creates a new git branch for staging changes.
+
+        Respects the policy setting `allow_branch_creation` in the agent config
+        (defaults to False, requiring explicit user permission).
+        """
+        # Respect configuration to avoid creating many branches/PRs by default
+        allow = False
+        try:
+            allow = bool(getattr(self, "_config", {}).get("allow_branch_creation", False))
+        except Exception:
+            allow = False
+
+        if not allow:
+            return (
+                "Branch creation is disabled by policy. To enable, set `allow_branch_creation: true` "
+                "in the agent config or provide explicit permission to create branches."
+            )
+
         try:
             subprocess.check_output(["git", "checkout", "-b", branch_name], text=True)
             return f"Successfully created and switched to branch `{branch_name}`."
