@@ -211,8 +211,8 @@ class OrchestrationMixin:
                 return self.context.next_level(self.__class__.__name__)
             else:
                 return self.context
-        except Exception as e:  # pylint: disable=broad-exception-caught
-            logging.warning("Failed to propagate context: %s", e)
+        except (AttributeError, RuntimeError, ValueError) as e:
+            logging.warning("Failed to propagate context: %s", e, exc_info=True)
             return None
 
     async def _try_fleet_delegation(self, agent_type: str, prompt: str, target_file: str | None, context: Any | None) -> str | None:
@@ -237,8 +237,8 @@ class OrchestrationMixin:
                 if asyncio.iscoroutine(res):
                     return await res
                 return res
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning("Fleet delegation failed for %s: %s", agent_type, e)
+        except (KeyError, AttributeError, RuntimeError) as e:  # pylint: disable=unused-variable
+            logging.warning("Fleet delegation failed for %s: %s", agent_type, e, exc_info=True)
 
         return None
 
@@ -269,8 +269,8 @@ class OrchestrationMixin:
                     return await res
                 return res
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error("Registry delegation failed for %s: %s", agent_type, e)
+        except (ImportError, KeyError, AttributeError, RuntimeError) as e:  # pylint: disable=unused-variable
+            logging.error("Registry delegation failed for %s: %s", agent_type, e, exc_info=True)
             return f"Error: Registry lookup of {agent_type} failed. {str(e)}"
 
         return None
