@@ -50,8 +50,14 @@ class ResilienceCore(BaseCore):
         delay: float = 1.0,
         backoff: float = 2.0,
         exceptions: tuple[type[Exception], ...] = (Exception,),
+        sleep_fn: Callable[[float], None] = time.sleep,
     ) -> Callable[[Callable[..., T]], Callable[..., T]]:
-        """Synchronous retry decorator with exponential backoff."""
+        """Synchronous retry decorator with exponential backoff.
+
+        sleep_fn: Optional callable to control sleep behaviour for testing or async
+            contexts (e.g., pass `asyncio.get_event_loop().run_until_complete` wrapper
+            for non-blocking behavior).
+        """
 
         def decorator(func: Callable[..., T]) -> Callable[..., T]:
             @functools.wraps(func)
@@ -74,8 +80,12 @@ class ResilienceCore(BaseCore):
                             wait,
                             e,
                         )
-                        # TODO: Replace with event-driven or async wait for non-blocking retry if possible
-                        time.sleep(wait)  # Blocking sleep; consider using asyncio.sleep in async contexts
+                        # Use the supplied sleep function; allows injection of non-blocking sleep
+                        try:
+                            sleep_fn(wait)
+                        except Exception:
+                            # Fallback to blocking sleep if provided sleep_fn fails
+                            time.sleep(wait)
                         current_delay *= backoff
                 if last_exception:
                     raise last_exception
@@ -144,9 +154,9 @@ class ResilienceCore(BaseCore):
                 return rc.calculate_backoff(  # pylint: disable=no-member
                     failure_count, threshold, base_timeout, multiplier, max_timeout
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+            except TimeoutError as e:
+                logger.error("ResilienceCore: Timeout error: %s", e)
+                return None
 
         if failure_count < threshold:
             return 0.0
@@ -171,9 +181,9 @@ class ResilienceCore(BaseCore):
                 return rc.should_attempt_recovery(  # pylint: disable=no-member
                     last_failure_time, current_time, timeout
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+            except TimeoutError as e:
+                logger.error("ResilienceCore: Timeout error: %s", e)
+                return None
         return (current_time - last_failure_time) > timeout
 
     @staticmethod
@@ -197,9 +207,9 @@ class ResilienceCore(BaseCore):
                         failure_count,
                         failure_threshold,
                     )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+            except TimeoutError as e:
+                logger.error("ResilienceCore: Timeout error: %s", e)
+                return None
 
         if current_state == "CLOSED":
             if failure_count >= failure_threshold:
