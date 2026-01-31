@@ -305,7 +305,7 @@ class PenaltyEngine:
         prefix: tuple[int, ...] = tuple(tokens[-(n - 1) :])
 
         # Penalize tokens that would complete a repeated n-gram
-        for ngram: tuple[int, ...] in ngram_set:
+        for ngram in ngram_set:
             if ngram[:-1] == prefix:
                 next_token: int = ngram[-1]
                 if 0 <= next_token < result.shape[-1]:
@@ -347,13 +347,13 @@ class PenaltyEngine:
         result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = logits.copy()
 
         # Single token bad words
-        for token: int in self._bad_words:
+        for token in self._bad_words:
             if 0 <= token < result.shape[-1]:
                 result[..., token] = self.config.bad_words_penalty
 
         # Multi-token bad word sequences
         past: list[int] = list(past_tokens)
-        for sequence: list[int] in self._bad_word_sequences:
+        for sequence in self._bad_word_sequences:
             if len(sequence) <= 1:
                 continue
 
@@ -469,7 +469,7 @@ class BatchPenaltyEngine:
                 logits, repetition_penalties, frequency_penalties, presence_penalties, prompt_tokens, output_tokens
             )
 
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             engine = PenaltyEngine(
                 PenaltyConfig(
                     repetition_penalty=float(repetition_penalties[b]),

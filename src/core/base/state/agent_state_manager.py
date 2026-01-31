@@ -374,7 +374,19 @@ class StateTransaction:
                     raise ValueError(f"Generated code has syntax errors: {e}") from e
 
         if self.run_tests:
-            self._run_associated_tests()
+            # Prefer the centralized test runner for focused test execution
+            try:
+                from src.core.base.common.utils.test_runner import run_focused_tests_for_files
+
+                file_paths = [str(p) for p in self.target_files]
+                success, output = run_focused_tests_for_files(file_paths, timeout=120)
+                if not success:
+                    logging.error("Associated tests failed: %s", output)
+                    raise ValueError(f"Verification tests failed for transaction {self.id}: {output}")
+            except (ImportError, FileNotFoundError) as e:
+                # Fallback to legacy per-file pytest invocation if test_runner is unavailable
+                logging.debug("Test runner not available; falling back to legacy runner: %s", e)
+                self._run_associated_tests()
 
     def _run_associated_tests(self) -> None:
         """Run associated tests for modified files."""

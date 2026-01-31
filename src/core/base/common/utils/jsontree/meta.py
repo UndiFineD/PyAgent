@@ -13,7 +13,11 @@
 # limitations under the License.
 
 """
-Meta.py module.
+JSON Tree Meta Utilities.
+
+Helper utilities for analyzing and transforming nested JSON-like trees used
+across the codebase. Functions include counting leaves, computing depth,
+filtering leaves by predicate, and validating leaf values.
 """
 
 from __future__ import annotations
