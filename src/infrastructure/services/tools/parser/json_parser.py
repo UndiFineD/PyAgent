@@ -17,6 +17,10 @@
 
 """
 Generic JSON tool call parser.
+
+Parses JSON objects emitted by LLMs when tool calls are requested.
+Provides robust handling for OpenAI-style `function` objects and direct
+`{"name": ..., "arguments": {...}}` formats.
 """
 
 from __future__ import annotations

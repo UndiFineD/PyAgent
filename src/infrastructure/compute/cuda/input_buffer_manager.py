@@ -353,7 +353,7 @@ class InputBufferManager:
     def release_all(self) -> None:
         """Release all buffers."""
         with self._lock:
-            for slot: InputSlot in self._slots.values():
+            for slot in self._slots.values():
                 if slot.tensor is not None:
                     self.pool.release(slot.tensor)
             self._slots.clear()
@@ -434,7 +434,7 @@ class PredictiveBufferManager(InputBufferManager):
         """Pre-warm predicted buffers."""
         sizes: List[int] = self.predict_next_sizes()
 
-        for size: int in sizes:
+        for size in sizes:
             spec = BufferSpec(shape=(size,), dtype="int64", device="cuda")
 
             if spec not in self._prewarmed:
