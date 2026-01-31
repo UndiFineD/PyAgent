@@ -145,10 +145,13 @@ class ConfigCore(BaseCore):
         """Load and return a configuration object."""
         if not path.exists():
             return ConfigObject({})
+
+        # Prefer Rust loader for supported formats when available
         if self._can_use_rust_loader(path):
             data = self._try_rust_load_config(path)
-            if data is not None:
+            if data:
                 return ConfigObject(data)
+
         ext = path.suffix.lower()
         fmt = self.SUPPORTED_EXTENSIONS.get(ext, ConfigFormat.JSON)
         return self._try_python_load_config(path, fmt)

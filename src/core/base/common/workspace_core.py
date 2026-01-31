@@ -18,7 +18,7 @@ Unified workspace and path management core.
 
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Union
+from typing import Dict, Optional, Set, Union
 
 try:
     import rust_core as rc

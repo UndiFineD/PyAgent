@@ -83,8 +83,9 @@ class ResilienceCore(BaseCore):
                         # Use the supplied sleep function; allows injection of non-blocking sleep
                         try:
                             sleep_fn(wait)
-                        except Exception:
+                        except Exception as err:  # pylint: disable=broad-exception-caught
                             # Fallback to blocking sleep if provided sleep_fn fails
+                            logger.debug("ResilienceCore: sleep function raised, falling back to time.sleep: %s", err)
                             time.sleep(wait)
                         current_delay *= backoff
                 if last_exception:
