@@ -11,6 +11,7 @@ import subprocess
 import threading
 import time
 from pathlib import Path
+from typing import Callable
 
 from src.observability.structured_logger import StructuredLogger
 
@@ -23,29 +24,55 @@ class FleetUpdateMixin:
     Checks for repository updates every 15 minutes.
     """
 
-    def init_update_service(self, interval_seconds: int = 900):
-        """Initializes the periodic repository update cycle."""
+    def init_update_service(self, interval_seconds: int = 900, sleep_fn: Callable[[float], None] | None = None):
+        """Initializes the periodic repository update cycle.
+
+        `sleep_fn` may be supplied to make the background loop testable and
+        interruptible. By default the mixin uses an internal `threading.Event`
+        which allows a fast wake-up when `stop_update_service` is called.
+        """
         self._update_interval = interval_seconds
+        # Kill event allows responsive interruption of sleeps
+        self._kill_event = threading.Event()
+        if sleep_fn is None:
+            def _wait(secs: float) -> None:
+                self._kill_event.wait(secs)
+
+            self._sleep_fn = _wait
+        else:
+            self._sleep_fn = sleep_fn
+
         self._updater_thread = threading.Thread(target=self._update_loop, name="FleetAutoUpdater", daemon=True)
         self._updater_thread.start()
         logger.info(f"FleetUpdateMixin: Auto-update service started with {interval_seconds}s interval.")
 
+    def stop_update_service(self) -> None:
+        """Stop the background update thread cleanly."""
+        self._kill_event.set()
+        self.kill_switch = True
+        t = getattr(self, "_updater_thread", None)
+        if t is not None and getattr(t, "is_alive", lambda: False)():
+            try:
+                t.join(timeout=2.0)
+            except Exception:
+                logger.debug("FleetUpdateMixin: updater thread did not join cleanly")
+
     def _update_loop(self):
         """Background thread loop for git operations."""
         # Initial short delay to let the system stabilize
-        time.sleep(30)
+        self._sleep_fn(30)
 
-        while not getattr(self, "kill_switch", False):
+        while not getattr(self, "kill_switch", False) and not getattr(self, "_kill_event", threading.Event()).is_set():
             try:
                 self._run_git_pull()
             except (subprocess.SubprocessError, OSError, RuntimeError) as e:
                 logger.error(f"FleetUpdateMixin: Update check failed: {e}")
 
             # Sleep in small increments to respond faster to kill_switch
-            for _ in range(self._update_interval // 5):
-                if getattr(self, "kill_switch", False):
+            for _ in range(max(1, self._update_interval // 5)):
+                if getattr(self, "kill_switch", False) or getattr(self, "_kill_event", threading.Event()).is_set():
                     break
-                time.sleep(5)
+                self._sleep_fn(5)
 
     def _run_git_pull(self):
         """Executes the git pull command."""

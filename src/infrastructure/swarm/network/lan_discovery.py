@@ -12,7 +12,7 @@ import socket
 import threading
 import time
 from dataclasses import asdict, dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Callable
 
 from src.infrastructure.swarm.network.network_utils import get_ip
 from src.observability.structured_logger import StructuredLogger
@@ -48,7 +48,12 @@ class LANDiscovery:
     MAX_CLOCK_SKEW = 10.0  # Seconds
 
     def __init__(
-        self, agent_id: str, service_port: int, secret_key: Optional[str] = None, metadata: Optional[Dict] = None
+        self,
+        agent_id: str,
+        service_port: int,
+        secret_key: Optional[str] = None,
+        metadata: Optional[Dict] = None,
+        sleep_fn: Callable[[float], None] | None = None,
     ):
         self.agent_id = agent_id
         self.service_port = service_port
@@ -64,6 +69,21 @@ class LANDiscovery:
         self._local_ip = None
         self._listen_thread: Optional[threading.Thread] = None
         self._announce_thread: Optional[threading.Thread] = None
+
+        # Sleep/wakeup support for the announce loop
+        self._sleep_event = threading.Event()
+        if sleep_fn is None:
+            def _wait(secs: float) -> None:
+                self._sleep_event.wait(secs)
+
+            self._sleep_fn = _wait
+        else:
+            self._sleep_fn = sleep_fn
+
+    def stop(self):
+        """Stops the discovery threads."""
+        self._running = False
+        self._sleep_event.set()
 
     @property
     def local_ip(self) -> str:
@@ -138,7 +158,8 @@ class LANDiscovery:
             except Exception as exc:  # pylint: disable=broad-exception-caught
                 logger.debug(f"LANDiscovery: Background loop error: {exc}")
 
-            time.sleep(30)  # Announce every 30 seconds
+            # Use the instance sleep function so the loop is interruptible and testable
+            self._sleep_fn(30)  # Announce every 30 seconds
 
     def _sync_registry(self, sock: socket.socket):
         with self._lock:

@@ -38,6 +38,7 @@ from __future__ import annotations
 import contextlib
 import time  # noqa: F401  # pylint: disable=unused-import,reimported
 import ipaddress
+import threading
 import logging
 import os
 import socket
@@ -361,7 +362,7 @@ def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
         return False
 
 
-def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: float = 0.5) -> bool:
+def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: float = 0.5, sleep_fn: callable | None = None) -> bool:
     """
     Wait for a port to become available.
 
@@ -370,15 +371,22 @@ def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: fl
         port: Port to check.
         timeout: Total timeout in seconds.
         poll_interval: Interval between checks.
+        sleep_fn: Optional sleep function to allow injection and testability.
 
     Returns:
         True if port became available, False if timeout.
     """
     deadline = time.monotonic() + timeout
+    if sleep_fn is None:
+        def _wait(secs: float) -> None:
+            threading.Event().wait(secs)
+
+        sleep_fn = _wait
+
     while time.monotonic() < deadline:
         if is_port_open(host, port, timeout=min(poll_interval, 0.5)):
             return True
-        time.sleep(poll_interval)
+        sleep_fn(poll_interval)
 
     return False
 
