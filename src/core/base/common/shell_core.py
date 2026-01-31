@@ -105,7 +105,7 @@ class ShellCore:
                 sanitized[k] = v
         return sanitized
 
-    def strip_ansi(self, text: Optional[str]) -> str:
+    def strip_ansi(self, text: str) -> str:
         """Removes ANSI escape sequences from a string.
 
         Safe for None/empty input.
