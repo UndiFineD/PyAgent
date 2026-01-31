@@ -121,6 +121,35 @@ class Worker:
         self._write_status("locked", {"acquired": len(self.acquired_locks), "shard_id": shard.get("id")})
         return True
 
+    def claim_shard_with_retries(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.5, backoff: float = 2.0) -> bool:
+        """Attempt to claim a shard with retries and exponential backoff.
+
+        Returns True if the claim eventually succeeds.
+        """
+        attempt = 0
+        cur_delay = delay
+        while attempt <= retries:
+            ok = False
+            try:
+                ok = self.claim_shard(manifest_path)
+            except Exception as e:
+                # transient error: log and retry
+                logger.debug("claim_shard attempt %d failed: %s", attempt + 1, e)
+                ok = False
+            if ok:
+                return True
+            attempt += 1
+            time.sleep(cur_delay)
+            cur_delay *= backoff
+        self._write_status("claim_retries_failed", {"attempts": attempt})
+        return False
+
+    async def claim_shard_async(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.5, backoff: float = 2.0) -> bool:
+        """Async wrapper for claim_shard_with_retries using thread executor."""
+        # Run CPU/IO bound blocking claim_shard_with_retries in thread pool
+        import asyncio
+        return await asyncio.to_thread(self.claim_shard_with_retries, manifest_path, retries, delay, backoff)
+
     def release_locks(self) -> None:
         """Release any locks this worker holds."""
         for lock_id in list(self.acquired_locks):
@@ -154,6 +183,8 @@ class Coordinator:
         scratch_dir: str | Path = "scratch/foreach_shards",
         poll_interval: float = 0.5,
         worker_timeout: int = 60,
+        leader_ttl: int = 60,
+        lock_manager: Optional[FileLockManager] = None,
     ) -> None:
         self.manifest_path = Path(manifest_path)
         self.scratch_dir = Path(scratch_dir)
@@ -161,9 +192,59 @@ class Coordinator:
         self._fs.ensure_directory(self.scratch_dir)
         self.poll_interval = poll_interval
         self.worker_timeout = worker_timeout
+        self.leader_ttl = leader_ttl
+        self.lock_manager = lock_manager or FileLockManager()
 
     def load_manifest(self) -> Dict[str, Any]:
         return json.loads(self.manifest_path.read_text())
+
+    def elect_leader(self, candidate_id: str) -> bool:
+        """Attempt to become the Coordinator leader.
+
+        Uses a short-lived lock to avoid races and writes the leader file with
+        a timestamp and TTL. Returns True if this coordinator becomes the leader.
+        """
+        leader_file = self.scratch_dir / "leader.json"
+        lock_id = "leader_election"
+        # Acquire a short lock to perform atomic leader check-and-set
+        acquired = self.lock_manager.acquire_lock(lock_id, timeout=5.0)
+        if not acquired:
+            return False
+        try:
+            now = time.time()
+            if leader_file.exists():
+                try:
+                    data = json.loads(leader_file.read_text())
+                    exp = data.get("timestamp", 0) + data.get("ttl", self.leader_ttl)
+                    if exp > now:
+                        # Existing leader still valid
+                        return data.get("leader") == candidate_id
+                except Exception:
+                    # Corrupted leader file; allow takeover
+                    pass
+            payload = {"leader": candidate_id, "timestamp": now, "ttl": self.leader_ttl}
+            self._fs.atomic_write(leader_file, json.dumps(payload, indent=2))
+            return True
+        finally:
+            self.lock_manager.release_lock(lock_id)
+
+    def get_current_leader(self) -> Optional[str]:
+        leader_file = self.scratch_dir / "leader.json"
+        if not leader_file.exists():
+            return None
+        try:
+            data = json.loads(leader_file.read_text())
+            exp = data.get("timestamp", 0) + data.get("ttl", self.leader_ttl)
+            if time.time() > exp:
+                return None
+            return data.get("leader")
+        except Exception:
+            return None
+
+    async def monitor_workers_and_merge_async(self, wait_for_completion: float = 10.0) -> Dict[str, Any]:
+        """Async wrapper for monitor_workers_and_merge using thread executor."""
+        import asyncio
+        return await asyncio.to_thread(self.monitor_workers_and_merge, wait_for_completion)
 
     def persist_manifest(self, manifest: Dict[str, Any]) -> None:
         self._fs.atomic_write(self.manifest_path, json.dumps(manifest, indent=2))
