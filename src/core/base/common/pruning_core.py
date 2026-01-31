@@ -108,9 +108,9 @@ class PruningCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.calculate_decay_rust([current_weight], age_seconds / half_life)[0]  # type: ignore
-            except RuntimeError as e:
-                logger.error("PruningCore: Rust calculate_decay_rust failed: %s", e)
-                return None
+            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
+                # Fall back to Python implementation on any Rust-side failure.
+                logger.debug("PruningCore: Rust calculate_decay_rust failed, falling back to Python: %s", e)
 
         return max(current_weight * math.exp(-math.log(2) * age_seconds / half_life), 0.05)
 
@@ -137,9 +137,9 @@ class PruningCore(BaseCore):
                 sync.weight = new_weight
                 sync.last_fired = time.time()
                 return new_weight
-            except RuntimeError as e:
-                logger.error("PruningCore: Rust update_weight_on_fire_rust failed: %s", e)
-                return None
+            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
+                logger.debug("PruningCore: Rust update_weight_on_fire_rust failed, falling back to Python: %s", e)
+
 
         if success:
             sync.weight = min(current_weight * 1.1, 1.0)
@@ -163,9 +163,8 @@ class PruningCore(BaseCore):
                 # Assuming Rust takes a dict or value
                 # pylint: disable=no-member
                 return rc.is_in_refractory_rust(sync.refractory_until)  # type: ignore
-            except RuntimeError as e:
-                logger.error("PruningCore: Rust is_in_refractory_rust failed: %s", e)
-                return None
+            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
+                logger.debug("PruningCore: Rust is_in_refractory_rust failed, falling back to Python: %s", e)
         return time.time() < sync.refractory_until
 
     def should_prune(self, weight: float, threshold: float) -> bool:
