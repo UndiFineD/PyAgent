@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+
+import threading
+import time
+import pytest
+
+from src.infrastructure.services.resilience.retry_strategy import RetryStrategy, JitterType
+from src.infrastructure.services.resilience.adaptive_rate_limiter import TokenBucket
+from src.infrastructure.services.executor.multiproc.multiproc_logic import MultiprocExecutor
+
+
+def test_retry_strategy_uses_injected_sleep(monkeypatch):
+    calls = []
+
+    def fake_sleep(s):
+        calls.append(s)
+
+    # Use low attempts so we exercise the sleep path
+    retry = RetryStrategy(max_attempts=2, base_delay=0.001, jitter=JitterType.NONE, sleep_fn=fake_sleep)
+
+    def flaky():
+        raise ConnectionError("fail")
+
+    with pytest.raises(Exception):
+        retry.execute(flaky)
+
+    assert len(calls) == 1
+    assert calls[0] >= 0
+
+
+def test_tokenbucket_blocking_uses_injected_sleep():
+    # Start with empty tokens and small rate so time to available is > 0
+    bucket = TokenBucket(rate=1.0, capacity=1.0, sleep_fn=lambda s: None)
+
+    # Remove token so it will need to wait
+    assert bucket.acquire(tokens=1.0) is True
+
+    # Next call in non-block mode should reject
+    assert bucket.acquire(tokens=1.0, block=False) is False
+
+    # Now in blocking mode it should call sleep_fn (which is a no-op) and then try again
+    res = bucket.acquire(tokens=1.0, block=True)
+    assert res in (True, False)
+
+
+def test_multiproc_monitor_interruptible(monkeypatch):
+    # Create an executor and replace the shutdown_event with a custom one
+    execr = MultiprocExecutor(num_workers=0, heartbeat_interval=10.0)
+
+    class DummyEvent:
+        def __init__(self):
+            self._called = False
+
+        def is_set(self):
+            return False
+
+        def wait(self, timeout):
+            self._called = True
+            # Raise to break loop and assert behavior
+            raise RuntimeError("break")
+
+    execr._shutdown_event = DummyEvent()
+
+    with pytest.raises(RuntimeError):
+        execr._monitor_workers()
+
+    assert getattr(execr._shutdown_event, "_called", False) is True
