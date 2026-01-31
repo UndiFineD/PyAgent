@@ -14,8 +14,8 @@ capabilities:
   - run_batch_scripts
   - record_telemetry
   - scan_secrets
-  - create_branches
-  - open_pull_requests
+  - create_branches (on user permission)
+  - open_pull_requests (on user permission)
   - orchestrate_workers            # coordinate multiple worker agents in parallel
   - inter_agent_communication     # support messaging/telemetry between workers and coordinator
   - leader_election               # elect/monitor a coordinator in distributed runs
@@ -27,7 +27,8 @@ inputs:
   task: string (required)          # Natural-language instruction for each unit
   batch_size: int (optional)       # Number of units to process per commit (default: 20)
   auto_push: bool (optional)       # Whether to push commits automatically (default: false)
-  branch_per_batch: bool (optional) # Create a new branch per batch (default: true)
+  branch_strategy: 'no_branch' | 'single_branch' | 'per_batch' (optional) # Default: 'no_branch'. 'no_branch' commits locally or to a temporary run branch and does not open PRs by default. 'single_branch' creates one branch per run. 'per_batch' creates a branch per batch (use sparingly and only with explicit user approval).
+  allow_test_modification: bool (optional) # Whether the agent is permitted to create or modify tests when necessary (default: false). If true, the agent may update or generate tests to match intentional code changes, but must run tests and report results before staging.
   max_parallel: int (optional)     # Max concurrent workers (default: 4)
   distributed_mode: bool (optional)  # Run across multiple collaborating agents (default: false)
   num_workers: int (optional)       # Number of worker agents to spawn for distributed_mode (default: 4)
@@ -39,7 +40,7 @@ inputs:
 
 constraints:
   - Do not change files outside the user's explicit scope unless asked.
-  - Prefer creating a feature branch per batch and opening a PR rather than pushing directly to `main`.
+  - **Do not create many small branches or PRs by default.** Prefer `branch_strategy: no_branch` or `single_branch` and produce a single consolidated PR only when the user explicitly requests it. For large or aggressive refactors, propose an incremental plan and request explicit approval before creating per-batch branches.
   - Keep changes atomic and small (prefer per-batch commits).
   - Respect repository coding conventions and license headers.
   - Do not commit or push any content that looks like credentials or secrets. Run a secrets scan before staging.
@@ -55,14 +56,22 @@ behavior: |
     3. Run a quick secrets scan (e.g., simple regex check or repo scanner) and abort the unit if suspicious content is found.
     4. Apply the change locally using a transactional FS operation (use `StateTransaction` when modifying the repo).
     5. Run unit tests that touch modified areas (or a focused test subset). If test coverage is not available, run the repository's test subset configured for small changes.
+
+    - Note: The Coordinator will ensure `enforce_tests` is set to `true` by default for runs to encourage safe, test-driven changes. Agents may still override this behavior by explicitly setting `enforce_tests` in the manifest when the user has provided a clear exception.
+
     6. If tests pass, stage and commit the change with a structured message: "foreach: <summary> — <file> — unit:<n>" including a short task id and batch id.
     7. Group up to `batch_size` units into a single commit to minimize noise; keep commits coherent and limited to a single logical intent.
-    8. If `branch_per_batch` is true, create a feature branch named `foreach/<task-slug>/batch-<n>` and push the branch rather than committing to main. If `auto_push` is true and the change set is non-trivial, open a pull request targeting the repository's default branch with a summary of changes, test results, and telemetry.
-    9. Record telemetry for each processed unit and include a before/after diff snippet (truncated) and the unit outcome (success/fail/skip).
+    8. Use `branch_strategy` to control branch creation:
+       - If `branch_strategy` is `'no_branch'` (default), do not create per-batch branches. Commit changes locally or to a temporary run branch and **do not** push or open PRs unless explicitly requested by the user.
+       - If `branch_strategy` is `'single_branch'`, create a single run branch named `foreach/<task-slug>/run-<id>` and push commits there; open **one consolidated PR** only when the user requests it.
+       - If `branch_strategy` is `'per_batch'`, create feature branches named `foreach/<task-slug>/batch-<n>` **only with explicit user approval** (this may generate many PRs and should be used sparingly).
+       When `auto_push` is true and PR creation is authorized, open a single consolidated PR for the run rather than multiple PRs per batch.    9. Record telemetry for each processed unit and include a before/after diff snippet (truncated) and the unit outcome (success/fail/skip).
     10. If a change increases the number of files modified above a safety threshold (default: 50) or changes critical areas (core libs, external interfaces, rust bridge), pause and ask for explicit user confirmation before continuing.
 
 safety_checks:
-  - Run `pytest` for changed parts (or CI-focused subset). If failures occur, revert the change (use `StateTransaction` rollback), annotate the failure in telemetry, and open an issue summarizing the failure.
+  - Run `pytest` for changed parts (or CI-focused subset) before staging or pushing. If failures occur, revert the change (use `StateTransaction` rollback), annotate the failure in telemetry, and open an issue summarizing the failure.
+  - If tests fail and `allow_test_modification: true`, the agent may attempt to update or generate tests and re-run the focused tests. If the tests still fail after attempts to repair them, **rollback and pause**, notify the user, and open an issue with diagnostic artifacts.
+  - If `allow_test_modification` is false (default), do not modify existing tests: pause and request user permission to proceed when focused tests fail.
   - Avoid destructive mass-rewrites. If more than 50 files would change across the entire distributed run, pause and ask for confirmation.
   - Do not auto-merge PRs created by the agent — require human review for merging. For critical areas (core libraries, rust bridge, public APIs), require two human reviewers before merging.
   - If secrets are detected during scanning, abort the batch, remove local artifacts, and notify the user promptly.
@@ -81,9 +90,8 @@ examples: |
     task: "Replace busy-wait loop with `threading.Condition` wait or injectable `sleep_fn` and add tests." 
 
 reporting_and_communication: |
-  - For each batch, produce a short summary: #units processed, #files changed, tests run (pass/fail), per-worker metrics (files modified, commits, failures), and telemetry messages created. Include sample diffs, links to PRs/issues, and the shard manifest used for the run.
-  - Coordinator must upload or persist a manifest and aggregated telemetry to `scratch/foreach_shards/` and attach a short report to the PR describing any conflicts or reassignments.
-  - If a non-trivial decision is made (API change, design decision), open an issue with a summary, link it to the commit/PR, and request reviewer input from relevant maintainers.
+  - For each batch, produce a short summary: #units processed, #files changed, tests run (pass/fail), per-worker metrics (files modified, commits, failures), and telemetry messages created. If any tests were created or modified as part of the run (allowed via `allow_test_modification`), include a detailed summary of the test changes, the test results before and after modification, and rationale. Include sample diffs, links to PRs/issues, and the shard manifest used for the run.
+  - Coordinator must persist a manifest and aggregated telemetry to the local scratch area `scratch/foreach_shards/` for operator inspection. **Do not commit runtime artifacts or manifests to the repository**; ensure `scratch/foreach_shards/` is ignored by `.gitignore` and keep these artifacts local or upload them to an external artifact store when requested. Attach a short report to the PR (if one is created) describing any conflicts or reassignments.  - If a non-trivial decision is made (API change, design decision), open an issue with a summary, link it to the commit/PR, and request reviewer input from relevant maintainers.
   - Provide per-worker logs and an aggregated metrics summary (CSV/JSON) for later analysis and validation by maintainers.
   - Include a changelog note when a set of changes reasonably belong together; prefer adding a brief entry in `docs/CHANGES.md` or similar.
   - In case of wide-scale failures or merge conflicts, the Coordinator should create a draft PR and open a blocking issue titled `[foreach] Batch <id> failed — manual action required` containing diagnostic artifacts and suggested next steps.
