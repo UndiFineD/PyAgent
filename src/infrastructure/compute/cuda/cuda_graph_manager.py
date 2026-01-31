@@ -17,21 +17,9 @@ Manages CUDA graph execution and lifecycle for GPU acceleration in PyAgent.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-CUDAGraphManager - CUDA graph capture and replay management.
-
-Implements vLLM's CUDAGraphWrapper patterns for efficient GPU execution:
-- BatchDescriptor: Graph cache keys for shape-based lookup
-- CUDAGraphEntry: Cached graphs with weak-ref outputs
-- CUDAGraphWrapper: Automatic capture/replay management
-- Runtime modes: NONE/PIECEWISE/FULL
-
-Beyond vLLM:
-- Adaptive capture based on hit rate patterns
-- Predictive pre-warming for common shapes
-- Memory-aware graph selection
-"""
-
+# CUDAGraphManager - CUDA graph capture and replay management.
+# Design notes condensed to avoid top-level string expressions that
+# can break the positioning of future imports in some environments.
 from __future__ import annotations
 
 import gc
