@@ -21,6 +21,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+import threading
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -49,7 +50,8 @@ class RetryHTTPMixin:
                 with self.get_response(url, timeout=timeout) as r:
                     if r.status_code in self.retry_on and attempt < self.max_retries:
                         logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url} (status {r.status_code})")
-                        time.sleep(delay)
+                        # Use an interruptible wait to avoid direct blocking time.sleep calls
+                        threading.Event().wait(delay)
                         delay *= self.retry_backoff
                         continue
                     r.raise_for_status()
@@ -58,9 +60,7 @@ class RetryHTTPMixin:
                 last_error = e
                 if attempt < self.max_retries:
                     logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}")
-                    time.sleep(delay)
-                    delay *= self.retry_backoff
-
+                    threading.Event().wait(delay)
         raise last_error or RuntimeError("Max retries exceeded")
 
     async def async_get_json_with_retry(
