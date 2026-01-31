@@ -65,15 +65,31 @@ class FileSystemCore:
         return rc and hasattr(rc, "discover_files_rust")
 
     def _try_rust_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> Optional[List[Path]]:
+        """Attempt to use the Rust-backed directory walker.
+
+        Returns None on any failure so callers fall back to the Python implementation.
+        KeyboardInterrupt and SystemExit are re-raised to avoid swallowing critical signals.
+        """
         try:
             files = rc.discover_files_rust(str(root), patterns, ignore or [])  # type: ignore
             return [Path(f) for f in files]
-        except Exception as e:
-            self.logger.warning("Rust directory walking failed: %s", e)
+        except (RuntimeError, AttributeError) as e:
+            # Certain runtime errors (from the extension) should simply fall back
+            # to the Python walker. AttributeError can occur when the extension
+            # is present but doesn't expose the expected symbol.
+            self.logger.warning("Rust directory walking failed (%s): %s", type(e).__name__, e)
             return None
 
     def _python_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> List[Path]:
-        found = []
+        """Fallback Python implementation for finding files.
+
+        This is deterministic and intentionally simple so behavior is consistent
+        across platforms when the Rust walker isn't available.
+        """
+        if not root.exists():
+            return []
+
+        found: List[Path] = []
         ignore_list = ignore or list(self._ignore_patterns)
         for path in root.rglob("*"):
             if path.is_dir():
@@ -104,6 +120,11 @@ class FileSystemCore:
         return self._atomic_write_with_lock(p, content, encoding, use_lock)
 
     def _atomic_write_with_lock(self, p: Path, content: str, encoding: str, use_lock: bool) -> bool:
+        """Write to a temporary file and atomically replace the target.
+
+        Uses an advisory lock when requested. Exceptions from OS operations are
+        handled and logged; critical signals are re-raised.
+        """
         lock = None
         try:
             if use_lock:
@@ -119,33 +140,47 @@ class FileSystemCore:
                 tmp_path = Path(tmp_file.name)
             os.replace(tmp_path, p)
             return True
-        except Exception as e:
+        except (OSError, shutil.Error) as e:
+            # Expected filesystem related failures should be handled gracefully.
             self.logger.error("Atomic write failed for %s: %s", p, e)
             return False
+        # We intentionally do not catch a general Exception here since filesystem
+        # errors are handled explicitly above and unexpected failures should
+        # propagate to the caller for visibility.
         finally:
             if lock:
-                self.lock_manager.release_lock(p)
+                # Release using the canonical lock id when possible.
+                try:
+                    lock_id = getattr(lock, "lock_id", p)
+                    self.lock_manager.release_lock(lock_id)
+                except (OSError, RuntimeError) as e:
+                    # We intentionally swallow release errors to avoid masking the
+                    # original operation error and to keep failure modes simple.
+                    self.logger.debug("Failed to release lock for %s: %s", p, e)
 
     def safe_copy(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
-        """Copy a file with error handling."""
+        """Copy a file with targeted error handling.
+
+        Returns True on success, False on recoverable filesystem errors.
+        """
         try:
             shutil.copy2(src, dst)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (OSError, shutil.Error) as e:
             self.logger.error("Failed to copy %s to %s: %s", src, dst, e)
             return False
 
     def move(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
-        """Move a file with error handling."""
+        """Move a file with targeted error handling."""
         try:
             shutil.move(str(src), str(dst))
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (OSError, shutil.Error) as e:
             self.logger.error("Failed to move %s to %s: %s", src, dst, e)
             return False
 
     def delete(self, path: Union[str, Path]) -> bool:
-        """Delete a file or directory with error handling."""
+        """Delete a file or directory with targeted error handling."""
         p = Path(path)
         try:
             if p.is_dir():
@@ -153,7 +188,7 @@ class FileSystemCore:
             else:
                 p.unlink(missing_ok=True)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (OSError, shutil.Error) as e:
             self.logger.error("Failed to delete %s: %s", p, e)
             return False
 
@@ -168,20 +203,34 @@ class FileSystemCore:
         return Path(path).exists()
 
     def read_text(self, path: Union[str, Path], encoding: str = "utf-8") -> str:
-        """Reads the content of a file."""
-        return Path(path).read_text(encoding=encoding)
+        """Read the content of a file.
+
+        Logs and re-raises OSError to make failures explicit to callers.
+        """
+        try:
+            return Path(path).read_text(encoding=encoding)
+        except OSError as e:
+            self.logger.error("Failed to read %s: %s", path, e)
+            raise
 
     def get_file_hash(self, path: Union[str, Path]) -> Optional[str]:
-        """Calculate SHA256 hash of a file."""
+        """Calculate SHA256 hash of a file.
+
+        Returns None if the file does not exist or a recoverable error occurs.
+        """
         p = Path(path)
         if not p.exists():
             return None
         try:
             sha256_hash = hashlib.sha256()
-            with open(p, 'rb', encoding='utf-8') as f:
+            # Open in binary mode for correct behavior across platforms.
+            with open(p, 'rb') as f:
                 for byte_block in iter(lambda: f.read(4096), b""):
                     sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except OSError as e:
             self.logger.error("Failed to calculate hash for %s: %s", p, e)
             return None
+        # Any other unexpected exception should propagate for visibility;
+        # we already handle OSError above which covers common disk problems.
+
