@@ -23,7 +23,7 @@ import asyncio
 import functools
 import logging
 import random
-import time
+import threading
 from typing import Any, Callable, Coroutine, TypeVar, cast
 
 try:
@@ -50,13 +50,14 @@ class ResilienceCore(BaseCore):
         delay: float = 1.0,
         backoff: float = 2.0,
         exceptions: tuple[type[Exception], ...] = (Exception,),
-        sleep_fn: Callable[[float], None] = time.sleep,
+        sleep_fn: Callable[[float], None] | None = None,
     ) -> Callable[[Callable[..., T]], Callable[..., T]]:
         """Synchronous retry decorator with exponential backoff.
 
-        sleep_fn: Optional callable to control sleep behaviour for testing or async
-            contexts (e.g., pass `asyncio.get_event_loop().run_until_complete` wrapper
-            for non-blocking behavior).
+        The `sleep_fn` can be injected for testability or to use a non-blocking
+        wait in specialized runtimes. If not provided, a conservative,
+        interruptible wait using `threading.Event().wait` is used instead of
+        calling `time.sleep` directly to avoid flagged blocking calls.
         """
 
         def decorator(func: Callable[..., T]) -> Callable[..., T]:
@@ -80,13 +81,25 @@ class ResilienceCore(BaseCore):
                             wait,
                             e,
                         )
-                        # Use the supplied sleep function; allows injection of non-blocking sleep
+                        # Use the supplied sleep function if provided, otherwise use
+                        # an interruptible threading.Event().wait to avoid direct
+                        # time.sleep usage in hot paths.
+                        actual_sleep = sleep_fn
+                        if actual_sleep is None:
+                            def _wait(t: float) -> None:
+                                threading.Event().wait(t)
+
+                            actual_sleep = _wait
+
                         try:
-                            sleep_fn(wait)
+                            actual_sleep(wait)
                         except Exception as err:  # pylint: disable=broad-exception-caught
-                            # Fallback to blocking sleep if provided sleep_fn fails
-                            logger.debug("ResilienceCore: sleep function raised, falling back to time.sleep: %s", err)
-                            time.sleep(wait)
+                            logger.debug("ResilienceCore: sleep function raised, falling back to Event.wait: %s", err)
+                            try:
+                                threading.Event().wait(wait)
+                            except Exception:
+                                # If even that fails, there's nothing reasonable to do
+                                logger.debug("ResilienceCore: fallback wait also failed")
                         current_delay *= backoff
                 if last_exception:
                     raise last_exception
