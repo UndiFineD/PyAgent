@@ -483,6 +483,7 @@ def retry_on_exception(
     delay: float = 1.0,
     backoff: float = 2.0,
     on_retry: Callable[[Exception, int], None] | None = None,
+    sleep_fn: Callable[[float], None] = time.sleep,
 ) -> Callable[[F], F]:
     """
     Retry a function on specific exceptions.
@@ -509,7 +510,11 @@ def retry_on_exception(
                     raise
                 if on_retry:
                     on_retry(e, attempt + 1)
-                time.sleep(current_delay)
+                # Use injected sleep function to allow non-blocking alternatives
+                try:
+                    sleep_fn(current_delay)
+                except Exception:
+                    time.sleep(current_delay)
                 current_delay *= backoff
         return None
 
