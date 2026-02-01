@@ -82,10 +82,24 @@ class LMStudioConfig:
     max_tokens: int = 2048
 
     # Context window (new) - prefer DV_LMSTUDIO_MAX_CONTEXT
-    max_context: int = field(default_factory=lambda: int(os.environ.get("DV_LMSTUDIO_MAX_CONTEXT", os.environ.get("LMSTUDIO_MAX_CONTEXT", "4096"))))
+    max_context: int = field(
+        default_factory=lambda: int(
+            os.environ.get(
+                "DV_LMSTUDIO_MAX_CONTEXT",
+                os.environ.get("LMSTUDIO_MAX_CONTEXT", "4096"),
+            )
+        )
+    )
 
     # HTTP path (e.g., 'v1' or 'api/v1'). Prefer DV-prefixed env then legacy.
-    path: str = field(default_factory=lambda: str(os.environ.get("DV_LMSTUDIO_PATH", os.environ.get("LMSTUDIO_PATH", "v1")).strip("/")))
+    path: str = field(
+        default_factory=lambda: str(
+            os.environ.get(
+                "DV_LMSTUDIO_PATH",
+                os.environ.get("LMSTUDIO_PATH", "v1"),
+            ).strip("/")
+        )
+    )
 
     # Caching
     cache_models: bool = True

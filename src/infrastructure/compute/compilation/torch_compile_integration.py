@@ -55,6 +55,8 @@ class CompileMode(Enum):
 
 
 class CompileBackend(Enum):
+    """Torch compilation backends."""
+
     ONNXRT = "onnxrt"  # ONNX Runtime
     EAGER = "eager"  # No compilation (debug)
     INDUCTOR = "inductor"  # In-ductor backend (default)
@@ -113,17 +115,14 @@ class CompilerInterface(ABC):
     @abstractmethod
     def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
         """Compile a function."""
-        pass
 
     @abstractmethod
     def is_compiled(self, fn: Callable[..., Any]) -> bool:
         """Check if function is compiled."""
-        pass
 
     @abstractmethod
     def invalidate(self, fn: Callable[..., Any]) -> None:
         """Invalidate compilation cache for function."""
-        pass
 
 
 class TorchCompiler(CompilerInterface):

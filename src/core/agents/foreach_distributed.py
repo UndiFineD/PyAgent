@@ -72,6 +72,7 @@ class Worker:
             logger.debug("Failed to write worker status: %s", e)
 
     def load_manifest(self, manifest_path: str | Path) -> Dict[str, Any]:
+        """Load a JSON manifest from file."""
         p = Path(manifest_path)
         content = p.read_text()
         return json.loads(content)
@@ -296,4 +297,3 @@ class Coordinator:
             return True
         except Exception:
             return False
-
