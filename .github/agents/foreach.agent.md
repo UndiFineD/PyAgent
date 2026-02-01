@@ -97,17 +97,11 @@ examples:
   - Replace blocking `time.sleep` calls in non-test code with condition-based or injectable sleep functions:
     task: "Replace busy-wait loop with `threading.Condition` wait or injectable `sleep_fn` and add tests." 
 
-<<<<<<< HEAD
 reporting_and_communication: |
   - For each batch, produce a short summary: #units processed, #files changed, tests run (pass/fail), per-worker metrics (files modified, commits, failures), and telemetry messages created. If any tests were created or modified as part of the run (allowed via `allow_test_modification`), include a detailed summary of the test changes, the test results before and after modification, and rationale. Include sample diffs, links to PRs/issues, and the shard manifest used for the run.
   - Coordinator must persist a manifest and aggregated telemetry to the local scratch area `scratch/foreach_shards/` for operator inspection. **Do not commit runtime artifacts or manifests to the repository**; ensure `scratch/foreach_shards/` is ignored by `.gitignore` and keep these artifacts local or upload them to an external artifact store when requested. Attach a short report to the PR (if one is created) describing any conflicts or reassignments.
   - Telemetry format: write one JSON object per unit (JSON Lines) to `scratch/foreach_shards/telemetry.jsonl`. Each entry should include at minimum: `unit_id`, `status`, `duration_seconds`, `file_changes` (list of paths), `test_results` (pass/fail or detailed), and a short `diff_snippet` (truncated). Aggregate files should also include run-level summary stats and per-worker metrics.
   - If a non-trivial decision is made (API change, design decision), open an issue with a summary, link it to the commit/PR, and request reviewer input from relevant maintainers.
-=======
-reporting_and_communication: |
-  - For each batch, produce a short summary: #units processed, #files changed, tests run (pass/fail), per-worker metrics (files modified, commits, failures), and telemetry messages created. If any tests were created or modified as part of the run (allowed via `allow_test_modification`), include a detailed summary of the test changes, the test results before and after modification, and rationale. Include sample diffs, links to PRs/issues, and the shard manifest used for the run.
-  - Coordinator must persist a manifest and aggregated telemetry to the local scratch area `scratch/foreach_shards/` for operator inspection. **Do not commit runtime artifacts or manifests to the repository**; ensure `scratch/foreach_shards/` is ignored by `.gitignore` and keep these artifacts local or upload them to an external artifact store when requested. Attach a short report to the PR (if one is created) describing any conflicts or reassignments.  - If a non-trivial decision is made (API change, design decision), open an issue with a summary, link it to the commit/PR, and request reviewer input from relevant maintainers.
->>>>>>> 0a9dd89aa3d33faa77d55f0750d54737063c423e
   - Provide per-worker logs and an aggregated metrics summary (CSV/JSON) for later analysis and validation by maintainers.
   - Include a changelog note when a set of changes reasonably belong together; prefer adding a brief entry in `docs/CHANGES.md` or similar.
   - In case of wide-scale failures or merge conflicts, the Coordinator should create a draft PR and open a blocking issue titled `[foreach] Batch <id> failed — manual action required` containing diagnostic artifacts and suggested next steps.
