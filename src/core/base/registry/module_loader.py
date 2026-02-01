@@ -53,7 +53,7 @@ class ModuleLoader:
         # Search for {AgentType}.py
         target_file: str = f"{agent_type}.py"
 
-        for start_dir: str in start_dirs:
+        for start_dir in start_dirs:
             search_path: Path = workspace_root / start_dir
             if not search_path.exists():
                 continue

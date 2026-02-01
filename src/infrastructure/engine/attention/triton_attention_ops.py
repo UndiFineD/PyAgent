@@ -270,7 +270,7 @@ if HAS_TRITON and HAS_TORCH:
         # Process each block
         num_blocks = (context_len + block_size - 1) // block_size
 
-        for block_idx: int in range(num_blocks):
+        for block_idx in range(num_blocks):
             # Get physical block number from block table
             block_table_offset = batch_idx * stride_block_tables_batch
             phys_block = tl.load(block_tables_ptr + block_table_offset + block_idx * stride_block_tables_block)
@@ -279,7 +279,7 @@ if HAS_TRITON and HAS_TORCH:
             k_offset = phys_block * stride_k_cache_block + kv_head_idx * stride_k_cache_head
 
             # Compute attention scores for this block
-            for seq_pos: int in range(block_size):
+            for seq_pos in range(block_size):
                 abs_pos = block_idx * block_size + seq_pos
                 if abs_pos < context_len:
                     # Load key vector
@@ -474,7 +474,7 @@ class SlidingWindowAttention(AttentionKernel):
 
         # Apply sliding window
         window_mask: Tensor = torch.ones_like(causal_mask)
-        for i: int in range(seq_len):
+        for i in range(seq_len):
             start: int = max(0, i - self.window_size + 1)
             window_mask[i, :start] = 0
 
@@ -612,7 +612,7 @@ class TritonAttentionOps:
         # Collect split outputs
         split_outputs = []
 
-        for i: int in range(num_splits):
+        for i in range(num_splits):
             start_pos: int = i * split_size
             end_pos: int = min((i + 1) * split_size, max_context)
 

@@ -100,10 +100,10 @@ class GPTQQuantizer(Quantizer):
         qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = np.zeros_like(weight, dtype=np.int8)
         w: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = weight.copy()
 
-        for block_start: int in range(0, in_features, self.block_size):
+        for block_start in range(0, in_features, self.block_size):
             block_end: int = min(block_start + self.block_size, in_features)
 
-            for col: int in range(block_start, block_end):
+            for col in range(block_start, block_end):
                 group_idx: int = col // self.config.group_size
                 group_start: int = group_idx * self.config.group_size
                 group_end: int = min(group_start + self.config.group_size, in_features)
@@ -126,7 +126,7 @@ class GPTQQuantizer(Quantizer):
                 dequant: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] | np.Any = q.astype(np.float32) * scale
                 error: np.ndarray[tuple[int, ...], np.dtype[np.floating[np.Any]]] | np.Any = col_data - dequant
 
-                for j: int in range(col + 1, block_end):
+                for j in range(col + 1, block_end):
                     h_ratio = hessian_inv[col, j] / (hessian_inv[col, col] + 1e-8)
                     w[:, j] += error * h_ratio
 

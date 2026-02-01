@@ -67,7 +67,7 @@ class LoRAManager:
         with self._lock:
             if rid in self._active_requests:
                 req: LoRARequest = self._active_requests.pop(rid)
-                if not any(r.adapter_name == req.adapter_name for r: LoRARequest in self._active_requests.values()):
+                if not any(r.adapter_name == req.adapter_name for r in self._active_requests.values()):
                     self._slot_manager.release(req.adapter_name)
 
     def get_adapter(self, name: str) -> Optional[LoRAAdapter]:

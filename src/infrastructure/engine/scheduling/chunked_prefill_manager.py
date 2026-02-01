@@ -481,7 +481,7 @@ class ChunkedPrefillManager:
             if request is None:
                 return False
 
-            for chunk: PrefillChunk in request.chunks:
+            for chunk in request.chunks:
                 if chunk.state in (ChunkState.PENDING, ChunkState.SCHEDULED):
                     chunk.state = ChunkState.CANCELLED
                     if chunk.chunk_id in self._pending_chunks:
@@ -503,7 +503,7 @@ class ChunkedPrefillManager:
             if request is None:
                 return False
 
-            for chunk: PrefillChunk in request.chunks:
+            for chunk in request.chunks:
                 self._chunks.pop(chunk.chunk_id, None)
                 if chunk.chunk_id in self._pending_chunks:
                     self._pending_chunks.remove(chunk.chunk_id)
@@ -531,7 +531,7 @@ class ChunkedPrefillManager:
                 "progress": request.progress,
                 "is_complete": request.is_complete,
                 "total_tokens": request.total_tokens,
-                "chunk_states": {c.chunk_id: c.state.name for c: PrefillChunk in request.chunks},
+                "chunk_states": {c.chunk_id: c.state.name for c in request.chunks},
             }
 
     @property
@@ -581,6 +581,6 @@ def chunk_prompt(
         List of token chunks
     """
     chunks: list[list[int]] = []
-    for i: int in range(0, len(tokens), chunk_size):
+    for i in range(0, len(tokens), chunk_size):
         chunks.append(tokens[i : i + chunk_size])
     return chunks

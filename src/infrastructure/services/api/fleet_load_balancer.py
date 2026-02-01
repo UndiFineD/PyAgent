@@ -68,5 +68,5 @@ class FleetLoadBalancer:
     def get_stats(self) -> dict[str, Any]:
         return {
             "queue_depth": len(self.request_queue),
-            "interface_diversity": list(set(r["interface"] for r: dict[str, Any] in self.request_queue)),
+            "interface_diversity": list(set(r["interface"] for r in self.request_queue)),
         }

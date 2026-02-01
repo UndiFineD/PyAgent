@@ -167,7 +167,7 @@ def apply_ssm_recurrence(
     output = np.zeros_like(x)
 
     # Sequential recurrence (can be parallelized with scan)
-    for t: int in range(seq_len):
+    for t in range(seq_len):
         # State update
         state = dA[:, t] * state + dB[:, t] * x[:, t : t + 1, :].transpose(0, 2, 1)
         state = state.squeeze(-1) if state.ndim == 4 else state
@@ -242,7 +242,7 @@ class MambaBlockState:
     ) -> "MambaBlockState":
         """Create zero-initialized block state."""
         layer_states = []
-        for _: int in range(num_layers):
+        for _ in range(num_layers):
             conv_state = np.zeros(
                 (batch_size, d_inner, conv_kernel_size),
                 dtype=dtype,
@@ -295,7 +295,7 @@ def chunk_sequence(
     seq_len = x.shape[1]
     chunks = []
 
-    for start: int in range(0, seq_len, chunk_size):
+    for start in range(0, seq_len, chunk_size):
         end: int = min(start + chunk_size, seq_len)
         chunks.append(x[:, start:end])
 
@@ -344,7 +344,7 @@ def parallel_scan(
     output = np.zeros_like(values)
     output[:, 0] = values[:, 0]
 
-    for t: int in range(1, seq_len):
+    for t in range(1, seq_len):
         output[:, t] = gates[:, t] * output[:, t - 1] + values[:, t]
 
     return output
