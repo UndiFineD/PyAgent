@@ -129,7 +129,7 @@ def llm_chat_via_github_models(
     )
 
 
-def llm_chat_via_ollama(prompt: str, model: str = "llama3") -> str | None:
+def llm_chat_via_ollama(prompt: str, _model: str = "llama3") -> str | None:
     """Call local Ollama endpoint."""
     import os
     env_model = os.environ.get("DV_OLLAMA_MODEL", "tinyllama").strip("'\"")

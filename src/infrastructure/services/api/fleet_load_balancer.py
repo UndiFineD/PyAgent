@@ -66,6 +66,7 @@ class FleetLoadBalancer:
         }
 
     def get_stats(self) -> dict[str, Any]:
+        """Get current load balancer statistics."""
         return {
             "queue_depth": len(self.request_queue),
             "interface_diversity": list(set(r["interface"] for r in self.request_queue)),

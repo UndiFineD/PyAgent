@@ -56,6 +56,7 @@ class KVzapSurrogate(nn.Module):
             self.model = nn.Linear(config.hidden_dim, config.num_heads)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        """Forward pass for the KV cache pruning surrogate model."""
         # hidden_states: [batch, seq_len, hidden_dim]
         # output: [batch, seq_len, num_heads]
         return self.model(hidden_states)
