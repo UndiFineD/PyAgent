@@ -17,7 +17,6 @@
 """Reader for tensorizer file format."""
 
 from _thread import LockType
-from _thread import LockType
 import hashlib
 import mmap
 import struct

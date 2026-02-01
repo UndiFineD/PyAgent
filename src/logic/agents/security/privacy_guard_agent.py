@@ -123,4 +123,3 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "pii_types_captured": list(set(t for log in self.redaction_logs for t in log["pii_types"])),
             "safety_rating": "High" if len(self.redaction_logs) < 100 else "Critical Levels of PII Exposure",
         }
-

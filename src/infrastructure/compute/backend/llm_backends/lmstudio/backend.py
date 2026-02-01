@@ -26,7 +26,7 @@ Separates concerns into:
 
 import logging
 import time
-from typing import TYPE_CHECKING, Any, Callable, Iterator, Optional, Sequence
+from typing import TYPE_CHECKING, Any, Callable, Iterator, Sequence
 
 from ..llm_backend import LLMBackend
 from .api import LMStudioAPIClient

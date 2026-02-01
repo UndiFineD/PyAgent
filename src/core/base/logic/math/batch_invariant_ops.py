@@ -399,9 +399,11 @@ class BatchInvariantOps:
         return rms_norm_batch_invariant(x, weight, eps)
 
     def get_stats(self) -> dict[str, int]:
-        # Get operation call counts.
+        """Get operation call counts."""
         return self._call_counts.copy()
 
     def reset_stats(self) -> None:
         """Reset operation call counts."""
+        for key in self._call_counts:
             self._call_counts[key] = 0
+
