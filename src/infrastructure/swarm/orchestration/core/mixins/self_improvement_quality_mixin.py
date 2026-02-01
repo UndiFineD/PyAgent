@@ -28,10 +28,10 @@ class SelfImprovementQualityMixin:
 
     def _analyze_complexity(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
         """Checks for high cyclomatic complexity."""
-        _RUST_ACCEL = getattr(self, "_RUST_ACCEL", False)
+        rust_accel = getattr(self, "_RUST_ACCEL", False)
         rc = getattr(self, "rc", None)
 
-        if _RUST_ACCEL and rc is not None:
+        if rust_accel and rc is not None:
             try:
                 complexity = rc.calculate_cyclomatic_complexity(content)
                 if complexity > 25:
@@ -45,7 +45,7 @@ class SelfImprovementQualityMixin:
                             "file": file_path_rel,
                         }
                     ]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return []
 
@@ -98,51 +98,23 @@ class SelfImprovementQualityMixin:
                 )
         return findings
 
-    def _analyze_robustness_and_perf(self, content: str, file_path_rel: str, allow_triton_check: bool = True) -> List[Dict[str, Any]]:
+    def _analyze_robustness_and_perf(
+        self,
+        content: str,
+        file_path_rel: str,
+    ) -> List[Dict[str, Any]]:
         """General quality and performance checks."""
         findings = []
         # Robustness: Bare except
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$", content, re.MULTILINE):
+        exc_pattern = r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$"
+        if re.search(exc_pattern, content, re.MULTILINE):
             findings.append(
                 {
                     "type": "Robustness Issue",
-                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.",
-=======
-        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught
-            \s*(#.*)?$", content, re.MULTILINE):
-            findings.append(
-                {
-                    "type": "Robustness Issue",
-                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught
-' or specific errors.",
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught
-            \s*(#.*)?$", content, re.MULTILINE):
-            findings.append(
-                {
-                    "type": "Robustness Issue",
-                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught
-' or specific errors.",
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$", content, re.MULTILINE):
-            findings.append(
-                {
-                    "type": "Robustness Issue",
-                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.",
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
-        if re.search(r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$", content, re.MULTILINE):
-            findings.append(
-                {
-                    "type": "Robustness Issue",
-                    "message": "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' or specific errors.",
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
+                    "message": (
+                        "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' "
+                        "or specific errors."
+                    ),
                     "file": file_path_rel,
                 }
             )
@@ -174,7 +146,5 @@ class SelfImprovementQualityMixin:
             )
 
         # Triton compatibility warning (placeholder for actual check location)
-        if not allow_triton_check:
-            # If Triton check is not allowed, skip any Triton-related warnings/checks here
-            pass
+        # If Triton check is not allowed, skip any Triton-related warnings/checks
         return findings
