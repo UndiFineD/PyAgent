@@ -100,4 +100,3 @@ class ByzantineCore:
     def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:
         """Returns IDs of agents whose votes deviated from consensus."""
         return [v["id"] for v in votes if v["hash"] != consensus_hash]
-
