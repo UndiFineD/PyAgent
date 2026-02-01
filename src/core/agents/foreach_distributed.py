@@ -43,6 +43,7 @@ class Worker:
         worker_timeout: int = 60,
         shard_lock_prefix: str = "foreach",
         conflict_strategy: str = "requeue",
+        sleep_fn: Optional[callable] = None,
     ) -> None:
         self.worker_id = worker_id
         self.scratch_dir = Path(scratch_dir)
@@ -53,6 +54,7 @@ class Worker:
         self.acquired_locks: List[str] = []
         self.shard_lock_prefix = shard_lock_prefix
         self.conflict_strategy = conflict_strategy
+        self.sleep_fn = sleep_fn or time.sleep
 
     def _status_path(self) -> Path:
         return self.scratch_dir / f"{self.worker_id}.status.json"
@@ -133,18 +135,19 @@ class Worker:
         """Attempt to claim shard with retries and exponential backoff.
 
         `sleep_fn` may be injected for testability; it should accept seconds to
-        sleep. If omitted, falls back to `time.sleep`.
+        sleep. If omitted, falls back to the instance's sleep_fn or `time.sleep`.
         """
-        sleep_fn = sleep_fn or time.sleep
+        sleep_fn = sleep_fn or self.sleep_fn
         attempt = 0
         cur_delay = float(delay)
-        while attempt < int(retries):
+        while attempt <= int(retries):
             ok = self.claim_shard(manifest_path)
             if ok:
                 return True
             attempt += 1
-            sleep_fn(cur_delay)
-            cur_delay *= float(backoff)
+            if attempt <= int(retries):
+                sleep_fn(cur_delay)
+                cur_delay *= float(backoff)
         return False
 
     async def claim_shard_async(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.1) -> bool:

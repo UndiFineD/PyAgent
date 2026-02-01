@@ -260,7 +260,7 @@ class TensorizerReader:
                 if progress_callback:
                     progress_callback(progress)
 
-        with ThreadPoolExecutor(max_workers=self.config.parallel_threads) as executor: ThreadPoolExecutor:
+        with ThreadPoolExecutor(max_workers=self.config.parallel_threads) as executor:
             executor.map(load_one, names)
 
         return result

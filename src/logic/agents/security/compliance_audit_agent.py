@@ -89,6 +89,19 @@ class ComplianceAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         )
         return res
 
+    def _record(self, action: str, result: str, provider: str = "", model: str = "") -> None:
+        """Records compliance operations to the recorder if available."""
+        if hasattr(self, "recorder") and self.recorder:
+            try:
+                self.recorder.record_interaction(
+                    provider=provider,
+                    model=model,
+                    prompt=action,
+                    result=result,
+                )
+            except (AttributeError, RuntimeError, TypeError):
+                pass  # Silently ignore if recorder is unavailable
+
     def _simulate_check(self, check_name: str) -> bool:
         """Simulates the result of a specific compliance check."""
         # For simplicity, we pass most checks but fail a few to demonstrate logic
