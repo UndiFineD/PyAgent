@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 """
 Environment Configuration Module - Phase 20: Production Infrastructure
 ========================================================================
@@ -22,13 +24,10 @@ Inspired by vLLM's envs.py pattern.
 Features:
 
 Author: PyAgent Phase 20
-"""
-"""
+
 Module: env_config
 Handles environment configuration and variable management for PyAgent core.
 """
-
-from __future__ import annotations
 
 import json
 import logging
