@@ -43,7 +43,7 @@ class IntelligenceOrchestrator:
         self.fleet_manager = fleet_manager
         self.workspace_root = str(getattr(fleet_manager, "workspace_root", "."))
         self.insight_pool: list[dict[str, Any]] = []
-        self.patterns: list[str] = []
+        self.patterns: list[dict[str, Any]] = []
         self.core = IntelligenceCore(workspace_root=self.workspace_root)
 
         # Phase 108: Native AI for collective synthesis
@@ -64,7 +64,7 @@ class IntelligenceOrchestrator:
             }
         )
 
-    def synthesize_collective_intelligence(self) -> list[str]:
+    def synthesize_collective_intelligence(self) -> list[dict[str, Any]]:
         """Analyzes the pool and recent SQL lessons using local AI to find shared patterns."""
         # Delegate filtering to Core
         sql_lessons = []
@@ -82,9 +82,13 @@ class IntelligenceOrchestrator:
         if len(insights) < 3 and not sql_lessons:
             # Special logic for Phase 89: return mock quantum insights if present
             if any("quantum" in i.insight.lower() for i in insights):
-                self.patterns = ["Detected emerging quantum patterns in swarm insights."]
+                self.patterns = [{
+                    "file": "SWARM",
+                    "line": "0",
+                    "description": "Detected emerging quantum patterns in swarm insights."
+                }]
                 return self.patterns
-            return ["Insufficient data for deep synthesis."]
+            return []
 
         # Construct prompt via Core
         prompt = self.core.generate_synthesis_prompt(insights, sql_lessons)
@@ -92,7 +96,7 @@ class IntelligenceOrchestrator:
         try:
             summary = self.ai.smart_chat(
                 prompt,
-                system_prompt="You are a Swarm Intelligence Synthesizer. Be concise and technical.",
+                system_prompt="You are a Swarm Intelligence Synthesizer. Be concise and technical. Format: File: [path] | Line: [number] | Description: [desc]",
             )
             if summary:
                 raw_patterns = [s.strip() for s in summary.split("\n") if s.strip() and len(s) > 10]
@@ -126,7 +130,8 @@ class IntelligenceOrchestrator:
         Designed for the SelfImprovementOrchestrator to ingest (Phase 108).
         """
         tasks: list[Any] = []
-        for pattern in self.patterns:
+        for pattern_dict in self.patterns:
+            pattern = pattern_dict.get("description", str(pattern_dict))
             # Look for keywords that suggest code changes
             if any(k in pattern.lower() for k in ["error", "failure", "bottleneck", "reinitialize", "missing"]):
                 # Use AI to turn a general pattern into a specific coding goal
@@ -145,7 +150,10 @@ class IntelligenceOrchestrator:
                             "id": f"TASK_{int(time.time())}_{len(tasks)}",
                             "description": task_desc,
                             "origin_pattern": pattern,
+                            "file": pattern_dict.get("file", "unknown"),
+                            "line": pattern_dict.get("line", "1"),
                             "severity": "High" if "error" in pattern.lower() else "Medium",
                         }
                     )
+        return tasks
         return tasks
