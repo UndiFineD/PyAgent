@@ -130,12 +130,22 @@ class LMStudioBackend(LLMBackend):
         Prefer SDK helpers but fall back to HTTP when SDK is unavailable.
         """
         try:
-            import lmstudio
+            if not self._check_sdk():
+                raise ImportError("SDK not available")
 
-            models = lmstudio.list_loaded_models()
+            client = self._mcp_client.get_sync_client()
+            # Use the client to list models instead of global SDK function
+            if hasattr(client, "llm") and hasattr(client.llm, "list_loaded"):
+                models = client.llm.list_loaded()
+            elif hasattr(client, "llm") and hasattr(client.llm, "list_loaded_models"):
+                models = client.llm.list_loaded_models()
+            else:
+                import lmstudio
+                models = lmstudio.list_loaded_models()
+
             logger.debug(f"Listed {len(models)} models via LM Studio SDK")
             return [m.path for m in models]
-        except (ImportError, RuntimeError, ValueError) as e:
+        except (ImportError, RuntimeError, ValueError, AttributeError) as e:
             logger.warning(f"Failed to list loaded models via SDK: {e}; will try HTTP fallback")
 
         # HTTP fallback
@@ -147,12 +157,22 @@ class LMStudioBackend(LLMBackend):
         Use the same fallback strategy as `list_loaded_models`.
         """
         try:
-            import lmstudio
+            if not self._check_sdk():
+                raise ImportError("SDK not available")
 
-            models = lmstudio.list_downloaded_models()
+            client = self._mcp_client.get_sync_client()
+            # Use the client to list models instead of global SDK function
+            if hasattr(client, "llm") and hasattr(client.llm, "list_downloaded"):
+                models = client.llm.list_downloaded()
+            elif hasattr(client, "llm") and hasattr(client.llm, "list_downloaded_models"):
+                models = client.llm.list_downloaded_models()
+            else:
+                import lmstudio
+                models = lmstudio.list_downloaded_models()
+
             logger.debug(f"Listed {len(models)} downloaded models via LM Studio SDK")
             return [m.path for m in models]
-        except (ImportError, RuntimeError, ValueError) as e:
+        except (ImportError, RuntimeError, ValueError, AttributeError) as e:
             logger.warning(
                 f"Failed to list downloaded models via SDK: {e}; will try HTTP fallback"
             )
