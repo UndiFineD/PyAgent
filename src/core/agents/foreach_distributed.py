@@ -264,7 +264,10 @@ class Coordinator:
             shard_status[sid] = {"status": "worker_stalled"}
             # write a reassign marker for operators/telemetry
             try:
-                self._fs.atomic_write(self.scratch_dir / f"reassign_{sid}.json", json.dumps({"shard_id": sid}, indent=2))
+                self._fs.atomic_write(
+                    self.scratch_dir / f"reassign_{sid}.json",
+                    json.dumps({"shard_id": sid}, indent=2),
+                )
             except Exception:
                 logger.debug("Failed to write reassign marker for shard %s", sid)
         return {"manifest_id": manifest.get("manifest_id"), "shard_status": shard_status}
