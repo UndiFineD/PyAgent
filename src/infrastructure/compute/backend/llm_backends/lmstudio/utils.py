@@ -72,12 +72,29 @@ async def lmstudio_chat_async(
     system_prompt: str = "You are a helpful assistant.",
     host: str = "localhost:1234",
 ) -> str:
-    """Async convenience function for LM Studio chat."""
+    """Async convenience function for LM Studio chat.
+
+    This function is robust to different SDK shapes for `client.llm`.
+    """
     try:
         import lmstudio
+        import inspect
 
         async with lmstudio.AsyncClient(host) as client:
-            llm = await client.llm.get(model) if model else await client.llm.get()
+            llm_accessor = client.llm
+
+            if hasattr(llm_accessor, "get"):
+                llm = await (llm_accessor.get(model) if model else llm_accessor.get())
+            else:
+                if callable(llm_accessor):
+                    maybe = llm_accessor(model) if model else llm_accessor()
+                    if inspect.isawaitable(maybe):
+                        llm = await maybe
+                    else:
+                        llm = maybe
+                else:
+                    # Fallback to module-level helper
+                    llm = lmstudio.llm(model) if model else lmstudio.llm()
 
             chat = lmstudio.Chat(system_prompt)
             chat.add_user_message(prompt)
