@@ -101,6 +101,10 @@ class SubagentCore:
         def _try_ollama() -> str | None:
             return self.runner.llm_client.llm_chat_via_ollama(full_prompt, model="llama3")
 
+        def _try_lmstudio() -> str | None:
+            """Attempts to use LM Studio (Phase 21)."""
+            return self.runner.llm_client.llm_chat_via_lmstudio(full_prompt)
+
         def _try_openai_api() -> str | None:
             return BackendHandlers.try_openai_api(full_prompt, self.runner.requests)
 
@@ -120,13 +124,15 @@ class SubagentCore:
             "codex": _try_codex_cli,
             "vllm": _try_vllm,
             "ollama": _try_ollama,
+            "lmstudio": _try_lmstudio,
             "neural": _try_neural,
-            "copilot": lambda: _try_codex_cli() or _try_vllm() or _try_ollama() or _try_copilot_cli(),
+            "copilot": lambda: _try_codex_cli() or _try_vllm() or _try_ollama() or _try_lmstudio() or _try_copilot_cli(),
             "gh": lambda: _try_gh_copilot(allow_non_command=True),
             "github_models": _try_github_models,
             "openai": _try_openai_api,
             "auto": lambda: (
-                _try_vllm()
+                _try_lmstudio()
+                or _try_vllm()
                 or _try_ollama()
                 or _try_codex_cli()
                 or _try_copilot_cli()
@@ -144,6 +150,8 @@ class SubagentCore:
             "codex-cli": "codex",
             "vllm": "vllm",
             "ollama": "ollama",
+            "lmstudio": "lmstudio",
+            "lms": "lmstudio",
             "neural": "neural",
             "rust": "neural",
             "local-neural": "neural",

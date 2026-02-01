@@ -351,7 +351,8 @@ def consult_external_models(
         for item in broken_items:
             print(f"   * File: {item['file']}")
             for issue in item["remaining_issues"]:
-                print(f"     - {issue.get('type', 'Unknown')}: {issue.get('message', '')}")
+                line = issue.get('line', '1')
+                print(f"     - L{line} | {issue.get('type', 'Unknown')}: {issue.get('message', '')}")
     print("[Intelligence] Federated consensus reached: Continue localized refactoring.")
 
 
@@ -421,9 +422,13 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
             for idx, pattern in enumerate(new_patterns, 1):
                 file_link = ""
                 doc_link = ""
+                line_info = ""
                 if isinstance(pattern, dict):
                     desc = pattern.get("description", str(pattern))
                     file_path = pattern.get("file")
+                    line_no = pattern.get("line")
+                    if line_no:
+                        line_info = f" (L{line_no})"
                     # ...existing code...
                     doc = pattern.get("doc")
                 else:
@@ -435,7 +440,7 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
                     file_link = f" [View]({file_path})"
                 if doc:
                     doc_link = f" [Docs]({doc})"
-                logger.info(f"  {idx}. {desc}{file_link}{doc_link}")
+                logger.info(f"  {idx}. {desc}{line_info}{file_link}{doc_link}")
     except (OSError, IOError, TypeError):
         # Catch file operations and type errors in synthesis loop
         logger.warning("[Intelligence] Synthesis skipped.")
@@ -465,13 +470,16 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
         "Focus on the root cause (e.g., missing type hints, unsafe IO pattern, recursion depth)."
     )
 
-    # Attempt to solve via Fleet Intelligence (External LLM)
+    # Attempt to solve via Fleet Intelligence (Support LM Studio/GitHub fallback)
     try:
         from src.infrastructure.compute.backend import execution_engine as ai
 
         print(" - Querying external intelligence for solution patterns...")
-        # Use available heavy model
-        solution = ai.llm_chat_via_github_models(context_prompt, model=model_name)
+        # Phase 317: Use smart fallback logic to ensure choice of local heavy models
+        if os.environ.get("DV_LMSTUDIO_BASE_URL") or os.environ.get("DV_OLLAMA_MODEL"):
+            solution = ai.llm_chat_via_lmstudio(context_prompt, model=model_name)
+        else:
+            solution = ai.llm_chat_via_github_models(context_prompt, model=model_name)
 
         if solution:
             print("\n[Autonomous Solver] Proposed Solution:")
