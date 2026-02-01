@@ -12,27 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Module: batch_dcp_wrapper - Batch DCP attention wrapper for PyAgent engine."""
+
 from __future__ import annotations
-
-"""
-Module: batch_dcp_wrapper
-Implements batch DCP attention wrapper for PyAgent engine.
-
-Batch DCP Wrapper - Batch processing for disaggregated prefill-decode.
-
-Implements batch-level wrappers for coordinating DCP (Disaggregated
-Compute and Prefill) operations across multiple requests.
-
-Key patterns from vLLM:
-- BatchDCPPrefillWrapper for batch prefill coordination
-- LSE (log-sum-exp) all-gather for distributed attention
-- plan/run methods for two-phase execution
-
-Beyond vLLM:
-- Unified batch interface for mixed prefill/decode
-- Automatic batch size optimization
-- Memory-aware batching with spill prevention
-"""
 
 import logging
 import time

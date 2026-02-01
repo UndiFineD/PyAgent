@@ -526,6 +526,7 @@ class LazyEnvVar(Generic[T]):
         self._computed = False
 
     def get(self) -> T:
+        """Get the environment variable value."""
         if self._computed:
             return self._value  # type: ignore
 
@@ -561,12 +562,8 @@ class LazyEnvVar(Generic[T]):
 # ============================================================================
 
 
-class temp_env:
-    """
-    Context manager for temporarily setting environment variables.
-
-    Example:
-        >>> with temp_env(DEBUG="1", PORT="9000"):
+class TempEnv:
+    """Context manager for temporarily setting environment variables."""
         ...     print(os.environ.get("DEBUG"))  # "1"
         >>> print(os.environ.get("DEBUG"))  # Original value
     """
@@ -581,7 +578,7 @@ class temp_env:
         self.env_vars = env_vars
         self.original: dict[str, str | None] = {}
 
-    def __enter__(self) -> "temp_env":
+    def __enter__(self) -> "TempEnv":
         # Save original values
         for key in self.env_vars:
             self.original[key] = os.environ.get(key)
@@ -624,5 +621,5 @@ __all__ = [
     "EnvConfigMeta",
     "NamespacedConfig",
     # Context Managers
-    "temp_env",
+    "TempEnv",
 ]

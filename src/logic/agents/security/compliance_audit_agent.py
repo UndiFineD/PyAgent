@@ -123,3 +123,4 @@ class ComplianceAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             for fail in res["failed_checks"]:
                 report += f"  - [FAIL] {fail['check']}: {fail['recommendation']}\n"
         return report
+
