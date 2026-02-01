@@ -31,10 +31,10 @@ class SelfImprovementSecurityMixin:
 
         # Access class-level attributes
         dangerous_patterns = getattr(self, "dangerous_patterns", [])
-        _RUST_ACCEL = getattr(self, "_RUST_ACCEL", False)
+        rust_accel = getattr(self, "rust_accel", False)
         rc = getattr(self, "rc", None)
 
-        if _RUST_ACCEL and rc is not None:
+        if rust_accel and rc is not None:
             try:
                 rust_findings = rc.analyze_security_patterns_rust(content, dangerous_patterns)
                 for line_num, pattern, msg in rust_findings:

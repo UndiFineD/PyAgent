@@ -12,14 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-Autonomous Fleet Self-Improvement Loop.
-Scans the workspace for issues, applies autonomous fixes, and harvests external intelligence.
-"""
+"""Autonomous Fleet Self-Improvement Loop - scans workspace for issues and applies fixes."""
 
 from __future__ import annotations
-
 
 import argparse
 import json
@@ -31,7 +26,6 @@ import sys
 import time
 from pathlib import Path
 from typing import Any
-# ruff: noqa: E402
 
 # Ensure the project root is in PYTHONPATH before importing from src
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))

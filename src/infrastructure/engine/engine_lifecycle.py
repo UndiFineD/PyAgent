@@ -307,7 +307,6 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
 
     def _drain_pending_requests(self, timeout: float) -> None:
         """Drain pending requests before shutdown."""
-        import time
         start = time.time()
         while time.time() - start < timeout:
             waiting = self.request_queue.get_waiting_requests()

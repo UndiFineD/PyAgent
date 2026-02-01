@@ -12,28 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Module: triton_attention_ops - Triton-based attention operations."""
+
 from __future__ import annotations
-
-"""
-Module: triton_attention_ops
-Triton-based attention operations for PyAgent engine.
-
-Triton Attention Operations - GPU-accelerated attention kernels.
-
-Implements high-performance attention operations inspired by vLLM's
-Triton attention kernels. Provides paged attention, flash attention,
-and optimized decode attention for inference.
-
-Key patterns from vLLM:
-- kernel_paged_attention_2d for 2D block attention
-- _paged_attention_decode with CUDA streams
-- KV splits for handling long contexts
-
-Beyond vLLM:
-- Unified attention API with automatic backend selection
-- Memory-efficient sliding window attention
-- Dynamic precision switching (FP16/BF16/FP32)
-"""
 
 import logging
 import math
@@ -41,30 +22,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
 
 from torch import Tensor
 
@@ -204,12 +161,12 @@ class AttentionKernel(ABC):
         """Check if kernel supports given context length."""
 
 
-_paged_attention_kernel = None
+PAGED_ATTENTION_KERNEL = None
 
 if HAS_TRITON and HAS_TORCH:
 
     @triton.jit
-    def _paged_attention_kernel(  # pylint: disable=function-redefined, unused-argument, invalid-name
+    def _paged_attention_kernel_impl(  # pylint: disable=function-redefined, unused-argument
         output_ptr,
         query_ptr,
         k_cache_ptr,
@@ -347,7 +304,7 @@ class TritonPagedAttention(AttentionKernel):
         # Launch kernel
         grid: tuple[int, int] = (batch_size, num_heads)
 
-        _paged_attention_kernel[grid](
+        PAGED_ATTENTION_KERNEL[grid](
             output,
             query,
             k_cache,
