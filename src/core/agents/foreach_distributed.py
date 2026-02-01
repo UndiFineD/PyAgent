@@ -26,7 +26,7 @@ logger = logging.getLogger("pyagent.foreach")
 
 
 class WorkerClaimError(Exception):
-    pass
+    """Raised when a worker fails to claim a shard."""
 
 
 class Worker:
@@ -68,13 +68,13 @@ class Worker:
         }
         try:
             self._fs.atomic_write(self._status_path(), json.dumps(payload, indent=2))
-        except Exception as e:  # pragma: no cover - best-effort status write
+        except (OSError, ValueError, RuntimeError) as e:  # pragma: no cover
             logger.debug("Failed to write worker status: %s", e)
 
     def load_manifest(self, manifest_path: str | Path) -> Dict[str, Any]:
         """Load a JSON manifest from file."""
         p = Path(manifest_path)
-        content = p.read_text()
+        content = p.read_text(encoding="utf-8")
         return json.loads(content)
 
     def _lock_id_for_file(self, file_path: str) -> str:
@@ -161,7 +161,7 @@ class Worker:
         for lock_id in list(self.acquired_locks):
             try:
                 self.locker.release_lock(lock_id)
-            except Exception:  # pragma: no cover - best-effort release
+            except (OSError, RuntimeError):  # pragma: no cover
                 logger.debug("Failed to release lock %s", lock_id)
             try:
                 self.acquired_locks.remove(lock_id)
@@ -213,7 +213,7 @@ class Coordinator:
         This method is intentionally idempotent and does not modify worker
         assignments unless necessary.
         """
-        content = self.manifest_path.read_text()
+        content = self.manifest_path.read_text(encoding="utf-8")
         manifest = json.loads(content)
         # Ensure enforce_tests flag is present and True by default
         if "enforce_tests" not in manifest:
@@ -241,7 +241,7 @@ class Coordinator:
                 status_path = self.scratch_dir / f"{worker}.status.json"
                 if status_path.exists():
                     try:
-                        data = json.loads(status_path.read_text())
+                        data = json.loads(status_path.read_text(encoding="utf-8"))
                         st = data.get("status")
                         if st == "done":
                             shard_status[sid] = {"status": "done", "merge": {"shard_id": sid}}
@@ -252,7 +252,7 @@ class Coordinator:
                         elif st == "lock_failed":
                             shard_status[sid] = {"status": "lock_failed"}
                             pending.remove(sid)
-                    except Exception:
+                    except (OSError, ValueError, json.JSONDecodeError):
                         shard_status[sid] = {"status": "unknown"}
                         pending.remove(sid)
                 else:
@@ -269,7 +269,7 @@ class Coordinator:
                     self.scratch_dir / f"reassign_{sid}.json",
                     json.dumps({"shard_id": sid}, indent=2),
                 )
-            except Exception:
+            except (OSError, RuntimeError):
                 logger.debug("Failed to write reassign marker for shard %s", sid)
         return {"manifest_id": manifest.get("manifest_id"), "shard_status": shard_status}
 
@@ -283,11 +283,11 @@ class Coordinator:
         # If leader file exists and not expired, fail
         if self._leader_file.exists():
             try:
-                data = json.loads(self._leader_file.read_text())
+                data = json.loads(self._leader_file.read_text(encoding="utf-8"))
                 expires = float(data.get("expires", 0))
                 if expires > now:
                     return False
-            except Exception:
+            except (OSError, ValueError, json.JSONDecodeError):
                 # Corrupt file: allow takeover
                 pass
         # Acquire leadership by writing a new leader file
@@ -295,5 +295,5 @@ class Coordinator:
             payload = {"leader": leader_name, "expires": now + float(self.leader_ttl)}
             self._fs.atomic_write(self._leader_file, json.dumps(payload, indent=2))
             return True
-        except Exception:
+        except (OSError, RuntimeError):
             return False

@@ -39,7 +39,6 @@ from enum import Enum
 from typing import Any, Callable, Generic, Iterator, Sequence, Type, TypeVar
 
 try:
-    import msgspec
     from msgspec import Struct
     from msgspec import json as msgspec_json
     from msgspec import msgpack as msgspec_msgpack
@@ -47,7 +46,6 @@ try:
     MSGSPEC_AVAILABLE = True
 except ImportError:
     MSGSPEC_AVAILABLE = False
-    msgspec = None  # type: ignore
 
 
 # =============================================================================
@@ -222,16 +220,16 @@ class JSONEncoder:
         self,
         *,
         enc_hook: Callable[[Any], Any] | None = None,
-        decimal_format: str = "string",
-        order: str | None = None,
+        _decimal_format: str = "string",
+        _order: str | None = None,
     ):
         """
         Initialize JSON encoder.
 
         Args:
             enc_hook: Custom encoding hook for unsupported types
-            decimal_format: How to encode decimals ("string" or "number")
-            order: Key ordering ("deterministic" or None)
+            _decimal_format: How to encode decimals ("string" or "number")
+            _order: Key ordering ("deterministic" or None)
         """
         require_msgspec()
 
@@ -368,28 +366,28 @@ class TypedSerializer(Generic[T]):
     def __init__(
         self,
         type_: Type[T],
-        format: str = "json",
+        serialization_format: str = "json",
     ):
         """
         Initialize typed serializer.
 
         Args:
             type_: Schema type (Struct or standard type)
-            format: Serialization format ("json" or "msgpack")
+            serialization_format: Serialization format ("json" or "msgpack")
         """
         require_msgspec()
 
         self._type = type_
-        self._format = format
+        self._format = serialization_format
 
-        if format == "json":
+        if serialization_format == "json":
             self._encoder = msgspec_json.Encoder()
             self._decoder = msgspec_json.Decoder(type_)
-        elif format == "msgpack":
+        elif serialization_format == "msgpack":
             self._encoder = msgspec_msgpack.Encoder()
             self._decoder = msgspec_msgpack.Decoder(type_)
         else:
-            raise ValueError(f"Unknown format: {format}")
+            raise ValueError(f"Unknown format: {serialization_format}")
 
     def encode(self, obj: T) -> bytes:
         """Encode typed object."""
