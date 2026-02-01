@@ -166,7 +166,7 @@ class ResilienceCore(BaseCore):
             try:
                 # Use Rust implementation for performance if available
                 return rc.calculate_backoff(  # pylint: disable=no-member
-                    failure_count, threshold, base_timeout, multiplier, max_timeout
+                    failure_count, threshold, base_timeout, multiplier, max_timeout, jitter_mode
                 )
             except TimeoutError as e:
                 logger.error("ResilienceCore: Timeout error: %s", e)
