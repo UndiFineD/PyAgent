@@ -21,10 +21,12 @@ LM Studio REST API client with HTTP fallback support.
 import logging
 import os
 import time
-from typing import TYPE_CHECKING, Any, Optional
+from typing import Any, Optional
 
-if TYPE_CHECKING:
+try:
     import httpx
+except ImportError:
+    httpx = None
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +36,7 @@ class LMStudioAPIClient:
 
     def __init__(self, base_url: str, api_token: Optional[str] = None, default_model: str = ""):
         """Initialize REST API client.
-        
+
         Args:
             base_url: Base URL for LM Studio API (e.g., http://localhost:1234 or http://localhost:1234/v1)
             api_token: Optional API token for authentication
@@ -46,10 +48,10 @@ class LMStudioAPIClient:
 
     def _normalize_url(self, endpoint: str = "") -> str:
         """Normalize REST API URL, handling both /api/v1 and /v1 prefixes.
-        
+
         Args:
             endpoint: Optional endpoint path (e.g., 'models', 'chat')
-        
+
         Returns:
             Full normalized URL for the endpoint.
         """
@@ -59,7 +61,7 @@ class LMStudioAPIClient:
             api_base = f"{base}/api/v1"
         else:
             api_base = base
-        
+
         if endpoint:
             return f"{api_base}/{endpoint.lstrip('/')}"
         return api_base
@@ -76,25 +78,26 @@ class LMStudioAPIClient:
         self, method: str, url: str, max_retries: int = 3, **kwargs
     ) -> Optional[Any]:
         """Make HTTP request with exponential backoff retry for transient errors.
-        
+
         Args:
             method: HTTP method ('GET', 'POST')
             url: Full URL to request
             max_retries: Maximum number of retry attempts
             **kwargs: Additional args for httpx (json, timeout, etc.)
-        
+
         Returns:
             Response object if successful, None if failed.
         """
-        import httpx
+        if httpx is None:
+            raise ImportError("httpx is required for LMStudioAPIClient")
 
         headers = self._get_headers()
         if "headers" in kwargs:
             headers.update(kwargs["headers"])
         kwargs["headers"] = headers
-        
+
         timeout = kwargs.get("timeout", 30)
-        
+
         for attempt in range(max_retries):
             try:
                 logger.debug(f"[LMStudio] HTTP {method} {url} (attempt {attempt + 1}/{max_retries})")
@@ -109,12 +112,12 @@ class LMStudioAPIClient:
                     )
                 else:
                     raise ValueError(f"Unsupported HTTP method: {method}")
-                
+
                 if resp.status_code >= 400:
                     logger.warning(
                         f"[LMStudio] HTTP {method} {url} returned {resp.status_code}: {resp.text[:500]}"
                     )
-                
+
                 return resp
             except (httpx.TimeoutException, httpx.ConnectError, httpx.NetworkError) as e:
                 if attempt < max_retries - 1:
@@ -124,18 +127,17 @@ class LMStudioAPIClient:
                     )
                     time.sleep(wait_time)
                     continue
-                else:
-                    logger.error(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts: {e}")
-                    raise
-            except Exception as e:
+                logger.error(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts: {e}")
+                raise
+            except (ValueError, RuntimeError) as e:
                 logger.error(f"[LMStudio] HTTP {method} {url} failed: {e}")
                 raise
-        
+
         raise RuntimeError(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts")
 
     def list_models(self) -> list[str]:
         """List available models via REST API.
-        
+
         Returns:
             List of model identifiers/paths.
         """
@@ -143,7 +145,7 @@ class LMStudioAPIClient:
             url = self._normalize_url("models")
             logger.info(f"[LMStudio] Attempting HTTP list models: {url}")
             resp = self._http_request_with_retry("GET", url, max_retries=3, timeout=5.0)
-            
+
             if resp.status_code == 200:
                 data = resp.json()
                 models = []
@@ -154,18 +156,18 @@ class LMStudioAPIClient:
                         models.append(str(item))
                 logger.info(f"[LMStudio] HTTP list_models succeeded: {len(models)} models from {url}")
                 return models
-            else:
-                logger.error(
-                    f"[LMStudio] HTTP list_models returned {resp.status_code} from {url}: {resp.text[:300]}"
-                )
-        except Exception as e:
+
+            logger.error(
+                f"[LMStudio] HTTP list_models returned {resp.status_code} from {url}: {resp.text[:300]}"
+            )
+        except (httpx.HTTPError, ValueError, RuntimeError) as e:
             logger.error(f"[LMStudio] Failed to list models via HTTP: {e}")
-        
+
         return []
 
     def get_info(self) -> dict[str, Any]:
         """Get server info and version.
-        
+
         Returns:
             Dictionary with server information.
         """
@@ -173,22 +175,22 @@ class LMStudioAPIClient:
             "api_base_url": self._normalize_url(),
             "api_version": None,
         }
-        
+
         try:
             # Try to fetch server info from common endpoints
             for endpoint in ["info", "version", "status"]:
                 try:
                     url = f"{self._normalize_url()}/{endpoint}"
                     resp = self._http_request_with_retry("GET", url, max_retries=1, timeout=2.0)
-                    if resp.status_code == 200:
+                    if resp and resp.status_code == 200:
                         data = resp.json()
                         info["api_version"] = (
                             data.get("version") or data.get("api_version") or "unknown"
                         )
                         break
-                except Exception:
+                except (httpx.HTTPError, ValueError, RuntimeError):
                     continue
-        except Exception:
+        except (ValueError, RuntimeError):
             pass
-        
+
         return info

@@ -25,10 +25,10 @@ Tests for LM Studio backend and msgspec serializers.
 - Integration with LLMClient
 """
 
+# pylint: disable=protected-access,unused-variable,unused-argument
 import os
 import time
 import inspect
-from typing import Any
 from unittest.mock import MagicMock, patch, AsyncMock
 
 import pytest
@@ -431,9 +431,9 @@ class TestLMStudioConvenienceFunctions:
 # MsgSpec Serializer Tests
 # ============================================================================
 
-
 class TestMsgSpecAvailability:
-        """Tests for msgspec availability and module imports."""
+    """Tests for msgspec availability and module imports."""
+
     def test_is_msgspec_available(self):
         """Test availability check."""
         from src.infrastructure.storage.serialization.msg_spec_serializer import is_msgspec_available
@@ -540,10 +540,11 @@ class TestTypedSerializer:
         import msgspec
 
         class User(msgspec.Struct):
+            """Internal schema for testing."""
             name: str
             age: int
 
-        serializer = TypedSerializer(User, format="json")
+        serializer = TypedSerializer(User, serialization_format="json")
 
         user = User(name="Alice", age=30)
         encoded = serializer.encode(user)
@@ -558,10 +559,11 @@ class TestTypedSerializer:
         import msgspec
 
         class Config(msgspec.Struct):
+            """Internal schema for testing."""
             enabled: bool
             count: int
 
-        serializer = TypedSerializer(Config, format="msgpack")
+        serializer = TypedSerializer(Config, serialization_format="msgpack")
 
         config = Config(enabled=True, count=5)
         encoded = serializer.encode(config)
@@ -576,9 +578,10 @@ class TestTypedSerializer:
         import msgspec
 
         class Item(msgspec.Struct):
+            """Internal schema for testing."""
             id: int
 
-        serializer = TypedSerializer(Item, format="json")
+        serializer = TypedSerializer(Item, serialization_format="json")
 
         items = [Item(id=1), Item(id=2), Item(id=3)]
         encoded = serializer.encode_many(items)
@@ -709,10 +712,8 @@ class TestLLMClientIntegration:
     def test_lmstudio_in_known_backends(self):
         """Test lmstudio is in smart_chat fallback chain."""
         from src.infrastructure.compute.backend.llm_client import LLMClient
-        import requests
 
         # Check source code contains lmstudio in known_backends
-        import inspect
         source = inspect.getsource(LLMClient.smart_chat)
         assert "lmstudio" in source
 
@@ -730,6 +731,9 @@ class TestPhase21ModuleStructure:
         )
 
         assert callable(is_msgspec_available)
+        assert JSONEncoder is not None
+        assert MsgPackEncoder is not None
+        assert TypedSerializer is not None
 
     def test_lmstudio_backend_exports(self):
         """Test LMStudioBackend exports."""
@@ -744,6 +748,12 @@ class TestPhase21ModuleStructure:
         )
 
         assert LMStudioBackend.PROVIDER_ID == "lmstudio"
+        assert LMStudioConfig is not None
+        assert ModelCache is not None
+        assert CachedModel is not None
+        assert callable(lmstudio_chat)
+        assert callable(lmstudio_stream)
+        assert callable(lmstudio_chat_async)
 
 
 if __name__ == "__main__":

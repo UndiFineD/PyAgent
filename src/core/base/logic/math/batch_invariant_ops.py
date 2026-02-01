@@ -43,7 +43,7 @@ def matmul_persistent(
     b: np.ndarray | torch.Tensor,
     bias: np.ndarray | torch.Tensor | None = None,
 ) -> np.ndarray | torch.Tensor:
-    # Deterministic matrix multiplication with optional bias.
+    """Deterministic matrix multiplication with optional bias."""
     if not HAS_TORCH:
         result = np.matmul(a, b)
         if bias is not None:
@@ -59,12 +59,14 @@ def matmul_persistent(
     if bias is not None:
         result = result + bias
     return result
+
+
 def softmax_batch_invariant(
     x: np.ndarray | torch.Tensor,
     dim: int = -1,
     dtype: type | None = None,
 ) -> np.ndarray | torch.Tensor:
-    # Numerically stable softmax that is deterministic across batch orderings.
+    """Numerically stable softmax that is deterministic across batch orderings."""
     if not HAS_TORCH:
         x_max = np.max(x, axis=dim, keepdims=True)
         exp_x = np.exp(x - x_max)
@@ -84,7 +86,7 @@ def log_softmax_batch_invariant(
     x: np.ndarray | torch.Tensor,
     dim: int = -1,
 ) -> np.ndarray | torch.Tensor:
-    # Numerically stable log softmax that is deterministic.
+    """Numerically stable log softmax that is deterministic."""
     if not HAS_TORCH:
         x_max = np.max(x, axis=dim, keepdims=True)
         shifted = x - x_max
@@ -102,12 +104,11 @@ def mean_batch_invariant(
     keepdim: bool = False,
     dtype: type | None = None,
 ) -> np.ndarray | torch.Tensor:
-    # Deterministic mean reduction.
+    """Deterministic mean reduction."""
     if not HAS_TORCH:
         if dim is None:
             return np.mean(x, dtype=dtype)
-        else:
-            return np.mean(x, axis=dim, keepdims=keepdim, dtype=dtype)
+        return np.mean(x, axis=dim, keepdims=keepdim, dtype=dtype)
 
     if dim is None:
         total = torch.sum(x)
@@ -136,7 +137,7 @@ def mm_batch_invariant(
     *,
     out: np.ndarray | torch.Tensor | None = None,
 ) -> np.ndarray | torch.Tensor:
-    # Deterministic matrix multiplication (2D x 2D).
+    """Deterministic matrix multiplication (2D x 2D)."""
     if not HAS_TORCH:
         result = np.matmul(a, b)
         if out is not None:
@@ -162,7 +163,7 @@ def bmm_batch_invariant(
     *,
     out: np.ndarray | torch.Tensor | None = None,
 ) -> np.ndarray | torch.Tensor:
-    # Deterministic batched matrix multiplication (3D x 3D).
+    """Deterministic batched matrix multiplication (3D x 3D)."""
     if not HAS_TORCH:
         result = np.matmul(a, b)
         if out is not None:
@@ -179,12 +180,12 @@ def addmm_batch_invariant(
     a: np.ndarray | torch.Tensor,
     b: np.ndarray | torch.Tensor,
 ) -> np.ndarray | torch.Tensor:
-    # Deterministic bias + matrix multiplication.
+    """Deterministic bias + matrix multiplication."""
     return matmul_persistent(a, b, bias=bias)
 
 
 def gelu_batch_invariant(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
-    # Deterministic GELU activation.
+    """Deterministic GELU activation."""
     if not HAS_TORCH:
         from scipy import special
         return 0.5 * x * (1.0 + special.erf(x / math.sqrt(2.0)))
@@ -198,7 +199,7 @@ def layer_norm_batch_invariant(
     bias: np.ndarray | torch.Tensor | None = None,
     eps: float = 1e-5,
 ) -> np.ndarray | torch.Tensor:
-    # Deterministic layer normalization.
+    """Deterministic layer normalization."""
     if not HAS_TORCH:
         dims = tuple(range(-len(normalized_shape), 0))
         mean = np.mean(x, axis=dims, keepdims=True)
@@ -227,7 +228,7 @@ def rms_norm_batch_invariant(
     weight: np.ndarray | torch.Tensor | None = None,
     eps: float = 1e-6,
 ) -> np.ndarray | torch.Tensor:
-    # Deterministic RMS normalization.
+    """Deterministic RMS normalization."""
     if not HAS_TORCH:
         rms = np.sqrt(np.mean(x * x, axis=-1, keepdims=True) + eps)
         result = x / rms
@@ -249,7 +250,7 @@ def attention_score_batch_invariant(
     key: np.ndarray | torch.Tensor,
     scale: float | None = None,
 ) -> np.ndarray | torch.Tensor:
-    # Compute attention scores deterministically.
+    """Compute attention scores deterministically."""
     if not HAS_TORCH:
         d = query.shape[-1]
         if scale is None:
@@ -268,7 +269,7 @@ def attention_output_batch_invariant(
     value: np.ndarray | torch.Tensor,
     mask: np.ndarray | torch.Tensor | None = None,
 ) -> np.ndarray | torch.Tensor:
-    # Compute attention output deterministically.
+    """Compute attention output deterministically."""
     if not HAS_TORCH:
         if mask is not None:
             scores = np.where(mask, scores, -1e9)
@@ -282,14 +283,19 @@ def attention_output_batch_invariant(
 
 
 class BatchInvariantOps:
-    # Container class for batch-invariant operations.
-    # Provides a consistent interface and tracks usage statistics.
+    """
+    Container class for batch-invariant operations.
+    Provides a consistent interface and tracks usage statistics.
+    """
 
     def __init__(self, device: Any = None, dtype: Any = None):
-        # Initialize batch-invariant operations.
-        # Args:
-        #     device: Target device
-        #     dtype: Default dtype for operations
+        """
+        Initialize batch-invariant operations.
+
+        Args:
+            device: Target device
+            dtype: Default dtype for operations
+        """
         if HAS_TORCH:
             self.device = device or torch.device("cpu")
             self.dtype = dtype or torch.float32
@@ -315,6 +321,7 @@ class BatchInvariantOps:
         b: np.ndarray | torch.Tensor,
         bias: np.ndarray | torch.Tensor | None = None
     ) -> np.ndarray | torch.Tensor:
+        """Matrix multiplication."""
         self._call_counts["matmul"] += 1
         return matmul_persistent(a, b, bias)
 
@@ -324,6 +331,7 @@ class BatchInvariantOps:
         dim: int = -1,
         dtype: type | None = None
     ) -> np.ndarray | torch.Tensor:
+        """Softmax operation."""
         self._call_counts["softmax"] += 1
         return softmax_batch_invariant(x, dim, dtype)
 
@@ -332,6 +340,7 @@ class BatchInvariantOps:
         x: np.ndarray | torch.Tensor,
         dim: int = -1
     ) -> np.ndarray | torch.Tensor:
+        """Log-softmax operation."""
         return log_softmax_batch_invariant(x, dim)
 
     def mean(
@@ -341,6 +350,7 @@ class BatchInvariantOps:
         keepdim: bool = False,
         dtype: type | None = None,
     ) -> np.ndarray | torch.Tensor:
+        """Mean reduction."""
         self._call_counts["mean"] += 1
         return mean_batch_invariant(x, dim, keepdim, dtype)
 
@@ -350,6 +360,7 @@ class BatchInvariantOps:
         b: np.ndarray | torch.Tensor,
         out: np.ndarray | torch.Tensor | None = None
     ) -> np.ndarray | torch.Tensor:
+        """2D Matrix multiplication."""
         self._call_counts["mm"] += 1
         return mm_batch_invariant(a, b, out=out)
 
@@ -359,6 +370,7 @@ class BatchInvariantOps:
         b: np.ndarray | torch.Tensor,
         out: np.ndarray | torch.Tensor | None = None
     ) -> np.ndarray | torch.Tensor:
+        """Batched matrix multiplication."""
         self._call_counts["bmm"] += 1
         return bmm_batch_invariant(a, b, out=out)
 
@@ -368,6 +380,7 @@ class BatchInvariantOps:
         a: np.ndarray | torch.Tensor,
         b: np.ndarray | torch.Tensor
     ) -> np.ndarray | torch.Tensor:
+        """Add-matrix multiplication."""
         self._call_counts["addmm"] += 1
         return addmm_batch_invariant(bias, a, b)
 
@@ -375,6 +388,7 @@ class BatchInvariantOps:
         self,
         x: np.ndarray | torch.Tensor
     ) -> np.ndarray | torch.Tensor:
+        """GELU activation."""
         self._call_counts["gelu"] += 1
         return gelu_batch_invariant(x)
 
@@ -386,6 +400,7 @@ class BatchInvariantOps:
         bias: np.ndarray | torch.Tensor | None = None,
         eps: float = 1e-5,
     ) -> np.ndarray | torch.Tensor:
+        """Layer normalization."""
         self._call_counts["layer_norm"] += 1
         return layer_norm_batch_invariant(x, normalized_shape, weight, bias, eps)
 
@@ -395,6 +410,7 @@ class BatchInvariantOps:
         weight: np.ndarray | torch.Tensor | None = None,
         eps: float = 1e-6,
     ) -> np.ndarray | torch.Tensor:
+        """RMS normalization."""
         self._call_counts["rms_norm"] += 1
         return rms_norm_batch_invariant(x, weight, eps)
 
@@ -406,4 +422,3 @@ class BatchInvariantOps:
         """Reset operation call counts."""
         for key in self._call_counts:
             self._call_counts[key] = 0
-

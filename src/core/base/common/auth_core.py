@@ -64,9 +64,8 @@ class AuthCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_challenge(agent_id)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+            except (AttributeError, RuntimeError, TypeError) as e:
+                logger.debug("rust_core challenge generation failed: %s", e)
         seed = f"{agent_id}_{time.time()}_{hashlib.sha256(str(time.time()).encode()).hexdigest()}"
         return hashlib.sha256(seed.encode()).hexdigest()
 
@@ -76,9 +75,8 @@ class AuthCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.generate_auth_proof(challenge, secret_key)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+            except (AttributeError, RuntimeError, TypeError) as e:
+                logger.debug("rust_core proof generation failed: %s", e)
         return hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
 
     def verify_proof(self, challenge: str, proof: str, expected_secret_hash: str) -> bool:
@@ -87,9 +85,8 @@ class AuthCore(BaseCore):
             try:
                 # pylint: disable=no-member
                 return rc.verify_auth_proof(challenge, proof, expected_secret_hash)  # type: ignore
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                pass
+            except (AttributeError, RuntimeError, TypeError) as e:
+                logger.debug("rust_core proof verification failed: %s", e)
 
         return proof == hashlib.sha512(f"{challenge}:{expected_secret_hash}".encode()).hexdigest()
 
