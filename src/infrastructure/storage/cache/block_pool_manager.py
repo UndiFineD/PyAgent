@@ -470,6 +470,7 @@ class BlockPool:
                 stats = self._arc.get_stats()
                 if stats["t1_size"] + stats["t2_size"] == 0:
                     break
+                # pylint: disable=protected-access
                 evicted_id = self._arc._evict()
                 if evicted_id is not None:
                     self._handle_eviction(evicted_id, "capacity")
