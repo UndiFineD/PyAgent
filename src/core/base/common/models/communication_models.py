@@ -1,17 +1,4 @@
-from __future__ import annotations
 #!/usr/bin/env python3
-from .core_enums import FilePriority, MessageRole, InputType
-from datetime import datetime
-from dataclasses import dataclass, field
-import time
-import uuid
-from pathlib import Path
-from typing import Any, Callable
-from .base_models import _empty_list_str, _empty_list_dict_str_any, _empty_dict_str_any
-"""
-Module: communication_models
-Defines context lineage and communication models for agent task attribution.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,6 +10,24 @@ Defines context lineage and communication models for agent task attribution.
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Module: communication_models
+Defines context lineage and communication models for agent task attribution.
+"""
+
+from __future__ import annotations
+
+import time
+import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Callable
+
+from .base_models import _empty_dict_str_any, _empty_list_dict_str_any, _empty_list_str
+from .core_enums import FilePriority, InputType, MessageRole
 
 
 @dataclass(slots=True)
@@ -61,7 +66,7 @@ class CascadeContext:
         """Create a child context at the next cascade level."""
         # Support both child_task_id and agent_id for backwards compatibility
         task_id = child_task_id or agent_id
-        
+
         if self.is_bursting():
             raise RecursionError("Recursive Improvement Loop Detected - Cascade depth limit reached")
 
@@ -505,3 +510,4 @@ class SpanContext:
                 "attributes": attributes or {},
             }
         )
+

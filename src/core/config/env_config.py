@@ -12,22 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 """
 Environment Configuration Module - Phase 20: Production Infrastructure
-========================================================================
 
 Type-safe environment variable access with defaults and validation.
 Inspired by vLLM's envs.py pattern.
 
 Features:
-
-Author: PyAgent Phase 20
+- Type-safe environment variable access
+- Defaults and validation
+- Generic configuration patterns
 
 Module: env_config
 Handles environment configuration and variable management for PyAgent core.
 """
+
+from __future__ import annotations
 
 import json
 import logging

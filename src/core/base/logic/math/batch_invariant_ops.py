@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 """
 batch_invariant_ops.py
-----------------------
-Implements deterministic, batch-invariant mathematical operations for tensors, supporting both NumPy and PyTorch backends.
-Includes matrix multiplication, normalization, attention, and activation functions designed for reproducibility and cross-backend compatibility.
+Implements deterministic, batch-invariant mathematical operations for tensors.
+Supports both NumPy and PyTorch backends with reproducibility.
 """
+
+from __future__ import annotations
 
 import logging
 import math
 from typing import Any
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
