@@ -8,15 +8,17 @@ Self improvement analysis.py module.
 import os
 
 from .mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
+from .mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
 from .mixins.research_analysis_mixin import ResearchAnalysisMixin
 from .mixins.structural_analysis_mixin import StructuralAnalysisMixin
 
 
-class SelfImprovementAnalysis(StructuralAnalysisMixin, ResearchAnalysisMixin, ComplexityAnalysisMixin):
+class SelfImprovementAnalysis(StructuralAnalysisMixin, ResearchAnalysisMixin, ComplexityAnalysisMixin, ProfilingAnalysisMixin):
     """Specialized assistant for scanning and analyzing tech debt and fleet metrics."""
 
     def __init__(self, workspace_root: str):
         self.workspace_root = workspace_root
         self.research_doc = os.path.join(workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")
+        self.profiling_agent: Any = None # Set by orchestrator
 
     # Logic delegated to mixins

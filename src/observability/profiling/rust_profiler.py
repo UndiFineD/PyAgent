@@ -328,7 +328,7 @@ class RustProfiler:
                 }
                 for k, v in by_calls[:20]
             ],
-            "unused_functions": [k for k, v in stats.items() if v.call_count == 0],
+            "unused_functions": [str(k) for k, v in stats.items() if v.call_count == 0],
             "source_locations": dict(self._source_locations),
         }
 
@@ -530,7 +530,7 @@ class RustUsageScanner:
             "usage_by_function": dict(all_usage),
             "unused_functions": sorted(unused_funcs),
             "top_used": sorted(
-                [(k, v["src_count"] + v["test_count"]) for k, v in all_usage.items()], key=lambda x: x[1], reverse=True
+                [(str(k), int(v["src_count"] + v["test_count"])) for k, v in all_usage.items()], key=lambda x: x[1], reverse=True
             )[:20],
         }
 

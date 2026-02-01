@@ -34,6 +34,7 @@ from typing import Any, Dict, List, Optional
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.mixins.identity_mixin import IdentityMixin
 from src.core.base.common.models.communication_models import CascadeContext, ConversationMessage
+from src.core.base.common.models.core_enums import MessageRole
 
 
 class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
@@ -53,6 +54,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
 
     def __init__(self, agent_id: str = "code_formatting_agent") -> None:
         super().__init__(agent_id)
+        self.agent_id = agent_id
         self.agent_type = "CodeFormattingStandardsAgent"
         self.capabilities = [
             "strict_formatting",
@@ -122,7 +124,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
                 # Extract max line length if specified
                 if "max-line-length=120" in content:
                     self.standards["max_line_length"] = 120
-            except Exception:
+            except (OSError, IOError):
                 pass  # Use defaults
 
     async def process_message(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
@@ -140,66 +142,69 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
 
         if "format" in content or "style" in content:
             return await self._handle_strict_formatting_request(message, _context)
-        elif "docstring" in content:
+        if "docstring" in content:
             return await self._handle_docstring_request(message, _context)
-        elif "lint" in content or "check" in content:
+        if "lint" in content or "check" in content:
             return await self._handle_strict_linting_request(message, _context)
-        elif "standards" in content:
+        if "standards" in content:
             return await self._handle_standards_request(message, _context)
-        elif "validate" in content or "review" in content:
+        if "validate" in content or "review" in content:
             return await self._handle_validation_request(message, _context)
-        else:
-            return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content="I enforce strict PyAgent code formatting standards. I can help with: strict formatting, docstring validation, comprehensive linting, standards compliance, code validation, and bracket/quote enforcement. What specific assistance do you need?",
-                message_type="response"
-            )
 
-    async def _handle_strict_formatting_request(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
+        return ConversationMessage(
+            role=MessageRole.ASSISTANT,
+            content=(
+                "I enforce strict PyAgent code formatting standards. I can help with: "
+                "strict formatting, docstring validation, comprehensive linting, standards compliance, "
+                "code validation, and bracket/quote enforcement. What specific assistance do you need?"
+            )
+        )
+
+    async def _handle_strict_formatting_request(
+        self, message: ConversationMessage, _context: CascadeContext
+    ) -> ConversationMessage:
         """Handle strict code formatting requests with comprehensive validation."""
         content = message.content
 
         # Extract file path if mentioned
         file_path = self._extract_file_path(content)
-        if file_path and os.path.exists(file_path):
-            # Perform comprehensive validation first
-            validation_result = await self.perform_comprehensive_validation(file_path)
-
-            if validation_result["passed"]:
-                result = await self.apply_strict_formatting(file_path)
-                return ConversationMessage(
-                    sender=self.agent_id,
-                    recipient=message.sender,
-                    content=f"✅ Strict formatting applied to {file_path}: {result}",
-                    message_type="response"
-                )
-            else:
-                # Report issues that need to be fixed first
-                issues_summary = "❌ Cannot format due to critical issues that must be resolved first:\n"
-                for issue in validation_result["critical_issues"]:
-                    issues_summary += f"  - {issue}\n"
-
-                if validation_result["warnings"]:
-                    issues_summary += "\nWarnings (will be auto-fixed):\n"
-                    for warning in validation_result["warnings"]:
-                        issues_summary += f"  - {warning}\n"
-
-                return ConversationMessage(
-                    sender=self.agent_id,
-                    recipient=message.sender,
-                    content=issues_summary,
-                    message_type="response"
-                )
-        else:
+        if not file_path or not os.path.exists(file_path):
             return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content="Please specify a valid Python file path. I enforce strict PyAgent formatting standards including indentation, line length, docstrings, and naming conventions.",
-                message_type="response"
+                role=MessageRole.ASSISTANT,
+                content=(
+                    "Please specify a valid Python file path. I enforce strict PyAgent formatting standards "
+                    "including indentation, line length, docstrings, and naming conventions."
+                )
             )
 
-    async def _handle_docstring_request(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
+        # Perform comprehensive validation first
+        validation_result = await self.perform_comprehensive_validation(file_path)
+
+        if validation_result["passed"]:
+            result = await self.apply_strict_formatting(file_path)
+            return ConversationMessage(
+                role=MessageRole.ASSISTANT,
+                content=f"✅ Strict formatting applied to {file_path}: {result}"
+            )
+
+        # Report issues that need to be fixed first
+        issues_list = [f"  - {issue}" for issue in validation_result["critical_issues"]]
+        issues_summary = "❌ Cannot format due to critical issues that must be resolved first:\n"
+        issues_summary += "\n".join(issues_list) + "\n"
+
+        if validation_result["warnings"]:
+            warnings_list = [f"  - {warning}" for warning in validation_result["warnings"]]
+            issues_summary += "\nWarnings (will be auto-fixed):\n"
+            issues_summary += "\n".join(warnings_list) + "\n"
+
+        return ConversationMessage(
+            role=MessageRole.ASSISTANT,
+            content=issues_summary
+        )
+
+    async def _handle_docstring_request(
+        self, message: ConversationMessage, _context: CascadeContext
+    ) -> ConversationMessage:
         """Handle docstring-related requests."""
         content = message.content
 
@@ -207,13 +212,11 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
         if file_path and os.path.exists(file_path):
             result = await self.validate_docstrings(file_path)
             return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content=f"Docstring validation for {file_path}: {result}",
-                message_type="response"
+                role=MessageRole.ASSISTANT,
+                content=f"Docstring validation for {file_path}: {result}"
             )
-        else:
-            standards_summary = """
+
+        standards_summary = """
 PyAgent Docstring Standards:
 - Use Google-style docstrings
 - Module docstrings required
@@ -222,15 +225,15 @@ PyAgent Docstring Standards:
 - Follow proper indentation and formatting
 
 Use the batch_docstring_formatter.py script for systematic fixes.
-            """
-            return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content=standards_summary,
-                message_type="response"
-            )
+        """
+        return ConversationMessage(
+            role=MessageRole.ASSISTANT,
+            content=standards_summary
+        )
 
-    async def _handle_strict_linting_request(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
+    async def _handle_strict_linting_request(
+        self, message: ConversationMessage, _context: CascadeContext
+    ) -> ConversationMessage:
         """Handle comprehensive linting requests with strict standards."""
         content = message.content
 
@@ -238,61 +241,60 @@ Use the batch_docstring_formatter.py script for systematic fixes.
         if file_path:
             result = await self.perform_comprehensive_linting(file_path)
             return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content=f"Comprehensive linting results for {file_path}:\n{result}",
-                message_type="response"
-            )
-        else:
-            return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content="Available strict linting: indentation, docstrings, line length, syntax, naming, whitespace, final newlines, brackets & quotes. Specify a file path.",
-                message_type="response"
+                role=MessageRole.ASSISTANT,
+                content=f"Comprehensive linting results for {file_path}:\n{result}"
             )
 
-    async def _handle_validation_request(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
+        return ConversationMessage(
+            role=MessageRole.ASSISTANT,
+            content=(
+                "Available strict linting: indentation, docstrings, line length, syntax, naming, "
+                "whitespace, final newlines, brackets & quotes. Specify a file path."
+            )
+        )
+
+    async def _handle_validation_request(
+        self, message: ConversationMessage, _context: CascadeContext
+    ) -> ConversationMessage:
         """Handle comprehensive validation requests."""
         content = message.content
 
         file_path = self._extract_file_path(content)
-        if file_path and os.path.exists(file_path):
-            result = await self.perform_comprehensive_validation(file_path)
-
-            response = f"Comprehensive validation for {file_path}:\n\n"
-
-            if result["passed"]:
-                response += "✅ PASSED - All strict standards met!\n"
-            else:
-                response += "❌ FAILED - Issues found:\n"
-
-            if result["critical_issues"]:
-                response += "\nCritical Issues (must fix):\n"
-                for issue in result["critical_issues"]:
-                    response += f"  - {issue}\n"
-
-            if result["warnings"]:
-                response += "\nWarnings (recommended fixes):\n"
-                for warning in result["warnings"]:
-                    response += f"  - {warning}\n"
-
-            response += f"\nLearned from {sum(self.common_mistakes.values())} total mistakes across all validations."
-
+        if not file_path or not os.path.exists(file_path):
             return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content=response,
-                message_type="response"
+                role=MessageRole.ASSISTANT,
+                content="Please specify a valid Python file path for comprehensive validation."
             )
+
+        result = await self.perform_comprehensive_validation(file_path)
+
+        response = f"Comprehensive validation for {file_path}:\n\n"
+
+        if result["passed"]:
+            response += "✅ PASSED - All strict standards met!\n"
         else:
-            return ConversationMessage(
-                sender=self.agent_id,
-                recipient=message.sender,
-                content="Please specify a valid Python file path for comprehensive validation.",
-                message_type="response"
-            )
+            response += "❌ FAILED - Issues found:\n"
 
-    async def _handle_standards_request(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
+        if result["critical_issues"]:
+            response += "\nCritical Issues (must fix):\n"
+            for issue in result["critical_issues"]:
+                response += f"  - {issue}\n"
+
+        if result["warnings"]:
+            response += "\nWarnings (recommended fixes):\n"
+            for warning in result["warnings"]:
+                response += f"  - {warning}\n"
+
+        response += f"\nLearned from {sum(self.common_mistakes.values())} total mistakes across all validations."
+
+        return ConversationMessage(
+            role=MessageRole.ASSISTANT,
+            content=response
+        )
+
+    async def _handle_standards_request(
+        self, _message: ConversationMessage, _context: CascadeContext
+    ) -> ConversationMessage:
         """Handle standards information requests."""
         standards_info = f"""
 🚨 STRICT PyAgent Code Formatting Standards (MANDATORY):
@@ -331,10 +333,8 @@ Use the batch_docstring_formatter.py script for systematic fixes.
 See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         """
         return ConversationMessage(
-            sender=self.agent_id,
-            recipient=message.sender,
-            content=standards_info,
-            message_type="response"
+            role=MessageRole.ASSISTANT,
+            content=standards_info
         )
 
     def get_learning_insights(self) -> str:
@@ -412,7 +412,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 self.common_mistakes["syntax_errors"] += len(syntax_issues)
 
             # 2. Strict indentation check
-            indent_issues = self._validate_indentation(content, lines)
+            indent_issues = self._validate_indentation(lines)
             if indent_issues["critical"]:
                 results["critical_issues"].extend(indent_issues["critical"])
                 results["passed"] = False
@@ -455,7 +455,11 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 results["passed"] = False
             if bracket_issues["warnings"]:
                 results["warnings"].extend(bracket_issues["warnings"])
-            self.common_mistakes["bracket_violations"] = self.common_mistakes.get("bracket_violations", 0) + len(bracket_issues["critical"]) + len(bracket_issues["warnings"])
+            self.common_mistakes["bracket_violations"] = (
+                self.common_mistakes.get("bracket_violations", 0) +
+                len(bracket_issues["critical"]) +
+                len(bracket_issues["warnings"])
+            )
 
             # 9. Strong typing validation (critical for Rust port)
             typing_issues = self._validate_strong_typing(content)
@@ -471,9 +475,17 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 results["passed"] = False
                 self.common_mistakes["time_sleep_usage"] += len(sleep_issues)
 
-        except Exception as e:
-            results["critical_issues"].append(f"Error during validation: {e}")
+        except (Exception,): # pylint: disable=broad-exception-caught
+            results["critical_issues"].append("Error during validation process")
             results["passed"] = False
+
+        if self.recorder:
+            self.recorder.record_interaction(
+                provider="python",
+                model="formatting-standards-agent",
+                prompt=f"Comprehensive validation of {file_path}",
+                result=str(results),
+            )
 
         return results
 
@@ -484,11 +496,11 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
             ast.parse(content)
         except SyntaxError as e:
             issues.append(f"Syntax Error: {e.msg} at line {e.lineno}")
-        except Exception as e:
-            issues.append(f"Parse Error: {e}")
+        except (Exception,): # pylint: disable=broad-exception-caught
+            issues.append("Parse Error")
         return issues
 
-    def _validate_indentation(self, content: str, lines: List[str]) -> Dict[str, List[str]]:
+    def _validate_indentation(self, lines: List[str]) -> Dict[str, List[str]]:
         """Strictly validate indentation - only 4 spaces allowed, no tabs."""
         issues = {"critical": [], "warnings": []}
 
@@ -560,7 +572,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                     if not re.match(r'^[A-Z][a-zA-Z0-9]*$', node.name):
                         issues["critical"].append(f"Class '{node.name}' should be PascalCase")
 
-        except Exception:
+        except (Exception,): # pylint: disable=broad-exception-caught
             pass  # Skip if syntax errors prevent parsing
 
         return issues
@@ -574,15 +586,15 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         issues["critical"].extend(bracket_issues)
 
         # 2. Bracket spacing
-        spacing_issues = self._validate_bracket_spacing(content, lines)
+        spacing_issues = self._validate_bracket_spacing(lines)
         issues["critical"].extend(spacing_issues)
 
         # 3. Quote consistency
-        quote_issues = self._validate_quote_consistency(content, lines)
+        quote_issues = self._validate_quote_consistency(lines)
         issues["warnings"].extend(quote_issues)  # Quote style is a warning, not critical
 
         # 4. Comma and colon spacing
-        comma_colon_issues = self._validate_comma_colon_spacing(content, lines)
+        comma_colon_issues = self._validate_comma_colon_spacing(lines)
         issues["critical"].extend(comma_colon_issues)
 
         return issues
@@ -615,7 +627,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
         return issues
 
-    def _validate_bracket_spacing(self, content: str, lines: List[str]) -> List[str]:
+    def _validate_bracket_spacing(self, lines: List[str]) -> List[str]:
         """Validate strict bracket spacing rules."""
         issues = []
 
@@ -671,7 +683,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
         return issues
 
-    def _validate_quote_consistency(self, content: str, lines: List[str]) -> List[str]:
+    def _validate_quote_consistency(self, lines: List[str]) -> List[str]:
         """Validate quote style consistency (prefer double quotes)."""
         issues = []
 
@@ -684,10 +696,12 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
             # Find string literals
             in_string = False
             string_start = None
+            string_char = None
             j = 0
             while j < len(line):
                 char = line[j]
 
+                # Check for unescaped quote
                 if char in ('"', "'") and (j == 0 or line[j-1] != '\\'):
                     if not in_string:
                         in_string = True
@@ -697,22 +711,18 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                         # End of string
                         string_content = line[string_start:j+1]
 
-                        # Check if this is a docstring (triple quotes)
+                        # Handle triple quotes skip
                         if j + 2 < len(line) and line[j+1:j+3] == string_char * 2:
-                            # Triple quotes - skip
                             j += 2
-                        elif string_char == "'":
-                            # Single quotes - prefer double quotes for string literals
-                            # But allow single quotes for single characters or when containing double quotes
-                            if len(string_content) > 3 and '"' not in string_content:
-                                issues.append(f"Line {i}: Prefer double quotes for string literals")
+                        elif string_char == "'" and len(string_content) > 3 and '"' not in string_content:
+                            issues.append(f"Line {i}: Prefer double quotes for string literals")
 
                         in_string = False
                 j += 1
 
         return issues
 
-    def _validate_comma_colon_spacing(self, content: str, lines: List[str]) -> List[str]:
+    def _validate_comma_colon_spacing(self, lines: List[str]) -> List[str]:
         """Validate comma and colon spacing rules."""
         issues = []
 
@@ -786,8 +796,8 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 else:
                     issues["warnings"].append(f"Docstring: {issue['message']}")
 
-        except Exception as e:
-            issues["critical"].append(f"Docstring validation error: {e}")
+        except (Exception,): # pylint: disable=broad-exception-caught
+            issues["critical"].append("Docstring validation error")
 
         return issues
 
@@ -826,20 +836,34 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                     f.write(new_content)
 
             # Run black for code formatting
+            command = [
+                sys.executable, "-m", "black",
+                "--line-length", str(self.standards["max_line_length"]),
+                file_path
+            ]
             result = subprocess.run(
-                [sys.executable, "-m", "black", "--line-length", str(self.standards["max_line_length"]), file_path],
+                command,
                 capture_output=True,
                 text=True,
+                check=False,
                 cwd=os.path.dirname(file_path)
             )
 
+            output = result.stdout or result.stderr
+            if self.recorder:
+                self.recorder.record_interaction(
+                    provider="python",
+                    model="black",
+                    prompt=" ".join(command),
+                    result=output[:2000],
+                )
+
             if result.returncode == 0:
                 return "Strict formatting applied successfully (auto-fixed warnings, applied black formatting)."
-            else:
-                return f"Formatting partially successful, but black reported: {result.stderr}"
+            return f"Formatting partially successful, but black reported: {result.stderr}"
 
-        except Exception as e:
-            return f"Error during strict formatting: {e}"
+        except (Exception,): # pylint: disable=broad-exception-caught
+            return "Error during strict formatting"
 
     def _validate_strong_typing(self, content: str) -> List[str]:
         """

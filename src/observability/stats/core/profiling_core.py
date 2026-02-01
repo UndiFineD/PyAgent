@@ -34,6 +34,8 @@ class ProfileStats:
     call_count: int
     total_time: float
     per_call: float
+    file_name: str | None = None
+    line_number: int | None = None
 
 
 class ProfilingCore:

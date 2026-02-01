@@ -72,11 +72,11 @@ class CacheEvent:
     latency_ns: int = 0
 
     @classmethod
-    def hit(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> "CacheEvent":
+    def hit(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> CacheEvent:
         return cls(time.time(), True, bytes_accessed, latency_ns)
 
     @classmethod
-    def miss(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> "CacheEvent":
+    def miss(cls, bytes_accessed: int = 0, latency_ns: int = 0) -> CacheEvent:
         return cls(time.time(), False, bytes_accessed, latency_ns)
 
 
@@ -140,7 +140,7 @@ class SlidingWindowMetrics:
         self,
         window_seconds: float = 60.0,
         max_events: int = 10000,
-    ):
+    ) -> None:
         self._window_seconds = window_seconds
         self._max_events = max_events
         self._events: Deque[CacheEvent] = deque(maxlen=max_events)
@@ -227,7 +227,7 @@ class CachingMetrics:
         cache_type: CacheType = CacheType.PREFIX,
         window_seconds: float = 60.0,
         max_recent_requests: int = 10000,
-    ):
+    ) -> None:
         self.cache_type = cache_type
         self._window = SlidingWindowMetrics(window_seconds, max_recent_requests)
         self._evictions: Deque[EvictionEvent] = deque(maxlen=1000)
@@ -343,7 +343,7 @@ class PrefixCacheStats:
     - Sharing efficiency metrics
     """
 
-    def __init__(self, window_seconds: float = 60.0):
+    def __init__(self, window_seconds: float = 60.0) -> None:
         self._metrics = CachingMetrics(CacheType.PREFIX, window_seconds)
         self._prefix_lengths: Deque[int] = deque(maxlen=1000)
         self._shared_prefixes: Dict[str, int] = {}  # hash -> share count
@@ -423,7 +423,7 @@ class MultiLevelCacheMetrics:
     Beyond vLLM: Unified view across all cache levels.
     """
 
-    def __init__(self, window_seconds: float = 60.0):
+    def __init__(self, window_seconds: float = 60.0) -> None:
         self._caches: Dict[CacheType, CachingMetrics] = {}
         self._window_seconds = window_seconds
         self._lock = threading.Lock()

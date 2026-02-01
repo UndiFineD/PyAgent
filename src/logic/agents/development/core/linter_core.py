@@ -25,6 +25,8 @@ import os
 import subprocess
 from typing import Optional, TypedDict
 
+from src.core.base.common.base_interfaces import ContextRecorderInterface
+
 
 class LintIssue(TypedDict):
     """Represents a single issue found by a linter."""
@@ -49,20 +51,31 @@ class LintResult(TypedDict):
 class LinterCore:
     """Core logic for Python Linter analysis."""
 
-    def __init__(self) -> None:
+    def __init__(self, recorder: Optional[ContextRecorderInterface] = None) -> None:
         self.logger: logging.Logger = logging.getLogger(__name__)
+        self.recorder = recorder
 
     def run_ruff(self, file_path: str) -> list[LintIssue]:
         """Runs ruff and returns issues."""
         issues: list[LintIssue] = []
         try:
             # --output-format json
+            command = ["ruff", "check", "--output-format=json", file_path]
             process: subprocess.CompletedProcess[str] = subprocess.run(
-                ["ruff", "check", "--output-format=json", file_path],
+                command,
                 capture_output=True,
                 text=True,
                 check=False,
             )
+
+            output = process.stdout or process.stderr
+            if self.recorder:
+                self.recorder.record_interaction(
+                    provider="python",
+                    model="ruff",
+                    prompt=" ".join(command),
+                    result=output[:2000],
+                )
 
             if process.stdout:
                 try:
@@ -91,12 +104,22 @@ class LinterCore:
         issues: list[LintIssue] = []
         try:
             # -f json
+            command = ["pylint", "-f", "json", file_path]
             process: subprocess.CompletedProcess[str] = subprocess.run(
-                ["pylint", "-f", "json", file_path],
+                command,
                 capture_output=True,
                 text=True,
                 check=False,
             )
+
+            output = process.stdout or process.stderr
+            if self.recorder:
+                self.recorder.record_interaction(
+                    provider="python",
+                    model="pylint",
+                    prompt=" ".join(command),
+                    result=output[:2000],
+                )
 
             if process.stdout:
                 try:
@@ -125,12 +148,22 @@ class LinterCore:
         issues: list[LintIssue] = []
         try:
             # flake8 default output: file:line:col: code message
+            command = ["flake8", "--format=default", file_path]
             process: subprocess.CompletedProcess[str] = subprocess.run(
-                ["flake8", "--format=default", file_path],
+                command,
                 capture_output=True,
                 text=True,
                 check=False,
             )
+
+            output = process.stdout or process.stderr
+            if self.recorder:
+                self.recorder.record_interaction(
+                    provider="python",
+                    model="flake8",
+                    prompt=" ".join(command),
+                    result=output[:2000],
+                )
 
             if process.stdout:
                 for line in process.stdout.splitlines():

@@ -60,8 +60,8 @@ class MCPClient:
             if not api_url.startswith("http://") and not api_url.startswith("https://"):
                 api_url = "http://" + api_url
             
-            # Phase 317: Use explicit base_url keyword to avoid discovery delays
-            self._sync_client = lmstudio.Client(base_url=api_url)
+            # Phase 317: Use explicit api_host keyword to avoid discovery delays
+            self._sync_client = lmstudio.Client(api_host=api_url)
             logger.info(f"[LMStudio] Connected sync client to {api_url}")
             return self._sync_client
         except Exception as e:
@@ -85,7 +85,7 @@ class MCPClient:
             if not api_url.startswith("http://") and not api_url.startswith("https://"):
                 api_url = "http://" + api_url
             
-            self._async_client = lmstudio.AsyncClient(api_url)
+            self._async_client = lmstudio.AsyncClient(api_host=api_url)
             logger.info(f"[LMStudio] Created async client to {api_url}")
             return self._async_client
         except Exception as e:

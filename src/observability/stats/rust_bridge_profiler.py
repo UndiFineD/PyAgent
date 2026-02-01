@@ -48,7 +48,7 @@ class RustBridgeProfiler:
     def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
         """Wraps a function with nanosecond-precision timing."""
 
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = time.perf_counter_ns()
             try:
                 result = fn(*args, **kwargs)

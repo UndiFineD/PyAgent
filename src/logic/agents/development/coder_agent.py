@@ -86,14 +86,14 @@ class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMix
         ".rb": CodeLanguage.RUBY,
     }
 
-    def __init__(self, file_path: str) -> None:
+    def __init__(self, file_path: str, **kwargs: Any) -> None:
         self.file_path = Path(file_path)
         self._language = self._detect_language()
-        super().__init__(file_path)
+        super().__init__(file_path, **kwargs)
         self.capabilities.extend(["python", "javascript", "code-refactor"])  # Phase 241
 
         # New: Delegate core logic to CoderCore (Rust-ready component)
-        self.core = CoderCore(self._language)
+        self.core = CoderCore(self._language, recorder=self.recorder)
 
         # Create copies of style rules to avoid cross-instance state leakage
         self._style_rules: list[StyleRule] = [

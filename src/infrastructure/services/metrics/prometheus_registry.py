@@ -122,7 +122,7 @@ class MetricCollector(ABC):
 class Counter(MetricCollector):
     """Thread-safe counter metric."""
 
-    def __init__(self, spec: MetricSpec):
+    def __init__(self, spec: MetricSpec) -> None:
         self.spec = spec
         self._values: Dict[Tuple[Tuple[str, str], ...], float] = {}
         self._lock = threading.Lock()
@@ -159,7 +159,7 @@ class Counter(MetricCollector):
 class Gauge(MetricCollector):
     """Thread-safe gauge metric."""
 
-    def __init__(self, spec: MetricSpec):
+    def __init__(self, spec: MetricSpec) -> None:
         self.spec = spec
         self._values: Dict[Tuple[Tuple[str, str], ...], float] = {}
         self._lock = threading.Lock()
@@ -209,7 +209,7 @@ class Histogram(MetricCollector):
 
     DEFAULT_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, float("inf"))
 
-    def __init__(self, spec: MetricSpec):
+    def __init__(self, spec: MetricSpec) -> None:
         self.spec = spec
         self._buckets = spec.buckets or self.DEFAULT_BUCKETS
         self._data: Dict[Tuple[Tuple[str, str], ...], Dict[str, Any]] = {}
@@ -273,7 +273,7 @@ class Summary(MetricCollector):
 
     DEFAULT_QUANTILES = (0.5, 0.9, 0.95, 0.99)
 
-    def __init__(self, spec: MetricSpec, max_age_seconds: float = 60.0, max_samples: int = 1000):
+    def __init__(self, spec: MetricSpec, max_age_seconds: float = 60.0, max_samples: int = 1000) -> None:
         self.spec = spec
         self._max_age = max_age_seconds
         self._max_samples = max_samples
@@ -348,7 +348,7 @@ class MetricsRegistry:
     _instance: Optional["MetricsRegistry"] = None
     _lock = threading.Lock()
 
-    def __init__(self, backend: MetricsBackend = MetricsBackend.PROMETHEUS):
+    def __init__(self, backend: MetricsBackend = MetricsBackend.PROMETHEUS) -> None:
         self._backend = backend
         self._metrics: Dict[str, MetricCollector] = {}
         self._metrics_lock = threading.Lock()
@@ -529,7 +529,7 @@ class SampledCounter(Counter):
     Beyond vLLM: Rate-limited counter to prevent cardinality explosion.
     """
 
-    def __init__(self, spec: MetricSpec, sample_rate: float = 0.1):
+    def __init__(self, spec: MetricSpec, sample_rate: float = 0.1) -> None:
         super().__init__(spec)
         self._sample_rate = sample_rate
         self._sample_counter = 0
@@ -549,7 +549,7 @@ class RateLimitedGauge(Gauge):
     Beyond vLLM: Prevents excessive updates in hot paths.
     """
 
-    def __init__(self, spec: MetricSpec, min_interval: float = 0.1):
+    def __init__(self, spec: MetricSpec, min_interval: float = 0.1) -> None:
         super().__init__(spec)
         self._min_interval = min_interval
         self._last_update: Dict[Tuple[Tuple[str, str], ...], float] = {}
@@ -570,7 +570,7 @@ class RateLimitedGauge(Gauge):
 class VLLMMetrics:
     """Collection of vLLM-compatible metrics."""
 
-    def __init__(self, registry: Optional[MetricsRegistry] = None):
+    def __init__(self, registry: Optional[MetricsRegistry] = None) -> None:
         self.registry = registry or MetricsRegistry.get_instance()
 
         # Request metrics

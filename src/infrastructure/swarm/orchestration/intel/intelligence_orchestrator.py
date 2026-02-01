@@ -113,6 +113,21 @@ class IntelligenceOrchestrator:
                 return self.patterns
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Intelligence: AI Synthesis failed: {e}")
+            # Fallback: Convert high-confidence insights directly to patterns
+            for insight in insights:
+                if insight.confidence > 0.9:
+                    # Try to parse the insight if it's already in the standard format
+                    if "File:" in insight.insight and "|" in insight.insight:
+                        parsed = self.core.extract_actionable_patterns([insight.insight])
+                        if parsed:
+                            self.patterns.extend(parsed)
+                    else:
+                        self.patterns.append({
+                            "file": "CollectiveIntelligence",
+                            "line": "0",
+                            "description": f"[{insight.agent}] {insight.insight}"
+                        })
+            return self.patterns
 
         return []
 

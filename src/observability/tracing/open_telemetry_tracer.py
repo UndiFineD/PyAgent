@@ -41,9 +41,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Any, Callable, Generator, ParamSpec, TypeVar
 
-from opentelemetry.trace.span import Span
-from opentelemetry.sdk.trace.export import SpanExporter
-
 logger: logging.Logger = logging.getLogger(__name__)
 
 # Standard trace headers
@@ -56,6 +53,8 @@ otel_import_error_traceback: str | None = None
 Context = Any
 Tracer = Any
 SpanKind = Any
+Span = Any
+SpanExporter = Any
 
 try:
     from opentelemetry import trace  # pylint: disable=unused-import
@@ -64,7 +63,8 @@ try:
         OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
     from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.trace.export import (BatchSpanProcessor,
-                                                SimpleSpanProcessor)
+                                                SimpleSpanProcessor,
+                                                SpanExporter)
     from opentelemetry.trace import (Span, SpanKind, Status, StatusCode,
                                      Tracer, get_current_span,
                                      get_tracer_provider, set_tracer_provider)
@@ -168,23 +168,37 @@ def init_tracer(
         ValueError: If OpenTelemetry is not available.
     """
     if not is_otel_available():
-        raise ValueError(
-            "OpenTelemetry is not available. Unable to initialize a tracer. "
-            "Ensure OpenTelemetry packages are installed. "
-            f"Original error:\n{otel_import_error_traceback}"
-        )
+        _raise_otel_missing_error()
 
     trace_provider = TracerProvider()
 
     if otlp_traces_endpoint:
-        span_exporter: SpanExporter = get_span_exporter(otlp_traces_endpoint)
-        if use_batch_processor:
-            trace_provider.add_span_processor(BatchSpanProcessor(span_exporter))
-        else:
-            trace_provider.add_span_processor(SimpleSpanProcessor(span_exporter))
+        _configure_span_export(trace_provider, otlp_traces_endpoint, use_batch_processor)
 
     set_tracer_provider(trace_provider)
     return trace_provider.get_tracer(instrumenting_module_name)
+
+
+def _raise_otel_missing_error() -> None:
+    """Internal helper to raise consistent error when OTEL is missing."""
+    raise ValueError(
+        "OpenTelemetry is not available. Unable to initialize a tracer. "
+        "Ensure OpenTelemetry packages are installed. "
+        f"Original error:\n{otel_import_error_traceback}"
+    )
+
+
+def _configure_span_export(
+    trace_provider: TracerProvider,
+    endpoint: str,
+    use_batch: bool
+) -> None:
+    """Internal helper to configure span processors for a provider."""
+    span_exporter: SpanExporter = get_span_exporter(endpoint)
+    if use_batch:
+        trace_provider.add_span_processor(BatchSpanProcessor(span_exporter))
+    else:
+        trace_provider.add_span_processor(SimpleSpanProcessor(span_exporter))
 
 
 def get_span_exporter(endpoint: str) -> SpanExporter:
@@ -197,7 +211,11 @@ def get_span_exporter(endpoint: str) -> SpanExporter:
         raise RuntimeError("OpenTelemetry is not available")
 
     protocol: str = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_PROTOCOL, "grpc")
+    return _create_exporter_by_protocol(protocol, endpoint)
 
+
+def _create_exporter_by_protocol(protocol: str, endpoint: str) -> SpanExporter:
+    """Creates the appropriate span exporter for the given protocol."""
     if protocol == "grpc":
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
             OTLPSpanExporter
@@ -542,24 +560,31 @@ class NullSpan:
     """A no-op span for testing or when tracing is disabled."""
 
     def set_attribute(self, key: str, value: Any) -> None:
+        """No-op attribute setter."""
         pass
 
     def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
+        """No-op event adder."""
         pass
 
     def record_exception(self, exception: Exception, escaped: bool = True) -> None:
+        """No-op exception recorder."""
         pass
 
     def set_status(self, status: Any) -> None:
+        """No-op status setter."""
         pass
 
     def is_recording(self) -> bool:
+        """Always returns False for no-op span."""
         return False
 
     def __enter__(self) -> "NullSpan":
+        """Context entry returns self."""
         return self
 
     def __exit__(self, *args: Any) -> None:
+        """Context exit logic."""
         pass
 
 

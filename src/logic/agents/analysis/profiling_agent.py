@@ -20,6 +20,7 @@ from __future__ import annotations
 import ast
 import cProfile
 import logging
+import os
 import pstats
 from typing import Any, List
 
@@ -61,6 +62,11 @@ class ProfilingAgent(BaseAgent):
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
             
+            # Phase 336: Support for static analysis if execution is too risky
+            if "os.remove" in code or "subprocess" in code:
+                logging.info(f"ProfilingAgent: Skipping execution profile for {file_path} due to risky calls. Using static fallback.")
+                return self.static_profile(file_path)
+
             # Execute in a controlled environment
             profiler.enable()
             exec(code, {"__name__": "__main__"})
@@ -79,6 +85,43 @@ class ProfilingAgent(BaseAgent):
             return results
         except Exception as e:
             logging.error(f"ProfilingAgent: Failed to profile {file_path}: {e}")
+            # Fallback to static
+            return self.static_profile(file_path)
+
+    def static_profile(self, file_path: str) -> list[ProfileStats]:
+        """Performs static analysis to estimate performance bottlenecks without execution."""
+        try:
+            logging.info(f"ProfilingAgent: [Static] Attempting to read: {file_path}")
+            if not os.path.exists(file_path):
+                logging.error(f"ProfilingAgent: [Static] File does not exist: {file_path}")
+                return []
+            
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            
+            tree = ast.parse(content)
+            findings: list[ProfileStats] = []
+            
+            for node in ast.walk(tree):
+                if isinstance(node, ast.FunctionDef):
+                    # Heuristic: count loops and complex operations
+                    loops = sum(1 for n in ast.walk(node) if isinstance(n, (ast.For, ast.While, ast.ListComp)))
+                    logging.info(f"ProfilingAgent: Static scan of {node.name} found {loops} loops.")
+                    if loops > 5:
+                        findings.append(ProfileStats(
+                            function_name=node.name,
+                            call_count=1,
+                            total_time=1.5, # Estimated
+                            per_call=1.5,
+                            file_name=file_path,
+                            line_number=node.lineno
+                        ))
+            
+            if findings:
+                self._handover_to_coder(file_path, findings)
+            return findings
+        except Exception as e:
+            logging.error(f"ProfilingAgent: [Static] Error: {e}")
             return []
 
     def _handover_to_coder(self, file_path: str, slow_functions: List[ProfileStats]) -> None:

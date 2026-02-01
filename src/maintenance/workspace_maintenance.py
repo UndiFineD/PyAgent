@@ -26,10 +26,12 @@ from typing import List, Tuple
 
 from src.maintenance.mixins.pylint_fixer_mixin import PylintFixerMixin
 from src.maintenance.mixins.import_cleanup_mixin import ImportCleanupMixin
+from src.maintenance.mixins.header_fixer_mixin import HeaderFixerMixin
+from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
 
 logger: logging.Logger = logging.getLogger(__name__)
 
-class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
+class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin):
     """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
 
     DEFAULT_EXCLUSIONS: set[str] = {
@@ -70,7 +72,19 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
         self.apply_header_compliance()
         self.apply_docstring_compliance()
         self.fix_pylint_violations()
+        self.apply_syntax_fixes()
         logger.info("Cycle complete.")
+
+    def apply_syntax_fixes(self) -> None:
+        """Applies generic syntax and pattern fixes across the workspace."""
+        for root, _, files in os.walk(self.workspace_root):
+            if self._is_excluded(root):
+                continue
+            for file in files:
+                if file.endswith(".py"):
+                    path: Path = Path(root) / file
+                    self.fix_invalid_for_loop_type_hints(path)
+                    self.check_unmatched_triple_quotes(path)
 
     def find_large_files(self, threshold_kb: int = 100) -> List[Tuple[int, Path]]:
         """Identifies files exceeding the specified size threshold."""
@@ -169,6 +183,9 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin):
             for file in files:
                 if file.endswith(".py"):
                     path: Path = Path(root) / file
+                    # First clean up any existing mess
+                    self.clean_file_headers(path)
+                    # Then apply standard header if still missing
                     self._apply_file_header(path)
 
     def _apply_file_header(self, path: Path) -> None:
