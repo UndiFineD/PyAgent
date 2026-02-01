@@ -1,7 +1,3 @@
-"""
-Module: triton_attention_ops
-Triton-based attention operations for PyAgent engine.
-"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +12,12 @@ Triton-based attention operations for PyAgent engine.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+from __future__ import annotations
+
 """
+Module: triton_attention_ops
+Triton-based attention operations for PyAgent engine.
+
 Triton Attention Operations - GPU-accelerated attention kernels.
 
 Implements high-performance attention operations inspired by vLLM's
@@ -35,8 +34,6 @@ Beyond vLLM:
 - Memory-efficient sliding window attention
 - Dynamic precision switching (FP16/BF16/FP32)
 """
-
-from __future__ import annotations
 
 import logging
 import math
