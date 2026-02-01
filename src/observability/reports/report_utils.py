@@ -67,7 +67,7 @@ def _find_imports(tree: ast.AST) -> list[str]:
     # We keep this for compatibility if it's used elsewhere with a pre-parsed tree.
     imports: list[str] = []
 
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias: ast.alias in node.names:
                 imports.append(alias.name)
@@ -78,7 +78,7 @@ def _find_imports(tree: ast.AST) -> list[str]:
 
     seen: set[str] = set()
     out: list[str] = []
-    for item: str in imports:
+    for item in imports:
         if item not in seen:
             seen.add(item)
             out.append(item)
@@ -140,21 +140,21 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
     """Find potential issues via lightweight static analysis."""
     issues: list[str] = []
     # 1. Mutable defaults
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            for default: ast.expr in node.args.defaults:
+            for default in node.args.defaults:
                 if isinstance(default, (ast.List, ast.Dict, ast.Set)):
                     issues.append(f"Function `{node.name}` has a mutable default argument (list / dict / set).")
                     break  # One per function is enough
     # 2. Bare excepts
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler) and node.type is None:
             issues.append("Contains bare `except` clause.")
     # 3. Missing type hints
-    for node: ast.AST in ast.walk(tree):
+    for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
             # Check args
-            missing_arg_type: bool = any(arg.annotation is None for arg: ast.arg in node.args.args if arg.arg != "self")
+            missing_arg_type: bool = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
             # Check return
             missing_return_type: bool = node.returns is None
             if missing_arg_type or missing_return_type:

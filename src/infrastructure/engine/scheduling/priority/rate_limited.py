@@ -57,7 +57,7 @@ class RateLimitedScheduler:
             TaskPriority.IDLE: 5.0,
         }
 
-        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p: TaskPriority in TaskPriority}
+        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p in TaskPriority}
 
         self._scheduler = PriorityScheduler(workers=workers)
         self._lock: LockType = threading.Lock()

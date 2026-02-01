@@ -42,6 +42,10 @@ from src.infrastructure.engine.structured.structured_output_params import (
     GuidedDecodingBackend, JsonSchemaConstraint, OutputConstraint,
     RegexConstraint, SchemaFormat, StructuredOutputConfig,
     StructuredOutputType, StructuredOutputValidator, TypeConstraint,
+)
+
+__all__ = [
+    # Manager & Backend
     "StructuredOutputManager",
     "StructuredOutputBackend",
     "StructuredOutputGrammar",
@@ -67,7 +71,6 @@ from src.infrastructure.engine.structured.structured_output_params import (
     "ConstraintType",
     "SchemaFormat",
     "GuidedDecodingBackend",
-    "WhitespacePattern",
     "OutputConstraint",
     "JsonSchemaConstraint",
     "RegexConstraint",
@@ -75,11 +78,6 @@ from src.infrastructure.engine.structured.structured_output_params import (
     "GrammarConstraint",
     "TypeConstraint",
     "StructuredOutputConfig",
-    "ValidationResult",
     "ConstraintBuilder",
     "StructuredOutputValidator",
-    "create_json_constraint",
-    "create_regex_constraint",
-    "create_choice_constraint",
-    "combine_constraints",
 ]
