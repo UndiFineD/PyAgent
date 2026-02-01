@@ -1,3 +1,18 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
 
 """
 batch_invariant_ops.py
@@ -5,11 +20,6 @@ batch_invariant_ops.py
 Implements deterministic, batch-invariant mathematical operations for tensors, supporting both NumPy and PyTorch backends.
 Includes matrix multiplication, normalization, attention, and activation functions designed for reproducibility and cross-backend compatibility.
 """
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
 
 import logging
 import math
@@ -29,10 +39,10 @@ HAS_TRITON = False
 
 
 def matmul_persistent(
-    a: np.ndarray | 'torch.Tensor',
-    b: np.ndarray | 'torch.Tensor',
-    bias: np.ndarray | 'torch.Tensor' | None = None,
-) -> np.ndarray | 'torch.Tensor':
+    a: np.ndarray | torch.Tensor,
+    b: np.ndarray | torch.Tensor,
+    bias: np.ndarray | torch.Tensor | None = None,
+) -> np.ndarray | torch.Tensor:
     # Deterministic matrix multiplication with optional bias.
     if not HAS_TORCH:
         result = np.matmul(a, b)
@@ -50,10 +60,10 @@ def matmul_persistent(
         result = result + bias
     return result
 def softmax_batch_invariant(
-    x: np.ndarray | 'torch.Tensor',
+    x: np.ndarray | torch.Tensor,
     dim: int = -1,
     dtype: type | None = None,
-) -> np.ndarray | 'torch.Tensor':
+) -> np.ndarray | torch.Tensor:
     # Numerically stable softmax that is deterministic across batch orderings.
     if not HAS_TORCH:
         x_max = np.max(x, axis=dim, keepdims=True)
@@ -71,9 +81,9 @@ def softmax_batch_invariant(
 
 
 def log_softmax_batch_invariant(
-    x: np.ndarray | 'torch.Tensor',
+    x: np.ndarray | torch.Tensor,
     dim: int = -1,
-) -> np.ndarray | 'torch.Tensor':
+) -> np.ndarray | torch.Tensor:
     # Numerically stable log softmax that is deterministic.
     if not HAS_TORCH:
         x_max = np.max(x, axis=dim, keepdims=True)
@@ -87,11 +97,11 @@ def log_softmax_batch_invariant(
 
 
 def mean_batch_invariant(
-    x: np.ndarray | 'torch.Tensor',
+    x: np.ndarray | torch.Tensor,
     dim: int | tuple[int, ...] | None = None,
     keepdim: bool = False,
     dtype: type | None = None,
-) -> np.ndarray | 'torch.Tensor':
+) -> np.ndarray | torch.Tensor:
     # Deterministic mean reduction.
     if not HAS_TORCH:
         if dim is None:
@@ -121,11 +131,11 @@ def mean_batch_invariant(
 
 
 def mm_batch_invariant(
-    a: np.ndarray | 'torch.Tensor',
-    b: np.ndarray | 'torch.Tensor',
+    a: np.ndarray | torch.Tensor,
+    b: np.ndarray | torch.Tensor,
     *,
-    out: np.ndarray | 'torch.Tensor' | None = None,
-) -> np.ndarray | 'torch.Tensor':
+    out: np.ndarray | torch.Tensor | None = None,
+) -> np.ndarray | torch.Tensor:
     # Deterministic matrix multiplication (2D x 2D).
     if not HAS_TORCH:
         result = np.matmul(a, b)
@@ -145,11 +155,11 @@ def mm_batch_invariant(
 
 
 def bmm_batch_invariant(
-    a: np.ndarray | 'torch.Tensor',
-    b: np.ndarray | 'torch.Tensor',
+    a: np.ndarray | torch.Tensor,
+    b: np.ndarray | torch.Tensor,
     *,
-    out: np.ndarray | 'torch.Tensor' | None = None,
-) -> np.ndarray | 'torch.Tensor':
+    out: np.ndarray | torch.Tensor | None = None,
+) -> np.ndarray | torch.Tensor:
     # Deterministic batched matrix multiplication (3D x 3D).
     if not HAS_TORCH:
         result = np.matmul(a, b)
@@ -163,15 +173,15 @@ def bmm_batch_invariant(
 
 
 def addmm_batch_invariant(
-    bias: np.ndarray | 'torch.Tensor',
-    a: np.ndarray | 'torch.Tensor',
-    b: np.ndarray | 'torch.Tensor',
-) -> np.ndarray | 'torch.Tensor':
+    bias: np.ndarray | torch.Tensor,
+    a: np.ndarray | torch.Tensor,
+    b: np.ndarray | torch.Tensor,
+) -> np.ndarray | torch.Tensor:
     # Deterministic bias + matrix multiplication.
     return matmul_persistent(a, b, bias=bias)
 
 
-def gelu_batch_invariant(x: np.ndarray | 'torch.Tensor') -> np.ndarray | 'torch.Tensor':
+def gelu_batch_invariant(x: np.ndarray | torch.Tensor) -> np.ndarray | torch.Tensor:
     # Deterministic GELU activation.
     if not HAS_TORCH:
         from scipy import special
@@ -180,12 +190,12 @@ def gelu_batch_invariant(x: np.ndarray | 'torch.Tensor') -> np.ndarray | 'torch.
 
 
 def layer_norm_batch_invariant(
-    x: np.ndarray | 'torch.Tensor',
+    x: np.ndarray | torch.Tensor,
     normalized_shape: tuple[int, ...],
-    weight: np.ndarray | 'torch.Tensor' | None = None,
-    bias: np.ndarray | 'torch.Tensor' | None = None,
+    weight: np.ndarray | torch.Tensor | None = None,
+    bias: np.ndarray | torch.Tensor | None = None,
     eps: float = 1e-5,
-) -> np.ndarray | 'torch.Tensor':
+) -> np.ndarray | torch.Tensor:
     # Deterministic layer normalization.
     if not HAS_TORCH:
         dims = tuple(range(-len(normalized_shape), 0))
@@ -211,10 +221,10 @@ def layer_norm_batch_invariant(
 
 
 def rms_norm_batch_invariant(
-    x: np.ndarray | 'torch.Tensor',
-    weight: np.ndarray | 'torch.Tensor' | None = None,
+    x: np.ndarray | torch.Tensor,
+    weight: np.ndarray | torch.Tensor | None = None,
     eps: float = 1e-6,
-) -> np.ndarray | 'torch.Tensor':
+) -> np.ndarray | torch.Tensor:
     # Deterministic RMS normalization.
     if not HAS_TORCH:
         rms = np.sqrt(np.mean(x * x, axis=-1, keepdims=True) + eps)
@@ -233,10 +243,10 @@ def rms_norm_batch_invariant(
 
 
 def attention_score_batch_invariant(
-    query: np.ndarray | 'torch.Tensor',
-    key: np.ndarray | 'torch.Tensor',
+    query: np.ndarray | torch.Tensor,
+    key: np.ndarray | torch.Tensor,
     scale: float | None = None,
-) -> np.ndarray | 'torch.Tensor':
+) -> np.ndarray | torch.Tensor:
     # Compute attention scores deterministically.
     if not HAS_TORCH:
         d = query.shape[-1]
@@ -252,10 +262,10 @@ def attention_score_batch_invariant(
 
 
 def attention_output_batch_invariant(
-    scores: np.ndarray | 'torch.Tensor',
-    value: np.ndarray | 'torch.Tensor',
-    mask: np.ndarray | 'torch.Tensor' | None = None,
-) -> np.ndarray | 'torch.Tensor':
+    scores: np.ndarray | torch.Tensor,
+    value: np.ndarray | torch.Tensor,
+    mask: np.ndarray | torch.Tensor | None = None,
+) -> np.ndarray | torch.Tensor:
     # Compute attention output deterministically.
     if not HAS_TORCH:
         if mask is not None:
@@ -299,90 +309,90 @@ class BatchInvariantOps:
 
     def matmul(
         self,
-        a: np.ndarray | 'torch.Tensor',
-        b: np.ndarray | 'torch.Tensor',
-        bias: np.ndarray | 'torch.Tensor' | None = None
-    ) -> np.ndarray | 'torch.Tensor':
+        a: np.ndarray | torch.Tensor,
+        b: np.ndarray | torch.Tensor,
+        bias: np.ndarray | torch.Tensor | None = None
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["matmul"] += 1
         return matmul_persistent(a, b, bias)
 
     def softmax(
         self,
-        x: np.ndarray | 'torch.Tensor',
+        x: np.ndarray | torch.Tensor,
         dim: int = -1,
         dtype: type | None = None
-    ) -> np.ndarray | 'torch.Tensor':
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["softmax"] += 1
         return softmax_batch_invariant(x, dim, dtype)
 
     def log_softmax(
         self,
-        x: np.ndarray | 'torch.Tensor',
+        x: np.ndarray | torch.Tensor,
         dim: int = -1
-    ) -> np.ndarray | 'torch.Tensor':
+    ) -> np.ndarray | torch.Tensor:
         return log_softmax_batch_invariant(x, dim)
 
     def mean(
         self,
-        x: np.ndarray | 'torch.Tensor',
+        x: np.ndarray | torch.Tensor,
         dim: int | tuple[int, ...] | None = None,
         keepdim: bool = False,
         dtype: type | None = None,
-    ) -> np.ndarray | 'torch.Tensor':
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["mean"] += 1
         return mean_batch_invariant(x, dim, keepdim, dtype)
 
     def mm(
         self,
-        a: np.ndarray | 'torch.Tensor',
-        b: np.ndarray | 'torch.Tensor',
-        out: np.ndarray | 'torch.Tensor' | None = None
-    ) -> np.ndarray | 'torch.Tensor':
+        a: np.ndarray | torch.Tensor,
+        b: np.ndarray | torch.Tensor,
+        out: np.ndarray | torch.Tensor | None = None
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["mm"] += 1
         return mm_batch_invariant(a, b, out=out)
 
     def bmm(
         self,
-        a: np.ndarray | 'torch.Tensor',
-        b: np.ndarray | 'torch.Tensor',
-        out: np.ndarray | 'torch.Tensor' | None = None
-    ) -> np.ndarray | 'torch.Tensor':
+        a: np.ndarray | torch.Tensor,
+        b: np.ndarray | torch.Tensor,
+        out: np.ndarray | torch.Tensor | None = None
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["bmm"] += 1
         return bmm_batch_invariant(a, b, out=out)
 
     def addmm(
         self,
-        bias: np.ndarray | 'torch.Tensor',
-        a: np.ndarray | 'torch.Tensor',
-        b: np.ndarray | 'torch.Tensor'
-    ) -> np.ndarray | 'torch.Tensor':
+        bias: np.ndarray | torch.Tensor,
+        a: np.ndarray | torch.Tensor,
+        b: np.ndarray | torch.Tensor
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["addmm"] += 1
         return addmm_batch_invariant(bias, a, b)
 
     def gelu(
         self,
-        x: np.ndarray | 'torch.Tensor'
-    ) -> np.ndarray | 'torch.Tensor':
+        x: np.ndarray | torch.Tensor
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["gelu"] += 1
         return gelu_batch_invariant(x)
 
     def layer_norm(
         self,
-        x: np.ndarray | 'torch.Tensor',
+        x: np.ndarray | torch.Tensor,
         normalized_shape: tuple[int, ...],
-        weight: np.ndarray | 'torch.Tensor' | None = None,
-        bias: np.ndarray | 'torch.Tensor' | None = None,
+        weight: np.ndarray | torch.Tensor | None = None,
+        bias: np.ndarray | torch.Tensor | None = None,
         eps: float = 1e-5,
-    ) -> np.ndarray | 'torch.Tensor':
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["layer_norm"] += 1
         return layer_norm_batch_invariant(x, normalized_shape, weight, bias, eps)
 
     def rms_norm(
         self,
-        x: np.ndarray | 'torch.Tensor',
-        weight: np.ndarray | 'torch.Tensor' | None = None,
+        x: np.ndarray | torch.Tensor,
+        weight: np.ndarray | torch.Tensor | None = None,
         eps: float = 1e-6,
-    ) -> np.ndarray | 'torch.Tensor':
+    ) -> np.ndarray | torch.Tensor:
         self._call_counts["rms_norm"] += 1
         return rms_norm_batch_invariant(x, weight, eps)
 
@@ -394,3 +404,4 @@ class BatchInvariantOps:
         # Reset operation call counts.
         for key in self._call_counts:
             self._call_counts[key] = 0
+
