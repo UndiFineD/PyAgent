@@ -287,12 +287,16 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
         timeout = timeout or self.config.shutdown_timeout
 
         self._signal_shutdown()
-        self._transition_to_shutting_down()
+        self._transition_to(EngineState.SHUTTING_DOWN)
 
         if self.config.drain_requests_on_shutdown:
             self._drain_pending_requests(timeout)
 
-        return self._transition_to_dead()
+        return self._transition_to(EngineState.DEAD)
+
+    def _signal_shutdown(self) -> None:
+        """Signal shutdown event to notify all waiters."""
+        self._shutdown_event.set()
 
     def _abort_all_pending_requests(self) -> None:
         """Abort all waiting and running requests in the queue."""
@@ -300,6 +304,19 @@ class EngineLifecycleManager:  # pylint: disable=too-many-public-methods
             self.request_queue.abort_request(request.request_id)
         for request in self.request_queue.get_running_requests():
             self.request_queue.abort_request(request.request_id)
+
+    def _drain_pending_requests(self, timeout: float) -> None:
+        """Drain pending requests before shutdown."""
+        import time
+        start = time.time()
+        while time.time() - start < timeout:
+            waiting = self.request_queue.get_waiting_requests()
+            running = self.request_queue.get_running_requests()
+            if not waiting and not running:
+                break
+            self._sleep_briefly()
+        # After timeout or when drained, abort any remaining requests
+        self._abort_all_pending_requests()
 
     def _sleep_briefly(self) -> None:
         # Helper to sleep briefly, compatible with sync context

@@ -1,8 +1,6 @@
-"""
-Module: lru_offload_manager
-Manages LRU offload for distributed KV storage in PyAgent.
-"""
 #!/usr/bin/env python3
+from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,8 +29,6 @@ Key Features Beyond vLLM:
 
 Based on vLLM v1 patterns with PyAgent innovations.
 """
-
-from __future__ import annotations
 
 import threading
 import time
