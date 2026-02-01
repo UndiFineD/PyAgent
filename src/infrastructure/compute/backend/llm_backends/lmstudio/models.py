@@ -84,6 +84,9 @@ class LMStudioConfig:
     # Context window (new) - prefer DV_LMSTUDIO_MAX_CONTEXT
     max_context: int = field(default_factory=lambda: int(os.environ.get("DV_LMSTUDIO_MAX_CONTEXT", os.environ.get("LMSTUDIO_MAX_CONTEXT", "4096"))))
 
+    # HTTP path (e.g., 'v1' or 'api/v1'). Prefer DV-prefixed env then legacy.
+    path: str = field(default_factory=lambda: str(os.environ.get("DV_LMSTUDIO_PATH", os.environ.get("LMSTUDIO_PATH", "v1")).strip("/")))
+
     # Caching
     cache_models: bool = True
     cache_ttl: float = 300.0  # 5 minutes
@@ -92,6 +95,20 @@ class LMStudioConfig:
     def api_host(self) -> str:
         """Return host:port string."""
         return f"{self.host}:{self.port}"
+
+    @property
+    def base_url(self) -> str:
+        """Return full base URL to connect to LM Studio.
+
+        Prefers `DV_LMSTUDIO_BASE_URL` (including path) when present, otherwise
+        constructs a URL using host and port.
+        """
+        dv = os.environ.get("DV_LMSTUDIO_BASE_URL")
+        if dv:
+            # Normalize: strip trailing slash
+            return dv.rstrip("/")
+        scheme = "http"
+        return f"{scheme}://{self.host}:{self.port}/{self.path}"
 
 
 @dataclass

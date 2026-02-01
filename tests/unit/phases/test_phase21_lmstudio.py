@@ -102,10 +102,35 @@ class TestLMStudioConfig:
             assert config.port == 1234
             assert config.default_model == "zai-org/glm-4.7-flash"
             assert config.max_context == 128000
+            # DV_BASE_URL contained '/v1', so base_url should reflect that
+            assert config.base_url == "http://192.168.88.251:1234/v1"
         finally:
             del os.environ["DV_LMSTUDIO_BASE_URL"]
             del os.environ["DV_LMSTUDIO_MODEL"]
             del os.environ["DV_LMSTUDIO_MAX_CONTEXT"]
+
+    def test_base_url_uses_path_when_no_dv(self):
+        """When DV_LMSTUDIO_BASE_URL not set, base_url should use host:port and configured path."""
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioConfig
+
+        # Ensure no DV override
+        dv_saved = {k: os.environ.pop(k, None) for k in ("DV_LMSTUDIO_BASE_URL",)}
+        try:
+            # Default path => 'v1'
+            config = LMStudioConfig(host="example.com", port=8080)
+            assert config.base_url == "http://example.com:8080/v1"
+
+            # Custom legacy LMSTUDIO_PATH should be respected (strip slashes)
+            os.environ["LMSTUDIO_PATH"] = "/api/v2/"
+            try:
+                config2 = LMStudioConfig(host="example.com", port=8080)
+                assert config2.base_url == "http://example.com:8080/api/v2"
+            finally:
+                del os.environ["LMSTUDIO_PATH"]
+        finally:
+            for k, v in dv_saved.items():
+                if v is not None:
+                    os.environ[k] = v
 
     def test_api_host_property(self):
         """Test api_host property."""
@@ -217,6 +242,87 @@ class TestLMStudioBackend:
             connectivity_manager=connectivity,
         )
 
+    @pytest.mark.asyncio
+    async def test_async_client_various_accessor_shapes(self):
+        """Ensure async client LLm access works with `.get`, callable, and fallback helpers."""
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioBackend
+
+        backend = LMStudioBackend(
+            session=MagicMock(),
+            connectivity_manager=MagicMock(),
+        )
+
+        # Helper fixtures
+        class MockLLM:
+            def __init__(self, response: str):
+                self._response = response
+
+            async def respond(self, chat, config=None):
+                return self._response
+
+        # Case A: client.llm has async `.get` method
+        async_get = AsyncMock()
+        async_get.return_value = MockLLM("resp-a")
+        # Simulate SDK that exposes `client.llm.get(...)` as an async coroutine
+        async_get.get = AsyncMock(return_value=MockLLM("resp-a"))
+        mock_client_a = MagicMock()
+        mock_client_a.llm = async_get
+
+        # Patch AsyncClient context manager
+        async_cm = AsyncMock()
+        async_cm.__aenter__.return_value = mock_client_a
+        async_cm.__aexit__.return_value = None
+
+        lm_mod_a = MagicMock()
+        lm_mod_a.__version__ = "1.0"
+        lm_mod_a.AsyncClient = MagicMock(return_value=async_cm)
+        lm_mod_a.Chat = MagicMock(return_value=MagicMock())
+        lm_mod_a.llm = MagicMock()
+
+        with patch.dict('sys.modules', {'lmstudio': lm_mod_a}):
+            res = await backend.chat_async("hello", model="m-a")
+            assert res == "resp-a"
+
+        # Case B: client.llm is callable and returns model (sync)
+        mock_llm_b = MockLLM("resp-b")
+        def callable_llm(model=None):
+            return mock_llm_b
+
+        mock_client_b = MagicMock()
+        mock_client_b.llm = callable_llm
+
+        async_cm_b = AsyncMock()
+        async_cm_b.__aenter__.return_value = mock_client_b
+        async_cm_b.__aexit__.return_value = None
+
+        lm_mod_b = MagicMock()
+        lm_mod_b.__version__ = "1.0"
+        lm_mod_b.AsyncClient = MagicMock(return_value=async_cm_b)
+        lm_mod_b.Chat = MagicMock(return_value=MagicMock())
+        lm_mod_b.llm = MagicMock()
+
+        with patch.dict('sys.modules', {'lmstudio': lm_mod_b}):
+            res = await backend.chat_async("hello", model="m-b")
+            assert res == "resp-b"
+
+        # Case C: client.llm not helpful -> fallback to module helper
+        fake_module = MagicMock()
+        fake_module.__version__ = "1.0"
+        fake_module.llm.return_value = MockLLM("resp-c")
+        # Use a context manager that yields a client with `llm` set to None so
+        # that the backend falls back to module-level helper
+        mock_client_c = MagicMock()
+        mock_client_c.llm = None
+        async_cm_c = AsyncMock()
+        async_cm_c.__aenter__.return_value = mock_client_c
+        async_cm_c.__aexit__.return_value = None
+        fake_module.AsyncClient = MagicMock(return_value=async_cm_c)
+        fake_module.Chat = MagicMock(return_value=MagicMock())
+
+        with patch.dict('sys.modules', {'lmstudio': fake_module}):
+            res = await backend.chat_async("hello", model="m-c")
+            assert res == "resp-c"
+
         # Mock _is_working to return False
         backend._is_working = MagicMock(return_value=False)
 
@@ -251,6 +357,46 @@ class TestLMStudioConvenienceFunctions:
 
         assert callable(lmstudio_chat)
 
+    def test_get_client_uses_http_scheme_for_api_host(self):
+        """LM Studio client should be created with http:// scheme when base url lacks scheme."""
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioBackend
+
+        os.environ["DV_LMSTUDIO_BASE_URL"] = "http://192.168.88.251:1234/v1"
+        try:
+            backend = LMStudioBackend(session=MagicMock(), connectivity_manager=MagicMock())
+            mock_lmstudio = MagicMock()
+            mock_client = MagicMock()
+            # Provide a __version__ attr used by _check_sdk and Client/AsyncClient constructors
+            mock_lmstudio.__version__ = "1.0"
+            mock_lmstudio.Client = MagicMock(return_value=mock_client)
+            mock_lmstudio.AsyncClient = MagicMock(return_value=mock_client)
+            with patch.dict('sys.modules', {'lmstudio': mock_lmstudio}):
+                # _get_client should attempt to instantiate lmstudio.Client with the full base URL (including /v1)
+                client = backend._get_client()
+                mock_lmstudio.Client.assert_called_once_with("http://192.168.88.251:1234/v1")
+        finally:
+            del os.environ["DV_LMSTUDIO_BASE_URL"]
+
+    def test_get_model_http_fallback_when_client_creation_fails(self):
+        """If client creation fails, backend should detect model via HTTP and return an HTTP-fallback LLM."""
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioBackend
+
+        backend = LMStudioBackend(session=MagicMock(), connectivity_manager=MagicMock())
+
+        # Simulate failure when creating client
+        backend._get_client = MagicMock(side_effect=RuntimeError("connect fail"))
+        # Simulate HTTP fallback detection returning the expected model
+        backend.list_loaded_models = MagicMock(return_value=["zai-org/glm-4.7-flash"])
+        # Stub out underlying HTTP chat request
+        backend._http_chat_request = MagicMock(return_value="http-response")
+
+        llm = backend.get_model("zai-org/glm-4.7-flash")
+        assert llm is not None
+        assert hasattr(llm, "respond")
+
+        # The fallback LLM's respond should call into _http_chat_request
+        resp = llm.respond("hello world")
+        assert resp == "http-response"
     def test_lmstudio_stream_import(self):
         """Test streaming function can be imported."""
         from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import lmstudio_stream
