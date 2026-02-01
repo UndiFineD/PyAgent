@@ -270,6 +270,21 @@ class LazyAgentMap(dict):
 
         raise KeyError(f"Agent '{key}' not found in registry (including dynamic scans).")
 
+    def __getattr__(self, name: str) -> Any:
+        """Attribute-based access for typed IDE support and cleaner code."""
+        if name in self.__dict__:
+            return self.__dict__[name]
+
+        try:
+            return self[name]
+        except KeyError:
+            # Fallback to normalized names for attributes as well
+            n_low = name.lower().replace("_", "")
+            for k in self.keys():
+                if k.lower().replace("_", "") == n_low:
+                    return self[k]
+            raise AttributeError(f"Agent '{name}' not found in registry.")
+
     def _instantiate(self, key: str, config: tuple[str, str, str | None]) -> Any:
         """Standard instantiation logic with dependency injection and version checks."""
         module_path, class_name, arg_path_suffix = config

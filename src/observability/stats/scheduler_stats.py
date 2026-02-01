@@ -146,7 +146,8 @@ class SpecDecodingStats:
     def position_acceptance_rates(self) -> list[float]:
         if not self.num_drafts:
             return [0.0] * len(self.num_accepted_tokens_per_pos)
-        return [count / self.num_drafts for count in self.num_accepted_tokens_per_pos]
+        rates: list[float] = [count / self.num_drafts for count in self.num_accepted_tokens_per_pos]
+        return rates
 
     def reset(self) -> None:
         self.num_drafts = 0

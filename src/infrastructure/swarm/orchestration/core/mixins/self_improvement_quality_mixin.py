@@ -52,7 +52,8 @@ class SelfImprovementQualityMixin:
     def _analyze_documentation(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
         """Checks for missing or insufficient docstrings."""
         findings = []
-        if not re.search(r'"""[\s\S]*?"""|\'\'\'[\s\S]*?\'\'\'', content[:1000]):
+        # Phase 337: Increased search window to 3000 to accommodate long license headers
+        if not re.search(r'"""[\s\S]*?"""|\'\'\'[\s\S]*?\'\'\'', content[:3000]):
             findings.append(
                 {
                     "type": "Missing Docstring",

@@ -45,16 +45,16 @@ class OllamaConnectorAgent(BaseAgent):
         "http://localhost:11434/v1",       # Local fallback
     ]
 
-    def __init__(self, file_path: str, endpoint: Optional[str] = None) -> None:
-        super().__init__(file_path)
+    def __init__(self, file_path: str, endpoint: Optional[str] = None, **kwargs: Any) -> None:
+        super().__init__(file_path, **kwargs)
         self.endpoint = endpoint or None
         self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
-        self.client = None
+        self.client: Optional[AsyncOpenAI] = None
 
     async def _detect_fastest_endpoint(self) -> str:
         """Detect and return the fastest available Ollama endpoint."""
         candidates = self.OLLAMA_CANDIDATES if not self.endpoint else [self.endpoint]
-        latencies = {}
+        latencies: dict[str, float] = {}
         for url in candidates:
             try:
                 async with httpx.AsyncClient(timeout=2.0) as client:
@@ -71,7 +71,7 @@ class OllamaConnectorAgent(BaseAgent):
         logger.warning("OllamaConnectorAgent: No network Ollama detected, using fallback endpoint.")
         return candidates[-1]
 
-    async def _ensure_client(self):
+    async def _ensure_client(self) -> None:
         if self.client is not None:
             return
         if not self.endpoint:
