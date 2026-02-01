@@ -75,14 +75,14 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     "pii_types": list(set(f["type"] for f in findings)),
                 }
             )
-            # Phase 108: Intelligence Recording
-            self._record(
-                text[:500],
-                redacted_text[:500],
-                provider="PrivacyGuard",
-                model="PIIScanner",
-                meta={"findings_count": len(findings)},
-            )
+            # Phase 108: Intelligence Recording (disabled - no recorder available)
+            # self._record(
+            #     text[:500],
+            #     redacted_text[:500],
+            #     provider="PrivacyGuard",
+            #     model="PIIScanner",
+            #     meta={"findings_count": len(findings)},
+            # )
 
         return {
             "original": original_text,
