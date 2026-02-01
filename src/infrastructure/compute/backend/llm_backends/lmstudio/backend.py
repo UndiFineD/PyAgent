@@ -317,7 +317,12 @@ class LMStudioBackend(LLMBackend):
         import lmstudio
 
         try:
-            async with lmstudio.AsyncClient(self.config.base_url) as client:
+            # Create a fresh AsyncClient for this request
+            api_url = self.config.base_url
+            if not api_url.startswith("http://") and not api_url.startswith("https://"):
+                api_url = "http://" + api_url
+            
+            async with lmstudio.AsyncClient(api_url) as client:
                 llm = await self._fetch_llm_from_async_client(client, model)
                 chat = lmstudio.Chat(system_prompt)
                 chat.add_user_message(prompt)

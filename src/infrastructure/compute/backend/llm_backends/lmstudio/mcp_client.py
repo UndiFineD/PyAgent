@@ -61,10 +61,10 @@ class MCPClient:
                 api_url = "http://" + api_url
             
             self._sync_client = lmstudio.Client(api_url)
-            logger.info(f"[LMStudio] Connected to LM Studio at {api_url}")
+            logger.info(f"[LMStudio] Connected sync client to {api_url}")
             return self._sync_client
         except Exception as e:
-            logger.error(f"[LMStudio] Failed to connect sync client: {e}")
+            logger.error(f"[LMStudio] Failed to connect sync client to {self.base_url}: {e}")
             raise
 
     def get_async_client(self) -> "lmstudio.AsyncClient":
@@ -85,10 +85,10 @@ class MCPClient:
                 api_url = "http://" + api_url
             
             self._async_client = lmstudio.AsyncClient(api_url)
-            logger.info(f"[LMStudio] Created async client to LM Studio at {api_url}")
+            logger.info(f"[LMStudio] Created async client to {api_url}")
             return self._async_client
         except Exception as e:
-            logger.error(f"[LMStudio] Failed to create async client: {e}")
+            logger.error(f"[LMStudio] Failed to create async client to {self.base_url}: {e}")
             raise
 
     def get_llm(self, client: Any, model: str = "") -> Any:
