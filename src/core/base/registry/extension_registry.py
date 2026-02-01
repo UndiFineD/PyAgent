@@ -199,7 +199,7 @@ class LazyExtensionManager(ExtensionManager):
 
     def register_lazy(self, name: str, module_spec: str, class_name: str | None = None) -> None:
         """Register a class to be imported lazily.
-        
+
         Supports two formats:
         - register_lazy("name", "module:ClassName")
         - register_lazy("name", "module", "ClassName")
@@ -296,3 +296,4 @@ class GlobalRegistry(ExtensionManager):
     def instance(cls) -> 'GlobalRegistry':
         """Get the singleton instance."""
         return cls()
+
