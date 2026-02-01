@@ -47,22 +47,25 @@ class LMStudioAPIClient:
         self.default_model = default_model
 
     def _normalize_url(self, endpoint: str = "") -> str:
-        """Normalize REST API URL, handling both /api/v1 and /v1 prefixes.
+        """Normalize REST API URL, handling both /v1 prefixes.
 
         Args:
-            endpoint: Optional endpoint path (e.g., 'models', 'chat')
+            endpoint: Optional endpoint path (e.g., 'models', 'chat/completions')
 
         Returns:
             Full normalized URL for the endpoint.
         """
         base = self.base_url
-        # Auto-detect: if ends with /v1 or /api/v1, use as-is; otherwise assume base is host:port
-        if not base.endswith("/v1") and not base.endswith("/api/v1"):
-            api_base = f"{base}/api/v1"
+        # Auto-detect: if ends with /v1, use as-is; otherwise assume base is host:port
+        if not base.endswith("/v1"):
+            api_base = f"{base}/v1"
         else:
             api_base = base
 
         if endpoint:
+            # Handle special cases for endpoint names
+            if endpoint == "chat":
+                endpoint = "chat/completions"
             return f"{api_base}/{endpoint.lstrip('/')}"
         return api_base
 
@@ -96,7 +99,9 @@ class LMStudioAPIClient:
             headers.update(kwargs["headers"])
         kwargs["headers"] = headers
 
-        timeout = kwargs.get("timeout", 30)
+        # Phase 317: Aggressive timeouts for large remote models
+        timeout_val = kwargs.get("timeout", 300.0)
+        timeout = httpx.Timeout(timeout_val, connect=15.0, read=timeout_val, write=30.0)
 
         for attempt in range(max_retries):
             try:
