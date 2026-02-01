@@ -169,8 +169,8 @@ class IntelligenceHarvester:
                         insight=lesson["text"],
                         confidence=0.85,
                     )
-            except Exception:
-                # Broad except is justified here to avoid breaking the intelligence harvesting loop
+            except (KeyError, AttributeError, ValueError):
+                # Specific exceptions for lesson structure validation and insight processing
                 logging.debug("Insight contribution failed.")
 
         return lessons
@@ -436,8 +436,8 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
                 if doc:
                     doc_link = f" [Docs]({doc})"
                 logger.info(f"  {idx}. {desc}{file_link}{doc_link}")
-    except Exception:
-        # Broad except is justified here to ensure explainability logging never breaks the main loop
+    except (OSError, IOError, TypeError):
+        # Catch file operations and type errors in synthesis loop
         logger.warning("[Intelligence] Synthesis skipped.")
 
 
@@ -487,8 +487,8 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
             )
             print(" - Solution pattern recorded to collective knowledge.")
 
-    except Exception:
-        # Broad except is justified here to ensure the main loop continues even if LLM call fails
+    except (RuntimeError, TimeoutError, ValueError):
+        # Catch LLM failures, timeouts, and invalid solution patterns
         print(" - Autonomous solving failed.")
 
 
@@ -619,8 +619,8 @@ def _cycle_throttle(
                     print(" - [Watcher] Change detected. Triggering next cycle.")
                     return
 
-        except Exception:
-            # Broad except is justified here to ensure fallback to time-based delay always works
+        except (OSError, RuntimeError):
+            # Catch file system and watcher runtime errors
             print(" - [Watcher Fallback] Watcher error. Using time-based delay.")
 
     print(f" - [Throttle] Waiting {delay}s for next cycle...")

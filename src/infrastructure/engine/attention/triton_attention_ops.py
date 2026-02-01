@@ -194,7 +194,7 @@ if HAS_TRITON and HAS_TORCH:
         num_kv_heads: tl.constexpr,
         block_size: tl.constexpr,
         scale: tl.constexpr,
-        BLOCK_D: tl.constexpr,
+        block_d: tl.constexpr,  # Lowercase to conform to naming conventions; value set at compile-time
     ) -> None:
         """Triton kernel for paged attention decode.
 
@@ -212,12 +212,12 @@ if HAS_TRITON and HAS_TORCH:
 
         # Load query vector
         q_offset = batch_idx * stride_query_batch + head_idx * stride_query_head
-        dim_offsets = tl.arange(0, BLOCK_D)
+        dim_offsets = tl.arange(0, block_d)
         query = tl.load(query_ptr + q_offset + dim_offsets * stride_query_dim)
         query = query * scale
 
         # Initialize accumulator
-        acc = tl.zeros([BLOCK_D], dtype=tl.float32)
+        acc = tl.zeros([block_d], dtype=tl.float32)
         max_logit = float("-inf")
         sum_exp = 0.0
 
@@ -334,7 +334,7 @@ class TritonPagedAttention(AttentionKernel):
             num_kv_heads=self.config.num_kv_heads,
             block_size=self.config.block_size,
             scale=self.scale,
-            BLOCK_D=head_dim,
+            block_d=head_dim,
         )
 
         return output
