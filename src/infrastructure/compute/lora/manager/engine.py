@@ -18,7 +18,6 @@ Engine.py module.
 
 from __future__ import annotations
 
-from _thread import LockType
 import threading
 from typing import Any, Dict, List, Optional
 
@@ -37,9 +36,10 @@ class LoRAManager:
         self._registry = LoRARegistry(max_cached=max_loras)
         self._slot_manager = LoRASlotManager(num_slots=max_gpu_slots)
         self._active_requests: Dict[str, LoRARequest] = {}
-        self._lock: LockType = threading.Lock()
+        self._lock: threading.Lock = threading.Lock()
 
     def load_adapter(self, config: LoRAConfig) -> LoRAInfo:
+        """Load a LoRA adapter from configuration."""
         if config.rank > self.max_rank:
             raise ValueError(f"exceeds max_rank {self.max_rank}")
         adapter: LoRAAdapter = self._registry.register(config)
@@ -48,10 +48,12 @@ class LoRAManager:
         raise RuntimeError(f"Failed to load {config.adapter_name}")
 
     def unload_adapter(self, name: str) -> bool:
+        """Unload a LoRA adapter by name."""
         self._slot_manager.evict(name)
         return self._registry.unregister(name)
 
     def add_request(self, request: LoRARequest) -> bool:
+        """Add a LoRA request to active requests."""
         adapter: LoRAAdapter | None = self._registry.get(request.adapter_name)
         if not adapter:
             return False
@@ -64,6 +66,7 @@ class LoRAManager:
         return True
 
     def remove_request(self, rid: str) -> None:
+        """Remove a LoRA request by ID."""
         with self._lock:
             if rid in self._active_requests:
                 req: LoRARequest = self._active_requests.pop(rid)
@@ -71,15 +74,19 @@ class LoRAManager:
                     self._slot_manager.release(req.adapter_name)
 
     def get_adapter(self, name: str) -> Optional[LoRAAdapter]:
+        """Get a loaded LoRA adapter by name."""
         return self._registry.get(name)
 
     def list_loaded_adapters(self) -> List[str]:
+        """List all loaded LoRA adapters."""
         return self._registry.list_adapters()
 
     def get_active_adapters(self) -> List[str]:
+        """Get list of currently active adapters."""
         return self._slot_manager.get_active_adapters()
 
     def get_stats(self) -> Dict[str, Any]:
+        """Get manager statistics."""
         with self._lock:
             return {
                 "registry": self._registry.get_stats(),
