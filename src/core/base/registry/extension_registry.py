@@ -23,7 +23,7 @@ from typing import Callable, TypeVar, Generic, Optional
 
 logger: logging.Logger = logging.getLogger(__name__)
 _T = TypeVar("_T", bound=type)
-BaseType = TypeVar("BaseType")
+BaseType_co = TypeVar("BaseType_co", covariant=True)
 
 class ExtensionManager:
     """
@@ -280,6 +280,7 @@ def create_multi_registry() -> MultiExtensionManager:
 class GlobalRegistry(ExtensionManager):
     """Global singleton registry with additional convenience methods."""
     _instance: Optional['GlobalRegistry'] = None
+    _initialized: bool = False
 
     def __new__(cls) -> 'GlobalRegistry':
         if cls._instance is None:

@@ -563,7 +563,10 @@ class LazyEnvVar(Generic[T]):
 
 
 class TempEnv:
-    """Context manager for temporarily setting environment variables."""
+    """Context manager for temporarily setting environment variables.
+
+    Example usage:
+        >>> with TempEnv(DEBUG="1"):
         ...     print(os.environ.get("DEBUG"))  # "1"
         >>> print(os.environ.get("DEBUG"))  # Original value
     """

@@ -113,4 +113,3 @@ class IdentityAgent(BaseAgent):
             return {"status": "verified", "issuer": vc.get("issuer")}
         else:
             return {"status": "error", "reason": "Signature mismatch (tampered)"}
-
