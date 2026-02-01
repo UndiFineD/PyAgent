@@ -1,8 +1,3 @@
-"""
-Module: batch_dcp_wrapper
-Implements batch DCP attention wrapper for PyAgent engine.
-"""
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +12,12 @@ Implements batch DCP attention wrapper for PyAgent engine.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+from __future__ import annotations
+
 """
+Module: batch_dcp_wrapper
+Implements batch DCP attention wrapper for PyAgent engine.
+
 Batch DCP Wrapper - Batch processing for disaggregated prefill-decode.
 
 Implements batch-level wrappers for coordinating DCP (Disaggregated
@@ -35,8 +33,6 @@ Beyond vLLM:
 - Automatic batch size optimization
 - Memory-aware batching with spill prevention
 """
-
-from __future__ import annotations
 
 import logging
 import time
@@ -136,13 +132,15 @@ class BatchMetadata:
 
     @property
     def is_decode(self) -> bool:
+        """Check if phase is decode."""
+        return self.phase == BatchPhase.DECODE
+
 
 @dataclass
+class DCPPlanConfig:
+    """Configuration for DCP planning and execution.
+
     Controls how batches are planned and executed.
-    """
-    Module: batch_dcp_wrapper
-    Batch DCP wrapper for attention mechanisms in PyAgent engine.
-    """
     """
 
     # Batch sizing
