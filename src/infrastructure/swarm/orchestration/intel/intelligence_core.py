@@ -136,19 +136,23 @@ class IntelligenceCore:
         pool_text = "\n".join(lines)
         return (
             "Analyze these swarm insights and relational lessons. "
-            f"Synthesize the top 3 high-level patterns or warnings:\n{pool_text}"
+            "Synthesize the top 5 high-level patterns or warnings. "
+            "For each pattern, provide the following fields if possible: "
+            "'file' (path), 'line' (number), and 'description' (what is wrong). "
+            "Format each pattern as: 'File: [path] | Line: [number] | Description: [desc]'\n"
+            f"Insights:\n{pool_text}"
         )
 
-    def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[str]:
-        """Filters raw AI output to ensure patterns are technically relevant.
+    def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[dict[str, Any]]:
+        """Filters raw AI output and converts to structured dictionaries.
 
         Args:
             raw_patterns: List of raw pattern strings from the AI.
 
         Returns:
-            List of filtered, actionable pattern strings.
+            List of filtered, actionable pattern dictionaries.
         """
-        valid_patterns = []
+        valid_patterns: list[dict[str, Any]] = []
         unknown_failures = []
         keywords = [
             "error",
@@ -172,13 +176,34 @@ class IntelligenceCore:
             if not p_clean:
                 continue
 
+            # Parse structured format: File: [path] | Line: [number] | Description: [desc]
+            pattern_dict = {
+                "file": "unknown",
+                "line": "1",
+                "description": p_clean,
+            }
+
+            if "|" in p_clean:
+                parts = p_clean.split("|")
+                for part in parts:
+                    if ":" in part:
+                        key, val = part.split(":", 1)
+                        key = key.strip().lower()
+                        val = val.strip()
+                        if key == "file":
+                            pattern_dict["file"] = val
+                        elif key == "line":
+                            pattern_dict["line"] = val
+                        elif key == "description":
+                            pattern_dict["description"] = val
+
             # Phase 336: Taxonomy Classification
             classification = FailureClassification.UNKNOWN
-            lower_p = p_clean.lower()
-            
+            lower_desc = pattern_dict["description"].lower()
+
             # Check map
             for keyword, cls in self._taxonomy_map.items():
-                if keyword in lower_p:
+                if keyword in lower_desc:
                     classification = cls
                     break
 
@@ -196,28 +221,31 @@ class IntelligenceCore:
                     logger.error(
                         f"Intelligence Circuit Breaker: Stopping recursive healing loop (Depth {self._healing_depth})"
                     )
-                    valid_patterns.append("STOP_RECURSION: Meta-stability loop detected in self-healing.")
+                    valid_patterns.append({
+                        "file": "SWARM",
+                        "line": "0",
+                        "description": "STOP_RECURSION: Meta-stability loop detected in self-healing."
+                    })
                     continue
 
             # If still unknown, check general keywords
             if classification == FailureClassification.UNKNOWN:
-                if any(k in lower_p for k in keywords) or len(p_clean) > 40:
-                    classification = FailureClassification.AI_ERROR # Default bucket if technical but unclassified specific
+                if any(k in lower_desc for k in keywords) or len(pattern_dict["description"]) > 40:
+                    classification = FailureClassification.AI_ERROR
                 else:
                     # Generic / Noise
                     unknown_failures.append(p_clean)
-                    self._unclassified_tracker[p_clean[:50]] += 1 # Track frequency
+                    self._unclassified_tracker[p_clean[:50]] += 1
                     continue
-            
-            valid_patterns.append(p_clean)
 
-        # Phase 336: Surface unknown patterns for investigation if they are significant
+            valid_patterns.append(pattern_dict)
+
+        # Phase 336: Surface unknown patterns
         if unknown_failures:
-            # Check for semantic clusters of unknown failures (in a real scenario we'd use embeddings)
-            # For now, simply log them as "Unclassified/Emergent"
-            valid_patterns.append(
-                f"[Unclassified Patterns Detected]: Found {len(unknown_failures)} patterns that did not match "
-                "known failure taxonomies. Investigate for emergent behaviors."
-            )
+            valid_patterns.append({
+                "file": "SwarmScanner",
+                "line": "0",
+                "description": f"[Unclassified Patterns Detected]: Found {len(unknown_failures)} unknown patterns."
+            })
 
         return valid_patterns
