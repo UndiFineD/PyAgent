@@ -269,10 +269,12 @@ class TestLMStudioBackend:
 
         # Helper fixtures
         class MockLLM:
+            """Mock LLM for async client testing."""
             def __init__(self, response: str):
                 self._response = response
 
-            async def respond(self, chat, config=None):
+            async def respond(self, _chat, _config=None):
+                """Mock respond method for testing."""
                 return self._response
 
         # Case A: client.llm has async `.get` method
@@ -431,8 +433,7 @@ class TestLMStudioConvenienceFunctions:
 
 
 class TestMsgSpecAvailability:
-    """Tests for msgspec availability."""
-
+        """Tests for msgspec availability and module imports."""
     def test_is_msgspec_available(self):
         """Test availability check."""
         from src.infrastructure.storage.serialization.msg_spec_serializer import is_msgspec_available
@@ -566,7 +567,7 @@ class TestTypedSerializer:
         encoded = serializer.encode(config)
         decoded = serializer.decode(encoded)
 
-        assert decoded.enabled == True
+        assert decoded.enabled is True
         assert decoded.count == 5
 
     def test_encode_many(self):
@@ -629,7 +630,7 @@ class TestChatMessageStructs:
         assert request.model == "test-model"
         assert len(request.messages) == 2
         assert request.temperature == 0.5
-        assert request.stream == False
+        assert not request.stream
 
 
 class TestChatHelpers:

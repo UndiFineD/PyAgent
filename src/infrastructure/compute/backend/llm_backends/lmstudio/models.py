@@ -46,7 +46,7 @@ def _parse_dv_base_url() -> tuple[str, int]:
                 host, port = netloc.split(":", 1)
                 return (host, int(port))
             return (netloc, int(os.environ.get("LMSTUDIO_PORT", "1234")))
-        except Exception:
+        except (ValueError, IndexError):
             # Parsing failed; fall back to older env vars
             pass
     return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))
