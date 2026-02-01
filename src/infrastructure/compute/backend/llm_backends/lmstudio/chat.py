@@ -125,40 +125,53 @@ class ChatHandler:
             url = self.api_client._normalize_url("chat")
             payload = {
                 "model": model or self.api_client.default_model,
-                "input": prompt,
-                "system_prompt": system_prompt,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ],
                 "stream": False,
             }
             # Add extra params if present
-            for k in ("temperature", "top_p", "max_output_tokens", "context_length"):
+            # Map context_length to max_tokens for OpenAI compatibility
+            if "max_output_tokens" in kwargs:
+                payload["max_tokens"] = kwargs["max_output_tokens"]
+            elif "max_tokens" in kwargs:
+                payload["max_tokens"] = kwargs["max_tokens"]
+                
+            for k in ("temperature", "top_p"):
                 if k in kwargs:
                     payload[k] = kwargs[k]
             
             logger.info(f"[LMStudio] HTTP fallback chat: POST {url} | model={payload['model']}")
             resp = self.api_client._http_request_with_retry(
-                "POST", url, max_retries=2, json=payload, timeout=30
+                "POST", url, max_retries=2, json=payload, timeout=600.0
             )
             logger.info(f"[LMStudio] HTTP fallback chat response: {resp.status_code}")
             resp.raise_for_status()
             
             data = resp.json()
-            # Extract message(s) from output array
-            output = data.get("output")
-            if isinstance(output, list):
-                messages = [
-                    item.get("content")
-                    for item in output
-                    if item.get("type") == "message" and item.get("content")
-                ]
-                text = "\n".join(messages)
+            # Extract standard OpenAI choices[0].message.content
+            choices = data.get("choices")
+            if choices and isinstance(choices, list) and len(choices) > 0:
+                text = choices[0].get("message", {}).get("content", "")
             else:
-                text = str(output)
+                # Fallback to older format if choices not present
+                output = data.get("output")
+                if isinstance(output, list):
+                    messages = [
+                        item.get("content")
+                        for item in output
+                        if item.get("type") == "message" and item.get("content")
+                    ]
+                    text = "\n".join(messages)
+                else:
+                    text = str(output) if output else ""
             
             if text:
                 logger.info(f"[LMStudio] HTTP fallback chat succeeded: {len(text)} chars")
                 return text
             
-            logger.warning(f"[LMStudio] HTTP fallback chat: no message content found in output: {output}")
+            logger.warning(f"[LMStudio] HTTP fallback chat: no message content found in response choices or output")
         except Exception as e:
             logger.error(f"[LMStudio] HTTP fallback chat failed: {e}")
         

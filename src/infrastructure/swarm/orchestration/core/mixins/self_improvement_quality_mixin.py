@@ -73,16 +73,17 @@ class SelfImprovementQualityMixin:
                 if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
                 and (n.returns is None or any(arg.annotation is None for arg in n.args.args if arg.arg != "self"))
             ]
-            if untyped_nodes:
+            for n in untyped_nodes:
                 findings.append(
                     {
                         "type": "Rust Readiness Task",
+                        "line": n.lineno,
                         "message": (
-                            f"Found {len(untyped_nodes)} functions without complete type hints. "
+                            f"Function '{n.name}' is missing complete type hints. "
                             "Strong typing required for Rust port."
                         ),
                         "file": file_path_rel,
-                        "details": [n.name for n in untyped_nodes],
+                        "details": [n.name],
                     }
                 )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -92,6 +93,7 @@ class SelfImprovementQualityMixin:
                 findings.append(
                     {
                         "type": "Rust Readiness Task",
+                        "line": 1,
                         "message": f"Heuristically detected {untyped_count} functions missing type hints.",
                         "file": file_path_rel,
                     }
@@ -102,29 +104,35 @@ class SelfImprovementQualityMixin:
         self,
         content: str,
         file_path_rel: str,
+        allow_triton_check: bool = True,
     ) -> List[Dict[str, Any]]:
         """General quality and performance checks."""
         findings = []
         # Robustness: Bare except
         exc_pattern = r"^\s*except Exception as e:  # pylint: disable=broad-exception-caught\s*(#.*)?$"
-        if re.search(exc_pattern, content, re.MULTILINE):
+        for match in re.finditer(exc_pattern, content, re.MULTILINE):
+            line_no = content.count("\n", 0, match.start()) + 1
             findings.append(
                 {
                     "type": "Robustness Issue",
+                    "line": line_no,
                     "message": (
                         "Bare 'except Exception as e:  # pylint: disable=broad-exception-caught' "
-                        "or specific errors."
+                        "found. Use specific errors where possible."
                     ),
                     "file": file_path_rel,
                 }
             )
 
         # Performance: time.sleep in non-test code
-        if re.search(r"^[^\#]*time" + r"\.sleep\(", content, re.MULTILINE) and "test" not in file_path_rel.lower():
-            if "SelfImprovementCore.py" not in file_path_rel:
+        sleep_pattern = r"^[^\#]*time" + r"\.sleep\("
+        for match in re.finditer(sleep_pattern, content, re.MULTILINE):
+            if "test" not in file_path_rel.lower() and "SelfImprovementCore.py" not in file_path_rel:
+                line_no = content.count("\n", 0, match.start()) + 1
                 findings.append(
                     {
                         "type": "Performance Warning",
+                        "line": line_no,
                         "message": "Found active time.sleep() in non-test code. Possible blocking bottleneck.",
                         "file": file_path_rel,
                     }
@@ -140,6 +148,7 @@ class SelfImprovementQualityMixin:
             findings.append(
                 {
                     "type": "Intelligence Gap",
+                    "line": 1,
                     "message": "Component performs AI/IO or Shell operations without recording context to shards.",
                     "file": file_path_rel,
                 }

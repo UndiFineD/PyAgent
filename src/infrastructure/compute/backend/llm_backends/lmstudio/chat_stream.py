@@ -139,11 +139,18 @@ class StreamingChatHandler:
             url = self.api_client._normalize_url("chat")  # pylint: disable=protected-access
             payload = {
                 "model": model or self.api_client.default_model,
-                "input": prompt,
-                "system_prompt": system_prompt,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ],
                 "stream": True,
             }
-            for k in ("temperature", "top_p", "max_output_tokens", "context_length"):
+            if "max_output_tokens" in kwargs:
+                payload["max_tokens"] = kwargs["max_output_tokens"]
+            elif "max_tokens" in kwargs:
+                payload["max_tokens"] = kwargs["max_tokens"]
+
+            for k in ("temperature", "top_p"):
                 if k in kwargs:
                     payload[k] = kwargs[k]
 
@@ -157,20 +164,30 @@ class StreamingChatHandler:
                 # Use SSE client to parse events
                 client = sseclient.SSEClient(resp.iter_text())
                 for event in client.events():
-                    if event.event == "message.delta":
-                        data = event.data
-                        try:
-                            content = json.loads(data).get("content", "")
-                        except (ValueError, json.JSONDecodeError):
-                            content = data
+                    # Handle OpenAI style [DONE] or empty data
+                    if event.data == "[DONE]":
+                        break
+                    
+                    try:
+                        data = json.loads(event.data)
+                        # Extract from OpenAI choices[0].delta.content
+                        choices = data.get("choices", [])
+                        if choices:
+                            content = choices[0].get("delta", {}).get("content", "")
+                        else:
+                            # Fallback to older format (message.delta event)
+                            content = data.get("content", "")
+                            
                         if content:
                             if on_fragment:
                                 on_fragment(content)
                             yield content
-                    elif event.event == "chat.end":
-                        # Final event
-                        logger.debug("[LMStudio] HTTP fallback chat_stream received chat.end event")
-                        break
+                    except (ValueError, json.JSONDecodeError):
+                        # Handle raw data if not JSON
+                        if event.data:
+                            if on_fragment:
+                                on_fragment(event.data)
+                            yield event.data
 
                 logger.info("[LMStudio] HTTP fallback chat_stream completed successfully")
 
