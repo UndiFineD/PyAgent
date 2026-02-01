@@ -23,7 +23,8 @@ from typing import Callable, TypeVar, Generic, Optional
 
 logger: logging.Logger = logging.getLogger(__name__)
 _T = TypeVar("_T", bound=type)
-BaseType_co = TypeVar("BaseType_co", covariant=True)
+T_co = TypeVar("T_co", covariant=True)
+
 
 class ExtensionManager:
     """
@@ -103,7 +104,7 @@ class ExtensionInfo:
         return f"ExtensionInfo(name={self.name}, cls={self.cls.__name__}, registry={self.registry_name})"
 
 
-class TypedExtensionManager(ExtensionManager, Generic[BaseType]):
+class TypedExtensionManager(ExtensionManager, Generic[T_co]):
     """Type-safe extension manager for registering subclasses of a base type."""
 
     def __init__(self, name: str = "typed", base_type: type | None = None):
@@ -246,15 +247,15 @@ class LazyExtensionManager(ExtensionManager):
 # ============================================================================
 
 # Global registry singleton
-_global_registry: Optional[ExtensionManager] = None
+_GLOBAL_REGISTRY: Optional[ExtensionManager] = None
 
 
 def get_global_registry() -> ExtensionManager:
     """Get or create the global registry singleton."""
-    global _global_registry
-    if _global_registry is None:
-        _global_registry = ExtensionManager("global")
-    return _global_registry
+    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
+    if _GLOBAL_REGISTRY is None:
+        _GLOBAL_REGISTRY = ExtensionManager("global")
+    return _GLOBAL_REGISTRY
 
 
 def create_registry(name: str) -> ExtensionManager:
@@ -297,4 +298,3 @@ class GlobalRegistry(ExtensionManager):
     def instance(cls) -> 'GlobalRegistry':
         """Get the singleton instance."""
         return cls()
-

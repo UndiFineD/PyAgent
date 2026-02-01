@@ -28,6 +28,8 @@ import logging
 import time
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Sequence
 
+import httpx
+
 from ..llm_backend import LLMBackend
 from .api import LMStudioAPIClient
 from .cache import ModelCache
@@ -118,7 +120,7 @@ class LMStudioBackend(LLMBackend):
 
             client = lmstudio.Client(base_url)
             return client
-        except Exception as e:
+        except (ImportError, RuntimeError, ValueError) as e:
             logger.warning(f"Failed to create LM Studio client: {e}")
             raise
 
@@ -133,7 +135,7 @@ class LMStudioBackend(LLMBackend):
             models = lmstudio.list_loaded_models()
             logger.debug(f"Listed {len(models)} models via LM Studio SDK")
             return [m.path for m in models]
-        except Exception as e:
+        except (ImportError, RuntimeError, ValueError) as e:
             logger.warning(f"Failed to list loaded models via SDK: {e}; will try HTTP fallback")
 
         # HTTP fallback
@@ -150,7 +152,7 @@ class LMStudioBackend(LLMBackend):
             models = lmstudio.list_downloaded_models()
             logger.debug(f"Listed {len(models)} downloaded models via LM Studio SDK")
             return [m.path for m in models]
-        except Exception as e:
+        except (ImportError, RuntimeError, ValueError) as e:
             logger.warning(
                 f"Failed to list downloaded models via SDK: {e}; will try HTTP fallback"
             )
@@ -181,7 +183,7 @@ class LMStudioBackend(LLMBackend):
                 self._model_cache.set(cache_key, llm)
 
             return llm
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError, ImportError, httpx.HTTPError) as e:
             logger.warning(f"LMStudio SDK model fetch failed: {e}; will try HTTP fallback")
 
         # HTTP fallback: if model is present via REST, return a shim LLM object
@@ -192,13 +194,15 @@ class LMStudioBackend(LLMBackend):
                 logger.info(f"Using HTTP fallback LLM for model '{model}'")
 
                 class _HTTPFallbackLLM:
+                    """Internal shim for HTTP-based LLM access when SDK is unavailable."""
                     def __init__(self, backend: "LMStudioBackend", model_id: str):
                         self._backend = backend
                         self._model_id = model_id
 
-                    def respond(self, chat, config=None):
+                    def respond(self, chat, _config=None):
+                        """Respond using HTTP fallback."""
                         # Use the backend's _http_chat_request method
-                        return self._backend._http_chat_request(chat, self._model_id)
+                        return self._backend._http_chat_request(chat, self._model_id)  # pylint: disable=protected-access
 
                 fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
                 if self.config.cache_models:
@@ -206,11 +210,11 @@ class LMStudioBackend(LLMBackend):
 
                 try:
                     self._update_status(self.PROVIDER_ID, True)
-                except Exception:
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
 
                 return fallback_llm
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         raise RuntimeError(f"Failed to get model '{model}'")
@@ -227,7 +231,7 @@ class LMStudioBackend(LLMBackend):
         try:
             if hasattr(chat, "user_message"):
                 return getattr(chat, "user_message")
-            elif hasattr(chat, "messages"):
+            if hasattr(chat, "messages"):
                 msgs = getattr(chat, "messages")
                 if isinstance(msgs, (list, tuple)) and msgs:
                     first = msgs[0]
@@ -235,7 +239,7 @@ class LMStudioBackend(LLMBackend):
                         return first.get("content") or first.get("text") or str(first)
                     return str(first)
             return str(chat)
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return str(chat)
 
     def chat(
@@ -255,7 +259,7 @@ class LMStudioBackend(LLMBackend):
             if self._check_sdk():
                 try:
                     llm = self.get_model(model)
-                except Exception as e:
+                except (RuntimeError, ValueError) as e:
                     logger.debug(f"Failed to get SDK model: {e}")
 
             start_time = time.time()
@@ -276,7 +280,7 @@ class LMStudioBackend(LLMBackend):
                 self._update_status(self.PROVIDER_ID, True)
 
             return result
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"Chat operation failed: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return ""
@@ -296,7 +300,7 @@ class LMStudioBackend(LLMBackend):
             if self._check_sdk():
                 try:
                     llm = self.get_model(model)
-                except Exception as e:
+                except (RuntimeError, ValueError) as e:
                     logger.debug(f"Failed to get SDK model for streaming: {e}")
 
             for fragment in self._streaming_handler.chat_stream(
@@ -314,7 +318,7 @@ class LMStudioBackend(LLMBackend):
                     system_prompt=system_prompt,
                 )
                 self._update_status(self.PROVIDER_ID, True)
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"Streaming chat failed: {e}")
             self._update_status(self.PROVIDER_ID, False)
 
@@ -346,7 +350,7 @@ class LMStudioBackend(LLMBackend):
                 chat = lmstudio.Chat(system_prompt)
                 chat.add_user_message(prompt)
 
-                config = self._chat_handler._build_prediction_config(True, **kwargs)
+                config = self._chat_handler._build_prediction_config(True, **kwargs)  # pylint: disable=protected-access
                 result = await llm.respond(chat, config=config)
                 response_text = str(result)
 
@@ -360,7 +364,7 @@ class LMStudioBackend(LLMBackend):
                 self._update_status(self.PROVIDER_ID, True)
 
                 return response_text
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"LM Studio async error: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return ""
@@ -387,7 +391,7 @@ class LMStudioBackend(LLMBackend):
                 embeddings.append(list(vec))
 
             return embeddings
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"LM Studio embedding error: {e}")
             return []
 
@@ -419,7 +423,7 @@ class LMStudioBackend(LLMBackend):
                 for t in tools
             ]
 
-            config = self._chat_handler._build_prediction_config(True, **kwargs)
+            config = self._chat_handler._build_prediction_config(True, **kwargs)  # pylint: disable=protected-access
             result = llm.respond(chat, tools=tool_defs, config=config)
 
             tool_calls = []
@@ -436,7 +440,7 @@ class LMStudioBackend(LLMBackend):
                 "content": str(result),
                 "tool_calls": tool_calls,
             }
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"LM Studio tool calling error: {e}")
             return {"content": "", "tool_calls": []}
 
@@ -447,7 +451,7 @@ class LMStudioBackend(LLMBackend):
             is_healthy = bool(models)
             self._update_status(self.PROVIDER_ID, is_healthy)
             return is_healthy
-        except Exception as e:
+        except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.debug(f"Health check failed: {e}")
             self._update_status(self.PROVIDER_ID, False)
             return False
