@@ -211,7 +211,7 @@ class BackendHandlers:
         return None
 
     @staticmethod
-    def _prepare_github_request(full_prompt: str, model: str, base_url: str) -> tuple[dict[str, str], dict[str, Any]]:
+    def _prepare_github_request(full_prompt: str, model: str, _base_url: str) -> tuple[dict[str, str], dict[str, Any]]:
         """Prepare headers and payload for GitHub Models API request."""
         content = BackendHandlers._parse_content(full_prompt)
         headers: dict[str, str] = {
@@ -234,6 +234,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
+        """Attempt to invoke GitHub Models API for code generation."""
         if not requests_lib:
             return None
 
