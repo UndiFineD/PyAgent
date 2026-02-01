@@ -427,23 +427,22 @@ def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
                     desc = pattern.get("description", str(pattern))
                     file_path = pattern.get("file")
                     line_no = pattern.get("line")
-                    if line_no:
+                    if line_no and str(line_no) != "0":
                         line_info = f" (L{line_no})"
-                    # ...existing code...
                     doc = pattern.get("doc")
                 else:
                     desc = str(pattern)
                     file_path = None
-                    # ...existing code...
                     doc = None
-                if file_path:
+                
+                if file_path and file_path != "unknown":
                     file_link = f" [View]({file_path})"
                 if doc:
                     doc_link = f" [Docs]({doc})"
                 logger.info(f"  {idx}. {desc}{line_info}{file_link}{doc_link}")
-    except (OSError, IOError, TypeError):
+    except (OSError, IOError, TypeError) as e:
         # Catch file operations and type errors in synthesis loop
-        logger.warning("[Intelligence] Synthesis skipped.")
+        logger.warning(f"[Intelligence] Synthesis skipped: {e}")
 
 
 def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[str, Any]], model_name: str) -> None:
