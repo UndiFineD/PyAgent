@@ -24,6 +24,9 @@ from __future__ import annotations
 
 import ast
 
+from typing import Optional
+
+from src.core.base.common.base_interfaces import ContextRecorderInterface
 from src.core.base.common.types.code_language import CodeLanguage
 from src.core.base.common.types.code_metrics import CodeMetrics
 from src.core.base.common.types.style_rule import StyleRule
@@ -94,10 +97,16 @@ class CoderCore(
 ):
     """Core logic for CoderAgent, target for Rust conversion."""
 
-    def __init__(self, language: CodeLanguage, workspace_root: str | None = None) -> None:
+    def __init__(
+        self,
+        language: CodeLanguage,
+        workspace_root: str | None = None,
+        recorder: Optional[ContextRecorderInterface] = None,
+    ) -> None:
         LogicCore.__init__(self)  # Ensure proper base init
         self.language = language
         self.workspace_root = workspace_root
+        self.recorder = recorder
         try:
             import rust_core
 

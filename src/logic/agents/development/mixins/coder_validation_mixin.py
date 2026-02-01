@@ -56,12 +56,23 @@ class CoderValidationMixin:
             tmp_path = tmp.name
         try:
             # Run flake8 on the temporary file
+            command = ["flake8", "--ignore=E501,F401,W291,W293", tmp_path]
             result = subprocess.run(
-                ["flake8", "--ignore=E501,F401,W291,W293", tmp_path],
+                command,
                 capture_output=True,
                 text=True,
                 check=False,
             )
+
+            if hasattr(self, "recorder") and self.recorder:
+                output = result.stdout or result.stderr
+                self.recorder.record_interaction(
+                    provider="python",
+                    model="flake8",
+                    prompt=" ".join(command),
+                    result=output[:2000],
+                )
+
             return result.returncode == 0
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"flake8 validation failed: {e}")

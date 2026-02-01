@@ -36,14 +36,14 @@ class LinterAgent(BaseAgent):
     Integrates Ruff, Pylint, and Flake8.
     """
 
-    def __init__(self, file_path: str = "") -> None:
+    def __init__(self, file_path: str = "", **kwargs: Any) -> None:
         """
         Initialize the Linter Agent.
         :param file_path: Optional initial file to focus on.
         """
-        super().__init__(file_path)
+        super().__init__(file_path, **kwargs)
         self.capabilities.extend(["python", "linting", "static-analysis"])
-        self.core = LinterCore()
+        self.core = LinterCore(recorder=self.recorder)
 
         self._system_prompt = (
             "You are a Quality Assurance Specialist for Python Code. "

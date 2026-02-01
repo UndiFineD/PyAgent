@@ -36,12 +36,24 @@ Legal audit agent.py module.
 from __future__ import annotations
 
 import re
-from typing import Any
+import time
+from typing import Any, Optional, TypedDict
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
+class LicenseReport(TypedDict, total=False):
+    """Structured report for license auditing."""
+    detected_licenses: list[str]
+    risk_level: str
+    summary: str
+    is_compliant: bool
+    violations: list[str]
+    action_required: str
+    risk_summary: str
 
 
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -50,8 +62,8 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Scans codebases for licensing risks, liability concerns, and smart contract vulnerabilities.
     """
 
-    def __init__(self, path: str) -> None:
-        super().__init__(path)
+    def __init__(self, path: str, **kwargs: Any) -> None:
+        super().__init__(path, **kwargs)
         self.license_patterns = {
             "GPL": r"GPL|General Public License",
             "AGPL": r"AGPL|Affero General Public License",
@@ -63,7 +75,21 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "AGPL",
         ]  # Blacklist for non-copyleft projects (Phase 238)
 
-    def check_license_compliance(self, content: str, project_license: str = "MIT") -> dict[str, Any]:
+    def _record(self, prompt: str, result: str, provider: str = "LegalAudit", model: str = "v1") -> None:
+        """Internal helper to record interactions to the swarm context."""
+        if hasattr(self, "recorder") and self.recorder:
+            try:
+                self.recorder.record_interaction(
+                    provider=provider,
+                    model=model,
+                    prompt=prompt,
+                    result=result,
+                    meta={"timestamp": time.time(), "agent": "LegalAuditAgent"}
+                )
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+
+    def check_license_compliance(self, content: str, project_license: str = "MIT") -> LicenseReport:
         """
         Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
@@ -71,25 +97,27 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         _ = project_license
         scan = self.scan_licensing(content)
         violations = [
-            license_name for license_name in scan["detected_licenses"] if license_name in self.license_blacklist
+            license_name for license_name in scan.get("detected_licenses", []) if license_name in self.license_blacklist
         ]
 
         is_compliant = not violations
-        return {
+        res: LicenseReport = {
             "is_compliant": is_compliant,
-            "detected_licenses": scan["detected_licenses"],
+            "detected_licenses": scan.get("detected_licenses", []),
             "violations": violations,
             "action_required": "Block / Rewrite" if not is_compliant else "None",
+            "risk_level": scan.get("risk_level", "low"),
         }
+        return res
 
-    def scan_licensing(self, content: str) -> dict[str, Any]:
+    def scan_licensing(self, content: str) -> LicenseReport:
         """Identifies licenses and flags copyleft risks."""
         detected = []
         for name, pattern in self.license_patterns.items():
             if re.search(pattern, content, re.IGNORECASE):
                 detected.append(name)
 
-        res = {
+        res: LicenseReport = {
             "detected_licenses": detected,
             "risk_level": "high" if any(license_name in ["GPL", "AGPL"] for license_name in detected) else "low",
             "summary": f"Detected: {', '.join(detected) if detected else 'None'}",

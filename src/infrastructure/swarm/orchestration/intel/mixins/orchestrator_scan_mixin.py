@@ -82,6 +82,7 @@ class OrchestratorScanMixin:
         # 1. Structural and Hive Analysis
         self.analysis.add_structural_findings(findings, file_path, rel_path, content)
         self.analysis.add_hive_findings(findings, file_path, rel_path, getattr(self, "active_tasks", []))
+        self.analysis.add_profiling_findings(findings, file_path, rel_path, content)
 
         # 2. Autonomous Fixes (Self-Healing Delegation)
         self.fixer.apply_autonomous_fixes(file_path, rel_path, content, findings)
