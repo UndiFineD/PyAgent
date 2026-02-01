@@ -262,8 +262,8 @@ class TokenCostEngine:
 
 
 class ModelFallbackEngine:
-    def __init__(self, cost_engine=None) -> None:
-        self.cost_engine = cost_engine
+    def __init__(self, cost_engine: Optional[TokenCostEngine] = None) -> None:
+        self.cost_engine: Optional[TokenCostEngine] = cost_engine
         self.core = ModelFallbackCore()
 
     def get_fallback_model(self, current_model: str) -> str:

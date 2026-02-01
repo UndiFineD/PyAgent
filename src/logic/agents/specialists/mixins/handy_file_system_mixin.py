@@ -36,6 +36,10 @@ class HandyFileSystemMixin:
             else:
                 result = subprocess.check_output(["find", path, "-name", f"*{query}*"], text=True)
 
-            return f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```"
+            res = f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```"
+            self._record("fast_find", {"query": query, "path": path}, res)
+            return res
         except (subprocess.SubprocessError, IOError, OSError) as e:
-            return f"Search failed: {e}"
+            err_msg = f"Search failed: {e}"
+            self._record("fast_find_error", {"query": query, "path": path}, err_msg)
+            return err_msg

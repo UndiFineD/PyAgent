@@ -158,6 +158,7 @@ class IntelligenceCore:
             "error",
             "failure",
             "bottleneck",
+            "profiling",
             "missing",
             "security",
             "leak",

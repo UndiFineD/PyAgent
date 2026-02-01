@@ -31,6 +31,7 @@ import time
 import tracemalloc
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from types import TracebackType
 from typing import Iterator, Optional
 
 
@@ -174,7 +175,12 @@ class MemoryProfiler:
         self.start_snapshot = capture_memory_snapshot(self.include_gpu)
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: Optional[type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> None:
         self.end_snapshot = capture_memory_snapshot(self.include_gpu)
 
         if self._start_trace:
@@ -320,7 +326,12 @@ class GCDebugger:
         self.start()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: Optional[type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> None:
         self.stop()
 
 
