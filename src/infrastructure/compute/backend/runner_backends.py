@@ -64,6 +64,7 @@ class BackendHandlers:
 
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
+        """Build full prompt with task description, prompt, and context."""
         try:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
         except ValueError:
@@ -75,6 +76,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_codex_cli(full_prompt: str, repo_root: Path, recorder: Any | None = None) -> str | None:
+        """Try to use Codex CLI backend for code generation."""
         try:
             logging.debug("Attempting to use Codex CLI backend")
             result: subprocess.CompletedProcess[str] = subprocess.run(
@@ -129,6 +131,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
+        """Try to use Copilot CLI backend for code generation."""
         try:
             logging.debug("Attempting to use local Copilot CLI backend")
             result: subprocess.CompletedProcess[str] = subprocess.run(
@@ -151,6 +154,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
+        """Try to use GitHub Copilot CLI backend for code generation."""
         # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
@@ -234,9 +238,14 @@ class BackendHandlers:
             return None
 
         base_url: str = (
-            (os.environ.get("GITHUB_MODELS_BASE_URL") or "https://models.inference.ai.azure.com").strip().rstrip("/")
+            (os.environ.get("GITHUB_MODELS_BASE_URL")
+             or "https://models.inference.ai.azure.com").strip().rstrip("/")
         )
-        model: str = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini").strip()
+        model: str = (
+            os.environ.get("DV_AGENT_MODEL")
+            or os.environ.get("GITHUB_MODELS_MODEL")
+            or "gpt-4o-mini"
+        ).strip()
 
         token = BackendHandlers._get_github_token()
         if not token:
@@ -258,6 +267,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
+        """Try to use OpenAI API backend for code generation."""
         if not requests_lib:
             return None
 

@@ -23,7 +23,7 @@ from typing import Callable, TypeVar, Generic, Optional
 
 logger: logging.Logger = logging.getLogger(__name__)
 _T = TypeVar("_T", bound=type)
-_BaseType = TypeVar("_BaseType")
+BaseType = TypeVar("BaseType")
 
 class ExtensionManager:
     """
@@ -103,7 +103,7 @@ class ExtensionInfo:
         return f"ExtensionInfo(name={self.name}, cls={self.cls.__name__}, registry={self.registry_name})"
 
 
-class TypedExtensionManager(ExtensionManager, Generic[_BaseType]):
+class TypedExtensionManager(ExtensionManager, Generic[BaseType]):
     """Type-safe extension manager for registering subclasses of a base type."""
 
     def __init__(self, name: str = "typed", base_type: type | None = None):

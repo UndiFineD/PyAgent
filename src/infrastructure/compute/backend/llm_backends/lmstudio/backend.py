@@ -78,6 +78,7 @@ class LMStudioBackend(LLMBackend):
         self._mcp_client = MCPClient(self.config.base_url, getattr(self.config, "api_token", None))
         self._chat_handler = ChatHandler(self._api_client)
         self._streaming_handler = StreamingChatHandler(self._api_client)
+        self._client: Any = None  # Initialize _client
 
     def _check_sdk(self) -> bool:
         """Check if LM Studio SDK is available."""
@@ -290,6 +291,7 @@ class LMStudioBackend(LLMBackend):
     ) -> Iterator[str]:
         """Stream chat completion tokens, with HTTP fallback using REST API SSE."""
         try:
+            full_response: list[str] = []
             llm = None
             if self._check_sdk():
                 try:
@@ -469,4 +471,3 @@ class LMStudioBackend(LLMBackend):
             "downloaded_models": downloaded,
             "is_healthy": bool(loaded),
         }
-
