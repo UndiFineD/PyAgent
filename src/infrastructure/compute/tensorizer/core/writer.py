@@ -99,7 +99,7 @@ class TensorizerWriter:
         self._file.write(struct.pack("<I", len(self._metadata)))
 
         # Each tensor's metadata
-        for meta: TensorMetadata in self._metadata:
+        for meta in self._metadata:
             meta_bytes: bytes = meta.to_bytes()
             self._file.write(struct.pack("<I", len(meta_bytes)))
             self._file.write(meta_bytes)

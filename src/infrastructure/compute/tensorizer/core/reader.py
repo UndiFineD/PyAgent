@@ -238,7 +238,7 @@ class TensorizerReader:
 
         progress = LoadProgress(
             total_tensors=len(names),
-            total_bytes=sum(self._metadata[n].size_bytes for n: str in names if n in self._metadata),
+            total_bytes=sum(self._metadata[n].size_bytes for n in names if n in self._metadata),
         )
 
         result: Dict[str, np.ndarray] = {}
@@ -267,5 +267,5 @@ class TensorizerReader:
 
     def iter_tensors(self) -> Iterator[Tuple[str, np.ndarray]]:
         """Iterate over tensors one at a time."""
-        for name: str in self._metadata:
+        for name in self._metadata:
             yield name, self.read_tensor(name)

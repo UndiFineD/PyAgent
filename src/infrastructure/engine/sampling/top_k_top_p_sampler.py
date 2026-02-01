@@ -279,7 +279,7 @@ class TopKTopPSampler:
         result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = logits.copy()
         batch_size: int = logits.shape[0]
 
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             # Get k-th largest value
             kth_largest = np.partition(result[b], -k)[-k]
             # Mask out values below threshold
@@ -304,7 +304,7 @@ class TopKTopPSampler:
         result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = logits.copy()
         batch_size: int = logits.shape[0]
 
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             # Sort and compute cumulative probabilities
             sorted_indices: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit | np._64Bit]]] = np.argsort(-result[b])
             sorted_logits = result[b, sorted_indices]
@@ -352,7 +352,7 @@ class TopKTopPSampler:
         probs: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self._softmax(logits)
 
         batch_size: int = logits.shape[0]
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             # Compute entropy
             entropy = -np.sum(probs[b] * np.log(probs[b] + 1e-10))
 
@@ -389,7 +389,7 @@ class TopKTopPSampler:
         probs: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = self._softmax(logits)
 
         batch_size: int = logits.shape[0]
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             entropy = -np.sum(probs[b] * np.log(probs[b] + 1e-10))
             threshold: float = min(eta, np.sqrt(eta) * np.exp(-entropy))
             result[b, probs[b] < threshold] = -np.inf
@@ -413,7 +413,7 @@ class TopKTopPSampler:
         batch_size: int = logits.shape[0]
         samples: np.ndarray[tuple[int], np.dtype[np.signedinteger[np._32Bit]]] = np.zeros(batch_size, dtype=np.int32)
 
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             # Handle all -inf case
             valid_mask = ~np.isinf(logits[b])
             if not valid_mask.any():
@@ -511,7 +511,7 @@ class BatchTopKTopPSampler:
         batch_size: int = logits.shape[0]
         samples: np.ndarray[tuple[int], np.dtype[np.signedinteger[np._32Bit]]] = np.zeros(batch_size, dtype=np.int32)
 
-        for b: int in range(batch_size):
+        for b in range(batch_size):
             # Apply temperature
             scaled_logits = logits[b : b + 1] / max(temperatures[b], 1e-7)
 

@@ -279,7 +279,6 @@ class LMStudioBackend(LLMBackend):
                 except Exception as e:
                     logger.debug(f"Failed to get SDK model for streaming: {e}")
             
-            full_response = []
             for fragment in self._streaming_handler.chat_stream(
                 llm, prompt, model, system_prompt, self._check_sdk(), on_fragment, **kwargs
             ):

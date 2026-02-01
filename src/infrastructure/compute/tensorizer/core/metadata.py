@@ -44,7 +44,7 @@ class TensorMetadata:
 
         # Shape (length-prefixed array)
         result += struct.pack("<I", len(self.shape))
-        for dim: int in self.shape:
+        for dim in self.shape:
             result += struct.pack("<Q", dim)
 
         # Dtype
@@ -76,7 +76,7 @@ class TensorMetadata:
         shape_len = struct.unpack_from("<I", data, pos)[0]
         pos += 4
         shape = []
-        for _: int in range(shape_len):
+        for _ in range(shape_len):
             shape.append(struct.unpack_from("<Q", data, pos)[0])
             pos += 8
 
