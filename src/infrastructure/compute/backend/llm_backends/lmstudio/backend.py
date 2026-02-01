@@ -97,8 +97,29 @@ class LMStudioBackend(LLMBackend):
 
     def disconnect(self) -> None:
         """Disconnect clients."""
+        # Close the client if it exists
+        if hasattr(self, "_client") and self._client is not None:
+            self._client.close()
         self._mcp_client.close()
         self._model_cache.clear()
+        self._client = None  # Clear the client reference
+
+    def _get_client(self) -> Any:
+        """Get or create an LM Studio client."""
+        try:
+            import lmstudio
+            
+            # Use the base URL from config
+            base_url = self.config.base_url
+            # Ensure http scheme
+            if not base_url.startswith(("http://", "https://")):
+                base_url = "http://" + base_url
+            
+            client = lmstudio.Client(base_url)
+            return client
+        except Exception as e:
+            logger.warning(f"Failed to create LM Studio client: {e}")
+            raise
 
     def list_loaded_models(self) -> list[str]:
         """List currently loaded models in LM Studio.
@@ -175,11 +196,8 @@ class LMStudioBackend(LLMBackend):
                         self._model_id = model_id
 
                     def respond(self, chat, config=None):
-                        # Extract prompt from Chat object
-                        prompt = self._backend._extract_prompt_from_chat(chat)
-                        return self._backend._chat_handler._http_fallback_chat(
-                            prompt, self._model_id, "You are a helpful assistant."
-                        )
+                        # Use the backend's _http_chat_request method
+                        return self._backend._http_chat_request(chat, self._model_id)
 
                 fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
                 if self.config.cache_models:

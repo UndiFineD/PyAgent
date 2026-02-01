@@ -58,6 +58,7 @@ class CompileBackend(Enum):
     ONNXRT = "onnxrt"  # ONNX Runtime
     EAGER = "eager"  # No compilation (debug)
     INDUCTOR = "inductor"  # In-ductor backend (default)
+    CUDAGRAPHS = "cudagraphs"  # CUDA Graphs backend
 
 @dataclass
 class CompileConfig:

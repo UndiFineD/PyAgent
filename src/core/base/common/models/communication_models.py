@@ -29,9 +29,11 @@ Defines context lineage and communication models for agent task attribution.
 class CascadeContext:
     """Context for tracking cascade operations and preventing infinite recursion."""
 
-    task_id: str
+    task_id: str = ""
     cascade_depth: int = 0
     depth_limit: int = 10
+    tenant_id: str = ""
+    security_scope: list[str] = field(default_factory=_empty_list_str)
     failure_history: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
 
     def __post_init__(self) -> None:
@@ -55,8 +57,11 @@ class CascadeContext:
                 # Skip non-dict items silently
             self.failure_history = valid_history
 
-    def next_level(self, child_task_id: str) -> 'CascadeContext':
+    def next_level(self, child_task_id: str = "", agent_id: str = "") -> 'CascadeContext':
         """Create a child context at the next cascade level."""
+        # Support both child_task_id and agent_id for backwards compatibility
+        task_id = child_task_id or agent_id
+        
         if self.is_bursting():
             raise RecursionError("Recursive Improvement Loop Detected - Cascade depth limit reached")
 
@@ -67,9 +72,11 @@ class CascadeContext:
             raise RecursionError("Recursive Improvement Loop Detected - Multiple recursive improvement failures")
 
         return CascadeContext(
-            task_id=child_task_id,
+            task_id=task_id,
             cascade_depth=self.cascade_depth + 1,
             depth_limit=self.depth_limit,
+            tenant_id=self.tenant_id,
+            security_scope=self.security_scope.copy(),
             failure_history=self.failure_history.copy()
         )
 
