@@ -143,7 +143,9 @@ def mm_batch_invariant(
             out[:] = result
             return out
         return result
-    if getattr(a, 'is_cuda', False) and HAS_TRITON and getattr(a, 'dim', lambda: 0)() == 2 and getattr(b, 'dim', lambda: 0)() == 2:
+    if (getattr(a, 'is_cuda', False) and HAS_TRITON and
+            getattr(a, 'dim', lambda: 0)() == 2 and
+            getattr(b, 'dim', lambda: 0)() == 2):
         result = matmul_persistent(a, b)
         if out is not None:
             out.copy_(result)
@@ -401,6 +403,5 @@ class BatchInvariantOps:
         return self._call_counts.copy()
 
     def reset_stats(self) -> None:
-        # Reset operation call counts.
-        for key in self._call_counts:
+        """Reset operation call counts."""
             self._call_counts[key] = 0
