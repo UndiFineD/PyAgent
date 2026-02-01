@@ -28,7 +28,6 @@ Tests for LM Studio backend and msgspec serializers.
 import os
 import time
 import inspect
-from dataclasses import dataclass
 from typing import Any
 from unittest.mock import MagicMock, patch, AsyncMock
 
@@ -45,11 +44,19 @@ class TestLMStudioConfig:
 
     def test_default_config(self):
         """Test default configuration values."""
-        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioConfig
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import (
+            LMStudioConfig,
+        )
 
-        # Ensure DV_* and LMSTUDIO_* vars do not influence default behavior for this test
-        dv_saved = {k: os.environ.pop(k, None) for k in ("DV_LMSTUDIO_BASE_URL", "DV_LMSTUDIO_MODEL", "DV_LMSTUDIO_MAX_CONTEXT")}
-        lm_saved = {k: os.environ.pop(k, None) for k in ("LMSTUDIO_HOST", "LMSTUDIO_PORT", "LMSTUDIO_MODEL")}
+        # Ensure DV_* and LMSTUDIO_* vars do not influence default behavior
+        dv_saved = {
+            k: os.environ.pop(k, None)
+            for k in ("DV_LMSTUDIO_BASE_URL", "DV_LMSTUDIO_MODEL", "DV_LMSTUDIO_MAX_CONTEXT")
+        }
+        lm_saved = {
+            k: os.environ.pop(k, None)
+            for k in ("LMSTUDIO_HOST", "LMSTUDIO_PORT", "LMSTUDIO_MODEL")
+        }
         try:
             config = LMStudioConfig()
             assert config.host == "localhost"
@@ -68,11 +75,19 @@ class TestLMStudioConfig:
 
     def test_config_from_env(self):
         """Test configuration from environment variables."""
-        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import LMStudioConfig
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import (
+            LMStudioConfig,
+        )
 
-        # Ensure DV_* and existing LMSTUDIO_* do not interfere with this env-based test
-        dv_saved = {k: os.environ.pop(k, None) for k in ("DV_LMSTUDIO_BASE_URL", "DV_LMSTUDIO_MODEL", "DV_LMSTUDIO_MAX_CONTEXT")}
-        lm_saved = {k: os.environ.pop(k, None) for k in ("LMSTUDIO_HOST", "LMSTUDIO_PORT", "LMSTUDIO_MODEL")}
+        # Ensure DV_* and existing LMSTUDIO_* do not interfere
+        dv_saved = {
+            k: os.environ.pop(k, None)
+            for k in ("DV_LMSTUDIO_BASE_URL", "DV_LMSTUDIO_MODEL", "DV_LMSTUDIO_MAX_CONTEXT")
+        }
+        lm_saved = {
+            k: os.environ.pop(k, None)
+            for k in ("LMSTUDIO_HOST", "LMSTUDIO_PORT", "LMSTUDIO_MODEL")
+        }
         os.environ["LMSTUDIO_HOST"] = "192.168.1.100"
         os.environ["LMSTUDIO_PORT"] = "5000"
         try:
@@ -166,7 +181,7 @@ class TestModelCache:
 
     def test_cache_expiration(self):
         """Test cache entry expiration."""
-        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import ModelCache, CachedModel
+        from src.infrastructure.compute.backend.llm_backends.lm_studio_backend import ModelCache
 
         cache = ModelCache(ttl=0.01)  # 10ms TTL
 
@@ -422,7 +437,7 @@ class TestMsgSpecAvailability:
         """Test availability check."""
         from src.infrastructure.storage.serialization.msg_spec_serializer import is_msgspec_available
 
-        assert is_msgspec_available() == True  # Should be installed
+        assert is_msgspec_available()
 
     def test_require_msgspec(self):
         """Test require function doesn't raise when available."""
@@ -682,10 +697,10 @@ class TestLLMClientIntegration:
     def test_llm_chat_via_lmstudio_method(self):
         """Test llm_chat_via_lmstudio method exists."""
         from src.infrastructure.compute.backend.llm_client import LLMClient
-        import requests
+        import requests as req_module
 
-        with patch.object(requests, 'Session', return_value=MagicMock()):
-            client = LLMClient(requests)
+        with patch.object(req_module, 'Session', return_value=MagicMock()):
+            client = LLMClient(req_module)
 
         assert hasattr(client, 'llm_chat_via_lmstudio')
         assert callable(client.llm_chat_via_lmstudio)
@@ -732,4 +747,3 @@ class TestPhase21ModuleStructure:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
-

@@ -404,4 +404,3 @@ class BatchInvariantOps:
         # Reset operation call counts.
         for key in self._call_counts:
             self._call_counts[key] = 0
-

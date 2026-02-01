@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,20 +28,29 @@ Key Features Beyond vLLM:
 Based on vLLM v1 patterns with PyAgent innovations.
 """
 
+from __future__ import annotations
+
 import threading
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import Any
 
-# Import shared types from ARCOffloadManager
 from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
-    Backend, BlockHash, BlockState, BlockStatus, LoadStoreSpec,
-    OffloadingEvent, OffloadingManager, OffloadMedium, PrepareStoreOutput,
-    SimpleBackend)
+    Backend,
+    BlockHash,
+    BlockState,
+    BlockStatus,
+    LoadStoreSpec,
+    OffloadingEvent,
+    OffloadingManager,
+    OffloadMedium,
+    PrepareStoreOutput,
+    SimpleBackend,
+)
 
 try:
-    import rust_core  # noqa: F401
+    import rust_core  # pylint: disable=unused-import
 
     HAS_RUST = True
 except ImportError:
@@ -376,7 +383,6 @@ class TieredLRUManager:
         """Promote block between tiers."""
         # This is a simplified promotion - actual implementation
         # would handle data transfer between backends
-        pass
 
     def prepare_store(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
         """Store in appropriate tier."""

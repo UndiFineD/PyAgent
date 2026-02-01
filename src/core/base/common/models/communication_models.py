@@ -510,4 +510,3 @@ class SpanContext:
                 "attributes": attributes or {},
             }
         )
-
