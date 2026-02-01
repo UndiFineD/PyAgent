@@ -45,7 +45,7 @@ logger = logging.getLogger(__name__)
 class LMStudioBackend(LLMBackend):
     """
     LM Studio LLM Backend with modular architecture.
-    
+
     Delegates to:
     - MCPClient: SDK client management
     - LMStudioAPIClient: REST API client
@@ -68,7 +68,7 @@ class LMStudioBackend(LLMBackend):
         self.config = config or LMStudioConfig()
         self._model_cache = ModelCache(self.config.cache_ttl)
         self._sdk_available: bool | None = None
-        
+
         # Initialize modular components
         self._api_client = LMStudioAPIClient(
             self.config.base_url,
@@ -108,13 +108,13 @@ class LMStudioBackend(LLMBackend):
         """Get or create an LM Studio client."""
         try:
             import lmstudio
-            
+
             # Use the base URL from config
             base_url = self.config.base_url
             # Ensure http scheme
             if not base_url.startswith(("http://", "https://")):
                 base_url = "http://" + base_url
-            
+
             client = lmstudio.Client(base_url)
             return client
         except Exception as e:
@@ -172,13 +172,13 @@ class LMStudioBackend(LLMBackend):
         try:
             if not self._check_sdk():
                 raise RuntimeError("LM Studio SDK not available")
-            
+
             client = self._mcp_client.get_sync_client()
             llm = self._mcp_client.get_llm(client, model)
-            
+
             if self.config.cache_models:
                 self._model_cache.set(cache_key, llm)
-            
+
             return llm
         except Exception as e:
             logger.warning(f"LMStudio SDK model fetch failed: {e}; will try HTTP fallback")
@@ -189,7 +189,7 @@ class LMStudioBackend(LLMBackend):
             logger.debug(f"HTTP fallback returned models sample: {models[:10]}")
             if models and (model in models or any(model in m for m in models)):
                 logger.info(f"Using HTTP fallback LLM for model '{model}'")
-                
+
                 class _HTTPFallbackLLM:
                     def __init__(self, backend: "LMStudioBackend", model_id: str):
                         self._backend = backend
@@ -202,12 +202,12 @@ class LMStudioBackend(LLMBackend):
                 fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
                 if self.config.cache_models:
                     self._model_cache.set(cache_key, fallback_llm)
-                
+
                 try:
                     self._update_status(self.PROVIDER_ID, True)
                 except Exception:
                     pass
-                
+
                 return fallback_llm
         except Exception:
             pass
@@ -216,10 +216,10 @@ class LMStudioBackend(LLMBackend):
 
     def _extract_prompt_from_chat(self, chat: Any) -> str:
         """Extract prompt string from Chat object.
-        
+
         Args:
             chat: Chat object from SDK or dict-like.
-        
+
         Returns:
             Extracted prompt text.
         """
@@ -256,12 +256,12 @@ class LMStudioBackend(LLMBackend):
                     llm = self.get_model(model)
                 except Exception as e:
                     logger.debug(f"Failed to get SDK model: {e}")
-            
+
             start_time = time.time()
             result = self._chat_handler.chat(
                 llm, prompt, model, system_prompt, self._check_sdk(), **kwargs
             )
-            
+
             if result:
                 elapsed = time.time() - start_time
                 logger.debug(f"Chat completed in {elapsed:.2f}s: {len(result)} chars")
@@ -273,7 +273,7 @@ class LMStudioBackend(LLMBackend):
                     system_prompt=system_prompt,
                 )
                 self._update_status(self.PROVIDER_ID, True)
-            
+
             return result
         except Exception as e:
             logger.error(f"Chat operation failed: {e}")
@@ -296,13 +296,13 @@ class LMStudioBackend(LLMBackend):
                     llm = self.get_model(model)
                 except Exception as e:
                     logger.debug(f"Failed to get SDK model for streaming: {e}")
-            
+
             for fragment in self._streaming_handler.chat_stream(
                 llm, prompt, model, system_prompt, self._check_sdk(), on_fragment, **kwargs
             ):
                 full_response.append(fragment)
                 yield fragment
-            
+
             if full_response:
                 self._record(
                     self.PROVIDER_ID,
@@ -338,12 +338,12 @@ class LMStudioBackend(LLMBackend):
             api_url = self.config.base_url
             if not api_url.startswith("http://") and not api_url.startswith("https://"):
                 api_url = "http://" + api_url
-            
+
             async with lmstudio.AsyncClient(api_url) as client:
                 llm = await self._fetch_llm_from_async_client(client, model)
                 chat = lmstudio.Chat(system_prompt)
                 chat.add_user_message(prompt)
-                
+
                 config = self._chat_handler._build_prediction_config(True, **kwargs)
                 result = await llm.respond(chat, config=config)
                 response_text = str(result)
@@ -454,7 +454,7 @@ class LMStudioBackend(LLMBackend):
         """Get backend information, including REST API version and server details."""
         loaded = self.list_loaded_models()
         downloaded = self.list_downloaded_models()
-        
+
         # Fetch server info via API client
         api_info = self._api_client.get_info()
 
