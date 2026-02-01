@@ -76,7 +76,7 @@ class QuantizedTensor:
             result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.zeros(self.shape, dtype=np.float32)
             flat: np.ndarray[tuple[int, int], np.dtype[np.signedinteger[np._8Bit]]] | np.ndarray[tuple[int, int], np.dtype[np.floating[np._32Bit]]] = unpacked_reshaped.reshape(out_features, -1)
 
-            for g: int in range(num_groups):
+            for g in range(num_groups):
                 start: int = g * group_size
                 end: int = min(start + group_size, in_features)
                 if self.zero_point is not None:

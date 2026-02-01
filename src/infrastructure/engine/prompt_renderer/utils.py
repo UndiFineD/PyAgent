@@ -61,7 +61,7 @@ class EmbeddingLoader:
             return EmbeddingInput(embeddings=[list(values)])
 
         embeddings = []
-        for i: int in range(0, len(values), dim):
+        for i in range(0, len(values), dim):
             embeddings.append(list(values[i : i + dim]))
 
         return EmbeddingInput(embeddings=embeddings, encoding=encoding)
@@ -69,7 +69,7 @@ class EmbeddingLoader:
     @classmethod
     def load_file(cls, path: str, encoding: str = "float32") -> EmbeddingInput:
         """Load embeddings from file."""
-        with open(path, 'rb', encoding='utf-8') as f: base64.IO[Any]:
+        with open(path, 'rb', encoding='utf-8') as f:
             data: str = base64.b64encode(f.read()).decode()
         return cls.load_base64(data, encoding)
 
@@ -86,7 +86,7 @@ class EmbeddingLoader:
             raise ValueError(f"Unknown encoding: {encoding}")
 
         format_char, _ = cls.ENCODINGS[encoding]
-        flat: List[float] = [v for emb: List[float] in embeddings for v: float in emb]
+        flat: List[float] = [v for emb in embeddings for v in emb]
         packed: bytes = struct.pack(f"{len(flat)}{format_char}", *flat)
         return base64.b64encode(packed).decode()
 

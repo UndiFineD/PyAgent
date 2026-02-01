@@ -167,13 +167,13 @@ class AttentionBackendRegistry:
                 return backend
 
         # Try fallback chain
-        for name: str in self._fallback_chain:
+        for name in self._fallback_chain:
             backend = self.get_backend(name)
             if backend and self._check_backend(backend, capabilities, attn_type):
                 return backend
 
         # Try any backend
-        for name: str in self._backends:
+        for name in self._backends:
             backend = self.get_backend(name)
             if backend and self._check_backend(backend, capabilities, attn_type):
                 return backend
@@ -298,7 +298,7 @@ class AttentionBackendRegistry:
 
     def get_available_backends(self) -> list[str]:
         """Get list of actually usable backends."""
-        return [name for name: str in self._backends if self._check_availability(name)]
+        return [name for name in self._backends if self._check_availability(name)]
 
 
 # Convenience function
