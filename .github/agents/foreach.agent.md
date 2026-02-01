@@ -63,18 +63,14 @@ behavior:
     2. Run local static checks (linters, type checks, mypy/pylint) relevant to modified files.
     3. Run a quick secrets scan (e.g., simple regex check or repo scanner) and abort the unit if suspicious content is found.
     4. Apply the change locally using a transactional FS operation (use `StateTransaction` when modifying the repo).
-    - Note: The Coordinator will ensure `enforce_tests` is set to `true` by default for runs to encourage safe, test-driven changes. Agents may still override this behavior by explicitly setting `enforce_tests` in the manifest when the user has provided a clear exception.
-
-    6. If tests pass, stage and commit the change with a structured message: "foreach: <summary> — <file> — unit:<n>" including a short task id and batch id.
-    7. Group up to `batch_size` units into a single commit to minimize noise; keep commits coherent and limited to a single logical intent.
-    8. Use `branch_strategy` to control branch creation:
+    5. If tests pass, stage and commit the change with a structured message: "foreach: <summary> — <file> — unit:<n>" including a short task id and batch id.
+    6. Group up to `batch_size` units into a single commit to minimize noise; keep commits coherent and limited to a single logical intent.
+    7. Use `branch_strategy` to control branch creation:
        - If `branch_strategy` is `'no_branch'` (default), do not create per-batch branches. Commit changes locally or to a temporary run branch and **do not** push or open PRs unless explicitly requested by the user.
        - If `branch_strategy` is `'single_branch'`, create a single run branch named `foreach/<task-slug>/run-<id>` and push commits there; open **one consolidated PR** only when the user requests it.
        - If `branch_strategy` is `'per_batch'`, create feature branches named `foreach/<task-slug>/batch-<n>` **only with explicit user approval** (this may generate many PRs and should be used sparingly).
-    9. Record telemetry for each processed unit and include a before/after diff snippet (truncated) and the unit outcome (success/fail/skip).
-       - If `branch_strategy` is `'per_batch'`, create feature branches named `foreach/<task-slug>/batch-<n>` **only with explicit user approval** (this may generate many PRs and should be used sparingly).
-       When `auto_push` is true and PR creation is authorized, open a single consolidated PR for the run rather than multiple PRs per batch.    9. Record telemetry for each processed unit and include a before/after diff snippet (truncated) and the unit outcome (success/fail/skip).
-    10. If a change increases the number of files modified above a safety threshold (default: 50) or changes critical areas (core libs, external interfaces, rust bridge), pause and ask for explicit user confirmation before continuing.
+    8. Record telemetry for each processed unit and include a before/after diff snippet (truncated) and the unit outcome (success/fail/skip). When `auto_push` is true and PR creation is authorized, open a single consolidated PR for the run rather than multiple PRs per batch.
+    9. If a change increases the number of files modified above a safety threshold (default: 50) or changes critical areas (core libs, external interfaces, rust bridge), pause and ask for explicit user confirmation before continuing.
 
 safety_checks:
   - Run `pytest` for changed parts (or CI-focused subset) before staging or pushing. If failures occur, revert the change (use `StateTransaction` rollback), annotate the failure in telemetry, and open an issue summarizing the failure.
