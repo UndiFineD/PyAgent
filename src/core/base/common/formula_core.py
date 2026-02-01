@@ -138,8 +138,8 @@ class FormulaCore:
             try:
                 safe_vars = {k: float(v) for k, v in variables.items()}
                 return float(rc.evaluate_formula(expression, safe_vars))
-            except RuntimeError as e:
-                logger.error("FormulaCore: Rust evaluate_formula failed: %s", e)
+            except (RuntimeError, ValueError) as e:
+                logger.warning("FormulaCore: Rust evaluate_formula failed: %s. Falling back to Python.", e)
         return None
 
     @classmethod

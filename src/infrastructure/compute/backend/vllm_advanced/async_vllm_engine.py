@@ -153,9 +153,9 @@ class AsyncVllmEngine:
     """
     _instance: Optional["AsyncVllmEngine"] = None
 
-    def __init__(self, config: AsyncEngineConfig) -> None:
+    def __init__(self, config: Optional[AsyncEngineConfig] = None) -> None:
         """Initialize the async vLLM engine."""
-        self.config = config
+        self.config = config or AsyncEngineConfig()
         self._engine: Optional[AsyncLLMEngine] = None
         self._running: bool = False
         self._req_tracker: Dict[str, AsyncRequestHandle] = {}
@@ -168,10 +168,10 @@ class AsyncVllmEngine:
         }
 
     @classmethod
-    def get_instance(cls: type["AsyncVllmEngine"], config: AsyncEngineConfig) -> "AsyncVllmEngine":
+    def get_instance(cls: type["AsyncVllmEngine"], config: Optional[AsyncEngineConfig] = None) -> "AsyncVllmEngine":
         """Get the singleton instance of the async engine."""
         if cls._instance is None:
-            cls._instance = AsyncVllmEngine(config)
+            cls._instance = AsyncVllmEngine(config or AsyncEngineConfig())
         return cls._instance
     @property
     def _requests(self):
