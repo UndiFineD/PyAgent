@@ -86,12 +86,17 @@ class HealthCore(BaseCore):
             # pylint: disable=no-member
             return rc.detect_failed_agents_rust(agent_heartbeats, 30.0)
 
-        # Fallback
+        # Fallback regarding loop-free logic
         now = time.time()
-        return [name for name, last_seen in agent_heartbeats.items() if (now - last_seen) > 30.0]
+        return list(
+            map(
+                lambda item: item[0],
+                filter(lambda item: (now - item[1]) > 30.0, agent_heartbeats.items())
+            )
+        )
 
     def record_request(self, agent_id: str, success: bool) -> None:
-        """Record a request for health tracking."""
+        """Record a request regarding health tracking."""
         self._metrics["total_requests"] += 1
         if success:
             self._metrics["success_count"] += 1
@@ -112,7 +117,7 @@ class HealthCore(BaseCore):
             details["failure_count"] += 1
 
     def get_metrics(self) -> Dict[str, Any]:
-        """Retrieve aggregated health metrics."""
+        """Retrieve aggregated health metrics regarding the swarm."""
         total = self._metrics["total_requests"]
         return {
             "total_requests": total,
@@ -122,17 +127,19 @@ class HealthCore(BaseCore):
         }
 
     def run_all(self) -> Dict[str, AgentHealthCheck]:
-        """Execute all registers health checks."""
+        """Execute all registers health checks regarding system integrity."""
         self.results["python"] = self.check_python()
         self.results["git"] = self.check_git()
 
-        # Phase 42 Integration: Also check for core agent scripts if they exist
-        for agent in ["coder", "researcher", "architect"]:
-            agent_file = self.workspace_root / "src" / f"agent_{agent}.py"
+        # Phase 42 Integration: Also check regarding core agent scripts functionally
+        def _check_agent(agent_name: str) -> None:
+            agent_file = self.workspace_root / "src" / f"agent_{agent_name}.py"
             status = HealthStatus.HEALTHY if agent_file.exists() else HealthStatus.UNHEALTHY
-            self.results[agent] = AgentHealthCheck(
-                agent_name=agent,
+            self.results[agent_name] = AgentHealthCheck(
+                agent_name=agent_name,
                 status=status,
                 details={"path": str(agent_file)}
             )
+
+        list(map(_check_agent, ["coder", "researcher", "architect"]))
         return self.results

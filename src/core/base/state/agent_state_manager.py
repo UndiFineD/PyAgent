@@ -1,9 +1,4 @@
-from __future__ import annotations
 #!/usr/bin/env python3
-"""
-Module: agent_state_manager
-Provides transactional file-system state management for PyAgent agents.
-"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,22 +13,23 @@ Provides transactional file-system state management for PyAgent agents.
 # limitations under the License.
 
 """
-State management for swarm agents.
-Handles persistence of agent memory, history, and metadata.
+Module: agent_state_manager
+Provides transactional file-system state management for PyAgent agents.
 """
+
+from __future__ import annotations
 
 import collections
 import json
 import logging
-from subprocess import CalledProcessError
-from subprocess import TimeoutExpired
 import time
 from pathlib import Path
+from subprocess import CalledProcessError, TimeoutExpired
 from typing import Any
 
 from src.core.base.common.file_system_core import FileSystemCore
-from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.core_enums import FailureClassification
+from src.core.base.lifecycle.version import VERSION
 
 __version__: str = VERSION
 
@@ -202,13 +198,11 @@ class StateDriftDetector:
     def __init__(self, target_files: list[Path]) -> None:
         self.snapshots: dict[Path, str] = {}
         self.target_files: list[Path] = target_files
+        self._fs = FileSystemCore()
 
     def snapshot(self) -> None:
         """Capture hash of current files."""
-        import hashlib
-        for p in self.target_files:
-            if p.exists():
-                self.snapshots[p] = hashlib.sha256(p.read_bytes()).hexdigest()
+        self.snapshots = self._fs.calculate_bulk_hashes(self.target_files)
 
     def detect_drift(self) -> list[str]:
         """Check if files changed unexpectedly (if used for monitoring invalid changes)."""
@@ -229,10 +223,24 @@ class StructuredErrorValidator:
     Captures diagnostic metadata for swarm intelligence.
     """
 
+    # Phase 336: Mapping of exception types to failure classifications
+    FAILURE_TAXONOMY: dict[type[BaseException], str] = {
+        RecursionError: FailureClassification.RECURSION_LIMIT.value,
+        IOError: FailureClassification.STATE_CORRUPTION.value,
+        ImportError: FailureClassification.STATE_CORRUPTION.value,
+        MemoryError: FailureClassification.RESOURCE_EXHAUSTION.value,
+        ConnectionError: FailureClassification.NETWORK_FAILURE.value,
+    }
+
     def __init__(self) -> None:
         self.logger: logging.Logger = logging.getLogger("StructuredErrorValidator")
 
-    def capture_failure(self, context_id: str, error: BaseException, traceback_obj: Any) -> dict[str, Any]:
+    def capture_failure(
+        self,
+        context_id: str,
+        error: BaseException,
+        traceback_obj: Any
+    ) -> dict[str, Any]:
         """
         Classify error and return structured metadata.
         """
@@ -241,25 +249,7 @@ class StructuredErrorValidator:
         error_type: str = type(error).__name__
         stack_trace: str = "".join(traceback.format_tb(traceback_obj)) if traceback_obj else str(error)
 
-        # Phase 336: Enhanced Taxonomy Mapping
-        classification: str = FailureClassification.UNKNOWN.value  # Default
-        
-        if isinstance(error, RecursionError):
-            classification: str = FailureClassification.RECURSION_LIMIT.value
-        elif isinstance(error, ValueError):
-             # Check if it's a validation error
-             if "validation" in str(error).lower():
-                 classification: str = FailureClassification.STATE_CORRUPTION.value
-             else:
-                classification: str = FailureClassification.AI_ERROR.value 
-        elif isinstance(error, IOError):
-            classification: str = FailureClassification.STATE_CORRUPTION.value
-        elif isinstance(error, ImportError):
-            classification: str = FailureClassification.STATE_CORRUPTION.value
-        elif isinstance(error, MemoryError):
-            classification: str = FailureClassification.RESOURCE_EXHAUSTION.value
-        elif isinstance(error, ConnectionError):
-            classification: str = FailureClassification.NETWORK_FAILURE.value
+        classification: str = self._classify_error(error)
 
         report = {
             "error_type": error_type,
@@ -273,6 +263,21 @@ class StructuredErrorValidator:
 
         self.logger.error(f"Swarm Failure Captured [{classification}]: {error_type} in {context_id}")
         return report
+
+    def _classify_error(self, error: BaseException) -> str:
+        """Internal helper to classify errors based on type and content."""
+        # Check explicit taxonomy
+        for exc_type, classification in self.FAILURE_TAXONOMY.items():
+            if isinstance(error, exc_type):
+                return classification
+
+        # Value-based classification for generic errors
+        if isinstance(error, ValueError):
+            if "validation" in str(error).lower():
+                return FailureClassification.STATE_CORRUPTION.value
+            return FailureClassification.AI_ERROR.value
+
+        return FailureClassification.UNKNOWN.value
 
 
 class StateTransaction:
@@ -390,34 +395,43 @@ class StateTransaction:
 
     def _run_associated_tests(self) -> None:
         """Run associated tests for modified files."""
-        import subprocess
         for file in self.target_files:
             if not file.exists() or file.suffix != ".py":
                 continue
 
-            # Simple heuristic: run the file if it is a test, or try to find a test
-            test_targets = []
-            if file.name.startswith("test_") or "tests" in file.parts:
-                test_targets.append(file)
-
-            # Add more heuristics if needed (e.g. src/foo.py -> tests/unit/test_foo.py)
+            # Identify target tests for this file
+            test_targets = self._identify_test_targets(file)
 
             for test_path in test_targets:
-                try:
-                    # Run pytest on the target
-                    subprocess.run(
-                        ["python", "-m", "pytest", str(test_path), "--tb=short"],
-                        check=True,
-                        capture_output=True,
-                        timeout=30
-                    )
-                except subprocess.CalledProcessError as e:
-                    err_msg: Any | str = e.stderr.decode() if e.stderr else 'Unknown error'
-                    logging.error(f"Pre-commit test failure for {test_path}: {err_msg}")
-                    raise ValueError(f"Verification tests failed for {file.name}") from e
-                except subprocess.TimeoutExpired as e:
-                    logging.error(f"Pre-commit test timeout for {test_path}")
-                    raise ValueError(f"Verification tests timed out for {file.name}") from e
+                self._execute_test_file(test_path, file.name)
+
+    def _identify_test_targets(self, file: Path) -> list[Path]:
+        """Heuristic to find tests associated with a given file."""
+        # Simple heuristic: run the file if it is a test, or try to find a test
+        if file.name.startswith("test_") or "tests" in file.parts:
+            return [file]
+
+        # Future: implement more complex mapping (src/foo.py -> tests/unit/test_foo.py)
+        return []
+
+    def _execute_test_file(self, test_path: Path, source_name: str) -> None:
+        """Run pytest on a specific test file in a subprocess."""
+        import subprocess
+        try:
+            # Run pytest on the target
+            subprocess.run(
+                ["python", "-m", "pytest", str(test_path), "--tb=short"],
+                check=True,
+                capture_output=True,
+                timeout=30
+            )
+        except subprocess.CalledProcessError as e:
+            err_msg: str = e.stderr.decode() if e.stderr else "Unknown error"
+            logging.error(f"Pre-commit test failure for {test_path}: {err_msg}")
+            raise ValueError(f"Verification tests failed for {source_name}") from e
+        except subprocess.TimeoutExpired as e:
+            logging.error(f"Pre-commit test timeout for {test_path}")
+            raise ValueError(f"Verification tests timed out for {source_name}") from e
 
     def commit(self) -> None:
         """Discard backups after successful transaction."""

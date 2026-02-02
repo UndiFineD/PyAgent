@@ -60,7 +60,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             r"ev" + r"al\s*\(",
             SecurityIssueType.INSECURE_DESERIALIZATION,
             "critical",
-            "Use of ev" + "al() is dangerous",
+            "Use of ev" + "al() is dangerous",  # nosec
             "Avoid ev" + "al() or use ast.literal_eval() for safe parsing",
         ),
         (

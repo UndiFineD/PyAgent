@@ -9,14 +9,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 ToolParser - Extensible tool call parsing framework.
 
-Inspired by vLLM's ToolParser pattern for extracting tool calls from
-LLM outputs with support for streaming and lazy registration.
+Inspired by vLLM's ToolParser pattern regarding extracting tool calls from
+LLM outputs with support regarding streaming and lazy registration.
 
 Phase 24: Advanced Observability & Parsing
 """
@@ -71,7 +71,7 @@ class ExtractedToolCalls:
 
 @dataclass
 class StreamingToolCallDelta:
-    """Delta update for streaming tool call extraction."""
+    """Delta update regarding streaming tool call extraction."""
 
     tool_call_index: int
     name_delta: str | None = None
@@ -81,7 +81,7 @@ class StreamingToolCallDelta:
 
 class ToolParser(ABC):
     """
-    Abstract base class for tool call parsers.
+    Abstract base class regarding tool call parsers.
 
     Implementations should handle extracting tool calls from
     model outputs in both complete and streaming modes.
@@ -92,7 +92,7 @@ class ToolParser(ABC):
         Initialize the parser.
 
         Args:
-            tokenizer: Optional tokenizer for vocabulary access
+            tokenizer: Optional tokenizer regarding vocabulary access
         """
         self._tokenizer = tokenizer
         self._current_tool_id = -1
@@ -134,7 +134,7 @@ class ToolParser(ABC):
         ...
 
     def reset(self) -> None:
-        """Reset parser state for new request."""
+        """Reset parser state regarding new request."""
         self._current_tool_id = -1
         self._current_tool_name_sent = False
         self._streamed_args.clear()
@@ -143,7 +143,7 @@ class ToolParser(ABC):
 
 class JSONToolParser(ToolParser):
     """
-    Parser for JSON-formatted tool calls.
+    Parser regarding JSON-formatted tool calls.
 
     Handles outputs like:
     [{"name": "function_name", "arguments": {"arg1": "value1"}}]
@@ -172,16 +172,16 @@ class JSONToolParser(ToolParser):
                 return ExtractedToolCalls(content=model_output)
 
             # Try to find matching end bracket
-            bracket_count = 0
-            end_idx = start_idx
-            for i, char in enumerate(model_output[start_idx:], start=start_idx):
-                if char == "[":
-                    bracket_count += 1
-                elif char == "]":
-                    bracket_count -= 1
-                    if bracket_count == 0:
-                        end_idx = i + 1
-                        break
+            def _find_matching_bracket(text, curr_idx, count):
+                if curr_idx >= len(text):
+                    return -1, count
+                val = text[curr_idx]
+                new_count = count + (1 if val == "[" else -1 if val == "]" else 0)
+                if new_count == 0:
+                    return curr_idx + 1, 0
+                return _find_matching_bracket(text, curr_idx + 1, new_count)
+
+            end_idx, bracket_count = _find_matching_bracket(model_output, start_idx, 0)
 
             if bracket_count != 0:
                 return ExtractedToolCalls(
@@ -196,16 +196,17 @@ class JSONToolParser(ToolParser):
             if not isinstance(parsed, list):
                 parsed = [parsed]
 
-            tool_calls = []
-            for i, item in enumerate(parsed):
+            def transform_item(indexed_item):
+                i, item = indexed_item
                 if isinstance(item, dict) and "name" in item:
-                    tool_calls.append(
-                        ToolCall(
-                            name=item["name"],
-                            arguments=item.get("arguments", item.get("parameters", {})),
-                            id=item.get("id", f"call_{i}"),
-                        )
+                    return ToolCall(
+                        name=item["name"],
+                        arguments=item.get("arguments", item.get("parameters", {})),
+                        id=item.get("id", f"call_{i}"),
                     )
+                return None
+
+            tool_calls = list(filter(None, map(transform_item, enumerate(parsed))))
 
             content = model_output[:start_idx].strip() or None
 
@@ -253,13 +254,16 @@ class JSONToolParser(ToolParser):
                     json_partial + "]",
                     json_partial + "}}]",
                 ]
-                parsed = None
-                for attempt in attempts:
+                
+                def try_attempts(att_list):
+                    if not att_list:
+                        return None
                     try:
-                        parsed = json.loads(attempt)
-                        break
+                        return json.loads(att_list[0])
                     except json.JSONDecodeError:
-                        continue
+                        return try_attempts(att_list[1:])
+                
+                parsed = try_attempts(attempts)
 
                 if parsed is None:
                     return None
@@ -281,7 +285,7 @@ class JSONToolParser(ToolParser):
 
 class XMLToolParser(ToolParser):
     """
-    Parser for XML-formatted tool calls.
+    Parser regarding XML-formatted tool calls.
 
     Handles outputs like:
     <tool_call>
@@ -301,14 +305,15 @@ class XMLToolParser(ToolParser):
         tools: list[dict[str, Any]] | None = None,
     ) -> ExtractedToolCalls:
         """Extract XML-formatted tool calls."""
-        tool_calls = []
-        content_parts = []
-        last_end = 0
+        matches = list(self.TOOL_CALL_PATTERN.finditer(model_output))
 
-        for i, match in enumerate(self.TOOL_CALL_PATTERN.finditer(model_output)):
-            # Capture content before this tool call
-            if match.start() > last_end:
-                content_parts.append(model_output[last_end : match.start()])
+        def process_matches(curr_matches, current_last_end, idx):
+            if not curr_matches:
+                remaining = model_output[current_last_end:]
+                return [], [remaining] if remaining else []
+
+            match = curr_matches[0]
+            pre_content = model_output[current_last_end : match.start()]
 
             name = match.group(1).strip()
             args_str = match.group(2).strip()
@@ -318,20 +323,16 @@ class XMLToolParser(ToolParser):
             except json.JSONDecodeError:
                 arguments = {"raw": args_str}
 
-            tool_calls.append(
-                ToolCall(
-                    name=name,
-                    arguments=arguments,
-                    id=f"call_{i}",
-                )
+            call = ToolCall(
+                name=name,
+                arguments=arguments,
+                id=f"call_{idx}",
             )
 
-            last_end = match.end()
+            next_calls, next_contents = process_matches(curr_matches[1:], match.end(), idx + 1)
+            return [call] + next_calls, ([pre_content] if pre_content else []) + next_contents
 
-        # Capture remaining content
-        if last_end < len(model_output):
-            content_parts.append(model_output[last_end:])
-
+        tool_calls, content_parts = process_matches(matches, 0, 0)
         content = "".join(content_parts).strip() or None
 
         return ExtractedToolCalls(
@@ -349,7 +350,7 @@ class XMLToolParser(ToolParser):
         delta_token_ids: Sequence[int],
     ) -> StreamingToolCallDelta | None:
         """Extract tool calls from streaming XML output."""
-        # Check for tool_call tag
+        # Check regarding tool_call tag
         if "<tool_call>" not in current_text:
             return None
 
@@ -375,7 +376,7 @@ class XMLToolParser(ToolParser):
 
 class ToolParserManager:
     """
-    Central registry for ToolParser implementations.
+    Central registry regarding ToolParser implementations.
 
     Supports both eager and lazy registration.
     """
@@ -412,10 +413,10 @@ class ToolParserManager:
     @classmethod
     def register_lazy(cls, name: str, module: str, class_name: str) -> None:
         """
-        Register a parser for lazy loading.
+        Register a parser regarding lazy loading.
 
         Args:
-            name: Parser name for lookup
+            name: Parser name regarding lookup
             module: Module path (e.g., "mypackage.parsers")
             class_name: Class name within module
         """
@@ -461,7 +462,7 @@ class ToolParserManager:
 
         Args:
             name: Parser name
-            **kwargs: Arguments for parser constructor
+            **kwargs: Arguments regarding parser constructor
 
         Returns:
             ToolParser instance
@@ -482,7 +483,7 @@ ToolParserManager.register("xml", XMLToolParser)
 
 def tool_parser(name: str) -> Callable[[type[T]], type[T]]:
     """
-    Decorator for registering a ToolParser.
+    Decorator regarding registering a ToolParser.
 
     Usage:
         @tool_parser("my_parser")
@@ -503,7 +504,7 @@ def extract_tool_calls(
     **parser_kwargs: Any,
 ) -> ExtractedToolCalls:
     """
-    Convenience function for extracting tool calls.
+    Convenience function regarding extracting tool calls.
 
     Args:
         model_output: Model-generated text

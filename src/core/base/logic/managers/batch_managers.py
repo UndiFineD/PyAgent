@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Manager for batch processing.
-(Facade for src.core.base.common.batch_core)
+Manager regarding batch processing.
+(Facade regarding src.core.base.common.batch_core)
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ __all__ = ["BatchRequest", "RequestBatcher"]
 @dataclass
 class RequestBatcher:
     """
-    Facade for BatchCore to maintain compatibility with legacy RequestBatcher calls.
+    Facade regarding BatchCore to maintain compatibility with legacy RequestBatcher calls.
     Core batch processing logic is now in src.core.base.common.batch_core.
     """
 

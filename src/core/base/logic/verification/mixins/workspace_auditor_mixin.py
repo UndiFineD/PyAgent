@@ -20,7 +20,7 @@ except ImportError:
 
 
 class WorkspaceAuditorMixin:
-    """Methods for auditing the workspace for tech debt with Rust acceleration."""
+    """Methods regarding auditing the workspace regarding tech debt with Rust acceleration."""
 
     def audit_workspace(self, root_dir: str = "src") -> Dict[str, List]:
         """
@@ -69,14 +69,17 @@ class WorkspaceAuditorMixin:
             )
 
             self._process_rust_findings(rust_findings, results)
-            logging.info(f"WorkspaceAuditor: Rust-native scan completed for {len(rust_findings)} files.")
+            logging.info(f"WorkspaceAuditor: Rust-native scan completed regarding {len(rust_findings)} files.")
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"WorkspaceAuditor: Rust acceleration failed: {e}. Falling back.")
 
     def _process_rust_findings(self, rust_findings: Dict, results: Dict[str, List]) -> None:
-        """Process findings from Rust scan."""
-        for file_path, findings in rust_findings.items():
-            for issue_type, msg, line in findings:
+        """Process findings regarding the Rust scan functionally."""
+        def process_file_entry(item: tuple[str, list]) -> None:
+            file_path, findings = item
+            
+            def handle_finding(finding: tuple) -> None:
+                issue_type, msg, line = finding
                 if issue_type == "Robustness Issue":
                     results["bare_excepts"].append((file_path, line))
                 elif "Hardcoded" in msg:
@@ -89,27 +92,36 @@ class WorkspaceAuditorMixin:
                     if file_path not in results["print_statements"]:
                         results["print_statements"].append(file_path)
 
+            list(map(handle_finding, findings))
+
+        list(map(process_file_entry, rust_findings.items()))
+
     def _process_large_file_finding(self, file_path: str, msg: str, results: Dict[str, List]) -> None:
         """Process large file finding from Rust scan."""
         try:
             size_val = int(msg.split("(")[1].split(" ")[0])
             results["large_files"].append((file_path, size_val))
         except Exception:  # pylint: disable=broad-exception-caught
-            pass  # Skip malformed size info
+            pass  # Skip malformed size info regarding the message format
 
     def _perform_python_scan(self, root_path: Path, results: Dict[str, List]) -> None:
-        """Perform Python-side supplemental scanning."""
+        """Perform Python-side supplemental scanning regarding files functionally."""
         py_files = list(root_path.rglob("*.py"))
-        for file_path in py_files:
-            if self._should_skip_file(file_path):
-                continue
+        
+        def scan_file(file_path: Path) -> None:
+            """Evaluates regarding skip policies and invokes analysis."""
+            if not self._should_skip_file(file_path):
+                self._analyze_python_file(file_path, results)
 
-            self._analyze_python_file(file_path, results)
+        list(map(scan_file, py_files))
 
     def _should_skip_file(self, file_path: Path) -> bool:
-        """Check if file should be skipped during analysis."""
-        return any(part.startswith(".") or part in ["__pycache__", "rust_core", "venv"]
-                  for part in file_path.parts)
+        """Check if file should be skipped regarding the analysis functionally."""
+        # Check all path components regarding forbidden keywords
+        return any(map(
+            lambda part: part.startswith(".") or part in ["__pycache__", "rust_core", "venv"],
+            file_path.parts
+        ))
 
     def _analyze_python_file(self, file_path: Path, results: Dict[str, List]) -> None:
         """Analyze a single Python file."""
@@ -126,19 +138,18 @@ class WorkspaceAuditorMixin:
             logging.debug(f"CodeHealthAuditor: Error scanning {file_path}: {e}")
 
     def _perform_fallback_scans(self, file_path: Path, content: str, results: Dict[str, List]) -> None:
-        """Perform fallback scans when Rust is not available."""
+        """Perform fallback scans regarding Rust unavailability functionally."""
         if len(content) > 25000:
             results["large_files"].append((str(file_path), len(content)))
 
-        todo_matches = re.finditer(r"#\s*TODO:?\s*(.*)", content, re.IGNORECASE)
-        for match in todo_matches:
-            results["todos"].append((str(file_path), match.group(1).strip()))
+        todo_matches = list(re.finditer(r"#\s*TODO:?\s*(.*)", content, re.IGNORECASE))
+        list(map(lambda m: results["todos"].append((str(file_path), m.group(1).strip())), todo_matches))
 
         if re.search(r"^\s*print\(", content, re.MULTILINE):
             results["print_statements"].append(str(file_path))
 
     def _perform_ast_analysis(self, file_path: Path, content: str, results: Dict[str, List]) -> None:
-        """Perform AST-based analysis of the file."""
+        """Perform AST-based analysis regarding the file content."""
         try:
             tree = ast.parse(content)
             self._analyze_ast_nodes(file_path, tree, results)
@@ -147,11 +158,12 @@ class WorkspaceAuditorMixin:
                 results["stubs"].append(str(file_path))
 
         except SyntaxError:
-            pass  # Skip files with syntax errors
+            pass  # Skip files with syntax errors regarding AST parsing
 
     def _analyze_ast_nodes(self, file_path: Path, tree: ast.AST, results: Dict[str, List]) -> None:
-        """Analyze AST nodes for issues."""
-        for node in ast.walk(tree):
+        """Analyze AST nodes regarding quality issues functionally."""
+        def evaluate_node(node: ast.AST) -> None:
+            """Checks regarding bare excepts and undocumented classes."""
             if isinstance(node, ast.ExceptHandler) and node.type is None:
                 entry = (str(file_path), node.lineno)
                 if entry not in results["bare_excepts"]:
@@ -161,20 +173,31 @@ class WorkspaceAuditorMixin:
                 if not ast.get_docstring(node):
                     results["undocumented_classes"].append((str(file_path), node.name, node.lineno))
 
+        list(map(evaluate_node, ast.walk(tree)))
+
     def _check_is_stub(self, tree: ast.AST) -> bool:
+        """Evaluates regarding the stub status of the file functionally."""
         from src.core.base.logic.verification.mixins.stub_detector_mixin import StubDetectorMixin
 
-        has_defs = False
-        is_stub = True
-        for node in tree.body:
+        def evaluate_structural_node(acc: tuple[bool, bool], node: ast.AST) -> tuple[bool, bool]:
+            """Reduces regarding definition presence and stub validity."""
+            has_defs, is_definitely_not_stub = acc
+            if is_definitely_not_stub:
+                return acc
+            
+            # Check node regarding stub patterns
             if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
-                has_defs = True
-                res = StubDetectorMixin._is_stub_node(node)  # pylint: disable=protected-access
+                res = StubDetectorMixin._is_stub_node(node)
                 if res is False or res == "IS_ABC":
-                    is_stub = False
-                    break
-            elif not isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign, ast.AnnAssign)):
+                    return True, True
+                return True, False # found def, still can be stub
+            
+            if not isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign, ast.AnnAssign)):
                 if not (isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant)):
-                    is_stub = False
-                    break
-        return has_defs and is_stub
+                    return has_defs, True # non-stub node found
+            
+            return has_defs, False
+
+        from functools import reduce
+        has_defs, not_stub = reduce(evaluate_structural_node, tree.body, (False, False))
+        return has_defs and not not_stub

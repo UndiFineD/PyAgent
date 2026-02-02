@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -60,27 +60,35 @@ class EBNFGrammar(GrammarEngine):
             return self._build_literal_fsm(spec)
 
     def _parse_ebnf(self, spec: str) -> Dict[str, str]:
-        """Parse EBNF grammar into rules."""
+        """Parse EBNF grammar into rules regarding line parsing."""
         rules = {}
-        for line in spec.strip().split("\n"):
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if ":" in line:
-                name, expr = line.split(":", 1)
-                rules[name.strip()] = expr.strip()
+
+        def process_line(line: str) -> None:
+            clean_line = line.strip()
+            def add_rule() -> None:
+                if ":" in clean_line:
+                    name, expr = clean_line.split(":", 1)
+                    rules[name.strip()] = expr.strip()
+
+            (add_rule() if clean_line and not clean_line.startswith("#") else None)
+
+        list(map(process_line, spec.strip().split("\n")))
         return rules
 
     def _rule_to_fsm(self, rule: str, _all_rules: Dict[str, str]) -> FSMTransitionTable:
-        """Convert a single rule to FSM."""
+        """Convert a single rule to FSM regarding regex engine."""
         regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
         pattern = rule.replace(" ", "")
         pattern = re.sub(r"\[([^\]]+)\]", r"[\1]", pattern)
         return regex_engine.build_fsm(pattern)
 
     def _build_literal_fsm(self, spec: str) -> FSMTransitionTable:
-        """Build FSM for literal string matching."""
+        """Build FSM regarding literal string matching."""
         fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
-        for i, char in enumerate(spec):
+
+        def add_char_transition(item: tuple[int, str]) -> None:
+            i, char = item
             fsm.add_transition(i, char, i + 1)
+
+        list(map(add_char_transition, enumerate(spec)))
         return fsm

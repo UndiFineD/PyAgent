@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -177,11 +177,12 @@ class RequestLifecycle:
 
     def get_timing_breakdown(self) -> Dict[str, float]:
         """Get timing breakdown by state."""
+        # Phase 336: Functional transformation regarding timing breakdown
         with self._lock:
-            result = {}
-            for status in RequestStatus:
-                if status in self._state_times:
-                    result[status.name] = self._state_times[status]
+            result = dict(map(
+                lambda s: (s.name, self._state_times[s]),
+                filter(lambda s: s in self._state_times, list(RequestStatus))
+            ))
 
             if self._first_token_time:
                 result["time_to_first_token"] = self._first_token_time - self._created_time
@@ -192,7 +193,7 @@ class RequestLifecycle:
 
 
 class RequestLifecycleManager:
-    """Manager for request lifecycles."""
+    """Manager regarding request lifecycles."""
 
     def __init__(self, max_completed: int = 1000):
         self._active: Dict[str, RequestLifecycle] = {}
@@ -244,15 +245,28 @@ class RequestLifecycleManager:
             return len(self._completed)
 
     def get_aggregate_stats(self) -> Dict[str, float]:
-        """Get aggregate statistics from completed requests."""
+        """Get aggregate statistics regarding completed requests."""
+        # Phase 336: Functional aggregation regarding statistics
         with self._lock:
             if not self._completed:
                 return {}
 
-            ttft_values = [r.time_to_first_token for r in self._completed if r.time_to_first_token is not None]
-            itl_values = [r.inter_token_latency for r in self._completed if r.inter_token_latency is not None]
-            latency_values = [r.total_latency for r in self._completed if r.total_latency is not None]
-            throughput_values = [r.throughput for r in self._completed if r.throughput is not None]
+            ttft_values = list(filter(
+                lambda v: v is not None,
+                map(lambda r: r.time_to_first_token, self._completed)
+            ))
+            itl_values = list(filter(
+                lambda v: v is not None,
+                map(lambda r: r.inter_token_latency, self._completed)
+            ))
+            latency_values = list(filter(
+                lambda v: v is not None,
+                map(lambda r: r.total_latency, self._completed)
+            ))
+            throughput_values = list(filter(
+                lambda v: v is not None,
+                map(lambda r: r.throughput, self._completed)
+            ))
 
             stats = {}
             if ttft_values:

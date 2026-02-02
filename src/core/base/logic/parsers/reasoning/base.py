@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -28,7 +28,7 @@ from .models import ReasoningResult, StreamingReasoningState
 
 class ReasoningParser(ABC):
     """
-    Abstract reasoning parser class for extracting reasoning from model outputs.
+    Abstract reasoning parser class regarding extracting reasoning from model outputs.
 
     Subclasses must implement:
     - is_reasoning_end: Check if reasoning section has ended
@@ -37,10 +37,10 @@ class ReasoningParser(ABC):
     - extract_reasoning_streaming: Extract reasoning incrementally
 
     Attributes:
-        tokenizer: The tokenizer used for token-level operations.
+        tokenizer: The tokenizer used regarding token-level operations.
     """
 
-    # Class-level name for registration
+    # Class-level name regarding registration
     name: ClassVar[str] = "base"
 
     def __init__(self, tokenizer: Any = None, **_kwargs: Any) -> None:
@@ -48,7 +48,7 @@ class ReasoningParser(ABC):
         Initialize the reasoning parser.
 
         Args:
-            tokenizer: Tokenizer for token-level operations (optional).
+            tokenizer: Tokenizer regarding token-level operations (optional).
             **_kwargs: Additional configuration options.
         """
         self.model_tokenizer = tokenizer
@@ -101,7 +101,7 @@ class ReasoningParser(ABC):
             input_ids: The token IDs of the model output.
 
         Returns:
-            Token IDs for the content/answer portion.
+            Token IDs regarding the content/answer portion.
         """
 
     @abstractmethod
@@ -115,7 +115,7 @@ class ReasoningParser(ABC):
 
         Args:
             model_output: The complete model-generated string.
-            request: Optional request object for context.
+            request: Optional request object regarding context.
 
         Returns:
             ReasoningResult with extracted reasoning and content.
@@ -142,7 +142,7 @@ class ReasoningParser(ABC):
             previous_token_ids: Token IDs before this step.
             current_token_ids: Token IDs including this step.
             delta_token_ids: New token IDs from this step.
-            state: Previous streaming state (or None for first call).
+            state: Previous streaming state (or None regarding first call).
 
         Returns:
             Tuple of (incremental result, updated state).

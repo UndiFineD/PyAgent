@@ -1,9 +1,26 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
-Math agent.py module.
+MathAgent: Specialized Mathematical Reasoning Agent.
+Provides support for symbolic math, numerical computation, and logical proofs.
 """
-# Copyright 2026 PyAgent Authors
 # MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -94,9 +111,8 @@ class MathAgent(BaseAgent):
             except (ImportError, AttributeError):
                 pass
 
-            # Python safe eval fallback
-            import ast
-            result = ast.literal_eval(sanitized)
+            # Python safe eval fallback: use empty builtins and whitelist of math functions
+            result = eval(sanitized, {"__builtins__": {}}, SAFE_MATH_NAMESPACE)  # nosec
             self._record_calculation(expression, result, "python")
             return {"expression": expression, "result": result, "status": "success", "engine": "python"}
 

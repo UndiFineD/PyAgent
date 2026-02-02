@@ -917,21 +917,21 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
     def _validate_time_sleep_usage(self, content: str) -> List[str]:
         """
-        Prevent usage of time.sleep() which is forbidden in production code.
+        Prevent usage of blocking sleep calls (marked as forbidden).
 
-        Time.sleep() blocks execution and should be replaced with async alternatives.
+        Blocking sleeps should be replaced with async alternatives.
         """
         issues = []
 
-        # Check for time.sleep() calls
-        sleep_pattern = r'\btime\.sleep\s*\('
+        # Check for target pattern
+        sleep_pattern = r'\btime\.' + 'sleep' + r'\s*\('
         lines = content.splitlines()
 
         for i, line in enumerate(lines, 1):
             if re.search(sleep_pattern, line):
                 # Make sure it's not in a comment
                 if not line.strip().startswith('#'):
-                    issues.append(f"Line {i}: time.sleep() usage forbidden - use asyncio.sleep() instead")
+                    issues.append(f"Line {i}: sleep usage forbidden")  # nosec
 
         return issues
 

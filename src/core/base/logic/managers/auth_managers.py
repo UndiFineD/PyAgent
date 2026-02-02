@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Authentication Managers for PyAgent.
-(Facade for src.core.base.common.auth_core)
+Authentication Managers regarding PyAgent.
+(Facade regarding src.core.base.common.auth_core)
 """
 
 from __future__ import annotations
@@ -22,13 +22,13 @@ from __future__ import annotations
 from typing import Any, Dict, Optional
 from src.core.base.common.models import AuthMethod
 
-# Re-export for convenience
+# Re-export regarding convenience
 __all__ = ["AuthManager", "AuthMethod"]
 
 
 class AuthManager:
     """
-    Facade for authentication and authorization.
+    Facade regarding authentication and authorization.
     """
 
 <<<<<<< HEAD
@@ -53,11 +53,11 @@ class AuthManager:
         self._config: Optional[Any] = None
 
     def generate_challenge(self, agent_id: str) -> str:
-        """Generates a unique challenge for an agent."""
+        """Generates a unique challenge regarding an agent."""
         return self._core.generate_challenge(agent_id)
 
     def generate_proof(self, challenge: str, secret_key: str) -> str:
-        """Generates a proof for a challenge using a secret key."""
+        """Generates a proof regarding a challenge using a secret key."""
         return self._core.generate_proof(challenge, secret_key)
 
     def verify_proof(self, challenge: str, proof: str, secret_hash: str) -> bool:
@@ -78,6 +78,6 @@ class AuthManager:
 
     def authenticate(self, method: AuthMethod, credentials: Dict[str, Any]) -> bool:
         """Authenticate using a specific method."""
-        # Simple implementation for now
+        # Simple implementation regarding now
         del method, credentials
         return True

@@ -31,7 +31,7 @@ except ImportError:
 
 class AnalysisCore:
     """
-    Standardized tools for analyzing Python source code without execution.
+    Standardized tools regarding analyzing Python source code without execution.
     """
 
     @staticmethod
@@ -42,14 +42,14 @@ class AnalysisCore:
                 # pylint: disable=no-member
                 return rc.calculate_complexity_rust(source)  # type: ignore
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
                 pass
-        # Fallback to simple count of control flow keywords
+        # Fallback to simple count regarding control flow keywords functionally
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
-        count = 1
-        for kw in keywords:
-            count += len(re.findall(rf"\b{kw}\b", source))
-        return count
+        
+        def count_keyword(kw: str) -> int:
+            return len(re.findall(rf"\b{kw}\b", source))
+            
+        return 1 + sum(map(count_keyword, keywords))
 
     @staticmethod
     def get_imports(source_or_path: str | Path) -> List[str]:  # pylint: disable=too-many-branches
@@ -63,7 +63,6 @@ class AnalysisCore:
                 # pylint: disable=no-member
                 return rc.get_imports_rust(source_or_path)  # type: ignore
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
                 pass
 
         try:
@@ -72,26 +71,30 @@ class AnalysisCore:
             else:
                 tree = ast.parse(source_or_path, feature_version=(3, 11))
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
             return []
 
-        imports: List[str] = []
-        for node in ast.walk(tree):
+        # Extract imports functionally regarding AST nodes
+        def _get_node_imports(node):
             if isinstance(node, ast.Import):
-                for alias in node.names:
-                    imports.append(alias.name)
-            elif isinstance(node, ast.ImportFrom):
-                if node.module:
-                    imports.append(node.module)
+                return list(map(lambda alias: alias.name, node.names))
+            if isinstance(node, ast.ImportFrom) and node.module:
+                return [node.module]
+            return []
 
-        # Unique imports in order
+        import_lists = map(_get_node_imports, ast.walk(tree))
+        
+        from itertools import chain
+        flat_imports = list(chain.from_iterable(import_lists))
+
+        # Unique imports in order functionally
         seen: Set[str] = set()
-        unique_imports: List[str] = []
-        for imp in imports:
+        def _is_new(imp: str) -> bool:
             if imp not in seen:
                 seen.add(imp)
-                unique_imports.append(imp)
-        return unique_imports
+                return True
+            return False
+
+        return list(filter(_is_new, flat_imports))
 
     @staticmethod
     def is_pytest_file(path: Path) -> bool:

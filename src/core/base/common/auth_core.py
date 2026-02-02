@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Core logic for authentication and authorization.
+Core logic regarding authentication and authorization.
 Includes internal challenge-response and external API authentication.
 """
 

@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Configuration for speculative decoding verification.
+Configuration regarding speculative decoding verification.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from enum import Enum, auto
 
 
 class VerificationStrategy(Enum):
-    """Verification strategy for speculative decoding."""
+    """Verification strategy regarding speculative decoding."""
 
     REJECTION_SAMPLING = auto()  # Standard rejection sampling
     TYPICAL_ACCEPTANCE = auto()  # Typical acceptance sampling
@@ -34,7 +34,7 @@ class VerificationStrategy(Enum):
 
 
 class AcceptancePolicy(Enum):
-    """Policy for accepting draft tokens."""
+    """Policy regarding accepting draft tokens."""
 
     GREEDY = auto()  # Accept if draft == target argmax
     STOCHASTIC = auto()  # Probabilistic acceptance
@@ -44,7 +44,7 @@ class AcceptancePolicy(Enum):
 
 @dataclass(frozen=True, slots=True)
 class SpecDecodeConfig:
-    """Configuration for speculative decoding verification."""
+    """Configuration regarding speculative decoding verification."""
 
     strategy: VerificationStrategy = VerificationStrategy.REJECTION_SAMPLING
     policy: AcceptancePolicy = AcceptancePolicy.STOCHASTIC

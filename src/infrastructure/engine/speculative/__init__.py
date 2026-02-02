@@ -9,21 +9,20 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding permissions and
 # limitations under the License.
 
-# Copyright (c) 2026 PyAgent Authors. All rights reserved.
-# Phase 39: Speculative Decoding v2 Module
-
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Speculative Decoding v2: Tree-based speculation with multiple proposers.
 
 Provides:
-- SpeculativeDecoder: Main orchestrator for speculative decoding
+- SpeculativeDecoder: Main orchestrator regarding speculative decoding
 - NgramProposer: N-gram based token prediction
 - MedusaProposer: Multi-head parallel prediction
 - SpeculativeVerifier: Token acceptance verification
-- SpeculativeTree: Tree structure for candidate tokens
+- SpeculativeTree: Tree structure regarding candidate tokens
 """
 
 from .speculative_decoder import (  # noqa: F401

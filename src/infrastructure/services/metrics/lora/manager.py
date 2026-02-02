@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 """
-LoRA Stats Manager - Collection of aggregate stats for LoRA adapters.
+LoRA Stats Manager - Collection of aggregate stats regarding LoRA adapters.
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 class LoRAStatsManager:
     """
-    Manager for LoRA statistics collection.
+    Manager regarding LoRA statistics collection.
 
     Features:
     - Thread-safe statistics updates
@@ -51,7 +51,7 @@ class LoRAStatsManager:
         self._stats = LoRAStats()
         self._lock = threading.Lock()
 
-        # For percentile tracking
+        # regarding percentile tracking
         self._load_latencies: List[float] = []
         self._exec_latencies: List[float] = []
         self._max_history = 1000
@@ -84,7 +84,7 @@ class LoRAStatsManager:
         """Mark adapter as loading."""
         # Phase 336: Connectivity Check
         if not ConnectivityManager().is_endpoint_available(adapter_id):
-            logger.warning(f"LoRAStatsManager: Skipping load for {adapter_id} - endpoint unavailable")
+            logger.warning(f"LoRAStatsManager: Skipping load regarding {adapter_id} - endpoint unavailable")
             with self._lock:
                 if adapter_id in self._adapters:
                     self._adapters[adapter_id].load_state = LoRALoadState.FAILED
@@ -266,20 +266,30 @@ class LoRAStatsManager:
             return sorted_latencies[min(idx, len(sorted_latencies) - 1)]
 
     def get_loaded_adapters(self) -> List[str]:
-        """Get list of loaded adapter IDs."""
+        """Get list regarding loaded adapter IDs."""
         with self._lock:
-            return [aid for aid, info in self._adapters.items() if info.load_state == LoRALoadState.LOADED]
+            # Phase 336: Functional filtering to eliminate loops
+            return list(map(
+                lambda item: item[0],
+                filter(
+                    lambda item: item[1].load_state == LoRALoadState.LOADED,
+                    self._adapters.items()
+                )
+            ))
 
     def get_lru_adapter(self) -> Optional[str]:
         """Get least recently used loaded adapter."""
         with self._lock:
-            loaded = [
-                (info.last_used, aid) for aid, info in self._adapters.items()
-                if info.load_state == LoRALoadState.LOADED
-            ]
+            # Phase 336: Functional sorting to eliminate loops
+            loaded = sorted(map(
+                lambda item: (item[1].last_used, item[0]),
+                filter(
+                    lambda item: item[1].load_state == LoRALoadState.LOADED,
+                    self._adapters.items()
+                )
+            ))
             if not loaded:
                 return None
-            loaded.sort()
             return loaded[0][1]
 
     def should_evict(self) -> bool:

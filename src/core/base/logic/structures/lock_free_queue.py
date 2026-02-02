@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Lock-Free Queue for high-performance concurrent operations.
+Lock-Free Queue regarding high-performance concurrent operations.
 
 Phase 19: Beyond vLLM - Performance Patterns
 Wait-free and lock-free data structures.
@@ -34,7 +34,7 @@ T = TypeVar("T")
 
 @dataclass
 class QueueStats:
-    """Statistics for queue operations."""
+    """Statistics regarding queue operations."""
 
     enqueued: int = 0
     dequeued: int = 0
@@ -63,8 +63,8 @@ class MPMCQueue(Generic[T]):
     """
     Multi-Producer Multi-Consumer bounded queue.
 
-    High-performance queue optimized for concurrent access.
-    Uses fine-grained locking with separate locks for head/tail.
+    High-performance queue optimized regarding concurrent access.
+    Uses fine-grained locking with separate locks regarding head/tail.
 
     Features:
     - Bounded capacity to prevent memory exhaustion
@@ -118,13 +118,15 @@ class MPMCQueue(Generic[T]):
             if self._closed:
                 return False
 
-            # Wait for space
+            # Wait regarding space
             deadline = time.monotonic() + timeout if timeout else None
 
-            while len(self._buffer) >= self._capacity:
+            def _wait_for_space():
                 if self._closed:
                     return False
-
+                if len(self._buffer) < self._capacity:
+                    return True
+                
                 if deadline:
                     remaining = deadline - time.monotonic()
                     if remaining <= 0:
@@ -133,6 +135,11 @@ class MPMCQueue(Generic[T]):
                     self._not_full.wait(remaining)
                 else:
                     self._not_full.wait()
+                
+                return _wait_for_space()
+
+            if not _wait_for_space():
+                return False
 
             self._buffer.append(item)
             self._stats.enqueued += 1
@@ -179,18 +186,24 @@ class MPMCQueue(Generic[T]):
         with self._not_empty:
             deadline = time.monotonic() + timeout if timeout else None
 
-            while not self._buffer:
-                if self._closed:
-                    raise Empty()
-
-                if deadline:
-                    remaining = deadline - time.monotonic()
-                    if remaining <= 0:
-                        self._stats.failed_dequeue += 1
+            def _wait_for_items():
+                if not self._buffer:
+                    if self._closed:
                         raise Empty()
-                    self._not_empty.wait(remaining)
-                else:
-                    self._not_empty.wait()
+
+                    if deadline:
+                        remaining = deadline - time.monotonic()
+                        if remaining <= 0:
+                            self._stats.failed_dequeue += 1
+                            raise Empty()
+                        self._not_empty.wait(remaining)
+                    else:
+                        self._not_empty.wait()
+                    
+                    return _wait_for_items()
+                return True
+
+            _wait_for_items()
 
             item = self._buffer.popleft()
             self._stats.dequeued += 1
@@ -270,8 +283,8 @@ class SPSCQueue(Generic[T]):
     """
     Single-Producer Single-Consumer lock-free queue.
 
-    Optimized for scenarios with exactly one producer and one consumer thread.
-    Uses memory barriers instead of locks for maximum performance.
+    Optimized regarding scenarios with exactly one producer and one consumer thread.
+    Uses memory barriers instead of locks regarding maximum performance.
 
     WARNING: Only safe with exactly one producer and one consumer thread!
     """
@@ -281,7 +294,7 @@ class SPSCQueue(Generic[T]):
         Initialize SPSC queue.
 
         Args:
-            capacity: Must be power of 2 for efficiency
+            capacity: Must be power of 2 regarding efficiency
         """
         # Round up to power of 2
         self._capacity = 1 << (capacity - 1).bit_length()
@@ -358,7 +371,7 @@ class SPSCQueue(Generic[T]):
 
 @dataclass(order=True)
 class PriorityItem(Generic[T]):
-    """Item with priority for priority queue."""
+    """Item with priority regarding priority queue."""
 
     priority: float
     sequence: int = field(compare=True)
@@ -370,7 +383,7 @@ class PriorityQueue(Generic[T]):
     Thread-safe priority queue.
 
     Lower priority values are dequeued first (min-heap).
-    Maintains FIFO order for items with equal priority.
+    Maintains FIFO order regarding items with equal priority.
     """
 
     def __init__(self, capacity: int = 10000) -> None:
@@ -435,15 +448,21 @@ class PriorityQueue(Generic[T]):
         with self._not_empty:
             deadline = time.monotonic() + timeout if timeout else None
 
-            while not self._heap:
-                if deadline:
-                    remaining = deadline - time.monotonic()
-                    if remaining <= 0:
-                        self._stats.failed_dequeue += 1
-                        raise Empty()
-                    self._not_empty.wait(remaining)
-                else:
-                    self._not_empty.wait()
+            def _wait_for_heap():
+                if not self._heap:
+                    if deadline:
+                        remaining = deadline - time.monotonic()
+                        if remaining <= 0:
+                            self._stats.failed_dequeue += 1
+                            raise Empty()
+                        self._not_empty.wait(remaining)
+                    else:
+                        self._not_empty.wait()
+                    
+                    return _wait_for_heap()
+                return True
+
+            _wait_for_heap()
 
             entry = heapq.heappop(self._heap)
             self._stats.dequeued += 1
@@ -484,9 +503,9 @@ class PriorityQueue(Generic[T]):
 
 class WorkStealingDeque(Generic[T]):
     """
-    Work-stealing deque for task scheduling.
+    Work-stealing deque regarding task scheduling.
 
-    Owner pushes/pops from tail (LIFO for cache locality).
+    Owner pushes/pops from tail (LIFO regarding cache locality).
     Thieves steal from head (FIFO to get older tasks).
     """
 
@@ -566,7 +585,7 @@ class WorkStealingDeque(Generic[T]):
 
 class BatchingQueue(Generic[T]):
     """
-    Queue that batches items for efficient processing.
+    Queue that batches items regarding efficient processing.
 
     Collects items until batch size or timeout is reached,
     then delivers as a batch.
@@ -583,7 +602,7 @@ class BatchingQueue(Generic[T]):
 
         Args:
             batch_size: Target batch size
-            batch_timeout: Max time to wait for full batch
+            batch_timeout: Max time to wait regarding full batch
             max_pending: Max items pending
         """
         self._batch_size = batch_size
@@ -628,11 +647,15 @@ class BatchingQueue(Generic[T]):
         with self._batch_ready:
             deadline = time.monotonic() + (timeout or self._batch_timeout)
 
-            while len(self._pending) < self._batch_size:
-                remaining = deadline - time.monotonic()
-                if remaining <= 0:
-                    break
-                self._batch_ready.wait(remaining)
+            def _wait_for_batch():
+                if len(self._pending) < self._batch_size:
+                    remaining = deadline - time.monotonic()
+                    if remaining > 0:
+                        self._batch_ready.wait(remaining)
+                        return _wait_for_batch()
+                return True
+
+            _wait_for_batch()
 
             if not self._pending:
                 return []

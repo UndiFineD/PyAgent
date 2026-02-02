@@ -221,6 +221,14 @@ class FileSystemCore:
         p = Path(path)
         if not p.exists():
             return None
+            
+        # Try Rust for speed
+        if rc and hasattr(rc, "generate_hash"):
+            try:
+                return rc.generate_hash(p.read_text(encoding="utf-8")) # type: ignore
+            except Exception:
+                pass
+
         try:
             sha256_hash = hashlib.sha256()
             # Open in binary mode for correct behavior across platforms.
@@ -233,4 +241,17 @@ class FileSystemCore:
             return None
         # Any other unexpected exception should propagate for visibility;
         # we already handle OSError above which covers common disk problems.
+
+    def calculate_bulk_hashes(self, paths: List[Path]) -> dict[Path, str]:
+        """Calculates hashes for multiple files, using Rust acceleration if available."""
+        if rc and hasattr(rc, "bulk_hash_files_rust"):
+            try:
+                str_paths = [str(p) for p in paths if p.exists()]
+                results = rc.bulk_hash_files_rust(str_paths) # type: ignore
+                return {Path(k): v for k, v in results.items()}
+            except Exception:
+                pass
+        
+        # Fallback
+        return {p: self.get_file_hash(p) or "" for p in paths if p.exists()}
 

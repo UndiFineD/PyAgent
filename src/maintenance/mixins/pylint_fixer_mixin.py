@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Mixin providing automated pylint issue remediation for the Maintenance Agent.
+"""
+
 import re
 import logging
 from pathlib import Path

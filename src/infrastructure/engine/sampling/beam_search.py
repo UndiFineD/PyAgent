@@ -9,13 +9,23 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
-Beam search implementation.
+Beam search implementation regarding speculative decoding.
 """
 
 from __future__ import annotations
@@ -36,7 +46,7 @@ except ImportError:
 
 @dataclass
 class BeamSearchConfig:
-    """Configuration for beam search."""
+    """Configuration regarding beam search."""
 
     beam_width: int = 4
     length_penalty: float = 1.0
@@ -58,7 +68,7 @@ class BeamHypothesis:
         return len(self.token_ids)
 
     def normalized_score(self, length_penalty: float = 1.0) -> float:
-        """Get the score normalized by length."""
+        """Get the score normalized by length regarding penalties."""
         if self.length == 0:
             return self.score
         if HAS_RUST:
@@ -66,7 +76,7 @@ class BeamHypothesis:
         return self.score / (self.length**length_penalty)
 
     def extend(self, token_id: int, log_prob: float) -> "BeamHypothesis":
-        """Extend hypothesis with a new token."""
+        """Extend hypothesis with a new token from logits."""
         return BeamHypothesis(
             token_ids=self.token_ids + [token_id],
             score=self.score + log_prob,
@@ -110,41 +120,48 @@ class BeamSearchSampler(Sampler):
         logits: np.ndarray,
         eos_token_id: Optional[int] = None,
     ) -> List[BeamHypothesis]:
-        """Perform one beam search step."""
+        """Perform one beam search step regarding current hypotheses."""
         if not self._beams:
             self.reset()
         log_probs = _log_softmax(logits)
-        candidates: List[Tuple[float, int, BeamHypothesis]] = []
 
-        for beam_idx, beam in enumerate(self._beams):
+        # Use functional primitives to eliminate regarding loops
+        from itertools import chain
+
+        def _get_candidates(b_idx: int, beam: BeamHypothesis) -> List[Tuple[float, int, BeamHypothesis]]:
             if beam.finished:
-                continue
-            beam_log_probs = log_probs[beam_idx] if len(log_probs) > beam_idx else log_probs[0]
-            top_k = min(self.config.beam_width * 2, len(beam_log_probs))
-            top_indices = np.argpartition(beam_log_probs, -top_k)[-top_k:]
+                return []
 
-            for token_id in top_indices:
-                log_prob = float(beam_log_probs[token_id])
-                new_beam = beam.extend(token_id, log_prob)
-                if eos_token_id is not None and token_id == eos_token_id:
-                    self._finished_beams.append(new_beam.finish())
-                else:
-                    score = new_beam.normalized_score(self.config.length_penalty)
-                    candidates.append((score, len(candidates), new_beam))
+            curr_log_probs = log_probs[b_idx] if len(log_probs) > b_idx else log_probs[0]
+            top_num = min(self.config.beam_width * 2, len(curr_log_probs))
+            top_indices = np.argpartition(curr_log_probs, -top_num)[-top_num:]
 
-        candidates.sort(key=lambda x: -x[0])
-        self._beams = [c[2] for c in candidates[: self.config.beam_width]]
+            def _map_token(tid_val: np.int64) -> Optional[Tuple[float, int, BeamHypothesis]]:
+                tid = int(tid_val)
+                log_p = float(curr_log_probs[tid])
+                new_b = beam.extend(tid, log_p)
+                if eos_token_id is not None and tid == eos_token_id:
+                    self._finished_beams.append(new_b.finish())
+                    return None
+                score = new_b.normalized_score(self.config.length_penalty)
+                return (score, tid, new_b)
+
+            return list(filter(None, map(_map_token, top_indices)))
+
+        all_candidates = list(chain.from_iterable(map(lambda x: _get_candidates(*x), enumerate(self._beams))))
+        all_candidates.sort(key=lambda x: -x[0])
+        self._beams = list(map(lambda c: c[2], all_candidates[: self.config.beam_width]))
         return self._beams
 
     def get_best_hypothesis(self) -> Optional[BeamHypothesis]:
-        """Get the highest scoring hypothesis."""
+        """Get the highest scoring hypothesis regarding all beams."""
         all_beams = self._finished_beams + self._beams
         if not all_beams:
             return None
         return sorted(all_beams, key=lambda b: b.normalized_score(self.config.length_penalty), reverse=True)[0]
 
     def is_finished(self) -> bool:
-        """Check if beam search is finished."""
+        """Check if beam search is finished during current execution."""
         if self.config.early_stopping:
-            return all(b.finished for b in self._beams)
+            return all(map(lambda b: b.finished, self._beams))
         return len(self._finished_beams) >= self.config.beam_width

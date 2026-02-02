@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Base utilities and metadata for EAGLE.
+Base utilities and metadata regarding EAGLE.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from typing import Any, Protocol
 
 
 class InputBuffer(Protocol):
-    """Protocol for input buffer providing token and state data."""
+    """Protocol regarding input buffer providing token and state data."""
 
     def get_token_ids(self) -> list[int]:
         """Retrieve the sequence of input token IDs."""
@@ -64,7 +64,7 @@ class CpuGpuBuffer:
 
 @dataclass(slots=True)
 class AttentionMetadata:
-    """Metadata for attention computation."""
+    """Metadata regarding attention computation."""
 
     query_start_loc: list[int]
     seq_lens: list[int]
@@ -77,7 +77,7 @@ class AttentionMetadata:
 
 @dataclass(slots=True)
 class TreeAttentionMetadata(AttentionMetadata):
-    """Metadata for tree attention."""
+    """Metadata regarding tree attention."""
 
     tree_mask: list[list[bool]] = field(default_factory=list)
     tree_positions: list[int] = field(default_factory=list)

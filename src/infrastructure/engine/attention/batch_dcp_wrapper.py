@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module: batch_dcp_wrapper - Batch DCP attention wrapper for PyAgent engine."""
+"""Module: batch_dcp_wrapper - Batch DCP attention wrapper regarding PyAgent engine."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ except ImportError:
 
 
 class BatchPhase(Enum):
-    """Phase of batch processing."""
+    """Phase regarding batch processing."""
 
     PREFILL = auto()
     DECODE = auto()
@@ -44,7 +44,7 @@ class BatchPhase(Enum):
 
 
 class AllReduceStrategy(Enum):
-    """Strategy for distributed reduction."""
+    """Strategy regarding distributed reduction."""
 
     RING = auto()  # Ring all-reduce
     TREE = auto()  # Tree-based reduction
@@ -79,7 +79,7 @@ class BatchRequest:
 
 @dataclass
 class BatchMetadata:
-    """Metadata for a batch of requests.
+    """Metadata regarding a batch regarding requests.
 
     Inspired by vLLM's batch metadata structures.
     """
@@ -120,7 +120,7 @@ class BatchMetadata:
 
 @dataclass
 class DCPPlanConfig:
-    """Configuration for DCP planning and execution.
+    """Configuration regarding DCP planning and execution.
 
     Controls how batches are planned and executed.
     """
@@ -151,7 +151,7 @@ class DCPPlanConfig:
 
 @dataclass
 class ExecutionPlan:
-    """Plan for executing a batch.
+    """Plan regarding executing a batch.
 
     Produced by plan() method, consumed by run() method.
     """
@@ -174,12 +174,12 @@ class ExecutionPlan:
     # Remote transfer plan
     remote_transfers: List[Dict[str, Any]] = field(default_factory=list)
 
-    # All-gather plan for LSE
+    # All-gather plan regarding LSE
     lse_gather_plan: Optional[Dict[str, Any]] = None
 
 
 class BatchExecutor(ABC):
-    """Abstract base for batch execution."""
+    """Abstract base regarding batch execution."""
 
     @abstractmethod
     def plan(
@@ -212,10 +212,10 @@ class BatchExecutor(ABC):
 
 
 class BatchDCPPrefillWrapper(BatchExecutor):
-    """Wrapper for batch DCP prefill operations.
+    """Wrapper regarding batch DCP prefill operations.
 
-    Coordinates prefill across a batch of requests,
-    preparing KV cache for transfer to decode instances.
+    Coordinates prefill across a batch regarding requests,
+    preparing KV cache regarding transfer regarding decode instances.
 
     Inspired by vLLM's BatchDCPPrefillWrapper pattern.
     """
@@ -254,39 +254,55 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         self._batch_counter += 1
         batch_id = metadata.batch_id or f"prefill_batch_{self._batch_counter}"
 
-        # Optimize request order for memory locality
+        # Optimize request order regarding memory locality
         sorted_requests = sorted(requests, key=lambda r: r.seq_len, reverse=True)
-        request_order = [r.request_id for r in sorted_requests]
+        request_order = list(map(lambda r: r.request_id, sorted_requests))
 
         # Plan token positions (ragged layout)
-        token_positions = {}
-        current_pos = 0
-        for req in sorted_requests:
-            token_positions[req.request_id] = (current_pos, current_pos + req.seq_len)
-            current_pos += req.seq_len
+        def get_positions() -> Dict[str, Tuple[int, int]]:
+            # Accumulate positions
+            from functools import reduce
+            initial: Tuple[int, Dict[str, Tuple[int, int]]] = (0, {})
+
+            def acc_pos(state: Tuple[int, Dict[str, Tuple[int, int]]], req: BatchRequest) -> Tuple[int, Dict[str, Tuple[int, int]]]:
+                curr, d = state
+                end = curr + req.seq_len
+                d[req.request_id] = (curr, end)
+                return (end, d)
+
+            return reduce(acc_pos, sorted_requests, initial)[1]
+
+        token_positions = get_positions()
 
         # Plan block allocation
-        block_allocation = {}
-        blocks_used = 0
         block_size = 16  # Tokens per block
 
-        for req in sorted_requests:
-            num_blocks = (req.seq_len + block_size - 1) // block_size
-            block_ids = list(range(blocks_used, blocks_used + num_blocks))
-            block_allocation[req.request_id] = block_ids
-            blocks_used += num_blocks
+        def get_allocations() -> Tuple[Dict[str, List[int]], int]:
+            from functools import reduce
+            initial: Tuple[int, Dict[str, List[int]]] = (0, {})
+
+            def acc_alloc(state: Tuple[int, Dict[str, List[int]]], req: BatchRequest) -> Tuple[int, Dict[str, List[int]]]:
+                used, d = state
+                num_blocks = (req.seq_len + block_size - 1) // block_size
+                block_ids = list(range(used, used + num_blocks))
+                d[req.request_id] = block_ids
+                return (used + num_blocks, d)
+
+            return reduce(acc_alloc, sorted_requests, initial)
+
+        block_allocation, _ = get_allocations()
 
         # Plan remote transfers
-        remote_transfers = []
-        for req in sorted_requests:
-            if req.remote_engine_id:
-                remote_transfers.append(
-                    {
-                        "request_id": req.request_id,
-                        "remote_engine_id": req.remote_engine_id,
-                        "block_ids": block_allocation[req.request_id],
-                    }
-                )
+        def create_transfer_if_remote(req: BatchRequest) -> Optional[Dict[str, Any]]:
+            if not req.remote_engine_id:
+                return None
+            return {
+                "request_id": req.request_id,
+                "remote_engine_id": req.remote_engine_id,
+                "block_ids": block_allocation[req.request_id],
+            }
+
+        remote_transfers = list(filter(None, map(create_transfer_if_remote, sorted_requests)))
 
         plan = ExecutionPlan(
             batch_id=batch_id,
@@ -307,13 +323,13 @@ class BatchDCPPrefillWrapper(BatchExecutor):
     ) -> Dict[str, Any]:
         """Execute prefill batch.
 
-        Runs attention and prepares KV cache for transfer.
+        Runs attention and prepares KV cache regarding transfer.
         """
         hidden_states = input_tensors.get("hidden_states")
         position_ids = input_tensors.get("position_ids")
 
         # Build attention mask
-        total_tokens = sum(end - start for start, end in plan.token_positions.values())
+        total_tokens = sum(map(lambda end_start: end_start[1] - end_start[0], plan.token_positions.values()))
 
         # Run attention (mock if no function provided)
         if self._attention_fn:
@@ -330,13 +346,17 @@ class BatchDCPPrefillWrapper(BatchExecutor):
             }
 
         # Prepare transfer metadata
-        transfer_info = {}
-        for transfer in plan.remote_transfers:
-            transfer_info[transfer["request_id"]] = {
-                "remote_engine_id": transfer["remote_engine_id"],
-                "block_ids": transfer["block_ids"],
-                "ready": True,
-            }
+        def create_transfer_entry(transfer: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
+            return (
+                transfer["request_id"],
+                {
+                    "remote_engine_id": transfer["remote_engine_id"],
+                    "block_ids": transfer["block_ids"],
+                    "ready": True,
+                }
+            )
+
+        transfer_info = dict(map(create_transfer_entry, plan.remote_transfers))
 
         # Update statistics
         self._total_prefills += len(plan.request_order)
@@ -358,9 +378,9 @@ class BatchDCPPrefillWrapper(BatchExecutor):
 
 
 class BatchDCPDecodeWrapper(BatchExecutor):
-    """Wrapper for batch DCP decode operations.
+    """Wrapper regarding batch DCP decode operations.
 
-    Coordinates decode across a batch of requests that
+    Coordinates decode across a batch regarding requests that
     receive KV cache from prefill instances.
     """
 
@@ -395,24 +415,20 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         self._batch_counter += 1
         batch_id = metadata.batch_id or f"decode_batch_{self._batch_counter}"
 
-        # For decode, order by arrival (FCFS)
-        request_order = [r.request_id for r in requests]
+        # Regarding decode, order by arrival (FCFS)
+        request_order = list(map(lambda r: r.request_id, requests))
 
-        # Single token per request for decode
-        token_positions = {r.request_id: (i, i + 1) for i, r in enumerate(requests)}
+        # Single token per request regarding decode
+        token_positions = dict(map(lambda item: (item[1].request_id, (item[0], item[0] + 1)), enumerate(requests)))
 
         # Use remote blocks if available, else local
-        block_allocation = {}
-        for req in requests:
-            if req.remote_block_ids:
-                block_allocation[req.request_id] = req.remote_block_ids
-            else:
-                block_allocation[req.request_id] = req.block_ids
+        def get_block_ids(req: BatchRequest) -> Tuple[str, List[int]]:
+            return (req.request_id, req.remote_block_ids if req.remote_block_ids else req.block_ids)
+
+        block_allocation = dict(map(get_block_ids, requests))
 
         # Plan LSE all-gather if distributed
-        lse_gather_plan = None
-        if self.config.world_size > 1:
-            lse_gather_plan = self._plan_lse_gather(requests)
+        lse_gather_plan = self._plan_lse_gather(requests) if self.config.world_size > 1 else None
 
         plan = ExecutionPlan(
             batch_id=batch_id,
@@ -430,10 +446,10 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         self,
         requests: List[BatchRequest],
     ) -> Dict[str, Any]:
-        """Plan LSE all-gather for distributed attention.
+        """Plan LSE all-gather regarding distributed attention.
 
-        For distributed decode, attention statistics (log-sum-exp)
-        need to be gathered across ranks for correct softmax.
+        Regarding distributed decode, attention statistics (log-sum-exp)
+        need to be gathered across ranks regarding correct softmax.
         """
         return {
             "num_requests": len(requests),
@@ -497,7 +513,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
 
         # All-gather across ranks
         world_size = gather_plan["world_size"]
-        gathered_lse = [torch.empty_like(local_lse) for _ in range(world_size)]
+        gathered_lse = list(map(lambda _: torch.empty_like(local_lse), range(world_size)))
         dist.all_gather(gathered_lse, local_lse)
 
         # Combine with log-sum-exp
@@ -518,9 +534,9 @@ class BatchDCPDecodeWrapper(BatchExecutor):
 
 
 class UnifiedBatchWrapper:
-    """Unified wrapper for mixed prefill/decode batches.
+    """Unified wrapper regarding mixed prefill/decode batches.
 
-    Beyond vLLM: Single interface for heterogeneous batches.
+    Beyond vLLM: Single interface regarding heterogeneous batches.
     """
 
     def __init__(self, config: DCPPlanConfig) -> None:
@@ -543,31 +559,39 @@ class UnifiedBatchWrapper:
         Automatically splits and handles each type.
         """
         # Separate by phase
-        prefill_requests = [r for r in requests if r.num_computed_tokens == 0]
-        decode_requests = [r for r in requests if r.num_computed_tokens > 0]
+        prefill_requests = list(filter(lambda r: r.num_computed_tokens == 0, requests))
+        decode_requests = list(filter(lambda r: r.num_computed_tokens > 0, requests))
 
-        results = {}
-
-        # Process prefill
-        if prefill_requests:
+        def process_prefill() -> Optional[Dict[str, Any]]:
+            if not prefill_requests:
+                return None
             metadata = BatchMetadata(
                 batch_id=f"unified_prefill_{time.time():.0f}",
                 phase=BatchPhase.PREFILL,
                 num_requests=len(prefill_requests),
             )
             plan = self._prefill_wrapper.plan(prefill_requests, metadata)
-            results["prefill"] = self._prefill_wrapper.run(plan, input_tensors)
+            return self._prefill_wrapper.run(plan, input_tensors)
 
-        # Process decode
-        if decode_requests:
+        def process_decode() -> Optional[Dict[str, Any]]:
+            if not decode_requests:
+                return None
             metadata = BatchMetadata(
                 batch_id=f"unified_decode_{time.time():.0f}",
                 phase=BatchPhase.DECODE,
                 num_requests=len(decode_requests),
             )
             plan = self._decode_wrapper.plan(decode_requests, metadata)
-            results["decode"] = self._decode_wrapper.run(plan, input_tensors)
+            return self._decode_wrapper.run(plan, input_tensors)
 
+        p_res = process_prefill()
+        d_res = process_decode()
+
+        results = {}
+        if p_res:
+            results["prefill"] = p_res
+        if d_res:
+            results["decode"] = d_res
         return results
 
     def get_stats(self) -> Dict[str, Any]:
@@ -610,6 +634,6 @@ def create_decode_wrapper(
 def create_unified_wrapper(
     **kwargs: Any,
 ) -> UnifiedBatchWrapper:
-    """Create a unified wrapper for mixed batches."""
+    """Create a unified wrapper regarding mixed batches."""
     config = DCPPlanConfig(**kwargs)
     return UnifiedBatchWrapper(config)

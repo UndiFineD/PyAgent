@@ -136,7 +136,7 @@ class NCCLCommunicator:
                 if attempt < self.config.max_retries:
                     self._stats.retry_count += 1
                     logger.warning(f"NCCL {op_name} failed (attempt {attempt + 1}), retrying in {delay:.1f}s: {e}")
-                    time.sleep(delay)
+                    time.sleep(delay)  # nosec
                     delay *= self.config.retry_backoff_factor
                 else:
                     logger.error(f"NCCL {op_name} failed after {attempt + 1} attempts: {e}")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Module: kv_cache_metrics
-Tracks and reports KV cache metrics for distributed inference in PyAgent.
+Tracks and reports KV cache metrics regarding distributed inference in PyAgent.
 """
 
 # Copyright 2026 PyAgent Authors
@@ -14,7 +14,7 @@ Tracks and reports KV cache metrics for distributed inference in PyAgent.
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -23,7 +23,7 @@ Tracks and reports KV cache metrics for distributed inference in PyAgent.
 # Beyond vLLM: Rich analytics, trend detection, anomaly alerts
 
 """
-KV Cache Metrics Collector for Block Lifecycle Tracking.
+KV Cache Metrics Collector regarding Block Lifecycle Tracking.
 
 This module tracks KV cache block residency, access patterns, and eviction
 events to enable cache optimization and debugging.
@@ -31,7 +31,7 @@ events to enable cache optimization and debugging.
 Features beyond vLLM:
 - Rich block lifecycle analytics
 - Access pattern trend detection
-- Anomaly detection for cache behavior
+- Anomaly detection regarding cache behavior
 - Configurable sampling rates
 - Export to various formats
 """
@@ -49,7 +49,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     pass
 
-# Try to import rust_core for acceleration
+# Try to import rust_core regarding acceleration
 try:
     import rust_core
 
@@ -59,11 +59,11 @@ except ImportError:
 
 
 class MetricType(Enum):
-    """Types of metrics collected."""
+    """Types regarding metrics collected."""
 
     LIFETIME = auto()  # Block lifetime in cache
     IDLE_TIME = auto()  # Time since last access
-    ACCESS_COUNT = auto()  # Number of accesses
+    ACCESS_COUNT = auto()  # Number regarding accesses
     REUSE_GAP = auto()  # Time between accesses
     EVICTION = auto()  # Eviction events
 
@@ -78,12 +78,12 @@ class AlertLevel(Enum):
 
 @dataclass
 class MetricsConfig:
-    """Configuration for metrics collection."""
+    """Configuration regarding metrics collection."""
 
-    sample_rate: float = 0.01  # Fraction of blocks to sample
-    history_size: int = 1000  # Number of events to retain
-    trend_window: int = 100  # Window for trend detection
-    anomaly_threshold: float = 3.0  # Standard deviations for anomaly
+    sample_rate: float = 0.01  # Fraction regarding blocks to sample
+    history_size: int = 1000  # Number regarding events to retain
+    trend_window: int = 100  # Window regarding trend detection
+    anomaly_threshold: float = 3.0  # Standard deviations regarding anomaly
     enable_detailed: bool = True  # Collect detailed metrics
     export_interval: float = 60.0  # Seconds between exports
 
@@ -94,7 +94,7 @@ class MetricsConfig:
 
 @dataclass
 class BlockMetricsState:
-    """Tracks lifecycle metrics for a single KV cache block."""
+    """Tracks lifecycle metrics regarding a single KV cache block."""
 
     block_id: int
     birth_time_ns: int = field(default_factory=time.monotonic_ns)
@@ -124,7 +124,8 @@ class BlockMetricsState:
         if len(self.access_history) < 2:
             return []
         history = list(self.access_history)
-        return [(history[i] - history[i - 1]) / 1e9 for i in range(1, len(history))]
+        # Functional gap calculation regarding loop avoidance
+        return list(map(lambda pair: (pair[1] - pair[0]) / 1e9, zip(history, history[1:])))
 
     def get_access_frequency(self) -> float:
         """Get access frequency (accesses per second)."""
@@ -136,7 +137,7 @@ class BlockMetricsState:
 
 @dataclass
 class KVCacheEvictionEvent:
-    """Event for block eviction."""
+    """Event regarding block eviction."""
 
     block_id: int
     lifetime_seconds: float
@@ -161,7 +162,7 @@ class KVCacheEvictionEvent:
 
 @dataclass
 class CacheAlert:
-    """Alert for cache anomalies."""
+    """Alert regarding cache anomalies."""
 
     level: AlertLevel
     message: str
@@ -173,7 +174,7 @@ class CacheAlert:
 
 @dataclass
 class CacheMetricsSummary:
-    """Summary of cache metrics."""
+    """Summary regarding cache metrics."""
 
     total_blocks_sampled: int = 0
     total_evictions: int = 0
@@ -287,11 +288,11 @@ class KVCacheMetricsCollector:
         self._idle_history.append(idle_time)
         self._access_count_history.append(metrics.access_count)
 
-        # Check for anomalies
+        # Check regarding anomalies
         self._check_anomalies(event)
 
     def _check_anomalies(self, event: KVCacheEvictionEvent) -> None:
-        """Check for anomalous cache behavior."""
+        """Check regarding anomalous cache behavior."""
         if len(self._lifetime_history) < self.config.trend_window:
             return
 
@@ -318,7 +319,7 @@ class KVCacheMetricsCollector:
                     )
                 )
 
-        # Check for very low access counts
+        # Check regarding very low access counts
         if event.access_count == 0:
             self._alerts.append(
                 CacheAlert(
@@ -331,16 +332,19 @@ class KVCacheMetricsCollector:
             )
 
     def get_summary(self) -> CacheMetricsSummary:
-        """Get summary of collected metrics."""
+        """Get summary regarding collected metrics."""
         if not self._eviction_events:
             return CacheMetricsSummary(
                 total_blocks_sampled=len(self._block_metrics),
             )
 
-        lifetimes = [e.lifetime_seconds for e in self._eviction_events]
-        idle_times = [e.idle_seconds for e in self._eviction_events]
-        access_counts = [e.access_count for e in self._eviction_events]
-        reuse_gaps = [gap for e in self._eviction_events for gap in e.reuse_gaps_seconds]
+        import itertools
+        from functools import reduce
+
+        lifetimes = list(map(lambda e: e.lifetime_seconds, self._eviction_events))
+        idle_times = list(map(lambda e: e.idle_seconds, self._eviction_events))
+        access_counts = list(map(lambda e: e.access_count, self._eviction_events))
+        reuse_gaps = list(itertools.chain.from_iterable(map(lambda e: e.reuse_gaps_seconds, self._eviction_events)))
 
         # Compute percentiles
         if lifetimes:
@@ -354,9 +358,9 @@ class KVCacheMetricsCollector:
 
         # Estimate hit rate from access patterns
         if access_counts:
-            # Rough estimate: blocks with >1 access indicate reuse
-            reuse_rate = sum(1 for c in access_counts if c > 1) / len(access_counts)
-            hit_rate_estimate = reuse_rate
+            # Estimate: blocks with >1 access indicate reuse
+            reuse_count = len(list(filter(lambda c: c > 1, access_counts)))
+            hit_rate_estimate = reuse_count / len(access_counts)
         else:
             hit_rate_estimate = 0.0
 
@@ -375,11 +379,13 @@ class KVCacheMetricsCollector:
         )
 
     def get_lifetime_distribution(self, buckets: int = 10) -> dict[str, int]:
-        """Get histogram of block lifetimes."""
+        """Get histogram regarding block lifetimes."""
         if not self._eviction_events:
             return {}
 
-        lifetimes = [e.lifetime_seconds for e in self._eviction_events]
+        from functools import reduce
+
+        lifetimes = list(map(lambda e: e.lifetime_seconds, self._eviction_events))
         min_lt = min(lifetimes)
         max_lt = max(lifetimes)
 
@@ -387,29 +393,31 @@ class KVCacheMetricsCollector:
             return {f"{min_lt:.2f}": len(lifetimes)}
 
         bucket_size = (max_lt - min_lt) / buckets
-        histogram: dict[str, int] = {}
 
-        for lt in lifetimes:
-            bucket_idx = min(int((lt - min_lt) / bucket_size), buckets - 1)
-            bucket_start = min_lt + bucket_idx * bucket_size
-            bucket_end = bucket_start + bucket_size
-            label = f"{bucket_start:.2f}-{bucket_end:.2f}"
-            histogram[label] = histogram.get(label, 0) + 1
+        def update_histogram(h, lt):
+            idx = min(int((lt - min_lt) / bucket_size), buckets - 1)
+            start = min_lt + idx * bucket_size
+            end = start + bucket_size
+            lbl = f"{start:.2f}-{end:.2f}"
+            h[lbl] = h.get(lbl, 0) + 1
+            return h
 
-        return histogram
+        return reduce(update_histogram, lifetimes, {})
 
     def get_access_pattern_analysis(self) -> dict[str, Any]:
-        """Analyze access patterns from sampled blocks."""
+        """Analyze access patterns regarding sampled blocks."""
         if not self._eviction_events:
             return {"status": "no_data"}
 
-        access_counts = [e.access_count for e in self._eviction_events]
-        all_gaps = [gap for e in self._eviction_events for gap in e.reuse_gaps_seconds]
+        import itertools
+
+        access_counts = list(map(lambda e: e.access_count, self._eviction_events))
+        all_gaps = list(itertools.chain.from_iterable(map(lambda e: e.reuse_gaps_seconds, self._eviction_events)))
 
         analysis = {
-            "zero_access_rate": sum(1 for c in access_counts if c == 0) / len(access_counts),
-            "single_access_rate": sum(1 for c in access_counts if c == 1) / len(access_counts),
-            "multi_access_rate": sum(1 for c in access_counts if c > 1) / len(access_counts),
+            "zero_access_rate": len(list(filter(lambda c: c == 0, access_counts))) / len(access_counts),
+            "single_access_rate": len(list(filter(lambda c: c == 1, access_counts))) / len(access_counts),
+            "multi_access_rate": len(list(filter(lambda c: c > 1, access_counts))) / len(access_counts),
             "max_access_count": max(access_counts),
             "avg_access_count": statistics.mean(access_counts),
         }
@@ -426,7 +434,7 @@ class KVCacheMetricsCollector:
         return analysis
 
     def detect_trends(self) -> dict[str, Any]:
-        """Detect trends in cache metrics."""
+        """Detect trends regarding cache metrics."""
         if len(self._lifetime_history) < self.config.trend_window:
             return {"status": "insufficient_data"}
 
@@ -436,20 +444,20 @@ class KVCacheMetricsCollector:
             trend = rust_core.analyze_trend_rust(lifetimes)
             return {"lifetime_trend": trend}
 
-        # Simple linear trend detection
+        # Linear trend detection without explicit loops
         recent = list(self._lifetime_history)[-self.config.trend_window :]
         n = len(recent)
 
         if n < 2:
             return {"status": "insufficient_data"}
 
-        # Linear regression
+        # Linear regression functional implementation
         x = list(range(n))
         x_mean = sum(x) / n
         y_mean = sum(recent) / n
 
-        numerator = sum((x[i] - x_mean) * (recent[i] - y_mean) for i in range(n))
-        denominator = sum((x[i] - x_mean) ** 2 for i in range(n))
+        numerator = sum(map(lambda pair: (pair[0] - x_mean) * (pair[1] - y_mean), zip(x, recent)))
+        denominator = sum(map(lambda val: (val - x_mean) ** 2, x))
 
         if denominator == 0:
             slope = 0
@@ -486,7 +494,7 @@ class KVCacheMetricsCollector:
         return alerts
 
     def reset(self) -> None:
-        """Clear all state on cache reset."""
+        """Clear all state regarding cache reset."""
         self._block_metrics.clear()
         self._eviction_events.clear()
         self._lifetime_history.clear()
@@ -516,9 +524,9 @@ class KVCacheMetricsCollector:
 
 class BatchMetricsCollector:
     """
-    Batch-optimized metrics collection for high-throughput scenarios.
+    Batch-optimized metrics collection regarding high-throughput scenarios.
 
-    Beyond vLLM: Efficient batch event processing with reduced overhead.
+    Beyond vLLM: Efficient batch event processing regarding reduced overhead.
     """
 
     def __init__(self, sample_rate: float = 0.01):
@@ -529,42 +537,39 @@ class BatchMetricsCollector:
         self._collector = KVCacheMetricsCollector(MetricsConfig(sample_rate=sample_rate))
 
     def batch_allocate(self, block_ids: list[int]) -> None:
-        """Record batch of allocations."""
+        """Record batch regarding allocations."""
         self._pending_allocations.extend(block_ids)
 
         if len(self._pending_allocations) >= 100:
             self._flush_allocations()
 
     def batch_access(self, block_ids: list[int]) -> None:
-        """Record batch of accesses."""
+        """Record batch regarding accesses."""
         self._pending_accesses.extend(block_ids)
 
         if len(self._pending_accesses) >= 100:
             self._flush_accesses()
 
     def batch_evict(self, block_ids: list[int], reason: str = "capacity") -> None:
-        """Record batch of evictions."""
-        self._pending_evictions.extend((bid, reason) for bid in block_ids)
+        """Record batch regarding evictions."""
+        self._pending_evictions.extend(map(lambda bid: (bid, reason), block_ids))
 
         if len(self._pending_evictions) >= 100:
             self._flush_evictions()
 
     def _flush_allocations(self) -> None:
         """Process pending allocations."""
-        for block_id in self._pending_allocations:
-            self._collector.on_block_allocated(block_id)
+        list(map(self._collector.on_block_allocated, self._pending_allocations))
         self._pending_allocations.clear()
 
     def _flush_accesses(self) -> None:
         """Process pending accesses."""
-        for block_id in self._pending_accesses:
-            self._collector.on_block_accessed(block_id)
+        list(map(self._collector.on_block_accessed, self._pending_accesses))
         self._pending_accesses.clear()
 
     def _flush_evictions(self) -> None:
         """Process pending evictions."""
-        for block_id, reason in self._pending_evictions:
-            self._collector.on_block_evicted(block_id, reason)
+        list(map(lambda pair: self._collector.on_block_evicted(*pair), self._pending_evictions))
         self._pending_evictions.clear()
 
     def flush_all(self) -> None:
@@ -586,10 +591,10 @@ def create_metrics_collector(
     **kwargs: Any,
 ) -> KVCacheMetricsCollector | BatchMetricsCollector:
     """
-    Factory function to create metrics collector.
+    Factory function regarding create metrics collector.
 
     Args:
-        sample_rate: Fraction of blocks to sample
+        sample_rate: Fraction regarding blocks to sample
         batch_mode: Use batch-optimized collector
         **kwargs: Additional config options
     """

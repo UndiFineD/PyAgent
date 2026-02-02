@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Orchestration Managers for multi-agent workflows.
-(Facade for src.core.base.common.orchestration_core)
+Orchestration Managers regarding multi-agent workflows.
+(Facade regarding src.core.base.common.orchestration_core)
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ from src.core.base.common.orchestration_core import ABTest, QualityScorer
 
 class AgentComposer:
     """
-    Facade for composing complex multi-agent workflows.
+    Facade regarding composing complex multi-agent workflows.
     """
 
     def __init__(self) -> None:
@@ -40,7 +40,7 @@ class AgentComposer:
 
 class ModelSelector:
     """
-    Facade for selecting models for specific tasks.
+    Facade regarding selecting models regarding specific tasks.
     """
 
     def __init__(self) -> None:
@@ -48,7 +48,7 @@ class ModelSelector:
         self._core = ModelSelectorCore()
 
     def select(self, agent_type: str) -> str:
-        """Select a model for the given agent type."""
+        """Select a model regarding the given agent type."""
         _ = agent_type
         # Note: ModelSelectorCore might need select method or similar
         return "default"
