@@ -21,7 +21,9 @@ Proposer logic for EAGLE speculative decoding.
 from __future__ import annotations
 
 import math
+import random
 import threading
+from typing import TYPE_CHECKING
 
 from .base import TreeAttentionMetadata
 from .config import EagleConfig, EagleMethod
@@ -112,30 +114,43 @@ class EagleProposer:
         """Tree-based draft proposal."""
         tree = SpeculativeTree.create(root_token_id=input_ids[-1] if input_ids else 0, max_depth=num_proposals)
 
-        proposals = []
+        proposals: list[DraftOutput] = []
         nodes_to_expand = [tree.root]
 
         for _ in range(num_proposals):
             if not nodes_to_expand:
                 break
 
-            batch_ids = [node.token_id for node in nodes_to_expand]
-            batch_positions = [positions[-1] + node.depth for node in nodes_to_expand]
-
-            output = self.draft_model.forward(batch_ids, batch_positions, hidden_states)
+            output = self._expand_tree_step(nodes_to_expand, positions, hidden_states, tree)
             proposals.append(output)
-
-            next_nodes = []
-            for i, node in enumerate(nodes_to_expand):
-                if i < len(output.logits):
-                    logits = output.logits[i]
-                    top_k = self._get_top_k_candidates(logits, k=4)
-                    children = tree.expand(node, top_k)
-                    next_nodes.extend(children)
-
-            nodes_to_expand = next_nodes
+            
+            # Update nodes_to_expand for next step
+            nodes_to_expand = [
+                child for node in nodes_to_expand for child in node.children
+            ]
 
         return proposals
+
+    def _expand_tree_step(
+        self,
+        nodes_to_expand: list,
+        positions: list[int],
+        hidden_states: list[list[float]] | None,
+        tree: SpeculativeTree
+    ) -> DraftOutput:
+        """Helper to expand one level of the speculative tree."""
+        batch_ids = [node.token_id for node in nodes_to_expand]
+        batch_positions = [positions[-1] + node.depth for node in nodes_to_expand]
+
+        output = self.draft_model.forward(batch_ids, batch_positions, hidden_states)
+
+        for i, node in enumerate(nodes_to_expand):
+            if i < len(output.logits):
+                logits = output.logits[i]
+                top_k = self._get_top_k_candidates(logits, k=4)
+                tree.expand(node, top_k)
+        
+        return output
 
     def _get_top_k_candidates(self, logits: list[float], k: int = 4) -> list[tuple[int, float]]:
         """Get top-k token candidates."""
@@ -166,17 +181,14 @@ class EagleProposer:
         num_tokens = sum(len(path) for path in paths)
 
         tree_mask = [[False] * num_tokens for _ in range(num_tokens)]
-        tree_positions = []
-        parent_indices = []
+        tree_positions: list[int] = []
+        parent_indices: list[int] = []
 
         token_idx = 0
         for path in paths:
-            for i, _ in enumerate(path):
-                tree_positions.append(base_seq_len + i)
-                parent_indices.append(token_idx - 1 if i > 0 else -1)
-                for j in range(i + 1):
-                    tree_mask[token_idx][token_idx - j] = True
-                token_idx += 1
+            token_idx = self._fill_path_metadata(
+                path, base_seq_len, token_idx, tree_mask, tree_positions, parent_indices
+            )
 
         return TreeAttentionMetadata(
             query_start_loc=[0],
@@ -187,6 +199,27 @@ class EagleProposer:
             tree_positions=tree_positions,
             parent_indices=parent_indices,
         )
+
+    def _fill_path_metadata(
+        self,
+        path: list,
+        base_seq_len: int,
+        start_token_idx: int,
+        tree_mask: list[list[bool]],
+        tree_positions: list[int],
+        parent_indices: list[int]
+    ) -> int:
+        """Fill metadata for a single path in the tree."""
+        path_len = len(path)
+        token_idx = start_token_idx
+        for i in range(path_len):
+            tree_positions.append(base_seq_len + i)
+            parent_indices.append(token_idx - 1 if i > 0 else -1)
+            # Optimization: Causal mask within path tokens
+            for j in range(i + 1):
+                tree_mask[token_idx][start_token_idx + j] = True
+            token_idx += 1
+        return token_idx
 
     def verify_and_accept(
         self,
@@ -204,10 +237,8 @@ class EagleProposer:
 
         accepted = []
         for draft_token, draft_lp, target_lp in zip(draft_tokens, draft_logprobs, target_logprobs):
-            import random
-
-            ratio = math.exp(target_lp - draft_lp)
-            if random.random() < min(1.0, ratio):
+            ratio = math.exp(min(0.0, target_lp - draft_lp))
+            if random.random() < ratio:
                 accepted.append(draft_token)
             else:
                 break
@@ -226,10 +257,8 @@ class EagleProposer:
 
         extrapolated = []
         for step in range(num_steps):
-            new_state = []
-            for i, val_last in enumerate(last):
-                delta = val_last - prev[i]
-                new_state.append(val_last + delta * (step + 1))
+            factor = step + 1
+            new_state = [val_last + (val_last - prev[i]) * factor for i, val_last in enumerate(last)]
             extrapolated.append(new_state)
         return extrapolated
 

@@ -37,11 +37,11 @@ class JsonSchemaGrammar(GrammarEngine):
     def __init__(
         self,
         vocab_size: int,
-        token_strings: Optional[Dict[int, str]] = None,
+        token_strings: Optional[dict[int, str]] = None,
         eos_token_id: Optional[int] = None,
     ) -> None:
         super().__init__(vocab_size, token_strings, eos_token_id)
-        self._schema_cache: Dict[str, FSMTransitionTable] = {}
+        self._schema_cache: dict[str, FSMTransitionTable] = {}
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
         """Build FSM from JSON Schema."""
@@ -56,7 +56,7 @@ class JsonSchemaGrammar(GrammarEngine):
         except json.JSONDecodeError:
             return self._build_generic_json_fsm()
 
-    def _schema_to_fsm(self, schema: Dict[str, Any]) -> FSMTransitionTable:
+    def _schema_to_fsm(self, schema: dict[str, Any]) -> FSMTransitionTable:
         """Convert JSON Schema to FSM."""
         schema_type = schema.get("type", "any")
 
@@ -74,7 +74,7 @@ class JsonSchemaGrammar(GrammarEngine):
             return self._build_null_fsm()
         return self._build_generic_json_fsm()
 
-    def _build_object_fsm(self, _schema: Dict) -> FSMTransitionTable:
+    def _build_object_fsm(self, _schema: dict[str, Any]) -> FSMTransitionTable:
         """Build FSM for JSON object."""
         fsm = FSMTransitionTable(num_states=7, initial_state=0, accepting_states=frozenset({6}))
         fsm.add_transition(0, "{", 1)

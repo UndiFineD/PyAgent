@@ -24,7 +24,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -44,9 +44,9 @@ class StopMatch:
 def check_stop_strings(
     output_text: str,
     new_char_count: int,
-    stop: List[str],
+    stop: list[str],
     include_in_output: bool,
-) -> Optional[Tuple[str, int]]:
+) -> tuple[str, int] | None:
     """
     Check if any stop strings appear in the output text.
 
@@ -83,9 +83,9 @@ def check_stop_strings(
 def check_stop_strings_rust(
     output_text: str,
     new_char_count: int,
-    stop: List[str],
+    stop: list[str],
     include_in_output: bool,
-) -> Optional[Tuple[str, int]]:
+) -> tuple[str, int] | None:
     """
     Rust-accelerated stop string checking.
     Falls back to Python implementation.
@@ -107,16 +107,16 @@ class IncrementalDetokenizer(ABC):
     """
 
     def __init__(self) -> None:
-        self.token_ids: List[int] = []
+        self.token_ids: list[int] = []
         self.output_text: str = ""
         self._last_output_text_offset: int = 0
 
     @property
-    def output_token_ids(self) -> List[int]:
+    def output_token_ids(self) -> list[int]:
         """Get output token IDs (excluding prompt)."""
         return self.token_ids
 
-    def update(self, new_token_ids: List[int], _stop_terminated: bool) -> Optional[str]:
+    def update(self, new_token_ids: list[int], _stop_terminated: bool) -> str | None:
         """
         Update with new token IDs.
 
@@ -168,8 +168,9 @@ class IncrementalDetokenizer(ABC):
 class NoOpDetokenizer(IncrementalDetokenizer):
     """No-op detokenizer when tokenizer is not available."""
 
-    def update(self, new_token_ids: List[int], _stop_terminated: bool) -> Optional[str]:
+    def update(self, new_token_ids: list[int], _stop_terminated: bool) -> str | None:
         self.token_ids.extend(new_token_ids)
+        return None
 
     def get_next_output_text(self, _finished: bool, _delta: bool) -> str:
         return ""
@@ -191,7 +192,7 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
             sampling_params = {}
 
         self.request_id = getattr(request, "request_id", "unknown")
-        self.stop: List[str] = sampling_params.get("stop", []) or []
+        self.stop: list[str] = sampling_params.get("stop", []) or []
         self.include_stop_str_in_output: bool = sampling_params.get("include_stop_str_in_output", False)
         self.skip_special_tokens: bool = sampling_params.get("skip_special_tokens", True)
         self.min_tokens: int = sampling_params.get("min_tokens", 0)
@@ -199,7 +200,7 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         # Stop buffer - keep last N chars to check for stop strings spanning tokens
         self.stop_buffer_length: int = max((len(s) for s in self.stop), default=0)
 
-    def update(self, new_token_ids: List[int], stop_terminated: bool) -> Optional[str]:
+    def update(self, new_token_ids: list[int], stop_terminated: bool) -> str | None:
         """Update with new tokens and check for stop strings."""
         if not new_token_ids:
             return None
@@ -213,14 +214,14 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
 
         return self._check_for_stop_strings(stop_check_offset)
 
-    def _prepare_tokens_for_detokenization(self, new_token_ids: List[int], stop_terminated: bool) -> List[int]:
+    def _prepare_tokens_for_detokenization(self, new_token_ids: list[int], stop_terminated: bool) -> list[int]:
         """Prepare tokens for detokenization, handling stop termination."""
         if stop_terminated and not self.include_stop_str_in_output:
             # Skip last token from detokenization
             return new_token_ids[:-1]
         return new_token_ids
 
-    def _detokenize_tokens(self, token_ids: List[int]) -> int:
+    def _detokenize_tokens(self, token_ids: list[int]) -> int:
         """Detokenize the given tokens and return stop check offset."""
         stop_check_offset = len(self.output_text)
         for token_id in token_ids:
@@ -232,12 +233,12 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
                 stop_check_offset = len(self.output_text)
         return stop_check_offset
 
-    def _check_for_stop_strings(self, stop_check_offset: int) -> Optional[str]:
+    def _check_for_stop_strings(self, stop_check_offset: int) -> str | None:
         """Check for stop strings and truncate output if needed."""
         if not self.stop or len(self.output_token_ids) <= self.min_tokens:
             return None
 
-        result = check_stop_strings(
+        result = check_stop_strings_rust(
             output_text=self.output_text,
             new_char_count=len(self.output_text) - stop_check_offset,
             stop=self.stop,
@@ -306,7 +307,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         )
 
         # Track added tokens for special handling
-        self.added_token_ids: Dict[int, str] = {}
+        self.added_token_ids: dict[int, str] = {}
         self.last_special: bool = False
 
         if hasattr(tokenizer, "get_added_tokens_decoder"):
@@ -314,8 +315,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
                 for tid, tok in tokenizer.get_added_tokens_decoder().items():
                     content = getattr(tok, "content", str(tok))
                     self.added_token_ids[tid] = content
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         # Prime with prompt tokens
@@ -326,7 +326,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
             for tid in prompt_suffix:
                 self._protected_step(tid)
 
-    def _protected_step(self, next_token_id: int) -> Optional[str]:
+    def _protected_step(self, next_token_id: int) -> str | None:
         """Decode one token with error protection."""
         try:
             self._decode_buffer.append(next_token_id)
@@ -354,11 +354,11 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
             return ""
 
         except (OverflowError, TypeError) as e:
-            logger.warning(f"Invalid token id {next_token_id}: {e}")
+            logger.warning("Invalid token id %s: %s", next_token_id, e)
             return None
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:  # pylint: disable=broad-exception-caught
             if str(e).startswith(INVALID_PREFIX_ERR_MSG):
-                logger.warning(f"Invalid prefix in request {self.request_id}, resetting")
+                logger.warning("Invalid prefix in request %s, resetting", self.request_id)
                 # Reset decode state
                 self._decode_buffer = [next_token_id]
                 self._last_decoded = ""
@@ -427,7 +427,7 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         self.spaces_between_special_tokens = sampling_params.get("spaces_between_special_tokens", True)
 
     @property
-    def output_token_ids(self) -> List[int]:
+    def output_token_ids(self) -> list[int]:
         """Get output token IDs (excluding prompt)."""
         return self.token_ids[self.prompt_len :] if self.prompt_len else self.token_ids
 
@@ -441,8 +441,7 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
             )
             if isinstance(new_tokens, str):
                 new_tokens = [new_tokens]
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:  # pylint: disable=broad-exception-caught
             new_tokens = [""]
 
         # Handle None tokens
@@ -486,7 +485,7 @@ def validate_utf8_rust(text: str) -> bool:
         from rust_core import validate_utf8_rust as _rust_impl
 
         return _rust_impl(text)
-    except ImportError:
+    except (ImportError, AttributeError):
         return validate_utf8(text)
 
 

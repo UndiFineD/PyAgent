@@ -30,8 +30,6 @@ Based on vLLM v1 patterns with PyAgent innovations.
 
 from __future__ import annotations
 
-from _thread import LockType
-from _thread import LockType
 import contextlib
 import threading
 from collections import defaultdict
@@ -39,6 +37,8 @@ from dataclasses import dataclass
 
 with contextlib.suppress(ImportError):
     import rust_core
+
+from _thread import LockType
 
 HAS_RUST: bool = "rust_core" in globals()
 
@@ -172,8 +172,15 @@ class NgramProposer:
             return NgramProposalResult(draft_tokens=[], confidence=0.0)
 
         excluded: set[int] = excluded_tokens or set()
+        best_match: NgramMatch | None = self._search_for_best_match(token_ids, excluded)
 
-        # Try different n-gram lengths from max to min
+        if best_match is None:
+            return NgramProposalResult(draft_tokens=[], confidence=0.0)
+
+        return self._build_proposal_result(best_match)
+
+    def _search_for_best_match(self, token_ids: list[int], excluded: set[int]) -> NgramMatch | None:
+        """Search across different n-gram lengths for the best match."""
         best_match: NgramMatch | None = None
 
         for n in range(self.max_n, self.min_n - 1, -1):
@@ -183,32 +190,42 @@ class NgramProposer:
             prefix: list[int] = token_ids[-n:]
             match: NgramMatch | None = self._find_match(token_ids[:-1], prefix, excluded)
 
-            if match and len(match.following_tokens) > (len(best_match.following_tokens) if best_match else 0):
+            if match and self._is_better_match(match, best_match):
                 best_match = match
 
-        if best_match is None:
-            return NgramProposalResult(draft_tokens=[], confidence=0.0)
+        return best_match
 
-        # Limit to k tokens
-        draft_tokens: list[int] = best_match.following_tokens[: self.k]
-        confidence: float = best_match.score * (len(draft_tokens) / self.k)
+    def _is_better_match(self, new_match: NgramMatch, old_match: NgramMatch | None) -> bool:
+        """Heuristic for comparing matches."""
+        if old_match is None:
+            return True
+        return len(new_match.following_tokens) > len(old_match.following_tokens)
 
-        return NgramProposalResult(draft_tokens=draft_tokens, match_info=best_match, confidence=confidence)
+    def _build_proposal_result(self, match: NgramMatch) -> NgramProposalResult:
+        """Build NgramProposalResult from a match."""
+        draft_tokens: list[int] = match.following_tokens[: self.k]
+        confidence: float = match.score * (len(draft_tokens) / self.k) if self.k > 0 else 0.0
+        return NgramProposalResult(draft_tokens=draft_tokens, match_info=match, confidence=confidence)
 
     def _find_match(self, context: list[int], prefix: list[int], excluded: set[int]) -> NgramMatch | None:
         """Find best matching n-gram in context."""
-        if HAS_RUST and hasattr(rust_core, "ngram_find_match_rust"):
-            if result := getattr(rust_core, "ngram_find_match_rust")(context, prefix, list(excluded), self.k):
-                pos, length, following = result
-                return NgramMatch(
-                    position=pos,
-                    length=length,
-                    following_tokens=following,
-                    score=self._compute_score(pos, len(context)),
-                )
-            return None
+        if HAS_RUST:
+            rust_fn = getattr(rust_core, "ngram_find_match_rust", None)
+            if rust_fn:
+                if result := rust_fn(context, prefix, list(excluded), self.k):
+                    pos, length, following = result
+                    return NgramMatch(
+                        position=pos,
+                        length=length,
+                        following_tokens=following,
+                        score=self._compute_score(pos, len(context)),
+                    )
+                return None
 
-        # Python implementation
+        return self._find_match_python(context, prefix, excluded)
+
+    def _find_match_python(self, context: list[int], prefix: list[int], excluded: set[int]) -> NgramMatch | None:
+        """Python implementation of n-gram matching."""
         n: int = len(prefix)
         best_pos = -1
         best_following: list[int] = []
@@ -314,15 +331,18 @@ class NgramProposer:
         if len(token_ids) < self.min_n:
             return NgramProposalResult(draft_tokens=[], confidence=0.0)
 
-        if HAS_RUST and hasattr(rust_core, "ngram_fuzzy_match_rust"):
-            if result := getattr(rust_core, "ngram_fuzzy_match_rust")(
-                token_ids[:-1], token_ids[-self.max_n :], self.k, max_distance
-            ):
-                draft_tokens, score = result
-                return NgramProposalResult(draft_tokens=draft_tokens, confidence=score)
-            return NgramProposalResult(draft_tokens=[], confidence=0.0)
+        if HAS_RUST:
+            rust_fn = getattr(rust_core, "ngram_fuzzy_match_rust", None)
+            if rust_fn:
+                if result := rust_fn(token_ids[:-1], token_ids[-self.max_n :], self.k, max_distance):
+                    draft_tokens, score = result
+                    return NgramProposalResult(draft_tokens=draft_tokens, confidence=score)
+                return NgramProposalResult(draft_tokens=[], confidence=0.0)
 
-        # Python implementation with simple fuzzy matching
+        return self._propose_fuzzy_python(token_ids, max_distance)
+
+    def _propose_fuzzy_python(self, token_ids: list[int], max_distance: int = 1) -> NgramProposalResult:
+        """Python implementation of fuzzy n-gram matching."""
         context: list[int] = token_ids[:-1]
         prefix: list[int] = token_ids[-self.max_n :]
         n: int = len(prefix)
@@ -346,7 +366,8 @@ class NgramProposer:
                     best_following = following
                     best_score: float = score
 
-        return NgramProposalResult(draft_tokens=best_following, confidence=best_score * (len(best_following) / self.k))
+        score_norm: float = best_score * (len(best_following) / self.k) if self.k > 0 else 0.0
+        return NgramProposalResult(draft_tokens=best_following, confidence=score_norm)
 
     def _hamming_distance(self, a: list[int], b: list[int]) -> int:
         """Compute Hamming distance between two sequences."""
@@ -417,11 +438,15 @@ class PromptLookupProposer:
         if not generated_tokens:
             return []
 
-        if HAS_RUST and hasattr(rust_core, "prompt_lookup_propose_rust"):
-            return getattr(rust_core, "prompt_lookup_propose_rust")(
-                prompt_tokens, generated_tokens, self.min_len, self.max_len, self.k
-            )
+        if HAS_RUST:
+            rust_fn = getattr(rust_core, "prompt_lookup_propose_rust", None)
+            if rust_fn:
+                return rust_fn(prompt_tokens, generated_tokens, self.min_len, self.max_len, self.k)
 
+        return self._propose_python(prompt_tokens, generated_tokens)
+
+    def _propose_python(self, prompt_tokens: list[int], generated_tokens: list[int]) -> list[int]:
+        """Python implementation of prompt lookup."""
         # Try different suffix lengths
         for suffix_len in range(self.max_len, self.min_len - 1, -1):
             if len(generated_tokens) < suffix_len:
@@ -429,8 +454,8 @@ class PromptLookupProposer:
 
             suffix: list[int] = generated_tokens[-suffix_len:]
 
-            # Search in prompt
-            for i in range(len(prompt_tokens) - suffix_len):
+            # Search in prompt from end
+            for i in range(len(prompt_tokens) - suffix_len, -1, -1):
                 if prompt_tokens[i : i + suffix_len] == suffix:
                     # Found match, return following tokens
                     start: int = i + suffix_len
