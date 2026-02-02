@@ -171,4 +171,3 @@ class IntelligenceOrchestrator:
                         }
                     )
         return tasks
-        return tasks

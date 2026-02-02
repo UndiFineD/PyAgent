@@ -38,7 +38,7 @@ class LogprobsProcessor:
 
     def process_logits(
         self, logits: np.ndarray, token_ids: np.ndarray, tokenizer: Optional[Any] = None
-    ) -> Union[FlatLogprobs, List[LogprobEntry]]:
+    ) -> FlatLogprobs | list[LogprobEntry]:
         """Process raw logits into formatted logprobs."""
         logprobs = self._log_softmax(logits)
         n = len(token_ids)
@@ -54,6 +54,20 @@ class LogprobsProcessor:
                 top_k_logprobs.astype(np.float32),
             )
 
+        return self._format_structured_entries(
+            n, token_ids, selected_logprobs, top_k_indices, top_k_logprobs, tokenizer
+        )
+
+    def _format_structured_entries(
+        self,
+        n: int,
+        token_ids: np.ndarray,
+        selected_logprobs: np.ndarray,
+        top_k_indices: np.ndarray,
+        top_k_logprobs: np.ndarray,
+        tokenizer: Optional[Any],
+    ) -> list[LogprobEntry]:
+        """Format structured logprob entries."""
         entries = []
         for i in range(n):
             tops = [
@@ -76,8 +90,8 @@ class LogprobsProcessor:
         return entries
 
     def process_batch(
-        self, batch_logits: List[np.ndarray], batch_token_ids: List[np.ndarray], tokenizer: Optional[Any] = None
-    ) -> List[Union[FlatLogprobs, List[LogprobEntry]]]:
+        self, batch_logits: list[np.ndarray], batch_token_ids: list[np.ndarray], tokenizer: Optional[Any] = None
+    ) -> list[FlatLogprobs | list[LogprobEntry]]:
         """Process a batch of logits."""
         return [self.process_logits(logits, tids, tokenizer) for logits, tids in zip(batch_logits, batch_token_ids)]
 
