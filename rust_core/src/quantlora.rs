@@ -41,6 +41,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(pyo3::wrap_pyfunction!(utils::hash_block_tokens_rust, m)?)?;
     m.add_function(pyo3::wrap_pyfunction!(utils::check_stop_strings_rust, m)?)?;
     m.add_function(pyo3::wrap_pyfunction!(utils::detokenize_batch_rust, m)?)?;
+    m.add_function(pyo3::wrap_pyfunction!(utils::validate_utf8_rust, m)?)?;
 
     Ok(())
 }

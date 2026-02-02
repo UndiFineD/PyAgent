@@ -21,7 +21,6 @@ from __future__ import annotations
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
@@ -62,13 +61,13 @@ class SpeculativeProposer(ABC):
 
     @abstractmethod
     def propose(
-        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: np.ndarray | None = None, num_candidates: int = 5
     ) -> SpeculativeTree:
         """Propose speculative tokens."""
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
+    def update(self, accepted_tokens: list[int], rejected_at: int) -> None:
         """Update proposer state after verification."""
         raise NotImplementedError
 
@@ -100,9 +99,11 @@ class NgramProposer(SpeculativeProposer):
         super().__init__(vocab_size, max_speculation_depth)
         self.ngram_order = ngram_order
         self.min_count = min_count
-        self._ngram_tables = {n: {} for n in range(1, ngram_order + 1)}
+        self._ngram_tables: dict[int, dict[tuple[int, ...], dict[int, int]]] = {
+            n: {} for n in range(1, ngram_order + 1)
+        }
 
-    def _update_ngrams(self, tokens: List[int]) -> None:
+    def _update_ngrams(self, tokens: list[int]) -> None:
         """Update ngram tables with newly seen tokens."""
         for n in range(1, self.ngram_order + 1):
             table = self._ngram_tables[n]
@@ -113,9 +114,9 @@ class NgramProposer(SpeculativeProposer):
                     table[context] = {}
                 table[context][next_token] = table[context].get(next_token, 0) + 1
 
-    def _get_predictions(self, context: List[int], top_k: int = 5) -> List[Tuple[int, float]]:
+    def _get_predictions(self, context: list[int], top_k: int = 5) -> list[tuple[int, float]]:
         """Get best token predictions for the current context."""
-        predictions: Dict[int, float] = {}
+        predictions: dict[int, float] = {}
         for n in range(self.ngram_order, 0, -1):
             if len(context) >= n:
                 ctx = tuple(context[-n:])
@@ -130,7 +131,7 @@ class NgramProposer(SpeculativeProposer):
         return sorted(predictions.items(), key=lambda x: x[1], reverse=True)[:top_k]
 
     def propose(
-        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: np.ndarray | None = None, num_candidates: int = 5
     ) -> SpeculativeTree:
         """Propose speculative tokens using n-gram lookup."""
         start = time.perf_counter()
@@ -138,26 +139,28 @@ class NgramProposer(SpeculativeProposer):
         self._update_ngrams(tokens)
 
         tree = SpeculativeTree(root_position=len(tokens))
-
-        def expand_node(parent_idx: int, context: List[int], depth: int) -> None:
+        
+        # Iterative expansion to reduce complexity
+        queue: list[tuple[int, list[int], int]] = [(-1, tokens, 0)]
+        
+        while queue:
+            parent_idx, context, depth = queue.pop(0)
             if depth >= self.max_speculation_depth:
-                return
+                continue
 
             preds = self._get_predictions(context, num_candidates)
             for token_id, prob in preds:
                 idx = tree.add_token(token_id, len(tokens) + depth, parent_idx, prob)
-                # Simple recursive expansion for branching (limited depth)
+                # Limit branching depth for performance
                 if depth < 2:
-                    expand_node(idx, context + [token_id], depth + 1)
-
-        expand_node(-1, tokens, 0)
+                    queue.append((idx, context + [token_id], depth + 1))
 
         self.stats.proposals_made += 1
         self.stats.tokens_proposed += len(tree)
         self.stats.proposal_time_ms += (time.perf_counter() - start) * 1000
         return tree
 
-    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
+    def update(self, accepted_tokens: list[int], rejected_at: int) -> None:
         """Update statistics."""
         self.stats.tokens_accepted += len(accepted_tokens)
 
@@ -177,9 +180,11 @@ class MedusaProposer(SpeculativeProposer):
         self.num_heads = min(num_heads, max_speculation_depth)
         self.top_k_per_head = top_k_per_head
         # Placeholder weights
-        self._head_weights = [np.random.randn(vocab_size) * 0.01 for _ in range(self.num_heads)]
+        self._head_weights: list[np.ndarray] = [
+            np.random.randn(vocab_size) * 0.01 for _ in range(self.num_heads)
+        ]
 
-    def _sample_from_head(self, head_idx: int, top_k: int = 5) -> List[Tuple[int, float]]:
+    def _sample_from_head(self, head_idx: int, top_k: int = 5) -> list[tuple[int, float]]:
         """Sample top-k tokens from a specific head."""
         logits = self._head_weights[head_idx]
         exp_logits = np.exp(logits - np.max(logits))
@@ -190,7 +195,7 @@ class MedusaProposer(SpeculativeProposer):
         return [(int(idx), float(probs[idx])) for idx in top_k_indices]
 
     def propose(
-        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: np.ndarray | None = None, num_candidates: int = 5
     ) -> SpeculativeTree:
         """Propose speculative tokens using Medusa heads."""
         start = time.perf_counter()
@@ -212,6 +217,6 @@ class MedusaProposer(SpeculativeProposer):
         self.stats.proposal_time_ms += (time.perf_counter() - start) * 1000
         return tree
 
-    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
+    def update(self, accepted_tokens: list[int], rejected_at: int) -> None:
         """Update statistics."""
         self.stats.tokens_accepted += len(accepted_tokens)

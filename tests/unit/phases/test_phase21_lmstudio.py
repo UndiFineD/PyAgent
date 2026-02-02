@@ -273,7 +273,7 @@ class TestLMStudioBackend:
             def __init__(self, response: str):
                 self._response = response
 
-            async def respond(self, _chat, _config=None):
+            async def respond(self, _chat, config=None, **kwargs):
                 """Mock respond method for testing."""
                 return self._response
 
