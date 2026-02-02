@@ -63,7 +63,7 @@ class BadWordsPenaltyMode(Enum):
 class TrieNode:
     """Trie node for efficient prefix matching."""
 
-    children: Dict[int, "TrieNode"] = field(default_factory=dict)
+    children: dict[int, TrieNode] = field(default_factory=dict)
     is_end: bool = False
     token_id: int = -1
 
@@ -85,7 +85,7 @@ class TrieNode:
     def find_blocked_tokens(
         self,
         past_tokens: Sequence[int],
-    ) -> Set[int]:
+    ) -> set[int]:
         """Find tokens that should be blocked given past tokens."""
         blocked = set()
 

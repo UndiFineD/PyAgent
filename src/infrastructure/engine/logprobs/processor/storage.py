@@ -89,7 +89,7 @@ class FlatLogprobs:
         return float(np.exp(-np.mean(self.logprobs))) if self.logprobs.size > 0 else 1.0
 
     @classmethod
-    def empty(cls, top_k: int = 5) -> "FlatLogprobs":
+    def empty(cls: type["FlatLogprobs"], top_k: int = 5) -> "FlatLogprobs":
         """Create an empty FlatLogprobs instance."""
         return cls(
             np.array([], dtype=np.int32),
@@ -99,7 +99,7 @@ class FlatLogprobs:
         )
 
     @classmethod
-    def from_entries(cls, entries: Sequence[LogprobEntry], top_k: int = 5) -> "FlatLogprobs":
+    def from_entries(cls: type["FlatLogprobs"], entries: Sequence[LogprobEntry], top_k: int = 5) -> "FlatLogprobs":
         """Create from a sequence of LogprobEntry objects."""
         n = len(entries)
         token_ids = np.zeros(n, dtype=np.int32)

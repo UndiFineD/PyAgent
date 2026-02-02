@@ -73,9 +73,9 @@ class SamplingParams:
     presence_penalty: float = 0.0
     frequency_penalty: float = 0.0
     repetition_penalty: float = 1.0
-    logit_bias: Optional[Dict[int, float]] = None
-    bad_words: Optional[List[List[int]]] = None
-    stop_token_ids: Optional[List[int]] = None
+    logit_bias: dict[int, float] | None = None
+    bad_words: list[list[int]] | None = None
+    stop_token_ids: list[int] | None = None
 
     def __post_init__(self) -> None:
         if self.logit_bias is None:
@@ -88,8 +88,8 @@ class SamplingParams:
 
 # Type aliases for batch updates
 RemovedRequest = int  # Batch index of removed request
-AddedRequest = Tuple[int, SamplingParams, Optional[List[int]], List[int]]
-MovedRequest = Tuple[int, int, MoveDirectionality]
+AddedRequest = tuple[int, SamplingParams, list[int] | None, list[int]]
+MovedRequest = tuple[int, int, MoveDirectionality]
 
 
 @dataclass(frozen=True)
@@ -108,7 +108,7 @@ class BatchUpdate:
     moved: Sequence[MovedRequest]
 
     @classmethod
-    def empty(cls, batch_size: int = 0) -> "BatchUpdate":
+    def empty(cls: type["BatchUpdate"], batch_size: int = 0) -> "BatchUpdate":
         """Create empty batch update."""
         return cls(
             batch_size=batch_size,
@@ -196,7 +196,7 @@ class LogitsProcessor(ABC):
     """
 
     @classmethod
-    def validate_params(cls, sampling_params: SamplingParams) -> None:
+    def validate_params(cls: type["LogitsProcessor"], sampling_params: SamplingParams) -> None:
         """
         Validate sampling params for this processor.
 
@@ -266,7 +266,7 @@ class MinPLogitsProcessor(LogitsProcessor):
         if HAS_NUMPY:
             self.min_p_cpu: ndarray[tuple[int], dtype[floating[_32Bit]]] = np.zeros(max_num_reqs, dtype=np.float32)
         else:
-            self.min_p_cpu: List[float] = [0.0] * max_num_reqs
+            self.min_p_cpu: list[float] = [0.0] * max_num_reqs
 
         self.min_p: Optional[Any] = None
 
@@ -381,7 +381,7 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         self.device: str = device
 
         # Per-request logit biases
-        self.biases: Dict[int, Dict[int, float]] = {}
+        self.biases: dict[int, dict[int, float]] = {}
 
         # Cached tensor representations
         self._bias_indices: Optional[Any] = None
@@ -477,9 +477,9 @@ class CompositeLogitsProcessor(LogitsProcessor):
     with optimized execution order.
     """
 
-    def __init__(self, processors: List[LogitsProcessor]) -> None:
-        self.processors: List[LogitsProcessor] = processors
-        self._argmax_invariant: Optional[bool] = None
+    def __init__(self, processors: list[LogitsProcessor]) -> None:
+        self.processors: list[LogitsProcessor] = processors
+        self._argmax_invariant: bool | None = None
 
     def is_argmax_invariant(self) -> bool:
         """Check if all processors are argmax invariant."""
@@ -531,7 +531,7 @@ class LogitsProcessorRegistry:
     _instance: Optional["LogitsProcessorRegistry"] = None
     _lock: LockType = threading.Lock()
 
-    def __new__(cls) -> "LogitsProcessorRegistry":
+    def __new__(cls: type["LogitsProcessorRegistry"]) -> "LogitsProcessorRegistry":
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
@@ -575,7 +575,7 @@ class LogitsProcessorRegistry:
         return CompositeLogitsProcessor(processors)
 
     @classmethod
-    def get_instance(cls) -> "LogitsProcessorRegistry":
+    def get_instance(cls: type["LogitsProcessorRegistry"]) -> "LogitsProcessorRegistry":
         """Get singleton instance."""
         return cls()
 

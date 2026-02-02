@@ -101,14 +101,14 @@ class SpecDecodeMetadataV2:
         return 0.0
 
     @classmethod
-    def make_dummy(cls, draft_token_ids: list[list[int]]) -> SpecDecodeMetadataV2:
+    def make_dummy(cls: type["SpecDecodeMetadataV2"], draft_token_ids: list[list[int]]) -> "SpecDecodeMetadataV2":
         """Create placeholder metadata for testing."""
         flattened = [t for tokens in draft_token_ids for t in tokens]
         num_draft = [len(tokens) for tokens in draft_token_ids]
         return cls(draft_token_ids=flattened, num_draft_tokens=num_draft)
 
     @classmethod
-    def from_proposals(cls, proposals: list[list[int]]) -> SpecDecodeMetadataV2:
+    def from_proposals(cls: type["SpecDecodeMetadataV2"], proposals: list[list[int]]) -> "SpecDecodeMetadataV2":
         """Create metadata from a list of draft token sequences."""
         flattened = []
         num_draft = []
@@ -148,7 +148,7 @@ class TreeVerificationMetadata:
         return []
 
     @classmethod
-    def from_tree(cls, tree_tokens: list[list[int]], tree_parents: list[list[int]]) -> TreeVerificationMetadata:
+    def from_tree(cls: type["TreeVerificationMetadata"], tree_tokens: list[list[int]], tree_parents: list[list[int]]) -> "TreeVerificationMetadata":
         """Construct verification metadata from tree paths and parent pointers."""
         flat_tokens, flat_parents, flat_depths = [], [], []
         path_lengths, path_starts = [], []

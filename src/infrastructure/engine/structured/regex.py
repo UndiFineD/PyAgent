@@ -90,13 +90,13 @@ class RegexGrammar(GrammarEngine):
 
         return self._build_simple_fsm(spec)
 
-    def _build_nfa(self, parsed) -> Dict:
+    def _build_nfa(self, parsed: Any) -> dict:
         """Build NFA from parsed regex."""
-        nfa: Dict[int, Dict[str, Set[int]]] = {0: {}}
+        nfa: dict[int, dict[str, set[int]]] = {0: {}}
         state_counter: list[int] = [1]
         accepting = set()
 
-        def _process_item(op, av, state: int) -> Set[int]:
+        def _process_item(op: Any, av: Any, state: int) -> set[int]:
             new_end_states = set()
             if state not in nfa:
                 nfa[state] = {}
@@ -153,8 +153,8 @@ class RegexGrammar(GrammarEngine):
                 new_end_states.add(state)
             return new_end_states
 
-        def process_pattern(pattern, start_state: int) -> Set[int]:
-            end_states: Set[int] = {start_state}
+        def process_pattern(pattern: Any, start_state: int) -> set[int]:
+            end_states: set[int] = {start_state}
             for op, av in pattern:
                 new_total_end_states = set()
                 for state in end_states:
@@ -162,11 +162,11 @@ class RegexGrammar(GrammarEngine):
                 end_states = new_total_end_states if new_total_end_states else end_states
             return end_states
 
-        final_states: Set[int] = process_pattern(parsed, 0)
+        final_states: set[int] = process_pattern(parsed, 0)
         accepting.update(final_states)
         return {"nfa": nfa, "accepting": accepting, "initial": 0}
 
-    def _nfa_to_dfa(self, nfa_data: Dict) -> FSMTransitionTable:
+    def _nfa_to_dfa(self, nfa_data: dict) -> FSMTransitionTable:
         """Convert NFA to DFA."""
         nfa = nfa_data["nfa"]
         accepting = nfa_data["accepting"]
