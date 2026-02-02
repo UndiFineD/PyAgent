@@ -120,8 +120,8 @@ class ConstraintSpec:
     fallback_allowed: bool = True
 
     # Optional hints
-    preferred_backend: Optional[StructuredOutputBackendType] = None
-    max_tokens: Optional[int] = None
+    preferred_backend: StructuredOutputBackendType | None = None
+    max_tokens: int | None = None
 
     def to_cache_key(self) -> str:
         """Create cache key."""
@@ -135,7 +135,7 @@ class OrchestratorConfig:
 
     default_backend: StructuredOutputBackendType = StructuredOutputBackendType.XGRAMMAR
     enable_fallback: bool = True
-    fallback_order: List[StructuredOutputBackendType] = field(default_factory=list)
+    fallback_order: list[StructuredOutputBackendType] = field(default_factory=list)
     max_compile_time_ms: float = 1000.0
     enable_caching: bool = True
     max_cache_size: int = 1000

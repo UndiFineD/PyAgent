@@ -82,7 +82,7 @@ class SpeculativeTree:
     confidence_threshold: float = 0.1  # TALON threshold
 
     @classmethod
-    def create(cls, root_token_id: int, max_depth: int, confidence_threshold: float = 0.1) -> SpeculativeTree:
+    def create(cls: type["SpeculativeTree"], root_token_id: int, max_depth: int, confidence_threshold: float = 0.1) -> "SpeculativeTree":
         """Create new speculative tree."""
         root = TreeNode(token_id=root_token_id, depth=0)
         return cls(root=root, max_depth=max_depth, confidence_threshold=confidence_threshold)
