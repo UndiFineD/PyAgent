@@ -99,6 +99,15 @@ pub fn check_stop_strings_rust(
     Ok(None)
 }
 
+/// Rust-accelerated UTF-8 validation.
+/// Checks if a string is valid UTF-8 and filter-out replacement character.
+#[pyfunction]
+pub fn validate_utf8_rust(text: &str) -> PyResult<bool> {
+    // Check if the string contains the replacement character (U+FFFD)
+    // which signifies an encoding error during detokenization.
+    Ok(!text.contains('\u{FFFD}'))
+}
+
 /// Parallel batch detokenization helper.
 /// Decodes multiple token sequences efficiently.
 #[pyfunction]

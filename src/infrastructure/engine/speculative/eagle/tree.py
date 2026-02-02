@@ -62,12 +62,15 @@ class TreeNode:
         return list(reversed(path))
 
     def all_leaves(self) -> list[TreeNode]:
-        """Get all leaf nodes in subtree."""
-        if not self.children:
-            return [self]
+        """Get all leaf nodes in subtree (iterative)."""
         leaves = []
-        for child in self.children:
-            leaves.extend(child.all_leaves())
+        stack = [self]
+        while stack:
+            curr = stack.pop()
+            if not curr.children:
+                leaves.append(curr)
+            else:
+                stack.extend(curr.children)
         return leaves
 
 
@@ -82,7 +85,7 @@ class SpeculativeTree:
     confidence_threshold: float = 0.1  # TALON threshold
 
     @classmethod
-    def create(cls: type["SpeculativeTree"], root_token_id: int, max_depth: int, confidence_threshold: float = 0.1) -> "SpeculativeTree":
+    def create(cls: type[SpeculativeTree], root_token_id: int, max_depth: int, confidence_threshold: float = 0.1) -> SpeculativeTree:
         """Create new speculative tree."""
         root = TreeNode(token_id=root_token_id, depth=0)
         return cls(root=root, max_depth=max_depth, confidence_threshold=confidence_threshold)

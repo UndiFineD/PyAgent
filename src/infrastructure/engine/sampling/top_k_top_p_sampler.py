@@ -42,10 +42,10 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Any
 
-from matplotlib.pylab import Generator
 import numpy as np
 
 if TYPE_CHECKING:
+    from numpy.random import Generator
     from numpy.typing import NDArray
 
 # Try to import rust_core for acceleration

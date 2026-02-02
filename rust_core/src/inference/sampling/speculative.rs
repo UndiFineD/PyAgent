@@ -309,7 +309,7 @@ pub fn eagle_prepare_inputs_padded_rust(
 
 /// Prompt lookup propose from prompt tokens
 #[pyfunction]
-pub fn prompt_lookup_propose_rust(
+pub fn prompt_lookup_propose_spec_rust(
     prompt_tokens: Vec<i64>,
     generated_tokens: Vec<i64>,
     min_len: usize,

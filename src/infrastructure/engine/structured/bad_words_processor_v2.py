@@ -27,20 +27,20 @@ Beyond vLLM innovations:
 - Bad phrase detection
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
+from typing import Any, Optional, Sequence
 
 try:
-    import numpy as np  # noqa: F401
-
+    import numpy as np
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # pylint: disable=unused-import
-
+    import rust_core
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -131,11 +131,12 @@ class BadWordsProcessorV2(LogitsProcessor):
         self.soft_penalty = soft_penalty
 
         # Per-request bad words and tries
-        self._bad_words: Dict[int, List[List[int]]] = {}
-        self._tries: Dict[int, TrieNode] = {}
+        self._bad_words: dict[int, list[list[int]]] = {}
+        self._tries: dict[int, TrieNode] = {}
+        self._rust_tries: dict[int, dict[int, list[tuple[list[int], bool]]]] = {}
 
         # Token histories
-        self._past_tokens: Dict[int, List[int]] = {}
+        self._past_tokens: dict[int, list[int]] = {}
 
         # Request count for quick check
         self._request_count = 0
@@ -149,22 +150,31 @@ class BadWordsProcessorV2(LogitsProcessor):
         if batch_update is None:
             return
 
-        # Process added requests
+        self._handle_additions(batch_update)
+        self._handle_removals(batch_update)
+        self._handle_moves(batch_update)
+
+    def _handle_additions(self, batch_update: BatchUpdate) -> None:
+        """Handle added requests."""
         for index, params, _, output_tokens in batch_update.added:
             if params.bad_words:
                 self._bad_words[index] = list(params.bad_words)
                 self._tries[index] = self._build_trie(params.bad_words)
+                if HAS_RUST:
+                    self._rust_tries[index] = rust_core.bad_words_trie_build_rust(params.bad_words)
                 self._past_tokens[index] = list(output_tokens)
                 self._request_count += 1
             elif index in self._bad_words:
                 self._remove_request(index)
 
-        # Process removed requests
+    def _handle_removals(self, batch_update: BatchUpdate) -> None:
+        """Handle removed requests."""
         for index in batch_update.removed:
             if index in self._bad_words:
                 self._remove_request(index)
 
-        # Process moved requests
+    def _handle_moves(self, batch_update: BatchUpdate) -> None:
+        """Handle moved requests within batch."""
         for from_idx, to_idx, direction in batch_update.moved:
             has_a = from_idx in self._bad_words
             has_b = to_idx in self._bad_words
@@ -172,27 +182,39 @@ class BadWordsProcessorV2(LogitsProcessor):
             if has_a:
                 self._bad_words[to_idx] = self._bad_words[from_idx]
                 self._tries[to_idx] = self._tries[from_idx]
+                if HAS_RUST:
+                    self._rust_tries[to_idx] = self._rust_tries[from_idx]
                 self._past_tokens[to_idx] = self._past_tokens[from_idx]
             elif to_idx in self._bad_words:
                 self._remove_request(to_idx)
 
             if direction == MoveDirectionality.SWAP:
-                if has_b:
-                    self._bad_words[from_idx] = self._bad_words[to_idx]
-                    self._tries[from_idx] = self._tries[to_idx]
-                    self._past_tokens[from_idx] = self._past_tokens[to_idx]
+                self._swap_request_data(from_idx, to_idx, has_b)
             else:
                 if from_idx in self._bad_words:
                     self._remove_request(from_idx)
+
+    def _swap_request_data(self, from_idx: int, to_idx: int, has_target: bool) -> None:
+        """Swap or move request data between indices."""
+        if has_target:
+            self._bad_words[from_idx] = self._bad_words[to_idx]
+            self._tries[from_idx] = self._tries[to_idx]
+            if HAS_RUST:
+                self._rust_tries[from_idx] = self._rust_tries[to_idx]
+            self._past_tokens[from_idx] = self._past_tokens[to_idx]
+        elif from_idx in self._bad_words:
+            # If swapped with nothing, clear the source
+            self._remove_request(from_idx)
 
     def _remove_request(self, index: int) -> None:
         """Remove request data."""
         self._bad_words.pop(index, None)
         self._tries.pop(index, None)
+        self._rust_tries.pop(index, None)
         self._past_tokens.pop(index, None)
         self._request_count = max(0, self._request_count - 1)
 
-    def _build_trie(self, bad_words: List[List[int]]) -> TrieNode:
+    def _build_trie(self, bad_words: list[list[int]]) -> TrieNode:
         """Build trie from bad words list."""
         root = TrieNode()
         for word in bad_words:
@@ -215,10 +237,19 @@ class BadWordsProcessorV2(LogitsProcessor):
 
     def _apply_rust(self, logits: Any) -> Any:
         """Apply using Rust acceleration."""
-        # Fall back to numpy for now
-        if HAS_NUMPY and isinstance(logits, np.ndarray):
-            return self._apply_numpy(logits)
-        return self._apply_generic(logits)
+        if not HAS_NUMPY or not isinstance(logits, np.ndarray):
+            return self._apply_generic(logits)
+
+        for req_idx, rust_trie in self._rust_tries.items():
+            if req_idx >= logits.shape[0]:
+                continue
+
+            past = self._past_tokens.get(req_idx, [])
+            # Use Rust for prefix checking
+            blocked = set(rust_core.bad_words_prefix_check_rust(past, rust_trie))
+            self._apply_mask_to_logits(logits[req_idx], blocked)
+
+        return logits
 
     def _apply_numpy(self, logits: "np.ndarray") -> "np.ndarray":
         """Apply using NumPy."""
@@ -226,17 +257,24 @@ class BadWordsProcessorV2(LogitsProcessor):
             if req_idx >= logits.shape[0]:
                 continue
 
-            past = self._past_tokens.get(req_idx, [])
-            blocked = trie.find_blocked_tokens(past)
-
-            for token_id in blocked:
-                if token_id < logits.shape[1]:
-                    if self.penalty_mode == BadWordsPenaltyMode.HARD:
-                        logits[req_idx, token_id] = _SMALLEST_LOGIT
-                    elif self.penalty_mode == BadWordsPenaltyMode.SOFT:
-                        logits[req_idx, token_id] += self.soft_penalty
+            blocked = self._get_blocked_tokens_for_req(req_idx, trie)
+            self._apply_mask_to_logits(logits[req_idx], blocked)
 
         return logits
+
+    def _get_blocked_tokens_for_req(self, req_idx: int, trie: TrieNode) -> set[int]:
+        """Get set of blocked tokens for a specific request."""
+        past = self._past_tokens.get(req_idx, [])
+        return trie.find_blocked_tokens(past)
+
+    def _apply_mask_to_logits(self, row_logits: "np.ndarray", blocked: set[int]) -> None:
+        """Apply mask to a single row of logits."""
+        for token_id in blocked:
+            if token_id < row_logits.shape[0]:
+                if self.penalty_mode == BadWordsPenaltyMode.HARD:
+                    row_logits[token_id] = _SMALLEST_LOGIT
+                elif self.penalty_mode == BadWordsPenaltyMode.SOFT:
+                    row_logits[token_id] += self.soft_penalty
 
     def _apply_generic(self, logits: Any) -> Any:
         """Generic apply."""
@@ -259,8 +297,8 @@ class BadWordsProcessorV2(LogitsProcessor):
 
 def apply_bad_words(
     logits: Any,
-    bad_words_token_ids: Dict[int, List[List[int]]],
-    past_tokens_ids: List[List[int]],
+    bad_words_token_ids: dict[int, list[list[int]]],
+    past_tokens_ids: list[list[int]],
 ) -> None:
     """
     Apply bad words filtering to logits.
@@ -277,35 +315,43 @@ def apply_bad_words(
 
 def _apply_bad_words_single_batch(
     logits: Any,
-    bad_words_token_ids: List[List[int]],
-    past_tokens_ids: List[int],
+    bad_words_token_ids: list[list[int]],
+    past_tokens_ids: list[int],
 ) -> None:
     """Apply bad words filtering for a single batch element."""
     for bad_word_ids in bad_words_token_ids:
-        if len(bad_word_ids) > len(past_tokens_ids) + 1:
+        if not _should_block_token(bad_word_ids, past_tokens_ids):
             continue
 
-        prefix_length = len(bad_word_ids) - 1
         last_token_id = bad_word_ids[-1]
+        _set_logit_to_inf(logits, last_token_id)
 
-        if prefix_length > 0:
-            actual_prefix = past_tokens_ids[-prefix_length:]
-            expected_prefix = bad_word_ids[:prefix_length]
 
-            if len(actual_prefix) != len(expected_prefix):
-                continue
+def _should_block_token(bad_word_ids: list[int], past_tokens_ids: list[int]) -> bool:
+    """Check if the last token of a bad word should be blocked."""
+    if len(bad_word_ids) > len(past_tokens_ids) + 1:
+        return False
 
-            if actual_prefix != expected_prefix:
-                continue
+    prefix_length = len(bad_word_ids) - 1
+    if prefix_length <= 0:
+        return True
 
-        # Block the last token
-        if HAS_NUMPY and isinstance(logits, np.ndarray):
-            logits[last_token_id] = _SMALLEST_LOGIT
-        else:
-            try:
-                logits[last_token_id] = _SMALLEST_LOGIT
-            except (IndexError, TypeError):
-                pass
+    actual_prefix = past_tokens_ids[-prefix_length:]
+    expected_prefix = bad_word_ids[:prefix_length]
+
+    return actual_prefix == expected_prefix
+
+
+def _set_logit_to_inf(logits: Any, token_id: int) -> None:
+    """Set logit for a specific token to -inf."""
+    if HAS_NUMPY and isinstance(logits, np.ndarray):
+        if token_id < logits.shape[0]:
+            logits[token_id] = _SMALLEST_LOGIT
+    else:
+        try:
+            logits[token_id] = _SMALLEST_LOGIT
+        except (IndexError, TypeError):
+            pass
 
 
 def apply_bad_words_with_drafts(
