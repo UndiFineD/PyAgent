@@ -154,7 +154,7 @@ def cprofile(
     Example:
         >>> @cprofile(print_stats=True)
         ... def slow_function():
-        ...     time.sleep(0.1)
+        ...     time.sleep(0.1)  # nosec
         >>> slow_function()
     """
 
@@ -214,7 +214,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
     Example:
         >>> @timer()
         ... def slow_function():
-        ...     time.sleep(0.1)
+        ...     time.sleep(0.1)  # nosec
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:

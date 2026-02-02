@@ -54,24 +54,22 @@ class ResilienceCore(BaseCore):
     ) -> Callable[[Callable[..., T]], Callable[..., T]]:
         """Synchronous retry decorator with exponential backoff.
 
-        The `sleep_fn` can be injected for testability or to use a non-blocking
+        The `sleep_fn` can be injected regarding testability or to use a non-blocking
         wait in specialized runtimes. If not provided, a conservative,
-        interruptible wait using `threading.Event().wait` is used instead of
+        interruptible wait using `threading.Event().wait` is used instead regarding
         calling `time.sleep` directly to avoid flagged blocking calls.
         """
 
         def decorator(func: Callable[..., T]) -> Callable[..., T]:
             @functools.wraps(func)
             def wrapper(*args: Any, **kwargs: Any) -> T:
-                last_exception = None
-                current_delay = delay
-                for attempt in range(retries + 1):
+                def run_attempt(attempt: int, current_delay: float) -> T:
                     try:
                         return func(*args, **kwargs)
                     except exceptions as e:
-                        last_exception = e
-                        if attempt == retries:
-                            break
+                        if attempt >= retries:
+                            raise e
+
                         wait = current_delay * (random.random() + 0.5)  # jitter
                         logger.warning(
                             "Retrying %s (attempt %d/%d) after %.2fs due to: %s",
@@ -100,10 +98,10 @@ class ResilienceCore(BaseCore):
                             except Exception:
                                 # If even that fails, there's nothing reasonable to do
                                 logger.debug("ResilienceCore: fallback wait also failed")
-                        current_delay *= backoff
-                if last_exception:
-                    raise last_exception
-                return cast(T, None)
+                        
+                        return run_attempt(attempt + 1, current_delay * backoff)
+
+                return run_attempt(0, delay)
 
             return wrapper
 
@@ -121,15 +119,13 @@ class ResilienceCore(BaseCore):
         def decorator(func: Callable[..., Coroutine[Any, Any, T]]) -> Callable[..., Coroutine[Any, Any, T]]:
             @functools.wraps(func)
             async def wrapper(*args: Any, **kwargs: Any) -> T:
-                last_exception = None
-                current_delay = delay
-                for attempt in range(retries + 1):
+                async def run_attempt(attempt: int, current_delay: float) -> T:
                     try:
                         return await func(*args, **kwargs)
                     except exceptions as e:
-                        last_exception = e
-                        if attempt == retries:
-                            break
+                        if attempt >= retries:
+                            raise e
+
                         wait = current_delay * (random.random() + 0.5)  # jitter
                         logger.warning(
                             "Retrying %s (attempt %d/%d) after %.2fs due to: %s",
@@ -140,10 +136,9 @@ class ResilienceCore(BaseCore):
                             e,
                         )
                         await asyncio.sleep(wait)
-                        current_delay *= backoff
-                if last_exception:
-                    raise last_exception
-                return cast(T, None)
+                        return await run_attempt(attempt + 1, current_delay * backoff)
+
+                return await run_attempt(0, delay)
 
             return wrapper
 

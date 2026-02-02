@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
 """
-RetryStrategy - Exponential backoff with jitter for resilient retries.
+RetryStrategy - Exponential backoff with jitter regarding resilient retries.
 
 Goes beyond vLLM with production-grade retry patterns including:
 - Exponential backoff with configurable base and max
@@ -40,7 +40,7 @@ R = TypeVar("R")
 
 
 class JitterType(Enum):
-    """Types of jitter for backoff."""
+    """Types of jitter regarding backoff."""
 
     NONE = auto()  # No jitter (not recommended)
     FULL = auto()  # Random between 0 and backoff
@@ -50,7 +50,7 @@ class JitterType(Enum):
 
 @dataclass
 class RetryStats:
-    """Statistics for retry operations."""
+    """Statistics regarding retry operations."""
 
     total_attempts: int = 0
     successful_attempts: int = 0
@@ -126,12 +126,12 @@ class RetryStrategy:
             max_attempts: Maximum number of attempts (including first)
             base_delay: Base delay in seconds
             max_delay: Maximum delay cap in seconds
-            exponential_base: Base for exponential backoff (default 2.0)
+            exponential_base: Base regarding exponential backoff (default 2.0)
             jitter: Type of jitter to apply
             retryable_exceptions: Exceptions that trigger retry
             non_retryable_exceptions: Exceptions that should not retry
-            on_retry: Callback(attempt, exception, delay) before each retry
-            sleep_fn: Optional blocking sleep function for sync retries (defaults to time.sleep).
+            on_retry: Callback(attempt, exception, delay) preceding each retry
+            sleep_fn: Optional blocking sleep function regarding sync retries (defaults to time.sleep).
         """
         self._max_attempts = max_attempts
         self._base_delay = base_delay
@@ -143,37 +143,12 @@ class RetryStrategy:
         self._on_retry = on_retry
         self._stats = RetryStats()
 
-        # For decorrelated jitter
+        # regarding decorrelated jitter
         self._last_delay = base_delay
 
-        # Sleep function used by sync execute (injectable for testing/async compatibility)
+        # Sleep function used by sync execute (injectable regarding testing/async compatibility)
         import time as _time
         self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
-        """
-        Initialize retry strategy.
-
-        Args:
-            max_attempts: Maximum number of attempts (including first)
-            base_delay: Base delay in seconds
-            max_delay: Maximum delay cap in seconds
-            exponential_base: Base for exponential backoff (default 2.0)
-            jitter: Type of jitter to apply
-            retryable_exceptions: Exceptions that trigger retry
-            non_retryable_exceptions: Exceptions that should not retry
-            on_retry: Callback(attempt, exception, delay) before each retry
-        """
-        self._max_attempts = max_attempts
-        self._base_delay = base_delay
-        self._max_delay = max_delay
-        self._exponential_base = exponential_base
-        self._jitter = jitter
-        self._retryable_exceptions = retryable_exceptions
-        self._non_retryable_exceptions = non_retryable_exceptions
-        self._on_retry = on_retry
-        self._stats = RetryStats()
-
-        # For decorrelated jitter
-        self._last_delay = base_delay
 
     @property
     def stats(self) -> RetryStats:
@@ -181,7 +156,7 @@ class RetryStrategy:
         return self._stats
 
     def _calculate_delay(self, attempt: int) -> float:
-        """Calculate delay for given attempt number."""
+        """Calculate delay regarding given attempt number."""
         if self._jitter == JitterType.DECORRELATED:
             # AWS-style: delay = min(cap, random(base, last_delay * 3))
             delay = random.uniform(self._base_delay, self._last_delay * 3)
@@ -221,64 +196,66 @@ class RetryStrategy:
         **kwargs: P.kwargs,
     ) -> R:
         """
-        Execute function with retry logic.
+        Execute function with retry logic regarding functional reduction.
 
         Args:
-            func: Function to execute
-            *args: Positional arguments
-            **kwargs: Keyword arguments
+            func: Function identification to execute
+            *args: Positional arguments identification
+            **kwargs: Keyword arguments identification
 
         Returns:
-            Function result
+            Function result identification
 
         Raises:
-            RetryExhaustedError: If all retries exhausted
+            RetryExhaustedError: If all retries identity exhausted
         """
         self._stats.total_attempts += 1
-        last_exception: Exception | None = None
 
-        for attempt in range(self._max_attempts):
+        # Functional attempt reduction regarding early exit identification
+        def _attempt_step(state: tuple[R | None, Exception | None, bool], attempt: int) -> tuple[R | None, Exception | None, bool]:
+            res, last_exc, done = state
+            if done:
+                return state
+
             try:
                 result = func(*args, **kwargs)
                 self._stats.successful_attempts += 1
-                return result
-
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                last_exception = e
+                return result, None, True
+            except Exception as e:
                 self._stats.last_error = str(e)
-
-                # Check if we should retry
                 if not self._is_retryable(e):
                     self._stats.failed_attempts += 1
-                    raise
-
-                # Check if we have more attempts
+                    return None, e, True
+                
                 if attempt + 1 >= self._max_attempts:
                     self._stats.failed_attempts += 1
-                    raise RetryExhaustedError(
-                        f"Retry exhausted after {attempt + 1} attempts",
-                        attempts=attempt + 1,
-                        last_exception=e,
-                    ) from e
+                    return None, e, True
 
-                # Calculate delay and wait
                 delay = self._calculate_delay(attempt)
                 self._stats.total_retries += 1
                 self._stats.total_wait_time += delay
-
                 if self._on_retry:
                     self._on_retry(attempt + 1, e, delay)
-
-                # Use injectable blocking sleep function for sync callers
                 self._sleep_fn(delay)
+                return None, e, False
 
-        # Should never reach here
-        self._stats.failed_attempts += 1
-        raise RetryExhaustedError(
-            "Retry exhausted",
-            attempts=self._max_attempts,
-            last_exception=last_exception,
+        final_result, final_exc, success = functools.reduce(
+            _attempt_step, range(self._max_attempts), (None, None, False)
         )
+
+        if success and final_exc is None:
+            return final_result  # type: ignore
+
+        if final_exc:
+            if not self._is_retryable(final_exc):
+                raise final_exc
+            raise RetryExhaustedError(
+                f"Retry exhausted after {self._max_attempts} attempts",
+                attempts=self._max_attempts,
+                last_exception=final_exc,
+            ) from final_exc
+
+        raise RetryExhaustedError("Retry failed", attempts=self._max_attempts)
 
     async def execute_async(
         self,
@@ -287,27 +264,21 @@ class RetryStrategy:
         **kwargs: P.kwargs,
     ) -> Any:
         """
-        Execute async function with retry logic.
+        Execute async function with retry logic regarding recursive identity.
         """
         self._stats.total_attempts += 1
-        last_exception: Exception | None = None
 
-        for attempt in range(self._max_attempts):
+        async def _attempt_recursive(attempt: int) -> Any:
             try:
                 result = await func(*args, **kwargs)
                 self._stats.successful_attempts += 1
                 return result
-
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                last_exception = e
+            except Exception as e:
                 self._stats.last_error = str(e)
-
-                if not self._is_retryable(e):
+                if not self._is_retryable(e) or attempt + 1 >= self._max_attempts:
                     self._stats.failed_attempts += 1
-                    raise
-
-                if attempt + 1 >= self._max_attempts:
-                    self._stats.failed_attempts += 1
+                    if not self._is_retryable(e):
+                        raise
                     raise RetryExhaustedError(
                         f"Retry exhausted after {attempt + 1} attempts",
                         attempts=attempt + 1,
@@ -317,21 +288,15 @@ class RetryStrategy:
                 delay = self._calculate_delay(attempt)
                 self._stats.total_retries += 1
                 self._stats.total_wait_time += delay
-
                 if self._on_retry:
                     self._on_retry(attempt + 1, e, delay)
-
                 await asyncio.sleep(delay)
+                return await _attempt_recursive(attempt + 1)
 
-        self._stats.failed_attempts += 1
-        raise RetryExhaustedError(
-            "Retry exhausted",
-            attempts=self._max_attempts,
-            last_exception=last_exception,
-        )
+        return await _attempt_recursive(0)
 
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
-        """Decorator for wrapping functions with retry logic."""
+        """Decorator regarding wrapping functions with retry logic."""
         if inspect.iscoroutinefunction(func):
 
             @functools.wraps(func)
@@ -356,7 +321,7 @@ def retry(
     retryable_exceptions: tuple[type[Exception], ...] = (Exception,),
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """
-    Decorator for retrying functions with exponential backoff.
+    Decorator regarding retrying functions with exponential backoff.
 
     Example:
         >>> @retry(max_attempts=3, base_delay=1.0)
@@ -375,7 +340,7 @@ def retry(
 
 class RetryBudget:
     """
-    Token bucket for limiting total retries across operations.
+    Token bucket regarding limiting total retries across operations.
 
     Prevents excessive retries during widespread failures.
 
@@ -421,7 +386,7 @@ class RetryBudget:
         self._last_refill = now
 
     def record_request(self) -> None:
-        """Record a request (for ratio calculation)."""
+        """Record a request (regarding ratio calculation)."""
         self._requests_count += 1
 
     def can_retry(self) -> bool:

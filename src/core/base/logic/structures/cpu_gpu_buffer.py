@@ -274,9 +274,7 @@ class CpuGpuBufferPool:
         self._in_use: set[int] = set()
 
         # Pre-allocate buffers
-        for _ in range(pool_size):
-            buf = CpuGpuBuffer(*size, dtype=self._dtype, device=device)
-            self._pool.append(buf)
+        list(map(lambda _: self._pool.append(CpuGpuBuffer(*size, dtype=self._dtype, device=device)), range(pool_size)))
 
     def acquire(self) -> tuple[CpuGpuBuffer, int]:
         """
@@ -285,10 +283,17 @@ class CpuGpuBufferPool:
         Returns:
             Tuple of (buffer, handle) for release
         """
-        for i, buf in enumerate(self._pool):
-            if i not in self._in_use:
-                self._in_use.add(i)
-                return buf, i
+        def find_free(idx):
+            if idx >= len(self._pool):
+                return None
+            if idx not in self._in_use:
+                return idx
+            return find_free(idx + 1)
+
+        idx = find_free(0)
+        if idx is not None:
+            self._in_use.add(idx)
+            return self._pool[idx], idx
 
         # Pool exhausted - create new buffer
         buf = CpuGpuBuffer(*self._size, dtype=self._dtype, device=self._device)

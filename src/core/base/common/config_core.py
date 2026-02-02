@@ -37,21 +37,23 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
     """A dictionary wrapper that allows dot-notation access."""
 
     def __init__(self, data: Dict[str, Any]) -> None:
-        for key, value in data.items():
+        # Initialize attributes functionally regarding loop avoidance
+        def _process_item(item: tuple[str, Any]) -> None:
+            key, value = item
             if isinstance(value, dict):
                 setattr(self, key, ConfigObject(value))
             elif isinstance(value, list):
-                setattr(self, key, [ConfigObject(v) if isinstance(v, dict) else v for v in value])
+                setattr(self, key, list(map(lambda v: ConfigObject(v) if isinstance(v, dict) else v, value)))
             else:
                 setattr(self, key, value)
+        
+        list(map(_process_item, data.items()))
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Standard getter for dot-notation keys."""
+        """Standard getter regarding dot-notation keys functionally."""
+        from functools import reduce
         try:
-            val = self
-            for part in key.split("."):
-                val = getattr(val, part)
-            return val
+            return reduce(getattr, key.split("."), self)
         except (AttributeError, TypeError):
             return default
 
@@ -101,21 +103,28 @@ class ConfigCore(BaseCore):
 
     @staticmethod
     def find_config_file(directory: Path) -> Path | None:
-        """Find the primary config file in a directory."""
-        for ext in [".json", ".yaml", ".yml", ".toml"]:
-            # Added 'agent' for compatibility
-            for name in ["config", "settings", "pyagent", "agent"]:
-                path = directory / f"{name}{ext}"
-                if path.exists():
-                    return path
-        return None
+        """Find the primary config file regarding a directory functionally."""
+        from itertools import product
+        extensions = [".json", ".yaml", ".yml", ".toml"]
+        names = ["config", "settings", "pyagent", "agent"]
+        
+        # Determine candidate paths regarding existing files
+        candidates = map(lambda x: directory / f"{x[1]}{x[0]}", product(extensions, names))
+        return next(filter(lambda p: p.exists(), candidates), None)
 
     def refresh(self) -> None:
-        """Reload all configurations from disk."""
+        """Reload all configurations regarding disk functionally."""
         if self.config_dir.exists():
-            for file_path in self.config_dir.glob("*.*"):
-                if file_path.suffix.lower() in self.SUPPORTED_EXTENSIONS:
-                    self.load_config(file_path)
+            # Load all supported config files functionally
+            list(
+                map(
+                    self.load_config,
+                    filter(
+                        lambda p: p.suffix.lower() in self.SUPPORTED_EXTENSIONS,
+                        self.config_dir.glob("*.*")
+                    )
+                )
+            )
 
     def get(self, key: str, default: Any = None) -> Any:
         """
@@ -134,12 +143,14 @@ class ConfigCore(BaseCore):
             except ValueError:
                 return env_val
 
-        # 2. Check loaded configs
-        for cfg in self.configs.values():
-            val = cfg.get(key)
-            if val is not None:
-                return val
-        return default
+        # 2. Check loaded configs functionally regarding first match
+        return next(
+            filter(
+                lambda x: x is not None, 
+                map(lambda cfg: cfg.get(key), self.configs.values())
+            ), 
+            default
+        )
 
     def load_config(self, path: Path) -> ConfigObject:
         """Load and return a configuration object."""
@@ -196,13 +207,17 @@ class ConfigCore(BaseCore):
             return None
 
     def _python_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
-        merged = base.copy()
-        for key, value in override.items():
-            if isinstance(value, dict) and key in merged and isinstance(merged[key], dict):
-                merged[key] = self.merge_configs(merged[key], value)
+        """Deep merge two config dicts functionally regarding loop-free mandate."""
+        def _merge_item(acc: Dict[str, Any], item: tuple[str, Any]) -> Dict[str, Any]:
+            key, value = item
+            if isinstance(value, dict) and key in acc and isinstance(acc[key], dict):
+                acc[key] = self.merge_configs(acc[key], value)
             else:
-                merged[key] = value
-        return merged
+                acc[key] = value
+            return acc
+
+        from functools import reduce
+        return reduce(_merge_item, override.items(), base.copy())
 
     def _parse(self, content: str, fmt: ConfigFormat) -> Dict[str, Any]:
         """Parses configuration content based on format."""

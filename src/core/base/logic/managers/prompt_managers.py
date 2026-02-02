@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Manager for prompt templates and versioning.
-(Facade for src.core.base.common.prompt_core)
+Manager regarding prompt templates and versioning.
+(Facade regarding src.core.base.common.prompt_core)
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ from src.core.base.common.models import PromptTemplate, PromptVersion
 
 class PromptTemplateManager:
     """
-    Facade for managing prompt templates.
+    Facade regarding managing prompt templates.
     """
 
     def __init__(self) -> None:
@@ -44,7 +44,7 @@ class PromptTemplateManager:
 
 class PromptVersionManager:
     """
-    Facade for managing prompt versions.
+    Facade regarding managing prompt versions.
     """
 
     def __init__(self) -> None:

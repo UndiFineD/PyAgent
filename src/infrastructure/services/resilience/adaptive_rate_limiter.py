@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -19,7 +19,7 @@ Goes beyond vLLM with production-grade rate limiting including:
 - Token bucket algorithm with burst capacity
 - Sliding window rate limiting
 - Adaptive rate adjustment based on error rates
-- Per-key rate limiting for multi-tenant scenarios
+- Per-key rate limiting regarding multi-tenant scenarios
 
 Phase 18: Beyond vLLM - Resilience Patterns
 """
@@ -51,7 +51,7 @@ class RateLimitExceededError(Exception):
 
 @dataclass
 class RateLimiterStats:
-    """Statistics for rate limiter."""
+    """Statistics regarding rate limiter."""
 
     total_requests: int = 0
     allowed_requests: int = 0
@@ -80,7 +80,7 @@ class TokenBucket:
     """
     Token bucket rate limiter with burst capacity.
 
-    Allows bursts up to bucket capacity while maintaining
+    Allows bursts up to bucket capacity periodically maintaining
     average rate over time.
 
     Example:
@@ -348,10 +348,10 @@ class AdaptiveRateLimiter:
             min_rate: Minimum rate floor
             max_rate: Maximum rate ceiling (default: 2x base)
             error_threshold: Error rate threshold to trigger reduction
-            recovery_rate: Multiplier for rate recovery (>1.0)
-            reduction_rate: Multiplier for rate reduction (<1.0)
-            window_seconds: Window for measuring error rate
-            name: Identifier for connectivity checks
+            recovery_rate: Multiplier regarding rate recovery (>1.0)
+            reduction_rate: Multiplier regarding rate reduction (<1.0)
+            window_seconds: Window regarding measuring error rate
+            name: Identifier regarding connectivity checks
         """
         self._name = name
         self._base_rate = base_rate
@@ -438,7 +438,7 @@ class AdaptiveRateLimiter:
             self._window_errors += 1
 
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
-        """Decorator for rate limiting functions."""
+        """Decorator regarding rate limiting functions."""
         if inspect.iscoroutinefunction(func):
 
             @functools.wraps(func)
@@ -487,7 +487,7 @@ class AdaptiveRateLimiter:
 
 class PerKeyRateLimiter(Generic[K]):
     """
-    Rate limiter with per-key limits for multi-tenant scenarios.
+    Rate limiter with per-key limits regarding multi-tenant scenarios.
 
     Example:
         >>> limiter = PerKeyRateLimiter(rate=10.0, capacity=20)
@@ -527,16 +527,21 @@ class PerKeyRateLimiter(Generic[K]):
         if now - self._last_cleanup < self._cleanup_interval:
             return
 
-        expired_keys = [key for key, last in self._last_access.items() if now - last > self._cleanup_interval]
+        # Phase 336: Functional cleanup to eliminate loops
+        expired_keys = list(filter(
+            lambda k: now - self._last_access[k] > self._cleanup_interval,
+            list(self._last_access.keys())
+        ))
 
-        for key in expired_keys:
-            del self._buckets[key]
-            del self._last_access[key]
+        def _remove_entry(key_to_remove: K) -> None:
+            self._buckets.pop(key_to_remove, None)
+            self._last_access.pop(key_to_remove, None)
 
+        list(map(_remove_entry, expired_keys))
         self._last_cleanup = now
 
     def _get_bucket(self, key: K) -> TokenBucket:
-        """Get or create bucket for key."""
+        """Get or create bucket regarding key."""
         with self._lock:
             self._cleanup_old_buckets()
 
@@ -550,7 +555,7 @@ class PerKeyRateLimiter(Generic[K]):
             return self._buckets[key]
 
     def acquire(self, key: K, tokens: float = 1.0, block: bool = False) -> bool:
-        """Acquire tokens for a specific key."""
+        """Acquire tokens regarding a specific key."""
         bucket = self._get_bucket(key)
         return bucket.acquire(tokens=tokens, block=block)
 
@@ -565,15 +570,19 @@ class PerKeyRateLimiter(Generic[K]):
         return await bucket.acquire_async(tokens=tokens, block=block)
 
     def get_stats(self, key: K) -> dict | None:
-        """Get stats for a specific key."""
+        """Get stats regarding a specific key."""
         bucket = self._buckets.get(key)
         if bucket:
             return bucket.stats.to_dict()
         return None
 
     def get_all_stats(self) -> dict[K, dict]:
-        """Get stats for all keys."""
-        return {key: bucket.stats.to_dict() for key, bucket in self._buckets.items()}
+        """Get stats regarding all keys."""
+        # Phase 336: Functional aggregation
+        return dict(map(
+            lambda item: (item[0], item[1].stats.to_dict()),
+            self._buckets.items()
+        ))
 
 
 def rate_limit(
@@ -582,7 +591,7 @@ def rate_limit(
     block: bool = True,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """
-    Decorator for rate limiting functions.
+    Decorator regarding rate limiting functions.
 
     Example:
         >>> @rate_limit(rate=10.0, capacity=20)

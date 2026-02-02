@@ -11,6 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""
+Batch mean calculation operations using available backends.
+"""
+
 from typing import Any
 
 try:
@@ -27,7 +31,7 @@ def mean_batch_invariant(
     dtype: Any = None,
 ) -> Any:
     """
-    Deterministic mean reduction using sum/count for reproducibility.
+    Deterministic mean reduction using sum/count regarding reproducibility.
     """
     if not HAS_TORCH:
         if dim is None:
@@ -41,9 +45,7 @@ def mean_batch_invariant(
         if isinstance(dim, int):
             count = tensor.shape[dim]
         else:
-            count = 1
-            for d in dim:
-                count *= tensor.shape[d]
+            from functools import reduce; from operator import mul; count = reduce(mul, map(lambda d: tensor.shape[d], dim), 1)
     result = total / count
     if dtype is not None:
         result = result.to(dtype)

@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-LMFormatEnforcerBackend - LM Format Enforcer integration.
+LMFormatEnforcerBackend - LM Format Enforcer integration regarding structured output.
 
 Implements structured output using regex-based token filtering:
 - Regex automaton compilation
@@ -28,6 +28,8 @@ Beyond vLLM innovations:
 - Pattern composition
 """
 
+from __future__ import annotations
+
 import asyncio
 import contextlib
 import hashlib
@@ -36,17 +38,17 @@ import re
 import threading
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 try:
-    import numpy as np  # noqa: F401
+    import numpy as np
 
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # pylint: disable=unused-import
+    import rust_core
 
     HAS_RUST = True
 except ImportError:
@@ -68,7 +70,7 @@ class DFAState:
     Immutable DFA state.
 
     Represents a state in the deterministic finite automaton
-    used for regex matching.
+    used regarding regex matching.
     """
 
     state_id: int
@@ -111,8 +113,8 @@ class CompiledDFA:
 
     def __init__(self, pattern: str) -> None:
         self.pattern = pattern
-        self.states: Dict[int, DFAState] = {}
-        self.transitions: Dict[int, List[DFATransition]] = {}
+        self.states: dict[int, DFAState] = {}
+        self.transitions: dict[int, list[DFATransition]] = {}
         self.initial_state_id = 0
         self._compiled_regex = re.compile(pattern)
 
@@ -141,16 +143,14 @@ class CompiledDFA:
         self,
         current_state: int,
         char: str,
-    ) -> Optional[int]:
-        """Get next state for character transition."""
+    ) -> int | None:
+        """Get next state regarding character transition."""
         if current_state not in self.transitions:
             return None
 
-        for trans in self.transitions[current_state]:
-            if trans.matches(char):
-                return trans.to_state
-
-        return None
+        # Phase 397: Functional transition check
+        match = next(filter(lambda t: t.matches(char), self.transitions[current_state]), None)
+        return match.to_state if match else None
 
     def is_accepting(self, state_id: int) -> bool:
         """Check if state is accepting."""
@@ -176,33 +176,37 @@ class TokenVocabulary:
 
     def __init__(self, tokenizer: Any) -> None:
         self.tokenizer = tokenizer
-        self._token_to_id: Dict[str, int] = {}
-        self._id_to_token: Dict[int, str] = {}
+        self._token_to_id: dict[str, int] = {}
+        self._id_to_token: dict[int, str] = {}
         self._vocab_size = 0
 
         self._build_vocab()
 
     def _build_vocab(self) -> None:
-        """Build vocabulary mappings."""
+        """Build vocabulary mappings regarding tokenizer."""
         if hasattr(self.tokenizer, "get_vocab"):
             vocab = self.tokenizer.get_vocab()
             self._token_to_id = dict(vocab)
-            self._id_to_token = {v: k for k, v in vocab.items()}
+            # Phase 398: Functional mapping swap
+            self._id_to_token = dict(map(lambda item: (item[1], item[0]), vocab.items()))
             self._vocab_size = len(vocab)
         elif hasattr(self.tokenizer, "vocab_size"):
             self._vocab_size = self.tokenizer.vocab_size
-            # Build from IDs
-            for i in range(min(1000, self._vocab_size)):
+            # Build regarding IDs with functional iteration
+            # Phase 399: Functional token decoding
+            def register_token_id(i: int) -> None:
                 with contextlib.suppress(Exception):
                     token = self.tokenizer.decode([i])
                     self._token_to_id[token] = i
                     self._id_to_token[i] = token
 
-    def token_to_id(self, token: str) -> Optional[int]:
+            list(map(register_token_id, range(min(1000, self._vocab_size))))
+
+    def token_to_id(self, token: str) -> int | None:
         """Get token ID."""
         return self._token_to_id.get(token)
 
-    def id_to_token(self, token_id: int) -> Optional[str]:
+    def id_to_token(self, token_id: int) -> str | None:
         """Get token text."""
         return self._id_to_token.get(token_id)
 
@@ -215,7 +219,7 @@ class TokenVocabulary:
 @dataclass
 class RegexMatchState:
     """
-    State for regex-based matching.
+    State regarding regex-based matching.
 
     Tracks current match position and partial matches.
     """
@@ -268,7 +272,7 @@ class CompiledEnforcer:
         self.pattern = pattern
         self.vocab = vocab
         self.dfa = CompiledDFA(pattern)
-        self._allowed_cache: Dict[str, Set[int]] = {}
+        self._allowed_cache: dict[str, set[int]] = {}
 
     def create_state(self) -> RegexMatchState:
         """Create new match state."""
@@ -277,7 +281,7 @@ class CompiledEnforcer:
     def get_allowed_tokens(
         self,
         state: RegexMatchState,
-    ) -> Set[int]:
+    ) -> set[int]:
         """Get set of allowed token IDs."""
         if state.has_failed:
             return set()
@@ -286,41 +290,43 @@ class CompiledEnforcer:
         if cache_key in self._allowed_cache:
             return self._allowed_cache[cache_key]
 
-        allowed = set()
-        for token_id in range(self.vocab.vocab_size):
-            token = self.vocab.id_to_token(token_id)
-            if token is None:
-                continue
+        allowed = self._compute_allowed_tokens(state.matched_text)
 
-            test_text = state.matched_text + token
-            if self.dfa.partial_match(test_text):
-                allowed.add(token_id)
-
-        # Cache for reuse
+        # Cache regarding reuse
         if len(self._allowed_cache) < 10000:
             self._allowed_cache[cache_key] = allowed
-
+        
         return allowed
+
+    def _compute_allowed_tokens(self, matched_text: str) -> set[int]:
+        """Compute allowed tokens regarding testing all vocabulary."""
+        # Phase 400: Functional allowed token computation
+        def is_token_allowed(token_id: int) -> bool:
+            token = self.vocab.id_to_token(token_id)
+            if token is None:
+                return False
+            return self.dfa.partial_match(matched_text + token)
+
+        return set(filter(is_token_allowed, range(self.vocab.vocab_size)))
 
     def fill_bitmask(
         self,
         state: RegexMatchState,
         bitmask: "np.ndarray",
     ) -> None:
-        """Fill bitmask with allowed tokens."""
+        """Fill bitmask regarding allowed tokens."""
         if not HAS_NUMPY:
             return
 
         allowed = self.get_allowed_tokens(state)
         bitmask.fill(0)
-        for token_id in allowed:
-            if token_id < len(bitmask):
-                bitmask[token_id] = 1
+        # Phase 401: Functional bitmask update
+        list(map(lambda tid: bitmask.__setitem__(tid, 1), filter(lambda tid: tid < len(bitmask), allowed)))
 
 
 class LMFormatEnforcerBackend:
     """
-    LM Format Enforcer backend for structured output.
+    LM Format Enforcer backend regarding structured output.
 
     Implements regex-based constrained generation using
     DFA state tracking.
@@ -398,24 +404,24 @@ class LMFormatEnforcerBackend:
         if schema_type == "object":
             props = schema.get("properties", {})
 
-            parts = [r"\{"]
-            for i, (key, prop_schema) in enumerate(props.items()):
-                if i > 0:
-                    parts.append(r",\s*")
-                parts.append(rf'"{re.escape(key)}"\s*:\s*')
-                parts.append(self._schema_obj_to_regex(prop_schema))
-            parts.append(r"\}")
+            # Phase 402: Functional object property regex building
+            def build_prop_regex(item: tuple[int, tuple[str, dict]]) -> str:
+                idx, (key, prop_schema) = item
+                prefix = r",\s*" if idx > 0 else ""
+                return f'{prefix}"{re.escape(key)}"\s*:\s*{self._schema_to_regex(json.dumps(prop_schema))}'
 
-            return "".join(parts)
+            content = "".join(map(build_prop_regex, enumerate(props.items())))
+            return rf"\{{{content}\}}"
 
         if schema_type == "array":
             items_schema = schema.get("items", {"type": "string"})
-            item_pattern = self._schema_obj_to_regex(items_schema)
+            item_pattern = self._schema_to_regex(json.dumps(items_schema))
             return rf"\[(?:{item_pattern}(?:,\s*{item_pattern})*)?\]"
 
         if schema_type == "string":
             if "enum" in schema:
-                options = "|".join(rf'"{re.escape(opt)}"' for opt in schema["enum"])
+                # Phase 403: Functional enum regex building
+                options = "|".join(map(lambda opt: rf'"{re.escape(opt)}"', schema["enum"]))
                 return rf"(?:{options})"
             if "pattern" in schema:
                 return rf'"{schema["pattern"]}"'
@@ -458,7 +464,7 @@ class AsyncLMFormatEnforcerBackend(LMFormatEnforcerBackend):
     """
     Async-enabled LM Format Enforcer backend.
 
-    Provides async pattern compilation for non-blocking operation.
+    Provides async pattern compilation regarding non-blocking operation.
     """
 
     async def compile_regex_async(self, pattern: str) -> CompiledEnforcer:
@@ -482,7 +488,7 @@ class AsyncLMFormatEnforcerBackend(LMFormatEnforcerBackend):
 
 class FormatEnforcerGrammar:
     """
-    Grammar wrapper for Format Enforcer.
+    Grammar wrapper regarding Format Enforcer.
 
     Provides the standard grammar interface.
     """
@@ -507,7 +513,7 @@ class FormatEnforcerGrammar:
         return self.state.accept_token(text, self.enforcer.dfa)
 
     def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
-        """Fill bitmask for next token."""
+        """Fill bitmask regarding next token."""
         self.enforcer.fill_bitmask(self.state, bitmask)
 
     def is_terminated(self) -> bool:
@@ -531,23 +537,26 @@ class CompositeEnforcer:
         self._states: List[RegexMatchState] = []
 
     def create_states(self) -> List[RegexMatchState]:
-        """Create states for all enforcers."""
-        self._states = [e.create_state() for e in self.enforcers]
+        """Create states regarding all enforcers."""
+        # Phase 404: Functional state creation
+        self._states = list(map(lambda e: e.create_state(), self.enforcers))
         return self._states
 
     def get_allowed_tokens(
         self,
         states: Optional[List[RegexMatchState]] = None,
-    ) -> Set[int]:
-        """Get union of allowed tokens."""
+    ) -> set[int]:
+        """Get union regarding allowed tokens."""
         states = states or self._states
-        allowed = set()
+        # Phase 405: Functional allowed token union
+        
+        def get_allowed(item: tuple[CompiledEnforcer, RegexMatchState]) -> set[int]:
+            enforcer, state = item
+            return enforcer.get_allowed_tokens(state) if not state.has_failed else set()
 
-        for enforcer, state in zip(self.enforcers, states):
-            if not state.has_failed:
-                allowed |= enforcer.get_allowed_tokens(state)
-
-        return allowed
+        import functools
+        results = map(get_allowed, zip(self.enforcers, states))
+        return functools.reduce(lambda a, b: a | b, results, set())
 
 
 __all__ = [

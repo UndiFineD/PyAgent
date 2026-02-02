@@ -90,11 +90,14 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
         """
         self.start_indices.append(len(self.logprobs))
         if value:
-            for token_id, logprob in value.items():
+            def _proc_item(item):
+                token_id, logprob = item
                 self.token_ids.append(token_id)
                 self.logprobs.append(logprob.logprob)
                 self.ranks.append(logprob.rank)
                 self.decoded_tokens.append(logprob.decoded_token)
+
+            list(map(_proc_item, value.items()))
         self.end_indices.append(len(self.logprobs))
 
     def append_fast(
@@ -117,17 +120,20 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
             decoded_tokens: Iterable of decoded token strings
         """
         self.start_indices.append(len(self.logprobs))
-        for token_id, logprob, rank, decoded_token in zip(token_ids, logprobs, ranks, decoded_tokens):
+
+        def _proc_tuple(tup):
+            token_id, logprob, rank, decoded_token = tup
             self.token_ids.append(token_id)
             self.logprobs.append(logprob)
             self.ranks.append(rank)
             self.decoded_tokens.append(decoded_token)
+
+        list(map(_proc_tuple, zip(token_ids, logprobs, ranks, decoded_tokens)))
         self.end_indices.append(len(self.logprobs))
 
     def extend(self, values: Iterable[LogprobsOnePosition | None]) -> None:
         """Extend with logprobs for multiple positions."""
-        for value in values:
-            self.append(value)
+        list(map(self.append, values))
 
     def __len__(self) -> int:
         """Get number of positions stored."""
@@ -156,29 +162,34 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
             if index < 0 or index >= len(self):
                 raise IndexError(f"Index {index} out of range [0, {len(self)})")
 
-            return {
-                self.token_ids[i]: Logprob(
-                    logprob=self.logprobs[i],
-                    rank=self.ranks[i],
-                    decoded_token=self.decoded_tokens[i],
+            return dict(
+                map(
+                    lambda i: (
+                        self.token_ids[i],
+                        Logprob(
+                            logprob=self.logprobs[i],
+                            rank=self.ranks[i],
+                            decoded_token=self.decoded_tokens[i],
+                        ),
+                    ),
+                    range(self.start_indices[index], self.end_indices[index]),
                 )
-                for i in range(self.start_indices[index], self.end_indices[index])
-            }
+            )
         if isinstance(index, slice):
             # Get the actual indices
             indices = range(*index.indices(len(self)))
             if not indices:
                 return FlatLogprobs()
 
-            start_indices_slice = [self.start_indices[i] for i in indices]
-            end_indices_slice = [self.end_indices[i] for i in indices]
+            start_indices_slice = list(map(lambda i: self.start_indices[i], indices))
+            end_indices_slice = list(map(lambda i: self.end_indices[i], indices))
 
             min_idx = start_indices_slice[0]
             max_idx = end_indices_slice[-1]
 
             return FlatLogprobs(
-                start_indices=[i - min_idx for i in start_indices_slice],
-                end_indices=[i - min_idx for i in end_indices_slice],
+                start_indices=list(map(lambda i: i - min_idx, start_indices_slice)),
+                end_indices=list(map(lambda i: i - min_idx, end_indices_slice)),
                 token_ids=self.token_ids[min_idx:max_idx],
                 logprobs=self.logprobs[min_idx:max_idx],
                 ranks=self.ranks[min_idx:max_idx],
@@ -201,8 +212,12 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
 
     def __iter__(self) -> Iterator[LogprobsOnePosition]:
         """Iterate over all positions."""
-        for i in range(len(self)):
-            yield self[i]
+        def _recursive_gen(idx):
+            if idx >= len(self):
+                return
+            yield self[idx]
+            yield from _recursive_gen(idx + 1)
+        return _recursive_gen(0)
 
     def clear(self) -> None:
         """Clear all stored logprobs."""
@@ -313,9 +328,11 @@ class LogprobsAccumulator:
         )
 
         # Update stats
-        for lp in logprobs:
+        def _upd_stats(lp):
             self._min_logprob = min(self._min_logprob, lp)
             self._max_logprob = max(self._max_logprob, lp)
+
+        list(map(_upd_stats, logprobs))
 
     def build(self) -> FlatLogprobs:
         """Return the accumulated FlatLogprobs."""

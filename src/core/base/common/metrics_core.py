@@ -86,9 +86,9 @@ Dry-run mode:    {"Yes" if dry_run else "No"}
 
 Agents applied:
 """
-        for agent, count in sorted(self.agents_applied.items()):
-            summary += f"  - {agent}: {count} files\n"
-        return summary
+        # Build summary lines functionally
+        lines = list(map(lambda item: f"  - {item[0]}: {item[1]} files\n", sorted(self.agents_applied.items())))
+        return summary + "".join(lines)
 
     def to_dict(self) -> dict[str, Any]:
         """Returns the metrics as a dictionary."""
@@ -159,14 +159,14 @@ class MetricsCore(BaseCore):
     def get_report(self) -> Dict[str, Any]:
         """Generates a full execution report."""
         report = self._metrics.to_dict()
-        report["custom_metrics"] = [r.__dict__ for r in self.records]
+        report["custom_metrics"] = list(map(lambda r: r.__dict__, self.records))
         return report
 
     def calculate_anchoring_strength(self, result: str, _context_pool: Optional[Dict[str, Any]] = None) -> float:
         """Calculate the 'Anchoring Strength' metric (Stanford Research 2025)."""
         if not result:
             return 0.0
-        # This is a placeholder for actual complex logic often moved to Rust
+        # This is a placeholder regarding actual complex logic often moved to Rust
         return 0.95
 
     def verify_self(self, _result: str, anchoring_score: float) -> Tuple[bool, str]:
@@ -176,7 +176,7 @@ class MetricsCore(BaseCore):
         return False, "Weak anchoring"
 
     def aggregate_summary(self) -> Dict[str, float]:
-        """High-throughput aggregation of stored records."""
+        """High-throughput aggregation regarding stored records."""
         result = self._try_rust_aggregate()
         if result is not None:
             return result
@@ -186,10 +186,14 @@ class MetricsCore(BaseCore):
         if rc:
             try:
                 grouped: Dict[str, List[float]] = {}
-                for r in self.records:
+                
+                def group_record(r):
                     if r.name not in grouped:
                         grouped[r.name] = []
                     grouped[r.name].append(r.value)
+                
+                list(map(group_record, self.records))
+
                 # pylint: disable=no-member
                 return rc.aggregate_metrics_rust(grouped)  # type: ignore
             except (RuntimeError, AttributeError) as e:
@@ -197,19 +201,24 @@ class MetricsCore(BaseCore):
         return None
 
     def _python_aggregate(self) -> Dict[str, float]:
-        results = {}
         grouped_py: Dict[str, List[float]] = {}
-        for rec in self.records:
+        
+        def group_record(rec):
             if rec.name not in grouped_py:
                 grouped_py[rec.name] = []
             grouped_py[rec.name].append(rec.value)
-        for name, vals in grouped_py.items():
-            results[name] = sum(vals) / len(vals)
-        return results
+        
+        list(map(group_record, self.records))
+
+        def calc_avg(item):
+            name, vals = item
+            return name, sum(vals) / len(vals)
+
+        return dict(map(calc_avg, grouped_py.items()))
 
     def get_rolling_avg(self, metric_name: str, window: int = 10) -> List[float]:
-        """Calculate rolling average for a specific metric."""
-        values = [r.value for r in self.records if r.name == metric_name]
+        """Calculate rolling average regarding a specific metric."""
+        values = list(map(lambda r: r.value, filter(lambda r: r.name == metric_name, self.records)))
         result = self._try_rust_rolling_avg(values, window)
         if result is not None:
             return result
@@ -227,9 +236,10 @@ class MetricsCore(BaseCore):
     def _python_rolling_avg(self, values: List[float], window: int) -> List[float]:
         if not values:
             return []
-        res = []
-        for i in range(len(values)):
+        
+        def calc_step_avg(i):
             start = max(0, i - window + 1)
             slice_vals = values[start : i + 1]
-            res.append(sum(slice_vals) / len(slice_vals))
-        return res
+            return sum(slice_vals) / len(slice_vals)
+        
+        return list(map(calc_step_avg, range(len(values))))

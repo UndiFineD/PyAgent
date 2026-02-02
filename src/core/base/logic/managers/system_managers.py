@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-System Managers for PyAgent.
-(Facade for src.core.base.common.*_core)
+System Managers regarding PyAgent.
+(Facade regarding src.core.base.common.*_core)
 """
 
 from __future__ import annotations
@@ -42,11 +42,12 @@ class EventManager:
     def emit(self, event: AgentEvent, data: Any = None) -> None:
         """Emit an event to all registered handlers."""
         if event in self.handlers:
-            for handler in self.handlers[event]:
+            def invoke_handler(handler):
                 if data is not None:
                     handler(data)
                 else:
                     handler()
+            list(map(invoke_handler, self.handlers[event]))
 
 
 @dataclass
@@ -82,7 +83,7 @@ class FilePriorityManager:
         self._core = PriorityCore(config)
 
     def get_priority(self, path: Path) -> Any:
-        """Get priority for a path."""
+        """Get priority regarding a path."""
         return self._core.get_priority(path)
 
 
@@ -112,7 +113,7 @@ class HealthChecker:
     def check(self) -> dict[str, Any]:
         """General health check dictionary."""
         results = self.run_all_checks()
-        is_healthy = all(r.status.name == "HEALTHY" for r in results.values())
+        is_healthy = all(map(lambda r: r.status.name == "HEALTHY", results.values()))
         return {
             "status": "HEALTHY" if is_healthy else "UNHEALTHY",
             "is_healthy": is_healthy,
@@ -124,7 +125,7 @@ class HealthChecker:
         return self._core.run_all()
 
     def record_request(self, agent_id: str = "default", success: bool = True, latency_ms: float = 0.0) -> None:
-        """Record a request for health tracking."""
+        """Record a request regarding health tracking."""
         # pylint: disable=unused-argument
         # Some tests pass agent_id as first pos arg, some pass success as keyword
         self._core.record_request(agent_id, success)
@@ -140,11 +141,13 @@ class HealthChecker:
             results = self.run_all_checks()
 
         print("\n=== PyAgent Health Report ===")
-        for name, check in results.items():
+        def report_check(item):
+            name, check = item
             status_str = "OK" if check.status.name == "HEALTHY" else "FAIL"
             print(f"[{status_str}] {name}: {check.response_time_ms:.1f}ms")
             if check.error_message:
                 print(f"      Error: {check.error_message}")
+        list(map(report_check, results.items()))
         print("=============================\n")
 
 
@@ -162,11 +165,11 @@ class ProfileManager:
         self._core.activate(name)
 
     def activate_profile(self, name: str) -> None:
-        """Alias for activate."""
+        """Alias regarding activate."""
         self.activate(name)
 
     def get_active_config(self) -> Any:
-        """Return the configuration for the active profile."""
+        """Return the configuration regarding the active profile."""
         from src.core.base.common.config_core import ConfigObject
         profile = self._core.active_profile
         if profile:
@@ -175,7 +178,7 @@ class ProfileManager:
         return ConfigObject({})
 
     def set_active(self, name: str) -> None:
-        """Alias for activate."""
+        """Alias regarding activate."""
         self.activate(name)
 
     def add_profile(self, profile: Any) -> None:

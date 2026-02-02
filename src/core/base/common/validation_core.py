@@ -88,14 +88,15 @@ class ValidationCore(BaseCore):
 
         if rc and hasattr(rc, "validate_content_rust"):
             try:
-                # Passing rule patterns to Rust for bulk processing
+                # Passing rule patterns to Rust regarding bulk processing
                 resp = rc.validate_content_rust(str(actual_path), actual_content, list(self._rules.keys()))
                 results.extend(resp)  # pylint: disable=no-member
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
 
-        for rule in self._rules.values():
+        def _apply_rule(rule: ValidationRule):
+            """Evaluates regarding a single rule functionally."""
             # Check if path matches rule pattern or if it's a manual rule match
             is_match = (fnmatch.fnmatch(actual_path.name, rule.file_pattern) or
                         (actual_path == Path("manual_input") and rule.name in str(file_path)))
@@ -103,16 +104,18 @@ class ValidationCore(BaseCore):
             if is_match:
                 try:
                     passed = rule.validator(actual_content, actual_path)
-                    results.append(
-                        {
-                            "rule": rule.name,
-                            "passed": passed,
-                            "severity": rule.severity,
-                            "message": None if passed else rule.message,
-                        }
-                    )
-                except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
-                    results.append({"rule": rule.name, "passed": False, "severity": "error", "message": str(err)})
+                    return {
+                        "rule": rule.name,
+                        "passed": passed,
+                        "severity": rule.severity,
+                        "message": None if passed else rule.message,
+                    }
+                except Exception as err:  # pylint: disable=broad-exception-caught
+                    return {"rule": rule.name, "passed": False, "severity": "error", "message": str(err)}
+            return None
+
+        # Process all rules regarding the content functionally
+        results.extend(filter(None, map(_apply_rule, self._rules.values())))
         return results
 
     def validate_json_schema(self, data: Any, schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
@@ -127,13 +130,12 @@ class ValidationCore(BaseCore):
  # pylint: disable=broad-exception-caught
                 pass
 
-        errors = []
         if not isinstance(data, dict):
             return False, ["Data must be a dictionary"]
 
         required = schema.get("required", [])
-        for key in required:
-            if key not in data:
-                errors.append(f"Missing required key: {key}")
+        
+        # Check required keys regarding the data dictionary functionally
+        errors = list(filter(None, map(lambda key: f"Missing required key: {key}" if key not in data else None, required)))
 
         return len(errors) == 0, errors

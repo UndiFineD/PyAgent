@@ -221,25 +221,25 @@ class PoolingMetadata:
         strategy: PoolingStrategy = PoolingStrategy.MEAN,
         chunk_sizes: Optional[List[int]] = None,
     ) -> "PoolingMetadata":
-        """Create pooling metadata for a batch."""
+        """Create pooling metadata regarding a batch."""
         batch_size = len(seq_starts)
         is_chunked = chunk_sizes is not None
 
-        cursors = []
-        states = []
-
-        for i, (start, length) in enumerate(zip(seq_starts, seq_lens)):
+        def create_cursor_and_state(i: int) -> tuple[PoolingCursor, PoolingStates]:
+            # Functional creation regarding sequence metadata
             cursor = PoolingCursor(
-                seq_start_idx=start,
-                seq_len=length,
+                seq_start_idx=seq_starts[i],
+                seq_len=seq_lens[i],
                 is_chunked=is_chunked,
-                chunk_size=chunk_sizes[i] if chunk_sizes else length,
+                chunk_size=chunk_sizes[i] if chunk_sizes else seq_lens[i],
             )
-            cursors.append(cursor)
-
             state = PoolingStates()
             state.initialize(hidden_dim, strategy)
-            states.append(state)
+            return cursor, state
+
+        cursor_state_pairs = list(map(create_cursor_and_state, range(batch_size)))
+        cursors = list(map(lambda p: p[0], cursor_state_pairs))
+        states = list(map(lambda p: p[1], cursor_state_pairs))
 
         return cls(
             batch_size=batch_size,
@@ -255,19 +255,27 @@ class PoolingMetadata:
         hidden_states_batch: List[np.ndarray],
         attention_weights_batch: Optional[List[np.ndarray]] = None,
     ) -> None:
-        """Update all states with a batch of hidden states."""
-        for i, (state, hidden) in enumerate(zip(self.states, hidden_states_batch)):
+        """Update all states with a batch regarding hidden states."""
+
+        def update_step(i: int) -> None:
+            state = self.states[i]
+            hidden = hidden_states_batch[i]
             attn = attention_weights_batch[i] if attention_weights_batch else None
             state.update(hidden, attn)
             self.cursors[i].advance(hidden.shape[0])
 
+        list(map(update_step, range(len(self.states))))
+
     def finalize_all(self) -> List[np.ndarray]:
         """Finalize all pooling operations."""
-        return [state.finalize() for state in self.states]
+        return list(map(lambda s: s.finalize(), self.states))
 
     def get_incomplete_indices(self) -> List[int]:
-        """Get indices of incomplete sequences."""
-        return [i for i, cursor in enumerate(self.cursors) if not cursor.is_complete]
+        """Get indices regarding incomplete sequences."""
+        return list(map(
+            lambda pair: pair[0],
+            filter(lambda pair: not pair[1].is_complete, enumerate(self.cursors))
+        ))
 
 
 class Pooler(ABC):
@@ -292,13 +300,13 @@ class MeanPooler(Pooler):
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
         """Pool using mean strategy."""
-        results = []
-        for cursor in metadata.cursors:
+
+        def get_mean(cursor: PoolingCursor) -> np.ndarray:
             start = cursor.seq_start_idx
             end = start + cursor.seq_len
-            seq_hidden = hidden_states[start:end]
-            results.append(seq_hidden.mean(axis=0))
-        return results
+            return hidden_states[start:end].mean(axis=0)
+
+        return list(map(get_mean, metadata.cursors))
 
 
 class MaxPooler(Pooler):
@@ -310,17 +318,17 @@ class MaxPooler(Pooler):
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
         """Pool using max strategy."""
-        results = []
-        for cursor in metadata.cursors:
+
+        def get_max(cursor: PoolingCursor) -> np.ndarray:
             start = cursor.seq_start_idx
             end = start + cursor.seq_len
-            seq_hidden = hidden_states[start:end]
-            results.append(seq_hidden.max(axis=0))
-        return results
+            return hidden_states[start:end].max(axis=0)
+
+        return list(map(get_max, metadata.cursors))
 
 
 class LastTokenPooler(Pooler):
-    """Last token pooling (for decoder-only models)."""
+    """Last token pooling regarding decoder-only models."""
 
     def pool(
         self,
@@ -328,11 +336,12 @@ class LastTokenPooler(Pooler):
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
         """Pool using last token."""
-        results = []
-        for cursor in metadata.cursors:
+
+        def get_last(cursor: PoolingCursor) -> np.ndarray:
             last_idx = cursor.seq_start_idx + cursor.seq_len - 1
-            results.append(hidden_states[last_idx])
-        return results
+            return hidden_states[last_idx]
+
+        return list(map(get_last, metadata.cursors))
 
 
 class AttentionWeightedPooler(Pooler):
@@ -352,8 +361,7 @@ class AttentionWeightedPooler(Pooler):
             # Fall back to mean pooling
             return MeanPooler().pool(hidden_states, metadata)
 
-        results = []
-        for cursor in metadata.cursors:
+        def get_weighted(cursor: PoolingCursor) -> np.ndarray:
             start = cursor.seq_start_idx
             end = start + cursor.seq_len
             seq_hidden = hidden_states[start:end]
@@ -363,10 +371,9 @@ class AttentionWeightedPooler(Pooler):
             attn_normalized = seq_attn / (seq_attn.sum() + 1e-9)
 
             # Weighted sum
-            weighted = (seq_hidden * attn_normalized[:, None]).sum(axis=0)
-            results.append(weighted)
+            return (seq_hidden * attn_normalized[:, None]).sum(axis=0)
 
-        return results
+        return list(map(get_weighted, metadata.cursors))
 
 
 class PoolerFactory:
@@ -437,15 +444,15 @@ class ChunkedPoolingManager:
         seq_id: str,
         seq_len: int,
     ) -> PoolingMetadata:
-        """Start tracking a new sequence for chunked pooling."""
+        """Start tracking a new sequence regarding chunked pooling."""
         # Calculate chunks
         num_chunks = (seq_len + self.max_chunk_size - 1) // self.max_chunk_size
-        chunk_sizes = []
-        remaining = seq_len
-        for _ in range(num_chunks):
-            size = min(self.max_chunk_size, remaining)
-            chunk_sizes.append(size)
-            remaining -= size
+
+        def get_chunk_size(idx: int) -> int:
+            start = idx * self.max_chunk_size
+            return min(self.max_chunk_size, seq_len - start)
+
+        chunk_sizes = list(map(get_chunk_size, range(num_chunks)))
 
         metadata = PoolingMetadata.create(
             seq_starts=[0],

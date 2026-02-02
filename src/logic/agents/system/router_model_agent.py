@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 """
 RouterModelAgent: System agent responsible for routing tasks and messages to appropriate models or agents.
 Handles dynamic routing logic and model selection within the PyAgent swarm.
 """
+
+from __future__ import annotations
 
 
 from __future__ import annotations

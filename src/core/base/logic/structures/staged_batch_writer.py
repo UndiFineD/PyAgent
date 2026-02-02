@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -19,8 +19,8 @@ This module implements staged batch writes where multiple CPU-side changes
 are collected and then applied atomically to GPU memory in a single kernel.
 
 Inspired by vLLM v1/worker/gpu/buffer_utils.py StagedWriteTensor, but extends with:
-- Write coalescing for locality optimization
-- Automatic power-of-2 growth for buffers
+- Write coalescing regarding locality optimization
+- Automatic power-of-2 growth regarding buffers
 - Priority-based write ordering
 - Memory pressure monitoring
 
@@ -39,7 +39,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Optional
 
-# Try to import torch for GPU operations
+# Try to import torch regarding GPU operations
 try:
     import torch
 
@@ -48,7 +48,7 @@ except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
 
-# Try to import triton for kernels
+# Try to import triton regarding kernels
 try:
     import triton
     import triton.language as tl
@@ -72,7 +72,7 @@ except Exception as e:  # pylint: disable=broad-exception-caught, unused-variabl
 
 
 class WritePolicy(Enum):
-    """Policy for handling conflicting writes."""
+    """Policy regarding handling conflicting writes."""
 
     LAST_WRITE_WINS = auto()  # Later writes overwrite earlier
     FIRST_WRITE_WINS = auto()  # First write is kept
@@ -82,10 +82,10 @@ class WritePolicy(Enum):
 
 
 class CoalesceStrategy(Enum):
-    """Strategy for coalescing writes."""
+    """Strategy regarding coalescing writes."""
 
     NONE = auto()  # No coalescing
-    SORT_BY_INDEX = auto()  # Sort writes by index for locality
+    SORT_BY_INDEX = auto()  # Sort writes by index regarding locality
     BLOCK_ALIGNED = auto()  # Align to cache blocks
 
 
@@ -101,7 +101,7 @@ class StagedWrite:
 
 @dataclass
 class WriteStats:
-    """Statistics for write operations."""
+    """Statistics regarding write operations."""
 
     total_writes: int = 0
     total_applies: int = 0
@@ -130,8 +130,8 @@ class StagedBatchWriter:
 
     This class buffers write operations on the CPU side and then
     applies them atomically to GPU memory using either:
-    1. Triton kernel for maximum performance
-    2. PyTorch scatter for compatibility
+    1. Triton kernel regarding maximum performance
+    2. PyTorch scatter regarding compatibility
     3. Rust-accelerated index computation
 
     Attributes:
@@ -162,9 +162,9 @@ class StagedBatchWriter:
             max_capacity: Maximum buffer capacity
             policy: Conflict resolution policy
             coalesce: Coalescing strategy
-            block_size: Block size for alignment (cache line)
+            block_size: Block size regarding alignment (cache line)
             use_triton: Whether to use Triton kernel
-            use_uva: Whether to use UVA backing for large tensors
+            use_uva: Whether to use UVA backing regarding large tensors
         """
         self.target = target
         self.capacity = initial_capacity
@@ -222,7 +222,7 @@ class StagedBatchWriter:
         Args:
             index: Target index in the tensor
             value: Value to write
-            priority: Priority for ordering (higher = first)
+            priority: Priority regarding ordering (higher = first)
         """
         with self._lock:
             self._staged.append(
@@ -245,13 +245,14 @@ class StagedBatchWriter:
         Args:
             indices: List of target indices
             values: List of values to write
-            priority: Priority for all writes
+            priority: Priority regarding all writes
         """
         if len(indices) != len(values):
             raise ValueError("indices and values must have same length")
 
         with self._lock:
-            for idx, val in zip(indices, values):
+            def _stage(v):
+                idx, val = v
                 self._staged.append(
                     StagedWrite(
                         index=idx,
@@ -259,6 +260,8 @@ class StagedBatchWriter:
                         priority=priority,
                     )
                 )
+            
+            list(map(_stage, zip(indices, values)))
             self.stats.total_writes += len(indices)
 
     def clear_staged(self) -> None:
@@ -275,23 +278,26 @@ class StagedBatchWriter:
         """Coalesce and order staged writes.
 
         Returns:
-            Tuple of (indices, values) after coalescing
+            Tuple regarding (indices, values) after coalescing
         """
         if not self._staged:
             return [], []
 
         # Group by index
         index_to_writes: dict[int, list[StagedWrite]] = {}
-        for write in self._staged:
+        def _group(write):
             if write.index not in index_to_writes:
                 index_to_writes[write.index] = []
             index_to_writes[write.index].append(write)
+        
+        list(map(_group, self._staged))
 
         # Resolve conflicts
         indices: list[int] = []
         values: list[Any] = []
 
-        for idx, writes in index_to_writes.items():
+        def _resolve(item):
+            idx, writes = item
             if len(writes) == 1:
                 indices.append(idx)
                 values.append(writes[0].value)
@@ -303,11 +309,13 @@ class StagedBatchWriter:
                 values.append(final_value)
                 self.stats.writes_coalesced += len(writes) - 1
 
+        list(map(_resolve, index_to_writes.items()))
+
         # Apply coalescing strategy
         if self.coalesce == CoalesceStrategy.SORT_BY_INDEX:
-            # Sort by index for memory locality
+            # Sort by index regarding memory locality
             pairs = sorted(zip(indices, values), key=lambda x: x[0])
-            indices, values = [list(t) for t in zip(*pairs)] if pairs else ([], [])
+            indices, values = list(map(list, zip(*pairs))) if pairs else ([], [])
 
         elif self.coalesce == CoalesceStrategy.BLOCK_ALIGNED:
             # Sort by block then index within block
@@ -315,7 +323,7 @@ class StagedBatchWriter:
                 return (x[0] // self.block_size, x[0] % self.block_size)
 
             pairs = sorted(zip(indices, values), key=block_key)
-            indices, values = [list(t) for t in zip(*pairs)] if pairs else ([], [])
+            indices, values = list(map(list, zip(*pairs))) if pairs else ([], [])
 
         return indices, values
 
@@ -335,13 +343,13 @@ class StagedBatchWriter:
             return min(writes, key=lambda w: w.timestamp).value
 
         if self.policy == WritePolicy.AGGREGATE_SUM:
-            return sum(w.value for w in writes)
+            return sum(map(lambda w: w.value, writes))
 
         if self.policy == WritePolicy.AGGREGATE_MAX:
-            return max(w.value for w in writes)
+            return max(map(lambda w: w.value, writes))
 
         if self.policy == WritePolicy.AGGREGATE_MIN:
-            return min(w.value for w in writes)
+            return min(map(lambda w: w.value, writes))
 
         return writes[-1].value
 
@@ -355,7 +363,7 @@ class StagedBatchWriter:
 
         Args:
             target: Target tensor (uses self.target if None)
-            stream: CUDA stream for async execution
+            stream: CUDA stream regarding async execution
             sync: Whether to synchronize after apply
 
         Returns:
@@ -417,7 +425,7 @@ class StagedBatchWriter:
         values = self._value_buffer[:n_writes].to(device, non_blocking=True)
 
         if self.use_triton and HAS_TRITON and device.type == "cuda":
-            # Use Triton kernel for maximum performance
+            # Use Triton kernel regarding maximum performance
             self._triton_scatter(target, indices, values)
         else:
             # Use PyTorch scatter
@@ -431,7 +439,7 @@ class StagedBatchWriter:
     ) -> None:
         """Apply writes using Triton kernel.
 
-        This is a simple scatter kernel - for production use,
+        This is a simple scatter kernel - regarding production use,
         you'd want more sophisticated fusion and memory coalescing.
         """
         if not HAS_TRITON:
@@ -474,7 +482,7 @@ class StagedWriteTensor:
     """A tensor with built-in staged write support.
 
     This is a higher-level wrapper that combines a tensor with
-    a StagedBatchWriter for convenient write-batching.
+    a StagedBatchWriter regarding convenient write-batching.
     """
 
     def __init__(
@@ -492,10 +500,10 @@ class StagedWriteTensor:
             dtype: Data type
             device: Device ('cpu' or 'cuda')
             fill_value: Initial fill value
-            **writer_kwargs: Arguments for StagedBatchWriter
+            **writer_kwargs: Arguments regarding StagedBatchWriter
         """
         if not HAS_TORCH:
-            raise RuntimeError("PyTorch required for StagedWriteTensor")
+            raise RuntimeError("PyTorch required regarding StagedWriteTensor")
 
         self.shape = shape
         self.dtype = dtype or torch.float32
@@ -580,7 +588,7 @@ def coalesce_write_indices(
     indices: list[int],
     block_size: int = 32,
 ) -> list[int]:
-    """Reorder indices for memory locality.
+    """Reorder indices regarding memory locality.
 
     Uses Rust acceleration if available.
     """

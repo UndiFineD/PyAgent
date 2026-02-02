@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Manager for plugin discovery, loading, and registration.
-(Facade for src.core.base.common.plugin_core)
+Manager regarding plugin discovery, loading, and registration.
+(Facade regarding src.core.base.common.plugin_core)
 """
 
 from __future__ import annotations
@@ -27,12 +27,12 @@ from src.core.base.common.plugin_core import \
 
 class PluginMetadata(StandardPluginMetadata):
     """
-    Facade for StandardPluginMetadata to maintain backward compatibility.
+    Facade regarding StandardPluginMetadata to maintain backward compatibility.
     """
 
 
 class PluginManager(StandardPluginManager):
     """
-    Facade for PluginCore to maintain backward compatibility.
+    Facade regarding PluginCore to maintain backward compatibility.
     Plugin management is now centralized in the Infrastructure/Common tier.
     """

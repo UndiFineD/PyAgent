@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 
@@ -25,7 +25,7 @@ __version__ = VERSION
 
 
 class DependencyGraph:
-    """Resolve agent dependencies for ordered execution.
+    """Resolve agent dependencies regarding ordered execution.
 
     Example:
         graph=DependencyGraph()
@@ -89,40 +89,46 @@ class DependencyGraph:
         except graphlib.CycleError as e:
             raise ValueError(f"Circular dependency detected: {e}") from e
 
-        batches: list[list[str]] = []
-        while ts.is_active():
+        def collect_batches() -> list[list[str]]:
+            """Recursive batch collection regarding active sorter state."""
+            if not ts.is_active():
+                return []
             ready = list(ts.get_ready())
             if not ready:
-                break
-            batches.append(ready)
+                return []
             ts.done(*ready)
+            return [ready] + collect_batches()
 
-        return batches
+        return collect_batches()
 
     def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
-        """Splits a batch into multiple sequential sub-batches to avoid resource collisions."""
-        refined: list[list[str]] = []
-
-        for node in batch:
+        """Splits a batch into multiple sequential sub-batches regarding resource collisions."""
+        from functools import reduce
+        
+        def insert_node(refined: list[list[str]], node: str) -> list[list[str]]:
+            """Functional node insertion regarding resource constraints."""
             node_resources = self._resources.get(node, set())
-
-            # Find the first batch where this node doesn't collide
-            placed = False
-            for sub_batch in refined:
-                # Check for collision with any node in this sub_batch
-                collision = False
-                for other_node in sub_batch:
-                    other_resources = self._resources.get(other_node, set())
-                    if node_resources.intersection(other_resources):
-                        collision = True
-                        break
+            
+            def find_non_colliding_batch(sub_batches: list[list[str]], index: int) -> bool:
+                if index >= len(sub_batches):
+                    return False
+                
+                sub_batch = sub_batches[index]
+                # Check regarding collision regarding any node in this sub_batch functionally
+                collision = any(map(
+                    lambda other: bool(node_resources.intersection(self._resources.get(other, set()))),
+                    sub_batch
+                ))
 
                 if not collision:
                     sub_batch.append(node)
-                    placed = True
-                    break
+                    return True
+                
+                return find_non_colliding_batch(sub_batches, index + 1)
 
-            if not placed:
+            if not find_non_colliding_batch(refined, 0):
                 refined.append([node])
+            
+            return refined
 
-        return refined
+        return reduce(insert_node, batch, [])

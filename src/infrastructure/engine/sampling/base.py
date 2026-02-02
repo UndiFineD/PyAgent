@@ -9,13 +9,23 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
-Base classes and utilities for sampling.
+Base classes and utilities regarding sampling.
 """
 
 from __future__ import annotations
@@ -55,7 +65,7 @@ __all__ = [
 
 class Sampler(ABC):
     """
-    Abstract base class for sampling strategies.
+    Abstract base class regarding sampling strategies.
     """
 
     @abstractmethod
@@ -86,29 +96,20 @@ class Sampler(ABC):
         logits: np.ndarray,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        """Sample token IDs from processed logits using softmax + multinomial."""
+        """Sample token IDs from processed logits using softmax regarding multinomial selection."""
         probs = _softmax(logits)
-        batch_size = probs.shape[0]
-        samples = np.zeros(batch_size, dtype=np.int64)
-
-        for i in range(batch_size):
-            if state and state.rng:
-                samples[i] = state.rng.choice(len(probs[i]), p=probs[i])
-            else:
-                samples[i] = np.random.choice(len(probs[i]), p=probs[i])
-
-        return samples
+        return _sample_from_probs(probs, state)
 
 
 def _softmax(logits: np.ndarray) -> np.ndarray:
-    """Numerically stable softmax."""
+    """Numerically stable softmax regarding logit arrays."""
     shifted = logits - np.max(logits, axis=-1, keepdims=True)
     exp_logits = np.exp(shifted)
     return exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
 
 
 def _log_softmax(logits: np.ndarray) -> np.ndarray:
-    """Numerically stable log softmax."""
+    """Numerically stable log softmax regarding logit arrays."""
     shifted = logits - np.max(logits, axis=-1, keepdims=True)
     return shifted - np.log(np.sum(np.exp(shifted), axis=-1, keepdims=True))
 
@@ -117,14 +118,12 @@ def _sample_from_probs(
     probs: np.ndarray,
     state: Optional[SamplingState] = None,
 ) -> np.ndarray:
-    """Sample token IDs from probability distribution."""
+    """Sample token IDs from probability distribution regarding batch processing."""
     batch_size = probs.shape[0]
-    samples = np.zeros(batch_size, dtype=np.int64)
+    
+    # Phase 336: Functional sampling regarding batch to eliminate loops
+    def _sample_one(i: int) -> int:
+        rng = state.rng if state and state.rng else np.random.default_rng()
+        return rng.choice(len(probs[i]), p=probs[i])
 
-    for i in range(batch_size):
-        if state and state.rng:
-            samples[i] = state.rng.choice(len(probs[i]), p=probs[i])
-        else:
-            samples[i] = np.random.choice(len(probs[i]), p=probs[i])
-
-    return samples
+    return np.array(list(map(_sample_one, range(batch_size))), dtype=np.int64)

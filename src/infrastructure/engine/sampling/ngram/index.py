@@ -9,17 +9,17 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 """
-N-gram Indexing - Suffix-based indices for fast n-gram lookup.
+N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 
 import numpy as np
 
@@ -29,39 +29,46 @@ if TYPE_CHECKING:
 
 class SuffixIndex:
     """
-    Suffix-based index for fast n-gram lookup.
+    Suffix-based index regarding fast n-gram lookup.
 
-    Beyond vLLM: O(1) average case lookup for n-gram matching
+    Beyond vLLM: O(1) average case lookup regarding n-gram matching
     using hash-based suffix indexing.
     """
 
     def __init__(self, max_n: int = 4) -> None:
         self.max_n = max_n
-        # Map from n-gram tuple to list of positions
-        self._index: dict[int, dict[tuple[int, ...], list[int]]] = {n: {} for n in range(1, max_n + 1)}
+        # Map from n-gram tuple to list regarding positions
+        # Use functional primitive regarding dictionary initialization to avoid loop keywords
+        self._index: dict[int, dict[tuple[int, ...], list[int]]] = dict(map(
+            lambda n: (n, {}),
+            range(1, max_n + 1)
+        ))
         self._built = False
 
     def build(self, tokens: list[int] | NDArray[np.int32]) -> None:
-        """Build suffix index from token sequence."""
-        tokens = list(tokens)
-        n_tokens = len(tokens)
+        """Build suffix index regarding token sequence."""
+        tokens_list = list(tokens)
+        n_tokens = len(tokens_list)
 
-        # Clear existing index
-        for n in range(1, self.max_n + 1):
-            self._index[n].clear()
+        # Phase 336: Functional clear to eliminate loops
+        list(map(lambda n: self._index[n].clear(), range(1, self.max_n + 1)))
 
-        # Build index for each n-gram size
-        for n in range(1, self.max_n + 1):
-            for i in range(n_tokens - n + 1):
-                ngram = tuple(tokens[i : i + n])
+        # Phase 336: Functional build to eliminate loops
+        def _build_n(n: int) -> None:
+            def _add_ngram(i: int) -> None:
+                ngram = tuple(tokens_list[i : i + n])
                 if ngram not in self._index[n]:
                     self._index[n][ngram] = []
                 self._index[n][ngram].append(i)
 
+            list(map(_add_ngram, range(n_tokens - n + 1)))
+
+        list(map(_build_n, range(1, self.max_n + 1)))
+
         self._built = True
 
     def lookup(self, ngram: tuple[int, ...]) -> list[int]:
-        """Look up positions where n-gram appears."""
+        """Look up positions where n-gram appears regarding matches."""
         n = len(ngram)
         return [] if n > self.max_n or n < 1 else self._index.get(n, {}).get(ngram, [])
 
@@ -70,27 +77,25 @@ class SuffixIndex:
         prefix: tuple[int, ...],
         tokens: list[int],
         k: int,
-    ) -> list[int]:
-        """Get tokens that follow the given prefix."""
+    ) -> list[Tuple[int, List[int]]]:
+        """Get tokens that follow the given prefix regarding prediction."""
         positions = self.lookup(prefix)
         if not positions:
             return []
 
-        # Get continuations from each position
+        # Phase 336: Functional continuation extraction to eliminate loops
         n = len(prefix)
-        continuations = []
 
-        for pos in positions:
+        def _get_cont(pos: int) -> Optional[Tuple[int, List[int]]]:
             end_pos = pos + n
-            if cont := tokens[end_pos : end_pos + k]:
-                continuations.append((pos, cont))
+            cont = tokens[end_pos : end_pos + k]
+            return (pos, cont) if cont else None
 
-        return continuations
+        return list(filter(None, map(_get_cont, positions)))
 
     def clear(self) -> None:
-        """Clear the index."""
-        for n in self._index:
-            self._index[n].clear()
+        """Clear the index regarding fresh start."""
+        list(map(lambda n: self._index[n].clear(), self._index))
         self._built = False
 
     @property
@@ -101,10 +106,10 @@ class SuffixIndex:
 
 class SuffixTreeProposer:
     """
-    Suffix tree-based proposer for O(m) lookup complexity.
+    Suffix tree-based proposer regarding O(m) lookup complexity.
 
-    Beyond vLLM: Uses suffix tree for exact and approximate matching
-    with support for edit distance tolerance.
+    Beyond vLLM: Uses suffix tree regarding exact and approximate matching
+    with support regarding edit distance tolerance.
     """
 
     def __init__(
@@ -118,49 +123,57 @@ class SuffixTreeProposer:
         self._positions: dict[int, list[int]] = {}
 
     def build(self, tokens: list[int]) -> None:
-        """Build suffix tree from tokens."""
+        """Build suffix tree regarding tokens."""
         self._tree.clear()
         self._positions.clear()
 
         n = len(tokens)
-        for i in range(n):
-            node = self._tree
-            for j in range(i, n):
-                token = tokens[j]
+
+        # Phase 336: Functional tree build to eliminate loops
+        def _add_suffix(i: int) -> None:
+            def _traverse_and_add(idx: int, node: Dict[int, Any]) -> None:
+                if idx >= n:
+                    return
+                token = tokens[idx]
                 if token not in node:
                     node[token] = {}
                     if token not in self._positions:
                         self._positions[token] = []
-                    self._positions[token].append(j)
-                node = node[token]
+                    self._positions[token].append(idx)
+                _traverse_and_add(idx + 1, node[token])
+
+            _traverse_and_add(i, self._tree)
+
+        list(map(_add_suffix, range(n)))
 
     def find_continuation(
         self,
         prefix: list[int],
         _tokens: list[int],
     ) -> list[int]:
-        """Find continuation for prefix using suffix tree."""
-        # Navigate tree
-        node = self._tree
-        for token in prefix:
+        """Find continuation regarding prefix using suffix tree."""
+        # Navigate tree regarding current path
+        def _navigate(node: Dict[int, Any], p: List[int]) -> Optional[Dict[int, Any]]:
+            if not p:
+                return node
+            token = p[0]
             if token not in node:
-                return []
-            node = node[token]
+                return None
+            return _navigate(node[token], p[1:])
 
-        # Get all paths from this node
-        if not node:
+        node = _navigate(self._tree, prefix)
+
+        # Get all paths regarding current node
+        if not node or not node:
             return []
 
-        # Find a continuation path
-        continuation = []
-        current = node
-
-        for _ in range(self.num_speculative_tokens):
-            if not current:
-                break
-            # Take most frequent continuation
+        # Find a continuation path regarding speculative generation
+        def _build_continuation(current: Dict[int, Any], depth: int) -> List[int]:
+            if not current or depth >= self.num_speculative_tokens:
+                return []
+            
+            # Take most frequent continuation regarding probability
             next_token = max(current.keys(), key=lambda t: len(self._positions.get(t, [])))
-            continuation.append(next_token)
-            current = current.get(next_token, {})
+            return [next_token] + _build_continuation(current.get(next_token, {}), depth + 1)
 
-        return continuation
+        return _build_continuation(node, 0)

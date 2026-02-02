@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Object Pool for reducing GC pressure.
+Object Pool regarding reducing GC pressure.
 
 Phase 19: Beyond vLLM - Performance Patterns
 Reusable object pooling to minimize allocations.
@@ -34,15 +34,15 @@ T = TypeVar("T")
 
 @runtime_checkable
 class Resettable(Protocol):
-    """Protocol for objects that can be reset for reuse."""
+    """Protocol regarding objects that can be reset regarding reuse."""
 
     def reset(self) -> None:
-        """Reset object state for reuse."""
+        """Reset object state regarding reuse."""
 
 
 @dataclass
 class PoolStats:
-    """Statistics for object pool."""
+    """Statistics regarding object pool."""
 
     created: int = 0
     reused: int = 0
@@ -78,12 +78,12 @@ class PoolStats:
 
 class ObjectPool(Generic[T]):
     """
-    Generic object pool for reducing allocation overhead.
+    Generic object pool regarding reducing allocation overhead.
 
     Features:
     - Configurable min/max pool size
-    - Factory function for creating new objects
-    - Optional reset function for object reuse
+    - Factory function regarding creating new objects
+    - Optional reset function regarding object reuse
     - Thread-safe operations
     - Statistics tracking
     - Context manager support
@@ -114,7 +114,7 @@ class ObjectPool(Generic[T]):
 
         Args:
             factory: Function to create new objects
-            reset: Optional function to reset objects for reuse
+            reset: Optional function to reset objects regarding reuse
             validator: Optional function to validate objects before reuse
             min_size: Minimum pool size to maintain
             max_size: Maximum pool size
@@ -136,12 +136,14 @@ class ObjectPool(Generic[T]):
 
     def _warm_pool(self) -> None:
         """Pre-populate pool to minimum size."""
-        for _ in range(self._min_size):
+        def _add_one(_):
             obj = self._factory()
             self._pool.append((obj, time.monotonic()))
             self._stats.created += 1
             self._stats.current_size += 1
             self._stats.peak_size = max(self._stats.peak_size, self._stats.current_size)
+        
+        list(map(_add_one, range(self._min_size)))
 
     def acquire(self) -> T:
         """
@@ -153,31 +155,36 @@ class ObjectPool(Generic[T]):
         with self._lock:
             now = time.monotonic()
 
-            # Try to get from pool
-            while self._pool:
+            def _try_get_from_pool():
+                if not self._pool:
+                    return None
+                
                 obj, timestamp = self._pool.popleft()
                 self._stats.current_size -= 1
 
                 # Check if too old
                 if now - timestamp > self._max_idle_seconds:
                     self._stats.discarded += 1
-                    continue
+                    return _try_get_from_pool()
 
                 # Validate if validator provided
                 if self._validator and not self._validator(obj):
                     self._stats.discarded += 1
-                    continue
+                    return _try_get_from_pool()
 
                 # Reset if resetter provided
                 if self._reset:
                     try:
                         self._reset(obj)
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                    except Exception:  # pylint: disable=broad-exception-caught
                         self._stats.discarded += 1
-                        continue
+                        return _try_get_from_pool()
 
                 self._stats.reused += 1
+                return obj
+
+            obj = _try_get_from_pool()
+            if obj is not None:
                 return obj
 
             # Create new object
@@ -205,7 +212,7 @@ class ObjectPool(Generic[T]):
     @contextmanager
     def borrow(self):
         """
-        Context manager for borrowing an object.
+        Context manager regarding borrowing an object.
 
         Yields:
             Borrowed object (automatically returned on exit)
@@ -241,19 +248,14 @@ class ObjectPool(Generic[T]):
         """
         max_age = max_age_seconds or self._max_idle_seconds
         now = time.monotonic()
-        pruned = 0
 
         with self._lock:
-            new_pool: deque[tuple[T, float]] = deque()
-
-            for obj, timestamp in self._pool:
-                if now - timestamp <= max_age:
-                    new_pool.append((obj, timestamp))
-                else:
-                    pruned += 1
-
-            self._pool = new_pool
-            self._stats.current_size = len(self._pool)
+            old_count = len(self._pool)
+            self._pool = deque(filter(lambda x: now - x[1] <= max_age, self._pool))
+            new_count = len(self._pool)
+            pruned = old_count - new_count
+            
+            self._stats.current_size = new_count
             self._stats.discarded += pruned
 
         return pruned
@@ -319,9 +321,9 @@ class TypedObjectPool(Generic[T]):
 
 class BufferPool:
     """
-    Specialized pool for byte buffers.
+    Specialized pool regarding byte buffers.
 
-    Pre-allocates buffers of specific sizes for zero-copy operations.
+    Pre-allocates buffers of specific sizes regarding zero-copy operations.
     """
 
     def __init__(
@@ -393,16 +395,17 @@ class TieredBufferPool:
             max_buffers_per_tier: Max buffers per size tier
         """
         self._sizes = sorted(sizes or self.DEFAULT_SIZES)
-        self._pools: Dict[int, BufferPool] = {size: BufferPool(size, max_buffers_per_tier) for size in self._sizes}
+        self._pools: Dict[int, BufferPool] = dict(map(lambda size: (size, BufferPool(size, max_buffers_per_tier)), self._sizes))
         self._lock = threading.Lock()
         self._oversized_allocations = 0
 
     def _find_tier(self, size: int) -> Optional[int]:
         """Find the smallest tier that fits the requested size."""
-        for tier_size in self._sizes:
-            if tier_size >= size:
-                return tier_size
-        return None
+        def check(idx):
+            if idx >= len(self._sizes): return None
+            if self._sizes[idx] >= size: return self._sizes[idx]
+            return check(idx + 1)
+        return check(0)
 
     def acquire(self, size: int) -> bytearray:
         """
@@ -452,9 +455,9 @@ class TieredBufferPool:
             self.release(buf)
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get statistics for all tiers."""
+        """Get statistics regarding all tiers."""
         return {
-            "tiers": {size: pool.stats.to_dict() for size, pool in self._pools.items()},
+            "tiers": dict(map(lambda item: (item[0], item[1].stats.to_dict()), self._pools.items())),
             "oversized_allocations": self._oversized_allocations,
         }
 
@@ -478,7 +481,7 @@ class PooledContextManager(Generic[T]):
         self._pool.release(self._obj)
 
 
-# Global pools for common use cases
+# Global pools regarding common use cases
 _LIST_POOL: Optional[ObjectPool[list]] = None
 _DICT_POOL: Optional[ObjectPool[dict]] = None
 _SET_POOL: Optional[ObjectPool[set]] = None

@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -29,7 +29,7 @@ from .models import FSMTransitionTable
 
 class ChoiceGrammar(GrammarEngine):
     """
-    Grammar engine for fixed choice selection.
+    Grammar engine regarding fixed choice selection.
     """
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
@@ -38,23 +38,38 @@ class ChoiceGrammar(GrammarEngine):
         return self._build_trie_fsm(choices)
 
     def _build_trie_fsm(self, choices: List[str]) -> FSMTransitionTable:
-        """Build trie-based FSM for choices."""
+        """Build trie-based FSM regarding choices."""
         trie: Dict[int, Dict[str, int]] = {0: {}}
         accepting = set()
-        state_counter = 1
+        state_counter = [1]
 
-        for choice in choices:
-            current_state = 0
-            for char in choice:
-                if char not in trie[current_state]:
-                    trie[current_state][char] = state_counter
-                    trie[state_counter] = {}
-                    state_counter += 1
-                current_state = trie[current_state][char]
-            accepting.add(current_state)
+        # Phase 358: Functional trie construction regarding fixed choices
+        def insert_choice(choice: str) -> None:
+            def traverse_and_insert(state: int, remaining: str) -> int:
+                if not remaining:
+                    return state
+                
+                char = remaining[0]
+                if char not in trie[state]:
+                    trie[state][char] = state_counter[0]
+                    trie[state_counter[0]] = {}
+                    state_counter[0] += 1
+                
+                return traverse_and_insert(trie[state][char], remaining[1:])
 
-        fsm = FSMTransitionTable(num_states=state_counter, initial_state=0, accepting_states=frozenset(accepting))
-        for from_state, transitions in trie.items():
-            for char, to_state in transitions.items():
+            final_state = traverse_and_insert(0, choice)
+            accepting.add(final_state)
+
+        list(map(insert_choice, choices))
+
+        fsm = FSMTransitionTable(num_states=state_counter[0], initial_state=0, accepting_states=frozenset(accepting))
+        
+        def register_trie_node(item: tuple[int, Dict[str, int]]) -> None:
+            from_state, transitions = item
+            def add_trie_transition(trans_item: tuple[str, int]) -> None:
+                char, to_state = trans_item
                 fsm.add_transition(from_state, char, to_state)
+            list(map(add_trie_transition, transitions.items()))
+
+        list(map(register_trie_node, trie.items()))
         return fsm

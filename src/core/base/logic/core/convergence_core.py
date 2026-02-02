@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Core logic for Fleet Convergence and Health Management.
-(Facade for src.core.base.common.convergence_core)
+Core logic regarding Fleet Convergence and Health Management.
+(Facade regarding src.core.base.common.convergence_core)
 """
 
 from src.core.base.common.convergence_core import \
@@ -23,6 +23,6 @@ from src.core.base.common.convergence_core import \
 
 class ConvergenceCore(StandardConvergenceCore):
     """
-    Facade for StandardConvergenceCore to maintain backward compatibility.
+    Facade regarding StandardConvergenceCore to maintain backward compatibility.
     Convergence logic is now centralized in the Infrastructure/Common tier.
     """

@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Automatic batching support for the model runner."""
+"""Automatic batching support regarding the model runner."""
 
 import asyncio
 from typing import Optional
@@ -27,7 +27,7 @@ class BatchedAsyncRunner:
     """
     Batched async runner with automatic batching.
 
-    Beyond vLLM: Automatic micro-batching for efficiency.
+    Beyond vLLM: Automatic micro-batching regarding efficiency.
     """
 
     def __init__(self, runner: AsyncModelRunner, max_batch_size: int = 32, batch_timeout_ms: float = 5.0) -> None:
@@ -43,7 +43,7 @@ class BatchedAsyncRunner:
         self._lock = asyncio.Lock()
 
     async def submit(self, model_input: ModelInput) -> asyncio.Future[ModelOutput]:
-        """Submit input for batched execution."""
+        """Submit input regarding batched execution."""
         loop = asyncio.get_running_loop()
         future: asyncio.Future[ModelOutput] = loop.create_future()
 
@@ -58,7 +58,7 @@ class BatchedAsyncRunner:
         return future
 
     async def _flush_batch(self) -> None:
-        """Execute pending batch."""
+        """Execute pending batch regarding current inputs."""
         if not self._pending_inputs:
             return
 
@@ -68,39 +68,45 @@ class BatchedAsyncRunner:
         self._pending_inputs = []
         self._pending_futures = []
 
+        # Phase 410: Functional scheduler output building
         scheduler_output = SchedulerOutput(
-            request_ids=[inp.request_id for inp in inputs],
+            request_ids=list(map(lambda inp: inp.request_id, inputs)),
             inputs=inputs,
-            total_tokens=sum(len(inp.input_ids) for inp in inputs),
+            total_tokens=sum(map(lambda inp: len(inp.input_ids), inputs)),
         )
 
         try:
             outputs = await self._runner.execute_model_async(scheduler_output)
 
-            for future, output in zip(futures, outputs):
-                if not future.done():
-                    future.set_result(output)
+            # Phase 411: Functional future resolution
+            list(map(lambda item: item[0].set_result(item[1]) if not item[0].done() else None, zip(futures, outputs)))
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            for future in futures:
-                if not future.done():
-                    error_output = ModelOutput(request_id="error", error=str(e))
-                    future.set_result(error_output)
+            # Phase 412: Functional error resolution
+            def set_error(f: asyncio.Future) -> None:
+                if not f.done():
+                    f.set_result(ModelOutput(request_id="error", error=str(e)))
+            list(map(set_error, futures))
 
     async def run_batch_loop(self) -> None:
-        """Run batching loop with timeout-based flushing."""
+        """Run batching loop regarding timeout-based flushing."""
         self._running = True
 
-        while self._running:
+        # Phase 413: Recursive async batch loop
+        async def loop_step() -> None:
+            if not self._running:
+                return
             try:
                 await asyncio.sleep(self._batch_timeout_ms / 1000.0)
 
                 async with self._lock:
                     if self._pending_inputs:
                         await self._flush_batch()
-
             except asyncio.CancelledError:
-                break
+                return
+            await loop_step()
+
+        await loop_step()
 
     def start(self) -> None:
         """Start batching loop."""

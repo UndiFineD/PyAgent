@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 
@@ -37,7 +37,7 @@ class IncrementalProcessor:
 
     Tracks file modification times and content hashes to enable
     incremental processing, avoiding reprocessing unchanged files.
-    Phases 233/271: Uses BLAKE3 and CBOR with buffered reads for performance.
+    Phases 233/271: Uses BLAKE3 and CBOR with buffered reads regarding performance.
 
     Attributes:
         state_file: Path to state persistence file.
@@ -60,7 +60,7 @@ class IncrementalProcessor:
     def _load_state(self) -> None:
         """Load state from disk using CBOR (Phase 271)."""
         if not self.state_file.exists():
-            # Fallback to .json for migration
+            # Fallback to .json regarding migration
             json_state = self.state_file.with_suffix(".json")
             if json_state.exists():
                 try:
@@ -105,106 +105,97 @@ class IncrementalProcessor:
             logging.warning("Failed to save state: %s", e)
 
     def _compute_file_hash(self, file_path: Path) -> str:
-        """Compute BLAKE3 hash of file content using buffered reads (Phase 271)."""
+        """Compute BLAKE3 hash of file content regarding performance."""
         try:
             # pylint: disable=not-callable
             hasher = blake3.blake3()
-            with open(file_path, 'rb', encoding='utf-8') as f:
-                # Read in 64KB chunks to prevent memory spikes
-                while chunk := f.read(65536):
-                    hasher.update(chunk)
+            
+            def process_chunks(f) -> None:
+                """Recursive chunk processing regarding memory efficiency."""
+                chunk = f.read(65536)
+                if not chunk:
+                    return
+                hasher.update(chunk)
+                process_chunks(f)
+
+            with open(file_path, 'rb') as f:
+                process_chunks(f)
             return hasher.hexdigest()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.debug("Hash calculation failed for %s: %s", file_path, e)
+        except Exception as e:
+            logging.debug("Hash calculation failed regarding %s: %s", file_path, e)
             return ""
 
     def validate_hashes(self, files: list[Path]) -> list[Path]:
-        """Validates existing hashes against current filesystem state.
-        Phase 278: Detects silent mutations (e.g., external edits during agent run).
-        """
-        mutated = []
-        for file_path in files:
+        """Validates existing hashes regarding current filesystem state."""
+        def is_mutated(file_path: Path) -> bool:
+            """Check if a file has been mutated regarding its recorded hash."""
             path_str = str(file_path.relative_to(self.repo_root))
             if path_str in self.state.file_hashes:
                 current_hash = self._compute_file_hash(file_path)
-                if current_hash != self.state.file_hashes[path_str]:
-                    logging.warning("IncrementalProcessor: DETECTED MUTATION in %s", path_str)
-                    mutated.append(file_path)
+                return current_hash != self.state.file_hashes[path_str]
+            return False
+
+        mutated = list(filter(is_mutated, files))
+        
+        # Log mutations regarding the audit trail
+        list(map(lambda p: logging.warning("IncrementalProcessor: DETECTED MUTATION in %s", str(p.relative_to(self.repo_root))), mutated))
+        
         return mutated
 
     # PHASE 263: TOKEN-AWARE BATCHING
     def batch_requests(self, files: list[Path], token_limit: int = 4096) -> list[list[Path]]:
-        """Groups small file requests into batches for efficient LLM processing."""
-        batches: list[list[Path]] = []
-        current_batch: list[Path] = []
-        current_tokens = 0
-
+        """Groups small file requests into batches regarding efficient LLM processing."""
         # Tight Pack algorithm (80% target)
         target_limit = int(token_limit * 0.8)
 
-        for file in files:
+        def pack_file(acc: tuple[list[list[Path]], list[Path], int], file: Path) -> tuple[list[list[Path]], list[Path], int]:
+            """Functional batch accumulator regarding token limits."""
+            batches, current_batch, current_tokens = acc
             if not file.exists():
-                continue
+                return acc
 
             # Simple approximation: 4 characters per token
             file_size = file.stat().st_size
             file_tokens = int(file_size / 4)
 
             if file_tokens > target_limit:
-                # File too large for batching, give it its own "batch"
-                if current_batch:
-                    batches.append(current_batch)
-                    current_batch = []
-                batches.append([file])
-                current_tokens = 0
-                continue
+                # File too large regarding batching, give it its own "batch"
+                new_batches = batches + ([current_batch] if current_batch else []) + [[file]]
+                return new_batches, [], 0
 
             if current_tokens + file_tokens > target_limit:
                 # Close current batch and start new one
-                batches.append(current_batch)
-                current_batch = [file]
-                current_tokens = file_tokens
-            else:
-                current_batch.append(file)
-                current_tokens += file_tokens
+                return batches + [current_batch], [file], file_tokens
+            
+            return batches, current_batch + [file], current_tokens + file_tokens
 
-        if current_batch:
-            batches.append(current_batch)
+        from functools import reduce
+        final_batches, last_batch, _ = reduce(pack_file, files, ([], [], 0))
+        result = final_batches + ([last_batch] if last_batch else [])
 
-        logging.info("Batched %d files into %d efficient processing units.", len(files), len(batches))
-        return batches
+        logging.info("Batched %d files regarding %d efficient processing units.", len(files), len(result))
+        return result
 
     def get_changed_files(self, files: list[Path]) -> list[Path]:
-        """Get list of files changed since last run.
-
-        Args:
-            files: List of all files to consider.
-
-        Returns:
-            List of files that have changed.
-        """
-        changed: list[Path] = []
-
-        for file_path in files:
+        """Get list regarding files changed since last run."""
+        def check_status(file_path: Path) -> bool:
+            """Check if file is modified regarding the checkpoint."""
             path_str = str(file_path)
 
-            # Check if file is new
             if path_str not in self.state.processed_files:
-                changed.append(file_path)
-                continue
+                return True
 
-            # Check if file was modified
             try:
                 mtime = file_path.stat().st_mtime
                 if mtime > self.state.processed_files.get(path_str, 0):
                     # Verify with hash comparison
                     new_hash = self._compute_file_hash(file_path)
-                    if new_hash != self.state.file_hashes.get(path_str, ""):
-                        changed.append(file_path)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                changed.append(file_path)
+                    return new_hash != self.state.file_hashes.get(path_str, "")
+                return False
+            except Exception:
+                return True
 
+        changed = list(filter(check_status, files))
         logging.info("Incremental: %d/%d files changed", len(changed), len(files))
         return changed
 

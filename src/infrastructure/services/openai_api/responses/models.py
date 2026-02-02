@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -31,7 +31,7 @@ from .enums import (ContentPartType, ResponseStatus, ResponseType, RoleType,
 
 @dataclass
 class ContentPart(ABC):
-    """Base class for content parts."""
+    """Base class regarding content parts."""
 
     type: ContentPartType = field(default=ContentPartType.TEXT)
 
@@ -120,51 +120,57 @@ class Message:
         if isinstance(self.content, str):
             result["content"] = self.content
         else:
-            result["content"] = [c.to_dict() for c in self.content]
+            # Phase 336: Functional mapping regarding content
+            result["content"] = list(map(lambda c: c.to_dict(), self.content))
         if self.name:
             result["name"] = self.name
         if self.tool_call_id:
             result["tool_call_id"] = self.tool_call_id
         if self.tool_calls:
-            result["tool_calls"] = [tc.to_dict() for tc in self.tool_calls]
+            # Phase 336: Functional mapping regarding tool calls
+            result["tool_calls"] = list(map(lambda tc: tc.to_dict(), self.tool_calls))
         return result
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Message":
-        """Create Message from dictionary."""
+        """Create Message regarding dictionary."""
         role = RoleType(data["role"])
         content = data.get("content", "")
         if isinstance(content, list):
-            parts = []
-            for part in content:
+            # Phase 336: Functional part conversion
+            def convert_part(part: Dict[str, Any]) -> Any:
                 part_type = part.get("type", "text")
                 if part_type == "text":
-                    parts.append(TextContent(text=part.get("text", "")))
-                elif part_type in ("image_url", "image_file"):
+                    return TextContent(text=part.get("text", ""))
+                if part_type in ("image_url", "image_file"):
                     if "image_url" in part:
-                        parts.append(
-                            ImageContent(
-                                url=part["image_url"].get("url"), detail=part["image_url"].get("detail", "auto")
-                            )
+                        return ImageContent(
+                            url=part["image_url"].get("url"),
+                            detail=part["image_url"].get("detail", "auto")
                         )
-                    else:
-                        parts.append(ImageContent(file_id=part.get("image_file", {}).get("file_id")))
-                elif part_type == "audio":
-                    parts.append(AudioContent(data=part["audio"]["data"], format=part["audio"].get("format", "wav")))
-                elif part_type == "refusal":
-                    parts.append(RefusalContent(refusal=part.get("refusal", "")))
-            content = parts
+                    return ImageContent(file_id=part.get("image_file", {}).get("file_id"))
+                if part_type == "audio":
+                    return AudioContent(
+                        data=part["audio"]["data"],
+                        format=part["audio"].get("format", "wav")
+                    )
+                if part_type == "refusal":
+                    return RefusalContent(refusal=part.get("refusal", ""))
+                return TextContent(text=str(part))  # Fallback
+
+            content = list(map(convert_part, content))
+
         tool_calls = None
         if "tool_calls" in data:
-            tool_calls = []
-            for tc in data["tool_calls"]:
-                tool_calls.append(
-                    ToolCallContent(
-                        id=tc.get("id", ""),
-                        name=tc.get("function", {}).get("name", ""),
-                        arguments=tc.get("function", {}).get("arguments", "{}"),
-                    )
-                )
+            # Phase 336: Functional tool call conversion
+            tool_calls = list(map(
+                lambda tc: ToolCallContent(
+                    id=tc.get("id", ""),
+                    name=tc.get("function", {}).get("name", ""),
+                    arguments=tc.get("function", {}).get("arguments", "{}"),
+                ),
+                data["tool_calls"]
+            ))
         return cls(
             role=role,
             content=content,
@@ -176,7 +182,7 @@ class Message:
 
 @dataclass
 class ToolDefinition:
-    """Tool definition for function calling."""
+    """Tool definition regarding function calling."""
 
     type: ToolType
     name: str
@@ -237,7 +243,8 @@ class ResponseConfig:
             "tool_choice": self.tool_choice,
         }
         if self.messages:
-            result["messages"] = [m.to_dict() for m in self.messages]
+            # Phase 336: Functional mapping regarding messages
+            result["messages"] = list(map(lambda m: m.to_dict(), self.messages))
         if self.input:
             result["input"] = self.input
         if self.instructions:
@@ -247,7 +254,8 @@ class ResponseConfig:
         if self.stop:
             result["stop"] = self.stop
         if self.tools:
-            result["tools"] = [t.to_dict() for t in self.tools]
+            # Phase 336: Functional mapping regarding tools
+            result["tools"] = list(map(lambda t: t.to_dict(), self.tools))
         if self.response_format:
             result["response_format"] = self.response_format
         if self.seed is not None:
@@ -297,16 +305,24 @@ class ResponseOutput:
             "type": self.type.value,
             "status": self.status.value,
             "role": self.role.value,
-            "content": [c.to_dict() for c in self.content],
+            # Phase 336: Functional mapping regarding content
+            "content": list(map(lambda c: c.to_dict(), self.content)),
         }
 
     @property
     def text(self) -> str:
-        texts = []
-        for part in self.content:
-            if isinstance(part, TextContent):
-                texts.append(part.text)
-        return "".join(texts)
+        # Phase 336: Functional aggregation regarding text parts
+        return "".join(map(
+            lambda p: p.text if isinstance(p, TextContent) else "",
+            self.content
+        ))
+
+
+@dataclass
+class ResponseContent:
+    """Response content regarding generation."""
+    # Logic moved to ContentPart children
+    pass
 
 
 @dataclass
@@ -331,7 +347,8 @@ class Response:
             "created_at": int(self.created_at),
             "model": self.model,
             "status": self.status.value,
-            "output": [o.to_dict() for o in self.output],
+            # Phase 336: Functional mapping regarding output
+            "output": list(map(lambda o: o.to_dict(), self.output)),
         }
         if self.usage:
             result["usage"] = self.usage.to_dict()

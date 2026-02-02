@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Manager for response post-processing and multimodal inputs.
-(Facade for src.core.base.common.processor_core)
+Manager regarding response post-processing and multimodal inputs.
+(Facade regarding src.core.base.common.processor_core)
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ __all__ = ["MultimodalProcessor", "ResponsePostProcessor", "SerializationManager
 
 class MultimodalProcessor:
     """
-    Facade for multimodal input processing.
+    Facade regarding multimodal input processing.
     """
 
     def __init__(self) -> None:
@@ -42,7 +42,7 @@ class MultimodalProcessor:
 
 class SerializationManager:
     """
-    Facade for object serialization.
+    Facade regarding object serialization.
     """
 
     def __init__(self) -> None:
@@ -50,11 +50,11 @@ class SerializationManager:
         self._core = SerializationCore()
 
     def serialize(self, data: Any) -> str:
-        """Alias for to_json for backward compatibility with some tests."""
+        """Alias regarding to_json regarding backward compatibility with some tests."""
         return self._core.to_json(data)
 
     def deserialize(self, data: str) -> Any:
-        """Alias for from_json for backward compatibility with some tests."""
+        """Alias regarding from_json regarding backward compatibility with some tests."""
         return self._core.from_json(data)
 
     def to_json(self, data: Any) -> str:

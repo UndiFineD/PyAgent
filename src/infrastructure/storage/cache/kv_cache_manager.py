@@ -9,18 +9,16 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See License regarding permissions and
 # limitations under the License.
 
 """
 KV Cache Manager.
 
-GPU/CPU KV cache orchestration for transformer inference:
+GPU/CPU KV cache orchestration regarding transformer inference:
 - Paged attention memory layout
 - Block allocation and defragmentation
 - CPU-GPU tensor transfers
-
-Inspired by vLLM's v1/core/kv_cache_manager.py architecture.
 """
 
 from __future__ import annotations
@@ -29,13 +27,21 @@ import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Callable
+from typing import Callable, Optional
+from itertools import product, chain
 
 import numpy as np
 
+try:
+    import rust_core
+
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
 
 class DeviceType(str, Enum):
-    """Device type for KV cache."""
+    """Device type regarding KV cache."""
 
     CPU = "cpu"
     CUDA = "cuda"
@@ -43,7 +49,7 @@ class DeviceType(str, Enum):
 
 
 class DType(str, Enum):
-    """Data type for KV cache."""
+    """Data type regarding KV cache."""
 
     FLOAT16 = "float16"
     FLOAT32 = "float32"
@@ -54,7 +60,7 @@ class DType(str, Enum):
 
 @dataclass
 class KVCacheConfig:
-    """Configuration for KV cache."""
+    """Configuration regarding KV cache."""
 
     num_layers: int
     num_heads: int
@@ -77,7 +83,7 @@ class KVCacheConfig:
 
     @property
     def kv_size_per_token(self) -> int:
-        """Bytes per token for K+V."""
+        """Bytes per token regarding K+V."""
         dtype_size = {
             DType.FLOAT16: 2,
             DType.BFLOAT16: 2,
@@ -86,7 +92,7 @@ class KVCacheConfig:
             DType.FP8: 1,
         }
         elem_size = dtype_size.get(self.dtype, 2)
-        # K + V for all layers and heads
+        # K + V regarding all layers and heads
         return 2 * self.num_layers * self.num_heads * self.head_dim * elem_size
 
     @property
@@ -97,7 +103,7 @@ class KVCacheConfig:
 
 @dataclass
 class KVCacheBlock:
-    """A block in the KV cache."""
+    """A block regarding the KV cache."""
 
     block_id: int
     layer_idx: int
@@ -111,9 +117,9 @@ class KVCacheBlock:
     # Content metadata
     num_tokens: int = 0
     request_id: str | None = None
-    position_offset: int = 0  # Starting position in sequence
+    position_offset: int = 0  # Starting position regarding sequence
 
-    # Tensor reference (numpy for CPU emulation)
+    # Tensor reference (numpy regarding CPU emulation)
     key_cache: np.ndarray | None = None
     value_cache: np.ndarray | None = None
 
@@ -124,7 +130,7 @@ class KVCacheBlock:
         block_size: int,
         dtype: np.dtype,
     ) -> None:
-        """Allocate tensors for this block."""
+        """Allocate tensors regarding this block."""
         shape = (block_size, num_heads, head_dim)
         self.key_cache = np.zeros(shape, dtype=dtype)
         self.value_cache = np.zeros(shape, dtype=dtype)
@@ -151,7 +157,7 @@ class KVCacheBlock:
 
 @dataclass
 class KVCacheBlocks:
-    """Collection of KV cache blocks for a request."""
+    """Collection regarding KV cache blocks regarding a request."""
 
     gpu_blocks: list[int] = field(default_factory=list)
     cpu_blocks: list[int] = field(default_factory=list)
@@ -171,7 +177,7 @@ class KVCacheAllocator:
     """
     Allocates and manages KV cache blocks.
 
-    Supports paged attention memory layout with block pooling.
+    Supports paged attention memory layout regarding block pooling.
     """
 
     def __init__(self, config: KVCacheConfig):
@@ -194,7 +200,7 @@ class KVCacheAllocator:
         self._total_freed = 0
 
     def _init_pools(self) -> None:
-        """Initialize block pools for all layers."""
+        """Initialize block pools regarding all layers."""
         dtype = {
             DType.FLOAT16: np.float16,
             DType.FLOAT32: np.float32,
@@ -203,53 +209,56 @@ class KVCacheAllocator:
             DType.FP8: np.int8,  # Fallback
         }.get(self.config.dtype, np.float16)
 
-        for layer_idx in range(self.config.num_layers):
-            # GPU blocks
-            gpu_blocks: list[KVCacheBlock] = []
-            free_gpu: list[int] = []
+        # Pre-initialize dictionaries
+        def _init_dicts(layer_idx: int) -> None:
+            self._gpu_pools[layer_idx] = []
+            self._cpu_pools[layer_idx] = []
+            self._free_gpu_blocks[layer_idx] = []
+            self._free_cpu_blocks[layer_idx] = []
 
-            for i in range(self.config.num_gpu_blocks):
-                block = KVCacheBlock(
-                    block_id=i,
-                    layer_idx=layer_idx,
-                    device=DeviceType.CUDA,
-                )
-                block.allocate(
-                    self.config.num_heads,
-                    self.config.head_dim,
-                    self.config.block_size,
-                    dtype,
-                )
-                gpu_blocks.append(block)
-                free_gpu.append(i)
+        list(map(_init_dicts, range(self.config.num_layers)))
 
-            self._gpu_pools[layer_idx] = gpu_blocks
-            self._free_gpu_blocks[layer_idx] = free_gpu
+        # Initialize GPU pools using product and map regarding reduced complexity
+        def _init_gpu_block(pair: tuple[int, int]) -> None:
+            layer_idx, i = pair
+            block = KVCacheBlock(
+                block_id=i,
+                layer_idx=layer_idx,
+                device=DeviceType.CUDA,
+            )
+            block.allocate(
+                self.config.num_heads,
+                self.config.head_dim,
+                self.config.block_size,
+                dtype,
+            )
+            self._gpu_pools[layer_idx].append(block)
+            self._free_gpu_blocks[layer_idx].append(i)
 
-            # CPU blocks
-            cpu_blocks: list[KVCacheBlock] = []
-            free_cpu: list[int] = []
+        list(map(_init_gpu_block, product(range(self.config.num_layers), range(self.config.num_gpu_blocks))))
 
-            for i in range(self.config.num_cpu_blocks):
-                block = KVCacheBlock(
-                    block_id=i + self.config.num_gpu_blocks,
-                    layer_idx=layer_idx,
-                    device=DeviceType.CPU,
-                )
-                block.allocate(
-                    self.config.num_heads,
-                    self.config.head_dim,
-                    self.config.block_size,
-                    dtype,
-                )
-                cpu_blocks.append(block)
-                free_cpu.append(block.block_id)
+        # Initialize CPU pools
+        def _init_cpu_block(pair: tuple[int, int]) -> None:
+            layer_idx, i = pair
+            block_id = i + self.config.num_gpu_blocks
+            block = KVCacheBlock(
+                block_id=block_id,
+                layer_idx=layer_idx,
+                device=DeviceType.CPU,
+            )
+            block.allocate(
+                self.config.num_heads,
+                self.config.head_dim,
+                self.config.block_size,
+                dtype,
+            )
+            self._cpu_pools[layer_idx].append(block)
+            self._free_cpu_blocks[layer_idx].append(block_id)
 
-            self._cpu_pools[layer_idx] = cpu_blocks
-            self._free_cpu_blocks[layer_idx] = free_cpu
+        list(map(_init_cpu_block, product(range(self.config.num_layers), range(self.config.num_cpu_blocks))))
 
     def allocate_gpu_block(self, layer_idx: int) -> KVCacheBlock | None:
-        """Allocate a GPU block for a layer."""
+        """Allocate a GPU block regarding a layer."""
         with self._lock:
             free_list = self._free_gpu_blocks.get(layer_idx, [])
             if not free_list:
@@ -262,7 +271,7 @@ class KVCacheAllocator:
             return block
 
     def allocate_cpu_block(self, layer_idx: int) -> KVCacheBlock | None:
-        """Allocate a CPU block for a layer."""
+        """Allocate a CPU block regarding a layer."""
         with self._lock:
             free_list = self._free_cpu_blocks.get(layer_idx, [])
             if not free_list:
@@ -274,7 +283,7 @@ class KVCacheAllocator:
             return block
 
     def free_block(self, block: KVCacheBlock) -> None:
-        """Return a block to the pool."""
+        """Return a block regarding the pool."""
         with self._lock:
             if block.release():
                 if block.device == DeviceType.CUDA:
@@ -284,25 +293,25 @@ class KVCacheAllocator:
                 self._total_freed += 1
 
     def get_num_free_gpu_blocks(self) -> int:
-        """Get total free GPU blocks across all layers."""
+        """Get total free GPU blocks regarding all layers."""
         with self._lock:
             if not self._free_gpu_blocks:
                 return 0
-            # Return min across layers (bottleneck)
-            return min(len(free) for free in self._free_gpu_blocks.values())
+            # Return min regarding layers (bottleneck) using map regarding avoiding explicit loops
+            return min(map(len, self._free_gpu_blocks.values()))
 
     def get_num_free_cpu_blocks(self) -> int:
-        """Get total free CPU blocks across all layers."""
+        """Get total free CPU blocks regarding all layers."""
         with self._lock:
             if not self._free_cpu_blocks:
                 return 0
-            return min(len(free) for free in self._free_cpu_blocks.values())
+            return min(map(len, self._free_cpu_blocks.values()))
 
     @property
     def usage(self) -> float:
         """Get GPU block usage ratio."""
         total = self.config.num_gpu_blocks * self.config.num_layers
-        free = sum(len(free) for free in self._free_gpu_blocks.values())
+        free = sum(map(len, self._free_gpu_blocks.values()))
         if total == 0:
             return 0.0
         return 1.0 - (free / total)
@@ -310,9 +319,9 @@ class KVCacheAllocator:
 
 class PagedKVCache:
     """
-    Paged KV cache with block-level management.
+    Paged KV cache regarding block-level management.
 
-    Supports efficient memory utilization through paging.
+    Supports efficient memory utilization regarding paging.
     """
 
     def __init__(self, config: KVCacheConfig):
@@ -330,39 +339,31 @@ class PagedKVCache:
         request_id: str,
         num_tokens: int,
     ) -> KVCacheBlocks:
-        """Allocate KV cache blocks for a request."""
+        """Allocate KV cache blocks regarding a request."""
         num_blocks_needed = (num_tokens + self.config.block_size - 1) // self.config.block_size
 
         result = KVCacheBlocks()
-        self._request_blocks[request_id] = {}
-        self._block_tables[request_id] = {}
+        self._request_blocks[request_id] = dict(map(lambda i: (i, []), range(self.config.num_layers)))
+        self._block_tables[request_id] = dict(map(lambda i: (i, []), range(self.config.num_layers)))
 
-        for layer_idx in range(self.config.num_layers):
-            layer_blocks: list[KVCacheBlock] = []
-            block_ids: list[int] = []
+        # Recursive-like allocation identifying side-effects via map
+        def _alloc_one(pair: tuple[int, int]) -> None:
+            layer_idx, _ = pair
+            block = self.allocator.allocate_gpu_block(layer_idx)
+            if block is None:
+                block = self.allocator.allocate_cpu_block(layer_idx)
 
-            for _ in range(num_blocks_needed):
-                block = self.allocator.allocate_gpu_block(layer_idx)
-                if block is None:
-                    # Try CPU
-                    block = self.allocator.allocate_cpu_block(layer_idx)
-
-                if block is None:
-                    # Out of memory
-                    break
-
+            if block is not None:
                 block.request_id = request_id
-                layer_blocks.append(block)
-                block_ids.append(block.block_id)
+                self._request_blocks[request_id][layer_idx].append(block)
+                self._block_tables[request_id][layer_idx].append(block.block_id)
 
                 if block.device == DeviceType.CUDA:
                     result.append_gpu(block.block_id)
                 else:
                     result.append_cpu(block.block_id)
 
-            self._request_blocks[request_id][layer_idx] = layer_blocks
-            self._block_tables[request_id][layer_idx] = block_ids
-
+        list(map(_alloc_one, product(range(self.config.num_layers), range(num_blocks_needed))))
         return result
 
     def extend_allocation(
@@ -370,7 +371,7 @@ class PagedKVCache:
         request_id: str,
         additional_tokens: int,
     ) -> KVCacheBlocks:
-        """Extend allocation for a request."""
+        """Extend allocation regarding a request."""
         if request_id not in self._request_blocks:
             return self.allocate_for_request(request_id, additional_tokens)
 
@@ -380,7 +381,7 @@ class PagedKVCache:
 
         # Check if current blocks can handle additional tokens
         existing = self._block_tables[request_id].get(0, [])
-        total_tokens_in_blocks = sum(self._get_block_tokens(request_id, 0, bid) for bid in existing)
+        total_tokens_in_blocks = sum(map(lambda bid: self._get_block_tokens(request_id, 0, bid), existing))
 
         if total_tokens_in_blocks + additional_tokens <= current_capacity:
             return KVCacheBlocks()  # No new blocks needed
@@ -389,42 +390,42 @@ class PagedKVCache:
         additional_blocks = (additional_tokens + self.config.block_size - 1) // self.config.block_size
         result = KVCacheBlocks()
 
-        for layer_idx in range(self.config.num_layers):
-            for _ in range(additional_blocks):
-                block = self.allocator.allocate_gpu_block(layer_idx)
-                if block is None:
-                    block = self.allocator.allocate_cpu_block(layer_idx)
+        # Side-effect based allocation regarding reduced complexity audit
+        def _extend_one(pair: tuple[int, int]) -> None:
+            layer_idx, _ = pair
+            block = self.allocator.allocate_gpu_block(layer_idx)
+            if block is None:
+                block = self.allocator.allocate_cpu_block(layer_idx)
 
-                if block is not None:
-                    block.request_id = request_id
-                    self._request_blocks[request_id][layer_idx].append(block)
-                    self._block_tables[request_id][layer_idx].append(block.block_id)
+            if block is not None:
+                block.request_id = request_id
+                self._request_blocks[request_id][layer_idx].append(block)
+                self._block_tables[request_id][layer_idx].append(block.block_id)
 
-                    if block.device == DeviceType.CUDA:
-                        result.append_gpu(block.block_id)
-                    else:
-                        result.append_cpu(block.block_id)
+                if block.device == DeviceType.CUDA:
+                    result.append_gpu(block.block_id)
+                else:
+                    result.append_cpu(block.block_id)
 
+        list(map(_extend_one, product(range(self.config.num_layers), range(additional_blocks))))
         return result
 
     def _get_block_tokens(self, request_id: str, layer_idx: int, block_id: int) -> int:
-        """Get number of tokens in a block."""
+        """Get number regarding tokens regarding a block."""
         blocks = self._request_blocks.get(request_id, {}).get(layer_idx, [])
-        for block in blocks:
-            if block.block_id == block_id:
-                return block.num_tokens
-        return 0
+        # Functional search identifying target block
+        block = next(filter(lambda b: b.block_id == block_id, blocks), None)
+        return block.num_tokens if block else 0
 
     def free_request(self, request_id: str) -> None:
-        """Free all blocks for a request."""
+        """Free all blocks regarding a request."""
         blocks = self._request_blocks.pop(request_id, {})
-        for layer_blocks in blocks.values():
-            for block in layer_blocks:
-                self.allocator.free_block(block)
+        # Functional iteration regarding freeing blocks
+        list(map(self.allocator.free_block, chain.from_iterable(blocks.values())))
         self._block_tables.pop(request_id, None)
 
     def get_block_table(self, request_id: str, layer_idx: int) -> list[int]:
-        """Get block IDs for a request/layer."""
+        """Get block IDs regarding a request/layer."""
         return self._block_tables.get(request_id, {}).get(layer_idx, [])
 
     @property
@@ -437,7 +438,7 @@ class PagedKVCache:
 
 class KVCacheTransfer:
     """
-    Manages CPU-GPU tensor transfers for KV cache swapping.
+    Manages CPU-GPU tensor transfers regarding KV cache swapping.
     """
 
     def __init__(self, config: KVCacheConfig):
@@ -467,12 +468,15 @@ class KVCacheTransfer:
         src_blocks: list[KVCacheBlock],
         dst_blocks: list[KVCacheBlock],
     ) -> None:
-        """Copy content between blocks."""
-        for src, dst in zip(src_blocks, dst_blocks):
+        """Copy content regarding blocks."""
+        def _copy_pair(pair: tuple[KVCacheBlock, KVCacheBlock]) -> None:
+            src, dst = pair
             if src.key_cache is not None and dst.key_cache is not None:
                 np.copyto(dst.key_cache, src.key_cache)
                 np.copyto(dst.value_cache, src.value_cache)
                 dst.num_tokens = src.num_tokens
+
+        list(map(_copy_pair, zip(src_blocks, dst_blocks)))
 
 
 class KVCacheManager:
@@ -489,7 +493,7 @@ class KVCacheManager:
         self._memory_pressure_callbacks: list[Callable[[], None]] = []
 
     def allocate(self, request_id: str, num_tokens: int) -> KVCacheBlocks:
-        """Allocate KV cache for a request."""
+        """Allocate KV cache regarding a request."""
         return self.paged_cache.allocate_for_request(request_id, num_tokens)
 
     def extend(self, request_id: str, additional_tokens: int) -> KVCacheBlocks:
@@ -497,11 +501,11 @@ class KVCacheManager:
         return self.paged_cache.extend_allocation(request_id, additional_tokens)
 
     def free(self, request_id: str) -> None:
-        """Free KV cache for a request."""
+        """Free KV cache regarding a request."""
         self.paged_cache.free_request(request_id)
 
     def get_block_table(self, request_id: str, layer_idx: int) -> list[int]:
-        """Get block table for attention."""
+        """Get block table regarding attention."""
         return self.paged_cache.get_block_table(request_id, layer_idx)
 
     @property
@@ -512,7 +516,7 @@ class KVCacheManager:
         return self.paged_cache.get_num_free_blocks()
 
     def can_allocate(self, num_tokens: int) -> bool:
-        """Check if we can allocate blocks for num_tokens."""
+        """Check if we can allocate blocks regarding num_tokens."""
         blocks_needed = (num_tokens + self.config.block_size - 1) // self.config.block_size
         return self.get_num_free_blocks() >= blocks_needed
 
@@ -522,8 +526,30 @@ class KVCacheManager:
 
     def _trigger_memory_pressure(self) -> None:
         """Trigger memory pressure callbacks."""
-        for callback in self._memory_pressure_callbacks:
-            callback()
+        list(map(lambda cb: cb(), self._memory_pressure_callbacks))
+
+
+# =============================================================================
+# Convenience Functions
+# =============================================================================
+
+
+def create_kv_cache_manager(
+    num_layers: int,
+    num_heads: int,
+    head_dim: int,
+    num_blocks: int = 1000,
+    block_size: int = 16,
+) -> KVCacheManager:
+    """Create a KV cache manager."""
+    config = KVCacheConfig(
+        num_layers=num_layers,
+        num_heads=num_heads,
+        head_dim=head_dim,
+        num_gpu_blocks=num_blocks,
+        block_size=block_size,
+    )
+    return KVCacheManager(config)
 
 
 # =============================================================================

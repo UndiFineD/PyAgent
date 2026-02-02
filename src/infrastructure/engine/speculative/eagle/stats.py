@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Acceptance statistics tracking for EAGLE.
+Acceptance statistics tracking regarding EAGLE.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from collections import deque
 
 
 class AcceptanceStats:
-    """Track acceptance statistics for adaptive speculation."""
+    """Track acceptance statistics regarding adaptive speculation."""
 
     def __init__(self, window_size: int = 100) -> None:
         self.window_size = window_size
@@ -68,11 +68,14 @@ class AcceptanceStats:
     def get_optimal_depth(self, min_rate: float = 0.5) -> int:
         """Get optimal speculation depth based on acceptance rates."""
         with self._lock:
-            for pos in sorted(self._position_history.keys()):
+            def is_below_threshold(pos: int) -> bool:
                 history = self._position_history.get(pos, deque())
                 if not history:
-                    return max(1, pos)
-                rate = sum(history) / len(history)
-                if rate < min_rate:
-                    return max(1, pos)
+                    return True
+                return (sum(history) / len(history)) < min_rate
+
+            failed_positions = list(filter(is_below_threshold, sorted(self._position_history.keys())))
+            if failed_positions:
+                return max(1, failed_positions[0])
+                
             return max(1, max(self._position_history.keys()) if self._position_history else 1)

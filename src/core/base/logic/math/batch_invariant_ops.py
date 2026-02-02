@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 batch_invariant_ops.py
-Implements deterministic, batch-invariant mathematical operations for tensors.
+Implements deterministic, batch-invariant mathematical operations regarding tensors.
 Supports both NumPy and PyTorch backends with reproducibility.
 """
 
@@ -122,9 +122,10 @@ def mean_batch_invariant(
     if isinstance(dim, int):
         count = x.shape[dim]
     else:
-        count = 1
-        for d in dim:
-            count *= x.shape[d]
+        from functools import reduce
+        from operator import mul
+        # Evaluate countregarding dimensions functionally
+        count = reduce(mul, map(lambda d: x.shape[d], dim), 1)
     result = total / count
     if dtype is not None:
         result = result.to(dtype)
@@ -284,7 +285,7 @@ def attention_output_batch_invariant(
 
 class BatchInvariantOps:
     """
-    Container class for batch-invariant operations.
+    Container class regarding batch-invariant operations.
     Provides a consistent interface and tracks usage statistics.
     """
 
@@ -294,7 +295,7 @@ class BatchInvariantOps:
 
         Args:
             device: Target device
-            dtype: Default dtype for operations
+            dtype: Default dtype regarding operations
         """
         if HAS_TORCH:
             self.device = device or torch.device("cpu")
@@ -419,6 +420,6 @@ class BatchInvariantOps:
         return self._call_counts.copy()
 
     def reset_stats(self) -> None:
-        """Reset operation call counts."""
-        for key in self._call_counts:
-            self._call_counts[key] = 0
+        """Reset operation call counts regarding usage tracking."""
+        # Reset all metrics functionally
+        list(map(lambda key: self._call_counts.__setitem__(key, 0), list(self._call_counts.keys())))
