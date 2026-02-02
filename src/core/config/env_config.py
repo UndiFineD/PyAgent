@@ -604,6 +604,10 @@ class TempEnv:
                 os.environ[key] = value
 
 
+# Alias for backward compatibility and linting
+temp_env = TempEnv
+
+
 # ============================================================================
 # Exports
 # ============================================================================
@@ -625,4 +629,5 @@ __all__ = [
     "NamespacedConfig",
     # Context Managers
     "TempEnv",
+    "temp_env",
 ]

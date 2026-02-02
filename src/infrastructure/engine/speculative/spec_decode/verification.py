@@ -19,12 +19,16 @@ Verification logic for speculative decoding.
 from __future__ import annotations
 
 import math
+import random
 import threading
 import time
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Self
 
 from .config import SpecDecodeConfig, VerificationStrategy
-from .metadata import SpecDecodeMetadataV2, TreeVerificationMetadata
+
+if TYPE_CHECKING:
+    from .metadata import SpecDecodeMetadataV2, TreeVerificationMetadata
 
 try:
     import rust_core
@@ -79,9 +83,9 @@ class SpecDecodeVerifier:
         """Perform token verification for a single request."""
         metadata.verification_start_time = time.perf_counter()
         if self.strategy == VerificationStrategy.TYPICAL_ACCEPTANCE:
-            result = self._verify_typical_acceptance(metadata, draft_logprobs, target_logprobs)
+            result = self._verify_typical_acceptance(metadata.draft_token_ids, draft_logprobs, target_logprobs)
         else:
-            result = self._verify_rejection_sampling(metadata, draft_logprobs, target_logprobs)
+            result = self._verify_rejection_sampling(metadata.draft_token_ids, draft_logprobs, target_logprobs)
         metadata.verification_end_time = time.perf_counter()
         result.verification_latency_ms = metadata.get_verification_latency() * 1000
         with self._lock:
@@ -90,12 +94,12 @@ class SpecDecodeVerifier:
         return result
 
     def _verify_rejection_sampling(
-        self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]
+        self, draft_tokens: list[int], draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
         """Verify tokens using standard rejection sampling."""
         if HAS_RUST and hasattr(rust_core, "spec_decode_verify_rejection_rust"):
             accepted, mask = getattr(rust_core, "spec_decode_verify_rejection_rust")(
-                metadata.draft_token_ids, draft_logprobs, target_logprobs, self.sampling_eps
+                draft_tokens, draft_logprobs, target_logprobs, self.sampling_eps
             )
             return VerificationResult(
                 accepted_tokens=accepted,
@@ -104,10 +108,10 @@ class SpecDecodeVerifier:
                 target_logprobs=target_logprobs,
                 draft_logprobs=draft_logprobs,
             )
-        import random
 
         accepted, mask = [], []
-        for draft_token, draft_lp, target_lp in zip(metadata.draft_token_ids, draft_logprobs, target_logprobs):
+        num_proposed = len(draft_tokens)
+        for draft_token, draft_lp, target_lp in zip(draft_tokens, draft_logprobs, target_logprobs):
             ratio = math.exp(min(0, target_lp - draft_lp))
             if random.random() < ratio:
                 accepted.append(draft_token)
@@ -115,7 +119,7 @@ class SpecDecodeVerifier:
             else:
                 mask.append(False)
                 break
-        while len(mask) < len(metadata.draft_token_ids):
+        while len(mask) < num_proposed:
             mask.append(False)
         return VerificationResult(
             accepted_tokens=accepted,
@@ -126,13 +130,12 @@ class SpecDecodeVerifier:
         )
 
     def _verify_typical_acceptance(
-        self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]
+        self, draft_tokens: list[int], draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
         """Verify tokens using entropy-weighted typical acceptance."""
-        import random
-
         accepted, mask = [], []
-        for draft_token, draft_lp, target_lp in zip(metadata.draft_token_ids, draft_logprobs, target_logprobs):
+        num_proposed = len(draft_tokens)
+        for draft_token, draft_lp, target_lp in zip(draft_tokens, draft_logprobs, target_logprobs):
             entropy_factor = max(0.1, 1.0 + target_lp)
             ratio = math.exp(min(0, target_lp - draft_lp)) * entropy_factor
             if random.random() < min(1.0, ratio):
@@ -141,7 +144,7 @@ class SpecDecodeVerifier:
             else:
                 mask.append(False)
                 break
-        while len(mask) < len(metadata.draft_token_ids):
+        while len(mask) < num_proposed:
             mask.append(False)
         return VerificationResult(
             accepted_tokens=accepted,
@@ -160,12 +163,11 @@ class SpecDecodeVerifier:
         """Verify a speculative tree and return the best path."""
         best_path_idx, best_accepted, best_tokens, best_mask = -1, 0, [], []
         for path_idx in range(tree_metadata.num_paths):
-            path_tokens = tree_metadata.get_path_tokens(path_idx)
             if path_idx >= len(draft_logprobs) or path_idx >= len(target_logprobs):
                 continue
+            path_tokens = tree_metadata.get_path_tokens(path_idx)
             path_draft_lp, path_target_lp = draft_logprobs[path_idx], target_logprobs[path_idx]
-            path_metadata = SpecDecodeMetadataV2(draft_token_ids=path_tokens, num_draft_tokens=[len(path_tokens)])
-            result = self._verify_rejection_sampling(path_metadata, path_draft_lp, path_target_lp)
+            result = self._verify_rejection_sampling(path_tokens, path_draft_lp, path_target_lp)
             if result.num_accepted > best_accepted:
                 best_accepted, best_path_idx, best_tokens, best_mask = (
                     result.num_accepted,

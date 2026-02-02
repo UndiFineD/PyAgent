@@ -1,0 +1,82 @@
+[Intelligence] Consulting external federated models for remaining debt...
+ - Analyzed 25 debt clusters.
+   * File: src\infrastructure\engine\speculative\ngram_proposer.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (73). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\speculative\ngram_proposer.py is complex (34 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\speculative\decoder\proposers.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\speculative\decoder\proposers.py is complex (16 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\speculative\eagle\proposer.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (40). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\speculative\eagle\proposer.py is complex (23 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\speculative\eagle\tree.py
+     - L0 | Profiling Candidate: File src\infrastructure\engine\speculative\eagle\tree.py is complex (15 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\speculative\spec_decode\metadata.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (32). Consider breaking down functions.
+     - L104 | Rust Readiness Task: Function 'make_dummy' is missing complete type hints. Strong typing required for Rust port.
+     - L111 | Rust Readiness Task: Function 'from_proposals' is missing complete type hints. Strong typing required for Rust port.
+     - L151 | Rust Readiness Task: Function 'from_tree' is missing complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\speculative\spec_decode\verification.py
+     - L0 | Profiling Candidate: File src\infrastructure\engine\speculative\spec_decode\verification.py is complex (13 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\bad_words_processor_v2.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (67). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\bad_words_processor_v2.py is complex (25 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\compiled_grammar.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (29). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\grammar_compiler.py
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\grammar_compiler.py is complex (3 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\guidance_backend.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (54). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\guidance_backend.py is complex (21 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\json_schema.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (26). Consider breaking down functions.
+   * File: src\infrastructure\engine\structured\lm_format_enforcer_backend.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (59). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\lm_format_enforcer_backend.py is complex (19 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\logits_processor_v2.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (76). Consider breaking down functions.
+     - L111 | Rust Readiness Task: Function 'empty' is missing complete type hints. Strong typing required for Rust port.
+     - L199 | Rust Readiness Task: Function 'validate_params' is missing complete type hints. Strong typing required for Rust port.
+     - L534 | Rust Readiness Task: Function '__new__' is missing complete type hints. Strong typing required for Rust port.
+     - L578 | Rust Readiness Task: Function 'get_instance' is missing complete type hints. Strong typing required for Rust port.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\logits_processor_v2.py is complex (31 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\logit_processor.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (66). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\logit_processor.py is complex (30 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\regex.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (44). Consider breaking down functions.
+     - L93 | Rust Readiness Task: Function '_build_nfa' is missing complete type hints. Strong typing required for Rust port.
+     - L213 | Rust Readiness Task: Function '_apply_repeat_loop' is missing complete type hints. Strong typing required for Rust port.
+     - L99 | Rust Readiness Task: Function '_process_item' is missing complete type hints. Strong typing required for Rust port.
+     - L156 | Rust Readiness Task: Function 'process_pattern' is missing complete type hints. Strong typing required for Rust port.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\regex.py is complex (19 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\structured_output_orchestrator.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (58). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\structured_output_orchestrator.py is complex (24 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\tokenizer_info.py
+     - L51 | Rust Readiness Task: Function 'from_tokenizer' is missing complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\structured\x_grammar_backend.py
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\x_grammar_backend.py is complex (10 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\manager\base.py
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\manager\base.py is complex (11 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\manager\engine.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (33). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\manager\engine.py is complex (12 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\manager\impl.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (34). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\manager\impl.py is complex (17 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\structured\params\config.py
+     - L122 | Rust Readiness Task: Function 'from_dict' is missing complete type hints. Strong typing required for Rust port.
+   * File: src\infrastructure\engine\structured\params\constraints.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (48). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\infrastructure\engine\structured\params\constraints.py is complex (5 loops). Needs ProfilingAgent review.
+   * File: src\infrastructure\engine\logprobs\processor\storage.py
+     - L92 | Rust Readiness Task: Function 'empty' is missing complete type hints. Strong typing required for Rust port.
+     - L102 | Rust Readiness Task: Function 'from_entries' is missing complete type hints. Strong typing required for Rust port.
+   * File: src\observability\tracing\open_telemetry_tracer.py
+     - L1 | Complexity Issue: Cyclomatic complexity is high (61). Consider breaking down functions.
+     - L0 | Profiling Candidate: File src\observability\tracing\open_telemetry_tracer.py is complex (23 loops). Needs ProfilingAgent review.
+[Intelligence] Federated consensus reached: Continue localized refactoring.
+
+[Autonomous Solver] Attempting to resolve remaining technical debt...
+ - Querying external intelligence for solution patterns...

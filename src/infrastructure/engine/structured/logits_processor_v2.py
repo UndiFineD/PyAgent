@@ -27,29 +27,25 @@ Beyond vLLM innovations:
 - Metrics collection
 - Processor hot-swapping
 """
+from __future__ import annotations
 
-from _thread import LockType
 import threading
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Type
+from typing import Any, Optional, Sequence, Type
 
 from numpy import dtype, floating, ndarray
 from numpy._typing._nbit_base import _32Bit
 
-from numpy import dtype, ndarray
-
 try:
-    import numpy as np  # noqa: F401
-
+    import numpy as np
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
-    import rust_core  # pylint: disable=unused-import
-
+    import rust_core
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -108,7 +104,7 @@ class BatchUpdate:
     moved: Sequence[MovedRequest]
 
     @classmethod
-    def empty(cls: type["BatchUpdate"], batch_size: int = 0) -> "BatchUpdate":
+    def empty(cls: type[BatchUpdate], batch_size: int = 0) -> BatchUpdate:
         """Create empty batch update."""
         return cls(
             batch_size=batch_size,
@@ -128,17 +124,17 @@ class BatchUpdateBuilder:
 
     def __init__(self, batch_size: int = 0) -> None:
         self.batch_size: int = batch_size
-        self._removed: List[RemovedRequest] = []
-        self._added: List[AddedRequest] = []
-        self._moved: List[MovedRequest] = []
+        self._removed: list[RemovedRequest] = []
+        self._added: list[AddedRequest] = []
+        self._moved: list[MovedRequest] = []
 
     def add_request(
         self,
         index: int,
         params: SamplingParams,
-        prompt_token_ids: Optional[List[int]] = None,
-        output_token_ids: Optional[List[int]] = None,
-    ) -> "BatchUpdateBuilder":
+        prompt_token_ids: list[int] | None = None,
+        output_token_ids: list[int] | None = None,
+    ) -> BatchUpdateBuilder:
         """Add a request to the batch."""
         self._added.append(
             (
@@ -150,7 +146,7 @@ class BatchUpdateBuilder:
         )
         return self
 
-    def remove_request(self, index: int) -> "BatchUpdateBuilder":
+    def remove_request(self, index: int) -> BatchUpdateBuilder:
         """Remove a request from the batch."""
         self._removed.append(index)
         return self
@@ -160,12 +156,12 @@ class BatchUpdateBuilder:
         from_index: int,
         to_index: int,
         directionality: MoveDirectionality = MoveDirectionality.UNIDIRECTIONAL,
-    ) -> "BatchUpdateBuilder":
+    ) -> BatchUpdateBuilder:
         """Move a request within the batch."""
         self._moved.append((from_index, to_index, directionality))
         return self
 
-    def set_batch_size(self, size: int) -> "BatchUpdateBuilder":
+    def set_batch_size(self, size: int) -> BatchUpdateBuilder:
         """Set batch size."""
         self.batch_size: int = size
         return self
@@ -179,7 +175,7 @@ class BatchUpdateBuilder:
             moved=tuple(self._moved),
         )
 
-    def clear(self) -> "BatchUpdateBuilder":
+    def clear(self) -> BatchUpdateBuilder:
         """Clear all pending changes."""
         self._removed.clear()
         self._added.clear()
@@ -196,7 +192,7 @@ class LogitsProcessor(ABC):
     """
 
     @classmethod
-    def validate_params(cls: type["LogitsProcessor"], sampling_params: SamplingParams) -> None:
+    def validate_params(cls: type[LogitsProcessor], sampling_params: SamplingParams) -> None:
         """
         Validate sampling params for this processor.
 
@@ -283,7 +279,14 @@ class MinPLogitsProcessor(LogitsProcessor):
         if batch_update is None:
             return
 
-        # Process added requests
+        self._process_added(batch_update)
+
+        if self.min_p_count:
+            self._process_removed(batch_update)
+            self._process_moved(batch_update)
+
+    def _process_added(self, batch_update: BatchUpdate) -> None:
+        """Process added requests in batch update."""
         for index, params, _, _ in batch_update.added:
             min_p: float = params.min_p
             min_p_before: Any | float = self.min_p_cpu[index]
@@ -294,27 +297,29 @@ class MinPLogitsProcessor(LogitsProcessor):
                 elif not min_p and min_p_before:
                     self.min_p_count -= 1
 
-        if self.min_p_count:
-            # Process removed requests
-            if batch_update.removed:
-                for index in batch_update.removed:
-                    if self.min_p_cpu[index]:
-                        self.min_p_cpu[index] = 0.0
-                        self.min_p_count -= 1
+    def _process_removed(self, batch_update: BatchUpdate) -> None:
+        """Process removed requests in batch update."""
+        if batch_update.removed:
+            for index in batch_update.removed:
+                if self.min_p_cpu[index]:
+                    self.min_p_cpu[index] = 0.0
+                    self.min_p_count -= 1
 
-            # Process moved requests
-            for from_idx, to_idx, direction in batch_update.moved:
-                min_p_a: Any | float = self.min_p_cpu[from_idx]
-                min_p_b: Any | float = self.min_p_cpu[to_idx]
-                if min_p_a != min_p_b:
-                    self.min_p_cpu[to_idx] = min_p_a
-                    if direction == MoveDirectionality.SWAP:
-                        self.min_p_cpu[from_idx] = min_p_b
-                if direction == MoveDirectionality.UNIDIRECTIONAL:
-                    if min_p_a:
-                        self.min_p_cpu[from_idx] = 0.0
-                    if min_p_b:
-                        self.min_p_count -= 1
+    def _process_moved(self, batch_update: BatchUpdate) -> None:
+        """Process moved requests in batch update."""
+        for from_idx, to_idx, direction in batch_update.moved:
+            min_p_a: Any | float = self.min_p_cpu[from_idx]
+            min_p_b: Any | float = self.min_p_cpu[to_idx]
+            if min_p_a != min_p_b:
+                self.min_p_cpu[to_idx] = min_p_a
+                if direction == MoveDirectionality.SWAP:
+                    self.min_p_cpu[from_idx] = min_p_b
+
+            if direction == MoveDirectionality.UNIDIRECTIONAL:
+                if min_p_a:
+                    self.min_p_cpu[from_idx] = 0.0
+                if min_p_b:
+                    self.min_p_count -= 1
 
     def apply(self, logits: Any) -> Any:
         """Apply min-p filtering."""
@@ -359,7 +364,7 @@ class MinPLogitsProcessor(LogitsProcessor):
         if HAS_NUMPY:
             self.min_p_cpu.fill(0)
         else:
-            self.min_p_cpu: List[float] = [0.0] * self.max_num_reqs
+            self.min_p_cpu = [0.0] * self.max_num_reqs
         self.min_p_count = 0
 
 
@@ -397,9 +402,16 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         if batch_update is None:
             return
 
-        needs_update = False
+        added_updated = self._process_added_biases(batch_update)
+        removed_updated = self._process_removed_biases(batch_update)
+        moved_updated = self._process_moved_biases(batch_update)
 
-        # Process added requests
+        if added_updated or removed_updated or moved_updated:
+            self._needs_rebuild = True
+
+    def _process_added_biases(self, batch_update: BatchUpdate) -> bool:
+        """Process added requests in batch update."""
+        needs_update = False
         for index, params, _, _ in batch_update.added:
             if params.logit_bias:
                 self.biases[index] = dict(params.logit_bias)
@@ -407,17 +419,23 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
             elif index in self.biases:
                 del self.biases[index]
                 needs_update = True
+        return needs_update
 
-        # Process removed requests
+    def _process_removed_biases(self, batch_update: BatchUpdate) -> bool:
+        """Process removed requests in batch update."""
+        needs_update = False
         for index in batch_update.removed:
             if index in self.biases:
                 del self.biases[index]
                 needs_update = True
+        return needs_update
 
-        # Process moved requests
+    def _process_moved_biases(self, batch_update: BatchUpdate) -> bool:
+        """Process moved requests in batch update."""
+        needs_update = False
         for from_idx, to_idx, direction in batch_update.moved:
-            bias_a: Dict[int, float] | None = self.biases.get(from_idx)
-            bias_b: Dict[int, float] | None = self.biases.get(to_idx)
+            bias_a: dict[int, float] | None = self.biases.get(from_idx)
+            bias_b: dict[int, float] | None = self.biases.get(to_idx)
 
             if bias_a is not None:
                 self.biases[to_idx] = bias_a
@@ -434,18 +452,28 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
             else:
                 if from_idx in self.biases:
                     del self.biases[from_idx]
-
-        if needs_update:
-            self._needs_rebuild = True
+        return needs_update
 
     def apply(self, logits: Any) -> Any:
         """Apply logit biases."""
         if not self.biases:
             return logits
 
+        if HAS_RUST:
+            return self._apply_rust(logits)
+
         if HAS_NUMPY and isinstance(logits, np.ndarray):
             return self._apply_numpy(logits)
 
+        return self._apply_generic(logits)
+
+    def _apply_rust(self, logits: Any) -> Any:
+        """Apply using Rust acceleration."""
+        if isinstance(logits, list):
+            return rust_core.logit_bias_apply_rust(logits, self.biases)
+        if HAS_NUMPY and isinstance(logits, np.ndarray):
+            # Convert to list for Rust for now, or use buffer protocol if supported
+            return np.array(rust_core.logit_bias_apply_rust(logits.tolist(), self.biases))
         return self._apply_generic(logits)
 
     def _apply_numpy(self, logits: "np.ndarray") -> "np.ndarray":
@@ -528,15 +556,15 @@ class LogitsProcessorRegistry:
     and automatic processor selection based on sampling params.
     """
 
-    _instance: Optional["LogitsProcessorRegistry"] = None
-    _lock: LockType = threading.Lock()
+    _instance: LogitsProcessorRegistry | None = None
+    _lock: threading.Lock = threading.Lock()
 
-    def __new__(cls: type["LogitsProcessorRegistry"]) -> "LogitsProcessorRegistry":
+    def __new__(cls: type[LogitsProcessorRegistry], *args: Any, **kwargs: Any) -> LogitsProcessorRegistry:
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
                     cls._instance = super().__new__(cls)
-                    cls._instance._processors: Dict[str, Type[LogitsProcessor]] = {}
+                    cls._instance._processors: dict[str, type[LogitsProcessor]] = {}
                     cls._instance._register_defaults()
         return cls._instance
 
@@ -548,12 +576,12 @@ class LogitsProcessorRegistry:
     def register(
         self,
         name: str,
-        processor_cls: Type[LogitsProcessor],
+        processor_cls: type[LogitsProcessor],
     ) -> None:
         """Register a processor type."""
         self._processors[name] = processor_cls
 
-    def get(self, name: str) -> Optional[Type[LogitsProcessor]]:
+    def get(self, name: str) -> type[LogitsProcessor] | None:
         """Get a processor type by name."""
         return self._processors.get(name)
 
@@ -564,7 +592,7 @@ class LogitsProcessorRegistry:
         device: str = "cpu",
     ) -> CompositeLogitsProcessor:
         """Create composite processor based on sampling params."""
-        processors: List[LogitsProcessor] = []
+        processors: list[LogitsProcessor] = []
 
         if params.min_p > 0:
             processors.append(MinPLogitsProcessor(max_num_reqs, device))
@@ -575,12 +603,12 @@ class LogitsProcessorRegistry:
         return CompositeLogitsProcessor(processors)
 
     @classmethod
-    def get_instance(cls: type["LogitsProcessorRegistry"]) -> "LogitsProcessorRegistry":
+    def get_instance(cls: type[LogitsProcessorRegistry]) -> LogitsProcessorRegistry:
         """Get singleton instance."""
         return cls()
 
 
-__all__: List[str] = [
+__all__: list[str] = [
     "MoveDirectionality",
     "SamplingParams",
     "RemovedRequest",

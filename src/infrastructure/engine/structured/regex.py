@@ -21,34 +21,26 @@ Regex-based grammar engine.
 from __future__ import annotations
 
 import contextlib
-from sre_constants import _NamedIntConstant
 import sys
 import warnings
-from typing import Dict, Optional, Set
+from typing import Any, Optional
 
-from re._constants import _NamedIntConstant
-
-from .base import GrammarEngine
-from .models import FSMTransitionTable
-
-# Handle sre_parse deprecation in Python 3.11+
+# Handle re._constants / sre_constants transition across Python versions
 if sys.version_info >= (3, 11):
     try:
-        # pylint: disable=deprecated-module,ungrouped-imports
         import re._constants as _sre_constants
         import re._parser as _sre_parse
     except ImportError:
-        with warnings.catch_warnings():
-            warnings.filterwarnings("ignore", category=DeprecationWarning)
-            # pylint: disable=deprecated-module,ungrouped-imports
-            import sre_constants as _sre_constants  # type: ignore
-            import sre_parse as _sre_parse  # type: ignore
-else:
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=DeprecationWarning)
-        # pylint: disable=deprecated-module,ungrouped-imports
+        # Fallback for internal structures if they move again
         import sre_constants as _sre_constants  # type: ignore
         import sre_parse as _sre_parse  # type: ignore
+else:
+    # Older Python versions
+    import sre_constants as _sre_constants  # type: ignore
+    import sre_parse as _sre_parse  # type: ignore
+
+from .base import GrammarEngine
+from .models import FSMTransitionTable
 
 # Align constants across different Python versions
 _LITERAL = _sre_constants.LITERAL
@@ -58,8 +50,8 @@ _RANGE = _sre_constants.RANGE
 _SUBPATTERN = _sre_constants.SUBPATTERN
 _MAX_REPEAT = _sre_constants.MAX_REPEAT
 _MIN_REPEAT = _sre_constants.MIN_REPEAT
-_MAXREPEAT: _NamedIntConstant | _NamedIntConstant = _sre_constants.MAXREPEAT
-_BRANCH: contextlib.Any | None = getattr(_sre_constants, "BRANCH", None)
+_MAXREPEAT: Any = _sre_constants.MAXREPEAT
+_BRANCH: Any | None = getattr(_sre_constants, "BRANCH", None)
 
 
 class RegexGrammar(GrammarEngine):
@@ -70,11 +62,11 @@ class RegexGrammar(GrammarEngine):
     def __init__(
         self,
         vocab_size: int,
-        token_strings: Optional[Dict[int, str]] = None,
+        token_strings: Optional[dict[int, str]] = None,
         eos_token_id: Optional[int] = None,
     ) -> None:
         super().__init__(vocab_size, token_strings, eos_token_id)
-        self._compiled_cache: Dict[str, FSMTransitionTable] = {}
+        self._compiled_cache: dict[str, FSMTransitionTable] = {}
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
         """Build DFA from regex pattern."""
@@ -90,14 +82,14 @@ class RegexGrammar(GrammarEngine):
 
         return self._build_simple_fsm(spec)
 
-    def _build_nfa(self, parsed: Any) -> dict:
+    def _build_nfa(self, parsed: Any) -> dict[str, Any]:
         """Build NFA from parsed regex."""
         nfa: dict[int, dict[str, set[int]]] = {0: {}}
         state_counter: list[int] = [1]
-        accepting = set()
+        accepting: set[int] = set()
 
         def _process_item(op: Any, av: Any, state: int) -> set[int]:
-            new_end_states = set()
+            new_end_states: set[int] = set()
             if state not in nfa:
                 nfa[state] = {}
 
@@ -135,15 +127,15 @@ class RegexGrammar(GrammarEngine):
                 new_end_states.add(new_state)
             elif op == _SUBPATTERN:
                 _, _, _, subpattern = av
-                sub_end: Set[int] = process_pattern(subpattern, state)
+                sub_end: set[int] = process_pattern(subpattern, state)
                 new_end_states.update(sub_end)
             elif op in (_MAX_REPEAT, _MIN_REPEAT):
                 min_count, max_count, subpattern = av
-                current_states: Set[int] = {state}
+                current_states: set[int] = {state}
                 for _ in range(min(min_count, 10)):
-                    next_states = set()
+                    next_states: set[int] = set()
                     for s in current_states:
-                        ends: Set[int] = process_pattern(subpattern, s)
+                        ends: set[int] = process_pattern(subpattern, s)
                         next_states.update(ends)
                     current_states = next_states
                 if max_count > min_count or max_count == _MAXREPEAT:
@@ -156,7 +148,7 @@ class RegexGrammar(GrammarEngine):
         def process_pattern(pattern: Any, start_state: int) -> set[int]:
             end_states: set[int] = {start_state}
             for op, av in pattern:
-                new_total_end_states = set()
+                new_total_end_states: set[int] = set()
                 for state in end_states:
                     new_total_end_states.update(_process_item(op, av, state))
                 end_states = new_total_end_states if new_total_end_states else end_states
@@ -166,36 +158,36 @@ class RegexGrammar(GrammarEngine):
         accepting.update(final_states)
         return {"nfa": nfa, "accepting": accepting, "initial": 0}
 
-    def _nfa_to_dfa(self, nfa_data: dict) -> FSMTransitionTable:
+    def _nfa_to_dfa(self, nfa_data: dict[str, Any]) -> FSMTransitionTable:
         """Convert NFA to DFA."""
-        nfa = nfa_data["nfa"]
-        accepting = nfa_data["accepting"]
-        initial = nfa_data["initial"]
-        dfa_states = {}
-        dfa_transitions: Dict[int, Dict[str, int]] = {}
-        dfa_accepting = set()
-        initial_set = frozenset({initial})
+        nfa: dict[int, dict[str, set[int]]] = nfa_data["nfa"]
+        accepting: set[int] = nfa_data["accepting"]
+        initial: int = nfa_data["initial"]
+        dfa_states: dict[frozenset[int], int] = {}
+        dfa_transitions: dict[int, dict[str, int]] = {}
+        dfa_accepting: set[int] = set()
+        initial_set: frozenset[int] = frozenset({initial})
         dfa_states[initial_set] = 0
         dfa_transitions[0] = {}
         if initial in accepting:
             dfa_accepting.add(0)
-        worklist = [initial_set]
-        state_counter = 1
+        worklist: list[frozenset[int]] = [initial_set]
+        state_counter: int = 1
         while worklist:
             current_set = worklist.pop()
             current_dfa = dfa_states[current_set]
-            all_chars = set()
+            all_chars: set[str] = set()
             for nfa_state in current_set:
                 if nfa_state in nfa:
                     all_chars.update(nfa[nfa_state].keys())
             for char in all_chars:
-                next_set = set()
+                next_set: set[int] = set()
                 for nfa_state in current_set:
                     if nfa_state in nfa and char in nfa[nfa_state]:
                         next_set.update(nfa[nfa_state][char])
                 if not next_set:
                     continue
-                next_frozen = frozenset(next_set)
+                next_frozen: frozenset[int] = frozenset(next_set)
                 if next_frozen not in dfa_states:
                     dfa_states[next_frozen] = state_counter
                     dfa_transitions[state_counter] = {}
@@ -210,10 +202,16 @@ class RegexGrammar(GrammarEngine):
                 fsm.add_transition(from_state, char, to_state)
         return fsm
 
-    def _apply_repeat_loop(self, nfa, current_states, subpattern, process_pattern_fn) -> None:
+    def _apply_repeat_loop(
+        self,
+        nfa: dict[int, dict[str, set[int]]],
+        current_states: set[int],
+        subpattern: Any,
+        process_pattern_fn: Any,
+    ) -> None:
         """Apply repeat loop transitions to NFA."""
         for s in current_states:
-            loop_ends = process_pattern_fn(subpattern, s)
+            loop_ends: set[int] = process_pattern_fn(subpattern, s)
             for end in loop_ends:
                 s_transitions = nfa.get(s, {})
                 if end not in nfa:

@@ -101,14 +101,14 @@ class SpecDecodeMetadataV2:
         return 0.0
 
     @classmethod
-    def make_dummy(cls: type["SpecDecodeMetadataV2"], draft_token_ids: list[list[int]]) -> "SpecDecodeMetadataV2":
+    def make_dummy(cls: type[SpecDecodeMetadataV2], draft_token_ids: list[list[int]]) -> SpecDecodeMetadataV2:
         """Create placeholder metadata for testing."""
         flattened = [t for tokens in draft_token_ids for t in tokens]
         num_draft = [len(tokens) for tokens in draft_token_ids]
         return cls(draft_token_ids=flattened, num_draft_tokens=num_draft)
 
     @classmethod
-    def from_proposals(cls: type["SpecDecodeMetadataV2"], proposals: list[list[int]]) -> "SpecDecodeMetadataV2":
+    def from_proposals(cls: type[SpecDecodeMetadataV2], proposals: list[list[int]]) -> SpecDecodeMetadataV2:
         """Create metadata from a list of draft token sequences."""
         flattened = []
         num_draft = []
@@ -148,19 +148,20 @@ class TreeVerificationMetadata:
         return []
 
     @classmethod
-    def from_tree(cls: type["TreeVerificationMetadata"], tree_tokens: list[list[int]], tree_parents: list[list[int]]) -> "TreeVerificationMetadata":
+    def from_tree(
+        cls: type[TreeVerificationMetadata], tree_tokens: list[list[int]], tree_parents: list[list[int]]
+    ) -> TreeVerificationMetadata:
         """Construct verification metadata from tree paths and parent pointers."""
         flat_tokens, flat_parents, flat_depths = [], [], []
         path_lengths, path_starts = [], []
         current_pos = 0
+
         for path_tokens, path_parents in zip(tree_tokens, tree_parents):
             path_starts.append(current_pos)
             path_lengths.append(len(path_tokens))
-            for i, (token, parent) in enumerate(zip(path_tokens, path_parents)):
-                flat_tokens.append(token)
-                flat_parents.append(parent)
-                flat_depths.append(i)
-            current_pos += len(path_tokens)
+            num_added = cls._flatten_path(path_tokens, path_parents, flat_tokens, flat_parents, flat_depths)
+            current_pos += num_added
+
         return cls(
             tree_token_ids=flat_tokens,
             tree_parent_indices=flat_parents,
@@ -169,6 +170,21 @@ class TreeVerificationMetadata:
             path_lengths=path_lengths,
             path_start_indices=path_starts,
         )
+
+    @staticmethod
+    def _flatten_path(
+        tokens: list[int],
+        parents: list[int],
+        out_tokens: list[int],
+        out_parents: list[int],
+        out_depths: list[int],
+    ) -> int:
+        """Helper to flatten a single tree path."""
+        for i, (token, parent) in enumerate(zip(tokens, parents)):
+            out_tokens.append(token)
+            out_parents.append(parent)
+            out_depths.append(i)
+        return len(tokens)
 
 
 class SpecDecodeMetadataFactory:
