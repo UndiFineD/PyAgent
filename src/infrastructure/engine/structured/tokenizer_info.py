@@ -38,7 +38,7 @@ class TokenizerInfo:
     add_prefix_space: bool = True
 
     @property
-    def token_strings(self) -> Dict[int, str]:
+    def token_strings(self) -> dict[int, str]:
         """Get mapping of token ID to string."""
         return dict(enumerate(self.encoded_vocab))
 
@@ -49,9 +49,9 @@ class TokenizerInfo:
 
     @classmethod
     def from_tokenizer(
-        cls,
+        cls: type["TokenizerInfo"],
         tokenizer: Any,
-        vocab_size: Optional[int] = None,
+        vocab_size: int | None = None,
     ) -> "TokenizerInfo":
         """Create TokenizerInfo from a HuggingFace tokenizer."""
         vocab_dict = tokenizer.get_vocab()

@@ -98,7 +98,7 @@ class StructuredOutputConfig:
 
         return constraints
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """
         Convert configuration to dictionary.
 
@@ -119,7 +119,7 @@ class StructuredOutputConfig:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "StructuredOutputConfig":
+    def from_dict(cls: type["StructuredOutputConfig"], data: dict[str, Any]) -> "StructuredOutputConfig":
         """Create from dictionary."""
         return cls(
             output_type=StructuredOutputType[data.get("output_type", "JSON_SCHEMA")],

@@ -37,8 +37,8 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         self,
         grammar_spec: GrammarSpec,
         vocab_size: int,
-        request_id: Optional[str] = None,
-        token_strings: Optional[Dict[int, str]] = None,
+        request_id: str | None = None,
+        token_strings: dict[int, str] | None = None,
     ) -> None:
         super().__init__(grammar_spec, vocab_size, request_id)
 
@@ -113,12 +113,12 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         """
         bitmask[batch_index, :] = True
 
-    def get_allowed_tokens(self) -> List[int]:
+    def get_allowed_tokens(self) -> list[int]:
         """
         Get allowed tokens (not implemented efficiently for simple regex).
 
         Returns:
-            List of all token IDs.
+            list of all token IDs.
         """
         return list(range(self.vocab_size))
 
@@ -130,25 +130,10 @@ class ChoiceGrammar(StructuredOutputGrammar):
         self,
         grammar_spec: GrammarSpec,
         vocab_size: int,
-        request_id: Optional[str] = None,
-        token_strings: Optional[Dict[int, str]] = None,
-        encode_fn: Optional[Callable[[str], List[int]]] = None,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+        request_id: str | None = None,
+        token_strings: dict[int, str] | None = None,
+        encode_fn: Callable[[str], list[int]] | None = None,
     ) -> None:
-=======
-    ):
-<<<<<<< HEAD
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-    ) -> None:
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
-    ) -> None:
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         """
         Initialize ChoiceGrammar.
 
@@ -161,13 +146,13 @@ class ChoiceGrammar(StructuredOutputGrammar):
         """
         super().__init__(grammar_spec, vocab_size, request_id)
 
-        self._choices: List[str] = json.loads(grammar_spec.spec)
+        self._choices: list[str] = json.loads(grammar_spec.spec)
         self._token_strings = token_strings or {}
         self._encode_fn = encode_fn
 
         self._generated_text = ""
-        self._valid_choices: List[str] = list(self._choices)
-        self._allowed_tokens_cache: Dict[str, set] = {}
+        self._valid_choices: list[str] = list(self._choices)
+        self._allowed_tokens_cache: dict[str, set] = {}
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
         """
@@ -238,12 +223,12 @@ class ChoiceGrammar(StructuredOutputGrammar):
             if token_id < bitmask.shape[1]:
                 bitmask[batch_index, token_id] = True
 
-    def get_allowed_tokens(self) -> List[int]:
+    def get_allowed_tokens(self) -> list[int]:
         """
         Get the list of allowed token IDs.
 
         Returns:
-            List of allowed token IDs.
+            list of allowed token IDs.
         """
         return list(self._compute_allowed_tokens())
 
