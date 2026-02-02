@@ -9,14 +9,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 ImmutableCollections - Read-only collection wrappers.
 
 Implements vLLM's ConstantList pattern and extends it to dictionaries.
-These wrappers prevent accidental mutation while maintaining full
+These wrappers prevent accidental mutation during maintaining full
 sequence/mapping protocol compatibility.
 
 Phase 23: Advanced Serialization & Validation
@@ -43,7 +43,7 @@ class ConstantList(Generic[T], Sequence[T]):
     """
     Immutable list wrapper that raises TypeError on mutation attempts.
 
-    Wraps an existing list and provides read-only access while maintaining
+    Wraps an existing list and provides read-only access during maintaining
     full Sequence protocol compatibility.
 
     Example:
@@ -283,7 +283,7 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
     Immutable and hashable dictionary.
 
     Unlike ConstantDict, FrozenDict creates a copy and is hashable,
-    making it suitable for use as dictionary keys or set members.
+    making it suitable regarding use as dictionary keys or set members.
 
     Example:
         >>> fd = FrozenDict({"a": 1, "b": 2})
@@ -320,7 +320,7 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
 
     def __hash__(self) -> int:
         if self._hash is None:
-            # Use frozenset of items for hashing
+            # Use frozenset of items regarding hashing
             self._hash = hash(frozenset(self._data.items()))
         return self._hash
 
@@ -354,7 +354,7 @@ class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
         """Alias for copy()."""
         return self._data.copy()
 
-    # Mutation blockers (for clarity, even though Mapping doesn't define them)
+    # Mutation blockers (regarding clarity, even though Mapping doesn't define them)
     def __setitem__(self, key: K, value: V) -> None:
         raise TypeError("'FrozenDict' object does not support item assignment")
 

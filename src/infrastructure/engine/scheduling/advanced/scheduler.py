@@ -19,7 +19,7 @@
 import threading
 import time
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .config import (PreemptionReason, RequestPriority, RequestState,
                      SchedulerConfig)
@@ -30,15 +30,15 @@ from .request import ScheduledRequest
 class AdvancedRequestScheduler:
     """Advanced request scheduler with priority and preemption."""
 
-    def __init__(self, config: Optional[SchedulerConfig] = None) -> None:
+    def __init__(self, config: SchedulerConfig | None = None) -> None:
         """Initialize scheduler."""
         self.config = config or SchedulerConfig()
 
         # Request queues
         self.waiting = PriorityRequestQueue(enable_starvation_prevention=self.config.starvation_prevention)
-        self.running: Dict[str, ScheduledRequest] = {}
-        self.preempted: Dict[str, ScheduledRequest] = {}
-        self.completed: Dict[str, ScheduledRequest] = {}
+        self.running: dict[str, ScheduledRequest] = {}
+        self.preempted: dict[str, ScheduledRequest] = {}
+        self.completed: dict[str, ScheduledRequest] = {}
 
         # Token tracking
         self._running_tokens = 0
@@ -55,9 +55,9 @@ class AdvancedRequestScheduler:
         prompt: str,
         priority: RequestPriority = RequestPriority.NORMAL,
         max_tokens: int = 256,
-        deadline: Optional[float] = None,
-        request_id: Optional[str] = None,
-        prompt_tokens: Optional[int] = None,
+        deadline: float | None = None,
+        request_id: str | None = None,
+        prompt_tokens: int | None = None,
     ) -> ScheduledRequest:
         """Add a new request to the scheduler."""
         if request_id is None:
@@ -83,56 +83,68 @@ class AdvancedRequestScheduler:
         self.waiting.push(request)
         return request
 
-    def schedule(self) -> List[ScheduledRequest]:
+    def schedule(self) -> list[ScheduledRequest]:
         """Select requests for the next execution batch."""
         with self._lock:
-            batch: List[ScheduledRequest] = []
+            batch: list[ScheduledRequest] = []
             token_budget = self.config.max_tokens_per_batch - self._running_tokens
 
             # First, try to resume preempted requests
-            preempted_ids = list(self.preempted.keys())
-            for req_id in preempted_ids:
-                if len(batch) >= self.config.max_running_requests - len(self.running):
-                    break
-
-                request = self.preempted[req_id]
-                if request.total_tokens <= token_budget:
-                    request.resume()
-                    request.state = RequestState.RUNNING
-                    del self.preempted[req_id]
-                    self.running[req_id] = request
-                    batch.append(request)
-                    token_budget -= request.total_tokens
+            token_budget = self._resume_preempted(batch, token_budget)
 
             # Then, schedule waiting requests
-            initial_running = len(self.running)
-            while len(batch) + initial_running < self.config.max_running_requests:
-                if token_budget <= 0:
-                    break
-
-                request = self.waiting.pop()
-                if request is None:
-                    break
-
-                if request.total_tokens > token_budget:
-                    if self._should_preempt(request, token_budget):
-                        freed = self._preempt_for_request(request)
-                        token_budget += freed
-                    else:
-                        self.waiting.push(request)
-                        continue
-
-                request.state = RequestState.RUNNING
-                if request.metrics.first_scheduled_at == 0:
-                    request.metrics.first_scheduled_at = time.time()
-
-                self.running[request.request_id] = request
-                batch.append(request)
-                token_budget -= request.total_tokens
-                self._total_scheduled += 1
-                self._running_tokens += request.total_tokens
+            token_budget = self._schedule_waiting(batch, token_budget)
 
             return batch
+
+    def _resume_preempted(self, batch: list[ScheduledRequest], token_budget: int) -> int:
+        """Resume preempted requests if budget allows."""
+        preempted_ids = list(self.preempted.keys())
+        for req_id in preempted_ids:
+            if len(batch) >= self.config.max_running_requests - len(self.running):
+                break
+
+            request = self.preempted[req_id]
+            if request.total_tokens <= token_budget:
+                request.resume()
+                request.state = RequestState.RUNNING
+                del self.preempted[req_id]
+                self.running[req_id] = request
+                batch.append(request)
+                token_budget -= request.total_tokens
+        
+        return token_budget
+
+    def _schedule_waiting(self, batch: list[ScheduledRequest], token_budget: int) -> int:
+        """Schedule waiting requests based on priority and budget."""
+        initial_running = len(self.running)
+        while len(batch) + initial_running < self.config.max_running_requests:
+            if token_budget <= 0:
+                break
+
+            request = self.waiting.pop()
+            if request is None:
+                break
+
+            if request.total_tokens > token_budget:
+                if self._should_preempt(request, token_budget):
+                    freed = self._preempt_for_request(request)
+                    token_budget += freed
+                else:
+                    self.waiting.push(request)
+                    continue
+
+            request.state = RequestState.RUNNING
+            if request.metrics.first_scheduled_at == 0:
+                request.metrics.first_scheduled_at = time.time()
+
+            self.running[request.request_id] = request
+            batch.append(request)
+            token_budget -= request.total_tokens
+            self._total_scheduled += 1
+            self._running_tokens += request.total_tokens
+        
+        return token_budget
 
     def _should_preempt(
         self,
@@ -193,7 +205,7 @@ class AdvancedRequestScheduler:
         self,
         request_id: str,
         reason: PreemptionReason,
-        saved_state: Optional[Any] = None,
+        saved_state: Any | None = None,
     ) -> bool:
         """Preempt a specific request."""
         if request_id not in self.running:
@@ -210,7 +222,7 @@ class AdvancedRequestScheduler:
         self,
         request_id: str,
         reason: PreemptionReason = PreemptionReason.MEMORY_PRESSURE,
-        saved_state: Optional[Any] = None,
+        saved_state: Any | None = None,
     ) -> bool:
         """Public API for preempting a request."""
         with self._lock:
@@ -269,7 +281,7 @@ class AdvancedRequestScheduler:
 
             return False
 
-    def get_request(self, request_id: str) -> Optional[ScheduledRequest]:
+    def get_request(self, request_id: str) -> ScheduledRequest | None:
         """Get request by ID."""
         with self._lock:
             if request_id in self.running:

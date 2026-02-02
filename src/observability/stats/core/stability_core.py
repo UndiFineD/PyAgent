@@ -51,7 +51,7 @@ class StabilityCore:
                     "latency_p95": metrics.latency_p95,
                 }
                 return rc.calculate_stability_score(m_dict, sae_anomalies)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         # Baseline: 1.0
@@ -70,13 +70,14 @@ class StabilityCore:
         """Determines if the swarm is in 'Digital Stasis' (too rigid)."""
         if rc:
             try:
-                variance = rc.calculate_variance_rust(score_history)  # type: ignore[attr-defined]
+                variance: float = rc.calculate_variance_rust(score_history)  # type: ignore[attr-defined]
                 return len(score_history) >= 10 and variance < 0.0001
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         if len(score_history) < 10:
             return False
-        variance = sum((x - sum(score_history) / len(score_history)) ** 2 for x in score_history) / len(score_history)
+        avg = sum(score_history) / len(score_history)
+        variance = sum((x - avg) ** 2 for x in score_history) / len(score_history)
         return variance < 0.0001  # Minimal change indicates stasis
 
     def get_healing_threshold(self, stability_score: float) -> float:
@@ -84,7 +85,7 @@ class StabilityCore:
         if rc:
             try:
                 return rc.get_healing_threshold(stability_score)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         if stability_score < 0.3:
             return 0.9  # Aggressive healing

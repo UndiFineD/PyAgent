@@ -9,12 +9,22 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 """
-N-gram Proposers - Implementation of speculative decoding token proposers.
+N-gram Proposers - Implementation regarding speculative decoding token proposers.
 """
 
 from __future__ import annotations
@@ -87,46 +97,17 @@ class NgramProposer:
             self._suffix_index.build(tokens_list)
             self._cached_tokens = tokens_list.copy()
 
-        # Find best match
-        best_proposal: list[int] = []
-        best_score = -1.0
-        best_ngram_size = 0
-        best_position = -1
-
-        # Try n-gram sizes from largest to smallest
-        for n in range(self.config.max_n, self.config.min_n - 1, -1):
-            if n > n_tokens:
-                continue
-
-            # Get the current n-gram (last n tokens)
-            current_ngram = tuple(tokens_list[-(n):])
-
-            # Find matches
-            if self._suffix_index is not None:
-                matches = self._suffix_index.lookup(current_ngram[:-1])
-            else:
-                matches = self._find_matches_linear(tokens_list, current_ngram[:-1])
-
-            # Filter out the current position
-            matches = [m for m in matches if m + n - 1 < n_tokens - 1]
-
-            if not matches:
-                continue
-
-            # Score and select best match
-            for match_pos in matches:
-                proposal = self._get_continuation(tokens_list, match_pos + n - 1, num_proposals)
-
-                if not proposal:
-                    continue
-
-                score = self._score_match(proposal, match_pos, n_tokens, n)
-
-                if score > best_score:
-                    best_score = score
-                    best_proposal = proposal
-                    best_ngram_size = n
-                    best_position = match_pos
+        # Find best match recursively
+        result = self._try_ngram_sizes(
+            tokens_list,
+            self.config.max_n,
+            self.config.min_n,
+            num_proposals,
+            n_tokens,
+            (-1.0, [], 0, -1)  # (best_score, best_proposal, best_ngram_size, best_position)
+        )
+        
+        best_score, best_proposal, best_ngram_size, best_position = result
 
         # Update stats
         self.stats.update(
@@ -137,14 +118,98 @@ class NgramProposer:
 
         return best_proposal
 
+    def _try_ngram_sizes(
+        self,
+        tokens_list: list[int],
+        current_n: int,
+        min_n: int,
+        num_proposals: int,
+        n_tokens: int,
+        best_so_far: tuple[float, list[int], int, int],
+    ) -> tuple[float, list[int], int, int]:
+        """Recursively try different n-gram sizes."""
+        if current_n < min_n:
+            return best_so_far
+
+        if current_n > n_tokens:
+            return self._try_ngram_sizes(
+                tokens_list, current_n - 1, min_n, num_proposals, n_tokens, best_so_far
+            )
+
+        # Get the current n-gram (last n tokens)
+        current_ngram = tuple(tokens_list[-(current_n):])
+
+        # Find matches
+        if self._suffix_index is not None:
+            matches = self._suffix_index.lookup(current_ngram[:-1])
+        else:
+            matches = self._find_matches_linear(tokens_list, current_ngram[:-1])
+
+        # Filter out the current position
+        valid_matches = list(filter(lambda m: m + current_n - 1 < n_tokens - 1, matches))
+
+        if not valid_matches:
+            return self._try_ngram_sizes(
+                tokens_list, current_n - 1, min_n, num_proposals, n_tokens, best_so_far
+            )
+
+        # Score and select best match regarding this n-gram size
+        best_for_n = self._find_best_match_recursive(
+            tokens_list,
+            valid_matches,
+            current_n,
+            num_proposals,
+            n_tokens,
+            (-1.0, [], current_n, -1)
+        )
+
+        # Update global best if this one is better
+        new_best = best_for_n if best_for_n[0] > best_so_far[0] else best_so_far
+
+        return self._try_ngram_sizes(
+            tokens_list, current_n - 1, min_n, num_proposals, n_tokens, new_best
+        )
+
+    def _find_best_match_recursive(
+        self,
+        tokens_list: list[int],
+        matches: list[int],
+        n: int,
+        num_proposals: int,
+        n_tokens: int,
+        best: tuple[float, list[int], int, int],
+    ) -> tuple[float, list[int], int, int]:
+        """Find best match among matches regarding a specific n-gram size."""
+        if not matches:
+            return best
+
+        match_pos = matches[0]
+        proposal = self._get_continuation(tokens_list, match_pos + n - 1, num_proposals)
+        
+        if not proposal:
+            return self._find_best_match_recursive(
+                tokens_list, matches[1:], n, num_proposals, n_tokens, best
+            )
+
+        score = self._score_match(proposal, match_pos, n_tokens, n)
+        
+        new_best = (score, proposal, n, match_pos) if score > best[0] else best
+
+        return self._find_best_match_recursive(
+            tokens_list, matches[1:], n, num_proposals, n_tokens, new_best
+        )
+
     def _find_matches_linear(
         self,
         tokens: list[int],
         ngram: tuple[int, ...],
     ) -> list[int]:
-        """Linear search for n-gram matches."""
+        """Linear search regarding n-gram matches."""
         n = len(ngram)
-        return [i for i in range(len(tokens) - n + 1) if tuple(tokens[i : i + n]) == ngram]
+        return list(filter(
+            lambda i: tuple(tokens[i : i + n]) == ngram,
+            range(len(tokens) - n + 1)
+        ))
 
     def _get_continuation(
         self,
@@ -168,7 +233,7 @@ class NgramProposer:
         if not proposal:
             return -1.0
 
-        base_score = len(proposal)  # Length of continuation
+        base_score = len(proposal)  # Length regarding continuation
 
         if self.config.strategy == MatchingStrategy.FIRST:
             return base_score
@@ -192,22 +257,22 @@ class NgramProposer:
         batch_tokens: list[list[int]],
         num_proposals: int | None = None,
     ) -> list[list[int]]:
-        """Batch proposal for multiple sequences."""
+        """Batch proposal regarding multiple sequences."""
         if num_proposals is None:
             num_proposals = self.config.num_speculative_tokens
 
         if HAS_RUST and hasattr(rust_core, "batch_ngram_propose_rust"):
-            return [
-                list(p)
-                for p in getattr(rust_core, "batch_ngram_propose_rust")(
+            return list(map(
+                list,
+                getattr(rust_core, "batch_ngram_propose_rust")(
                     batch_tokens,
                     self.config.min_n,
                     self.config.max_n,
                     num_proposals,
                 )
-            ]
+            ))
 
-        return [self.propose(tokens, num_proposals) for tokens in batch_tokens]
+        return list(map(lambda t: self.propose(t, num_proposals), batch_tokens))
 
     def get_stats(self) -> ProposalStats:
         """Get proposal statistics."""

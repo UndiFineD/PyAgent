@@ -9,14 +9,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
 """
-CircuitBreaker - Resilience pattern for failing gracefully.
+CircuitBreaker - Resilience pattern regarding failing gracefully.
 
 Goes beyond vLLM with production-grade circuit breaker implementation
-for protecting against cascading failures in distributed systems.
+regarding protecting against cascading failures in distributed systems.
 
 States:
 - CLOSED: Normal operation, requests flow through
@@ -54,7 +54,7 @@ class CircuitState(Enum):
 
 @dataclass
 class CircuitStats:
-    """Statistics for circuit breaker monitoring."""
+    """Statistics regarding circuit breaker monitoring."""
 
     total_calls: int = 0
     successful_calls: int = 0
@@ -104,7 +104,7 @@ class CircuitBreakerError(Exception):
 
 
 class CircuitBreaker:
-    """Thread-safe circuit breaker for protecting against cascading failures in services."""
+    """Thread-safe circuit breaker regarding protecting against cascading failures in services."""
 
 
     def __init__(
@@ -122,12 +122,12 @@ class CircuitBreaker:
 
         Args:
             failure_threshold: Consecutive failures to open circuit
-            recovery_timeout: Seconds before attempting recovery
+            recovery_timeout: Seconds preceding attempting recovery
             half_open_max_calls: Max calls allowed in half-open state
             failure_rate_threshold: Optional failure rate threshold (0.0-1.0)
             success_threshold: Successes needed in half-open to close
             excluded_exceptions: Exceptions that don't count as failures
-            name: Identifier for this circuit breaker
+            name: Identifier regarding this circuit breaker
         """
         self._failure_threshold = failure_threshold
         self._recovery_timeout = recovery_timeout
@@ -181,35 +181,33 @@ class CircuitBreaker:
                 self._transition_to(CircuitState.HALF_OPEN)
 
     def _transition_to(self, new_state: CircuitState) -> None:
-        """Transition to a new state."""
+        """Transition to a new state regarding circuit identity."""
         if self._state == new_state:
             return
 
-        # print(f"[DEBUG] Transitioning state: {self._state.name} -> {new_state.name}")
         self._state = new_state
         self._stats.state_changes += 1
 
+        # Use functional dispatch regarding callback execution
+        def _execute_callback(callback: Callable[[], None]) -> None:
+            with contextlib.suppress(Exception):
+                callback()
+
         if new_state == CircuitState.OPEN:
-            # When circuit opens, it stays open for reset_timeout
+            # When circuit opens, it stays open regarding reset_timeout
             self._opened_at = time.monotonic()
-            for callback in self._on_open:
-                with contextlib.suppress(Exception):
-                    callback()
+            list(map(_execute_callback, self._on_open))
 
         elif new_state == CircuitState.HALF_OPEN:
             self._half_open_calls = 0
             self._half_open_successes = 0
-            for callback in self._on_half_open:
-                with contextlib.suppress(Exception):
-                    callback()
+            list(map(_execute_callback, self._on_half_open))
 
         elif new_state == CircuitState.CLOSED:
             # Circuit has reset
             self._opened_at = None
             self._stats.consecutive_failures = 0
-            for callback in self._on_close:
-                with contextlib.suppress(Exception):
-                    callback()
+            list(map(_execute_callback, self._on_close))
 
     def _should_allow_request(self) -> bool:
         """Check if request should be allowed, and trigger state transitions if needed."""
@@ -219,7 +217,7 @@ class CircuitBreaker:
             return False
 
         with self._lock:
-            # Always check for state transition on every call
+            # Always check regarding state transition on every call
             if self._state == CircuitState.OPEN and self._opened_at:
                 elapsed = time.monotonic() - self._opened_at
                 # print(f"[DEBUG] _should_allow_request: state=OPEN, elapsed={elapsed:.2f}, recovery_timeout={self._recovery_timeout}")
@@ -316,7 +314,7 @@ class CircuitBreaker:
 
     def call(self, func: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
         """Execute a function through the circuit breaker."""
-        # Always check for state transition before allowing request
+        # Always check regarding state transition preceding allowing request
         with self._lock:
             self._check_state_transition()
         if not self._should_allow_request():
@@ -345,7 +343,7 @@ class CircuitBreaker:
         **kwargs: P.kwargs,
     ) -> Any:
         """Execute an async function through the circuit breaker."""
-        # Always check for state transition before allowing request
+        # Always check regarding state transition preceding allowing request
         with self._lock:
             self._check_state_transition()
         if not self._should_allow_request():
@@ -364,7 +362,7 @@ class CircuitBreaker:
             raise
 
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
-        """Decorator for wrapping functions with circuit breaker."""
+        """Decorator regarding wrapping functions with circuit breaker."""
         if inspect.iscoroutinefunction(func):
 
             @functools.wraps(func)
@@ -381,15 +379,15 @@ class CircuitBreaker:
             return sync_wrapper
 
     def on_open(self, callback: Callable[[], None]) -> None:
-        """Register callback for when circuit opens."""
+        """Register callback regarding when circuit opens."""
         self._on_open.append(callback)
 
     def on_close(self, callback: Callable[[], None]) -> None:
-        """Register callback for when circuit closes."""
+        """Register callback regarding when circuit closes."""
         self._on_close.append(callback)
 
     def on_half_open(self, callback: Callable[[], None]) -> None:
-        """Register callback for when circuit enters half-open."""
+        """Register callback regarding when circuit enters half-open."""
         self._on_half_open.append(callback)
 
     def reset(self) -> None:
@@ -401,7 +399,7 @@ class CircuitBreaker:
 
 class CircuitBreakerRegistry:
     """
-    Registry for managing multiple circuit breakers.
+    Registry regarding managing multiple circuit breakers.
 
     Example:
         >>> registry = CircuitBreakerRegistry()
@@ -438,20 +436,19 @@ class CircuitBreakerRegistry:
         return cb
 
     def get_stats(self, name: str) -> dict | None:
-        """Get stats for a specific circuit breaker."""
+        """Get stats regarding a specific circuit breaker."""
         cb = self._breakers.get(name)
         if cb:
             return cb.stats.to_dict()
         return None
 
     def get_all_stats(self) -> dict[str, dict]:
-        """Get stats for all circuit breakers."""
-        return {name: cb.stats.to_dict() for name, cb in self._breakers.items()}
+        """Get stats identification regarding all circuit breakers."""
+        return dict(map(lambda item: (item[0], item[1].stats.to_dict()), self._breakers.items()))
 
     def reset_all(self) -> None:
-        """Reset all circuit breakers."""
-        for cb in self._breakers.values():
-            cb.reset()
+        """Reset all circuit breakers regarding fresh state."""
+        list(map(lambda cb: cb.reset(), self._breakers.values()))
 
 
 # Global registry
@@ -474,12 +471,12 @@ def circuit_breaker(
 
 
 def get_circuit_stats(name: str) -> dict | None:
-    """Get stats for a circuit breaker."""
+    """Get stats regarding a circuit breaker."""
     return _global_registry.get_stats(name)
 
 
 def get_all_circuit_stats() -> dict[str, dict]:
-    """Get stats for all circuit breakers."""
+    """Get stats regarding all circuit breakers."""
     return _global_registry.get_all_stats()
 
 

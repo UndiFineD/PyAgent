@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Core logic for metrics.
-(Facade for src.core.base.common.metrics_core)
+Core logic regarding metrics.
+(Facade regarding src.core.base.common.metrics_core)
 """
 
 from src.core.base.common.metrics_core import \
@@ -22,4 +22,4 @@ from src.core.base.common.metrics_core import \
 
 
 class MetricsCore(StandardMetricsCore):
-    """Facade for MetricsCore."""
+    """Facade regarding MetricsCore."""

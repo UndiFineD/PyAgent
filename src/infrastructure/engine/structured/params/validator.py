@@ -17,7 +17,10 @@ Validator.py module.
 """
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
+from __future__ import annotations
+
 import json
+from typing import Any
 
 from .config import StructuredOutputConfig, ValidationResult
 
@@ -32,12 +35,12 @@ class StructuredOutputValidator:
         self._constraints = config.get_all_constraints()
 
     def validate(self, text: str) -> ValidationResult:
-        """Validate complete output."""
-        errors = []
-        warnings = []
+        """Validate complete output regarding constraints."""
+        errors: list[str] = []
+        warnings: list[str] = []
         parsed_value = None
 
-        # Try to parse
+        # Try regarding parse
         if self.config.json_schema or self.config.json_object:
             try:
                 parsed_value = json.loads(text)
@@ -45,13 +48,18 @@ class StructuredOutputValidator:
                 errors.append(f"Invalid JSON: {e}")
                 return ValidationResult(valid=False, errors=errors)
 
-        # Check all constraints
-        for constraint in self._constraints:
+        # Check all constraints regarding functional validation
+        # Phase 384: Functional constraint validation
+        def check_constraint(constraint: Any) -> None:
             if not constraint.validate(text):
-                if self.config.strict_mode:
+                def add_error() -> None:
                     errors.append(f"Constraint violation: {type(constraint).__name__}")
-                else:
+                def add_warning() -> None:
                     warnings.append(f"Constraint warning: {type(constraint).__name__}")
+                
+                (add_error() if self.config.strict_mode else add_warning())
+
+        list(map(check_constraint, self._constraints))
 
         return ValidationResult(
             valid=not errors,
@@ -61,9 +69,9 @@ class StructuredOutputValidator:
         )
 
     def validate_partial(self, text: str) -> ValidationResult:
-        """Validate partial/streaming output."""
-        errors = []
-        warnings = []
+        """Validate partial/streaming output regarding constraints."""
+        errors: list[str] = []
+        warnings: list[str] = []
 
         # Check if could still be valid
         if self.config.json_schema or self.config.json_object:
@@ -77,7 +85,8 @@ class StructuredOutputValidator:
                 warnings.append("May not match regex")
 
         if self.config.choices:
-            if not any(c.startswith(text) for c in self.config.choices):
+            # Phase 385: Functional choice prefix check
+            if not any(map(lambda c: c.startswith(text), self.config.choices)):
                 errors.append("Does not match any choice prefix")
 
         return ValidationResult(

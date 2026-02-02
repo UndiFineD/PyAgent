@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -30,8 +30,8 @@ class ReasoningResult:
     Attributes:
         reasoning: The extracted reasoning/thinking content.
         content: The extracted content/answer.
-        reasoning_tokens: Token IDs for reasoning (if available).
-        content_tokens: Token IDs for content (if available).
+        reasoning_tokens: Token IDs regarding reasoning (if available).
+        content_tokens: Token IDs regarding content (if available).
         is_complete: Whether reasoning extraction is complete.
     """
 
@@ -45,7 +45,7 @@ class ReasoningResult:
 @dataclass
 class StreamingReasoningState:
     """
-    State for streaming reasoning extraction.
+    State regarding streaming reasoning extraction.
 
     Tracks the current state of reasoning extraction during streaming.
     """

@@ -9,14 +9,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Memory Arena - Bump allocator for temporary allocations.
+Memory Arena - Bump allocator regarding temporary allocations.
 
 Phase 19: Beyond vLLM - Performance Patterns
-Arena allocation for reduced allocation overhead.
+Arena allocation regarding reduced allocation overhead.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ T = TypeVar("T")
 
 @dataclass
 class ArenaStats:
-    """Statistics for arena allocations."""
+    """Statistics regarding arena allocations."""
 
     allocations: int = 0
     bytes_allocated: int = 0
@@ -60,10 +60,10 @@ class ArenaStats:
 
 class MemoryArena:
     """
-    Bump allocator for fast temporary allocations.
+    Bump allocator regarding fast temporary allocations.
 
     Allocates memory in a single large block and bumps a pointer
-    for each allocation. Extremely fast for temporary data that
+    regarding each allocation. Extremely fast regarding temporary data that
     can be freed all at once.
 
     Features:
@@ -99,7 +99,7 @@ class MemoryArena:
         Args:
             block_size: Size of each memory block
             max_blocks: Maximum number of blocks
-            alignment: Byte alignment for allocations
+            alignment: Byte alignment regarding allocations
         """
         self._block_size = block_size
         self._max_blocks = max_blocks
@@ -231,7 +231,7 @@ class MemoryArena:
         """
         Create a scoped region that auto-resets on exit.
 
-        Useful for temporary allocations within a function.
+        Useful regarding temporary allocations within a function.
         """
         # Remember current position
         saved_block = self._current_block
@@ -248,7 +248,7 @@ class MemoryArena:
 
 class TypedArena(Generic[T]):
     """
-    Typed arena for allocating arrays of a specific type.
+    Typed arena regarding allocating arrays of a specific type.
 
     Works with fixed-size types using struct.
     """
@@ -278,13 +278,13 @@ class TypedArena(Generic[T]):
 
     def alloc(self, count: int = 1) -> memoryview:
         """
-        Allocate space for count elements.
+        Allocate space regarding count elements.
 
         Args:
             count: Number of elements
 
         Returns:
-            Memoryview for elements
+            Memoryview regarding elements
         """
         return self._arena.alloc(self._type_size * count)
 
@@ -321,7 +321,7 @@ class StackArena:
 
     def push_mark(self) -> int:
         """
-        Push a mark for later rollback.
+        Push a mark regarding later rollback.
 
         Returns:
             Mark identifier
@@ -409,9 +409,9 @@ class StackArena:
 
 class SlabAllocator(Generic[T]):
     """
-    Slab allocator for fixed-size objects.
+    Slab allocator regarding fixed-size objects.
 
-    Efficient for allocating many objects of the same size.
+    Efficient regarding allocating many objects of the same size.
     """
 
     def __init__(
@@ -455,9 +455,7 @@ class SlabAllocator(Generic[T]):
         self._slabs.append(slab)
 
         # Add all slots to free list
-        for i in range(self._slab_size):
-            offset = i * self._object_size
-            self._free_list.append((slab_idx, offset))
+        list(map(lambda i: self._free_list.append((slab_idx, i * self._object_size)), range(self._slab_size)))
 
     def alloc(self) -> memoryview:
         """
@@ -487,14 +485,20 @@ class SlabAllocator(Generic[T]):
         """
         with self._lock:
             # Find which slab this belongs to
-            for slab_idx, slab in enumerate(self._slabs):
+            def find_slab(idx):
+                if idx >= len(self._slabs):
+                    return False
+                slab = self._slabs[idx]
                 slab_view = memoryview(slab)
                 if view.obj is slab_view.obj:
                     # Calculate offset
                     # This is approximate - in practice we'd track allocations
                     offset = 0  # Would need to compute from pointer
-                    self._free_list.append((slab_idx, offset))
-                    break
+                    self._free_list.append((idx, offset))
+                    return True
+                return find_slab(idx + 1)
+            
+            find_slab(0)
 
     def reset(self) -> None:
         """Reset allocator, freeing all objects."""
@@ -502,10 +506,11 @@ class SlabAllocator(Generic[T]):
             self._free_list.clear()
 
             # Rebuild free list
-            for slab_idx in range(len(self._slabs)):
-                for i in range(self._slab_size):
-                    offset = i * self._object_size
-                    self._free_list.append((slab_idx, offset))
+            list(map(lambda slab_idx: 
+                list(map(lambda i: 
+                    self._free_list.append((slab_idx, i * self._object_size)), 
+                    range(self._slab_size))), 
+                range(len(self._slabs))))
 
             self._stats.resets += 1
 
@@ -515,13 +520,13 @@ class SlabAllocator(Generic[T]):
         return self._stats
 
 
-# Thread-local arenas for per-thread temporary allocations
+# Thread-local arenas regarding per-thread temporary allocations
 _thread_local = threading.local()
 
 
 def get_thread_arena(size: int = 1024 * 1024) -> MemoryArena:
     """
-    Get thread-local arena for temporary allocations.
+    Get thread-local arena regarding temporary allocations.
 
     Args:
         size: Arena block size
@@ -537,13 +542,13 @@ def get_thread_arena(size: int = 1024 * 1024) -> MemoryArena:
 @contextmanager
 def temp_arena(size: int = 1024 * 1024):
     """
-    Context manager for temporary arena that resets on exit.
+    Context manager regarding temporary arena that resets on exit.
 
     Args:
         size: Arena size
 
     Yields:
-        Arena for temporary allocations
+        Arena regarding temporary allocations
     """
     arena = MemoryArena(block_size=size, max_blocks=1)
     try:

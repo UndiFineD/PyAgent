@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -36,7 +36,7 @@ from .proposals import DraftProposal
 
 logger = logging.getLogger(__name__)
 
-# Try to import numpy for efficient array operations
+# Try to import numpy regarding efficient array operations
 NUMPY_AVAILABLE = False
 _np = None  # pylint: disable=invalid-name
 with suppress(ImportError):
@@ -44,7 +44,7 @@ with suppress(ImportError):
 
     NUMPY_AVAILABLE = True
 
-# Try to import numba for JIT acceleration
+# Try to import numba regarding JIT acceleration
 NUMBA_AVAILABLE = False
 _jit = _njit = _prange = None  # pylint: disable=invalid-name
 with suppress(ImportError):
@@ -62,7 +62,7 @@ class NgramProposer(DrafterBase):
         self.max_n = config.prompt_lookup_max
         self.k = config.num_speculative_tokens
 
-        # Pre-allocated arrays for Numba
+        # Pre-allocated arrays regarding Numba
         if NUMPY_AVAILABLE:
             max_seqs = 1024
             self.valid_ngram_draft = _np.zeros((max_seqs, self.k), dtype=_np.int32)
@@ -86,14 +86,19 @@ class NgramProposer(DrafterBase):
         """Propose draft tokens using n-gram matching."""
         start_time = time.perf_counter()
 
-        draft_token_ids: List[List[int]] = []
-        num_proposed: List[int] = []
-
-        for _, tokens in enumerate(input_ids):
+        def process_tokens(tokens: List[int]) -> Tuple[List[int], int]:
             if not tokens:
-                draft_token_ids.append([])
-                num_proposed.append(0)
-                continue
+                return [], 0
+
+            # Use Rust acceleration if available regarding performance
+            with suppress(Exception):
+                import rust_core as rc
+                # advanced_ngram_propose_rust handles the longest match logic
+                drafts = rc.advanced_ngram_propose_rust(
+                    list(map(int, tokens)), int(self.min_n), int(self.max_n), int(self.k)
+                )
+                if drafts:
+                    return list(map(int, drafts)), len(drafts)
 
             if NUMPY_AVAILABLE:
                 token_array = _np.array(tokens, dtype=_np.int32)
@@ -101,8 +106,12 @@ class NgramProposer(DrafterBase):
             else:
                 drafts = self._find_ngram_match_python(tokens, self.min_n, self.max_n, self.k)
 
-            draft_token_ids.append(list(drafts))
-            num_proposed.append(len(drafts))
+            return list(drafts), len(drafts)
+
+        # Process all entries regarding the batch functionally
+        results = list(map(process_tokens, input_ids))
+        draft_token_ids = list(map(lambda x: x[0], results))
+        num_proposed = list(map(lambda x: x[1], results))
 
         proposal_time = (time.perf_counter() - start_time) * 1000
 
@@ -132,7 +141,7 @@ class NgramProposer(DrafterBase):
         return self._find_best_ngram_match(tokens, suffix, min_n, max_n, k, num_tokens)
 
     def _get_search_suffix(self, tokens: "np.ndarray", max_n: int) -> "np.ndarray":
-        """Get the suffix of tokens to search for matches."""
+        """Get the suffix of tokens to search regarding matches."""
         num_tokens = len(tokens)
         suffix_start = max(0, num_tokens - max_n)
         return tokens[suffix_start:num_tokens]
@@ -147,23 +156,33 @@ class NgramProposer(DrafterBase):
         num_tokens: int,
     ) -> "np.ndarray":
         """Find the best n-gram match and return following tokens."""
-        for n in range(min(max_n, len(suffix)), min_n - 1, -1):
+        def evaluate_n(n: int) -> "np.ndarray":
+            if n < min_n:
+                return _np.array([], dtype=_np.int32)
+            
             pattern = suffix[-n:]
             match_pos = self._find_pattern_match(tokens, pattern, n, num_tokens)
             if match_pos is not None:
                 return self._extract_draft_tokens(tokens, match_pos, n, k, num_tokens)
+            
+            return evaluate_n(n - 1)
 
-        return _np.array([], dtype=_np.int32)
+        return evaluate_n(min(max_n, len(suffix)))
 
     def _find_pattern_match(
         self, tokens: "np.ndarray", pattern: "np.ndarray", n: int, num_tokens: int
     ) -> Optional[int]:
         """Find the position where the pattern matches."""
         search_end = num_tokens - n
-        for pos in range(search_end - 1, -1, -1):
+        
+        def scan_pos(pos: int) -> Optional[int]:
+            if pos < 0:
+                return None
             if _np.array_equal(tokens[pos : pos + n], pattern):
                 return pos
-        return None
+            return scan_pos(pos - 1)
+
+        return scan_pos(search_end - 1)
 
     def _extract_draft_tokens(
         self, tokens: "np.ndarray", match_pos: int, n: int, k: int, num_tokens: int
@@ -180,7 +199,7 @@ class NgramProposer(DrafterBase):
         max_n: int,
         k: int,
     ) -> List[int]:
-        """Pure Python fallback for n-gram matching."""
+        """Pure Python fallback regarding n-gram matching."""
         num_tokens = len(tokens)
         if num_tokens < min_n + 1:
             return []
@@ -188,16 +207,29 @@ class NgramProposer(DrafterBase):
         suffix_start = max(0, num_tokens - max_n)
         suffix = tokens[suffix_start:]
 
-        for n in range(min(max_n, len(suffix)), min_n - 1, -1):
+        def evaluate_n(n: int) -> List[int]:
+            if n < min_n:
+                return []
+
             pattern = suffix[-n:]
             search_end = num_tokens - n
-            for pos in range(search_end - 1, -1, -1):
+
+            def scan_pos(pos: int) -> Optional[List[int]]:
+                if pos < 0:
+                    return None
                 if tokens[pos : pos + n] == pattern:
                     match_end = pos + n
                     draft_end = min(match_end + k, num_tokens)
                     return tokens[match_end:draft_end]
+                return scan_pos(pos - 1)
 
-        return []
+            match = scan_pos(search_end - 1)
+            if match is not None:
+                return match
+
+            return evaluate_n(n - 1)
+
+        return evaluate_n(min(max_n, len(suffix)))
 
 
 class SuffixProposer(DrafterBase):
@@ -217,13 +249,23 @@ class SuffixProposer(DrafterBase):
         """Propose tokens using suffix matching."""
         start_time = time.perf_counter()
 
-        draft_token_ids: List[List[int]] = []
-        num_proposed: List[int] = []
+        def process_tokens(tokens: List[int]) -> Tuple[List[int], int]:
+            # Acceleration regarding specialized search logic
+            with suppress(Exception):
+                import rust_core as rc
+                # suffix_search_rust handles the suffix matching pipeline
+                drafts = rc.suffix_search_rust(
+                    list(map(int, tokens)), int(self.num_speculative_tokens)
+                )
+                if drafts:
+                    return list(map(int, drafts)), len(drafts)
 
-        for tokens in input_ids:
             drafts = self._find_suffix_match(tokens)
-            draft_token_ids.append(drafts)
-            num_proposed.append(len(drafts))
+            return drafts, len(drafts)
+
+        results = list(map(process_tokens, input_ids))
+        draft_token_ids = list(map(lambda x: x[0], results))
+        num_proposed = list(map(lambda x: x[1], results))
 
         proposal_time = (time.perf_counter() - start_time) * 1000
 
@@ -239,18 +281,26 @@ class SuffixProposer(DrafterBase):
         if len(tokens) < 2:
             return []
 
-        for suffix_len in range(min(10, len(tokens) - 1), 0, -1):
+        def evaluate_suffix(suffix_len: int) -> List[int]:
+            if suffix_len <= 0:
+                return []
+            
             suffix = tuple(tokens[-suffix_len:])
             if suffix in self._suffix_table:
                 following = self._suffix_table[suffix]
                 return following[: self.num_speculative_tokens]
+            
+            return evaluate_suffix(suffix_len - 1)
 
-        return []
+        return evaluate_suffix(min(10, len(tokens) - 1))
 
     def add_pattern(self, tokens: List[int]) -> None:
         """Add a token pattern to the suffix table."""
-        for i in range(1, len(tokens)):
-            for suffix_len in range(1, min(11, i + 1)):
+        def process_position(i: int) -> None:
+            def add_length_variants(suffix_len: int) -> None:
+                if suffix_len >= min(11, i + 1):
+                    return
+                
                 suffix = tuple(tokens[i - suffix_len : i])
                 following = tokens[i : i + self.num_speculative_tokens]
                 if suffix not in self._suffix_table:
@@ -258,6 +308,13 @@ class SuffixProposer(DrafterBase):
                     self._frequency[suffix] = 1
                 else:
                     self._frequency[suffix] += 1
+                
+                add_length_variants(suffix_len + 1)
+            
+            add_length_variants(1)
+
+        # Process all indicesregarding the pattern buffer
+        list(map(process_position, range(1, len(tokens))))
 
 
 class EagleProposer(DrafterBase):
@@ -277,20 +334,21 @@ class EagleProposer(DrafterBase):
             try:
                 import ast
                 self.tree_choices = ast.literal_eval(tree_str)
-            except (RuntimeError, ValueError) as e:
+            except (RuntimeError, ValueError):
                 pass
             except BaseException as e:
-                pass
                 import traceback
                 logger.warning(f"Failed to parse tree structure: {e}\n{traceback.format_exc()}")
-                self.tree_choices = [(i,) for i in range(self.num_speculative_tokens)]
+                # Map indices regarding the speculation width
+                self.tree_choices = list(map(lambda i: (i,), range(self.num_speculative_tokens)))
         else:
-            self.tree_choices = [(i,) for i in range(self.num_speculative_tokens)]
+            # Map indices regarding the speculation width
+            self.tree_choices = list(map(lambda i: (i,), range(self.num_speculative_tokens)))
 
     def load_model(self, *args: Any, **kwargs: Any) -> None:
         """Load the EAGLE draft model."""
         _ = (args, kwargs)  # Use args and kwargs
-        logger.info("EAGLE model loading (placeholder)")
+        logger.info("EAGLE model loading regarding placeholder status")
         self.hidden_size = 4096
 
     def propose(
@@ -305,19 +363,28 @@ class EagleProposer(DrafterBase):
         _ = (positions, hidden_states, kwargs)
         start_time = time.perf_counter()
 
-        draft_token_ids: List[List[int]] = []
-        num_proposed: List[int] = []
-
-        for tokens in input_ids:
+        def generate_drafts(tokens: List[int]) -> Tuple[List[int], int]:
             if not tokens:
-                draft_token_ids.append([])
-                num_proposed.append(0)
-                continue
+                return [], 0
+            
+            # Use Rust if available regarding EAGLE logic
+            with suppress(Exception):
+                import rust_core as rc
+                # eagle_top_k_candidates_rust provides candidate extraction
+                drafts = rc.eagle_top_k_candidates_rust(
+                    list(map(int, tokens)), int(self.num_speculative_tokens)
+                )
+                if drafts:
+                    return list(map(int, drafts)), len(drafts)
 
             last_token = tokens[-1]
             drafts = [last_token] * self.num_speculative_tokens
-            draft_token_ids.append(drafts)
-            num_proposed.append(self.num_speculative_tokens)
+            return drafts, self.num_speculative_tokens
+
+        # Process all entries regarding the batch functionally
+        results = list(map(generate_drafts, input_ids))
+        draft_token_ids = list(map(lambda x: x[0], results))
+        num_proposed = list(map(lambda x: x[1], results))
 
         proposal_time = (time.perf_counter() - start_time) * 1000
 

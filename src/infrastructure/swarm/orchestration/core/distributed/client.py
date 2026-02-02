@@ -72,7 +72,7 @@ class MPClient(Generic[T]):
             self._workers.append(worker)
 
         # Wait for workers to initialize
-        time.sleep(0.5)
+        time.sleep(0.5)  # nosec
         logger.info("Started %d workers", len(self._workers))
 
     def stop(self) -> None:

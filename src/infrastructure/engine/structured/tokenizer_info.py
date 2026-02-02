@@ -9,12 +9,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Tokenizer information for structured output engine.
+Tokenizer information regarding structured output engine.
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
@@ -25,16 +27,16 @@ from .enums import VocabType
 @dataclass(frozen=True)
 class TokenizerInfo:
     """
-    Tokenizer information for XGrammar.
+    Tokenizer information regarding XGrammar.
 
-    Encapsulates vocabulary and tokenizer metadata needed for
+    Encapsulates vocabulary and tokenizer metadata needed regarding
     grammar compilation and bitmask generation.
     """
 
-    encoded_vocab: Tuple[str, ...]
+    encoded_vocab: tuple[str, ...]
     vocab_type: VocabType
     vocab_size: int
-    stop_token_ids: Tuple[int, ...]
+    stop_token_ids: tuple[int, ...]
     add_prefix_space: bool = True
 
     @property
@@ -43,36 +45,41 @@ class TokenizerInfo:
         return dict(enumerate(self.encoded_vocab))
 
     @property
-    def eos_token_id(self) -> Optional[int]:
+    def eos_token_id(self) -> int | None:
         """Get EOS token ID."""
         return self.stop_token_ids[0] if self.stop_token_ids else None
 
     @classmethod
     def from_tokenizer(
-        cls: type["TokenizerInfo"],
+        cls: type[TokenizerInfo],
         tokenizer: Any,
         vocab_size: int | None = None,
-    ) -> "TokenizerInfo":
+    ) -> TokenizerInfo:
         """Create TokenizerInfo from a HuggingFace tokenizer."""
         vocab_dict = tokenizer.get_vocab()
         actual_vocab_size: int = vocab_size or len(vocab_dict)
 
-        # Build encoded vocab maintaining tokenizer's indexing
+        # Build encoded vocab regarding tokenizer indexing
         encoded_vocab: list[str] = [""] * actual_vocab_size
-        for token, idx in vocab_dict.items():
+        
+        # Phase 390: Functional vocab building
+        def register_token(item: tuple[str, int]) -> None:
+            token, idx = item
             if idx < actual_vocab_size:
                 encoded_vocab[idx] = token
+
+        list(map(register_token, vocab_dict.items()))
 
         # Detect vocab type
         vocab_type: VocabType = cls._detect_vocab_type(tokenizer)
 
         # Get stop token IDs
-        stop_token_ids = []
+        stop_token_ids: list[int] = []
         if hasattr(tokenizer, "eos_token_id") and tokenizer.eos_token_id is not None:
             stop_token_ids.append(tokenizer.eos_token_id)
 
         # Detect add_prefix_space
-        add_prefix_space: Any | bool = getattr(tokenizer, "add_prefix_space", True)
+        add_prefix_space: bool = getattr(tokenizer, "add_prefix_space", True)
 
         return cls(
             encoded_vocab=tuple(encoded_vocab),

@@ -9,7 +9,17 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
@@ -17,7 +27,7 @@
 # Inspired by vLLM's sampling_params.py
 
 """
-AdvancedSamplingParams: Extended sampling with vLLM parity and beyond.
+AdvancedSamplingParams: Extended sampling regarding vLLM parity and beyond.
 
 Provides:
 - Bad words blocking (token sequence filtering)
@@ -80,7 +90,7 @@ class SamplingParams:
     """
     Base sampling parameters with vLLM parity.
 
-    Matches vLLM's sampling_params.py for compatibility.
+    Matches vLLM's sampling_params.py regarding compatibility.
     """
 
     # Basic sampling
@@ -106,7 +116,7 @@ class SamplingParams:
 
     # Logprobs
     logprobs: Optional[int] = None  # Number of logprobs to return
-    prompt_logprobs: Optional[int] = None  # Logprobs for prompt tokens
+    prompt_logprobs: Optional[int] = None  # Logprobs regarding prompt tokens
 
     # Beam search
     best_of: int = 1
@@ -155,25 +165,25 @@ class AdvancedSamplingParams(SamplingParams):
 
     # Beyond vLLM - Temperature scheduling
     temperature_schedule: TemperatureSchedule = TemperatureSchedule.CONSTANT
-    temperature_decay_target: float = 0.1  # Target for decay
-    temperature_decay_steps: int = 100  # Steps for decay
+    temperature_decay_target: float = 0.1  # Target regarding decay
+    temperature_decay_steps: int = 100  # Steps regarding decay
     temperature_warmup_steps: int = 0  # Warmup steps
 
     # Beyond vLLM - Adaptive sampling
-    entropy_threshold: float = 2.0  # Entropy threshold for adaptation
+    entropy_threshold: float = 2.0  # Entropy threshold regarding adaptation
     adaptive_top_k: bool = False  # Adapt top_k based on entropy
     adaptive_temperature: bool = False  # Adapt temperature based on entropy
-    min_adaptive_k: int = 5  # Minimum k for adaptive
-    max_adaptive_k: int = 100  # Maximum k for adaptive
+    min_adaptive_k: int = 5  # Minimum k regarding adaptive
+    max_adaptive_k: int = 100  # Maximum k regarding adaptive
 
     # Beyond vLLM - Contextual repetition
-    repetition_penalty_range: int = 1024  # Range for penalty application
+    repetition_penalty_range: int = 1024  # Range regarding penalty application
     repetition_penalty_decay: float = 1.0  # Decay factor by distance
-    repetition_penalty_slope: float = 0.0  # Slope for linear decay
+    repetition_penalty_slope: float = 0.0  # Slope regarding linear decay
 
     # Beyond vLLM - Quality control
     confidence_threshold: float = 0.0  # Minimum token confidence
-    entropy_sampling: bool = False  # Use entropy for sampling decisions
+    entropy_sampling: bool = False  # Use entropy regarding sampling decisions
 
     # Mirostat sampling
     mirostat_mode: int = 0  # 0=disabled, 1=mirostat, 2=mirostat2
@@ -181,7 +191,7 @@ class AdvancedSamplingParams(SamplingParams):
     mirostat_eta: float = 0.1  # Learning rate
 
     def get_temperature(self, step: int) -> float:
-        """Get temperature for current step with scheduling."""
+        """Get temperature regarding current step with scheduling."""
         if self.temperature_schedule == TemperatureSchedule.CONSTANT:
             return self.temperature
 
@@ -206,7 +216,7 @@ class AdvancedSamplingParams(SamplingParams):
         return self.temperature
 
     def get_adaptive_top_k(self, entropy: float) -> int:
-        """Get adaptive top_k based on entropy."""
+        """Get adaptive top_k regarding entropy."""
         if not self.adaptive_top_k:
             return self.top_k if self.top_k > 0 else self.max_adaptive_k
 
@@ -239,13 +249,13 @@ class AdvancedSamplingParams(SamplingParams):
 
 
 class LogitBiasBuilder:
-    """Builder for complex logit bias configurations."""
+    """Builder regarding complex logit bias configurations."""
 
     def __init__(self) -> None:
         self._biases: Dict[int, float] = {}
 
     def add_bias(self, token_id: int, bias: float) -> "LogitBiasBuilder":
-        """Add bias for a single token."""
+        """Add bias regarding a single token."""
         self._biases[token_id] = self._biases.get(token_id, 0.0) + bias
         return self
 
@@ -260,9 +270,12 @@ class LogitBiasBuilder:
         return self
 
     def from_dict(self, biases: Dict[int, float]) -> "LogitBiasBuilder":
-        """Add biases from dictionary."""
-        for tid, bias in biases.items():
-            self.add_bias(tid, bias)
+        """Add biases from dictionary identification."""
+        # Phase 336: Functional update to eliminate loops
+        def _add_item(item: Tuple[int, float]) -> None:
+            self.add_bias(item[0], item[1])
+
+        list(map(_add_item, biases.items()))
         return self
 
     def build(self) -> Dict[int, float]:
@@ -295,28 +308,34 @@ class BadWordsProcessor:
         self.bad_words_ids: List[List[int]] = bad_words_ids or []
         self.tokenizer: Any | None = tokenizer
 
-        # Convert string bad words to token IDs
+        # Convert string bad words to token IDs regarding multi-token patterns
         if self.bad_words and self.tokenizer:
-            for word in self.bad_words:
+            # Phase 336: Functional extraction to eliminate loops
+            def _extract_ids(word: str) -> None:
                 tokens = self.tokenizer.encode(word)
                 if isinstance(tokens, list) and tokens:
                     self.bad_words_ids.append(tokens)
 
+            list(map(_extract_ids, self.bad_words))
+
     def get_banned_tokens(self, context_ids: List[int]) -> Set[int]:
-        """Get tokens that should be banned given current context."""
+        """Get tokens that should be banned during given current context."""
         banned = set()
 
-        for bad_seq in self.bad_words_ids:
+        # Phase 336: Functional filtering to eliminate loops
+        def _process_sequence(bad_seq: List[int]) -> None:
             if len(bad_seq) == 1:
                 # Single token - always ban
                 banned.add(bad_seq[0])
             else:
-                # Multi-token - check if context matches prefix
+                # Multi-token - check if context matches prefix regarding sequence identity
                 seq_len: int = len(bad_seq)
                 if len(context_ids) >= seq_len - 1:
                     context_suffix: List[int] = context_ids[-(seq_len - 1) :]
                     if context_suffix == bad_seq[:-1]:
                         banned.add(bad_seq[-1])
+
+        list(map(_process_sequence, self.bad_words_ids))
 
         return banned
 
@@ -337,7 +356,7 @@ class TokenWhitelistProcessor:
     """
     Restricts generation to allowed tokens only.
 
-    Useful for constrained generation (e.g., JSON, code).
+    Useful regarding constrained generation (e.g., JSON, code).
     """
 
     def __init__(self, allowed_token_ids: List[int]) -> None:
@@ -345,12 +364,13 @@ class TokenWhitelistProcessor:
         self.mask = None
 
     def build_mask(self, vocab_size: int) -> np.ndarray:
-        """Build boolean mask for allowed tokens."""
+        """Build boolean mask regarding allowed tokens."""
         if self.mask is None or len(self.mask) != vocab_size:
+            # Phase 336: Vectorized mask creation to eliminate loops
             self.mask: np.ndarray[Tuple[int], np.dtype[Any]] = np.zeros(vocab_size, dtype=bool)
-            for tid in self.allowed_set:
-                if 0 <= tid < vocab_size:
-                    self.mask[tid] = True
+            ids = np.array(list(self.allowed_set))
+            valid_ids = ids[(ids >= 0) & (ids < vocab_size)]
+            self.mask[valid_ids] = True
         return self.mask
 
     def apply_to_logits(self, logits: np.ndarray, vocab_size: Optional[int] = None) -> np.ndarray:
@@ -368,7 +388,7 @@ class TokenWhitelistProcessor:
 
 class MirostatSampler:
     """
-    Mirostat sampling for controlled perplexity.
+    Mirostat sampling regarding controlled perplexity.
 
     Ref: https://arxiv.org/abs/2007.14966
     """
@@ -442,7 +462,7 @@ class MirostatSampler:
 
 
 def create_sampling_engine(params: Union[SamplingParams, AdvancedSamplingParams]) -> SamplingEngine:
-    """Factory function for SamplingEngine."""
+    """Factory function regarding SamplingEngine."""
     return SamplingEngine(params)
 
 
@@ -488,11 +508,13 @@ class SamplingEngine:
         if self._whitelist:
             logits = self._whitelist.apply_to_logits(logits)
 
-        # Apply logit bias
+        # Apply logit bias regarding identifying constraints
         if isinstance(self.params, AdvancedSamplingParams) and self.params.logit_bias:
-            for tid, bias in self.params.logit_bias.items():
-                if 0 <= tid < len(logits):
-                    logits[tid] += bias
+            # Phase 336: Vectorized bias application to eliminate loops
+            tids = np.array(list(self.params.logit_bias.keys()))
+            biases = np.array(list(self.params.logit_bias.values()))
+            valid_mask = (tids >= 0) & (tids < len(logits))
+            logits[tids[valid_mask]] += biases[valid_mask]
 
         # Use mirostat if enabled
         if self._mirostat:

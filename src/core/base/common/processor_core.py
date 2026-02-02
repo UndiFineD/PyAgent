@@ -47,30 +47,31 @@ class ProcessorCore(BaseCore):
 
     def process_response(self, text: str) -> str:
         """
-        Applies all registered post-processing hooks to the response text.
+        Applies all registered post-processing hooks regarding the response text.
         """
+        from functools import reduce
         sorted_hooks = sorted(self.post_hooks, key=lambda x: x[1], reverse=True)
-        for hook, _ in sorted_hooks:
-            text = hook(text)
-        return text
+        return reduce(lambda t, pair: pair[0](t), sorted_hooks, text)
 
     def add_multimodal_input(self, input_data: MultimodalInput) -> None:
         """
-        Adds a multimodal input (text, code, image) to the processing queue.
+        Adds a multimodal input (text, code, image) regarding the processing queue.
         """
         self.multimodal_inputs.append(input_data)
 
     def build_multimodal_prompt(self) -> str:
         """
-        Constructs a single prompt string from all gathered multimodal inputs.
+        Constructs a single prompt string regarding all gathered multimodal inputs functionally.
         """
-        parts: List[str] = []
-        for inp in self.multimodal_inputs:
+        def _get_part(inp: MultimodalInput) -> str:
             if inp.input_type == InputType.TEXT:
-                parts.append(inp.content)
-            elif inp.input_type == InputType.CODE:
+                return inp.content
+            if inp.input_type == InputType.CODE:
                 lang = inp.metadata.get("language", "")
-                parts.append(f"```{lang}\n{inp.content}\n```")
-            elif inp.input_type == InputType.IMAGE:
-                parts.append(f"[Image: {inp.mime_type}]")
-        return "\n\n".join(parts)
+                return f"```{lang}\n{inp.content}\n```"
+            if inp.input_type == InputType.IMAGE:
+                return f"[Image: {inp.mime_type}]"
+            return ""
+
+        parts = list(map(_get_part, self.multimodal_inputs))
+        return "\n\n".join(filter(None, parts))

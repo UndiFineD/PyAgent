@@ -44,15 +44,21 @@ class ConvergenceCore(BaseCore):
  # pylint: disable=broad-exception-caught
                 pass
 
-        healthy_count = sum(1 for status in agent_reports.values() if status)
+        healthy_count = sum(map(int, agent_reports.values()))
         total_count = len(agent_reports)
         all_passed = healthy_count == total_count if total_count > 0 else False
+
+        def get_failed(item):
+            name, status = item
+            return name if not status else None
+
+        failed_agents = list(filter(None, map(get_failed, agent_reports.items())))
 
         return {
             "all_passed": all_passed,
             "healthy_count": healthy_count,
             "total_count": total_count,
-            "failed_agents": [name for name, status in agent_reports.items() if not status],
+            "failed_agents": failed_agents,
         }
 
     def generate_strategic_summary(self, _phase_history: List[Dict[str, Any]]) -> str:

@@ -36,25 +36,35 @@ import functools
 import logging
 import os
 import time
-from collections.abc import Mapping
+from collections.abc import Callable, Generator, Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, Callable, Generator, ParamSpec, TypeVar
+from typing import TYPE_CHECKING, Any, ParamSpec, TypeVar
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 # Standard trace headers
 TRACE_HEADERS: list[str] = ["traceparent", "tracestate"]
 
-# Track if OpenTelemetry is available
+# Track if OpenTelemetry and Rust core are available
 _is_otel_imported = False
+HAS_RUST = False
 otel_import_error_traceback: str | None = None
 
-Context = Any
-Tracer = Any
-SpanKind = Any
-Span = Any
-SpanExporter = Any
+# Type aliases for fallback/optional usage
+if TYPE_CHECKING:
+    from opentelemetry.context.context import Context
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import SpanExporter
+    from opentelemetry.trace import Span, SpanKind, Status, StatusCode, Tracer
+else:
+    Context = Any
+    Tracer = Any
+    SpanKind = Any
+    Span = Any
+    SpanExporter = Any
+    Status = Any
+    StatusCode = Any
 
 try:
     from opentelemetry import trace  # pylint: disable=unused-import
@@ -76,6 +86,12 @@ except ImportError:
     import traceback
 
     otel_import_error_traceback = traceback.format_exc()
+
+try:
+    import rust_core as rc # type: ignore
+    HAS_RUST = True
+except ImportError:
+    rc = None # type: ignore
 
 
 P = ParamSpec("P")
@@ -140,6 +156,17 @@ class SpanAttributes:
 # ============================================================================
 # Core Functions
 # ============================================================================
+
+
+_CACHED_PROPAGATOR: TraceContextTextMapPropagator | None = None
+
+
+def get_propagator() -> TraceContextTextMapPropagator | None:
+    """Get the cached trace context propagator."""
+    global _CACHED_PROPAGATOR
+    if _CACHED_PROPAGATOR is None and is_otel_available():
+        _CACHED_PROPAGATOR = TraceContextTextMapPropagator()
+    return _CACHED_PROPAGATOR
 
 
 def is_otel_available() -> bool:
@@ -254,11 +281,12 @@ def extract_trace_context(headers: Mapping[str, str] | None) -> Context | None:
     Returns:
         OpenTelemetry context or None.
     """
-    if not is_otel_available():
+    propagator = get_propagator()
+    if not propagator:
         return None
 
     headers = headers or {}
-    return TraceContextTextMapPropagator().extract(headers)
+    return propagator.extract(headers)
 
 
 def inject_trace_context(headers: dict[str, str]) -> dict[str, str]:
@@ -271,10 +299,11 @@ def inject_trace_context(headers: dict[str, str]) -> dict[str, str]:
     Returns:
         Headers with trace context added.
     """
-    if not is_otel_available():
+    propagator = get_propagator()
+    if not propagator:
         return headers
 
-    TraceContextTextMapPropagator().inject(headers)
+    propagator.inject(headers)
     return headers
 
 
@@ -308,11 +337,10 @@ def _start_span_context(
     kind: SpanKind | None,
     attributes: dict[str, Any] | None,
     context: Context | None,
-    record_exception: bool,
+    should_record_exception: bool,
     set_status_on_exception: bool,
 ) -> Any:
     """Start a span context with the given parameters."""
-    # Default to INTERNAL kind
     if kind is None:
         kind = SpanKind.INTERNAL
     return tracer.start_as_current_span(
@@ -320,9 +348,10 @@ def _start_span_context(
         kind=kind,
         attributes=attributes,
         context=context,
-        record_exception=record_exception,
+        record_exception=should_record_exception,
         set_status_on_exception=set_status_on_exception,
     )
+
 
 @contextmanager
 def create_span(
@@ -332,7 +361,7 @@ def create_span(
     kind: SpanKind | None = None,
     attributes: dict[str, Any] | None = None,
     context: Context | None = None,
-    record_exception: bool = True,
+    should_record_exception: bool = True,
     set_status_on_exception: bool = True,
 ) -> Generator[Span | None, None, None]:
     """
@@ -344,17 +373,11 @@ def create_span(
         kind: Span kind (CLIENT, SERVER, PRODUCER, CONSUMER, INTERNAL).
         attributes: Initial span attributes.
         context: Parent context.
-        record_exception: If True, record exceptions on the span.
+        should_record_exception: If True, record exceptions on the span.
         set_status_on_exception: If True, set error status on exception.
 
     Yields:
         Span instance or None if tracing is not available.
-
-    Example:
-        >>> with create_span("process_request", attributes={"user_id": 123}) as span:
-        ...     if span:
-        ...         span.set_attribute("status", "processing")
-        ...     result = do_work()
     """
     if not is_otel_available():
         yield None
@@ -365,15 +388,16 @@ def create_span(
         yield None
         return
 
-    with _start_span_context(
+    ctx = _start_span_context(
         tracer_obj,
         name,
         kind,
         attributes,
         context,
-        record_exception,
+        should_record_exception,
         set_status_on_exception,
-    ) as span:
+    )
+    with ctx as span:
         yield span
 
 
@@ -383,7 +407,7 @@ def traced(
     tracer: Tracer | None = None,
     kind: SpanKind | None = None,
     attributes: dict[str, Any] | None = None,
-    record_exception: bool = True,
+    should_record_exception: bool = True,
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """
     Decorator to trace a function.
@@ -393,7 +417,7 @@ def traced(
         tracer: Tracer to use.
         kind: Span kind.
         attributes: Static span attributes.
-        record_exception: If True, record exceptions.
+        should_record_exception: If True, record exceptions.
 
     Example:
         >>> @traced("process_data", attributes={"service": "processor"})
@@ -411,7 +435,7 @@ def traced(
                 tracer=tracer,
                 kind=kind,
                 attributes=attributes,
-                record_exception=record_exception,
+                should_record_exception=should_record_exception,
             ):
                 return func(*args, **kwargs)
 
@@ -484,15 +508,15 @@ def record_exception(exception: Exception, escaped: bool = True) -> None:
 # ============================================================================
 
 
-_log_tracing_disabled_once = False
+_TRACING_DISABLED_LOGGED = False
 
 
 def log_tracing_disabled_warning() -> None:
     """Log a warning that tracing is disabled (only once)."""
-    # global _log_tracing_disabled_once  # noqa: PLW0603
-    if not _log_tracing_disabled_once:
+    global _TRACING_DISABLED_LOGGED  # pylint: disable=global-statement
+    if not _TRACING_DISABLED_LOGGED:
         logger.warning("Received a request with trace context but tracing is disabled")
-        _log_tracing_disabled_once = True
+        _TRACING_DISABLED_LOGGED = True
 
 
 # ============================================================================
@@ -561,19 +585,15 @@ class NullSpan:
 
     def set_attribute(self, key: str, value: Any) -> None:
         """No-op attribute setter."""
-        pass
 
     def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
         """No-op event adder."""
-        pass
 
     def record_exception(self, exception: Exception, escaped: bool = True) -> None:
         """No-op exception recorder."""
-        pass
 
     def set_status(self, status: Any) -> None:
         """No-op status setter."""
-        pass
 
     def is_recording(self) -> bool:
         """Always returns False for no-op span."""
@@ -585,17 +605,24 @@ class NullSpan:
 
     def __exit__(self, *args: Any) -> None:
         """Context exit logic."""
-        pass
 
 
 class NullTracer:
     """A no-op tracer for testing or when tracing is disabled."""
 
     @contextmanager
-    def start_as_current_span(self, name: str, **kwargs: Any) -> Generator[NullSpan, None, None]:  # noqa: ARG002
+    def start_as_current_span(
+        self,
+        name: str,
+        **kwargs: Any
+    ) -> Generator[NullSpan, None, None]:
+        """No-op span context manager."""
+        # pylint: disable=unused-argument
         yield NullSpan()
 
-    def start_span(self, name: str, **kwargs: Any) -> NullSpan:  # noqa: ARG002
+    def start_span(self, name: str, **kwargs: Any) -> NullSpan:
+        """No-op span creator."""
+        # pylint: disable=unused-argument
         return NullSpan()
 
 

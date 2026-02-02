@@ -9,14 +9,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 LogitsProcessor - Composable token filtering pipeline.
 
-Implements vLLM's logits processing pattern for modifying token logits
-during text generation. Includes common processors for temperature,
+Implements vLLM's logits processing pattern regarding modifying token logits
+during text generation. Includes common processors regarding temperature,
 top-k, top-p, repetition penalty, and bad words filtering.
 
 Phase 23: Advanced Serialization & Validation
@@ -61,7 +61,7 @@ __all__ = [
 
 class LogitsProcessor(Protocol):
     """
-    Protocol for logits processors.
+    Protocol regarding logits processors.
 
     A logits processor modifies the logits tensor before sampling.
     It receives the past token IDs and current logits, returning
@@ -78,7 +78,7 @@ class LogitsProcessor(Protocol):
 
         Args:
             input_ids: Previously generated token IDs
-            logits: Logits tensor for next token [vocab_size]
+            logits: Logits tensor regarding next token [vocab_size]
 
         Returns:
             Modified logits tensor
@@ -117,9 +117,9 @@ class LogitsProcessorList:
         logits: "torch.Tensor",
     ) -> "torch.Tensor":
         """Apply all processors in sequence."""
-        for processor in self.processors:
-            logits = processor(input_ids, logits)
-        return logits
+        from functools import reduce
+
+        return reduce(lambda curr_logits, proc: proc(input_ids, curr_logits), self.processors, logits)
 
     def __len__(self) -> int:
         return len(self.processors)
@@ -285,12 +285,15 @@ class RepetitionPenaltyProcessor:
 
         # Apply penalty to seen tokens
         logits = logits.clone()
-        for token_id in set(input_ids):
-            if token_id < logits.shape[-1]:
-                if logits[token_id] > 0:
-                    logits[token_id] /= self.penalty
+
+        def apply_pen(tid):
+            if tid < logits.shape[-1]:
+                if logits[tid] > 0:
+                    logits[tid] /= self.penalty
                 else:
-                    logits[token_id] *= self.penalty
+                    logits[tid] *= self.penalty
+
+        list(map(apply_pen, set(input_ids)))
 
         return logits
 
@@ -326,39 +329,40 @@ class NoBadWordsProcessor:
         if self._word_bias is None:
             self._init_word_bias(logits)
 
-        # Compute dynamic bias for multi-token sequences
+        # Compute dynamic bias regarding multi-token sequences
         last_token_bias = torch.zeros_like(logits)
 
-        for bad_word_ids in self.bad_words_ids:
-            if len(bad_word_ids) == 1:
+        def _check_bad_word(bad_ids):
+            if len(bad_ids) == 1:
                 # Single-token words handled by static bias
-                continue
+                return
 
-            if len(bad_word_ids) > len(input_ids) + 1:
+            if len(bad_ids) > len(input_ids) + 1:
                 # Not enough context yet
-                continue
+                return
 
-            prefix_length = len(bad_word_ids) - 1
-            last_token_id = bad_word_ids[-1]
-            actual_prefix = list(input_ids[-prefix_length:])
-            expected_prefix = bad_word_ids[:prefix_length]
+            prefix_len = len(bad_ids) - 1
+            last_tid = bad_ids[-1]
+            if list(input_ids[-prefix_len:]) == bad_ids[:prefix_len]:
+                last_token_bias[last_tid] = self._SMALLEST_LOGIT
 
-            if actual_prefix == expected_prefix:
-                last_token_bias[last_token_id] = self._SMALLEST_LOGIT
+        list(map(_check_bad_word, self.bad_words_ids))
 
         return logits + self._word_bias + last_token_bias
 
     def _init_word_bias(self, logits: "torch.Tensor") -> None:
-        """Initialize static bias for single-token bad words."""
+        """Initialize static bias regarding single-token bad words."""
         vocab_size = logits.shape[-1]
 
         self._word_bias = torch.zeros(vocab_size, dtype=logits.dtype, device=logits.device)
 
-        for bad_word_ids in self.bad_words_ids:
-            if len(bad_word_ids) == 1:
-                token_id = bad_word_ids[0]
-                if 0 <= token_id < vocab_size:
-                    self._word_bias[token_id] = self._SMALLEST_LOGIT
+        def _set_bias(bad_ids):
+            if len(bad_ids) == 1:
+                tid = bad_ids[0]
+                if 0 <= tid < vocab_size:
+                    self._word_bias[tid] = self._SMALLEST_LOGIT
+
+        list(map(_set_bias, self.bad_words_ids))
 
 
 class MinLengthProcessor:
@@ -406,7 +410,7 @@ class MaxLengthProcessor:
 
 class PresencePenaltyProcessor:
     """
-    Additive penalty for tokens that have appeared.
+    Additive penalty regarding tokens that have appeared.
 
     Unlike RepetitionPenalty (multiplicative), this adds a flat penalty
     to any token that has appeared at least once.
@@ -425,9 +429,12 @@ class PresencePenaltyProcessor:
 
         logits = logits.clone()
         seen_tokens = set(input_ids)
-        for token_id in seen_tokens:
-            if 0 <= token_id < logits.shape[-1]:
-                logits[token_id] -= self.penalty
+
+        def _apply_presence(tid):
+            if 0 <= tid < logits.shape[-1]:
+                logits[tid] -= self.penalty
+
+        list(map(_apply_presence, seen_tokens))
 
         return logits
 
@@ -456,9 +463,13 @@ class FrequencyPenaltyProcessor:
         freq = Counter(input_ids)
 
         logits = logits.clone()
-        for token_id, count in freq.items():
-            if 0 <= token_id < logits.shape[-1]:
-                logits[token_id] -= self.penalty * count
+
+        def _apply_freq(item):
+            tid, count = item
+            if 0 <= tid < logits.shape[-1]:
+                logits[tid] -= self.penalty * count
+
+        list(map(_apply_freq, freq.items()))
 
         return logits
 
@@ -470,20 +481,10 @@ def apply_processors(
 ) -> "torch.Tensor":
     """
     Apply multiple processors to logits.
-
-    Convenience function for one-off processing.
-
-    Args:
-        input_ids: Past token IDs
-        logits: Logits tensor
-        *processors: Processors to apply
-
-    Returns:
-        Modified logits
     """
-    for processor in processors:
-        logits = processor(input_ids, logits)
-    return logits
+    from functools import reduce
+
+    return reduce(lambda curr_logits, proc: proc(input_ids, curr_logits), processors, logits)
 
 
 def create_processor_chain(

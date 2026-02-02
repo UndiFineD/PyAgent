@@ -245,3 +245,123 @@ pub fn compute_load_imbalance_rust(loads: Vec<Vec<f64>>) -> f64 {
     }
 }
 
+/// Compute log_to_phy mapping from phy_to_log
+/// Returns 3D vector [layers, logical_experts, replicas]
+#[pyfunction]
+pub fn compute_log_to_phy_rust(
+    phy_to_log: Vec<Vec<i64>>,
+    num_logical: usize,
+    max_replicas: usize,
+) -> Vec<Vec<Vec<i64>>> {
+    let num_layers = phy_to_log.len();
+    if num_layers == 0 {
+        return vec![];
+    }
+    
+    let mut log_to_phy = vec![vec![vec![-1i64; max_replicas]; num_logical]; num_layers];
+    let mut replica_idx = vec![vec![0usize; num_logical]; num_layers];
+    
+    for layer in 0..num_layers {
+        for (phy_idx, &log_idx) in phy_to_log[layer].iter().enumerate() {
+            if log_idx >= 0 && log_idx < num_logical as i64 {
+                let l_idx = log_idx as usize;
+                let r_idx = replica_idx[layer][l_idx];
+                if r_idx < max_replicas {
+                    log_to_phy[layer][l_idx][r_idx] = phy_idx as i64;
+                    replica_idx[layer][l_idx] += 1;
+                }
+            }
+        }
+    }
+    
+    log_to_phy
+}
+
+/// Aggregate physical expert loads into logical expert loads
+/// Returns 2D vector [layers, logical_experts]
+#[pyfunction]
+pub fn aggregate_expert_loads_rust(
+    avg_load: Vec<Vec<f64>>,
+    phy_to_log: Vec<Vec<i64>>,
+    num_logical: usize,
+) -> Vec<Vec<f64>> {
+    let num_layers = avg_load.len();
+    if num_layers == 0 {
+        return vec![];
+    }
+    
+    let mut logical_loads = vec![vec![0.0; num_logical]; num_layers];
+    
+    for layer in 0..num_layers {
+        if layer < phy_to_log.len() {
+            for (phy_idx, &log_idx) in phy_to_log[layer].iter().enumerate() {
+                if log_idx >= 0 && log_idx < num_logical as i64 && phy_idx < avg_load[layer].len() {
+                    logical_loads[layer][log_idx as usize] += avg_load[layer][phy_idx];
+                }
+            }
+        }
+    }
+    
+    logical_loads
+}
+
+/// Balanced packing implementation
+/// Parks objects into packs with balanced total weight
+#[pyfunction]
+pub fn compute_balanced_packing_rust(
+    weights: Vec<Vec<f64>>,
+    num_packs: usize,
+) -> (Vec<Vec<i64>>, Vec<Vec<i64>>) {
+    let num_layers = weights.len();
+    if num_layers == 0 {
+        return (vec![], vec![]);
+    }
+    
+    let num_groups = weights[0].len();
+    if num_packs == 0 || num_groups % num_packs != 0 {
+        return (vec![], vec![]);
+    }
+    
+    let groups_per_pack = num_groups / num_packs;
+    
+    let mut pack_index = vec![vec![-1i64; num_groups]; num_layers];
+    let mut rank_in_pack = vec![vec![-1i64; num_groups]; num_layers];
+    
+    for layer in 0..num_layers {
+        // Create indexed weights: (index, weight)
+        let mut indexed_weights: Vec<(usize, f64)> = weights[layer].iter().enumerate()
+            .map(|(i, &w)| (i, w))
+            .collect();
+            
+        // Sort by weight descending
+        indexed_weights.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+        
+        let mut p_weights = vec![0.0f64; num_packs];
+        let mut p_items = vec![0usize; num_packs];
+        
+        for (group_idx, weight) in indexed_weights {
+            // Find pack with lowest weight that has capacity
+            let mut best_pack = None;
+            let mut min_weight = f64::MAX;
+            
+            for p in 0..num_packs {
+                if p_items[p] < groups_per_pack {
+                    if p_weights[p] < min_weight {
+                        min_weight = p_weights[p];
+                        best_pack = Some(p);
+                    }
+                }
+            }
+            
+            if let Some(p) = best_pack {
+                pack_index[layer][group_idx] = p as i64;
+                rank_in_pack[layer][group_idx] = p_items[p] as i64;
+                p_weights[p] += weight;
+                p_items[p] += 1;
+            }
+        }
+    }
+    
+    (pack_index, rank_in_pack)
+}
+

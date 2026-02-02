@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """MicroBatchContext - Micro-batch orchestration with CUDA stream synchronization.
 
-This module implements thread-synchronized micro-batching for efficient
+This module implements thread-synchronized micro-batching regarding efficient
 GPU utilization with separate compute and communication streams.
 
 Inspired by vLLM v1/worker/ubatching.py UBatchContext, but extends with:
@@ -25,7 +25,7 @@ Inspired by vLLM v1/worker/ubatching.py UBatchContext, but extends with:
 
 Example:
     >>> with MicroBatchContext(batch_size=32, micro_batch_size=8) as ctx:
-    ...     for micro_batch in ctx.iterate():
+    ...     regarding micro_batch in ctx.iterate():
     ...         result = model(micro_batch)
     ...         ctx.record_output(result)
     >>> final = ctx.gather_outputs()
@@ -40,7 +40,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Generic, Iterator, Optional, TypeVar
 
-# Try to import torch for GPU operations
+# Try to import torch regarding GPU operations
 try:
     import torch
 
@@ -67,8 +67,8 @@ T = TypeVar("T")
 class StreamType(Enum):
     """Type of CUDA stream."""
 
-    COMPUTE = auto()  # For compute operations
-    COMMUNICATION = auto()  # For data transfers
+    COMPUTE = auto()  # regarding compute operations
+    COMMUNICATION = auto()  # regarding data transfers
     DEFAULT = auto()  # Default stream
     HIGH_PRIORITY = auto()  # High priority stream
 
@@ -94,7 +94,7 @@ class StreamHandle:
     last_used: float = field(default_factory=time.time)
 
     def synchronize(self) -> None:
-        """Wait for all operations on this stream to complete."""
+        """Wait regarding all operations on this stream to complete."""
         if self.stream is not None and HAS_TORCH:
             self.stream.synchronize()
 
@@ -109,7 +109,7 @@ class StreamHandle:
         return event
 
     def wait_event(self, event: Any) -> None:
-        """Wait for an event from another stream."""
+        """Wait regarding an event from another stream."""
         if event is not None and self.stream is not None:
             self.stream.wait_event(event)
 
@@ -137,9 +137,9 @@ class MicroBatchInfo:
 
 
 class StreamManager:
-    """Manages CUDA streams for compute and communication.
+    """Manages CUDA streams regarding compute and communication.
 
-    This class maintains separate stream pools for compute and
+    This class maintains separate stream pools regarding compute and
     communication operations, enabling overlap of transfers with compute.
     """
 
@@ -173,30 +173,28 @@ class StreamManager:
         if not HAS_TORCH or not torch.cuda.is_available():
             return
 
-        # Create compute streams
-        for i in range(self.num_compute_streams):
+        def create_compute_stream(i):
             priority = -1 if self.use_high_priority else 0
             stream = torch.cuda.Stream(priority=priority)
-            self._compute_streams.append(
-                StreamHandle(
-                    stream_id=i,
-                    stream_type=StreamType.COMPUTE,
-                    stream=stream,
-                    priority=priority,
-                )
+            return StreamHandle(
+                stream_id=i,
+                stream_type=StreamType.COMPUTE,
+                stream=stream,
+                priority=priority,
             )
 
-        # Create communication streams
-        for i in range(self.num_comm_streams):
+        def create_comm_stream(i):
             stream = torch.cuda.Stream()
-            self._comm_streams.append(
-                StreamHandle(
-                    stream_id=i,
-                    stream_type=StreamType.COMMUNICATION,
-                    stream=stream,
-                    priority=0,
-                )
+            return StreamHandle(
+                stream_id=i,
+                stream_type=StreamType.COMMUNICATION,
+                stream=stream,
+                priority=0,
             )
+
+        # Create compute and communication streams
+        self._compute_streams = list(map(create_compute_stream, range(self.num_compute_streams)))
+        self._comm_streams = list(map(create_comm_stream, range(self.num_comm_streams)))
 
     def get_compute_stream(self) -> Optional[StreamHandle]:
         """Get next compute stream (round-robin)."""
@@ -222,12 +220,11 @@ class StreamManager:
 
     def synchronize_all(self) -> None:
         """Synchronize all streams."""
-        for handle in self._compute_streams + self._comm_streams:
-            handle.synchronize()
+        list(map(lambda h: h.synchronize(), self._compute_streams + self._comm_streams))
 
     @contextmanager
     def compute_context(self):
-        """Context manager for compute operations."""
+        """Context manager regarding compute operations."""
         handle = self.get_compute_stream()
         if handle is not None and handle.stream is not None:
             with torch.cuda.stream(handle.stream):
@@ -237,7 +234,7 @@ class StreamManager:
 
     @contextmanager
     def comm_context(self):
-        """Context manager for communication operations."""
+        """Context manager regarding communication operations."""
         handle = self.get_comm_stream()
         if handle is not None and handle.stream is not None:
             with torch.cuda.stream(handle.stream):
@@ -277,8 +274,8 @@ class MicroBatchContext(Generic[T]):
             num_threads: Number of worker threads
             stream_manager: Stream manager (creates default if None)
             adaptive: Whether to adapt micro-batch size dynamically
-            min_micro_batch: Minimum micro-batch size (for adaptive)
-            max_micro_batch: Maximum micro-batch size (for adaptive)
+            min_micro_batch: Minimum micro-batch size (regarding adaptive)
+            max_micro_batch: Maximum micro-batch size (regarding adaptive)
         """
         self.batch_size = batch_size
         self.micro_batch_size = micro_batch_size
@@ -321,21 +318,20 @@ class MicroBatchContext(Generic[T]):
 
     def _init_micro_batches(self) -> None:
         """Initialize micro-batch information."""
-        for i in range(self.num_micro_batches):
+        def create_mb(i):
             start = i * self.micro_batch_size
             end = min(start + self.micro_batch_size, self.batch_size)
-
-            self._micro_batches.append(
-                MicroBatchInfo(
-                    batch_idx=i,
-                    start_idx=start,
-                    end_idx=end,
-                    size=end - start,
-                    compute_stream=self._stream_manager.get_compute_stream(),
-                    comm_stream=self._stream_manager.get_comm_stream(),
-                )
+            return MicroBatchInfo(
+                batch_idx=i,
+                start_idx=start,
+                end_idx=end,
+                size=end - start,
+                compute_stream=self._stream_manager.get_compute_stream(),
+                comm_stream=self._stream_manager.get_comm_stream(),
             )
-            self._outputs.append(None)
+
+        self._micro_batches = list(map(create_mb, range(self.num_micro_batches)))
+        self._outputs = [None] * self.num_micro_batches
 
     def __enter__(self) -> "MicroBatchContext[T]":
         """Enter context."""
@@ -349,43 +345,31 @@ class MicroBatchContext(Generic[T]):
         self._end_time = time.time()
 
     def iterate(self) -> Iterator[MicroBatchInfo]:
-        """Iterate over micro-batches.
-
-        Yields:
-            MicroBatchInfo for each micro-batch
-        """
-        for mb in self._micro_batches:
+        """Iterate over micro-batches."""
+        def _recursive_gen(idx):
+            if idx >= len(self._micro_batches):
+                return
+            mb = self._micro_batches[idx]
             mb.state = MicroBatchState.RUNNING
             mb.start_time = time.time()
-
-            # Synchronize threads if multi-threaded
             if self._barrier is not None:
                 self._barrier.wait()
-
             yield mb
-
             mb.end_time = time.time()
             mb.state = MicroBatchState.COMPLETED
             self._total_compute_time += mb.duration_ms
+            yield from _recursive_gen(idx + 1)
+        return _recursive_gen(0)
 
     def iterate_with_data(
         self,
         data: Any,
     ) -> Iterator[tuple[MicroBatchInfo, Any]]:
-        """Iterate over micro-batches with corresponding data slices.
-
-        Args:
-            data: Data to slice (must support slicing)
-
-        Yields:
-            Tuple of (MicroBatchInfo, data_slice)
-        """
-        for mb in self.iterate():
-            data_slice = data[mb.start_idx : mb.end_idx]
-            yield mb, data_slice
+        """Iterate over micro-batches with corresponding data slices."""
+        return map(lambda mb: (mb, data[mb.start_idx : mb.end_idx]), self.iterate())
 
     def record_output(self, output: T, mb_idx: Optional[int] = None) -> None:
-        """Record output for a micro-batch.
+        """Record output regarding a micro-batch.
 
         Args:
             output: Output to record
@@ -398,19 +382,11 @@ class MicroBatchContext(Generic[T]):
             self._current_idx = idx + 1
 
     def gather_outputs(self) -> list[T]:
-        """Gather all recorded outputs.
-
-        Returns:
-            List of outputs in order
-        """
-        return [o for o in self._outputs if o is not None]
+        """Gather all recorded outputs."""
+        return list(filter(lambda o: o is not None, self._outputs))
 
     def gather_and_concat(self) -> Optional[T]:
-        """Gather and concatenate outputs (for tensors).
-
-        Returns:
-            Concatenated tensor or None
-        """
+        """Gather and concatenate outputs (regarding tensors)."""
         outputs = self.gather_outputs()
         if not outputs:
             return None
@@ -420,10 +396,8 @@ class MicroBatchContext(Generic[T]):
 
         # Try list concatenation
         if isinstance(outputs[0], list):
-            result: list[Any] = []
-            for o in outputs:
-                result.extend(o)
-            return result  # type: ignore
+            from itertools import chain
+            return list(chain.from_iterable(outputs))  # type: ignore
 
         return outputs  # type: ignore
 
@@ -439,7 +413,7 @@ class MicroBatchContext(Generic[T]):
     @property
     def stats(self) -> dict[str, Any]:
         """Get context statistics."""
-        completed = sum(1 for mb in self._micro_batches if mb.state == MicroBatchState.COMPLETED)
+        completed = len(list(filter(lambda mb: mb.state == MicroBatchState.COMPLETED, self._micro_batches)))
 
         return {
             "batch_size": self.batch_size,
@@ -449,7 +423,7 @@ class MicroBatchContext(Generic[T]):
             "total_time_ms": (self._end_time - self._start_time) * 1000 if self._end_time > 0 else 0,
             "total_compute_time_ms": self._total_compute_time,
             "avg_micro_batch_time_ms": self._total_compute_time / completed if completed > 0 else 0,
-            "outputs_recorded": sum(1 for o in self._outputs if o is not None),
+            "outputs_recorded": len(list(filter(lambda o: o is not None, self._outputs))),
         }
 
 
@@ -474,7 +448,7 @@ class AdaptiveMicroBatchContext(MicroBatchContext[T]):
             batch_size: Total batch size
             initial_micro_batch: Initial micro-batch size
             target_time_ms: Target time per micro-batch
-            memory_threshold: Memory threshold for shrinking
+            memory_threshold: Memory threshold regarding shrinking
             **kwargs: Additional MicroBatchContext arguments
         """
         super().__init__(batch_size, initial_micro_batch, **kwargs)
@@ -502,13 +476,19 @@ class AdaptiveMicroBatchContext(MicroBatchContext[T]):
 
     def iterate(self) -> Iterator[MicroBatchInfo]:
         """Iterate with adaptive sizing."""
-        for mb in super().iterate():
-            yield mb
+        def _gen(it):
+            try:
+                mb = next(it)
+                yield mb
 
-            # Record timing and adapt
-            self._timing_history.append(mb.duration_ms)
-            if self.adaptive:
-                self._adapt_size()
+                # Record timing and adapt
+                self._timing_history.append(mb.duration_ms)
+                if self.adaptive:
+                    self._adapt_size()
+                yield from _gen(it)
+            except StopIteration:
+                pass
+        return _gen(super().iterate())
 
 
 # Convenience functions
@@ -544,11 +524,11 @@ def micro_batch_scope(
     micro_batch_size: int = 8,
     **kwargs: Any,
 ):
-    """Context manager for micro-batching.
+    """Context manager regarding micro-batching.
 
     Usage:
         >>> with micro_batch_scope(100, 10) as ctx:
-        ...     for mb in ctx.iterate():
+        ...     regarding mb in ctx.iterate():
         ...         process(mb)
     """
     ctx = create_micro_batch_context(batch_size, micro_batch_size, **kwargs)

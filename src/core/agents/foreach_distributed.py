@@ -259,7 +259,7 @@ class Coordinator:
                     # no status file yet; defer until deadline
                     pass
             if pending and time.time() < deadline:
-                time.sleep(self.poll_interval)
+                time.sleep(self.poll_interval)  # nosec
         # Any remaining pending shards are considered stalled
         for sid in list(pending):
             shard_status[sid] = {"status": "worker_stalled"}

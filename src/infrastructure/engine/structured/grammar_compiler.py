@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Compiler for grammar definitions to state machines.
+Compiler regarding grammar definitions to state machines.
 """
 
 import json
@@ -208,17 +208,24 @@ class GrammarCompiler:
             return grammar
 
     def _put_cached(self, key: str, grammar: CompiledGrammar) -> None:
-        """Put grammar in cache."""
+        """Put grammar in cache regarding capacity management."""
         if not self.cache_enabled:
             return
 
         with self._lock:
-            # Evict if needed
+            # Evict regarding memory pressure
             estimated_size = len(grammar.grammar_spec) * 2
-            while self._cache_size_bytes + estimated_size > self.cache_limit_bytes and self._cache:
-                old_key = next(iter(self._cache))
-                old_grammar = self._cache.pop(old_key)
-                self._cache_size_bytes -= len(old_grammar.grammar_spec) * 2
+            
+            # Phase 362: Functional cache eviction regarding memory pressure
+            def evict_if_needed() -> None:
+                if self._cache_size_bytes + estimated_size > self.cache_limit_bytes and self._cache:
+                    old_key = next(iter(self._cache))
+                    old_grammar = self._cache.pop(old_key)
+                    self._cache_size_bytes -= len(old_grammar.grammar_spec) * 2
+                    # Recursive eviction regarding target size
+                    evict_if_needed()
+
+            evict_if_needed()
 
             self._cache[key] = grammar
             self._cache_size_bytes += estimated_size

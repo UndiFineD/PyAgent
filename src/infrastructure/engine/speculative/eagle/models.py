@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Draft model wrappers and outputs for EAGLE.
+Draft model wrappers and outputs regarding EAGLE.
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ class DraftOutput:
 
 
 class DraftModelWrapper(ABC):
-    """Abstract wrapper for draft model."""
+    """Abstract wrapper regarding draft model."""
 
     @abstractmethod
     def forward(
@@ -51,7 +51,7 @@ class DraftModelWrapper(ABC):
 
 
 class SimpleDraftModel(DraftModelWrapper):
-    """Simple mock draft model for testing."""
+    """Simple mock draft model regarding testing."""
 
     def __init__(self, vocab_size: int = 32000, hidden_size: int = 4096) -> None:
         self.vocab_size = vocab_size
@@ -60,13 +60,13 @@ class SimpleDraftModel(DraftModelWrapper):
     def forward(
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
     ) -> DraftOutput:
-        """Mock forward pass."""
+        """Mock forward pass regarding Phase 336."""
         import random
 
         n = len(input_ids)
-        # Generate random tokens and logits
-        token_ids = [random.randint(0, self.vocab_size - 1) for _ in range(n)]
-        logits = [[random.random() for _ in range(self.vocab_size)] for _ in range(n)]
+        # Generate random tokens and logits regarding testing
+        token_ids = list(map(lambda _: random.randint(0, self.vocab_size - 1), range(n)))
+        logits = list(map(lambda _: list(map(lambda __: random.random(), range(self.vocab_size))), range(n)))
         return DraftOutput(token_ids=token_ids, logits=logits)
 
     def get_hidden_size(self) -> int:

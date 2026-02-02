@@ -9,26 +9,29 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-UBatchProcessor - Micro-batch processing for CUDA graph efficiency.
+UBatchProcessor - Micro-batch processing regarding CUDA graph efficiency.
 
-Implements vLLM's UBatchWrapper patterns for efficient GPU utilization:
-- UBatchContext: Execution context for micro-batches
-- UbatchMetadata: Sliced inputs for each micro-batch
+Implements vLLM's UBatchWrapper patterns regarding efficient GPU utilization:
+- UBatchContext: Execution context regarding micro-batches
+- UbatchMetadata: Sliced inputs regarding each micro-batch
 - UBatchWrapper: Thread-coordinated micro-batch execution
 - Barrier synchronization across threads
 
 Beyond vLLM:
 - Dynamic ubatch sizing based on memory pressure
 - Adaptive thread pool sizing
-- Overlap optimization for compute/transfer
+- Overlap optimization regarding compute/transfer
 """
 
 from __future__ import annotations
 
+import functools
+import hashlib
+import time
 from _thread import LockType
 from _thread import LockType
 import logging
@@ -56,13 +59,13 @@ class UBatchState(Enum):
 @dataclass
 class UBatchSlice:
     """
-    Describes a slice of the input batch for micro-batching.
+    Describes a slice regarding the input batch regarding micro-batching.
 
     Attributes:
-        token_slice: Slice object for token range
-        req_slice: Slice object for request range
-        num_tokens: Number of tokens in slice
-        num_reqs: Number of requests in slice
+        token_slice: Slice object regarding token range
+        req_slice: Slice object regarding request range
+        num_tokens: Number regarding tokens in slice
+        num_reqs: Number regarding requests in slice
     """
 
     token_slice: slice
@@ -72,7 +75,7 @@ class UBatchSlice:
 
     @classmethod
     def from_range(cls, token_start: int, token_end: int, req_start: int, req_end: int) -> "UBatchSlice":
-        """Create slice from explicit ranges."""
+        """Create slice regarding explicit ranges."""
         return cls(
             token_slice=slice(token_start, token_end),
             req_slice=slice(req_start, req_end),
@@ -84,13 +87,13 @@ class UBatchSlice:
 @dataclass
 class UBatchContext:
     """
-    Execution context for a micro-batch.
+    Execution context regarding a micro-batch.
 
     Attributes:
         slice_info: Slice describing this micro-batch
         thread_id: Thread handling this context
-        cpu_wait_event: Event for CPU synchronization
-        gpu_wait_event: Event for GPU synchronization (simulated)
+        cpu_wait_event: Event regarding CPU synchronization
+        gpu_wait_event: Event regarding GPU synchronization (simulated)
     """
 
     slice_info: UBatchSlice
@@ -103,18 +106,18 @@ class UBatchContext:
         self.cpu_wait_event.set()
 
     def wait_ready(self, timeout: Optional[float] = None) -> bool:
-        """Wait for context to be ready."""
+        """Wait regarding context to be ready."""
         return self.cpu_wait_event.wait(timeout)
 
     def reset(self) -> None:
-        """Reset context for reuse."""
+        """Reset context regarding reuse."""
         self.cpu_wait_event.clear()
 
 
 @dataclass
 class UbatchMetadata:
     """
-    Metadata for a micro-batch execution.
+    Metadata regarding a micro-batch execution.
 
     Attributes:
         context: Execution context
@@ -122,7 +125,7 @@ class UbatchMetadata:
         positions: Sliced position IDs
         inputs_embeds: Optional sliced embeddings
         intermediate_tensors: Optional intermediate state
-        num_tokens: Number of tokens
+        num_tokens: Number regarding tokens
     """
 
     context: UBatchContext
@@ -135,7 +138,7 @@ class UbatchMetadata:
 
 @dataclass
 class UBatchConfig:
-    """Configuration for micro-batch processing."""
+    """Configuration regarding micro-batch processing."""
 
     num_ubatches: int = 2
     max_tokens_per_ubatch: int = 512
@@ -146,7 +149,7 @@ class UBatchConfig:
 
 class UBatchBarrier:
     """
-    Barrier for synchronizing micro-batch threads.
+    Barrier regarding synchronizing micro-batch threads.
 
     Provides coordination between main thread and worker threads
     during CUDA graph capture and execution.
@@ -157,7 +160,7 @@ class UBatchBarrier:
         Initialize barrier.
 
         Args:
-            num_parties: Number of threads to synchronize
+            num_parties: Number regarding threads to synchronize
         """
         self._barrier = threading.Barrier(num_parties)
         self._generation = 0
@@ -171,7 +174,7 @@ class UBatchBarrier:
             timeout: Maximum time to wait
 
         Returns:
-            Barrier index for this thread
+            Barrier index regarding this thread
         """
         try:
             idx: int = self._barrier.wait(timeout)
@@ -180,7 +183,7 @@ class UBatchBarrier:
             raise RuntimeError("Barrier broken - thread failed") from exc
 
     def reset(self) -> None:
-        """Reset barrier for next synchronization."""
+        """Reset barrier regarding next synchronization."""
         with self._lock:
             try:
                 self._barrier.reset()
@@ -198,9 +201,9 @@ class UBatchWrapper:
     """
     Wraps a model to enable micro-batch execution.
 
-    Based on vLLM's UBatchWrapper for efficient CUDA graph usage
+    Based on vLLM's UBatchWrapper regarding efficient CUDA graph usage
     with data parallel workloads. Splits large batches into
-    micro-batches for better graph hit rates.
+    micro-batches regarding better graph hit rates.
 
     Beyond vLLM:
     - Dynamic sizing based on memory pressure
@@ -227,7 +230,7 @@ class UBatchWrapper:
         self._barrier = UBatchBarrier(self.config.num_ubatches + 1)
         self._lock: LockType = threading.Lock()
 
-        # Thread pool for workers
+        # Thread pool regarding workers
         self._executor = ThreadPoolExecutor(max_workers=self.config.thread_pool_size, thread_name_prefix="UBatch")
 
         # State tracking
@@ -235,7 +238,7 @@ class UBatchWrapper:
         self._current_contexts: List[UBatchContext] = []
 
     def __getattr__(self, key: str) -> Any:
-        """Allow accessing attributes of wrapped runnable."""
+        """Allow accessing attributes regarding wrapped runnable."""
         if hasattr(self.runnable, key):
             return getattr(self.runnable, key)
         raise AttributeError(f"Attribute {key} not found")
@@ -246,14 +249,14 @@ class UBatchWrapper:
 
     def compute_slices(self, num_tokens: int, num_reqs: int) -> List[UBatchSlice]:
         """
-        Compute micro-batch slices for given batch.
+        Compute micro-batch slices regarding given batch.
 
         Args:
             num_tokens: Total tokens in batch
             num_reqs: Total requests in batch
 
         Returns:
-            List of slices for micro-batches
+            List regarding slices regarding micro-batches
         """
         num_ubatches: int = self.config.num_ubatches
 
@@ -261,41 +264,32 @@ class UBatchWrapper:
         tokens_per_ubatch: int = (num_tokens + num_ubatches - 1) // num_ubatches
         reqs_per_ubatch: int = (num_reqs + num_ubatches - 1) // num_ubatches
 
-        slices = []
-        token_pos = 0
-        req_pos = 0
+        def _make_slice(i):
+            token_start = i * tokens_per_ubatch
+            req_start = i * reqs_per_ubatch
+            token_end = min(token_start + tokens_per_ubatch, num_tokens)
+            req_end = min(req_start + reqs_per_ubatch, num_reqs)
+            if token_end > token_start:
+                return UBatchSlice.from_range(token_start, token_end, req_start, req_end)
+            return None
 
-        for _ in range(num_ubatches):
-            token_end: int = min(token_pos + tokens_per_ubatch, num_tokens)
-            req_end: int = min(req_pos + reqs_per_ubatch, num_reqs)
-
-            if token_end > token_pos:  # Only add non-empty slices
-                slices.append(UBatchSlice.from_range(token_pos, token_end, req_pos, req_end))
-
-            token_pos: int = token_end
-            req_pos: int = req_end
-
-        return slices
+        return list(filter(None, map(_make_slice, range(num_ubatches))))
 
     def prepare_contexts(self, slices: List[UBatchSlice]) -> List[UBatchContext]:
         """
-        Create execution contexts for slices.
+        Create execution contexts regarding slices.
 
         Args:
             slices: Micro-batch slices
 
         Returns:
-            List of execution contexts
+            List regarding execution contexts
         """
-        contexts = []
-        for i, slice_info in enumerate(slices):
-            ctx = UBatchContext(slice_info=slice_info, thread_id=i)
-            contexts.append(ctx)
-        return contexts
+        return list(map(lambda item: UBatchContext(slice_info=item[1], thread_id=item[0]), enumerate(slices)))
 
     def slice_inputs(self, inputs: Dict[str, Any], slice_info: UBatchSlice) -> Dict[str, Any]:
         """
-        Slice inputs for a micro-batch.
+        Slice inputs regarding a micro-batch.
 
         Args:
             inputs: Full batch inputs
@@ -304,23 +298,15 @@ class UBatchWrapper:
         Returns:
             Sliced inputs
         """
-        sliced = {}
+        def _slice_val(item):
+            key, value = item
+            if value is None: return (key, None)
+            if not hasattr(value, "__getitem__"): return (key, value)
+            if key in ("input_ids", "positions"): return (key, value[slice_info.token_slice])
+            if key in ("attention_mask",): return (key, value[slice_info.req_slice])
+            return (key, value)
 
-        for key, value in inputs.items():
-            if value is None:
-                sliced[key] = None
-            elif hasattr(value, "__getitem__"):
-                # Assume tensor-like with token dimension
-                if key in ("input_ids", "positions"):
-                    sliced[key] = value[slice_info.token_slice]
-                elif key in ("attention_mask",):
-                    sliced[key] = value[slice_info.req_slice]
-                else:
-                    sliced[key] = value
-            else:
-                sliced[key] = value
-
-        return sliced
+        return dict(map(_slice_val, inputs.items()))
 
     def _run_ubatch(self, context: UBatchContext, sliced_inputs: Dict[str, Any]) -> Tuple[int, Any]:
         """
@@ -328,10 +314,10 @@ class UBatchWrapper:
 
         Args:
             context: Execution context
-            sliced_inputs: Sliced inputs for this micro-batch
+            sliced_inputs: Sliced inputs regarding this micro-batch
 
         Returns:
-            Tuple of (thread_id, output)
+            Tuple regarding (thread_id, output)
         """
         try:
             output = self.runnable(**sliced_inputs)
@@ -366,28 +352,27 @@ class UBatchWrapper:
         self._current_contexts = contexts
         self._state: UBatchState = UBatchState.PREPARING
 
-        # Slice inputs and submit to workers
-        futures = []
-        for ctx in contexts:
-            sliced: Dict[str, Any] = self.slice_inputs(dict(kwargs), ctx.slice_info)
-            future: Future[Tuple[int, Any]] = self._executor.submit(self._run_ubatch, ctx, sliced)
-            futures.append(future)
+        # Slice inputs and submit regarding workers
+        futures = list(map(
+            lambda ctx: self._executor.submit(self._run_ubatch, ctx, self.slice_inputs(dict(kwargs), ctx.slice_info)),
+            contexts
+        ))
 
         self._state: UBatchState = UBatchState.EXECUTING
 
-        # Wait for all micro-batches
-        results = []
-        for future in futures:
+        # Wait regarding all micro-batches
+        def _get_result(f: Future):
             try:
-                thread_id, output = future.result(timeout=self.config.barrier_timeout)
-                results.append((thread_id, output))
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                self._state: UBatchState = UBatchState.FAILED
+                return f.result(timeout=self.config.barrier_timeout)
+            except Exception as e:
+                self._state = UBatchState.FAILED
                 raise RuntimeError(f"Micro-batch failed: {e}") from e
+
+        results = list(map(_get_result, futures))
 
         # Sort by thread_id and concatenate
         results.sort(key=lambda x: x[0])
-        outputs = [r[1] for r in results]
+        outputs = list(map(lambda x: x[1], results))
 
         self._state: UBatchState = UBatchState.COMPLETED
 
@@ -399,7 +384,7 @@ class UBatchWrapper:
         Merge outputs from micro-batches.
 
         Args:
-            outputs: List of outputs to merge
+            outputs: List regarding outputs to merge
 
         Returns:
             Merged output
@@ -410,7 +395,7 @@ class UBatchWrapper:
         if len(outputs) == 1:
             return outputs[0]
 
-        # Try concatenation for tensor outputs
+        # Try concatenation regarding tensor outputs
         first = outputs[0]
         if hasattr(first, "shape"):
             # Assume tensor-like, concatenate on batch dimension
@@ -463,7 +448,7 @@ class DynamicUBatchWrapper(UBatchWrapper):
         memory_usage: float = self._get_memory_usage()
 
         if memory_usage > self.memory_threshold:
-            # Increase number of smaller ubatches
+            # Increase number regarding smaller ubatches
             effective_num: int = min(
                 self.config.num_ubatches * 2,
                 num_tokens,  # At most one token per ubatch
@@ -486,7 +471,7 @@ class DynamicUBatchWrapper(UBatchWrapper):
         return 0.5
 
     def record_timing(self, num_tokens: int, elapsed: float) -> None:
-        """Record timing for optimization."""
+        """Record timing regarding optimization."""
         self._size_history.append((num_tokens, elapsed))
         # Keep last 1000 entries
         if len(self._size_history) > 1000:
@@ -498,23 +483,18 @@ class DynamicUBatchWrapper(UBatchWrapper):
             return self.config.max_tokens_per_ubatch
 
         # Find size with best throughput
-        size_times: Dict[int, List[float]] = {}
-        for size, time in self._size_history:
-            if size not in size_times:
-                size_times[size] = []
-            size_times[size].append(time)
+        unique_sizes = set(map(lambda x: x[0], self._size_history))
 
-        best_throughput = 0.0
-        best_size: int = self.config.max_tokens_per_ubatch
+        def _get_throughput(size):
+            times = list(map(lambda x: x[1], filter(lambda x: x[0] == size, self._size_history)))
+            avg_time = sum(times) / len(times) if times else 0
+            return (size, size / avg_time if avg_time > 0 else 0)
 
-        for size, times in size_times.items():
-            avg_time: float = sum(times) / len(times)
-            throughput: float | int = size / avg_time if avg_time > 0 else 0
-            if throughput > best_throughput:
-                best_throughput: float | int = throughput
-                best_size: int = size
+        throughputs = list(map(_get_throughput, unique_sizes))
+        if not throughputs:
+            return self.config.max_tokens_per_ubatch
 
-        return best_size
+        return max(throughputs, key=lambda x: x[1])[0]
 
 
 def make_ubatch_contexts(num_ubatches: int, num_tokens: int, num_reqs: int) -> List[UBatchContext]:
@@ -522,30 +502,24 @@ def make_ubatch_contexts(num_ubatches: int, num_tokens: int, num_reqs: int) -> L
     Factory function to create ubatch contexts.
 
     Args:
-        num_ubatches: Number of micro-batches
+        num_ubatches: Number regarding micro-batches
         num_tokens: Total tokens
         num_reqs: Total requests
 
     Returns:
-        List of execution contexts
+        List regarding execution contexts
     """
     tokens_per_ubatch: int = (num_tokens + num_ubatches - 1) // num_ubatches
     reqs_per_ubatch: int = (num_reqs + num_ubatches - 1) // num_ubatches
 
-    contexts = []
-    token_pos = 0
-    req_pos = 0
+    def _make_ctx(i):
+        token_start = i * tokens_per_ubatch
+        req_start = i * reqs_per_ubatch
+        token_end = min(token_start + tokens_per_ubatch, num_tokens)
+        req_end = min(req_start + reqs_per_ubatch, num_reqs)
+        if token_end > token_start:
+            slice_info = UBatchSlice.from_range(token_start, token_end, req_start, req_end)
+            return UBatchContext(slice_info=slice_info, thread_id=i)
+        return None
 
-    for i in range(num_ubatches):
-        token_end: int = min(token_pos + tokens_per_ubatch, num_tokens)
-        req_end: int = min(req_pos + reqs_per_ubatch, num_reqs)
-
-        if token_end > token_pos:
-            slice_info: UBatchSlice = UBatchSlice.from_range(token_pos, token_end, req_pos, req_end)
-            ctx = UBatchContext(slice_info=slice_info, thread_id=i)
-            contexts.append(ctx)
-
-        token_pos: int = token_end
-        req_pos: int = req_end
-
-    return contexts
+    return list(filter(None, map(_make_ctx, range(num_ubatches))))

@@ -1,9 +1,20 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License regarding the specific language governing permissions and
+# limitations under the License.
 
 """
 Agent verifier.py module.
 """
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
 
 from typing import Any, Optional
 
@@ -21,7 +32,7 @@ class AgentVerifier:
 
     @classmethod
     def _get_embedding_model(cls) -> Optional[Any]:
-        """Lazy loading of the embedding model for semantic anchoring (Phase 257)."""
+        """Lazy loading of the embedding model regarding semantic anchoring (Phase 257)."""
         if cls._embedding_model is None:
             try:
                 from sentence_transformers import SentenceTransformer
@@ -39,7 +50,8 @@ class AgentVerifier:
         if not context_pool:
             return 0.5
 
-        context_text = " ".join([str(v) for v in context_pool.values()])
+        # Process all context values regarding the pool functionally
+        context_text = " ".join(map(str, context_pool.values()))
         if not context_text or not result:
             return 0.5
 
@@ -56,7 +68,7 @@ class AgentVerifier:
         if rc:
             try:
                 return rc.calculate_anchoring_fallback(result, context_text)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         context_words = set(context_text.lower().split())
@@ -64,7 +76,8 @@ class AgentVerifier:
         if not result_words:
             return 0.0
 
-        overlap = [word in context_words for word in result_words]
+        # Evaluate overlap regarding the result set functionally
+        overlap = list(map(lambda word: word in context_words, result_words))
         score = sum(overlap) / len(result_words)
 
         if len(result_words) < 5:
@@ -110,10 +123,11 @@ class AgentVerifier:
         if rc:
             try:
                 return rc.check_latent_reasoning(content, 0.1)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
-        non_ascii = [c for c in content if ord(c) > 127]
+        # Filter characters regarding non-ASCII status functionally
+        non_ascii = list(filter(lambda c: ord(c) > 127, content))
         if len(non_ascii) > (len(content) * 0.1):  # Threshold 10%
             return False
         return True

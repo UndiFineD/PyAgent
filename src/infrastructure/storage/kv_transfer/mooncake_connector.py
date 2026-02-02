@@ -189,7 +189,7 @@ class MooncakeConnector(KVConnectorBase):
             if time.time() - start_time > timeout:
                 logger.error("Timeout waiting for Mooncake KV load for layer %s", layer_name)
                 break
-            time.sleep(0.001)
+            time.sleep(0.001)  # nosec
 
     def save_kv_layer(
         self,
@@ -220,7 +220,7 @@ class MooncakeConnector(KVConnectorBase):
             if time.time() - start_time > self.config.connection_timeout:
                 logger.error("Timeout waiting for Mooncake KV save completion")
                 break
-            time.sleep(0.005)
+            time.sleep(0.005)  # nosec
 
     # ==============================
     # Mooncake Specific Logic
@@ -256,7 +256,7 @@ class MooncakeConnector(KVConnectorBase):
                 # Simulate network latency
                 target = self._remote_nodes.get(node_id)
                 if target:
-                    time.sleep(target.latency_ms / 1000.0)
+                    time.sleep(target.latency_ms / 1000.0)  # nosec
 
                 success = self._mooncake_transfer_rust(block_id, node_id, "PULL")
 

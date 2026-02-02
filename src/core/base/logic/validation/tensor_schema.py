@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 TensorSchema - Tensor shape validation with symbolic dimensions.
 
-Implements vLLM's tensor schema pattern for validating tensor shapes
+Implements vLLM's tensor schema pattern regarding validating tensor shapes
 with symbolic dimension names that can be resolved at runtime.
 
 Phase 23: Advanced Serialization & Validation
@@ -52,7 +52,7 @@ __all__ = [
 
 
 class DynamicDim:
-    """Marker for dynamic dimensions that can vary at runtime."""
+    """Marker regarding dynamic dimensions that can vary at runtime."""
 
     def __init__(self, name: str):
         self.name = name
@@ -96,10 +96,12 @@ class TensorShape:
         self.dims = dims
         self.dynamic_dims = dynamic_dims or set()
 
-        # Auto-detect dynamic dims
-        for dim in dims:
+        # Auto-detect dynamic dims functionally
+        def detect_dynamic(dim):
             if isinstance(dim, DynamicDim):
                 self.dynamic_dims.add(dim.name)
+        
+        list(map(detect_dynamic, dims))
 
     def resolve(self, **bindings: int) -> tuple[int | str, ...]:
         """
@@ -111,17 +113,16 @@ class TensorShape:
         Returns:
             Tuple of resolved dimensions (unresolved symbols remain as strings)
         """
-        resolved = []
-        for dim in self.dims:
+        def _resolve(dim):
             if isinstance(dim, str) and dim in bindings:
-                resolved.append(bindings[dim])
-            elif isinstance(dim, DynamicDim) and dim.name in bindings:
-                resolved.append(bindings[dim.name])
-            elif isinstance(dim, DynamicDim):
-                resolved.append(dim.name)
-            else:
-                resolved.append(dim)
-        return tuple(resolved)
+                return bindings[dim]
+            if isinstance(dim, DynamicDim) and dim.name in bindings:
+                return bindings[dim.name]
+            if isinstance(dim, DynamicDim):
+                return dim.name
+            return dim
+
+        return tuple(map(_resolve, self.dims))
 
     def matches(self, shape: tuple[int, ...], **bindings: int) -> bool:
         """
@@ -139,39 +140,40 @@ class TensorShape:
 
         resolved = self.resolve(**bindings)
 
-        for actual, expected in zip(shape, resolved):
+        def _check(pair):
+            actual, expected = pair
             if isinstance(expected, str):
                 # Symbolic dimension - skip if dynamic, otherwise match
                 if expected not in self.dynamic_dims:
-                    continue
-            elif isinstance(expected, int):
-                if actual != expected:
-                    return False
+                    return True
+                return True
+            if isinstance(expected, int):
+                return actual == expected
+            return True
 
-        return True
+        return all(map(_check, zip(shape, resolved)))
 
     def __len__(self) -> int:
         return len(self.dims)
 
     def __repr__(self) -> str:
-        dim_strs = []
-        for dim in self.dims:
+        def _fmt(dim):
             if isinstance(dim, DynamicDim):
-                dim_strs.append(f"{dim.name}*")
-            elif isinstance(dim, str):
+                return f"{dim.name}*"
+            if isinstance(dim, str):
                 if dim in self.dynamic_dims:
-                    dim_strs.append(f"{dim}*")
-                else:
-                    dim_strs.append(dim)
-            else:
-                dim_strs.append(str(dim))
+                    return f"{dim}*"
+                return dim
+            return str(dim)
+        
+        dim_strs = list(map(_fmt, self.dims))
         return f"TensorShape({', '.join(dim_strs)})"
 
 
 @dataclass
 class TensorSchema:
     """
-    Schema for validating multiple tensors with related dimensions.
+    Schema regarding validating multiple tensors with related dimensions.
 
     Example:
         >>> schema = TensorSchema(
@@ -196,13 +198,16 @@ class TensorSchema:
         self.validate_on_init = validate
         self.resolve_bindings = resolve_bindings or {}
 
-        for name, shape in field_shapes.items():
+        def _add_field(item):
+            name, shape = item
             if isinstance(shape, TensorShape):
                 self.fields[name] = shape
             elif isinstance(shape, tuple):
                 self.fields[name] = TensorShape(*shape)
             else:
                 raise TypeError(f"Expected TensorShape or tuple, got {type(shape)}")
+
+        list(map(_add_field, field_shapes.items()))
 
     def validate(self, **tensors: Any) -> dict[str, tuple[int, ...]]:
         """
@@ -235,17 +240,16 @@ class TensorSchema:
         collected_bindings: dict[str, int]
     ) -> None:
         """Collect dimension bindings from tensors."""
-        for name, tensor in tensors.items():
-            if name not in self.fields:
-                continue
+        def _collect(item):
+            name, tensor = item
+            if name in self.fields:
+                shape = self._get_shape(tensor)
+                expected = self.fields[name]
+                if len(shape) == len(expected.dims):
+                    self._extract_bindings(shape, expected, collected_bindings)
+                results[name] = shape
 
-            shape = self._get_shape(tensor)
-            expected = self.fields[name]
-
-            if len(shape) == len(expected.dims):
-                self._extract_bindings(shape, expected, collected_bindings)
-
-            results[name] = shape
+        list(map(_collect, tensors.items()))
 
     def _extract_bindings(
         self,
@@ -254,11 +258,14 @@ class TensorSchema:
         collected_bindings: dict[str, int]
     ) -> None:
         """Extract dimension bindings from shape comparison."""
-        for actual, exp in zip(shape, expected.dims):
+        def _extract(pair):
+            actual, exp = pair
             if isinstance(exp, str) and exp not in collected_bindings:
                 collected_bindings[exp] = actual
             elif isinstance(exp, DynamicDim) and exp.name not in collected_bindings:
                 collected_bindings[exp.name] = actual
+
+        list(map(_extract, zip(shape, expected.dims)))
 
     def _validate_shapes(
         self,
@@ -267,16 +274,16 @@ class TensorSchema:
         collected_bindings: dict[str, int]
     ) -> None:
         """Validate all tensor shapes against schema."""
-        for name, tensor in tensors.items():
-            if name not in self.fields:
-                continue
+        def _validate(item):
+            name, tensor = item
+            if name in self.fields:
+                shape = results[name]
+                expected = self.fields[name]
+                if not expected.matches(shape, **collected_bindings):
+                    resolved = expected.resolve(**collected_bindings)
+                    raise ValueError(f"Shape mismatch regarding '{name}': expected {resolved}, got {shape}")
 
-            shape = results[name]
-            expected = self.fields[name]
-
-            if not expected.matches(shape, **collected_bindings):
-                resolved = expected.resolve(**collected_bindings)
-                raise ValueError(f"Shape mismatch for '{name}': expected {resolved}, got {shape}")
+        list(map(_validate, tensors.items()))
 
     def _get_shape(self, tensor: Any) -> tuple[int, ...]:
         """Get shape from tensor or nested structure."""
@@ -307,7 +314,7 @@ class TensorSchema:
             return (len(nested),)
 
     def __repr__(self) -> str:
-        fields_str = ", ".join(f"{k}={v}" for k, v in self.fields.items())
+        fields_str = ", ".join(map(lambda item: f"{item[0]}={item[1]}", self.fields.items()))
         return f"TensorSchema({fields_str})"
 
 

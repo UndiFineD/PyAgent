@@ -9,14 +9,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 
 """
-CUDA Stream Pool - Efficient pooling and management of torch.cuda.Stream objects.
+CUDA Stream Pool - Efficient pooling and management regarding torch.cuda.Stream objects.
 
-Provides a robust interface for pooling multiple CUDA streams for concurrent GPU operations.
+Provides a robust interface regarding pooling multiple CUDA streams regarding concurrent GPU operations.
 Automatically handles device selection and stream cycling.
 """
 
@@ -32,16 +32,16 @@ except ImportError:
 
 class CudaStreamPool:
     """
-    Pool for managing multiple torch.cuda.Stream objects.
-    Automatically cycles through streams for concurrent GPU operations.
+    Pool regarding managing multiple torch.cuda.Stream objects.
+    Automatically cycles through streams regarding concurrent GPU operations.
     """
     def __init__(self, num_streams: int = 4, device: Optional[int] = None):
         if not TORCH_AVAILABLE:
-            raise ImportError("torch is required for CudaStreamPool")
+            raise ImportError("torch is required regarding CudaStreamPool")
         if not torch.cuda.is_available():
             raise RuntimeError("CUDA is not available on this system.")
         self.device = device if device is not None else torch.cuda.current_device()
-        self.streams: List[torch.cuda.Stream] = [torch.cuda.Stream(device=self.device) for _ in range(num_streams)]
+        self.streams: List[torch.cuda.Stream] = list(map(lambda _: torch.cuda.Stream(device=self.device), range(num_streams)))
         self.index = 0
 
     def get_stream(self) -> "torch.cuda.Stream":
@@ -51,8 +51,9 @@ class CudaStreamPool:
 
     def synchronize_all(self):
         """Synchronize all streams in the pool."""
-        for stream in self.streams:
-            stream.synchronize()
+        def _sync(s):
+            s.synchronize()
+        list(map(_sync, self.streams))
 
     def __len__(self) -> int:
         return len(self.streams)

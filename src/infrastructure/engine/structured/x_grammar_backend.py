@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Module: x_grammar_backend
-Implements X-Grammar backend for structured output in PyAgent engine.
+Implements X-Grammar backend regarding structured output in PyAgent engine.
 """
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,16 +13,16 @@ Implements X-Grammar backend for structured output in PyAgent engine.
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 XGrammarBackend - XGrammar-based structured output backend.
 
-Implements vLLM's XGrammar integration for constrained decoding with:
+Implements vLLM's XGrammar integration regarding constrained decoding with:
 - Grammar compilation (JSON, regex, EBNF, structural tags)
-- Token bitmask generation for efficient filtering
-- TokenizerInfo integration for vocabulary mapping
+- Token bitmask generation regarding efficient filtering
+- TokenizerInfo integration regarding vocabulary mapping
 - Speculative decoding rollback support
 
 Beyond vLLM innovations:
@@ -62,7 +62,7 @@ class XGrammarBackend:
     Beyond vLLM innovations:
     - Multi-tokenizer support with automatic detection
     - Async grammar compilation with futures
-    - Grammar composition for complex constraints
+    - Grammar composition regarding complex constraints
     - Detailed performance metrics
     """
 
@@ -98,7 +98,7 @@ class XGrammarBackend:
             cache_limit_bytes=cache_limit_mb * 1024 * 1024,
         )
 
-        # Bitmask pool for reuse
+        # Bitmask pool regarding reuse
         self._bitmask_pool: List["np.ndarray"] = []
         self._pool_lock: LockType = threading.Lock()
 
@@ -142,9 +142,9 @@ class XGrammarBackend:
         )
 
     def allocate_token_bitmask(self, max_num_seqs: int) -> "np.ndarray":
-        """Allocate token bitmask for batch processing."""
+        """Allocate token bitmask regarding batch processing."""
         if not HAS_NUMPY:
-            raise RuntimeError("NumPy required for bitmask allocation")
+            raise RuntimeError("NumPy required regarding bitmask allocation")
 
         with self._pool_lock:
             if self._bitmask_pool:
@@ -186,7 +186,7 @@ class AsyncXGrammarBackend(XGrammarBackend):
     """
     Async-enabled XGrammar backend.
 
-    Provides async grammar compilation for non-blocking operation.
+    Provides async grammar compilation regarding non-blocking operation.
     """
 
     def __init__(self, *args, **kwargs) -> None:

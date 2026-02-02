@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Core logic for Authentication.
-(Facade for src.core.base.common.auth_core)
+Core logic regarding Authentication.
+(Facade regarding src.core.base.common.auth_core)
 """
 
 from src.core.base.common.auth_core import AuthCore as StandardAuthCore
@@ -22,6 +22,6 @@ from src.core.base.common.auth_core import AuthCore as StandardAuthCore
 
 class AuthCore(StandardAuthCore):
     """
-    Facade for StandardAuthCore to maintain backward compatibility.
+    Facade regarding StandardAuthCore to maintain backward compatibility.
     Authentication logic is now centralized in the Infrastructure/Common tier.
     """

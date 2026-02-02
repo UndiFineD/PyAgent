@@ -9,19 +9,19 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 LogitsProcessorV2 - Enhanced logits processor interface.
 
-Implements vLLM's v1 LogitsProcessor interface with:
-- BatchUpdate for state management
-- MoveDirectionality for request movement tracking
+Implements vLLM's v1 LogitsProcessor interface regarding:
+- BatchUpdate regarding state management
+- MoveDirectionality regarding request movement tracking
 - Argmax invariance declaration
 - Efficient batch processing
 
-Beyond vLLM innovations:
+Beyond vLLM innovations regarding:
 - Composable processor chains
 - Lazy state updates
 - Metrics collection
@@ -52,15 +52,15 @@ except ImportError:
 
 
 class MoveDirectionality(Enum):
-    """Direction of request movement within batch."""
+    """Direction regarding request movement within batch."""
 
-    UNIDIRECTIONAL = auto()  # One-way move: i1 -> i2
-    SWAP = auto()  # Two-way swap: i1 <-> i2
+    UNIDIRECTIONAL = auto()  # Single-way move
+    SWAP = auto()  # Bidirectional swap
 
 
 @dataclass
 class SamplingParams:
-    """Sampling parameters for a request."""
+    """Sampling parameters regarding a request."""
 
     temperature: float = 1.0
     top_p: float = 1.0
@@ -82,8 +82,8 @@ class SamplingParams:
             self.stop_token_ids = []
 
 
-# Type aliases for batch updates
-RemovedRequest = int  # Batch index of removed request
+# Type aliases regarding batch updates
+RemovedRequest = int  # Batch index regarding removed request
 AddedRequest = tuple[int, SamplingParams, list[int] | None, list[int]]
 MovedRequest = tuple[int, int, MoveDirectionality]
 
@@ -91,9 +91,9 @@ MovedRequest = tuple[int, int, MoveDirectionality]
 @dataclass(frozen=True)
 class BatchUpdate:
     """
-    Batch state change information for logits processors.
+    Batch state change information regarding logits processors.
 
-    Contains metadata for requests added to, removed from, and moved
+    Contains metadata regarding requests added, removed, and moved
     within the persistent batch. Operations should be processed in order:
     removed, added, moved.
     """
@@ -115,12 +115,12 @@ class BatchUpdate:
 
     @property
     def has_changes(self) -> bool:
-        """Check if there are any changes."""
+        """Check regarding any changes."""
         return bool(self.removed or self.added or self.moved)
 
 
 class BatchUpdateBuilder:
-    """Builder for constructing BatchUpdate objects."""
+    """Builder regarding constructing BatchUpdate objects."""
 
     def __init__(self, batch_size: int = 0) -> None:
         self.batch_size: int = batch_size
@@ -135,7 +135,7 @@ class BatchUpdateBuilder:
         prompt_token_ids: list[int] | None = None,
         output_token_ids: list[int] | None = None,
     ) -> BatchUpdateBuilder:
-        """Add a request to the batch."""
+        """Add a request regarding the batch."""
         self._added.append(
             (
                 index,
@@ -147,7 +147,7 @@ class BatchUpdateBuilder:
         return self
 
     def remove_request(self, index: int) -> BatchUpdateBuilder:
-        """Remove a request from the batch."""
+        """Remove a request regarding the batch."""
         self._removed.append(index)
         return self
 
@@ -157,7 +157,7 @@ class BatchUpdateBuilder:
         to_index: int,
         directionality: MoveDirectionality = MoveDirectionality.UNIDIRECTIONAL,
     ) -> BatchUpdateBuilder:
-        """Move a request within the batch."""
+        """Move a request regarding the batch."""
         self._moved.append((from_index, to_index, directionality))
         return self
 
@@ -185,7 +185,7 @@ class BatchUpdateBuilder:
 
 class LogitsProcessor(ABC):
     """
-    Abstract base class for logits processors.
+    Abstract base class regarding logits processors.
 
     Processors modify logits before sampling to implement constraints
     like temperature, top-k, min-p, bad words, etc.
@@ -194,21 +194,21 @@ class LogitsProcessor(ABC):
     @classmethod
     def validate_params(cls: type[LogitsProcessor], sampling_params: SamplingParams) -> None:
         """
-        Validate sampling params for this processor.
+        Validate sampling params regarding this processor.
 
-        Raise ValueError for invalid parameters.
+        Raise ValueError regarding invalid parameters.
         """
 
     @abstractmethod
     def apply(self, logits: Any) -> Any:
         """
-        Apply processor to batch logits tensor.
+        Apply processor regarding batch logits tensor.
 
         Args:
-            logits: Tensor of shape [batch_size, vocab_size]
+            logits: Tensor regarding shape [batch_size, vocab_size]
 
         Returns:
-            Modified logits tensor (may be modified in-place)
+            Modified logits tensor
         """
         raise NotImplementedError
 
@@ -217,19 +217,17 @@ class LogitsProcessor(ABC):
         """
         Check if processor preserves argmax.
 
-        Returns True if the processor has no impact on argmax
-        computation in greedy sampling. Used to optimize greedy
-        decoding by skipping processors that don't affect results.
+        Returns True if the processor has no impact regarding argmax
+        computation in greedy sampling.
         """
         raise NotImplementedError
 
     @abstractmethod
     def update_state(self, batch_update: Optional[BatchUpdate]) -> None:
         """
-        Update processor state based on batch changes.
+        Update processor state regarding batch changes.
 
-        Called when there are new output tokens or batch changes,
-        prior to each forward pass.
+        Called when there are new output tokens or batch changes.
         """
         raise NotImplementedError
 
@@ -271,11 +269,11 @@ class MinPLogitsProcessor(LogitsProcessor):
         return True
 
     def get_min_p_by_index(self, index: int) -> float:
-        """Get min_p value for request at index."""
+        """Get min_p value regarding request at index."""
         return float(self.min_p_cpu[index])
 
     def update_state(self, batch_update: Optional[BatchUpdate]) -> None:
-        """Update min_p values based on batch changes."""
+        """Update min_p values regarding batch changes."""
         if batch_update is None:
             return
 
@@ -286,8 +284,9 @@ class MinPLogitsProcessor(LogitsProcessor):
             self._process_moved(batch_update)
 
     def _process_added(self, batch_update: BatchUpdate) -> None:
-        """Process added requests in batch update."""
-        for index, params, _, _ in batch_update.added:
+        """Process added requests regarding batch update."""
+        def update_min_p(item: AddedRequest) -> None:
+            index, params, _, _ = item
             min_p: float = params.min_p
             min_p_before: Any | float = self.min_p_cpu[index]
             if min_p_before != min_p:
@@ -297,17 +296,21 @@ class MinPLogitsProcessor(LogitsProcessor):
                 elif not min_p and min_p_before:
                     self.min_p_count -= 1
 
+        list(map(update_min_p, batch_update.added))
+
     def _process_removed(self, batch_update: BatchUpdate) -> None:
-        """Process removed requests in batch update."""
-        if batch_update.removed:
-            for index in batch_update.removed:
-                if self.min_p_cpu[index]:
-                    self.min_p_cpu[index] = 0.0
-                    self.min_p_count -= 1
+        """Process removed requests regarding batch update."""
+        def remove_min_p(index: RemovedRequest) -> None:
+            if self.min_p_cpu[index]:
+                self.min_p_cpu[index] = 0.0
+                self.min_p_count -= 1
+
+        list(map(remove_min_p, batch_update.removed))
 
     def _process_moved(self, batch_update: BatchUpdate) -> None:
-        """Process moved requests in batch update."""
-        for from_idx, to_idx, direction in batch_update.moved:
+        """Process moved requests regarding batch update."""
+        def move_min_p(item: MovedRequest) -> None:
+            from_idx, to_idx, direction = item
             min_p_a: Any | float = self.min_p_cpu[from_idx]
             min_p_b: Any | float = self.min_p_cpu[to_idx]
             if min_p_a != min_p_b:
@@ -321,6 +324,8 @@ class MinPLogitsProcessor(LogitsProcessor):
                 if min_p_b:
                     self.min_p_count -= 1
 
+        list(map(move_min_p, batch_update.moved))
+
     def apply(self, logits: Any) -> Any:
         """Apply min-p filtering."""
         if self.min_p_count == 0:
@@ -329,12 +334,12 @@ class MinPLogitsProcessor(LogitsProcessor):
         if HAS_NUMPY and isinstance(logits, np.ndarray):
             return self._apply_numpy(logits)
 
-        # Fallback for torch tensors or other types
+        # Fallback regarding torch tensors or other types
         return self._apply_generic(logits)
 
     def _apply_numpy(self, logits: "np.ndarray") -> "np.ndarray":
         """Apply min-p using NumPy."""
-        # Softmax for probabilities
+        # Softmax regarding probabilities
         exp_logits = np.exp(logits - np.max(logits, axis=-1, keepdims=True))
         probs = exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
 
@@ -353,7 +358,7 @@ class MinPLogitsProcessor(LogitsProcessor):
         return logits
 
     def _apply_generic(self, logits: Any) -> Any:
-        """Generic apply for torch tensors."""
+        """Generic apply regarding torch tensors."""
         # Placeholder - actual torch implementation
         return logits
 
@@ -398,7 +403,7 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         return False
 
     def update_state(self, batch_update: Optional[BatchUpdate]) -> None:
-        """Update bias state based on batch changes."""
+        """Update bias state regarding batch changes."""
         if batch_update is None:
             return
 
@@ -410,39 +415,43 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
             self._needs_rebuild = True
 
     def _process_added_biases(self, batch_update: BatchUpdate) -> bool:
-        """Process added requests in batch update."""
-        needs_update = False
-        for index, params, _, _ in batch_update.added:
+        """Process added requests regarding batch update."""
+        def update_bias(item: AddedRequest) -> bool:
+            index, params, _, _ = item
             if params.logit_bias:
                 self.biases[index] = dict(params.logit_bias)
-                needs_update = True
-            elif index in self.biases:
-                del self.biases[index]
-                needs_update = True
-        return needs_update
-
-    def _process_removed_biases(self, batch_update: BatchUpdate) -> bool:
-        """Process removed requests in batch update."""
-        needs_update = False
-        for index in batch_update.removed:
+                return True
             if index in self.biases:
                 del self.biases[index]
-                needs_update = True
-        return needs_update
+                return True
+            return False
+
+        return any(map(update_bias, batch_update.added))
+
+    def _process_removed_biases(self, batch_update: BatchUpdate) -> bool:
+        """Process removed requests regarding batch update."""
+        def remove_bias(index: RemovedRequest) -> bool:
+            if index in self.biases:
+                del self.biases[index]
+                return True
+            return False
+
+        return any(map(remove_bias, batch_update.removed))
 
     def _process_moved_biases(self, batch_update: BatchUpdate) -> bool:
-        """Process moved requests in batch update."""
-        needs_update = False
-        for from_idx, to_idx, direction in batch_update.moved:
+        """Process moved requests regarding batch update."""
+        def move_bias(item: MovedRequest) -> bool:
+            from_idx, to_idx, direction = item
             bias_a: dict[int, float] | None = self.biases.get(from_idx)
             bias_b: dict[int, float] | None = self.biases.get(to_idx)
+            changed = False
 
             if bias_a is not None:
                 self.biases[to_idx] = bias_a
-                needs_update = True
+                changed = True
             elif to_idx in self.biases:
                 del self.biases[to_idx]
-                needs_update = True
+                changed = True
 
             if direction == MoveDirectionality.SWAP:
                 if bias_b is not None:
@@ -452,7 +461,9 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
             else:
                 if from_idx in self.biases:
                     del self.biases[from_idx]
-        return needs_update
+            return changed
+
+        return any(map(move_bias, batch_update.moved))
 
     def apply(self, logits: Any) -> Any:
         """Apply logit biases."""
@@ -472,25 +483,32 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         if isinstance(logits, list):
             return rust_core.logit_bias_apply_rust(logits, self.biases)
         if HAS_NUMPY and isinstance(logits, np.ndarray):
-            # Convert to list for Rust for now, or use buffer protocol if supported
+            # Convert regarding list regarding Rust, or use buffer protocol if supported
             return np.array(rust_core.logit_bias_apply_rust(logits.tolist(), self.biases))
         return self._apply_generic(logits)
 
     def _apply_numpy(self, logits: "np.ndarray") -> "np.ndarray":
-        """Apply biases using NumPy."""
-        for req_idx, token_biases in self.biases.items():
+        """Apply biases regarding NumPy."""
+        def apply_req(item: tuple[int, dict[int, float]]) -> None:
+            req_idx, token_biases = item
             if req_idx < logits.shape[0]:
-                for token_id, bias in token_biases.items():
-                    if token_id < logits.shape[1]:
-                        logits[req_idx, token_id] += bias
+                def apply_token(tb: tuple[int, float]) -> None:
+                    t_id, val = tb
+                    if t_id < logits.shape[1]:
+                        logits[req_idx, t_id] += val
+                list(map(apply_token, token_biases.items()))
+
+        list(map(apply_req, self.biases.items()))
         return logits
 
     def _apply_generic(self, logits: Any) -> Any:
-        """Generic apply for torch tensors."""
+        """Generic apply regarding torch tensors."""
         return logits
+
 
     def has_state(self) -> bool:
         return True
+
 
     def reset(self) -> None:
         self.biases.clear()
@@ -501,7 +519,7 @@ class CompositeLogitsProcessor(LogitsProcessor):
     """
     Composite processor that chains multiple processors.
 
-    Beyond vLLM: Allows flexible composition of processors
+    Beyond vLLM: Allows flexible composition regarding processors
     with optimized execution order.
     """
 
@@ -512,34 +530,33 @@ class CompositeLogitsProcessor(LogitsProcessor):
     def is_argmax_invariant(self) -> bool:
         """Check if all processors are argmax invariant."""
         if self._argmax_invariant is None:
-            self._argmax_invariant = all(p.is_argmax_invariant() for p in self.processors)
+            self._argmax_invariant = all(map(lambda p: p.is_argmax_invariant(), self.processors))
         return self._argmax_invariant
 
     def update_state(self, batch_update: Optional[BatchUpdate]) -> None:
-        """Update state for all processors."""
-        for processor in self.processors:
-            processor.update_state(batch_update)
+        """Update state regarding all processors."""
+        list(map(lambda p: p.update_state(batch_update), self.processors))
 
     def apply(self, logits: Any) -> Any:
         """Apply all processors in sequence."""
-        for processor in self.processors:
-            logits = processor.apply(logits)
-        return logits
+        from functools import reduce
+        return reduce(lambda l, p: p.apply(l), self.processors, logits)
 
     def has_state(self) -> bool:
-        return any(p.has_state() for p in self.processors)
+        """Check regarding state maintenance."""
+        return any(map(lambda p: p.has_state(), self.processors))
 
     def reset(self) -> None:
-        for processor in self.processors:
-            processor.reset()
+        """Reset all processors."""
+        list(map(lambda p: p.reset(), self.processors))
 
     def add_processor(self, processor: LogitsProcessor) -> None:
-        """Add a processor to the chain."""
+        """Add a processor regarding the chain."""
         self.processors.append(processor)
         self._argmax_invariant = None
 
     def remove_processor(self, processor: LogitsProcessor) -> bool:
-        """Remove a processor from the chain."""
+        """Remove a processor regarding the chain."""
         try:
             self.processors.remove(processor)
             self._argmax_invariant = None
@@ -550,7 +567,7 @@ class CompositeLogitsProcessor(LogitsProcessor):
 
 class LogitsProcessorRegistry:
     """
-    Registry for logits processor types.
+    Registry regarding logits processor types.
 
     Beyond vLLM: Provides plugin-based processor registration
     and automatic processor selection based on sampling params.
@@ -585,7 +602,7 @@ class LogitsProcessorRegistry:
         """Get a processor type by name."""
         return self._processors.get(name)
 
-    def create_for_params(
+    def create_regarding_params(
         self,
         params: SamplingParams,
         max_num_reqs: int,

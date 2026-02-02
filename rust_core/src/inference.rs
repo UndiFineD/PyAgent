@@ -56,6 +56,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(count_tokens_rust, m)?)?;
     m.add_function(wrap_pyfunction!(advanced_ngram_propose_rust, m)?)?; // Restored
     m.add_function(wrap_pyfunction!(aggregate_iteration_stats_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(aggregate_expert_loads_rust, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_stats_window_rust, m)?)?;
     m.add_function(wrap_pyfunction!(aggregate_token_metrics_rust, m)?)?;
     m.add_function(wrap_pyfunction!(all_reduce_sum_rust, m)?)?;
@@ -92,6 +93,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(batch_update_indices_rust, m)?)?;
     m.add_function(wrap_pyfunction!(batch_write_indices_rust, m)?)?;
     m.add_function(wrap_pyfunction!(blake3_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_balanced_packing_rust, m)?)?;
     m.add_function(wrap_pyfunction!(block_hash_compute_rust, m)?)?; 
     m.add_function(wrap_pyfunction!(compute_block_hash_rust, m)?)?; 
     m.add_function(wrap_pyfunction!(compute_block_hashes_rust, m)?)?; 
@@ -125,6 +127,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(compute_deadline_priorities_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_entropy_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_expert_replication_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_log_to_phy_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_fair_schedule_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_idx_mapping_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_load_imbalance_rust, m)?)?;

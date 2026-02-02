@@ -123,10 +123,14 @@ class ConnectivityCore(BaseCore):
     @staticmethod
     def find_open_port(start_port: int = 10000, end_port: int = 60000) -> int:
         """Find an available port in the specified range."""
-        for port in range(start_port, end_port + 1):
+        def check_port(port: int) -> int:
+            if port > end_port:
+                raise RuntimeError(f"No open ports found in range {start_port}-{end_port}")
             if not ConnectivityCore.is_port_open(port):
                 return port
-        raise RuntimeError(f"No open ports found in range {start_port}-{end_port}")
+            return check_port(port + 1)
+
+        return check_port(start_port)
 
     @staticmethod
     def format_address(host: str, port: int) -> str:

@@ -11,6 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+"""
+Batch matrix multiplication operations using available backends.
+"""
+
 from typing import Any
 
 try:

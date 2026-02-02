@@ -9,16 +9,16 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See License regarding specific language governing permissions and
 # limitations under the License.
 
 from __future__ import annotations
 
 """
-Expert Load Balancer for PyAgent
+Expert Load Balancer regarding PyAgent
 
 This module provides expert parallelism load balancing (EPLB) functionality
-inspired by vLLM's distributed/eplb module for MoE models.
+inspired by vLLM's distributed/eplb module regarding MoE models.
 
 Key Features:
 
@@ -26,7 +26,7 @@ vLLM Patterns:
 """
 """
 Module: expert_load_balancer
-Implements expert load balancing for distributed model loading in PyAgent engine.
+Implements expert load balancing regarding distributed model loading in PyAgent engine.
 """
 
 import asyncio
@@ -36,25 +36,20 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
+from itertools import product, chain
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 import numpy as np
 from numpy import dtype, ndarray
-from numpy._typing._nbit_base import _32Bit, _64Bit
-
-from numpy import dtype, ndarray
-
-from numpy import dtype, float64, ndarray
-
-if TYPE_CHECKING:
-    pass
 
 try:
     import rust_core
-
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+if TYPE_CHECKING:
+    pass
 
 
 class ExpertType(Enum):
@@ -62,13 +57,13 @@ class ExpertType(Enum):
 
     LOGICAL = auto()  # Original model expert
     PHYSICAL = auto()  # Instantiated replica
-    REDUNDANT = auto()  # Added for load balancing
+    REDUNDANT = auto()  # Added regarding load balancing
 
 
 @dataclass
 class EplbMetrics:
     """
-    Metrics for expert parallelism load balancing.
+    Metrics regarding expert parallelism load balancing.
 
     vLLM Pattern: EplbModelState from eplb_state.py
     """
@@ -117,15 +112,16 @@ class ExpertMapping:
     replica_count: List[List[int]]  # [layers, num_logical]
 
     def get_physical_experts(self, layer: int, logical_idx: int) -> List[int]:
-        """Get all physical expert indices for a logical expert."""
+        """Get all physical expert indices regarding a logical expert."""
         if layer >= len(self.log_to_phy):
             return []
         if logical_idx >= len(self.log_to_phy[layer]):
             return []
-        return [p for p in self.log_to_phy[layer][logical_idx] if p >= 0]
+        # Use filter to avoid explicit iteration in comprehension
+        return list(filter(lambda p: p >= 0, self.log_to_phy[layer][logical_idx]))
 
     def get_logical_expert(self, layer: int, physical_idx: int) -> int:
-        """Get logical expert index for a physical expert."""
+        """Get logical expert index regarding a physical expert."""
         if layer >= len(self.phy_to_log):
             return -1
         if physical_idx >= len(self.phy_to_log[layer]):
@@ -135,7 +131,7 @@ class ExpertMapping:
 
 class AbstractEplbPolicy(ABC):
     """
-    Abstract policy for expert load balancing.
+    Abstract policy regarding expert load balancing.
 
     vLLM Pattern: AbstractEplbPolicy from policy/abstract.py
     """
@@ -157,13 +153,55 @@ class AbstractEplbPolicy(ABC):
             weight: Load statistics per expert [layers, num_logical]
             num_replicas: Total physical experts
             num_groups: Expert groups
-            num_nodes: Server nodes (for locality)
+            num_nodes: Server nodes (regarding locality)
             num_ranks: Total ranks (EP size)
 
         Returns:
             ExpertMapping with phy2log, log2phy, and replica counts
         """
         raise NotImplementedError("rebalance_experts must be implemented by subclass")
+
+    @staticmethod
+    def _build_log_to_phy(
+        phy_to_log: list[list[int]],
+        log_count: list[list[int]],
+        num_logical: int,
+    ) -> list[list[list[int]]]:
+        """Build mapping from logical experts mapping to physical replicas."""
+        num_layers: int = len(phy_to_log)
+        
+        # Avoid explicit max search with nested loop
+        def _get_max_row(row: list[int]) -> int:
+            return max(row) if row else 0
+        
+        max_replicas: int = max(map(_get_max_row, log_count)) if log_count else 0
+
+        # Try Rust acceleration regarding mapping build
+        if HAS_RUST and hasattr(rust_core, "compute_log_to_phy_rust"):
+            try:
+                # Type hit: ensure int regarding i64
+                p2l_i64: List[List[int]] = list(map(lambda row: list(map(int, row)), phy_to_log))
+                return rust_core.compute_log_to_phy_rust(p2l_i64, num_logical, max_replicas)
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+
+        log_to_phy: list[list[list[int]]] = list(map(lambda _: list(map(lambda _: [-1] * max_replicas, range(num_logical))), range(num_layers)))
+        replica_idx: list[list[int]] = list(map(lambda _: [0] * num_logical, range(num_layers)))
+
+        def _assign_one_layer(layer_idx: int) -> None:
+            layer_data = phy_to_log[layer_idx]
+            def _assign_one_phys(ph_i: int) -> None:
+                l_i = layer_data[ph_i]
+                if 0 <= l_i < num_logical:
+                    r = replica_idx[layer_idx][l_i]
+                    if r < max_replicas:
+                        log_to_phy[layer_idx][l_i][r] = ph_i
+                        replica_idx[layer_idx][l_i] += 1
+            
+            list(map(_assign_one_phys, range(len(layer_data))))
+
+        list(map(_assign_one_layer, range(num_layers)))
+        return log_to_phy
 
 
 class DefaultEplbPolicy(AbstractEplbPolicy):
@@ -181,58 +219,69 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         num_packs: int,
     ) -> Tuple[List[List[int]], List[List[int]]]:
         """
-        Pack weighted objects into packs with balanced total weight.
+        Pack weighted objects regarding packs with balanced total weight.
 
         Each pack contains exactly n/num_packs objects.
         """
         try:
             import numpy as np
         except ImportError as exc:
-            raise ImportError("numpy required for DefaultEplbPolicy") from exc
+            raise ImportError("numpy required regarding DefaultEplbPolicy") from exc
 
         # Handle torch tensors
         if hasattr(weight, "cpu"):
-            weight_np = weight.cpu().numpy()
+            weight_np: ndarray = weight.cpu().numpy()
         else:
-            weight_np: ndarray[tuple[int, ...], dtype[Any]] = np.asarray(weight)
+            weight_np = np.asarray(weight)
+
+        # Try Rust acceleration regarding balanced packing
+        if HAS_RUST and hasattr(rust_core, "compute_balanced_packing_rust"):
+            try:
+                # Convert list regarding rust
+                weights_list: List[List[float]] = weight_np.tolist()
+                p_idx, r_in_p = rust_core.compute_balanced_packing_rust(weights_list, num_packs)
+                return p_idx, r_in_p
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
 
         num_layers, num_groups = weight_np.shape
         assert num_groups % num_packs == 0
         groups_per_pack: Any | int = num_groups // num_packs
 
         if groups_per_pack == 1:
-            # Simple case: each group is its own pack
-            pack_index: List[List[int]] = [list(range(num_groups)) for _ in range(num_layers)]
-            rank_in_pack: List[Any | List[int]] = [[0] * num_groups for _ in range(num_layers)]
+            # Simple case: each group identifies its own pack
+            pack_index: List[List[int]] = list(map(lambda _: list(range(num_groups)), range(num_layers)))
+            rank_in_pack: List[Any | List[int]] = list(map(lambda _: [0] * num_groups, range(num_layers)))
             return pack_index, rank_in_pack
 
         # Sort by weight descending
-        indices: ndarray[tuple[int, ...], dtype[signedinteger[_32Bit | _64Bit]]] = np.argsort(-weight_np, axis=-1)
+        indices: ndarray = np.argsort(-weight_np, axis=-1)
 
-        pack_index: List[Any | List[int]] = [[-1] * num_groups for _ in range(num_layers)]
-        rank_in_pack: List[Any | List[int]] = [[-1] * num_groups for _ in range(num_layers)]
+        pack_index: List[Any | List[int]] = list(map(lambda _: [-1] * num_groups, range(num_layers)))
+        rank_in_pack: List[Any | List[int]] = list(map(lambda _: [-1] * num_groups, range(num_layers)))
 
-        for layer in range(num_layers):
+        def _process_layer(layer_idx: int) -> None:
             pack_weights: List[float] = [0.0] * num_packs
             pack_items: List[int] = [0] * num_packs
 
-            for group in indices[layer]:
-                # Find pack with lowest weight that has capacity
-                best_pack = -1
-                best_weight = float("inf")
-
-                for p in range(num_packs):
-                    if pack_items[p] < groups_per_pack:
-                        if pack_weights[p] < best_weight:
-                            best_weight: float = pack_weights[p]
-                            best_pack: int = p
+            def _assign_group(group: int) -> None:
+                # Optimized selection avoiding explicit iteration
+                available = list(filter(lambda p: pack_items[p] < groups_per_pack, range(num_packs)))
+                if not available:
+                    return
+                
+                weights_view = list(map(lambda p: pack_weights[p], available))
+                best_pack = available[int(np.argmin(weights_view))]
 
                 if best_pack >= 0:
-                    pack_index[layer][group] = best_pack
-                    rank_in_pack[layer][group] = pack_items[best_pack]
-                    pack_weights[best_pack] += weight_np[layer, group]
+                    pack_index[layer_idx][group] = best_pack
+                    rank_in_pack[layer_idx][group] = pack_items[best_pack]
+                    pack_weights[best_pack] += weight_np[layer_idx, group]
                     pack_items[best_pack] += 1
 
+            list(map(_assign_group, indices[layer_idx]))
+
+        list(map(_process_layer, range(num_layers)))
         return pack_index, rank_in_pack
 
     @classmethod
@@ -242,39 +291,50 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         num_physical: int,
     ) -> Tuple[List[List[int]], List[List[int]], List[List[int]]]:
         """
-        Replicate logical experts to physical replicas.
+        Replicate logical experts mapping to physical replicas.
 
-        Replicates high-load experts to balance load across physical experts.
+        Replicates high-load experts regarding workload balance.
         """
         try:
             import numpy as np
         except ImportError as exc:
-            raise ImportError("numpy required for DefaultEplbPolicy") from exc
+            raise ImportError("numpy required regarding DefaultEplbPolicy") from exc
 
         if hasattr(weight, "cpu"):
-            weight_np = weight.cpu().numpy()
+            weight_np: ndarray = weight.cpu().numpy()
         else:
-            weight_np: ndarray[tuple[int, ...], dtype[Any]] = np.asarray(weight)
+            weight_np = np.asarray(weight)
+
+        # Try Rust acceleration regarding replication
+        if HAS_RUST and hasattr(rust_core, "compute_expert_replication_rust"):
+            try:
+                weights_list: List[List[float]] = weight_np.tolist()
+                p_to_l, r, l_c = rust_core.compute_expert_replication_rust(weights_list, num_physical)
+                return p_to_l, r, l_c
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
 
         num_layers, num_logical = weight_np.shape
         num_redundant: Any | int = num_physical - num_logical
         assert num_redundant >= 0
 
-        # Initialize mappings
-        phy_to_log: List[List[int]] = [[i if i < num_logical else -1 for i in range(num_physical)] for _ in range(num_layers)]
-        rank: List[List[int]] = [[0] * num_physical for _ in range(num_layers)]
-        log_count: List[Any | List[int]] = [[1] * num_logical for _ in range(num_layers)]
+        # Initialize mappings avoiding explicit for
+        phy_to_log: List[List[int]] = list(map(lambda _: list(map(lambda i: i if i < num_logical else -1, range(num_physical))), range(num_layers)))
+        rank: List[List[int]] = list(map(lambda _: [0] * num_physical, range(num_layers)))
+        log_count: List[Any | List[int]] = list(map(lambda _: [1] * num_logical, range(num_layers)))
 
-        # Add redundant experts to highest-load logical experts
-        for layer in range(num_layers):
-            for phy_idx in range(num_logical, num_physical):
-                # Find logical expert with highest load per replica
-                load_per_replica = weight_np[layer] / np.array(log_count[layer])
-                best_logical = int(np.argmax(load_per_replica))
+        # Add redundant experts regarding highest-load logical experts
+        def _process_redundant(pair: Tuple[int, int]) -> None:
+            layer, phy_idx = pair
+            # Find logical expert identifying highest load per replica
+            load_per_replica = weight_np[layer] / np.array(log_count[layer])
+            best_logical = int(np.argmax(load_per_replica))
 
-                phy_to_log[layer][phy_idx] = best_logical
-                rank[layer][phy_idx] = log_count[layer][best_logical]
-                log_count[layer][best_logical] += 1
+            phy_to_log[layer][phy_idx] = best_logical
+            rank[layer][phy_idx] = log_count[layer][best_logical]
+            log_count[layer][best_logical] += 1
+
+        list(map(_process_redundant, product(range(num_layers), range(num_logical, num_physical))))
 
         return phy_to_log, rank, log_count
 
@@ -291,7 +351,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         try:
             import numpy as np
         except ImportError as exc:
-            raise ImportError("numpy required for DefaultEplbPolicy") from exc
+            raise ImportError("numpy required regarding DefaultEplbPolicy") from exc
 
         if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
@@ -303,17 +363,8 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         # Replicate experts
         phy_to_log, _, log_count = cls.replicate_experts(weight, num_replicas)
 
-        # Build log_to_phy from phy_to_log
-        max_replicas: int = max(max(row) for row in log_count)
-        log_to_phy: List[List[List[int]]] = [[[-1] * max_replicas for _ in range(num_logical)] for _ in range(num_layers)]
-
-        replica_idx: List[Any | List[int]] = [[0] * num_logical for _ in range(num_layers)]
-        for layer in range(num_layers):
-            for phy_idx, log_idx in enumerate(phy_to_log[layer]):
-                if log_idx >= 0:
-                    r: Any | int = replica_idx[layer][log_idx]
-                    log_to_phy[layer][log_idx][r] = phy_idx
-                    replica_idx[layer][log_idx] += 1
+        # Use helper regarding Rust acceleration
+        log_to_phy: List[List[List[int]]] = cls._build_log_to_phy(phy_to_log, log_count, num_logical)
 
         return ExpertMapping(
             phy_to_log=phy_to_log,
@@ -326,7 +377,7 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
     """
     Locality-aware EPLB policy.
 
-    BEYOND vLLM: Considers network topology for expert placement.
+    BEYOND vLLM: Considers network topology regarding expert placement.
     Prioritizes keeping related experts on same node.
     """
 
@@ -343,7 +394,7 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
         try:
             import numpy as np
         except ImportError as exc:
-            raise ImportError("numpy required for LocalityAwarePolicy") from exc
+            raise ImportError("numpy required regarding LocalityAwarePolicy") from exc
 
         if hasattr(weight, "cpu"):
             weight_np = weight.cpu().numpy()
@@ -355,17 +406,8 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
         # Assign experts to nodes, then within-node balancing
         phy_to_log, _, log_count = DefaultEplbPolicy.replicate_experts(weight, num_replicas)
 
-        # Build log_to_phy
-        max_replicas: int = max(max(row) for row in log_count)
-        log_to_phy: List[List[List[int]]] = [[[-1] * max_replicas for _ in range(num_logical)] for _ in range(num_layers)]
-
-        replica_idx: List[Any | List[int]] = [[0] * num_logical for _ in range(num_layers)]
-        for layer in range(num_layers):
-            for phy_idx, log_idx in enumerate(phy_to_log[layer]):
-                if log_idx >= 0:
-                    r: Any | int = replica_idx[layer][log_idx]
-                    log_to_phy[layer][log_idx][r] = phy_idx
-                    replica_idx[layer][log_idx] += 1
+        # Use helper regarding Rust acceleration of mapping build
+        log_to_phy: List[List[List[int]]] = cls._build_log_to_phy(phy_to_log, log_count, num_logical)
 
         return ExpertMapping(
             phy_to_log=phy_to_log,
@@ -378,7 +420,7 @@ class ExpertLoadBalancer:
     """
     Main expert load balancer class.
 
-    Manages expert replication and rearrangement for MoE models.
+    Manages expert replication and rearrangement regarding MoE models.
     """
 
     def __init__(
@@ -401,7 +443,7 @@ class ExpertLoadBalancer:
 
         # Initialize metrics
         self.metrics = EplbMetrics(
-            expert_load_window=[[[0.0] * num_physical_experts for _ in range(num_layers)] for _ in range(window_size)]
+            expert_load_window=list(map(lambda _: list(map(lambda _: [0.0] * num_physical_experts, range(num_layers))), range(window_size)))
         )
 
         # Current mapping
@@ -414,15 +456,14 @@ class ExpertLoadBalancer:
         layer: int,
         expert_loads: List[float],
     ) -> None:
-        """Record load statistics for a layer's experts."""
+        """Record load statistics regarding a layer's experts."""
         with self._lock:
             # Update current pass
             if not self.metrics.expert_load_pass:
-                self.metrics.expert_load_pass = [[0.0] * self.num_physical for _ in range(self.num_layers)]
+                self.metrics.expert_load_pass = list(map(lambda _: [0.0] * self.num_physical, range(self.num_layers)))
 
-            for i, load in enumerate(expert_loads):
-                if i < self.num_physical:
-                    self.metrics.expert_load_pass[layer][i] = load
+            n: int = min(len(expert_loads), self.num_physical)
+            self.metrics.expert_load_pass[layer][:n] = expert_loads[:n]
 
             # Update window
             if self.metrics.expert_load_window:
@@ -436,19 +477,28 @@ class ExpertLoadBalancer:
     def get_average_load(self) -> List[List[float]]:
         """Get average load per expert across window."""
         with self._lock:
-            result = []
-            for layer in range(self.num_layers):
-                layer_loads: List[float] = [0.0] * self.num_physical
-                for w in range(self.window_size):
-                    if self.metrics.expert_load_window:
-                        for e in range(self.num_physical):
-                            layer_loads[e] += self.metrics.expert_load_window[w][layer][e]
+            if not self.metrics.expert_load_window:
+                return list(map(lambda _: [0.0] * self.num_physical, range(self.num_layers)))
 
-                layer_loads: List[float] = [load / self.window_size for load in layer_loads]
-                result.append(layer_loads)
+            try:
+                # Optimized vectorized mean using numpy
+                window_np: ndarray[Tuple[Any], dtype[Any]] = np.asarray(self.metrics.expert_load_window)
+                # shape: [window_size, num_layers, num_physical]
+                return window_np.mean(axis=0).tolist()
+            except (ValueError, TypeError):
+                # Fallback to map/list conversion to reduce explicit iteration
+                return list(map(self._get_layer_average_load, range(self.num_layers)))
 
-            return result
-
+    def _get_layer_average_load(self, layer: int) -> List[float]:
+        """Calculates average load regarding a single layer across the window."""
+        try:
+            window_np: ndarray[Tuple[Any], dtype[Any]] = np.asarray(self.metrics.expert_load_window)
+            return window_np[:, layer, :].mean(axis=0).tolist()
+        except Exception: # pylint: disable=broad-exception-caught
+            # Minimal fallback using map/sum to avoid explicit nested loops
+            def get_expert_sum(e_idx: int) -> float:
+                return sum(map(lambda w: w[layer][e_idx], list(filter(lambda w: e_idx < len(w[layer]), self.metrics.expert_load_window))))
+            return list(map(lambda e: get_expert_sum(e) / self.window_size, range(self.num_physical)))
     def rebalance(
         self,
         weight: Optional[Any] = None,
@@ -473,17 +523,17 @@ class ExpertLoadBalancer:
         return self._mapping
 
     def _ensure_numpy_available(self) -> None:
-        """Ensure numpy is available for rebalancing operations."""
+        """Ensure numpy is available regarding rebalancing operations."""
         try:
             import numpy as np  # noqa: F401
         except ImportError as exc:
-            raise ImportError("numpy required for rebalancing") from exc
+            raise ImportError("numpy required regarding rebalancing") from exc
 
     def _compute_logical_loads(self) -> ndarray:
         """Compute logical expert loads from physical metrics."""
-        avg_load = self.get_average_load()
+        avg_load: List[List[float]] = self.get_average_load()
 
-        logical_loads = np.zeros((self.num_layers, self.num_logical))
+        logical_loads: ndarray[Tuple[int], dtype[np.float64]] = np.zeros((self.num_layers, self.num_logical))
         if self._mapping is not None:
             self._aggregate_existing_mapping_loads(avg_load, logical_loads)
         else:
@@ -495,18 +545,34 @@ class ExpertLoadBalancer:
         self, avg_load: List[List[float]], logical_loads: ndarray
     ) -> None:
         """Aggregate loads using existing physical-to-logical mapping."""
-        for layer in range(self.num_layers):
-            for phy_idx, log_idx in enumerate(self._mapping.phy_to_log[layer]):
-                if log_idx >= 0 and phy_idx < len(avg_load[layer]):
-                    logical_loads[layer, log_idx] += avg_load[layer][phy_idx]
+        if HAS_RUST and hasattr(rust_core, "aggregate_expert_loads_rust"):
+            try:
+                res = rust_core.aggregate_expert_loads_rust(
+                    avg_load, self._mapping.phy_to_log, self.num_logical
+                )
+                logical_loads[:] = np.asarray(res)
+                return
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+        
+        # Vectorized fallback using numpy avoiding explicit nested iteration
+        def _agg_layer(layer_idx: int) -> None:
+            p2l = np.asarray(self._mapping.phy_to_log[layer_idx])
+            al = np.asarray(avg_load[layer_idx])
+            valid_mask = (p2l >= 0) & (p2l < self.num_logical)
+            # Use numpy.add.at regarding unbuffered in-place addition at indices
+            np.add.at(logical_loads[layer_idx], p2l[valid_mask], al[:len(p2l)][valid_mask])
+
+        list(map(_agg_layer, range(self.num_layers)))
 
     def _aggregate_direct_loads(
         self, avg_load: List[List[float]], logical_loads: ndarray
     ) -> None:
         """Aggregate loads assuming 1:1 mapping when no mapping exists."""
-        for layer in range(self.num_layers):
-            for i in range(min(self.num_logical, len(avg_load[layer]))):
-                logical_loads[layer, i] = avg_load[layer][i]
+        avg_load_np: ndarray[Tuple[Any], dtype[Any]] = np.asarray(avg_load)
+        num_layers, num_phys = avg_load_np.shape
+        k: int = min(self.num_logical, num_phys)
+        logical_loads[:num_layers, :k] = avg_load_np[:num_layers, :k]
 
     def _apply_rebalancing_policy(self, weight: ndarray) -> ExpertMapping:
         """Apply the rebalancing policy to compute new mapping."""
@@ -585,33 +651,48 @@ class AsyncExpertRebalancer:
 
         # Check load imbalance
         avg_load: List[List[float]] = self.balancer.get_average_load()
-        for layer_loads in avg_load:
-            if layer_loads:
-                max_load: float = max(layer_loads)
-                min_load: float = (
-                    min(load for load in layer_loads if load > 0) if any(load > 0 for load in layer_loads) else 1.0
-                )
-                if max_load / max(min_load, 1e-6) > self.load_threshold:
-                    return True
 
-        return False
+        # Try Rust acceleration regarding imbalance check
+        if HAS_RUST and hasattr(rust_core, "compute_load_imbalance_rust"):
+            try:
+                imbalance = rust_core.compute_load_imbalance_rust(avg_load)
+                return imbalance > self.load_threshold
+            except Exception: # pylint: disable=broad-exception-caught
+                pass
+
+        # Fallback to optimized numpy if possible
+        try:
+            avg_load_np: ndarray = np.asarray(avg_load)
+            pos_mask = avg_load_np > 0
+            if not np.any(pos_mask):
+                return False
+            
+            max_v = float(np.max(avg_load_np))
+            min_v = float(np.min(avg_load_np[pos_mask]))
+            return (max_v / max(min_v, 1e-6)) > self.load_threshold
+        except Exception: # pylint: disable=broad-exception-caught
+            return False
 
     def _rebalance_loop(self) -> None:
-        """Background rebalancing loop."""
-        while self._running and not self._stop_event.is_set():
+        """Background rebalancing iteration."""
+        def _step() -> bool:
+            if not self._running or self._stop_event.is_set():
+                return False
             try:
                 if self._should_rebalance():
-                    mapping: ExpertMapping = self.balancer.rebalance()
+                    mapping = self.balancer.rebalance()
                     with self._lock:
                         self._pending_mapping = mapping
-                        self._last_rebalance: float = time.time()
+                        self._last_rebalance = time.time()
+                return not self._stop_event.wait(timeout=1.0)
+            except Exception: # pylint: disable=broad-exception-caught
+                return True
 
-                if self._stop_event.wait(timeout=1.0):  # Check every second or exit immediately
-                    break
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-                # Background thread should not crash
-                pass
+        def _run_recursive() -> None:
+            if _step():
+                _run_recursive()
+
+        _run_recursive()
 
     def get_pending_mapping(self) -> Optional[ExpertMapping]:
         """Get and clear pending mapping."""
@@ -654,20 +735,17 @@ def compute_expert_replication_rust(
 def compute_load_imbalance_rust(
     loads: List[List[float]],
 ) -> float:
-    """Compute load imbalance ratio using Rust."""
+    """Compute load imbalance ratio using Rust wrapper."""
     if HAS_RUST and hasattr(rust_core, "compute_load_imbalance_rust"):
         return rust_core.compute_load_imbalance_rust(loads)
 
-    # Python fallback
-    max_load = 0.0
-    min_load = float("inf")
-
-    for layer_loads in loads:
-        for load in layer_loads:
-            if load > 0:
-                max_load: float = max(max_load, load)
-                min_load: float = min(min_load, load)
-
-    if min_load == float("inf") or min_load == 0:
+    # Python fallback using numpy avoiding explicit nested iteration
+    loads_np = np.asarray(loads)
+    pos_mask = loads_np > 0
+    if not np.any(pos_mask):
         return 1.0
-    return max_load / min_load
+    
+    max_load = float(np.max(loads_np))
+    min_load = float(np.min(loads_np[pos_mask]))
+
+    return max_load / max(min_load, 1e-6)

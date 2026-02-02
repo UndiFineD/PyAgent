@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See License regarding permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Management logic for KV offloading eviction policies and tiers.
+Management logic regarding KV offloading eviction policies and tiers.
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ from __future__ import annotations
 import logging
 from collections import OrderedDict
 from typing import Any, Dict, Iterable, List, Optional
+from itertools import takewhile, chain, islice
 
 try:
     from ...core import rust_core
@@ -57,39 +58,41 @@ class LRUOffloadingManager(OffloadingManager):
 
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
         """Count consecutive cached blocks from start."""
-        hit_count = 0
-        for block_hash in block_hashes:
-            block = self.blocks.get(block_hash)
-            if block is None or not block.is_ready:
-                break
-            hit_count += 1
-        return hit_count
+        def _is_hit(h: BlockHash) -> bool:
+            block = self.blocks.get(h)
+            return block is not None and block.is_ready
+
+        return len(list(takewhile(_is_hit, block_hashes)))
 
     def prepare_load(self, block_hashes: Iterable[BlockHash]) -> LoadStoreSpec:
-        """Prepare blocks for loading with refcount pinning."""
-        blocks = []
+        """Prepare blocks regarding loading with refcount pinning."""
         hashes = list(block_hashes)
 
-        for block_hash in hashes:
-            block = self.blocks[block_hash]
-            assert block.is_ready, f"Block {block_hash} not ready"
+        def _pin(h: BlockHash) -> BlockStatus:
+            block = self.blocks[h]
+            assert block.is_ready, f"Block {h} not ready"
             block.ref_cnt += 1
-            blocks.append(block)
+            return block
 
+        blocks = list(map(_pin, hashes))
         return self.backend.get_load_store_spec(hashes, blocks)
 
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
-        """Move blocks to end of LRU order."""
-        for block_hash in reversed(list(block_hashes)):
-            if block_hash in self.blocks:
-                self.blocks.move_to_end(block_hash)
+        """Move blocks to end regarding LRU order."""
+        def _touch_one(h: BlockHash) -> None:
+            if h in self.blocks:
+                self.blocks.move_to_end(h)
+
+        list(map(_touch_one, reversed(list(block_hashes))))
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
         """Decrement refcount after load."""
-        for block_hash in block_hashes:
-            block = self.blocks[block_hash]
+        def _unpin(h: BlockHash) -> None:
+            block = self.blocks[h]
             assert block.ref_cnt > 0
             block.ref_cnt -= 1
+
+        list(map(_unpin, block_hashes))
 
     def prepare_store(
         self,
@@ -97,26 +100,25 @@ class LRUOffloadingManager(OffloadingManager):
     ) -> Optional[PrepareStoreOutput]:
         """Prepare to store blocks, evicting as needed."""
         # Filter already stored
-        block_hashes_to_store = [h for h in block_hashes if h not in self.blocks]
-
+        block_hashes_to_store = list(filter(lambda h: h not in self.blocks, block_hashes))
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
-        # Find blocks to evict
+        # Find blocks to evict identifying side-effects
         to_evict: List[BlockHash] = []
         if num_to_evict > 0:
-            for block_hash, block in self.blocks.items():
-                if block.ref_cnt == 0:
-                    to_evict.append(block_hash)
-                    num_to_evict -= 1
-                    if num_to_evict == 0:
-                        break
-            else:
-                # Not enough evictable blocks
+            evictable_keys = list(islice(
+                filter(lambda k: self.blocks[k].ref_cnt == 0, self.blocks),
+                num_to_evict
+            ))
+            if len(evictable_keys) < num_to_evict:
                 return None
+            to_evict.extend(evictable_keys)
 
         # Evict blocks
-        for block_hash in to_evict:
-            self.backend.free(self.blocks.pop(block_hash))
+        def _evict_one(h: BlockHash) -> None:
+            self.backend.free(self.blocks.pop(h))
+
+        list(map(_evict_one, to_evict))
 
         if to_evict and self.events is not None:
             self.events.append(
@@ -131,8 +133,11 @@ class LRUOffloadingManager(OffloadingManager):
         # Allocate new blocks
         blocks = self.backend.allocate_blocks(block_hashes_to_store)
 
-        for block_hash, block in zip(block_hashes_to_store, blocks):
-            self.blocks[block_hash] = block
+        def _store_one(pair: tuple[BlockHash, BlockStatus]) -> None:
+            h, b = pair
+            self.blocks[h] = b
+
+        list(map(_store_one, zip(block_hashes_to_store, blocks)))
 
         return PrepareStoreOutput(
             block_hashes_to_store=block_hashes_to_store,
@@ -148,20 +153,21 @@ class LRUOffloadingManager(OffloadingManager):
         """Complete store operation."""
         stored: List[BlockHash] = []
 
-        for block_hash in block_hashes:
-            block = self.blocks.get(block_hash)
+        def _complete_one(h: BlockHash) -> None:
+            block = self.blocks.get(h)
             if block is None:
-                continue
-
+                return
             if success:
                 if not block.is_ready:
                     block.ref_cnt = 0
                     block.is_ready = True
-                    stored.append(block_hash)
+                    stored.append(h)
             else:
                 if not block.is_ready:
                     self.backend.free(block)
-                    del self.blocks[block_hash]
+                    self.blocks.pop(h, None)
+
+        list(map(_complete_one, block_hashes))
 
         if stored and self.events is not None:
             self.events.append(
@@ -185,7 +191,7 @@ class ARCOffloadingManager(OffloadingManager):
     ARC (Adaptive Replacement Cache) offloading manager.
 
     vLLM Pattern: ARCOffloadingManager from arc_manager.py
-    Dynamically balances recency vs frequency for eviction decisions.
+    Dynamically balances recency vs frequency regarding eviction decisions.
     """
 
     def __init__(
@@ -209,110 +215,91 @@ class ARCOffloadingManager(OffloadingManager):
 
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
         """Count consecutive hits in T1 or T2."""
-        hit_count = 0
-        for block_hash in block_hashes:
-            block = self.t1.get(block_hash) or self.t2.get(block_hash)
-            if block is None or not block.is_ready:
-                break
-            hit_count += 1
-        return hit_count
+        def _is_hit(h: BlockHash) -> bool:
+            block = self.t1.get(h) or self.t2.get(h)
+            return block is not None and block.is_ready
+
+        return len(list(takewhile(_is_hit, block_hashes)))
 
     def prepare_load(self, block_hashes: Iterable[BlockHash]) -> LoadStoreSpec:
-        """Prepare blocks for loading."""
-        blocks = []
+        """Prepare blocks regarding loading."""
         hashes = list(block_hashes)
 
-        for block_hash in hashes:
-            block = self.t1.get(block_hash) or self.t2.get(block_hash)
-            assert block is not None, f"Block {block_hash} not found"
-            assert block.is_ready, f"Block {block_hash} not ready"
+        def _pin(h: BlockHash) -> BlockStatus:
+            block = self.t1.get(h) or self.t2.get(h)
+            assert block is not None, f"Block {h} not found"
+            assert block.is_ready, f"Block {h} not ready"
             block.ref_cnt += 1
-            blocks.append(block)
+            return block
 
+        blocks = list(map(_pin, hashes))
         return self.backend.get_load_store_spec(hashes, blocks)
 
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
         """Update LRU state with ARC adaptation."""
-        for block_hash in reversed(list(block_hashes)):
-            if block_hash in self.t1:
-                block = self.t1.pop(block_hash)
+        def _touch_one(h: BlockHash) -> None:
+            if h in self.t1:
+                block = self.t1.pop(h)
                 if block.is_ready:
-                    self.t2[block_hash] = block
+                    self.t2[h] = block
                 else:
-                    # Just stored, don't promote yet
-                    self.t1[block_hash] = block
-
-            elif block_hash in self.t2:
-                self.t2.move_to_end(block_hash)
-
-            elif block_hash in self.b1:
-                # Hit in ghost list → increase recency preference
-                delta = compute_arc_target_rust(
-                    len(self.t1),
-                    len(self.t2),
-                    len(self.b1),
-                    len(self.b2),
-                    self.target_t1_size,
-                    True,
-                    self.cache_capacity,
+                    self.t1[h] = block
+            elif h in self.t2:
+                self.t2.move_to_end(h)
+            elif h in self.b1:
+                self.target_t1_size = compute_arc_target_rust(
+                    len(self.t1), len(self.t2), len(self.b1), len(self.b2),
+                    self.target_t1_size, True, self.cache_capacity,
                 )
-                self.target_t1_size = delta
-                self.b1.move_to_end(block_hash)
-
-            elif block_hash in self.b2:
-                # Hit in ghost list → increase frequency preference
-                delta = compute_arc_target_rust(
-                    len(self.t1),
-                    len(self.t2),
-                    len(self.b1),
-                    len(self.b2),
-                    self.target_t1_size,
-                    False,
-                    self.cache_capacity,
+                self.b1.move_to_end(h)
+            elif h in self.b2:
+                self.target_t1_size = compute_arc_target_rust(
+                    len(self.t1), len(self.t2), len(self.b1), len(self.b2),
+                    self.target_t1_size, False, self.cache_capacity,
                 )
-                self.target_t1_size = delta
-                self.b2.move_to_end(block_hash)
+                self.b2.move_to_end(h)
+
+        list(map(_touch_one, reversed(list(block_hashes))))
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
         """Decrement refcount after load."""
-        for block_hash in block_hashes:
-            block = self.t1.get(block_hash) or self.t2.get(block_hash)
+        def _unpin(h: BlockHash) -> None:
+            block = self.t1.get(h) or self.t2.get(h)
             if block is not None:
                 assert block.ref_cnt > 0
                 block.ref_cnt -= 1
+
+        list(map(_unpin, block_hashes))
 
     def _evict_one(self) -> Optional[BlockHash]:
         """Evict one block following ARC policy."""
         # Try T1 first if above target
         if len(self.t1) > self.target_t1_size:
-            for block_hash, block in self.t1.items():
-                if block.ref_cnt == 0:
-                    self.backend.free(block)
-                    del self.t1[block_hash]
-                    self.b1[block_hash] = None
-                    if len(self.b1) > self.cache_capacity:
-                        self.b1.popitem(last=False)
-                    return block_hash
-
-        # Try T2
-        for block_hash, block in self.t2.items():
-            if block.ref_cnt == 0:
-                self.backend.free(block)
-                del self.t2[block_hash]
-                self.b2[block_hash] = None
-                if len(self.b2) > self.cache_capacity:
-                    self.b2.popitem(last=False)
-                return block_hash
-
-        # Fallback to T1
-        for block_hash, block in self.t1.items():
-            if block.ref_cnt == 0:
-                self.backend.free(block)
-                del self.t1[block_hash]
-                self.b1[block_hash] = None
+            victim = next(filter(lambda k: self.t1[k].ref_cnt == 0, self.t1), None)
+            if victim:
+                self.backend.free(self.t1.pop(victim))
+                self.b1[victim] = None
                 if len(self.b1) > self.cache_capacity:
                     self.b1.popitem(last=False)
-                return block_hash
+                return victim
+
+        # Try T2
+        victim = next(filter(lambda k: self.t2[k].ref_cnt == 0, self.t2), None)
+        if victim:
+            self.backend.free(self.t2.pop(victim))
+            self.b2[victim] = None
+            if len(self.b2) > self.cache_capacity:
+                self.b2.popitem(last=False)
+            return victim
+
+        # Fallback to T1
+        victim = next(filter(lambda k: self.t1[k].ref_cnt == 0, self.t1), None)
+        if victim:
+            self.backend.free(self.t1.pop(victim))
+            self.b1[victim] = None
+            if len(self.b1) > self.cache_capacity:
+                self.b1.popitem(last=False)
+            return victim
 
         return None
 
@@ -321,17 +308,23 @@ class ARCOffloadingManager(OffloadingManager):
         block_hashes: Iterable[BlockHash],
     ) -> Optional[PrepareStoreOutput]:
         """Prepare to store with ARC eviction."""
-        block_hashes_to_store = [h for h in block_hashes if h not in self.t1 and h not in self.t2]
-
+        hashes_list = list(block_hashes)
+        block_hashes_to_store = list(filter(lambda h: h not in self.t1 and h not in self.t2, hashes_list))
         num_to_evict = len(block_hashes_to_store) - self.backend.get_num_free_blocks()
 
         evicted: List[BlockHash] = []
-        while num_to_evict > 0:
-            victim = self._evict_one()
-            if victim is None:
-                return None
-            evicted.append(victim)
-            num_to_evict -= 1
+
+        def _evict_recursive(count: int) -> bool:
+            if count <= 0:
+                return True
+            v = self._evict_one()
+            if v is None:
+                return False
+            evicted.append(v)
+            return _evict_recursive(count - 1)
+
+        if not _evict_recursive(num_to_evict):
+            return None
 
         if evicted and self.events is not None:
             self.events.append(
@@ -343,13 +336,15 @@ class ARCOffloadingManager(OffloadingManager):
                 )
             )
 
-        for block_hash in block_hashes_to_store:
-            self.b1.pop(block_hash, None)
-            self.b2.pop(block_hash, None)
+        list(map(lambda h: (self.b1.pop(h, None), self.b2.pop(h, None)), block_hashes_to_store))
 
         blocks = self.backend.allocate_blocks(block_hashes_to_store)
-        for block_hash, block in zip(block_hashes_to_store, blocks):
-            self.t1[block_hash] = block
+
+        def _store_one(pair: tuple[BlockHash, BlockStatus]) -> None:
+            h, b = pair
+            self.t1[h] = b
+
+        list(map(_store_one, zip(block_hashes_to_store, blocks)))
 
         return PrepareStoreOutput(
             block_hashes_to_store=block_hashes_to_store,
@@ -364,23 +359,23 @@ class ARCOffloadingManager(OffloadingManager):
     ) -> None:
         """Complete store operation."""
         stored: List[BlockHash] = []
-        for block_hash in block_hashes:
-            block = self.t1.get(block_hash) or self.t2.get(block_hash)
-            if block is None:
-                continue
 
+        def _complete_one(h: BlockHash) -> None:
+            block = self.t1.get(h) or self.t2.get(h)
+            if block is None:
+                return
             if success:
                 if not block.is_ready:
                     block.ref_cnt = 0
                     block.is_ready = True
-                    stored.append(block_hash)
+                    stored.append(h)
             else:
                 if not block.is_ready:
                     self.backend.free(block)
-                    if block_hash in self.t1:
-                        del self.t1[block_hash]
-                    elif block_hash in self.t2:
-                        del self.t2[block_hash]
+                    self.t1.pop(h, None)
+                    self.t2.pop(h, None)
+
+        list(map(_complete_one, block_hashes))
 
         if stored and self.events is not None:
             self.events.append(
@@ -422,7 +417,7 @@ class TieredOffloadManager(OffloadingManager):
         enable_events: bool = False,
     ) -> None:
         self.backends = backends
-        self.managers = [LRUOffloadingManager(backend, enable_events) for backend in backends]
+        self.managers = list(map(lambda b: LRUOffloadingManager(b, enable_events), backends))
         self.events: Optional[List[OffloadingEvent]] = [] if enable_events else None
         self._tier_map: Dict[BlockHash, int] = {}
 
@@ -430,24 +425,24 @@ class TieredOffloadManager(OffloadingManager):
         return self._tier_map.get(block_hash)
 
     def lookup(self, block_hashes: Iterable[BlockHash]) -> int:
-        hit_count = 0
-        for block_hash in block_hashes:
-            tier = self._get_tier(block_hash)
+        def _is_tier_hit(h: BlockHash) -> bool:
+            tier = self._get_tier(h)
             if tier is None:
-                break
-            block = self.managers[tier].blocks.get(block_hash)
-            if block is None or not block.is_ready:
-                break
-            hit_count += 1
-        return hit_count
+                return False
+            block = self.managers[tier].blocks.get(h)
+            return block is not None and block.is_ready
+
+        return len(list(takewhile(_is_tier_hit, block_hashes)))
 
     def prepare_load(self, block_hashes: Iterable[BlockHash]) -> LoadStoreSpec:
         tier_groups: Dict[int, List[BlockHash]] = {}
-        hashes = list(block_hashes)
-        for block_hash in hashes:
-            tier = self._get_tier(block_hash)
-            if tier is not None:
-                tier_groups.setdefault(tier, []).append(block_hash)
+
+        def _group_tier(h: BlockHash) -> None:
+            t = self._get_tier(h)
+            if t is not None:
+                tier_groups.setdefault(t, []).append(h)
+
+        list(map(_group_tier, block_hashes))
 
         if tier_groups:
             tier = min(tier_groups.keys())
@@ -456,34 +451,42 @@ class TieredOffloadManager(OffloadingManager):
 
     def touch(self, block_hashes: Iterable[BlockHash]) -> None:
         tier_groups: Dict[int, List[BlockHash]] = {}
-        for block_hash in block_hashes:
-            tier = self._get_tier(block_hash)
-            if tier is not None:
-                tier_groups.setdefault(tier, []).append(block_hash)
-        for tier, hashes in tier_groups.items():
-            self.managers[tier].touch(hashes)
+
+        def _group_tier(h: BlockHash) -> None:
+            t = self._get_tier(h)
+            if t is not None:
+                tier_groups.setdefault(t, []).append(h)
+
+        list(map(_group_tier, block_hashes))
+        list(map(lambda item: self.managers[item[0]].touch(item[1]), tier_groups.items()))
 
     def complete_load(self, block_hashes: Iterable[BlockHash]) -> None:
         tier_groups: Dict[int, List[BlockHash]] = {}
-        for block_hash in block_hashes:
-            tier = self._get_tier(block_hash)
-            if tier is not None:
-                tier_groups.setdefault(tier, []).append(block_hash)
-        for tier, hashes in tier_groups.items():
-            self.managers[tier].complete_load(hashes)
+
+        def _group_tier(h: BlockHash) -> None:
+            t = self._get_tier(h)
+            if t is not None:
+                tier_groups.setdefault(t, []).append(h)
+
+        list(map(_group_tier, block_hashes))
+        list(map(lambda item: self.managers[item[0]].complete_load(item[1]), tier_groups.items()))
 
     def prepare_store(
         self,
         block_hashes: Iterable[BlockHash],
     ) -> Optional[PrepareStoreOutput]:
-        hashes = [h for h in block_hashes if h not in self._tier_map]
-        for tier, manager in enumerate(self.managers):
-            result = manager.prepare_store(hashes)
-            if result is not None:
-                for block_hash in result.block_hashes_to_store:
-                    self._tier_map[block_hash] = tier
-                return result
-        return None
+        hashes = list(filter(lambda h: h not in self._tier_map, block_hashes))
+
+        def _try_manager(manager_idx: int) -> Optional[PrepareStoreOutput]:
+            if manager_idx >= len(self.managers):
+                return None
+            res = self.managers[manager_idx].prepare_store(hashes)
+            if res is not None:
+                list(map(lambda h: self._tier_map.update({h: manager_idx}), res.block_hashes_to_store))
+                return res
+            return _try_manager(manager_idx + 1)
+
+        return _try_manager(0)
 
     def complete_store(
         self,
@@ -491,15 +494,21 @@ class TieredOffloadManager(OffloadingManager):
         success: bool = True,
     ) -> None:
         tier_groups: Dict[int, List[BlockHash]] = {}
-        for block_hash in block_hashes:
-            tier = self._get_tier(block_hash)
-            if tier is not None:
-                tier_groups.setdefault(tier, []).append(block_hash)
-        for tier, hashes in tier_groups.items():
-            self.managers[tier].complete_store(hashes, success)
+
+        def _group_tier(h: BlockHash) -> None:
+            t = self._get_tier(h)
+            if t is not None:
+                tier_groups.setdefault(t, []).append(h)
+
+        list(map(_group_tier, block_hashes))
+
+        def _complete_tier(pair: tuple[int, List[BlockHash]]) -> None:
+            t, hs = pair
+            self.managers[t].complete_store(hs, success)
             if not success:
-                for h in hashes:
-                    self._tier_map.pop(h, None)
+                list(map(lambda h: self._tier_map.pop(h, None), hs))
+
+        list(map(_complete_tier, tier_groups.items()))
 
     def promote(self, block_hash: BlockHash, target_tier: int = 0) -> bool:
         """Promote block to faster tier."""
@@ -518,8 +527,8 @@ def compute_lru_eviction_rust(
     if HAS_RUST and hasattr(rust_core, "compute_lru_eviction_rust"):
         return rust_core.compute_lru_eviction_rust(blocks, num_to_evict)
 
-    evictable = [(i, b) for i, b in enumerate(blocks) if b.get("ref_cnt", 0) == 0]
-    return [i for i, _ in evictable[:num_to_evict]]
+    evictable = list(filter(lambda p: p[1].get("ref_cnt", 0) == 0, enumerate(blocks)))
+    return list(map(lambda p: p[0], islice(evictable, num_to_evict)))
 
 
 def compute_arc_target_rust(

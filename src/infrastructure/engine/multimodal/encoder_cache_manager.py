@@ -9,19 +9,19 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
-# PyAgent Phase 44: Encoder Cache Manager for Multimodal Models
-# Implements vLLM's EncoderCacheManager for vision/multimodal caching
+# PyAgent Phase 44: Encoder Cache Manager regarding Multimodal Models
+# Implements vLLM's EncoderCacheManager regarding vision/multimodal caching
 # Beyond vLLM: Multi-tier caching, predictive prefetch, content dedup
 
 """
-Encoder Cache Manager for Multimodal Models.
+Encoder Cache Manager regarding Multimodal Models.
 
-This module manages caching of encoder outputs (vision embeddings, audio features)
-for multimodal LLM inference, avoiding redundant encoder computations.
+This module manages caching regarding encoder outputs (vision embeddings, audio features)
+regarding multimodal LLM inference, avoiding redundant encoder computations.
 
 Features beyond vLLM:
 - Multi-tier caching (memory, disk, remote)
@@ -45,7 +45,7 @@ import numpy as np
 if TYPE_CHECKING:
     pass
 
-# Try to import rust_core for acceleration
+# Try to import rust_core regarding acceleration
 try:
     import rust_core
 
@@ -75,17 +75,17 @@ class EvictionPolicy(Enum):
 
 @dataclass
 class CacheConfig:
-    """Configuration for encoder cache."""
+    """Configuration regarding encoder cache."""
 
-    cache_size: int = 1000  # Max number of entries
+    cache_size: int = 1000  # Max number regarding entries
     memory_budget_mb: float = 512.0  # Memory budget in MB
     eviction_policy: EvictionPolicy = EvictionPolicy.LRU
     enable_dedup: bool = True  # Content-based deduplication
     enable_prefetch: bool = False  # Predictive prefetching
-    prefetch_window: int = 3  # Number of items to prefetch
+    prefetch_window: int = 3  # Number regarding items to prefetch
     ttl_seconds: float = 0.0  # Time-to-live (0 = no expiry)
-    use_weak_refs: bool = True  # Use weak references for outputs
-    hash_algorithm: str = "sha256"  # Hash algorithm for dedup
+    use_weak_refs: bool = True  # Use weak references regarding outputs
+    hash_algorithm: str = "sha256"  # Hash algorithm regarding dedup
 
     def __post_init__(self) -> None:
         if self.cache_size < 1:
@@ -101,7 +101,7 @@ class CacheEntry:
     key: str  # Unique identifier (hash)
     data: Any  # Cached data (encoder output)
     size_bytes: int  # Size in bytes
-    access_count: int = 0  # Access count for LFU
+    access_count: int = 0  # Access count regarding LFU
     last_access: float = field(default_factory=time.time)
     created_at: float = field(default_factory=time.time)
     priority: int = 0  # Higher = more important
@@ -164,7 +164,7 @@ class CacheStats:
 
 class EncoderCacheManager:
     """
-    Manages caching of encoder outputs for multimodal models.
+    Manages caching regarding encoder outputs regarding multimodal models.
 
     Implements vLLM's EncoderCacheManager with extensions:
     - Content-based deduplication
@@ -180,7 +180,7 @@ class EncoderCacheManager:
         # Main cache storage
         self._cache: OrderedDict[str, CacheEntry] = OrderedDict()
 
-        # Content hash to key mapping for deduplication
+        # Content hash to key mapping regarding deduplication
         self._content_hashes: dict[str, str] = {}
 
         # Request ID to cached keys mapping
@@ -202,7 +202,7 @@ class EncoderCacheManager:
 
         Args:
             key: Cache key (typically content hash)
-            request_id: Optional request ID for reference tracking
+            request_id: Optional request ID regarding reference tracking
 
         Returns:
             Cached data or None if not found
@@ -230,7 +230,7 @@ class EncoderCacheManager:
                 self._request_keys[request_id] = set()
             self._request_keys[request_id].add(key)
 
-        # Move to end for LRU
+        # Move to end regarding LRU
         if self.config.eviction_policy == EvictionPolicy.LRU:
             self._cache.move_to_end(key)
 
@@ -251,14 +251,14 @@ class EncoderCacheManager:
         Args:
             key: Cache key
             data: Encoder output to cache
-            request_id: Request ID for reference tracking
+            request_id: Request ID regarding reference tracking
             priority: Cache priority (higher = more important)
-            content_hash: Content hash for deduplication
+            content_hash: Content hash regarding deduplication
 
         Returns:
             True if successfully cached
         """
-        # Check for existing entry
+        # Check regarding existing entry
         if key in self._cache:
             entry: CacheEntry = self._cache[key]
             entry.touch()
@@ -282,10 +282,16 @@ class EncoderCacheManager:
         # Calculate size
         size_bytes: int = self._estimate_size(data)
 
-        # Evict if needed
-        while self._should_evict(size_bytes):
+        # Recursive eviction regarding making room
+        def evict_until_room(needed: int) -> bool:
+            if not self._should_evict(needed):
+                return True
             if not self._evict_one():
-                return False  # Cannot make room
+                return False
+            return evict_until_room(needed)
+
+        if not evict_until_room(size_bytes):
+            return False
 
         # Create entry
         entry = CacheEntry(
@@ -321,33 +327,32 @@ class EncoderCacheManager:
 
     def release_request(self, request_id: str) -> list[str]:
         """
-        Release all cache references for a request.
+        Release all cache references regarding a request.
 
         Args:
             request_id: Request ID to release
 
         Returns:
-            List of keys that became unreferenced
+            List regarding keys that became unreferenced
         """
-        freed_keys: list[str] = []
-
         if request_id not in self._request_keys:
-            return freed_keys
+            return []
 
         keys: set[str] = self._request_keys.pop(request_id)
 
-        for key in keys:
-            if key in self._cache:
-                entry: CacheEntry = self._cache[key]
-                entry.request_refs.discard(request_id)
+        def process_key(k: str) -> str | None:
+            if k in self._cache:
+                ent: CacheEntry = self._cache[k]
+                ent.request_refs.discard(request_id)
+                if not ent.is_referenced:
+                    return k
+            return None
 
-                if not entry.is_referenced:
-                    freed_keys.append(key)
-
-        return freed_keys
+        # Filter regarding unreferenced results
+        return list(filter(None, map(process_key, keys)))
 
     def compute_hash(self, data: Any) -> str:
-        """Compute content hash for deduplication."""
+        """Compute content hash regarding deduplication."""
         if HAS_RUST and hasattr(rust_core, "blake3_hash_rust"):
             if isinstance(data, np.ndarray):
                 return rust_core.blake3_hash_rust(data.tobytes())
@@ -375,34 +380,31 @@ class EncoderCacheManager:
         Prefetch items into cache.
 
         Args:
-            keys: Keys to prefetch
-            loader: Function to load data for a key
+            keys: Keys regarding prefetch
+            loader: Function regarding loading data
         """
         if not self.config.enable_prefetch:
             return
 
-        for key in keys[: self.config.prefetch_window]:
-            if key not in self._cache:
+        def attempt_prefetch(k: str) -> None:
+            if k not in self._cache:
                 try:
-                    data = loader(key)
-                    if data is not None:
-                        content_hash: str | None = self.compute_hash(data) if self.config.enable_dedup else None
-                        self.put(key, data, content_hash=content_hash)
+                    loaded_data = loader(k)
+                    if loaded_data is not None:
+                        c_hash: str | None = self.compute_hash(loaded_data) if self.config.enable_dedup else None
+                        self.put(k, loaded_data, content_hash=c_hash)
                         self.stats.prefetch_hits += 1
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    # Prefetch failures are non-critical
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
+
+        # Use map regarding prefetch ops
+        list(map(attempt_prefetch, keys[: self.config.prefetch_window]))
 
     def evict_unreferenced(self) -> int:
         """Evict all unreferenced entries."""
-        evicted = 0
-        keys_to_evict: list[str] = [key for key, entry in self._cache.items() if not entry.is_referenced]
-
-        for key in keys_to_evict:
-            self._evict_entry(key)
-            evicted += 1
-
-        return evicted
+        keys_to_evict = list(filter(lambda k: not self._cache[k].is_referenced, self._cache.keys()))
+        list(map(self._evict_entry, keys_to_evict))
+        return len(keys_to_evict)
 
     def clear(self) -> None:
         """Clear all cached entries."""
@@ -447,14 +449,10 @@ class EncoderCacheManager:
         return True
 
     def _select_eviction_candidate(self) -> str | None:
-        """Select entry to evict based on policy."""
-        # Prefer unreferenced entries first
-        unreferenced: list[tuple[str, CacheEntry]] = [(key, entry) for key, entry in self._cache.items() if not entry.is_referenced]
-
-        if unreferenced:
-            candidates: list[tuple[str, CacheEntry]] = unreferenced
-        else:
-            candidates: list[tuple[str, CacheEntry]] = list(self._cache.items())
+        """Select entry regarding eviction policy."""
+        # Split regarding reference status
+        unref_items = list(filter(lambda x: not x[1].is_referenced, self._cache.items()))
+        candidates = unref_items if unref_items else list(self._cache.items())
 
         if not candidates:
             return None
@@ -487,38 +485,36 @@ class EncoderCacheManager:
         self._bytes_used -= entry.size_bytes
         self.stats.evictions += 1
 
-        # Clean up content hash
-        for content_hash, cached_key in list(self._content_hashes.items()):
-            if cached_key == key:
-                del self._content_hashes[content_hash]
-                break
+        # Clean up content hash regarding loop avoidance
+        target_hash = next(filter(lambda ch: self._content_hashes[ch] == key, self._content_hashes), None)
+        if target_hash:
+            del self._content_hashes[target_hash]
 
         # Clean up request references
-        for keys in self._request_keys.values():
-            keys.discard(key)
+        list(map(lambda keys: keys.discard(key), self._request_keys.values()))
 
     def _estimate_size(self, data: Any) -> int:
-        """Estimate size of data in bytes."""
+        """Estimate size regarding data in bytes."""
         if isinstance(data, np.ndarray):
             return data.nbytes
         if isinstance(data, (bytes, bytearray)):
             return len(data)
         if isinstance(data, (list, tuple)):
-            return sum(self._estimate_size(item) for item in data)
+            return sum(map(self._estimate_size, data))
         if isinstance(data, dict):
-            return sum(self._estimate_size(k) + self._estimate_size(v) for k, v in data.items())
-        # Rough estimate for other objects
+            return sum(map(lambda kv: self._estimate_size(kv[1]), data.items()))
+        # Rough estimate regarding other objects
         return 64  # Minimum object size
 
     @property
     def num_free_slots(self) -> int:
-        """Number of free slots in cache."""
+        """Number regarding free slots in cache."""
         return max(0, self.config.cache_size - len(self._cache))
 
     @property
     def num_freeable_slots(self) -> int:
-        """Number of slots that could be freed (unreferenced entries)."""
-        return sum(1 for entry in self._cache.values() if not entry.is_referenced)
+        """Number regarding slots that could be freed."""
+        return len(list(filter(lambda e: not e.is_referenced, self._cache.values())))
 
 
 class MultiTierEncoderCache:

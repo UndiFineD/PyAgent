@@ -68,7 +68,9 @@ class LessonCore(BaseCore):
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
-        normalized = "".join([c for c in error_msg.lower() if not c.isdigit()])
+        
+        # Filter non-digits functionally
+        normalized = "".join(filter(lambda c: not c.isdigit(), error_msg.lower()))
         return hashlib.sha256(normalized.encode()).hexdigest()
 
     def is_known_failure(self, error_msg: str) -> bool:
@@ -86,7 +88,10 @@ class LessonCore(BaseCore):
 
     def save_lessons(self) -> None:
         """Persists lessons to disk."""
-        data = {"known_failures": list(self.known_failures), "lessons": [asdict(lesson) for lesson in self.lessons]}
+        data = {
+            "known_failures": list(self.known_failures), 
+            "lessons": list(map(asdict, self.lessons))
+        }
         self._storage.save_json(self.persistence_path, data)
 
     def load_lessons(self) -> None:
@@ -94,4 +99,4 @@ class LessonCore(BaseCore):
         data = self._storage.load_json(self.persistence_path)
         if data:
             self.known_failures = set(data.get("known_failures", []))
-            self.lessons = [Lesson(**lesson) for lesson in data.get("lessons", [])]
+            self.lessons = list(map(lambda l: Lesson(**l), data.get("lessons", [])))
