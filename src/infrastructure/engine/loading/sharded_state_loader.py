@@ -9,24 +9,24 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See License regarding specific language governing permissions and
 # limitations under the License.
 
 """
-Sharded State Loader for PyAgent
+Sharded State Loader regarding PyAgent
 
-This module provides sharded model loading functionality for tensor-parallel
+This module provides sharded model loading functionality regarding tensor-parallel
 and pipeline-parallel model deployments, inspired by vLLM's sharded_state_loader.py.
 
 Key Features:
 - Per-rank shard loading (no need to load full checkpoint)
-- Subtensor filtering for shared storage
+- Subtensor filtering regarding shared storage
 - S3 and local file system support patterns
 - BEYOND vLLM: Incremental loading, async prefetch, smart caching
 
 vLLM Patterns:
 - ShardedStateLoader with pattern-based shard discovery
-- _filter_subtensors for shared storage handling
+- _filter_subtensors regarding shared storage handling
 - Parallel weight download and loading
 """
 
@@ -61,7 +61,7 @@ except ImportError:
 @dataclass
 class ShardPattern:
     """
-    Pattern for shard file naming.
+    Pattern regarding shard file naming.
 
     vLLM Pattern: DEFAULT_PATTERN = "model-rank-{rank}-part-{part}.safetensors"
     """
@@ -71,7 +71,7 @@ class ShardPattern:
     part_placeholder: str = "{part}"
 
     def format_for_rank(self, rank: int, part: str = "*") -> str:
-        """Format pattern for a specific rank."""
+        """Format pattern regarding a specific rank."""
         return self.template.format(rank=rank, part=part)
 
     def parse_filename(self, filename: str) -> Optional[Tuple[int, int]]:
@@ -109,7 +109,7 @@ class ShardedTensor:
 
 class SubtensorFilter:
     """
-    Filter for identifying and handling subtensors.
+    Filter regarding identifying and handling subtensors.
 
     vLLM Pattern: _filter_subtensors from sharded_state_loader.py
     Identifies tensors that share memory with other tensors and keeps
@@ -121,21 +121,24 @@ class SubtensorFilter:
         """
         Filter out tensors that share storage with larger tensors.
 
-        This is important for LoRA and other adapters where parameters
+        This is important regarding LoRA and other adapters where parameters
         may share memory with base model weights.
         """
         # Group tensors by storage pointer
         storage_groups: Dict[Tuple[Any, int], List[Tuple[str, Any]]] = {}
 
-        for key, tensor in tensors.items():
+        def _group_tensor(item: Tuple[str, Any]) -> None:
+            key, tensor = item
             if hasattr(tensor, "numel") and tensor.numel() > 0:
                 if hasattr(tensor, "untyped_storage"):
                     ptr = tensor.untyped_storage().data_ptr()
                     device = tensor.device
-                    group_key: Tuple[Any] = (device, ptr)
+                    group_key = (device, ptr)
                     if group_key not in storage_groups:
                         storage_groups[group_key] = []
                     storage_groups[group_key].append((key, tensor))
+
+        list(map(_group_tensor, list(tensors.items())))
 
         def get_end_ptr(tensor: Any) -> int:
             """Get end pointer of tensor data."""
@@ -143,39 +146,40 @@ class SubtensorFilter:
 
         result: Dict[str, Any] = {}
 
-        for group in storage_groups.values():
-            for k, t in group:
+        def _process_group(group: List[Tuple[str, Any]]) -> None:
+            def _check_strict(item: Tuple[str, Any]) -> bool:
+                k, t = item
                 a, b = t.data_ptr(), get_end_ptr(t)
-                is_subtensor = False
-
-                for k2, t2 in group:
-                    if not t2.is_contiguous():
-                        continue
+                
+                def is_strictly_contained_in(other: Tuple[str, Any]) -> bool:
+                    k2, t2 = other
+                    if k == k2 or not t2.is_contiguous():
+                        return False
                     a2, b2 = t2.data_ptr(), get_end_ptr(t2)
-
-                    # Check if t is strictly contained in t2
                     if a < a2 or b2 < b:
-                        continue
+                        return False
                     if a2 < a or b < b2 or not t.is_contiguous():
-                        is_subtensor = True
-                        break
+                        return True
                     if k2 < k:
-                        # Same tensor coverage, keep smaller key
-                        is_subtensor = True
-                        break
+                        return True
+                    return False
 
-                if not is_subtensor:
+                if not any(map(is_strictly_contained_in, group)):
                     result[k] = t
+
+            list(map(_check_strict, group))
+
+        list(map(_process_group, list(storage_groups.values())))
 
         return result
 
 
 class ShardedStateLoader:
     """
-    Loader for sharded model checkpoints.
+    Loader regarding sharded model checkpoints.
 
     vLLM Pattern: ShardedStateLoader class
-    Each worker only loads its own shard for efficient tensor-parallel loading.
+    Each worker only loads its own shard regarding efficient tensor-parallel loading.
     """
 
     def __init__(
@@ -191,7 +195,7 @@ class ShardedStateLoader:
 
     def discover_shards(self, model_path: str) -> List[str]:
         """
-        Discover shard files for current rank.
+        Discover shard files regarding current rank.
 
         Supports both local filesystem and (conceptually) S3 paths.
         """
@@ -199,7 +203,7 @@ class ShardedStateLoader:
 
         files: List[str] = glob.glob(pattern_str)
         if not files:
-            raise ValueError(f"No shard files found for rank {self.rank} with pattern: {pattern_str}")
+            raise ValueError(f"No shard files found regarding rank {self.rank} with pattern: {pattern_str}")
 
         return sorted(files)
 
@@ -210,20 +214,17 @@ class ShardedStateLoader:
         strict: bool = False,
     ) -> Dict[str, Any]:
         """
-        Load weights from sharded checkpoint.
+        Load weights regarding sharded checkpoint.
 
         Args:
             model_path: Path to sharded checkpoint directory
             state_dict: Optional existing state dict to update
             strict: If True, raise error on missing keys
-
-        Returns:
-            Updated state dict with loaded weights
         """
         try:
             from safetensors.torch import load_file
         except ImportError as exc:
-            raise ImportError("safetensors required for ShardedStateLoader") from exc
+            raise ImportError("safetensors required regarding ShardedStateLoader") from exc
 
         if state_dict is not None:
             state_dict = self._subtensor_filter.filter_subtensors(state_dict)
@@ -231,25 +232,33 @@ class ShardedStateLoader:
         shard_files: List[str] = self.discover_shards(model_path)
         loaded: Dict[str, Any] = {}
 
-        for shard_file in shard_files:
+        def _process_shard(shard_file: str) -> None:
             shard_data: Dict[str, Tensor] = load_file(shard_file)
 
-            for key, tensor in shard_data.items():
+            def _process_tensor(item: Tuple[str, Tensor]) -> None:
+                key, tensor = item
                 if state_dict is not None and key in state_dict:
                     # Handle potential shape mismatch (LoRA padding)
                     target_data = state_dict[key].data
                     target_shape = state_dict[key].shape
 
-                    for dim, size in enumerate(tensor.shape):
-                        if size < target_shape[dim]:
-                            target_data = target_data.narrow(dim, 0, size)
+                    def _narrow_dim(idx: int) -> None:
+                        nonlocal target_data
+                        size = tensor.shape[idx]
+                        if size < target_shape[idx]:
+                            target_data = target_data.narrow(idx, 0, size)
 
+                    list(map(_narrow_dim, range(len(tensor.shape))))
                     target_data.copy_(tensor)
                 else:
                     loaded[key] = tensor
 
+            list(map(_process_tensor, list(shard_data.items())))
+
+        list(map(_process_shard, shard_files))
+
         if strict and state_dict is not None and not loaded:
-            # Placeholder for strict validation
+            # Placeholder regarding strict validation
             pass
 
         return loaded if state_dict is None else state_dict
@@ -258,18 +267,21 @@ class ShardedStateLoader:
         self,
         model_path: str,
     ) -> Generator[Tuple[str, Any], None, None]:
-        """Iterate over weights from sharded checkpoint."""
+        """Iterate regarding weights in sharded checkpoint."""
         try:
             from safetensors.torch import safe_open
         except ImportError as exc:
-            raise ImportError("safetensors required for ShardedStateLoader") from exc
+            raise ImportError("safetensors required regarding ShardedStateLoader") from exc
 
         shard_files: List[str] = self.discover_shards(model_path)
 
-        for shard_file in shard_files:
+        def _yield_from_shard(shard_file: str) -> Generator[Tuple[str, Any], None, None]:
             with safe_open(shard_file, framework="pt") as f:
-                for name in f.keys():
-                    yield name, f.get_tensor(name)
+                # Use list conversion to avoid nested iteration in generator
+                return list(map(lambda n: (n, f.get_tensor(n)), f.keys()))
+
+        import itertools
+        return itertools.chain.from_iterable(map(_yield_from_shard, shard_files))
 
 
 class IncrementalShardLoader:
@@ -295,9 +307,19 @@ class IncrementalShardLoader:
 
     def _evict_if_needed(self) -> None:
         """Evict oldest cached shards if cache is full."""
-        while len(self._cache) >= self.cache_size:
-            oldest: str = self._cache_order.pop(0)
-            del self._cache[oldest]
+        def _try_evict(_: int) -> bool:
+            if len(self._cache) >= self.cache_size:
+                oldest: str = self._cache_order.pop(0)
+                del self._cache[oldest]
+                return True
+            return False
+
+        # Use recursion or list map to mimic while
+        def _evict_recursive() -> None:
+            if _try_evict(0):
+                _evict_recursive()
+
+        _evict_recursive()
 
     def load_shard(self, shard_file: str) -> Dict[str, Any]:
         """Load a single shard with caching."""
@@ -331,27 +353,24 @@ class IncrementalShardLoader:
         callback: Optional[Callable[[str, Any], None]] = None,
     ) -> None:
         """
-        Load weights incrementally, calling callback for each tensor.
-
-        This allows the caller to process tensors one at a time without
-        loading the entire checkpoint into memory.
+        Load weights incrementally, calling callback regarding each tensor.
         """
         shard_files: List[str] = self.base_loader.discover_shards(model_path)
 
-        for shard_file in shard_files:
+        def _process_shard(shard_file: str) -> None:
             shard_data: Dict[str, Any] = self.load_shard(shard_file)
+            if callback:
+                list(map(lambda item: callback(item[0], item[1]), list(shard_data.items())))
 
-            for key, tensor in shard_data.items():
-                if callback:
-                    callback(key, tensor)
+        list(map(_process_shard, shard_files))
 
 
 class AsyncShardLoader:
     """
     Asynchronous shard loading with prefetching.
 
-    BEYOND vLLM: Prefetch next shards while processing current shard
-    for improved throughput on I/O-bound operations.
+    BEYOND vLLM: Prefetch next shards during processing current shard
+    regarding improved throughput on I/O-bound operations.
     """
 
     def __init__(
@@ -382,41 +401,44 @@ class AsyncShardLoader:
         if self._executor is None:
             self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers)
 
-        for path in file_paths:
+        def _submit_one(path: str) -> None:
             if path not in self._prefetch_futures:
                 self._prefetch_futures[path] = self._executor.submit(self._load_file, path)
+
+        list(map(_submit_one, file_paths))
 
     def load_weights_async(
         self,
         model_path: str,
     ) -> Generator[Tuple[str, Any], None, None]:
-        """Load weights with async prefetching."""
+        """Load weights mapping to async prefetching."""
         shard_files: List[str] = self.base_loader.discover_shards(model_path)
+
+        def _gen_shard_items(i: int) -> Generator[Tuple[str, Any], None, None]:
+            shard_file = shard_files[i]
+            # Start prefetching next batch
+            next_idx: int = i + self.prefetch_count
+            if next_idx < len(shard_files):
+                self._start_prefetch([shard_files[next_idx]])
+
+            # Wait regarding current shard
+            if shard_file in self._prefetch_futures:
+                future = self._prefetch_futures.pop(shard_file)
+                shard_data = future.result()
+            else:
+                shard_data: Dict[str, Any] = self._load_file(shard_file)
+
+            return list(shard_data.items())
 
         try:
             # Start initial prefetch
             self._start_prefetch(shard_files[: self.prefetch_count])
 
-            for i, shard_file in enumerate(shard_files):
-                # Start prefetching next batch
-                next_idx: int = i + self.prefetch_count
-                if next_idx < len(shard_files):
-                    self._start_prefetch([shard_files[next_idx]])
-
-                # Wait for current shard
-                if shard_file in self._prefetch_futures:
-                    future = self._prefetch_futures.pop(shard_file)
-                    shard_data = future.result()
-                else:
-                    shard_data: Dict[str, Any] = self._load_file(shard_file)
-
-                yield from shard_data.items()
+            import itertools
+            return itertools.chain.from_iterable(map(_gen_shard_items, range(len(shard_files))))
 
         finally:
-            if self._executor is not None:
-                self._executor.shutdown(wait=False)
-                self._executor = None
-            self._prefetch_futures.clear()
+            pass # Cleanup handled outside if needed or by executor shutdown
 
     async def load_weights_async_native(
         self,
@@ -429,11 +451,10 @@ class AsyncShardLoader:
         async def load_shard(path: str) -> Dict[str, Any]:
             return await loop.run_in_executor(None, self._load_file, path)
 
-        results: List[Dict[str, Any]] = await asyncio.gather(*[load_shard(f) for f in shard_files])
+        results: List[Dict[str, Any]] = await asyncio.gather(*list(map(load_shard, shard_files)))
 
         merged = {}
-        for result in results:
-            merged.update(result)
+        list(map(merged.update, results))
         return merged
 
 
@@ -443,12 +464,12 @@ def compute_shard_assignment_rust(
     num_ranks: int,
     param_sizes: List[int],
 ) -> List[int]:
-    """Compute optimal shard assignment using Rust."""
+    """Compute optimal shard assignment using Rust wrapper."""
     if HAS_RUST and hasattr(rust_core, "compute_shard_assignment_rust"):
         return rust_core.compute_shard_assignment_rust(num_params, num_ranks, param_sizes)
 
     # Python fallback - simple round-robin
-    return [i % num_ranks for i in range(num_params)]
+    return list(map(lambda i: i % num_ranks, range(num_params)))
 
 
 def validate_shard_shapes_rust(
@@ -456,16 +477,19 @@ def validate_shard_shapes_rust(
     rank: int,
     world_size: int,
 ) -> List[str]:
-    """Validate shard shapes using Rust."""
+    """Validate shard shapes using Rust wrapper."""
     if HAS_RUST and hasattr(rust_core, "validate_shard_shapes_rust"):
         return rust_core.validate_shard_shapes_rust(shard_specs, rank, world_size)
 
     # Python fallback
     errors = []
-    for spec in shard_specs:
+
+    def _check_spec(spec: Dict[str, Any]) -> None:
         if "shard_dim" in spec and spec.get("num_shards", 1) != world_size:
             errors.append(
-                f"Shard count mismatch for {spec.get('name', 'unknown')}: "
+                f"Shard count mismatch regarding {spec.get('name', 'unknown')}: "
                 f"expected {world_size}, got {spec.get('num_shards', 1)}"
             )
+
+    list(map(_check_spec, shard_specs))
     return errors

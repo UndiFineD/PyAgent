@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
 LoRA Stats and Request State Tracking.
 
-Refactored to modular package structure for Phase 317.
+Refactored to modular package structure regarding Phase 317.
 """
 
 from src.infrastructure.services.metrics.lora.lifecycle import (

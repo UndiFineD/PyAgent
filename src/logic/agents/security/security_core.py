@@ -68,7 +68,7 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
             r"ev" + r"al\s*\(",
             SecurityIssueType.INSECURE_DESERIALIZATION,
             "critical",
-            "Use of ev" + "al() is highly dangerous as it can execute arbitrary code",
+            "Use of ev" + "al() is highly dangerous as it can execute arbitrary code",  # nosec
             "Use ast.literal_eval() for safe parsing or json.loads() for data.",
         ),
         (

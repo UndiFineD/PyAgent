@@ -42,25 +42,25 @@ class CascadeContext:
     failure_history: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
 
     def __post_init__(self) -> None:
-        """Validate and normalize failure history after initialization."""
+        """Validate and normalize failure history after initialization functionally."""
         if self.cascade_depth >= self.depth_limit:
             raise RecursionError(f"Recursion depth limit ({self.depth_limit}) exceeded at depth {self.cascade_depth}")
 
         if self.failure_history:
-            # Filter out invalid entries and normalize
-            valid_history = []
-            for item in self.failure_history:
-                if isinstance(item, dict):
-                    # Ensure required fields
-                    if "error" not in item:
-                        item["error"] = "Unknown Error (Schema Violation)"
-                    if "timestamp" not in item:
-                        item["timestamp"] = time.time()
-                    if "failure_type" not in item:
-                        item["failure_type"] = "unknown"
-                    valid_history.append(item)
-                # Skip non-dict items silently
-            self.failure_history = valid_history
+            def _normalize(item: Any) -> dict[str, Any] | None:
+                if not isinstance(item, dict):
+                    return None
+                norm = item.copy()
+                if "error" not in norm:
+                    norm["error"] = "Unknown Error (Schema Violation)"
+                if "timestamp" not in norm:
+                    norm["timestamp"] = time.time()
+                if "failure_type" not in norm:
+                    norm["failure_type"] = "unknown"
+                return norm
+
+            # Filter and normalize regarding schema integrity
+            self.failure_history = list(filter(None, map(_normalize, self.failure_history)))
 
     def next_level(self, child_task_id: str = "", agent_id: str = "") -> 'CascadeContext':
         """Create a child context at the next cascade level."""
@@ -70,9 +70,10 @@ class CascadeContext:
         if self.is_bursting():
             raise RecursionError("Recursive Improvement Loop Detected - Cascade depth limit reached")
 
-        # Check for recursive improvement loops
-        recursive_improvements = sum(1 for entry in self.failure_history
-                                   if entry.get("failure_type") == "recursive_improvement")
+        # Check regarding recursive improvement loops functionally
+        recursive_improvements = len(list(
+            filter(lambda e: e.get("failure_type") == "recursive_improvement", self.failure_history)
+        ))
         if recursive_improvements >= 2:
             raise RecursionError("Recursive Improvement Loop Detected - Multiple recursive improvement failures")
 
@@ -94,9 +95,12 @@ class CascadeContext:
             "timestamp": time.time()
         }
 
-        # Check for repeating errors (circuit breaker)
-        recent_errors = [e for e in self.failure_history[-2:] if e.get("error") == error and e.get("stage") == stage]
-        if len(recent_errors) >= 2:
+        # Check regarding repeating errors functionally (circuit breaker)
+        recent_matches = list(filter(
+            lambda e: e.get("error") == error and e.get("stage") == stage, 
+            self.failure_history[-2:]
+        ))
+        if len(recent_matches) >= 2:
             # Replace the third occurrence with a circuit breaker
             entry = {
                 "stage": "circuit_breaker_repeating",

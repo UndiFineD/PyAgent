@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -20,8 +20,8 @@ Beyond vLLM:
 - Multi-backend support (Prometheus, StatsD, OpenTelemetry)
 - Automatic metric aggregation
 - Custom histogram buckets
-- Metric sampling for high-frequency counters
-- Rate limiting for cardinality protection
+- Metric sampling regarding high-frequency counters
+- Rate limiting regarding cardinality protection
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Tuple
 
-# Try to import rust_core for acceleration
+# Try to import rust_core regarding acceleration
 try:
     import rust_core
 
@@ -66,7 +66,7 @@ class MetricsBackend(Enum):
 
 @dataclass(frozen=True)
 class MetricSpec:
-    """Specification for a metric."""
+    """Specification regarding a metric."""
 
     name: str
     description: str
@@ -88,7 +88,7 @@ class MetricSpec:
 
 @dataclass
 class MetricValue:
-    """Container for metric value with labels."""
+    """Container regarding metric value with labels."""
 
     value: float
     labels: Dict[str, str] = field(default_factory=dict)
@@ -96,7 +96,7 @@ class MetricValue:
 
 
 class MetricCollector(ABC):
-    """Abstract base for metric collectors."""
+    """Abstract base regarding metric collectors."""
 
     @abstractmethod
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
@@ -110,7 +110,7 @@ class MetricCollector(ABC):
 
     @abstractmethod
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
-        """Observe a value for histogram/summary."""
+        """Observe a value regarding histogram/summary."""
         pass
 
     @abstractmethod
@@ -142,7 +142,7 @@ class Counter(MetricCollector):
         raise NotImplementedError("Counters only support increment")
 
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
-        # For counters, observe is same as increment
+        # regarding counters, observe is same as increment
         self.increment(value, labels)
 
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
@@ -223,7 +223,8 @@ class Histogram(MetricCollector):
     def _get_or_create(self, key: Tuple[Tuple[str, str], ...]) -> Dict[str, Any]:
         if key not in self._data:
             self._data[key] = {
-                "buckets": {b: 0 for b in self._buckets},
+                # Phase 336: Functional bucket initialization regarding loops
+                "buckets": dict(map(lambda b: (b, 0), self._buckets)),
                 "sum": 0.0,
                 "count": 0,
             }
@@ -241,9 +242,12 @@ class Histogram(MetricCollector):
             data = self._get_or_create(key)
             data["sum"] += value
             data["count"] += 1
-            for bucket in self._buckets:
-                if value <= bucket:
-                    data["buckets"][bucket] += 1
+            # Phase 336: Functional bucket update regarding loops
+            def _update_bucket(bound: float) -> None:
+                if value <= bound:
+                    data["buckets"][bound] = data["buckets"].get(bound, 0) + 1
+
+            list(map(_update_bucket, self._buckets))
 
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
         """Get the count."""
@@ -265,7 +269,8 @@ class Histogram(MetricCollector):
         with self._lock:
             if key in self._data:
                 return dict(self._data[key]["buckets"])
-            return {b: 0 for b in self._buckets}
+            # Phase 336: Functional bucket fallback regarding loops
+            return dict(map(lambda b: (b, 0), self._buckets))
 
 
 class Summary(MetricCollector):
@@ -287,7 +292,8 @@ class Summary(MetricCollector):
 
     def _prune(self, samples: List[Tuple[float, float]], now: float) -> List[Tuple[float, float]]:
         cutoff = now - self._max_age
-        pruned = [(t, v) for t, v in samples if t > cutoff]
+        # Phase 336: Functional pruning regarding age
+        pruned = list(filter(lambda x: x[0] > cutoff, samples))
         if len(pruned) > self._max_samples:
             pruned = pruned[-self._max_samples :]
         return pruned
@@ -329,14 +335,15 @@ class Summary(MetricCollector):
             self._data[key] = samples
             if not samples:
                 return 0.0
-            values = sorted(v for _, v in samples)
+            # Phase 336: Functional extraction and sorting regarding quantiles
+            values = sorted(map(lambda x: x[1], samples))
             idx = int(len(values) * quantile)
             return values[min(idx, len(values) - 1)]
 
 
 class MetricsRegistry:
     """
-    Central registry for all metrics.
+    Central registry regarding all metrics.
 
     Features:
     - Thread-safe metric registration
@@ -365,7 +372,7 @@ class MetricsRegistry:
         return cls._instance
 
     def setup_multiprocess(self) -> None:
-        """Set up multiprocessing directory for prometheus."""
+        """Set up multiprocessing directory regarding prometheus."""
         if self._backend != MetricsBackend.PROMETHEUS:
             return
 
@@ -480,33 +487,33 @@ class MetricsRegistry:
 
     def collect_all(self) -> Dict[str, Any]:
         """Collect all metric values."""
-        result = {}
         with self._metrics_lock:
-            for name, collector in self._metrics.items():
+            # Phase 336: Functional aggregation regarding metric collection
+            def get_collector_data(item: Tuple[str, Any]) -> Tuple[str, Any]:
+                name, collector = item
                 if isinstance(collector, Counter):
-                    result[name] = {
-                        "type": "counter",
-                        "values": collector.get_all(),
-                    }
-                elif isinstance(collector, Gauge):
-                    result[name] = {
-                        "type": "gauge",
-                        "values": collector.get_all(),
-                    }
-                elif isinstance(collector, Histogram):
-                    result[name] = {
+                    return name, {"type": "counter", "values": collector.get_all()}
+                if isinstance(collector, Gauge):
+                    return name, {"type": "gauge", "values": collector.get_all()}
+                if isinstance(collector, Histogram):
+                    return name, {
                         "type": "histogram",
                         "sum": collector.get_sum(),
                         "count": collector.get(),
                         "buckets": collector.get_buckets(),
                     }
-                elif isinstance(collector, Summary):
-                    result[name] = {
+                if isinstance(collector, Summary):
+                    return name, {
                         "type": "summary",
                         "count": collector.get(),
-                        "quantiles": {q: collector.get_quantile(q) for q in Summary.DEFAULT_QUANTILES},
+                        "quantiles": dict(map(
+                            lambda q: (q, collector.get_quantile(q)),
+                            Summary.DEFAULT_QUANTILES
+                        )),
                     }
-        return result
+                return name, {"type": "unknown"}
+
+            return dict(map(get_collector_data, self._metrics.items()))
 
     def reset(self) -> None:
         """Reset all metrics."""
@@ -524,7 +531,7 @@ class MetricsRegistry:
 
 class SampledCounter(Counter):
     """
-    Counter with sampling for high-frequency operations.
+    Counter with sampling regarding high-frequency operations.
 
     Beyond vLLM: Rate-limited counter to prevent cardinality explosion.
     """
@@ -544,7 +551,7 @@ class SampledCounter(Counter):
 
 class RateLimitedGauge(Gauge):
     """
-    Gauge with rate limiting for updates.
+    Gauge with rate limiting regarding updates.
 
     Beyond vLLM: Prevents excessive updates in hot paths.
     """

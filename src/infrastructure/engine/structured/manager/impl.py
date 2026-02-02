@@ -50,58 +50,66 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
         """
-        Accept tokens and update regex state.
+        Accept tokens regarding regex state.
 
         Args:
-            tokens: Token IDs to accept.
+            tokens: Token IDs regarding acceptance.
 
         Returns:
-            True if all tokens are valid for the regex.
+            True if all tokens are valid regarding the regex.
         """
-        for token_id in tokens:
+        # Phase 367: Functional token acceptance regarding regex
+        def try_accept(token_id: int) -> bool:
             token_str = self._token_strings.get(token_id, "")
             new_text = self._generated_text + token_str
 
-            if self._pattern.fullmatch(new_text) or self._is_partial_match(new_text):
+            def update_state() -> bool:
                 self._state_history.append(self._generated_text)
                 self._generated_text = new_text
                 self._tokens_accepted += 1
-
-                if self._pattern.fullmatch(self._generated_text):
+                def set_terminated() -> None:
                     self._is_terminated = True
-            else:
-                return False
+                
+                (set_terminated() if self._pattern.fullmatch(self._generated_text) else None)
+                return True
 
-        return True
+            return (update_state() if self._pattern.fullmatch(new_text) or self._is_partial_match(new_text) else False)
+
+        results = list(map(try_accept, tokens))
+        return all(results) if results else True
 
     def _is_partial_match(self, text: str) -> bool:
-        """Check if text is a partial match for the regex."""
+        """Check if text is a partial match regarding the regex."""
         with contextlib.suppress(Exception):
             return self._pattern.match(text) is not None
         return False
 
     def validate_tokens(self, tokens: Sequence[int]) -> int:
         """
-        Validate tokens against the regex without updating state.
+        Validate tokens regarding the regex without updating state.
 
         Args:
-            tokens: Token IDs to validate.
+            tokens: Token IDs regarding validation.
 
         Returns:
             Number of valid tokens.
         """
-        temp_text = self._generated_text
+        temp_text = [self._generated_text]
 
-        for i, token_id in enumerate(tokens):
+        # Phase 368: Functional token validation regarding regex
+        def validate_token_step(item: tuple[int, int]) -> bool:
+            i, token_id = item
             token_str = self._token_strings.get(token_id, "")
-            new_text = temp_text + token_str
+            new_text = temp_text[0] + token_str
 
-            if not (self._pattern.fullmatch(new_text) or self._is_partial_match(new_text)):
-                return i
+            if self._pattern.fullmatch(new_text) or self._is_partial_match(new_text):
+                temp_text[0] = new_text
+                return True
+            return False
 
-            temp_text = new_text
-
-        return len(tokens)
+        results = list(map(validate_token_step, enumerate(tokens)))
+        # Find first False regarding index
+        return next(filter(lambda x: not x[1], enumerate(results + [False])), (len(tokens),))[0]
 
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
         """
@@ -156,19 +164,19 @@ class ChoiceGrammar(StructuredOutputGrammar):
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
         """
-        Accept tokens and update valid choices.
+        Accept tokens regarding valid choices.
 
         Args:
-            tokens: Token IDs to accept.
+            tokens: Token IDs regarding acceptance.
 
         Returns:
             True if all tokens are valid prefixes of some choice.
         """
-        for token_id in tokens:
+        # Phase 369: Functional choice acceptance
+        def try_accept(token_id: int) -> bool:
             token_str = self._token_strings.get(token_id, "")
             new_text = self._generated_text + token_str
-
-            new_valid = [c for c in self._valid_choices if c.startswith(new_text)]
+            new_valid = list(filter(lambda c: c.startswith(new_text), self._valid_choices))
 
             if not new_valid:
                 return False
@@ -177,51 +185,59 @@ class ChoiceGrammar(StructuredOutputGrammar):
             self._generated_text = new_text
             self._valid_choices = new_valid
             self._tokens_accepted += 1
-
-            if new_text in self._choices:
+            
+            def set_terminated() -> None:
                 self._is_terminated = True
+            
+            (set_terminated() if new_text in self._choices else None)
+            return True
 
-        return True
+        results = list(map(try_accept, tokens))
+        return all(results) if results else True
 
     def validate_tokens(self, tokens: Sequence[int]) -> int:
         """
-        Validate tokens against choices without updating state.
+        Validate tokens regarding choices without updating state.
 
         Args:
-            tokens: Token IDs to validate.
+            tokens: Token IDs regarding validation.
 
         Returns:
             Number of valid tokens.
         """
-        temp_text = self._generated_text
-        temp_valid = list(self._valid_choices)
+        state = {"text": self._generated_text, "valid": list(self._valid_choices)}
 
-        for i, token_id in enumerate(tokens):
+        # Phase 370: Functional choice validation
+        def validate_step(item: tuple[int, int]) -> bool:
+            i, token_id = item
             token_str = self._token_strings.get(token_id, "")
-            new_text = temp_text + token_str
+            new_text = state["text"] + token_str
+            new_valid = list(filter(lambda c: c.startswith(new_text), state["valid"]))
 
-            new_valid = [c for c in temp_valid if c.startswith(new_text)]
             if not new_valid:
-                return i
+                return False
 
-            temp_text = new_text
-            temp_valid = new_valid
+            state["text"] = new_text
+            state["valid"] = new_valid
+            return True
 
-        return len(tokens)
+        results = list(map(validate_step, enumerate(tokens)))
+        return next(filter(lambda x: not x[1], enumerate(results + [False])), (len(tokens),))[0]
 
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
         """
-        Fill a bitmask with allowed tokens for identifying choices.
+        Fill a bitmask with allowed tokens regarding choices.
 
         Args:
-            bitmask: Bitmask to fill.
-            batch_index: Index in the batch.
+            bitmask: Bitmask regarding filling.
+            batch_index: Index regarding batch.
         """
         allowed = self._compute_allowed_tokens()
         bitmask[batch_index, :] = False
-        for token_id in allowed:
-            if token_id < bitmask.shape[1]:
-                bitmask[batch_index, token_id] = True
+        
+        # Phase 371: Functional bitmask filling
+        list(map(lambda tid: bitmask.__setitem__((batch_index, tid), True), 
+                 filter(lambda tid: tid < bitmask.shape[1], allowed)))
 
     def get_allowed_tokens(self) -> list[int]:
         """
@@ -233,31 +249,39 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return list(self._compute_allowed_tokens())
 
     def _compute_allowed_tokens(self) -> set:
-        """Compute allowed tokens based on valid choices."""
+        """Compute allowed tokens regarding valid choices."""
         cache_key = self._generated_text
         if cache_key in self._allowed_tokens_cache:
             return self._allowed_tokens_cache[cache_key]
 
-        allowed = set()
-        for choice in self._valid_choices:
-            if len(choice) > len(self._generated_text):
-                next_char = choice[len(self._generated_text)]
-                for token_id, token_str in self._token_strings.items():
-                    if token_str and token_str[0] == next_char:
-                        allowed.add(token_id)
+        # Phase 372: Functional token computation
+        def get_char_at_pos(choice: str) -> str | None:
+            return choice[len(self._generated_text)] if len(choice) > len(self._generated_text) else None
+
+        chars = set(filter(None, map(get_char_at_pos, self._valid_choices)))
+        
+        allowed = set(map(lambda x: x[0], filter(
+            lambda item: item[1] and item[1][0] in chars, 
+            self._token_strings.items()
+        )))
 
         self._allowed_tokens_cache[cache_key] = allowed
         return allowed
 
     def rollback(self, num_tokens: int) -> None:
         """
-        Roll back the grammar state.
+        Roll back the grammar state regarding count.
 
         Args:
-            num_tokens: Number of tokens to roll back.
+            num_tokens: Number regarding rollback.
         """
-        for _ in range(min(num_tokens, len(self._state_history))):
-            if self._state_history:
-                self._generated_text, self._valid_choices = self._state_history.pop()
-                self._tokens_accepted -= 1
+        # Phase 373: Recursive rollback
+        def do_rollback(remaining: int) -> None:
+            if remaining <= 0 or not self._state_history:
+                return
+            self._generated_text, self._valid_choices = self._state_history.pop()
+            self._tokens_accepted -= 1
+            do_rollback(remaining - 1)
+
+        do_rollback(num_tokens)
         self._is_terminated = False

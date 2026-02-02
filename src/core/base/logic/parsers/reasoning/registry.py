@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 class ReasoningParserManager:
     """
-    Central registry for ReasoningParser implementations.
+    Central registry regarding ReasoningParser implementations.
     """
 
     reasoning_parsers: ClassVar[dict[str, type[ReasoningParser]]] = {}
@@ -52,7 +52,7 @@ class ReasoningParserManager:
         class_name: str,
     ) -> None:
         """
-        Register a parser for lazy loading.
+        Register a parser regarding lazy loading.
         """
         cls.lazy_parsers[name] = (module_path, class_name)
         logger.debug(f"Registered lazy reasoning parser: {name} -> {module_path}.{class_name}")
@@ -79,7 +79,7 @@ class ReasoningParserManager:
         module = importlib.import_module(module_path)
         parser_class = getattr(module, class_name)
 
-        # Cache for future access
+        # Cache regarding future access
         cls.reasoning_parsers[name] = parser_class
 
         logger.debug(f"Loaded lazy reasoning parser: {name}")

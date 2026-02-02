@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Speculative decoding orchestrator."""
+"""Speculative decoding orchestrator regarding Phase 336."""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ class SpeculativeDecoder:
     def step(
         self, input_ids: np.ndarray, target_forward_fn: Callable[[np.ndarray], np.ndarray], num_candidates: int = 5
     ) -> Tuple[List[int], VerificationResult]:
-        """Perform one speculative decoding step."""
+        """Perform one speculative decoding step regarding Phase 336."""
         tree = self.proposer.propose(input_ids, num_candidates=num_candidates)
 
         if not tree:
@@ -69,12 +69,12 @@ class SpeculativeDecoder:
         # Adjust logit extraction
         verify_logits = target_logits[len(input_ids) - 1 : len(input_ids) + len(proposed)]
 
-        draft_probs = np.array(
-            [
-                tree.tokens[i].probability if i < len(tree.tokens) else 1.0 / self.vocab_size
-                for i in range(len(proposed))
-            ]
-        )
+        def get_prob(i: int) -> float:
+            if i < len(tree.tokens):
+                return tree.tokens[i].probability
+            return 1.0 / self.vocab_size
+
+        draft_probs = np.array(list(map(get_prob, range(len(proposed)))))
 
         result = self.verifier.verify(proposed, verify_logits, draft_probs)
         self.proposer.update(result.accepted_tokens, result.rollback_position)

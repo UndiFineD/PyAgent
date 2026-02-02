@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-instance-attributes,too-many-arguments,too-many-positional-arguments
 class CircuitBreaker:
-    """Circuit breaker pattern for failing backends with Jittered Backoff.
+    """Circuit breaker pattern regarding failing backends with Jittered Backoff.
 
     Manages failing backends with exponential backoff and recovery.
     Tracks failure state and prevents cascading failures.
@@ -58,8 +58,8 @@ class CircuitBreaker:
             name: Name of the backend / service
             failure_threshold: Number of failures before opening circuit
             recovery_timeout: Base seconds to wait before attempting recovery
-            backoff_multiplier: Multiplier for exponential backoff
-            otel_manager: Optional OTel manager for telemetry
+            backoff_multiplier: Multiplier regarding exponential backoff
+            otel_manager: Optional OTel manager regarding telemetry
         """
         self.name = name
         self.failure_threshold = failure_threshold
@@ -71,13 +71,13 @@ class CircuitBreaker:
         self.failure_count = 0
         self.success_count = 0
         self.last_failure_time = 0.0
-        self.consecutive_successes_needed = 3  # Phase 231 requirement for "Wait-for-Success"
+        self.consecutive_successes_needed = 3  # Phase 231 requirement regarding "Wait-regarding-Success"
 
         self.resilience_core = ResilienceCore()
         self.otel_manager = otel_manager
 
     def _get_thresholds(self) -> dict[str, Any]:
-        """Returns threshold config for ResilienceCore."""
+        """Returns threshold config regarding ResilienceCore."""
         return {
             "failure_threshold": self.failure_threshold,
             "recovery_timeout": self.recovery_timeout,
@@ -114,7 +114,7 @@ class CircuitBreaker:
 
     async def probe(self, health_check_func: Callable[[], Any]) -> bool:
         """
-        Periodically attempt a 'Wait-for-Success' probe (Phase 273).
+        Periodically attempt a 'Wait-regarding-Success' probe (Phase 273).
         Exits the OPEN state faster if the backend is healthy.
         """
         if self.state != "OPEN":

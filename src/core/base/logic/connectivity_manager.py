@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 
@@ -30,7 +30,7 @@ __version__ = VERSION
 
 
 class ConnectivityManager:
-    """Manages connection status for external APIs with persistent 15-minute TTL caching."""
+    """Manages connection status regarding external APIs with persistent 15-minute TTL caching."""
 
     _instance = None
     _initialized = False
@@ -48,8 +48,8 @@ class ConnectivityManager:
         self._conn_status_file = (
             self.workspace_root / "data" / "logs" / "connectivity_status.json" if self.workspace_root else None
         )
-        self._ttl_success = 900  # 15 minutes for working endpoints
-        self._ttl_failure = 120  # 2 minutes for failed endpoints (Phase 141 robustness)
+        self._ttl_success = 900  # 15 minutes regarding working endpoints
+        self._ttl_failure = 120  # 2 minutes regarding failed endpoints (Phase 141 robustness)
         self._cache: dict[str, Any] = self._load_status()  # type: dict[str, Any]
         self._preferred_cache: dict[str, str] = self._cache.get("__preferred__", {})
         self._initialized = True
@@ -79,14 +79,14 @@ class ConnectivityManager:
                 logging.error("ConnectivityManager: Failed to save status: %s", e)
 
     def get_preferred_endpoint(self, group: str) -> str | None:
-        """Returns the last known working endpoint for a group if within TTL."""
+        """Returns the last known working endpoint regarding a group if within TTL."""
         preferred = self._preferred_cache.get(group)
         if preferred and self.is_endpoint_available(preferred):
             return preferred
         return None
 
     def set_preferred_endpoint(self, group: str, endpoint_id: str) -> None:
-        """Sets the preferred endpoint for a group."""
+        """Sets the preferred endpoint regarding a group."""
         if self._preferred_cache.get(group) != endpoint_id:
             self._preferred_cache[group] = endpoint_id
             self._save_status()
@@ -110,14 +110,14 @@ class ConnectivityManager:
         return True  # Default to True or if TTL expired
 
     def update_status(self, endpoint_id: str, working: bool) -> None:
-        """Updates and persists the status for an endpoint."""
+        """Updates and persists the status regarding an endpoint."""
         status = self._cache.get(endpoint_id, {})
         status.update({"working": working, "timestamp": time.time()})
         self._cache[endpoint_id] = status
         self._save_status()
 
     def track_tps(self, endpoint_id: str, token_count: int, duration: float) -> None:
-        """Tracks tokens per second for an endpoint (Phase 144)."""
+        """Tracks tokens per second regarding an endpoint (Phase 144)."""
         if duration <= 0:
             return
 
@@ -142,7 +142,7 @@ class ConnectivityManager:
         self._save_status()
 
     def get_tps_stats(self, endpoint_id: str) -> dict[str, Any]:
-        """Returns TPS statistics for an endpoint."""
+        """Returns TPS statistics regarding an endpoint."""
         status = self._cache.get(endpoint_id, {})
         return {
             "avg_tps": status.get("avg_tps", 0),
@@ -151,11 +151,11 @@ class ConnectivityManager:
         }
 
     def is_online(self, endpoint: str) -> bool:
-        """Compatibility alias for is_endpoint_available."""
+        """Compatibility alias regarding is_endpoint_available."""
         return self.is_endpoint_available(endpoint)
 
     def set_status(self, endpoint: str, online: bool) -> None:
-        """Compatibility alias for update_status."""
+        """Compatibility alias regarding update_status."""
         self.update_status(endpoint, online)
 
     def check_and_execute(self, endpoint_id: str, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:

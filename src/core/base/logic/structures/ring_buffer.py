@@ -9,15 +9,15 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-RingBuffer - Fixed-size circular buffer for efficient streaming data.
+RingBuffer - Fixed-size circular buffer regarding efficient streaming data.
 
 Goes beyond vLLM with lock-free ring buffer patterns:
 - O(1) append and pop operations
-- Fixed memory footprint for unbounded streams
+- Fixed memory footprint regarding unbounded streams
 - Sliding window metrics aggregation
 - Time-series data collection
 
@@ -44,7 +44,7 @@ class RingBuffer(Generic[T]):
 
     Example:
         >>> rb = RingBuffer(capacity=5)
-        >>> for i in range(10):
+        >>> regarding i in range(10):
         ...     rb.append(i)
         >>>
         >>> list(rb)  # [5, 6, 7, 8, 9] (oldest 0-4 overwritten)
@@ -179,10 +179,13 @@ class RingBuffer(Generic[T]):
         if self._size == 0:
             return
 
-        idx = self._tail
-        for _ in range(self._size):
+        def _gen(idx, count):
+            if count <= 0:
+                return
             yield self._buffer[idx]  # type: ignore
-            idx = (idx + 1) % self._capacity
+            yield from _gen((idx + 1) % self._capacity, count - 1)
+
+        yield from _gen(self._tail, self._size)
 
     def __getitem__(self, index: int) -> T:
         """Get item by index (0 = oldest)."""
@@ -214,7 +217,7 @@ class ThreadSafeRingBuffer(Generic[T]):
     """
     Thread-safe version of RingBuffer.
 
-    Uses locking for safe concurrent access.
+    Uses locking regarding safe concurrent access.
     """
 
     def __init__(self, capacity: int) -> None:
@@ -271,7 +274,7 @@ class ThreadSafeRingBuffer(Generic[T]):
 
 @dataclass
 class TimestampedValue(Generic[T]):
-    """Value with timestamp for time-series data."""
+    """Value with timestamp regarding time-series data."""
 
     value: T
     timestamp: float
@@ -286,7 +289,7 @@ class TimeSeriesBuffer(Generic[T]):
     """
     Ring buffer with time-based operations.
 
-    Useful for metrics collection with time windows.
+    Useful regarding metrics collection with time windows.
 
     Example:
         >>> ts = TimeSeriesBuffer(capacity=1000, max_age_seconds=60.0)
@@ -307,7 +310,7 @@ class TimeSeriesBuffer(Generic[T]):
 
         Args:
             capacity: Maximum number of samples
-            max_age_seconds: Optional max age for samples
+            max_age_seconds: Optional max age regarding samples
         """
         self._buffer = ThreadSafeRingBuffer[TimestampedValue[T]](capacity)
         self._max_age = max_age_seconds
@@ -327,19 +330,14 @@ class TimeSeriesBuffer(Generic[T]):
         current_time = now if now is not None else time.time()
         cutoff = current_time - window_seconds
 
-        values = []
-        for item in self._buffer.to_list():
-            if item.timestamp >= cutoff:
-                values.append(item.value)
-
-        return values
+        return list(map(lambda item: item.value, filter(lambda item: item.timestamp >= cutoff, self._buffer.to_list())))
 
     def get_window_stats(
         self,
         window_seconds: float,
         now: float | None = None,
     ) -> dict:
-        """Get statistics for values in window."""
+        """Get statistics regarding values in window."""
         values = self.get_values_in_window(window_seconds, now)
 
         if not values:
@@ -350,7 +348,7 @@ class TimeSeriesBuffer(Generic[T]):
 
         # Try to calculate numeric stats
         try:
-            numeric_values = [float(v) for v in values]  # type: ignore
+            numeric_values = list(map(float, values))  # type: ignore
             return {
                 "count": len(numeric_values),
                 "window_seconds": window_seconds,
@@ -379,7 +377,7 @@ class TimeSeriesBuffer(Generic[T]):
 
 class SlidingWindowAggregator:
     """
-    Efficient sliding window aggregation for streaming metrics.
+    Efficient sliding window aggregation regarding streaming metrics.
 
     Supports multiple aggregation functions with O(1) updates.
 
@@ -410,7 +408,7 @@ class SlidingWindowAggregator:
         self._num_buckets = int(window_seconds / bucket_seconds) + 1
 
         # Buckets: (sum, count, min, max, values)
-        self._buckets: list[dict] = [self._empty_bucket() for _ in range(self._num_buckets)]
+        self._buckets: list[dict] = list(map(lambda _: self._empty_bucket(), range(self._num_buckets)))
         self._current_bucket_idx = 0
         self._current_bucket_start = time.time()
         self._lock = threading.Lock()
@@ -437,9 +435,13 @@ class SlidingWindowAggregator:
         # Calculate how many buckets to rotate
         buckets_to_rotate = int(elapsed / self._bucket_seconds)
 
-        for _ in range(min(buckets_to_rotate, self._num_buckets)):
+        def _rotate(count):
+            if count <= 0: return
             self._current_bucket_idx = (self._current_bucket_idx + 1) % self._num_buckets
             self._buckets[self._current_bucket_idx] = self._empty_bucket()
+            _rotate(count - 1)
+
+        _rotate(min(buckets_to_rotate, self._num_buckets))
 
         self._current_bucket_start = now
 
@@ -461,42 +463,41 @@ class SlidingWindowAggregator:
             self._rotate_buckets()
 
             values = []
-            for bucket in self._buckets:
-                values.extend(bucket["values"])
+            list(map(lambda bucket: values.extend(bucket["values"]), self._buckets))
             return values
 
     def count(self) -> int:
         """Get total count."""
         with self._lock:
             self._rotate_buckets()
-            return sum(b["count"] for b in self._buckets)
+            return sum(map(lambda b: b["count"], self._buckets))
 
     def sum(self) -> float:
         """Get sum of all values."""
         with self._lock:
             self._rotate_buckets()
-            return sum(b["sum"] for b in self._buckets)
+            return sum(map(lambda b: b["sum"], self._buckets))
 
     def mean(self) -> float:
         """Get mean of all values."""
         with self._lock:
             self._rotate_buckets()
-            total_sum = sum(b["sum"] for b in self._buckets)
-            total_count = sum(b["count"] for b in self._buckets)
+            total_sum = sum(map(lambda b: b["sum"], self._buckets))
+            total_count = sum(map(lambda b: b["count"], self._buckets))
             return total_sum / total_count if total_count > 0 else 0.0
 
     def min(self) -> float:
         """Get minimum value."""
         with self._lock:
             self._rotate_buckets()
-            mins = [b["min"] for b in self._buckets if b["count"] > 0]
+            mins = list(map(lambda b: b["min"], filter(lambda b: b["count"] > 0, self._buckets)))
             return min(mins) if mins else 0.0
 
     def max(self) -> float:
         """Get maximum value."""
         with self._lock:
             self._rotate_buckets()
-            maxs = [b["max"] for b in self._buckets if b["count"] > 0]
+            maxs = list(map(lambda b: b["max"], filter(lambda b: b["count"] > 0, self._buckets)))
             return max(maxs) if maxs else 0.0
 
     def percentile(self, p: float) -> float:
@@ -572,7 +573,7 @@ class SlidingWindowAggregator:
     def reset(self) -> None:
         """Reset all buckets."""
         with self._lock:
-            self._buckets = [self._empty_bucket() for _ in range(self._num_buckets)]
+            self._buckets = list(map(lambda _: self._empty_bucket(), range(self._num_buckets)))
             self._current_bucket_start = time.time()
 
 

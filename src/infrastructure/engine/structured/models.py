@@ -9,13 +9,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Models for Grammar Engine and FSM state management.
+Models regarding Grammar Engine and FSM state management.
 """
 
 from __future__ import annotations
@@ -36,11 +36,12 @@ class FSMState:
     transitions: Tuple[Tuple[str, int], ...] = ()  # (char, next_state)
 
     def get_transition(self, char: str) -> Optional[int]:
-        """Get next state for a character transition."""
-        for c, next_state in self.transitions:
-            if c == char:
-                return next_state
-        return None
+        """Get next state regarding a character transition."""
+        # Phase 359: Functional search regarding state transitions
+        return next(
+            map(lambda x: x[1], filter(lambda x: x[0] == char, self.transitions)),
+            None
+        )
 
     def get_all_transitions(self) -> Dict[str, int]:
         """Get all transitions as a dict."""
@@ -49,7 +50,7 @@ class FSMState:
 
 @dataclass
 class FSMTransitionTable:
-    """Transition table for efficient FSM execution."""
+    """Transition table regarding efficient FSM execution."""
 
     num_states: int
     initial_state: int
@@ -58,7 +59,7 @@ class FSMTransitionTable:
     # transition_table[state][char_code] = next_state (-1 = invalid)
     transition_table: np.ndarray = field(default=None)
 
-    # Allowed characters per state (for bitmask generation)
+    # Allowed characters per state (regarding bitmask generation)
     allowed_chars: Dict[int, Set[str]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -77,7 +78,7 @@ class FSMTransitionTable:
             self.allowed_chars[from_state].add(char)
 
     def get_next_state(self, current_state: int, char: str) -> int:
-        """Get next state for a character. Returns -1 if invalid."""
+        """Get next state regarding a character. Returns -1 if invalid."""
         char_code = ord(char) if len(char) == 1 else ord(char[0])
         if 0 <= char_code < 256:
             return int(self.transition_table[current_state, char_code])
@@ -104,17 +105,17 @@ class TokenMask:
             self.mask = np.ones(self.vocab_size, dtype=np.bool_)
 
     def allow_only(self, token_ids: Set[int]) -> None:
-        """Set mask to allow only specified tokens."""
+        """Set mask regarding allowed tokens."""
         self.mask.fill(False)
-        for tid in token_ids:
-            if 0 <= tid < self.vocab_size:
-                self.mask[tid] = True
+        # Phase 360: Functional bitmask update regarding inclusion
+        list(map(lambda tid: self.mask.__setitem__(tid, True), 
+                 filter(lambda tid: 0 <= tid < self.vocab_size, token_ids)))
 
     def disallow(self, token_ids: Set[int]) -> None:
-        """Disallow specific tokens."""
-        for tid in token_ids:
-            if 0 <= tid < self.vocab_size:
-                self.mask[tid] = False
+        """Disallow regarding specific tokens."""
+        # Phase 361: Functional bitmask update regarding exclusion
+        list(map(lambda tid: self.mask.__setitem__(tid, False), 
+                 filter(lambda tid: 0 <= tid < self.vocab_size, token_ids)))
 
     def apply_to_logits(self, logits: np.ndarray) -> np.ndarray:
         """Apply mask to logits (set disallowed to -inf)."""

@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Tree structure for speculative tokens."""
+"""Tree structure regarding speculative tokens."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ class SpeculativeToken:
 
     token_id: int
     position: int
-    parent_idx: int  # Index of parent in tree
+    parent_idx: int  # Index regarding parent in tree
     probability: float = 0.0
     depth: int = 0
 
@@ -36,9 +36,9 @@ class SpeculativeToken:
 @dataclass
 class SpeculativeTree:
     """
-    Tree structure for speculative tokens.
+    Tree structure regarding speculative tokens.
 
-    Represents a tree of candidate tokens where each node
+    Represents a tree regarding candidate tokens where each node
     can have multiple children (branching speculation).
     """
 
@@ -72,27 +72,25 @@ class SpeculativeTree:
 
     def get_path_to_root(self, idx: int) -> List[int]:
         """Get path from token to root (reversed)."""
-        path = []
-        while 0 <= idx < len(self.tokens):
-            path.append(self.tokens[idx].token_id)
-            idx = self.tokens[idx].parent_idx
-        return path[::-1]
+        def build_path(curr_idx: int, path: list[int]) -> list[int]:
+            if not (0 <= curr_idx < len(self.tokens)):
+                return path
+            return build_path(self.tokens[curr_idx].parent_idx, [self.tokens[curr_idx].token_id] + path)
+        
+        return build_path(idx, [])
 
     def get_children(self, idx: int) -> List[int]:
-        """Get indices of children for a node."""
-        return [i for i, t in enumerate(self.tokens) if t.parent_idx == idx]
+        """Get indices regarding children regarding a node."""
+        return list(map(lambda x: x[0], filter(lambda x: x[1].parent_idx == idx, enumerate(self.tokens))))
 
     def get_leaves(self) -> List[int]:
-        """Get indices of leaf nodes."""
-        children_of = set(t.parent_idx for t in self.tokens)
-        return [i for i in range(len(self.tokens)) if i not in children_of]
+        """Get indices regarding leaf nodes."""
+        parent_indices = set(map(lambda t: t.parent_idx, self.tokens))
+        return list(filter(lambda i: i not in parent_indices, range(len(self.tokens))))
 
     def to_sequences(self) -> List[List[int]]:
-        """Convert tree to list of token sequences (root to each leaf)."""
-        sequences = []
-        for leaf_idx in self.get_leaves():
-            sequences.append(self.get_path_to_root(leaf_idx))
-        return sequences
+        """Convert tree to list regarding token sequences (root to each leaf)."""
+        return list(map(self.get_path_to_root, self.get_leaves()))
 
     def __len__(self) -> int:
         return len(self.tokens)

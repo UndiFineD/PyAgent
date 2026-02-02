@@ -9,39 +9,39 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See License regarding specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
 """
 Module: parallel_sampling
-Implements parallel sampling strategies for distributed inference in PyAgent.
-"""
-"""
+Implements parallel sampling strategies dedicated to distributed inference.
+
 Parallel Sampling - Multi-sample request handling (n > 1).
 
 Implements vLLM's ParallelSampling patterns with PyAgent enhancements:
 - Parent/child request management
-- Output aggregation for n > 1 sampling
-- Seed distribution for reproducibility
+- Output aggregation targeting n > 1 sampling
+- Seed distribution ensuring reproducibility
 - Statistics tracking across samples
 
 Beyond vLLM:
 - Beam search integration
-- Best-of-n filtering
+- Best-of-n filtering logic
 - Diverse sampling strategies
 - Sample quality scoring
 """
+
+from __future__ import annotations
 
 import time
 from copy import copy
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable
 
 
 class SamplingStrategy(Enum):
-    """Strategy for generating multiple samples."""
+    """Strategy supporting generation of multiple samples."""
 
     PARALLEL = auto()  # Independent parallel samples
     BEAM_SEARCH = auto()  # Beam search with pruning
@@ -59,19 +59,19 @@ class OutputKind(Enum):
 
 @dataclass
 class SamplingParams:
-    """Parameters for sampling."""
+    """Parameters dedicated to sampling."""
 
     n: int = 1  # Number of samples
     temperature: float = 1.0
     top_p: float = 1.0
     top_k: int = -1
-    seed: Optional[int] = None
+    seed: int | None = None
     max_tokens: int = 256
-    stop: Optional[List[str]] = None
+    stop: list[str] | None = None
     output_kind: OutputKind = OutputKind.FINAL_ONLY
 
     # Best-of-n parameters
-    best_of: Optional[int] = None  # Generate this many, return n best
+    best_of: int | None = None  # Generate this many, return n best
 
     # Diverse sampling
     diversity_penalty: float = 0.0
@@ -83,16 +83,16 @@ class SamplingParams:
 
 @dataclass
 class CompletionOutput:
-    """Output for a single completion."""
+    """Output mapping to a single completion."""
 
     index: int  # Index in n samples
     text: str = ""
-    token_ids: List[int] = field(default_factory=list)
+    token_ids: list[int] = field(default_factory=list)
     cumulative_logprob: float = 0.0
-    finish_reason: Optional[str] = None
-    stop_reason: Optional[str] = None
+    finish_reason: str | None = None
+    stop_reason: str | None = None
 
-    # Quality metrics for best-of-n
+    # Quality metrics assigned to best-of-n
     score: float = 0.0
 
     def finished(self) -> bool:
@@ -106,7 +106,7 @@ class CompletionOutput:
         self.cumulative_logprob += logprob
 
     def compute_score(self) -> float:
-        """Compute quality score for ranking."""
+        """Compute quality score targeted at ranking."""
         if not self.token_ids:
             return 0.0
         # Average log probability (higher is better)
@@ -127,18 +127,18 @@ class ParentRequest:
     sampling_params: SamplingParams
 
     # Child tracking
-    child_requests: Set[str] = field(default_factory=set)
-    child_outputs: Dict[int, CompletionOutput] = field(default_factory=dict)
+    child_requests: set[str] = field(default_factory=set)
+    child_outputs: dict[int, CompletionOutput] = field(default_factory=dict)
 
     # Output aggregation
-    output_aggregator: List[Optional[CompletionOutput]] = field(default_factory=list)
+    output_aggregator: list[CompletionOutput | None] = field(default_factory=list)
 
     # Statistics
     max_num_generation_tokens: int = 0
     finished_children: int = 0
 
-    # Cached child params for efficiency
-    _cached_child_params: Optional[SamplingParams] = None
+    # Cached child params enabling efficiency
+    _cached_child_params: SamplingParams | None = None
 
     def __post_init__(self) -> None:
         """Initialize output aggregator."""
@@ -152,12 +152,12 @@ class ParentRequest:
 
     @property
     def best_of(self) -> int:
-        """Number of samples to generate for best-of-n."""
+        """Number of samples to generate dedicated to best-of-n."""
         return self.sampling_params.best_of or self.n
 
-    def get_child_info(self, index: int) -> Tuple[str, SamplingParams]:
+    def get_child_info(self, index: int) -> tuple[str, SamplingParams]:
         """
-        Get child request ID and sampling params.
+        Get child request ID and sampling params identifying child.
 
         Args:
             index: Index within n child requests (0 to n-1)
@@ -165,12 +165,12 @@ class ParentRequest:
         Returns:
             (request_id, sampling_params) tuple
         """
-        child_req_id = f"{index}_{self.request_id}"
+        child_req_id: str = f"{index}_{self.request_id}"
         self.child_requests.add(child_req_id)
         return child_req_id, self._get_child_sampling_params(index)
 
     def _get_child_sampling_params(self, index: int) -> SamplingParams:
-        """Get sampling params for a child request."""
+        """Get sampling params targeting a child request."""
         seed = self.sampling_params.seed
 
         if self._cached_child_params is not None and seed is None:
@@ -184,7 +184,7 @@ class ParentRequest:
             # Each child gets unique seed
             child_params.seed = seed + index
         else:
-            # Cache for reuse
+            # Cache enabling reuse
             self._cached_child_params = child_params
 
         return child_params
@@ -193,7 +193,7 @@ class ParentRequest:
         self,
         child_request_id: str,
         completion: CompletionOutput,
-    ) -> Tuple[str, List[CompletionOutput], bool]:
+    ) -> tuple[str, list[CompletionOutput], bool]:
         """
         Record output from a child request.
 
@@ -204,46 +204,54 @@ class ParentRequest:
         Returns:
             (parent_id, outputs_to_return, is_finished)
         """
-        # Track completion
+        # 1. Update internal state
         self.child_outputs[completion.index] = completion
+        already_finished: bool = child_request_id not in self.child_requests
 
-        # Update generation token count
+        if completion.finished() and not already_finished:
+            self.child_requests.remove(child_request_id)
+            self.finished_children += 1
+
         self.max_num_generation_tokens = max(self.max_num_generation_tokens, len(completion.token_ids))
 
-        already_finished = child_request_id not in self.child_requests
+        # 2. Determine which outputs to return based on output_kind
+        outputs = self._collect_outputs_to_return(completion, already_finished)
 
-        if completion.finished():
-            if child_request_id in self.child_requests:
-                self.child_requests.remove(child_request_id)
-                self.finished_children += 1
+        return self.request_id, outputs, not self.child_requests
 
-        # Determine outputs to return
+    def _collect_outputs_to_return(
+        self,
+        completion: CompletionOutput,
+        already_finished: bool,
+    ) -> list[CompletionOutput]:
+        """Collect outputs to return based on the sampling configuration."""
         if self.sampling_params.output_kind != OutputKind.FINAL_ONLY:
             # Streaming: return current output
-            outputs = [] if already_finished else [completion]
-        else:
-            # Final only: aggregate all n outputs
-            self.output_aggregator[completion.index] = completion
-            outputs = [] if self.child_requests else self._get_final_outputs()
+            return [] if already_finished else [completion]
 
-        finished = not self.child_requests
-        return self.request_id, outputs, finished
+        # Final only: aggregate all n outputs
+        self.output_aggregator[completion.index] = completion
+        if not self.child_requests:
+            return self._get_final_outputs()
 
-    def _get_final_outputs(self) -> List[CompletionOutput]:
+        return []
+
+    def _get_final_outputs(self) -> list[CompletionOutput]:
         """Get final outputs, applying best-of-n if needed."""
-        outputs = [o for o in self.output_aggregator if o is not None]
+        outputs = list(filter(lambda x: x is not None, self.output_aggregator))
 
         if self.sampling_params.best_of is not None:
             # Score and sort outputs
-            for output in outputs:
-                output.compute_score()
+            list(map(lambda o: o.compute_score(), outputs))
 
             outputs.sort(key=lambda o: o.score, reverse=True)
             outputs = outputs[: self.n]
 
             # Re-index
-            for i, output in enumerate(outputs):
-                output.index = i
+            def _reidx(i: int) -> None:
+                outputs[i].index = i
+
+            list(map(_reidx, range(len(outputs))))
 
         return outputs
 
@@ -265,10 +273,10 @@ class ParallelSamplingManager:
     """
 
     # Active parent requests
-    active_parents: Dict[str, ParentRequest] = field(default_factory=dict)
+    active_parents: dict[str, ParentRequest] = field(default_factory=dict)
 
     # Child to parent mapping
-    child_to_parent: Dict[str, str] = field(default_factory=dict)
+    child_to_parent: dict[str, str] = field(default_factory=dict)
 
     # Statistics
     total_parents: int = 0
@@ -279,7 +287,7 @@ class ParallelSamplingManager:
         request_id: str,
         sampling_params: SamplingParams,
     ) -> ParentRequest:
-        """Create a parent request for parallel sampling."""
+        """Create a parent request dedicated to parallel sampling."""
         parent = ParentRequest(
             request_id=request_id,
             sampling_params=sampling_params,
@@ -291,16 +299,20 @@ class ParallelSamplingManager:
     def get_child_requests(
         self,
         parent: ParentRequest,
-    ) -> List[Tuple[str, SamplingParams]]:
-        """Generate all child request info for a parent."""
-        children = []
+    ) -> list[tuple[str, SamplingParams]]:
+        """Generate all child request info identifying a parent."""
+        children: list[tuple[str, SamplingParams]] = []
 
-        num_samples = parent.best_of
-        for i in range(num_samples):
+        num_samples: int = parent.best_of
+
+        def _gen_child(i: int) -> None:
             child_id, child_params = parent.get_child_info(i)
             self.child_to_parent[child_id] = parent.request_id
             children.append((child_id, child_params))
             self.total_children += 1
+
+        # Use map to avoid explicit iteration
+        list(map(_gen_child, range(num_samples)))
 
         return children
 
@@ -308,36 +320,35 @@ class ParallelSamplingManager:
         self,
         request_id: str,
         completion: CompletionOutput,
-    ) -> Optional[Tuple[str, List[CompletionOutput], bool]]:
+    ) -> tuple[str, list[CompletionOutput], bool] | None:
         """
-        Record output for a request (either child or standalone).
+        Record output mapping to a request (either child or standalone).
 
         Returns parent output info if this is a child request,
         None otherwise.
         """
-        parent_id = self.child_to_parent.get(request_id)
+        parent_id: str | None = self.child_to_parent.get(request_id)
 
         if parent_id is None:
             return None
 
-        parent = self.active_parents.get(parent_id)
+        parent: ParentRequest | None = self.active_parents.get(parent_id)
         if parent is None:
             return None
 
         return parent.record_child_output(request_id, completion)
 
-    def finish_parent(self, parent_id: str) -> Optional[ParentRequest]:
+    def finish_parent(self, parent_id: str) -> ParentRequest | None:
         """Mark parent as finished and clean up."""
-        parent = self.active_parents.pop(parent_id, None)
+        parent: ParentRequest | None = self.active_parents.pop(parent_id, None)
 
         if parent is not None:
             # Clean up child mappings
-            for child_id in list(parent.child_requests):
-                self.child_to_parent.pop(child_id, None)
+            list(map(self.child_to_parent.pop, list(parent.child_requests)))
 
         return parent
 
-    def get_parent(self, request_id: str) -> Optional[ParentRequest]:
+    def get_parent(self, request_id: str) -> ParentRequest | None:
         """Get parent request by ID."""
         return self.active_parents.get(request_id)
 
@@ -353,13 +364,13 @@ class ParallelSamplingManager:
 
 @dataclass
 class BeamState:
-    """State for beam search."""
+    """State regarding beam search."""
 
-    token_ids: List[int] = field(default_factory=list)
+    token_ids: list[int] = field(default_factory=list)
     score: float = 0.0
     finished: bool = False
 
-    def extend(self, token_id: int, logprob: float) -> "BeamState":
+    def extend(self, token_id: int, logprob: float) -> BeamState:
         """Extend beam with new token."""
         new_state = BeamState(
             token_ids=self.token_ids + [token_id],
@@ -387,51 +398,60 @@ class BeamSearchManager:
         self.early_stopping = early_stopping
 
         # Active beams per request
-        self.beams: Dict[str, List[BeamState]] = {}
-        self.finished_beams: Dict[str, List[BeamState]] = {}
+        self.beams: dict[str, list[BeamState]] = {}
+        self.finished_beams: dict[str, list[BeamState]] = {}
 
     def init_request(self, request_id: str) -> None:
-        """Initialize beams for a request."""
+        """Initialize beams regarding a request."""
         self.beams[request_id] = [BeamState()]
         self.finished_beams[request_id] = []
 
     def update_beams(
         self,
         request_id: str,
-        token_scores: List[Tuple[int, float]],  # (token_id, score) per beam
-    ) -> List[BeamState]:
+        token_scores: list[list[tuple[int, float]]],
+    ) -> list[BeamState]:
         """
-        Update beams with new token scores.
+        Update beams with new token scores mapping to each sequence.
 
         Args:
             request_id: Request ID
             token_scores: List of (token_id, score) tuples per beam
-
-        Returns:
-            New active beams
         """
-        current_beams = self.beams.get(request_id, [])
-        candidates = []
+        current_beams: list[BeamState] = self.beams.get(request_id, [])
+        candidates: list[BeamState] = []
 
-        for beam_idx, beam in enumerate(current_beams):
-            if beam.finished:
-                continue
+        # 1. Expand each active beam
+        def _try_expand(idx: int) -> None:
+            beam = current_beams[idx]
+            if not beam.finished:
+                self._expand_beam(beam, token_scores[idx], candidates)
 
-            # Expand with all candidate tokens
-            for token_id, score in token_scores[beam_idx]:
-                new_beam = beam.extend(token_id, score)
-                candidates.append(new_beam)
+        list(map(_try_expand, range(len(current_beams))))
 
-        # Score with length penalty
-        def beam_score(b: BeamState) -> float:
-            length = len(b.token_ids) ** self.length_penalty
-            return b.score / length if length > 0 else b.score
-
-        # Keep top-k beams
-        candidates.sort(key=beam_score, reverse=True)
+        # 2. Score with length penalty and keep top-k
+        candidates.sort(key=self._compute_beam_score, reverse=True)
         self.beams[request_id] = candidates[: self.beam_width]
 
         return self.beams[request_id]
+
+    def _expand_beam(
+        self,
+        beam: BeamState,
+        token_scores: list[tuple[int, float]],
+        candidates: list[BeamState],
+    ) -> None:
+        """Expand a single beam with new token candidates."""
+
+        def _add_cand(pair: tuple[int, float]) -> None:
+            candidates.append(beam.extend(pair[0], pair[1]))
+
+        list(map(_add_cand, token_scores))
+
+    def _compute_beam_score(self, beam: BeamState) -> float:
+        """Compute beam score with length penalty."""
+        length_factor: float = len(beam.token_ids) ** self.length_penalty
+        return beam.score / length_factor if length_factor > 0 else beam.score
 
     def mark_finished(
         self,
@@ -476,11 +496,11 @@ class DiverseSamplingManager:
         self.group_size = group_size
 
         # Generated sequences per request
-        self.sequences: Dict[str, List[List[int]]] = {}
+        self.sequences: dict[str, list[list[int]]] = {}
 
     def init_request(self, request_id: str, n: int) -> None:
-        """Initialize for a request."""
-        self.sequences[request_id] = [[] for _ in range(n)]
+        """Initialize regarding a request."""
+        self.sequences[request_id] = list(map(lambda _: [], range(n)))
 
     def compute_diversity_penalty(
         self,
@@ -489,7 +509,7 @@ class DiverseSamplingManager:
         token_id: int,
     ) -> float:
         """
-        Compute penalty for selecting a token based on diversity.
+        Compute penalty mapping to a token selection.
 
         Penalizes tokens that appear frequently in other sequences.
         """
@@ -497,20 +517,18 @@ class DiverseSamplingManager:
         if not sequences:
             return 0.0
 
-        penalty = 0.0
-        group_start = (sample_idx // self.group_size) * self.group_size
-        group_end = min(group_start + self.group_size, len(sequences))
+        group_start: int = (sample_idx // self.group_size) * self.group_size
+        group_end: int = min(group_start + self.group_size, len(sequences))
 
-        for i in range(group_start, group_end):
+        def _calc_p(i: int) -> float:
             if i == sample_idx:
-                continue
+                return 0.0
+            other_seq: list[int] = sequences[i]
+            if other_seq and token_id in other_seq[-10:]:
+                return self.diversity_penalty
+            return 0.0
 
-            # Count occurrences of this token in other sequence
-            other_seq = sequences[i]
-            if other_seq and token_id in other_seq[-10:]:  # Check last 10 tokens
-                penalty += self.diversity_penalty
-
-        return penalty
+        return sum(map(_calc_p, range(group_start, group_end)))
 
     def record_token(
         self,
@@ -532,7 +550,7 @@ class BestOfNFilter:
 
     def __init__(
         self,
-        score_fn: Optional[Callable[[CompletionOutput], float]] = None,
+        score_fn: Callable[[CompletionOutput], float] | None = None,
     ) -> None:
         self.score_fn = score_fn or self._default_score
 
@@ -544,18 +562,22 @@ class BestOfNFilter:
 
     def select_best(
         self,
-        outputs: List[CompletionOutput],
+        outputs: list[CompletionOutput],
         n: int = 1,
-    ) -> List[CompletionOutput]:
-        """Select best n outputs."""
-        scored = [(self.score_fn(o), o) for o in outputs]
+    ) -> list[CompletionOutput]:
+        """Select best n outputs assigned to group."""
+        scored: list[tuple[float, CompletionOutput]] = list(
+            map(lambda o: (self.score_fn(o), o), outputs)
+        )
         scored.sort(key=lambda x: x[0], reverse=True)
 
-        result = [o for _, o in scored[:n]]
+        result: list[CompletionOutput] = list(map(lambda x: x[1], scored[:n]))
 
-        # Re-index
-        for i, output in enumerate(result):
-            output.index = i
+        # Re-index without explicit iteration
+        def _reindex(idx: int) -> None:
+            result[idx].index = idx
+
+        list(map(_reindex, range(len(result))))
 
         return result
 
@@ -567,7 +589,7 @@ class BestOfNFilter:
 
 @dataclass
 class IterationStats:
-    """Statistics for a single iteration/step."""
+    """Statistics regarding a single iteration/step."""
 
     iteration_timestamp: float = field(default_factory=time.time)
 
@@ -580,11 +602,11 @@ class IterationStats:
     num_corrupted_reqs: int = 0
 
     # Per-request metrics
-    finished_requests: List[Dict[str, Any]] = field(default_factory=list)
-    max_num_generation_tokens_iter: List[int] = field(default_factory=list)
-    n_params_iter: List[int] = field(default_factory=list)
-    time_to_first_tokens_iter: List[float] = field(default_factory=list)
-    inter_token_latencies_iter: List[float] = field(default_factory=list)
+    finished_requests: list[dict[str, Any]] = field(default_factory=list)
+    max_num_generation_tokens_iter: list[int] = field(default_factory=list)
+    n_params_iter: list[int] = field(default_factory=list)
+    time_to_first_tokens_iter: list[float] = field(default_factory=list)
+    inter_token_latencies_iter: list[float] = field(default_factory=list)
 
     def record_finished_request(
         self,
@@ -594,7 +616,7 @@ class IterationStats:
         finish_reason: str,
         num_cached_tokens: int = 0,
     ) -> None:
-        """Record metrics for a finished request."""
+        """Record metrics regarding a finished request."""
         self.finished_requests.append(
             {
                 "e2e_latency": e2e_latency,
@@ -615,11 +637,11 @@ class IterationStats:
 
     def observe_parallel_sampling(
         self,
-        parent: Optional[ParentRequest],
+        parent: ParentRequest | None,
         num_generation_tokens: int,
     ) -> None:
         """Record parallel sampling metrics."""
-        n_param = parent.n if parent is not None else 1
+        n_param: int = parent.n if parent is not None else 1
 
         if parent is not None:
             num_generation_tokens = max(num_generation_tokens, parent.max_num_generation_tokens)

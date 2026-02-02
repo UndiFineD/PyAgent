@@ -168,33 +168,6 @@ class StabilityCore:
         return 0.5
 
 
-class TracingCore:
-    """distributed tracing and latency breakdown logic."""
-
-    def create_span_context(self, trace_id: str, span_id: str) -> dict[str, str]:
-        """Create a standard OTel span context."""
-        return {"trace_id": trace_id, "span_id": span_id, "version": "OTel-1.1"}
-
-    def calculate_latency_breakdown(self, total_time: float, network_time: float) -> dict[str, float]:
-        """Calculate network vs thinking latency breakdown."""
-        thinking_time: float = total_time - network_time
-        return {
-            "total_latency_ms": total_time * 1000,
-            "network_latency_ms": network_time * 1000,
-            "agent_thinking_ms": thinking_time * 1000,
-            "think_ratio": thinking_time / total_time if total_time > 0 else 0,
-        }
-
-    def format_otel_log(self, name: str, attributes: dict[str, Any]) -> dict[str, Any]:
-        """Format a log entry for OpenTelemetry ingestion."""
-        return {
-            "timestamp": time.time_ns(),
-            "name": name,
-            "attributes": attributes,
-            "kind": "INTERNAL",
-        }
-
-
 class DerivedMetricCalculator:
     """Calculate derived metrics from dependencies using safe AST evaluation."""
 

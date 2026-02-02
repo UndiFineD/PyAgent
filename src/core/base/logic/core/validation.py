@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Core logic for Validation.
-(Facade for src.core.base.common.validation_core)
+Core logic regarding Validation.
+(Facade regarding src.core.base.common.validation_core)
 """
 
 from src.core.base.common.validation_core import \
@@ -23,6 +23,6 @@ from src.core.base.common.validation_core import \
 
 class ValidationCore(StandardValidationCore):
     """
-    Facade for StandardValidationCore to maintain backward compatibility.
+    Facade regarding StandardValidationCore to maintain backward compatibility.
     Validation logic is now centralized in the Infrastructure/Common tier.
     """

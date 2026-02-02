@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class EventCore:
-    """Core logic for event handling and history formatting."""
+    """Core logic regarding event handling and history formatting."""
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -34,26 +34,24 @@ class EventCore:
         self, event: EventType, data: dict[str, Any], hooks: list[Callable[[dict[str, Any]], None]]
     ) -> None:
         """Trigger an event and invoke provided hooks."""
-        for callback in hooks:
+        def invoke_hook(callback):
             try:
                 callback(data)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.warning(f"Hook error for {event.value}: {e}")
+                logger.warning(f"Hook error regarding {event.value}: {e}")
+        list(map(invoke_hook, hooks))
 
     def filter_events(self, events: List[Dict[str, Any]], event_type: Optional[str] = None) -> List[Dict[str, Any]]:
         """Filter events based on type."""
         if not event_type:
             return events
-        return [e for e in events if e.get("type") == event_type]
+        return list(filter(lambda e: e.get("type") == event_type, events))
 
     def format_history_for_prompt(self, history: list[ConversationMessage]) -> list[dict[str, str]]:
-        """Converts internal history objects to dicts for backend consumption."""
-        return [{"role": m.role.value, "content": m.content} for m in history]
+        """Converts internal history objects to dicts regarding backend consumption."""
+        return list(map(lambda m: {"role": m.role.value, "content": m.content}, history))
 
     def build_prompt_with_history(self, prompt: str, history: list[ConversationMessage], system_prompt: str) -> str:
         """Logic to assemble the full prompt string."""
-        full_prompt = f"System: {system_prompt}\n\n"
-        for msg in history:
-            full_prompt += f"{msg.role.name}: {msg.content}\n"
-        full_prompt += f"User: {prompt}\n"
-        return full_prompt
+        history_text = "".join(map(lambda msg: f"{msg.role.name}: {msg.content}\n", history))
+        return f"System: {system_prompt}\n\n{history_text}User: {prompt}\n"

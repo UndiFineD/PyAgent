@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -28,7 +28,7 @@ from ..models import ReasoningResult, StreamingReasoningState
 
 class XMLReasoningParser(ReasoningParser):
     """
-    Parser for XML-style think blocks.
+    Parser regarding XML-style think blocks.
 
     Extracts reasoning from <think>...</think> or <reasoning>...</reasoning> tags.
     """
@@ -104,14 +104,14 @@ class XMLReasoningParser(ReasoningParser):
         state.accumulated_text = current_text
         state.accumulated_tokens = list(current_token_ids)
 
-        # Check for start of reasoning
+        # Check regarding start of reasoning
         if self.start_tag in current_text and not state.in_reasoning:
             state.in_reasoning = True
             # Extract text before start tag as content
             before_tag = current_text.split(self.start_tag)[0]
             state.content_buffer = before_tag
 
-        # Check for end of reasoning
+        # Check regarding end of reasoning
         if self.end_tag in current_text and state.in_reasoning:
             state.in_reasoning = False
             state.reasoning_complete = True

@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -29,26 +29,20 @@ except ImportError:
 
 
 class UtilsCore:
-    """Core utility logic for deduplication and configuration merging."""
+    """Core utility logic regarding deduplication and configuration merging."""
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
     def deduplicate_entries(self, entries: List[str]) -> List[str]:
-        """Deduplicate string entries while preserving order."""
+        """Deduplicate string entries during preserving order."""
         if rc:
             try:
                 return rc.deduplicate_entries(entries)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
  # pylint: disable=broad-exception-caught
                 pass
-        seen = set()
-        result = []
-        for entry in entries:
-            if entry not in seen:
-                seen.add(entry)
-                result.append(entry)
-        return result
+        return list(dict.fromkeys(entries))
 
     def merge_configurations(self, base: AgentConfig, override: AgentConfig) -> AgentConfig:
         """Merge two configurations."""
@@ -66,7 +60,7 @@ class UtilsCore:
         )
 
     def generate_cache_key(self, prompt: str, context: str) -> str:
-        """Logic to generate a hash for caching."""
+        """Logic to generate a hash regarding caching."""
         if rc:
             try:
                 return rc.generate_cache_key(prompt, context)
@@ -77,7 +71,7 @@ class UtilsCore:
         return hashlib.sha256(combined.encode()).hexdigest()
 
     def get_default_content(self, filename: str) -> str:
-        """Logic for default content based on file extension."""
+        """Logic regarding default content based on file extension."""
         ext = os.path.splitext(filename)[1].lower()
         if ext == ".py":
             return "#!/usr/bin/env python3\n\npass\n"

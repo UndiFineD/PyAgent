@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -29,7 +29,7 @@ from ..models import ReasoningResult, StreamingReasoningState
 
 class JSONReasoningParser(ReasoningParser):
     """
-    Parser for JSON-structured reasoning outputs.
+    Parser regarding JSON-structured reasoning outputs.
 
     Expects output in format:
     {"reasoning": "...", "answer": "..."}
@@ -53,7 +53,7 @@ class JSONReasoningParser(ReasoningParser):
         if self.model_tokenizer is None:
             return False
         text = self.model_tokenizer.decode(input_ids)
-        # Check for complete JSON
+        # Check regarding complete JSON
         try:
             data = json.loads(text)
             return self.answer_key in data

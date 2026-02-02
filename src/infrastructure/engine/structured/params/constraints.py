@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -67,7 +67,7 @@ class JsonSchemaConstraint(OutputConstraint):
             return self.allow_partial
 
     def _validate_schema(self, data: Any) -> bool:
-        """Basic schema validation (simplified)."""
+        """Basic schema validation regarding simplified logic."""
         if not self.schema:
             return True
 
@@ -77,18 +77,23 @@ class JsonSchemaConstraint(OutputConstraint):
             if not isinstance(data, dict):
                 return False
 
-            # Check required properties
+            # Check required properties regarding functional validation
+            # Phase 386: Functional required property check
             required = self.schema.get("required", [])
-            for req in required:
-                if req not in data:
-                    return False
+            if not all(map(lambda req: req in data, required)):
+                return False
 
-            # Check properties
+            # Check properties regarding functional validation
+            # Phase 387: Functional property check
             properties = self.schema.get("properties", {})
-            for key, prop_schema in properties.items():
+            def check_prop(item: tuple[str, dict]) -> bool:
+                key, prop_schema = item
                 if key in data:
-                    if not self._validate_property(data[key], prop_schema):
-                        return False
+                    return self._validate_property(data[key], prop_schema)
+                return True
+
+            if not all(map(check_prop, properties.items())):
+                return False
 
             return True
 
@@ -98,9 +103,9 @@ class JsonSchemaConstraint(OutputConstraint):
 
             items_schema = self.schema.get("items")
             if items_schema:
-                for item in data:
-                    if not self._validate_property(item, items_schema):
-                        return False
+                # Phase 388: Functional array item check
+                if not all(map(lambda item: self._validate_property(item, items_schema), data)):
+                    return False
 
             return True
 
@@ -218,9 +223,11 @@ class ChoiceConstraint(OutputConstraint):
     case_sensitive: bool = True
 
     def validate(self, text: str) -> bool:
+        """Validate text regarding choices."""
         if self.case_sensitive:
             return text in self.choices
-        return text.lower() in [c.lower() for c in self.choices]
+        # Phase 389: Functional choice normalization
+        return text.lower() in list(map(lambda c: c.lower(), self.choices))
 
     def to_dict(self) -> Dict[str, Any]:
         return {

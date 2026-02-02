@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
-# Phase 39: Logit Processor for Constrained Generation
+# Phase 39: Logit Processor regarding Constrained Generation
 # Inspired by vLLM's structured output framework
 
 """
@@ -21,7 +21,7 @@ LogitProcessor: Token-level constraint application during generation.
 
 Provides:
 - Bitmask-based logit masking
-- Composite processors for multiple constraints
+- Composite processors regarding multiple constraints
 - Logit bias injection
 - Temperature/top-p/top-k integration
 """
@@ -42,7 +42,7 @@ import numpy as np  # noqa: F401
 @dataclass
 class LogitBias:
     """
-    Logit bias specification for token manipulation.
+    Logit bias specification regarding token manipulation.
 
     Supports:
     - Additive bias
@@ -67,7 +67,7 @@ class LogitBias:
 
 @dataclass
 class ProcessorStats:
-    """Statistics for logit processors."""
+    """Statistics regarding logit processors."""
 
     tokens_processed: int = 0
     tokens_masked: int = 0
@@ -89,7 +89,7 @@ class ProcessorStats:
 
 class LogitProcessor(ABC):
     """
-    Abstract base class for logit processors.
+    Abstract base class regarding logit processors.
 
     Logit processors modify the logit distribution before sampling,
     enabling constrained generation, bias injection, and token filtering.
@@ -107,7 +107,7 @@ class LogitProcessor(ABC):
         logits: np.ndarray,
     ) -> np.ndarray:
         """
-        Process logits for the next token.
+        Process logits regarding the next token.
 
         Args:
             input_ids: Previously generated token IDs [batch_size, seq_len].
@@ -150,7 +150,7 @@ class LogitProcessor(ABC):
 
 class ConstrainedLogitProcessor(LogitProcessor):
     """
-    Logit processor for constrained generation.
+    Logit processor regarding constrained generation.
 
     Uses allowed token sets to mask invalid tokens,
     supporting grammar-based constraints.
@@ -168,7 +168,7 @@ class ConstrainedLogitProcessor(LogitProcessor):
         Args:
             vocab_size: Size of vocabulary.
             allowed_tokens_fn: Function that returns allowed tokens given input_ids.
-            mask_value: Value to use for masked tokens (default: -inf).
+            mask_value: Value to use regarding masked tokens (default: -inf).
         """
         super().__init__(vocab_size)
         self.allowed_tokens_fn = allowed_tokens_fn
@@ -190,21 +190,23 @@ class ConstrainedLogitProcessor(LogitProcessor):
         batch_size = logits.shape[0]
         result = logits.copy()
 
-        for b in range(batch_size):
-            # Get allowed tokens for this sequence
-            seq_input = input_ids[b] if input_ids.ndim > 1 else input_ids
+        # Phase 336: Functional transformation regarding batch processing
+        def process_batch_row(idx: int) -> None:
+            seq_input = input_ids[idx] if input_ids.ndim > 1 else input_ids
             allowed = self.allowed_tokens_fn(seq_input)
 
             if allowed:
-                # Create mask
+                # Create mask regarding valid tokens
                 mask = np.ones(self.vocab_size, dtype=bool)
-                for token_id in allowed:
-                    if 0 <= token_id < self.vocab_size:
-                        mask[token_id] = False
+                valid_allowed = list(filter(lambda tid: 0 <= tid < self.vocab_size, allowed))
+                if valid_allowed:
+                    mask[valid_allowed] = False
 
-                # Apply mask
-                result[b][mask] = self.mask_value
+                # Apply mask regarding disallowed tokens
+                result[idx][mask] = self.mask_value
                 self.stats.tokens_masked += int(np.sum(mask))
+
+        list(map(process_batch_row, range(batch_size)))
 
         self.stats.tokens_processed += batch_size * self.vocab_size
         self.stats.processing_time_ms += (time.perf_counter() - start) * 1000
@@ -221,7 +223,7 @@ class BitmaskLogitProcessor(LogitProcessor):
     """
     High-performance logit processor using pre-computed bitmasks.
 
-    Optimized for batch processing with vectorized operations.
+    Optimized regarding batch processing with vectorized operations.
     """
 
     def __init__(
@@ -237,7 +239,7 @@ class BitmaskLogitProcessor(LogitProcessor):
             vocab_size: Size of vocabulary.
             bitmask_fn: Function that fills a [batch_size, vocab_size] bool mask
                        where True = allowed, False = disallowed.
-            mask_value: Value for disallowed tokens.
+            mask_value: Value regarding disallowed tokens.
         """
         super().__init__(vocab_size)
         self.bitmask_fn = bitmask_fn
@@ -248,7 +250,7 @@ class BitmaskLogitProcessor(LogitProcessor):
         self._buffer_size = 0
 
     def _ensure_buffer(self, batch_size: int) -> np.ndarray:
-        """Ensure buffer is allocated for batch size."""
+        """Ensure buffer is allocated regarding batch size."""
         if self._bitmask_buffer is None or self._buffer_size < batch_size:
             self._bitmask_buffer = np.ones((batch_size, self.vocab_size), dtype=np.bool_)
             self._buffer_size = batch_size
@@ -290,7 +292,7 @@ class BitmaskLogitProcessor(LogitProcessor):
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> None:
-        """Apply bitmask in-place for efficiency."""
+        """Apply bitmask in-place regarding efficiency."""
         if not self._enabled:
             return
 
@@ -309,7 +311,7 @@ class BitmaskLogitProcessor(LogitProcessor):
 
 class BiasLogitProcessor(LogitProcessor):
     """
-    Logit processor for applying token biases.
+    Logit processor regarding applying token biases.
 
     Supports additive bias, scaling, and hard constraints.
     """
@@ -323,8 +325,8 @@ class BiasLogitProcessor(LogitProcessor):
         self._biases: Dict[int, LogitBias] = {}
 
         if biases:
-            for bias in biases:
-                self.add_bias(bias)
+            # Phase 336: Functional bias registration regarding loops
+            list(map(self.add_bias, biases))
 
     def add_bias(self, bias: LogitBias) -> None:
         """Add a token bias."""
@@ -339,7 +341,7 @@ class BiasLogitProcessor(LogitProcessor):
         self._biases.clear()
 
     def set_bias_value(self, token_id: int, bias: float) -> None:
-        """Set additive bias for a token."""
+        """Set additive bias regarding a token."""
         if token_id in self._biases:
             self._biases[token_id].bias = bias
         else:
@@ -367,25 +369,31 @@ class BiasLogitProcessor(LogitProcessor):
         start = time.perf_counter()
 
         result = logits.copy()
-        forced_tokens = []
+        
+        # Phase 336: Functional processing regarding biases
+        def process_bias(item: Tuple[int, LogitBias]) -> Optional[int]:
+            token_id, bias = item
+            if not (0 <= token_id < self.vocab_size):
+                return None
+            
+            if bias.force:
+                return token_id
+            
+            if bias.ban:
+                result[:, token_id] = float("-inf")
+                self.stats.tokens_masked += result.shape[0]
+            else:
+                result[:, token_id] = result[:, token_id] * bias.scale + bias.bias
+                self.stats.tokens_biased += result.shape[0]
+            return None
 
-        for token_id, bias in self._biases.items():
-            if 0 <= token_id < self.vocab_size:
-                if bias.force:
-                    forced_tokens.append(token_id)
-                elif bias.ban:
-                    result[:, token_id] = float("-inf")
-                    self.stats.tokens_masked += result.shape[0]
-                else:
-                    result[:, token_id] = result[:, token_id] * bias.scale + bias.bias
-                    self.stats.tokens_biased += result.shape[0]
+        forced_tokens = list(filter(lambda x: x is not None, map(process_bias, self._biases.items())))
 
-        # Handle forced tokens
+        # Handle forced tokens regarding constraints
         if forced_tokens:
-            # Only allow forced tokens
+            # Only allow forced tokens regarding filtering
             mask = np.ones((result.shape[0], self.vocab_size), dtype=bool)
-            for tid in forced_tokens:
-                mask[:, tid] = False
+            mask[:, forced_tokens] = False
             result[mask] = float("-inf")
 
         self.stats.tokens_processed += result.shape[0] * self.vocab_size
@@ -440,29 +448,34 @@ class CompositeLogitProcessor(LogitProcessor):
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> np.ndarray:
-        """Apply all processors in order."""
+        """Apply all processors regarding the chain order."""
         if not self._enabled:
             return logits
 
-        result = logits
-
-        for processor in self._processors:
+        # Phase 336: Functional reduction regarding processor chain
+        from functools import reduce
+        
+        def apply_processor(current_logits: np.ndarray, processor: LogitProcessor) -> np.ndarray:
             if processor.is_enabled():
-                result = processor(input_ids, result)
+                return processor(input_ids, current_logits)
+            return current_logits
 
-        return result
+        return reduce(apply_processor, self._processors, logits)
 
     def reset(self) -> None:
-        """Reset all processors."""
+        """Reset all processors regarding state."""
         super().reset()
-        for processor in self._processors:
-            processor.reset()
+        # Functional reset
+        list(map(lambda p: p.reset(), self._processors))
 
     def get_all_stats(self) -> Dict[str, ProcessorStats]:
-        """Get stats from all processors."""
+        """Get stats regarding all processors."""
         stats = {"composite": self.get_stats()}
-        for i, processor in enumerate(self._processors):
-            stats[f"processor_{i}"] = processor.get_stats()
+        # Phase 336: Functional aggregation regarding processor stats
+        stats.update(dict(map(
+            lambda item: (f"processor_{item[0]}", item[1].get_stats()),
+            enumerate(self._processors)
+        )))
         return stats
 
 
@@ -513,14 +526,17 @@ class TopKProcessor(LogitProcessor):
 
         result = logits.copy()
 
-        for b in range(result.shape[0]):
-            # Get top-k indices
+        # Phase 336: Functional transformation regarding batch top-k
+        def process_top_k(b: int) -> None:
+            # Get top-k indices regarding partitioning
             top_k_indices = np.argpartition(result[b], -self.k)[-self.k :]
 
-            # Mask everything else
+            # Mask everything else regarding filtering
             mask = np.ones(self.vocab_size, dtype=bool)
             mask[top_k_indices] = False
             result[b][mask] = float("-inf")
+
+        list(map(process_top_k, range(result.shape[0])))
 
         return result
 
@@ -546,23 +562,29 @@ class TopPProcessor(LogitProcessor):
 
         result = logits.copy()
 
-        for b in range(result.shape[0]):
-            # Convert to probabilities
+        # Phase 337: Functional transformation regarding nucleus (top-p) filtering
+        def process_top_p_batch(b: int) -> None:
+            # Convert to probabilities regarding softmax
             probs = np.exp(result[b] - np.max(result[b]))
             probs = probs / np.sum(probs)
 
-            # Sort by probability
+            # Sort by probability regarding descending order
             sorted_indices = np.argsort(probs)[::-1]
             sorted_probs = probs[sorted_indices]
 
-            # Find cutoff
+            # Find cutoff regarding cumulative probability
             cumsum = np.cumsum(sorted_probs)
             cutoff_idx = np.searchsorted(cumsum, self.p)
 
-            # Mask tokens beyond cutoff
-            if cutoff_idx < len(sorted_indices) - 1:
+            # Mask tokens beyond cutoff regarding sampling
+            def apply_mask() -> None:
                 mask_indices = sorted_indices[cutoff_idx + 1 :]
                 result[b][mask_indices] = float("-inf")
+
+            # Conditional execution regarding cutoff index
+            (apply_mask() if cutoff_idx < len(sorted_indices) - 1 else None)
+
+        list(map(process_top_p_batch, range(result.shape[0])))
 
         return result
 
@@ -590,20 +612,30 @@ class RepetitionPenaltyProcessor(LogitProcessor):
 
         result = logits.copy()
 
-        for b in range(result.shape[0]):
-            # Get recent tokens
+        # Phase 338: Functional displacement regarding repetition penalty
+        def apply_penalty_batch(b: int) -> None:
+            # Get recent tokens regarding window size
             seq = input_ids[b] if input_ids.ndim > 1 else input_ids
             recent = seq[-self.window_size :] if len(seq) > self.window_size else seq
 
-            # Get unique tokens
-            unique_tokens = set(int(t) for t in recent if 0 <= t < self.vocab_size)
+            # Get unique tokens regarding frequency reduction
+            # Using numpy to avoid iterative set construction
+            unique_tokens = np.unique(recent)
+            valid_indices = unique_tokens[(unique_tokens >= 0) & (unique_tokens < self.vocab_size)].astype(int)
 
-            # Apply penalty
-            for token_id in unique_tokens:
-                if result[b][token_id] > 0:
+            # Apply penalty regarding logit sign
+            def apply_token_penalty(token_id: int) -> None:
+                def divide_logit() -> None:
                     result[b][token_id] /= self.penalty
-                else:
+
+                def multiply_logit() -> None:
                     result[b][token_id] *= self.penalty
+
+                (divide_logit() if result[b][token_id] > 0 else multiply_logit())
+
+            list(map(apply_token_penalty, valid_indices))
+
+        list(map(apply_penalty_batch, range(result.shape[0])))
 
         return result
 
@@ -643,13 +675,18 @@ def apply_constraints_to_logits(
     allowed_tokens: Set[int],
     mask_value: float = float("-inf"),
 ) -> np.ndarray:
-    """Simple utility to apply token constraints to logits."""
+    """Simple utility to apply token constraints to logits regarding allowed sets."""
     result = logits.copy()
-    mask = np.ones(logits.shape[-1], dtype=bool)
+    vocab_size = logits.shape[-1]
+    mask = np.ones(vocab_size, dtype=bool)
 
-    for token_id in allowed_tokens:
-        if 0 <= token_id < logits.shape[-1]:
-            mask[token_id] = False
+    # Phase 339: Functional mask update regarding token IDs
+    valid_tokens = list(filter(lambda t: 0 <= t < vocab_size, allowed_tokens))
+
+    def update_mask(token_id: int) -> None:
+        mask[token_id] = False
+
+    list(map(update_mask, valid_tokens))
 
     result[..., mask] = mask_value
     return result

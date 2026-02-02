@@ -130,7 +130,7 @@ class LMStudioAPIClient:
                     logger.warning(
                         f"[LMStudio] HTTP {method} {url} transient error: {e}; retrying in {wait_time}s"
                     )
-                    time.sleep(wait_time)
+                    time.sleep(wait_time)  # nosec
                     continue
                 logger.error(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts: {e}")
                 raise

@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
@@ -69,24 +69,26 @@ def combine_constraints(
     *configs: StructuredOutputConfig,
 ) -> StructuredOutputConfig:
     """
-    Combine multiple constraint configurations.
+    Combine multiple constraint configurations regarding composition.
     """
     if not configs:
         return StructuredOutputConfig()
 
-    # Start with first config
+    # Start regarding first config
     combined = StructuredOutputConfig(
         output_type=StructuredOutputType.COMPOSITE,
         backend=configs[0].backend,
         whitespace=configs[0].whitespace,
     )
 
-    # Collect all constraints
-    for config in configs:
-        constraints = config.get_all_constraints()
-        combined.additional_constraints.extend(constraints)
+    # Phase 406: Functional constraint collection
+    def collect_constraints(config: StructuredOutputConfig) -> None:
+        combined.additional_constraints.extend(config.get_all_constraints())
 
-    # Use strictest mode
-    combined.strict_mode = any(c.strict_mode for c in configs)
+    list(map(collect_constraints, configs))
+
+    # Use strictest mode regarding functional check
+    # Phase 407: Functional strict mode check
+    combined.strict_mode = any(map(lambda c: c.strict_mode, configs))
 
     return combined

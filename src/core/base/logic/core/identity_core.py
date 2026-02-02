@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Core logic for Agent Identity.
-(Facade for src.core.base.common.identity_core)
+Core logic regarding Agent Identity.
+(Facade regarding src.core.base.common.identity_core)
 """
 
 from __future__ import annotations
@@ -27,6 +27,6 @@ __all__ = ["IdentityCore", "AgentIdentity"]
 
 class IdentityCore(StandardIdentityCore):
     """
-    Facade for StandardIdentityCore to maintain backward compatibility.
+    Facade regarding StandardIdentityCore to maintain backward compatibility.
     Identity logic is now centralized in the Infrastructure/Common tier.
     """

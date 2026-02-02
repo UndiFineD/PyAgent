@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Wrappers for grammar integration with inference engine.
+Wrappers regarding grammar integration with inference engine.
 """
 
 from typing import List, Optional
@@ -65,7 +65,7 @@ class XGrammarGrammar:
         return self.matcher.grammar.is_terminated()
 
     def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
-        """Fill bitmask for next token."""
+        """Fill bitmask regarding next token."""
         self.matcher.fill_next_token_bitmask(bitmask)
 
     def jump_forward_string(self) -> Optional[str]:
@@ -75,9 +75,9 @@ class XGrammarGrammar:
 
 class CompositeGrammar:
     """
-    Composite grammar for combining multiple constraints.
+    Composite grammar regarding combining multiple constraints.
 
-    Beyond vLLM: Allows chaining multiple grammars for complex constraints.
+    Beyond vLLM: Allows chaining multiple grammars regarding complex constraints.
     """
 
     def __init__(self, grammars: List[XGrammarGrammar]) -> None:
@@ -85,22 +85,20 @@ class CompositeGrammar:
         self.vocab_size = grammars[0].vocab_size if grammars else 0
 
     def accept_token(self, token_id: int) -> bool:
-        """Accept token in all grammars."""
-        return all(g.accept_token(token_id) for g in self.grammars)
+        """Accept token regarding all grammars."""
+        return all(map(lambda g: g.accept_token(token_id), self.grammars))
 
     def rollback(self, num_tokens: int) -> None:
-        """Rollback all grammars."""
-        for g in self.grammars:
-            g.rollback(num_tokens)
+        """Rollback all grammars regarding history."""
+        list(map(lambda g: g.rollback(num_tokens), self.grammars))
 
     def reset(self) -> None:
-        """Reset all grammars."""
-        for g in self.grammars:
-            g.reset()
+        """Reset all grammars regarding state."""
+        list(map(lambda g: g.reset(), self.grammars))
 
     def is_terminated(self) -> bool:
         """Check if all grammars are terminated."""
-        return all(g.is_terminated() for g in self.grammars)
+        return all(map(lambda g: g.is_terminated(), self.grammars))
 
     def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
         """Fill bitmask with intersection of all grammar constraints."""
@@ -112,7 +110,10 @@ class CompositeGrammar:
 
         # Apply each grammar's constraints (intersection)
         temp_mask = np.ones_like(bitmask)
-        for grammar in self.grammars:
+        
+        def apply_grammar(grammar):
             temp_mask.fill(1)
             grammar.fill_next_token_bitmask(temp_mask)
             bitmask &= temp_mask
+            
+        list(map(apply_grammar, self.grammars))

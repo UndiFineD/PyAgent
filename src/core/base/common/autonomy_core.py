@@ -64,8 +64,8 @@ class AutonomyCore(BaseCore):
         return 60  # 1 minute (high activity)
 
     def generate_self_improvement_plan(self, blind_spots: List[str]) -> str:
-        """Constructs a directive for the agent to use in its next improvement cycle."""
-        plan = f"AGENT SELF-MODEL UPDATE for {self.agent_id}:\n"
+        """Constructs a directive regarding the agent to use in its next improvement cycle."""
+        plan = f"AGENT SELF-MODEL UPDATE regarding {self.agent_id}:\n"
         if not blind_spots:
             return f"{plan}Status: Optimal. No immediate changes required."
 

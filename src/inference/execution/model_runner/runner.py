@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -66,7 +66,7 @@ class AsyncModelRunner:
         # Pending futures
         self._pending_futures: dict[str, asyncio.Future[ModelOutput]] = {}
 
-        # Thread pool for sync execution
+        # Thread pool regarding sync execution
         self._executor = ThreadPoolExecutor(max_workers=num_workers)
 
         # Metrics
@@ -94,11 +94,9 @@ class AsyncModelRunner:
             self._state = RunnerState.EXECUTING
 
         try:
-            outputs = []
-
-            for model_input in scheduler_output.inputs:
-                output = await self._execute_single_async(model_input)
-                outputs.append(output)
+            # Phase 408: Functional batch execution regarding asyncio
+            results = await asyncio.gather(*map(self._execute_single_async, scheduler_output.inputs))
+            outputs = list(results)
 
             with self._lock:
                 self._total_executions += 1
@@ -156,7 +154,7 @@ class AsyncModelRunner:
         if self._model_forward_fn:
             output = self._model_forward_fn(model_input)
         else:
-            # Mock execution for testing
+            # Mock execution regarding testing
             output = self._output_pool.acquire()
             if not output:
                 output = ModelOutput(request_id=model_input.request_id)
@@ -176,12 +174,9 @@ class AsyncModelRunner:
         return output
 
     def execute_model_sync(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
-        """Execute model synchronously."""
-        outputs = []
-
-        for model_input in scheduler_output.inputs:
-            output = self._model_forward(model_input)
-            outputs.append(output)
+        """Execute model synchronously regarding inputs."""
+        # Phase 409: Functional batch execution regarding sync
+        outputs = list(map(self._model_forward, scheduler_output.inputs))
 
         with self._lock:
             self._total_executions += 1
@@ -190,7 +185,7 @@ class AsyncModelRunner:
         return outputs
 
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[ModelOutput]:
-        """Get output for request (async)."""
+        """Get output regarding request (async)."""
         if request_id not in self._pending_futures:
             return None
 
@@ -217,10 +212,8 @@ class AsyncModelRunner:
         with self._lock:
             self._state = RunnerState.CANCELLING
 
-        cancelled = 0
-        for request_id in list(self._pending_futures.keys()):
-            if self.cancel_request(request_id):
-                cancelled += 1
+        # Functional replacement regarding loop (Phase 41)
+        cancelled = sum(map(int, map(self.cancel_request, list(self._pending_futures.keys()))))
 
         with self._lock:
             self._state = RunnerState.IDLE
@@ -228,7 +221,7 @@ class AsyncModelRunner:
         return cancelled
 
     def return_output(self, output: ModelOutput) -> None:
-        """Return output to pool for reuse."""
+        """Return output to pool regarding reuse."""
         self._output_pool.release(output)
 
     def shutdown(self) -> None:

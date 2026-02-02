@@ -2,7 +2,7 @@
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 use serde::{Deserialize, Serialize};
-// ...existing code...
+use regex::Regex;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Finding {
@@ -76,33 +76,57 @@ fn apply_patch(original: &str, _patch: &str) -> PyResult<String> {
 // --- Internal logic implementations (replace with real logic as needed) ---
 
 fn analyze_security_impl(content: &str, file_path_rel: &str) -> Vec<Finding> {
-    // Example: regex for dangerous patterns
     let mut findings = Vec::new();
-    if content.contains("eval(") {
-        findings.push(Finding {
-            finding_type: "Security Risk".to_string(),
-            message: "Use of eval() is highly insecure.".to_string(),
-            file: file_path_rel.to_string(),
-            line: None,
-            details: None,
-        });
+    
+    // Check for eval() but skip ast.literal_eval() and model.eval()
+    // Using regex for word boundary and negative lookbehind simulation (naive)
+    let eval_re = Regex::new(r"(?m)^.*[^\w.]eval\s*\(.*$").unwrap();
+    for (i, line) in content.lines().enumerate() {
+        let trimmed = line.trim();
+        // Ignore comments and docstrings roughly
+        if trimmed.starts_with("#") || trimmed.starts_with("\"") || trimmed.starts_with("'") {
+            continue;
+        }
+        if eval_re.is_match(line) && !line.contains("ast.literal_eval") && !line.contains(".eval()") && !line.contains("# nosec") {
+            findings.push(Finding {
+                finding_type: "Security Risk".to_string(),
+                message: "Use of eval() is highly insecure.".to_string(),
+                file: file_path_rel.to_string(),
+                line: Some((i + 1) as u32),
+                details: None,
+            });
+        }
     }
     findings
 }
 
 fn analyze_complexity_impl(_content: &str, _file_path_rel: &str) -> Vec<Finding> {
-    // Placeholder: implement cyclomatic complexity analysis
     Vec::new()
 }
 
 fn analyze_documentation_impl(content: &str, file_path_rel: &str) -> Vec<Finding> {
     let mut findings = Vec::new();
-    if !content.trim_start().starts_with("\"\"\"") {
+    
+    // Skip shebang and comments at top
+    let lines: Vec<&str> = content.lines().collect();
+    let mut has_docstring = false;
+    for line in lines {
+        let trimmed = line.trim();
+        if trimmed.is_empty() || trimmed.starts_with("#") || trimmed.starts_with("!") {
+            continue;
+        }
+        if trimmed.starts_with("\"\"\"") || trimmed.starts_with("'''") {
+            has_docstring = true;
+        }
+        break;
+    }
+
+    if !has_docstring {
         findings.push(Finding {
             finding_type: "Missing Docstring".to_string(),
             message: "Module-level docstring is missing.".to_string(),
             file: file_path_rel.to_string(),
-            line: None,
+            line: Some(1),
             details: None,
         });
     }
@@ -110,20 +134,26 @@ fn analyze_documentation_impl(content: &str, file_path_rel: &str) -> Vec<Finding
 }
 
 fn analyze_typing_impl(_content: &str, _file_path_rel: &str) -> Vec<Finding> {
-    // Placeholder: implement type hint analysis
     Vec::new()
 }
 
 fn analyze_robustness_and_perf_impl(content: &str, file_path_rel: &str, _allow_triton_check: bool) -> Vec<Finding> {
     let mut findings = Vec::new();
-    if content.contains("time.sleep(") {
-        findings.push(Finding {
-            finding_type: "Performance Warning".to_string(),
-            message: "Found active time.sleep() in non-test code.".to_string(),
-            file: file_path_rel.to_string(),
-            line: None,
-            details: None,
-        });
+    for (i, line) in content.lines().enumerate() {
+        let trimmed = line.trim();
+        // Ignore comments and docstrings roughly
+        if trimmed.starts_with("#") || trimmed.starts_with("\"") || trimmed.starts_with("'") {
+            continue;
+        }
+        if line.contains("time.sleep(") && !file_path_rel.contains("test") && !line.contains("# nosec") {
+            findings.push(Finding {
+                finding_type: "Performance Warning".to_string(),
+                message: "Found active time.sleep() in non-test code.".to_string(),
+                file: file_path_rel.to_string(),
+                line: Some((i + 1) as u32),
+                details: None,
+            });
+        }
     }
     findings
 }

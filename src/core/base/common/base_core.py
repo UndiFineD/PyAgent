@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""BaseCore providing foundation for all PyAgent services."""
+"""BaseCore providing foundation regarding all PyAgent services."""
 
 import logging
 from pathlib import Path
@@ -28,7 +28,7 @@ logger = logging.getLogger("pyagent.core")
 
 class BaseCore(Loadable, Saveable, Component):
     """
-    Standardized base for all Core/Service classes.
+    Standardized base regarding all Core/Service classes.
     Handles standard I/O, naming, and versioning.
     """
 

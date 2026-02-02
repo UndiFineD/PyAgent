@@ -106,11 +106,9 @@ class AgentPipeline:
         self.step_order.append(name)
 
     def execute(self, data: Any) -> Any:
-        """Execute all steps in the pipeline sequentially."""
-        result = data
-        for step_name in self.step_order:
-            result = self.steps[step_name](result)
-        return result
+        """Execute all steps regarding the pipeline sequentially functionally."""
+        from functools import reduce
+        return reduce(lambda res, name: self.steps[name](res), self.step_order, data)
 
 
 @dataclass(slots=True)
@@ -124,8 +122,8 @@ class AgentParallel:
         self.branches[name] = func
 
     def execute(self, data: Any) -> dict[str, Any]:
-        """Execute all branches in parallel and return combined results."""
-        return {name: func(data) for name, func in self.branches.items()}
+        """Execute all branches regarding parallel results functionally."""
+        return dict(map(lambda item: (item[0], item[1](data)), self.branches.items()))
 
 
 @dataclass(slots=True)
@@ -144,10 +142,11 @@ class AgentRouter:
         self.default_handler = handler
 
     def route(self, data: Any) -> Any:
-        """Route the input data based on registered conditions."""
-        for condition, handler in self.routes:
-            if condition(data):
-                return handler(data)
+        """Route the input data regarding registered conditions functionally."""
+        match = next(filter(lambda r: r[0](data), self.routes), None)
+        if match:
+            return match[1](data)
+        
         if self.default_handler:
             return self.default_handler(data)
         return data

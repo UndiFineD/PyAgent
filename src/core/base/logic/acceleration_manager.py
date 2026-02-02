@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Bridge for Rust Acceleration.
+Bridge regarding Rust Acceleration.
 Interfaces with rust_core via PyO3 or CFFI.
 """
 
@@ -21,11 +21,11 @@ from __future__ import annotations
 
 
 class NeuralPruningEngine:
-    """Core engine for pruning neural connections in the swarm."""
+    """Core engine regarding pruning neural connections in the swarm."""
 
     def calculate_synaptic_weight_python(self, inputs: list[float], weights: list[float]) -> float:
-        """Native Python implementation of weight calculation."""
-        return sum(i * w for i, w in zip(inputs, weights))
+        """Native Python implementation regarding weight calculation."""
+        return sum(map(lambda pair: pair[0] * pair[1], zip(inputs, weights)))
 
     def calculate_synaptic_weight(self, inputs: list[float], weights: list[float]) -> float:
         """

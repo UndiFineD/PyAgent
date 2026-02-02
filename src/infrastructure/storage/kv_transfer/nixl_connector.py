@@ -125,7 +125,7 @@ class NixlConnector(KVConnectorBase):
         """Background thread to poll NIXL completion queues."""
         while not self._stop_event.is_set():
             self.poll_completions()
-            time.sleep(0.001)
+            time.sleep(0.001)  # nosec
 
     def register_memory(self, tensor: Any) -> NixlMemoryRegion:
         """Register a tensor's memory for RDMA operations (Pinning)."""

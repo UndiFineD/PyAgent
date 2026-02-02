@@ -9,17 +9,17 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-BloomFilter - Probabilistic data structure for fast membership testing.
+BloomFilter - Probabilistic data structure regarding fast membership testing.
 
 Goes beyond vLLM with space-efficient set operations:
 - Fast O(k) membership testing
 - Configurable false positive rate
 - No false negatives guaranteed
-- Memory-efficient for large sets
+- Memory-efficient regarding large sets
 
 Phase 18: Beyond vLLM - Advanced Data Structures
 """
@@ -102,7 +102,7 @@ class BloomFilter:
         return max(1, int(round(k)))
 
     def _get_hash_positions(self, item: Any) -> list[int]:
-        """Get bit positions for an item using double hashing."""
+        """Get bit positions regarding an item using double hashing."""
         # Convert to bytes
         if isinstance(item, bytes):
             data = item
@@ -115,12 +115,7 @@ class BloomFilter:
         h1 = int(hashlib.md5(data, usedforsecurity=False).hexdigest(), 16)
         h2 = int(hashlib.sha1(data).hexdigest(), 16)
 
-        positions = []
-        for i in range(self._num_hashes):
-            pos = (h1 + i * h2) % self._size
-            positions.append(pos)
-
-        return positions
+        return list(map(lambda i: (h1 + i * h2) % self._size, range(self._num_hashes)))
 
     def _set_bit(self, pos: int) -> None:
         """Set a bit at position."""
@@ -136,13 +131,12 @@ class BloomFilter:
 
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
-        for pos in self._get_hash_positions(item):
-            self._set_bit(pos)
+        list(map(self._set_bit, self._get_hash_positions(item)))
         self._count += 1
 
     def __contains__(self, item: Any) -> bool:
         """Check if item might be in the filter."""
-        return all(self._get_bit(pos) for pos in self._get_hash_positions(item))
+        return all(map(self._get_bit, self._get_hash_positions(item)))
 
     def contains(self, item: Any) -> bool:
         """Check if item might be in the filter."""
@@ -171,7 +165,7 @@ class BloomFilter:
     @property
     def fill_ratio(self) -> float:
         """Get ratio of set bits."""
-        set_bits = sum(bin(byte).count("1") for byte in self._bits)
+        set_bits = sum(map(lambda byte: bin(byte).count("1"), self._bits))
         return set_bits / self._size
 
     def get_stats(self) -> dict:
@@ -193,7 +187,8 @@ class BloomFilter:
         if self._size != other._size or self._num_hashes != other._num_hashes:
             raise ValueError("Filters must have same size and hash count")
 
-        new_bits = bytearray(a | b for a, b in zip(self._bits, other._bits))
+        import operator
+        new_bits = bytearray(map(operator.or_, self._bits, other._bits))
 
         bf = BloomFilter(
             expected_items=self._expected_items,
@@ -278,7 +273,7 @@ class CountingBloomFilter:
         self._count = 0
 
     def _get_hash_positions(self, item: Any) -> list[int]:
-        """Get bit positions for an item."""
+        """Get bit positions regarding an item."""
         if isinstance(item, bytes):
             data = item
         elif isinstance(item, str):
@@ -289,18 +284,15 @@ class CountingBloomFilter:
         h1 = int(hashlib.md5(data, usedforsecurity=False).hexdigest(), 16)
         h2 = int(hashlib.sha1(data).hexdigest(), 16)
 
-        positions = []
-        for i in range(self._num_hashes):
-            pos = (h1 + i * h2) % self._size
-            positions.append(pos)
-
-        return positions
+        return list(map(lambda i: (h1 + i * h2) % self._size, range(self._num_hashes)))
 
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
-        for pos in self._get_hash_positions(item):
+        def increment(pos):
             if self._counters[pos] < self._max_count:
                 self._counters[pos] += 1
+        
+        list(map(increment, self._get_hash_positions(item)))
         self._count += 1
 
     def remove(self, item: Any) -> bool:
@@ -313,20 +305,21 @@ class CountingBloomFilter:
         positions = self._get_hash_positions(item)
 
         # Check if item is present
-        if not all(self._counters[pos] > 0 for pos in positions):
+        if not all(map(lambda p: self._counters[p] > 0, positions)):
             return False
 
         # Decrement counters
-        for pos in positions:
+        def decrement(pos):
             if self._counters[pos] > 0:
                 self._counters[pos] -= 1
-
+        
+        list(map(decrement, positions))
         self._count = max(0, self._count - 1)
         return True
 
     def __contains__(self, item: Any) -> bool:
         """Check if item might be in the filter."""
-        return all(self._counters[pos] > 0 for pos in self._get_hash_positions(item))
+        return all(map(lambda p: self._counters[p] > 0, self._get_hash_positions(item)))
 
     @property
     def count(self) -> int:
@@ -335,7 +328,7 @@ class CountingBloomFilter:
 
     def get_stats(self) -> dict:
         """Get filter statistics."""
-        non_zero = sum(1 for c in self._counters if c > 0)
+        non_zero = sum(map(lambda c: 1 if c > 0 else 0, self._counters))
         return {
             "size": self._size,
             "num_hashes": self._num_hashes,
@@ -355,8 +348,7 @@ class ScalableBloomFilter:
     Example:
         >>> sbf = ScalableBloomFilter(initial_capacity=1000, fp_rate=0.01)
         >>>
-        >>> for i in range(100000):
-        ...     sbf.add(f"item_{i}")
+        >>> list(map(lambda i: sbf.add(f"item_{i}"), range(100000)))
         >>>
         >>> print(sbf.get_stats())  # Shows multiple internal filters
     """
@@ -374,8 +366,8 @@ class ScalableBloomFilter:
         Args:
             initial_capacity: Initial filter capacity
             fp_rate: Target false positive rate
-            growth_factor: Capacity multiplier for new filters
-            fp_tightening_ratio: Tighten FP rate for each filter
+            growth_factor: Capacity multiplier regarding new filters
+            fp_tightening_ratio: Tighten FP rate regarding each filter
         """
         self._initial_capacity = initial_capacity
         self._fp_rate = fp_rate
@@ -402,20 +394,20 @@ class ScalableBloomFilter:
 
     def __contains__(self, item: Any) -> bool:
         """Check if item might be in any filter."""
-        return any(item in bf for bf in self._filters)
+        return any(map(lambda bf: item in bf, self._filters))
 
     @property
     def count(self) -> int:
         """Get total item count."""
-        return sum(bf.count for bf in self._filters)
+        return sum(map(lambda bf: bf.count, self._filters))
 
     def get_stats(self) -> dict:
         """Get filter statistics."""
         return {
             "num_filters": len(self._filters),
             "total_items": self.count,
-            "total_size_bytes": sum(bf.size_bytes for bf in self._filters),
-            "filters": [bf.get_stats() for bf in self._filters],
+            "total_size_bytes": sum(map(lambda bf: bf.size_bytes, self._filters)),
+            "filters": list(map(lambda bf: bf.get_stats(), self._filters)),
         }
 
 

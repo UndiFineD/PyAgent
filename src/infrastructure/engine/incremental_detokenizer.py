@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """
 IncrementalDetokenizer - Fast streaming token-to-text conversion.
 
@@ -26,11 +31,11 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 # Constants
-INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET = 5
-INVALID_PREFIX_ERR_MSG = "Invalid prefix encountered"
+INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET: int = 5
+INVALID_PREFIX_ERR_MSG: str = "Invalid prefix encountered"
 
 
 @dataclass
@@ -185,7 +190,7 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         super().__init__()
 
         # Extract sampling params
-        sampling_params = getattr(request, "sampling_params", None) or {}
+        sampling_params: dict[str, Any] = getattr(request, "sampling_params", None) or {}
         if hasattr(sampling_params, "__dict__"):
             sampling_params = sampling_params.__dict__
         elif not isinstance(sampling_params, dict):
@@ -330,24 +335,11 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         """Decode one token with error protection."""
         try:
             self._decode_buffer.append(next_token_id)
-
-            # Decode current buffer
-            if hasattr(self.tokenizer, "decode"):
-                decoded = self.tokenizer.decode(
-                    self._decode_buffer,
-                    skip_special_tokens=self.skip_special_tokens,
-                )
-            elif hasattr(self.tokenizer_wrapper, "decode"):
-                decoded = self.tokenizer_wrapper.decode(
-                    self._decode_buffer,
-                    skip_special_tokens=self.skip_special_tokens,
-                )
-            else:
-                decoded = ""
+            decoded: str = self._execute_decode()
 
             # Get new text
             if len(decoded) > len(self._last_decoded):
-                new_text = decoded[len(self._last_decoded) :]
+                new_text: str = decoded[len(self._last_decoded) :]
                 self._last_decoded = decoded
                 return new_text
 
@@ -356,14 +348,32 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         except (OverflowError, TypeError) as e:
             logger.warning("Invalid token id %s: %s", next_token_id, e)
             return None
-        except Exception as e:  # pylint: disable=broad-exception-caught
-            if str(e).startswith(INVALID_PREFIX_ERR_MSG):
-                logger.warning("Invalid prefix in request %s, resetting", self.request_id)
-                # Reset decode state
-                self._decode_buffer = [next_token_id]
-                self._last_decoded = ""
-                return None
-            raise
+        except Exception as e:
+            return self._handle_decode_exception(e, next_token_id)
+
+    def _execute_decode(self) -> str:
+        """Call the appropriate decode method on the tokenizer."""
+        if hasattr(self.tokenizer, "decode"):
+            return self.tokenizer.decode(
+                self._decode_buffer,
+                skip_special_tokens=self.skip_special_tokens,
+            )
+        if hasattr(self.tokenizer_wrapper, "decode"):
+            return self.tokenizer_wrapper.decode(
+                self._decode_buffer,
+                skip_special_tokens=self.skip_special_tokens,
+            )
+        return ""
+
+    def _handle_decode_exception(self, e: Exception, next_token_id: int) -> str | None:
+        """Handle exceptions during the decode process."""
+        if str(e).startswith(INVALID_PREFIX_ERR_MSG):
+            logger.warning("Invalid prefix in request %s, resetting", self.request_id)
+            # Reset decode state
+            self._decode_buffer = [next_token_id]
+            self._last_decoded = ""
+            return None
+        raise e
 
     def decode_next(self, next_token_id: int) -> str:
         """Decode the next token."""
@@ -433,10 +443,33 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
 
     def decode_next(self, next_token_id: int) -> str:
         """Decode next token using incremental approach."""
-        # Get new token
+        # 1. Get new tokens from ID
+        new_tokens: list[str] = self._get_tokens_for_id(next_token_id)
+        self.tokens.extend(new_tokens)
+        output_tokens = self.tokens
+
+        # 2. Convert tokens to string and handle prefix
+        # Get prefix and new text
         try:
-            new_tokens = self.tokenizer.convert_ids_to_tokens(
-                [next_token_id],
+            prefix_text: str = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset : self.read_offset])
+            new_text: str = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset :])
+        except Exception:  # pylint: disable=broad-exception-caught
+            return ""
+
+        # 3. Validation and offset update
+        if self._is_incomplete_text(new_text, prefix_text):
+            return ""
+
+        self.prefix_offset = self.read_offset
+        self.read_offset = len(output_tokens)
+
+        return new_text[len(prefix_text) :]
+
+    def _get_tokens_for_id(self, token_id: int) -> list[str]:
+        """Convert a single token ID to a list of token strings."""
+        try:
+            new_tokens: list[str] = self.tokenizer.convert_ids_to_tokens(
+                [token_id],
                 skip_special_tokens=self.skip_special_tokens,
             )
             if isinstance(new_tokens, str):
@@ -444,30 +477,12 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         except Exception:  # pylint: disable=broad-exception-caught
             new_tokens = [""]
 
-        # Handle None tokens
-        new_tokens = [t if t is not None else "" for t in new_tokens]
+        # Ensure no None values in results
+        return [t if t is not None else "" for t in new_tokens]
 
-        # Add to tokens list
-        self.tokens.extend(new_tokens)
-        output_tokens = self.tokens
-
-        # Get prefix and new text
-        try:
-            prefix_text = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset : self.read_offset])
-            new_text = self.tokenizer.convert_tokens_to_string(output_tokens[self.prefix_offset :])
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
-            return ""
-
-        # Check for incomplete UTF-8
-        if len(new_text) <= len(prefix_text) or new_text.endswith("�"):
-            return ""
-
-        # Update offsets
-        self.prefix_offset = self.read_offset
-        self.read_offset = len(output_tokens)
-
-        return new_text[len(prefix_text) :]
+    def _is_incomplete_text(self, new_text: str, prefix_text: str) -> bool:
+        """Check if newly decoded text is incomplete (e.g. partial UTF-8)."""
+        return len(new_text) <= len(prefix_text) or new_text.endswith("")
 
 
 def validate_utf8(text: str) -> bool:

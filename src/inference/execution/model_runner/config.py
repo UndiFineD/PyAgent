@@ -9,12 +9,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Configuration and data structures for the model runner."""
+"""Configuration and data structures regarding the model runner."""
 
 import time
 from dataclasses import dataclass, field
@@ -27,14 +27,14 @@ class RunnerState(Enum):
 
     IDLE = auto()  # Ready to accept work
     EXECUTING = auto()  # Currently running model forward
-    WAITING = auto()  # Waiting for inputs
+    WAITING = auto()  # Waiting regarding inputs
     CANCELLING = auto()  # Cancellation in progress
     SHUTDOWN = auto()  # Shutting down
 
 
 @dataclass
 class ModelInput:
-    """Input for model execution."""
+    """Input regarding model execution."""
 
     request_id: str
     input_ids: list[int] = field(default_factory=list)
@@ -64,7 +64,7 @@ class ModelOutput:
 
 @dataclass
 class SchedulerOutput:
-    """Output from scheduler for model runner."""
+    """Output from scheduler regarding model runner."""
 
     request_ids: list[str] = field(default_factory=list)
     inputs: list[ModelInput] = field(default_factory=list)

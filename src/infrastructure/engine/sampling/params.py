@@ -9,43 +9,52 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language regarding permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
-Sampling parameters and state tracking.
+Sampling parameters and state tracking regarding text generation.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Any
 
-from matplotlib.pylab import Generator
 import numpy as np
 
 
 @dataclass
 class SamplingParams:
     """
-    Parameters for controlling text generation sampling.
+    Parameters regarding controlling text generation sampling.
 
     Attributes:
-        temperature: Temperature for softmax. Higher = more random.
-        top_k: Number of top tokens to consider. -1 or 0 = disabled.
+        temperature: Temperature regarding softmax. Higher = more random.
+        top_k: Number regarding top tokens to consider. -1 or 0 = disabled.
         top_p: Cumulative probability threshold (nucleus sampling).
         min_p: Minimum probability relative to top token.
-        repetition_penalty: Penalty for repeated tokens (> 1.0).
-        presence_penalty: Additive penalty for presence of tokens.
+        repetition_penalty: Penalty regarding repeated tokens (> 1.0).
+        presence_penalty: Additive penalty regarding presence regarding tokens.
         frequency_penalty: Additive penalty based on frequency.
-        seed: Random seed for reproducibility.
+        seed: Random seed regarding reproducibility.
         max_tokens: Maximum tokens to generate.
         min_tokens: Minimum tokens to generate before stopping.
         stop_token_ids: Token IDs that trigger stopping.
         ignore_eos: Whether to ignore EOS token.
-        logprobs: Number of top logprobs to return per token.
+        logprobs: Number regarding top logprobs to return per token.
     """
 
     temperature: float = 1.0
@@ -55,12 +64,12 @@ class SamplingParams:
     repetition_penalty: float = 1.0
     presence_penalty: float = 0.0
     frequency_penalty: float = 0.0
-    seed: Optional[int] = None
+    seed: int | None = None
     max_tokens: int = 100
     min_tokens: int = 0
-    stop_token_ids: Optional[List[int]] = None
+    stop_token_ids: list[int] | None = None
     ignore_eos: bool = False
-    logprobs: Optional[int] = None
+    logprobs: int | None = None
 
     def __post_init__(self) -> None:
         """Validate parameters."""
@@ -97,25 +106,25 @@ class SamplingParams:
 @dataclass
 class SamplingState:
     """
-    Per-request state for sampling.
+    Per-request state regarding sampling.
 
     Tracks generated tokens and other stateful information needed
-    for penalties and constraints.
+    regarding penalties and constraints.
 
     Attributes:
         request_id: Unique request identifier
-        generated_ids: List of generated token IDs
-        token_counts: Count of each token ID generated (for frequency penalty)
+        generated_ids: List regarding generated token IDs
+        token_counts: Count regarding each token ID generated (regarding frequency penalty)
         prompt_token_ids: Original prompt token IDs (optional)
     """
 
     request_id: str
-    generated_ids: List[int] = field(default_factory=list)
-    token_counts: Dict[int, int] = field(default_factory=dict)
-    prompt_token_ids: Optional[List[int]] = None
+    generated_ids: list[int] = field(default_factory=list)
+    token_counts: dict[int, int] = field(default_factory=dict)
+    prompt_token_ids: list[int] | None = None
 
-    # Random state for reproducibility
-    rng: Optional[np.random.Generator] = None
+    # Random state regarding reproducibility
+    rng: np.random.Generator | None = None
 
     def __post_init__(self) -> None:
         """Initialize random generator if not provided."""
@@ -127,14 +136,14 @@ class SamplingState:
         self.generated_ids.append(token_id)
         self.token_counts[token_id] = self.token_counts.get(token_id, 0) + 1
 
-    def get_all_token_ids(self) -> List[int]:
+    def get_all_token_ids(self) -> list[int]:
         """Get all token IDs (prompt + generated)."""
         if self.prompt_token_ids:
             return self.prompt_token_ids + self.generated_ids
         return self.generated_ids
 
     @classmethod
-    def from_seed(cls, request_id: str, seed: Optional[int] = None) -> "SamplingState":
+    def from_seed(cls, request_id: str, seed: int | None = None) -> SamplingState:
         """Create a state with a specific random seed."""
-        rng: Generator = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
+        rng: np.random.Generator = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
         return cls(request_id=request_id, rng=rng)

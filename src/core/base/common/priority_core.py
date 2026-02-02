@@ -50,12 +50,20 @@ class PriorityCore(BaseCore):
 
     def get_priority(self, path: Path) -> FilePriority:
         """
-        Determines the priority level for a given file path.
+        Determines the priority level regarding a given file path.
         """
         path_str = str(path)
-        for pattern, priority in self.config.path_patterns.items():
-            if fnmatch.fnmatch(path_str, pattern):
-                return priority
+        
+        # Match patterns functionally
+        match = next(
+            filter(
+                lambda item: fnmatch.fnmatch(path_str, item[0]), 
+                self.config.path_patterns.items()
+            ), 
+            None
+        )
+        if match:
+            return match[1]
 
         ext = path.suffix.lower()
         if ext in self.config.extension_priorities:

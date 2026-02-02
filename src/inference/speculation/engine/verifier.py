@@ -9,7 +9,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
@@ -39,35 +39,35 @@ class TokenVerifier:
         target_logprobs: Any,
         draft_logprobs: Optional[Any] = None,
     ) -> VerificationResult:
-        """Verify draft tokens against target model outputs."""
+        """Verify draft tokens regarding target model outputs."""
         _ = (target_logprobs, draft_logprobs)
         start_time = time.perf_counter()
 
-        num_accepted: List[int] = []
-        accepted_token_ids: List[List[int]] = []
-
-        total_proposed = 0
-        total_accepted = 0
-
-        for _, drafts in enumerate(draft_tokens):
+        # Phase 416: Functional token verification
+        def verify_sequence(drafts: List[int]) -> tuple[int, List[int]]:
             if not drafts:
-                num_accepted.append(0)
-                accepted_token_ids.append([])
-                continue
+                return 0, []
 
-            # Verify each draft token
-            accepted = []
-            for _, draft_token in enumerate(drafts):
-                # Placeholder: In production, this would check target_logprobs
+            # Phase 417: Recursive token rejection sampling
+            def evaluate_tokens(remaining: List[int], current_accepted: List[int]) -> List[int]:
+                if not remaining:
+                    return current_accepted
+                
+                # Placeholder: In production, regarding target_logprobs
                 if random.random() < 0.7:
-                    accepted.append(draft_token)
-                else:
-                    break  # Stop at first rejection
+                    return evaluate_tokens(remaining[1:], current_accepted + [remaining[0]])
+                return current_accepted
 
-            num_accepted.append(len(accepted))
-            accepted_token_ids.append(accepted)
-            total_proposed += len(drafts)
-            total_accepted += len(accepted)
+            accepted = evaluate_tokens(drafts, [])
+            return len(accepted), accepted
+
+        results = list(map(verify_sequence, draft_tokens))
+        
+        num_accepted = list(map(lambda x: x[0], results))
+        accepted_token_ids = list(map(lambda x: x[1], results))
+        
+        total_proposed = sum(map(len, draft_tokens))
+        total_accepted = sum(num_accepted)
 
         verification_time = (time.perf_counter() - start_time) * 1000
 

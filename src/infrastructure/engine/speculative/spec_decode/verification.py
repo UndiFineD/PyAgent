@@ -9,11 +9,11 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 """
-Verification logic for speculative decoding.
+Verification logic regarding speculative decoding.
 """
 
 from __future__ import annotations
@@ -22,8 +22,9 @@ import math
 import random
 import threading
 import time
+import functools
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING
 
 from .config import SpecDecodeConfig, VerificationStrategy
 
@@ -40,7 +41,7 @@ except ImportError:
 
 @dataclass(slots=True)
 class VerificationResult:
-    """Result of speculative decoding verification."""
+    """Result regarding speculative decoding verification."""
 
     accepted_tokens: list[int]
     num_accepted: int
@@ -57,14 +58,14 @@ class VerificationResult:
 
     @property
     def acceptance_rate(self) -> float:
-        """Calculate the ratio of accepted to total proposed tokens in this result."""
+        """Calculate the ratio regarding accepted to total proposed tokens in this result."""
         if not self.acceptance_mask:
             return 0.0
         return sum(self.acceptance_mask) / len(self.acceptance_mask)
 
 
 class SpecDecodeVerifier:
-    """Verifier for speculative decoding using various sampling strategies."""
+    """Verifier regarding speculative decoding using various sampling strategies."""
 
     def __init__(self, config: SpecDecodeConfig) -> None:
         """Initialize verifier with configuration."""
@@ -80,7 +81,7 @@ class SpecDecodeVerifier:
     def verify(
         self, metadata: SpecDecodeMetadataV2, draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
-        """Perform token verification for a single request."""
+        """Perform token verification regarding a single request."""
         metadata.verification_start_time = time.perf_counter()
         if self.strategy == VerificationStrategy.TYPICAL_ACCEPTANCE:
             result = self._verify_typical_acceptance(metadata.draft_token_ids, draft_logprobs, target_logprobs)
@@ -109,22 +110,24 @@ class SpecDecodeVerifier:
                 draft_logprobs=draft_logprobs,
             )
 
-        accepted, mask = [], []
-        num_proposed = len(draft_tokens)
-        for draft_token, draft_lp, target_lp in zip(draft_tokens, draft_logprobs, target_logprobs):
+        def step(acc: tuple[list[int], list[bool], bool], item: tuple[int, float, float]) -> tuple[list[int], list[bool], bool]:
+            accepted, mask, done = acc
+            if done:
+                return (accepted, mask + [False], True)
+            draft_token, draft_lp, target_lp = item
             ratio = math.exp(min(0, target_lp - draft_lp))
             if random.random() < ratio:
-                accepted.append(draft_token)
-                mask.append(True)
-            else:
-                mask.append(False)
-                break
-        while len(mask) < num_proposed:
-            mask.append(False)
+                return (accepted + [draft_token], mask + [True], False)
+            return (accepted, mask + [False], True)
+
+        final_accepted, final_mask, _ = functools.reduce(
+            step, zip(draft_tokens, draft_logprobs, target_logprobs), ([], [], False)
+        )
+
         return VerificationResult(
-            accepted_tokens=accepted,
-            num_accepted=len(accepted),
-            acceptance_mask=mask,
+            accepted_tokens=final_accepted,
+            num_accepted=len(final_accepted),
+            acceptance_mask=final_mask,
             target_logprobs=target_logprobs,
             draft_logprobs=draft_logprobs,
         )
@@ -133,23 +136,25 @@ class SpecDecodeVerifier:
         self, draft_tokens: list[int], draft_logprobs: list[float], target_logprobs: list[float]
     ) -> VerificationResult:
         """Verify tokens using entropy-weighted typical acceptance."""
-        accepted, mask = [], []
-        num_proposed = len(draft_tokens)
-        for draft_token, draft_lp, target_lp in zip(draft_tokens, draft_logprobs, target_logprobs):
+        def step(acc: tuple[list[int], list[bool], bool], item: tuple[int, float, float]) -> tuple[list[int], list[bool], bool]:
+            accepted, mask, done = acc
+            if done:
+                return (accepted, mask + [False], True)
+            draft_token, draft_lp, target_lp = item
             entropy_factor = max(0.1, 1.0 + target_lp)
             ratio = math.exp(min(0, target_lp - draft_lp)) * entropy_factor
             if random.random() < min(1.0, ratio):
-                accepted.append(draft_token)
-                mask.append(True)
-            else:
-                mask.append(False)
-                break
-        while len(mask) < num_proposed:
-            mask.append(False)
+                return (accepted + [draft_token], mask + [True], False)
+            return (accepted, mask + [False], True)
+
+        final_accepted, final_mask, _ = functools.reduce(
+            step, zip(draft_tokens, draft_logprobs, target_logprobs), ([], [], False)
+        )
+
         return VerificationResult(
-            accepted_tokens=accepted,
-            num_accepted=len(accepted),
-            acceptance_mask=mask,
+            accepted_tokens=final_accepted,
+            num_accepted=len(final_accepted),
+            acceptance_mask=final_mask,
             target_logprobs=target_logprobs,
             draft_logprobs=draft_logprobs,
         )
@@ -161,22 +166,27 @@ class SpecDecodeVerifier:
         target_logprobs: list[list[float]],
     ) -> VerificationResult:
         """Verify a speculative tree and return the best path."""
-        best_path_idx, best_accepted, best_tokens, best_mask = -1, 0, [], []
-        for path_idx in range(tree_metadata.num_paths):
+        def evaluate_path(path_idx: int) -> tuple[int, VerificationResult] | None:
             if path_idx >= len(draft_logprobs) or path_idx >= len(target_logprobs):
-                continue
+                return None
             path_tokens = tree_metadata.get_path_tokens(path_idx)
             path_draft_lp, path_target_lp = draft_logprobs[path_idx], target_logprobs[path_idx]
             result = self._verify_rejection_sampling(path_tokens, path_draft_lp, path_target_lp)
-            if result.num_accepted > best_accepted:
-                best_accepted, best_path_idx, best_tokens, best_mask = (
-                    result.num_accepted,
-                    path_idx,
-                    result.accepted_tokens,
-                    result.acceptance_mask,
-                )
+            return (path_idx, result)
+
+        evaluated = filter(None, map(evaluate_path, range(tree_metadata.num_paths)))
+        
+        def compare(best: tuple[int, VerificationResult], curr: tuple[int, VerificationResult]) -> tuple[int, VerificationResult]:
+            if curr[1].num_accepted > best[1].num_accepted:
+                return curr
+            return best
+
+        initial = (-1, VerificationResult(accepted_tokens=[], num_accepted=0))
+        best_path_tuple = functools.reduce(compare, evaluated, initial)
+        best_path_idx, best_result = best_path_tuple
+        
         tree_metadata.best_path_index = best_path_idx
-        return VerificationResult(accepted_tokens=best_tokens, num_accepted=best_accepted, acceptance_mask=best_mask)
+        return best_result
 
     def get_overall_acceptance_rate(self) -> float:
         """Return the global acceptance rate across all verification calls."""
@@ -185,7 +195,7 @@ class SpecDecodeVerifier:
 
 
 class BatchVerifier:
-    """Batch verification for multiple requests."""
+    """Batch verification regarding multiple requests."""
 
     def __init__(self, verifier: SpecDecodeVerifier) -> None:
         """Initialize batch verifier."""
@@ -197,15 +207,15 @@ class BatchVerifier:
         draft_logprobs_list: list[list[float]],
         target_logprobs_list: list[list[float]],
     ) -> list[VerificationResult]:
-        """Verify tokens for a batch of requests."""
-        return [
-            self.verifier.verify(metadata, draft_lp, target_lp)
-            for metadata, draft_lp, target_lp in zip(metadata_list, draft_logprobs_list, target_logprobs_list)
-        ]
+        """Verify tokens regarding a batch regarding requests."""
+        return list(map(
+            lambda triple: self.verifier.verify(triple[0], triple[1], triple[2]),
+            zip(metadata_list, draft_logprobs_list, target_logprobs_list)
+        ))
 
 
 class StreamingVerifier:
-    """Streaming verification for interactive token-by-token processing."""
+    """Streaming verification regarding interactive token-by-token processing."""
 
     def __init__(self, config: SpecDecodeConfig) -> None:
         """Initialize streaming verifier."""
@@ -215,8 +225,6 @@ class StreamingVerifier:
 
     def add_token(self, token: int, draft_logprob: float, target_logprob: float) -> bool | None:
         """Add and verify a single token."""
-        import random
-
         with self._lock:
             ratio = math.exp(min(0, target_logprob - draft_logprob))
             if random.random() < ratio:
@@ -225,7 +233,7 @@ class StreamingVerifier:
             return False
 
     def get_accepted(self) -> list[int]:
-        """Retrieve list of accepted tokens."""
+        """Retrieve list regarding accepted tokens."""
         with self._lock:
             return list(self._accepted)
 
