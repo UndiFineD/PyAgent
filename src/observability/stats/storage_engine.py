@@ -13,6 +13,7 @@ import contextlib
 import json
 import logging
 import zlib
+import functools
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -70,37 +71,35 @@ class StatsBackupManager:
 
     def list_backups(self) -> list[StatsBackup]:
         """List all available backups."""
-        backups = []
-        # Add in-memory backups
-        for name, data in self.backups.items():
-            path_obj: Path = (
+        def make_backup(item: tuple[str, dict[str, Any]]) -> StatsBackup:
+            name, data = item
+            path_obj = (
                 self.backup_dir / f"{self._safe_name(name)}.json"
                 if self.backup_dir
                 else Path(f"{self._safe_name(name)}.json")
             )
-            backups.append(StatsBackup(name=name, path=path_obj, timestamp=data.get("timestamp", "")))
+            return StatsBackup(name=name, path=path_obj, timestamp=data.get("timestamp", ""))
 
-        # Add from disk if not already present
+        backups = list(map(make_backup, self.backups.items()))
         backups.extend(self._load_backups_from_disk())
         return backups
 
     def _load_backups_from_disk(self) -> list[StatsBackup]:
         """Helper to load backups from disk not already in memory."""
-        disk_backups = []
-        if self.backup_dir and self.backup_dir.exists():
-            for f in self.backup_dir.glob("*.json"):
-                name = f.stem
-                if name not in self.backups:
-                    with contextlib.suppress(Exception):
-                        payload = json.loads(f.read_text(encoding="utf-8"))
-                        disk_backups.append(
-                            StatsBackup(
-                                name=name,
-                                path=f,
-                                timestamp=payload.get("timestamp", ""),
-                            )
-                        )
-        return disk_backups
+        if not self.backup_dir or not self.backup_dir.exists():
+            return []
+        
+        def process_file(f: Path) -> StatsBackup | None:
+            name = f.stem
+            if name in self.backups:
+                return None
+            try:
+                payload = json.loads(f.read_text(encoding="utf-8"))
+                return StatsBackup(name=name, path=f, timestamp=payload.get("timestamp", ""))
+            except Exception:
+                return None
+
+        return list(filter(None, map(process_file, self.backup_dir.glob("*.json"))))
 
     def restore(self, name: str) -> dict[str, Any] | None:
         if name in self.backups:
@@ -149,21 +148,24 @@ class StatsSnapshotManager:
 
     def _load_snapshots_from_disk(self) -> list[StatsSnapshot]:
         """Helper to load snapshots from disk not already in memory."""
-        disk_snaps = []
-        if self.snapshot_dir and self.snapshot_dir.exists():
-            for f in self.snapshot_dir.glob("*.json"):
-                name = f.stem
-                if name not in self.snapshots:
-                    with contextlib.suppress(Exception):
-                        payload = json.loads(f.read_text(encoding="utf-8"))
-                        disk_snaps.append(
-                            StatsSnapshot(
-                                name=payload.get("name", name),
-                                data=payload.get("data", {}),
-                                timestamp=payload.get("timestamp", ""),
-                            )
-                        )
-        return disk_snaps
+        if not self.snapshot_dir or not self.snapshot_dir.exists():
+            return []
+
+        def process_snap(f: Path) -> StatsSnapshot | None:
+            name = f.stem
+            if name in self.snapshots:
+                return None
+            try:
+                payload = json.loads(f.read_text(encoding="utf-8"))
+                return StatsSnapshot(
+                    name=payload.get("name", name),
+                    data=payload.get("data", {}),
+                    timestamp=payload.get("timestamp", ""),
+                )
+            except Exception:
+                return None
+
+        return list(filter(None, map(process_snap, self.snapshot_dir.glob("*.json"))))
 
     def restore_snapshot(self, name: str) -> dict[str, Any] | None:
         """Restore a snapshot by name."""

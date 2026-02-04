@@ -27,6 +27,13 @@ from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+import functools
+
+try:
+    import rust_core
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
 
 from src.core.base.lifecycle.version import VERSION
 from src.observability.stats.observability_core import (Alert, AlertSeverity,
@@ -229,30 +236,29 @@ class StatsAgent:
 
     def _check_thresholds(self, metric: Metric) -> None:
         """Check if metric breaches any thresholds."""
-        for threshold in self._thresholds:
+        def check_single(threshold: Threshold) -> None:
             if threshold.metric_name != metric.name:
-                continue
-            breached = False
+                return
+            
+            # Map of operators to lambda functions
+            ops = {
+                ">": lambda v, t: v > t,
+                "<": lambda v, t: v < t,
+                ">=": lambda v, t: v >= t,
+                "<=": lambda v, t: v <= t,
+                "==": lambda v, t: v == t
+            }
 
-            # Preferred API: min/max thresholds.
-            if threshold.max_value is not None and metric.value > threshold.max_value:
-                breached = True
-            if threshold.min_value is not None and metric.value < threshold.min_value:
-                breached = True
+            breached = any([
+                threshold.max_value is not None and metric.value > threshold.max_value,
+                threshold.min_value is not None and metric.value < threshold.min_value,
+                threshold.operator in ops and ops[threshold.operator](metric.value, threshold.value)
+            ])
 
-            # Legacy API: operator/value thresholds.
-            if threshold.operator == ">" and metric.value > threshold.value:
-                breached = True
-            elif threshold.operator == "<" and metric.value < threshold.value:
-                breached = True
-            elif threshold.operator == ">=" and metric.value >= threshold.value:
-                breached = True
-            elif threshold.operator == "<=" and metric.value <= threshold.value:
-                breached = True
-            elif threshold.operator == "==" and metric.value == threshold.value:
-                breached = True
             if breached:
                 self._create_alert(metric, threshold)
+
+        list(map(check_single, self._thresholds))
 
     def _create_alert(self, metric: Metric, threshold: Threshold) -> Alert:
         """Create an alert."""
@@ -387,68 +393,104 @@ class StatsAgent:
     # ========== Original Methods ==========
     def get_missing_items(self) -> dict[str, list[str]]:
         """Identify files missing specific auxiliary components."""
-        missing: dict[str, list[str]] = {
-            "context": [],
-            "changes": [],
-            "errors": [],
-            "improvements": [],
-            "tests": [],
-        }
-        for file_path in self.files:
-            base: str = file_path.stem
-            dir_path: Path = file_path.parent
-            if not (dir_path / f"{base}.description.md").exists():
-                missing["context"].append(str(file_path))
-            if not (dir_path / f"{base}.changes.md").exists():
-                missing["changes"].append(str(file_path))
-            if not (dir_path / f"{base}.errors.md").exists():
-                missing["errors"].append(str(file_path))
-            if not (dir_path / f"{base}.improvements.md").exists():
-                missing["improvements"].append(str(file_path))
-            if not (dir_path / f"test_{base}.py").exists():
-                missing["tests"].append(str(file_path))
-        return missing
+        suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]
+        
+        if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):
+            all_paths = []
+            for f in self.files:
+                base = f.parent / f.stem
+                all_paths.extend([str(base.with_suffix(s)) for s in suffixes])
+                all_paths.append(str(f.parent / f"test_{f.stem}.py"))
+            
+            exists = rust_core.batch_exists_rust(all_paths)
+            
+            missing: dict[str, list[str]] = {
+                "context": [], "changes": [], "errors": [], "improvements": [], "tests": []
+            }
+            
+            keys = ["context", "changes", "errors", "improvements", "tests"]
+            for i, file_path in enumerate(self.files):
+                start = i * 5
+                for j, key in enumerate(keys):
+                    if not exists[start + j]:
+                        missing[key].append(str(file_path))
+            return missing
+
+        # Fallback
+        def check_file(acc: dict[str, list[str]], f: Path) -> dict[str, list[str]]:
+            base = f.parent / f.stem
+            if not base.with_suffix(".description.md").exists(): acc["context"].append(str(f))
+            if not base.with_suffix(".changes.md").exists(): acc["changes"].append(str(f))
+            if not base.with_suffix(".errors.md").exists(): acc["errors"].append(str(f))
+            if not base.with_suffix(".improvements.md").exists(): acc["improvements"].append(str(f))
+            if not (f.parent / f"test_{f.stem}.py").exists(): acc["tests"].append(str(f))
+            return acc
+
+        return functools.reduce(check_file, self.files, {
+            "context": [], "changes": [], "errors": [], "improvements": [], "tests": []
+        })
 
     def calculate_stats(self) -> dict[str, int]:
-        """Calculate statistics for each file."""
-        total_files: int = len(self.files)
-        files_with_context = 0
-        files_with_changes = 0
-        files_with_errors = 0
-        files_with_improvements = 0
-        files_with_tests = 0
-        for file_path in self.files:
-            base: str = file_path.stem
-            dir_path: Path = file_path.parent
-            if (dir_path / f"{base}.description.md").exists():
-                files_with_context += 1
-            if (dir_path / f"{base}.changes.md").exists():
-                files_with_changes += 1
-            if (dir_path / f"{base}.errors.md").exists():
-                files_with_errors += 1
-            if (dir_path / f"{base}.improvements.md").exists():
-                files_with_improvements += 1
-            if (dir_path / f"test_{base}.py").exists():
-                files_with_tests += 1
+        """Calculate statistics for each file regarding update progress."""
+        suffixes = [".description.md", ".changes.md", ".errors.md", ".improvements.md"]
+        
+        if HAS_RUST and hasattr(rust_core, "batch_exists_rust"):
+            all_paths = []
+            for f in self.files:
+                base = f.parent / f.stem
+                all_paths.extend([str(base.with_suffix(s)) for s in suffixes])
+                all_paths.append(str(f.parent / f"test_{f.stem}.py"))
+            
+            exists = rust_core.batch_exists_rust(all_paths)
+            
+            def count_matches(acc: list[int], i: int) -> list[int]:
+                start = i * 5
+                return [acc[j] + (1 if exists[start + j] else 0) for j in range(5)]
+            
+            counts = functools.reduce(count_matches, range(len(self.files)), [0, 0, 0, 0, 0])
+            self.stats = {
+                "total_files": len(self.files),
+                "files_with_context": counts[0],
+                "files_with_changes": counts[1],
+                "files_with_errors": counts[2],
+                "files_with_improvements": counts[3],
+                "files_with_tests": counts[4],
+            }
+            return self.stats
+
+        # Fallback
+        def update_counts(acc: list[int], f: Path) -> list[int]:
+            base = f.parent / f.stem
+            return [
+                acc[0] + (1 if base.with_suffix(".description.md").exists() else 0),
+                acc[1] + (1 if base.with_suffix(".changes.md").exists() else 0),
+                acc[2] + (1 if base.with_suffix(".errors.md").exists() else 0),
+                acc[3] + (1 if base.with_suffix(".improvements.md").exists() else 0),
+                acc[4] + (1 if (f.parent / f"test_{f.stem}.py").exists() else 0),
+            ]
+
+        counts = functools.reduce(update_counts, self.files, [0, 0, 0, 0, 0])
         self.stats = {
-            "total_files": total_files,
-            "files_with_context": files_with_context,
-            "files_with_changes": files_with_changes,
-            "files_with_errors": files_with_errors,
-            "files_with_improvements": files_with_improvements,
-            "files_with_tests": files_with_tests,
+            "total_files": len(self.files),
+            "files_with_context": counts[0],
+            "files_with_changes": counts[1],
+            "files_with_errors": counts[2],
+            "files_with_improvements": counts[3],
+            "files_with_tests": counts[4],
         }
         return self.stats
 
     def add_trend_analysis(self, previous_stats: dict[str, int]) -> dict[str, str]:
         """Compare current stats with previous run and calculate deltas."""
-        deltas: dict[str, str] = {}
-        for key, current_value in self.stats.items():
-            previous_value: int = previous_stats.get(key, 0)
+        def calculate_delta(acc: dict[str, str], item: tuple[str, int]) -> dict[str, str]:
+            key, current_value = item
+            previous_value = previous_stats.get(key, 0)
             delta = current_value - previous_value
-            percentage_change: Any | int = (delta / previous_value * 100) if previous_value else 0
-            deltas[key] = f"{delta:+} ({percentage_change:.1f}%)"
-        return deltas
+            pct = (delta / previous_value * 100) if previous_value else 0
+            acc[key] = f"{delta:+} ({pct:.1f}%)"
+            return acc
+
+        return functools.reduce(calculate_delta, self.stats.items(), {})
 
     def visualize_stats(self) -> None:
         """Generate CLI graphs for stats visualization."""
@@ -462,7 +504,7 @@ class StatsAgent:
 
     def export_stats(self, output_path: str, formats: list[str]) -> None:
         """Export stats to multiple formats."""
-        for fmt in formats:
+        def run_export(fmt: str) -> None:
             if fmt == "json":
                 with open(f"{output_path}.json", 'w', encoding='utf-8') as json_file:
                     json.dump(self.stats, json_file, indent=2)
@@ -474,8 +516,7 @@ class StatsAgent:
             elif fmt == "html":
                 with open(f"{output_path}.html", 'w', encoding='utf-8') as html_file:
                     html_file.write("<html><body><h1>Stats Report</h1><table>")
-                    for key, value in self.stats.items():
-                        html_file.write(f"<tr><td>{key}</td><td>{value}</td></tr>")
+                    list(map(lambda k: html_file.write(f"<tr><td>{k}</td><td>{self.stats[k]}</td></tr>"), self.stats))
                     html_file.write("</table></body></html>")
             elif fmt == "sqlite":
                 import sqlite3
@@ -489,16 +530,21 @@ class StatsAgent:
                 conn.commit()
                 conn.close()
 
+        list(map(run_export, formats))
+
     def generate_comparison_report(self, baseline_stats: dict[str, int]) -> None:
         """Generate a comparison report between current and baseline stats."""
-        comparison = {}
-        for key, current_value in self.stats.items():
-            baseline_value: int = baseline_stats.get(key, 0)
-            comparison[key] = {
-                "current": current_value,
-                "baseline": baseline_value,
-                "difference": current_value - baseline_value,
+        def compare_item(acc: dict[str, Any], item: tuple[str, int]) -> dict[str, Any]:
+            key, current_val = item
+            baseline_val = baseline_stats.get(key, 0)
+            acc[key] = {
+                "current": current_val,
+                "baseline": baseline_val,
+                "difference": current_val - baseline_val,
             }
+            return acc
+
+        comparison = functools.reduce(compare_item, self.stats.items(), {})
         report: str = json.dumps(comparison, indent=2)
         logger.info(report)
         print(report)
