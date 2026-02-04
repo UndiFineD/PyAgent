@@ -100,6 +100,7 @@ python -m pytest tests/unit/
 - [x] **Decentralized Transport**: Zero-broker P2P swarms with mDNS discovery.
 - [x] **Synaptic Pruning**: Exponential knowledge decay for high-efficiency memory.
 - [x] **Holographic Memory**: Distributed vector weights across the fleet.
+- [x] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup (inspired by 4o-ghibli-at-home).
 - [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
 - [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
 

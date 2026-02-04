@@ -1,0 +1,182 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""Tests for ChangeMonitoringAgent."""
+
+import asyncio
+import json
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock, patch
+
+from src.core.agents.change_monitoring_agent import (
+    ChangeMonitoringAgent,
+    FileSystemDataSource,
+    HistoryManager
+)
+
+
+class TestHistoryManager(unittest.TestCase):
+    """Test cases for HistoryManager."""
+
+    def test_add_and_get_previous_value(self):
+        """Test adding changes and retrieving previous values."""
+        manager = HistoryManager()
+
+        # Add some changes
+        manager.add_change({
+            'object': 'obj1',
+            'attribute_name': 'attr1',
+            'attribute_value': 'value1'
+        })
+        manager.add_change({
+            'object': 'obj1',
+            'attribute_name': 'attr1',
+            'attribute_value': 'value2'
+        })
+
+        # Get previous value
+        prev = manager.get_previous_value('obj1', 'attr1')
+        self.assertEqual(prev, 'value1')
+
+    def test_save_and_load_history(self):
+        """Test saving and loading history to/from file."""
+        manager = HistoryManager()
+
+        manager.add_change({
+            'object': 'test_obj',
+            'attribute_name': 'test_attr',
+            'attribute_value': 'test_value'
+        })
+
+        with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
+            temp_file = f.name
+
+        try:
+            # Save
+            manager.save_to_file(temp_file)
+
+            # Load into new manager
+            new_manager = HistoryManager()
+            new_manager.load_from_file(temp_file)
+
+            self.assertEqual(len(new_manager.history), 1)
+            self.assertEqual(new_manager.history[0]['object'], 'test_obj')
+
+        finally:
+            Path(temp_file).unlink()
+
+
+class TestFileSystemDataSource(unittest.TestCase):
+    """Test cases for FileSystemDataSource."""
+
+    def setUp(self):
+        """Set up test fixtures."""
+        self.temp_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        """Clean up test fixtures."""
+        import shutil
+        shutil.rmtree(self.temp_dir)
+
+    def test_get_current_usn(self):
+        """Test getting current USN (mtime)."""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        data_source = FileSystemDataSource(self.temp_dir)
+        usn = loop.run_until_complete(data_source.get_current_usn())
+
+        self.assertIsInstance(usn, float)
+        self.assertGreaterEqual(usn, 0)
+
+    def test_get_changes_since(self):
+        """Test getting changes since a USN."""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        data_source = FileSystemDataSource(self.temp_dir)
+
+        # Get initial USN
+        initial_usn = loop.run_until_complete(data_source.get_current_usn())
+
+        # Create a file to trigger change
+        test_file = Path(self.temp_dir) / 'test.txt'
+        test_file.write_text('test')
+
+        # Get changes
+        changes = loop.run_until_complete(data_source.get_changes_since(initial_usn))
+
+        # Should detect the directory change
+        self.assertTrue(len(changes) > 0)
+
+
+class TestChangeMonitoringAgent(unittest.TestCase):
+    """Test cases for ChangeMonitoringAgent."""
+
+    def setUp(self):
+        """Set up test fixtures."""
+        self.agent = ChangeMonitoringAgent(__file__)
+
+    def test_add_data_source(self):
+        """Test adding a data source."""
+        data_source = FileSystemDataSource('/tmp')
+        self.agent.add_data_source('test_ds', data_source)
+
+        self.assertIn('test_ds', self.agent.data_sources)
+        self.assertIn('test_ds', self.agent.history_managers)
+
+    def test_get_change_summary_empty(self):
+        """Test getting change summary for empty history."""
+        summary = asyncio.run(self.agent.get_change_summary('nonexistent'))
+        self.assertEqual(summary, {})
+
+    @patch('src.core.agents.change_monitoring_agent.FileSystemDataSource')
+    def test_get_initial_dump(self, mock_ds_class):
+        """Test getting initial dump."""
+        # Mock data source
+        mock_ds = MagicMock()
+        mock_ds.get_initial_dump = AsyncMock(return_value=[
+            {'object': 'test', 'attribute_name': 'size', 'attribute_value': 100}
+        ])
+        mock_ds_class.return_value = mock_ds
+
+        self.agent.add_data_source('test_ds', mock_ds)
+
+        dump = asyncio.run(self.agent.get_initial_dump('test_ds'))
+
+        self.assertEqual(len(dump), 1)
+        self.assertIn('explanation', dump[0])  # Should be processed
+
+    def test_format_output_integration(self):
+        """Test that agent can format output using mixin."""
+        changes = [
+            {
+                'object': 'CN=TestUser',
+                'attribute_name': 'userAccountControl',
+                'attribute_value': '512',
+                'last_orig_change_time': '2023-01-01',
+                'explanation': 'NORMAL_ACCOUNT'
+            }
+        ]
+
+        # Agent inherits format_change_output from mixin
+        output = self.agent.format_change_output(changes, 'table')
+        self.assertIn('NORMAL_ACCOUNT', output)

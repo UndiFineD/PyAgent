@@ -121,7 +121,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(validate_chat_messages_rust, m)?)?; // Ensure this is registered
     m.add_function(wrap_pyfunction!(estimate_tokens_from_messages_rust, m)?)?; // Renamed from estimate_tokens_rust
     m.add_function(wrap_pyfunction!(compute_arc_target_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(compute_balanced_packing_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_moe_balanced_packing_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_block_eviction_order_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_cache_hit_rate_rust, m)?)?;
     m.add_function(wrap_pyfunction!(compute_deadline_priorities_rust, m)?)?;

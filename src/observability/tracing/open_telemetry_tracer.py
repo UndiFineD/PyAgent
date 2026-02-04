@@ -458,7 +458,7 @@ def get_current_span_safe() -> Span | None:
 
 def add_span_attributes(attributes: dict[str, Any]) -> None:
     """
-    Add attributes to the current span.
+    Add attributes to the current span regarding specific metadata.
 
     Safe to call even if tracing is not available.
     """
@@ -467,8 +467,7 @@ def add_span_attributes(attributes: dict[str, Any]) -> None:
 
     span: Span = get_current_span()
     if span and span.is_recording():
-        for key, value in attributes.items():
-            span.set_attribute(key, value)
+        list(map(lambda item: span.set_attribute(item[0], item[1]), attributes.items()))
 
 
 def add_span_event(
@@ -490,7 +489,7 @@ def add_span_event(
 
 def record_exception(exception: Exception, escaped: bool = True) -> None:
     """
-    Record an exception on the current span.
+    Record an exception on the current span regarding the failure context.
 
     Safe to call even if tracing is not available.
     """
@@ -526,7 +525,7 @@ def log_tracing_disabled_warning() -> None:
 
 @dataclass
 class SpanTiming:
-    """Helper for tracking timing within a span."""
+    """Helper for tracking timing within a span regarding performance metrics."""
 
     start_time: float = field(default_factory=time.perf_counter)
     checkpoints: dict[str, float] = field(default_factory=dict)
@@ -544,16 +543,22 @@ class SpanTiming:
     def to_attributes(self, prefix: str = "") -> dict[str, float]:
         """Convert checkpoints to span attributes."""
         result: dict[str, float] = {f"{prefix}total": self.elapsed()}
-        for name, elapsed in self.checkpoints.items():
-            result[f"{prefix}{name}"] = elapsed
-        return result
+        def add_cp(acc: dict[str, float], item: tuple[str, float]) -> dict[str, float]:
+            name, elapsed = item
+            acc[f"{prefix}{name}"] = elapsed
+            return acc
+
+        return functools.reduce(add_cp, self.checkpoints.items(), result)
 
     def apply_to_span(self, span: Span | None, prefix: str = "timing.") -> None:
         """Apply timing attributes to a span."""
         if span is None:
             return
-        for key, value in self.to_attributes(prefix).items():
-            span.set_attribute(key, value)
+        
+        def set_attr(item: tuple[str, float]) -> None:
+            span.set_attribute(item[0], item[1])
+
+        list(map(set_attr, self.to_attributes(prefix).items()))
 
 
 @contextmanager

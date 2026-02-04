@@ -8,6 +8,8 @@ from .formatting import FormattingCore  # noqa: F401
 from .metrics import MetricsCore  # noqa: F401
 from .utils import UtilsCore  # noqa: F401
 from .validation import ValidationCore  # noqa: F401
+from .code_analyzer import CodeAnalyzerCore  # noqa: F401
+from .memory_consolidation_core import MemoryConsolidationCore  # noqa: F401
 
 __all__ = [
     "ValidationCore",
@@ -15,4 +17,6 @@ __all__ = [
     "FormattingCore",
     "UtilsCore",
     "EventCore",
+    "CodeAnalyzerCore",
+    "MemoryConsolidationCore",
 ]

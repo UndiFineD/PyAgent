@@ -31,6 +31,22 @@ from .core_enums import FilePriority, InputType, MessageRole
 
 
 @dataclass(slots=True)
+class WorkState:
+    """Mutable storage regarding intermediate results in a multi-agent pipeline."""
+    results: dict[str, Any] = field(default_factory=dict)
+    shared_data: dict[str, Any] = field(default_factory=dict)
+    artifacts: list[Path] = field(default_factory=list)
+
+    def update(self, key: str, value: Any) -> None:
+        """Updates a result key regarding the current pipeline state."""
+        self.results[key] = value
+
+    def add_artifact(self, path: Path) -> None:
+        """Records a new artifact path regarding the pipeline output."""
+        if path not in self.artifacts:
+            self.artifacts.append(path)
+
+@dataclass(slots=True)
 class CascadeContext:
     """Context for tracking cascade operations and preventing infinite recursion."""
 

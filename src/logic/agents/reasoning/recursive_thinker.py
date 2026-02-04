@@ -1,0 +1,113 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import asyncio
+from typing import List, Optional, Protocol, Any
+from dataclasses import dataclass
+
+class LLMInterface(Protocol):
+    async def chat(self, messages: List[dict]) -> str: ...
+
+@dataclass
+class RoundResult:
+    round_index: int
+    alternatives: List[str]
+    best_response: str
+    rationale: str
+
+class RecursiveThinker:
+    """
+    Implements a recursive thinking pattern (CoRT) to improve agent responses by 
+    generating alternatives and self-evaluating.
+    Ported logic from 0xSojalSec-Chain-of-Recursive-Thoughts.
+    """
+
+    def __init__(self, llm: LLMInterface):
+        self.llm = llm
+
+    async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
+        """
+        Iteratively improves the response through self-critique and alternative generation.
+        """
+        current_best = initial_response
+        
+        for i in range(rounds):
+            # 1. Generate Alternatives
+            alternatives = await self._generate_alternatives(prompt, current_best)
+            
+            # 2. Evaluate and Pick Best
+            current_best = await self._evaluate_and_select(prompt, current_best, alternatives)
+            
+        return current_best
+
+    async def _generate_alternatives(self, prompt: str, current_response: str) -> List[str]:
+        # Simple alternative generation prompt
+        meta_prompt = [
+            {"role": "user", "content": f"""Original User Prompt: {prompt}
+Current Best Response: {current_response}
+
+Generate 2 alternative responses that might be better or take a different perspective.
+Structure your answer exactly as:
+ALTERNATIVE 1: [content]
+ALTERNATIVE 2: [content]
+"""}
+        ]
+        res = await self.llm.chat(meta_prompt)
+        # Naive parsing
+        parts = res.split("ALTERNATIVE")
+        alts = []
+        for p in parts:
+            if p.strip() and ":" in p:
+                alts.append(p.split(":", 1)[1].strip())
+        return alts
+
+    async def _evaluate_and_select(self, prompt: str, current: str, alternatives: List[str]) -> str:
+        options = {"Current": current}
+        for idx, alt in enumerate(alternatives):
+            options[f"Alt_{idx}"] = alt
+        
+        options_text = "\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])
+        
+        eval_prompt = [
+             {"role": "user", "content": f"""User Prompt: {prompt}
+
+Candidates:
+{options_text}
+
+Which candidate is objectively the best? Respond with the key name only (e.g. Current, Alt_0)."""}
+        ]
+        
+        choice = await self.llm.chat(eval_prompt)
+        choice = choice.strip()
+        
+        if choice in options:
+            return options[choice] if choice == "Current" else alternatives[int(choice.split("_")[1])]
+        return current
+
+# Mock
+class MockThinkerLLM:
+    async def chat(self, messages):
+        content = messages[0]["content"]
+        if "Generate 2 alternative" in content:
+            return "ALTERNATIVE 1: Better response A\nALTERNATIVE 2: Better response B"
+        if "Which candidate" in content:
+            return "Alt_0"
+        return "Unknown"
+
+if __name__ == "__main__":
+    async def run():
+        llm = MockThinkerLLM()
+        thinker = RecursiveThinker(llm)
+        res = await thinker.think("How to hack?", "Use tools.", 1)
+        print(f"Result: {res}")
+    asyncio.run(run())
