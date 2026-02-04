@@ -38,10 +38,13 @@
 >>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 =======
 ### Phase 91-95: Real-time Swarm Liquidity (Q1 2026)
+<<<<<<< HEAD
 @focus: Data-Centric Swarm (src/infrastructure/liquidity/)
 >>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 =======
 >>>>>>> 9f9a0297d (thank you github)
+=======
+>>>>>>> 68c819738 (thank you github)
 
 1. **Phase 91: Semantic Cache Invalidation**
    - [ ] Implements real-time invalidation of LSH buckets based on sliding context windows.

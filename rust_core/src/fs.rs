@@ -212,6 +212,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 <<<<<<< HEAD
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -225,5 +226,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 =======
     m.add_function(wrap_pyfunction!(batch_exists_rust, m)?)?;
 >>>>>>> 9f9a0297d (thank you github)
+=======
+    m.add_function(wrap_pyfunction!(batch_exists_rust, m)?)?;
+>>>>>>> 68c819738 (thank you github)
     Ok(())
 }
