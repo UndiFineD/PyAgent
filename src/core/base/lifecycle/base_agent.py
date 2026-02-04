@@ -43,12 +43,21 @@ from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.mixins.governance_mixin import GovernanceMixin
 # Import Mixins for Synaptic Modularization (Phase 317)
+from src.core.base.mixins.config_mixin import ConfigMixin
+from src.core.base.mixins.environment_mixin import EnvironmentMixin
+from src.core.base.mixins.expertise_mixin import ExpertiseMixin
+from src.core.base.mixins.governance_mixin import GovernanceMixin
 from src.core.base.mixins.identity_mixin import IdentityMixin
 from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
 from src.core.base.mixins.multimodal_mixin import MultimodalMixin
 from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
 from src.core.base.mixins.persistence_mixin import PersistenceMixin
 from src.core.base.mixins.reflection_mixin import ReflectionMixin
+from src.core.base.mixins.security_mixin import SecurityMixin
+from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
+from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin
+from src.core.base.mixins.task_manager_mixin import TaskManagerMixin
+from src.core.base.mixins.tool_framework_mixin import ToolFrameworkMixin
 
 # Advanced components (Lazy loaded or optional)
 try:
@@ -75,6 +84,12 @@ class BaseAgent(
     GovernanceMixin,
     ReflectionMixin,
     MultimodalMixin,
+    SecurityMixin,
+    TaskQueueMixin,
+    StreamManagerMixin,
+    TaskManagerMixin,
+    ToolFrameworkMixin,
+    EnvironmentMixin,
 ):
     """
     Core AI Agent Shell (Synaptic modularization Phase 317).
@@ -135,6 +150,11 @@ class BaseAgent(
         OrchestrationMixin.__init__(self, **kwargs)
         ReflectionMixin.__init__(self, **kwargs)
         MultimodalMixin.__init__(self, **kwargs)
+        SecurityMixin.__init__(self, **kwargs)
+        TaskQueueMixin.__init__(self, **kwargs)
+        StreamManagerMixin.__init__(self, **kwargs)
+        TaskManagerMixin.__init__(self, **kwargs)
+        ToolFrameworkMixin.__init__(self, **kwargs)
 
         self._config = self.agent_logic_core.load_config_from_env()
         GovernanceMixin.__init__(self, config=self._config, **kwargs)

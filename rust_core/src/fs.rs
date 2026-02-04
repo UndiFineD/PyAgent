@@ -135,6 +135,16 @@ pub fn save_json_atomic_rust(path: &str, content: &str) -> PyResult<bool> {
     }
 }
 
+/// Batch existence check for files.
+#[pyfunction]
+pub fn batch_exists_rust(paths: Vec<String>) -> PyResult<Vec<bool>> {
+    let mut results = Vec::with_capacity(paths.len());
+    for path in paths {
+        results.push(Path::new(&path).exists());
+    }
+    Ok(results)
+}
+
 /// High-speed directory scanning with pattern matching and ignore lists (FileSystemCore).
 #[pyfunction]
 pub fn discover_files_rust(
@@ -201,6 +211,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 <<<<<<< HEAD
 <<<<<<< HEAD
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
+<<<<<<< HEAD
 =======
 >>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 =======
@@ -211,5 +222,8 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
 =======
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
 >>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
+=======
+    m.add_function(wrap_pyfunction!(batch_exists_rust, m)?)?;
+>>>>>>> 9f9a0297d (thank you github)
     Ok(())
 }

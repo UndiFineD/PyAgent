@@ -20,9 +20,10 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
+import time
 
 from .core_enums import (AuthMethod, FilePriority,
-                         SerializationFormat)
+                         SerializationFormat, EnvironmentStatus, EnvironmentIsolation)
 from ._factories import (
     _empty_agent_event_handlers, _empty_dict_str_any,
     _empty_dict_str_callable_any_any, _empty_dict_str_configprofile,
@@ -42,6 +43,8 @@ __all__ = [
     "ExecutionCondition",
     "DiffResult",
     "ModelConfig",
+    "EnvironmentConfig",
+    "EnvironmentInstance",
     "EventHook",
     "_empty_agent_event_handlers",
     "_empty_dict_str_any",
@@ -181,6 +184,57 @@ class DiffResult:
     additions: int = 0
     deletions: int = 0
     changes: int = 0
+
+
+@dataclass(slots=True)
+class EnvironmentConfig:
+    """Configuration for agent environments."""
+
+    name: str
+    version: str = "1.0.0"
+    description: str = ""
+    tags: list[str] = field(default_factory=_empty_list_str)
+    isolation: EnvironmentIsolation = EnvironmentIsolation.NONE
+    cpu_limit: float = 1.0  # CPU cores
+    memory_limit: int = 1024  # MB
+    disk_limit: int = 10240  # MB
+    ttl_seconds: int = 1800  # 30 minutes default
+    environment_variables: dict[str, str] = field(default_factory=_empty_dict_str_str)
+    dependencies: list[str] = field(default_factory=_empty_list_str)
+    build_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    test_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    deploy_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+
+
+@dataclass(slots=True)
+class EnvironmentInstance:
+    """Runtime instance of an environment."""
+
+    id: str
+    environment_name: str
+    status: EnvironmentStatus = EnvironmentStatus.PENDING
+    created_at: float = field(default_factory=time.time)
+    updated_at: float = field(default_factory=time.time)
+    expires_at: Optional[float] = None
+    cpu_usage: float = 0.0
+    memory_usage: int = 0
+    disk_usage: int = 0
+    process_id: Optional[int] = None
+    container_id: Optional[str] = None
+    working_directory: Optional[Path] = None
+    environment_variables: dict[str, str] = field(default_factory=_empty_dict_str_str)
+    metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+
+    def is_expired(self) -> bool:
+        """Check if the environment instance has expired."""
+        if self.expires_at is None:
+            return False
+        return time.time() > self.expires_at
+
+    def update_status(self, new_status: EnvironmentStatus) -> None:
+        """Update the instance status and timestamp."""
+        self.status = new_status
+        self.updated_at = time.time()
 
 
 EventHook = Callable[[dict[str, Any]], None]
