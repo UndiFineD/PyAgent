@@ -146,19 +146,28 @@ class IntelligenceHarvester:
         )
 
         # 1. LMStudio (Local External)
-        lmstudio_res = ai.llm_chat_via_lmstudio(prompt, model=os.environ.get("DV_LMSTUDIO_MODEL", ""))
-        if lmstudio_res:
-            lessons.append({"provider": "LMStudio", "text": lmstudio_res})
+        try:
+            lmstudio_res = ai.llm_chat_via_lmstudio(prompt, model=os.environ.get("DV_LMSTUDIO_MODEL", ""))
+            if lmstudio_res:
+                lessons.append({"provider": "LMStudio", "text": lmstudio_res})
+        except Exception:
+            logging.debug("LMStudio harvesting failed.")
 
         # 2. GitHub Models (Global External)
-        gemini_res = ai.llm_chat_via_github_models(prompt, model=self.model_name)
-        if gemini_res:
-            lessons.append({"provider": "GitHubModels", "text": gemini_res})
+        try:
+            gemini_res = ai.llm_chat_via_github_models(prompt, model=self.model_name)
+            if gemini_res:
+                lessons.append({"provider": "GitHubModels", "text": gemini_res})
+        except Exception:
+            logging.debug("GitHubModels harvesting failed.")
 
         # 3. Copilot CLI (System Intel)
-        copilot_res = ai.llm_chat_via_copilot_cli(prompt)
-        if copilot_res:
-            lessons.append({"provider": "CopilotCLI", "text": copilot_res})
+        try:
+            copilot_res = ai.llm_chat_via_copilot_cli(prompt)
+            if copilot_res:
+                lessons.append({"provider": "CopilotCLI", "text": copilot_res})
+        except Exception:
+            logging.debug("CopilotCLI harvesting failed.")
 
         # Feed to fleet
         if lessons:
@@ -377,7 +386,7 @@ def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
 
 def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, Any]) -> None:
     """Updates FLEET_AUTO_DOC.md with cycle results."""
-    fleet_path = os.path.join(root, "src/infrastructure/fleet/fleet_manager.py")
+    fleet_path = os.path.join(root, "src/infrastructure/swarm/fleet/fleet_manager.py")
     doc_res = fleet.doc_gen_agent.extract_docs(fleet_path)
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")
 
@@ -494,9 +503,9 @@ def _attempt_autonomous_solutions(fleet: FleetManager, broken_items: list[dict[s
             )
             print(" - Solution pattern recorded to collective knowledge.")
 
-    except (RuntimeError, TimeoutError, ValueError):
+    except Exception as e:
         # Catch LLM failures, timeouts, and invalid solution patterns
-        print(" - Autonomous solving failed.")
+        print(f" - Autonomous solving failed: {e}")
 
 
 def _prune_verified_directives(

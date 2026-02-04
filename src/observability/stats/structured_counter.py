@@ -24,6 +24,7 @@ Phase 24: Advanced Observability & Parsing
 from __future__ import annotations
 
 import copy
+import functools
 from contextlib import contextmanager
 from dataclasses import dataclass, fields
 from typing import Any, Generator, TypeVar
@@ -61,13 +62,15 @@ class StructuredCounter:
 
     def reset(self) -> None:
         """Reset all counter fields to their default values."""
-        for f in fields(self):
+        def reset_field(f: Any) -> None:
             if f.default is not f.default_factory:
                 setattr(self, f.name, f.default if f.default is not dataclass else 0)
             elif f.default_factory is not dataclass:
                 setattr(self, f.name, f.default_factory())
             else:
                 setattr(self, f.name, 0)
+        
+        list(map(reset_field, fields(self)))
 
     def diff(self: T, other: T) -> dict[str, int]:
         """
@@ -79,18 +82,19 @@ class StructuredCounter:
         Returns:
             Dictionary of field names to their differences (self - other)
         """
-        result = {}
-        for f in fields(self):
+        def calculate_diff(acc: dict[str, int], f: Any) -> dict[str, int]:
             current = getattr(self, f.name)
             baseline = getattr(other, f.name)
             if isinstance(current, (int, float)) and isinstance(baseline, (int, float)):
-                diff = current - baseline
-                if diff != 0:
-                    result[f.name] = diff
-        return result
+                diff_val = current - baseline
+                if diff_val != 0:
+                    acc[f.name] = diff_val
+            return acc
+
+        return functools.reduce(calculate_diff, fields(self), {})
 
     def as_dict(self) -> dict[str, Any]:
-        """Convert counter to dictionary."""
+        """Convert counter to dictionary regarding current values."""
         return {f.name: getattr(self, f.name) for f in fields(self)}
 
     @contextmanager
@@ -110,13 +114,17 @@ class StructuredCounter:
         """
         old = self.clone()
         yield
-        for name, expected_diff in kwargs.items():
+        
+        def check_expected(item: tuple[str, int]) -> None:
+            name, expected_diff = item
             actual_diff = getattr(self, name) - getattr(old, name)
             assert actual_diff == expected_diff, (
                 f"{name} not as expected: before={getattr(old, name)}, "
                 f"after={getattr(self, name)}, expected_diff={expected_diff}, "
                 f"actual_diff={actual_diff}"
             )
+            
+        list(map(check_expected, kwargs.items()))
 
     def increment(self, field_name: str, amount: int = 1) -> None:
         """Increment a counter field by the given amount."""

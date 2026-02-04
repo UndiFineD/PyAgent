@@ -11,13 +11,17 @@ import json
 import socket
 import threading
 import time
+import subprocess
+import platform
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional, Callable
 
-from src.infrastructure.swarm.network.network_utils import get_ip
-from src.observability.structured_logger import StructuredLogger
+from src.infrastructure.swarm.network.network_utils import get_local_network_ip
+# from src.observability.structured_logger import StructuredLogger
+import logging
 
-logger = StructuredLogger(__name__)
+# logger = StructuredLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -41,11 +45,11 @@ class LANDiscovery:
     """
     Decentralized LAN Discovery for PyAgents.
     Follows an Announce -> Respond -> Register -> Sync cycle.
+
+    Network-aware implementation that detects subnet and uses proper broadcasting.
     """
 
-    DISCOVERY_PORT = 31415
-    BROADCAST_ADDR = "255.255.255.255"
-    MAX_CLOCK_SKEW = 10.0  # Seconds
+    DEFAULT_DISCOVERY_PORT = 31415
 
     def __init__(
         self,
@@ -54,19 +58,36 @@ class LANDiscovery:
         secret_key: Optional[str] = None,
         metadata: Optional[Dict] = None,
         sleep_fn: Callable[[float], None] | None = None,
+        discovery_port: Optional[int] = None,
+        enable_broadcast: bool = True,
+        auto_find_port: bool = True,
     ):
         self.agent_id = agent_id
         self.service_port = service_port
         self.secret_key = secret_key
         self.metadata = metadata or {}
+        self.enable_broadcast = enable_broadcast
+        self.auto_find_port = auto_find_port
+
+        # Set discovery port (with auto-detection if needed)
+        self.discovery_port = discovery_port or self.DEFAULT_DISCOVERY_PORT
+        if auto_find_port and not self._test_port_available(self.discovery_port):
+            available_port = self.find_available_port(self.discovery_port + 1)
+            if available_port:
+                logger.info(f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}")
+                self.discovery_port = available_port
+            else:
+                logger.warning(f"LANDiscovery: No available ports found, using {self.discovery_port} anyway")
+
         self.registry: Dict[str, PeerInfo] = {}
         self._running = False
         self._lock = threading.Lock()
         self._nonces: Dict[str, float] = {}  # agent_id: last_timestamp
         self._ping_times: Dict[str, float] = {}  # agent_id: sent_time
 
-        # Local IP detection (lazy)
+        # Network detection
         self._local_ip = None
+        self._subnet_broadcast = None
         self._listen_thread: Optional[threading.Thread] = None
         self._announce_thread: Optional[threading.Thread] = None
 
@@ -80,17 +101,124 @@ class LANDiscovery:
         else:
             self._sleep_fn = sleep_fn
 
-    def stop(self):
-        """Stops the discovery threads."""
+    def _test_port_available(self, port: int) -> bool:
+        """
+        Test if a port is available for binding.
+
+        Args:
+            port: Port number to test.
+
+        Returns:
+            True if port is available, False otherwise.
+        """
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind(("", port))
+            sock.close()
+            return True
+        except OSError:
+            return False
+
+    def find_available_port(self, start_port: int, max_attempts: int = 100) -> Optional[int]:
+        """
+        Find an available port starting from start_port.
+
+        Args:
+            start_port: Port number to start searching from.
+            max_attempts: Maximum number of ports to try.
+
+        Returns:
+            Available port number or None if none found.
+        """
+        for port in range(start_port, start_port + max_attempts):
+            if self._test_port_available(port):
+                return port
+        return None
+        self.agent_id = agent_id
+        self.service_port = service_port
+        self.secret_key = secret_key
+        self.metadata = metadata or {}
+        self.registry: Dict[str, PeerInfo] = {}
         self._running = False
-        self._sleep_event.set()
+        self._lock = threading.Lock()
+        self._nonces: Dict[str, float] = {}  # agent_id: last_timestamp
+        self._ping_times: Dict[str, float] = {}  # agent_id: sent_time
+
+        # Network detection
+        self._local_ip = None
+        self._subnet_broadcast = None
+        self._listen_thread: Optional[threading.Thread] = None
+        self._announce_thread: Optional[threading.Thread] = None
+
+        # Sleep/wakeup support for the announce loop
+        self._sleep_event = threading.Event()
+        if sleep_fn is None:
+            def _wait(secs: float) -> None:
+                self._sleep_event.wait(secs)
+
+            self._sleep_fn = _wait
+        else:
+            self._sleep_fn = sleep_fn
+
+    def _detect_subnet_broadcast(self) -> Optional[str]:
+        """
+        Detect the proper subnet broadcast address for the local network.
+
+        Returns:
+            Subnet broadcast address, or None if detection fails.
+        """
+        try:
+            # Get local IP
+            local_ip = self.local_ip
+            if local_ip == "0.0.0.0" or local_ip.startswith("127."):
+                logger.warning("LANDiscovery: Cannot detect subnet for localhost/unknown IP")
+                return None
+
+            # Parse IP and create subnet broadcast
+            ip_parts = local_ip.split('.')
+            if len(ip_parts) != 4:
+                logger.warning(f"LANDiscovery: Invalid IPv4 address format: {local_ip}")
+                return None
+
+            # Assume /24 subnet (most common for home/office networks)
+            # Broadcast is x.x.x.255 for /24 subnet
+            broadcast = f"{ip_parts[0]}.{ip_parts[1]}.{ip_parts[2]}.255"
+            logger.info(f"LANDiscovery: Detected subnet broadcast: {broadcast}")
+            return broadcast
+
+        except Exception as e:
+            logger.warning(f"LANDiscovery: Failed to detect subnet broadcast: {e}")
+            return None
 
     @property
     def local_ip(self) -> str:
-        """Lazily identifies and returns the local IPv4 address."""
+        """Lazily identifies and returns the local network IPv4 address for LAN discovery."""
+        print("DEBUG: Accessing local_ip property", flush=True)
         if not self._local_ip:
-            self._local_ip = get_ip()
+            print("DEBUG: _local_ip is None, detecting...", flush=True)
+            self._local_ip = self._detect_local_network_ip()
+            print(f"DEBUG: Detection finished. Check: {self._local_ip}", flush=True)
         return self._local_ip
+
+    def _detect_local_network_ip(self) -> str:
+        """
+        Detect the IP address of the local network interface for LAN discovery.
+        Delegates to the shared network_utils.get_local_network_ip implementation.
+        """
+        return get_local_network_ip()
+
+    @property
+    def broadcast_addr(self) -> str:
+        """Get the appropriate broadcast address for this network."""
+        if not self.enable_broadcast:
+            return "255.255.255.255"  # Fallback when broadcast is disabled
+
+        if not self._subnet_broadcast:
+            self._subnet_broadcast = self._detect_subnet_broadcast()
+
+        # Fallback to global broadcast if subnet detection fails
+        return self._subnet_broadcast or "255.255.255.255"
 
     def _sign(self, data: str) -> str:
         if not self.secret_key:
@@ -122,26 +250,191 @@ class LANDiscovery:
     def start(self):
         """Starts the discovery threads."""
         if self._running:
+            logger.warning("LANDiscovery: Already running")
             return
-        self._running = True
-        self._listen_thread = threading.Thread(target=self._listen_loop, daemon=True)
-        self._listen_thread.start()
-        self._announce_thread = threading.Thread(target=self._announce_loop, daemon=True)
-        self._announce_thread.start()
-        logger.info(f"LANDiscovery: Active for {self.agent_id} on {self.local_ip}:{self.service_port}")
+
+        try:
+            # Detect network configuration
+            self._detect_network_config()
+
+            # Test if we can bind to the discovery port
+            if not self._test_port_available(self.discovery_port):
+                if self.auto_find_port:
+                    available_port = self.find_available_port(self.discovery_port + 1)
+                    if available_port:
+                        logger.info(f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}")
+                        self.discovery_port = available_port
+                    else:
+                        logger.error("LANDiscovery: No available ports found for discovery")
+                        return
+                else:
+                    logger.error(f"LANDiscovery: Port {self.discovery_port} is not available")
+                    return
+
+            self._running = True
+            self._listen_thread = threading.Thread(
+                target=self._listen_loop,
+                daemon=True,
+                name=f"LANDiscovery-Listen-{self.agent_id[:8]}"
+            )
+            self._listen_thread.start()
+
+            if self.enable_broadcast:
+                self._announce_thread = threading.Thread(
+                    target=self._announce_loop,
+                    daemon=True,
+                    name=f"LANDiscovery-Announce-{self.agent_id[:8]}"
+                )
+                self._announce_thread.start()
+
+            logger.info(f"LANDiscovery: Started on port {self.discovery_port} (broadcast: {self.enable_broadcast})")
+
+        except Exception as e:
+            logger.error(f"LANDiscovery: Failed to start: {e}")
+            self._running = False
+            raise
+    def get_network_info(self) -> Dict[str, Any]:
+        """
+        Get information about the current network configuration.
+
+        Returns:
+            Dictionary with network information.
+        """
+        connectivity = self.test_network_connectivity()
+
+        return {
+            "local_ip": self.local_ip,
+            "broadcast_addr": self.broadcast_addr,
+            "discovery_port": self.discovery_port,
+            "service_port": self.service_port,
+            "enable_broadcast": self.enable_broadcast,
+            "subnet_detected": self._subnet_broadcast is not None,
+            "peers_discovered": len(self.registry),
+            "connectivity": connectivity
+        }
+
+    def test_network_connectivity(self) -> Dict[str, Any]:
+        """
+        Test network connectivity for discovery operations.
+
+        Returns:
+            Dictionary with connectivity test results.
+        """
+        results = {
+            "port_available": self._test_port_available(self.discovery_port),
+            "can_bind_socket": False,
+            "broadcast_reachable": False,
+            "subnet_detected": self._subnet_broadcast is not None,
+            "local_ip_valid": False
+        }
+
+        # Test socket binding
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind(("", self.discovery_port))
+            results["can_bind_socket"] = True
+            sock.close()
+        except OSError:
+            pass
+
+        # Test local IP validity
+        local_ip = self.local_ip
+        results["local_ip_valid"] = (
+            local_ip != "0.0.0.0" and
+            not local_ip.startswith("127.") and
+            len(local_ip.split('.')) == 4
+        )
+
+        # Test broadcast reachability (basic connectivity test)
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+            sock.settimeout(1.0)
+            test_msg = b"test"
+            sock.sendto(test_msg, (self.broadcast_addr, self.discovery_port))
+            results["broadcast_reachable"] = True
+            sock.close()
+        except (OSError, socket.timeout):
+            pass
+
+        return results
+        logger.info(f"LANDiscovery: Forced broadcast address to {broadcast_addr}")
+
+    def test_network_connectivity(self) -> bool:
+        """
+        Test if the current network configuration allows discovery.
+
+        Returns:
+            True if network connectivity test passes, False otherwise.
+        """
+        try:
+            # Try to send a test packet
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+            sock.settimeout(1.0)  # 1 second timeout
+
+            test_msg = self._create_message("TEST")
+            sock.sendto(test_msg, (self.broadcast_addr, self.discovery_port))
+
+            # Try to receive a response (though we may not get one)
+            try:
+                sock.recvfrom(1024)
+            except socket.timeout:
+                pass  # Expected - no one may respond to our test
+
+            sock.close()
+            logger.info("LANDiscovery: Network connectivity test passed")
+            return True
+
+        except Exception as e:
+            logger.warning(f"LANDiscovery: Network connectivity test failed: {e}")
+            return False
+
+    def find_available_port(self, start_port: int = 31415, max_attempts: int = 100) -> Optional[int]:
+        """
+        Find an available port for discovery.
+
+        Args:
+            start_port: Port to start checking from.
+            max_attempts: Maximum number of ports to try.
+
+        Returns:
+            Available port number, or None if none found.
+        """
+        for port in range(start_port, start_port + max_attempts):
+            try:
+                sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                sock.bind(("", port))
+                sock.close()
+                logger.info(f"LANDiscovery: Found available port: {port}")
+                return port
+            except OSError:
+                continue
+
+        logger.warning(f"LANDiscovery: No available ports found in range {start_port}-{start_port + max_attempts}")
+        return None
 
     def stop(self):
         """Stops the discovery threads."""
         self._running = False
 
     def _announce_loop(self):
+        if not self.enable_broadcast:
+            logger.info("LANDiscovery: Broadcasting disabled, announce loop skipping")
+            return
+
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+        broadcast_addr = self.broadcast_addr
 
         # Initial announcement
         try:
             msg = self._create_message("ANNOUNCE")
-            sock.sendto(msg, (self.BROADCAST_ADDR, self.DISCOVERY_PORT))
+            sock.sendto(msg, (broadcast_addr, self.discovery_port))
+            logger.debug(f"LANDiscovery: Sent initial announcement to {broadcast_addr}:{self.discovery_port}")
         except Exception as exc:  # pylint: disable=broad-exception-caught
             logger.error(f"LANDiscovery: Initial announcement failed: {exc}")
 
@@ -149,7 +442,7 @@ class LANDiscovery:
             try:
                 # Periodic Heartbeat
                 msg = self._create_message("HEARTBEAT")
-                sock.sendto(msg, (self.BROADCAST_ADDR, self.DISCOVERY_PORT))
+                sock.sendto(msg, (broadcast_addr, self.discovery_port))
 
                 # Registry Sync (Gossip)
                 if self.registry:
@@ -169,16 +462,18 @@ class LANDiscovery:
             )[:10]
 
         msg = self._create_message("SYNC", {"peers": peers_list})
-        sock.sendto(msg, (self.BROADCAST_ADDR, self.DISCOVERY_PORT))
+        broadcast_addr = self.broadcast_addr
+        sock.sendto(msg, (broadcast_addr, self.discovery_port))
 
     def _listen_loop(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
-            # Bind to all interfaces on DISCOVERY_PORT
-            sock.bind(("", self.DISCOVERY_PORT))
+            # Bind to all interfaces on discovery port
+            sock.bind(("", self.discovery_port))
+            logger.info(f"LANDiscovery: Listening on port {self.discovery_port}")
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.error(f"LANDiscovery: Failed to bind to port {self.DISCOVERY_PORT}: {exc}")
+            logger.error(f"LANDiscovery: Failed to bind to port {self.discovery_port}: {exc}")
             return
 
         while self._running:

@@ -308,7 +308,7 @@ pub fn aggregate_expert_loads_rust(
 /// Balanced packing implementation
 /// Parks objects into packs with balanced total weight
 #[pyfunction]
-pub fn compute_balanced_packing_rust(
+pub fn compute_moe_balanced_packing_rust(
     weights: Vec<Vec<f64>>,
     num_packs: usize,
 ) -> (Vec<Vec<i64>>, Vec<Vec<i64>>) {

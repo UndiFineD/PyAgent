@@ -257,3 +257,24 @@ class RateLimitStrategy(Enum):
     SLIDING_WINDOW = auto()  # Sliding window rate limiting
     TOKEN_BUCKET = auto()  # Token bucket algorithm
     LEAKY_BUCKET = auto()  # Leaky bucket algorithm
+
+
+class EnvironmentStatus(Enum):
+    """Environment instance status."""
+
+    PENDING = "pending"
+    CREATING = "creating"
+    RUNNING = "running"
+    FAILED = "failed"
+    TERMINATED = "terminated"
+    EXPIRED = "expired"
+
+
+class EnvironmentIsolation(Enum):
+    """Environment isolation levels."""
+
+    NONE = "none"  # No isolation
+    PROCESS = "process"  # Separate process
+    CONTAINER = "container"  # Docker container
+    VM = "vm"  # Virtual machine
+    NAMESPACE = "namespace"  # Linux namespace
