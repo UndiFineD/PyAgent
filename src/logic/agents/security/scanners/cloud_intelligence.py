@@ -84,6 +84,24 @@ class CloudIntelligence:
         return results
 
     @staticmethod
+    def get_gcp_audit_targets() -> List[str]:
+        """GCP services to audit for security misconfigurations (Ported from gcp_scanner)."""
+        return [
+            "bigquery", "bigtable", "cloud_functions", "compute_disks", "compute_firewalls",
+            "compute_instances", "dns_managed_zones", "iam_policies", "kms_keys",
+            "service_accounts", "sql_instances", "storage_buckets", "pubsub_subscriptions"
+        ]
+
+    @staticmethod
+    def get_dangling_resource_indicators() -> Dict[str, str]:
+        """Indicators of dangling or orphaned cloud resources (Ported from ghostbuster)."""
+        return {
+            "danging_elastic_ip": "DNS records pointing to Elastic IPs not associated with any instance",
+            "orphaned_dns_record": "Route53/CloudDNS entries pointing to deleted load balancers or S3 buckets",
+            "unused_network_interface": "ENIs with 'available' status potentially incurring costs or security risks"
+        }
+
+    @staticmethod
     def get_cspm_misconfigurations() -> Dict[str, Dict[str, Any]]:
         """Common cloud misconfigurations across AWS, Azure, and GCP (Ported from fixinventory)."""
         return {

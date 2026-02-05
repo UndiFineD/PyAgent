@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""
+Small utility: parse .external/refactor_report.json and update
+.external/tracking.md and .external/completed.md, plus generate
+.external/candidates.md with prioritized candidates.
+
+This script is read-only for scanned files and only appends/edits
+the tracking/completed/candidates files in-place. It does not
+execute any code found in .external.
+"""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+REPORT = ROOT / '.external' / 'refactor_report.json'
+TRACKING = ROOT / '.external' / 'tracking.md'
+COMPLETED = ROOT / '.external' / 'completed.md'
+CANDIDATES = ROOT / '.external' / 'candidates.md'
+
+
+def load_report():
+    with REPORT.open('r', encoding='utf-8', errors='ignore') as f:
+        return json.load(f)
+
+
+def append_tracking(rows):
+    if not rows:
+        return 0
+    text = '\n'.join(rows) + '\n'
+    TRACKING.parent.mkdir(parents=True, exist_ok=True)
+    with TRACKING.open('a', encoding='utf-8') as f:
+        f.write(text)
+    return len(rows)
+
+
+def move_completed_rows():
+    if not TRACKING.exists():
+        return 0
+    lines = TRACKING.read_text(encoding='utf-8', errors='ignore').splitlines()
+    keep = []
+    moved = []
+    for ln in lines:
+        if 'Completed' in ln or 'Done' in ln or 'Integrated' in ln:
+            moved.append(ln)
+        else:
+            keep.append(ln)
+    if not moved:
+        return 0
+    TRACKING.write_text('\n'.join(keep) + '\n', encoding='utf-8')
+    COMPLETED.parent.mkdir(parents=True, exist_ok=True)
+    with COMPLETED.open('a', encoding='utf-8') as f:
+        f.write('\n'.join(moved) + '\n')
+    return len(moved)
+
+
+def build_candidates(report, limit=50):
+    cand = []
+    for d in report.get('directories', []):
+        path = d.get('path')
+        for f in d.get('files', []):
+            defs = f.get('missing_in_src') or f.get('definitions') or []
+            if not defs:
+                continue
+            cand.append({
+                'repo': path,
+                'file': f.get('path'),
+                'suffix': f.get('suffix'),
+                'defs': defs,
+                'count': len(defs),
+            })
+    # Prioritize Python files with few defs
+    cand.sort(key=lambda x: (0 if x['suffix']=='.py' else 1, x['count'], x['repo']))
+    return cand[:limit]
+
+
+def write_candidates(cands):
+    lines = []
+    lines.append('# Prioritized candidates from .external/refactor_report.json')
+    lines.append('')
+    for c in cands:
+        lines.append(f"- **{c['repo']}**: {c['file']} ({c['suffix']}) — {c['count']} missing: {', '.join(c['defs'])}")
+    CANDIDATES.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    return len(cands)
+
+
+def main():
+    if not REPORT.exists():
+        print('No report found at', REPORT)
+        return 1
+    report = load_report()
+    # Build tracking rows
+    rows = []
+    for d in report.get('directories', []):
+        repo = d.get('path')
+        files = d.get('files', [])
+        if not files:
+            continue
+        # collect distinct defs across files
+        defs = []
+        for f in files:
+            for name in (f.get('missing_in_src') or f.get('definitions') or []):
+                if name not in defs:
+                    defs.append(name)
+        # create a compact row: repo | Candidate | N files | defs
+        row = f"| {repo} | Candidate | {len(files)} files | {', '.join(defs)} |"
+        rows.append(row)
+    added = append_tracking(rows)
+    moved = move_completed_rows()
+    candidates = build_candidates(report)
+    written = write_candidates(candidates)
+    print(f'Appended {added} tracking rows, moved {moved} completed rows, wrote {written} candidates')
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
