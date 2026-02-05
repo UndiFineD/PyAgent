@@ -78,6 +78,26 @@ class WindowsIntelligence:
         }
 
     @staticmethod
+    def get_evasive_api_hashing_gadgets() -> Dict[str, Any]:
+        """Techniques for resolving APIs via hashing to evade static analysis (Ported from GhostStrike)."""
+        return {
+            "hash_algorithm": "hash = (hash >> 13) | (hash << 19); hash += *str++;",
+            "seed": 0,
+            "target_dlls": ["kernel32.dll", "advapi32.dll", "user32.dll", "ntdll.dll"],
+            "resolution_method": "Walking PE export directory and comparing name hashes instead of using GetProcAddress"
+        }
+
+    @staticmethod
+    def get_stealthy_registry_persistence() -> Dict[str, str]:
+        """Registry-only scheduled task creation for stealth (Ported from GhostTask)."""
+        return {
+            "task_cache_path": r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks",
+            "task_tree_path": r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree",
+            "requirements": "Requires SeRestorePrivilege and a restart of the 'Schedule' service (gpsvc)",
+            "detection": "Mismatched timestamps or missing SD (Security Descriptor) values in the TaskCache registry"
+        }
+
+    @staticmethod
     def get_potato_exploit_guids() -> Dict[str, str]:
         """Known CLSIDs used for Potato-style privilege escalation (SeImpersonate)."""
         return {

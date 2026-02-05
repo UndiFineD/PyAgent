@@ -81,6 +81,31 @@ class DevOpsIntelligence:
             }
         }
 
+    def get_github_runner_attack_vectors(self) -> List[Dict[str, Any]]:
+        """Attack vectors for GitHub Action Self-Hosted Runners (Ported from Gato-X)."""
+        return [
+            {
+                "name": "Runner Registration Token Leak",
+                "description": "Leakage of runner registration tokens in logs or code.",
+                "severity": "CRITICAL"
+            },
+            {
+                "name": "Workflow Command Injection",
+                "description": "Injection into github.event.issue.title or search results used in run: steps.",
+                "severity": "HIGH"
+            },
+            {
+                "name": "Non-Ephemeral Runner Persistence",
+                "description": "Exploiting long-lived runners for lateral movement in the internal network.",
+                "severity": "MEDIUM"
+            },
+            {
+                "name": "Actions PATH Hijacking",
+                "description": "Modifying GITHUB_PATH to achieve persistence or privilege escalation on the runner.",
+                "severity": "HIGH"
+            }
+        ]
+
     async def scan_sccm_dp(self, target: str) -> Dict[str, Any]:
         """Lightweight check for SCCM DP exposure."""
         session = await self.get_session()
