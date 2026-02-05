@@ -98,6 +98,45 @@ class ADIntelligence:
         ]
 
     @staticmethod
+    def get_sccm_vulnerability_indicators() -> Dict[str, Any]:
+        """Indicators for SCCM (MECM) misconfigurations (Ported from GOAD/SharpSCCM)."""
+        return {
+            "NAA_Credentials": {
+                "description": "Network Access Account credentials stored in WMI.",
+                "query": "Get-WmiObject -Namespace root\\ccm\\policy\\machine\\actualconfig -Class CCM_NetworkAccessAccount"
+            },
+            "PXE_Password": {
+                "description": "PXE boot passwords often found in SCCM configuration files or registry.",
+                "location": "HKLM\\Software\\Microsoft\\SMS\\Providers\\CommaSeparatedPXEPassword"
+            },
+            "Client_Push_Account": {
+                "description": "Accounts used for client push installation often have local admin rights.",
+                "remediation": "Check for privileged accounts used in 'Client Push Installation Properties'."
+            }
+        }
+
+    @staticmethod
+    def get_gpo_abuse_indicators() -> List[Dict[str, str]]:
+        """Common GPO misconfigurations for persistence and privilege escalation."""
+        return [
+            {
+                "name": "Scheduled Task GPO",
+                "file": "ScheduledTasks.xml",
+                "description": "Stored credentials in GPO scheduled tasks (cpassword)."
+            },
+            {
+                "name": "Restricted Groups GPO",
+                "file": "GptTmpl.inf",
+                "description": "GPO enforcing local group membership (e.g. adding domain users to local admins)."
+            },
+            {
+                "name": "Registry GPO",
+                "file": "Registry.xml",
+                "description": "GPO pushing insecure registry settings (e.g. disabling UAC or Defender)."
+            }
+        ]
+
+    @staticmethod
     def get_bitlocker_recovery_attributes() -> List[str]:
         """Attributes for extracting BitLocker recovery keys (msFVE-RecoveryInformation)."""
         return [
