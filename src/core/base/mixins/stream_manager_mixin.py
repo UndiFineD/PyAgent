@@ -91,14 +91,24 @@ class StreamManagerMixin:
     """
 
     def __init__(self, **kwargs: Any) -> None:
-        if not HAS_REDIS:
+        # Allow tests to patch the module-level `redis` object; check module presence instead of HAS_REDIS
+        if redis is None:
             logging.warning("Redis not available. Stream management will be limited.")
             self.redis_client = None
             self.redis_publisher = None
         else:
-            redis_url = kwargs.get('redis_url', 'redis://localhost:6379')
-            self.redis_client = redis.from_url(redis_url)
-            self.redis_publisher = redis.from_url(redis_url)
+            # Only connect to Redis if an explicit `redis_url` was provided.
+            # This avoids implicit connections to localhost during tests or
+            # when Redis is available on the system but not intended to be used.
+            redis_url = kwargs.get('redis_url')
+            if redis_url:
+                # Use module-level factory (tests may patch `redis.from_url` to return an AsyncMock)
+                self.redis_client = redis.from_url(redis_url)
+                self.redis_publisher = redis.from_url(redis_url)
+            else:
+                logging.info("Redis available but no redis_url provided; not connecting by default.")
+                self.redis_client = None
+                self.redis_publisher = None
 
         self.active_streams: Dict[str, StreamInfo] = {}
         self.stream_callbacks: Dict[str, Callable[[], None]] = {}
