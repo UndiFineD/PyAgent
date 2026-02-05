@@ -30,6 +30,50 @@ class ReconIntelligence:
     Ported from BBTz and other recon tools.
     """
 
+    @staticmethod
+    def get_service_banner_signatures() -> List[Dict[str, Any]]:
+        """Critical service banner signatures for fast identification (Ported from ghostport)."""
+        return [
+            {
+                "service": "ActiveMQ",
+                "pattern": r"\0\0\0.\x01ActiveMQ\0\0\0",
+                "relevance": "Messaging middleware often exposed without auth."
+            },
+            {
+                "service": "Amanda Index Server",
+                "pattern": r"220 ([-.\w]+) AMANDA index server \((\d[-.\w ]+)\) ready\.\r\n",
+                "relevance": "Backup server metadata leak."
+            },
+            {
+                "service": "Symantec AntiVirus Scan Engine",
+                "pattern": r"220 Symantec AntiVirus Scan Engine ready\.\r\n",
+                "relevance": "Security appliance identification."
+            },
+            {
+                "service": "Kubernetes API (Unauthorized)",
+                "pattern": r'{"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"forbidden"',
+                "relevance": "Critical Cloud misconfiguration."
+            },
+            {
+                "service": "Etcd API",
+                "pattern": r'{"action":"get","node":{"key":"/"',
+                "relevance": "Cluster secret storage exposure."
+            }
+        ]
+
+    @staticmethod
+    def get_secret_regex_patterns() -> Dict[str, str]:
+        """Regex patterns for identifying secrets in files and traffic (Ported from gf-secrets)."""
+        return {
+            "AWS_Key": r"([^A-Z0-9]|^)(AKIA|A3T|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{12,}",
+            "AWS_S3_Bucket": r"[a-z0-9.-]+\.s3\.amazonaws\.com|[a-z0-9.-]+\.s3-[a-z0-9-]+\.amazonaws\.com",
+            "GitHub_Token": r"github.*['|\"][0-9a-zA-Z]{35,40}['|\"]",
+            "Slack_Webhook": r"https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
+            "Google_API_Key": r"AIza[0-9A-Za-z\\-_]{35}",
+            "Firebase_URL": r"[a-z0-9.-]+\.firebaseio\.com",
+            "Heroku_API_Key": r"[Hh][Ee][Rr][Oo][Kk][Uu].*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}"
+        }
+
     JS_RESERVED_WORDS = {
         "await", "break", "case", "catch", "class", "const", "continue", "debugger", "default",
         "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for",
@@ -55,6 +99,28 @@ class ReconIntelligence:
         "undefined", "focus", "offscreenbuffering", "unescape", "form", "open", "untaint",
         "forms", "opener", "valueof", "frame", "option", "window", "yield"
     }
+
+    @staticmethod
+    def get_git_repo_discovery_patterns() -> Dict[str, str]:
+        """Patterns for discovering and dumping git repositories (Ported from git-dumper)."""
+        return {
+            "root_git": "/.git/",
+            "config": "/.git/config",
+            "index": "/.git/index",
+            "objects": "/.git/objects/",
+            "refs": "/.git/refs/heads/",
+            "head": "/.git/HEAD"
+        }
+
+    @staticmethod
+    def get_eviltree_sensitive_patterns() -> Dict[str, str]:
+        """Regex and keywords for sensitive file content discovery (Ported from EvilTree)."""
+        return {
+            "passwords_regex": r".{0,3}passw.{0,3}[=]{1}.{0,18}",
+            "sensitive_keywords": "passw,db_,admin,account,user,token,secret,key,credential,login",
+            "aws_keys": r"AKIA[0-9A-Z]{16}",
+            "google_api": r"AIza[0-9A-Za-z-_]{35}"
+        }
 
     @staticmethod
     def get_common_http_ports(scale: str = "medium") -> List[int]:
