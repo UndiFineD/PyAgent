@@ -6,7 +6,6 @@ __pycache__/
 .git/
 .agent_cache/
 .beads/
-.github/
 .pytest_cache/
 .venv/
 .ollama/
