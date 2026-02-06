@@ -67,7 +67,7 @@ class CascadeContext:
         if getattr(self, "agent_id", "") and not self.task_id:
             self.task_id = self.agent_id
         # Backwards compatibility: if workflow_id provided and task_id not set, use workflow_id
-        if getattr(self, "workflow_id", "") and not self.task_id:
+        elif getattr(self, "workflow_id", "") and not self.task_id:
             self.task_id = self.workflow_id
         if self.cascade_depth >= self.depth_limit:
             raise RecursionError(f"Recursion depth limit ({self.depth_limit}) exceeded at depth {self.cascade_depth}")
