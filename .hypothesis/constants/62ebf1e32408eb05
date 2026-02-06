@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\StatsAgent.py
-# hypothesis_version: 6.150.1
-
-[0.0, 2.0, 100, '0 / 0 (0.0%)', '<', '<=', '==', '=== Stats Report ===', '====================', '>', '>=', 'No files provided', 'baseline', 'changes', 'code_coverage', 'context', 'csv', 'current', 'default', 'difference', 'errors', 'files_with_changes', 'files_with_context', 'files_with_errors', 'files_with_tests', 'html', 'improvements', 'json', 'sqlite', 'tags', 'tests', 'text', 'timestamp', 'total_coverage', 'total_files', 'utf-8', 'value', 'w']

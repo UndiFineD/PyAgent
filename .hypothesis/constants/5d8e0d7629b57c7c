@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\CodeQualityCore.py
-# hypothesis_version: 6.150.1
-
-[100, 120, '==', '===', '=>', 'Insecure', 'Safety', 'Style', 'Suggestion', '\\bvar\\s+', 'line', 'match', 'message', 'type', 'unwrap()']

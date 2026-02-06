@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\orchestration\StatusManager.py
-# hypothesis_version: 6.150.1
-
-['Completed', 'Failed', 'Idle', 'Pending', 'Running', 'active_project', 'agent', 'current_step_index', 'file', 'last_updated', 'overall_status', 'prompt', 'result', 'status', 'steps', 'w']

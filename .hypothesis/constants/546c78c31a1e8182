@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\engines\MemoryEngine.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.5, '$gte', '.agent_memory.json', 'Self', 'Semantic Memory', 'True', 'agent', 'agent_memory', 'content', 'distances', 'documents', 'file_path', 'metadata', 'metadatas', 'outcome', 'score', 'success', 'task', 'timestamp', 'unknown', 'utility_score']

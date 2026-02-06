@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\models\enums.py
-# hypothesis_version: 6.150.1
-
-['api_key', 'assistant', 'audio', 'basic_auth', 'bearer_token', 'cbor', 'code', 'code_review', 'complete', 'completed', 'custom', 'diagram', 'documentation', 'error', 'general', 'idle', 'image', 'initialized', 'json', 'msgpack', 'none', 'oauth2', 'pickle', 'post_improve', 'post_read', 'post_write', 'pre_improve', 'pre_read', 'pre_write', 'processing', 'protobuf', 'reading', 'refactoring', 'simulating', 'start', 'system', 'testing', 'text', 'thinking', 'token', 'user', 'video', 'writing', 'yaml']

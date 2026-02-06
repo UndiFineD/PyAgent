@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\reports\ReportValidator.py
-# hypothesis_version: 6.150.1
-
-['Content too short', 'Missing main heading', '\\[.*?\\]\\(\\s*\\)', '^#+\\s']

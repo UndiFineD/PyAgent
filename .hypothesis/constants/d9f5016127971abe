@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\reports\GrafanaGenerator.py
-# hypothesis_version: 6.150.1
-
-['Agent Count', 'Fleet Latency', 'Shard Load', 'count(agent_up)', 'expr', 'fleet_summary.json', 'gauge', 'panels', 'schemaVersion', 'stat', 'targets', 'timeseries', 'title', 'type', 'uid']
