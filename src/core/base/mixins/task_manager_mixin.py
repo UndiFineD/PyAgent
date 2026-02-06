@@ -235,7 +235,8 @@ class TaskManagerMixin:
         return {
             "success": True,
             "message": f"Cleared {removed_count} completed tasks",
-            "remaining_tasks": len(self.tasks)
+            "remaining_tasks": len(self.tasks),
+            "removed_count": removed_count
         }
 
     def _load_tasks(self) -> None:

@@ -38,7 +38,7 @@ class TestDataParsingMixin:
     def test_extract_xml_value_simple(self):
         """Test simple XML value extraction."""
         mixin = DataParsingMixin()
-        xml = "<parameter>test_value
+        xml = "<parameter>test_value</parameter>"
         result = mixin.extract_xml_value(xml, "parameter")
         assert result == "test_value"
 

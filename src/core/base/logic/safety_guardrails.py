@@ -37,7 +37,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 
-from pydantic import BaseModel, Field, ValidationError, validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 logger = logging.getLogger(__name__)
 
@@ -254,7 +254,7 @@ class OutputValidator:
             return ValidationResult(
                 is_valid=True,
                 message="Schema validation passed",
-                details={"validated_data": validated.dict()}
+                details={"validated_data": validated.model_dump()}
             )
 
         except (ValidationError, json.JSONDecodeError) as e:
@@ -522,14 +522,16 @@ class ResearchSummary(BaseModel):
     key_findings: List[str] = Field(..., description="A list of 3-5 key findings")
     confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")
 
-    @validator('title')
-    def validate_title(cls, v):
+    @field_validator('title')
+    @classmethod
+    def validate_title(cls, v: str) -> str:
         if len(v.strip()) < 5:
             raise ValueError('Title must be at least 5 characters long')
         return v
 
-    @validator('key_findings')
-    def validate_findings(cls, v):
+    @field_validator('key_findings')
+    @classmethod
+    def validate_findings(cls, v: List[str]) -> List[str]:
         if len(v) < 3:
             raise ValueError('Must have at least 3 key findings')
         if len(v) > 5:

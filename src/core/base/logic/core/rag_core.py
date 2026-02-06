@@ -338,7 +338,14 @@ class RAGCore(BaseCore):
         # Apply pre-processors
         processed_query = query
         for processor in tool_config.pre_processors:
-            processed_query = await processor(processed_query)
+            if asyncio.iscoroutinefunction(processor):
+                processed_query = await processor(processed_query)
+            else:
+                res = processor(processed_query)
+                if asyncio.iscoroutine(res):
+                    processed_query = await res
+                else:
+                    processed_query = res
 
         # Perform retrieval based on strategy
         vector_store = self.vector_stores.get(tool_config.collection_name)
@@ -486,25 +493,56 @@ class RAGCore(BaseCore):
         content = document.content
         chunk_size = config.chunk_size
         overlap = config.chunk_overlap
+        
+        # Ensure we don't have infinite loops with bad config
+        if chunk_size <= overlap:
+            overlap = max(0, chunk_size - 1)
 
         chunks = []
         start = 0
 
         while start < len(content):
-            end = start + chunk_size
-
-            # Find a good break point (sentence, word boundary)
+            # 1. Initial hard limit
+            end = min(start + chunk_size, len(content))
+            
+            # Find a good break point if not at the end
             if end < len(content):
-                # Look for sentence endings
-                for i in range(min(100, len(content) - end)):
-                    if content[end - i] in ".!?" and content[end - i + 1:end - i + 2].isspace():
-                        end = end - i + 1
-                        break
-                else:
-                    # Look for word boundaries
-                    while end > start and not content[end - 1].isspace():
-                        end -= 1
-
+                # Ensure we make progress: next start should be > current start
+                # next_start = end - overlap
+                # we want end - overlap > start  =>  end > start + overlap
+                min_end = start + overlap + 1
+                
+                # Check for sentence delimiters
+                # Look backwards from 'end' down to 'min_end'
+                # Limit lookback to reasonable amount (e.g. 100 chars)
+                found_break = False
+                search_end = end
+                
+                # Try sentence boundaries first
+                limit = max(min_end, search_end - 100)
+                curr = search_end
+                while curr > limit:
+                     # Check character at curr-1
+                     idx = curr - 1
+                     if content[idx] in ".!?" and (curr >= len(content) or content[curr].isspace()):
+                         end = curr
+                         found_break = True
+                         break
+                     curr -= 1
+                
+                if not found_break:
+                     # Try word boundaries
+                     curr = search_end
+                     while curr > min_end:
+                         if content[curr-1].isspace():
+                             end = curr
+                             found_break = True
+                             break
+                         curr -= 1
+                     
+                     # If still not found, we keep the hard break at 'end' (start + chunk_size)
+                     # which satisfies > start + overlap
+            
             chunk_content = content[start:end].strip()
             if chunk_content:
                 chunk = Document(
@@ -517,7 +555,18 @@ class RAGCore(BaseCore):
                 chunk.metadata["chunk_index"] = len(chunks)
                 chunks.append(chunk)
 
-            start = end - overlap
+            # Stop if we have reached the end of content
+            if end == len(content):
+                break
+
+            # Advance start
+            next_start = end - overlap
+            
+            # Absolute safety guarantee against infinite loops
+            if next_start <= start:
+                next_start = start + 1
+                
+            start = next_start
 
         return chunks
 

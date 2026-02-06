@@ -25,8 +25,8 @@ import time
 from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin, StreamState, StreamInfo
 
 
-class TestStreamManagerMixin(StreamManagerMixin):
-    """Test implementation of StreamManagerMixin."""
+class StreamManagerMixinImpl(StreamManagerMixin):
+    """Non-test implementation of StreamManagerMixin for fixtures."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -38,7 +38,7 @@ class TestStreamManager:
     @pytest.fixture
     def stream_manager(self):
         """Create a test stream manager instance."""
-        return TestStreamManagerMixin()
+        return StreamManagerMixinImpl()
 
     @pytest.fixture
     def stream_manager_with_redis(self):
@@ -46,7 +46,7 @@ class TestStreamManager:
         with patch('src.core.base.mixins.stream_manager_mixin.redis') as mock_redis:
             mock_client = AsyncMock()
             mock_redis.from_url.return_value = mock_client
-            manager = TestStreamManagerMixin(redis_url="redis://test")
+            manager = StreamManagerMixinImpl(redis_url="redis://test")
             return manager, mock_client
 
     def test_initialization_without_redis(self, stream_manager):

@@ -135,31 +135,17 @@ class LANDiscovery:
             if self._test_port_available(port):
                 return port
         return None
-        self.agent_id = agent_id
-        self.service_port = service_port
-        self.secret_key = secret_key
-        self.metadata = metadata or {}
-        self.registry: Dict[str, PeerInfo] = {}
-        self._running = False
-        self._lock = threading.Lock()
-        self._nonces: Dict[str, float] = {}  # agent_id: last_timestamp
-        self._ping_times: Dict[str, float] = {}  # agent_id: sent_time
 
-        # Network detection
-        self._local_ip = None
-        self._subnet_broadcast = None
-        self._listen_thread: Optional[threading.Thread] = None
-        self._announce_thread: Optional[threading.Thread] = None
-
-        # Sleep/wakeup support for the announce loop
-        self._sleep_event = threading.Event()
-        if sleep_fn is None:
-            def _wait(secs: float) -> None:
-                self._sleep_event.wait(secs)
-
-            self._sleep_fn = _wait
+    def _detect_network_config(self):
+        """Detects local IP and broadcast address."""
+        self._local_ip = get_local_network_ip()
+        if self._local_ip and self._local_ip != "127.0.0.1":
+            # Simple assumption for /24 subnet broadcast
+            parts = self._local_ip.split(".")
+            parts[-1] = "255"
+            self._subnet_broadcast = ".".join(parts)
         else:
-            self._sleep_fn = sleep_fn
+            self._subnet_broadcast = "255.255.255.255"
 
     def _detect_subnet_broadcast(self) -> Optional[str]:
         """

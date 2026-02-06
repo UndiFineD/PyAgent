@@ -18,6 +18,7 @@ Tests for the Task Prioritization System.
 
 import asyncio
 import pytest
+import pytest_asyncio
 from datetime import datetime, timedelta
 from unittest.mock import Mock
 
@@ -376,7 +377,7 @@ class TestTaskManager:
 class TestTaskScheduler:
     """Test TaskScheduler functionality."""
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def scheduler(self):
         """Create a task scheduler for testing."""
         manager = TaskManager()

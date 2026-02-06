@@ -56,6 +56,7 @@ class JobQueue:
         self.job_queue: deque[str] = deque()
         self.job_results: Dict[str, Dict[str, Any]] = {}
         self.queue_lock = threading.Lock()
+        self.queue_not_empty = threading.Condition(self.queue_lock)
 
         # Worker management
         self.workers: list[threading.Thread] = []
@@ -98,6 +99,10 @@ class JobQueue:
         """Stop the job queue workers."""
         self.running = False
 
+        # Wake up any waiting workers so they can exit
+        with self.queue_not_empty:
+            self.queue_not_empty.notify_all()
+
         # Wait for workers to finish
         for worker in self.workers:
             worker.join(timeout=5.0)
@@ -135,6 +140,11 @@ class JobQueue:
             }
 
             self.job_queue.append(job_id)
+            # Notify a waiting worker that a job is available
+            try:
+                self.queue_not_empty.notify()
+            except Exception:
+                pass
 
         return job_id
 
@@ -177,7 +187,11 @@ class JobQueue:
         while self.running:
             job_id = None
 
-            with self.queue_lock:
+            with self.queue_not_empty:
+                # Wait until there is a job or the queue is being stopped
+                while self.running and not self.job_queue:
+                    self.queue_not_empty.wait(timeout=0.1)
+
                 if self.job_queue:
                     job_id = self.job_queue.popleft()
                     if job_id in self.job_results:

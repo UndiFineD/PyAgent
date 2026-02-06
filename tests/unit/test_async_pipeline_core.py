@@ -14,6 +14,7 @@
 
 import pytest
 import asyncio
+import pytest_asyncio
 from unittest.mock import AsyncMock
 from src.core.base.logic.async_pipeline_core import (
     AsyncPipelineCore,
@@ -27,7 +28,7 @@ from src.core.base.logic.async_pipeline_core import (
 class TestAsyncPipelineCore:
     """Test cases for AsyncPipelineCore"""
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def pipeline(self):
         """Create AsyncPipelineCore instance"""
         config = PipelineConfig(max_concurrent_tasks=5, max_queue_size=50)
@@ -46,7 +47,8 @@ class TestAsyncPipelineCore:
             metadata={'task_type': 'test'}
         )
 
-    def test_pipeline_initialization(self, pipeline):
+    @pytest.mark.asyncio
+    async def test_pipeline_initialization(self, pipeline):
         """Test pipeline initialization"""
         assert pipeline.config.max_concurrent_tasks == 5
         assert pipeline.config.max_queue_size == 50
@@ -119,7 +121,8 @@ class TestAsyncPipelineCore:
         task = PipelineTask(
             task_id="fail_task",
             name="Fail Task",
-            metadata={'task_type': 'test'}
+            metadata={'task_type': 'test'},
+            max_retries=0
         )
         await pipeline.submit_task(task)
 
@@ -214,7 +217,8 @@ class TestAsyncPipelineCore:
         task = PipelineTask(
             task_id="timeout_task",
             name="Timeout Task",
-            metadata={'task_type': 'test'}
+            metadata={'task_type': 'test'},
+            max_retries=0
         )
         await pipeline.submit_task(task)
 

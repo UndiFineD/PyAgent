@@ -14,7 +14,7 @@
 
 import pytest
 from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from src.core.base.logic.core.dns_security_core import (
     DnsSecurityCore,
     DnsRecordType,
@@ -164,7 +164,7 @@ class TestDnsSecurityCore:
     async def test_clear_cache(self):
         """Test clearing DNS cache."""
         # Add something to cache (mock)
-        self.core.cache["test.com"] = ("1.2.3.4", datetime.utcnow() + timedelta(hours=1))
+        self.core.cache["test.com"] = ("1.2.3.4", datetime.now(timezone.utc) + timedelta(hours=1))
 
         result = await self.core.clear_cache()
         assert result is True
@@ -174,7 +174,7 @@ class TestDnsSecurityCore:
     async def test_get_cache_info(self):
         """Test getting cache information."""
         # Add some cache entries
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         self.core.cache["valid.com"] = ("1.2.3.4", now + timedelta(hours=1))
         self.core.cache["expired.com"] = ("5.6.7.8", now - timedelta(hours=1))
 
@@ -223,8 +223,8 @@ class TestDnsSecurityCore:
         """Test cleanup functionality."""
         # Add some data
         await self.core.add_filter_rule(FilterRule("test.com", FilterAction.BLOCK))
-        self.core.query_log.append(DnsQuery("test.com", DnsRecordType.A, "1.2.3.4", datetime.utcnow()))
-        self.core.cache["test.com"] = ("1.2.3.4", datetime.utcnow())
+        self.core.query_log.append(DnsQuery("test.com", DnsRecordType.A, "1.2.3.4", datetime.now(timezone.utc)))
+        self.core.cache["test.com"] = ("1.2.3.4", datetime.now(timezone.utc))
 
         await self.core.cleanup()
 

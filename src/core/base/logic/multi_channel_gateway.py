@@ -31,6 +31,7 @@ Key Features:
 import asyncio
 import json
 import logging
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
@@ -88,7 +89,7 @@ class ChannelMessage:
     content: str
     message_type: MessageType = MessageType.TEXT
     metadata: Dict[str, Any] = field(default_factory=dict)
-    timestamp: float = field(default_factory=lambda: asyncio.get_event_loop().time())
+    timestamp: float = field(default_factory=time.time)
     thread_id: Optional[str] = None
     reply_to: Optional[str] = None
 
@@ -98,7 +99,7 @@ class GatewayPresence:
     """Presence information for gateway clients."""
     client_id: str
     status: str = "online"  # online, away, busy, offline
-    last_seen: float = field(default_factory=lambda: asyncio.get_event_loop().time())
+    last_seen: float = field(default_factory=time.time)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -135,8 +136,8 @@ class GatewaySession(BaseModel):
     channel_id: str
     activation_mode: SessionActivationMode = SessionActivationMode.MENTION
     is_active: bool = True
-    created_at: float = Field(default_factory=lambda: asyncio.get_event_loop().time())
-    last_activity: float = Field(default_factory=lambda: asyncio.get_event_loop().time())
+    created_at: float = Field(default_factory=time.time)
+    last_activity: float = Field(default_factory=time.time)
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
@@ -144,11 +145,11 @@ class GatewayProtocol:
     """WebSocket protocol for gateway communication."""
 
     def __init__(self):
-        self.clients: Dict[str, websockets.WebSocketServerProtocol] = {}
+        self.clients: Dict[str, Any] = {}
         self.presence: Dict[str, GatewayPresence] = {}
         self.sessions: Dict[str, GatewaySession] = {}
 
-    async def handle_client(self, websocket: websockets.WebSocketServerProtocol, path: str):
+    async def handle_client(self, websocket: Any, path: str):
         """Handle a WebSocket client connection."""
         client_id = str(uuid4())
         self.clients[client_id] = websocket
@@ -158,7 +159,7 @@ class GatewayProtocol:
             await websocket.send(json.dumps({
                 "type": "welcome",
                 "client_id": client_id,
-                "timestamp": asyncio.get_event_loop().time()
+                "timestamp": time.time()
             }))
 
             # Update presence
@@ -225,7 +226,7 @@ class GatewayProtocol:
         await self.send_to_client(client_id, {
             "type": "session_created",
             "session_id": session.session_id,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         })
 
     async def handle_session_update(self, client_id: str, data: Dict[str, Any]):
@@ -249,7 +250,7 @@ class GatewayProtocol:
                 elif key == "metadata":
                     session.metadata.update(value)
 
-        session.last_activity = asyncio.get_event_loop().time()
+        session.last_activity = time.time()
 
         await self.send_to_client(client_id, {
             "type": "session_updated",
@@ -277,7 +278,7 @@ class GatewayProtocol:
             "type": "message_sent",
             "session_id": session_id,
             "content": content,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         })
 
     async def handle_tool_call(self, client_id: str, data: Dict[str, Any]):
@@ -299,7 +300,7 @@ class GatewayProtocol:
             "type": "tool_call_ack",
             "session_id": session_id,
             "tool_name": tool_name,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         })
 
     async def broadcast_presence_update(self, client_id: str):
@@ -311,7 +312,7 @@ class GatewayProtocol:
             "status": presence.status,
             "last_seen": presence.last_seen,
             "metadata": presence.metadata,
-            "timestamp": asyncio.get_event_loop().time()
+            "timestamp": time.time()
         }
 
         await self.broadcast(message, exclude_client=client_id)
