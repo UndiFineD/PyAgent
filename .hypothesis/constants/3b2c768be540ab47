@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\reports\ReportExporter.py
-# hypothesis_version: 6.150.1
-
-['# (.+)$', '## (.+)$', '<code>\\1</code>', '<h1>\\1</h1>', '<h2>\\1</h2>', '<li>\\1</li>', 'Report', '^- (.+)$', '`([^`]+)`', 'content', 'utf-8']

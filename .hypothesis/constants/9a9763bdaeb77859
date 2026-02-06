@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\compliance\ComplianceAgent.py
-# hypothesis_version: 6.150.1
-
-[0.8, 'CRITICAL', 'ERROR', 'FAIL', 'PASS', 'critical_violations', 'issue_count', 'message', 'score', 'status']

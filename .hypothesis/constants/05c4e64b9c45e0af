@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\api\AgentAPIServer.py
-# hypothesis_version: 6.150.1
-
-[429, 8000, '/', '/agents', '/task', '/ws/telemetry', '0.0.0.0', '2.0.0', 'PyAgent Unified API', 'REJECTED', 'Web', '__main__', 'agent', 'agents', 'code', 'error', 'fleet_size', 'id', 'interface', 'lb_metadata', 'lb_stats', 'message', 'online', 'reason', 'result', 'status', 'success', 'task_completed', 'task_started', 'timestamp', 'type', 'version']
