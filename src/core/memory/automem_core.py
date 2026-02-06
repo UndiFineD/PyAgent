@@ -56,15 +56,6 @@ class AutoMemCore:
 
 
 __all__ = ["AutoMemCore", "MemoryRecord"]
-"""
-PyAgent AutoMem Memory System Integration.
-
-Based on the exceptional AutoMem memory system (90.53% LoCoMo benchmark).
-Implements graph-vector hybrid memory with FalkorDB + Qdrant for revolutionary
-conversational memory capabilities.
-"""
-
-from __future__ import annotations
 
 import hashlib
 import json

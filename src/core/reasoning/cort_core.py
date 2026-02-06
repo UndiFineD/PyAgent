@@ -53,14 +53,6 @@ class CoRTReasoningCore:
 
 
 __all__ = ["CoRTReasoningCore", "ReasonStep"]
-"""
-PyAgent Chain-of-Recursive-Thoughts (CoRT) Reasoning System.
-
-Based on the Chain-of-Recursive-Thoughts framework for breakthrough
-problem-solving and response quality through recursive thinking.
-"""
-
-from __future__ import annotations
 
 import asyncio
 import json

@@ -43,14 +43,6 @@ def run_scenario(name: str, func) -> ScenarioResult:
 
 
 __all__ = ["ScenarioResult", "assert_equal", "run_scenario"]
-"""
-PyAgent Better-Agents Testing Framework.
-
-Based on the better-agents repository for enterprise-grade development practices.
-Implements comprehensive testing pyramid with unit, integration, and E2E testing.
-"""
-
-from __future__ import annotations
 
 import asyncio
 import json
