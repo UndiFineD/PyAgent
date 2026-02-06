@@ -145,7 +145,7 @@ torch==2.9.1
 tqdm==4.67.1
 transformers==4.57.3
 tzdata==2025.3
-vllm==0.14.1
+
 
 # Development & testing extras (from dev.txt)
 build==1.4.0
