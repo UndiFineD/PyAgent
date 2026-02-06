@@ -6,12 +6,14 @@ Used to manage the lifecycle of long-running tasks, including startup and shutdo
 """
 
 import asyncio
-from fastapi import FastAPI
-from typing import Optional, Any
 import os
-from core.observation.logger import get_logger
+from typing import Any, Optional
+
+from fastapi import FastAPI
+
 from core.di.decorators import component
 from core.lifespan.lifespan_interface import LifespanProvider
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -97,5 +99,5 @@ class LongJobLifespanProvider(LifespanProvider):
             logger.error("❌ Error shutting down LongJob: %s", str(e))
 
         # Clean up LongJob-related attributes in app.state
-        if hasattr(app.state, 'longjob_task'):
-            delattr(app.state, 'longjob_task')
+        if hasattr(app.state, "longjob_task"):
+            delattr(app.state, "longjob_task")

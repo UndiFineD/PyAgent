@@ -4,13 +4,14 @@ Milvus lifespan provider implementation
 """
 
 from collections import defaultdict
-from fastapi import FastAPI
 from typing import Any
 
-from core.observation.logger import get_logger
-from core.di.utils import get_bean, get_all_subclasses
+from fastapi import FastAPI
+
 from core.di.decorators import component
+from core.di.utils import get_all_subclasses, get_bean
 from core.lifespan.lifespan_interface import LifespanProvider
+from core.observation.logger import get_logger
 from core.oxm.milvus.milvus_collection_base import MilvusCollectionBase
 
 logger = get_logger(__name__)
@@ -114,6 +115,6 @@ class MilvusLifespanProvider(LifespanProvider):
                 logger.error("❌ Error while closing Milvus connections: %s", str(e))
 
         # Clean up Milvus-related attributes in app.state
-        for attr in ['milvus_clients', 'milvus_factory']:
+        for attr in ["milvus_clients", "milvus_factory"]:
             if hasattr(app.state, attr):
                 delattr(app.state, attr)

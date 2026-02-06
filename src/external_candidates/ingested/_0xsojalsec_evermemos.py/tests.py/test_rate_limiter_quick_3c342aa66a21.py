@@ -7,6 +7,7 @@ Test cases specifically for quickly verifying the functionality of the rate limi
 
 import asyncio
 import time
+
 import pytest
 
 from core.rate_limit.rate_limiter import rate_limit
@@ -39,8 +40,12 @@ class TestRateLimiterQuick:
         assert len(call_times) == 3
 
         # The third call should wait approximately 0.5 seconds (leaky bucket algorithm)
-        assert total_time >= 0.4, f"Rate limiting wait time too short: {total_time} seconds"
-        assert total_time < 0.8, f"Rate limiting wait time too long: {total_time} seconds"
+        assert (
+            total_time >= 0.4
+        ), f"Rate limiting wait time too short: {total_time} seconds"
+        assert (
+            total_time < 0.8
+        ), f"Rate limiting wait time too long: {total_time} seconds"
 
         print(f"Basic functionality test completed, duration: {total_time:.3f} seconds")
 
@@ -67,10 +72,16 @@ class TestRateLimiterQuick:
         assert results == list(range(1, 16))
 
         # 15 calls at 10 per second should take about 0.5 seconds (leaky bucket algorithm)
-        assert total_time >= 0.4, f"High-frequency rate limiting time too short: {total_time} seconds"
-        assert total_time < 0.8, f"High-frequency rate limiting time too long: {total_time} seconds"
+        assert (
+            total_time >= 0.4
+        ), f"High-frequency rate limiting time too short: {total_time} seconds"
+        assert (
+            total_time < 0.8
+        ), f"High-frequency rate limiting time too long: {total_time} seconds"
 
-        print(f"High-frequency rate limiting test completed, duration: {total_time:.3f} seconds")
+        print(
+            f"High-frequency rate limiting test completed, duration: {total_time:.3f} seconds"
+        )
 
     @pytest.mark.asyncio
     async def test_concurrent_different_keys(self):
@@ -102,9 +113,13 @@ class TestRateLimiterQuick:
         assert len(results["C"]) == 1
 
         # Calls from different users should execute concurrently, total time should be very short
-        assert total_time < 0.1, f"Concurrent calls with different keys took too long: {total_time} seconds"
+        assert (
+            total_time < 0.1
+        ), f"Concurrent calls with different keys took too long: {total_time} seconds"
 
-        print(f"Concurrent different keys test completed, duration: {total_time:.3f} seconds")
+        print(
+            f"Concurrent different keys test completed, duration: {total_time:.3f} seconds"
+        )
 
     @pytest.mark.asyncio
     async def test_decorator_performance_quick(self):
@@ -143,7 +158,9 @@ class TestRateLimiterQuick:
         print(f"Overhead: {overhead:.4f} seconds ({overhead_percent:.1f}%)")
 
         # Decorator overhead should be less than 200% (relatively loose limit)
-        assert overhead_percent < 200, f"Decorator overhead too high: {overhead_percent:.1f}%"
+        assert (
+            overhead_percent < 200
+        ), f"Decorator overhead too high: {overhead_percent:.1f}%"
 
     @pytest.mark.asyncio
     async def test_error_handling_quick(self):
@@ -233,18 +250,28 @@ class TestRateLimiterQuick:
 
         # First 10 should complete relatively quickly, though some delay may occur due to leaky bucket algorithm
         first_10_time = call_times[9] - call_times[0]
-        assert first_10_time < 0.5, f"First 10 calls took too long: {first_10_time:.3f} seconds"
+        assert (
+            first_10_time < 0.5
+        ), f"First 10 calls took too long: {first_10_time:.3f} seconds"
 
         # 11th and 12th calls need to wait
         wait_time_11 = call_times[10] - call_times[9]
         wait_time_12 = call_times[11] - call_times[10]
 
-        assert wait_time_11 >= 0.08, f"11th call wait time too short: {wait_time_11:.3f} seconds"
-        assert wait_time_12 >= 0.08, f"12th call wait time too short: {wait_time_12:.3f} seconds"
+        assert (
+            wait_time_11 >= 0.08
+        ), f"11th call wait time too short: {wait_time_11:.3f} seconds"
+        assert (
+            wait_time_12 >= 0.08
+        ), f"12th call wait time too short: {wait_time_12:.3f} seconds"
 
-        print(f"1 second 10 requests test completed, total duration: {total_time:.3f} seconds")
+        print(
+            f"1 second 10 requests test completed, total duration: {total_time:.3f} seconds"
+        )
         print(f"First 10 duration: {first_10_time:.3f} seconds")
-        print(f"11th call wait: {wait_time_11:.3f} seconds, 12th call wait: {wait_time_12:.3f} seconds")
+        print(
+            f"11th call wait: {wait_time_11:.3f} seconds, 12th call wait: {wait_time_12:.3f} seconds"
+        )
 
     @pytest.mark.asyncio
     async def test_10_seconds_1_request(self):
@@ -275,17 +302,23 @@ class TestRateLimiterQuick:
         # Check time intervals
         if len(call_times) >= 2:
             interval1 = call_times[1] - call_times[0]
-            assert interval1 >= 0.4, f"Second call interval too short: {interval1:.3f} seconds"
+            assert (
+                interval1 >= 0.4
+            ), f"Second call interval too short: {interval1:.3f} seconds"
 
         if len(call_times) >= 3:
             interval2 = call_times[2] - call_times[1]
-            assert interval2 >= 0.4, f"Third call interval too short: {interval2:.3f} seconds"
+            assert (
+                interval2 >= 0.4
+            ), f"Third call interval too short: {interval2:.3f} seconds"
 
         # Total time should be approximately 1 second (two 0.5-second intervals)
         assert total_time >= 0.9, f"Total time too short: {total_time:.3f} seconds"
         assert total_time < 1.5, f"Total time too long: {total_time:.3f} seconds"
 
-        print(f"10 seconds 1 request test completed (simulated), total duration: {total_time:.3f} seconds")
+        print(
+            f"10 seconds 1 request test completed (simulated), total duration: {total_time:.3f} seconds"
+        )
 
     @pytest.mark.asyncio
     async def test_concurrent_performance_stress(self):
@@ -295,7 +328,9 @@ class TestRateLimiterQuick:
         call_count = 0
         lock = asyncio.Lock()
 
-        @rate_limit(max_rate=20, time_period=1)  # Reduce limit to make effect more noticeable
+        @rate_limit(
+            max_rate=20, time_period=1
+        )  # Reduce limit to make effect more noticeable
         async def stress_func(task_id):
             nonlocal call_count
             async with lock:  # Use lock to ensure counter atomicity
@@ -320,8 +355,12 @@ class TestRateLimiterQuick:
 
         # 50 requests at 20 per second, leaky bucket algorithm may behave differently
         # Mainly verify that rate limiting is working, no need for exact timing
-        assert total_time >= 1.0, f"Stress test completed too quickly: {total_time:.3f} seconds"
-        assert total_time <= 4.0, f"Stress test completed too slowly: {total_time:.3f} seconds"
+        assert (
+            total_time >= 1.0
+        ), f"Stress test completed too quickly: {total_time:.3f} seconds"
+        assert (
+            total_time <= 4.0
+        ), f"Stress test completed too slowly: {total_time:.3f} seconds"
 
         # Calculate throughput
         throughput = 50 / total_time
@@ -331,7 +370,9 @@ class TestRateLimiterQuick:
         print(f"Number of unique results: {unique_results}/50")
 
         # Throughput verification (considering characteristics of leaky bucket algorithm, allow some margin)
-        assert throughput <= 40, f"Throughput significantly exceeds limit: {throughput:.1f} req/s"
+        assert (
+            throughput <= 40
+        ), f"Throughput significantly exceeds limit: {throughput:.1f} req/s"
         assert throughput >= 10, f"Throughput too low: {throughput:.1f} req/s"
 
         # Main purpose is to verify the rate limiter works correctly and controls execution speed
@@ -376,9 +417,13 @@ class TestRateLimiterQuick:
         assert (
             fast_total_time >= 0.15
         ), f"Fast service rate limiting wait time too short: {fast_total_time:.3f} seconds"
-        assert slow_total_time < 0.1, f"Slow service should not have noticeable wait: {slow_total_time:.3f} seconds"
+        assert (
+            slow_total_time < 0.1
+        ), f"Slow service should not have noticeable wait: {slow_total_time:.3f} seconds"
 
-        print(f"Multiple rate limiters isolation test completed, total duration: {total_time:.3f} seconds")
+        print(
+            f"Multiple rate limiters isolation test completed, total duration: {total_time:.3f} seconds"
+        )
         print(
             f"Fast service total duration: {fast_total_time:.3f} seconds, slow service total duration: {slow_total_time:.3f} seconds"
         )

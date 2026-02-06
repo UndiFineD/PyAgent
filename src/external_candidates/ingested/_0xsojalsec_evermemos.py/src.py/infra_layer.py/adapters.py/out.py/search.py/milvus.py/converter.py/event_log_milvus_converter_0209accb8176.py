@@ -5,18 +5,19 @@ Event Log Milvus Converter
 Responsible for converting MongoDB EventLog documents into Milvus Collection entities, supporting both individual and group scenarios.
 """
 
-from typing import Dict, Any
 import json
+from typing import Any, Dict
 
-from core.oxm.milvus.base_converter import BaseMilvusConverter
-from core.observation.logger import get_logger
-from infra_layer.adapters.out.search.milvus.memory.event_log_collection import (
-    EventLogCollection,
-)
+from api_specs.memory_types import RawDataType
 from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
     EventLogRecord as MongoEventLogRecord,
 )
-from api_specs.memory_types import RawDataType
+from infra_layer.adapters.out.search.milvus.memory.event_log_collection import (
+    EventLogCollection,
+)
+
+from core.observation.logger import get_logger
+from core.oxm.milvus.base_converter import BaseMilvusConverter
 
 logger = get_logger(__name__)
 

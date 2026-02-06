@@ -1,6 +1,7 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-VolWeb\manage.py
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+
 import os
 import sys
 

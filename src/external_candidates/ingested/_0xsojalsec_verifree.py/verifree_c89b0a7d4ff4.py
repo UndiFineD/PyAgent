@@ -13,35 +13,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import gc
 import logging
 import time
+from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import List, Literal
-from typing import List, Optional, Tuple
-from tqdm import tqdm
-import gc
-import numpy as np
-import tree
+from typing import List, Literal, Optional, Tuple
 
 import launchpad as lp
-from jinja2 import Template
+import numpy as np
 import torch
-from torch.utils.data import DataLoader
-import vllm
 import torch.distributed as dist
-
+import tree
+import vllm
+from jinja2 import Template
 from oat.actors.base import ActorBase
 from oat.algorithms.ppo import PPOActor, PPOArgs, PPOLearner
 from oat.args import default_args_validation, get_default_args
 from oat.interface import get_program
 from oat.utils.data import PromptDataset, load_data_from_disk_or_hf
-from oat.utils.ops import masked_mean, masked_whiten
-from collections import defaultdict
 from oat.utils.ipc import PlasmaShmClient
-
-from utils.types import VeriFreeTrajectoryData
+from oat.utils.ops import masked_mean, masked_whiten
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+from utils.collector import FeedbackCollector
 from utils.data import VeriFreeTrajectoryDataset
-from utils.collector import FeedbackCollector 
+from utils.types import VeriFreeTrajectoryData
 
 
 def apply_ours_qwen3_template(question: str):
@@ -56,6 +53,7 @@ def apply_ours_qwen3_template(question: str):
 TEMPLATE_FACTORY = {
     "ours": apply_ours_qwen3_template,
 }
+
 
 @dataclass
 class VeriFreeArgs(PPOArgs):
@@ -79,19 +77,19 @@ class VeriFreeArgs(PPOArgs):
 class VeriFreeActor(PPOActor):
     def init(self, actor_id, save_path):
         super().init(actor_id, save_path)
-        
+
         self.step_counter = 0
-        
+
         # Special treatment to sample from a base model - now only cover Qwen.
         if "qwen" in args.pretrain.lower():
-            if args.prompt_template in ['ours']:
-                
+            if args.prompt_template in ["ours"]:
+
                 self.sampling_params = vllm.SamplingParams(
                     temperature=args.temperature,
                     top_p=args.top_p,
                     top_k=args.top_k,
                     max_tokens=args.generate_max_length,
-                    stop = ["</answer>"],
+                    stop=["</answer>"],
                     n=args.num_samples,
                     logprobs=2,
                     include_stop_str_in_output=True,
@@ -103,15 +101,17 @@ class VeriFreeActor(PPOActor):
                     top_p=args.eval_top_p,
                     top_k=args.eval_top_k,
                     max_tokens=args.eval_generate_max_length,
-                    stop = ["</answer>"],
+                    stop=["</answer>"],
                     include_stop_str_in_output=True,
                     skip_special_tokens=False,
                 )
             else:
-                raise ValueError(f"unrecognized prompt_template: {args.prompt_template}")
+                raise ValueError(
+                    f"unrecognized prompt_template: {args.prompt_template}"
+                )
         else:
             raise ValueError("There may be model-template mismatch.")
-        
+
     def step(
         self,
         prompts: List[str],
@@ -124,7 +124,7 @@ class VeriFreeActor(PPOActor):
             self.sampling_params.max_tokens = self.args.new_max_tokens
             self.eval_sampling_params.max_tokens = self.args.new_max_tokens
             self.reset_prefix_cache()
-        
+
         assert not self.eval_mode
         info = {}
         logging.info(f"actor start")
@@ -151,19 +151,19 @@ class VeriFreeActor(PPOActor):
                 # for each response
                 candidates[i].append(outputs[i].outputs[k].text)
                 no_eos.append(outputs[i].outputs[k].finish_reason == "length")
-                token_ids = outputs[i].outputs[k].token_ids # (tuple)
+                token_ids = outputs[i].outputs[k].token_ids  # (tuple)
                 logps = outputs[i].outputs[k].logprobs
                 logps = [item[token_ids[i]].logprob for i, item in enumerate(logps)]
 
                 response_logprobs[i].append(logps)
                 response_ids[i].append(token_ids)
                 resp_lens.append(len(token_ids))
-                
+
         info["actor/generate_time"] = time.time() - st
 
         # step 2. verify
         st = time.time()
-        
+
         end_with_eos = []
         for i in range(len(outputs)):
             think_ids.append([])
@@ -171,16 +171,18 @@ class VeriFreeActor(PPOActor):
             answer_ids.append([])
             for k in range(self.sampling_params.n):
                 model_response = outputs[i].outputs[k].text
-                
-                if self.args.prompt_template == 'ours':
+
+                if self.args.prompt_template == "ours":
                     think_index = model_response.find("<answer")
                     if think_index != -1:
                         think_text = model_response[:think_index] + "<answer"
-                        think_id = tuple(self.tokenizer(think_text)['input_ids'])
-                        answer_text = Template("> \\boxed{ {{-reference-}} } </answer>").render(reference=references[i])
-                        answer_id = tuple(self.tokenizer(answer_text)['input_ids'])
+                        think_id = tuple(self.tokenizer(think_text)["input_ids"])
+                        answer_text = Template(
+                            "> \\boxed{ {{-reference-}} } </answer>"
+                        ).render(reference=references[i])
+                        answer_id = tuple(self.tokenizer(answer_text)["input_ids"])
                         if len(think_id + answer_id) > self.sampling_params.max_tokens:
-                            no_eos[i*self.sampling_params.n + k] = True
+                            no_eos[i * self.sampling_params.n + k] = True
                         end_with_eos[i].append(False)
                     else:
                         think_text = model_response
@@ -191,8 +193,10 @@ class VeriFreeActor(PPOActor):
                     think_ids[i].append(think_id)
                     answer_ids[i].append(answer_id)
                 else:
-                    raise NotImplementedError(f'Not supported template: {self.args.prompt_template}')
-                
+                    raise NotImplementedError(
+                        f"Not supported template: {self.args.prompt_template}"
+                    )
+
         no_eos = np.array(no_eos).reshape(len(prompts), -1)
 
         info["actor/verify_time"] = time.time() - st
@@ -216,9 +220,13 @@ class VeriFreeActor(PPOActor):
                         response=candidates_per_prompt[j],
                         response_ids=response_ids[i][j],
                         response_logprobs=response_logprobs[i][j],
-                        gt_text=self.tokenizer.decode(list(prompt_token_ids[i]) + list(think_ids[i][j]) + list(answer_ids[i][j])),
-                        think_text=self.tokenizer.decode( list(think_ids[i][j]) ),
-                        answer_text=self.tokenizer.decode( list(answer_ids[i][j]) ),
+                        gt_text=self.tokenizer.decode(
+                            list(prompt_token_ids[i])
+                            + list(think_ids[i][j])
+                            + list(answer_ids[i][j])
+                        ),
+                        think_text=self.tokenizer.decode(list(think_ids[i][j])),
+                        answer_text=self.tokenizer.decode(list(answer_ids[i][j])),
                         think_ids=think_ids[i][j],
                         answer_ids=answer_ids[i][j],
                         loss_mask=not no_eos[i][j] if self.args.ignore_no_eos else True,
@@ -230,8 +238,6 @@ class VeriFreeActor(PPOActor):
         logging.info(f"actor finished data_len={len(trajectory_data)}")
         handle = self.ipc_client.serialize_ipc(trajectory_data)
         return handle
-    
-
 
 
 class VeriFreeLearner(PPOLearner):
@@ -239,7 +245,7 @@ class VeriFreeLearner(PPOLearner):
         super()._init(args, actors)
         self.args = args
         self.dataset_builder = VeriFreeTrajectoryDataset
-        
+
         self.collector = FeedbackCollector(
             args, actors, PlasmaShmClient(self.ipc_server)
         )
@@ -323,8 +329,7 @@ class VeriFreeLearner(PPOLearner):
             }
         )
         return all_metrics
-    
-    
+
     def learn(self, learning_round: int):
         torch.cuda.empty_cache()
         dist.barrier()
@@ -335,7 +340,7 @@ class VeriFreeLearner(PPOLearner):
         )
         dataloader = DataLoader(
             dataset,
-            batch_size=self.args.train_batch_size_per_device, 
+            batch_size=self.args.train_batch_size_per_device,
             shuffle=False,
             drop_last=False,
             pin_memory=False,
@@ -345,43 +350,57 @@ class VeriFreeLearner(PPOLearner):
         device = torch.cuda.current_device()
         collected_logps = []
         for batch in dataloader:
-            completion_masks = self.get_completion_mask(batch['gt_attention_mask'], batch['prompt_ids_lens'])
-            response_masks = completion_masks[:, 1:] 
-            
-            batch_logits = self.model(
-                batch['gt_input_ids'].to(device), attention_mask=batch['gt_attention_mask'].to(device)
-            )["logits"].detach().float()
+            completion_masks = self.get_completion_mask(
+                batch["gt_attention_mask"], batch["prompt_ids_lens"]
+            )
+            response_masks = completion_masks[:, 1:]
+
+            batch_logits = (
+                self.model(
+                    batch["gt_input_ids"].to(device),
+                    attention_mask=batch["gt_attention_mask"].to(device),
+                )["logits"]
+                .detach()
+                .float()
+            )
             batch_logits /= self.args.temperature
 
             batch_logps = self.get_batch_logps(
                 batch_logits,
-                batch['gt_input_ids'].to(device),
+                batch["gt_input_ids"].to(device),
                 response_masks.to(device),
             )
             batch_logps = batch_logps.cpu()
-            
-            
+
             batch_logps_list = [batch_logps[bid] for bid in range(len(batch_logps))]
-            del batch_logits 
+            del batch_logits
             del batch_logps
             collected_logps.extend(batch_logps_list)
-            
+
         assert len(collected_logps) == len(dataset.trajectories)
-        for traj_idx, (logps, traj) in enumerate(zip(collected_logps, dataset.trajectories)):
-            prompt_len = traj['prompt_ids_lens']
-            think_len = traj['think_ids_lens']
-            answer_len = traj['answer_ids_lens']
+        for traj_idx, (logps, traj) in enumerate(
+            zip(collected_logps, dataset.trajectories)
+        ):
+            prompt_len = traj["prompt_ids_lens"]
+            think_len = traj["think_ids_lens"]
+            answer_len = traj["answer_ids_lens"]
 
             if answer_len == 0:
-                logp_reward = torch.tensor(float('-inf'))
+                logp_reward = torch.tensor(float("-inf"))
             else:
-                logp_reward = logps[prompt_len + think_len - 1 : prompt_len + think_len + answer_len - 1].sum() 
-                
-            traj["gt_action_logprobs"] = logps[prompt_len - 1 : prompt_len + think_len + answer_len - 1].detach()
+                logp_reward = logps[
+                    prompt_len + think_len - 1 : prompt_len + think_len + answer_len - 1
+                ].sum()
+
+            traj["gt_action_logprobs"] = logps[
+                prompt_len - 1 : prompt_len + think_len + answer_len - 1
+            ].detach()
             traj["logp_reward"] = logp_reward.detach()
             if traj["no_eos"]:
-                traj["logp_reward"] = torch.tensor(float('-inf'))
-            self.pi_buffer[traj_idx].gt_action_logprobs = traj["gt_action_logprobs"].tolist()
+                traj["logp_reward"] = torch.tensor(float("-inf"))
+            self.pi_buffer[traj_idx].gt_action_logprobs = traj[
+                "gt_action_logprobs"
+            ].tolist()
             self.pi_buffer[traj_idx].logp_reward = traj["logp_reward"].item()
 
         if learning_round == 1:
@@ -457,12 +476,8 @@ class VeriFreeLearner(PPOLearner):
         all_values = []
 
         with torch.no_grad():
-            for i in range(
-                0, len(input_ids), self.args.train_batch_size_per_device
-            ):
-                batch_inds = torch.arange(
-                    i, i + self.args.train_batch_size_per_device
-                )
+            for i in range(0, len(input_ids), self.args.train_batch_size_per_device):
+                batch_inds = torch.arange(i, i + self.args.train_batch_size_per_device)
                 ## Forward critic network.
                 batch_values = self.critic(
                     input_ids=input_ids[batch_inds], attention_mask=att_mask[batch_inds]
@@ -510,7 +525,7 @@ class VeriFreeLearner(PPOLearner):
             )
             advantages = advantages / (std_grouped_rewards + 1e-8)
         return advantages
-    
+
     def compute_rloo_advantages(self, rewards, response_masks):
         rewards = rewards.sum(-1)
         # Compute grouped-wise rewards
@@ -518,8 +533,10 @@ class VeriFreeLearner(PPOLearner):
         mean_grouped_rewards = mean_grouped_rewards.repeat_interleave(
             self.args.num_samples, dim=0
         )
-        advantages = (rewards - mean_grouped_rewards) * (self.args.num_samples / (self.args.num_samples - 1))
-        
+        advantages = (rewards - mean_grouped_rewards) * (
+            self.args.num_samples / (self.args.num_samples - 1)
+        )
+
         return advantages
 
     def learning_step(self, trajectory):
@@ -529,17 +546,15 @@ class VeriFreeLearner(PPOLearner):
         input_ids = trajectory["gt_input_ids"].to(device)
         att_mask = trajectory["gt_attention_mask"].to(device)
         final_rewards = (
-            torch.tensor(trajectory["logp_reward"])
-            .to(device)
-            .reshape(-1, 1)
+            torch.tensor(trajectory["logp_reward"]).to(device).reshape(-1, 1)
         ).float() * args.reward_scale
         ################  exp(logp) ################
-        if args.reward_source == 'p':
+        if args.reward_source == "p":
             final_rewards = torch.exp(final_rewards)
         ############################################
 
         prompt_id_lens = trajectory["prompt_ids_lens"]
-        
+
         assert final_rewards.shape[0] == input_ids.shape[0]
         action_logprobs = [
             torch.tensor(lp).to(device) for lp in trajectory["gt_action_logprobs"]
@@ -548,10 +563,10 @@ class VeriFreeLearner(PPOLearner):
         completion_masks = self.get_completion_mask(att_mask, prompt_id_lens)
         response_masks = completion_masks[:, 1:]
         think_masks, answer_masks = self.get_think_and_answer_mask(
-            att_mask, 
-            prompt_id_lens, 
-            trajectory['think_ids_lens'], 
-            trajectory['answer_ids_lens']
+            att_mask,
+            prompt_id_lens,
+            trajectory["think_ids_lens"],
+            trajectory["answer_ids_lens"],
         )
         think_masks = think_masks[:, 1:]
         answer_masks = answer_masks[:, 1:]
@@ -594,12 +609,8 @@ class VeriFreeLearner(PPOLearner):
         if self.ref_model is not None:
             all_ref_logps = []
             with torch.no_grad():
-                for i in range(
-                    0, len(input_ids), args.train_batch_size_per_device
-                ):
-                    batch_inds = torch.arange(
-                        i, i + args.train_batch_size_per_device
-                    )
+                for i in range(0, len(input_ids), args.train_batch_size_per_device):
+                    batch_inds = torch.arange(i, i + args.train_batch_size_per_device)
 
                     batch_ref_logits = self.ref_model(
                         input_ids[batch_inds], attention_mask=att_mask[batch_inds]
@@ -631,7 +642,7 @@ class VeriFreeLearner(PPOLearner):
             advantages = advantages[:, None]
         elif self.args.critic_type == "naive":
             advantages = rewards.sum(dim=-1)
-            
+
         # Compute losses and update models for multiple PPO epochs.
         stats = defaultdict(list)
         for _ in range(args.num_ppo_epochs):
@@ -688,41 +699,48 @@ class VeriFreeLearner(PPOLearner):
                     mb_input_ids,
                     mb_response_masks,
                 )
-                
+
                 ################## pg #####################################
                 if args.reinforce_update:
                     pg_loss = -mb_advantage * new_logps
                 else:
                     logprobs_diff = new_logps - mb_logps
                     ratio = torch.exp(logprobs_diff)
-                    pg_loss = -mb_advantage.detach() * (new_logps * mb_think_masks).sum(dim=1) 
+                    pg_loss = -mb_advantage.detach() * (new_logps * mb_think_masks).sum(
+                        dim=1
+                    )
                     stats["ratio_max"].append(ratio.detach().max().item())
                     stats["ratio_min"].append(ratio.detach().min().item())
-                
-                pg_loss = (pg_loss * mb_loss_masks  ).mean()
+
+                pg_loss = (pg_loss * mb_loss_masks).mean()
                 infos["pg_loss"] = pg_loss.detach()
                 ################## pg #####################################
-                
-                
+
                 ################## sft #####################################
-                if args.sft_coef_source == 'adv':
-                    sft_loss = (-new_logps * mb_answer_masks * mb_advantage.detach()).sum(dim=1)
-                elif args.sft_coef_source == 'reward':
-                    sft_loss = (-new_logps * mb_answer_masks * mb_final_rewards.detach() ).sum(dim=1) 
-                elif args.sft_coef_source == '1':
+                if args.sft_coef_source == "adv":
+                    sft_loss = (
+                        -new_logps * mb_answer_masks * mb_advantage.detach()
+                    ).sum(dim=1)
+                elif args.sft_coef_source == "reward":
+                    sft_loss = (
+                        -new_logps * mb_answer_masks * mb_final_rewards.detach()
+                    ).sum(dim=1)
+                elif args.sft_coef_source == "1":
                     sft_loss = (-new_logps * mb_answer_masks).sum(dim=1)
                 else:
-                    raise ValueError(f'Unrecognized sft_coef_source: {args.sft_coef_source}')
+                    raise ValueError(
+                        f"Unrecognized sft_coef_source: {args.sft_coef_source}"
+                    )
 
-                sft_loss = (sft_loss * mb_loss_masks  ).mean()
+                sft_loss = (sft_loss * mb_loss_masks).mean()
                 infos["sft_loss"] = sft_loss.detach()
                 ################## sft #####################################
-                
+
                 ############ merge ############
                 # num_response_tokens = mb_response_masks.sum()
-                loss = (pg_loss + sft_loss) #/ num_response_tokens
+                loss = pg_loss + sft_loss  # / num_response_tokens
                 ############ merge ############
-                
+
                 infos["loss"] = loss.detach()
                 if args.beta > 0:
                     mb_ref_logps = ref_logps[mini_batch_inds]
@@ -741,7 +759,6 @@ class VeriFreeLearner(PPOLearner):
                 self.strategy.backward(loss, self.model, self.optimizer)
                 self.strategy.optimizer_step(self.optimizer, self.model, self.scheduler)
 
-
         infos.update(
             {f"{k}_nan": torch.tensor(stats[k]).isnan().sum() for k in stats.keys()}
         )
@@ -758,7 +775,7 @@ class VeriFreeLearner(PPOLearner):
         infos["adv_mean"] = advantages.mean().cpu()
         infos["adv_min"] = advantages.min().cpu()
         infos["adv_max"] = advantages.max().cpu()
-        if args.reward_source == 'p':
+        if args.reward_source == "p":
             infos["p_reward_mean"] = final_rewards.mean().cpu()
             infos["p_reward_min"] = final_rewards.min().cpu()
             infos["p_reward_max"] = final_rewards.max().cpu()
@@ -771,24 +788,24 @@ class VeriFreeLearner(PPOLearner):
 
         return infos
 
-
     def get_think_and_answer_mask(
         self,
         attention_mask: torch.LongTensor,
         prompt_id_lens: List[int],
         think_id_lens: List[int],
-        answer_id_lens: List[int]
+        answer_id_lens: List[int],
     ):
         think_masks = attention_mask.clone().bool()
         answer_masks = attention_mask.clone().bool()
         # mask prompts
-        for think_mask, answer_mask, prompt_len, think_len, answer_len in zip(think_masks, answer_masks, prompt_id_lens, think_id_lens, answer_id_lens):
+        for think_mask, answer_mask, prompt_len, think_len, answer_len in zip(
+            think_masks, answer_masks, prompt_id_lens, think_id_lens, answer_id_lens
+        ):
             think_mask[:prompt_len] = False
-            think_mask[prompt_len+think_len:] = False 
-            answer_mask[:prompt_len+think_len] = False
-            answer_mask[prompt_len+think_len+answer_len:] = False
+            think_mask[prompt_len + think_len :] = False
+            answer_mask[: prompt_len + think_len] = False
+            answer_mask[prompt_len + think_len + answer_len :] = False
         return think_masks, answer_masks
-
 
 
 def run_verifree(args: VeriFreeArgs):
@@ -811,7 +828,7 @@ if __name__ == "__main__":
     args: VeriFreeArgs = get_default_args(VeriFreeArgs)
 
     args.algo = "PPO"
-    args.online_evaluation = True  
+    args.online_evaluation = True
 
     args = default_args_validation(args)
     run_verifree(args)

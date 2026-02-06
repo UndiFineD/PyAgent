@@ -6,7 +6,7 @@ This module defines a standard group chat data format for storing and exchanging
 The format design considers extensibility, readability, and data completeness.
 """
 
-from typing import TypedDict, List, Optional, Literal, Dict, Any
+from typing import Any, Dict, List, Literal, Optional, TypedDict
 
 
 # User detailed information
@@ -248,7 +248,7 @@ def create_example_group_chat() -> GroupChatFormat:
                 "sender": "user_103",
                 "sender_name": "Chen",
                 "type": "text",
-                "content": "Good morning, \"Smart Sales Assistant\" now how is the progress?",
+                "content": 'Good morning, "Smart Sales Assistant" now how is the progress?',
                 "refer_list": [],
             },
             {

@@ -6,10 +6,11 @@ Audit base class based on Beanie ODM, including common timestamp fields and auto
 """
 
 from datetime import datetime
-from typing import Optional, List, Any
-from beanie import before_event, Insert, Update
-from pydantic import Field, BaseModel
+from typing import Any, List, Optional
+
+from beanie import Insert, Update, before_event
 from common_utils.datetime_utils import get_now_with_timezone
+from pydantic import BaseModel, Field
 
 
 class AuditBase(BaseModel):
@@ -57,9 +58,9 @@ class AuditBase(BaseModel):
         now = get_now_with_timezone()
         for doc in documents:
             # Only set time for audit fields with None value, avoiding overwriting existing values
-            if hasattr(doc, 'created_at') and doc.created_at is None:
+            if hasattr(doc, "created_at") and doc.created_at is None:
                 doc.created_at = now
-            if hasattr(doc, 'updated_at') and doc.updated_at is None:
+            if hasattr(doc, "updated_at") and doc.updated_at is None:
                 doc.updated_at = now
 
 

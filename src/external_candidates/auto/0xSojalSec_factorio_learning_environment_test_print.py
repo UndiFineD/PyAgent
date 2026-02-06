@@ -1,14 +1,17 @@
-def safe_subprocess_run(*args, **kwargs):
-    """Conservative placeholder: replace with secure implementation.
-    This wrapper intentionally raises at runtime to force human review before enabling.
-    """
-    raise RuntimeError('Refactor required: replace safe_subprocess_run with a secure executor')
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\tests\actions\test_print.py
+# NOTE: extracted with static-only rules; review before use
 
 def test_print_tuple(game):
+
     """
 
     Print a tuple
 
     """
-    r = game.print('Hello', 'World', (1, 2, 3))
-    assert r == 'Hello\tWorld\t(1, 2, 3)'
+
+    r = game.print("Hello", "World", (1, 2, 3))
+
+
+
+    assert r == "Hello\tWorld\t(1, 2, 3)"
+

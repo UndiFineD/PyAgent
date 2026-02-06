@@ -3,12 +3,10 @@
 
 import copy
 import math
-from typing import Dict, Any, Tuple
-from typing import List
-
-from inspect_ai.dataset import Dataset, Sample, MemoryDataset
+from typing import Any, Dict, List, Tuple
 
 from data.vqa.blueprint_transforms import get_blueprint_bounds
+from inspect_ai.dataset import Dataset, MemoryDataset, Sample
 
 
 class SubchunkConfig:
@@ -264,9 +262,11 @@ def create_subchunk_augmented_dataset(
                         input=original_sample.input,
                         target=original_sample.target,
                         metadata=new_metadata,
-                        id=f"{original_sample.id}_{chunk_suffix}"
-                        if original_sample.id
-                        else None,
+                        id=(
+                            f"{original_sample.id}_{chunk_suffix}"
+                            if original_sample.id
+                            else None
+                        ),
                         files=original_sample.files,
                     )
 

@@ -5,9 +5,8 @@ import os
 import shutil
 import sys
 
-
-if sys.argv[0] == 'install.py':
-    sys.path.append('.')
+if sys.argv[0] == "install.py":
+    sys.path.append(".")
 
 current_dir = os.path.dirname(__file__)
 source_folder = os.path.join(current_dir, "workflow/ComfyUI-ACE_Plus")
@@ -15,7 +14,9 @@ target_folder = os.path.join(os.path.dirname(current_dir), "ComfyUI-ACE_Plus")
 
 if not os.path.exists(target_folder):
     shutil.move(source_folder, target_folder)
-    print(f"{os.path.abspath(source_folder)} copy to {os.path.abspath(target_folder)} success!")
+    print(
+        f"{os.path.abspath(source_folder)} copy to {os.path.abspath(target_folder)} success!"
+    )
 else:
     print(f"{os.path.abspath(target_folder)} exist.")
 

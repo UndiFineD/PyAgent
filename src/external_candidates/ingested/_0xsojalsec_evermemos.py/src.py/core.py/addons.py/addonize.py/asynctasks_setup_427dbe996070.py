@@ -6,10 +6,10 @@ Async task setup module
 Handles the entry function for loading async task scan paths from addons and registering tasks
 """
 
+from core.addons.addons_registry import ADDONS_REGISTRY
 from core.asynctasks.task_scan_registry import TaskScanDirectoriesRegistry
 from core.di.utils import get_bean_by_type
 from core.observation.logger import get_logger
-from core.addons.addons_registry import ADDONS_REGISTRY
 
 logger = get_logger(__name__)
 

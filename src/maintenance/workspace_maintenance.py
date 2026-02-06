@@ -36,7 +36,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
 
     DEFAULT_EXCLUSIONS: set[str] = {
         ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache", 
-        ".ruff_cache", ".agent_cache", "target", "node_modules", 
+        ".ruff_cache", "data/agent_cache", "target", "node_modules",
         ".hypothesis", "__pycache__", "reports", "archive"
     }
 

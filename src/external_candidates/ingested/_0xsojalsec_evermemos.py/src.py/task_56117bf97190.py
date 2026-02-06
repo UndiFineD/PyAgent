@@ -21,8 +21,8 @@ Environment variables:
     REDIS_USERNAME: Redis username (optional)
 """
 
-import os
 import logging
+import os
 
 from arq.connections import RedisSettings
 

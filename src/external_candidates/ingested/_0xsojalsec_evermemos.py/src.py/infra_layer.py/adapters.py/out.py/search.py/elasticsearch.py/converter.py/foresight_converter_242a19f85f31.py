@@ -6,18 +6,19 @@ Responsible for converting MongoDB foresight documents into Elasticsearch Foresi
 Supports both individual and group foresights.
 """
 
+from datetime import datetime
 from typing import List
-import jieba
 
+import jieba
 from common_utils.datetime_utils import get_now_with_timezone
-from core.oxm.es.base_converter import BaseEsConverter
-from core.observation.logger import get_logger
-from core.nlp.stopwords_utils import filter_stopwords
-from infra_layer.adapters.out.search.elasticsearch.memory.foresight import ForesightDoc
 from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
     ForesightRecord as MongoForesightRecord,
 )
-from datetime import datetime
+from infra_layer.adapters.out.search.elasticsearch.memory.foresight import ForesightDoc
+
+from core.nlp.stopwords_utils import filter_stopwords
+from core.observation.logger import get_logger
+from core.oxm.es.base_converter import BaseEsConverter
 
 logger = get_logger(__name__)
 
@@ -53,7 +54,7 @@ class ForesightConverter(BaseEsConverter[ForesightDoc]):
             if source_doc.start_time:
                 if isinstance(source_doc.start_time, str):
                     timestamp = datetime.fromisoformat(
-                        source_doc.start_time.replace('Z', '+00:00')
+                        source_doc.start_time.replace("Z", "+00:00")
                     )
                 elif isinstance(source_doc.start_time, datetime):
                     timestamp = source_doc.start_time
@@ -64,7 +65,7 @@ class ForesightConverter(BaseEsConverter[ForesightDoc]):
             # Create ES document instance
             # Pass id via meta parameter to ensure idempotency (MongoDB _id -> ES _id)
             es_doc = ForesightDoc(
-                meta={'id': str(source_doc.id)},
+                meta={"id": str(source_doc.id)},
                 user_id=source_doc.user_id,
                 user_name=source_doc.user_name or "",
                 # Timestamp field

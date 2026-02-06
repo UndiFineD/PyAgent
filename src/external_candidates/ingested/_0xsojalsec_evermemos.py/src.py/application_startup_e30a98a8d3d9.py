@@ -5,13 +5,14 @@ Application startup module
 Responsible for various initialization operations when the application starts
 """
 
+from core.addons.addonize.di_setup import (
+    print_registered_beans,
+    setup_dependency_injection,
+)
+from core.addons.addons_registry import ADDONS_REGISTRY
+
 # Import dependency injection related modules
 from core.observation.logger import get_logger
-from core.addons.addons_registry import ADDONS_REGISTRY
-from core.addons.addonize.di_setup import (
-    setup_dependency_injection,
-    print_registered_beans,
-)
 
 # Recommended usage: get logger once at the top of the module, then use directly (high performance)
 logger = get_logger(__name__)

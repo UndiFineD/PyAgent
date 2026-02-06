@@ -8,19 +8,20 @@ This module provides methods to call DeepInfra or vLLM API for getting text embe
 
 from __future__ import annotations
 
-import os
 import asyncio
 import logging
+import os
 from abc import ABC, abstractmethod
-from enum import Enum
-from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
+from memory_layer.constants import VECTORIZE_DIMENSIONS
 from openai import AsyncOpenAI, BadRequestError
 
-from core.di.utils import get_bean
 from core.di.decorators import service
-from memory_layer.constants import VECTORIZE_DIMENSIONS
+from core.di.utils import get_bean
 
 logger = logging.getLogger(__name__)
 

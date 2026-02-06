@@ -6,26 +6,33 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional
 
-from core.observation.logger import get_logger
-
 from memory_layer.llm.llm_provider import LLMProvider
-from memory_layer.memory_extractor.profile_memory.data_normalize import merge_single_profile, project_to_dict
-from memory_layer.memory_extractor.profile_memory.project_helpers import merge_projects_participated
-from memory_layer.memory_extractor.profile_memory.skill_helpers import merge_skill_lists_keep_highest_level
+from memory_layer.memory_extractor.profile_memory.data_normalize import (
+    merge_single_profile,
+    project_to_dict,
+)
+from memory_layer.memory_extractor.profile_memory.project_helpers import (
+    merge_projects_participated,
+)
+from memory_layer.memory_extractor.profile_memory.skill_helpers import (
+    merge_skill_lists_keep_highest_level,
+)
 from memory_layer.memory_extractor.profile_memory.types import (
-    ProfileMemory,
     ImportanceEvidence,
+    ProfileMemory,
 )
 from memory_layer.memory_extractor.profile_memory.value_helpers import (
     merge_value_with_evidences_lists,
     merge_value_with_evidences_lists_keep_highest_level,
 )
 
+from core.observation.logger import get_logger
+
 logger = get_logger(__name__)
 
 
 def convert_important_info_to_evidence(
-    important_info: Dict[str, Any]
+    important_info: Dict[str, Any],
 ) -> List[ImportanceEvidence]:
     """Convert aggregated group stats into ImportanceEvidence instances."""
     evidence_list: List[ImportanceEvidence] = []
@@ -114,7 +121,7 @@ class ProfileMemoryMerger:
     def _profile_memory_to_prompt_dict(cls, profile: ProfileMemory) -> Dict[str, Any]:
 
         def truncate_evidences_in_items(
-            items: Optional[List[Dict[str, Any]]]
+            items: Optional[List[Dict[str, Any]]],
         ) -> List[Dict[str, Any]]:
             if not items:
                 return []

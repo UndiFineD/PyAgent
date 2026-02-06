@@ -5,25 +5,26 @@ Generate predictions of potential impacts on user's future life and decisions fr
 """
 
 import json
-from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
 
-from memory_layer.prompts import get_prompt_by
+from agentic_layer.vectorize_service import get_vectorize_service
+from api_specs.memory_types import (
+    BaseMemory,
+    EpisodeMemory,
+    Foresight,
+    MemCell,
+    MemoryType,
+)
+from common_utils.datetime_utils import get_now_with_timezone
 from memory_layer.llm.llm_provider import LLMProvider
 from memory_layer.memory_extractor.base_memory_extractor import (
     MemoryExtractor,
     MemoryExtractRequest,
 )
-from api_specs.memory_types import (
-    MemoryType,
-    MemCell,
-    Foresight,
-    BaseMemory,
-    EpisodeMemory,
-)
-from agentic_layer.vectorize_service import get_vectorize_service
+from memory_layer.prompts import get_prompt_by
+
 from core.observation.logger import get_logger
-from common_utils.datetime_utils import get_now_with_timezone
 
 logger = get_logger(__name__)
 
@@ -265,10 +266,10 @@ class ForesightExtractor(MemoryExtractor):
         import re
 
         # Keep only digits and hyphens, remove other characters (e.g., Chinese, spaces, etc.)
-        cleaned = re.sub(r'[^\d\-]', '', date_str)
+        cleaned = re.sub(r"[^\d\-]", "", date_str)
 
         # Validate format is YYYY-MM-DD
-        if not re.match(r'^\d{4}-\d{2}-\d{2}$', cleaned):
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", cleaned):
             logger.warning(
                 f"Invalid time format, does not match YYYY-MM-DD: original='{date_str}', cleaned='{cleaned}'"
             )
@@ -276,7 +277,7 @@ class ForesightExtractor(MemoryExtractor):
 
         # Validate date values are valid (month 1-12, day 1-31, etc.)
         try:
-            year, month, day = map(int, cleaned.split('-'))
+            year, month, day = map(int, cleaned.split("-"))
             # Use datetime to validate date validity
             datetime(year, month, day)
             return cleaned
@@ -309,9 +310,9 @@ class ForesightExtractor(MemoryExtractor):
         """
         try:
             # First try to extract JSON from code block
-            if '```json' in response:
-                start = response.find('```json') + 7
-                end = response.find('```', start)
+            if "```json" in response:
+                start = response.find("```json") + 7
+                end = response.find("```", start)
                 if end > start:
                     json_str = response[start:end].strip()
                     data = json.loads(json_str)
@@ -328,13 +329,13 @@ class ForesightExtractor(MemoryExtractor):
                 # First collect all data to be processed
                 items_to_process = []
                 for item in data:
-                    content = item.get('content', '')
-                    evidence = item.get('evidence', '')
+                    content = item.get("content", "")
+                    evidence = item.get("evidence", "")
 
                     # Use passed start_time or LLM-provided time
-                    item_start_time = item.get('start_time', start_time)
-                    item_end_time = item.get('end_time')
-                    item_duration_days = item.get('duration_days')
+                    item_start_time = item.get("start_time", start_time)
+                    item_end_time = item.get("end_time")
+                    item_duration_days = item.get("duration_days")
 
                     # Clean time format (prevent LLM outputting incorrect format)
                     item_start_time = self._clean_date_string(item_start_time)
@@ -356,18 +357,18 @@ class ForesightExtractor(MemoryExtractor):
 
                     items_to_process.append(
                         {
-                            'foresight': content,
-                            'evidence': evidence,
-                            'start_time': item_start_time,
-                            'end_time': item_end_time,
-                            'duration_days': item_duration_days,
-                            'parent_episode_id': item.get('parent_episode_id'),
+                            "foresight": content,
+                            "evidence": evidence,
+                            "start_time": item_start_time,
+                            "end_time": item_end_time,
+                            "duration_days": item_duration_days,
+                            "parent_episode_id": item.get("parent_episode_id"),
                         }
                     )
 
                 # Batch compute embeddings for all content (performance optimization)
                 vs = get_vectorize_service()
-                contents = [item['foresight'] for item in items_to_process]
+                contents = [item["foresight"] for item in items_to_process]
                 vectors_batch = await vs.get_embeddings(
                     contents
                 )  # Use get_embeddings (List[str])
@@ -376,7 +377,7 @@ class ForesightExtractor(MemoryExtractor):
                 for i, item_data in enumerate(items_to_process):
                     # Handle embedding: could be numpy array or already list
                     vector = vectors_batch[i]
-                    if hasattr(vector, 'tolist'):
+                    if hasattr(vector, "tolist"):
                         vector = vector.tolist()
                     elif not isinstance(vector, list):
                         vector = list(vector)
@@ -387,12 +388,12 @@ class ForesightExtractor(MemoryExtractor):
                         timestamp=timestamp or get_now_with_timezone(),
                         ori_event_id_list=ori_event_id_list or [],
                         group_id=group_id,
-                        foresight=item_data['foresight'],
-                        evidence=item_data['evidence'],
-                        start_time=item_data['start_time'],
-                        end_time=item_data['end_time'],
-                        duration_days=item_data['duration_days'],
-                        parent_episode_id=item_data['parent_episode_id'],
+                        foresight=item_data["foresight"],
+                        evidence=item_data["evidence"],
+                        start_time=item_data["start_time"],
+                        end_time=item_data["end_time"],
+                        duration_days=item_data["duration_days"],
+                        parent_episode_id=item_data["parent_episode_id"],
                         vector=vector,
                         vector_model=vs.get_model_name(),
                     )
@@ -421,7 +422,7 @@ class ForesightExtractor(MemoryExtractor):
         Returns:
             Start time string in YYYY-MM-DD format
         """
-        return timestamp.strftime('%Y-%m-%d')
+        return timestamp.strftime("%Y-%m-%d")
 
     def _calculate_end_time_from_duration(
         self, start_time: str, duration_days: int
@@ -440,10 +441,10 @@ class ForesightExtractor(MemoryExtractor):
             if not start_time or duration_days is None:
                 return None
 
-            start_date = datetime.strptime(start_time, '%Y-%m-%d')
+            start_date = datetime.strptime(start_time, "%Y-%m-%d")
             end_date = start_date + timedelta(days=duration_days)
 
-            return end_date.strftime('%Y-%m-%d')
+            return end_date.strftime("%Y-%m-%d")
 
         except Exception as e:
             logger.error(f"Error calculating end time from duration: {e}")
@@ -464,8 +465,8 @@ class ForesightExtractor(MemoryExtractor):
             if not start_time or not end_time:
                 return None
 
-            start_date = datetime.strptime(start_time, '%Y-%m-%d')
-            end_date = datetime.strptime(end_time, '%Y-%m-%d')
+            start_date = datetime.strptime(start_time, "%Y-%m-%d")
+            end_date = datetime.strptime(end_time, "%Y-%m-%d")
 
             duration = end_date - start_date
             return duration.days

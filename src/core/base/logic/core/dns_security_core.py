@@ -20,7 +20,7 @@ import json
 import logging
 from typing import Dict, List, Optional, Any, Tuple, Set, Union
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 import ipaddress
 import re
@@ -95,7 +95,7 @@ class DnsStatistics:
     queries_by_client: Dict[str, int] = field(default_factory=dict)
     queries_by_type: Dict[str, int] = field(default_factory=dict)
     response_times: List[float] = field(default_factory=list)
-    start_time: datetime = field(default_factory=datetime.utcnow)
+    start_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class DnsSecurityCore:
@@ -215,7 +215,7 @@ class DnsSecurityCore:
 
                 if self._matches_pattern(domain, rule.pattern):
                     rule.hit_count += 1
-                    rule.last_hit = datetime.utcnow()
+                    rule.last_hit = datetime.now(timezone.utc)
                     return rule.action, rule.description
 
             # Fallback: check blocked domains set for exact matches (optimization for default filters)
@@ -261,7 +261,7 @@ class DnsSecurityCore:
                 domain=domain,
                 record_type=record_type,
                 client_ip=client_ip,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 response_time=time.time() - start_time
             )
 
@@ -286,7 +286,7 @@ class DnsSecurityCore:
                 domain=domain,
                 record_type=record_type,
                 client_ip=client_ip,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 result=QueryResult.ERROR,
                 response_time=time.time() - start_time
             )
@@ -351,7 +351,7 @@ class DnsSecurityCore:
                     sum(self.statistics.response_times) / len(self.statistics.response_times)
                     if self.statistics.response_times else 0
                 ),
-                "uptime_seconds": (datetime.utcnow() - self.statistics.start_time).total_seconds(),
+                "uptime_seconds": (datetime.now(timezone.utc) - self.statistics.start_time).total_seconds(),
                 "filter_rules_count": len(self.filter_rules),
                 "active_filters": len([r for r in self.filter_rules if r.enabled]),
             }
@@ -494,7 +494,7 @@ class DnsSecurityCore:
     async def get_cache_info(self) -> Dict[str, Any]:
         """Get cache information"""
         try:
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             valid_entries = sum(1 for _, (_, expiry) in self.cache.items() if expiry > now)
 
             return {

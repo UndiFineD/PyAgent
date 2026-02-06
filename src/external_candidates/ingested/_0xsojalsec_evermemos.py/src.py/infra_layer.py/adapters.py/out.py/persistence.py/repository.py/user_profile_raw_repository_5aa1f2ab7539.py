@@ -6,14 +6,15 @@ User profile data access layer based on Beanie ODM.
 Provides ProfileStorage compatible interface (duck typing).
 """
 
-from typing import Optional, Dict, Any, List
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from core.oxm.mongo.base_repository import BaseRepository
+from typing import Any, Dict, List, Optional
 
 from infra_layer.adapters.out.persistence.document.memory.user_profile import (
     UserProfile,
 )
+
+from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 
@@ -42,7 +43,7 @@ class UserProfileRawRepository(BaseRepository[UserProfile]):
         metadata = metadata or {}
         group_id = metadata.get("group_id", "default")
 
-        if hasattr(profile, 'to_dict'):
+        if hasattr(profile, "to_dict"):
             profile_data = profile.to_dict()
         elif isinstance(profile, dict):
             profile_data = profile
@@ -116,13 +117,16 @@ class UserProfileRawRepository(BaseRepository[UserProfile]):
 
     async def get_all_by_user(self, user_id: str, limit: int = 40) -> List[UserProfile]:
         try:
-            return await self.model.find(
-                UserProfile.user_id == user_id
-            ).sort([("version", -1)]).limit(limit).to_list()
+            return (
+                await self.model.find(UserProfile.user_id == user_id)
+                .sort([("version", -1)])
+                .limit(limit)
+                .to_list()
+            )
         except Exception as e:
             logger.error(f"Failed to get user profile: user_id={user_id}, error={e}")
             return []
-    
+
     async def upsert(
         self,
         user_id: str,

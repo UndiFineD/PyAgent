@@ -4,30 +4,31 @@
 Responsible for writing unified foresight and event logs into Milvus / Elasticsearch.
 """
 
-from typing import Optional, List, Dict, Any
 import logging
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
-    ForesightRecord,
-)
-from infra_layer.adapters.out.search.elasticsearch.converter.foresight_converter import (
-    ForesightConverter,
-)
-from infra_layer.adapters.out.search.milvus.converter.foresight_milvus_converter import (
-    ForesightMilvusConverter,
-)
+from common_utils.datetime_utils import get_now_with_timezone
 from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
     EventLogRecord,
+)
+from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
+    ForesightRecord,
 )
 from infra_layer.adapters.out.search.elasticsearch.converter.event_log_converter import (
     EventLogConverter,
 )
+from infra_layer.adapters.out.search.elasticsearch.converter.foresight_converter import (
+    ForesightConverter,
+)
 from infra_layer.adapters.out.search.milvus.converter.event_log_milvus_converter import (
     EventLogMilvusConverter,
 )
-from infra_layer.adapters.out.search.repository.foresight_milvus_repository import (
-    ForesightMilvusRepository,
+from infra_layer.adapters.out.search.milvus.converter.foresight_milvus_converter import (
+    ForesightMilvusConverter,
+)
+from infra_layer.adapters.out.search.repository.event_log_es_repository import (
+    EventLogEsRepository,
 )
 from infra_layer.adapters.out.search.repository.event_log_milvus_repository import (
     EventLogMilvusRepository,
@@ -35,11 +36,11 @@ from infra_layer.adapters.out.search.repository.event_log_milvus_repository impo
 from infra_layer.adapters.out.search.repository.foresight_es_repository import (
     ForesightEsRepository,
 )
-from infra_layer.adapters.out.search.repository.event_log_es_repository import (
-    EventLogEsRepository,
+from infra_layer.adapters.out.search.repository.foresight_milvus_repository import (
+    ForesightMilvusRepository,
 )
+
 from core.di import get_bean_by_type, service
-from common_utils.datetime_utils import get_now_with_timezone
 
 logger = logging.getLogger(__name__)
 

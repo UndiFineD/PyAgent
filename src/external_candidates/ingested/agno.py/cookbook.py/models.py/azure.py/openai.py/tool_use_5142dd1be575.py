@@ -1,0 +1,15 @@
+# Extracted from: C:\DEV\PyAgent\.external\agno\cookbook\models\azure\openai\tool_use.py
+"""Run `pip install duckduckgo-search` to install dependencies."""
+
+from agno.agent import Agent
+from agno.models.azure import AzureOpenAI
+from agno.tools.duckduckgo import DuckDuckGoTools
+
+agent = Agent(
+    model=AzureOpenAI(id="gpt-4o-mini"),
+    tools=[DuckDuckGoTools()],
+    show_tool_calls=True,
+    markdown=True,
+)
+
+agent.print_response("Whats happening in France?", stream=True)

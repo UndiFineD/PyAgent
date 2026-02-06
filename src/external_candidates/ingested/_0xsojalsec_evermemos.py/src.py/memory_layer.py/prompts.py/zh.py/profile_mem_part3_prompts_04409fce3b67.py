@@ -103,4 +103,3 @@ JSON 模板：
 字段项架构（用于列表字段）：
 - 每个项必须是：{"value": string, "evidences": [string], "level": string?}
 """
-

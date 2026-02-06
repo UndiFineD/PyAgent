@@ -1,21 +1,20 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\openai_compatible_client.py
 import asyncio
 import os
-from typing import Dict, Any, List, Optional, AsyncGenerator, Union
+from typing import Any, AsyncGenerator, Dict, List, Optional, Union
 
-from core.di.decorators import component
-from core.observation.logger import get_logger
 from core.component.config_provider import ConfigProvider
-
-from core.component.llm.llm_adapter.message import ChatMessage
+from core.component.llm.llm_adapter.anthropic_adapter import AnthropicAdapter
 from core.component.llm.llm_adapter.completion import (
     ChatCompletionRequest,
     ChatCompletionResponse,
 )
-from core.component.llm.llm_adapter.llm_backend_adapter import LLMBackendAdapter
-from core.component.llm.llm_adapter.openai_adapter import OpenAIAdapter
-from core.component.llm.llm_adapter.anthropic_adapter import AnthropicAdapter
 from core.component.llm.llm_adapter.gemini_adapter import GeminiAdapter
+from core.component.llm.llm_adapter.llm_backend_adapter import LLMBackendAdapter
+from core.component.llm.llm_adapter.message import ChatMessage
+from core.component.llm.llm_adapter.openai_adapter import OpenAIAdapter
+from core.di.decorators import component
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -221,7 +220,7 @@ class OpenAICompatibleClient:
             if "api_key" in safe_config:
                 safe_config["api_key"] = (
                     f"***{safe_config['api_key'][-4:]}"
-                    if len(safe_config.get('api_key', '')) > 4
+                    if len(safe_config.get("api_key", "")) > 4
                     else "***"
                 )
             return safe_config
@@ -236,7 +235,7 @@ class OpenAICompatibleClient:
     async def close(self):
         """Close HTTP client connections for all adapters"""
         for adapter in self._adapters.values():
-            if hasattr(adapter, 'close'):
+            if hasattr(adapter, "close"):
                 await adapter.close()  # type: ignore
 
     def close_sync(self):

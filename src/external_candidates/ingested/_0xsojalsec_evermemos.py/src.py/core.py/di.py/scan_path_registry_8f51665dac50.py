@@ -9,7 +9,7 @@ class ScannerPathsRegistry:
         """Initialize scanner path registry"""
         self.scan_paths: List[str] = []
 
-    def add_scan_path(self, path: str) -> 'ScannerPathsRegistry':
+    def add_scan_path(self, path: str) -> "ScannerPathsRegistry":
         """Add scan path"""
         self.scan_paths.append(path)
         return self
@@ -18,7 +18,7 @@ class ScannerPathsRegistry:
         """Get scan paths"""
         return self.scan_paths
 
-    def clear(self) -> 'ScannerPathsRegistry':
+    def clear(self) -> "ScannerPathsRegistry":
         """Clear scan paths"""
         self.scan_paths = []
         return self

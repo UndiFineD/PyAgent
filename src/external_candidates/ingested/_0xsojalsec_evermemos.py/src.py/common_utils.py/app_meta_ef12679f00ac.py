@@ -18,7 +18,7 @@ def set_service_name(name: str) -> None:
     Args:
         name: service name
     """
-    _APP_META_DATA['service_name'] = name
+    _APP_META_DATA["service_name"] = name
 
 
 def get_service_name() -> Optional[str]:
@@ -28,7 +28,7 @@ def get_service_name() -> Optional[str]:
     Returns:
         str: service name, returns None if not set
     """
-    return _APP_META_DATA.get('service_name')
+    return _APP_META_DATA.get("service_name")
 
 
 def set_meta_data(key: str, value: any) -> None:

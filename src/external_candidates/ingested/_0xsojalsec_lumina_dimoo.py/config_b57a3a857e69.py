@@ -13,7 +13,7 @@ GENERATION_CONFIG = {
     "default_cfg_img": 4.0,
     "default_seq_len": 1024,
     "default_newline_every": 16,
-    "remasking_strategy": "low_confidence"
+    "remasking_strategy": "low_confidence",
 }
 
 # Image related configuration
@@ -33,7 +33,7 @@ SPECIAL_TOKENS = {
     "answer_end": 126355,
     "boi": 126349,  # begin of image
     "eoi": 126350,  # end of image
-    "uncondition": 126351
+    "uncondition": 126351,
 }
 
 # Prompt templates
@@ -45,21 +45,29 @@ PROMPT_TEMPLATES = {
     "control_generation": "Generate an image according to the text prompt and the given control image.",
     "subject_generation": "Generate an image according to the text prompt and the given object image.",
     "multi_view": "Generate a view-image based on the given image.",
-    "style_transfer": "Transform the current image into the style of the provided image."
+    "style_transfer": "Transform the current image into the style of the provided image.",
 }
 
 # Edit type configuration
 EDIT_TYPE_CONFIG = {
     "dense": {
         "canny": "canny edge map",
-        "hed": "hed edge map", 
+        "hed": "hed edge map",
         "depth": "depth map",
-        "openpose": "pose estimation map"
+        "openpose": "pose estimation map",
     },
     "supported_types": [
-        "canny_pred", "hed_pred", 
-        "depth_pred", "openpose_pred", "canny_control", 
-        "hed_control", "depth_control", "openpose_control", "subject_driven", 
-        "edit", "ref_transfer", "multi_view"
-    ]
+        "canny_pred",
+        "hed_pred",
+        "depth_pred",
+        "openpose_pred",
+        "canny_control",
+        "hed_control",
+        "depth_control",
+        "openpose_control",
+        "subject_driven",
+        "edit",
+        "ref_transfer",
+        "multi_view",
+    ],
 }

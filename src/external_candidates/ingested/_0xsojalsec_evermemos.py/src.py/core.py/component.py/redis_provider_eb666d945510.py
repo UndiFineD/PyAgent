@@ -5,9 +5,10 @@ Redis Connection Provider
 Technical component providing Redis connection pool management and basic operations
 """
 
-import os
 import asyncio
+import os
 from typing import Optional, Union
+
 import redis.asyncio as redis
 from redis.asyncio.connection import ConnectionPool
 

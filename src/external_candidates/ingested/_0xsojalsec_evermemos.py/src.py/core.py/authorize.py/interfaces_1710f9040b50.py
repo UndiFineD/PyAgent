@@ -1,6 +1,7 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\authorize\interfaces.py
 from abc import ABC, abstractmethod
-from typing import Optional, Any, Dict
+from typing import Any, Dict, Optional
+
 from .enums import Role
 
 

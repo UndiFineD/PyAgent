@@ -7,6 +7,7 @@ Manages the list of all addon registries, providing a unified access interface
 
 import os
 from typing import List, Optional, Set
+
 from core.addons.addon_registry import AddonRegistry
 from core.observation.logger import get_logger
 
@@ -57,7 +58,7 @@ class AddonsRegistry:
         """Initialize the addons registry manager"""
         self._addons: List[AddonRegistry] = []
 
-    def register(self, addon: AddonRegistry) -> 'AddonsRegistry':
+    def register(self, addon: AddonRegistry) -> "AddonsRegistry":
         """
         Register an addon
 
@@ -94,7 +95,7 @@ class AddonsRegistry:
                 return addon
         return None
 
-    def clear(self) -> 'AddonsRegistry':
+    def clear(self) -> "AddonsRegistry":
         """
         Clear all registered addons
 
@@ -129,7 +130,7 @@ class AddonsRegistry:
         Returns:
             True means should load, False means should skip
         """
-        filter_config = os.environ.get('MEMSYS_ENTRYPOINTS_FILTER', '').strip()
+        filter_config = os.environ.get("MEMSYS_ENTRYPOINTS_FILTER", "").strip()
 
         # If environment variable is not set or empty, load all entrypoints
         if not filter_config:
@@ -137,11 +138,11 @@ class AddonsRegistry:
 
         # Split by comma and filter
         allowed_entrypoints: Set[str] = {
-            name.strip() for name in filter_config.split(',') if name.strip()
+            name.strip() for name in filter_config.split(",") if name.strip()
         }
         return entrypoint_name in allowed_entrypoints
 
-    def load_entrypoints(self) -> 'AddonsRegistry':
+    def load_entrypoints(self) -> "AddonsRegistry":
         """
         Automatically load all registered addons from entry points
 
@@ -178,16 +179,16 @@ class AddonsRegistry:
             # Python 3.10+ uses select method, Python 3.9 uses dictionary access
             try:
                 # Python 3.10+
-                addon_eps = entry_points(group='memsys.addons')
+                addon_eps = entry_points(group="memsys.addons")
             except TypeError:
                 # Python 3.9 fallback
                 eps = entry_points()
-                if hasattr(eps, 'select'):
-                    addon_eps = eps.select(group='memsys.addons')
+                if hasattr(eps, "select"):
+                    addon_eps = eps.select(group="memsys.addons")
                 else:
                     # Direct dictionary access
                     addon_eps = (
-                        eps.get('memsys.addons', []) if isinstance(eps, dict) else []
+                        eps.get("memsys.addons", []) if isinstance(eps, dict) else []
                     )
 
             for ep in addon_eps:

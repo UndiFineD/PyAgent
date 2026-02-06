@@ -1,12 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\devops_scripts\data_fix\es_sync_episodic_memory_docs.py
 import traceback
 from datetime import timedelta
-from typing import Optional, AsyncIterator, Dict, Any
+from typing import Any, AsyncIterator, Dict, Optional
 
-from core.observation.logger import get_logger
-from core.di.utils import get_bean_by_type
 from elasticsearch.helpers import async_streaming_bulk
 
+from core.di.utils import get_bean_by_type
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -22,6 +22,7 @@ async def sync_episodic_memory_docs(
         limit: Maximum number of documents to process
         days: Only process documents created in the last N days; None means process all
     """
+    from common_utils.datetime_utils import get_now_with_timezone
     from infra_layer.adapters.out.persistence.repository.episodic_memory_raw_repository import (
         EpisodicMemoryRawRepository,
     )
@@ -31,8 +32,6 @@ async def sync_episodic_memory_docs(
     from infra_layer.adapters.out.search.elasticsearch.memory.episodic_memory import (
         EpisodicMemoryDoc,
     )
-
-    from common_utils.datetime_utils import get_now_with_timezone
 
     mongo_repo = get_bean_by_type(EpisodicMemoryRawRepository)
     index_name = EpisodicMemoryDoc.get_index_name()

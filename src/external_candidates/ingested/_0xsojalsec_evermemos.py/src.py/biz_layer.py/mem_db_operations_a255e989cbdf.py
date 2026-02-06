@@ -11,62 +11,67 @@ This module contains the following features:
 """
 
 import time
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
+
 from api_specs.dtos.memory_command import MemorizeRequest
 from api_specs.memory_types import MemCell, RawDataType
-from memory_layer.memory_extractor.profile_memory_extractor import ProfileMemory
+from common_utils.datetime_utils import (
+    from_iso_format,
+    from_timestamp,
+    get_now_with_timezone,
+    to_iso_format,
+    to_timezone,
+)
+from infra_layer.adapters.out.event.memcell_created import MemCellCreatedEvent
+from infra_layer.adapters.out.persistence.document.memory.core_memory import CoreMemory
+from infra_layer.adapters.out.persistence.document.memory.episodic_memory import (
+    EpisodicMemory,
+)
+from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
+    EventLogRecord,
+)
+from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
+    ForesightRecord,
+)
+from infra_layer.adapters.out.persistence.document.memory.memcell import (
+    DataTypeEnum,
+)
+from infra_layer.adapters.out.persistence.document.memory.memcell import (
+    MemCell as DocMemCell,
+)
+from infra_layer.adapters.out.persistence.document.memory.memcell import (
+    RawData as DocRawData,
+)
+from infra_layer.adapters.out.persistence.repository.conversation_status_raw_repository import (
+    ConversationStatusRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.core_memory_raw_repository import (
+    CoreMemoryRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.group_profile_raw_repository import (
+    GroupProfileRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.group_user_profile_memory_raw_repository import (
+    GroupUserProfileMemoryRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.memcell_raw_repository import (
+    MemCellRawRepository,
+)
 from memory_layer.memory_extractor.group_profile_memory_extractor import (
     GroupProfileMemory,
 )
 from memory_layer.memory_extractor.profile_memory_extractor import (
     GroupImportanceEvidence,
     ImportanceEvidence,
+    ProfileMemory,
+    ProjectInfo,
 )
+
 from core.di import get_bean_by_type
-from infra_layer.adapters.out.persistence.repository.conversation_status_raw_repository import (
-    ConversationStatusRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.group_user_profile_memory_raw_repository import (
-    GroupUserProfileMemoryRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.group_profile_raw_repository import (
-    GroupProfileRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.core_memory_raw_repository import (
-    CoreMemoryRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.memcell_raw_repository import (
-    MemCellRawRepository,
-)
-from infra_layer.adapters.out.persistence.document.memory.core_memory import CoreMemory
-from infra_layer.adapters.out.persistence.document.memory.episodic_memory import (
-    EpisodicMemory,
-)
-from infra_layer.adapters.out.persistence.document.memory.memcell import (
-    MemCell as DocMemCell,
-    RawData as DocRawData,
-    DataTypeEnum,
-)
-from memory_layer.memory_extractor.profile_memory_extractor import ProjectInfo
-from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta
-from common_utils.datetime_utils import (
-    get_now_with_timezone,
-    to_timezone,
-    to_iso_format,
-    from_iso_format,
-    from_timestamp,
-)
-from core.observation.logger import get_logger
 from core.events import ApplicationEventPublisher
-from infra_layer.adapters.out.event.memcell_created import MemCellCreatedEvent
-from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
-    ForesightRecord,
-)
-from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
-    EventLogRecord,
-)
-from api_specs.memory_types import RawDataType
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -181,7 +186,7 @@ def _convert_importance_evidence_to_document(
 
 
 def _convert_document_to_importance_evidence(
-    importance_evidence_list: List[Dict[str, Any]]
+    importance_evidence_list: List[Dict[str, Any]],
 ) -> List[ImportanceEvidence]:
     """
     Convert database document format to ImportanceEvidence.
@@ -218,7 +223,7 @@ def _convert_group_importance_evidence_to_document(
 
 
 def _convert_document_to_group_importance_evidence(
-    group_importance_evidence: Dict[str, Any]
+    group_importance_evidence: Dict[str, Any],
 ) -> GroupImportanceEvidence:
     """
     Convert database document format to GroupImportanceEvidence.
@@ -252,10 +257,10 @@ def _convert_episode_memory_to_doc(
     Returns:
         EpisodicMemory: Episodic memory object in database document format
     """
+    from agentic_layer.vectorize_service import get_vectorize_service
     from infra_layer.adapters.out.persistence.document.memory.episodic_memory import (
         EpisodicMemory,
     )
-    from agentic_layer.vectorize_service import get_vectorize_service
 
     # Parse timestamp to datetime object
     if current_time is None:
@@ -264,7 +269,7 @@ def _convert_episode_memory_to_doc(
     # Default to using current_time
     timestamp_dt = current_time
 
-    if hasattr(episode_memory, 'timestamp') and episode_memory.timestamp:
+    if hasattr(episode_memory, "timestamp") and episode_memory.timestamp:
         try:
             if isinstance(episode_memory.timestamp, datetime):
                 timestamp_dt = episode_memory.timestamp
@@ -279,7 +284,7 @@ def _convert_episode_memory_to_doc(
 
     return EpisodicMemory(
         user_id=episode_memory.user_id,  # Keep None or actual value, do not convert to empty string
-        user_name=episode_memory.user_name or '',
+        user_name=episode_memory.user_name or "",
         group_id=episode_memory.group_id,
         group_name=episode_memory.group_name,
         timestamp=timestamp_dt,
@@ -288,19 +293,19 @@ def _convert_episode_memory_to_doc(
         subject=episode_memory.subject or "",
         episode=(
             episode_memory.episode
-            if hasattr(episode_memory, 'episode')
+            if hasattr(episode_memory, "episode")
             else episode_memory.summary or ""
         ),
         type=str(episode_memory.type.value) if episode_memory.type else "",
-        keywords=getattr(episode_memory, 'keywords', None),
-        linked_entities=getattr(episode_memory, 'linked_entities', None),
-        memcell_event_id_list=getattr(episode_memory, 'memcell_event_id_list', None),
+        keywords=getattr(episode_memory, "keywords", None),
+        linked_entities=getattr(episode_memory, "linked_entities", None),
+        memcell_event_id_list=getattr(episode_memory, "memcell_event_id_list", None),
         vector_model=episode_memory.vector_model,
         vector=episode_memory.vector,
         extend={
             "memory_type": episode_memory.memory_type.value,
-            "ori_event_id": getattr(episode_memory, 'ori_event_id', None),
-            "tags": getattr(episode_memory, 'tags', None),
+            "ori_event_id": getattr(episode_memory, "ori_event_id", None),
+            "tags": getattr(episode_memory, "tags", None),
         },
     )
 
@@ -369,12 +374,12 @@ def _convert_event_log_to_docs(
             break
 
         vector = event_log.fact_embeddings[i]
-        if hasattr(vector, 'tolist'):
+        if hasattr(vector, "tolist"):
             vector = vector.tolist()
 
         doc = EventLogRecord(
             user_id=event_log.user_id,
-            user_name=event_log.user_name or '',
+            user_name=event_log.user_name or "",
             atomic_fact=fact,
             parent_episode_id=str(parent_doc.event_id),
             timestamp=parent_doc.timestamp or current_time,
@@ -382,7 +387,7 @@ def _convert_event_log_to_docs(
             group_name=event_log.group_name,
             participants=parent_doc.participants,
             vector=vector,
-            vector_model=getattr(event_log, 'vector_model', None),
+            vector_model=getattr(event_log, "vector_model", None),
             event_type=parent_doc.type or RawDataType.CONVERSATION.value,
             extend={},
         )
@@ -416,11 +421,11 @@ def _convert_group_profile_data_to_profile_format(
     # Fix: Initialize as empty list instead of None to avoid empty list being saved as None
     topics = []
     if (
-        hasattr(group_profile_memory, 'topics')
+        hasattr(group_profile_memory, "topics")
         and group_profile_memory.topics is not None
     ):
         for topic in group_profile_memory.topics:
-            if hasattr(topic, 'name'):  # Business layer TopicInfo object
+            if hasattr(topic, "name"):  # Business layer TopicInfo object
                 # Ensure last_active_at is datetime object
                 last_active_at = topic.last_active_at
                 if isinstance(last_active_at, str):
@@ -442,11 +447,11 @@ def _convert_group_profile_data_to_profile_format(
                     summary=topic.summary,
                     status=topic.status,
                     last_active_at=last_active_at,
-                    id=getattr(topic, 'id', None),
-                    update_type=getattr(topic, 'update_type', None),
-                    old_topic_id=getattr(topic, 'old_topic_id', None),
-                    evidences=getattr(topic, 'evidences', []),
-                    confidence=getattr(topic, 'confidence', None),
+                    id=getattr(topic, "id", None),
+                    update_type=getattr(topic, "update_type", None),
+                    old_topic_id=getattr(topic, "old_topic_id", None),
+                    evidences=getattr(topic, "evidences", []),
+                    confidence=getattr(topic, "confidence", None),
                 )
                 topics.append(doc_topic)
             elif isinstance(topic, dict):
@@ -461,7 +466,7 @@ def _convert_group_profile_data_to_profile_format(
     # Fix: Initialize as empty dict instead of None to avoid empty dict being saved as None
     roles = {}
     if (
-        hasattr(group_profile_memory, 'roles')
+        hasattr(group_profile_memory, "roles")
         and group_profile_memory.roles is not None
     ):
         for role_name, assignments in group_profile_memory.roles.items():
@@ -470,10 +475,10 @@ def _convert_group_profile_data_to_profile_format(
                 if isinstance(assignment, dict):
                     # Create RoleAssignment object from dict
                     role_assignment = RoleAssignment(
-                        user_id=assignment.get('user_id', ''),
-                        user_name=assignment.get('user_name', ''),
-                        confidence=assignment.get('confidence'),
-                        evidences=assignment.get('evidences', []),
+                        user_id=assignment.get("user_id", ""),
+                        user_name=assignment.get("user_name", ""),
+                        confidence=assignment.get("confidence"),
+                        evidences=assignment.get("evidences", []),
                     )
                     role_assignments.append(role_assignment)
                 else:
@@ -485,7 +490,7 @@ def _convert_group_profile_data_to_profile_format(
     # Handle timestamp: ensure it's integer milliseconds timestamp
     # TODO: Refactoring: timestamp should remain as datetime instead of converting to int
     timestamp = None
-    if hasattr(group_profile_memory, 'timestamp') and group_profile_memory.timestamp:
+    if hasattr(group_profile_memory, "timestamp") and group_profile_memory.timestamp:
         if isinstance(group_profile_memory.timestamp, datetime):
             timestamp = int(group_profile_memory.timestamp.timestamp() * 1000)
         elif isinstance(group_profile_memory.timestamp, (int, float)):
@@ -507,12 +512,12 @@ def _convert_group_profile_data_to_profile_format(
         timestamp = int(get_now_with_timezone().timestamp() * 1000)
 
     # Extract other fields
-    group_name = getattr(group_profile_memory, 'group_name', None)
-    subject = getattr(group_profile_memory, 'theme', None) or getattr(
-        group_profile_memory, 'subject', None
+    group_name = getattr(group_profile_memory, "group_name", None)
+    subject = getattr(group_profile_memory, "theme", None) or getattr(
+        group_profile_memory, "subject", None
     )
-    summary = getattr(group_profile_memory, 'summary', None)
-    extend = getattr(group_profile_memory, 'extend', None)
+    summary = getattr(group_profile_memory, "summary", None)
+    extend = getattr(group_profile_memory, "extend", None)
 
     return {
         "group_name": group_name,
@@ -574,7 +579,7 @@ def _convert_document_to_project_info(project_info: Dict[str, str]) -> ProjectIn
                     ]
             except (ValueError, SyntaxError):
                 # Parsing failed, split by comma
-                items = [item.strip() for item in value.split(',') if item.strip()]
+                items = [item.strip() for item in value.split(",") if item.strip()]
                 return [{"value": item, "evidences": []} for item in items]
 
         return None
@@ -593,7 +598,7 @@ def _convert_document_to_project_info(project_info: Dict[str, str]) -> ProjectIn
 
 
 def _convert_projects_participated_list(
-    projects_participated: Optional[List[Dict[str, str]]]
+    projects_participated: Optional[List[Dict[str, str]]],
 ) -> List[ProjectInfo]:
     """
     Convert projects_participated (List[Dict[str, str]]) from database to List[ProjectInfo].
@@ -629,68 +634,68 @@ def _convert_profile_data_to_core_format(profile_memory: ProfileMemory) -> CoreM
 
     # Convert hard_skills: use profile_memory.hard_skills directly
     hard_skills = None
-    if hasattr(profile_memory, 'hard_skills') and profile_memory.hard_skills:
+    if hasattr(profile_memory, "hard_skills") and profile_memory.hard_skills:
         hard_skills = profile_memory.hard_skills
 
     # Convert soft_skills: use profile_memory.soft_skills directly
     soft_skills = None
-    if hasattr(profile_memory, 'soft_skills') and profile_memory.soft_skills:
+    if hasattr(profile_memory, "soft_skills") and profile_memory.soft_skills:
         soft_skills = profile_memory.soft_skills
 
-    output_reasoning = getattr(profile_memory, 'output_reasoning', None)
+    output_reasoning = getattr(profile_memory, "output_reasoning", None)
 
     motivation_system = None
     if (
-        hasattr(profile_memory, 'motivation_system')
+        hasattr(profile_memory, "motivation_system")
         and profile_memory.motivation_system
     ):
         motivation_system = profile_memory.motivation_system
 
     fear_system = None
-    if hasattr(profile_memory, 'fear_system') and profile_memory.fear_system:
+    if hasattr(profile_memory, "fear_system") and profile_memory.fear_system:
         fear_system = profile_memory.fear_system
 
     value_system = None
-    if hasattr(profile_memory, 'value_system') and profile_memory.value_system:
+    if hasattr(profile_memory, "value_system") and profile_memory.value_system:
         value_system = profile_memory.value_system
 
     humor_use = None
-    if hasattr(profile_memory, 'humor_use') and profile_memory.humor_use:
+    if hasattr(profile_memory, "humor_use") and profile_memory.humor_use:
         humor_use = profile_memory.humor_use
 
     colloquialism = None
-    if hasattr(profile_memory, 'colloquialism') and profile_memory.colloquialism:
+    if hasattr(profile_memory, "colloquialism") and profile_memory.colloquialism:
         colloquialism = profile_memory.colloquialism
 
     # Convert way_of_decision_making: use raw data directly (already contains evidences)
     way_of_decision_making = None
     if (
-        hasattr(profile_memory, 'way_of_decision_making')
+        hasattr(profile_memory, "way_of_decision_making")
         and profile_memory.way_of_decision_making
     ):
         way_of_decision_making = profile_memory.way_of_decision_making
 
     # Convert personality: use raw data directly (already contains evidences)
     personality = None
-    if hasattr(profile_memory, 'personality') and profile_memory.personality:
+    if hasattr(profile_memory, "personality") and profile_memory.personality:
         personality = profile_memory.personality
 
     # Convert projects_participated: List[ProjectInfo] -> List[Dict[str, Any]]
     # Note: ProjectInfo fields now contain evidence-embedded data, use raw format directly
     projects_participated = None
     if (
-        hasattr(profile_memory, 'projects_participated')
+        hasattr(profile_memory, "projects_participated")
         and profile_memory.projects_participated
     ):
         if isinstance(profile_memory.projects_participated, list):
             projects_participated = []
             for project in profile_memory.projects_participated:
-                if hasattr(project, 'project_id'):  # ProjectInfo object
+                if hasattr(project, "project_id"):  # ProjectInfo object
                     # Use raw data directly, preserve evidence-embedded format
-                    user_objective = getattr(project, 'user_objective', None)
-                    contributions = getattr(project, 'contributions', None)
-                    subtasks = getattr(project, 'subtasks', None)
-                    user_concerns = getattr(project, 'user_concerns', None)
+                    user_objective = getattr(project, "user_objective", None)
+                    contributions = getattr(project, "contributions", None)
+                    subtasks = getattr(project, "subtasks", None)
+                    user_concerns = getattr(project, "user_concerns", None)
 
                     project_dict = {
                         "project_id": (
@@ -712,14 +717,14 @@ def _convert_profile_data_to_core_format(profile_memory: ProfileMemory) -> CoreM
                     projects_participated.append(project)  # Already in correct format
 
     # Extract additional fields
-    user_goal = getattr(profile_memory, 'user_goal', None)
-    work_responsibility = getattr(profile_memory, 'work_responsibility', None)
-    working_habit_preference = getattr(profile_memory, 'working_habit_preference', None)
-    interests = getattr(profile_memory, 'interests', None)
-    tendency = getattr(profile_memory, 'tendency', None)
-    user_name = getattr(profile_memory, 'user_name', None)
+    user_goal = getattr(profile_memory, "user_goal", None)
+    work_responsibility = getattr(profile_memory, "work_responsibility", None)
+    working_habit_preference = getattr(profile_memory, "working_habit_preference", None)
+    interests = getattr(profile_memory, "interests", None)
+    tendency = getattr(profile_memory, "tendency", None)
+    user_name = getattr(profile_memory, "user_name", None)
     group_importance_evidence = getattr(
-        profile_memory, 'group_importance_evidence', None
+        profile_memory, "group_importance_evidence", None
     )
 
     return {
@@ -779,38 +784,38 @@ def _convert_memcell_to_document(
                 # Helper function: convert various types to string
                 def to_string(value):
                     if value is None:
-                        return ''
+                        return ""
                     elif isinstance(value, str):
                         return value
                     elif isinstance(value, datetime):
                         return value.isoformat()
                     elif isinstance(value, list):
-                        return ','.join(str(item) for item in value) if value else ''
+                        return ",".join(str(item) for item in value) if value else ""
                     else:
                         return str(value)
 
                 message = {
-                    "content": raw_data_dict.get('content')
-                    or '',  # Handle None content explicitly
+                    "content": raw_data_dict.get("content")
+                    or "",  # Handle None content explicitly
                     "extend": {
-                        "speaker_id": to_string(raw_data_dict.get('speaker_id', '')),
+                        "speaker_id": to_string(raw_data_dict.get("speaker_id", "")),
                         "speaker_name": to_string(
-                            raw_data_dict.get('speaker_name', '')
+                            raw_data_dict.get("speaker_name", "")
                         ),
                         "timestamp": to_string(
                             _convert_timestamp_to_time(
-                                raw_data_dict.get('timestamp', '')
+                                raw_data_dict.get("timestamp", "")
                             )
                         ),
-                        "message_id": to_string(raw_data_dict.get('data_id', '')),
-                        "receiverId": to_string(raw_data_dict.get('receiverId', '')),
-                        "roomId": to_string(raw_data_dict.get('roomId', '')),
-                        "userIdList": to_string(raw_data_dict.get('userIdList', [])),
-                        "createBy": to_string(raw_data_dict.get('createBy', '')),
-                        "updateTime": to_string(raw_data_dict.get('updateTime', '')),
-                        "msgType": to_string(raw_data_dict.get('msgType', '')),
-                        "referList": to_string(raw_data_dict.get('referList', [])),
-                        "orgId": to_string(raw_data_dict.get('orgId', '')),
+                        "message_id": to_string(raw_data_dict.get("data_id", "")),
+                        "receiverId": to_string(raw_data_dict.get("receiverId", "")),
+                        "roomId": to_string(raw_data_dict.get("roomId", "")),
+                        "userIdList": to_string(raw_data_dict.get("userIdList", [])),
+                        "createBy": to_string(raw_data_dict.get("createBy", "")),
+                        "updateTime": to_string(raw_data_dict.get("updateTime", "")),
+                        "msgType": to_string(raw_data_dict.get("msgType", "")),
+                        "referList": to_string(raw_data_dict.get("referList", [])),
+                        "orgId": to_string(raw_data_dict.get("orgId", "")),
                     },
                 }
 
@@ -862,11 +867,11 @@ def _convert_memcell_to_document(
 
         # Prepare foresight_memories (convert to dict list)
         foresight_memories_list = None
-        if hasattr(memcell, 'foresight_memories') and memcell.foresight_memories:
+        if hasattr(memcell, "foresight_memories") and memcell.foresight_memories:
             foresight_memories_list = [
                 (
                     sm.to_dict()
-                    if hasattr(sm, 'to_dict')
+                    if hasattr(sm, "to_dict")
                     else (sm if isinstance(sm, dict) else None)
                 )
                 for sm in memcell.foresight_memories
@@ -877,20 +882,20 @@ def _convert_memcell_to_document(
 
         # Prepare event_log (convert to dict)
         event_log_dict = None
-        if hasattr(memcell, 'event_log') and memcell.event_log:
-            if hasattr(memcell.event_log, 'to_dict'):
+        if hasattr(memcell, "event_log") and memcell.event_log:
+            if hasattr(memcell.event_log, "to_dict"):
                 event_log_dict = memcell.event_log.to_dict()
             elif isinstance(memcell.event_log, dict):
                 event_log_dict = memcell.event_log
 
         # Prepare extend field (contains embedding and other extension info)
         extend_dict = {}
-        if hasattr(memcell, 'extend') and memcell.extend:
+        if hasattr(memcell, "extend") and memcell.extend:
             extend_dict = memcell.extend if isinstance(memcell.extend, dict) else {}
 
         # Add embedding to extend (if exists)
-        if hasattr(memcell, 'embedding') and memcell.embedding:
-            extend_dict['embedding'] = memcell.embedding
+        if hasattr(memcell, "embedding") and memcell.embedding:
+            extend_dict["embedding"] = memcell.embedding
 
         # Create document model - pass timezone-aware datetime object directly instead of string
         # This avoids infinite recursion triggered by base class datetime validator
@@ -1069,7 +1074,7 @@ async def _save_profile_memory_to_core(
         logger.debug(f"Save CoreMemory: {profile_memory.user_id}")
 
         # Prepare save data (does not include user_id, as upsert_by_user_id handles it automatically)
-        save_data = {"extend": getattr(profile_memory, 'extend', None)}
+        save_data = {"extend": getattr(profile_memory, "extend", None)}
         # Add non-null fields
         for k, v in converted_data.items():
             if v is not None:
@@ -1120,7 +1125,7 @@ async def _save_profile_memory_to_group_user_profile_memory(
         logger.debug(f"Save CoreMemory: {profile_memory.user_id}")
 
         # Prepare save data (does not include user_id, as upsert_by_user_id handles it automatically)
-        save_data = {"extend": getattr(profile_memory, 'extend', None)}
+        save_data = {"extend": getattr(profile_memory, "extend", None)}
         # Add non-null fields
         for k, v in converted_data.items():
             if v is not None:
@@ -1284,31 +1289,31 @@ async def _update_status_after_memcell_extraction(
         last_history_time = None
         if request.history_raw_data_list and request.history_raw_data_list[-1]:
             last_history_data = request.history_raw_data_list[-1]
-            if hasattr(last_history_data, 'content') and isinstance(
+            if hasattr(last_history_data, "content") and isinstance(
                 last_history_data.content, dict
             ):
-                last_history_time = last_history_data.content.get('timestamp')
-            elif hasattr(last_history_data, 'timestamp'):
+                last_history_time = last_history_data.content.get("timestamp")
+            elif hasattr(last_history_data, "timestamp"):
                 last_history_time = last_history_data.timestamp
 
         first_new_time = None
         if request.new_raw_data_list and request.new_raw_data_list[0]:
             first_new_data = request.new_raw_data_list[0]
-            if hasattr(first_new_data, 'content') and isinstance(
+            if hasattr(first_new_data, "content") and isinstance(
                 first_new_data.content, dict
             ):
-                first_new_time = first_new_data.content.get('timestamp')
-            elif hasattr(first_new_data, 'timestamp'):
+                first_new_time = first_new_data.content.get("timestamp")
+            elif hasattr(first_new_data, "timestamp"):
                 first_new_time = first_new_data.timestamp
 
         last_new_time = None
         if request.new_raw_data_list and request.new_raw_data_list[-1]:
             last_new_data = request.new_raw_data_list[-1]
-            if hasattr(last_new_data, 'content') and isinstance(
+            if hasattr(last_new_data, "content") and isinstance(
                 last_new_data.content, dict
             ):
-                last_new_time = last_new_data.content.get('timestamp')
-            elif hasattr(last_new_data, 'timestamp'):
+                last_new_time = last_new_data.content.get("timestamp")
+            elif hasattr(last_new_data, "timestamp"):
                 last_new_time = last_new_data.timestamp
 
         if last_new_time:
@@ -1350,4 +1355,3 @@ async def _update_status_after_memcell_extraction(
     except Exception as e:
         logger.error(f"Status update after MemCell extraction failed: {e}")
         return False
-

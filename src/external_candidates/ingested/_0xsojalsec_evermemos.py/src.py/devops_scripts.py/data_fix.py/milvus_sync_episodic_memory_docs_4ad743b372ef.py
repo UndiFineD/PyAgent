@@ -15,11 +15,10 @@ Technical implementation:
 
 import traceback
 from datetime import timedelta
-from typing import Optional, List, Dict, Any
+from typing import Any, Dict, List, Optional
 
-from core.observation.logger import get_logger
 from core.di.utils import get_bean_by_type
-
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -41,6 +40,7 @@ async def sync_episodic_memory_docs(
         limit: Maximum number of documents to process, None means process all
         days: Only process documents created in the last N days, None means process all
     """
+    from common_utils.datetime_utils import get_now_with_timezone
     from infra_layer.adapters.out.persistence.repository.episodic_memory_raw_repository import (
         EpisodicMemoryRawRepository,
     )
@@ -50,7 +50,6 @@ async def sync_episodic_memory_docs(
     from infra_layer.adapters.out.search.milvus.memory.episodic_memory_collection import (
         EpisodicMemoryCollection,
     )
-    from common_utils.datetime_utils import get_now_with_timezone
 
     # Get MongoDB Repository
     mongo_repo = get_bean_by_type(EpisodicMemoryRawRepository)
@@ -145,7 +144,7 @@ async def sync_episodic_memory_docs(
                 except Exception as e:  # noqa: BLE001
                     logger.error(
                         "Failed to convert document: id=%s, error=%s",
-                        getattr(mongo_doc, 'id', 'unknown'),
+                        getattr(mongo_doc, "id", "unknown"),
                         e,
                     )
                     batch_errors += 1

@@ -1,7 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\terrain\dataset.py
-from inspect_ai.dataset import Sample, MemoryDataset
-from typing import List, Tuple
 import math
+from typing import List, Tuple
+
+from inspect_ai.dataset import MemoryDataset, Sample
 
 
 def generate_spiral_positions(

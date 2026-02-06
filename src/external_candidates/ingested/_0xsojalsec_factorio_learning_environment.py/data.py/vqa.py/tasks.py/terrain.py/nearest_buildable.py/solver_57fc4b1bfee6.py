@@ -1,9 +1,10 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\terrain\nearest_buildable\solver.py
 import random
 from typing import List
-from inspect_ai.solver import Solver, solver, TaskState, Generate
-from fle.env import Position, BuildingBox
+
+from fle.env import BuildingBox, Position
 from fle.env.game_types import Prototype
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 # Common prototypes to test for building placement
 BUILDABLE_PROTOTYPES = [

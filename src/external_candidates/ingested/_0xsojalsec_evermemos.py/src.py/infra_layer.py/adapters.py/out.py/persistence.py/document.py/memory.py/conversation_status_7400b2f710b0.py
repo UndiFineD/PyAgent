@@ -1,11 +1,13 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\infra_layer\adapters\out\persistence\document\memory\conversation_status.py
 from datetime import datetime
 from typing import Optional
-from core.oxm.mongo.document_base import DocumentBase
-from pydantic import Field, ConfigDict
-from pymongo import IndexModel, ASCENDING, DESCENDING
+
 from beanie import PydanticObjectId
+from pydantic import ConfigDict, Field
+from pymongo import ASCENDING, DESCENDING, IndexModel
+
 from core.oxm.mongo.audit_base import AuditBase
+from core.oxm.mongo.document_base import DocumentBase
 
 
 class ConversationStatus(DocumentBase, AuditBase):

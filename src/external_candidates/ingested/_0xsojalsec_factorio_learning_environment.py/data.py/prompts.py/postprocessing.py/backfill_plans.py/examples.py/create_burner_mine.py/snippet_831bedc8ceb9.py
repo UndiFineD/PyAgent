@@ -152,7 +152,7 @@ move_to(chest.position)
 chest_inventory = inspect_inventory(chest)
 copper_ore_count = chest_inventory.get(Prototype.CopperOre, 0)
 print(f"Copper ore in the wooden chest: {copper_ore_count}")
-assert copper_ore_count > 0, (
-    "No copper ore found in the wooden chest. Setup verification failed."
-)
+assert (
+    copper_ore_count > 0
+), "No copper ore found in the wooden chest. Setup verification failed."
 print("\nSetup verification complete.")

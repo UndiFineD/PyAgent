@@ -1,7 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\agentkit_prompting\setup.py
-import setuptools
-import pkg_resources
 import pathlib
+
+import pkg_resources
+import setuptools
 
 PKG_NAME = "agentkit-llm"
 VERSION = "0.1.8.1"
@@ -15,20 +16,20 @@ setuptools.setup(
     name=PKG_NAME,
     version=VERSION,
     author="AgentKit Team",
-    description='A LLM prompting framework for LLM agents',
+    description="A LLM prompting framework for LLM agents",
     url="https://github.com/rhyswynn/AgentKit",
-    long_description=pathlib.Path('README.md').read_text(),
-    long_description_content_type='text/markdown',
-    packages=setuptools.find_namespace_packages('src'),
-    package_dir={'': 'src'},
-    entry_points={'console_scripts': ['agentkit=agentkit.run_gui:main']},
-    install_requires = ['colorama', 'numpy','ruamel.yaml'],
+    long_description=pathlib.Path("README.md").read_text(),
+    long_description_content_type="text/markdown",
+    packages=setuptools.find_namespace_packages("src"),
+    package_dir={"": "src"},
+    entry_points={"console_scripts": ["agentkit=agentkit.run_gui:main"]},
+    install_requires=["colorama", "numpy", "ruamel.yaml"],
     extras_require=EXTRAS,
     include_package_data=True,
     license="CC-BY-4.0-Attribution",
     classifiers=[
-        'Intended Audience :: Science/Research',
-        'Programming Language :: Python :: 3',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        "Intended Audience :: Science/Research",
+        "Programming Language :: Python :: 3",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
 )

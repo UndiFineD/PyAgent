@@ -1,6 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\blueprints\action_prediction\solver.py
 import random
-from inspect_ai.solver import Solver, solver, TaskState, Generate
+
+from inspect_ai.solver import Generate, Solver, TaskState, solver
+
 from ....templates import Templates
 
 

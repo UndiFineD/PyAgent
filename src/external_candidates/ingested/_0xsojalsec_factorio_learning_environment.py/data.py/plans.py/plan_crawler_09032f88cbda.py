@@ -1,23 +1,22 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\plans\plan_crawler.py
-import json
 import http.client
+import json
+import logging
 import math
 import os
 import random
+import re
 import time
+import urllib.parse
 from multiprocessing import Pool
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 import requests
-import re
 from bs4 import BeautifulSoup
-from pathlib import Path
-
+from data.plans.prompts import classifier_prompt, extract_steps
 from dotenv import load_dotenv
 from openai import OpenAI
-from typing import Dict, List, Optional, Tuple
-import logging
-import urllib.parse
-from data.plans.prompts import classifier_prompt, extract_steps
 
 load_dotenv()
 

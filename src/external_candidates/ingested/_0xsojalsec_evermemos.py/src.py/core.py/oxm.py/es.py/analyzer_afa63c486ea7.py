@@ -1,5 +1,5 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\oxm\es\analyzer.py
-from elasticsearch.dsl import tokenizer, normalizer, token_filter, analyzer
+from elasticsearch.dsl import analyzer, normalizer, token_filter, tokenizer
 
 # ================================
 # Token Filters definition

@@ -1,48 +1,47 @@
 # Extracted from: C:\DEV\PyAgent\.external\burp-deepseek\burpseek.py
 # -*- coding: utf-8 -*-
 
+import json
+import threading  # Para crear el hilo en segundo plano
+
+import urllib2
 from burp import (
     IBurpExtender,
     IContextMenuFactory,
     IContextMenuInvocation,
-    IHttpRequestResponse,
     IExtensionHelpers,
+    IHttpRequestResponse,
+    IScanIssue,
     ITab,
-    IScanIssue
 )
-from javax.swing import (
-    JMenuItem,
-    JOptionPane,
-    JPanel,
-    JLabel,
-    JTextField,
-    JButton
-)
-from java.awt import GridLayout, BorderLayout
-import json
-import urllib2
-import threading  # Para crear el hilo en segundo plano
+from java.awt import BorderLayout, GridLayout
+from javax.swing import JButton, JLabel, JMenuItem, JOptionPane, JPanel, JTextField
 
-def to_unicode(obj, encoding='utf-8'):
+
+def to_unicode(obj, encoding="utf-8"):
     """
     Convierte un string a 'unicode' en Jython/Python 2.
     Evita errores de codificación ASCII cuando hay caracteres especiales.
     """
     if obj is None:
-        return u''
+        return ""
     if isinstance(obj, unicode):
         return obj
     try:
         return obj.decode(encoding)
     except:
-        return obj.decode(encoding, 'replace')
+        return obj.decode(encoding, "replace")
+
 
 class CustomScanIssue(IScanIssue):
     """
     Clase que implementa IScanIssue para reportar hallazgos personalizados
     en Burp. Evita depender de createScanIssue(...) que no existe en Community.
     """
-    def __init__(self, http_service, url, http_messages, issue_name, issue_detail, severity):
+
+    def __init__(
+        self, http_service, url, http_messages, issue_name, issue_detail, severity
+    ):
         self._http_service = http_service
         self._url = url
         self._http_messages = http_messages  # lista/array de IHttpRequestResponse
@@ -123,20 +122,22 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
             IContextMenuInvocation.CONTEXT_MESSAGE_EDITOR_REQUEST,
             IContextMenuInvocation.CONTEXT_MESSAGE_EDITOR_RESPONSE,
             IContextMenuInvocation.CONTEXT_MESSAGE_VIEWER_REQUEST,
-            IContextMenuInvocation.CONTEXT_MESSAGE_VIEWER_RESPONSE
+            IContextMenuInvocation.CONTEXT_MESSAGE_VIEWER_RESPONSE,
         ]:
             menu_list.append(
                 JMenuItem(
                     "Send to DeepSeek",
-                    actionPerformed=lambda event, ctx=context_menu:
-                        self.send_to_deepseek(ctx, self.default_prompt)
+                    actionPerformed=lambda event, ctx=context_menu: self.send_to_deepseek(
+                        ctx, self.default_prompt
+                    ),
                 )
             )
             menu_list.append(
                 JMenuItem(
                     "Send to DeepSeek (custom prompt)",
-                    actionPerformed=lambda event, ctx=context_menu:
-                        self.send_to_deepseek_custom_prompt(ctx)
+                    actionPerformed=lambda event, ctx=context_menu: self.send_to_deepseek_custom_prompt(
+                        ctx
+                    ),
                 )
             )
         return menu_list if menu_list else None
@@ -166,9 +167,11 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
         Lanza la lógica de conexión a DeepSeek en un hilo aparte para no
         bloquear la interfaz de Burp al hacer clic derecho.
         """
+
         def worker():
             # Aquí dentro hacemos la llamada y creamos el Issue
             self._do_deepseek_request(message_info, invocation_id, prompt)
+
         t = threading.Thread(target=worker)
         t.start()
 
@@ -184,7 +187,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
         # Decidimos si usar request o response según el contexto
         if invocation_id in [
             IContextMenuInvocation.CONTEXT_MESSAGE_EDITOR_REQUEST,
-            IContextMenuInvocation.CONTEXT_MESSAGE_VIEWER_REQUEST
+            IContextMenuInvocation.CONTEXT_MESSAGE_VIEWER_REQUEST,
         ]:
             raw_data = message_info.getRequest()
         else:
@@ -205,15 +208,15 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
         url = "https://api.deepseek.com/chat/completions"
         headers = {
             "Authorization": "Bearer {}".format(self.api_key),
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
         payload = {
             "model": "deepseek-chat",
             "messages": [
                 {"role": "system", "content": system_text},
-                {"role": "user",   "content": u"{}\n\n{}".format(prompt, data_text)}
+                {"role": "user", "content": "{}\n\n{}".format(prompt, data_text)},
             ],
-            "stream": False
+            "stream": False,
         }
 
         try:
@@ -250,10 +253,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
         self._callbacks.applyMarkers(message_info, None, None)
 
         issue_name = "DeepSeek Analysis"
-        issue_detail = (
-            "<b>DeepSeek Analysis</b><br><br>"
-            "{}".format(analysis_html)
-        )
+        issue_detail = "<b>DeepSeek Analysis</b><br><br>" "{}".format(analysis_html)
 
         new_issue = CustomScanIssue(
             http_service=http_service,
@@ -261,7 +261,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
             http_messages=[message_info],
             issue_name=issue_name,
             issue_detail=issue_detail,
-            severity="Information"  # Aquí en vez de "High"
+            severity="Information",  # Aquí en vez de "High"
         )
         self._callbacks.addScanIssue(new_issue)
 
@@ -278,7 +278,9 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
         prompt_field = JTextField(self.default_prompt, 20)
         panel.add(prompt_field)
 
-        result = JOptionPane.showConfirmDialog(None, panel, "Configure DeepSeek", JOptionPane.OK_CANCEL_OPTION)
+        result = JOptionPane.showConfirmDialog(
+            None, panel, "Configure DeepSeek", JOptionPane.OK_CANCEL_OPTION
+        )
         if result == JOptionPane.OK_OPTION:
             self.api_key = api_key_field.getText()
             self.default_prompt = prompt_field.getText()
@@ -292,9 +294,12 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, ITab):
 
     def getUiComponent(self):
         panel = JPanel(BorderLayout())
-        config_button = JButton("Configure DeepSeek", actionPerformed=lambda x: self.show_config_dialog())
+        config_button = JButton(
+            "Configure DeepSeek", actionPerformed=lambda x: self.show_config_dialog()
+        )
         panel.add(config_button, BorderLayout.NORTH)
         return panel
+
 
 # Hook de entrada para Burp
 if __name__ in ["__main__", "burp"]:

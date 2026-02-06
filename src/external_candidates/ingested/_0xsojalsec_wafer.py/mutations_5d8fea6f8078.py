@@ -1,5 +1,5 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-wafer\mutations.py
-from utils import choice, rndunicode, choice_percent
+from utils import choice, choice_percent, rndunicode
 
 
 class Mutations:
@@ -61,7 +61,7 @@ class Mutations:
     def mutate_value_newline(attr):
         # find a random position in the value
         # and insert a newline
-        if (attr.value is None):
+        if attr.value is None:
             print("attr.value is None")
             print(attr)
             exit(0)

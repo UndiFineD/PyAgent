@@ -26,7 +26,10 @@ from memory_layer.memory_extractor.profile_memory.project_helpers import (
     merge_projects_participated,
     project_to_dict,
 )
-from memory_layer.memory_extractor.profile_memory.skill_helpers import merge_skill_lists, normalize_skills_with_evidence
+from memory_layer.memory_extractor.profile_memory.skill_helpers import (
+    merge_skill_lists,
+    normalize_skills_with_evidence,
+)
 from memory_layer.memory_extractor.profile_memory.value_helpers import (
     extract_values_with_evidence,
     merge_value_with_evidences_lists,

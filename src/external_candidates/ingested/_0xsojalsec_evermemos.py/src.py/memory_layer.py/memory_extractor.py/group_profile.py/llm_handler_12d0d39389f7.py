@@ -134,6 +134,7 @@ class GroupProfileLLMHandler:
         Only passes topics-related info to LLM, excluding evidences (but keeping confidence).
         """
         from memory_layer.prompts import get_prompt_by
+
         CONTENT_ANALYSIS_PROMPT = get_prompt_by("CONTENT_ANALYSIS_PROMPT")
 
         # Build existing_profile for LLM, including only required fields, excluding evidences
@@ -141,15 +142,15 @@ class GroupProfileLLMHandler:
             "topics": (
                 [
                     {
-                        "id": t.id if hasattr(t, 'id') else t.get("id"),
-                        "name": t.name if hasattr(t, 'name') else t.get("name"),
+                        "id": t.id if hasattr(t, "id") else t.get("id"),
+                        "name": t.name if hasattr(t, "name") else t.get("name"),
                         "summary": (
-                            t.summary if hasattr(t, 'summary') else t.get("summary")
+                            t.summary if hasattr(t, "summary") else t.get("summary")
                         ),
-                        "status": t.status if hasattr(t, 'status') else t.get("status"),
+                        "status": t.status if hasattr(t, "status") else t.get("status"),
                         "confidence": (
                             t.confidence
-                            if hasattr(t, 'confidence')
+                            if hasattr(t, "confidence")
                             else t.get("confidence", "strong")
                         ),
                         # Exclude evidences field
@@ -189,6 +190,7 @@ class GroupProfileLLMHandler:
         Only passes roles info to LLM, excluding evidences (but keeping confidence).
         """
         from memory_layer.prompts import get_prompt_by
+
         BEHAVIOR_ANALYSIS_PROMPT = get_prompt_by("BEHAVIOR_ANALYSIS_PROMPT")
 
         # Build existing_profile for LLM, including only roles, excluding evidences
@@ -216,8 +218,8 @@ class GroupProfileLLMHandler:
         # Build speaker info (requires help from data_processor, extract from conversation_text here)
         # Extract current speakers from conversation
         current_speakers = set()
-        for line in conversation_text.split('\n'):
-            match = re.search(r'\(user_id:([^)]+)\):', line)
+        for line in conversation_text.split("\n"):
+            match = re.search(r"\(user_id:([^)]+)\):", line)
             if match:
                 speaker_id = match.group(1).strip()
                 current_speakers.add(speaker_id)
@@ -255,10 +257,10 @@ class GroupProfileLLMHandler:
         # Try to extract speaker names from memcells
         speaker_names = {}
         for memcell in memcell_list:
-            if hasattr(memcell, 'original_data') and memcell.original_data:
+            if hasattr(memcell, "original_data") and memcell.original_data:
                 for data in memcell.original_data:
-                    speaker_id = data.get('speaker_id', '')
-                    speaker_name = data.get('speaker_name', '')
+                    speaker_id = data.get("speaker_id", "")
+                    speaker_name = data.get("speaker_name", "")
                     if speaker_id and speaker_name:
                         speaker_names[speaker_id] = speaker_name
 
@@ -270,7 +272,7 @@ class GroupProfileLLMHandler:
             if has_org_info and speaker_id in org_mapping:
                 org_data = org_mapping[speaker_id]
                 org_info = f" | Role: {org_data['role']} | Team: {org_data['team']} | Manager: {org_data['direct_manager']}"
-                if org_data['skip_level_manager'] != "Unknown Skip Manager":
+                if org_data["skip_level_manager"] != "Unknown Skip Manager":
                     org_info += f" | Skip Manager: {org_data['skip_level_manager']}"
 
             speaker_info += f"- {speaker_id}: {speaker_name}{org_info}\n"
@@ -322,7 +324,7 @@ class GroupProfileLLMHandler:
         try:
             # Extract JSON from response
             json_match = re.search(
-                r'```(?:json)?\s*(\{.*?\})\s*```', response, re.DOTALL
+                r"```(?:json)?\s*(\{.*?\})\s*```", response, re.DOTALL
             )
             if json_match:
                 data = json.loads(json_match.group(1))
@@ -352,7 +354,7 @@ class GroupProfileLLMHandler:
         try:
             # Extract JSON from response
             json_match = re.search(
-                r'```(?:json)?\s*(\{.*?\})\s*```', response, re.DOTALL
+                r"```(?:json)?\s*(\{.*?\})\s*```", response, re.DOTALL
             )
             if json_match:
                 data = json.loads(json_match.group(1))

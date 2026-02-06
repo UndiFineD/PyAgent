@@ -1,25 +1,26 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\asynctasks\task_manager.py
-import os
-import uuid
 import importlib
+import os
 import pkgutil
-from pathlib import Path
-from typing import Any, Dict, Optional, List, Callable, Union
+import uuid
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Union
 
-from arq import create_pool, ArqRedis
+from arq import ArqRedis, create_pool
 from arq.connections import RedisSettings
 from arq.jobs import Job
-from arq.worker import Worker, Function, func as arq_func
+from arq.worker import Function, Worker
+from arq.worker import func as arq_func
 
 from core.asynctasks.task_scan_registry import TaskScanDirectoriesRegistry
-from core.context.context_manager import ContextManager
+from core.authorize.enums import Role
 from core.context.context import get_current_user_info
+from core.context.context_manager import ContextManager
 from core.di.decorators import component
 from core.observation.logger import get_logger
-from core.authorize.enums import Role
 
 logger = get_logger(__name__)
 
@@ -193,7 +194,7 @@ class TaskManager:
                 package = importlib.import_module(package_name)
 
                 # Scan all modules in the package
-                if hasattr(package, '__path__'):
+                if hasattr(package, "__path__"):
                     # This is a package, recursively scan all submodules
                     for _, module_name, _ in pkgutil.walk_packages(
                         package.__path__, prefix=f"{package_name}."
@@ -226,7 +227,7 @@ class TaskManager:
             # Get all attributes in the module
             for attr_name in dir(module):
                 # Skip private and special attributes
-                if attr_name.startswith('_'):
+                if attr_name.startswith("_"):
                     continue
 
                 try:

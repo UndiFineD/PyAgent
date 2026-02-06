@@ -1,25 +1,26 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\context\context_manager.py
-from contextvars import copy_context, Context
-from typing import Optional, Dict, Any, Callable, TypeVar, Coroutine, Union, Tuple
+from contextvars import Context, copy_context
 from functools import wraps
+from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar, Union
+
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from core.context.context import (
-    set_current_session,
-    clear_current_session,
-    get_current_session,
-    set_current_user_info,
-    get_current_user_info,
-    clear_current_user_context,
-)
 from core.component.database_session_provider import DatabaseSessionProvider
+from core.context.context import (
+    clear_current_session,
+    clear_current_user_context,
+    get_current_session,
+    get_current_user_info,
+    set_current_session,
+    set_current_user_info,
+)
 from core.di.decorators import component
 from core.di.utils import get_bean_by_type
 from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
-F = TypeVar('F', bound=Callable[..., Coroutine[Any, Any, Any]])
+F = TypeVar("F", bound=Callable[..., Coroutine[Any, Any, Any]])
 
 
 @component(name="database_session_manager")

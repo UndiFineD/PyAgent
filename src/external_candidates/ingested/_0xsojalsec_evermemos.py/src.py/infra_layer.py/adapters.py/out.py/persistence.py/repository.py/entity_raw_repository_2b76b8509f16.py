@@ -1,12 +1,14 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\infra_layer\adapters\out\persistence\repository\entity_raw_repository.py
 from datetime import datetime
-from typing import List, Optional, Dict, Any
-from pymongo.asynchronous.client_session import AsyncClientSession
+from typing import Any, Dict, List, Optional
+
 from beanie import PydanticObjectId
-from core.oxm.mongo.base_repository import BaseRepository
 from infra_layer.adapters.out.persistence.document.memory.entity import Entity
-from core.observation.logger import get_logger
+from pymongo.asynchronous.client_session import AsyncClientSession
+
 from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 
@@ -73,7 +75,9 @@ class EntityRawRepository(BaseRepository[Entity]):
                 {"entity_id": entity_id}, session=session
             )
             if not existing_doc:
-                logger.warning("⚠️  Entity to update not found: entity_id=%s", entity_id)
+                logger.warning(
+                    "⚠️  Entity to update not found: entity_id=%s", entity_id
+                )
                 return None
 
             for key, value in update_data.items():
@@ -94,7 +98,9 @@ class EntityRawRepository(BaseRepository[Entity]):
                 {"entity_id": entity_id}, session=session
             )
             if not result:
-                logger.warning("⚠️  Entity to delete not found: entity_id=%s", entity_id)
+                logger.warning(
+                    "⚠️  Entity to delete not found: entity_id=%s", entity_id
+                )
                 return False
 
             await result.delete(session=session)

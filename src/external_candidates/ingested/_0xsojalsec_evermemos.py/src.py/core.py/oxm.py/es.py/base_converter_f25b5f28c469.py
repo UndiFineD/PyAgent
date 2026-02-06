@@ -7,14 +7,15 @@ All ES document converters should inherit from this base class to obtain a unifi
 """
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Type, Any, get_args, get_origin
-from core.oxm.es.doc_base import DocBase
+from typing import Any, Generic, Type, TypeVar, get_args, get_origin
+
 from core.observation.logger import get_logger
+from core.oxm.es.doc_base import DocBase
 
 logger = get_logger(__name__)
 
 # Generic type variable - only constrains ES document type
-EsDocType = TypeVar('EsDocType', bound=DocBase)
+EsDocType = TypeVar("EsDocType", bound=DocBase)
 
 
 class BaseEsConverter(ABC, Generic[EsDocType]):
@@ -40,7 +41,7 @@ class BaseEsConverter(ABC, Generic[EsDocType]):
             Type[EsDocType]: ES document model class
         """
         # Get the generic base class of the current class
-        if hasattr(cls, '__orig_bases__'):
+        if hasattr(cls, "__orig_bases__"):
             for base in cls.__orig_bases__:
                 if get_origin(base) is BaseEsConverter:
                     args = get_args(base)

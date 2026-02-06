@@ -8,10 +8,9 @@ Implemented using a prefix tree (Trie) for efficient path matching lookup
 """
 
 import sys
-
-from typing import Dict, Any, Optional
 from pathlib import Path
 from threading import RLock
+from typing import Any, Dict, Optional
 
 
 class _PathTrieNode:
@@ -20,11 +19,11 @@ class _PathTrieNode:
     Used to store path segments and corresponding metadata
     """
 
-    __slots__ = ['children', 'metadata', 'is_registered']
+    __slots__ = ["children", "metadata", "is_registered"]
 
     def __init__(self):
         # Child node mapping {path_segment: _PathTrieNode}
-        self.children: Dict[str, '_PathTrieNode'] = {}
+        self.children: Dict[str, "_PathTrieNode"] = {}
         # Metadata corresponding to this node (only registered path nodes have it)
         self.metadata: Optional[Dict[str, Any]] = None
         # Flag indicating whether this node is a registered path endpoint
@@ -98,7 +97,7 @@ class ScanContextRegistry:
     """
 
     # Singleton instance
-    _instance: Optional['ScanContextRegistry'] = None
+    _instance: Optional["ScanContextRegistry"] = None
     _lock: RLock = RLock()
 
     # Instance attributes (initialized in __init__)
@@ -107,7 +106,7 @@ class ScanContextRegistry:
     _instance_lock: RLock
     _initialized: bool
 
-    def __new__(cls) -> 'ScanContextRegistry':
+    def __new__(cls) -> "ScanContextRegistry":
         """Singleton pattern: ensure only one instance is created"""
         if cls._instance is None:
             with cls._lock:
@@ -119,7 +118,7 @@ class ScanContextRegistry:
     def __init__(self) -> None:
         """Initialize instance (use _initialized flag to ensure initialization happens only once)"""
         # Check if already initialized to avoid re-initialization
-        if hasattr(self, '_initialized') and self._initialized:
+        if hasattr(self, "_initialized") and self._initialized:
             return
 
         # Prefix tree root node
@@ -132,7 +131,7 @@ class ScanContextRegistry:
         self._initialized: bool = True
 
     @classmethod
-    def get_instance(cls) -> 'ScanContextRegistry':
+    def get_instance(cls) -> "ScanContextRegistry":
         """
         Get singleton instance
 
@@ -164,10 +163,10 @@ class ScanContextRegistry:
         # Resolve to absolute path
         resolved = str(Path(path).resolve())
         # Split by path separator and filter out empty strings
-        parts = [p for p in resolved.replace('\\', '/').split('/') if p]
+        parts = [p for p in resolved.replace("\\", "/").split("/") if p]
         return parts
 
-    def register(self, path: str, metadata: Dict[str, Any]) -> 'ScanContextRegistry':
+    def register(self, path: str, metadata: Dict[str, Any]) -> "ScanContextRegistry":
         """
         Register context metadata for a scan path
 
@@ -197,7 +196,7 @@ class ScanContextRegistry:
 
         return self
 
-    def unregister(self, path: str) -> 'ScanContextRegistry':
+    def unregister(self, path: str) -> "ScanContextRegistry":
         """
         Unregister a scan path
 
@@ -254,7 +253,7 @@ class ScanContextRegistry:
 
         return matched_metadata.copy()
 
-    def clear(self) -> 'ScanContextRegistry':
+    def clear(self) -> "ScanContextRegistry":
         """
         Clear all registered path contexts
 
@@ -296,7 +295,7 @@ class ScanContextRegistry:
         module = sys.modules.get(module_name)
 
         # Get file path of the module
-        if module and hasattr(module, '__file__') and module.__file__:
+        if module and hasattr(module, "__file__") and module.__file__:
             return instance.search_metadata_based_path(Path(module.__file__))
 
         return {}

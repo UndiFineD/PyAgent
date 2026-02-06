@@ -10,36 +10,36 @@ Lock usage strategy:
 - Global container creation: use _container_lock to ensure singleton
 """
 
-import inspect
 import abc
+import inspect
+from threading import RLock
 from typing import (
+    Any,
+    Callable,
     Dict,
+    List,
+    Optional,
+    Set,
     Type,
     TypeVar,
-    Optional,
-    Any,
-    List,
-    Set,
-    Callable,
     Union,
-    get_origin,
     get_args,
+    get_origin,
 )
-from threading import RLock
 
 from core.di.bean_definition import BeanDefinition, BeanScope
 from core.di.bean_order_strategy import BeanOrderStrategy
-from core.di.scan_context import ScanContextRegistry
 from core.di.exceptions import (
-    CircularDependencyError,
     BeanNotFoundError,
+    CircularDependencyError,
+    DependencyResolutionError,
     DuplicateBeanError,
     FactoryError,
-    DependencyResolutionError,
     MockNotEnabledError,
 )
+from core.di.scan_context import ScanContextRegistry
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class DIContainer:
@@ -165,7 +165,7 @@ class DIContainer:
         is_mock: bool = False,
         instance: T = None,
         metadata: Optional[Dict[str, Any]] = None,
-    ) -> 'DIContainer':
+    ) -> "DIContainer":
         """
         Register Bean
 
@@ -222,7 +222,7 @@ class DIContainer:
         is_primary: bool = False,
         is_mock: bool = False,
         metadata: Optional[Dict[str, Any]] = None,
-    ) -> 'DIContainer':
+    ) -> "DIContainer":
         """
         Register factory method
 
@@ -393,11 +393,11 @@ class DIContainer:
             if self._is_bean_available(bean_def):
                 beans_info.append(
                     {
-                        'name': name,
-                        'type_name': bean_def.bean_type.__name__,
-                        'scope': bean_def.scope.value,
-                        'is_primary': bean_def.is_primary,
-                        'is_mock': bean_def.is_mock,
+                        "name": name,
+                        "type_name": bean_def.bean_type.__name__,
+                        "scope": bean_def.scope.value,
+                        "is_primary": bean_def.is_primary,
+                        "is_mock": bean_def.is_mock,
                     }
                 )
 
@@ -438,7 +438,7 @@ class DIContainer:
                     if (
                         base != abc.ABC
                         and base != object
-                        and hasattr(base, '__abstractmethods__')
+                        and hasattr(base, "__abstractmethods__")
                     ):  # ABC type
                         all_parent_types.add(base)
             except (AttributeError, TypeError):
@@ -526,7 +526,7 @@ class DIContainer:
         # Prepare constructor parameters
         init_params = {}
         for param_name, param in signature.parameters.items():
-            if param_name == 'self':
+            if param_name == "self":
                 continue
 
             # Try to inject dependency by type
@@ -562,7 +562,7 @@ class DIContainer:
         try:
             signature = inspect.signature(bean_def.bean_type.__init__)
             for param_name, param in signature.parameters.items():
-                if param_name == 'self':
+                if param_name == "self":
                     continue
                 if param.annotation != inspect.Parameter.empty:
                     bean_def.dependencies.add(param.annotation)

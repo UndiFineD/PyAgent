@@ -1,10 +1,25 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-wafer\language.py
-from language_utils import gen_boolean, gen_color, gen_date, gen_email, \
-    gen_javascript, gen_number, gen_style, gen_text, gen_url, gen_name, \
-    gen_target, gen_drop, gen_dir, gen_flag, gen_wtarget, gen_access_key, \
-    gen_duration
-from utils import rndstr, choice
+from language_utils import (
+    gen_access_key,
+    gen_boolean,
+    gen_color,
+    gen_date,
+    gen_dir,
+    gen_drop,
+    gen_duration,
+    gen_email,
+    gen_flag,
+    gen_javascript,
+    gen_name,
+    gen_number,
+    gen_style,
+    gen_target,
+    gen_text,
+    gen_url,
+    gen_wtarget,
+)
 from mutations import Mutations
+from utils import choice, rndstr
 
 
 class HTMLTag:
@@ -34,7 +49,10 @@ class HTMLTag:
             # mutate attributes
             for attr in self.attributes:
                 attr.__str__()
-                if attr.attr == AttrType.ATTR_TAG_SPECIFIC and attr.kind != HTMLTagAttributeType.TypeFlag:
+                if (
+                    attr.attr == AttrType.ATTR_TAG_SPECIFIC
+                    and attr.kind != HTMLTagAttributeType.TypeFlag
+                ):
                     cases = [
                         lambda x: self.mutator.mutate_attr(x),
                         lambda x: self.mutator.mutate_value(x),
@@ -47,15 +65,15 @@ class HTMLTag:
         tag = ""
         if self.self_closing:
             tag = f"<{self.name}"
-            tag += f" name=\"{self.nameattr}\" "
-            tag += f" id=\"{self.id}\" "
+            tag += f' name="{self.nameattr}" '
+            tag += f' id="{self.id}" '
             for attr in self.attributes:
                 tag += f"{attr} "
             tag += "/>"
         else:
             tag = f"<{self.name}"
-            tag += f" name=\"{self.nameattr}\" "
-            tag += f" id=\"{self.id}\" "
+            tag += f' name="{self.nameattr}" '
+            tag += f' id="{self.id}" '
             for attr in self.attributes:
                 tag += f"{attr} "
             tag += ">"
@@ -105,7 +123,7 @@ Generators = {
     HTMLTagAttributeType.TypeName: gen_name,
     HTMLTagAttributeType.TypeFlag: gen_flag,
     HTMLTagAttributeType.TypeDrop: gen_drop,
-    HTMLTagAttributeType.TypeDir:  gen_dir,
+    HTMLTagAttributeType.TypeDir: gen_dir,
     HTMLTagAttributeType.TypeWindowTarget: gen_wtarget,
     HTMLTagAttributeType.TypeAccessKey: gen_access_key,
     HTMLTagAttributeType.TypeDuration: gen_duration,
@@ -133,7 +151,10 @@ class HTMLAttribute:
                 self.attr = AttrType.ATTR_TAG_SPECIFIC
 
     def __str__(self) -> str:
-        if self.kind == HTMLTagAttributeType.TypeTarget or self.kind == HTMLTagAttributeType.TypeName:
+        if (
+            self.kind == HTMLTagAttributeType.TypeTarget
+            or self.kind == HTMLTagAttributeType.TypeName
+        ):
             self.value = Generators[self.kind](self.root)
         else:
             self.value = Generators[self.kind]()

@@ -160,4 +160,3 @@ CONVERSATION_PROFILE_PART2_EXTRACTION_PROMPT = """
 
 再次强调，原则**质量优于数量**和**需要明确证据**非常重要。
 """
-

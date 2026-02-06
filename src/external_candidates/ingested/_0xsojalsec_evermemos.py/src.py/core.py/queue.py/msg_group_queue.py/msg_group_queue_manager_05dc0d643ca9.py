@@ -9,13 +9,14 @@ Supports message delivery, consumption, statistics, monitoring, and other featur
 import asyncio
 import hashlib
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
-from collections import deque
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+from common_utils.datetime_utils import get_now_with_timezone, to_iso_format
 
 from core.observation.logger import get_logger
-from common_utils.datetime_utils import get_now_with_timezone, to_iso_format
 
 logger = get_logger(__name__)
 
@@ -205,7 +206,7 @@ class MsgGroupQueueManager:
             int: Queue ID (0 to num_queues-1)
         """
         # Use MD5 hash to ensure even distribution
-        hash_obj = hashlib.md5(group_key.encode('utf-8'))
+        hash_obj = hashlib.md5(group_key.encode("utf-8"))
         hash_int = int(hash_obj.hexdigest(), 16)
         return hash_int % self.num_queues
 

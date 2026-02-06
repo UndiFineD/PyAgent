@@ -1,12 +1,13 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\request\app_logic_provider.py
-from typing import Dict, Any, Optional
-from abc import ABC, abstractmethod
 import uuid
+from abc import ABC, abstractmethod
+from typing import Any, Dict, Optional
+
 from fastapi import Request
 
+from core.context.context import get_current_app_info, get_current_request
 from core.di.decorators import component
 from core.observation.logger import get_logger
-from core.context.context import get_current_app_info, get_current_request
 
 logger = get_logger(__name__)
 
@@ -162,12 +163,12 @@ class AppLogicProviderImpl(AppLogicProvider):
         app_info: Dict[str, Any] = {}
 
         # Get request_id from request headers, prioritize X-Request-Id, fallback to lowercase
-        request_id = request.headers.get('X-Request-Id') or request.headers.get(
-            'x-request-id'
+        request_id = request.headers.get("X-Request-Id") or request.headers.get(
+            "x-request-id"
         )
         if not request_id:
             request_id = str(uuid.uuid4())
 
-        app_info['request_id'] = request_id
+        app_info["request_id"] = request_id
 
         return app_info

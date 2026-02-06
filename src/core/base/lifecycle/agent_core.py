@@ -195,7 +195,7 @@ class BaseCore(LogicCore):
             ".venv",
             "venv",
             "env",
-            ".agent_cache",
+            "data/agent_cache",
             ".agent_snapshots",
         }
         parts = relative_path.split("/")

@@ -6,13 +6,14 @@ Long job manager implementation.
 
 import asyncio
 import logging
-from typing import Dict, List, Optional, Any
+import os
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from common_utils.datetime_utils import get_now_with_timezone
+
+from core.di import get_beans_by_type, service
 from core.longjob.interfaces import LongJobInterface, LongJobStatus
-from core.di import service, get_beans_by_type
-import os
 
 
 @service(name="long_job_manager", primary=True)
@@ -28,28 +29,28 @@ class LongJobManager:
         Read configuration from environment variables
         """
         # Read configuration from environment variables
-        self.max_concurrent_jobs = int(os.getenv('LONGJOB_MAX_CONCURRENT_JOBS', '10'))
+        self.max_concurrent_jobs = int(os.getenv("LONGJOB_MAX_CONCURRENT_JOBS", "10"))
         self.auto_discover = (
-            os.getenv('LONGJOB_AUTO_DISCOVER', 'true').lower() == 'true'
+            os.getenv("LONGJOB_AUTO_DISCOVER", "true").lower() == "true"
         )
-        self.auto_start_mode = os.getenv('LONGJOB_AUTO_START_MODE', 'all').lower()
+        self.auto_start_mode = os.getenv("LONGJOB_AUTO_START_MODE", "all").lower()
         self.job_whitelist = self._parse_job_list(
-            os.getenv('LONGJOB_JOB_WHITELIST', '')
+            os.getenv("LONGJOB_JOB_WHITELIST", "")
         )
         self.job_blacklist = self._parse_job_list(
-            os.getenv('LONGJOB_JOB_BLACKLIST', '')
+            os.getenv("LONGJOB_JOB_BLACKLIST", "")
         )
-        self.startup_timeout = float(os.getenv('LONGJOB_STARTUP_TIMEOUT', '60.0'))
-        self.shutdown_timeout = float(os.getenv('LONGJOB_SHUTDOWN_TIMEOUT', '30.0'))
+        self.startup_timeout = float(os.getenv("LONGJOB_STARTUP_TIMEOUT", "60.0"))
+        self.shutdown_timeout = float(os.getenv("LONGJOB_SHUTDOWN_TIMEOUT", "30.0"))
         self.wait_for_current_task = (
-            os.getenv('LONGJOB_WAIT_FOR_CURRENT_TASK', 'true').lower() == 'true'
+            os.getenv("LONGJOB_WAIT_FOR_CURRENT_TASK", "true").lower() == "true"
         )
-        self.log_level = os.getenv('LONGJOB_LOG_LEVEL', 'INFO')
+        self.log_level = os.getenv("LONGJOB_LOG_LEVEL", "INFO")
         self.log_startup_details = (
-            os.getenv('LONGJOB_LOG_STARTUP_DETAILS', 'true').lower() == 'true'
+            os.getenv("LONGJOB_LOG_STARTUP_DETAILS", "true").lower() == "true"
         )
         self.log_job_lifecycle = (
-            os.getenv('LONGJOB_LOG_JOB_LIFECYCLE', 'true').lower() == 'true'
+            os.getenv("LONGJOB_LOG_JOB_LIFECYCLE", "true").lower() == "true"
         )
 
         self.logger = logging.getLogger(__name__)
@@ -68,10 +69,10 @@ class LongJobManager:
 
         # Statistics
         self.stats = {
-            'total_jobs_started': 0,
-            'total_jobs_stopped': 0,
-            'total_jobs_failed': 0,
-            'manager_start_time': get_now_with_timezone(),
+            "total_jobs_started": 0,
+            "total_jobs_stopped": 0,
+            "total_jobs_failed": 0,
+            "manager_start_time": get_now_with_timezone(),
         }
 
         self.logger.info(
@@ -94,7 +95,7 @@ class LongJobManager:
         """
         if not job_list_str:
             return []
-        return [job.strip() for job in job_list_str.split(',') if job.strip()]
+        return [job.strip() for job in job_list_str.split(",") if job.strip()]
 
     def should_start_job(self, job_id: str) -> bool:
         """
@@ -106,13 +107,13 @@ class LongJobManager:
         Returns:
             bool: Whether to start the job
         """
-        if self.auto_start_mode == 'none':
+        if self.auto_start_mode == "none":
             return False
-        elif self.auto_start_mode == 'all':
+        elif self.auto_start_mode == "all":
             return True
-        elif self.auto_start_mode == 'whitelist':
+        elif self.auto_start_mode == "whitelist":
             return job_id in self.job_whitelist
-        elif self.auto_start_mode == 'blacklist':
+        elif self.auto_start_mode == "blacklist":
             return job_id not in self.job_blacklist
         else:
             return True
@@ -186,10 +187,10 @@ class LongJobManager:
                 except Exception as e:
                     self.logger.error(
                         "Error adding auto-discovered job %s: %s",
-                        getattr(job, 'job_id', 'unknown'),
+                        getattr(job, "job_id", "unknown"),
                         str(e),
                     )
-                    results[getattr(job, 'job_id', 'unknown')] = False
+                    results[getattr(job, "job_id", "unknown")] = False
 
             self._auto_discovered = True
             self.logger.info(
@@ -217,11 +218,11 @@ class LongJobManager:
         """
         if self.log_startup_details:
             config_info = {
-                'max_concurrent_jobs': self.max_concurrent_jobs,
-                'auto_discover': self.auto_discover,
-                'auto_start_mode': self.auto_start_mode,
-                'job_whitelist': self.job_whitelist,
-                'job_blacklist': self.job_blacklist,
+                "max_concurrent_jobs": self.max_concurrent_jobs,
+                "auto_discover": self.auto_discover,
+                "auto_start_mode": self.auto_start_mode,
+                "job_whitelist": self.job_whitelist,
+                "job_blacklist": self.job_blacklist,
             }
             self.logger.info(
                 "Starting default startup process with config: %s", config_info
@@ -230,13 +231,13 @@ class LongJobManager:
             self.logger.info("Starting default startup process")
 
         results = {
-            'discovered_jobs': {},
-            'started_jobs': {},
-            'filtered_jobs': {},
-            'total_discovered': 0,
-            'total_filtered': 0,
-            'total_started': 0,
-            'errors': [],
+            "discovered_jobs": {},
+            "started_jobs": {},
+            "filtered_jobs": {},
+            "total_discovered": 0,
+            "total_filtered": 0,
+            "total_started": 0,
+            "errors": [],
         }
 
         try:
@@ -246,8 +247,8 @@ class LongJobManager:
             )
             if should_auto_discover:
                 discovered = await self.discover_and_add_jobs()
-                results['discovered_jobs'] = discovered
-                results['total_discovered'] = len(discovered)
+                results["discovered_jobs"] = discovered
+                results["total_discovered"] = len(discovered)
 
             # Filter jobs to start based on environment variable configuration
             jobs_to_start = {}
@@ -255,11 +256,11 @@ class LongJobManager:
                 if self.should_start_job(job_id):
                     jobs_to_start[job_id] = job
                 else:
-                    results['filtered_jobs'][job_id] = 'excluded_by_config'
+                    results["filtered_jobs"][job_id] = "excluded_by_config"
                     if self.log_startup_details:
                         self.logger.info("Job %s excluded by configuration", job_id)
 
-            results['total_filtered'] = len(results['filtered_jobs'])
+            results["total_filtered"] = len(results["filtered_jobs"])
 
             # Start filtered jobs
             if jobs_to_start:
@@ -274,10 +275,10 @@ class LongJobManager:
                         started[job_id] = False
                         error_msg = f"Failed to start job {job_id}: {str(e)}"
                         self.logger.error(error_msg)
-                        results['errors'].append(error_msg)
+                        results["errors"].append(error_msg)
 
-                results['started_jobs'] = started
-                results['total_started'] = sum(
+                results["started_jobs"] = started
+                results["total_started"] = sum(
                     1 for success in started.values() if success
                 )
             else:
@@ -286,20 +287,20 @@ class LongJobManager:
             if self.log_startup_details:
                 self.logger.info(
                     "Default startup completed: discovered=%d, filtered=%d, started=%d",
-                    results['total_discovered'],
-                    results['total_filtered'],
-                    results['total_started'],
+                    results["total_discovered"],
+                    results["total_filtered"],
+                    results["total_started"],
                 )
             else:
                 self.logger.info(
                     "Default startup completed: started=%d jobs",
-                    results['total_started'],
+                    results["total_started"],
                 )
 
         except Exception as e:
             error_msg = f"Error during default startup: {str(e)}"
             self.logger.error(error_msg, exc_info=True)
-            results['errors'].append(error_msg)
+            results["errors"].append(error_msg)
 
         return results
 
@@ -332,12 +333,12 @@ class LongJobManager:
             task = asyncio.create_task(self._run_job_with_monitoring(job))
             self._job_tasks[job_id] = task
 
-            self.stats['total_jobs_started'] += 1
+            self.stats["total_jobs_started"] += 1
             self.logger.info("Job %s started successfully", job_id)
             return True
 
         except Exception as e:
-            self.stats['total_jobs_failed'] += 1
+            self.stats["total_jobs_failed"] += 1
             self.logger.error(
                 "Failed to start job %s: %s", job_id, str(e), exc_info=True
             )
@@ -370,8 +371,8 @@ class LongJobManager:
         try:
             # Stop job (supports graceful shutdown)
             if (
-                hasattr(job, 'shutdown')
-                and 'wait_for_current_task' in job.shutdown.__code__.co_varnames
+                hasattr(job, "shutdown")
+                and "wait_for_current_task" in job.shutdown.__code__.co_varnames
             ):
                 await asyncio.wait_for(
                     job.shutdown(
@@ -400,7 +401,7 @@ class LongJobManager:
 
                 del self._job_tasks[job_id]
 
-            self.stats['total_jobs_stopped'] += 1
+            self.stats["total_jobs_stopped"] += 1
             self.logger.info("Job %s stopped successfully", job_id)
             return True
 
@@ -587,13 +588,13 @@ class LongJobManager:
         job = self._jobs[job_id]
 
         # Check if job supports statistics
-        if hasattr(job, 'get_stats'):
+        if hasattr(job, "get_stats"):
             return job.get_stats()
 
         return {
-            'job_id': job_id,
-            'status': job.get_status().value,
-            'is_running': job.is_running(),
+            "job_id": job_id,
+            "status": job.get_status().value,
+            "is_running": job.is_running(),
         }
 
     def get_manager_stats(self) -> Dict[str, Any]:
@@ -606,11 +607,11 @@ class LongJobManager:
         stats = self.stats.copy()
         stats.update(
             {
-                'total_jobs': len(self._jobs),
-                'running_jobs': len(self.get_running_jobs()),
-                'is_shutdown': self._is_shutdown,
-                'uptime': (
-                    get_now_with_timezone() - stats['manager_start_time']
+                "total_jobs": len(self._jobs),
+                "running_jobs": len(self.get_running_jobs()),
+                "is_shutdown": self._is_shutdown,
+                "uptime": (
+                    get_now_with_timezone() - stats["manager_start_time"]
                 ).total_seconds(),
             }
         )
@@ -642,7 +643,7 @@ class LongJobManager:
                 await job.shutdown()
 
         except Exception as e:
-            self.stats['total_jobs_failed'] += 1
+            self.stats["total_jobs_failed"] += 1
             self.logger.error("Job %s failed: %s", job_id, str(e), exc_info=True)
 
             # Attempt to clean up job

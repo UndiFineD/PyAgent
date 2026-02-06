@@ -8,17 +8,18 @@ import asyncio
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Optional, Any, Dict
 from datetime import datetime
+from typing import Any, Dict, Optional
+
+from common_utils.datetime_utils import get_now_with_timezone
 
 from core.longjob.interfaces import (
-    LongJobInterface,
-    LongJobStatus,
     ConsumerConfig,
     ErrorHandler,
+    LongJobInterface,
+    LongJobStatus,
     MessageBatch,
 )
-from common_utils.datetime_utils import get_now_with_timezone
 
 
 class DefaultErrorHandler(ErrorHandler):
@@ -76,11 +77,11 @@ class RecycleConsumerBase(LongJobInterface, ABC):
 
         # Statistics
         self.stats = {
-            'total_processed': 0,
-            'total_errors': 0,
-            'total_timeouts': 0,
-            'start_time': None,
-            'last_processed_time': None,
+            "total_processed": 0,
+            "total_errors": 0,
+            "total_timeouts": 0,
+            "start_time": None,
+            "last_processed_time": None,
         }
 
     async def start(self) -> None:
@@ -101,7 +102,7 @@ class RecycleConsumerBase(LongJobInterface, ABC):
             # Start consumption loop
             self._task = asyncio.create_task(self._consume_loop())
             self.status = LongJobStatus.RUNNING
-            self.stats['start_time'] = get_now_with_timezone()
+            self.stats["start_time"] = get_now_with_timezone()
 
             self.logger.info("Consumer %s started successfully", self.job_id)
 
@@ -197,12 +198,12 @@ class RecycleConsumerBase(LongJobInterface, ABC):
             except Exception as e:
                 # Error handling
                 context = {
-                    'job_id': self.job_id,
-                    'timestamp': get_now_with_timezone().isoformat(),
-                    'stats': self.stats.copy(),
+                    "job_id": self.job_id,
+                    "timestamp": get_now_with_timezone().isoformat(),
+                    "stats": self.stats.copy(),
                 }
 
-                self.stats['total_errors'] += 1
+                self.stats["total_errors"] += 1
 
                 try:
                     should_continue = await self._error_handler.handle_error(e, context)
@@ -235,11 +236,11 @@ class RecycleConsumerBase(LongJobInterface, ABC):
             # Use timeout to control processing time for a single message
             await asyncio.wait_for(self._process_single_message(), timeout=timeout)
 
-            self.stats['total_processed'] += 1
-            self.stats['last_processed_time'] = get_now_with_timezone()
+            self.stats["total_processed"] += 1
+            self.stats["last_processed_time"] = get_now_with_timezone()
 
         except asyncio.TimeoutError:
-            self.stats['total_timeouts'] += 1
+            self.stats["total_timeouts"] += 1
             self.logger.warning(
                 "Message processing timeout in consumer %s (timeout: %ss)",
                 self.job_id,
@@ -248,10 +249,10 @@ class RecycleConsumerBase(LongJobInterface, ABC):
             # Timeout is also treated as an error, handled by error handler
             timeout_error = TimeoutError(f"Message processing timeout ({timeout}s)")
             context = {
-                'job_id': self.job_id,
-                'error_type': 'timeout',
-                'timeout': timeout,
-                'timestamp': get_now_with_timezone().isoformat(),
+                "job_id": self.job_id,
+                "error_type": "timeout",
+                "timeout": timeout,
+                "timestamp": get_now_with_timezone().isoformat(),
             }
 
             try:
@@ -295,7 +296,7 @@ class RecycleConsumerBase(LongJobInterface, ABC):
                         message_batch = MessageBatch(
                             data=raw_message,
                             batch_id=f"auto_wrapped_{id(raw_message)}",
-                            metadata={'auto_wrapped': True},
+                            metadata={"auto_wrapped": True},
                         )
 
                     if message_batch.is_empty:
@@ -392,12 +393,12 @@ class RecycleConsumerBase(LongJobInterface, ABC):
     def get_stats(self) -> Dict[str, Any]:
         """Get consumer statistics"""
         stats = self.stats.copy()
-        stats['status'] = self.status.value
-        stats['uptime'] = None
+        stats["status"] = self.status.value
+        stats["uptime"] = None
 
-        if stats['start_time']:
-            uptime = get_now_with_timezone() - stats['start_time']
-            stats['uptime'] = uptime.total_seconds()
+        if stats["start_time"]:
+            uptime = get_now_with_timezone() - stats["start_time"]
+            stats["uptime"] = uptime.total_seconds()
 
         return stats
 

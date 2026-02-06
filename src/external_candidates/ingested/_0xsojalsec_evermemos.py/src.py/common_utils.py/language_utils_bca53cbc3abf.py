@@ -38,4 +38,3 @@ def is_supported_language(language: str) -> bool:
         是否支持该语言
     """
     return language.lower() in SUPPORTED_LANGUAGES
-

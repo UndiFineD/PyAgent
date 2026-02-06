@@ -11,9 +11,12 @@ Usage:
     python src/bootstrap.py tests/test_tokenizer_factory.py
 """
 
+from core.component.llm.tokenizer.tokenizer_factory import (
+    DEFAULT_TIKTOKEN_ENCODINGS,
+    TokenizerFactory,
+)
 from core.di.utils import get_bean_by_type
 from core.observation.logger import get_logger
-from core.component.llm.tokenizer.tokenizer_factory import TokenizerFactory, DEFAULT_TIKTOKEN_ENCODINGS
 
 logger = get_logger(__name__)
 
@@ -27,8 +30,12 @@ class TestTokenizerFactory:
 
         factory = get_bean_by_type(TokenizerFactory)
 
-        assert factory is not None, "TokenizerFactory should be available in DI container"
-        assert isinstance(factory, TokenizerFactory), "Should be TokenizerFactory instance"
+        assert (
+            factory is not None
+        ), "TokenizerFactory should be available in DI container"
+        assert isinstance(
+            factory, TokenizerFactory
+        ), "Should be TokenizerFactory instance"
 
         print("✅ Successfully got TokenizerFactory from DI container")
         print(f"   - Factory instance: {factory}")
@@ -53,7 +60,11 @@ class TestTokenizerFactory:
         print(f"   - Encoding: o200k_base")
         print(f"   - Test text: {test_text}")
         print(f"   - Token count: {len(tokens)}")
-        print(f"   - Tokens: {tokens[:10]}..." if len(tokens) > 10 else f"   - Tokens: {tokens}")  # noqa: G004
+        print(
+            f"   - Tokens: {tokens[:10]}..."
+            if len(tokens) > 10
+            else f"   - Tokens: {tokens}"
+        )  # noqa: G004
 
         # Verify decoding
         decoded_text = tokenizer.decode(tokens)
@@ -68,7 +79,9 @@ class TestTokenizerFactory:
 
         # Clear cache first
         factory.clear_cache()
-        assert factory.get_cached_tokenizer_count() == 0, "Cache should be empty after clear"
+        assert (
+            factory.get_cached_tokenizer_count() == 0
+        ), "Cache should be empty after clear"
         print("   - Cache cleared")
 
         # Get tokenizer first time
@@ -83,7 +96,9 @@ class TestTokenizerFactory:
 
         # Verify same instance (from cache)
         assert tokenizer1 is tokenizer2, "Should return same cached instance"
-        assert count_after_first == count_after_second, "Cache count should not increase"
+        assert (
+            count_after_first == count_after_second
+        ), "Cache count should not increase"
 
         print("✅ Tokenizer caching works correctly")
         print(f"   - Same instance returned: {tokenizer1 is tokenizer2}")
@@ -109,7 +124,9 @@ class TestTokenizerFactory:
         print(f"   - Expected count: {expected_count}")
         print(f"   - Actual cached count: {cached_count}")
 
-        assert cached_count >= expected_count, f"Should have at least {expected_count} tokenizers cached"
+        assert (
+            cached_count >= expected_count
+        ), f"Should have at least {expected_count} tokenizers cached"
 
         print("✅ Default encodings preloaded successfully")
 
@@ -132,7 +149,9 @@ class TestTokenizerFactory:
 
         # Verify all are cached
         cached_count = factory.get_cached_tokenizer_count()
-        assert cached_count == len(encodings_to_test), f"Should have {len(encodings_to_test)} tokenizers cached"
+        assert cached_count == len(
+            encodings_to_test
+        ), f"Should have {len(encodings_to_test)} tokenizers cached"
 
         print("✅ Multiple encodings loaded and cached")
         print(f"   - Total cached: {cached_count}")
@@ -155,8 +174,8 @@ class TestTokenizerFactory:
 
         total_tokens = 0
         for msg in messages:
-            speaker = msg.get('speaker_name', '')
-            content = msg.get('content', '')
+            speaker = msg.get("speaker_name", "")
+            content = msg.get("content", "")
             text = f"{speaker}: {content}" if speaker else content
             tokens = tokenizer.encode(text)
             total_tokens += len(tokens)
@@ -187,6 +206,7 @@ def run_all_tests():
     except Exception as e:
         logger.error("❌ Test execution failed: %s", e)
         import traceback
+
         traceback.print_exc()
         raise
 

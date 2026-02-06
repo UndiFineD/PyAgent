@@ -4,17 +4,19 @@ MongoDB Lifespan Provider Implementation
 """
 
 from collections import defaultdict
-from fastapi import FastAPI
 from typing import Any
 
-from core.observation.logger import get_logger
-from core.di.utils import get_bean_by_type
-from core.di.decorators import component
-from core.lifespan.lifespan_interface import LifespanProvider
-from core.oxm.mongo.document_base import DocumentBase
-from core.di.utils import get_all_subclasses
-from core.component.mongodb_client_factory import MongoDBClientFactory, MongoDBClientWrapper
+from fastapi import FastAPI
 
+from core.component.mongodb_client_factory import (
+    MongoDBClientFactory,
+    MongoDBClientWrapper,
+)
+from core.di.decorators import component
+from core.di.utils import get_all_subclasses, get_bean_by_type
+from core.lifespan.lifespan_interface import LifespanProvider
+from core.observation.logger import get_logger
+from core.oxm.mongo.document_base import DocumentBase
 
 logger = get_logger(__name__)
 

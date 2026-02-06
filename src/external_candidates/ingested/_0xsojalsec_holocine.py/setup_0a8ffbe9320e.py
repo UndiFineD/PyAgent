@@ -1,15 +1,15 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-HoloCine\setup.py
 import os
-from setuptools import setup, find_packages
-import pkg_resources
 
+import pkg_resources
+from setuptools import find_packages, setup
 
 # Path to the requirements file
 requirements_path = os.path.join(os.path.dirname(__file__), "requirements.txt")
 
 # Read the requirements from the requirements file
 if os.path.exists(requirements_path):
-    with open(requirements_path, 'r') as f:
+    with open(requirements_path, "r") as f:
         install_requires = [str(r) for r in pkg_resources.parse_requirements(f)]
 else:
     install_requires = []
@@ -28,5 +28,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     package_data={"diffsynth": ["tokenizer_configs/**/**/*.*"]},
-    python_requires='>=3.6',
+    python_requires=">=3.6",
 )

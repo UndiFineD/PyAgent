@@ -1,12 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\ADFSpoof\utils.py
+import base64
 import random
 import string
 import sys
-import base64
 
 
 def random_string():
-    return '_' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    return "_" + "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 
 def new_guid(stream):
@@ -26,9 +26,20 @@ def new_guid(stream):
 
 
 def encode_object_guid(guid):
-    guid = guid.replace('}', '').replace('{', '')
-    guid_parts = guid.split('-')
-    hex_string = guid_parts[0][6:] + guid_parts[0][4:6] + guid_parts[0][2:4] + guid_parts[0][0:2] + guid_parts[1][2:] + guid_parts[1][0:2] + guid_parts[2][2:] + guid_parts[2][0:2] + guid_parts[3] + guid_parts[4]
+    guid = guid.replace("}", "").replace("{", "")
+    guid_parts = guid.split("-")
+    hex_string = (
+        guid_parts[0][6:]
+        + guid_parts[0][4:6]
+        + guid_parts[0][2:4]
+        + guid_parts[0][0:2]
+        + guid_parts[1][2:]
+        + guid_parts[1][0:2]
+        + guid_parts[2][2:]
+        + guid_parts[2][0:2]
+        + guid_parts[3]
+        + guid_parts[4]
+    )
     hex_array = bytearray.fromhex(hex_string)
     immutable_id = base64.b64encode(hex_array)
     return immutable_id
@@ -40,11 +51,11 @@ def die():
 
 def print_intro():
 
-    print('    ___    ____  ___________                   ____')
-    print('   /   |  / __ \/ ____/ ___/____  ____  ____  / __/')
-    print('  / /| | / / / / /_   \__ \/ __ \/ __ \/ __ \/ /_  ')
-    print(' / ___ |/ /_/ / __/  ___/ / /_/ / /_/ / /_/ / __/  ')
-    print('/_/  |_/_____/_/    /____/ .___/\____/\____/_/     ')
-    print('                        /_/                        \n')
-    print('A tool to for AD FS security tokens')
-    print('Created by @doughsec\n')
+    print("    ___    ____  ___________                   ____")
+    print("   /   |  / __ \/ ____/ ___/____  ____  ____  / __/")
+    print("  / /| | / / / / /_   \__ \/ __ \/ __ \/ __ \/ /_  ")
+    print(" / ___ |/ /_/ / __/  ___/ / /_/ / /_/ / /_/ / __/  ")
+    print("/_/  |_/_____/_/    /____/ .___/\____/\____/_/     ")
+    print("                        /_/                        \n")
+    print("A tool to for AD FS security tokens")
+    print("Created by @doughsec\n")

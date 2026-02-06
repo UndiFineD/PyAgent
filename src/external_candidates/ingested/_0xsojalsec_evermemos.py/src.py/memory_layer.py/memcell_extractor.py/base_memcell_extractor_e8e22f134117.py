@@ -8,10 +8,11 @@ boundaries in various types of content (conversations, emails, notes, etc.).
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
-from memory_layer.llm.llm_provider import LLMProvider
-from api_specs.memory_types import RawDataType, BaseMemory, MemCell
+from typing import Any, Dict, List, Optional
+
 from api_specs.dtos.memory_command import RawData
+from api_specs.memory_types import BaseMemory, MemCell, RawDataType
+from memory_layer.llm.llm_provider import LLMProvider
 
 
 @dataclass

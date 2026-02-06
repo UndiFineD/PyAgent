@@ -122,9 +122,15 @@ class HistoryManager:
 
     def get_previous_value(self, object_id: str, attribute: str) -> Optional[Any]:
         """Get the most recent previous value for an object/attribute."""
+        found_current = False
         for change in reversed(self.history):
             if (change.get('object') == object_id and
                 change.get('attribute_name') == attribute):
+                if not found_current:
+                    # Skip the most recent (current) value
+                    found_current = True
+                    continue
+                # Return the previous value
                 return change.get('attribute_value')
         return None
 

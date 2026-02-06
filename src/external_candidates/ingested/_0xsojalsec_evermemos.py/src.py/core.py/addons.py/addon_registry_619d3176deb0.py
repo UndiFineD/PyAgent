@@ -6,8 +6,9 @@ Used to host DI and async task registry for a single addon
 """
 
 from typing import Optional
-from core.di.scan_path_registry import ScannerPathsRegistry
+
 from core.asynctasks.task_scan_registry import TaskScanDirectoriesRegistry
+from core.di.scan_path_registry import ScannerPathsRegistry
 
 
 class AddonRegistry:
@@ -44,7 +45,7 @@ class AddonRegistry:
         self.di: Optional[ScannerPathsRegistry] = None
         self.asynctasks: Optional[TaskScanDirectoriesRegistry] = None
 
-    def register_di(self, registry: ScannerPathsRegistry) -> 'AddonRegistry':
+    def register_di(self, registry: ScannerPathsRegistry) -> "AddonRegistry":
         """
         Register DI component scan path registry
 
@@ -59,7 +60,7 @@ class AddonRegistry:
 
     def register_asynctasks(
         self, registry: TaskScanDirectoriesRegistry
-    ) -> 'AddonRegistry':
+    ) -> "AddonRegistry":
         """
         Register async task scan directory registry
 

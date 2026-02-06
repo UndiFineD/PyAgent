@@ -4,16 +4,16 @@
 Component Scanner
 """
 
+import importlib
 import os
 import sys
-import importlib
-from pathlib import Path
-from typing import List, Set, Optional, Dict, Any
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
 
-from core.observation.logger import get_logger
 from core.di.scan_context import ScanContextRegistry, get_scan_context_registry
+from core.observation.logger import get_logger
 
 
 class ComponentScanner:
@@ -24,13 +24,13 @@ class ComponentScanner:
         self.scan_packages: List[str] = []
         # Using 'di' causes directories like audit to be filtered out, so full path matching is required
         self.exclude_paths: Set[str] = {
-            '/di/',
-            '/config/',
-            '__pycache__',
-            '.git',
-            '.pytest_cache',
+            "/di/",
+            "/config/",
+            "__pycache__",
+            ".git",
+            ".pytest_cache",
         }
-        self.exclude_patterns: Set[str] = {'test_', '_test', 'tests'}
+        self.exclude_patterns: Set[str] = {"test_", "_test", "tests"}
         self.include_patterns: Set[str] = set()
         self.recursive = True
         # self.parallel = True if os.getenv("ENV") == 'dev' else False
@@ -46,65 +46,65 @@ class ComponentScanner:
         # Key modules that need to be preloaded to avoid circular dependencies during parallel import
         self.preload_modules = [
             # SQLAlchemy core modules
-            'sqlalchemy.engine',
-            'sqlalchemy.engine.base',
-            'sqlalchemy.engine.default',
-            'sqlalchemy.pool',
-            'sqlalchemy.sql',
-            'sqlalchemy.sql.schema',
-            'sqlalchemy.sql.sqltypes',
-            'sqlalchemy.orm',
-            'sqlalchemy.orm.session',
-            'sqlalchemy.orm.query',
+            "sqlalchemy.engine",
+            "sqlalchemy.engine.base",
+            "sqlalchemy.engine.default",
+            "sqlalchemy.pool",
+            "sqlalchemy.sql",
+            "sqlalchemy.sql.schema",
+            "sqlalchemy.sql.sqltypes",
+            "sqlalchemy.orm",
+            "sqlalchemy.orm.session",
+            "sqlalchemy.orm.query",
             # Pydantic core modules
-            'pydantic',
-            'pydantic.fields',
-            'pydantic.main',
-            'pydantic.validators',
-            'pydantic.v1',
-            'pydantic.v1.fields',
-            'pydantic.v1.main',
+            "pydantic",
+            "pydantic.fields",
+            "pydantic.main",
+            "pydantic.validators",
+            "pydantic.v1",
+            "pydantic.v1.fields",
+            "pydantic.v1.main",
             # Other modules that may cause circular dependencies
-            'typing_extensions',
-            'dataclasses',
+            "typing_extensions",
+            "dataclasses",
         ]
 
-    def add_scan_path(self, path: str) -> 'ComponentScanner':
+    def add_scan_path(self, path: str) -> "ComponentScanner":
         """Add scan path"""
         self.scan_paths.append(path)
         return self
 
-    def add_scan_package(self, package: str) -> 'ComponentScanner':
+    def add_scan_package(self, package: str) -> "ComponentScanner":
         """Add scan package"""
         self.scan_packages.append(package)
         return self
 
-    def exclude_path(self, path: str) -> 'ComponentScanner':
+    def exclude_path(self, path: str) -> "ComponentScanner":
         """Exclude path"""
         self.exclude_paths.add(path)
         return self
 
-    def exclude_pattern(self, pattern: str) -> 'ComponentScanner':
+    def exclude_pattern(self, pattern: str) -> "ComponentScanner":
         """Exclude pattern"""
         self.exclude_patterns.add(pattern)
         return self
 
-    def include_pattern(self, pattern: str) -> 'ComponentScanner':
+    def include_pattern(self, pattern: str) -> "ComponentScanner":
         """Include pattern"""
         self.include_patterns.add(pattern)
         return self
 
-    def set_recursive(self, recursive: bool) -> 'ComponentScanner':
+    def set_recursive(self, recursive: bool) -> "ComponentScanner":
         """Set whether to scan recursively"""
         self.recursive = recursive
         return self
 
-    def set_parallel(self, parallel: bool) -> 'ComponentScanner':
+    def set_parallel(self, parallel: bool) -> "ComponentScanner":
         """Set whether to scan in parallel"""
         self.parallel = parallel
         return self
 
-    def set_max_workers(self, max_workers: int) -> 'ComponentScanner':
+    def set_max_workers(self, max_workers: int) -> "ComponentScanner":
         """Set maximum number of worker threads"""
         self.max_workers = max_workers
         return self
@@ -140,7 +140,7 @@ class ComponentScanner:
         if failed_count > 0:
             self.logger.debug("Skipped %d unavailable modules", failed_count)
 
-    def add_preload_module(self, module_name: str) -> 'ComponentScanner':
+    def add_preload_module(self, module_name: str) -> "ComponentScanner":
         """Add module that needs to be preloaded"""
         if module_name not in self.preload_modules:
             self.preload_modules.append(module_name)
@@ -148,7 +148,7 @@ class ComponentScanner:
 
     def register_scan_context(
         self, path: str, metadata: Dict[str, Any]
-    ) -> 'ComponentScanner':
+    ) -> "ComponentScanner":
         """
         Register context metadata for a scan path
 
@@ -181,7 +181,7 @@ class ComponentScanner:
         """
         return self.context_registry
 
-    def scan(self) -> 'ComponentScanner':
+    def scan(self) -> "ComponentScanner":
         """Execute scanning"""
         self.logger.info("🔍 Starting component scan...")
 
@@ -214,14 +214,14 @@ class ComponentScanner:
 
         # Scan paths
         if self.scan_paths:
-            self.logger.debug("Scanning paths: %s", ', '.join(self.scan_paths))
+            self.logger.debug("Scanning paths: %s", ", ".join(self.scan_paths))
         for scan_path in self.scan_paths:
             files_from_path = self._collect_files_from_path(scan_path)
             python_files.extend(files_from_path)
 
         # Scan packages
         if self.scan_packages:
-            self.logger.debug("Scanning packages: %s", ', '.join(self.scan_packages))
+            self.logger.debug("Scanning packages: %s", ", ".join(self.scan_packages))
         for package in self.scan_packages:
             files_from_package = self._collect_files_from_package(package)
             python_files.extend(files_from_package)
@@ -246,7 +246,7 @@ class ComponentScanner:
             self.logger.warning("Scan path does not exist: %s", path)
             return files
 
-        if path_obj.is_file() and path_obj.suffix == '.py':
+        if path_obj.is_file() and path_obj.suffix == ".py":
             if self._should_include_file(path_obj):
                 files.append(path_obj)
         elif path_obj.is_dir():
@@ -261,7 +261,7 @@ class ComponentScanner:
         """Collect Python files from package"""
         try:
             package = importlib.import_module(package_name)
-            if hasattr(package, '__file__') and package.__file__:
+            if hasattr(package, "__file__") and package.__file__:
                 package_path = Path(package.__file__).parent
                 return self._collect_files_from_path(str(package_path))
         except ImportError as e:
@@ -272,7 +272,7 @@ class ComponentScanner:
     def _should_include_file(self, file_path: Path) -> bool:
         """Check if file should be included"""
         # Exclude special files
-        if file_path.name.startswith('__') and file_path.name.endswith('__.py'):
+        if file_path.name.startswith("__") and file_path.name.endswith("__.py"):
             return False
 
         # Check excluded paths

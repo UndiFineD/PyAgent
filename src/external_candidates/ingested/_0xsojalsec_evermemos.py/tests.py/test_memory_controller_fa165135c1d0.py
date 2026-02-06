@@ -6,33 +6,34 @@ Verify input and output structures of all endpoints under /api/v1/memories
 Usage:
     # Run all tests
     python tests/test_memory_controller.py
-    
+
     # Specify API address
     python tests/test_memory_controller.py --base-url http://localhost:1995
-    
+
     # Specify test user
     python tests/test_memory_controller.py --base-url http://dev-server:1995 --user-id test_user_123
-    
+
     # Test a specific method
     python tests/test_memory_controller.py --test-method memorize
     python tests/test_memory_controller.py --test-method fetch_episodic
     python tests/test_memory_controller.py --test-method fetch_event_log
     python tests/test_memory_controller.py --test-method search_keyword
-    
+
     # Test all methods except certain ones (parameters separated by commas)
     python tests/test_memory_controller.py --except-test-method memorize
     python tests/test_memory_controller.py --except-test-method memorize,fetch_episodic
     python tests/test_memory_controller.py --except-test-method save_meta,patch_meta
-    
+
     # Disable sync mode (use background mode)
     python tests/test_memory_controller.py --sync-mode false
 """
 
 import argparse
 import json
-from zoneinfo import ZoneInfo
 import uuid
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
 import requests
 
 
@@ -457,8 +458,8 @@ class MemoryControllerTester:
                 assert isinstance(memory, dict), f"Memory {idx} should be a dictionary"
                 # Note: Different memory types may have different field structures
                 # Here only basic field existence is validated
-                memory_type = memory.get('memory_type', 'unknown')
-                summary = memory.get('summary', memory.get('content', 'no summary'))[
+                memory_type = memory.get("memory_type", "unknown")
+                summary = memory.get("summary", memory.get("content", "no summary"))[
                     :50
                 ]
                 print(f"  Memory {idx}: {memory_type} - {summary}...")

@@ -9,13 +9,13 @@ The Factory is only responsible for creating and caching clients; mode determina
 import asyncio
 from typing import Optional
 
-from core.observation.logger import get_logger
-from core.di.decorators import component
 from core.component.mongodb_client_factory import (
     MongoDBClientFactory,
-    MongoDBConfig,
     MongoDBClientWrapper,
+    MongoDBConfig,
 )
+from core.di.decorators import component
+from core.observation.logger import get_logger
 from core.tenants.tenantize.oxm.mongo.config_utils import get_default_database_name
 from core.tenants.tenantize.oxm.mongo.tenant_aware_mongo_client import (
     TenantAwareMongoClient,
@@ -223,7 +223,7 @@ class TenantAwareClientWrapper(MongoDBClientWrapper):
         try:
             # TenantAwareMongoClient will select the correct client based on configuration and context
             real_client = await self.client._get_real_client()
-            await real_client.admin.command('ping')
+            await real_client.admin.command("ping")
             logger.info("✅ MongoDB connection test succeeded (tenant-aware)")
             return True
         except Exception as e:

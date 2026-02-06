@@ -17,10 +17,11 @@ Use cases:
 - Any computation result that needs to be cached per tenant
 """
 
-from typing import TypeVar, Callable, Optional, Union
+from typing import Callable, Optional, TypeVar, Union
+
 from core.observation.logger import get_logger
-from core.tenants.tenant_contextvar import get_current_tenant
 from core.tenants.tenant_config import get_tenant_config
+from core.tenants.tenant_contextvar import get_current_tenant
 from core.tenants.tenant_models import TenantPatchKey
 
 logger = get_logger(__name__)

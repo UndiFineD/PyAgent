@@ -5,9 +5,10 @@ Used to extract metadata such as title, description, and images from web pages
 """
 
 import re
-import aiohttp
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 from urllib.parse import urljoin, urlparse
+
+import aiohttp
 from bs4 import BeautifulSoup, Tag
 
 from core.observation.logger import get_logger
@@ -66,10 +67,10 @@ class URLExtractor:
                 return self._create_empty_metadata(url, final_url)
 
             # Parse HTML and extract metadata
-            soup = BeautifulSoup(html_content, 'html.parser')
+            soup = BeautifulSoup(html_content, "html.parser")
             metadata = self._extract_metadata_from_soup(soup, final_url)
-            metadata['original_url'] = url
-            metadata['final_url'] = final_url
+            metadata["original_url"] = url
+            metadata["final_url"] = final_url
 
             return metadata
 
@@ -89,7 +90,7 @@ class URLExtractor:
         """
         try:
             timeout = aiohttp.ClientTimeout(total=self.timeout)
-            headers = {'User-Agent': self.user_agent}
+            headers = {"User-Agent": self.user_agent}
 
             # Create SSL context, skip certificate verification (relatively safe for content extraction)
             import ssl
@@ -123,13 +124,13 @@ class URLExtractor:
         try:
             timeout = aiohttp.ClientTimeout(total=self.timeout)
             headers = {
-                'User-Agent': self.user_agent,
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-                'Accept-Encoding': 'gzip, deflate',
-                'DNT': '1',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
+                "User-Agent": self.user_agent,
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+                "Accept-Encoding": "gzip, deflate",
+                "DNT": "1",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
             }
 
             # Create SSL context, skip certificate verification (relatively safe for content extraction)
@@ -145,15 +146,15 @@ class URLExtractor:
             ) as session:
                 async with session.get(url) as response:
                     # Check content type
-                    content_type = response.headers.get('content-type', '').lower()
-                    if 'text/html' not in content_type:
+                    content_type = response.headers.get("content-type", "").lower()
+                    if "text/html" not in content_type:
                         logger.warning(
                             "Non-HTML content: %s, content-type: %s", url, content_type
                         )
                         return None
 
                     # Check content length
-                    content_length = response.headers.get('content-length')
+                    content_length = response.headers.get("content-length")
                     if content_length and int(content_length) > self.max_content_length:
                         logger.warning(
                             "Content too large: %s, size: %s", url, content_length
@@ -188,52 +189,52 @@ class URLExtractor:
             Dict[str, Any]: Extracted metadata
         """
         metadata = {
-            'title': None,
-            'description': None,
-            'image': None,
-            'site_name': None,
-            'url': url,
-            'type': None,
-            'favicon': None,
-            'og_tags': {},
-            'twitter_tags': {},
-            'meta_tags': {},
+            "title": None,
+            "description": None,
+            "image": None,
+            "site_name": None,
+            "url": url,
+            "type": None,
+            "favicon": None,
+            "og_tags": {},
+            "twitter_tags": {},
+            "meta_tags": {},
         }
 
         try:
             # Extract Open Graph tags
             og_tags = self._extract_og_tags(soup)
-            metadata['og_tags'] = og_tags
+            metadata["og_tags"] = og_tags
 
             # Extract Twitter Card tags
             twitter_tags = self._extract_twitter_tags(soup)
-            metadata['twitter_tags'] = twitter_tags
+            metadata["twitter_tags"] = twitter_tags
 
             # Extract basic meta tags
             meta_tags = self._extract_meta_tags(soup)
-            metadata['meta_tags'] = meta_tags
+            metadata["meta_tags"] = meta_tags
 
             # Prioritize Open Graph information, but skip values containing template variables
-            metadata['title'] = (
-                self._get_safe_value(og_tags.get('title'))
-                or self._get_safe_value(twitter_tags.get('title'))
+            metadata["title"] = (
+                self._get_safe_value(og_tags.get("title"))
+                or self._get_safe_value(twitter_tags.get("title"))
                 or self._get_safe_value(self._extract_title(soup))
-                or self._get_safe_value(meta_tags.get('title'))
+                or self._get_safe_value(meta_tags.get("title"))
             )
 
-            metadata['description'] = (
-                self._get_safe_value(og_tags.get('description'))
-                or self._get_safe_value(twitter_tags.get('description'))
-                or self._get_safe_value(meta_tags.get('description'))
+            metadata["description"] = (
+                self._get_safe_value(og_tags.get("description"))
+                or self._get_safe_value(twitter_tags.get("description"))
+                or self._get_safe_value(meta_tags.get("description"))
             )
 
-            metadata['image'] = self._get_safe_value(
-                og_tags.get('image')
-            ) or self._get_safe_value(twitter_tags.get('image'))
+            metadata["image"] = self._get_safe_value(
+                og_tags.get("image")
+            ) or self._get_safe_value(twitter_tags.get("image"))
 
-            metadata['site_name'] = self._get_safe_value(og_tags.get('site_name'))
-            metadata['type'] = self._get_safe_value(og_tags.get('type'))
-            metadata['favicon'] = self._extract_favicon(soup, url)
+            metadata["site_name"] = self._get_safe_value(og_tags.get("site_name"))
+            metadata["type"] = self._get_safe_value(og_tags.get("type"))
+            metadata["favicon"] = self._extract_favicon(soup, url)
 
             # Clean and validate data
             metadata = self._clean_metadata(metadata)
@@ -247,10 +248,10 @@ class URLExtractor:
         """Extract Open Graph tags"""
         og_tags = {}
 
-        for tag in soup.find_all('meta', property=lambda x: x and x.startswith('og:')):
-            if tag.get('content'):
-                property_name = tag['property'][3:]  # Remove 'og:' prefix
-                og_tags[property_name] = tag['content'].strip()
+        for tag in soup.find_all("meta", property=lambda x: x and x.startswith("og:")):
+            if tag.get("content"):
+                property_name = tag["property"][3:]  # Remove 'og:' prefix
+                og_tags[property_name] = tag["content"].strip()
 
         return og_tags
 
@@ -259,11 +260,11 @@ class URLExtractor:
         twitter_tags = {}
 
         for tag in soup.find_all(
-            'meta', attrs={'name': lambda x: x and x.startswith('twitter:')}
+            "meta", attrs={"name": lambda x: x and x.startswith("twitter:")}
         ):
-            if tag.get('content'):
-                name = tag['name'][8:]  # Remove 'twitter:' prefix
-                twitter_tags[name] = tag['content'].strip()
+            if tag.get("content"):
+                name = tag["name"][8:]  # Remove 'twitter:' prefix
+                twitter_tags[name] = tag["content"].strip()
 
         return twitter_tags
 
@@ -272,30 +273,30 @@ class URLExtractor:
         meta_tags = {}
 
         # Extract title
-        title_tag = soup.find('meta', attrs={'name': 'title'})
-        if title_tag and title_tag.get('content'):
-            meta_tags['title'] = title_tag['content'].strip()
+        title_tag = soup.find("meta", attrs={"name": "title"})
+        if title_tag and title_tag.get("content"):
+            meta_tags["title"] = title_tag["content"].strip()
 
         # Extract description
-        description_tag = soup.find('meta', attrs={'name': 'description'})
-        if description_tag and description_tag.get('content'):
-            meta_tags['description'] = description_tag['content'].strip()
+        description_tag = soup.find("meta", attrs={"name": "description"})
+        if description_tag and description_tag.get("content"):
+            meta_tags["description"] = description_tag["content"].strip()
 
         # Extract keywords
-        keywords_tag = soup.find('meta', attrs={'name': 'keywords'})
-        if keywords_tag and keywords_tag.get('content'):
-            meta_tags['keywords'] = keywords_tag['content'].strip()
+        keywords_tag = soup.find("meta", attrs={"name": "keywords"})
+        if keywords_tag and keywords_tag.get("content"):
+            meta_tags["keywords"] = keywords_tag["content"].strip()
 
         # Extract author
-        author_tag = soup.find('meta', attrs={'name': 'author'})
-        if author_tag and author_tag.get('content'):
-            meta_tags['author'] = author_tag['content'].strip()
+        author_tag = soup.find("meta", attrs={"name": "author"})
+        if author_tag and author_tag.get("content"):
+            meta_tags["author"] = author_tag["content"].strip()
 
         return meta_tags
 
     def _extract_title(self, soup: BeautifulSoup) -> Optional[str]:
         """Extract page title"""
-        title_tag = soup.find('title')
+        title_tag = soup.find("title")
         if title_tag and title_tag.string:
             return title_tag.string.strip()
         return None
@@ -303,10 +304,10 @@ class URLExtractor:
     def _extract_first_image(self, soup: BeautifulSoup, base_url: str) -> Optional[str]:
         """Extract the first meaningful image"""
         # Find img tags
-        img_tags = soup.find_all('img', src=True)
+        img_tags = soup.find_all("img", src=True)
 
         for img in img_tags:
-            src = img['src'].strip()
+            src = img["src"].strip()
             if not src:
                 continue
 
@@ -323,16 +324,16 @@ class URLExtractor:
         """Determine if the image is meaningful (non-decorative)"""
         # Skip obvious decorative images
         skip_patterns = [
-            'icon',
-            'logo',
-            'avatar',
-            'button',
-            'pixel',
-            'spacer',
-            'blank',
-            'transparent',
-            '1x1',
-            'tracking',
+            "icon",
+            "logo",
+            "avatar",
+            "button",
+            "pixel",
+            "spacer",
+            "blank",
+            "transparent",
+            "1x1",
+            "tracking",
         ]
 
         src_lower = src.lower()
@@ -340,8 +341,8 @@ class URLExtractor:
             return False
 
         # Check image size attributes
-        width = img_tag.get('width')
-        height = img_tag.get('height')
+        width = img_tag.get("width")
+        height = img_tag.get("height")
 
         if width and height:
             try:
@@ -360,10 +361,10 @@ class URLExtractor:
     def _extract_favicon(self, soup: BeautifulSoup, base_url: str) -> Optional[str]:
         """Extract website icon"""
         # Find icon in link tags
-        icon_links = soup.find_all('link', rel=lambda x: x and 'icon' in x.lower())
+        icon_links = soup.find_all("link", rel=lambda x: x and "icon" in x.lower())
 
         for link in icon_links:
-            href = link.get('href')
+            href = link.get("href")
             if href:
                 return urljoin(base_url, href.strip())
 
@@ -376,28 +377,28 @@ class URLExtractor:
         """Clean and validate metadata"""
         # Clean string fields
         string_fields = [
-            'title',
-            'description',
-            'image',
-            'site_name',
-            'type',
-            'favicon',
-            'url',
+            "title",
+            "description",
+            "image",
+            "site_name",
+            "type",
+            "favicon",
+            "url",
         ]
         for field in string_fields:
             if metadata.get(field):
                 # Clean extra whitespace
-                cleaned_value = re.sub(r'\s+', ' ', str(metadata[field])).strip()
+                cleaned_value = re.sub(r"\s+", " ", str(metadata[field])).strip()
                 metadata[field] = cleaned_value
 
                 # Limit length
-                if field == 'title' and len(metadata[field]) > 200:
-                    metadata[field] = metadata[field][:200] + '...'
-                elif field == 'description' and len(metadata[field]) > 500:
-                    metadata[field] = metadata[field][:500] + '...'
+                if field == "title" and len(metadata[field]) > 200:
+                    metadata[field] = metadata[field][:200] + "..."
+                elif field == "description" and len(metadata[field]) > 500:
+                    metadata[field] = metadata[field][:500] + "..."
 
         # Validate URL format
-        url_fields = ['image', 'favicon', 'url']
+        url_fields = ["image", "favicon", "url"]
         for field in url_fields:
             if metadata.get(field) and not self._is_valid_url(metadata[field]):
                 metadata[field] = None
@@ -426,12 +427,12 @@ class URLExtractor:
 
         # Define regular expression patterns for template variables
         template_patterns = [
-            r'\$\{[^}]+\}',  # ${variable}
-            r'\{\{[^}]+\}\}',  # {{variable}}
-            r'#\{[^}]+\}',  # #{variable}
-            r'@\{[^}]+\}',  # @{variable}
+            r"\$\{[^}]+\}",  # ${variable}
+            r"\{\{[^}]+\}\}",  # {{variable}}
+            r"#\{[^}]+\}",  # #{variable}
+            r"@\{[^}]+\}",  # @{variable}
             # {variable} - Only match variable names containing letters, digits, dots, underscores
-            r'\{[a-zA-Z_][a-zA-Z0-9_.]*\}',
+            r"\{[a-zA-Z_][a-zA-Z0-9_.]*\}",
         ]
 
         # Check each pattern
@@ -478,37 +479,37 @@ class URLExtractor:
     ) -> Dict[str, Any]:
         """Create empty metadata"""
         return {
-            'title': None,
-            'description': None,
-            'image': None,
-            'site_name': None,
-            'url': final_url,
-            'original_url': original_url,
-            'final_url': final_url,
-            'type': None,
-            'favicon': None,
-            'og_tags': {},
-            'twitter_tags': {},
-            'meta_tags': {},
-            'error': None,
+            "title": None,
+            "description": None,
+            "image": None,
+            "site_name": None,
+            "url": final_url,
+            "original_url": original_url,
+            "final_url": final_url,
+            "type": None,
+            "favicon": None,
+            "og_tags": {},
+            "twitter_tags": {},
+            "meta_tags": {},
+            "error": None,
         }
 
     def _create_error_metadata(self, url: str, error: str) -> Dict[str, Any]:
         """Create error metadata"""
         return {
-            'title': None,
-            'description': None,
-            'image': None,
-            'site_name': None,
-            'url': url,
-            'original_url': url,
-            'final_url': url,
-            'type': None,
-            'favicon': None,
-            'og_tags': {},
-            'twitter_tags': {},
-            'meta_tags': {},
-            'error': error,
+            "title": None,
+            "description": None,
+            "image": None,
+            "site_name": None,
+            "url": url,
+            "original_url": url,
+            "final_url": url,
+            "type": None,
+            "favicon": None,
+            "og_tags": {},
+            "twitter_tags": {},
+            "meta_tags": {},
+            "error": error,
         }
 
 

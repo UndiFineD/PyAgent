@@ -1,20 +1,18 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-VoiceCraft\main.py
-from pathlib import Path
-import torch
-import pickle
 import argparse
 import logging
+import pickle
+from pathlib import Path
+
+import torch
 import torch.distributed as dist
 from config import MyParser
 from steps import trainer
 
-
 if __name__ == "__main__":
-    formatter = (
-        "%(asctime)s [%(levelname)s] %(filename)s:%(lineno)d || %(message)s"
-    )
+    formatter = "%(asctime)s [%(levelname)s] %(filename)s:%(lineno)d || %(message)s"
     logging.basicConfig(format=formatter, level=logging.INFO)
-    
+
     torch.cuda.empty_cache()
     args = MyParser().parse_args()
     logging.info(args)
@@ -24,7 +22,7 @@ if __name__ == "__main__":
 
     if args.resume:
         resume = args.resume
-        assert(bool(args.exp_dir))
+        assert bool(args.exp_dir)
         with open("%s/args.pkl" % args.exp_dir, "rb") as f:
             old_args = pickle.load(f)
         new_args = vars(args)
@@ -38,7 +36,7 @@ if __name__ == "__main__":
         with open("%s/args.pkl" % args.exp_dir, "wb") as f:
             pickle.dump(args, f)
 
-    dist.init_process_group(backend='nccl', init_method='env://')
+    dist.init_process_group(backend="nccl", init_method="env://")
     rank = dist.get_rank()
     world_size = dist.get_world_size()
     torch.cuda.set_device(rank)

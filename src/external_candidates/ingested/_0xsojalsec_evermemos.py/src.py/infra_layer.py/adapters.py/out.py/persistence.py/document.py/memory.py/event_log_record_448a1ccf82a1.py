@@ -6,12 +6,14 @@ Unified storage for event logs (atomic facts) extracted from episodic memory (in
 """
 
 from datetime import datetime
-from typing import List, Optional, Dict, Any
-from core.oxm.mongo.document_base import DocumentBase
-from pydantic import Field, ConfigDict
-from pymongo import IndexModel, ASCENDING, DESCENDING
-from core.oxm.mongo.audit_base import AuditBase
+from typing import Any, Dict, List, Optional
+
 from beanie import PydanticObjectId
+from pydantic import ConfigDict, Field
+from pymongo import ASCENDING, DESCENDING, IndexModel
+
+from core.oxm.mongo.audit_base import AuditBase
+from core.oxm.mongo.document_base import DocumentBase
 
 
 class EventLogRecord(DocumentBase, AuditBase):

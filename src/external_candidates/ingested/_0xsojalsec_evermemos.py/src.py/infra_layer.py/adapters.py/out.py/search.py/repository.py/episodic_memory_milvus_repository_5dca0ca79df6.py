@@ -6,16 +6,18 @@ Specialized repository class for episodic memory based on BaseMilvusRepository, 
 Main features include vector storage, similarity search, filtered queries, and document management.
 """
 
-from datetime import datetime
-from typing import List, Optional, Dict, Any, Union
 import json
-from core.oxm.milvus.base_repository import BaseMilvusRepository
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
+
+from common_utils.datetime_utils import get_now_with_timezone
 from infra_layer.adapters.out.search.milvus.memory.episodic_memory_collection import (
     EpisodicMemoryCollection,
 )
-from core.observation.logger import get_logger
-from common_utils.datetime_utils import get_now_with_timezone
+
 from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.milvus.base_repository import BaseMilvusRepository
 
 logger = get_logger(__name__)
 
@@ -221,9 +223,9 @@ class EpisodicMemoryMilvusRepository(BaseMilvusRepository[EpisodicMemoryCollecti
             if event_type:
                 filter_expr.append(f'event_type == "{event_type}"')
             if start_time:
-                filter_expr.append(f'timestamp >= {int(start_time.timestamp())}')
+                filter_expr.append(f"timestamp >= {int(start_time.timestamp())}")
             if end_time:
-                filter_expr.append(f'timestamp <= {int(end_time.timestamp())}')
+                filter_expr.append(f"timestamp <= {int(end_time.timestamp())}")
 
             filter_str = " and ".join(filter_expr) if filter_expr else None
 
@@ -352,9 +354,9 @@ class EpisodicMemoryMilvusRepository(BaseMilvusRepository[EpisodicMemoryCollecti
             if group_id:
                 filter_expr.append(f'group_id == "{group_id}"')
             if start_time:
-                filter_expr.append(f'timestamp >= {int(start_time.timestamp())}')
+                filter_expr.append(f"timestamp >= {int(start_time.timestamp())}")
             if end_time:
-                filter_expr.append(f'timestamp <= {int(end_time.timestamp())}')
+                filter_expr.append(f"timestamp <= {int(end_time.timestamp())}")
 
             if not filter_expr:
                 raise ValueError("At least one filter condition must be provided")
