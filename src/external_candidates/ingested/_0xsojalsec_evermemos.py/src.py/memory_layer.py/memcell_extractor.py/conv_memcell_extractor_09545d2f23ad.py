@@ -6,28 +6,28 @@ This module provides a simple and extensible base class for detecting
 boundaries in various types of content (conversations, emails, notes, etc.).
 """
 
-from typing import Dict, Any, Optional, List, Tuple
-from datetime import datetime
-from dataclasses import dataclass
-import uuid
-import json, re
 import asyncio
-from core.di.utils import get_bean, get_bean_by_type
-from core.component.llm.tokenizer.tokenizer_factory import TokenizerFactory
-from common_utils.datetime_utils import (
-    from_iso_format as dt_from_iso_format,
-)
-from memory_layer.llm.llm_provider import LLMProvider
-from api_specs.memory_types import RawDataType
+import json
+import re
+import uuid
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
-from memory_layer.prompts import get_prompt_by
+from api_specs.memory_types import RawDataType
+from common_utils.datetime_utils import from_iso_format as dt_from_iso_format
+from memory_layer.llm.llm_provider import LLMProvider
 from memory_layer.memcell_extractor.base_memcell_extractor import (
-    MemCellExtractor,
-    RawData,
     MemCell,
-    StatusResult,
+    MemCellExtractor,
     MemCellExtractRequest,
+    RawData,
+    StatusResult,
 )
+from memory_layer.prompts import get_prompt_by
+
+from core.component.llm.tokenizer.tokenizer_factory import TokenizerFactory
+from core.di.utils import get_bean, get_bean_by_type
 from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
@@ -117,8 +117,8 @@ class ConvMemCellExtractor(MemCellExtractor):
         total = 0
         for msg in messages:
             if isinstance(msg, dict):
-                speaker = msg.get('speaker_name', '')
-                content = msg.get('content', '')
+                speaker = msg.get("speaker_name", "")
+                content = msg.get("content", "")
                 # Format matches what's sent to LLM: "speaker: content"
                 text = f"{speaker}: {content}" if speaker else content
             else:
@@ -147,25 +147,25 @@ class ConvMemCellExtractor(MemCellExtractor):
         for raw_data in chat_raw_data_list:
 
             # Extract speaker_id
-            if 'speaker_id' in raw_data and raw_data['speaker_id']:
-                participant_ids.add(raw_data['speaker_id'])
+            if "speaker_id" in raw_data and raw_data["speaker_id"]:
+                participant_ids.add(raw_data["speaker_id"])
 
             # Extract all IDs from referList
-            if 'referList' in raw_data and raw_data['referList']:
-                for refer_item in raw_data['referList']:
+            if "referList" in raw_data and raw_data["referList"]:
+                for refer_item in raw_data["referList"]:
                     # refer_item may be a dictionary format containing _id field
                     if isinstance(refer_item, dict):
                         # Handle MongoDB ObjectId format _id
-                        if '_id' in refer_item:
-                            refer_id = refer_item['_id']
+                        if "_id" in refer_item:
+                            refer_id = refer_item["_id"]
                             # If it's an ObjectId object, convert to string
-                            if hasattr(refer_id, '__str__'):
+                            if hasattr(refer_id, "__str__"):
                                 participant_ids.add(str(refer_id))
                             else:
                                 participant_ids.add(refer_id)
                         # Also check regular id field
-                        elif 'id' in refer_item:
-                            participant_ids.add(refer_item['id'])
+                        elif "id" in refer_item:
+                            participant_ids.add(refer_item["id"])
                     # If refer_item is directly an ID string
                     elif isinstance(refer_item, str):
                         participant_ids.add(refer_item)
@@ -518,7 +518,7 @@ class ConvMemCellExtractor(MemCellExtractor):
         )
 
         # Get message type
-        msg_type = content.get('msgType') if isinstance(content, dict) else None
+        msg_type = content.get("msgType") if isinstance(content, dict) else None
 
         # Define supported message types and corresponding placeholders
         SUPPORTED_MSG_TYPES = {
@@ -544,7 +544,7 @@ class ConvMemCellExtractor(MemCellExtractor):
             if placeholder is not None:
                 # Replace message content with placeholder
                 content = content.copy()
-                content['content'] = placeholder
+                content["content"] = placeholder
                 logger.debug(
                     f"[ConvMemCellExtractor] Message type {msg_type} converted to placeholder: {placeholder}"
                 )

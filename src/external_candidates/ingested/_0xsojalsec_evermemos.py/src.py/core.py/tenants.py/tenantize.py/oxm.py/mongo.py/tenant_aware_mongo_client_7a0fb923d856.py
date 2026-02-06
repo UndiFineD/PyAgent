@@ -6,21 +6,22 @@ This module implements tenant-aware proxy versions of AsyncMongoClient and Async
 Core functionality: intercept all method calls and dynamically switch to the corresponding real client/database based on tenant context.
 """
 
-from typing import Dict, Optional, Any
-from pymongo.asynchronous.mongo_client import AsyncMongoClient
-from pymongo.asynchronous.database import AsyncDatabase
+from typing import Any, Dict, Optional
+
+from common_utils.datetime_utils import timezone
 from pymongo.asynchronous.collection import AsyncCollection
+from pymongo.asynchronous.database import AsyncDatabase
+from pymongo.asynchronous.mongo_client import AsyncMongoClient
 
 from core.observation.logger import get_logger
-from core.tenants.tenant_contextvar import get_current_tenant
 from core.tenants.tenant_config import get_tenant_config
+from core.tenants.tenant_contextvar import get_current_tenant
 from core.tenants.tenant_models import TenantPatchKey
-from common_utils.datetime_utils import timezone
 from core.tenants.tenantize.oxm.mongo.config_utils import (
-    get_tenant_mongo_config,
-    get_mongo_client_cache_key,
-    load_mongo_config_from_env,
     get_default_database_name,
+    get_mongo_client_cache_key,
+    get_tenant_mongo_config,
+    load_mongo_config_from_env,
 )
 from core.tenants.tenantize.tenant_cache_utils import get_or_compute_tenant_cache
 

@@ -19,10 +19,9 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import torch
-from transformers import AutoModelForCausalLM
-
 from janus.models import MultiModalityCausalLM, VLChatProcessor
 from janus.utils.io import load_pil_images
+from transformers import AutoModelForCausalLM
 
 # specify the path to the model
 model_path = "deepseek-ai/Janus-1.3B"

@@ -52,4 +52,4 @@ from core.events.base_event import BaseEvent
 from core.events.event_listener import EventListener
 from core.events.event_publisher import ApplicationEventPublisher
 
-__all__ = ['BaseEvent', 'EventListener', 'ApplicationEventPublisher']
+__all__ = ["BaseEvent", "EventListener", "ApplicationEventPublisher"]

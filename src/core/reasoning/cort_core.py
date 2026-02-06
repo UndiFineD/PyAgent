@@ -12,6 +12,61 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""CoRTReasoningCore (Chain-of-Recursive-Thoughts) placeholder.
+
+Provides a small API interface for recursive reasoning rounds. This
+module is intentionally conservative and returns structured placeholders
+for integration and testing.
+"""
+from __future__ import annotations
+from dataclasses import dataclass
+import typing as t
+
+
+@dataclass
+class ReasonStep:
+    prompt: str
+    response: str
+    score: float = 0.0
+
+
+class CoRTReasoningCore:
+    """Minimal recursive reasoning coordinator stub.
+
+    The real implementation should implement multiple rounds, evaluation,
+    and temperature/strategy selection. This stub provides a synchronous
+    interface for integration tests.
+    """
+
+    def __init__(self):
+        self.history: list[ReasonStep] = []
+
+    def think(self, prompt: str, rounds: int = 1) -> list[ReasonStep]:
+        """Perform `rounds` reasoning steps and return the step history.
+
+        This stub echoes the prompt as the response for now.
+        """
+        for i in range(rounds):
+            step = ReasonStep(prompt=prompt, response=f"Echo: {prompt}", score=1.0)
+            self.history.append(step)
+        return list(self.history[-rounds:])
+
+
+__all__ = ["CoRTReasoningCore", "ReasonStep"]
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 PyAgent Chain-of-Recursive-Thoughts (CoRT) Reasoning System.
 

@@ -5,14 +5,13 @@ import re
 from collections import defaultdict
 from json import JSONDecodeError
 
-from inspect_ai.model import ChatMessageUser
-from inspect_ai.solver import Solver, solver, TaskState, Generate
-
 from data.vqa.blueprint_transforms import detect_direction_system
 from data.vqa.direction_utils import convert_numeric_direction
 from data.vqa.position_utils import format_position
-from fle.agents.data.screenshots_from_run import create_factorio_instance
 from dotenv import load_dotenv
+from fle.agents.data.screenshots_from_run import create_factorio_instance
+from inspect_ai.model import ChatMessageUser
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 load_dotenv()
 
@@ -182,15 +181,21 @@ Return your response in this exact JSON format:
                                 )[:3]
 
                             options = {
-                                "A": distractors[0]
-                                if len(distractors) > 0
-                                else "transport-belt",
-                                "B": distractors[1]
-                                if len(distractors) > 1
-                                else "inserter",
-                                "C": distractors[2]
-                                if len(distractors) > 2
-                                else "assembly-machine-2",
+                                "A": (
+                                    distractors[0]
+                                    if len(distractors) > 0
+                                    else "transport-belt"
+                                ),
+                                "B": (
+                                    distractors[1]
+                                    if len(distractors) > 1
+                                    else "inserter"
+                                ),
+                                "C": (
+                                    distractors[2]
+                                    if len(distractors) > 2
+                                    else "assembly-machine-2"
+                                ),
                                 "D": entity_name,
                             }
                             correct_answer = "D"

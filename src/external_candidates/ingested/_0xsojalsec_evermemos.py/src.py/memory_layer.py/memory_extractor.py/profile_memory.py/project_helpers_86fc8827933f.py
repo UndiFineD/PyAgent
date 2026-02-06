@@ -6,13 +6,13 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Set
 
-from core.observation.logger import get_logger
-
 from memory_layer.memory_extractor.profile_memory.types import ProjectInfo
 from memory_layer.memory_extractor.profile_memory.value_helpers import (
     extract_values_with_evidence,
     merge_value_with_evidences_lists,
 )
+
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -217,7 +217,7 @@ def _normalize_entry_date(value: Any) -> str:
 
 
 def filter_project_items_by_type(
-    projects_participated: Optional[List[Dict[str, Any]]]
+    projects_participated: Optional[List[Dict[str, Any]]],
 ) -> Optional[List[Dict[str, Any]]]:
     """
     Filter subtasks and contributions in projects_participated by type.

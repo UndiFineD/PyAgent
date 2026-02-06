@@ -1,10 +1,11 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-maltego-telegram\settings.py
+import asyncio
+import configparser
+import multiprocessing
+import os
+
 from pyrogram import Client
 
-import configparser
-import asyncio
-import os
-import multiprocessing
 
 class Config:
     def __init__(self, filename="config.ini"):
@@ -18,6 +19,7 @@ class Config:
             return self.config.get(section, key)
         except (configparser.NoSectionError, configparser.NoOptionError):
             return fallback
+
 
 config = Config()
 

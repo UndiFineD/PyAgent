@@ -65,7 +65,10 @@ _PACKAGE_MAPPING = {
 _PATH_ROOT = os.path.dirname(__file__)
 _PATH_SRC = os.path.join(_PATH_ROOT, "src")
 _PATH_REQUIRE = os.path.join(_PATH_ROOT, "requirements")
-_FREEZE_REQUIREMENTS = os.environ.get("FREEZE_REQUIREMENTS", "0").lower() in ("1", "true")
+_FREEZE_REQUIREMENTS = os.environ.get("FREEZE_REQUIREMENTS", "0").lower() in (
+    "1",
+    "true",
+)
 
 
 def _load_py_module(name: str, location: str) -> ModuleType:
@@ -86,7 +89,9 @@ def _named_temporary_file(directory: Optional[str] = None) -> str:
 
 
 @contextlib.contextmanager
-def _set_manifest_path(manifest_dir: str, aggregate: bool = False, mapping: Mapping = _PACKAGE_MAPPING) -> Generator:
+def _set_manifest_path(
+    manifest_dir: str, aggregate: bool = False, mapping: Mapping = _PACKAGE_MAPPING
+) -> Generator:
     if aggregate:
         # aggregate all MANIFEST.in contents into a single temporary file
         manifest_path = _named_temporary_file(manifest_dir)
@@ -122,7 +127,9 @@ def _set_manifest_path(manifest_dir: str, aggregate: bool = False, mapping: Mapp
 
 
 if __name__ == "__main__":
-    assistant = _load_py_module(name="assistant", location=os.path.join(_PATH_ROOT, ".actions", "assistant.py"))
+    assistant = _load_py_module(
+        name="assistant", location=os.path.join(_PATH_ROOT, ".actions", "assistant.py")
+    )
 
     if os.path.isdir(_PATH_SRC):
         # copy the version information to all packages
@@ -152,15 +159,21 @@ if __name__ == "__main__":
     else:
         assert len(local_pkgs) > 0
         # PL as a package is distributed together with Fabric, so in such case there are more than one candidate
-        package_to_install = "pytorch_lightning" if "pytorch_lightning" in local_pkgs else local_pkgs[0]
+        package_to_install = (
+            "pytorch_lightning" if "pytorch_lightning" in local_pkgs else local_pkgs[0]
+        )
     print(f"Installing package: {package_to_install}")
 
     # going to install with `setuptools.setup`
     pkg_path = os.path.join(_PATH_SRC, package_to_install)
     pkg_setup = os.path.join(pkg_path, "__setup__.py")
     if not os.path.exists(pkg_setup):
-        raise RuntimeError(f"Something's wrong, no package was installed. Package name: {_PACKAGE_NAME}")
-    setup_module = _load_py_module(name=f"{package_to_install}_setup", location=pkg_setup)
+        raise RuntimeError(
+            f"Something's wrong, no package was installed. Package name: {_PACKAGE_NAME}"
+        )
+    setup_module = _load_py_module(
+        name=f"{package_to_install}_setup", location=pkg_setup
+    )
     setup_args = setup_module._setup_args()
     is_main_pkg = package_to_install == "lightning"
     print(f"Installing as the main package: {is_main_pkg}")

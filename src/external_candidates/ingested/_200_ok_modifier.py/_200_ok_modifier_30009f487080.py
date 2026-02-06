@@ -1,10 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\200-OK-Modifier\200_OK_modifier.py
 # -*- coding: utf-8 -*-
-from burp import IBurpExtender
-from burp import IContextMenuFactory
-from burp import IHttpListener
-from java.util import List, ArrayList
+from burp import IBurpExtender, IContextMenuFactory, IHttpListener
+from java.util import ArrayList, List
 from javax.swing import JCheckBoxMenuItem
+
 
 class BurpExtender(IBurpExtender, IContextMenuFactory, IHttpListener):
     def registerExtenderCallbacks(self, callbacks):
@@ -18,8 +17,12 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, IHttpListener):
     def createMenuItems(self, invocation):
         self.context = invocation
         menu = ArrayList()
-        activateMenuItem = JCheckBoxMenuItem("Change Response to 200 OK", actionPerformed=self.toggleEnabled)
-        deactivateMenuItem = JCheckBoxMenuItem("Disable response modifier", actionPerformed=self.toggleDisabled)
+        activateMenuItem = JCheckBoxMenuItem(
+            "Change Response to 200 OK", actionPerformed=self.toggleEnabled
+        )
+        deactivateMenuItem = JCheckBoxMenuItem(
+            "Disable response modifier", actionPerformed=self.toggleDisabled
+        )
         if self.enabled:
             activateMenuItem.setSelected(True)
         else:
@@ -44,6 +47,6 @@ class BurpExtender(IBurpExtender, IContextMenuFactory, IHttpListener):
                 headers = list(responseInfo.getHeaders())
                 statusCode = responseInfo.getStatusCode()
                 headers[0] = "HTTP/2 200 OK OriginalCodeWas: {}".format(statusCode)
-                responseBody = responseBytes[responseInfo.getBodyOffset():]
+                responseBody = responseBytes[responseInfo.getBodyOffset() :]
                 newResponse = self._helpers.buildHttpMessage(headers, responseBody)
                 messageInfo.setResponse(newResponse)

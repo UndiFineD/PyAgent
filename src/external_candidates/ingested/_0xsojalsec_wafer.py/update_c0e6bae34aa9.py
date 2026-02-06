@@ -1,10 +1,11 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-wafer\update.py
-import requests
-import sys
-import os
-import zipfile
-from lxml import html as lxml_html
 import logging as log
+import os
+import sys
+import zipfile
+
+import requests
+from lxml import html as lxml_html
 
 URL = "https://googlechromelabs.github.io/chrome-for-testing/#stable"
 

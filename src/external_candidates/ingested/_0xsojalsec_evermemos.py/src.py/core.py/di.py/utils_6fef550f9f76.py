@@ -4,14 +4,14 @@
 Dependency injection utility functions
 """
 
-from typing import Type, TypeVar, List, Dict, Any, Optional, Callable
 import inspect
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
 
-from core.di.container import get_container
 from core.di.bean_definition import BeanScope
+from core.di.container import get_container
 from core.di.exceptions import BeanNotFoundError
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 def get_bean(name: str) -> Any:
@@ -348,24 +348,24 @@ def get_bean_info(bean_type: Type = None, bean_name: str = None) -> Dict[str, An
         if container.contains_bean(bean_name):
             bean_def = container._named_beans[bean_name]
             info = {
-                'name': bean_def.bean_name,
-                'type': bean_def.bean_type.__name__,
-                'scope': bean_def.scope.value,
-                'is_primary': bean_def.is_primary,
-                'is_mock': bean_def.is_mock,
-                'has_instance': bean_def in container._singleton_instances,
+                "name": bean_def.bean_name,
+                "type": bean_def.bean_type.__name__,
+                "scope": bean_def.scope.value,
+                "is_primary": bean_def.is_primary,
+                "is_mock": bean_def.is_mock,
+                "has_instance": bean_def in container._singleton_instances,
             }
     elif bean_type:
         if container.contains_bean_by_type(bean_type):
             definitions = container._bean_definitions[bean_type]
             info = {
-                'type': bean_type.__name__,
-                'implementations': [
+                "type": bean_type.__name__,
+                "implementations": [
                     {
-                        'name': def_.bean_name,
-                        'scope': def_.scope.value,
-                        'is_primary': def_.is_primary,
-                        'is_mock': def_.is_mock,
+                        "name": def_.bean_name,
+                        "scope": def_.scope.value,
+                        "is_primary": def_.is_primary,
+                        "is_mock": def_.is_mock,
                     }
                     for def_ in definitions
                 ],
@@ -396,9 +396,9 @@ def list_all_beans() -> List[str]:
     formatted_beans = []
     for bean_info in beans_info:
         flags = []
-        if bean_info['is_primary']:
+        if bean_info["is_primary"]:
             flags.append("primary")
-        if bean_info['is_mock']:
+        if bean_info["is_mock"]:
             flags.append("mock")
         flag_str = f" ({', '.join(flags)})" if flags else ""
 
@@ -412,9 +412,9 @@ def list_all_beans() -> List[str]:
 def print_container_info():
     """Print container information"""
     formatted_beans = list_all_beans()
-    from core.observation.logger import (
+    from core.observation.logger import (  # Convenient usage, suitable for occasional calls
         info,
-    )  # Convenient usage, suitable for occasional calls
+    )
 
     info(f"\n📦 Dependency injection container information:")
     info(f"   Total Bean count: {len(formatted_beans)}")

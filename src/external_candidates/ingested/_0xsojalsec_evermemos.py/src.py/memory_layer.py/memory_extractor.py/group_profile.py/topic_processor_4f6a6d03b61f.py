@@ -1,11 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\memory_layer\memory_extractor\group_profile\topic_processor.py
 """Topic management utilities for group profile extraction."""
 
-from typing import List, Dict, Set, Optional
-from datetime import datetime
 import uuid
+from datetime import datetime
+from typing import Dict, List, Optional, Set
 
-from common_utils.datetime_utils import get_now_with_timezone, from_iso_format
+from common_utils.datetime_utils import from_iso_format, get_now_with_timezone
+
 from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
@@ -75,7 +76,9 @@ class TopicProcessor:
         Returns:
             Latest timestamp from (filtered) memcells, or current time if no valid timestamp found.
         """
-        from memory_layer.memory_extractor.group_profile_memory_extractor import convert_to_datetime
+        from memory_layer.memory_extractor.group_profile_memory_extractor import (
+            convert_to_datetime,
+        )
 
         # If memcell_ids provided and not empty, create a set for fast lookup
         filter_ids = set(memcell_ids) if memcell_ids else None
@@ -86,12 +89,12 @@ class TopicProcessor:
         for memcell in memcell_list:
             # If filter_ids provided, only consider memcells in the filter
             # Convert to string to match format in filter_ids
-            if filter_ids and hasattr(memcell, 'event_id'):
+            if filter_ids and hasattr(memcell, "event_id"):
                 memcell_id_str = str(memcell.event_id)
                 if memcell_id_str not in filter_ids:
                     continue
 
-            if hasattr(memcell, 'timestamp') and memcell.timestamp:
+            if hasattr(memcell, "timestamp") and memcell.timestamp:
                 matched_count += 1
                 memcell_time = convert_to_datetime(memcell.timestamp)
                 if latest_time is None or memcell_time > latest_time:
@@ -127,7 +130,9 @@ class TopicProcessor:
         Returns:
             Processed list of TopicInfo objects (sorted by last_active_at)
         """
-        from memory_layer.memory_extractor.group_profile_memory_extractor import TopicInfo
+        from memory_layer.memory_extractor.group_profile_memory_extractor import (
+            TopicInfo,
+        )
 
         # Calculate the latest time in memcell list as reference time point
         # Used for time judgment in topic replacement strategy (offline batch processing scenario)

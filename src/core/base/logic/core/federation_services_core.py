@@ -20,7 +20,7 @@ import json
 import logging
 from typing import Dict, List, Optional, Any, Tuple, Set, Union
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 import uuid
 import base64
@@ -293,7 +293,7 @@ class FederationServicesCore:
         """Generate a SAML security token"""
         try:
             token_id = str(uuid.uuid4())
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             expires = now + timedelta(minutes=request.validity_minutes)
 
             # Create token based on provider

@@ -10,22 +10,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List
 
-from rich.progress import (
-    Progress,
-    SpinnerColumn,
-    TextColumn,
-    BarColumn,
-    TaskProgressColumn,
-    TimeElapsedColumn,
-    TimeRemainingColumn,
-    MofNCompleteColumn,
-)
-from rich.console import Console
-
-from evaluation.src.adapters.base import BaseAdapter
-from evaluation.src.adapters.registry import register_adapter
-from evaluation.src.core.data_models import Conversation, SearchResult
 from common_utils.datetime_utils import to_iso_format
+from evaluation.src.adapters.base import BaseAdapter
 
 # Import EverMemOS implementation
 from evaluation.src.adapters.evermemos import (
@@ -34,10 +20,23 @@ from evaluation.src.adapters.evermemos import (
     stage3_memory_retrivel,
     stage4_response,
 )
+from evaluation.src.adapters.registry import register_adapter
+from evaluation.src.core.data_models import Conversation, SearchResult
 
 # Import Memory Layer components
 from memory_layer.llm.llm_provider import LLMProvider
 from memory_layer.memory_extractor.event_log_extractor import EventLogExtractor
+from rich.console import Console
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    SpinnerColumn,
+    TaskProgressColumn,
+    TextColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+)
 
 
 @register_adapter("evermemos")
@@ -558,8 +557,8 @@ class EverMemOSAdapter(BaseAdapter):
             # Build context using response_top_k
             retrieved_docs_text = []
             for doc, score in top_results[:response_top_k]:
-                subject = doc.get('subject', 'N/A')
-                episode = doc.get('episode', 'N/A')
+                subject = doc.get("subject", "N/A")
+                episode = doc.get("episode", "N/A")
                 doc_text = f"{subject}: {episode}\n---"
                 retrieved_docs_text.append(doc_text)
 
@@ -616,8 +615,9 @@ class EverMemOSAdapter(BaseAdapter):
         """
         Convert evaluation framework config to ExperimentConfig format.
         """
-        from evaluation.src.adapters.evermemos.config import ExperimentConfig
         import os
+
+        from evaluation.src.adapters.evermemos.config import ExperimentConfig
 
         exp_config = ExperimentConfig()
 

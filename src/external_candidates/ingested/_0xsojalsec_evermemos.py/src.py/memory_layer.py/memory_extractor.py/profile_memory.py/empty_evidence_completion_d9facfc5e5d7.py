@@ -5,12 +5,20 @@ from __future__ import annotations
 
 from typing import AbstractSet, Any, Callable, Dict, List, Optional, Set, Tuple
 
-from core.observation.logger import get_logger
-
 from memory_layer.llm.llm_provider import LLMProvider
-from memory_layer.memory_extractor.profile_memory.conversation import build_evidence_completion_prompt
-from memory_layer.memory_extractor.profile_memory.data_normalize import merge_evidences_recursive
-from memory_layer.memory_extractor.profile_memory.evidence_utils import conversation_id_from_evidence, ensure_str_list, format_evidence_entry
+from memory_layer.memory_extractor.profile_memory.conversation import (
+    build_evidence_completion_prompt,
+)
+from memory_layer.memory_extractor.profile_memory.data_normalize import (
+    merge_evidences_recursive,
+)
+from memory_layer.memory_extractor.profile_memory.evidence_utils import (
+    conversation_id_from_evidence,
+    ensure_str_list,
+    format_evidence_entry,
+)
+
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -193,7 +201,7 @@ async def complete_missing_evidences(
 
 
 def _extract_missing_evidences_payload(
-    profile: Dict[str, Any]
+    profile: Dict[str, Any],
 ) -> Optional[Dict[str, Any]]:
     """Return a minimal payload containing only entries lacking evidences."""
     if not profile:

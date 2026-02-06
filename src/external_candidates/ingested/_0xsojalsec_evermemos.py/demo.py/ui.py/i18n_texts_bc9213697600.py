@@ -9,7 +9,7 @@ Usage:
     print(texts.get("banner_title"))
 """
 
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 class I18nTexts:
@@ -76,7 +76,10 @@ class I18nTexts:
             "zh": "语义向量检索",
             "en": "Semantic vector search",
         },
-        "retrieval_mode_hybrid": {"zh": "Hybrid 检索（推荐）", "en": "Hybrid Search (Recommended)"},
+        "retrieval_mode_hybrid": {
+            "zh": "Hybrid 检索（推荐）",
+            "en": "Hybrid Search (Recommended)",
+        },
         "retrieval_mode_hybrid_desc": {
             "zh": "Keyword + Vector + Rerank",
             "en": "Keyword + Vector + Rerank",
@@ -91,7 +94,10 @@ class I18nTexts:
             "zh": "LLM 引导的多轮检索（实验性）",
             "en": "LLM-guided multi-round retrieval (experimental)",
         },
-        "retrieval_mode_selected": {"zh": "已选择检索模式", "en": "Retrieval mode selected"},
+        "retrieval_mode_selected": {
+            "zh": "已选择检索模式",
+            "en": "Retrieval mode selected",
+        },
         "retrieval_mode_agentic_cost_warning": {
             "zh": "⚠️  Agentic 检索将使用 LLM API，可能产生额外费用",
             "en": "⚠️  Agentic retrieval uses LLM API, may incur additional costs",
@@ -123,7 +129,10 @@ class I18nTexts:
             "zh": "💡 首轮检索到的记忆信息不够充分，LLM 生成了更精确的补充查询以获取更多相关记忆",
             "en": "💡 First-round memories insufficient, LLM generated refined queries for more relevant memories",
         },
-        "agentic_supplementary_queries": {"zh": "补充查询", "en": "Supplementary queries"},
+        "agentic_supplementary_queries": {
+            "zh": "补充查询",
+            "en": "Supplementary queries",
+        },
         # ==================== Banner and Welcome ====================
         "banner_title": {
             "zh": "🧠  EverMem 记忆对话助手",

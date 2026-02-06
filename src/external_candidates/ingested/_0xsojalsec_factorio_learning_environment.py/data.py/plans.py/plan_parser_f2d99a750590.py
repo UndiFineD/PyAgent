@@ -1,9 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\plans\plan_parser.py
 import json
 import re
+from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Tuple
-from dataclasses import dataclass
 
 
 @dataclass

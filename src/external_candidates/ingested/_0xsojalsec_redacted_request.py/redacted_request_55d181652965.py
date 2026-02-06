@@ -1,15 +1,19 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-Redacted-Request\Redacted-Request.py
-from burp import IBurpExtender, IContextMenuFactory
-from javax.swing import JMenuItem
-from java.awt.datatransfer import StringSelection
-from java.awt import Toolkit
-from java.awt.event import ActionListener
 import re
+
+from burp import IBurpExtender, IContextMenuFactory
+from java.awt import Toolkit
+from java.awt.datatransfer import StringSelection
+from java.awt.event import ActionListener
+from javax.swing import JMenuItem
 
 # Welcome message
 print("Welcome to the Redacted Request Extension v1.0 by OME MISHRA!")
 print("Copyright (c) 2023 OME MISHRA. All rights reserved.")
-print("This code is protected by copyright law. Unauthorized copying or distribution is prohibited.")
+print(
+    "This code is protected by copyright law. Unauthorized copying or distribution is prohibited."
+)
+
 
 class BurpExtender(IBurpExtender, IContextMenuFactory):
 
@@ -28,7 +32,9 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         if len(selectedMessages) == 1:
             menuItems = []
             menuItem = JMenuItem("Copy Redacted Request")
-            menuItem.addActionListener(self.MenuItemClickListener(self._helpers, selectedMessages[0]))
+            menuItem.addActionListener(
+                self.MenuItemClickListener(self._helpers, selectedMessages[0])
+            )
             menuItems.append(menuItem)
             return menuItems
         return None
@@ -41,20 +47,29 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         def actionPerformed(self, e):
             request = self._selectedMessage.getRequest()
             requestBytes = self._helpers.bytesToString(request)
-            
+
             # Redact the Cookie header
-            modifiedRequestBytes = re.sub(r'Cookie: .*', 'Cookie: Redacted', requestBytes)
-            
+            modifiedRequestBytes = re.sub(
+                r"Cookie: .*", "Cookie: Redacted", requestBytes
+            )
+
             # Redact the Authorization header
-            modifiedRequestBytes = re.sub(r'Authorization: .*', 'Authorization: Redacted', modifiedRequestBytes)
-            
+            modifiedRequestBytes = re.sub(
+                r"Authorization: .*", "Authorization: Redacted", modifiedRequestBytes
+            )
+
             # Redact the X-Amz-Security-Token header
-            modifiedRequestBytes = re.sub(r'X-Amz-Security-Token: .*', 'X-Amz-Security-Token: Redacted', modifiedRequestBytes)
-            
+            modifiedRequestBytes = re.sub(
+                r"X-Amz-Security-Token: .*",
+                "X-Amz-Security-Token: Redacted",
+                modifiedRequestBytes,
+            )
+
             stringSelection = StringSelection(modifiedRequestBytes)
             clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
             clipboard.setContents(stringSelection, None)
             print("Request copied to clipboard.")
+
 
 if __name__ in ["__main__", "burp"]:
     BurpExtender()

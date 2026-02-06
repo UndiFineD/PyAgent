@@ -1,6 +1,7 @@
 # Extracted from: C:\DEV\PyAgent\.external\android-action-kernel\sanitizer.py
 import xml.etree.ElementTree as ET
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
+
 
 def get_interactive_elements(xml_content: str) -> List[Dict]:
     """
@@ -14,7 +15,7 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
         return []
 
     elements = []
-    
+
     # Recursively find all nodes
     for node in root.iter():
         # Filter: We only care about elements that are interactive or have information
@@ -22,29 +23,34 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
         # Check for actual text input fields (not just focusable elements)
         element_class = node.attrib.get("class", "")
         is_editable = (
-            "EditText" in element_class or
-            "AutoCompleteTextView" in element_class or
-            node.attrib.get("editable") == "true"
+            "EditText" in element_class
+            or "AutoCompleteTextView" in element_class
+            or node.attrib.get("editable") == "true"
         )
         text = node.attrib.get("text", "")
         desc = node.attrib.get("content-desc", "")
         resource_id = node.attrib.get("resource-id", "")
-        
+
         # Skip empty layout containers that do nothing
         if not is_clickable and not is_editable and not text and not desc:
             continue
-            
+
         # Parse Bounds: "[140,200][400,350]" -> Center X, Y
         bounds = node.attrib.get("bounds")
         if bounds:
             try:
                 # Extract coordinates
-                coords = bounds.replace("][", ",").replace("[", "").replace("]", "").split(",")
+                coords = (
+                    bounds.replace("][", ",")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split(",")
+                )
                 x1, y1, x2, y2 = map(int, coords)
-                
+
                 center_x = (x1 + x2) // 2
                 center_y = (y1 + y2) // 2
-                
+
                 # Determine suggested action based on element type
                 if is_editable:
                     suggested_action = "type"
@@ -61,7 +67,7 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
                     "center": (center_x, center_y),
                     "clickable": is_clickable,
                     "editable": is_editable,
-                    "action": suggested_action
+                    "action": suggested_action,
                 }
                 elements.append(element)
             except Exception:

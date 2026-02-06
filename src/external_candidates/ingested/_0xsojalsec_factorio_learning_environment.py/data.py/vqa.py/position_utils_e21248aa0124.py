@@ -2,7 +2,7 @@
 """Position utilities for VQA tasks."""
 
 import re
-from typing import Union, Tuple, Dict, Any
+from typing import Any, Dict, Tuple, Union
 
 
 def format_position(x: Union[int, float], y: Union[int, float]) -> str:

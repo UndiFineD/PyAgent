@@ -6,16 +6,18 @@ Event log specific repository class based on BaseRepository, providing efficient
 Reuses EpisodicMemoryDoc, filtering by type field as event_log.
 """
 
-from datetime import datetime
 import pprint
-from typing import List, Optional, Dict, Any
-from elasticsearch.dsl import Q
-from core.oxm.es.base_repository import BaseRepository
-from infra_layer.adapters.out.search.elasticsearch.memory.event_log import EventLogDoc
-from core.observation.logger import get_logger
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 from common_utils.datetime_utils import get_now_with_timezone
 from common_utils.text_utils import SmartTextParser
+from elasticsearch.dsl import Q
+from infra_layer.adapters.out.search.elasticsearch.memory.event_log import EventLogDoc
+
 from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.es.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 
@@ -136,17 +138,17 @@ class EventLogEsRepository(BaseRepository[EventLogDoc]):
                 user_id=user_id,
                 user_name=user_name or "",
                 timestamp=timestamp,
-                title='',
-                episode='',
+                title="",
+                episode="",
                 atomic_fact=atomic_fact,
                 search_content=search_content,
-                summary='',
+                summary="",
                 group_id=group_id,
                 group_name=group_name or "",
                 participants=participants or [],
                 keywords=[],
                 linked_entities=[],
-                subject='',
+                subject="",
                 memcell_event_id_list=[],
                 extend=eventlog_extend,
                 created_at=created_at,

@@ -5,8 +5,8 @@ from memory_layer.memory_extractor.profile_memory import (
     GroupImportanceEvidence,
     ImportanceEvidence,
     ProfileMemory,
-    ProfileMemoryExtractRequest,
     ProfileMemoryExtractor,
+    ProfileMemoryExtractRequest,
     ProfileMemoryMerger,
     ProjectInfo,
 )

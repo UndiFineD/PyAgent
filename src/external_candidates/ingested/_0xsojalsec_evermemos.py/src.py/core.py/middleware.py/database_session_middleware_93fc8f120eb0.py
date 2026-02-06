@@ -1,18 +1,18 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\middleware\database_session_middleware.py
-from fastapi import Request, Response
-from starlette.responses import StreamingResponse
-from starlette.middleware.base import _StreamingResponse
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.types import ASGIApp
-from typing import Callable, AsyncGenerator
-from sqlmodel.ext.asyncio.session import AsyncSession
+from typing import AsyncGenerator, Callable
 
+from fastapi import Request, Response
+from sqlmodel.ext.asyncio.session import AsyncSession
+from starlette.middleware.base import BaseHTTPMiddleware, _StreamingResponse
+from starlette.responses import StreamingResponse
+from starlette.types import ASGIApp
+
+from core.component.database_session_provider import DatabaseSessionProvider
 from core.context.context import (
-    set_current_session,
     clear_current_session,
     get_current_session,
+    set_current_session,
 )
-from core.component.database_session_provider import DatabaseSessionProvider
 from core.di.utils import get_bean_by_type
 from core.observation.logger import get_logger
 

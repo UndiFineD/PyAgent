@@ -1,12 +1,15 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-Kimi-Audio\infer.py
-from kimia_infer.api.kimia import KimiAudio
-import os
-import soundfile as sf
 import argparse
+import os
+
+import soundfile as sf
+from kimia_infer.api.kimia import KimiAudio
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_path", type=str, default="moonshotai/Kimi-Audio-7B-Instruct")
+    parser.add_argument(
+        "--model_path", type=str, default="moonshotai/Kimi-Audio-7B-Instruct"
+    )
     args = parser.parse_args()
 
     model = KimiAudio(
@@ -56,7 +59,6 @@ if __name__ == "__main__":
     )
     print(">>> output text: ", text)
 
-
     # audio2audio multiturn
     messages = [
         {
@@ -67,13 +69,16 @@ if __name__ == "__main__":
         {
             "role": "assistant",
             "message_type": "audio-text",
-            "content": ["test_audios/multiturn/case1/multiturn_a1.wav", "当然可以，李白的诗很多，比如这句：“床前明月光，疑是地上霜。举头望明月，低头思故乡。"]
+            "content": [
+                "test_audios/multiturn/case1/multiturn_a1.wav",
+                "当然可以，李白的诗很多，比如这句：“床前明月光，疑是地上霜。举头望明月，低头思故乡。",
+            ],
         },
         {
             "role": "user",
             "message_type": "audio",
             "content": "test_audios/multiturn/case1/multiturn_q2.wav",
-        }
+        },
     ]
     wav, text = model.generate(messages, **sampling_params, output_type="both")
     sf.write(
@@ -82,7 +87,6 @@ if __name__ == "__main__":
         24000,
     )
     print(">>> output text: ", text)
-
 
     messages = [
         {
@@ -93,13 +97,16 @@ if __name__ == "__main__":
         {
             "role": "assistant",
             "message_type": "audio-text",
-            "content": ["test_audios/multiturn/case2/multiturn_a1.wav", "当然可以，这很简单。一二三四五六七八九十。"]
+            "content": [
+                "test_audios/multiturn/case2/multiturn_a1.wav",
+                "当然可以，这很简单。一二三四五六七八九十。",
+            ],
         },
         {
             "role": "user",
             "message_type": "audio",
             "content": "test_audios/multiturn/case2/multiturn_q2.wav",
-        }
+        },
     ]
     wav, text = model.generate(messages, **sampling_params, output_type="both")
     sf.write(

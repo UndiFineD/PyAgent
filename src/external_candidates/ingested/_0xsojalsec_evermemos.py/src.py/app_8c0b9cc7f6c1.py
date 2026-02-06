@@ -5,18 +5,17 @@ Application module
 Contains business-specific logic such as controller registration, graph structure creation, capability loading, etc.
 """
 
+from base_app import create_base_app
 from fastapi import FastAPI
-from core.di.utils import get_beans_by_type, get_bean_by_type
-from core.capability.app_capability import ApplicationCapability
-from core.observation.logger import get_logger
-from core.interface.controller.base_controller import BaseController
-from core.middleware.user_context_middleware import UserContextMiddleware
-from core.middleware.app_logic_middleware import AppLogicMiddleware
 from fastapi.middleware import Middleware
 
-from base_app import create_base_app
+from core.capability.app_capability import ApplicationCapability
+from core.di.utils import get_bean_by_type, get_beans_by_type
+from core.interface.controller.base_controller import BaseController
 from core.lifespan.lifespan_factory import LifespanFactory
-
+from core.middleware.app_logic_middleware import AppLogicMiddleware
+from core.middleware.user_context_middleware import UserContextMiddleware
+from core.observation.logger import get_logger
 
 # Recommended usage: obtain logger once at the module top level, then use directly (high performance)
 logger = get_logger(__name__)

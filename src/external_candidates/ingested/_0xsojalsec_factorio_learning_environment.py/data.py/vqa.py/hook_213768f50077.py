@@ -4,12 +4,11 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
-from inspect_ai.hooks import Hooks, hooks, TaskEnd
-
-from inspect_ai.log import EvalLog, EvalSample
 from dotenv import load_dotenv
+from inspect_ai.hooks import Hooks, TaskEnd, hooks
+from inspect_ai.log import EvalLog, EvalSample
 
 load_dotenv()
 STEP = 32

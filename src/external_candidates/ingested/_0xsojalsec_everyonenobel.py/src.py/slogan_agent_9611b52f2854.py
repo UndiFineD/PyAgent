@@ -1,7 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EveryoneNobel\src\slogan_agent.py
-from openai import OpenAI
 import re
-from pypinyin import pinyin, Style
+
+from openai import OpenAI
+from pypinyin import Style, pinyin
 
 
 def call_llm(api_key: str, prompt: str, sys_prompt: str) -> dict:

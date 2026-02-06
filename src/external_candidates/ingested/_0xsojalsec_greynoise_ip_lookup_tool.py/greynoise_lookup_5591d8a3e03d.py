@@ -1,24 +1,26 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-GreyNoise-IP-Lookup-Tool\greynoise_lookup.py
 #!/usr/bin/env python3
 """
-GreyNoise IP Lookup 
+GreyNoise IP Lookup
 
 """
 
-import requests
-import sys
-import os
-import json
 import argparse
-from pathlib import Path
-from typing import Dict, Any, Optional
+import json
+import os
+import sys
 import time
+from pathlib import Path
+from typing import Any, Dict, Optional
+
+import requests
 
 # Configuration and cache files
 CONFIG_FILE = Path.home() / ".greynoise.conf"
 CACHE_FILE = Path.home() / ".greynoise_cache.json"
 API_URL = "https://api.greynoise.io/v3/community/"
 CACHE_EXPIRY = 86400  # 24 hours
+
 
 class Config:
     def __init__(self):
@@ -60,7 +62,8 @@ class Config:
             with open(CACHE_FILE, "r") as f:
                 cache = json.load(f)
                 return {
-                    k: v for k, v in cache.items()
+                    k: v
+                    for k, v in cache.items()
                     if time.time() - v.get("timestamp", 0) < CACHE_EXPIRY
                 }
         except (json.JSONDecodeError, IOError):
@@ -74,13 +77,12 @@ class Config:
         except IOError as e:
             print(f"⚠️ Error saving cache: {e}")
 
+
 def lookup_ip(ip_address: str, config: Config) -> Optional[Dict[str, Any]]:
     """Query GreyNoise API for the given IP address"""
     try:
         response = requests.get(
-            API_URL + ip_address,
-            headers=config.headers,
-            timeout=15
+            API_URL + ip_address, headers=config.headers, timeout=15
         )
 
         if response.status_code == 200:
@@ -91,9 +93,10 @@ def lookup_ip(ip_address: str, config: Config) -> Optional[Dict[str, Any]]:
         print(f"⚠️ Connection error: {e}")
     return None
 
+
 def print_json(data: Any, indent: int = 0):
     """Recursively print dictionary or list in a readable tree format"""
-    prefix = ' ' * indent
+    prefix = " " * indent
     if isinstance(data, dict):
         for k, v in data.items():
             print(f"{prefix}📌 {k}:", end=" ")
@@ -109,20 +112,22 @@ def print_json(data: Any, indent: int = 0):
     else:
         print(f"{prefix}{data}")
 
+
 def extract_name(data: Dict[str, Any]) -> str:
     """Extract the 'name' field from any common location in the API response"""
     return (
-        data.get("name") or
-        data.get("metadata", {}).get("name") or
-        data.get("metadata", {}).get("organization", {}).get("name") or
-        "N/A"
+        data.get("name")
+        or data.get("metadata", {}).get("name")
+        or data.get("metadata", {}).get("organization", {}).get("name")
+        or "N/A"
     )
+
 
 def format_output(data: Dict[str, Any]) -> str:
     """Format and display the full output from the GreyNoise API"""
     if not data:
         return "⛔ No data available for this IP"
-    
+
     name = extract_name(data)
 
     print(f"\n{'='*60}")
@@ -135,9 +140,10 @@ def format_output(data: Dict[str, Any]) -> str:
     print(f"{'='*60}\n")
     return ""
 
+
 def validate_ip(ip_address: str) -> bool:
     """Basic IPv4 address format validation"""
-    parts = ip_address.split('.')
+    parts = ip_address.split(".")
     if len(parts) != 4:
         return False
     try:
@@ -145,13 +151,16 @@ def validate_ip(ip_address: str) -> bool:
     except ValueError:
         return False
 
+
 def main():
     parser = argparse.ArgumentParser(
         description="GreyNoise IP Intelligence Lookup (Complete Version)",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("ips", nargs="+", help="IP address(es) to lookup")
-    parser.add_argument("--no-cache", action="store_true", help="Ignore cache and force fresh lookup")
+    parser.add_argument(
+        "--no-cache", action="store_true", help="Ignore cache and force fresh lookup"
+    )
 
     args = parser.parse_args()
     config = Config()
@@ -175,6 +184,6 @@ def main():
     if not args.no_cache:
         config.save_cache()
 
+
 if __name__ == "__main__":
     main()
-

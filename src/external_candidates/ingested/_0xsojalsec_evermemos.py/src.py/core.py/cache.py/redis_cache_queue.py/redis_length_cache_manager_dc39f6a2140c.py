@@ -8,14 +8,15 @@ Length-limited cache implementation based on Redis Sorted Set, supporting:
 - Queue expiration time is 60 minutes, extended on each append
 """
 
-import time
 import random
-from typing import List, Dict, Any, Optional, Union
+import time
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
 
+from core.component.redis_provider import RedisProvider
 from core.di.decorators import component
 from core.observation.logger import get_logger
-from core.component.redis_provider import RedisProvider
+
 from .redis_data_processor import RedisDataProcessor
 
 # Configuration constants
@@ -107,7 +108,7 @@ class RedisLengthCacheFactory:
         max_length: int = DEFAULT_MAX_LENGTH,
         expire_minutes: int = DEFAULT_EXPIRE_MINUTES,
         cleanup_probability: float = DEFAULT_CLEANUP_PROBABILITY,
-    ) -> 'RedisLengthCacheManager':
+    ) -> "RedisLengthCacheManager":
         """
         Create cache manager instance
 
@@ -447,7 +448,7 @@ class RedisLengthCacheManager:
                     # Safely convert score to timestamp
                     try:
                         if isinstance(score_raw, bytes):
-                            score_str = score_raw.decode('utf-8')
+                            score_str = score_raw.decode("utf-8")
                         else:
                             score_str = str(score_raw)
                         timestamp = int(float(score_str))

@@ -12,23 +12,30 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Optional, Tuple, Union
 
-
-from core.di import get_bean_by_type, get_bean, service
+from api_specs.dtos.memory_query import FetchMemResponse
+from api_specs.memory_models import (
+    BaseMemoryModel,
+    BehaviorHistoryModel,
+    CoreMemoryModel,
+    EntityModel,
+    EpisodicMemoryModel,
+    EventLogModel,
+    ForesightModel,
+    ForesightRecordModel,
+    MemoryModel,
+    MemoryType,
+    Metadata,
+    PreferenceModel,
+    ProfileModel,
+    RelationModel,
+)
+from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
+    EventLogRecord,
+    EventLogRecordProjection,
+)
 from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
     ForesightRecord,
     ForesightRecordProjection,
-)
-from infra_layer.adapters.out.persistence.repository.episodic_memory_raw_repository import (
-    EpisodicMemoryRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.core_memory_raw_repository import (
-    CoreMemoryRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.entity_raw_repository import (
-    EntityRawRepository,
-)
-from infra_layer.adapters.out.persistence.repository.relationship_raw_repository import (
-    RelationshipRawRepository,
 )
 from infra_layer.adapters.out.persistence.repository.behavior_history_raw_repository import (
     BehaviorHistoryRawRepository,
@@ -36,40 +43,29 @@ from infra_layer.adapters.out.persistence.repository.behavior_history_raw_reposi
 from infra_layer.adapters.out.persistence.repository.conversation_meta_raw_repository import (
     ConversationMetaRawRepository,
 )
+from infra_layer.adapters.out.persistence.repository.core_memory_raw_repository import (
+    CoreMemoryRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.entity_raw_repository import (
+    EntityRawRepository,
+)
+from infra_layer.adapters.out.persistence.repository.episodic_memory_raw_repository import (
+    EpisodicMemoryRawRepository,
+)
 from infra_layer.adapters.out.persistence.repository.event_log_record_raw_repository import (
     EventLogRecordRawRepository,
-)
-from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
-    EventLogRecord,
-    EventLogRecordProjection,
 )
 from infra_layer.adapters.out.persistence.repository.foresight_record_repository import (
     ForesightRecordRawRepository,
 )
-from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
-    ForesightRecordProjection,
+from infra_layer.adapters.out.persistence.repository.relationship_raw_repository import (
+    RelationshipRawRepository,
 )
 from infra_layer.adapters.out.persistence.repository.user_profile_raw_repository import (
     UserProfileRawRepository,
 )
-from api_specs.dtos.memory_query import FetchMemResponse
 
-from api_specs.memory_models import (
-    MemoryType,
-    MemoryModel,
-    BaseMemoryModel,
-    ProfileModel,
-    PreferenceModel,
-    EpisodicMemoryModel,
-    ForesightModel,
-    EntityModel,
-    RelationModel,
-    BehaviorHistoryModel,
-    CoreMemoryModel,
-    EventLogModel,
-    ForesightRecordModel,
-    Metadata,
-)
+from core.di import get_bean, get_bean_by_type, service
 
 logger = logging.getLogger(__name__)
 
@@ -457,7 +453,7 @@ class FetchMemoryServiceImpl(FetchMemoryServiceInterface):
             group_name=event_log.group_name,
             participants=event_log.participants,
             vector=getattr(
-                event_log, 'vector', None
+                event_log, "vector", None
             ),  # EventLogRecordShort does not have vector field
             vector_model=event_log.vector_model,
             event_type=event_log.event_type,
@@ -492,7 +488,7 @@ class FetchMemoryServiceImpl(FetchMemoryServiceInterface):
             duration_days=foresight_record.duration_days,
             participants=foresight_record.participants,
             vector=getattr(
-                foresight_record, 'vector', None
+                foresight_record, "vector", None
             ),  # ForesightRecordProjection does not have vector field
             vector_model=foresight_record.vector_model,
             evidence=foresight_record.evidence,
@@ -556,7 +552,11 @@ class FetchMemoryServiceImpl(FetchMemoryServiceInterface):
                         memories = []
                 case MemoryType.FORESIGHT:
                     # Foresight: each user has only one foresight document
-                    foresight_records = await self._foresight_record_repo.get_by_user_id(user_id, limit=limit)
+                    foresight_records = (
+                        await self._foresight_record_repo.get_by_user_id(
+                            user_id, limit=limit
+                        )
+                    )
 
                     memories = [
                         self._convert_foresight_record(record)
@@ -585,12 +585,12 @@ class FetchMemoryServiceImpl(FetchMemoryServiceInterface):
                                 created_at=core_memory.created_at,
                                 updated_at=core_memory.updated_at,
                                 metadata={
-                                    "user_name": base_info.get('user_name', ''),
-                                    "position": base_info.get('position', ''),
-                                    "department": base_info.get('department', ''),
-                                    "company": base_info.get('company', ''),
-                                    "location": base_info.get('location', ''),
-                                    "contact": base_info.get('contact', {}),
+                                    "user_name": base_info.get("user_name", ""),
+                                    "position": base_info.get("position", ""),
+                                    "department": base_info.get("department", ""),
+                                    "company": base_info.get("company", ""),
+                                    "location": base_info.get("location", ""),
+                                    "contact": base_info.get("contact", {}),
                                 },
                             )
                         ]
@@ -599,24 +599,32 @@ class FetchMemoryServiceImpl(FetchMemoryServiceInterface):
 
                 case MemoryType.PROFILE:
                     # Profile: get user profiles from user_profile_repo
-                    user_profiles = await self._user_profile_repo.get_all_by_user(user_id, limit)
-                    
+                    user_profiles = await self._user_profile_repo.get_all_by_user(
+                        user_id, limit
+                    )
+
                     memories = []
                     for up in user_profiles:
-                        memories.append({
-                            "id": str(up.id),
-                            "user_id": up.user_id,
-                            "group_id": up.group_id,
-                            "profile_data": up.profile_data,
-                            "scenario": up.scenario,
-                            "confidence": up.confidence,
-                            "version": up.version,
-                            "cluster_ids": up.cluster_ids,
-                            "memcell_count": up.memcell_count,
-                            "last_updated_cluster": up.last_updated_cluster,
-                            "created_at": up.created_at.isoformat() if up.created_at else None,
-                            "updated_at": up.updated_at.isoformat() if up.updated_at else None,
-                        })
+                        memories.append(
+                            {
+                                "id": str(up.id),
+                                "user_id": up.user_id,
+                                "group_id": up.group_id,
+                                "profile_data": up.profile_data,
+                                "scenario": up.scenario,
+                                "confidence": up.confidence,
+                                "version": up.version,
+                                "cluster_ids": up.cluster_ids,
+                                "memcell_count": up.memcell_count,
+                                "last_updated_cluster": up.last_updated_cluster,
+                                "created_at": (
+                                    up.created_at.isoformat() if up.created_at else None
+                                ),
+                                "updated_at": (
+                                    up.updated_at.isoformat() if up.updated_at else None
+                                ),
+                            }
+                        )
 
                 case MemoryType.PREFERENCE:
                     # Preferences: extract preference settings from core memory

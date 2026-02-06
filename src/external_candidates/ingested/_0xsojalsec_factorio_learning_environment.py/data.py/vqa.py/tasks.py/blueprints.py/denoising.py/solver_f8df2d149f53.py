@@ -1,8 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\blueprints\denoising\solver.py
 import random
-from inspect_ai.solver import Solver, solver, TaskState, Generate
+
 from fle.agents.data.screenshots_from_run import create_factorio_instance
 from fle.commons.models.rendered_image import RenderedImage
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 
 @solver

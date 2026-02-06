@@ -1,7 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\llm\llm_adapter\openai_adapter.py
-from typing import Dict, Any, List, Union, AsyncGenerator
 import os
+from typing import Any, AsyncGenerator, Dict, List, Union
+
 import openai
+
 from core.component.llm.llm_adapter.completion import (
     ChatCompletionRequest,
     ChatCompletionResponse,

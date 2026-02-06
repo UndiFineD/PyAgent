@@ -1,28 +1,26 @@
 # Extracted from: C:\DEV\PyAgent\.external\AcuAutomate\AcuAutomate.py
 #!/usr/bin/env python3
-# Unoficial Acunetix CLI version for automation 
+# Unoficial Acunetix CLI version for automation
 # Coded by https://twitter.com/DanialHalo
 
-import requests
-import json
 import argparse
-import validators
-import textwrap
+import json
 import sys
+import textwrap
+
+import requests
+import validators
+
 requests.packages.urllib3.disable_warnings()
 
 
-
-with open('config.json') as config_file:
+with open("config.json") as config_file:
     config = json.load(config_file)
 
 
+tarurl = config["url"] + ":" + str(config["port"])
+headers = {"X-Auth": config["api_key"], "Content-Type": "application/json"}
 
-tarurl = config['url']+":"+str(config['port'])
-headers = {
-    "X-Auth": config['api_key'],
-    "Content-Type": "application/json"
-}
 
 def create_scan(target_url, scan_type):
     scan_profile = {
@@ -33,21 +31,27 @@ def create_scan(target_url, scan_type):
         "xss": "11111111-1111-1111-1111-111111111116",
         "sql": "11111111-1111-1111-1111-111111111113",
     }
-    profile_id = scan_profile.get(scan_type, scan_profile['full'])
+    profile_id = scan_profile.get(scan_type, scan_profile["full"])
 
-    def add_task(url=''):
+    def add_task(url=""):
         data = {"address": url, "description": url, "criticality": "10"}
         try:
-            response = requests.post(tarurl + "/api/v1/targets", data=json.dumps(data), headers=headers, timeout=30, verify=False)
+            response = requests.post(
+                tarurl + "/api/v1/targets",
+                data=json.dumps(data),
+                headers=headers,
+                timeout=30,
+                verify=False,
+            )
             result = json.loads(response.content)
-            return result['target_id']
+            return result["target_id"]
         except Exception as e:
             print(str(e))
             return
 
-    url = tarurl+"/api/v1/scans"
+    url = tarurl + "/api/v1/scans"
 
-    print("[*] Running scan on : "+str(target_url))
+    print("[*] Running scan on : " + str(target_url))
 
     data = {
         "target_id": add_task(target_url),
@@ -67,30 +71,29 @@ def scan_targets_from_file(file_path, scan_type):
             if validators.url(target):
                 create_scan(target, scan_type)
             else:
-                print("[!] Invalid URL: "+target)
+                print("[!] Invalid URL: " + target)
     except Exception as e:
-                print("[!] Error reading file: "+str(e))
-
-
+        print("[!] Error reading file: " + str(e))
 
 
 def stop_scan(scan_id):
-    url = tarurl+"/api/v1/scans/"+str(scan_id)+"/abort"
+    url = tarurl + "/api/v1/scans/" + str(scan_id) + "/abort"
     response = requests.post(url, headers=headers, verify=False)
 
-    print("[-] Scan stop scan id: "+scan_id)
+    print("[-] Scan stop scan id: " + scan_id)
 
 
 def stop_specific_scan(target):
-    url = tarurl+"/api/v1/scans?q=status:processing;"
+    url = tarurl + "/api/v1/scans?q=status:processing;"
     response = requests.get(url, headers=headers, verify=False)
     scans = response.json()["scans"]
     for scan in scans:
         if target == scan["target"]["description"]:
             stop_scan(scan["scan_id"])
 
+
 def stop_all_scans():
-    url = tarurl+"/api/v1/scans?q=status:processing;"
+    url = tarurl + "/api/v1/scans?q=status:processing;"
     response = requests.get(url, headers=headers, verify=False)
     scans = response.json()["scans"]
     for scan in scans:
@@ -98,7 +101,6 @@ def stop_all_scans():
 
 
 if __name__ == "__main__":
-
 
     banner = """
 
@@ -114,34 +116,43 @@ if __name__ == "__main__":
 
     print(banner)
 
-
-
     if len(sys.argv) < 2:  # Check if no command line arguments are provided
         print("usage: acunetix-cli.py [-h]")
 
-
-    parser = argparse.ArgumentParser(description="Launch or stop a scan using Acunetix API")
+    parser = argparse.ArgumentParser(
+        description="Launch or stop a scan using Acunetix API"
+    )
     subparsers = parser.add_subparsers(dest="action", help="Action to perform")
 
     # Start sub-command
     start_parser = subparsers.add_parser("scan", help="Launch a scan use scan -h")
-    start_parser.add_argument("-p", "--pipe", action='store_true', help='Read from pipe')
+    start_parser.add_argument(
+        "-p", "--pipe", action="store_true", help="Read from pipe"
+    )
     start_parser.add_argument("-d", "--domain", help="Domain to scan")
-    start_parser.add_argument("-f", "--file", help="File containing list of URLs to scan")
-    start_parser.add_argument("-t", "--type", choices=["full", "high", "weak", "crawl", "xss", "sql"], default="full",
-                        help= textwrap.dedent('''\
+    start_parser.add_argument(
+        "-f", "--file", help="File containing list of URLs to scan"
+    )
+    start_parser.add_argument(
+        "-t",
+        "--type",
+        choices=["full", "high", "weak", "crawl", "xss", "sql"],
+        default="full",
+        help=textwrap.dedent("""\
                         High Risk Vulnerabilities Scan,
                         Weak Password Scan,
                         Crawl Only,
                         XSS Scan,
                         SQL Injection Scan,
-                        Full Scan (by default)'''))
-
+                        Full Scan (by default)"""),
+    )
 
     # Stop sub-command
     stop_parser = subparsers.add_parser("stop", help="Stop a scan")
     stop_parser.add_argument("-d", "--domain", help="Domain of the scan to stop")
-    stop_parser.add_argument("-a", "--all", action='store_true', help="Stop all Running Scans")
+    stop_parser.add_argument(
+        "-a", "--all", action="store_true", help="Stop all Running Scans"
+    )
 
     args = parser.parse_args()
 
@@ -150,19 +161,21 @@ if __name__ == "__main__":
             if validators.url(args.domain):
                 create_scan(args.domain, args.type)
             else:
-                print("[!] Invalid URL: "+args.domain)
+                print("[!] Invalid URL: " + args.domain)
 
         elif args.file:
             scan_targets_from_file(args.file, args.type)
 
         elif args.pipe:
-            input_data = sys.stdin.read().split('\n')
+            input_data = sys.stdin.read().split("\n")
             for url in input_data:
                 if validators.url(url):
                     create_scan(url, args.type)
 
         else:
-            print("[!] Must provide either domain or file containing list of targets \nFor Help: acunetix.py scan -h")
+            print(
+                "[!] Must provide either domain or file containing list of targets \nFor Help: acunetix.py scan -h"
+            )
 
     elif args.action == "stop":
         if args.domain:
@@ -170,4 +183,6 @@ if __name__ == "__main__":
         elif args.all == True:
             stop_all_scans()
         else:
-            print("[!] Must provide either domain or stop all flag \nFor Help: acunetix.py stop -h")
+            print(
+                "[!] Must provide either domain or stop all flag \nFor Help: acunetix.py stop -h"
+            )

@@ -1,8 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-nano-vllm\example.py
 import os
+
 from nanovllm import LLM, SamplingParams
 from transformers import AutoTokenizer
-
 
 path = os.path.expanduser("~/huggingface/Qwen3-0.6B/")
 tokenizer = AutoTokenizer.from_pretrained(path)
@@ -18,7 +18,7 @@ prompts = [
         [{"role": "user", "content": prompt}],
         tokenize=False,
         add_generation_prompt=True,
-        enable_thinking=True
+        enable_thinking=True,
     )
     for prompt in prompts
 ]

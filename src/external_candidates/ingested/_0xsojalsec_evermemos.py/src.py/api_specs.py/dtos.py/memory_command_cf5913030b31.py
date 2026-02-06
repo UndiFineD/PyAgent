@@ -1,19 +1,15 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\api_specs\dtos\memory_command.py
-from dataclasses import dataclass
 import datetime
-from typing import List, Optional
-
-from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
-from datetime import datetime
 import json
-from api_specs.memory_types import RawDataType
 import re
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
+from api_specs.memory_types import RawDataType
 from bson import ObjectId
 
-
-iso_pattern = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}'
+iso_pattern = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"
 
 
 @dataclass
@@ -44,7 +40,7 @@ class RawData:  # Memcell this is actually more oriented towards input, this is 
             return {k: self._serialize_value(v) for k, v in value.items()}
         elif isinstance(value, (list, tuple)):
             return [self._serialize_value(item) for item in value]
-        elif hasattr(value, '__dict__'):
+        elif hasattr(value, "__dict__"):
             # Handle custom objects by converting to dictionary
             return self._serialize_value(value.__dict__)
         else:
@@ -93,30 +89,30 @@ class RawData:  # Memcell this is actually more oriented towards input, this is 
 
         # Exact match datetime field names (based on actual field names used in the project)
         exact_datetime_fields = {
-            'timestamp',
-            'createTime',
-            'updateTime',
-            'create_time',
-            'update_time',
-            'sent_timestamp',
-            'received_timestamp',
-            'create_timestamp',
-            'last_update_timestamp',
-            'modify_timestamp',
-            'created_at',
-            'updated_at',
-            'joinTime',
-            'leaveTime',
-            'lastOnlineTime',
-            'sync_time',
-            'processed_at',
-            'start_time',
-            'end_time',
-            'event_time',
-            'build_timestamp',
-            'datetime',
-            'created',
-            'updated',  # Add common datetime field variants
+            "timestamp",
+            "createTime",
+            "updateTime",
+            "create_time",
+            "update_time",
+            "sent_timestamp",
+            "received_timestamp",
+            "create_timestamp",
+            "last_update_timestamp",
+            "modify_timestamp",
+            "created_at",
+            "updated_at",
+            "joinTime",
+            "leaveTime",
+            "lastOnlineTime",
+            "sync_time",
+            "processed_at",
+            "start_time",
+            "end_time",
+            "event_time",
+            "build_timestamp",
+            "datetime",
+            "created",
+            "updated",  # Add common datetime field variants
         }
 
         field_lower = field_name.lower()
@@ -127,36 +123,36 @@ class RawData:  # Memcell this is actually more oriented towards input, this is 
 
         # Exclude common words that should not be recognized as datetime fields
         exclusions = {
-            'runtime',
-            'timeout',
-            'timeline',
-            'timestamp_format',
-            'time_zone',
-            'time_limit',
-            'timestamp_count',
-            'timestamp_enabled',
-            'time_sync',
-            'playtime',
-            'lifetime',
-            'uptime',
-            'downtime',
+            "runtime",
+            "timeout",
+            "timeline",
+            "timestamp_format",
+            "time_zone",
+            "time_limit",
+            "timestamp_count",
+            "timestamp_enabled",
+            "time_sync",
+            "playtime",
+            "lifetime",
+            "uptime",
+            "downtime",
         }
 
         if field_name in exclusions or field_lower in exclusions:
             return False
 
         # Suffix match check (stricter rules)
-        time_suffixes = ['_time', '_timestamp', '_at', '_date']
+        time_suffixes = ["_time", "_timestamp", "_at", "_date"]
         for suffix in time_suffixes:
             if field_name.endswith(suffix) or field_lower.endswith(suffix):
                 return True
 
         # Prefix match check (stricter rules)
-        if field_name.endswith('Time') and not field_name.endswith('runtime'):
+        if field_name.endswith("Time") and not field_name.endswith("runtime"):
             # Match xxxTime pattern, but exclude runtime
             return True
 
-        if field_name.endswith('Timestamp'):
+        if field_name.endswith("Timestamp"):
             # Match xxxTimestamp pattern
             return True
 
@@ -188,19 +184,19 @@ class RawData:  # Memcell this is actually more oriented towards input, this is 
         """
         try:
             data = {
-                'content': self._serialize_value(self.content),
-                'data_id': self.data_id,
-                'data_type': self.data_type,
-                'metadata': (
+                "content": self._serialize_value(self.content),
+                "data_id": self.data_id,
+                "data_type": self.data_type,
+                "metadata": (
                     self._serialize_value(self.metadata) if self.metadata else None
                 ),
             }
-            return json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+            return json.dumps(data, ensure_ascii=False, separators=(",", ":"))
         except (TypeError, ValueError) as e:
             raise ValueError(f"Failed to serialize RawData to JSON: {e}") from e
 
     @classmethod
-    def from_json_str(cls, json_str: str) -> 'RawData':
+    def from_json_str(cls, json_str: str) -> "RawData":
         """
         Deserialize RawData object from JSON string
 
@@ -222,17 +218,17 @@ class RawData:  # Memcell this is actually more oriented towards input, this is 
             raise ValueError("JSON must be an object")
 
         # Check required fields
-        if 'content' not in data or 'data_id' not in data:
+        if "content" not in data or "data_id" not in data:
             raise ValueError("JSON missing required fields: content and data_id")
 
         # Create instance and deserialize values
         instance = cls.__new__(cls)
-        instance.content = instance._deserialize_value(data['content'], 'content')
-        instance.data_id = data['data_id']
-        instance.data_type = data.get('data_type')
+        instance.content = instance._deserialize_value(data["content"], "content")
+        instance.data_id = data["data_id"]
+        instance.data_type = data.get("data_type")
         instance.metadata = (
-            instance._deserialize_value(data.get('metadata'), 'metadata')
-            if data.get('metadata')
+            instance._deserialize_value(data.get("metadata"), "metadata")
+            if data.get("metadata")
             else None
         )
 

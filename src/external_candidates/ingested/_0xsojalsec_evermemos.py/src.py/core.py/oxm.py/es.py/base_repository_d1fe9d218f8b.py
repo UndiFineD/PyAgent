@@ -7,15 +7,17 @@ All Elasticsearch repositories should inherit from this base class to obtain uni
 """
 
 from abc import ABC
-from typing import Optional, TypeVar, Generic, Type, List, Dict, Any
+from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
+
 from elasticsearch import AsyncElasticsearch
-from core.oxm.es.doc_base import DocBase
+
 from core.observation.logger import get_logger
+from core.oxm.es.doc_base import DocBase
 
 logger = get_logger(__name__)
 
 # Generic type variable
-T = TypeVar('T', bound=DocBase)
+T = TypeVar("T", bound=DocBase)
 
 
 class BaseRepository(ABC, Generic[T]):
@@ -115,7 +117,7 @@ class BaseRepository(ABC, Generic[T]):
         try:
             client = await self.get_client()
             await document.save(using=client, refresh=refresh)
-            doc_id = getattr(getattr(document, 'meta', None), 'id', 'unknown')
+            doc_id = getattr(getattr(document, "meta", None), "id", "unknown")
             logger.debug(
                 "✅ Document updated successfully [%s]: %s", self.model_name, doc_id
             )
@@ -166,7 +168,7 @@ class BaseRepository(ABC, Generic[T]):
             logger.debug(
                 "✅ Document deleted successfully [%s]: %s",
                 self.model_name,
-                getattr(document, 'meta', {}).get('id', 'unknown'),
+                getattr(document, "meta", {}).get("id", "unknown"),
             )
             return True
         except Exception as e:
@@ -240,7 +242,7 @@ class BaseRepository(ABC, Generic[T]):
             logger.debug(
                 "✅ Search executed successfully [%s]: Found %d results",
                 self.model_name,
-                response.get('hits', {}).get('total', {}).get('value', 0),
+                response.get("hits", {}).get("total", {}).get("value", 0),
             )
             return response
         except Exception as e:
@@ -264,9 +266,9 @@ class BaseRepository(ABC, Generic[T]):
             )
 
             documents = []
-            for hit in response.get('hits', {}).get('hits', []):
-                doc = self.model.from_dict(hit['_source'])
-                doc.meta.id = hit['_id']
+            for hit in response.get("hits", {}).get("hits", []):
+                doc = self.model.from_dict(hit["_source"])
+                doc.meta.id = hit["_id"]
                 documents.append(doc)
 
             return documents

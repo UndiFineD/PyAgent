@@ -5,18 +5,19 @@ Foresight Milvus Converter
 Responsible for converting MongoDB foresight documents into Milvus Collection entities, supporting both individual and group use cases.
 """
 
-from typing import Dict, Any
 import json
 from datetime import datetime
+from typing import Any, Dict
 
-from core.oxm.milvus.base_converter import BaseMilvusConverter
-from core.observation.logger import get_logger
-from infra_layer.adapters.out.search.milvus.memory.foresight_collection import (
-    ForesightCollection,
-)
 from infra_layer.adapters.out.persistence.document.memory.foresight_record import (
     ForesightRecord as MongoForesightRecord,
 )
+from infra_layer.adapters.out.search.milvus.memory.foresight_collection import (
+    ForesightCollection,
+)
+
+from core.observation.logger import get_logger
+from core.oxm.milvus.base_converter import BaseMilvusConverter
 
 logger = get_logger(__name__)
 
@@ -39,7 +40,7 @@ class ForesightMilvusConverter(BaseMilvusConverter[ForesightCollection]):
             if isinstance(time_value, datetime):
                 return int(time_value.timestamp())
             elif isinstance(time_value, str):
-                dt = datetime.fromisoformat(time_value.replace('Z', '+00:00'))
+                dt = datetime.fromisoformat(time_value.replace("Z", "+00:00"))
                 return int(dt.timestamp())
             elif isinstance(time_value, (int, float)):
                 return int(time_value)
@@ -60,7 +61,7 @@ class ForesightMilvusConverter(BaseMilvusConverter[ForesightCollection]):
             if isinstance(time_value, datetime):
                 return int(time_value.timestamp())
             elif isinstance(time_value, str):
-                dt = datetime.fromisoformat(time_value.replace('Z', '+00:00'))
+                dt = datetime.fromisoformat(time_value.replace("Z", "+00:00"))
                 return int(dt.timestamp())
             elif isinstance(time_value, (int, float)):
                 return int(time_value)

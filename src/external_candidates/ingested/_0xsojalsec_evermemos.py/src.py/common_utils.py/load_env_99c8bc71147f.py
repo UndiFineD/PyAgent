@@ -9,13 +9,13 @@ Provides Python path setup and .env file loading functionality to ensure environ
 import logging
 import os
 import sys
-from typing import Optional
-from dotenv import load_dotenv
 import time
+from typing import Optional
 
 from common_utils.app_meta import set_service_name
-from common_utils.project_path import PROJECT_DIR
 from common_utils.datetime_utils import get_timezone
+from common_utils.project_path import PROJECT_DIR
+from dotenv import load_dotenv
 
 # Environment variables are not loaded yet, so get_logger cannot be used here
 logger = logging.getLogger(__name__)
@@ -79,7 +79,7 @@ def reset_timezone():
     timezone = get_timezone()
     os.environ["TZ"] = timezone.key
     # tzset() is not available on Windows, only call it if available
-    if hasattr(time, 'tzset'):
+    if hasattr(time, "tzset"):
         time.tzset()
 
 
@@ -92,8 +92,8 @@ def sync_pythonpath_with_syspath():
     2. Exclude .venv and similar virtual environment paths
     3. Maintain the original priority of PYTHONPATH
     """
-    import sys
     import os
+    import sys
     from pathlib import Path
 
     # Get current PYTHONPATH

@@ -1,13 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\blueprints\spatial_reasoning\solver.py
 import json
 
-from inspect_ai.model import ChatMessageUser, ChatMessageTool
-from inspect_ai.solver import Solver, solver, TaskState, Generate
-from inspect_ai.tool import tool, ToolError
-from inspect_ai.util import sandbox
-
 from fle.agents.data.screenshots_from_run import create_factorio_instance
 from fle.commons.models.rendered_image import RenderedImage
+from inspect_ai.model import ChatMessageTool, ChatMessageUser
+from inspect_ai.solver import Generate, Solver, TaskState, solver
+from inspect_ai.tool import ToolError, tool
+from inspect_ai.util import sandbox
 
 
 @tool

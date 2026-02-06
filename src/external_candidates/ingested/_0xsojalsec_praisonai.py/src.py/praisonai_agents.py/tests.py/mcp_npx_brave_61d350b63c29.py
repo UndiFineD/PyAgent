@@ -1,0 +1,20 @@
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-PraisonAI\src\praisonai-agents\tests\mcp-npx-brave.py
+import os
+
+from praisonaiagents import MCP, Agent
+
+brave_api_key = os.getenv("BRAVE_API_KEY")
+
+# Pass the environment variable directly to the MCP server
+search_agent = Agent(
+    instructions="""You are a helpful assistant that can search the web for information.
+    Use the available tools when relevant to answer user questions.""",
+    llm="gpt-5-nano",
+    tools=MCP(
+        command="npx",
+        args=["-y", "@modelcontextprotocol/server-brave-search"],
+        env={"BRAVE_API_KEY": brave_api_key},
+    ),
+)
+
+search_agent.start("Search more information about AI News")

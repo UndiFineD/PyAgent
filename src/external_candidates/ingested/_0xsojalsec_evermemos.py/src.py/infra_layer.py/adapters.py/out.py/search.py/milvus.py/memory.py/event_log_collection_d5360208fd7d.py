@@ -7,12 +7,13 @@ Provides Schema definition and index configuration compatible with EventLogMilvu
 Supports both personal and group event logs.
 """
 
-from pymilvus import DataType, FieldSchema, CollectionSchema
+from memory_layer.constants import VECTORIZE_DIMENSIONS
+from pymilvus import CollectionSchema, DataType, FieldSchema
+
 from core.oxm.milvus.milvus_collection_base import IndexConfig
 from core.tenants.tenantize.oxm.milvus.tenant_aware_collection_with_suffix import (
     TenantAwareMilvusCollectionWithSuffix,
 )
-from memory_layer.constants import VECTORIZE_DIMENSIONS
 
 
 class EventLogCollection(TenantAwareMilvusCollectionWithSuffix):

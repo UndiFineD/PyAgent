@@ -1,25 +1,28 @@
 # Extracted from: C:\DEV\PyAgent\.external\ADFSpoof\EncryptedPfx.py
+import struct
+import sys
+
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import hashes, hmac
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.kbkdf import (
-    CounterLocation, KBKDFHMAC, Mode,
+    KBKDFHMAC,
+    CounterLocation,
+    Mode,
 )
-from pyasn1.type.univ import ObjectIdentifier, OctetString
 from pyasn1.codec.der.decoder import decode as der_decode
 from pyasn1.codec.der.encoder import encode
+from pyasn1.type.univ import ObjectIdentifier, OctetString
 from utils import die, new_guid
-import sys
-import struct
 
 
-class EncryptedPFX():
+class EncryptedPFX:
     def __init__(self, blob_path, key_path, debug=False):
         self.pfx_path = blob_path
         self.DEBUG = debug
-        with open(key_path, 'rb') as infile:
+        with open(key_path, "rb") as infile:
             self.decryption_key = infile.read()
-        with open(self.pfx_path, 'rb') as infile:
+        with open(self.pfx_path, "rb") as infile:
             self._raw = infile.read()
         self.decode()
 
@@ -29,7 +32,9 @@ class EncryptedPFX():
 
         backend = default_backend()
         iv = self.iv.asOctets()
-        cipher = Cipher(algorithms.AES(self.encryption_key), modes.CBC(iv), backend=backend)
+        cipher = Cipher(
+            algorithms.AES(self.encryption_key), modes.CBC(iv), backend=backend
+        )
         decryptor = cipher.decryptor()
         plain_pfx = decryptor.update(self.ciphertext) + decryptor.finalize()
 
@@ -50,7 +55,9 @@ class EncryptedPFX():
             sys.stderr.write("Expected MAC: {0}\n".format(self.mac))
             die()
         if self.DEBUG:
-            sys.stderr.write("MAC Calculated over IV and Ciphertext: {0}\n".format(mac_code))
+            sys.stderr.write(
+                "MAC Calculated over IV and Ciphertext: {0}\n".format(mac_code)
+            )
 
     def _derive_keys(self, password=None):
         label = encode(self.encryption_oid) + encode(self.mac_oid)
@@ -67,7 +74,7 @@ class EncryptedPFX():
             label=label,
             context=context,
             fixed=None,
-            backend=backend
+            backend=backend,
         )
 
         key = kdf.derive(password)
@@ -121,20 +128,26 @@ class EncryptedPFX():
         encryption_oid, remains = der_decode(remains, ObjectIdentifier())
 
         if self.DEBUG:
-            sys.stderr.write("Decoded Algorithm OIDS\n Encryption Algorithm OID: {0}\n MAC Algorithm OID: {1}\n".format(encryption_oid, mac_oid))
+            sys.stderr.write(
+                "Decoded Algorithm OIDS\n Encryption Algorithm OID: {0}\n MAC Algorithm OID: {1}\n".format(
+                    encryption_oid, mac_oid
+                )
+            )
         return encryption_oid, mac_oid, remains
 
     def decode(self):
-        version = struct.unpack('>I', self._raw[0:4])[0]
+        version = struct.unpack(">I", self._raw[0:4])[0]
 
         if version != 1:
             sys.stderr.write("Version should be 1   .\n")
             die()
 
-        method = struct.unpack('>I', self._raw[4:8])[0]
+        method = struct.unpack(">I", self._raw[4:8])[0]
 
         if method != 0:
-            sys.stderr.write("Not using EncryptThenMAC. Currently only EncryptThenMAC is supported.")
+            sys.stderr.write(
+                "Not using EncryptThenMAC. Currently only EncryptThenMAC is supported."
+            )
             die()
 
         self.guid, remains = self._decode_groupkey()
@@ -159,14 +172,16 @@ class EncryptedPFX():
         self.ciphertext_length, remains = self._decode_length(remains)
 
         if self.DEBUG:
-            sys.stderr.write("Decoded Ciphertext length: {0}\n".format(self.ciphertext_length))
+            sys.stderr.write(
+                "Decoded Ciphertext length: {0}\n".format(self.ciphertext_length)
+            )
 
-        self.ciphertext = remains[:self.ciphertext_length - self.mac_length]
+        self.ciphertext = remains[: self.ciphertext_length - self.mac_length]
 
         if self.DEBUG:
             sys.stderr.write("Decoded Ciphertext: {0}\n".format(self.ciphertext))
 
-        self.mac = remains[self.ciphertext_length - self.mac_length:]
+        self.mac = remains[self.ciphertext_length - self.mac_length :]
 
         if self.DEBUG:
             sys.stderr.write("Decoded MAC: {0}\n".format(self.mac))

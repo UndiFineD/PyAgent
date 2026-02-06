@@ -143,7 +143,10 @@ def _find_matching_item(
     identifier = _build_item_identifier(completed_item)
     if identifier:
         for candidate in items:
-            if isinstance(candidate, dict) and _build_item_identifier(candidate) == identifier:
+            if (
+                isinstance(candidate, dict)
+                and _build_item_identifier(candidate) == identifier
+            ):
                 return candidate
 
     value_keys = (
@@ -256,6 +259,7 @@ def merge_evidences_recursive(
                 path=f"{path}[{target_idx}]",
             )
 
+
 def remove_entries_without_evidence(payload: Any, *, path: str = "user_profile") -> Any:
     """
     Recursively remove entries that lack evidences after completion.
@@ -300,6 +304,7 @@ def remove_entries_without_evidence(payload: Any, *, path: str = "user_profile")
         return sanitized
 
     return payload
+
 
 __all__ = [
     "ensure_str_list",

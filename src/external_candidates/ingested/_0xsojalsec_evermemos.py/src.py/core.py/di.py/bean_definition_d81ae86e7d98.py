@@ -7,7 +7,7 @@ Contains Bean definition classes and scope enumeration
 """
 
 from enum import Enum
-from typing import Type, Callable, Any, Set, Dict, Optional
+from typing import Any, Callable, Dict, Optional, Set, Type
 
 
 class BeanScope(str, Enum):

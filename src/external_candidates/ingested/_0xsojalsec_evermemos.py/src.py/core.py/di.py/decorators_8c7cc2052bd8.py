@@ -4,13 +4,13 @@
 Dependency injection decorator
 """
 
-from typing import Type, TypeVar, Optional, Callable, Any, Dict
 from functools import wraps
+from typing import Any, Callable, Dict, Optional, Type, TypeVar
 
-from core.di.container import get_container
 from core.di.bean_definition import BeanScope
+from core.di.container import get_container
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 def component(
@@ -40,7 +40,7 @@ def component(
         cls._di_metadata = metadata
 
         # Check if marked to skip (via conditional decorator)
-        if getattr(cls, '_di_skip', False):
+        if getattr(cls, "_di_skip", False):
             return cls
 
         if not lazy:
@@ -140,7 +140,7 @@ def mock_impl(
             bean_type=cls,
             bean_name=name,
             scope=scope,
-            is_primary=getattr(cls, '_di_primary', False),
+            is_primary=getattr(cls, "_di_primary", False),
             is_mock=True,
             metadata=metadata,
         )
@@ -167,7 +167,7 @@ def factory(
     """
 
     def decorator(func: Callable[[], T]) -> Callable[[], T]:
-        target_type = bean_type or func.__annotations__.get('return', None)
+        target_type = bean_type or func.__annotations__.get("return", None)
 
         if not target_type:
             raise ValueError("Factory decorator must specify return type")
@@ -200,14 +200,14 @@ def prototype(cls: Type[T]) -> Type[T]:
     cls._di_scope = BeanScope.PROTOTYPE
 
     # If already a component, update scope
-    if hasattr(cls, '_di_component'):
+    if hasattr(cls, "_di_component"):
         container = get_container()
         container.register_bean(
             bean_type=cls,
-            bean_name=getattr(cls, '_di_name', None),
+            bean_name=getattr(cls, "_di_name", None),
             scope=BeanScope.PROTOTYPE,
-            is_primary=getattr(cls, '_di_primary', False),
-            metadata=getattr(cls, '_di_metadata', None),
+            is_primary=getattr(cls, "_di_primary", False),
+            metadata=getattr(cls, "_di_metadata", None),
         )
 
     return cls

@@ -1,7 +1,8 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\oxm\es\es_utils.py
-from common_utils.datetime_utils import get_now_with_timezone
-from typing import Type, List, Optional, TYPE_CHECKING
 import os
+from typing import TYPE_CHECKING, List, Optional, Type
+
+from common_utils.datetime_utils import get_now_with_timezone
 
 from core.observation.logger import get_logger
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 logger = get_logger(__name__)
 
 
-def generate_index_name(cls: Type['DocBase']) -> str:
+def generate_index_name(cls: Type["DocBase"]) -> str:
     """Generate index name with timestamp"""
     now = get_now_with_timezone()
     alias = cls.get_index_name()
@@ -23,7 +24,7 @@ def get_index_ns() -> str:
     return os.getenv("SELF_ES_INDEX_NS") or ""
 
 
-def is_abstract_doc_class(doc_class: Type['DocBase']) -> bool:
+def is_abstract_doc_class(doc_class: Type["DocBase"]) -> bool:
     """
     Check if the document class is an abstract class
 
@@ -37,7 +38,7 @@ def is_abstract_doc_class(doc_class: Type['DocBase']) -> bool:
         bool: Whether it is an abstract class
     """
     # Check the abstract attribute of the Meta class
-    pattern = getattr(doc_class, 'PATTERN', None) or None
+    pattern = getattr(doc_class, "PATTERN", None) or None
     return (not pattern) or "Generated" in doc_class.__name__
 
 
@@ -50,10 +51,10 @@ class EsIndexInitializer:
     """
 
     def __init__(self):
-        self._initialized_classes: List[Type['DocBase']] = []
+        self._initialized_classes: List[Type["DocBase"]] = []
 
     async def initialize_indices(
-        self, document_classes: Optional[List[Type['DocBase']]] = None
+        self, document_classes: Optional[List[Type["DocBase"]]] = None
     ) -> None:
         """
         Initialize indices for multiple document classes
@@ -92,7 +93,7 @@ class EsIndexInitializer:
             logger.error("❌ Elasticsearch index initialization failed: %s", e)
             raise
 
-    async def init_document_index(self, doc_class: Type['DocBase']) -> None:
+    async def init_document_index(self, doc_class: Type["DocBase"]) -> None:
         """
         Initialize index for a single document class
 
@@ -163,13 +164,13 @@ class EsIndexInitializer:
             raise
 
     @property
-    def initialized_classes(self) -> List[Type['DocBase']]:
+    def initialized_classes(self) -> List[Type["DocBase"]]:
         """Get list of initialized document classes"""
         return self._initialized_classes
 
 
 async def initialize_document_indices(
-    document_classes: Optional[List[Type['DocBase']]] = None,
+    document_classes: Optional[List[Type["DocBase"]]] = None,
 ) -> None:
     """
     Utility function: Initialize indices for multiple document classes
@@ -181,7 +182,7 @@ async def initialize_document_indices(
     await initializer.initialize_indices(document_classes)
 
 
-async def init_single_document_index(doc_class: Type['DocBase']) -> None:
+async def init_single_document_index(doc_class: Type["DocBase"]) -> None:
     """
     Utility function: Initialize index for a single document class
 

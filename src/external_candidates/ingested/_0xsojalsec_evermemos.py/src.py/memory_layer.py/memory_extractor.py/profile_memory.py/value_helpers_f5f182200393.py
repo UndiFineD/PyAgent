@@ -5,13 +5,13 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Set
 
-from core.observation.logger import get_logger
-
 from memory_layer.memory_extractor.profile_memory.evidence_utils import (
     conversation_id_from_evidence,
     ensure_str_list,
     format_evidence_entry,
 )
+
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 

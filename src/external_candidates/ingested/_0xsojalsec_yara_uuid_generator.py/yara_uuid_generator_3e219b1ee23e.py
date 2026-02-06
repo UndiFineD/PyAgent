@@ -1,10 +1,11 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-yara-uuid-generator\yara-uuid-generator.py
 import argparse
-import os
 import logging
+import os
 import re
 import uuid
 from pprint import pprint
+
 import plyara
 from plyara.utils import generate_hash
 
@@ -20,7 +21,7 @@ def process_files(input_path, output_path, replace_files):
     """
     Process all files in the input directory
     """
-    logging.info('Processing files in directory: %s', input_path)
+    logging.info("Processing files in directory: %s", input_path)
 
     # Check if the output directory exists
     if not replace_files:
@@ -40,13 +41,13 @@ def process_file(input_path, output_path, filename, replace_files):
     """
     Process a single file
     """
-    logging.info('Processing file: %s', filename)
+    logging.info("Processing file: %s", filename)
 
     # We keep the rule name, the UUID and the indentation format in a list for the replacement
     rule_name_uuid_list = []
 
     # Read the file
-    with open(os.path.join(input_path, filename), 'r', encoding="utf-8") as f:
+    with open(os.path.join(input_path, filename), "r", encoding="utf-8") as f:
         yara_file_content = f.read()
 
     # Parse the file
@@ -56,7 +57,7 @@ def process_file(input_path, output_path, filename, replace_files):
     # Generate a UUID for each rule
     for rule in yara_rules:
         # Print the rule
-        #pprint(rule)
+        # pprint(rule)
 
         # Calculate the logic hash
         logic_hash = generate_hash(rule)
@@ -65,17 +66,17 @@ def process_file(input_path, output_path, filename, replace_files):
         rule_uuid = generate_uuid_from_hash(logic_hash)
 
         # Log the rule Rule Name and UUID
-        logging.info('Rule Name: %s UUID: %s', rule['rule_name'], rule_uuid)
+        logging.info("Rule Name: %s UUID: %s", rule["rule_name"], rule_uuid)
 
         # Determine the indentation of the meta section
         meta_indentation = determine_meta_indentation(rule)
 
         # Add the rule name, the UUID and the indentation format to the list
-        rule_name_uuid_list.append((rule['rule_name'], rule_uuid, meta_indentation))
+        rule_name_uuid_list.append((rule["rule_name"], rule_uuid, meta_indentation))
 
     # Now we replace the rules in place
     # First we split the content of the file into lines
-    yara_rule_lines = yara_file_content.split('\n')
+    yara_rule_lines = yara_file_content.split("\n")
     yara_rule_lines_copy = yara_rule_lines.copy()
     # Now we loop over the lines and insert the UUIDs in the meta data section when we find the rule name
     check_for_meta_section = False
@@ -86,7 +87,7 @@ def process_file(input_path, output_path, filename, replace_files):
         logging.debug("Line: '%s'", line)
 
         # Whenever we find a line that contains "strings:" or "condition:" we insert the new meta data line before that line
-        if check_for_meta_section and ( "strings:" in line or "condition:" in line ):
+        if check_for_meta_section and ("strings:" in line or "condition:" in line):
             logging.debug("Inserting new meta data line: '%s'", new_meta_line)
             # If the rules doesn't have a meta section yet, we add it
             if not meta_section_found:
@@ -128,7 +129,9 @@ def process_file(input_path, output_path, filename, replace_files):
             # Check if the rule name is in the line
             if line.startswith("rule ") and rule_name_uuid[0] in line:
                 # Now we create the new meta data line and prepend the indentation format
-                new_meta_line = rule_name_uuid[2] + 'id = "' + str(rule_name_uuid[1]) + '"'
+                new_meta_line = (
+                    rule_name_uuid[2] + 'id = "' + str(rule_name_uuid[1]) + '"'
+                )
                 logging.debug("New meta data line: '%s'", new_meta_line)
                 # We set a marker that we now check for the meta data section
                 check_for_meta_section = True
@@ -138,24 +141,24 @@ def process_file(input_path, output_path, filename, replace_files):
     # Replace the input file with the new file
     if replace_files:
         # Write the file
-        with open(os.path.join(input_path, filename), 'w', encoding="utf-8") as f:
-            f.write('\n'.join(yara_rule_lines))
+        with open(os.path.join(input_path, filename), "w", encoding="utf-8") as f:
+            f.write("\n".join(yara_rule_lines))
 
     # or write the new file to the output directory
     else:
         # If output path ends with *.yar, write it to a single file with the same name
         if output_path.endswith(".yar"):
             # Write the file
-            with open(output_path, 'a', encoding="utf-8") as f:
-                f.write('\n'.join(yara_rule_lines))
+            with open(output_path, "a", encoding="utf-8") as f:
+                f.write("\n".join(yara_rule_lines))
         # Otherwise write the file to the output directory
         else:
             # Check if the output directory exists and create it if necessary
             if not os.path.exists(output_path):
                 os.mkdir(output_path)
             # Write the file
-            with open(os.path.join(output_path, filename), 'w', encoding="utf-8") as f:
-                f.write('\n'.join(yara_rule_lines))
+            with open(os.path.join(output_path, filename), "w", encoding="utf-8") as f:
+                f.write("\n".join(yara_rule_lines))
 
 
 def determine_meta_indentation(rule):
@@ -163,13 +166,13 @@ def determine_meta_indentation(rule):
     Determine the indentation of the meta section
     """
     # Set the default indentation
-    indentation = '   '
+    indentation = "   "
 
     # Regex pattern
-    pattern = re.compile(r'[^\s\t]')
+    pattern = re.compile(r"[^\s\t]")
 
     # Check if the rule has a meta section
-    if 'raw_meta' in rule:
+    if "raw_meta" in rule:
         # The raw_meta field value looks like this:
         # 'raw_meta': 'meta:\n'
         #     '      description = "Detects NatBypass tool (also used by '
@@ -177,7 +180,7 @@ def determine_meta_indentation(rule):
         # We try to find out what follows the "meta:\n" until the first meta data value begins
 
         # We split the raw_meta field value by the newline character
-        raw_meta_lines = rule['raw_meta'].split('\n')
+        raw_meta_lines = rule["raw_meta"].split("\n")
 
         # Check each line and start with the second line
         for meta_line in raw_meta_lines[1:]:
@@ -186,7 +189,7 @@ def determine_meta_indentation(rule):
             # If we found a match
             if match:
                 # The indentation is the part of the line before the first meta data value begins
-                indentation = meta_line[0:match.start()]
+                indentation = meta_line[0 : match.start()]
                 # Log the indentation
                 logging.debug("Meta indentation: '%s'", indentation)
                 # We are done
@@ -198,18 +201,30 @@ def determine_meta_indentation(rule):
 if __name__ == "__main__":
 
     # Parse the arguments
-    parser = argparse.ArgumentParser(description='Yara UUID Generator')
-    parser.add_argument('-i', '--input', help='Input file or directory', required=True)
-    parser.add_argument('-o', '--output', help='Output file or directory', required=False, default='output')
-    parser.add_argument('-d', '--debug', help='Enable debug logging', required=False, action='store_true')
+    parser = argparse.ArgumentParser(description="Yara UUID Generator")
+    parser.add_argument("-i", "--input", help="Input file or directory", required=True)
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="Output file or directory",
+        required=False,
+        default="output",
+    )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        help="Enable debug logging",
+        required=False,
+        action="store_true",
+    )
     args = parser.parse_args()
 
     # Initialize the logger
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG if args.debug else logging.INFO)
     # Set the level of the plyara logger to warning
-    logging.getLogger('plyara').setLevel(logging.WARNING)
-    logging.getLogger('tzlocal').setLevel(logging.CRITICAL)
+    logging.getLogger("plyara").setLevel(logging.WARNING)
+    logging.getLogger("tzlocal").setLevel(logging.CRITICAL)
     # Create a handler for the command line
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG if args.debug else logging.INFO)
@@ -217,9 +232,11 @@ if __name__ == "__main__":
     fh = logging.FileHandler("yara-uuid-generator.log")
     fh.setLevel(logging.DEBUG)
     # Create a formatter for the log messages that go to the log file
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     # Create a formatter for the log messages that go to the command line
-    formatter_cmd = logging.Formatter('%(message)s')
+    formatter_cmd = logging.Formatter("%(message)s")
     # Add the formatter to the handlers
     ch.setFormatter(formatter_cmd)
     fh.setFormatter(formatter)
@@ -228,23 +245,28 @@ if __name__ == "__main__":
     logger.addHandler(fh)
 
     # Log the a startup message
-    logger.info('Starting Yara UUID Generator')
+    logger.info("Starting Yara UUID Generator")
 
     # If no output directory is specified, we replace the files in the input directory
     REPLACE_FILES = False
-    if args.output == 'output':
+    if args.output == "output":
         # Set a marker to indicate that we are overwriting the input files
         REPLACE_FILES = True
 
     # Check if the input file or directory exists
     if not os.path.exists(args.input):
-        logger.error('Input file or directory does not exist')
+        logger.error("Input file or directory does not exist")
         exit(1)
 
     # Check if the input is a file
     if os.path.isfile(args.input):
         # Process the file
-        process_file(os.path.dirname(args.input), args.output, os.path.basename(args.input), REPLACE_FILES)
+        process_file(
+            os.path.dirname(args.input),
+            args.output,
+            os.path.basename(args.input),
+            REPLACE_FILES,
+        )
     # Input is a directory
     else:
         # Process all files in the input directory

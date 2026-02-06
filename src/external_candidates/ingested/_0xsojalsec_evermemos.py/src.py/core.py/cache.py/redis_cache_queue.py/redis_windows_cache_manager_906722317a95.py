@@ -9,15 +9,15 @@ Time window cache implemented using Redis Sorted Set, supporting:
 - Random cleanup of expired data
 """
 
-import time
 import random
-from typing import List, Dict, Any, Optional, Union
-
+import time
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
 
+from core.component.redis_provider import RedisProvider
 from core.di.decorators import component
 from core.observation.logger import get_logger
-from core.component.redis_provider import RedisProvider
+
 from .redis_data_processor import RedisDataProcessor
 
 # Configuration constants
@@ -80,7 +80,7 @@ class RedisWindowsCacheFactory:
         self,
         expire_minutes: int = DEFAULT_EXPIRE_MINUTES,
         cleanup_probability: float = DEFAULT_CLEANUP_PROBABILITY,
-    ) -> 'RedisWindowsCacheManager':
+    ) -> "RedisWindowsCacheManager":
         """
         Create cache manager instance
 
@@ -177,7 +177,7 @@ class RedisWindowsCacheManager:
 
             # Clean expired data
             cleaned_count = await client.zremrangebyscore(
-                key, '-inf', cleanup_threshold
+                key, "-inf", cleanup_threshold
             )
 
             if cleaned_count > 0:
@@ -341,7 +341,7 @@ class RedisWindowsCacheManager:
 
             # Clean expired data
             cleaned_count = await client.zremrangebyscore(
-                key, '-inf', cleanup_threshold
+                key, "-inf", cleanup_threshold
             )
 
             if cleaned_count > 0:
@@ -432,7 +432,7 @@ class RedisWindowsCacheManager:
                     # Safely convert score to timestamp
                     try:
                         if isinstance(score_raw, bytes):
-                            score_str = score_raw.decode('utf-8')
+                            score_str = score_raw.decode("utf-8")
                         else:
                             score_str = str(score_raw)
                         timestamp = int(float(score_str))

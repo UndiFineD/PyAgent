@@ -1,14 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\factory\nearest_entity\solver.py
 # solver.py - Nearest entity question generation with entity placement
 
-import random
 import math
-
-from inspect_ai.solver import Solver, solver, TaskState, Generate
+import random
 
 from data.vqa.image_utils import save_rendered_image
-from fle.env import Position, Prototype, BuildingBox, Direction
-
+from fle.env import BuildingBox, Direction, Position, Prototype
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 # List of entities suitable for placement
 PLACEABLE_ENTITIES = [

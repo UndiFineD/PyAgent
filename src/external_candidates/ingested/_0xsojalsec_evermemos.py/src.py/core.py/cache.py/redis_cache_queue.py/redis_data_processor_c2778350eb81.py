@@ -11,7 +11,8 @@ Provides unified data serialization and deserialization functionality, supportin
 import json
 import pickle
 import uuid
-from typing import Any, Union, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Union
+
 from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
@@ -97,7 +98,7 @@ class RedisDataProcessor:
             else:
                 # Try decoding as string for JSON deserialization
                 try:
-                    data_str = data.decode('utf-8')
+                    data_str = data.decode("utf-8")
                     return json.loads(data_str)
                 except UnicodeDecodeError:
                     logger.warning("Binary data cannot be decoded as UTF-8")
@@ -138,7 +139,7 @@ class RedisDataProcessor:
 
         if isinstance(data, bytes):
             # For binary data, use binary separator
-            unique_id_bytes = unique_id.encode('utf-8')
+            unique_id_bytes = unique_id.encode("utf-8")
             separator = b":"
             return unique_id_bytes + separator + data
         else:
@@ -162,7 +163,7 @@ class RedisDataProcessor:
             if separator in member:
                 unique_id_bytes, data = member.split(separator, 1)
                 try:
-                    unique_id = unique_id_bytes.decode('utf-8')
+                    unique_id = unique_id_bytes.decode("utf-8")
                 except UnicodeDecodeError:
                     unique_id = "unknown"
             else:
@@ -171,8 +172,8 @@ class RedisDataProcessor:
                 data = member
         else:
             # Handle string data (from clients with decode_responses=True)
-            if ':' in member:
-                unique_id, data = member.split(':', 1)
+            if ":" in member:
+                unique_id, data = member.split(":", 1)
             else:
                 # Compatible with old format
                 unique_id = "unknown"
@@ -182,7 +183,7 @@ class RedisDataProcessor:
 
     @staticmethod
     def process_data_for_storage(
-        data: Union[str, Dict, List, Any]
+        data: Union[str, Dict, List, Any],
     ) -> Union[str, bytes]:
         """
         Process data for storage

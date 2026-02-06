@@ -9,13 +9,13 @@ Mainly handles:
 - user_id: User ID
 """
 
-from typing import Optional
 from contextlib import asynccontextmanager
+from typing import Optional
 
 from core.context import context
-from core.observation.logger import get_logger
 from core.di.decorators import component
 from core.di.utils import get_bean_by_type
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -52,12 +52,12 @@ class LogInfoService:
         try:
             # Update values in the new dictionary
             if trace_id is not None:
-                app_info['trace_id'] = trace_id
+                app_info["trace_id"] = trace_id
             # Update group_id and from_user_id (if new values are provided)
             if group_id is not None:
-                app_info['group_id'] = group_id
+                app_info["group_id"] = group_id
             if from_user_id is not None:
-                app_info['from_user_id'] = from_user_id
+                app_info["from_user_id"] = from_user_id
 
             # Set the updated app_info
             token = context.set_current_app_info(app_info)
@@ -119,19 +119,19 @@ class LogInfoService:
     def get_current_trace_id() -> Optional[str]:
         """Get current trace_id"""
         app_info = context.get_current_app_info()
-        return app_info.get('trace_id') if app_info else None
+        return app_info.get("trace_id") if app_info else None
 
     @staticmethod
     def get_current_group_id() -> Optional[str]:
         """Get current group_id"""
         app_info = context.get_current_app_info()
-        return app_info.get('group_id') if app_info else None
+        return app_info.get("group_id") if app_info else None
 
     @staticmethod
     def get_current_from_user_id() -> Optional[str]:
         """Get current initiator ID"""
         app_info = context.get_current_app_info()
-        return app_info.get('from_user_id') if app_info else None
+        return app_info.get("from_user_id") if app_info else None
 
 
 # Global log service instance

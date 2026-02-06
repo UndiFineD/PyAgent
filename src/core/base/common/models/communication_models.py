@@ -51,6 +51,10 @@ class CascadeContext:
     """Context for tracking cascade operations and preventing infinite recursion."""
 
     task_id: str = ""
+    # Backwards-compatible alias: some callers pass `agent_id` as the task identifier
+    agent_id: str = ""
+    # Optional workflow identifier for tracking across systems
+    workflow_id: str = ""
     cascade_depth: int = 0
     depth_limit: int = 10
     tenant_id: str = ""
@@ -59,6 +63,12 @@ class CascadeContext:
 
     def __post_init__(self) -> None:
         """Validate and normalize failure history after initialization functionally."""
+        # Backwards compatibility: if agent_id provided and task_id not set, use agent_id
+        if getattr(self, "agent_id", "") and not self.task_id:
+            self.task_id = self.agent_id
+        # Backwards compatibility: if workflow_id provided and task_id not set, use workflow_id
+        if getattr(self, "workflow_id", "") and not self.task_id:
+            self.task_id = self.workflow_id
         if self.cascade_depth >= self.depth_limit:
             raise RecursionError(f"Recursion depth limit ({self.depth_limit}) exceeded at depth {self.cascade_depth}")
 

@@ -6,10 +6,11 @@ Base document class based on Beanie ODM, providing common foundational document 
 """
 
 from datetime import datetime
-from common_utils.datetime_utils import to_timezone
+from typing import List, Optional, Self
+
 from beanie import Document, WriteRules
-from pydantic import model_validator, BaseModel
-from typing import Self, List, Optional
+from common_utils.datetime_utils import to_timezone
+from pydantic import BaseModel, model_validator
 from pymongo.asynchronous.client_session import AsyncClientSession
 from pymongo.results import InsertManyResult
 
@@ -142,7 +143,7 @@ class DocumentBase(Document):
 
         return obj
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def check_datetimes_are_aware(self) -> Self:
         """
         Recursively traverse all fields of the model to ensure any datetime object is 'aware' (contains timezone information).

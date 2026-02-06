@@ -1,6 +1,5 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\tests\test_rcon_utils.py
 import pytest
-
 from fle.env.utils.rcon import _lua2python
 
 

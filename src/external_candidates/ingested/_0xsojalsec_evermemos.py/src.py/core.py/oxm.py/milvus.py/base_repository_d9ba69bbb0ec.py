@@ -6,16 +6,17 @@ Provides common basic operations, all Milvus repositories should inherit from th
 """
 
 from abc import ABC
-from typing import Optional, TypeVar, Generic, Type, List, Any
-from core.oxm.milvus.milvus_collection_base import MilvusCollectionBase
-from core.oxm.milvus.async_collection import AsyncCollection
-from core.observation.logger import get_logger
+from typing import Any, Generic, List, Optional, Type, TypeVar
+
 from core.di.utils import get_bean
+from core.observation.logger import get_logger
+from core.oxm.milvus.async_collection import AsyncCollection
+from core.oxm.milvus.milvus_collection_base import MilvusCollectionBase
 
 logger = get_logger(__name__)
 
 # Generic type variable
-T = TypeVar('T', bound=MilvusCollectionBase)
+T = TypeVar("T", bound=MilvusCollectionBase)
 
 
 class BaseMilvusRepository(ABC, Generic[T]):

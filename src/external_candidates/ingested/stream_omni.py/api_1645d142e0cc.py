@@ -15,13 +15,13 @@
 # python api.py
 
 
-import requests
+import base64
 import json
 import os
 import time
 
+import requests
 from PIL import Image
-import base64
 
 ### Image
 image_path = "./stream_omni/serve/examples/cat.jpg"
@@ -38,7 +38,9 @@ def speech_to_token_from_file(file_path):
     }
     # Open the file in binary mode and send it as part of the request
     with open(file_path, "rb") as file:
-        files = {"file": (file.name, file, "audio/wav")}  # Name, file object, and file type
+        files = {
+            "file": (file.name, file, "audio/wav")
+        }  # Name, file object, and file type
         response = requests.post(url, headers=headers, files=files)
 
     # Handle the response (assumed to be JSON based on the FastAPI code)
@@ -86,7 +88,13 @@ pload = {
     "stop": "<|eot_id|>",
     "images": [image_base64],
 }
-response = requests.post("http://localhost:40000/worker_generate_stream", headers={"User-Agent": "LLaVA Client"}, json=pload, stream=True, timeout=100)
+response = requests.post(
+    "http://localhost:40000/worker_generate_stream",
+    headers={"User-Agent": "LLaVA Client"},
+    json=pload,
+    stream=True,
+    timeout=100,
+)
 
 
 for chunk in response.iter_lines(decode_unicode=False, delimiter=b"\0"):

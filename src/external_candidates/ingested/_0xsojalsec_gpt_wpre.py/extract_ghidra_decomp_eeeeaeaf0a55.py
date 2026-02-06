@@ -2,15 +2,17 @@
 #!/usr/bin/env python
 
 import ghidra_bridge
+
 # Bring in all the Ghidra classes
 bridge = ghidra_bridge.GhidraBridge(namespace=globals(), hook_import=True)
 
-import os, json
-from tqdm import tqdm
+import json
+import os
 from collections import defaultdict
 
 # Sketchy Ghidra remote imports
-from ghidra.app.decompiler import DecompInterface, DecompileOptions
+from ghidra.app.decompiler import DecompileOptions, DecompInterface
+from tqdm import tqdm
 
 currentProgram = getCurrentProgram()
 
@@ -30,9 +32,11 @@ for func in tqdm(functions, desc="Building call graph"):
     name = func.getName()
     funcNames[name] = func
     for calledFunc in func.getCalledFunctions(getMonitor()):
-        if calledFunc.isThunk(): continue
+        if calledFunc.isThunk():
+            continue
         calledName = calledFunc.getName()
-        if calledName == name: continue
+        if calledName == name:
+            continue
         callGraph[name].append(calledName)
 callGraph = dict(callGraph)
 for func in functions:
@@ -62,7 +66,7 @@ for func in tqdm(functions, desc="Decompiling functions"):
 decompiler.closeProgram()
 
 # Save the decompilations
-with open(os.path.join(progName,"decompilations.json"), "w") as f:
+with open(os.path.join(progName, "decompilations.json"), "w") as f:
     json.dump(decomps, f)
     f.write("\n")
 
@@ -76,6 +80,6 @@ print(f"Missing {len(missing)} functions:")
 print(missing)
 
 # Save the call graph
-with open(os.path.join(progName,"call_graph.json"), "w") as f:
+with open(os.path.join(progName, "call_graph.json"), "w") as f:
     json.dump(callGraph, f)
     f.write("\n")

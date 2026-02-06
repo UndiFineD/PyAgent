@@ -1,25 +1,26 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-wafer\wafer.py
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome import service
-from urllib.parse import urlparse
-from urllib.parse import urlencode
-from language import HTMLTag, HTMLAttribute, HTMLTagAttributeType
-from tags import GlobalAttributes, EventsAttributes, TagSpecificAttributes, Tags
-from mutations import Mutations
-from utils import choice, choice_percent
-from threading import Thread, Lock
-from scripts import INTERACTION_TRIGGER, ALERT_TRIGGER
-from update import install_chromedriver
-import logging as log
 import argparse
+import logging as log
 import random
 import time
+from threading import Lock, Thread
+from urllib.parse import urlencode, urlparse
+
+from language import HTMLAttribute, HTMLTag, HTMLTagAttributeType
+from mutations import Mutations
+from selenium import webdriver
+from selenium.webdriver.chrome import service
+from selenium.webdriver.support.ui import WebDriverWait
+from tags import EventsAttributes, GlobalAttributes, Tags, TagSpecificAttributes
+from update import install_chromedriver
+from utils import choice, choice_percent
+
+from scripts import ALERT_TRIGGER, INTERACTION_TRIGGER
 
 # WAFBypass class
 
 
-class TagList():
+class TagList:
     def __init__(self, e):
         self.l = list(e)
 
@@ -30,7 +31,7 @@ class TagList():
         return s
 
 
-class FuzzQueue():
+class FuzzQueue:
     def __init__(self) -> None:
         self.queue = []
         self.lock = Lock()
@@ -52,24 +53,24 @@ class FuzzQueue():
         return len(self.queue)
 
 
-class WAFBypass():
+class WAFBypass:
     code = ALERT_TRIGGER
     trigger = INTERACTION_TRIGGER
 
     def __init__(self, opts) -> None:
         self.param = opts.param
         self.options = webdriver.ChromeOptions()
-        self.options.add_argument('--no-sandbox')
+        self.options.add_argument("--no-sandbox")
         if opts.headless:
-            self.options.add_argument('--headless')
-        self.options.add_argument('--disable-gpu')
-        self.options.add_experimental_option(
-            "excludeSwitches", ["enable-logging"])
+            self.options.add_argument("--headless")
+        self.options.add_argument("--disable-gpu")
+        self.options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.unfiltered_attributes = {}
         self.unfiltered_tags = []
         self.driver = webdriver.Chrome(
             options=self.options,
-            service=service.Service(service_args=["--log-path=NUL"]))
+            service=service.Service(service_args=["--log-path=NUL"]),
+        )
         self.url = urlparse(opts.url)
         self.mutator = Mutations()
         self.queue = FuzzQueue()
@@ -83,7 +84,8 @@ class WAFBypass():
             raise Exception("Connection Error")
 
         self.driver.execute_cdp_cmd(
-            "Page.addScriptToEvaluateOnNewDocument", {"source": self.code})
+            "Page.addScriptToEvaluateOnNewDocument", {"source": self.code}
+        )
 
     def inc_payloads(self):
         self.lock.acquire()
@@ -100,7 +102,9 @@ class WAFBypass():
     def wait_for_pageload(self, driver):
         try:
             WebDriverWait(driver, 4).until(
-                lambda driver: driver.execute_script("return document.readyState") == "complete")
+                lambda driver: driver.execute_script("return document.readyState")
+                == "complete"
+            )
         except TimeoutError:
             raise Exception("Page Load Error")
 
@@ -155,13 +159,13 @@ class WAFBypass():
                     self.unfiltered_attributes["tag_specific"][tag.name] = []
                 try:
                     for attr in TagSpecificAttributes[tag.name]:
-                        encoded = urlencode(
-                            {self.param: f"<{tag.name} {attr}/>"})
+                        encoded = urlencode({self.param: f"<{tag.name} {attr}/>"})
                         url = f"{self.url.scheme}://{self.url.netloc}/?{encoded}"
                         is403, _ = self.navigate(self.driver, url)
                         if not is403:
                             self.unfiltered_attributes["tag_specific"][tag.name].append(
-                                attr)
+                                attr
+                            )
                 except KeyError:
                     print(f"Tag {tag.name} not found in TagSpecificAttributes")
         except KeyboardInterrupt:
@@ -205,8 +209,7 @@ class WAFBypass():
                 attr = choice(globals)
                 globals.remove(attr)
                 # make a copy of attr to avoid mutating the original
-                attr = HTMLAttribute(attr.name, attr.kind,
-                                     glob=True, root=None)
+                attr = HTMLAttribute(attr.name, attr.kind, glob=True, root=None)
                 tag.add_attribute(attr)
 
             if len(self.unfiltered_attributes["events"]) == 0:
@@ -214,12 +217,10 @@ class WAFBypass():
 
             attr = choice(self.unfiltered_attributes["events"])
             # make a copy of attr to avoid mutating the original
-            attr = HTMLAttribute(attr.name, attr.kind,
-                                 glob=False, root=None)
+            attr = HTMLAttribute(attr.name, attr.kind, glob=False, root=None)
             tag.add_attribute(attr)
 
-            tag_specific = list(
-                self.unfiltered_attributes["tag_specific"][tag.name])
+            tag_specific = list(self.unfiltered_attributes["tag_specific"][tag.name])
 
             for _ in range(0, nattr):
                 if len(tag_specific) == 0:
@@ -227,18 +228,14 @@ class WAFBypass():
                 attr = choice(tag_specific)
                 tag_specific.remove(attr)
                 # make a copy of attr to avoid mutating the original
-                attr = HTMLAttribute(attr.name, attr.kind,
-                                     glob=False, root=None)
+                attr = HTMLAttribute(attr.name, attr.kind, glob=False, root=None)
                 tag.add_attribute(attr)
 
-            addchildren = {
-                70: lambda: False,
-                30: lambda: True
-            }
+            addchildren = {70: lambda: False, 30: lambda: True}
 
             should_add = choice_percent(addchildren)
 
-            if (should_add()):
+            if should_add():
                 tag.children.append(self.get_tag())
 
             return tag
@@ -247,7 +244,8 @@ class WAFBypass():
 
     def fuzz_thread(self, driver: webdriver.Chrome, started):
         driver.execute_cdp_cmd(
-            "Page.addScriptToEvaluateOnNewDocument", {"source": self.code})
+            "Page.addScriptToEvaluateOnNewDocument", {"source": self.code}
+        )
 
         while not started:
             time.sleep(0.1)
@@ -320,8 +318,7 @@ class WAFBypass():
                 is403, triggered = self.navigate(self.driver, url)
                 if triggered:
                     print(f"XSS Payload: {payload}")
-                self.driver.execute_script(
-                    self.trigger.format(self.get_ids(tags)))
+                self.driver.execute_script(self.trigger.format(self.get_ids(tags)))
                 triggered = self.triggered_xss
                 if triggered:
                     print(f"XSS Payload: {payload}")
@@ -339,12 +336,16 @@ def main():
     # mutually exclusive group
     group = args.add_mutually_exclusive_group(required=True)
     group.add_argument("--url", help="URL to test", type=str)
-    group.add_argument("--update-chromedriver",
-                       help="Update chromedriver to latest version", action="store_true", default=False)
-    args.add_argument("--param", help="Parameter to test",
-                      type=str)
-    args.add_argument("--headless", help="Run in headless mode",
-                      action="store_true", default=False)
+    group.add_argument(
+        "--update-chromedriver",
+        help="Update chromedriver to latest version",
+        action="store_true",
+        default=False,
+    )
+    args.add_argument("--param", help="Parameter to test", type=str)
+    args.add_argument(
+        "--headless", help="Run in headless mode", action="store_true", default=False
+    )
     arguments = args.parse_args()
 
     if arguments.update_chromedriver:

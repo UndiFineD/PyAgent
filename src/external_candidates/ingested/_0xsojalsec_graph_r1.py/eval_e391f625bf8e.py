@@ -1,8 +1,10 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-Graph-R1\eval.py
-import numpy as np
 import re
 import string
 from collections import Counter
+
+import numpy as np
+
 
 def normalize_answer(answer: str) -> str:
     """
@@ -18,6 +20,7 @@ def normalize_answer(answer: str) -> str:
     Returns:
         str: The normalized string.
     """
+
     def remove_articles(text):
         return re.sub(r"\b(a|an|the)\b", " ", text)
 
@@ -30,17 +33,23 @@ def normalize_answer(answer: str) -> str:
 
     def lower(text):
         return text.lower()
-    
+
     return white_space_fix(remove_articles(remove_punc(lower(answer))))
 
+
 def calculate_metric_scores_em(gold_answers, predicted_answers, aggregation_fn):
-    assert len(gold_answers) == len(predicted_answers), "Length of gold answers and predicted answers should be the same."
+    assert len(gold_answers) == len(
+        predicted_answers
+    ), "Length of gold answers and predicted answers should be the same."
 
     example_eval_results = []
     total_em = 0
 
     for gold_list, predicted in zip(gold_answers, predicted_answers):
-        em_scores = [1.0 if normalize_answer(gold) == normalize_answer(predicted) else 0.0 for gold in gold_list]
+        em_scores = [
+            1.0 if normalize_answer(gold) == normalize_answer(predicted) else 0.0
+            for gold in gold_list
+        ]
         aggregated_em = aggregation_fn(em_scores)
         example_eval_results.append({"ExactMatch": aggregated_em})
         total_em += aggregated_em
@@ -50,8 +59,11 @@ def calculate_metric_scores_em(gold_answers, predicted_answers, aggregation_fn):
 
     return pooled_eval_results, example_eval_results
 
+
 def calculate_metric_scores_f1(gold_answers, predicted_answers, aggregation_fn):
-    assert len(gold_answers) == len(predicted_answers), "Length of gold answers and predicted answers should be the same."
+    assert len(gold_answers) == len(
+        predicted_answers
+    ), "Length of gold answers and predicted answers should be the same."
 
     def compute_f1(gold: str, predicted: str) -> float:
         gold_tokens = normalize_answer(gold).split()
@@ -80,6 +92,7 @@ def calculate_metric_scores_f1(gold_answers, predicted_answers, aggregation_fn):
 
     return pooled_eval_results, example_eval_results
 
+
 # #For Evaluation
 # answers = [
 #     ["Politician"],
@@ -93,17 +106,24 @@ def calculate_metric_scores_f1(gold_answers, predicted_answers, aggregation_fn):
 #     "New York."
 # ]
 
+
 def cal_em(gold_answers, predicted_answers):
     overall_qa_em_result, example_qa_em_results = calculate_metric_scores_em(
-        gold_answers=gold_answers, predicted_answers=predicted_answers,
-        aggregation_fn=np.max)
+        gold_answers=gold_answers,
+        predicted_answers=predicted_answers,
+        aggregation_fn=np.max,
+    )
     return overall_qa_em_result["ExactMatch"]
+
 
 def cal_f1(gold_answers, predicted_answers):
     overall_qa_f1_result, example_qa_f1_results = calculate_metric_scores_f1(
-        gold_answers=gold_answers, predicted_answers=predicted_answers,
-        aggregation_fn=np.max)
+        gold_answers=gold_answers,
+        predicted_answers=predicted_answers,
+        aggregation_fn=np.max,
+    )
     return overall_qa_f1_result["F1"]
+
 
 # overall_qa_em_result, example_qa_em_results = calculate_metric_scores_em(
 #     gold_answers=answers, predicted_answers=pred_answers,

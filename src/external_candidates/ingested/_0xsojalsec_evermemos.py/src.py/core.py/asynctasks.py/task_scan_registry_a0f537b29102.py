@@ -9,7 +9,7 @@ class TaskScanDirectoriesRegistry:
         """Initialize scan directory registry"""
         self.scan_directories: List[str] = []
 
-    def add_scan_path(self, path: str) -> 'TaskScanDirectoriesRegistry':
+    def add_scan_path(self, path: str) -> "TaskScanDirectoriesRegistry":
         """Add scan directory"""
         self.scan_directories.append(path)
         return self
@@ -18,7 +18,7 @@ class TaskScanDirectoriesRegistry:
         """Get scan directories"""
         return self.scan_directories
 
-    def clear(self) -> 'TaskScanDirectoriesRegistry':
+    def clear(self) -> "TaskScanDirectoriesRegistry":
         """Clear scan directories"""
         self.scan_directories = []
         return self

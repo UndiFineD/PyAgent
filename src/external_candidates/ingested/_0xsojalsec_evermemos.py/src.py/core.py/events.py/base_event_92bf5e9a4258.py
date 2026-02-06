@@ -10,15 +10,13 @@ All business events should inherit from this base class.
 import json
 import uuid
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, Type, TypeVar
 
 import bson
-
 from common_utils.datetime_utils import get_now_with_timezone, to_iso_format
 
-
-T = TypeVar('T', bound='BaseEvent')
+T = TypeVar("T", bound="BaseEvent")
 
 
 @dataclass
@@ -80,7 +78,7 @@ class BaseEvent(ABC):
         """
         data = asdict(self)
         # Add event type field for identifying the event type during deserialization
-        data['_event_type'] = self.event_type()
+        data["_event_type"] = self.event_type()
         return data
 
     @classmethod

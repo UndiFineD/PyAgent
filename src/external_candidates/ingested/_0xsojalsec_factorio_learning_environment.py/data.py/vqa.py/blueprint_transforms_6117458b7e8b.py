@@ -2,8 +2,8 @@
 """Blueprint transformation utilities for data augmentation using flips instead of rotations."""
 
 import copy
-from typing import Dict, Any, List, Tuple, Set, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 class FlipType(Enum):

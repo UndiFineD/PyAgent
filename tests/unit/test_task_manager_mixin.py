@@ -27,7 +27,7 @@ from src.core.base.mixins.task_manager_mixin import TaskManagerMixin, TaskItem
 from src.core.base.common.models.communication_models import CascadeContext
 
 
-class TestTaskManagerMixin(TaskManagerMixin):
+class MockTaskManagerMixin(TaskManagerMixin):
     """Test implementation of TaskManagerMixin."""
 
     def __init__(self, **kwargs):
@@ -40,7 +40,7 @@ class TestTaskManager:
     @pytest.fixture
     def task_manager(self, tmp_path):
         """Create a test task manager instance."""
-        return TestTaskManagerMixin(_workspace_root=str(tmp_path))
+        return MockTaskManagerMixin(_workspace_root=str(tmp_path))
 
     @pytest.fixture
     def cascade_context(self):
@@ -236,7 +236,7 @@ class TestTaskManager:
         task_file = tmp_path / ".pyagent_tasks.json"
 
         # Create manager with persistence
-        manager1 = TestTaskManagerMixin(_workspace_root=str(tmp_path))
+        manager1 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
         manager1.tasks = [
             TaskItem("Task 1", completed=True, priority=2),
             TaskItem("Task 2", completed=False, priority=1)
@@ -244,7 +244,7 @@ class TestTaskManager:
         manager1._save_tasks()
 
         # Create new manager and load
-        manager2 = TestTaskManagerMixin(_workspace_root=str(tmp_path))
+        manager2 = MockTaskManagerMixin(_workspace_root=str(tmp_path))
 
         assert len(manager2.tasks) == 2
         assert manager2.tasks[0].description == "Task 1"

@@ -1,27 +1,28 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\llm\llm_adapter\gemini_adapter.py
 import asyncio
-import time
 import logging
-from typing import Dict, Any, List, Union, AsyncGenerator
 import os
+import time
+from typing import Any, AsyncGenerator, Dict, List, Union
+
 from google.genai.client import Client
-from core.di.decorators import service
 from google.genai.types import (
-    GenerateContentConfig,
     ContentDict,
-    HarmCategory,
+    GenerateContentConfig,
     HarmBlockThreshold,
+    HarmCategory,
+    ThinkingConfig,
 )
-from google.genai.types import ThinkingConfig
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+
 from core.component.llm.llm_adapter.completion import (
     ChatCompletionRequest,
     ChatCompletionResponse,
 )
-from core.component.llm.llm_adapter.message import MessageRole
 from core.component.llm.llm_adapter.llm_backend_adapter import LLMBackendAdapter
-
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from core.component.llm.llm_adapter.message import MessageRole
 from core.constants.errors import ErrorMessage
+from core.di.decorators import service
 
 logger = logging.getLogger(__name__)
 

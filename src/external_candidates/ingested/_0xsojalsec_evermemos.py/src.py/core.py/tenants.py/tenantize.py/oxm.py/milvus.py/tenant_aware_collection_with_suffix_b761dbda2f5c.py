@@ -9,7 +9,8 @@ This module combines the functionalities of TenantAwareCollection and MilvusColl
 """
 
 from typing import Optional
-from pymilvus import connections, Collection
+
+from pymilvus import Collection, connections, utility
 from pymilvus.client.types import ConsistencyLevel
 
 from core.observation.logger import get_logger
@@ -17,13 +18,12 @@ from core.oxm.milvus.milvus_collection_base import (
     MilvusCollectionWithSuffix,
     generate_new_collection_name,
 )
-from core.tenants.tenantize.oxm.milvus.tenant_aware_collection import (
-    TenantAwareCollection,
-)
 from core.tenants.tenantize.oxm.milvus.config_utils import (
     get_tenant_aware_collection_name,
 )
-from pymilvus import utility
+from core.tenants.tenantize.oxm.milvus.tenant_aware_collection import (
+    TenantAwareCollection,
+)
 
 logger = get_logger(__name__)
 

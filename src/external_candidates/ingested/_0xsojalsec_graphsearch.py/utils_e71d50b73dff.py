@@ -1,12 +1,13 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-GraphSearch\utils.py
-import json
-import re
-import os
 import asyncio
+import json
+import os
+import re
 from typing import Any, Dict, List, Tuple
+
+from config import EMBED_MODEL_NAME, LLM_API_KEY, LLM_BASE_URL, MODEL_NAME
 from openai import AsyncOpenAI
 
-from config import LLM_API_KEY, LLM_BASE_URL, MODEL_NAME, EMBED_MODEL_NAME
 
 def compute_args_hash(*args: Any, cache_type: str | None = None) -> str:
     """Compute a hash for the given arguments.
@@ -26,6 +27,7 @@ def compute_args_hash(*args: Any, cache_type: str | None = None) -> str:
     # Compute MD5 hash
     return hashlib.md5(args_str.encode()).hexdigest()
 
+
 async def openai_complete(
     prompt,
     model="gpt-4o",
@@ -35,9 +37,7 @@ async def openai_complete(
     **kwargs,
 ) -> str:
     model = MODEL_NAME
-    openai_async_client = AsyncOpenAI(
-        api_key=LLM_API_KEY, base_url=LLM_BASE_URL
-    )
+    openai_async_client = AsyncOpenAI(api_key=LLM_API_KEY, base_url=LLM_BASE_URL)
 
     messages = []
     if system_prompt:
@@ -51,24 +51,27 @@ async def openai_complete(
 
     return response.choices[0].message.content
 
+
 def load_vdb(dataset, documents):
     import faiss
     from sentence_transformers import SentenceTransformer
+
     index_path = f"./db/vdb/{dataset}_index.faiss"
     embed_model = SentenceTransformer(EMBED_MODEL_NAME, trust_remote_code=True)
 
     if os.path.exists(index_path):
         index = faiss.read_index(index_path)
         return index, embed_model
-    
+
     embeddings = embed_model.encode(documents, show_progress_bar=True)
     dim = embeddings.shape[1]
     index = faiss.IndexFlatL2(dim)
     index.add(embeddings)
-    
+
     os.makedirs(os.path.dirname(index_path), exist_ok=True)
     faiss.write_index(index, index_path)
     return index, embed_model
+
 
 def vdb_retrieve(question, documents, index, embed_model, top_k):
     query_embedding = embed_model.encode([question])
@@ -76,8 +79,10 @@ def vdb_retrieve(question, documents, index, embed_model, top_k):
     retrieved_docs = [documents[i] for i in I[0]]
     return retrieved_docs
 
+
 def extract_words_str(text):
-    return ' '.join(re.findall(r'[A-Za-z]+', text))
+    return " ".join(re.findall(r"[A-Za-z]+", text))
+
 
 def format_history_context(history):
     history_context_str = ""
@@ -85,11 +90,8 @@ def format_history_context(history):
         history_context_str += f"Sub-query {i + 1}: {q}\nRetrieved context:\n{ctx_sum}\nSub-query answer: {a}\n\n"
     return history_context_str.strip()
 
-def truncate_str_by_token_size(
-    text: str,
-    max_token_size: int,
-    tokenizer
-) -> str:
+
+def truncate_str_by_token_size(text: str, max_token_size: int, tokenizer) -> str:
     if max_token_size <= 0:
         return ""
 
@@ -97,8 +99,10 @@ def truncate_str_by_token_size(
     truncated = encoded[:max_token_size]
     return tokenizer.decode(truncated, skip_special_tokens=True)
 
+
 def normalize(text: str) -> str:
     import string
+
     """
     Normalize a given string by applying the following transformations:
     1. Convert the string to lowercase.
@@ -112,6 +116,7 @@ def normalize(text: str) -> str:
     Returns:
         str: The normalized string.
     """
+
     def remove_articles(text):
         return re.sub(r"\b(a|an|the)\b", " ", text)
 
@@ -124,11 +129,13 @@ def normalize(text: str) -> str:
 
     def lower(text):
         return text.lower()
-    
+
     return white_space_fix(remove_articles(remove_punc(lower(text)))).split()
+
 
 def parse_expanded_queries(query_expansion_result: str):
     import ast
+
     """
     Try to extract and parse a Python-style list of strings from
     the model output, even if surrounded by extra text.
@@ -144,7 +151,7 @@ def parse_expanded_queries(query_expansion_result: str):
         pass
 
     # Step 2️⃣: 用正则在文本中提取形如 ["...", "..."] 的部分
-    match = re.search(r'\[[\s\S]*?\]', text)
+    match = re.search(r"\[[\s\S]*?\]", text)
     if match:
         list_str = match.group(0)
         try:
@@ -156,6 +163,8 @@ def parse_expanded_queries(query_expansion_result: str):
 
     # Step 3️⃣: 如果都失败，就退化为单元素列表
     return [text]
+
+
 def always_get_an_event_loop() -> asyncio.AbstractEventLoop:
     """
     Ensure that there is always an event loop available.

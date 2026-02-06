@@ -9,9 +9,9 @@ These classes can be imported and used by other test files
 
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from core.di.container import DIContainer
-from core.di.bean_definition import BeanScope
 
+from core.di.bean_definition import BeanScope
+from core.di.container import DIContainer
 
 # ==================== User Service Related ====================
 

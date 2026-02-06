@@ -4,8 +4,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
+
+from api_specs.memory_models import MemoryModel, MemoryType, Metadata, RetrieveMethod
 from api_specs.memory_types import BaseMemory
-from api_specs.memory_models import MemoryType, Metadata, MemoryModel, RetrieveMethod
 from common_utils.datetime_utils import get_timezone
 
 

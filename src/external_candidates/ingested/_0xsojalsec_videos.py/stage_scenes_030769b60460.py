@@ -1,9 +1,9 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-videos\stage_scenes.py
 #!/usr/bin/env python
+import importlib
 import inspect
 import os
 import sys
-import importlib
 
 from manimlib.config import get_module
 from manimlib.extract_scene import is_child_scene
@@ -18,18 +18,14 @@ def get_sorted_scene_classes(module_name):
     importlib.import_module(module.__name__)
     line_to_scene = {}
     name_scene_list = inspect.getmembers(
-        module,
-        lambda obj: is_child_scene(obj, module)
+        module, lambda obj: is_child_scene(obj, module)
     )
     for name, scene_class in name_scene_list:
         if inspect.getmodule(scene_class).__name__ != module.__name__:
             continue
         lines, line_no = inspect.getsourcelines(scene_class)
         line_to_scene[line_no] = scene_class
-    return [
-        line_to_scene[index]
-        for index in sorted(line_to_scene.keys())
-    ]
+    return [line_to_scene[index] for index in sorted(line_to_scene.keys())]
 
 
 def stage_scenes(module_name):
@@ -39,10 +35,10 @@ def stage_scenes(module_name):
         return
     # TODO, fix this
     animation_dir = os.path.join(
-        os.path.expanduser('~'),
-        "Dropbox/3Blue1Brown/videos/2021/holomorphic_dynamics/videos"
+        os.path.expanduser("~"),
+        "Dropbox/3Blue1Brown/videos/2021/holomorphic_dynamics/videos",
     )
-    # 
+    #
     files = os.listdir(animation_dir)
     sorted_files = []
     for scene_class in scene_classes:
@@ -67,9 +63,7 @@ def stage_scenes(module_name):
     count = 0
     while True:
         staged_scenes_dir = os.path.join(
-            animation_dir,
-            os.pardir,
-            "staged_scenes_{}".format(count)
+            animation_dir, os.pardir, "staged_scenes_{}".format(count)
         )
         if not os.path.exists(staged_scenes_dir):
             os.makedirs(staged_scenes_dir)
@@ -82,10 +76,7 @@ def stage_scenes(module_name):
         # sorts by date modified, it shows up in the
         # correct order
         symlink_name = os.path.join(
-            staged_scenes_dir,
-            "Scene_{:03}_{}".format(
-                count, f.split(os.sep)[-1]
-            )
+            staged_scenes_dir, "Scene_{:03}_{}".format(count, f.split(os.sep)[-1])
         )
         os.symlink(f, symlink_name)
 

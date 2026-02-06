@@ -4,12 +4,15 @@
 Upload VQA dataset to Hugging Face with each JSONL file as a separate split.
 """
 
-from pathlib import Path
-from datasets import Dataset, DatasetDict, Features, Value, Image as HFImage
-import pandas as pd
 import json
+from pathlib import Path
+from typing import Any, Dict, List
+
+import pandas as pd
+from datasets import Dataset, DatasetDict, Features
+from datasets import Image as HFImage
+from datasets import Value
 from huggingface_hub import create_repo
-from typing import Dict, List, Any
 
 # Dataset configuration
 DATASET_NAME = "factorio-vqa"  # Change this to your desired dataset name

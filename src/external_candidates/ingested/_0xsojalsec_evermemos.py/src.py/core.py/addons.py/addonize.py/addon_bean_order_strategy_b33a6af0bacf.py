@@ -14,7 +14,8 @@ Priority ordering rules (from highest to lowest):
 """
 
 import os
-from typing import List, Tuple, Set, Type, Dict
+from typing import Dict, List, Set, Tuple, Type
+
 from core.di.bean_definition import BeanDefinition, BeanScope
 from core.di.bean_order_strategy import BeanOrderStrategy
 from core.di.container import DIContainer

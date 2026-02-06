@@ -1,10 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\infra_layer\adapters\out\persistence\repository\core_memory_raw_repository.py
-from typing import List, Optional, Dict, Any, Tuple, Union
-from pymongo.asynchronous.client_session import AsyncClientSession
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from core.oxm.mongo.base_repository import BaseRepository
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 from infra_layer.adapters.out.persistence.document.memory.core_memory import CoreMemory
+from pymongo.asynchronous.client_session import AsyncClientSession
+
+from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 
@@ -231,7 +233,7 @@ class CoreMemoryRawRepository(BaseRepository[CoreMemory]):
                 # Delete specific version - delete directly and check deletion count
                 result = await self.model.find(query_filter, session=session).delete()
                 deleted_count = (
-                    result.deleted_count if hasattr(result, 'deleted_count') else 0
+                    result.deleted_count if hasattr(result, "deleted_count") else 0
                 )
                 success = deleted_count > 0
 
@@ -253,7 +255,7 @@ class CoreMemoryRawRepository(BaseRepository[CoreMemory]):
                 # Delete all versions
                 result = await self.model.find(query_filter, session=session).delete()
                 deleted_count = (
-                    result.deleted_count if hasattr(result, 'deleted_count') else 0
+                    result.deleted_count if hasattr(result, "deleted_count") else 0
                 )
                 success = deleted_count > 0
 

@@ -96,6 +96,7 @@ class RAGToolConfig:
     embedding_model: str = "text-embedding-ada-002"
     chunk_size: int = 1000
     chunk_overlap: int = 200
+    vector_store_id: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
 
 
@@ -260,6 +261,7 @@ class RAGCore(BaseCore):
             description=description,
             vector_store_type=VectorStoreType.QDRANT,  # Default, would be determined by store
             collection_name=collection_name,
+            vector_store_id=vector_store_id,
             **kwargs
         )
 
@@ -288,7 +290,9 @@ class RAGCore(BaseCore):
             raise ValueError(f"RAG tool {tool_id} not found")
 
         tool_config = self.rag_tools[tool_id]
-        vector_store = self.vector_stores.get(tool_config.collection_name)
+        # Resolve vector store by explicit id (preferred) or fall back to collection name
+        store_key = tool_config.vector_store_id or tool_config.collection_name
+        vector_store = self.vector_stores.get(store_key)
 
         if not vector_store:
             raise ValueError(f"Vector store for tool {tool_id} not found")
@@ -299,11 +303,15 @@ class RAGCore(BaseCore):
             if chunk_documents and len(doc.content) > tool_config.chunk_size:
                 chunks = await self._chunk_document(doc, tool_config)
                 processed_docs.extend(chunks)
+
+                # Register chunks in document registry
+                for chunk in chunks:
+                    self.documents[chunk.doc_id] = chunk
             else:
                 processed_docs.append(doc)
 
-            # Store in document registry
-            self.documents[doc.doc_id] = doc
+                # Store in document registry
+                self.documents[doc.doc_id] = doc
 
         # Add to vector store
         doc_ids = await vector_store.add_documents(processed_docs)
@@ -335,10 +343,18 @@ class RAGCore(BaseCore):
         tool_config = self.rag_tools[tool_id]
         config = retrieval_config or tool_config.retrieval_config
 
-        # Apply pre-processors
+        # Apply pre-processors (support sync or async processors)
         processed_query = query
         for processor in tool_config.pre_processors:
-            processed_query = await processor(processed_query)
+            try:
+                result = processor(processed_query)
+                if asyncio.iscoroutine(result):
+                    processed_query = await result
+                else:
+                    processed_query = result
+            except TypeError:
+                # Fallback: if processor is async function requiring awaitable call
+                processed_query = await processor(processed_query)
 
         # Perform retrieval based on strategy
         vector_store = self.vector_stores.get(tool_config.collection_name)
@@ -349,10 +365,14 @@ class RAGCore(BaseCore):
             vector_store, processed_query, config, filters
         )
 
-        # Apply post-processors
+        # Apply post-processors (support sync or async processors)
         processed_results = results
         for processor in tool_config.post_processors:
-            processed_results = await processor(processed_results)
+            result = processor(processed_results)
+            if asyncio.iscoroutine(result):
+                processed_results = await result
+            else:
+                processed_results = result
 
         # Create retrieval result
         documents, scores = zip(*processed_results) if processed_results else ([], [])
@@ -484,26 +504,25 @@ class RAGCore(BaseCore):
     async def _chunk_document(self, document: Document, config: RAGToolConfig) -> List[Document]:
         """Chunk a document into smaller pieces."""
         content = document.content
-        chunk_size = config.chunk_size
-        overlap = config.chunk_overlap
+        chunk_size = max(1, int(config.chunk_size))
+        overlap = max(0, int(config.chunk_overlap))
 
-        chunks = []
+        chunks: List[Document] = []
         start = 0
+        content_length = len(content)
 
-        while start < len(content):
-            end = start + chunk_size
+        while start < content_length:
+            end = min(start + chunk_size, content_length)
 
-            # Find a good break point (sentence, word boundary)
-            if end < len(content):
-                # Look for sentence endings
-                for i in range(min(100, len(content) - end)):
-                    if content[end - i] in ".!?" and content[end - i + 1:end - i + 2].isspace():
-                        end = end - i + 1
-                        break
-                else:
-                    # Look for word boundaries
-                    while end > start and not content[end - 1].isspace():
-                        end -= 1
+            # If not at end, try to break at last space within window to avoid cutting words
+            if end < content_length:
+                last_space = content.rfind(' ', start, end)
+                if last_space > start:
+                    end = last_space
+
+            # Ensure we make progress; if end equals start, advance by chunk_size
+            if end <= start:
+                end = min(start + chunk_size, content_length)
 
             chunk_content = content[start:end].strip()
             if chunk_content:
@@ -517,7 +536,15 @@ class RAGCore(BaseCore):
                 chunk.metadata["chunk_index"] = len(chunks)
                 chunks.append(chunk)
 
-            start = end - overlap
+            # Move start forward with overlap
+            if end >= content_length:
+                break
+
+            # Calculate next start ensuring it doesn't go backwards
+            next_start = end - overlap
+            if next_start <= start:
+                next_start = end
+            start = next_start
 
         return chunks
 

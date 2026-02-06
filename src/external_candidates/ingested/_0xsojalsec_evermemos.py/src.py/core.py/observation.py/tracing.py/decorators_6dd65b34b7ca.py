@@ -5,10 +5,10 @@ Decorator module
 This module contains various decorators used for validation and processing before method execution.
 """
 
-from functools import wraps
-from typing import Any, Dict, Callable, Optional
 import logging
 import time
+from functools import wraps
+from typing import Any, Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -149,7 +149,7 @@ def _format_args(args, kwargs) -> str:
 
     # Handle positional arguments
     for i, arg in enumerate(args):
-        if hasattr(arg, '__dict__'):  # Object type
+        if hasattr(arg, "__dict__"):  # Object type
             args_str.append(f"arg{i}: {type(arg).__name__}")
         elif isinstance(arg, (list, dict)) and len(str(arg)) > 100:  # Large object
             args_str.append(f"arg{i}: {type(arg).__name__}(len={len(arg)})")
@@ -158,7 +158,7 @@ def _format_args(args, kwargs) -> str:
 
     # Handle keyword arguments
     for key, value in kwargs.items():
-        if hasattr(value, '__dict__'):  # Object type
+        if hasattr(value, "__dict__"):  # Object type
             args_str.append(f"{key}: {type(value).__name__}")
         elif isinstance(value, (list, dict)) and len(str(value)) > 100:  # Large object
             args_str.append(f"{key}: {type(value).__name__}(len={len(value)})")
@@ -170,7 +170,7 @@ def _format_args(args, kwargs) -> str:
 
 def _format_result(result) -> str:
     """Format function return value"""
-    if hasattr(result, '__dict__'):  # Object type
+    if hasattr(result, "__dict__"):  # Object type
         return f"{type(result).__name__}"
     elif isinstance(result, (list, dict)) and len(str(result)) > 100:  # Large object
         return f"{type(result).__name__}(len={len(result)})"

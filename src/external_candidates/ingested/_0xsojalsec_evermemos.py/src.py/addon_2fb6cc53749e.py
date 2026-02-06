@@ -1,11 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\addon.py
 import os
 
-from core.di.scan_path_registry import ScannerPathsRegistry
-from core.asynctasks.task_scan_registry import TaskScanDirectoriesRegistry
 from common_utils.project_path import get_base_scan_path
+
 from core.addons.addon_registry import AddonRegistry
 from core.addons.addons_registry import ADDONS_REGISTRY
+from core.asynctasks.task_scan_registry import TaskScanDirectoriesRegistry
+from core.di.scan_path_registry import ScannerPathsRegistry
 
 # Configure DI scan paths
 paths_registry = ScannerPathsRegistry()

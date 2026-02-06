@@ -7,15 +7,16 @@ Does not depend on domain layer interfaces, directly operates on GroupUserProfil
 Supports joint queries and operations based on user_id and group_id.
 """
 
-from typing import List, Optional, Dict, Any, Tuple
-from pymongo.asynchronous.client_session import AsyncClientSession
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from core.oxm.mongo.base_repository import BaseRepository
+from typing import Any, Dict, List, Optional, Tuple
 
 from infra_layer.adapters.out.persistence.document.memory.group_user_profile_memory import (
     GroupUserProfileMemory,
 )
+from pymongo.asynchronous.client_session import AsyncClientSession
+
+from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 
@@ -339,7 +340,7 @@ class GroupUserProfileMemoryRawRepository(BaseRepository[GroupUserProfileMemory]
                 # Delete specific version - directly delete and check deletion count
                 result = await self.model.find(query_filter, session=session).delete()
                 deleted_count = (
-                    result.deleted_count if hasattr(result, 'deleted_count') else 0
+                    result.deleted_count if hasattr(result, "deleted_count") else 0
                 )
                 success = deleted_count > 0
 
@@ -363,7 +364,7 @@ class GroupUserProfileMemoryRawRepository(BaseRepository[GroupUserProfileMemory]
                 # Delete all versions
                 result = await self.model.find(query_filter, session=session).delete()
                 deleted_count = (
-                    result.deleted_count if hasattr(result, 'deleted_count') else 0
+                    result.deleted_count if hasattr(result, "deleted_count") else 0
                 )
                 success = deleted_count > 0
 
@@ -699,7 +700,7 @@ class GroupUserProfileMemoryRawRepository(BaseRepository[GroupUserProfileMemory]
                 {"user_id": user_id}, session=session
             ).delete()
             deleted_count = (
-                result.deleted_count if hasattr(result, 'deleted_count') else 0
+                result.deleted_count if hasattr(result, "deleted_count") else 0
             )
             logger.debug(
                 "✅ Successfully deleted group user profiles by user ID: user_id=%s, deleted %d records",
@@ -729,7 +730,7 @@ class GroupUserProfileMemoryRawRepository(BaseRepository[GroupUserProfileMemory]
                 {"group_id": group_id}, session=session
             ).delete()
             deleted_count = (
-                result.deleted_count if hasattr(result, 'deleted_count') else 0
+                result.deleted_count if hasattr(result, "deleted_count") else 0
             )
             logger.debug(
                 "✅ Successfully deleted group user profiles by group ID: group_id=%s, deleted %d records",

@@ -1,12 +1,12 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\observation\logger.py
 import logging
+import os
+import sys
 import traceback
-from typing import Any, Optional
+from datetime import datetime
 from enum import Enum
 from functools import lru_cache
-import sys
-import os
-from datetime import datetime
+from typing import Any, Optional
 
 
 class LogLevel(Enum):
@@ -22,10 +22,10 @@ class LogLevel(Enum):
 class LoggerProvider:
     """Unified logging management class - hybrid mode + LRU cache optimization"""
 
-    _instance: Optional['LoggerProvider'] = None
+    _instance: Optional["LoggerProvider"] = None
     _initialized: bool = False
 
-    def __new__(cls) -> 'LoggerProvider':
+    def __new__(cls) -> "LoggerProvider":
         """Singleton pattern implementation"""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -40,12 +40,12 @@ class LoggerProvider:
     def _setup_root_logging(self):
         """Set up logging configuration"""
         # Get log level from environment variable, default to INFO
-        log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
+        log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 
         # Configure root logger
         logging.basicConfig(
             level=getattr(logging, log_level),
-            format='%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s',
+            format="%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",
             handlers=[
                 logging.StreamHandler(sys.stdout),
                 # Can add file handler
@@ -58,16 +58,16 @@ class LoggerProvider:
         self._setup_root_logging()
 
         # Disable redundant logs from third-party libraries
-        logging.getLogger('urllib3').setLevel(logging.WARNING)
-        logging.getLogger('google').setLevel(logging.WARNING)
-        logging.getLogger('googleapiclient').setLevel(logging.WARNING)
+        logging.getLogger("urllib3").setLevel(logging.WARNING)
+        logging.getLogger("google").setLevel(logging.WARNING)
+        logging.getLogger("googleapiclient").setLevel(logging.WARNING)
         # Disable INFO level logs from httpx to avoid frequent HTTP request logs
-        logging.getLogger('httpx').setLevel(logging.WARNING)
+        logging.getLogger("httpx").setLevel(logging.WARNING)
         # Disable debug logs from HTTP-related libraries to avoid redundant network request logs
-        logging.getLogger('hpack').setLevel(logging.WARNING)
-        logging.getLogger('httpcore').setLevel(logging.WARNING)
-        logging.getLogger('pymongo').setLevel(logging.WARNING)
-        logging.getLogger('aiokafka').setLevel(logging.WARNING)
+        logging.getLogger("hpack").setLevel(logging.WARNING)
+        logging.getLogger("httpcore").setLevel(logging.WARNING)
+        logging.getLogger("pymongo").setLevel(logging.WARNING)
+        logging.getLogger("aiokafka").setLevel(logging.WARNING)
         # Disable debug logs from websockets client to avoid redundant connection logs
         # logging.getLogger('websockets.client').setLevel(logging.WARNING)
 
@@ -81,7 +81,7 @@ class LoggerProvider:
         Returns:
             logging.Logger: Cached logger instance
         """
-        return logging.getLogger(f'{module_name}')
+        return logging.getLogger(f"{module_name}")
 
     def get_logger(self, name: Optional[str] = None) -> logging.Logger:
         """Get logger with specified name (recommended usage: explicitly pass module name)
@@ -95,7 +95,7 @@ class LoggerProvider:
         if name is None:
             # Get caller's module name (convenient but lower performance)
             frame = sys._getframe(1)
-            name = frame.f_globals.get('__name__', 'unknown')
+            name = frame.f_globals.get("__name__", "unknown")
 
         # Use LRU cache to avoid repeatedly creating logger
         return self._get_cached_logger(name)
@@ -166,7 +166,7 @@ class LoggerProvider:
     def _get_caller_logger(self) -> logging.Logger:
         """Get caller's logger (with LRU cache optimization)"""
         frame = sys._getframe(2)  # Skip current method and the called logging method
-        module_name = frame.f_globals.get('__name__', 'unknown')
+        module_name = frame.f_globals.get("__name__", "unknown")
         # Use LRU cache to avoid repeatedly creating logger
         return self._get_cached_logger(module_name)
 

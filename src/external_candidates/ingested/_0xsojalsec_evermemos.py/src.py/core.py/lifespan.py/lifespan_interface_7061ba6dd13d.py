@@ -6,8 +6,9 @@ Simple lifespan management interface that supports ordering and name field defin
 """
 
 from abc import ABC, abstractmethod
-from fastapi import FastAPI
 from typing import Any
+
+from fastapi import FastAPI
 
 from core.observation.logger import get_logger
 

@@ -183,4 +183,3 @@ GROUP_PROFILE_MERGE_PROMPT = """
 - **示例**：如果原始内容是中文，user_goal、subtasks 应该是中文，但 personality 应该保持为"Extraversion/NeedForBelonging/等"。
 </output_language>
 """
-
