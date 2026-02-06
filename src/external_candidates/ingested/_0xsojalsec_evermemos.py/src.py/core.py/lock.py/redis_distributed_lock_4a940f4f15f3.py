@@ -7,13 +7,13 @@ Using contextvar to manage coroutine context, ensuring thread safety and corouti
 """
 
 import asyncio
-from typing import Optional, Union
 from contextlib import asynccontextmanager
+from typing import Optional, Union
 
-from core.di.decorators import component
-from core.observation.logger import get_logger
 from core.component.redis_provider import RedisProvider
+from core.di.decorators import component
 from core.di.utils import get_bean_by_type
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -34,7 +34,7 @@ class RedisDistributedLock:
     A single lock instance responsible for lock operations on a specific resource
     """
 
-    def __init__(self, resource: str, lock_manager: 'RedisDistributedLockManager'):
+    def __init__(self, resource: str, lock_manager: "RedisDistributedLockManager"):
         """
         Initialize distributed lock
 

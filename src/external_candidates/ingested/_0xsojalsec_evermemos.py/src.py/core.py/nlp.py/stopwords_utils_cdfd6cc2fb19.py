@@ -5,9 +5,10 @@ Stopwords utility class
 Provides functionality for loading and managing stopwords, supports Harbin Institute of Technology stopwords list.
 """
 
-import os
 import logging
-from typing import Set, Optional
+import os
+from typing import Optional, Set
+
 from common_utils.project_path import CURRENT_DIR
 
 logger = logging.getLogger(__name__)
@@ -51,7 +52,7 @@ class StopwordsManager:
             return stopwords
 
         try:
-            with open(self.stopwords_file_path, 'r', encoding='utf-8') as f:
+            with open(self.stopwords_file_path, "r", encoding="utf-8") as f:
                 for line in f:
                     word = line.strip()
                     if word:  # Skip empty lines

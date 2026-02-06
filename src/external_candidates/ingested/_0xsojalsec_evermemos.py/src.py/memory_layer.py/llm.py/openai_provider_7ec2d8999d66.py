@@ -5,19 +5,20 @@ OpenAI LLM provider implementation using OpenRouter.
 This provider uses OpenRouter API to access OpenAI models.
 """
 
-from math import log
-import os
-import time
-import json
-import urllib.request
-import urllib.parse
-import urllib.error
-import aiohttp
-from typing import Optional
 import asyncio
+import json
+import os
 import random
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from math import log
+from typing import Optional
 
-from memory_layer.llm.protocol import LLMProvider, LLMError
+import aiohttp
+from memory_layer.llm.protocol import LLMError, LLMProvider
+
 from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
@@ -91,8 +92,8 @@ class OpenAIProvider(LLMProvider):
         start_time = time.perf_counter()
         # Prepare request data
         if os.getenv("LLM_OPENROUTER_PROVIDER", "default") != "default":
-            provider_str = os.getenv('LLM_OPENROUTER_PROVIDER')
-            provider_list = [p.strip() for p in provider_str.split(',')]
+            provider_str = os.getenv("LLM_OPENROUTER_PROVIDER")
+            provider_list = [p.strip() for p in provider_str.split(",")]
             openrouter_provider = {"order": provider_list, "allow_fallbacks": False}
         else:
             openrouter_provider = None
@@ -114,8 +115,8 @@ class OpenAIProvider(LLMProvider):
 
         # Use asynchronous aiohttp instead of synchronous urllib
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.api_key}',
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
         }
         max_retries = 5
         for retry_num in range(max_retries):
@@ -133,8 +134,8 @@ class OpenAIProvider(LLMProvider):
                         # print(response_data)
                         # Handle error responses
                         if response.status != 200:
-                            error_msg = response_data.get('error', {}).get(
-                                'message', f"HTTP {response.status}"
+                            error_msg = response_data.get("error", {}).get(
+                                "message", f"HTTP {response.status}"
                             )
                             logger.error(
                                 f"❌ [OpenAI-{self.model}] HTTP error {response.status}:"
@@ -153,10 +154,10 @@ class OpenAIProvider(LLMProvider):
                         end_time = time.perf_counter()
 
                         # Extract finish_reason
-                        finish_reason = response_data.get('choices', [{}])[0].get(
-                            'finish_reason', ''
+                        finish_reason = response_data.get("choices", [{}])[0].get(
+                            "finish_reason", ""
                         )
-                        if finish_reason == 'stop':
+                        if finish_reason == "stop":
                             logger.debug(
                                 f"[OpenAI-{self.model}] Finish reason: {finish_reason}"
                             )
@@ -166,10 +167,10 @@ class OpenAIProvider(LLMProvider):
                             )
 
                         # Extract token usage information
-                        usage = response_data.get('usage', {})
-                        prompt_tokens = usage.get('prompt_tokens', 0)
-                        completion_tokens = usage.get('completion_tokens', 0)
-                        total_tokens = usage.get('total_tokens', 0)
+                        usage = response_data.get("usage", {})
+                        prompt_tokens = usage.get("prompt_tokens", 0)
+                        completion_tokens = usage.get("completion_tokens", 0)
+                        total_tokens = usage.get("total_tokens", 0)
 
                         # Print detailed usage information
 
@@ -195,14 +196,14 @@ class OpenAIProvider(LLMProvider):
                         # New: record statistics for current call (if statistics enabled)
                         if self.enable_stats:
                             self.current_call_stats = {
-                                'prompt_tokens': prompt_tokens,
-                                'completion_tokens': completion_tokens,
-                                'total_tokens': total_tokens,
-                                'duration': end_time - start_time,
-                                'timestamp': time.time(),
+                                "prompt_tokens": prompt_tokens,
+                                "completion_tokens": completion_tokens,
+                                "total_tokens": total_tokens,
+                                "duration": end_time - start_time,
+                                "timestamp": time.time(),
                             }
 
-                        return response_data['choices'][0]['message']['content']
+                        return response_data["choices"][0]["message"]["content"]
 
             except aiohttp.ClientError as e:
                 error_time = time.perf_counter()

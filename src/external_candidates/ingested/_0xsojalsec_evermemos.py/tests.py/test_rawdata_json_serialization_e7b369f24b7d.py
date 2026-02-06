@@ -4,10 +4,11 @@ Test JSON serialization and deserialization functionality of RawData
 Includes basic functionality tests and improved field name heuristic judgment tests
 """
 
-import pytest
 from datetime import datetime
-from memory_layer.memcell_extractor.base_memcell_extractor import RawData
+
+import pytest
 from common_utils.datetime_utils import get_now_with_timezone
+from memory_layer.memcell_extractor.base_memcell_extractor import RawData
 
 
 class TestRawDataJsonSerialization:
@@ -121,34 +122,34 @@ class TestRawDataJsonSerialization:
         """Test serialization of email data (simulating output from email_mapper)"""
         original_data = RawData(
             content={
-                'user_id_list': ["user_001", "user_002"],
-                'id': 'email_123',
-                'source': 'gmail',
-                'mail_address': 'test@example.com',
-                'thread_id': 'thread_456',
-                'is_delete': False,
-                'is_read': True,
-                'is_draft': False,
-                'importance': 'high',
-                'sent_timestamp': get_now_with_timezone(),
-                'received_timestamp': get_now_with_timezone(),
-                'labels': ['inbox', 'important'],
-                'sender_name': 'Sender Name',
-                'sender_address': 'sender@example.com',
-                'receiver': ['receiver@example.com'],
-                'cc': [],
-                'bcc': [],
-                'subject': 'Email Subject',
-                'body_type': 'html',
-                'body_content': '<p>Email content</p>',
-                'attachments': [],
-                'create_timestamp': get_now_with_timezone(),
-                'last_update_timestamp': get_now_with_timezone(),
-                'message_id': 'msg_789',
+                "user_id_list": ["user_001", "user_002"],
+                "id": "email_123",
+                "source": "gmail",
+                "mail_address": "test@example.com",
+                "thread_id": "thread_456",
+                "is_delete": False,
+                "is_read": True,
+                "is_draft": False,
+                "importance": "high",
+                "sent_timestamp": get_now_with_timezone(),
+                "received_timestamp": get_now_with_timezone(),
+                "labels": ["inbox", "important"],
+                "sender_name": "Sender Name",
+                "sender_address": "sender@example.com",
+                "receiver": ["receiver@example.com"],
+                "cc": [],
+                "bcc": [],
+                "subject": "Email Subject",
+                "body_type": "html",
+                "body_content": "<p>Email content</p>",
+                "attachments": [],
+                "create_timestamp": get_now_with_timezone(),
+                "last_update_timestamp": get_now_with_timezone(),
+                "message_id": "msg_789",
             },
             data_id="email_123",
             data_type="Email",
-            metadata={'original_id': 'email_123', 'source': 'email_mapper'},
+            metadata={"original_id": "email_123", "source": "email_mapper"},
         )
 
         # Serialize and deserialize
@@ -156,31 +157,31 @@ class TestRawDataJsonSerialization:
         restored_data = RawData.from_json_str(json_str)
 
         # Verify email-specific fields
-        assert restored_data.content['user_id_list'] == ["user_001", "user_002"]
-        assert restored_data.content['source'] == 'gmail'
-        assert restored_data.content['is_read'] is True
-        assert isinstance(restored_data.content['sent_timestamp'], datetime)
-        assert isinstance(restored_data.content['received_timestamp'], datetime)
-        assert restored_data.content['labels'] == ['inbox', 'important']
+        assert restored_data.content["user_id_list"] == ["user_001", "user_002"]
+        assert restored_data.content["source"] == "gmail"
+        assert restored_data.content["is_read"] is True
+        assert isinstance(restored_data.content["sent_timestamp"], datetime)
+        assert isinstance(restored_data.content["received_timestamp"], datetime)
+        assert restored_data.content["labels"] == ["inbox", "important"]
         assert restored_data.data_type == "Email"
 
     def test_linkdoc_data_serialization(self):
         """Test serialization of document data (simulating output from linkdoc_mapper)"""
         original_data = RawData(
             content={
-                'user_id_list': ["user_001"],
-                'title': 'Document Title',
-                'content': 'Document content',
-                'is_delete': False,
-                'download_url': 'https://example.com/doc.pdf',
-                'participants': ["user_001", "user_002"],
-                'modify_timestamp': get_now_with_timezone(),
-                'file_type': "pdf",
-                'source_type': 'notion',
+                "user_id_list": ["user_001"],
+                "title": "Document Title",
+                "content": "Document content",
+                "is_delete": False,
+                "download_url": "https://example.com/doc.pdf",
+                "participants": ["user_001", "user_002"],
+                "modify_timestamp": get_now_with_timezone(),
+                "file_type": "pdf",
+                "source_type": "notion",
             },
             data_id="doc_456",
             data_type="LinkDoc",
-            metadata={'original_id': 'doc_456', 'source': 'linkdoc_mapper'},
+            metadata={"original_id": "doc_456", "source": "linkdoc_mapper"},
         )
 
         # Serialize and deserialize
@@ -188,10 +189,10 @@ class TestRawDataJsonSerialization:
         restored_data = RawData.from_json_str(json_str)
 
         # Verify document-specific fields
-        assert restored_data.content['title'] == 'Document Title'
-        assert restored_data.content['source_type'] == 'notion'
-        assert isinstance(restored_data.content['modify_timestamp'], datetime)
-        assert restored_data.content['participants'] == ["user_001", "user_002"]
+        assert restored_data.content["title"] == "Document Title"
+        assert restored_data.content["source_type"] == "notion"
+        assert isinstance(restored_data.content["modify_timestamp"], datetime)
+        assert restored_data.content["participants"] == ["user_001", "user_002"]
         assert restored_data.data_type == "LinkDoc"
 
     def test_conversation_data_serialization(self):
@@ -343,34 +344,34 @@ class TestRawDataJsonSerialization:
 
         # Test field names that should be recognized as time fields
         datetime_fields = [
-            'timestamp',
-            'createTime',
-            'updateTime',
-            'create_time',
-            'update_time',
-            'sent_timestamp',
-            'received_timestamp',
-            'create_timestamp',
-            'last_update_timestamp',
-            'modify_timestamp',
-            'created_at',
-            'updated_at',
-            'joinTime',
-            'leaveTime',
-            'lastOnlineTime',
-            'sync_time',
-            'processed_at',
-            'custom_time',
-            'event_timestamp',
-            'process_at',
-            'end_date',
-            'datetime',
-            'created',
-            'updated',
-            'start_time',
-            'end_time',
-            'event_time',
-            'build_timestamp',
+            "timestamp",
+            "createTime",
+            "updateTime",
+            "create_time",
+            "update_time",
+            "sent_timestamp",
+            "received_timestamp",
+            "create_timestamp",
+            "last_update_timestamp",
+            "modify_timestamp",
+            "created_at",
+            "updated_at",
+            "joinTime",
+            "leaveTime",
+            "lastOnlineTime",
+            "sync_time",
+            "processed_at",
+            "custom_time",
+            "event_timestamp",
+            "process_at",
+            "end_date",
+            "datetime",
+            "created",
+            "updated",
+            "start_time",
+            "end_time",
+            "event_time",
+            "build_timestamp",
         ]
 
         for field in datetime_fields:
@@ -381,28 +382,28 @@ class TestRawDataJsonSerialization:
 
         # Test field names that should not be recognized as time fields
         non_datetime_fields = [
-            'content',
-            'message',
-            'user_id',
-            'room_id',
-            'title',
-            'description',
-            'count',
-            'size',
-            'type',
-            'status',
-            'version',
-            'id',
-            'name',
-            'timeout',
-            'runtime',
-            'timeline',
-            'timestamp_format',
-            'time_zone',
-            'time_limit',
-            'timestamp_count',
-            'timestamp_enabled',
-            'time_sync',
+            "content",
+            "message",
+            "user_id",
+            "room_id",
+            "title",
+            "description",
+            "count",
+            "size",
+            "type",
+            "status",
+            "version",
+            "id",
+            "name",
+            "timeout",
+            "runtime",
+            "timeline",
+            "timestamp_format",
+            "time_zone",
+            "time_limit",
+            "timestamp_count",
+            "timestamp_enabled",
+            "time_sync",
         ]
 
         for field in non_datetime_fields:
@@ -510,17 +511,17 @@ class TestRawDataJsonSerialization:
         # Simulate real output from email_mapper.py
         original_data = RawData(
             content={
-                'user_id_list': ["user_001"],
-                'id': 'email_123',
-                'source': 'gmail',
-                'subject': 'Meeting schedule: starting at 2024-01-01T14:00:00Z',  # Subject contains time format
-                'body_content': 'The meeting will start at 2024-01-01T14:00:00+00:00, please attend on time',  # Body contains time format
-                'sent_timestamp': test_time,  # Actual time field
-                'received_timestamp': test_time,  # Actual time field
-                'create_timestamp': test_time,  # Actual time field
-                'last_update_timestamp': test_time,  # Actual time field
-                'sender_name': 'Li Si',
-                'sender_address': 'lisi@company.com',
+                "user_id_list": ["user_001"],
+                "id": "email_123",
+                "source": "gmail",
+                "subject": "Meeting schedule: starting at 2024-01-01T14:00:00Z",  # Subject contains time format
+                "body_content": "The meeting will start at 2024-01-01T14:00:00+00:00, please attend on time",  # Body contains time format
+                "sent_timestamp": test_time,  # Actual time field
+                "received_timestamp": test_time,  # Actual time field
+                "create_timestamp": test_time,  # Actual time field
+                "last_update_timestamp": test_time,  # Actual time field
+                "sender_name": "Li Si",
+                "sender_address": "lisi@company.com",
             },
             data_id="email_123",
             data_type="Email",
@@ -531,16 +532,16 @@ class TestRawDataJsonSerialization:
         restored_data = RawData.from_json_str(json_str)
 
         # Verify time fields are correctly converted
-        assert isinstance(restored_data.content['sent_timestamp'], datetime)
-        assert isinstance(restored_data.content['received_timestamp'], datetime)
-        assert isinstance(restored_data.content['create_timestamp'], datetime)
-        assert isinstance(restored_data.content['last_update_timestamp'], datetime)
+        assert isinstance(restored_data.content["sent_timestamp"], datetime)
+        assert isinstance(restored_data.content["received_timestamp"], datetime)
+        assert isinstance(restored_data.content["create_timestamp"], datetime)
+        assert isinstance(restored_data.content["last_update_timestamp"], datetime)
 
         # Verify time format strings in text content remain unchanged
-        assert isinstance(restored_data.content['subject'], str)
-        assert isinstance(restored_data.content['body_content'], str)
-        assert '2024-01-01T14:00:00Z' in restored_data.content['subject']
-        assert '2024-01-01T14:00:00+00:00' in restored_data.content['body_content']
+        assert isinstance(restored_data.content["subject"], str)
+        assert isinstance(restored_data.content["body_content"], str)
+        assert "2024-01-01T14:00:00Z" in restored_data.content["subject"]
+        assert "2024-01-01T14:00:00+00:00" in restored_data.content["body_content"]
 
     def test_real_world_document_data_improved(self):
         """Test real-world document data scenario (improved version)"""
@@ -549,13 +550,13 @@ class TestRawDataJsonSerialization:
         # Simulate real output from linkdoc_mapper.py
         original_data = RawData(
             content={
-                'user_id_list': ["user_001"],
-                'title': 'Project Plan - Deadline 2024-12-31T23:59:59Z',  # Title contains time format
-                'content': '# Project Plan\n\nStart time: 2024-01-01T09:00:00+00:00\nEnd time: 2024-12-31T18:00:00+00:00',  # Content contains time format
-                'modify_timestamp': test_time,  # Actual time field
-                'last_update_timestamp': test_time,  # Actual time field
-                'source_type': 'notion',
-                'file_type': 'markdown',
+                "user_id_list": ["user_001"],
+                "title": "Project Plan - Deadline 2024-12-31T23:59:59Z",  # Title contains time format
+                "content": "# Project Plan\n\nStart time: 2024-01-01T09:00:00+00:00\nEnd time: 2024-12-31T18:00:00+00:00",  # Content contains time format
+                "modify_timestamp": test_time,  # Actual time field
+                "last_update_timestamp": test_time,  # Actual time field
+                "source_type": "notion",
+                "file_type": "markdown",
             },
             data_id="doc_123",
             data_type="LinkDoc",
@@ -566,15 +567,15 @@ class TestRawDataJsonSerialization:
         restored_data = RawData.from_json_str(json_str)
 
         # Verify time fields are correctly converted
-        assert isinstance(restored_data.content['modify_timestamp'], datetime)
-        assert isinstance(restored_data.content['last_update_timestamp'], datetime)
+        assert isinstance(restored_data.content["modify_timestamp"], datetime)
+        assert isinstance(restored_data.content["last_update_timestamp"], datetime)
 
         # Verify time format strings in text content remain unchanged
-        assert isinstance(restored_data.content['title'], str)
-        assert isinstance(restored_data.content['content'], str)
-        assert '2024-12-31T23:59:59Z' in restored_data.content['title']
-        assert '2024-01-01T09:00:00+00:00' in restored_data.content['content']
-        assert '2024-12-31T18:00:00+00:00' in restored_data.content['content']
+        assert isinstance(restored_data.content["title"], str)
+        assert isinstance(restored_data.content["content"], str)
+        assert "2024-12-31T23:59:59Z" in restored_data.content["title"]
+        assert "2024-01-01T09:00:00+00:00" in restored_data.content["content"]
+        assert "2024-12-31T18:00:00+00:00" in restored_data.content["content"]
 
     def test_nested_structure_with_mixed_content(self):
         """Test nested structures with mixed content"""

@@ -9,15 +9,15 @@ import re
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
-from core.observation.logger import get_logger
-
-from memory_layer.prompts import get_prompt_by
 from api_specs.memory_types import MemCell
 from memory_layer.memory_extractor.profile_memory.types import (
     GroupImportanceEvidence,
     ImportanceEvidence,
     ProfileMemoryExtractRequest,
 )
+from memory_layer.prompts import get_prompt_by
+
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -437,9 +437,7 @@ def build_evidence_completion_prompt(
     """Construct the evidence completion prompt for a batch of user profiles."""
     # 通过 PromptManager 获取提示词
     prompt_template = get_prompt_by("CONVERSATION_PROFILE_EVIDENCE_COMPLETION_PROMPT")
-    return prompt_template.replace(
-        "{conversation}", conversation_text
-    ).replace(
+    return prompt_template.replace("{conversation}", conversation_text).replace(
         "{user_profiles_without_evidences}",
         json.dumps(profiles_without_evidences, ensure_ascii=False),
     )

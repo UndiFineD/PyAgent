@@ -31,7 +31,7 @@ from src.core.base.mixins.tool_framework_mixin import (
 from src.core.base.common.models.communication_models import CascadeContext
 
 
-class TestToolFrameworkMixin(ToolFrameworkMixin):
+class MockToolFrameworkMixin(ToolFrameworkMixin):
     """Test implementation of ToolFrameworkMixin."""
 
     def __init__(self, **kwargs):
@@ -44,7 +44,7 @@ class TestToolFramework:
     @pytest.fixture
     def tool_framework(self):
         """Create a test tool framework instance."""
-        return TestToolFrameworkMixin()
+        return MockToolFrameworkMixin()
 
     @pytest.fixture
     def cascade_context(self):
@@ -259,14 +259,14 @@ class TestToolFramework:
             }
 
         # Test with string inputs that should be converted
-        result = await tool_framework.execute_tool(
+        result = asyncio.run(tool_framework.execute_tool(
             "type_conversion_tool",
             {
                 "int_param": "42",
                 "float_param": "3.14",
                 "bool_param": "true"
             }
-        )
+        ))
 
         assert result["success"] == True
         data = result["result"]
@@ -286,7 +286,7 @@ class TestToolFramework:
             return f"Got: {required_param}"
 
         # Should not raise validation error even with missing required param
-        result = await tool_framework.execute_tool("no_validation_tool", {})
+        result = asyncio.run(tool_framework.execute_tool("no_validation_tool", {}))
         assert result["success"] == False  # Will fail during execution due to missing param
 
     def test_tool_definition_serialization(self, tool_framework):

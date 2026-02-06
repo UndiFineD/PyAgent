@@ -1,0 +1,11 @@
+# Extracted from: C:\DEV\PyAgent\.external\AskVideos-VideoCLIP\video_llama\runners\__init__.py
+"""
+Copyright (c) 2022, salesforce.com, inc.
+All rights reserved.
+SPDX-License-Identifier: BSD-3-Clause
+For full license text, see the LICENSE_Lavis file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+"""
+
+from video_llama.runners.runner_base import RunnerBase
+
+__all__ = ["RunnerBase"]

@@ -4,16 +4,16 @@ Application logic middleware
 Responsible for extracting and setting application-level context information, and handling application-related logic (e.g., reporting)
 """
 
-from typing import Callable, Dict, Any, Optional
+from typing import Any, Callable, Dict, Optional
 
 from fastapi import Request
-from starlette.responses import Response
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 from starlette.types import ASGIApp
 
-from core.observation.logger import get_logger
 from core.context.context import set_current_app_info, set_current_request
 from core.di.utils import get_bean_by_type
+from core.observation.logger import get_logger
 from core.request.app_logic_provider import AppLogicProvider
 
 logger = get_logger(__name__)

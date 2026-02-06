@@ -25,8 +25,8 @@ from typing import Callable, Optional
 
 from fastapi import Request
 from fastapi.responses import HTMLResponse
-from starlette.responses import Response
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 from starlette.types import ASGIApp
 
 from core.observation.logger import get_logger
@@ -52,9 +52,9 @@ class ProfileMiddleware(BaseHTTPMiddleware):
 
         # Read from environment variable whether profiling is enabled
         profiling_env = os.getenv(
-            'PROFILING_ENABLED', os.getenv('PROFILING', 'true')
+            "PROFILING_ENABLED", os.getenv("PROFILING", "true")
         ).lower()
-        self._profiling_enabled = profiling_env in ('true', '1', 'yes')
+        self._profiling_enabled = profiling_env in ("true", "1", "yes")
 
         # Check if pyinstrument is available
         self._profiler_available = False

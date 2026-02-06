@@ -1,14 +1,16 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\oxm\es\doc_base.py
-import typing
-from typing import Type, Any, Dict, Set
-
 import os
-from fnmatch import fnmatch
+import typing
 from datetime import datetime
-from elasticsearch.dsl import MetaField, AsyncDocument, field as e_field
+from fnmatch import fnmatch
+from typing import Any, Dict, Set, Type
+
 from common_utils.datetime_utils import to_timezone
-from core.oxm.es.es_utils import generate_index_name, get_index_ns
 from elasticsearch import AsyncElasticsearch
+from elasticsearch.dsl import AsyncDocument, MetaField
+from elasticsearch.dsl import field as e_field
+
+from core.oxm.es.es_utils import generate_index_name, get_index_ns
 
 
 class DocBase(AsyncDocument):
@@ -32,7 +34,7 @@ class DocBase(AsyncDocument):
         Raises:
             ValueError: If the document class does not have correct index configuration
         """
-        if hasattr(cls, '_index') and hasattr(cls._index, '_name'):
+        if hasattr(cls, "_index") and hasattr(cls._index, "_name"):
             return cls._index._name
         raise ValueError(
             f"Document class {cls.__name__} does not have correct index configuration"
@@ -57,16 +59,16 @@ class AliasSupportDoc(DocBase):
             Set of Date-type field names
         """
         # Get cached date_fields from CustomMeta
-        custom_meta = getattr(cls, 'CustomMeta', None)
+        custom_meta = getattr(cls, "CustomMeta", None)
         if custom_meta is not None:
-            existing_cache = getattr(custom_meta, 'date_fields', None)
+            existing_cache = getattr(custom_meta, "date_fields", None)
             if existing_cache is not None:
                 return existing_cache
 
         date_fields = set()
         # Iterate through all class attributes to find Date-type fields
         for attr_name in dir(cls):
-            if attr_name.startswith('_'):
+            if attr_name.startswith("_"):
                 continue
             try:
                 attr_value = getattr(cls, attr_name)
@@ -78,7 +80,7 @@ class AliasSupportDoc(DocBase):
 
         # Dynamically set to CustomMeta
         if custom_meta is not None:
-            setattr(custom_meta, 'date_fields', date_fields)
+            setattr(custom_meta, "date_fields", date_fields)
 
         return date_fields
 
@@ -125,10 +127,10 @@ class AliasSupportDoc(DocBase):
 
         # Strictly set meta.id based on ID_SOURCE_FIELD (no heuristics), and compatible with ES construction (meta with _id)
         # Get id_source_field configuration from CustomMeta
-        custom_meta_class = getattr(self.__class__, 'CustomMeta', None)
+        custom_meta_class = getattr(self.__class__, "CustomMeta", None)
 
         id_source_field = (
-            getattr(custom_meta_class, 'id_source_field', None)
+            getattr(custom_meta_class, "id_source_field", None)
             if custom_meta_class
             else None
         )

@@ -3,13 +3,15 @@
 Database lifecycle provider implementation
 """
 
-from fastapi import FastAPI
-from typing import Tuple, Any
+from typing import Any, Tuple
 
-from core.observation.logger import get_logger
-from core.di.utils import get_bean_by_type
-from core.di.decorators import component
+from fastapi import FastAPI
+
 from core.component.database_connection_provider import DatabaseConnectionProvider
+from core.di.decorators import component
+from core.di.utils import get_bean_by_type
+from core.observation.logger import get_logger
+
 from .lifespan_interface import LifespanProvider
 
 logger = get_logger(__name__)
@@ -82,6 +84,6 @@ class DatabaseLifespanProvider(LifespanProvider):
                 logger.error("Error while closing database connection: %s", str(e))
 
         # Clean up database-related attributes in app.state
-        for attr in ['connection_pool', 'checkpointer', 'db_provider']:
+        for attr in ["connection_pool", "checkpointer", "db_provider"]:
             if hasattr(app.state, attr):
                 delattr(app.state, attr)

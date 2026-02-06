@@ -3,7 +3,7 @@
 
 import sqlite3
 
-con = sqlite3.connect('db.sql')
+con = sqlite3.connect("db.sql")
 
 query = "CREATE TABLE measurements (uuid VARCHAR, msm_asn INTEGER, msm_timestamp INTEGER, measurement_id INTEGER, country VARCHAR, probe_id INTEGER, af INTEGER);"
 

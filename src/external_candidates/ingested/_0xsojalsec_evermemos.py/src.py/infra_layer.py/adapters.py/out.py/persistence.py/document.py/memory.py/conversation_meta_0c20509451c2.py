@@ -6,13 +6,15 @@ A conversation metadata document model based on Beanie ODM, storing complete met
 """
 
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
+
 from beanie import Indexed
-from core.oxm.mongo.document_base import DocumentBase
-from pydantic import Field, ConfigDict, BaseModel
-from pymongo import IndexModel, ASCENDING, DESCENDING, TEXT
-from core.oxm.mongo.audit_base import AuditBase
 from common_utils.datetime_utils import get_timezone
+from pydantic import BaseModel, ConfigDict, Field
+from pymongo import ASCENDING, DESCENDING, TEXT, IndexModel
+
+from core.oxm.mongo.audit_base import AuditBase
+from core.oxm.mongo.document_base import DocumentBase
 
 
 class UserDetailModel(BaseModel):

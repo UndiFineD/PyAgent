@@ -1,7 +1,7 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\interface\controller\base_controller.py
 import inspect
 from abc import ABC
-from typing import Any, Callable, List, Optional, Union, get_origin, get_args
+from typing import Any, Callable, List, Optional, Union, get_args, get_origin
 
 from fastapi import APIRouter, FastAPI
 from fastapi.openapi.utils import get_openapi
@@ -160,13 +160,13 @@ class BaseController(ABC):
             Callable: The function with default authorization applied (if no authorization decorator exists).
         """
         # Check if the function already has an authorization decorator
-        if hasattr(func, '__authorization_context__'):
+        if hasattr(func, "__authorization_context__"):
             return func
 
         # If it's a bound method, get the original function
-        if hasattr(func, '__func__'):
+        if hasattr(func, "__func__"):
             # This is a bound method; check if the original function already has an authorization decorator
-            if hasattr(func.__func__, '__authorization_context__'):
+            if hasattr(func.__func__, "__authorization_context__"):
                 return func
 
             # Get the original function and apply the decorator
@@ -216,7 +216,7 @@ class BaseController(ABC):
             bool: Whether authentication is required.
         """
         # Check if the function has authorization context directly
-        if hasattr(func, '__authorization_context__'):
+        if hasattr(func, "__authorization_context__"):
             auth_context = func.__authorization_context__
             return auth_context.need_auth()
 
@@ -238,7 +238,7 @@ class BaseController(ABC):
         import re
 
         # Use regular expression to match {parameter:type} format and replace with {parameter}
-        return re.sub(r'\{([^}:]+):[^}]+\}', r'{\1}', path)
+        return re.sub(r"\{([^}:]+):[^}]+\}", r"{\1}", path)
 
     def _get_security_config(self) -> List[dict]:
         """
@@ -271,9 +271,9 @@ class BaseController(ABC):
 
     def _get_model_name(self, model: Any) -> str:
         """Get model name"""
-        if hasattr(model, '__name__'):
+        if hasattr(model, "__name__"):
             return model.__name__
-        elif hasattr(model, '_name'):
+        elif hasattr(model, "_name"):
             return model._name
         else:
             return str(model)
@@ -296,24 +296,24 @@ class BaseController(ABC):
         discriminator_mapping = {}
 
         for arg in union_args:
-            if hasattr(arg, '__name__'):
+            if hasattr(arg, "__name__"):
                 model_name = arg.__name__
                 one_of.append({"$ref": f"#/components/schemas/{model_name}"})
 
                 # Try to get discriminator field value
-                if hasattr(arg, 'model_fields') and 'type' in arg.model_fields:
+                if hasattr(arg, "model_fields") and "type" in arg.model_fields:
                     # Get literal or enum value of the type field
-                    type_field = arg.model_fields['type']
+                    type_field = arg.model_fields["type"]
                     if (
-                        hasattr(type_field, 'default')
+                        hasattr(type_field, "default")
                         and type_field.default is not None
                     ):
                         discriminator_mapping[type_field.default] = (
                             f"#/components/schemas/{model_name}"
                         )
-                    elif hasattr(type_field.annotation, '__args__'):
+                    elif hasattr(type_field.annotation, "__args__"):
                         # Handle Literal type
-                        literal_values = getattr(type_field.annotation, '__args__', ())
+                        literal_values = getattr(type_field.annotation, "__args__", ())
                         if literal_values:
                             discriminator_mapping[literal_values[0]] = (
                                 f"#/components/schemas/{model_name}"
@@ -343,7 +343,7 @@ class BaseController(ABC):
             openapi_schema = get_openapi(
                 title=app.title,
                 version=app.version,
-                summary=getattr(app, 'summary', None),
+                summary=getattr(app, "summary", None),
                 description=app.description,
                 routes=app.routes,
             )
@@ -362,11 +362,11 @@ class BaseController(ABC):
             # Traverse all routes to find BaseController instances
             def collect_controllers_from_routes(routes):
                 for route in routes:
-                    if hasattr(route, 'router') and hasattr(route.router, 'routes'):
+                    if hasattr(route, "router") and hasattr(route.router, "routes"):
                         # This is an include_router case; process recursively
                         collect_controllers_from_routes(route.router.routes)
-                    elif hasattr(route, 'endpoint') and hasattr(
-                        route.endpoint, '__self__'
+                    elif hasattr(route, "endpoint") and hasattr(
+                        route.endpoint, "__self__"
                     ):
                         # This is a bound method; check if it's a BaseController instance
                         controller = route.endpoint.__self__
@@ -394,7 +394,7 @@ class BaseController(ABC):
         return custom_openapi
 
     def _add_security_schemes_to_openapi(
-        self, controllers: List['BaseController'], openapi_schema: dict
+        self, controllers: List["BaseController"], openapi_schema: dict
     ):
         """
         Add security schemes definition to OpenAPI schema.
@@ -409,12 +409,12 @@ class BaseController(ABC):
         for controller in controllers:
             # Check if the controller has a custom security configuration provider
             if (
-                hasattr(controller, '_security_config_provider')
+                hasattr(controller, "_security_config_provider")
                 and controller._security_config_provider is not None
             ):
                 try:
                     # Try to get security schemes definition (if supported by controller)
-                    if hasattr(controller, '_get_security_schemes'):
+                    if hasattr(controller, "_get_security_schemes"):
                         schemes = controller._get_security_schemes()
                         if schemes:
                             security_schemes.update(schemes)
@@ -454,7 +454,7 @@ class BaseController(ABC):
             openapi_schema["components"]["securitySchemes"].update(security_schemes)
 
     def _add_security_to_auth_routes(
-        self, controllers: List['BaseController'], openapi_schema: dict
+        self, controllers: List["BaseController"], openapi_schema: dict
     ):
         """
         Add security configuration to routes requiring authentication.
@@ -466,7 +466,7 @@ class BaseController(ABC):
         # Collect all paths requiring authentication
         all_auth_routes = []
         for controller in controllers:
-            if hasattr(controller, '_auth_routes'):
+            if hasattr(controller, "_auth_routes"):
                 all_auth_routes.extend(controller._auth_routes)
 
         # Get security configuration
@@ -494,7 +494,7 @@ class BaseController(ABC):
         """
         Process extra_models for a single controller.
         """
-        if not hasattr(controller, '_extra_models'):
+        if not hasattr(controller, "_extra_models"):
             return
 
         for model in controller._extra_models:
@@ -502,8 +502,8 @@ class BaseController(ABC):
                 # For Union types, we need to find their original names
                 # Look up the variable name of this Union type in the controller's module
                 model_name = None
-                if hasattr(controller, '__class__') and hasattr(
-                    controller.__class__, '__module__'
+                if hasattr(controller, "__class__") and hasattr(
+                    controller.__class__, "__module__"
                 ):
                     import sys
 
@@ -526,7 +526,7 @@ class BaseController(ABC):
                 # Also add schemas for Union members
                 union_args = self._get_union_args(model)
                 for arg in union_args:
-                    if hasattr(arg, 'model_json_schema'):
+                    if hasattr(arg, "model_json_schema"):
                         arg_name = self._get_model_name(arg)
                         if arg_name not in openapi_schema["components"]["schemas"]:
                             # Generate schema for individual model
@@ -534,11 +534,11 @@ class BaseController(ABC):
                                 ref_template="#/components/schemas/{model}"
                             )
                             # Extract schemas from $defs
-                            if '$defs' in arg_schema:
+                            if "$defs" in arg_schema:
                                 openapi_schema["components"]["schemas"].update(
-                                    arg_schema['$defs']
+                                    arg_schema["$defs"]
                                 )
-                                del arg_schema['$defs']
+                                del arg_schema["$defs"]
                             # Add main model schema
                             openapi_schema["components"]["schemas"][
                                 arg_name
@@ -546,17 +546,17 @@ class BaseController(ABC):
             else:
                 # Process regular model
                 model_name = self._get_model_name(model)
-                if hasattr(model, 'model_json_schema'):
+                if hasattr(model, "model_json_schema"):
                     if model_name not in openapi_schema["components"]["schemas"]:
                         model_schema = model.model_json_schema(
                             ref_template="#/components/schemas/{model}"
                         )
                         # Extract schemas from $defs
-                        if '$defs' in model_schema:
+                        if "$defs" in model_schema:
                             openapi_schema["components"]["schemas"].update(
-                                model_schema['$defs']
+                                model_schema["$defs"]
                             )
-                            del model_schema['$defs']
+                            del model_schema["$defs"]
                         # Add main model schema
                         openapi_schema["components"]["schemas"][
                             model_name

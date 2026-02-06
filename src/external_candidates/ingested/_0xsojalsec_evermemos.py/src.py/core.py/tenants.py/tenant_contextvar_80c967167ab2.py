@@ -9,17 +9,16 @@ used to safely store and access current tenant information in asynchronous envir
 from contextvars import ContextVar
 from typing import Optional
 
-from core.tenants.tenant_models import TenantInfo
-from core.tenants.tenant_config import get_tenant_config
-from core.tenants.tenant_info_provider import TenantInfoProvider
 from core.di.container import get_container
 from core.di.exceptions import BeanNotFoundError
-
+from core.tenants.tenant_config import get_tenant_config
+from core.tenants.tenant_info_provider import TenantInfoProvider
+from core.tenants.tenant_models import TenantInfo
 
 # Global tenant context variable
 # Using ContextVar ensures each task has an independent tenant context in asynchronous environments
 current_tenant_contextvar: ContextVar[Optional[TenantInfo]] = ContextVar(
-    'current_tenant', default=None
+    "current_tenant", default=None
 )
 
 

@@ -4,10 +4,11 @@
 Encapsulates all HTTP API call details and provides the simplest interface.
 """
 
-import re
 import asyncio
+import re
+from typing import Any, Dict, List
+
 import httpx
-from typing import List, Dict, Any
 from common_utils.datetime_utils import (
     get_now_with_timezone,
     get_timezone,
@@ -35,12 +36,12 @@ def extract_event_time_from_memory(mem: Dict[str, Any]) -> str:
 
     # 1. Extract from subject: Match ISO date format inside parentheses (YYYY-MM-DD)
     if subject:
-        match = re.search(r'\((\d{4}-\d{2}-\d{2})\)', subject)
+        match = re.search(r"\((\d{4}-\d{2}-\d{2})\)", subject)
         if match:
             return match.group(1)
 
         # 2. Extract from subject: Match Chinese date format "YYYY年MM月DD日"
-        match = re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', subject)
+        match = re.search(r"(\d{4})年(\d{1,2})月(\d{1,2})日", subject)
         if match:
             year, month, day = match.groups()
             return f"{year}-{month.zfill(2)}-{day.zfill(2)}"
@@ -48,18 +49,18 @@ def extract_event_time_from_memory(mem: Dict[str, Any]) -> str:
     # 3. Extract from episode (search entire content, no character limit)
     if episode:
         # Match "于YYYY年MM月DD日" or "在YYYY年MM月DD日"
-        match = re.search(r'[于在](\d{4})年(\d{1,2})月(\d{1,2})日', episode)
+        match = re.search(r"[于在](\d{4})年(\d{1,2})月(\d{1,2})日", episode)
         if match:
             year, month, day = match.groups()
             return f"{year}-{month.zfill(2)}-{day.zfill(2)}"
 
         # Match ISO format "YYYY-MM-DD"
-        match = re.search(r'(\d{4})-(\d{2})-(\d{2})', episode)
+        match = re.search(r"(\d{4})-(\d{2})-(\d{2})", episode)
         if match:
             return match.group(0)
 
         # Match other Chinese date formats (without "at" prefix)
-        match = re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', episode)
+        match = re.search(r"(\d{4})年(\d{1,2})月(\d{1,2})日", episode)
         if match:
             year, month, day = match.groups()
             return f"{year}-{month.zfill(2)}-{day.zfill(2)}"
@@ -163,9 +164,7 @@ class SimpleMemoryManager:
 
         except httpx.ConnectError:
             print(f"  ❌ Cannot connect to API server ({self.base_url})")
-            print(
-                f"     Please start first: uv run python src/run.py"
-            )
+            print(f"     Please start first: uv run python src/run.py")
             return False
         except Exception as e:
             print(f"  ❌ Storage failed: {e}")
@@ -275,7 +274,7 @@ class SimpleMemoryManager:
                     raw_memories = result.get("result", {}).get("memories", [])
                     metadata = result.get("result", {}).get("metadata", {})
                     latency = metadata.get("total_latency_ms", 0)
-                    
+
                     # Flatten grouped memories to flat list
                     memories = []
                     for group_dict in raw_memories:
@@ -314,12 +313,12 @@ class SimpleMemoryManager:
             return
 
         for i, mem in enumerate(memories, 1):
-            score = mem.get('score', 0)
+            score = mem.get("score", 0)
             # Extract actual event time (not storage time)
             event_time = extract_event_time_from_memory(mem)
-            subject = mem.get('subject', '')
-            summary = mem.get('summary', '')
-            episode = mem.get('episode', '')
+            subject = mem.get("subject", "")
+            summary = mem.get("summary", "")
+            episode = mem.get("episode", "")
 
             print(f"\n     [{i}] Relevance: {score:.4f} | Time: {event_time}")
             if subject:
@@ -354,9 +353,9 @@ class SimpleMemoryManager:
         if text:
             print(f"\n{'='*60}")
             print(f"{text}")
-            print('=' * 60)
+            print("=" * 60)
         else:
-            print('-' * 60)
+            print("-" * 60)
 
     def print_summary(self):
         """Print usage summary and tips"""

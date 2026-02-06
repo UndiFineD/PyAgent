@@ -5,9 +5,9 @@ Text processing utility module
 Provides general-purpose utility functions for text processing, including smart truncation, formatting, and other features.
 """
 
-from typing import List, Dict, Any
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List
 
 
 class TokenType(Enum):
@@ -86,7 +86,7 @@ class SmartTextParser:
     def _is_punctuation(self, char: str) -> bool:
         """Check if character is punctuation"""
         # Common punctuation characters
-        punctuation_chars = set('.,!?;:"\'()[]{}+-*/%=<>@#$&|~`^_\\/')
+        punctuation_chars = set(".,!?;:\"'()[]{}+-*/%=<>@#$&|~`^_\\/")
 
         return char in punctuation_chars or (
             0x2000 <= ord(char) <= 0x206F  # General Punctuation
@@ -345,7 +345,7 @@ class SmartTextParser:
                     max(estimated_length - 10, 0),
                     -1,
                 ):
-                    if text[i].isspace() or text[i] in '.,!?;:':
+                    if text[i].isspace() or text[i] in ".,!?;:":
                         truncate_pos = i + 1
                         break
 
@@ -465,11 +465,11 @@ def clean_whitespace(text: str) -> str:
     for token in tokens:
         if token.type == TokenType.WHITESPACE:
             if not prev_was_whitespace:
-                result_parts.append(' ')  # Use single space uniformly
+                result_parts.append(" ")  # Use single space uniformly
             prev_was_whitespace = True
         else:
             result_parts.append(token.content)
             prev_was_whitespace = False
 
     # Strip leading and trailing whitespace
-    return ''.join(result_parts).strip()
+    return "".join(result_parts).strip()

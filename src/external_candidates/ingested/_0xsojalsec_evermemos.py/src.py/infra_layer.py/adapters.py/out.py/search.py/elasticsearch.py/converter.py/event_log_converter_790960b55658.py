@@ -7,16 +7,17 @@ Supports both personal and group event logs.
 """
 
 from typing import List
-import jieba
 
-from core.oxm.es.base_converter import BaseEsConverter
-from core.observation.logger import get_logger
-from core.nlp.stopwords_utils import filter_stopwords
-from infra_layer.adapters.out.search.elasticsearch.memory.event_log import EventLogDoc
+import jieba
+from api_specs.memory_types import RawDataType
 from infra_layer.adapters.out.persistence.document.memory.event_log_record import (
     EventLogRecord as MongoEventLogRecord,
 )
-from api_specs.memory_types import RawDataType
+from infra_layer.adapters.out.search.elasticsearch.memory.event_log import EventLogDoc
+
+from core.nlp.stopwords_utils import filter_stopwords
+from core.observation.logger import get_logger
+from core.oxm.es.base_converter import BaseEsConverter
 
 logger = get_logger(__name__)
 
@@ -50,7 +51,7 @@ class EventLogConverter(BaseEsConverter[EventLogDoc]):
             # Create ES document instance
             # Pass id via meta parameter to ensure idempotency (MongoDB _id -> ES _id)
             es_doc = EventLogDoc(
-                meta={'id': str(source_doc.id)},
+                meta={"id": str(source_doc.id)},
                 user_id=source_doc.user_id,
                 user_name=source_doc.user_name or "",
                 # Timestamp fields

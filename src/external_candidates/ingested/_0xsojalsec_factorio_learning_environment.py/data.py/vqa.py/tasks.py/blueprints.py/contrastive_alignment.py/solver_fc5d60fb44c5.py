@@ -1,9 +1,10 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\tasks\blueprints\contrastive_alignment\solver.py
 import json
 import re
-from inspect_ai.model import ChatMessageUser
-from inspect_ai.solver import Solver, solver, TaskState, Generate
+
 from data.vqa.templates import Templates
+from inspect_ai.model import ChatMessageUser
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 
 @solver

@@ -5,10 +5,11 @@ Elasticsearch Client Factory
 Provides Elasticsearch client caching and management functionality based on environment variables.
 """
 
-import os
 import asyncio
-from typing import Dict, Optional, List, Any
+import os
 from hashlib import md5
+from typing import Any, Dict, List, Optional
+
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.dsl.async_connections import connections as async_connections
 

@@ -9,21 +9,21 @@ for loading/saving cluster state.
 
 Usage:
     from memory_layer.cluster_manager import ClusterManager, ClusterManagerConfig, ClusterState
-    
+
     # Initialize
     config = ClusterManagerConfig(
         similarity_threshold=0.65,
         max_time_gap_days=7,
     )
     cluster_mgr = ClusterManager(config)
-    
+
     # Caller loads state (from InMemory / MongoDB / file)
     state_dict = await storage.load_cluster_state(group_id)
     state = ClusterState.from_dict(state_dict) if state_dict else ClusterState()
-    
+
     # Pure computation
     cluster_id, state = await cluster_mgr.cluster_memcell(memcell, state)
-    
+
     # Caller saves state
     await storage.save_cluster_state(group_id, state.to_dict())
 """

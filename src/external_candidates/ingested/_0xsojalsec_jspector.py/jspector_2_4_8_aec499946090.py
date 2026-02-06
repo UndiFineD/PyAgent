@@ -1,20 +1,40 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-JSpector\JSpector.2.4.8.py
-from burp import (IBurpExtender, IHttpListener, IScannerListener,
-                  IExtensionStateListener, IContextMenuFactory, IScanIssue)
 import re
-from java.util import ArrayList
-from javax.swing import JMenuItem, JOptionPane
+
+from burp import (
+    IBurpExtender,
+    IContextMenuFactory,
+    IExtensionStateListener,
+    IHttpListener,
+    IScanIssue,
+    IScannerListener,
+)
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
+from java.util import ArrayList
+from javax.swing import JMenuItem, JOptionPane
 
-class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionStateListener, IContextMenuFactory):
+
+class BurpExtender(
+    IBurpExtender,
+    IHttpListener,
+    IScannerListener,
+    IExtensionStateListener,
+    IContextMenuFactory,
+):
 
     def __init__(self):
-        self._exclusion_regex = re.compile(r'http://www\.w3\.org')
-        self._url_pattern = re.compile(r'(?:http|https|ftp|ftps|sftp|file|tftp|telnet|gopher|ldap|ssh)://[^\s"<>]+')
+        self._exclusion_regex = re.compile(r"http://www\.w3\.org")
+        self._url_pattern = re.compile(
+            r'(?:http|https|ftp|ftps|sftp|file|tftp|telnet|gopher|ldap|ssh)://[^\s"<>]+'
+        )
         self._endpoint_pattern1 = re.compile(r'(?:(?<=["\'])/(?:[^/"\']+/?)+(?=["\']))')
-        self._endpoint_pattern2 = re.compile(r'http\.(?:post|get|put|delete|patch)\(["\']((?:[^/"\']+/?)+)["\']')
-        self._endpoint_pattern3 = re.compile(r'httpClient\.(?:post|get|put|delete|patch)\(this\.configuration\.basePath\+["\']/(?:[^/"\']+/?)+["\']')
+        self._endpoint_pattern2 = re.compile(
+            r'http\.(?:post|get|put|delete|patch)\(["\']((?:[^/"\']+/?)+)["\']'
+        )
+        self._endpoint_pattern3 = re.compile(
+            r'httpClient\.(?:post|get|put|delete|patch)\(this\.configuration\.basePath\+["\']/(?:[^/"\']+/?)+["\']'
+        )
         self._invocation = None
         self._scanned_js_files = set()
 
@@ -28,11 +48,13 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
         callbacks.registerExtensionStateListener(self)
         callbacks.registerContextMenuFactory(self)
 
-        print("JSpector extension loaded successfully.\nWarning: the size of the output console content is limited, we recommend that you save your results in a file.\n")
-        
+        print(
+            "JSpector extension loaded successfully.\nWarning: the size of the output console content is limited, we recommend that you save your results in a file.\n"
+        )
+
     def processHttpMessage(self, toolFlag, messageIsRequest, messageInfo):
         def is_js_file(url):
-            return url.lower().endswith('.js')
+            return url.lower().endswith(".js")
 
         if not messageIsRequest and self._callbacks.isInScope(messageInfo.getUrl()):
             js_url = messageInfo.getUrl().toString()
@@ -44,11 +66,20 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
                 if response:
                     response_info = self._helpers.analyzeResponse(response)
                     headers = response_info.getHeaders()
-                    content_type = next((header.split(':', 1)[1].strip() for header in headers if header.lower().startswith('content-type:')), None)
-                    content_type_is_js = content_type and 'javascript' in content_type.lower()
+                    content_type = next(
+                        (
+                            header.split(":", 1)[1].strip()
+                            for header in headers
+                            if header.lower().startswith("content-type:")
+                        ),
+                        None,
+                    )
+                    content_type_is_js = (
+                        content_type and "javascript" in content_type.lower()
+                    )
 
                     if content_type_is_js or is_js_file(js_url):
-                        body = response[response_info.getBodyOffset():]
+                        body = response[response_info.getBodyOffset() :]
                         urls = self.extract_urls_from_js(body)
 
                         if urls:
@@ -56,7 +87,7 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
 
                         if toolFlag == self._callbacks.TOOL_PROXY:
                             self._scanned_js_files.add(js_url)
-                            
+
     def extract_urls_from_js(self, js_code):
         urls = set(re.findall(self._url_pattern, js_code))
         endpoints1 = set(re.findall(self._endpoint_pattern1, js_code))
@@ -83,22 +114,27 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
         self._invocation = invocation
         menu_items = ArrayList()
 
-        menu_item1 = JMenuItem("Export URLs to clipboard",
-                                actionPerformed=self.export_urls_to_clipboard)
+        menu_item1 = JMenuItem(
+            "Export URLs to clipboard", actionPerformed=self.export_urls_to_clipboard
+        )
         menu_items.add(menu_item1)
 
-        menu_item2 = JMenuItem("Export endpoints to clipboard",
-                                actionPerformed=self.export_endpoints_to_clipboard)
+        menu_item2 = JMenuItem(
+            "Export endpoints to clipboard",
+            actionPerformed=self.export_endpoints_to_clipboard,
+        )
         menu_items.add(menu_item2)
 
-        menu_item3 = JMenuItem("Export all results to clipboard",
-                                actionPerformed=self.export_results_to_clipboard)
+        menu_item3 = JMenuItem(
+            "Export all results to clipboard",
+            actionPerformed=self.export_results_to_clipboard,
+        )
         menu_items.add(menu_item3)
 
         return menu_items
 
     def is_js_file(self, url):
-        return url.lower().endswith('.js')
+        return url.lower().endswith(".js")
 
     def export_data_to_clipboard(self, export_type):
         messages = self._invocation.getSelectedMessages()
@@ -117,11 +153,20 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
                         response_info = self._helpers.analyzeResponse(response)
                         headers = response_info.getHeaders()
 
-                        content_type = next((header.split(':', 1)[1].strip() for header in headers if header.lower().startswith('content-type:')), None)
-                        content_type_is_js = content_type and 'javascript' in content_type.lower()
+                        content_type = next(
+                            (
+                                header.split(":", 1)[1].strip()
+                                for header in headers
+                                if header.lower().startswith("content-type:")
+                            ),
+                            None,
+                        )
+                        content_type_is_js = (
+                            content_type and "javascript" in content_type.lower()
+                        )
 
                         if content_type_is_js or self.is_js_file(js_url):
-                            body = response[response_info.getBodyOffset():]
+                            body = response[response_info.getBodyOffset() :]
                             urls = self.extract_urls_from_js(body)
                             if urls:
                                 if export_type == "urls":
@@ -152,7 +197,7 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
 
     def copy_results_to_clipboard(self, all_results, export_type):
         if all_results:
-            num_results = len(all_results.split('\n')) - 1
+            num_results = len(all_results.split("\n")) - 1
             clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
             clipboard.setContents(StringSelection(all_results), None)
             message = "{} {} exported to clipboard".format(num_results, export_type)
@@ -178,11 +223,15 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
 
         print("JSpector results for {}:".format(js_full_url))
         print("-----------------")
-        print("URLs found ({}):\n-----------------\n{}".format(len(urls_list), '\n'.join(urls_list)))
+        print(
+            "URLs found ({}):\n-----------------\n{}".format(
+                len(urls_list), "\n".join(urls_list)
+            )
+        )
 
         print("\nEndpoints found ({}):".format(len(endpoints_list)))
         if endpoints_list:
-            print("-----------------\n{}".format('\n'.join(endpoints_list)))
+            print("-----------------\n{}".format("\n".join(endpoints_list)))
         else:
             print("No endpoints found.")
         print("-----------------")
@@ -193,7 +242,9 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
         endpoints_list = []
 
         for url in urls:
-            if re.match('^(?:http|https|ftp|ftps|sftp|file|tftp|telnet|gopher|ldap|ssh)://', url):
+            if re.match(
+                "^(?:http|https|ftp|ftps|sftp|file|tftp|telnet|gopher|ldap|ssh)://", url
+            ):
                 urls_list.append(url)
             else:
                 endpoints_list.append(url)
@@ -202,6 +253,7 @@ class BurpExtender(IBurpExtender, IHttpListener, IScannerListener, IExtensionSta
         endpoints_list.sort()
 
         return urls_list, endpoints_list
+
 
 class JSURLsIssue(IScanIssue):
 
@@ -254,7 +306,9 @@ class JSURLsIssue(IScanIssue):
         if not items:
             return ""
 
-        details = "<b>{title} ({num_items}):</b>".format(title=title, num_items=len(items))
+        details = "<b>{title} ({num_items}):</b>".format(
+            title=title, num_items=len(items)
+        )
         details += "<ul>"
 
         for item in items:

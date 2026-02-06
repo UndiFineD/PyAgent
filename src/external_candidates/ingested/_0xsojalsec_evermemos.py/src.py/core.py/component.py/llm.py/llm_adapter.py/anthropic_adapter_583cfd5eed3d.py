@@ -1,19 +1,20 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\llm\llm_adapter\anthropic_adapter.py
-import json
-import time
 import asyncio
-from typing import Dict, Any, List, Union, AsyncGenerator
+import json
 import os
+import time
+from typing import Any, AsyncGenerator, Dict, List, Union
+
 import httpx
-from core.di.decorators import service
 
 from core.component.llm.llm_adapter.completion import (
     ChatCompletionRequest,
     ChatCompletionResponse,
 )
-from core.component.llm.llm_adapter.message import MessageRole
 from core.component.llm.llm_adapter.llm_backend_adapter import LLMBackendAdapter
+from core.component.llm.llm_adapter.message import MessageRole
 from core.constants.errors import ErrorMessage
+from core.di.decorators import service
 
 
 class AnthropicAdapter(LLMBackendAdapter):

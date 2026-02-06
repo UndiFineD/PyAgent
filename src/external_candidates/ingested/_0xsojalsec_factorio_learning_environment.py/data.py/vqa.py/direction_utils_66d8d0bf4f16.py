@@ -2,7 +2,7 @@
 """Direction utilities for VQA tasks."""
 
 import enum
-from typing import Union, Optional
+from typing import Optional, Union
 
 from data.vqa.blueprint_transforms import DirectionSystem
 

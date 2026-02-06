@@ -6,17 +6,18 @@ Responsible for converting MongoDB's EpisodicMemory documents into Milvus Collec
 Mainly handles field mapping, vector construction, and data format conversion.
 """
 
-from typing import Dict, Any
 import json
+from typing import Any, Dict
 
-from core.oxm.milvus.base_converter import BaseMilvusConverter
-from core.observation.logger import get_logger
-from infra_layer.adapters.out.search.milvus.memory.episodic_memory_collection import (
-    EpisodicMemoryCollection,
-)
 from infra_layer.adapters.out.persistence.document.memory.episodic_memory import (
     EpisodicMemory as MongoEpisodicMemory,
 )
+from infra_layer.adapters.out.search.milvus.memory.episodic_memory_collection import (
+    EpisodicMemoryCollection,
+)
+
+from core.observation.logger import get_logger
+from core.oxm.milvus.base_converter import BaseMilvusConverter
 
 logger = get_logger(__name__)
 
@@ -64,9 +65,9 @@ class EpisodicMemoryMilvusConverter(BaseMilvusConverter[EpisodicMemoryCollection
                 # Basic identifier fields
                 "id": str(source_doc.id),  # Use Beanie's id attribute
                 "user_id": source_doc.user_id or "",  # Convert None to empty string
-                "group_id": getattr(source_doc, 'group_id', ""),
+                "group_id": getattr(source_doc, "group_id", ""),
                 "participants": getattr(
-                    source_doc, 'participants', []
+                    source_doc, "participants", []
                 ),  # Add participants
                 # Time fields - convert to Unix timestamp
                 "timestamp": timestamp,
@@ -76,7 +77,7 @@ class EpisodicMemoryMilvusConverter(BaseMilvusConverter[EpisodicMemoryCollection
                 # Classification fields
                 "event_type": (
                     str(source_doc.type)
-                    if hasattr(source_doc, 'type') and source_doc.type
+                    if hasattr(source_doc, "type") and source_doc.type
                     else ""
                 ),
                 # Metadata JSON (detailed information)
@@ -97,7 +98,7 @@ class EpisodicMemoryMilvusConverter(BaseMilvusConverter[EpisodicMemoryCollection
                 # Vector field - needs to be set externally
                 "vector": (
                     source_doc.vector
-                    if hasattr(source_doc, 'vector') and source_doc.vector
+                    if hasattr(source_doc, "vector") and source_doc.vector
                     else []
                 ),
             }
@@ -124,19 +125,19 @@ class EpisodicMemoryMilvusConverter(BaseMilvusConverter[EpisodicMemoryCollection
         """
         detail = {
             # User information
-            "user_name": getattr(source_doc, 'user_name', None),
+            "user_name": getattr(source_doc, "user_name", None),
             # Content related
-            "title": getattr(source_doc, 'subject', None),
-            "summary": getattr(source_doc, 'summary', None),
+            "title": getattr(source_doc, "subject", None),
+            "summary": getattr(source_doc, "summary", None),
             # Classification and tags
-            "participants": getattr(source_doc, 'participants', None),
-            "keywords": getattr(source_doc, 'keywords', None),
-            "linked_entities": getattr(source_doc, 'linked_entities', None),
+            "participants": getattr(source_doc, "participants", None),
+            "keywords": getattr(source_doc, "keywords", None),
+            "linked_entities": getattr(source_doc, "linked_entities", None),
             # MongoDB specific fields
-            "subject": getattr(source_doc, 'subject', None),
-            "memcell_event_id_list": getattr(source_doc, 'memcell_event_id_list', None),
+            "subject": getattr(source_doc, "subject", None),
+            "memcell_event_id_list": getattr(source_doc, "memcell_event_id_list", None),
             # Extension fields
-            "extend": getattr(source_doc, 'extend', None),
+            "extend": getattr(source_doc, "extend", None),
         }
 
         # Filter out None values
@@ -158,13 +159,13 @@ class EpisodicMemoryMilvusConverter(BaseMilvusConverter[EpisodicMemoryCollection
         text_content = []
 
         # Collect all text content (by priority: subject -> summary -> content)
-        if hasattr(source_doc, 'subject') and source_doc.subject:
+        if hasattr(source_doc, "subject") and source_doc.subject:
             text_content.append(source_doc.subject)
 
-        if hasattr(source_doc, 'summary') and source_doc.summary:
+        if hasattr(source_doc, "summary") and source_doc.summary:
             text_content.append(source_doc.summary)
 
-        if hasattr(source_doc, 'episode') and source_doc.episode:
+        if hasattr(source_doc, "episode") and source_doc.episode:
             # episode might be very long, only take first 500 characters
             text_content.append(source_doc.episode[:500])
 

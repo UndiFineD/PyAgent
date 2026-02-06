@@ -34,8 +34,8 @@ class MemCellCreatedEvent(BaseEvent):
 
     @classmethod
     def from_dict(
-        cls: Type['MemCellCreatedEvent'], data: Dict[str, Any]
-    ) -> 'MemCellCreatedEvent':
+        cls: Type["MemCellCreatedEvent"], data: Dict[str, Any]
+    ) -> "MemCellCreatedEvent":
         """
         Create an instance from a dictionary
 

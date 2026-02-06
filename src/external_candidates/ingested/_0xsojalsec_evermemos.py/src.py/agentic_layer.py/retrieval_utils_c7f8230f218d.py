@@ -8,14 +8,17 @@ Provides implementations of various retrieval strategies:
 - Agentic retrieval (LLM-guided multi-round retrieval)
 """
 
+import asyncio
+import logging
 import re
 import time
+from typing import Any, Dict, List, Optional, Tuple
+
 import jieba
 import numpy as np
-import logging
-import asyncio
-from typing import List, Tuple, Dict, Any, Optional
+
 from core.nlp.stopwords_utils import filter_stopwords as filter_chinese_stopwords
+
 from .vectorize_service import get_vectorize_service
 
 logger = logging.getLogger(__name__)
@@ -55,7 +58,7 @@ def build_bm25_index(candidates):
     tokenized_docs = []
     for mem in candidates:
         text = getattr(mem, "episode", None) or getattr(mem, "summary", "") or ""
-        has_chinese = bool(re.search(r'[\u4e00-\u9fff]', text))
+        has_chinese = bool(re.search(r"[\u4e00-\u9fff]", text))
 
         if has_chinese:
             tokens = list(jieba.cut(text))
@@ -87,7 +90,7 @@ async def search_with_bm25(
         return []
 
     # Tokenize query (supports Chinese and English)
-    has_chinese = bool(re.search(r'[\u4e00-\u9fff]', query))
+    has_chinese = bool(re.search(r"[\u4e00-\u9fff]", query))
 
     if has_chinese:
         tokens = list(jieba.cut(query))
@@ -121,14 +124,14 @@ def reciprocal_rank_fusion(
 
     # Process first result set
     for rank, (doc, score) in enumerate(results1, start=1):
-        doc_id = doc.get('id')
+        doc_id = doc.get("id")
         if doc_id not in doc_map:
             doc_map[doc_id] = doc
         doc_rrf_scores[doc_id] = doc_rrf_scores.get(doc_id, 0.0) + 1.0 / (k + rank)
 
     # Process second result set
     for rank, (doc, score) in enumerate(results2, start=1):
-        doc_id = doc.get('id')
+        doc_id = doc.get("id")
         if doc_id not in doc_map:
             doc_map[doc_id] = doc
         doc_rrf_scores[doc_id] = doc_rrf_scores.get(doc_id, 0.0) + 1.0 / (k + rank)

@@ -5,20 +5,23 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Optional, Set
 
-from core.observation.logger import get_logger
-
 from api_specs.memory_types import BaseMemory, MemoryType, RawDataType
 from memory_layer.memory_extractor.profile_memory.project_helpers import (
     convert_projects_to_dataclass,
     merge_projects_participated,
     project_to_dict,
 )
-from memory_layer.memory_extractor.profile_memory.skill_helpers import merge_skill_lists, normalize_skills_with_evidence
+from memory_layer.memory_extractor.profile_memory.skill_helpers import (
+    merge_skill_lists,
+    normalize_skills_with_evidence,
+)
 from memory_layer.memory_extractor.profile_memory.types import ProfileMemory
 from memory_layer.memory_extractor.profile_memory.value_helpers import (
     extract_values_with_evidence,
     merge_value_with_evidences_lists,
 )
+
+from core.observation.logger import get_logger
 
 logger = get_logger(__name__)
 

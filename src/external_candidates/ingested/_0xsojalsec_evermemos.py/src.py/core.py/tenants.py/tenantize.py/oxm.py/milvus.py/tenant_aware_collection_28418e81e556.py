@@ -7,21 +7,22 @@ Core idea: Dynamically return the correct connection handler based on tenant con
 """
 
 from typing import Optional
+
 from pymilvus import Collection, CollectionSchema
 from pymilvus.orm.connections import connections
 
+from core.component.milvus_client_factory import MilvusClientFactory
+from core.di.utils import get_bean_by_type
 from core.observation.logger import get_logger
 from core.tenants.tenant_contextvar import get_current_tenant
 from core.tenants.tenant_models import TenantPatchKey
 from core.tenants.tenantize.oxm.milvus.config_utils import (
-    get_tenant_milvus_config,
     get_milvus_connection_cache_key,
-    load_milvus_config_from_env,
     get_tenant_aware_collection_name,
+    get_tenant_milvus_config,
+    load_milvus_config_from_env,
 )
 from core.tenants.tenantize.tenant_cache_utils import get_or_compute_tenant_cache
-from core.component.milvus_client_factory import MilvusClientFactory
-from core.di.utils import get_bean_by_type
 
 logger = get_logger(__name__)
 

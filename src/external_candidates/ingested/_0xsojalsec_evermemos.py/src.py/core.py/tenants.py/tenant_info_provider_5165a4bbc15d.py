@@ -11,8 +11,8 @@ Uses DI mechanism to manage TenantInfoProvider implementations.
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from core.tenants.tenant_models import TenantInfo, TenantDetail
 from core.di.decorators import component
+from core.tenants.tenant_models import TenantDetail, TenantInfo
 
 
 class TenantInfoProvider(ABC):

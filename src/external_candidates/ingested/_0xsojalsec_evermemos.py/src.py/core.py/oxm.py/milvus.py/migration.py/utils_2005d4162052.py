@@ -13,17 +13,16 @@ Note:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, Callable, Type
+from typing import Callable, Optional, Type
 
 from pymilvus import Collection
 
+from core.di.utils import get_all_subclasses
 from core.observation.logger import get_logger
 from core.oxm.milvus.milvus_collection_base import (
     MilvusCollectionBase,
     MilvusCollectionWithSuffix,
 )
-from core.di.utils import get_all_subclasses
-
 
 logger = get_logger(__name__)
 
@@ -58,7 +57,7 @@ def find_collection_manager_by_alias(alias: str) -> Type[MilvusCollectionBase]:
         # Skip abstract classes
         # pylint: disable=protected-access  # Internal framework usage, accessing subclass configuration attributes
         if (
-            not hasattr(doc_class, '_COLLECTION_NAME')
+            not hasattr(doc_class, "_COLLECTION_NAME")
             or doc_class._COLLECTION_NAME is None
         ):
             continue

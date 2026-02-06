@@ -44,7 +44,9 @@ def get_instagram_locations(lat, lng, cookie):
 
 
 def get_instagram_locations_by_query(query):
-    locs = requests.get("https://www.instagram.com/web/search/topsearch/?context=place&query=" + query).json()
+    locs = requests.get(
+        "https://www.instagram.com/web/search/topsearch/?context=place&query=" + query
+    ).json()
 
     return [v["place"]["location"] for v in locs["places"]]
 
@@ -62,7 +64,9 @@ def get_fuzzy_locations(lat, lng, cookie, sigma=2):
     # to obtain the initial loc)
     deltas = (
         (lat + delta_lat * std_lat, lng + delta_lng * std_lng)
-        for delta_lat, delta_lng in filter(lambda x: any(x), product(range(-sigma, sigma + 1), repeat=2))
+        for delta_lat, delta_lng in filter(
+            lambda x: any(x), product(range(-sigma, sigma + 1), repeat=2)
+        )
     )
 
     # to change args order for convenient unpacking
@@ -87,7 +91,10 @@ def make_geojson(locations):
     for location in [location for location in locations if "lng" in location]:
         feature = {
             "type": "Feature",
-            "geometry": {"type": "Point", "coordinates": [location["lng"], location["lat"]]},
+            "geometry": {
+                "type": "Point",
+                "coordinates": [location["lng"], location["lat"]],
+            },
             "properties": location,
         }
         features.append(feature)
@@ -103,7 +110,9 @@ def encode_date(date_str: str):
         try:
             date = datetime.strptime(date_str, "%Y-%m-%d")
         except ValueError:
-            print('Unable to parse date. Please use format "yyyy-mm-dd".', file=sys.stderr)
+            print(
+                'Unable to parse date. Please use format "yyyy-mm-dd".', file=sys.stderr
+            )
             sys.exit(1)
     date = date.replace(hour=23, minute=59, second=59, tzinfo=timezone.utc)
     date_ts = int(date.timestamp()) * 1000  # milliseconds
@@ -179,7 +188,9 @@ html_template = """<html>
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Get a list of Instagram locations near a lat/lng")
+    parser = argparse.ArgumentParser(
+        description="Get a list of Instagram locations near a lat/lng"
+    )
     parser.add_argument("--cookie", action="store", dest="cookie")
     parser.add_argument("--json", action="store", dest="output")
     parser.add_argument("--geojson", action="store", dest="geojson")
@@ -208,7 +219,12 @@ def main():
 
     if args.map:
         s = Template(html_template)
-        viz = s.substitute(lat=args.lat, lng=args.lng, locs=json.dumps(make_geojson(locations)), date_var=date_var)
+        viz = s.substitute(
+            lat=args.lat,
+            lng=args.lng,
+            locs=json.dumps(make_geojson(locations)),
+            date_var=date_var,
+        )
 
         f = open(args.map, "w")
         f.write(viz)
@@ -216,10 +232,22 @@ def main():
 
     if args.csv:
         for i in locations:
-            i["url"] = f"https://www.instagram.com/explore/locations/{i['external_id']}{date_var}"
+            i["url"] = (
+                f"https://www.instagram.com/explore/locations/{i['external_id']}{date_var}"
+            )
 
         # leading empty string for 'id' column is for backward compatibility since that's the pandas behavior.
-        fieldnames = ["", "name", "external_id", "external_id_source", "lat", "lng", "address", "minimum_age", "url"]
+        fieldnames = [
+            "",
+            "name",
+            "external_id",
+            "external_id_source",
+            "lat",
+            "lng",
+            "address",
+            "minimum_age",
+            "url",
+        ]
 
         with open(args.csv, "w") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)

@@ -5,13 +5,13 @@ Memory types module
 This module contains the definitions of memory types and related data structures, just for extraction.
 """
 
-from enum import Enum
-from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass
 from datetime import datetime
-from common_utils.datetime_utils import to_iso_format
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
 
 from api_specs.memory_models import MemoryType
+from common_utils.datetime_utils import to_iso_format
 
 
 class RawDataType(Enum):
@@ -20,7 +20,7 @@ class RawDataType(Enum):
     CONVERSATION = "Conversation"
 
     @classmethod
-    def from_string(cls, type_str: Optional[str]) -> Optional['RawDataType']:
+    def from_string(cls, type_str: Optional[str]) -> Optional["RawDataType"]:
         """
         Convert string type to RawDataType enum
 
@@ -84,7 +84,7 @@ class MemCell:
     episode: Optional[str] = None  # episodic memory content
 
     # Prospective association prediction field
-    foresights: Optional[List['Foresight']] = None  # list of prospective associations
+    foresights: Optional[List["Foresight"]] = None  # list of prospective associations
     # Event Log field
     event_log: Optional[Any] = None  # Event Log object
     # extend fields, can be used to store any additional information
@@ -121,7 +121,7 @@ class MemCell:
             "event_log": (
                 (
                     self.event_log.to_dict()
-                    if hasattr(self.event_log, 'to_dict')
+                    if hasattr(self.event_log, "to_dict")
                     else self.event_log
                 )
                 if self.event_log

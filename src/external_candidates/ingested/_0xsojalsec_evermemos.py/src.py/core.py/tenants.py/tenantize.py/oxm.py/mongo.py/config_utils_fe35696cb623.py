@@ -6,11 +6,12 @@ Provides common utility functions related to tenant-aware MongoDB configuration.
 """
 
 import os
-from typing import Optional, Dict, Any
 from functools import lru_cache
+from typing import Any, Dict, Optional
+
 from core.observation.logger import get_logger
-from core.tenants.tenant_contextvar import get_current_tenant
 from core.tenants.tenant_config import get_tenant_config
+from core.tenants.tenant_contextvar import get_current_tenant
 
 logger = get_logger(__name__)
 

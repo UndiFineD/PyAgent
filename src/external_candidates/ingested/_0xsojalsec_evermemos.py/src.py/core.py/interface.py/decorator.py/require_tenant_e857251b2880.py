@@ -7,7 +7,7 @@ Ensures that the API request carries a valid tenant context (X-Organization-Id a
 """
 
 from functools import wraps
-from typing import Callable, Any
+from typing import Any, Callable
 
 from fastapi import HTTPException
 

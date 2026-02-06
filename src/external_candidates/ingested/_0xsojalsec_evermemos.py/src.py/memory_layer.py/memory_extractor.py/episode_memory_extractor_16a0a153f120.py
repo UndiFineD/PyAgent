@@ -6,20 +6,23 @@ This module provides a simple base class for extracting memories
 from boundary detection results (BoundaryResult).
 """
 
+import asyncio
+import json
+import re
+import uuid
 from dataclasses import dataclass, field
-from typing import Optional, List, Dict, Any
 from datetime import datetime
-import re, json, asyncio, uuid
+from typing import Any, Dict, List, Optional
 
-
-from memory_layer.prompts import get_prompt_by
-from memory_layer.llm.llm_provider import LLMProvider
-
-from memory_layer.memory_extractor.base_memory_extractor import MemoryExtractor, MemoryExtractRequest
-from api_specs.memory_types import MemoryType, EpisodeMemory, RawDataType, MemCell
-
-from common_utils.datetime_utils import get_now_with_timezone
 from agentic_layer.vectorize_service import get_vectorize_service
+from api_specs.memory_types import EpisodeMemory, MemCell, MemoryType, RawDataType
+from common_utils.datetime_utils import get_now_with_timezone
+from memory_layer.llm.llm_provider import LLMProvider
+from memory_layer.memory_extractor.base_memory_extractor import (
+    MemoryExtractor,
+    MemoryExtractRequest,
+)
+from memory_layer.prompts import get_prompt_by
 
 from core.observation.logger import get_logger
 
@@ -55,7 +58,7 @@ class EpisodeMemoryExtractor(MemoryExtractor):
     ):
         """
         Initialize Episode Extractor
-        
+
         Args:
             llm_provider: LLM provider
             episode_prompt: Optional custom personal Episode prompt (uses default if not provided)
@@ -64,11 +67,17 @@ class EpisodeMemoryExtractor(MemoryExtractor):
         """
         super().__init__(MemoryType.EPISODIC_MEMORY)
         self.llm_provider = llm_provider
-        
+
         # Use custom prompts or get default via PromptManager
-        self.episode_generation_prompt = episode_prompt or get_prompt_by("EPISODE_GENERATION_PROMPT")
-        self.group_episode_generation_prompt = group_episode_prompt or get_prompt_by("GROUP_EPISODE_GENERATION_PROMPT")
-        self.default_custom_instructions = custom_instructions or get_prompt_by("DEFAULT_CUSTOM_INSTRUCTIONS")
+        self.episode_generation_prompt = episode_prompt or get_prompt_by(
+            "EPISODE_GENERATION_PROMPT"
+        )
+        self.group_episode_generation_prompt = group_episode_prompt or get_prompt_by(
+            "GROUP_EPISODE_GENERATION_PROMPT"
+        )
+        self.default_custom_instructions = custom_instructions or get_prompt_by(
+            "DEFAULT_CUSTOM_INSTRUCTIONS"
+        )
 
     def _parse_timestamp(self, timestamp) -> datetime:
         """
@@ -86,7 +95,7 @@ class EpisodeMemoryExtractor(MemoryExtractor):
                     return datetime.fromtimestamp(int(timestamp))
                 else:
                     # Try parsing as ISO format
-                    return datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                    return datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
             except (ValueError, AttributeError):
                 # Fallback to current time if parsing fails
                 logger.error(f"Failed to parse timestamp: {timestamp}")
@@ -109,18 +118,18 @@ class EpisodeMemoryExtractor(MemoryExtractor):
         lines = []
         for data in data_list:
             # Handle both RawData objects and dict objects
-            if hasattr(data, 'content'):
+            if hasattr(data, "content"):
                 # RawData object
-                speaker = data.content.get('speaker_name') or data.content.get(
-                    'sender', 'Unknown'
+                speaker = data.content.get("speaker_name") or data.content.get(
+                    "sender", "Unknown"
                 )
-                content = data.content['content']
-                timestamp = data.content['timestamp']
+                content = data.content["content"]
+                timestamp = data.content["timestamp"]
             else:
                 # Dict object
-                speaker = data.get('speaker_name') or data.get('sender', 'Unknown')
-                content = data['content']
-                timestamp = data['timestamp']
+                speaker = data.get("speaker_name") or data.get("sender", "Unknown")
+                content = data["content"]
+                timestamp = data["timestamp"]
 
             if timestamp:
                 lines.append(f"[{timestamp}] {speaker}: {content}")
@@ -132,47 +141,43 @@ class EpisodeMemoryExtractor(MemoryExtractor):
         lines = []
         for data in data_list:
             # Handle both RawData objects and dict objects
-            if hasattr(data, 'content'):
+            if hasattr(data, "content"):
                 # RawData object
-                speaker = data.content.get('speaker_name') or data.content.get(
-                    'sender', 'Unknown'
+                speaker = data.content.get("speaker_name") or data.content.get(
+                    "sender", "Unknown"
                 )
-                content = data.content['content']
-                timestamp = data.content['timestamp']
+                content = data.content["content"]
+                timestamp = data.content["timestamp"]
             else:
                 # Dict object
-                speaker = data.get('speaker_name') or data.get('sender', 'Unknown')
-                content = data['content']
-                timestamp = data['timestamp']
+                speaker = data.get("speaker_name") or data.get("sender", "Unknown")
+                content = data["content"]
+                timestamp = data["timestamp"]
 
             if timestamp:
-                lines.append(
-                    f"""
+                lines.append(f"""
                 {{
                     "timestamp": {timestamp},
                     "speaker": {speaker},
                     "content": {content}
-                }}"""
-                )
+                }}""")
             else:
-                lines.append(
-                    f"""
+                lines.append(f"""
                 {{
                     "speaker": {speaker},
                     "content": {content}
-                }}"""
-                )
+                }}""")
         return "\n".join(lines)
 
     def get_speaker_name_map(self, data_list: List[Dict[str, Any]]) -> Dict[str, str]:
         speaker_name_map = {}
         for data in data_list:
-            if hasattr(data, 'content'):
-                speaker_name_map[data.content.get('speaker_id')] = data.content.get(
-                    'speaker_name'
+            if hasattr(data, "content"):
+                speaker_name_map[data.content.get("speaker_id")] = data.content.get(
+                    "speaker_name"
                 )
             else:
-                speaker_name_map[data.get('speaker_id')] = data.get('speaker_name')
+                speaker_name_map[data.get("speaker_id")] = data.get("speaker_name")
         return speaker_name_map
 
     def _extract_participant_name_map(
@@ -180,13 +185,13 @@ class EpisodeMemoryExtractor(MemoryExtractor):
     ) -> List[str]:
         participant_name_map = {}
         for raw_data in chat_raw_data_list:
-            if 'speaker_name' in raw_data and raw_data['speaker_name']:
-                participant_name_map[raw_data['speaker_id']] = raw_data['speaker_name']
-            if 'referList' in raw_data and raw_data['referList']:
-                for refer_item in raw_data['referList']:
+            if "speaker_name" in raw_data and raw_data["speaker_name"]:
+                participant_name_map[raw_data["speaker_id"]] = raw_data["speaker_name"]
+            if "referList" in raw_data and raw_data["referList"]:
+                for refer_item in raw_data["referList"]:
                     if isinstance(refer_item, dict):
-                        if 'name' in refer_item and refer_item['_id']:
-                            participant_name_map[refer_item['_id']] = refer_item['name']
+                        if "name" in refer_item and refer_item["_id"]:
+                            participant_name_map[refer_item["_id"]] = refer_item["name"]
         return participant_name_map
 
     async def _extract_episode(
@@ -268,9 +273,9 @@ class EpisodeMemoryExtractor(MemoryExtractor):
                 response = await self.llm_provider.generate(prompt)
 
                 # Parse JSON
-                if '```json' in response:
-                    start = response.find('```json') + 7
-                    end = response.find('```', start)
+                if "```json" in response:
+                    start = response.find("```json") + 7
+                    end = response.find("```", start)
                     if end > start:
                         json_str = response[start:end].strip()
                         data = json.loads(json_str)
@@ -333,7 +338,9 @@ class EpisodeMemoryExtractor(MemoryExtractor):
         logger.debug(f"✅ Episode extraction completed: subject='{title}'")
         return episode_memory
 
-    async def extract_memory(self, request: MemoryExtractRequest) -> Optional[EpisodeMemory]:
+    async def extract_memory(
+        self, request: MemoryExtractRequest
+    ) -> Optional[EpisodeMemory]:
         """
         Extract Episode memory from MemCell (implement abstract method from base class)
 

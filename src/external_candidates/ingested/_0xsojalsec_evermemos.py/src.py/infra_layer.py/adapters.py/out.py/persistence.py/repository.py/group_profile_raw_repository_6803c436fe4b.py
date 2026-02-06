@@ -1,12 +1,14 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\infra_layer\adapters\out\persistence\repository\group_profile_raw_repository.py
-from typing import List, Optional, Dict, Any, Tuple
-from pymongo.asynchronous.client_session import AsyncClientSession
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from core.oxm.mongo.base_repository import BaseRepository
+from typing import Any, Dict, List, Optional, Tuple
+
 from infra_layer.adapters.out.persistence.document.memory.group_profile import (
     GroupProfile,
 )
+from pymongo.asynchronous.client_session import AsyncClientSession
+
+from core.di.decorators import repository
+from core.observation.logger import get_logger
+from core.oxm.mongo.base_repository import BaseRepository
 
 logger = get_logger(__name__)
 
@@ -235,7 +237,7 @@ class GroupProfileRawRepository(BaseRepository[GroupProfile]):
                 # Delete all versions
                 result = await self.model.find(query_filter, session=session).delete()
                 deleted_count = (
-                    result.deleted_count if hasattr(result, 'deleted_count') else 0
+                    result.deleted_count if hasattr(result, "deleted_count") else 0
                 )
                 success = deleted_count > 0
 

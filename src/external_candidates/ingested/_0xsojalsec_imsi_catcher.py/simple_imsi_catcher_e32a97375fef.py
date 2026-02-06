@@ -22,11 +22,11 @@ This program shows you IMSI numbers of cellphones around you.
 """
 
 import ctypes
-import json
-from optparse import OptionParser
 import datetime
 import io
+import json
 import socket
+from optparse import OptionParser
 
 imsitracker = None
 
@@ -86,7 +86,7 @@ class tracker:
             return ""
 
     def decode_imsi(self, imsi):
-        new_imsi = ''
+        new_imsi = ""
         for a in imsi:
             c = hex(a)
             if len(c) == 4:
@@ -130,7 +130,7 @@ class tracker:
 
     def load_mcc_codes(self):
         # mcc codes form https://en.wikipedia.org/wiki/Mobile_Network_Code
-        with io.open('mcc-mnc/mcc_codes.json', 'r', encoding='utf8') as file:
+        with io.open("mcc-mnc/mcc_codes.json", "r", encoding="utf8") as file:
             self.mcc_codes = json.load(file)
 
     def current_cell(self, mcc, mnc, lac, cell):
@@ -153,24 +153,36 @@ class tracker:
 
     def sqlite_file(self, filename):
         import sqlite3  # Avoid pulling in sqlite3 when not saving
+
         print("Saving to SQLite database in %s" % filename)
         self.sqlite_con = sqlite3.connect(filename)
         self.sqlite_con.text_factory = str
         # FIXME Figure out proper SQL type for each attribute
-        self.sqlite_con.execute("CREATE TABLE IF NOT EXISTS observations(stamp datetime, tmsi1 text, tmsi2 text, imsi text, imsicountry text, imsibrand text, imsioperator text, mcc integer, mnc integer, lac integer, cell integer);")
+        self.sqlite_con.execute(
+            "CREATE TABLE IF NOT EXISTS observations(stamp datetime, tmsi1 text, tmsi2 text, imsi text, imsicountry text, imsibrand text, imsioperator text, mcc integer, mnc integer, lac integer, cell integer);"
+        )
 
     def text_file(self, filename):
         txt = open(filename, "w")
-        txt.write("stamp, tmsi1, tmsi2, imsi, imsicountry, imsibrand, imsioperator, mcc, mnc, lac, cell\n")
+        txt.write(
+            "stamp, tmsi1, tmsi2, imsi, imsicountry, imsibrand, imsioperator, mcc, mnc, lac, cell\n"
+        )
         txt.close()
         self.textfilePath = filename
 
     def mysql_file(self):
         import os.path
-        if os.path.isfile('.env'):
+
+        if os.path.isfile(".env"):
             import MySQLdb as mdb
             from decouple import config
-            self.mysql_con = mdb.connect(config("MYSQL_HOST"), config("MYSQL_USER"), config("MYSQL_PASSWORD"), config("MYSQL_DB"))
+
+            self.mysql_con = mdb.connect(
+                config("MYSQL_HOST"),
+                config("MYSQL_USER"),
+                config("MYSQL_PASSWORD"),
+                config("MYSQL_DB"),
+            )
             self.mysql_cur = self.mysql_con.cursor()
             # Check MySQL connection
             if self.mysql_cur:
@@ -182,8 +194,25 @@ class tracker:
             print("create file .env first")
             exit()
 
-    def output(self, cpt, tmsi1, tmsi2, imsi, imsicountry, imsibrand, imsioperator, mcc, mnc, lac, cell, now, packet=None):
-        print(f"{str(cpt):7s} ; {tmsi1:10s} ; {tmsi2:10s} ; {imsi:17s} ; {imsicountry:16s} ; {imsibrand:14s} ; {imsioperator:21s} ; {str(mcc):4s} ; {str(mnc):5s} ; {str(lac):6s} ; {str(cell):6s} ; {now.isoformat():s}")
+    def output(
+        self,
+        cpt,
+        tmsi1,
+        tmsi2,
+        imsi,
+        imsicountry,
+        imsibrand,
+        imsioperator,
+        mcc,
+        mnc,
+        lac,
+        cell,
+        now,
+        packet=None,
+    ):
+        print(
+            f"{str(cpt):7s} ; {tmsi1:10s} ; {tmsi2:10s} ; {imsi:17s} ; {imsicountry:16s} ; {imsibrand:14s} ; {imsioperator:21s} ; {str(mcc):4s} ; {str(mnc):5s} ; {str(lac):6s} ; {str(cell):6s} ; {now.isoformat():s}"
+        )
 
     def pfields(self, cpt, tmsi1, tmsi2, imsi, mcc, mnc, lac, cell, packet=None):
         imsicountry = ""
@@ -194,12 +223,28 @@ class tracker:
         else:
             imsi = ""
         now = datetime.datetime.now()
-        self.output_function(cpt, tmsi1, tmsi2, imsi, imsicountry, imsibrand, imsioperator, mcc, mnc, lac, cell, now, packet)
+        self.output_function(
+            cpt,
+            tmsi1,
+            tmsi2,
+            imsi,
+            imsicountry,
+            imsibrand,
+            imsioperator,
+            mcc,
+            mnc,
+            lac,
+            cell,
+            now,
+            packet,
+        )
 
         if self.textfilePath:
             now = datetime.datetime.now()
             txt = open(self.textfilePath, "a")
-            txt.write(f"{str(now)}, {tmsi1}, {tmsi2}, {imsi}, {imsicountry}, {imsibrand}, {imsioperator}, {mcc}, {mnc}, {lac}, {cell}\n")
+            txt.write(
+                f"{str(now)}, {tmsi1}, {tmsi2}, {imsi}, {imsicountry}, {imsibrand}, {imsioperator}, {mcc}, {mnc}, {lac}, {cell}\n"
+            )
             txt.close()
 
         if tmsi1 == "":
@@ -209,8 +254,21 @@ class tracker:
 
         if self.sqlite_con:
             self.sqlite_con.execute(
-               u"INSERT INTO observations (stamp, tmsi1, tmsi2, imsi, imsicountry, imsibrand, imsioperator, mcc, mnc, lac, cell) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-               (now, tmsi1, tmsi2, imsi, imsicountry, imsibrand, imsioperator, mcc, mnc, lac, cell)
+                "INSERT INTO observations (stamp, tmsi1, tmsi2, imsi, imsicountry, imsibrand, imsioperator, mcc, mnc, lac, cell) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                (
+                    now,
+                    tmsi1,
+                    tmsi2,
+                    imsi,
+                    imsicountry,
+                    imsibrand,
+                    imsioperator,
+                    mcc,
+                    mnc,
+                    lac,
+                    cell,
+                ),
             )
             self.sqlite_con.commit()
             pass
@@ -218,51 +276,75 @@ class tracker:
         if self.mysql_cur:
             print("saving data to db...")
             # Example query
-            query = ("INSERT INTO `imsi` (`tmsi1`, `tmsi2`, `imsi`,`mcc`, `mnc`, `lac`, `cell_id`, `stamp`, `deviceid`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")
+            query = "INSERT INTO `imsi` (`tmsi1`, `tmsi2`, `imsi`,`mcc`, `mnc`, `lac`, `cell_id`, `stamp`, `deviceid`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
             arg = (tmsi1, tmsi2, imsi, mcc, mnc, lac, cell, now, "rtl")
             self.mysql_cur.execute(query, arg)
             self.mysql_con.commit()
 
     def header(self):
-        print(f"{'Nb IMSI':7s} ; {'TMSI-1':10s} ; {'TMSI-2':10s} ; {'IMSI':17s} ; {'country':16s} ; {'brand':14s} ; {'operator':21s} ; {'MCC':4s} ; {'MNC':5s} ; {'LAC':6s} ; {'CellId':6s} ; {'Timestamp':s}")
+        print(
+            f"{'Nb IMSI':7s} ; {'TMSI-1':10s} ; {'TMSI-2':10s} ; {'IMSI':17s} ; {'country':16s} ; {'brand':14s} ; {'operator':21s} ; {'MCC':4s} ; {'MNC':5s} ; {'LAC':6s} ; {'CellId':6s} ; {'Timestamp':s}"
+        )
 
     def register_imsi(self, arfcn, imsi1="", imsi2="", tmsi1="", tmsi2="", p=""):
         do_print = False
-        n = ''
+        n = ""
         tmsi1 = self.str_tmsi(tmsi1)
         tmsi2 = self.str_tmsi(tmsi2)
         if imsi1:
             self.imsi_seen(imsi1, arfcn)
         if imsi2:
             self.imsi_seen(imsi2, arfcn)
-        if imsi1 and (not self.imsi_to_track or imsi1[:self.imsi_to_track_len] == self.imsi_to_track):
+        if imsi1 and (
+            not self.imsi_to_track
+            or imsi1[: self.imsi_to_track_len] == self.imsi_to_track
+        ):
             if imsi1 not in self.imsis:
                 # new IMSI
                 do_print = True
                 self.imsis.append(imsi1)
                 self.nb_IMSI += 1
                 n = self.nb_IMSI
-            if self.tmsis and tmsi1 and (tmsi1 not in self.tmsis or self.tmsis[tmsi1] != imsi1):
+            if (
+                self.tmsis
+                and tmsi1
+                and (tmsi1 not in self.tmsis or self.tmsis[tmsi1] != imsi1)
+            ):
                 # new TMSI to an ISMI
                 do_print = True
                 self.tmsis[tmsi1] = imsi1
-            if self.tmsis and tmsi2 and (tmsi2 not in self.tmsis or self.tmsis[tmsi2] != imsi1):
+            if (
+                self.tmsis
+                and tmsi2
+                and (tmsi2 not in self.tmsis or self.tmsis[tmsi2] != imsi1)
+            ):
                 # new TMSI to an ISMI
                 do_print = True
                 self.tmsis[tmsi2] = imsi1
 
-        if imsi2 and (not self.imsi_to_track or imsi2[:self.imsi_to_track_len] == self.imsi_to_track):
+        if imsi2 and (
+            not self.imsi_to_track
+            or imsi2[: self.imsi_to_track_len] == self.imsi_to_track
+        ):
             if imsi2 not in self.imsis:
                 # new IMSI
                 do_print = True
                 self.imsis.append(imsi2)
                 self.nb_IMSI += 1
                 n = self.nb_IMSI
-            if self.tmsis and tmsi1 and (tmsi1 not in self.tmsis or self.tmsis[tmsi1] != imsi2):
+            if (
+                self.tmsis
+                and tmsi1
+                and (tmsi1 not in self.tmsis or self.tmsis[tmsi1] != imsi2)
+            ):
                 # new TMSI to an ISMI
                 do_print = True
                 self.tmsis[tmsi1] = imsi2
-            if self.tmsis and tmsi2 and (tmsi2 not in self.tmsis or self.tmsis[tmsi2] != imsi2):
+            if (
+                self.tmsis
+                and tmsi2
+                and (tmsi2 not in self.tmsis or self.tmsis[tmsi2] != imsi2)
+            ):
                 # new TMSI to an ISMI
                 do_print = True
                 self.tmsis[tmsi2] = imsi2
@@ -278,9 +360,29 @@ class tracker:
 
         if do_print:
             if imsi1:
-                self.pfields(str(n), tmsi1, tmsi2, imsi1, str(self.mcc), str(self.mnc), str(self.lac), str(self.cell), p)
+                self.pfields(
+                    str(n),
+                    tmsi1,
+                    tmsi2,
+                    imsi1,
+                    str(self.mcc),
+                    str(self.mnc),
+                    str(self.lac),
+                    str(self.cell),
+                    p,
+                )
             if imsi2:
-                self.pfields(str(n), tmsi1, tmsi2, imsi2, str(self.mcc), str(self.mnc), str(self.lac), str(self.cell), p)
+                self.pfields(
+                    str(n),
+                    tmsi1,
+                    tmsi2,
+                    imsi2,
+                    str(self.mcc),
+                    str(self.mnc),
+                    str(self.lac),
+                    str(self.cell),
+                    p,
+                )
 
         if not imsi1 and not imsi2:
             # Register IMSI as seen if a TMSI believed to
@@ -296,7 +398,17 @@ class tracker:
                     do_print = True
                     self.tmsis[tmsi2] = ""
                 if do_print:
-                    self.pfields(str(n), tmsi1, tmsi2, None, str(self.mcc), str(self.mnc), str(self.lac), str(self.cell), p)
+                    self.pfields(
+                        str(n),
+                        tmsi1,
+                        tmsi2,
+                        None,
+                        str(self.mcc),
+                        str(self.mnc),
+                        str(self.lac),
+                        str(self.cell),
+                        p,
+                    )
 
     def imsi_seen(self, imsi, arfcn):
         now = datetime.datetime.utcnow().replace(microsecond=0)
@@ -316,7 +428,9 @@ class tracker:
         now = datetime.datetime.utcnow().replace(microsecond=0)
         maxage = datetime.timedelta(minutes=self.purgeTimer)
         limit = now - maxage
-        remove = [imsi for imsi in self.imsistate if limit > self.imsistate[imsi]["lastseen"]]
+        remove = [
+            imsi for imsi in self.imsistate if limit > self.imsistate[imsi]["lastseen"]
+        ]
         for k in remove:
             del self.imsistate[k]
         # keys = self.imsistate.keys()
@@ -345,11 +459,23 @@ class gsmtap_hdr(ctypes.BigEndianStructure):
     ]
 
     def __repr__(self):
-        return "%s(version=%d, hdr_len=%d, type=%d, timeslot=%d, arfcn=%d, signal_dbm=%d, snr_db=%d, frame_number=%d, sub_type=%d, antenna_nr=%d, sub_slot=%d, res=%d)" % (
-            self.__class__, self.version, self.hdr_len, self.type,
-            self.timeslot, self.arfcn, self.signal_dbm, self.snr_db,
-            self.frame_number, self.sub_type, self.antenna_nr, self.sub_slot,
-            self.res,
+        return (
+            "%s(version=%d, hdr_len=%d, type=%d, timeslot=%d, arfcn=%d, signal_dbm=%d, snr_db=%d, frame_number=%d, sub_type=%d, antenna_nr=%d, sub_slot=%d, res=%d)"
+            % (
+                self.__class__,
+                self.version,
+                self.hdr_len,
+                self.type,
+                self.timeslot,
+                self.arfcn,
+                self.signal_dbm,
+                self.snr_db,
+                self.frame_number,
+                self.sub_type,
+                self.antenna_nr,
+                self.sub_slot,
+                self.res,
+            )
         )
 
 
@@ -408,19 +534,21 @@ def find_cell(gsm, udpdata, t=None):
     """
     if gsm.sub_type == 0x01:  # Channel Type == BCCH (0)
         p = bytearray(udpdata)
-        if p[0x12] == 0x1b:  # (0x12 + 0x2a = 0x3c) Message Type: System Information Type 3
+        if (
+            p[0x12] == 0x1B
+        ):  # (0x12 + 0x2a = 0x3c) Message Type: System Information Type 3
             # FIXME
             m = hex(p[0x15])
             if len(m) < 4:
-                mcc = m[2] + '0'
+                mcc = m[2] + "0"
             else:
                 mcc = m[3] + m[2]
-            mcc += str(p[0x16] & 0x0f)
+            mcc += str(p[0x16] & 0x0F)
 
             # FIXME not works with mnc like 005 or 490
             m = hex(p[0x17])
             if len(m) < 4:
-                mnc = m[2] + '0'
+                mnc = m[2] + "0"
             else:
                 mnc = m[3] + m[2]
 
@@ -449,7 +577,9 @@ def find_imsi(udpdata, t=None):
         imsi1 = ""
         imsi2 = ""
         if p[0x12] == 0x21:  # Message Type: Paging Request Type 1
-            if p[0x14] == 0x08 and (p[0x15] & 0x1) == 0x1:  # Channel 1: TCH/F (Full rate) (2)
+            if (
+                p[0x14] == 0x08 and (p[0x15] & 0x1) == 0x1
+            ):  # Channel 1: TCH/F (Full rate) (2)
                 # Mobile Identity 1 Type: IMSI (1)
                 """
                         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -463,38 +593,44 @@ def find_imsi(udpdata, t=None):
                 """
                 imsi1 = p[0x15:][:8]
                 # p[0x10] == 0x59 = l2 pseudo length value: 22
-                if p[0x10] == 0x59 and p[0x1E] == 0x08 and (p[0x1F] & 0x1) == 0x1:  # Channel 2: TCH/F (Full rate) (2)
+                if (
+                    p[0x10] == 0x59 and p[0x1E] == 0x08 and (p[0x1F] & 0x1) == 0x1
+                ):  # Channel 2: TCH/F (Full rate) (2)
                     # Mobile Identity 2 Type: IMSI (1)
                     """
-                        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-                0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00
-                0010   00 43 90 95 40 00 40 11 ac 12 7f 00 00 01 7f 00
-                0020   00 01 b4 1c 12 79 00 2f fe 42 02 04 01 00 00 00
-                0030   c8 00 00 16 51 c6 02 00 08 00 59 06 21 00 08 YY
-                0040   YY YY YY YY YY YY YY 17 08 XX XX XX XX XX XX XX
-                0050   XX
-                YY YY YY YY YY YY YY YY = IMSI 1
-                XX XX XX XX XX XX XX XX = IMSI 2
+                            0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+                    0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00
+                    0010   00 43 90 95 40 00 40 11 ac 12 7f 00 00 01 7f 00
+                    0020   00 01 b4 1c 12 79 00 2f fe 42 02 04 01 00 00 00
+                    0030   c8 00 00 16 51 c6 02 00 08 00 59 06 21 00 08 YY
+                    0040   YY YY YY YY YY YY YY 17 08 XX XX XX XX XX XX XX
+                    0050   XX
+                    YY YY YY YY YY YY YY YY = IMSI 1
+                    XX XX XX XX XX XX XX XX = IMSI 2
                     """
                     imsi2 = p[0x1F:][:8]
-                elif p[0x10] == 0x4d and p[0x1E] == 0x05 and p[0x1F] == 0xf4:  # Channel 2: TCH/F (Full rate) (2)
+                elif (
+                    p[0x10] == 0x4D and p[0x1E] == 0x05 and p[0x1F] == 0xF4
+                ):  # Channel 2: TCH/F (Full rate) (2)
                     # Mobile Identity - Mobile Identity 2 - IMSI
                     """
-                        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-                0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00
-                0010   00 43 f6 92 40 00 40 11 46 15 7f 00 00 01 7f 00
-                0020   00 01 ab c1 12 79 00 2f fe 42 02 04 01 00 00 00
-                0030   d8 00 00 23 3e be 02 00 05 00 4d 06 21 a0 08 YY
-                0040   YY YY YY YY YY YY YY 17 05 f4 XX XX XX XX 2b 2b
-                0050   2b
-                YY YY YY YY YY YY YY YY = IMSI 1
-                XX XX XX XX = TMSI
+                            0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+                    0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00
+                    0010   00 43 f6 92 40 00 40 11 46 15 7f 00 00 01 7f 00
+                    0020   00 01 ab c1 12 79 00 2f fe 42 02 04 01 00 00 00
+                    0030   d8 00 00 23 3e be 02 00 05 00 4d 06 21 a0 08 YY
+                    0040   YY YY YY YY YY YY YY 17 05 f4 XX XX XX XX 2b 2b
+                    0050   2b
+                    YY YY YY YY YY YY YY YY = IMSI 1
+                    XX XX XX XX = TMSI
                     """
                     tmsi1 = p[0x20:][:4]
 
                 t.register_imsi(gsm.arfcn, imsi1, imsi2, tmsi1, tmsi2, p)
 
-            elif p[0x1B] == 0x08 and (p[0x1C] & 0x1) == 0x1:  # Channel 2: TCH/F (Full rate) (2)
+            elif (
+                p[0x1B] == 0x08 and (p[0x1C] & 0x1) == 0x1
+            ):  # Channel 2: TCH/F (Full rate) (2)
                 # Mobile Identity 2 Type: IMSI (1)
                 """
                         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -511,7 +647,9 @@ def find_imsi(udpdata, t=None):
                 imsi2 = p[0x1C:][:8]
                 t.register_imsi(gsm.arfcn, imsi1, imsi2, tmsi1, tmsi2, p)
 
-            elif p[0x14] == 0x05 and (p[0x15] & 0x07) == 4:  # Mobile Identity - Mobile Identity 1 - TMSI/P-TMSI
+            elif (
+                p[0x14] == 0x05 and (p[0x15] & 0x07) == 4
+            ):  # Mobile Identity - Mobile Identity 1 - TMSI/P-TMSI
                 """
                         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
                 0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00
@@ -524,7 +662,9 @@ def find_imsi(udpdata, t=None):
                 YY YY YY YY = TMSI/P-TMSI - Mobile Identity 2
                 """
                 tmsi1 = p[0x16:][:4]
-                if p[0x1B] == 0x05 and (p[0x1C] & 0x07) == 4:  # Mobile Identity - Mobile Identity 2 - TMSI/P-TMSI
+                if (
+                    p[0x1B] == 0x05 and (p[0x1C] & 0x07) == 4
+                ):  # Mobile Identity - Mobile Identity 2 - TMSI/P-TMSI
                     tmsi2 = p[0x1D:][:4]
                 else:
                     tmsi2 = ""
@@ -532,7 +672,9 @@ def find_imsi(udpdata, t=None):
                 t.register_imsi(gsm.arfcn, imsi1, imsi2, tmsi1, tmsi2, p)
 
         elif p[0x12] == 0x22:  # Message Type: Paging Request Type 2
-            if p[0x1D] == 0x08 and (p[0x1E] & 0x1) == 0x1:  # Mobile Identity 3 Type: IMSI (1)
+            if (
+                p[0x1D] == 0x08 and (p[0x1E] & 0x1) == 0x1
+            ):  # Mobile Identity 3 Type: IMSI (1)
                 """
                         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
                 0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00
@@ -553,7 +695,7 @@ def find_imsi(udpdata, t=None):
 
 def udpserver(port, prn):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_address = ('localhost', port)
+    server_address = ("localhost", port)
     sock.bind(server_address)
     while True:
         udpdata, address = sock.recvfrom(4096)
@@ -569,15 +711,63 @@ def find_imsi_from_pkt(p):
 if __name__ == "__main__":
     imsitracker = tracker()
     parser = OptionParser(usage="%prog: [options]")
-    parser.add_option("-a", "--alltmsi", action="store_true", dest="show_all_tmsi", help="Show TMSI who haven't got IMSI (default  : false)")
-    parser.add_option("-i", "--iface", dest="iface", default="lo", help="Interface (default : lo)")
-    parser.add_option("-m", "--imsi", dest="imsi", default="", type="string", help='IMSI to track (default : None, Example: 123456789101112 or "123 45 6789101112")')
-    parser.add_option("-p", "--port", dest="port", default="4729", type="int", help="Port (default : 4729)")
-    parser.add_option("-s", "--sniff", action="store_true", dest="sniff", help="sniff on interface instead of listening on port (require root/suid access)")
-    parser.add_option("-w", "--sqlite", dest="sqlite", default=None, type="string", help="Save observed IMSI values to specified SQLite file")
-    parser.add_option("-t", "--txt", dest="txt", default=None, type="string", help="Save observed IMSI values to specified TXT file")
-    parser.add_option("-z", "--mysql", action="store_true", dest="mysql", help="Save observed IMSI values to specified MYSQL DB (copy .env.dist to .env and edit it)")
-    (options, args) = parser.parse_args()
+    parser.add_option(
+        "-a",
+        "--alltmsi",
+        action="store_true",
+        dest="show_all_tmsi",
+        help="Show TMSI who haven't got IMSI (default  : false)",
+    )
+    parser.add_option(
+        "-i", "--iface", dest="iface", default="lo", help="Interface (default : lo)"
+    )
+    parser.add_option(
+        "-m",
+        "--imsi",
+        dest="imsi",
+        default="",
+        type="string",
+        help='IMSI to track (default : None, Example: 123456789101112 or "123 45 6789101112")',
+    )
+    parser.add_option(
+        "-p",
+        "--port",
+        dest="port",
+        default="4729",
+        type="int",
+        help="Port (default : 4729)",
+    )
+    parser.add_option(
+        "-s",
+        "--sniff",
+        action="store_true",
+        dest="sniff",
+        help="sniff on interface instead of listening on port (require root/suid access)",
+    )
+    parser.add_option(
+        "-w",
+        "--sqlite",
+        dest="sqlite",
+        default=None,
+        type="string",
+        help="Save observed IMSI values to specified SQLite file",
+    )
+    parser.add_option(
+        "-t",
+        "--txt",
+        dest="txt",
+        default=None,
+        type="string",
+        help="Save observed IMSI values to specified TXT file",
+    )
+    parser.add_option(
+        "-z",
+        "--mysql",
+        action="store_true",
+        dest="mysql",
+        help="Save observed IMSI values to specified MYSQL DB (copy .env.dist to .env and edit it)",
+    )
+    options, args = parser.parse_args()
 
     if options.sqlite:
         imsitracker.sqlite_file(options.sqlite)
@@ -593,7 +783,11 @@ if __name__ == "__main__":
     if options.imsi:
         imsi = "9" + options.imsi.replace(" ", "")
         imsi_to_track_len = len(imsi)
-        if imsi_to_track_len % 2 == 0 and imsi_to_track_len > 0 and imsi_to_track_len < 17:
+        if (
+            imsi_to_track_len % 2 == 0
+            and imsi_to_track_len > 0
+            and imsi_to_track_len < 17
+        ):
             for i in range(0, imsi_to_track_len - 1, 2):
                 imsi_to_track += chr(int(imsi[i + 1]) * 16 + int(imsi[i]))
             imsi_to_track_len = len(imsi_to_track)
@@ -610,9 +804,15 @@ if __name__ == "__main__":
             exit(1)
     imsitracker.track_this_imsi(imsi_to_track)
     if options.sniff:
-        from scapy.all import sniff, UDP
+        from scapy.all import UDP, sniff
+
         imsitracker.header()
-        sniff(iface=options.iface, filter=f"port {options.port} and not icmp and udp", prn=find_imsi_from_pkt, store=0)
+        sniff(
+            iface=options.iface,
+            filter=f"port {options.port} and not icmp and udp",
+            prn=find_imsi_from_pkt,
+            store=0,
+        )
     else:
         imsitracker.header()
         udpserver(port=options.port, prn=find_imsi)

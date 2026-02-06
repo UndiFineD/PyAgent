@@ -7,21 +7,18 @@ This module contains various functions to convert external request formats to in
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Union, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
 from zoneinfo import ZoneInfo
 
-from api_specs.memory_models import MemoryType
-from api_specs.dtos.memory_query import RetrieveMemRequest, FetchMemRequest
-from api_specs.dtos.memory_command import MemorizeRequest
+from api_specs.dtos.memory_command import MemorizeRequest, RawData
+from api_specs.dtos.memory_query import FetchMemRequest, RetrieveMemRequest
+from api_specs.memory_models import MemoryType, RetrieveMethod
 from api_specs.memory_types import RawDataType
-from api_specs.dtos.memory_command import RawData
-
-from typing import Dict, Any, Optional
 from common_utils.datetime_utils import from_iso_format
-from zoneinfo import ZoneInfo
+
 from core.observation.logger import get_logger
-from api_specs.memory_models import RetrieveMethod, MemoryType
+
 logger = get_logger(__name__)
 
 
@@ -100,7 +97,6 @@ def convert_dict_to_retrieve_mem_request(
         #     raise ValueError("user_id or group_id at least one is required")
 
         # Handle retrieve_method, use default keyword if not provided
-        
 
         retrieve_method_str = data.get("retrieve_method", "keyword")
         logger.debug(f"[DEBUG] retrieve_method_str from data: {retrieve_method_str!r}")
@@ -134,7 +130,9 @@ def convert_dict_to_retrieve_mem_request(
         raw_memory_types = data.get("memory_types", [])
         # Handle comma-separated string (from query_params)
         if isinstance(raw_memory_types, str):
-            raw_memory_types = [mt.strip() for mt in raw_memory_types.split(",") if mt.strip()]
+            raw_memory_types = [
+                mt.strip() for mt in raw_memory_types.split(",") if mt.strip()
+            ]
         memory_types = []
         for mt in raw_memory_types:
             if isinstance(mt, str):
@@ -184,7 +182,7 @@ def _extract_current_time(data: Dict[str, Any]) -> Optional[datetime]:
     current_time_str = data["current_time"]
     if isinstance(current_time_str, str):
         try:
-            return datetime.fromisoformat(current_time_str.replace('Z', '+00:00'))
+            return datetime.fromisoformat(current_time_str.replace("Z", "+00:00"))
         except ValueError:
             logger.warning(f"Unable to parse current_time: {current_time_str}")
             return None
@@ -228,12 +226,12 @@ def _create_memorize_request(
     # If current_time is None, try to get it from timestamp or updateTime of new_data[0]
     if current_time is None and new_data and new_data[0] is not None:
         first_data = new_data[0]
-        if hasattr(first_data, 'content') and first_data.content:
+        if hasattr(first_data, "content") and first_data.content:
             # Prefer updateTime
-            if 'updateTime' in first_data.content and first_data.content['updateTime']:
-                current_time = first_data.content['updateTime']
-            elif 'timestamp' in first_data.content and first_data.content['timestamp']:
-                current_time = first_data.content['timestamp']
+            if "updateTime" in first_data.content and first_data.content["updateTime"]:
+                current_time = first_data.content["updateTime"]
+            elif "timestamp" in first_data.content and first_data.content["timestamp"]:
+                current_time = first_data.content["timestamp"]
 
     return MemorizeRequest(
         history_raw_data_list=history_data,

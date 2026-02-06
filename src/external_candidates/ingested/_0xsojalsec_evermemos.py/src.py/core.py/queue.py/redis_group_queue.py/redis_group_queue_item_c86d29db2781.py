@@ -7,8 +7,9 @@ Defines a standard interface for items stored in the queue, supporting JSON and 
 
 import json
 from abc import ABC, abstractmethod
-from typing import Any, Dict
 from enum import Enum
+from typing import Any, Dict
+
 import bson
 
 
@@ -34,7 +35,7 @@ class RedisGroupQueueItem(ABC):
 
     @classmethod
     @abstractmethod
-    def from_json_str(cls, json_str: str) -> 'RedisGroupQueueItem':
+    def from_json_str(cls, json_str: str) -> "RedisGroupQueueItem":
         """
         Create an object instance from a JSON string
 
@@ -51,7 +52,7 @@ class RedisGroupQueueItem(ABC):
 
     @classmethod
     @abstractmethod
-    def from_bson_bytes(cls, bson_bytes: bytes) -> 'RedisGroupQueueItem':
+    def from_bson_bytes(cls, bson_bytes: bytes) -> "RedisGroupQueueItem":
         """
         Deserialize object from BSON bytes
 
@@ -104,7 +105,7 @@ class SimpleQueueItem(RedisGroupQueueItem):
         return {"data": self.data, "item_type": self.item_type}
 
     @classmethod
-    def from_json_str(cls, json_str: str) -> 'SimpleQueueItem':
+    def from_json_str(cls, json_str: str) -> "SimpleQueueItem":
         """Create instance from JSON string"""
         try:
             json_dict = json.loads(json_str)
@@ -115,7 +116,7 @@ class SimpleQueueItem(RedisGroupQueueItem):
             raise ValueError(f"Invalid JSON data: {e}") from e
 
     @classmethod
-    def from_bson_bytes(cls, bson_bytes: bytes) -> 'SimpleQueueItem':
+    def from_bson_bytes(cls, bson_bytes: bytes) -> "SimpleQueueItem":
         """Create instance from BSON bytes"""
         try:
             data = bson.decode(bson_bytes)

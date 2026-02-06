@@ -7,12 +7,14 @@ Redis-based cached conversation data access implementation using Redis length-li
 
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from core.observation.logger import get_logger
-from core.di.decorators import repository
-from memory_layer.memcell_extractor.base_memcell_extractor import RawData
+
 from biz_layer.mem_db_operations import _normalize_datetime_for_storage
 from common_utils.datetime_utils import get_now_with_timezone
+from memory_layer.memcell_extractor.base_memcell_extractor import RawData
+
 from core.di import get_bean
+from core.di.decorators import repository
+from core.observation.logger import get_logger
 from core.tenants.tenantize.kv.redis.tenant_key_utils import patch_redis_tenant_key
 
 logger = get_logger(__name__)
@@ -123,8 +125,8 @@ class ConversationDataRepositoryImpl(ConversationDataRepository):
                     timestamp = None
                     if raw_data.content:
                         timestamp = raw_data.content.get(
-                            'timestamp'
-                        ) or raw_data.content.get('createTime')
+                            "timestamp"
+                        ) or raw_data.content.get("createTime")
 
                     # Ensure timestamp is a datetime object
                     if timestamp:

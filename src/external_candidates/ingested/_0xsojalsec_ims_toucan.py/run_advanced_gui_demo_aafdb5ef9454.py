@@ -1,30 +1,27 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-IMS-Toucan\run_advanced_GUI_demo.py
 import sys
+
 import numpy as np
 import pyqtgraph as pg
 import scipy.io.wavfile
 import sounddevice
 import torch.cuda
-from PyQt5.QtCore import QTimer
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QColor
-from PyQt5.QtGui import QCursor
-from PyQt5.QtGui import QFont
-from PyQt5.QtGui import QPen
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QComboBox
-from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtWidgets import QHBoxLayout
-from PyQt5.QtWidgets import QLineEdit
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtWidgets import QVBoxLayout
-from PyQt5.QtWidgets import QWidget
 from huggingface_hub import hf_hub_download
-
 from InferenceInterfaces.ToucanTTSInterface import ToucanTTSInterface
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal
+from PyQt5.QtGui import QColor, QCursor, QFont, QPen
+from PyQt5.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QFileDialog,
+    QHBoxLayout,
+    QLineEdit,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 from Utility.storage_config import MODEL_DIR
 from Utility.utils import load_json_from_path
 
@@ -62,7 +59,7 @@ class DraggableScatter(pg.ScatterPlotItem):
             mousePoint = vb.mapSceneToView(event.scenePos())
             x_click = mousePoint.x()
             # Find the closest point
-            min_dist = float('inf')
+            min_dist = float("inf")
             closest_idx = None
             for i, (x, y) in enumerate(zip(self.x, self.y)):
                 dist = abs(x - x_click)
@@ -112,7 +109,7 @@ class DraggableScatter(pg.ScatterPlotItem):
             mousePoint = vb.mapSceneToView(event.scenePos())
             x_hover = mousePoint.x()
             # Check if hovering near a point
-            min_dist = float('inf')
+            min_dist = float("inf")
             for i, (x, y) in enumerate(zip(self.x, self.y)):
                 dist = abs(x - x_hover)
                 if dist < min_dist:
@@ -127,7 +124,11 @@ class TTSInterface(QMainWindow):
     def __init__(self, tts_interface: ToucanTTSInterface):
         super().__init__()
 
-        path_to_iso_list = hf_hub_download(cache_dir=MODEL_DIR, repo_id="Flux9665/ToucanTTS", filename="iso_to_fullname.json")
+        path_to_iso_list = hf_hub_download(
+            cache_dir=MODEL_DIR,
+            repo_id="Flux9665/ToucanTTS",
+            filename="iso_to_fullname.json",
+        )
         iso_to_name = load_json_from_path(path_to_iso_list)
         self.name_to_iso = dict()
         for iso in iso_to_name:
@@ -164,7 +165,9 @@ class TTSInterface(QMainWindow):
         self.text_input_layout.addWidget(self.dropdown_box)
 
         self.text_input = QLineEdit()
-        self.text_input.setPlaceholderText("Enter the text you want to be read here... (use , to insert pauses)")
+        self.text_input.setPlaceholderText(
+            "Enter the text you want to be read here... (use , to insert pauses)"
+        )
         self.text_input.textChanged.connect(self.on_user_input_changed)
         self.text_input_layout.addWidget(self.text_input)
         self.main_layout.insertLayout(0, self.text_input_layout)
@@ -194,14 +197,14 @@ class TTSInterface(QMainWindow):
     def init_plots(self):
         # Spectrogram Plot
         self.spectrogram_view = pg.PlotWidget(background="#f5f5f5")
-        self.spectrogram_view.setLabel('left', 'Frequency Buckets', units='')
-        self.spectrogram_view.setLabel('bottom', 'Phonemes', units='')
+        self.spectrogram_view.setLabel("left", "Frequency Buckets", units="")
+        self.spectrogram_view.setLabel("bottom", "Phonemes", units="")
         self.main_layout.addWidget(self.spectrogram_view)
 
         # Pitch Plot
         self.pitch_plot = pg.PlotWidget(background="#f5f5f5")
-        self.pitch_plot.setLabel('left', 'Intonation', units='')
-        self.pitch_plot.setLabel('bottom', 'Phonemes', units='')
+        self.pitch_plot.setLabel("left", "Intonation", units="")
+        self.pitch_plot.setLabel("bottom", "Phonemes", units="")
         self.main_layout.addWidget(self.pitch_plot)
 
     def load_data(self, durations, pitch, spectrogram):
@@ -215,37 +218,58 @@ class TTSInterface(QMainWindow):
         self.spectrogram = spectrogram
 
         # Display Spectrogram
-        self.spectrogram_view.setLimits(xMin=0, xMax=self.cumulative_durations[-1] + 10, yMin=0, yMax=1000)  # Adjust as per your data
+        self.spectrogram_view.setLimits(
+            xMin=0, xMax=self.cumulative_durations[-1] + 10, yMin=0, yMax=1000
+        )  # Adjust as per your data
         self.spectrogram_view.enableAutoRange(axis=pg.ViewBox.XYAxes, enable=True)
-        self.spectrogram_view.setMouseEnabled(x=False, y=False)  # Disable panning and zooming
+        self.spectrogram_view.setMouseEnabled(
+            x=False, y=False
+        )  # Disable panning and zooming
         img = pg.ImageItem(self.spectrogram)
         self.spectrogram_view.addItem(img)
-        img.setLookupTable(pg.colormap.get('GnBu', source='matplotlib').getLookupTable())
+        img.setLookupTable(
+            pg.colormap.get("GnBu", source="matplotlib").getLookupTable()
+        )
         spectrogram_ticks = self.get_phoneme_ticks(self.cumulative_durations)
-        self.spectrogram_view.getAxis('bottom').setTicks([spectrogram_ticks])
-        spectrogram_label_color = QColor('#006400')
-        self.spectrogram_view.getAxis('bottom').setTextPen(QPen(spectrogram_label_color))
-        self.spectrogram_view.getAxis('bottom').setStyle(tickFont=QFont('Times New Roman', 16))
-        self.spectrogram_view.getAxis('left').setTextPen(QPen(QColor('#f5f5f5')))
+        self.spectrogram_view.getAxis("bottom").setTicks([spectrogram_ticks])
+        spectrogram_label_color = QColor("#006400")
+        self.spectrogram_view.getAxis("bottom").setTextPen(
+            QPen(spectrogram_label_color)
+        )
+        self.spectrogram_view.getAxis("bottom").setStyle(
+            tickFont=QFont("Times New Roman", 16)
+        )
+        self.spectrogram_view.getAxis("left").setTextPen(QPen(QColor("#f5f5f5")))
 
         # Display Pitch
-        self.pitch_curve = self.pitch_plot.plot(self.cumulative_durations, self.pitch, pen=pg.mkPen('#B8860B', width=4), name='Pitch')
+        self.pitch_curve = self.pitch_plot.plot(
+            self.cumulative_durations,
+            self.pitch,
+            pen=pg.mkPen("#B8860B", width=4),
+            name="Pitch",
+        )
         self.pitch_plot.setMouseEnabled(x=False, y=False)  # Disable panning and zooming
         pitch_ticks = self.get_phoneme_ticks(self.cumulative_durations, for_pitch=True)
-        self.pitch_plot.getAxis('bottom').setTicks([pitch_ticks])
-        pitch_label_color = QColor('#006400')
-        self.pitch_plot.getAxis('bottom').setTextPen(QPen(pitch_label_color))
-        self.pitch_plot.getAxis('bottom').setStyle(tickFont=QFont('Times New Roman', 16))
-        self.pitch_plot.getAxis('left').setTextPen(QPen(QColor('#f5f5f5')))
+        self.pitch_plot.getAxis("bottom").setTicks([pitch_ticks])
+        pitch_label_color = QColor("#006400")
+        self.pitch_plot.getAxis("bottom").setTextPen(QPen(pitch_label_color))
+        self.pitch_plot.getAxis("bottom").setStyle(
+            tickFont=QFont("Times New Roman", 16)
+        )
+        self.pitch_plot.getAxis("left").setTextPen(QPen(QColor("#f5f5f5")))
 
         # Display Durations
         self.duration_lines = []
         for i, cum_dur in enumerate(self.cumulative_durations):
-            line = pg.InfiniteLine(pos=cum_dur, angle=90, pen=pg.mkPen('orange', width=3))
+            line = pg.InfiniteLine(
+                pos=cum_dur, angle=90, pen=pg.mkPen("orange", width=3)
+            )
             self.spectrogram_view.addItem(line)
             line.setMovable(True)
             # Use lambda with default argument to capture current i
-            line.sigPositionChanged.connect(lambda _, idx=i: self.on_duration_changed(idx))
+            line.sigPositionChanged.connect(
+                lambda _, idx=i: self.on_duration_changed(idx)
+            )
             self.duration_lines.append(line)
 
         self.enable_interactions()
@@ -297,11 +321,13 @@ class TTSInterface(QMainWindow):
     def enable_interactions(self):
         x_pitch = self.cumulative_durations.copy()
         y_pitch = self.pitch.copy()
-        self.pitch_scatter = DraggableScatter(x_pitch,
-                                              y_pitch,
-                                              pen=pg.mkPen(None),
-                                              brush=pg.mkBrush(218, 165, 32, 255),
-                                              size=18, )
+        self.pitch_scatter = DraggableScatter(
+            x_pitch,
+            y_pitch,
+            pen=pg.mkPen(None),
+            brush=pg.mkBrush(218, 165, 32, 255),
+            size=18,
+        )
         self.pitch_scatter.pointMoved.connect(self.on_pitch_point_moved)
         self.pitch_plot.addItem(self.pitch_scatter)
         self.pitch_plot.showGrid(x=True, y=False, alpha=0.1)
@@ -357,11 +383,13 @@ class TTSInterface(QMainWindow):
 
         # Update phoneme ticks
         spectrogram_ticks = self.get_phoneme_ticks(self.cumulative_durations)
-        self.spectrogram_view.getAxis('bottom').setTicks([spectrogram_ticks])
-        self.pitch_plot.getAxis('bottom').setTicks([spectrogram_ticks])
+        self.spectrogram_view.getAxis("bottom").setTicks([spectrogram_ticks])
+        self.pitch_plot.getAxis("bottom").setTicks([spectrogram_ticks])
 
         # Update spectrogram's X-axis limits
-        self.spectrogram_view.setLimits(xMin=0, xMax=self.cumulative_durations[-1] + 10)  # Added buffer
+        self.spectrogram_view.setLimits(
+            xMin=0, xMax=self.cumulative_durations[-1] + 10
+        )  # Added buffer
 
         # Mark that an update is required
         self.mark_tts_update()
@@ -392,26 +420,32 @@ class TTSInterface(QMainWindow):
         """
         if self.text_input.text().strip() == "":
             return
-        wave, mel, durations, pitch = self.tts_backend(text=self.text_input.text().strip(),
-                                                       view=False,
-                                                       duration_scaling_factor=1.0,
-                                                       pitch_variance_scale=1.0,
-                                                       energy_variance_scale=1.0,
-                                                       pause_duration_scaling_factor=1.0,
-                                                       durations=None,
-                                                       pitch=None,
-                                                       energy=None,
-                                                       input_is_phones=False,
-                                                       return_plot_as_filepath=False,
-                                                       loudness_in_db=-24.0,
-                                                       prosody_creativity=0.6,
-                                                       return_everything=True)
+        wave, mel, durations, pitch = self.tts_backend(
+            text=self.text_input.text().strip(),
+            view=False,
+            duration_scaling_factor=1.0,
+            pitch_variance_scale=1.0,
+            energy_variance_scale=1.0,
+            pause_duration_scaling_factor=1.0,
+            durations=None,
+            pitch=None,
+            energy=None,
+            input_is_phones=False,
+            return_plot_as_filepath=False,
+            loudness_in_db=-24.0,
+            prosody_creativity=0.6,
+            return_everything=True,
+        )
         # reset and clear everything
         self.clear_all_widgets()
         self.init_plots()
         self.init_controls()
 
-        self.load_data(durations=durations.cpu().numpy(), pitch=pitch.cpu().numpy(), spectrogram=mel.cpu().transpose(0, 1).numpy())
+        self.load_data(
+            durations=durations.cpu().numpy(),
+            pitch=pitch.cpu().numpy(),
+            spectrogram=mel.cpu().transpose(0, 1).numpy(),
+        )
 
         self.update_result_audio(wave)
         self.cumulative_durations = np.cumsum(self.durations)
@@ -429,8 +463,12 @@ class TTSInterface(QMainWindow):
             line.blockSignals(False)
 
         # Update phoneme ticks
-        self.spectrogram_view.getAxis('bottom').setTicks([self.get_phoneme_ticks(self.cumulative_durations)])
-        self.pitch_plot.getAxis('bottom').setTicks([self.get_phoneme_ticks(self.cumulative_durations, for_pitch=True)])
+        self.spectrogram_view.getAxis("bottom").setTicks(
+            [self.get_phoneme_ticks(self.cumulative_durations)]
+        )
+        self.pitch_plot.getAxis("bottom").setTicks(
+            [self.get_phoneme_ticks(self.cumulative_durations, for_pitch=True)]
+        )
 
         # print("Generated new random prosody.")
 
@@ -441,7 +479,9 @@ class TTSInterface(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
         file_filter = "Audio Files (*.wav *.mp3 *.flac *.ogg);;All Files (*)"
-        file_path, _ = QFileDialog.getOpenFileName(self, "Load Example of Voice to Mimic", "", file_filter, options=options)
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Load Example of Voice to Mimic", "", file_filter, options=options
+        )
         if file_path:
             self.audio_file_path = file_path
             # print(f"Loaded audio file: {self.audio_file_path}")
@@ -459,7 +499,9 @@ class TTSInterface(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         file_filter = "WAV Files (*.wav);;All Files (*)"
-        save_path, _ = QFileDialog.getSaveFileName(self, "Save Audio File", "", file_filter, options=options)
+        save_path, _ = QFileDialog.getSaveFileName(
+            self, "Save Audio File", "", file_filter, options=options
+        )
         if save_path:
             try:
                 sample_rate = 24000
@@ -468,14 +510,20 @@ class TTSInterface(QMainWindow):
 
                 # Normalize the audio if it's not in the correct range
                 if self.result_audio.dtype != np.int16:
-                    audio_normalized = np.int16(self.result_audio / np.max(np.abs(self.result_audio)) * 32767)
+                    audio_normalized = np.int16(
+                        self.result_audio / np.max(np.abs(self.result_audio)) * 32767
+                    )
                 else:
                     audio_normalized = self.result_audio
 
                 # Save using scipy.io.wavfile
                 scipy.io.wavfile.write(save_path, sample_rate, audio_normalized)
                 # print(f"Audio saved successfully at: {save_path}")
-                QMessageBox.information(self, "Save Successful", f"Audio saved successfully at:\n{save_path}")
+                QMessageBox.information(
+                    self,
+                    "Save Successful",
+                    f"Audio saved successfully at:\n{save_path}",
+                )
             except Exception as e:
                 print(f"Error saving audio: {e}")
                 QMessageBox.critical(self, "Save Error", f"Failed to save audio:\n{e}")
@@ -483,7 +531,9 @@ class TTSInterface(QMainWindow):
     def play_audio(self):
         # print("playing current audio...")
         if self.result_audio is not None:
-            sounddevice.play(self.result_audio, samplerate=24000, blocking=True) # blocking is required on MacOS
+            sounddevice.play(
+                self.result_audio, samplerate=24000, blocking=True
+            )  # blocking is required on MacOS
 
     def update_result_audio(self, audio_array):
         """
@@ -498,7 +548,9 @@ class TTSInterface(QMainWindow):
         Marks that a TTS update is required and starts/resets the timer.
         """
         self.tts_update_required = True
-        self.tts_timer.start(1500)  # 800 milliseconds delay before the model starts to compute something
+        self.tts_timer.start(
+            1500
+        )  # 800 milliseconds delay before the model starts to compute something
 
     def run_tts(self):
         """
@@ -521,32 +573,52 @@ class TTSInterface(QMainWindow):
             if self.audio_file_path is not None:
                 self.tts_backend.set_utterance_embedding(self.audio_file_path)
 
-            self.tts_backend.set_language(self.name_to_iso[self.dropdown_box.currentText()])
+            self.tts_backend.set_language(
+                self.name_to_iso[self.dropdown_box.currentText()]
+            )
 
             phonemes = self.tts_backend.text2phone.get_phone_string(text=text)
             self.phonemes = phonemes.replace(" ", "")
 
-            forced_durations = None if self.durations is None or len(self.durations) != len(self.phonemes) else torch.LongTensor(insert_zeros_at_indexes(self.durations, self.word_boundaries)).unsqueeze(0)
-            forced_pitch = None if self.pitch is None or len(self.pitch) != len(self.phonemes) else torch.tensor(insert_zeros_at_indexes(self.pitch, self.word_boundaries)).unsqueeze(0)
+            forced_durations = (
+                None
+                if self.durations is None or len(self.durations) != len(self.phonemes)
+                else torch.LongTensor(
+                    insert_zeros_at_indexes(self.durations, self.word_boundaries)
+                ).unsqueeze(0)
+            )
+            forced_pitch = (
+                None
+                if self.pitch is None or len(self.pitch) != len(self.phonemes)
+                else torch.tensor(
+                    insert_zeros_at_indexes(self.pitch, self.word_boundaries)
+                ).unsqueeze(0)
+            )
 
-            wave, mel, durations, pitch = self.tts_backend(text,
-                                                           view=False,
-                                                           duration_scaling_factor=1.0,
-                                                           pitch_variance_scale=1.0,
-                                                           energy_variance_scale=1.0,
-                                                           pause_duration_scaling_factor=1.0,
-                                                           durations=forced_durations,
-                                                           pitch=forced_pitch,
-                                                           energy=None,
-                                                           input_is_phones=False,
-                                                           return_plot_as_filepath=False,
-                                                           loudness_in_db=-24.0,
-                                                           prosody_creativity=0.6,
-                                                           return_everything=True)
+            wave, mel, durations, pitch = self.tts_backend(
+                text,
+                view=False,
+                duration_scaling_factor=1.0,
+                pitch_variance_scale=1.0,
+                energy_variance_scale=1.0,
+                pause_duration_scaling_factor=1.0,
+                durations=forced_durations,
+                pitch=forced_pitch,
+                energy=None,
+                input_is_phones=False,
+                return_plot_as_filepath=False,
+                loudness_in_db=-24.0,
+                prosody_creativity=0.6,
+                return_everything=True,
+            )
 
             self.word_boundaries = find_zero_indexes(durations)
 
-            self.load_data(durations=durations.cpu().numpy(), pitch=pitch.cpu().numpy(), spectrogram=mel.cpu().transpose(0, 1).numpy())
+            self.load_data(
+                durations=durations.cpu().numpy(),
+                pitch=pitch.cpu().numpy(),
+                spectrogram=mel.cpu().transpose(0, 1).numpy(),
+            )
 
             self.update_result_audio(wave)
             # print("TTS run completed and plots/audio updated.")
@@ -618,7 +690,9 @@ def main():
     """
     app.setStyleSheet(stylesheet)
 
-    interface = TTSInterface(ToucanTTSInterface(device="cuda" if torch.cuda.is_available() else "cpu"))
+    interface = TTSInterface(
+        ToucanTTSInterface(device="cuda" if torch.cuda.is_available() else "cpu")
+    )
     interface.show()
     sys.exit(app.exec_())
 

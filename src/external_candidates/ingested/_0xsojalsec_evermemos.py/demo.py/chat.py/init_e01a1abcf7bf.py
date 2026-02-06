@@ -11,9 +11,9 @@ Provides the following core components:
 """
 
 from .orchestrator import ChatOrchestrator
+from .selectors import GroupSelector, LanguageSelector, ScenarioSelector
 from .session import ChatSession
 from .ui import ChatUI
-from .selectors import LanguageSelector, ScenarioSelector, GroupSelector
 
 __all__ = [
     "ChatOrchestrator",
@@ -23,4 +23,3 @@ __all__ = [
     "ScenarioSelector",
     "GroupSelector",
 ]
-

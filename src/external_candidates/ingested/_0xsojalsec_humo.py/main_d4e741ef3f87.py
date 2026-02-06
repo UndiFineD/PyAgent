@@ -13,14 +13,14 @@
 # Inference codes adapted from [SeedVR]
 # https://github.com/ByteDance-Seed/SeedVR/blob/main/projects/inference_seedvr2_7b.py
 
-from sys import argv
 import sys
+from sys import argv
 
 path_to_insert = "humo"
 if path_to_insert not in sys.path:
     sys.path.insert(0, path_to_insert)
 
-from common.config import load_config, create_object
+from common.config import create_object, load_config
 
 # Load config.
 config = load_config(argv[1], argv[2:])

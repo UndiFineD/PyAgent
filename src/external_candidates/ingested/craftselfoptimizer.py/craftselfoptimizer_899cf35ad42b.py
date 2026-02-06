@@ -6,15 +6,38 @@
 import torch
 from torch.optim import Optimizer
 
+
 class CraftSelfOptimizer(Optimizer):
     """
     Highly efficient CraftSelfOptimizer with adaptive tuning and hybrid switching.
     Maximizes convergence speed and stability while aligning with Crafts Self-Referential Law.
     """
-    def __init__(self, params, a=0.5, k=1e-3, lr=0.01, beta=0.9, eps=1e-8, max_scale=10.0,
-                 auto_tune=True, hybrid_optimizer=None, clip_grad=1.0, min_scale=1e-4):
-        defaults = dict(a=a, k=k, lr=lr, beta=beta, eps=eps, max_scale=max_scale,
-                        auto_tune=auto_tune, clip_grad=clip_grad, min_scale=min_scale)
+
+    def __init__(
+        self,
+        params,
+        a=0.5,
+        k=1e-3,
+        lr=0.01,
+        beta=0.9,
+        eps=1e-8,
+        max_scale=10.0,
+        auto_tune=True,
+        hybrid_optimizer=None,
+        clip_grad=1.0,
+        min_scale=1e-4,
+    ):
+        defaults = dict(
+            a=a,
+            k=k,
+            lr=lr,
+            beta=beta,
+            eps=eps,
+            max_scale=max_scale,
+            auto_tune=auto_tune,
+            clip_grad=clip_grad,
+            min_scale=min_scale,
+        )
         super().__init__(params, defaults)
         self.hybrid_optimizer = hybrid_optimizer
         self.current_epoch = 0
@@ -44,35 +67,39 @@ class CraftSelfOptimizer(Optimizer):
 
         # CraftSelf step
         for group in self.param_groups:
-            a = group['a']
-            k = group['k']
-            lr = group['lr']
-            beta = group['beta']
-            eps = group['eps']
-            max_scale = group['max_scale']
-            clip_grad = group['clip_grad']
-            min_scale = group['min_scale']
+            a = group["a"]
+            k = group["k"]
+            lr = group["lr"]
+            beta = group["beta"]
+            eps = group["eps"]
+            max_scale = group["max_scale"]
+            clip_grad = group["clip_grad"]
+            min_scale = group["min_scale"]
 
             # Auto-tune a and k every epoch
-            if group['auto_tune']:
-                param_stds = [p.std() for p in group['params'] if p.numel() > 1]
+            if group["auto_tune"]:
+                param_stds = [p.std() for p in group["params"] if p.numel() > 1]
                 if param_stds:
                     avg_std = torch.stack(param_stds).mean().item()
-                    group['a'] = min(0.5, max(0.0, avg_std * 0.5))  # Scale with param variance
+                    group["a"] = min(
+                        0.5, max(0.0, avg_std * 0.5)
+                    )  # Scale with param variance
                 if len(self.loss_history) >= 2:
                     loss_ratio = self.loss_history[-1] / (self.loss_history[-2] + eps)
-                    group['k'] = k * min(2.0, max(0.5, loss_ratio))  # Adjust k based on loss trend
+                    group["k"] = k * min(
+                        2.0, max(0.5, loss_ratio)
+                    )  # Adjust k based on loss trend
 
-            for p in group['params']:
+            for p in group["params"]:
                 if p.grad is None:
                     continue
                 g = p.grad
                 # Gradient clipping for stability
                 g = g.clamp(-clip_grad, clip_grad)
                 state = self.state[p]
-                if 'ema_g' not in state:
-                    state['ema_g'] = torch.zeros_like(p)
-                ema_g = state['ema_g']
+                if "ema_g" not in state:
+                    state["ema_g"] = torch.zeros_like(p)
+                ema_g = state["ema_g"]
                 ema_g.mul_(beta).add_((1 - beta) * g.abs())
 
                 p_exp = a + 1
@@ -82,6 +109,7 @@ class CraftSelfOptimizer(Optimizer):
                 p.add_(update)
 
         self.current_epoch += 1
+
 
 # Example usage (can be added as max_efficiency_train_example.py)
 """

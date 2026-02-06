@@ -7,11 +7,13 @@ Provides generic Elasticsearch index rebuilding and migration functionality.
 
 import time
 import traceback
-from typing import Type, Any
+from typing import Any, Type
+
 from elasticsearch import NotFoundError, RequestError
 from elasticsearch.dsl import AsyncDocument
-from core.observation.logger import get_logger
+
 from core.di.utils import get_all_subclasses
+from core.observation.logger import get_logger
 from core.oxm.es.doc_base import DocBase, get_index_ns
 from core.oxm.es.es_utils import is_abstract_doc_class
 
@@ -102,11 +104,11 @@ async def rebuild_index(
         ValueError: If the document class is missing required attributes or methods
     """
     # Validate document class
-    if not hasattr(document_class, 'PATTERN'):
+    if not hasattr(document_class, "PATTERN"):
         raise ValueError(
             "Document class %s must have PATTERN attribute" % document_class.__name__
         )
-    if not hasattr(document_class, 'dest'):
+    if not hasattr(document_class, "dest"):
         raise ValueError(
             "Document class %s must have dest() method" % document_class.__name__
         )

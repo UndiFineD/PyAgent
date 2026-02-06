@@ -6,15 +6,16 @@ Provides serialization/deserialization between ConsumerRecord and RedisGroupQueu
 Uses BSON format to handle binary data, ensuring data integrity
 """
 
-import json
 import base64
-from typing import Optional, Sequence, Tuple, Any, Dict
+import json
 from dataclasses import dataclass
+from typing import Any, Dict, Optional, Sequence, Tuple
 
 import bson
-
 from aiokafka import ConsumerRecord
+
 from core.observation.logger import get_logger
+
 from .redis_group_queue_item import RedisGroupQueueItem
 
 logger = get_logger(__name__)
@@ -79,11 +80,11 @@ class KafkaConsumerRecordItem(RedisGroupQueueItem):
 
     def _encode_bytes_to_base64(self, data: bytes) -> str:
         """Encode bytes data to base64 string"""
-        return base64.b64encode(data).decode('utf-8')
+        return base64.b64encode(data).decode("utf-8")
 
     def _decode_base64_to_bytes(self, data: str) -> bytes:
         """Decode base64 string to bytes data"""
-        return base64.b64decode(data.encode('utf-8'))
+        return base64.b64decode(data.encode("utf-8"))
 
     def to_dict(self) -> Dict[str, Any]:
         """
@@ -129,7 +130,7 @@ class KafkaConsumerRecordItem(RedisGroupQueueItem):
             raise ValueError(f"BSON serialization failed: {e}") from e
 
     @classmethod
-    def from_json_str(cls, json_str: str) -> 'KafkaConsumerRecordItem':
+    def from_json_str(cls, json_str: str) -> "KafkaConsumerRecordItem":
         """
         JSON deserialization is not supported, please use BSON deserialization
         """
@@ -138,7 +139,7 @@ class KafkaConsumerRecordItem(RedisGroupQueueItem):
         )
 
     @classmethod
-    def from_bson_bytes(cls, bson_bytes: bytes) -> 'KafkaConsumerRecordItem':
+    def from_bson_bytes(cls, bson_bytes: bytes) -> "KafkaConsumerRecordItem":
         """
         Deserialize from BSON byte data
 
@@ -198,7 +199,7 @@ class KafkaConsumerRecordItem(RedisGroupQueueItem):
                         headers_bytes.append((name, self._decode_base64_to_bytes(data)))
                     except Exception:
                         # If decoding fails, encode as UTF-8 bytes
-                        headers_bytes.append((name, data.encode('utf-8')))
+                        headers_bytes.append((name, data.encode("utf-8")))
                 else:
                     headers_bytes.append((name, bytes(data)))
 

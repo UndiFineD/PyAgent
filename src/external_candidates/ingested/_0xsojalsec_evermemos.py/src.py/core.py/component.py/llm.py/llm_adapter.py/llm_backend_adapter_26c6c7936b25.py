@@ -1,6 +1,7 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-EverMemOS\src\core\component\llm\llm_adapter\llm_backend_adapter.py
 from abc import ABC, abstractmethod
-from typing import Union, AsyncGenerator, List
+from typing import AsyncGenerator, List, Union
+
 from core.component.llm.llm_adapter.completion import (
     ChatCompletionRequest,
     ChatCompletionResponse,

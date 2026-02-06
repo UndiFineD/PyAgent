@@ -12,11 +12,12 @@ Comprehensively test various scenarios of Bean sorting strategy, including:
 - Simple sorting logic of the sort_beans method
 """
 
-import pytest
 from typing import Set, Type
+
+import pytest
+
 from core.di.bean_definition import BeanDefinition, BeanScope
 from core.di.bean_order_strategy import BeanOrderStrategy
-
 
 # ==================== Test Helper Classes ====================
 

@@ -8,9 +8,9 @@ Connects to an existing MCP server and reads data without controlling it
 import asyncio
 import json
 import logging
-from typing import Optional, Dict, Any
-from queue import Queue
 import threading
+from queue import Queue
+from typing import Any, Dict, Optional
 
 from fastmcp import Client
 

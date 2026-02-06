@@ -5,11 +5,13 @@ Health check controller
 Provides system health status check interface
 """
 
+from typing import Any, Dict
+
 from common_utils.datetime_utils import get_now_with_timezone
-from typing import Dict, Any
+
+from core.di.decorators import component
 from core.interface.controller.base_controller import BaseController, get
 from core.observation.logger import get_logger
-from core.di.decorators import component
 
 logger = get_logger(__name__)
 

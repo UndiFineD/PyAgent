@@ -1,7 +1,7 @@
 # Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-factorio-learning-environment\data\vqa\bounding_box_utils.py
 """Bounding box utilities for VQA tasks."""
 
-from typing import Dict, Tuple, Any
+from typing import Any, Dict, Tuple
 
 
 def calculate_blueprint_bounding_box(blueprint: Dict[str, Any]) -> Dict[str, float]:

@@ -115,7 +115,11 @@ class LANDiscovery:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.bind(("", port))
-            sock.close()
+            try:
+                # Some tests use a DummySocket without close(); guard against that
+                sock.close()
+            except Exception:
+                pass
             return True
         except OSError:
             return False
@@ -255,6 +259,17 @@ class LANDiscovery:
 
         try:
             # Detect network configuration
+            # Backwards-compatible helper: ensure network config is detected.
+            if not hasattr(self, '_detect_network_config'):
+                # create a simple detector if missing
+                def _detect_network_config():
+                    if not self._local_ip:
+                        self._local_ip = self._detect_local_network_ip()
+                    if not self._subnet_broadcast:
+                        self._subnet_broadcast = self._detect_subnet_broadcast()
+
+                self._detect_network_config = _detect_network_config
+
             self._detect_network_config()
 
             # Test if we can bind to the discovery port

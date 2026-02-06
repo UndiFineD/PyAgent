@@ -12,15 +12,50 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-PyAgent AutoMem Memory System Integration.
+"""AutoMemCore: graph-vector hybrid memory system (placeholder).
 
-Based on the exceptional AutoMem memory system (90.53% LoCoMo benchmark).
-Implements graph-vector hybrid memory with FalkorDB + Qdrant for revolutionary
-conversational memory capabilities.
+This module provides a safe, minimal stub implementation for the
+AutoMem memory core referenced in the roadmap. The full implementation
+should provide vector indexing, graph storage, persistence, and a
+low-latency recall API.
 """
-
 from __future__ import annotations
+from pathlib import Path
+from dataclasses import dataclass
+import typing as t
+
+
+@dataclass
+class MemoryRecord:
+    id: str
+    vector: list[float]
+    metadata: dict
+
+
+class AutoMemCore:
+    """Minimal AutoMemCore stub.
+
+    Methods are intentionally minimal to keep CI fast; implementors
+    should replace with production-ready storage/indexing later.
+    """
+
+    def __init__(self, store_dir: t.Optional[Path] = None):
+        self.store_dir = Path(store_dir) if store_dir else None
+        self._records: dict[str, MemoryRecord] = {}
+
+    def add(self, rec: MemoryRecord) -> None:
+        """Add a memory record (in-memory only for now)."""
+        self._records[rec.id] = rec
+
+    def recall(self, query_vector: list[float], top_k: int = 8) -> list[MemoryRecord]:
+        """Naive recall: returns up to `top_k` records (no real vector search).
+
+        This is a placeholder; replace with a nearest-neighbor index.
+        """
+        return list(self._records.values())[:top_k]
+
+
+__all__ = ["AutoMemCore", "MemoryRecord"]
 
 import hashlib
 import json

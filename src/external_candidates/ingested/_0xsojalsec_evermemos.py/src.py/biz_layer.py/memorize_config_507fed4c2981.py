@@ -5,8 +5,8 @@ Memory retrieval process configuration
 Centralized management of all trigger conditions and thresholds for easy adjustment and maintenance.
 """
 
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 
 
 @dataclass

@@ -12,7 +12,8 @@ Priority ranking rules (from highest to lowest):
 4. scope: Factory Bean > Regular Bean
 """
 
-from typing import List, Tuple, Set, Type
+from typing import List, Set, Tuple, Type
+
 from core.di.bean_definition import BeanDefinition, BeanScope
 
 

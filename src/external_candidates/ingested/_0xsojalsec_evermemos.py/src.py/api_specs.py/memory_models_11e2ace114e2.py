@@ -8,9 +8,9 @@ This module contains input and output data structure definitions for fetch_mem_s
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
-from datetime import datetime
 
 from common_utils.datetime_utils import get_now_with_timezone
 
@@ -21,7 +21,7 @@ class RetrieveMethod(str, Enum):
     KEYWORD = "keyword"
     VECTOR = "vector"
     HYBRID = "hybrid"
-    RRF = "rrf"          # keyword + vector + RRF fusion
+    RRF = "rrf"  # keyword + vector + RRF fusion
     AGENTIC = "agentic"  # LLM-guided multi-round retrieval
 
 
@@ -71,7 +71,7 @@ class Metadata:
         return result
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Metadata':
+    def from_dict(cls, data: Dict[str, Any]) -> "Metadata":
         """Create Metadata object from dictionary"""
         return cls(**{k: v for k, v in data.items() if k in cls.__annotations__})
 

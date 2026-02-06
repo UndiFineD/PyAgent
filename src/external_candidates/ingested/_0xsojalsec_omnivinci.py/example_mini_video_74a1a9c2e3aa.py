@@ -27,20 +27,42 @@ Usage:
     python example_mini_video.py --model_path <path_to_model> --video_path <path_to_video>
 """
 
-from transformers import AutoProcessor, AutoModel, AutoConfig, AutoModelForCausalLM
-import torch
-import os
 import argparse
+import os
+
+import torch
+from transformers import AutoConfig, AutoModel, AutoModelForCausalLM, AutoProcessor
 
 # Configuration
 parser = argparse.ArgumentParser(description="Video understanding example")
 parser.add_argument("--model_path", type=str, default="./", help="Path to the model")
-parser.add_argument("--video_path", type=str, required=True, help="Path to the video file")
-parser.add_argument("--max_new_tokens", type=int, default=1024, help="Maximum number of tokens to generate")
-parser.add_argument("--num_video_frames", type=int, default=128, help="Number of video frames to process")
-parser.add_argument("--audio_length", type=str, default="max_3600", help="Maximum audio length")
-parser.add_argument("--prompt", type=str, default="What are they talking about in detail?", help="Text prompt for the model")
-parser.add_argument("--load_audio", action="store_true", default=True, help="Load audio from video")
+parser.add_argument(
+    "--video_path", type=str, required=True, help="Path to the video file"
+)
+parser.add_argument(
+    "--max_new_tokens",
+    type=int,
+    default=1024,
+    help="Maximum number of tokens to generate",
+)
+parser.add_argument(
+    "--num_video_frames",
+    type=int,
+    default=128,
+    help="Number of video frames to process",
+)
+parser.add_argument(
+    "--audio_length", type=str, default="max_3600", help="Maximum audio length"
+)
+parser.add_argument(
+    "--prompt",
+    type=str,
+    default="What are they talking about in detail?",
+    help="Text prompt for the model",
+)
+parser.add_argument(
+    "--load_audio", action="store_true", default=True, help="Load audio from video"
+)
 
 args = parser.parse_args()
 
@@ -57,10 +79,7 @@ assert os.path.exists(video_path), f"Video path {video_path} does not exist."
 config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
 
 model = AutoModel.from_pretrained(
-    model_path,
-    trust_remote_code=True,
-    torch_dtype=torch.float16,
-    device_map="auto"
+    model_path, trust_remote_code=True, torch_dtype=torch.float16, device_map="auto"
 )
 
 processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
@@ -76,27 +95,33 @@ if audio_length != -1:
     model.config.audio_chunk_length = audio_length
     processor.config.audio_chunk_length = audio_length
 
+
 def forward_inference(video_path, text_prompt):
     """Run inference on video with text prompt."""
     print(f"Text prompt: {text_prompt}")
     print(f"Video path: {video_path}")
-    conversation = [{
-        "role": "user",
-        "content": [
-            {"type": "video", "video": video_path},
-            {"type": "text", "text": text_prompt}
-        ]
-    }]
-    text = processor.apply_chat_template(conversation, tokenize=False, add_generation_prompt=True)
+    conversation = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "video", "video": video_path},
+                {"type": "text", "text": text_prompt},
+            ],
+        }
+    ]
+    text = processor.apply_chat_template(
+        conversation, tokenize=False, add_generation_prompt=True
+    )
 
     inputs = processor([text])
 
     output_ids = model.generate(
         input_ids=inputs.input_ids,
-        media=getattr(inputs, 'media', None),
-        media_config=getattr(inputs, 'media_config', None),
+        media=getattr(inputs, "media", None),
+        media_config=getattr(inputs, "media_config", None),
         generation_config=generation_config,
     )
     print(processor.tokenizer.batch_decode(output_ids, skip_special_tokens=True))
+
 
 forward_inference(video_path, text_prompt)

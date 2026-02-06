@@ -7,9 +7,17 @@ VERSION = "1.0.0"
 
 ACTION_XREF = "lazycross:xref"
 
+
 class XrefChoose(idaapi.Choose):
     def __init__(self, title, items):
-        idaapi.Choose.__init__(self, title, [["Address", 30], ["Pseudocode line", 80]], embedded=False, width=100, icon=40)
+        idaapi.Choose.__init__(
+            self,
+            title,
+            [["Address", 30], ["Pseudocode line", 80]],
+            embedded=False,
+            width=100,
+            icon=40,
+        )
         self.items = items
 
     def OnClose(self):
@@ -25,6 +33,7 @@ class XrefChoose(idaapi.Choose):
     def OnSelectLine(self, n):
         idaapi.jumpto(self.items[n]["addr"])
 
+
 class UI_Hook(idaapi.UI_Hooks):
     def __init__(self):
         idaapi.UI_Hooks.__init__(self)
@@ -37,6 +46,7 @@ class UI_Hook(idaapi.UI_Hooks):
                 return
         idaapi.attach_action_to_popup(form, popup, ACTION_XREF, None)
 
+
 def HexRaysCallback(event, *args):
     if event == idaapi.hxe_populating_popup:
         widget, phandle, vu = args
@@ -44,13 +54,18 @@ def HexRaysCallback(event, *args):
             idaapi.attach_action_to_popup(widget, phandle, ACTION_XREF, None)
     return 0
 
+
 class ActionHandler(idaapi.action_handler_t):
     def __init__(self, action):
         idaapi.action_handler_t.__init__(self)
         self.action = action
 
     def update(self, ctx):
-        return idaapi.AST_ENABLE_FOR_WIDGET if ctx.widget_type in [idaapi.BWN_DISASM, idaapi.BWN_PSEUDOCODE] else idaapi.AST_DISABLE_FOR_WIDGET
+        return (
+            idaapi.AST_ENABLE_FOR_WIDGET
+            if ctx.widget_type in [idaapi.BWN_DISASM, idaapi.BWN_PSEUDOCODE]
+            else idaapi.AST_DISABLE_FOR_WIDGET
+        )
 
     def activate(self, ctx):
         if ctx.widget_type == idaapi.BWN_PSEUDOCODE:
@@ -70,6 +85,7 @@ class ActionHandler(idaapi.action_handler_t):
             idaapi.hide_wait_box()
 
         return 0
+
 
 class ObjVisitor(idaapi.ctree_visitor_t):
     def __init__(self, ea, cfunc):
@@ -94,11 +110,9 @@ class ObjVisitor(idaapi.ctree_visitor_t):
             if e.ea != idaapi.BADADDR:
                 addr = e.ea
 
-        self.found.append({
-            "addr": addr,
-            "line": idaapi.tag_remove(e.print1(None))
-        })
+        self.found.append({"addr": addr, "line": idaapi.tag_remove(e.print1(None))})
         return 0
+
 
 def show_xref(ea):
     name = idaapi.get_name(ea)
@@ -152,6 +166,7 @@ def show_xref(ea):
     else:
         print("LazyCross: No xrefs found")
 
+
 class LazyCross(idaapi.plugin_t):
     flags = idaapi.PLUGIN_HIDE
     comment = "LazyCross"
@@ -162,7 +177,9 @@ class LazyCross(idaapi.plugin_t):
     def init(self):
         self.hexrays_inited = False
 
-        self.action = idaapi.action_desc_t(ACTION_XREF, "LazyCross", ActionHandler(ACTION_XREF), "Ctrl+X")
+        self.action = idaapi.action_desc_t(
+            ACTION_XREF, "LazyCross", ActionHandler(ACTION_XREF), "Ctrl+X"
+        )
         idaapi.register_action(self.action)
 
         self.ui_hook = UI_Hook()
@@ -197,4 +214,3 @@ class LazyCross(idaapi.plugin_t):
 
 def PLUGIN_ENTRY():
     return LazyCross()
-

@@ -5,7 +5,6 @@ from typing import Any, Dict, Mapping, MutableMapping, Optional, Type, Union
 
 from .types import AnnotationKeyBase, AnnotationValueBase
 
-
 _NOTES_ATTR = "__notes__"
 
 

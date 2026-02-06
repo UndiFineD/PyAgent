@@ -7,18 +7,17 @@ Smart text parser test module
 Comprehensively test SmartTextParser and related functions in various scenarios
 """
 
-import pytest
-import sys
 import os
+import sys
 
-
+import pytest
 from common_utils.text_utils import (
     SmartTextParser,
+    Token,
     TokenConfig,
     TokenType,
-    Token,
-    smart_truncate_text,
     clean_whitespace,
+    smart_truncate_text,
 )
 
 
@@ -351,7 +350,9 @@ class TestSmartTruncateByScore:
     def test_simple_truncation(self):
         """Test simple truncation"""
         text = "Hello World"
-        result = self.parser.smart_truncate_by_score(text, 1.5)  # Only allow one English word
+        result = self.parser.smart_truncate_by_score(
+            text, 1.5
+        )  # Only allow one English word
         # Due to word boundary protection, may retain complete second word
         assert result == "Hello..." or result == "Hello World"
 
@@ -536,7 +537,9 @@ class TestPerformance:
 
         # Parsing with score limit should be faster
         assert len(tokens_limited) < len(tokens_full)
-        assert time_limited <= time_full  # Usually should be faster, but at least not slower
+        assert (
+            time_limited <= time_full
+        )  # Usually should be faster, but at least not slower
 
 
 class TestEdgeCases:

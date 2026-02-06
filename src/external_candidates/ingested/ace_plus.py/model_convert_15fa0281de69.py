@@ -2,21 +2,23 @@
 # Copy from https://gist.github.com/Stella2211/10f5bd870387ec1ddb9932235321068e
 # This is a great work.
 import json
+import struct
+import sys
 from pathlib import Path
+from typing import Any, Dict
+
 import torch
 from tqdm import tqdm
-import struct
-from typing import Dict, Any
-import sys
 
 # input file
-if(len(sys.argv) < 3):
+if len(sys.argv) < 3:
     print("Usage: mem_eff_fp8_convert.py {fp16 model path} {output path}")
     sys.exit(1)
 
 path = sys.argv[1]
-output =sys.argv[2]
+output = sys.argv[2]
 model_file = Path(path)
+
 
 class MemoryEfficientSafeOpen:
     # does not support metadata loading
@@ -104,10 +106,14 @@ class MemoryEfficientSafeOpen:
             # # convert to float16 if float8 is not supported
             # print(f"Warning: {dtype_str} is not supported in this PyTorch version. Converting to float16.")
             # return byte_tensor.view(torch.uint8).to(torch.float16).reshape(shape)
-            raise ValueError(f"Unsupported float8 type: {dtype_str} (upgrade PyTorch to support float8 types)")
+            raise ValueError(
+                f"Unsupported float8 type: {dtype_str} (upgrade PyTorch to support float8 types)"
+            )
 
 
-def mem_eff_save_file(tensors: Dict[str, torch.Tensor], filename: str, metadata: Dict[str, Any] = None):
+def mem_eff_save_file(
+    tensors: Dict[str, torch.Tensor], filename: str, metadata: Dict[str, Any] = None
+):
     _TYPES = {
         torch.float64: "F64",
         torch.float32: "F32",
@@ -130,7 +136,9 @@ def mem_eff_save_file(tensors: Dict[str, torch.Tensor], filename: str, metadata:
             if not isinstance(key, str):
                 raise ValueError(f"Metadata key must be a string, got {type(key)}")
             if not isinstance(value, str):
-                print(f"Warning: Metadata value for key '{key}' is not a string. Converting to string.")
+                print(
+                    f"Warning: Metadata value for key '{key}' is not a string. Converting to string."
+                )
                 validated[key] = str(value)
             else:
                 validated[key] = value
@@ -142,10 +150,18 @@ def mem_eff_save_file(tensors: Dict[str, torch.Tensor], filename: str, metadata:
         header["__metadata__"] = validate_metadata(metadata)
     for k, v in tensors.items():
         if v.numel() == 0:  # empty tensor
-            header[k] = {"dtype": _TYPES[v.dtype], "shape": list(v.shape), "data_offsets": [offset, offset]}
+            header[k] = {
+                "dtype": _TYPES[v.dtype],
+                "shape": list(v.shape),
+                "data_offsets": [offset, offset],
+            }
         else:
             size = v.numel() * v.element_size()
-            header[k] = {"dtype": _TYPES[v.dtype], "shape": list(v.shape), "data_offsets": [offset, offset + size]}
+            header[k] = {
+                "dtype": _TYPES[v.dtype],
+                "shape": list(v.shape),
+                "data_offsets": [offset, offset + size],
+            }
             offset += size
 
     hjson = json.dumps(header).encode("utf-8")
@@ -161,7 +177,9 @@ def mem_eff_save_file(tensors: Dict[str, torch.Tensor], filename: str, metadata:
             if v.is_cuda:
                 # Direct GPU to disk save
                 with torch.cuda.device(v.device):
-                    if v.dim() == 0:  # if scalar, need to add a dimension to work with view
+                    if (
+                        v.dim() == 0
+                    ):  # if scalar, need to add a dimension to work with view
                         v = v.unsqueeze(0)
                     tensor_bytes = v.contiguous().view(torch.uint8)
                     tensor_bytes.cpu().numpy().tofile(f)
@@ -174,22 +192,25 @@ def mem_eff_save_file(tensors: Dict[str, torch.Tensor], filename: str, metadata:
 
 # read safetensors metadata
 def read_safetensors_metadata(path: str):
-    with open(path, 'rb') as f:
-        header_size = int.from_bytes(f.read(8), 'little')
-        header_json = f.read(header_size).decode('utf-8')
+    with open(path, "rb") as f:
+        header_size = int.from_bytes(f.read(8), "little")
+        header_json = f.read(header_size).decode("utf-8")
         header = json.loads(header_json)
-        metadata = header.get('__metadata__', {})
+        metadata = header.get("__metadata__", {})
         return metadata
 
-metadata = read_safetensors_metadata(path)
-print(json.dumps(metadata, indent=4)) #show metadata
 
-sd_pruned = dict() #initialize empty dict
+metadata = read_safetensors_metadata(path)
+print(json.dumps(metadata, indent=4))  # show metadata
+
+sd_pruned = dict()  # initialize empty dict
 
 with MemoryEfficientSafeOpen(path) as reader:
     keys = reader.keys()
-    for key in tqdm(keys): #for each key in the safetensors file
-        sd_pruned[key] = reader.get_tensor(key).to(torch.float8_e4m3fn) #convert to fp8
+    for key in tqdm(keys):  # for each key in the safetensors file
+        sd_pruned[key] = reader.get_tensor(key).to(
+            torch.float8_e4m3fn
+        )  # convert to fp8
 
 # save the pruned safetensors file
 mem_eff_save_file(sd_pruned, output, metadata={"format": "pt", **metadata})

@@ -9,19 +9,21 @@ DI Scanner Test
 Test the component scanning and auto-registration functionality of Scanner
 """
 
-import pytest
-import tempfile
 import shutil
+import tempfile
 from pathlib import Path
-from core.di.container import DIContainer, get_container
-from core.di.scanner import ComponentScanner
-from core.di.decorators import component, service, repository, mock_impl, factory
+
+import pytest
+
 from core.di.bean_definition import BeanScope
+from core.di.container import DIContainer, get_container
+from core.di.decorators import component, factory, mock_impl, repository, service
+from core.di.scanner import ComponentScanner
 from core.di.tests.test_fixtures import (
-    UserRepository,
+    EmailNotificationService,
     MySQLUserRepository,
     NotificationService,
-    EmailNotificationService,
+    UserRepository,
 )
 
 
@@ -214,8 +216,8 @@ class TestInterfaceImplementationScanning:
     def test_multiple_implementations_of_interface(self):
         """Test multiple implementations of the same interface"""
         from core.di.tests.test_fixtures import (
-            PostgreSQLUserRepository,
             MockUserRepository,
+            PostgreSQLUserRepository,
         )
 
         # Register multiple implementations
@@ -297,7 +299,7 @@ class TestConditionalRegistration:
         # Lazily registered Bean should not immediately appear in container
         # Note: In current implementation, lazy=True is just a flag, actual behavior depends on specific implementation
         # Here we only verify the component is correctly marked
-        assert hasattr(LazyComponent, '_di_lazy')
+        assert hasattr(LazyComponent, "_di_lazy")
         assert LazyComponent._di_lazy is True
 
 
@@ -377,13 +379,13 @@ class TestRealWorldScanningScenario:
         """Test scanning test_fixtures module"""
         # This test verifies we can import classes from fixtures module
         from core.di.tests.test_fixtures import (
+            EmailNotificationService,
+            MemoryCacheService,
+            MockUserRepository,
             MySQLUserRepository,
             PostgreSQLUserRepository,
-            MockUserRepository,
-            EmailNotificationService,
-            SMSNotificationService,
             RedisCacheService,
-            MemoryCacheService,
+            SMSNotificationService,
         )
 
         # Verify all classes can be imported and instantiated normally

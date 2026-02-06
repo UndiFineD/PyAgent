@@ -14,14 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public
 #  License along with OctoBot. If not, see <https://www.gnu.org/licenses/>.
-from setuptools import find_packages
-from setuptools import setup
-from octobot import PROJECT_NAME, AUTHOR, VERSION
+from octobot import AUTHOR, PROJECT_NAME, VERSION
+from setuptools import find_packages, setup
 
-PACKAGES = find_packages(exclude=["tentacles*", "tests", ])
+PACKAGES = find_packages(
+    exclude=[
+        "tentacles*",
+        "tests",
+    ]
+)
 
 # long description from README file
-with open('README.md', encoding='utf-8') as f:
+with open("README.md", encoding="utf-8") as f:
     DESCRIPTION = f.read()
 
 
@@ -29,40 +33,36 @@ def ignore_git_requirements(requirements):
     return [requirement for requirement in requirements if "git+" not in requirement]
 
 
-REQUIRED = ignore_git_requirements(open('requirements.txt').readlines())
-REQUIRES_PYTHON = '>=3.10'
+REQUIRED = ignore_git_requirements(open("requirements.txt").readlines())
+REQUIRES_PYTHON = ">=3.10"
 
 setup(
     name=PROJECT_NAME,
     version=VERSION,
-    url='https://github.com/Drakkar-Software/OctoBot',
-    license='GPL-3.0',
+    url="https://github.com/Drakkar-Software/OctoBot",
+    license="GPL-3.0",
     author=AUTHOR,
-    author_email='contact@drakkar.software',
-    description='Cryptocurrencies alert / trading bot',
-    py_modules=['start'],
+    author_email="contact@drakkar.software",
+    description="Cryptocurrencies alert / trading bot",
+    py_modules=["start"],
     packages=PACKAGES,
     package_data={
         "": ["config/*", "strategy_optimizer/optimizer_data_files/*"],
     },
     long_description=DESCRIPTION,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     tests_require=["pytest"],
     test_suite="tests",
     zip_safe=False,
     install_requires=REQUIRED,
     python_requires=REQUIRES_PYTHON,
-    entry_points={
-        'console_scripts': [
-            PROJECT_NAME + ' = octobot.cli:main'
-        ]
-    },
+    entry_points={"console_scripts": [PROJECT_NAME + " = octobot.cli:main"]},
     classifiers=[
-        'Development Status :: 4 - Beta',
-        'Operating System :: OS Independent',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX',
-        'Programming Language :: Python :: 3.10',
+        "Development Status :: 4 - Beta",
+        "Operating System :: OS Independent",
+        "Operating System :: MacOS :: MacOS X",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: POSIX",
+        "Programming Language :: Python :: 3.10",
     ],
 )

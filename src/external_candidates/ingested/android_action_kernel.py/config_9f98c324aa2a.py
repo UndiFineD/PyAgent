@@ -5,17 +5,17 @@ Loads settings from environment variables and .env file.
 """
 
 import os
-from dotenv import load_dotenv
 
 from constants import (
+    DEFAULT_BEDROCK_MODEL,
+    DEFAULT_GROQ_MODEL,
+    DEFAULT_MAX_STEPS,
+    DEFAULT_OPENAI_MODEL,
+    DEFAULT_STEP_DELAY,
     DEVICE_DUMP_PATH,
     LOCAL_DUMP_PATH,
-    DEFAULT_MAX_STEPS,
-    DEFAULT_STEP_DELAY,
-    DEFAULT_GROQ_MODEL,
-    DEFAULT_OPENAI_MODEL,
-    DEFAULT_BEDROCK_MODEL,
 )
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
